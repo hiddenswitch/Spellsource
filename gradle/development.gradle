@@ -1,5 +1,5 @@
-task testAll(group: 'Contributors') {
-    description('Runs all tests. Make sure mongod is running. When testing custom cards, failed fuzzing results are put in cards/src/test/resources/traces by testRandomMassPlay.')
+task testAll(group: 'Spellsource') {
+    description('Runs all tests. When testing custom cards, failed fuzzing results are put in cards/src/test/resources/traces by testRandomMassPlay.')
     dependsOn subprojects.collect { proj ->
         proj.tasks.matching {
             it.name == 'test'
@@ -7,17 +7,17 @@ task testAll(group: 'Contributors') {
     }
 }
 
-task netRun(group: 'Contributors') {
+task netRun(group: 'Spellsource') {
     description("Starts the Spellsource server")
     dependsOn ':net:run'
 }
 
-task netRunDebug(group: 'Contributors') {
+task netRunDebug(group: 'Spellsource') {
     description("Starts the Spellsource server attachable as a Remote debug target from IntelliJ")
     dependsOn ':net:runDebug'
 }
 
-task swagger(group: 'Contributors') {
+task swagger(group: 'Spellsource') {
     description("Generates sources from the client/swagger-api.yaml. Run this whenever you change that file.")
     dependsOn += ['client:generateSwaggerJava', 'generateSwaggerCsharp']
 }

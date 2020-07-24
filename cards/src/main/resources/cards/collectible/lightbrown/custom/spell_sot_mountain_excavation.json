@@ -1,0 +1,98 @@
+{
+  "name": "Sot Mountain Excavation",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "LEGENDARY",
+  "description": "Summon a random Legendary minion. Lose 4 of your Armor and cast this again.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "rarity": "LEGENDARY",
+          "cardType": "MINION"
+        }
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "AndCondition",
+          "conditions": [
+            {
+              "class": "ComparisonCondition",
+              "operation": "GREATER",
+              "value1": {
+                "class": "AttributeValueProvider",
+                "target": "FRIENDLY_HERO",
+                "attribute": "ARMOR"
+              },
+              "value2": 0
+            },
+            {
+              "class": "CanSummonCondition"
+            }
+          ]
+        },
+        "spell": {
+          "class": "RecastWhileSpell",
+          "condition": {
+            "class": "AndCondition",
+            "conditions": [
+              {
+                "class": "ComparisonCondition",
+                "operation": "GREATER",
+                "value1": {
+                  "class": "AttributeValueProvider",
+                  "target": "FRIENDLY_HERO",
+                  "attribute": "ARMOR"
+                },
+                "value2": 0
+              },
+              {
+                "class": "CanSummonCondition"
+              }
+            ]
+          },
+          "spell": {
+            "class": "MetaSpell",
+            "spells": [
+              {
+                "class": "BuffSpell",
+                "target": "FRIENDLY_HERO",
+                "armorBonus": {
+                  "class": "AlgebraicValueProvider",
+                  "operation": "NEGATE",
+                  "value1": {
+                    "class": "AlgebraicValueProvider",
+                    "operation": "MINIMUM",
+                    "value1": {
+                      "class": "AttributeValueProvider",
+                      "attribute": "ARMOR"
+                    },
+                    "value2": 4
+                  }
+                }
+              },
+              {
+                "class": "SummonSpell",
+                "cardFilter": {
+                  "class": "CardFilter",
+                  "rarity": "LEGENDARY",
+                  "cardType": "MINION"
+                }
+              }
+            ]
+          },
+          "randomTarget": true
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

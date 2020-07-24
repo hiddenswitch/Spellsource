@@ -1,0 +1,33 @@
+{
+  "name": "Gorge",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Destroy your opponent's leftmost minion and give its Health to all minions in your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HAND",
+        "hpBonus": {
+          "class": "AttributeValueProvider",
+          "target": "LEFTMOST_ENEMY_MINION",
+          "attribute": "HP"
+        }
+      },
+      {
+        "class": "DestroySpell",
+        "target": "LEFTMOST_ENEMY_MINION"
+      }
+    ]
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ]
+}

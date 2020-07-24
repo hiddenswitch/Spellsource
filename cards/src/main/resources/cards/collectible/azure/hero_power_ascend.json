@@ -1,0 +1,26 @@
+{
+  "name": "Ascend",
+  "heroPower": "hero_power_ascend",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "AZURE",
+  "rarity": "FREE",
+  "description": "Skill: Recieve two Soar spells.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "spell_soar",
+        "spell_soar"
+      ]
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "Bloody Reconstruction",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "FREE",
+  "description": "Restore [0] Health to your champion. (Increases by 3 for each minion that died this turn)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HealSpell",
+    "target": "FRIENDLY_HERO",
+    "value": {
+      "class": "DiedThisTurnValueProvider",
+      "multiplier": 3,
+      "targetPlayer": "BOTH"
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "DiedThisTurnValueProvider",
+        "multiplier": 3,
+        "targetPlayer": "BOTH"
+      }
+    }
+  ],
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

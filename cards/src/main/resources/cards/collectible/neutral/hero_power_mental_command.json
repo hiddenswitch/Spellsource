@@ -1,0 +1,27 @@
+{
+  "name": "Echolocation",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Choose a target. Your Blind Acolytes attack it.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "TargetToSourceSecondaryToTargetSpell",
+      "target": "FRIENDLY_MINIONS",
+      "spell": {
+        "class": "FightSpell"
+      },
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "minion_mind_controlled_mech"
+      },
+      "secondaryTarget": "TARGET"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

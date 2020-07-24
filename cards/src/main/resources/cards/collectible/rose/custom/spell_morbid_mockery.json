@@ -1,0 +1,26 @@
+{
+  "name": "Morbid Mockery",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Draw an Aftermath minion. Give it Guard.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "value": 1,
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "OUTPUT",
+      "attribute": "CARD_TAUNT"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "DEATHRATTLES",
+      "cardType": "MINION"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

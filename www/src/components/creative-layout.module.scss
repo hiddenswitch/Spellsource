@@ -10,16 +10,16 @@ $base-font-size: 17pt !default;
 $mobile-font-size: 17pt !default;
 $base-line-height: 1.2 !default;
 $container-width: 100% !default;
-$container-max-width: 860px !default;
+$main-width: 700px !default;
 
 // From dark
 :root {
   --base-color: #DBDBDB;
   --primary-color: #A2FC8F;
-  --border: dashed 1px rgba(219, 219, 219, 0.9);
-  --selection-background: rgba(219, 219, 219, 0.99);
-  --selection-text: #000;
-  --background-color: #000;
+  --border: solid 1px #DBDBDB;
+  --selection-background: #DBDBDB;
+  --selection-text: #21215c;
+  --background-color: #21215c;
   --text-color: var(--base-color);
   --placeholder-color: var(--base-color);
   --link-color: var(--base-color);
@@ -59,11 +59,34 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-size: $base-font-size;
   margin: 0px;
   margin-top: 22px;
   font-weight: bold;
   color: var(--text-color);
+}
+
+h1 {
+  font-size: 60px;
+}
+
+h2 {
+  font-size: 40px;
+}
+
+h3 {
+  font-size: 27px;
+}
+
+h4 {
+  font-size: 20px;
+}
+
+h5 {
+  font-size: $base-font-size;
+}
+
+h6 {
+  font-size: 15px;
 }
 
 p, ul, ol {
@@ -81,29 +104,75 @@ a:hover {
   background-color: var(--base-color);
 }
 
+figure {
+  display: inline-block;
+  margin: 20px;
+  align-items: center;
+}
+
+figcaption {
+  text-align: center;
+}
+
+summary:hover {
+  color: var(--background-color);
+  background-color: var(--base-color);
+}
+
 .primary-text {
   color: var(--primary-color);
 }
 
+.emphasis-gif {
+  width: $main-width;
+  max-width: 95%;
+  height: auto;
+  flex: 1;
+  margin: auto;
+}
+
+.small-logo {
+  width: 75px;
+}
+
 @media only screen and (max-device-width: 500px) {
   * {
-    font-size: $mobile-font-size !important;
+    font-size: $base-font-size !important;
   }
 }
 
-/*h1:before { content: "#";  margin-right: 9px; }
-h2:before { content: "##";  margin-right: 9px; }
-h3:before { content: "###";  margin-right: 9px; }
-h4:before { content: "####";  margin-right: 9px; }
-h5:before { content: "#####";  margin-right: 9px; }
-h6:before { content: "######";  margin-right: 9px; }*/
+@media only screen and (max-device-width: 700px) {
+  .emphasis-gif {
+    width: 100vw;
+    max-width: 100vw;
+    margin: calc(-50vw + 50%);
+  }
+}
+
+  /*h1:before { content: "#";  margin-right: 9px; }
+  h2:before { content: "##";  margin-right: 9px; }
+  h3:before { content: "###";  margin-right: 9px; }
+  h4:before { content: "####";  margin-right: 9px; }
+  h5:before { content: "#####";  margin-right: 9px; }
+  h6:before { content: "######";  margin-right: 9px; }*/
 
 /**
  * Layout
  */
 .container {
   width: $container-width;
-  max-width: $container-max-width;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+main {
+  max-width: calc(100% - 50px);
+  width: $main-width;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+section {
   margin-right: auto;
   margin-left: auto;
 }
@@ -111,13 +180,17 @@ h6:before { content: "######";  margin-right: 9px; }*/
 footer {
   color: var(--text-color);
   border-top: var(--border);
-  margin: 20px auto 15px;
+  margin: 22px auto 15px;
   padding-top: 10px;
   text-align: right;
 }
 
+footer p {
+  margin-right: 2.5%;
+}
+
 header {
-  margin-top: 25px;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 
@@ -126,8 +199,15 @@ header p {
   margin: 0;
 }
 
-footer {
-  margin-bottom: 20px;
+.fullscreen-div {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar {
+  width: 0;
 }
 
 /**
@@ -167,6 +247,9 @@ footer {
   border-top: var(--border);
   border-bottom: var(--border);
   margin-bottom: 25px;
+  white-space: nowrap;
+  overflow-x: auto;
+  position: relative;
 }
 
 .menu .input-box {
@@ -176,16 +259,18 @@ footer {
 }
 
 .menu .search-results {
-  position: absolute;
-  background-color: black;
+  background-color: var(--background-color);
   z-index: 10;
   margin-left: -0.25em;
   margin-top: 0.25em;
   padding-right: 2.5em;
+  position: fixed;
+  top: auto;
 }
 
 .menu .search-list-group-item {
-  padding-left: 0.25em;
+  text-align: left;
+  padding-left: 0.2em;
   padding-right: 0.25em;
 }
 
@@ -194,12 +279,13 @@ footer {
   margin-bottom: 12px;
   padding-left: 0px;
   list-style-type: none;
-  text-align: left;
+  text-align: center;
 }
 
 .menu ul li {
   display: inline-block;
   margin-left: 10px;
+  user-select: none;
 }
 
 .menu ul li a {
@@ -597,4 +683,8 @@ pre {
   color: var(--code-color-14);
 }
 
-/* Literal.Number.Integer.Long */
+textarea.blocklyCommentTextarea {
+  background-color: lightgray;
+  color: black;
+  font-size: 12pt;
+}

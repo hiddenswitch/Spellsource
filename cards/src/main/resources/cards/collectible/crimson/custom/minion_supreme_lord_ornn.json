@@ -1,0 +1,40 @@
+{
+  "name": "Supreme-Lord Ornn",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Opener: If you have no duplicates in your deck, your Underlings have +2/+2 this game.",
+  "battlecry": {
+    "condition": {
+      "class": "HighlanderDeckCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "aura": {
+        "class": "BuffAura",
+        "target": "FRIENDLY_MINIONS",
+        "attackBonus": 2,
+        "filter": {
+          "class": "SpecificCardFilter",
+          "cards": [
+            "token_underling_overlord"
+          ]
+        },
+        "hpBonus": 2
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM"
+  ]
+}

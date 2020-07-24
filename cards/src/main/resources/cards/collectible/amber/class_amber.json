@@ -1,0 +1,44 @@
+{
+  "name": "Hive Queen",
+  "type": "CLASS",
+  "heroClass": "AMBER",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 0.0,
+        "g": 0.0,
+        "r": 0.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.333,
+      "g": 0.867,
+      "r": 1.0
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.0,
+      "g": 0.8,
+      "r": 1.0
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.0,
+      "g": 0.694,
+      "r": 0.867
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.0,
+      "g": 0.482,
+      "r": 0.604
+    }
+  },
+  "hero": "hero_zara"
+}

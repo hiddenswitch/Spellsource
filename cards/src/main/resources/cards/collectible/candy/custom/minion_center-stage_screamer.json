@@ -1,0 +1,30 @@
+{
+  "name": "Center-Stage Screamer",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Guard, Lifedrain. Opener: Gain Attack equal to the Cost of your Signature.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_SIGNATURE",
+        "attribute": "BASE_MANA_COST"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "LIFESTEAL": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

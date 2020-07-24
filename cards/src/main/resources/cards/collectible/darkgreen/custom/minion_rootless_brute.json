@@ -1,0 +1,32 @@
+{
+  "name": "Rootless Brute",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "description": "Whenever your champion takes damage, shuffle that many Rootless Brutes into your deck.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "card": "minion_rootless_brute",
+      "howMany": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_HERO",
+        "attribute": "LAST_HIT"
+      }
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "JOURNEY_TO_UNGORO"
+  ]
+}

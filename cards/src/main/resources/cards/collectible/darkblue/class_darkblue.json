@@ -1,0 +1,44 @@
+{
+  "name": "Soulseeker",
+  "type": "CLASS",
+  "heroClass": "DARKBLUE",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.737,
+      "g": 0.482,
+      "r": 0.494
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.6117,
+      "g": 0.2274,
+      "r": 0.2509
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.541,
+      "g": 0.2,
+      "r": 0.22
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.408,
+      "g": 0.149,
+      "r": 0.165
+    }
+  },
+  "hero": "hero_ophelia"
+}

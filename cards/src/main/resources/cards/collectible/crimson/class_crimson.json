@@ -1,0 +1,44 @@
+{
+  "name": "Overlord",
+  "type": "CLASS",
+  "heroClass": "CRIMSON",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.486,
+      "g": 0.384,
+      "r": 0.906
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.23529411764705882,
+      "g": 0.0784313725490196,
+      "r": 0.8627450980392157
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.204,
+      "g": 0.067,
+      "r": 0.753
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.145,
+      "g": 0.047,
+      "r": 0.541
+    }
+  },
+  "hero": "hero_wraith_mandron"
+}

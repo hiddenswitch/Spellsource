@@ -3,9 +3,6 @@ package com.hiddenswitch.spellsource.net.models;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by bberman on 1/19/17.
- */
 public class ReturnToCollectionRequest implements Serializable {
 	private List<String> userIds;
 	private List<String> deckIds;

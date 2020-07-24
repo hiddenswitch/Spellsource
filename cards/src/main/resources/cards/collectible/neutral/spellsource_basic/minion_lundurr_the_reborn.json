@@ -1,0 +1,55 @@
+{
+  "name": "Lundurr the Reborn",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 10,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Opener: If you played another Elemental this turn, gain +5 Attack and Blitz.",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "CardCountValueProvider",
+        "cardFilter": {
+          "class": "CardFilter",
+          "value": {
+            "class": "CurrentTurnValueProvider"
+          },
+          "race": "ELEMENTAL",
+          "attribute": "PLAYED_FROM_HAND_OR_DECK",
+          "cardType": "MINION",
+          "operation": "EQUAL"
+        },
+        "cardSource": {
+          "class": "GraveyardCardsSource"
+        }
+      },
+      "value2": 1
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "target": "SELF",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "attackBonus": 5
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "CHARGE"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Hate Spike",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TWILIGHT",
+  "rarity": "RARE",
+  "description": "Deal $[1] damage to a minion. If it has an Aftermath, trigger it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": {
+          "class": "GatekeeperShaValueProvider",
+          "offset": 1
+        }
+      },
+      {
+        "class": "TriggerDeathrattleSpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "GatekeeperShaValueDescription",
+      "value": 1
+    }
+  ],
+  "sets": [
+    "CUSTOM",
+    "VL_DYINGECHOES"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Spiritual Diffusion",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "Destroy up to 3 random enemy minions. Summon a 2/2 Spirit in their place.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.DestroyAndSummonInPlaceSpell",
+    "target": "ENEMY_MINIONS",
+    "card": "token_voodoo_spirit",
+    "howMany": 3,
+    "targetPlayer": "OWNER"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

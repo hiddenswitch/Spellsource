@@ -1,0 +1,44 @@
+{
+  "name": "Timeweaver",
+  "type": "CLASS",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 0.0,
+        "g": 0.0,
+        "r": 0.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.925,
+      "g": 0.886,
+      "r": 0.886
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.8901960784313725,
+      "g": 0.8313725490196079,
+      "r": 0.8313725490196079
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.737,
+      "g": 0.667,
+      "r": 0.667
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.435,
+      "g": 0.345,
+      "r": 0.345
+    }
+  },
+  "hero": "hero_atropos"
+}

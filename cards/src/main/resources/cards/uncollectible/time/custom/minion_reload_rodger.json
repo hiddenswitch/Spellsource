@@ -1,0 +1,27 @@
+{
+  "name": "Reload Rodger",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you discard a card, shuffle a copy into your deck.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DiscardTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "target": "EVENT_TARGET",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "GOBLINS_VS_GNOMES"
+  ]
+}

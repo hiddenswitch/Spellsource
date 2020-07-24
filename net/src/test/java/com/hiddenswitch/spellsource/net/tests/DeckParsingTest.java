@@ -3,35 +3,36 @@ package com.hiddenswitch.spellsource.net.tests;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.decks.DeckListParsingException;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DeckParsingTest {
 	@Test
 	public void testDecklistParsingNumberNameCards() {
 		CardCatalogue.loadCardsFromPackage();
-		String deckList1 = "Name: Test Name\nClass: WHITE\nFormat: All\n1x Has Number Name 1\n1x 2 Has Number Name";
-		final DeckCreateRequest createRequest = DeckCreateRequest.fromDeckList(deckList1);
-		Assert.assertTrue(createRequest.getCardIds().contains("minion_has_number_name_1"));
-		Assert.assertTrue(createRequest.getCardIds().contains("minion_has_number_name_2"));
+		var deckList1 = "Name: Test Name\nClass: WHITE\nFormat: All\n1x Has Number Name 1\n1x 2 Has Number Name";
+		var createRequest = DeckCreateRequest.fromDeckList(deckList1);
+		assertTrue(createRequest.getCardIds().contains("minion_has_number_name_1"));
+		assertTrue(createRequest.getCardIds().contains("minion_has_number_name_2"));
 	}
 
 	@Test
 	public void testDecklistTwoWordHero() {
 		CardCatalogue.loadCardsFromPackage();
-		String deckList1 = "Name: Test Name\nClass: WHITE\nFormat: All\nHero: Two Words\n1x Has Number Name 1\n1x 2 Has Number Name";
-		final DeckCreateRequest createRequest = DeckCreateRequest.fromDeckList(deckList1);
-		Assert.assertTrue(createRequest.getCardIds().contains("minion_has_number_name_1"));
-		Assert.assertTrue(createRequest.getCardIds().contains("minion_has_number_name_2"));
-		Assert.assertEquals(createRequest.getHeroCardId(), "hero_two_word_name");
+		var deckList1 = "Name: Test Name\nClass: WHITE\nFormat: All\nHero: Two Words\n1x Has Number Name 1\n1x 2 Has Number Name";
+		var createRequest = DeckCreateRequest.fromDeckList(deckList1);
+		assertTrue(createRequest.getCardIds().contains("minion_has_number_name_1"));
+		assertTrue(createRequest.getCardIds().contains("minion_has_number_name_2"));
+		assertEquals(createRequest.getHeroCardId(), "hero_two_word_name");
 	}
 
 	@Test
 	public void testDecklistParsing() {
 		CardCatalogue.loadCardsFromPackage();
-		String deckList1 = "### Witch Doctor: Beast Doctor\n" +
+		var deckList1 = "### Witch Doctor: Beast Doctor\n" +
 				"# Class: ROSE\n" +
 				"# Format: Spellsource\n" +
 				"#\n" +
@@ -53,7 +54,7 @@ public class DeckParsingTest {
 				"# 2x (7) Jungle King\n" +
 				"#";
 
-		String deckList2 = "### Witch Doctor: Aftermath Doctor\n" +
+		var deckList2 = "### Witch Doctor: Aftermath Doctor\n" +
 				"# Class: ROSE\n" +
 				"# Format: Spellsource\n" +
 				"#\n" +
@@ -78,27 +79,27 @@ public class DeckParsingTest {
 
 		Stream.of(deckList1, deckList2)
 				.forEach(deckList -> {
-					final DeckCreateRequest validRequest;
+					DeckCreateRequest validRequest;
 					try {
 						validRequest = DeckCreateRequest.fromDeckList(deckList)
 								.withUserId("testUserId");
 					} catch (DeckListParsingException e) {
-						org.junit.Assert.fail("Deck failed to parse due to error: " + e.getMessage());
+						fail("Deck failed to parse due to error: " + e.getMessage());
 						return;
 					}
 
-					org.junit.Assert.assertTrue(validRequest.isValid());
+					assertTrue(validRequest.isValid());
 
 					Stream.of(
 							"weapon_ritual_dagger",
 							"spell_marked_for_sacrifice",
 							"spell_evocation_witchdoctor"
 					).forEach(cid -> {
-						org.junit.Assert.assertEquals(validRequest.getCardIds().stream().filter(cid::equals).count(), 2L);
+						assertEquals(validRequest.getCardIds().stream().filter(cid::equals).count(), 2L);
 					});
 
-					org.junit.Assert.assertEquals(validRequest.getHeroClass(), "ROSE");
-					Assert.assertEquals(validRequest.getFormat(), "Spellsource");
+					assertEquals(validRequest.getHeroClass(), "ROSE");
+					assertEquals(validRequest.getFormat(), "Spellsource");
 				});
 
 	}

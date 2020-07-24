@@ -1,0 +1,45 @@
+{
+  "name": "Klive Icetooth",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Spellpower +1. Opener: Stun a minion and restore 5 Health to your champion.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "MinionOnBoardCondition"
+          },
+          "spell": {
+            "class": "AddAttributeSpell",
+            "attribute": "FROZEN"
+          }
+        },
+        {
+          "class": "HealSpell",
+          "target": "FRIENDLY_HERO",
+          "value": 5
+        }
+      ]
+    },
+    "targetSelectionCondition": {
+      "class": "MinionOnBoardCondition",
+      "invert": true
+    },
+    "targetSelectionOverride": "NONE"
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "SPELL_DAMAGE": 1
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

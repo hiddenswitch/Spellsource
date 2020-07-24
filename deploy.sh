@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.77
+SPELLSOURCE_VERSION=0.8.79
 
 usage="$(basename "$0") [-hvCsS] -- bash source for Spellsource
 
@@ -160,6 +160,7 @@ if [[ "$build_stack" == true ]]; then
   # shellcheck disable=SC2046
   unset $(grep -v '^#' "secrets/spellsource/stack-application-production.env" | sed -E 's/(.*)=.*/\1/' | xargs)
   export COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1
+  docker context use default
   docker-compose build
   docker-compose push
 fi
@@ -167,13 +168,16 @@ fi
 if [[ "$deploy_stack" == true ]]; then
   # Only used in this script
   source "secrets/common-deployment.env"
-  # Send secrets to the manager via an ssh pipe
+  docker context import hiddenswitch secrets/hiddenswitch.dockercontext >/dev/null || true
+  docker context use hiddenswitch >/dev/null
   # shellcheck disable=SC2046
   env $(cat "secrets/spellsource/stack-application-production.env") docker-compose config |
     ssh -i "secrets/deployment.rsa" doctorpangloss@"${SSH_HOST}" docker stack deploy --prune --resolve-image always --compose-file - spellsource
 fi
 
 if [[ "$deploy_steam" == true ]]; then
+  # should be executed with local docker
+  docker context use default
   docker build -t steamguardcli -f steamguardcli/Dockerfile ./steamguardcli
   source "secrets/spellsource/unityclient-build.env"
   STEAMCMD_GUARD_CODE="$(docker run --rm -v="$(pwd)"/secrets/spellsource/maFiles:/data steamguardcli mono /build/steamguard --mafiles-path /data generate-code)"
@@ -192,9 +196,10 @@ if [[ ${dump_mongo} == true ]]; then
   docker context use hiddenswitch >/dev/null
   docker run --network=backend -i --rm mongo:3.6 bash -c "mkdir -pv ./out >/dev/null; mongodump  --excludeCollection=games --uri=mongodb://spellsource_mongo:27017/metastone >/dev/null; tar -czvf ./archive.tar.gz ./dump >/dev/null; cat archive.tar.gz" >"${archive_path}"
   mkdir -pv .mongo
-  mongod --dbpath=.mongo --bind_ip_all >/dev/null & mongo_pid=$!
+  docker context use default >/dev/null
+  mongo_pid=$(docker run --rm -v="$(pwd)"/.mongo:/data/db -p="27017:27017" -d mongo:3.6)
   echo "mongod pid: ${mongo_pid}"
   tar -C "${dump_dir}" -xzvf "${archive_path}"
   mongorestore --drop --uri=mongodb://localhost:27017/metastone "${dump_dir}"/dump
-  kill -2 ${mongo_pid}
+  docker stop ${mongo_pid}
 fi

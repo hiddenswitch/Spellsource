@@ -1,0 +1,39 @@
+{
+  "name": "Value Overload",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "MAGENTA",
+  "rarity": "LEGENDARY",
+  "description": "Fill your hand and board with 1/1 Customers.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReceiveCardSpell",
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "operation": "SUBTRACT",
+          "value1": 10,
+          "value2": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "HAND_COUNT",
+            "targetPlayer": "SELF"
+          }
+        },
+        "card": "token_customer"
+      },
+      {
+        "class": "SummonSpell",
+        "value": 7,
+        "card": "token_customer"
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_PLENTIFULPATRONS"
+  ]
+}

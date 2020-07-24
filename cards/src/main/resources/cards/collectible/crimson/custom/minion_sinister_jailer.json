@@ -1,0 +1,26 @@
+{
+  "name": "Sinister Jailer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "<b>Guard</b>, <b>Aftermath</b>: Summon two 2/2 Captives with Guard.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_captiveguard_overlord",
+      "token_captiveguard_overlord"
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM"
+  ]
+}

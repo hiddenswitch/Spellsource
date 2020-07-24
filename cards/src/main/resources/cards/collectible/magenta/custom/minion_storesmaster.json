@@ -1,0 +1,57 @@
+{
+  "name": "Storesmaster",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Both players Source which cards they draw during their turns.",
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "SpellOverrideAura",
+      "target": "FRIENDLY_PLAYER",
+      "applyEffect": {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "FromDeckToHandSpell"
+        },
+        "cardSource": {
+          "class": "DeckSource",
+          "distinct": true
+        },
+        "exclusive": true
+      },
+      "removeEffect": {
+        "class": "DrawCardSpell"
+      }
+    },
+    {
+      "class": "SpellOverrideAura",
+      "target": "ENEMY_PLAYER",
+      "applyEffect": {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "FromDeckToHandSpell"
+        },
+        "cardSource": {
+          "class": "DeckSource",
+          "distinct": true
+        },
+        "exclusive": true
+      },
+      "removeEffect": {
+        "class": "DrawCardSpell"
+      }
+    }
+  ],
+  "sets": [
+    "CUSTOM",
+    "TRADER_WONDERSOFTHEWEST"
+  ]
+}

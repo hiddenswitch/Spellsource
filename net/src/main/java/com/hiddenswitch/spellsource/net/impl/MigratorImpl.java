@@ -9,7 +9,7 @@ import io.vertx.core.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 
 public class MigratorImpl implements Migrator {
 	Vertx vertx;
@@ -32,7 +32,7 @@ public class MigratorImpl implements Migrator {
 			impl.add(req);
 		}
 		vertx.runOnContext(v1 -> {
-			vertx.runOnContext(suspendableHandler((SuspendableAction1<Void>) v2 -> {
+			vertx.runOnContext(Sync.fiber((SuspendableAction1<Void>) v2 -> {
 				response.handle(impl.migrateTo(new MigrateToRequest().withVersion(version)));
 			}));
 		});

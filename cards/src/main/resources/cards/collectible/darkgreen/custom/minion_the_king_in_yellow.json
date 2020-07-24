@@ -1,0 +1,34 @@
+{
+  "name": "King in Yellow",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Whenever another allied minion survives damage, transform it into a 6/6 Aberration.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "target": "EVENT_TARGET",
+        "invert": true
+      },
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "EVENT_TARGET",
+      "card": "token_aberration"
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

@@ -220,7 +220,7 @@ public abstract class FiberAsync<V, E extends Throwable> implements java.io.Seri
         return getResult();
     }
     
-    private void checkInterrupted() throws InterruptedException {
+    protected void checkInterrupted() throws InterruptedException {
         if (Fiber.interrupted()) {
             interrupted();
             throw new InterruptedException();

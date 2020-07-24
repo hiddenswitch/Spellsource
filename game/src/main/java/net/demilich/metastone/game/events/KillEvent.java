@@ -12,6 +12,6 @@ import net.demilich.metastone.game.entities.Entity;
 public final class KillEvent extends BasicGameEvent {
 
 	public KillEvent(GameContext context, Entity victim) {
-		super(EventTypeEnum.KILL, context, context.getPlayer(victim.getOwner()), victim, victim);
+		super(EventTypeEnum.KILL, true, context, context.getPlayer(victim.getOwner()), victim, victim);
 	}
 }

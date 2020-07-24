@@ -1,0 +1,32 @@
+{
+  "name": "The Vein Wyrm",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Dash. Opener: Drain the Health of the minion(s) opposite this one.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrainSpell",
+      "target": "OPPOSITE_MINIONS",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "HP"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DRAIN": true,
+    "RUSH": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ]
+}

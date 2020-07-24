@@ -1,0 +1,25 @@
+{
+  "name": "Rejan, Last Defender",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 2,
+  "baseHp": 9,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Equip a 6/2 Excalibur with <b>Decay<b>. It doesn't lose Durability while this is alive.",
+  "battlecry": {
+    "spell": {
+      "class": "EquipWeaponSpell",
+      "card": "weapon_excalibur"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

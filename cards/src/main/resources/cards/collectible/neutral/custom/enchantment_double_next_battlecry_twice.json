@@ -1,0 +1,26 @@
+{
+  "name": "Double Next Opener Twice",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "The next two openers are triggered twice.",
+  "triggers": [
+    {
+      "countUntilCast": 2,
+      "eventTrigger": {
+        "class": "BattlecryResolvedTrigger"
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "TRIGGER_HOST",
+        "card": "enchantment_double_next_battlecry_twice"
+      }
+    }
+  ],
+  "aura": {
+    "class": "DoubleBattlecriesAura"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

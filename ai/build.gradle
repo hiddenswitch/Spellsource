@@ -1,0 +1,29 @@
+plugins {
+    id 'java-library'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'java-library'
+apply from: '../gradle/instrument.gradle'
+
+shadowJar {
+    zip64 true
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation project(':game')
+    implementation project(':cards')
+
+    implementation 'com.google.guava:guava:26.0-jre'
+    implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'commons-io:commons-io:2.5'
+    implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
+    implementation group: 'io.jenetics', name: 'jenetics', version: '6.0.1'
+    implementation group: 'io.jenetics', name: 'jenetics.ext', version: '6.0.1'
+    runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
+}

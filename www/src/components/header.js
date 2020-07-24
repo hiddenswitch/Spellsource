@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PostLink from './post-link'
 import { useStaticQuery, graphql, Link } from 'gatsby'
 import Img from 'gatsby-image'
@@ -11,7 +11,7 @@ const Header = () => {
     headerImage: file(relativePath: { eq: "assets/icon.png" }) {
       id
       childImageSharp {
-        fixed(width: 53) {
+        fixed(width: 25) {
           ...GatsbyImageSharpFixed
         }
       }
@@ -30,22 +30,37 @@ const Header = () => {
         }
       }
     }
-    siteSearchIndex {
-      index
-    }
   }
 `)
+
+  const headerDiv = useRef(null)
+
+  const handleScroll = event => {
+    sessionStorage.setItem('scrollPosition', headerDiv.current.scrollLeft)
+  }
+
+  const keepHorizontalScroll = () => {
+    if(sessionStorage.getItem('scrollPosition') !== null) {
+      headerDiv.current.scrollLeft = sessionStorage.getItem('scrollPosition')
+    }
+  }
+
+  useEffect(() => {
+    keepHorizontalScroll()
+  }, []);
+
   const pages = data.allMarkdownRemark.edges
     .filter(edge => !!edge.node.frontmatter.header)
     .map(edge => <li key={edge.node.id}><PostLink post={edge.node}/></li>)
 
   return <header>
-    <div className={styles.menu}>
+    <div className={styles.menu} ref={headerDiv} onScroll={e => {handleScroll(e)}}>
       <ul>
         <li key={data.headerImage.id}><Link to='/'><Img fixed={data.headerImage.childImageSharp.fixed}/></Link></li>
-        <li key={'javadocs'}><a href='/javadoc'>Docs</a></li>
+        <li key={'javadocs'}><a href='/javadoc'>[Docs]</a></li>
         {pages}
-        <li key={'search'}><Search placeholder={'Search'} searchIndex={data.siteSearchIndex.index}/></li>
+        <li key={'download'}><Link to='/download'>[Play Now]</Link></li>
+        <li key={'search'}><Search placeholder={'Search'} /></li>
       </ul>
     </div>
   </header>

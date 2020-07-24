@@ -1,0 +1,39 @@
+{
+  "name": "Zatha'hun, Bloodthirsty",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 9,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Dash. Opener: Shuffle 3 Drains into your deck. Whenever this deals damage, gain that much Armor.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": {
+        "class": "EventValueProvider"
+      }
+    }
+  },
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "card": "spell_drain",
+      "howMany": 3,
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,29 @@
+{
+  "name": "Starving Vampire",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "After a minion is summoned, Drain 1 Health from it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger"
+    },
+    "spell": {
+      "class": "DrainSpell",
+      "target": "EVENT_TARGET",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "DRAIN": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ]
+}

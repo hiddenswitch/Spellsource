@@ -1,0 +1,32 @@
+{
+  "name": "Shub-Rhogog",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 4,
+  "baseHp": 9,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Choose a minion. Fill both players' boards with copies of it.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "BothPlayersSpell",
+      "spell": {
+        "class": "RecastWhileSpell",
+        "spell": {
+          "class": "SummonSpell"
+        },
+        "howMany": 7
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "WITCHWOOD"
+  ]
+}

@@ -4,10 +4,11 @@ import styles from './creative-layout.module.scss'
 
 export default ({ children }) => {
   return <div className={styles.container}>
-    <Header/>
+    <Header />
     <main>
       {children}
     </main>
-    <footer><p>Copyright © 2020 Hidden Switch</p></footer>
+    <br/>
+    {/*<footer><p>Copyright © 2020 Hidden Switch</p></footer>*/}
   </div>
 }

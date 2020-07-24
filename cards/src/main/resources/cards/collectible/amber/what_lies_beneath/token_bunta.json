@@ -1,0 +1,29 @@
+{
+  "name": "Arido, One-Woman Army",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 8,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Dash. Dodge. At the end of your turn, gain Dodge.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "TRIGGER_HOST",
+      "attribute": "DIVINE_SHIELD"
+    }
+  },
+  "attributes": {
+    "DIVINE_SHIELD": true,
+    "RUSH": true
+  },
+  "collectible": false,
+  "set": "WHAT_LIES_BENEATH",
+  "fileFormatVersion": 1
+}

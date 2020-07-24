@@ -1,0 +1,19 @@
+{
+  "name": "Dustbowl Anarchist",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "COPPER",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Dash.",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ]
+}

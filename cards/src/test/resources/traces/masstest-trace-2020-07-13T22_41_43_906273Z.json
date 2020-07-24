@@ -1,0 +1,26 @@
+{
+  "seed" : -7235521649755667674,
+  "catalogueVersion" : 2,
+  "heroClasses" : [ "WHITE", "MAGENTA" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_null_phoenix", "spell_banish_to_the_dream", "minion_bogovanis", "minion_jack_in_the_box", "minion_inora_spellbound", "minion_ethereal_channeler", "minion_rainbow_runner", "minion_cackling_spinster", "minion_fairytale_tracker", "minion_flamerunner", "minion_dawn_drake", "minion_bugbiter", "spell_mental_assault", "minion_trigger_happy_survivor", "spell_soulshackle", "minion_shadowheart", "spell_feast_of_souls", "minion_macabre_samaritan", "minion_wild_pyrodancer", "minion_bookkeeper", "minion_wild_pyrodancer", "minion_cursing_disciple", "minion_colrum", "minion_yokai_loremaster", "spell_time_shred", "minion_cursing_disciple", "minion_redhide_butcher", "minion_shedding_chameleon", "minion_onis_eye", "minion_petal_knight" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "spell_treasure_shipment", "minion_undead_trickster", "minion_kodama_bulwark", "spell_value_overload", "minion_pack_mule", "minion_fel_manticore", "minion_garbasu_monster", "spell_goods_delivery", "minion_hunchback_supplier", "minion_guard_sprite", "minion_eyeweaver", "spell_tough_customer", "minion_storesmaster", "minion_colrum", "minion_magishire_wildcat", "minion_guard_sprite", "minion_jungle_operative", "spell_power_to_the_people", "minion_cacodemon", "minion_draconic_magnate", "minion_treeleach", "spell_scavenged_steel", "spell_switcheroo", "spell_new_muscle", "minion_blubber_behemoth", "minion_commander_gareth", "minion_guard_whelp", "minion_zaiko_the_generous", "minion_jack_in_the_box", "minion_yokai_bonder" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 15, 21 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 42, 52 ]
+  } ],
+  "actions" : [ 0, 2, 4, 2, 4, 5, 2, 0, 1, 4, 6, 0, 2, 2, 0, 2, 10, 0, 0, 2, 0, 0, 0, 11, 18, 1, 9, 1, 0, 3, 0, 3, 11, 0, 3, 5 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

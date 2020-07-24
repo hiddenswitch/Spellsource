@@ -6,13 +6,14 @@ import com.hiddenswitch.spellsource.net.impl.util.SimulationResultGenerator;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PythonBridgeTest {
 	String DECK_1 = "### Aggro Outlaw\n" +
@@ -105,19 +106,19 @@ public class PythonBridgeTest {
 	@Test
 	public void testSimulateMethod() throws InterruptedException {
 		CardCatalogue.loadCardsFromPackage();
-		List<String> deckLists = Arrays.asList(DECK_1, DECK_2, DECK_3, DECK_4);
-		int n = 1;
-		CountDownLatch latch = new CountDownLatch(1);
+		var deckLists = Arrays.asList(DECK_1, DECK_2, DECK_3, DECK_4);
+		var n = 1;
+		var latch = new CountDownLatch(1);
 		Supplier<Behaviour> behaviourSupplier = () -> {
-			GameStateValueBehaviour inst = new GameStateValueBehaviour();
+			var inst = new GameStateValueBehaviour();
 			inst.setMaxDepth(1);
 			return inst;
 		};
-		AtomicInteger counter = new AtomicInteger();
+		var counter = new AtomicInteger();
 		PythonBridge.simulate(new SimulationResultGenerator() {
 			@Override
 			public void offer(String obj) {
-				Assert.assertNotNull(obj);
+				assertNotNull(obj);
 				counter.incrementAndGet();
 			}
 
@@ -127,6 +128,6 @@ public class PythonBridgeTest {
 			}
 		}, deckLists, n, Arrays.asList(behaviourSupplier, behaviourSupplier), false, true);
 		latch.await();
-		Assert.assertTrue(counter.get() > 0);
+		assertTrue(counter.get() > 0);
 	}
 }

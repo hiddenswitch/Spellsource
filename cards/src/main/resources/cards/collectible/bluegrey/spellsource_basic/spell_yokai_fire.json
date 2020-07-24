@@ -1,0 +1,36 @@
+{
+  "name": "Yokai Fire",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLUEGREY",
+  "rarity": "FREE",
+  "description": "Deal $2 damage. If a Demon died this turn, deal $4 damage instead.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER",
+      "value1": {
+        "class": "DiedThisTurnValueProvider",
+        "cardFilter": {
+          "class": "RaceFilter",
+          "race": "DEMON"
+        },
+        "targetPlayer": "BOTH"
+      },
+      "value2": 0
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 4
+    },
+    "spell2": {
+      "class": "DamageSpell",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

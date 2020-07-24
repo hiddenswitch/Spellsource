@@ -1,0 +1,25 @@
+{
+  "name": "Arido",
+  "heroPower": "hero_power_arido",
+  "baseManaCost": 10,
+  "type": "HERO",
+  "heroClass": "AMBER",
+  "rarity": "LEGENDARY",
+  "description": "Opener: Fill your board with Serv-Ants with Guard.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "value": 7,
+      "card": "token_serv-ant_guard"
+    }
+  },
+  "attributes": {
+    "ARMOR": 5,
+    "BATTLECRY": true,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -151,11 +151,18 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	}
 
 	@Override
-	public Behaviour clone() {
+	public GameStateValueBehaviour clone() {
+		var clone = (GameStateValueBehaviour) super.clone();
 		if (featureVector != null) {
-			return new GameStateValueBehaviour(featureVector.clone(), nameSuffix);
+			clone.featureVector = featureVector.clone();
 		}
-		return new GameStateValueBehaviour();
+		if (indexPlan != null) {
+			clone.indexPlan = new ArrayDeque<>(indexPlan);
+		}
+		if (strictPlan != null) {
+			clone.strictPlan = new ArrayDeque<>(strictPlan);
+		}
+		return clone;
 	}
 
 	/**
@@ -439,16 +446,19 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			// gameplay causes a discover on a trigger, like a "Start of Game: Choose a new starting hero power."
 			if (validActions.stream().allMatch(a -> a.getActionType() == ActionType.DISCOVER || a.getActionType() == ActionType.BATTLECRY)) {
 				// We're going to choose an action at random at this point.
-				final var finalContext = context;
-				LOGGER.error("requestAction {} {}: Plan did not have answer to actions that were all discovers or battlecries. " +
-								"Sources were: {}", gameId, player,
-						validActions.stream().
-								map(ga -> ga.getSource(finalContext))
-								.filter(Objects::nonNull)
-								.map(Entity::getSourceCard)
-								.map(Card::getCardId)
-								.collect(toList()));
-				throw new UnsupportedOperationException();
+				var finalContext = context;
+				span.setTag("trace", context.getTrace().dump());
+				var sources = validActions.stream().
+						map(ga -> ga.getSource(finalContext))
+						.filter(Objects::nonNull)
+						.map(Entity::getSourceCard)
+						.map(Card::getCardId)
+						.collect(toList());
+				span.setTag("validActionSources", String.join(",", sources));
+				if (throwsExceptions()) {
+					throw new UnsupportedOperationException();
+				}
+				return exceptionActionChoice(Optional.empty(), validActions);
 			}
 
 			// Depth-first search for the branch which terminates with the highest score, where the DAG has game states as
@@ -584,7 +594,10 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			}
 
 			if (maxScore.isEmpty()) {
-				throw new NullPointerException("maxScore");
+				if (throwsExceptions()) {
+					throw new NullPointerException("maxScore");
+				}
+				return exceptionActionChoice(maxScore, validActions);
 			}
 
 			// Save the action plan, iterating backwards from the highest scoring node.
@@ -791,10 +804,15 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		Deque<IntermediateNode> intermediateNodes = new ArrayDeque<>();
 		var guard = new AtomicBoolean();
 
+		// Model the opponent as a random player.
+		mutateContext.setBehaviour(playerId == 0 ? 1 : 0, new PlayRandomBehaviour());
 		mutateContext.setBehaviour(playerId, new RequestActionFunction((context1, player1, validActions1) -> {
 			if (isInterrupted() || intermediateNodes.size() > getMaxDepth()) {
 				intermediateNodes.clear();
-				throw new RuntimeException("interrupted");
+				if (throwsExceptions()) {
+					throw new RuntimeException("interrupted");
+				}
+				return exceptionActionChoice(Optional.empty(), validActions1);
 			}
 
 			// This is a guard function that detects if intermediate game actions, like discovers or battlecries, are created
@@ -855,7 +873,10 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			intermediateMutateContext.setBehaviour(playerId, new RequestActionFunction((context, player, validActions) -> {
 				if (isInterrupted()) {
 					intermediateNodes.clear();
-					throw new RuntimeException("interrupted");
+					if (throwsExceptions()) {
+						throw new RuntimeException("interrupted");
+					}
+					return exceptionActionChoice(Optional.empty(), validActions);
 				}
 
 				// Make choices until we've exhausted the actions that were specified by this intermediate node.

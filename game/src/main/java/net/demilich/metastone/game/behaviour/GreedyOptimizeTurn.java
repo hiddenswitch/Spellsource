@@ -59,7 +59,7 @@ public class GreedyOptimizeTurn extends IntelligentBehaviour {
 	}
 
 	@Override
-	public Behaviour clone() {
+	public GreedyOptimizeTurn clone() {
 		try {
 			return new GreedyOptimizeTurn(heuristic.getClass().getConstructor().newInstance());
 		} catch (InstantiationException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {

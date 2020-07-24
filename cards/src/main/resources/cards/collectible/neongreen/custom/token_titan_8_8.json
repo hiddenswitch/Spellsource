@@ -1,0 +1,14 @@
+{
+  "name": "Formed Infant",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "FREE",
+  "race": "TITAN",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

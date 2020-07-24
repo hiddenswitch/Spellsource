@@ -1,0 +1,37 @@
+{
+  "name": "Sanguine Shiv",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "BLOOD",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "EPIC",
+  "description": "If you've Drained Health this turn, attacking with this weapon doesn't cost Durability.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "AttributeCondition",
+        "target": "FRIENDLY_PLAYER",
+        "value": 0,
+        "attribute": "DRAINED_THIS_TURN",
+        "operation": "GREATER"
+      },
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "SELF",
+      "value": 1,
+      "attribute": "HP"
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ]
+}

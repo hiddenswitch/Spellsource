@@ -1,0 +1,44 @@
+{
+  "name": "Archaeologist",
+  "type": "CLASS",
+  "heroClass": "LIGHTBROWN",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 0.0,
+        "g": 0.0,
+        "r": 0.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.784,
+      "g": 0.914,
+      "r": 1.0
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.6784313725490196,
+      "g": 0.8705882352941177,
+      "r": 1.0
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.506,
+      "g": 0.722,
+      "r": 0.867
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.169,
+      "g": 0.431,
+      "r": 0.604
+    }
+  },
+  "hero": "hero_izzy_jameson"
+}

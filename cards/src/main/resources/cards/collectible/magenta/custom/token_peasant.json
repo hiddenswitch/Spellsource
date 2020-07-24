@@ -1,0 +1,19 @@
+{
+  "name": "Peasant",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Dash.",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_PLENTIFULPATRONS"
+  ]
+}

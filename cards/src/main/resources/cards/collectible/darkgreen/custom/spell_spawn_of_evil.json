@@ -1,0 +1,21 @@
+{
+  "name": "Spawn of Evil",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "RARE",
+  "description": "Choose a minion. Summon a copy of it for both players.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BothPlayersSpell",
+    "spell": {
+      "class": "SummonSpell"
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "WITCHWOOD"
+  ]
+}

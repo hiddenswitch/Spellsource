@@ -1,0 +1,31 @@
+{
+  "name": "Bat-talion",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "Summon [1 3/3 Bat]. (Increases with Spellpower)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "SpellDamageValueProvider",
+      "value": 1
+    },
+    "card": "token_voodoo_bat"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "SpellDamageValueProvider",
+        "value": 1
+      },
+      "description1": " 3/3 Bat",
+      "description2": " 3/3 Bats"
+    }
+  ]
+}

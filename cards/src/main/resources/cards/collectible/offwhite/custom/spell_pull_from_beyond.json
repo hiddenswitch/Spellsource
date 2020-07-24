@@ -1,0 +1,41 @@
+{
+  "name": "Pull From Beyond",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "OFFWHITE",
+  "rarity": "RARE",
+  "description": "Spend all your lun and draw a card with cost equal to the lun used.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "FromDeckToHandSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "manaCost": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "MANA"
+          }
+        }
+      },
+      {
+        "class": "GainManaSpell",
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "operation": "NEGATE",
+          "value1": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "MANA"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

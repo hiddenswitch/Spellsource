@@ -12,7 +12,7 @@ import io.vertx.ext.web.handler.AuthHandler;
 
 import java.util.Set;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.suspendableHandler;
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 
 /**
  * A HTTP header based authentication method that uses login tokens to authorize users.
@@ -64,7 +64,7 @@ public class SpellsourceAuthHandler implements AuthHandler {
 
 	@Override
 	public void handle(RoutingContext event) {
-		parseCredentials(event, suspendableHandler(credentials -> {
+		parseCredentials(event, Sync.fiber(credentials -> {
 			if (credentials.failed()) {
 				event.fail(403, credentials.cause());
 				return;

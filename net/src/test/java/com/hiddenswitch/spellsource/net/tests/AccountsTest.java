@@ -2,86 +2,86 @@ package com.hiddenswitch.spellsource.net.tests;
 
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.net.Accounts;
-import com.hiddenswitch.spellsource.net.impl.Sync;
 import com.hiddenswitch.spellsource.net.impl.UserId;
-import com.hiddenswitch.spellsource.net.impl.util.UserRecord;
-import com.hiddenswitch.spellsource.net.models.*;
+import com.hiddenswitch.spellsource.net.models.ChangePasswordRequest;
+import com.hiddenswitch.spellsource.net.models.LoginRequest;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
-import io.vertx.ext.unit.TestContext;
+import io.vertx.core.Vertx;
+import io.vertx.junit5.VertxTestContext;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
 
+import static com.hiddenswitch.spellsource.net.impl.Sync.invoke;
+import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
 import static net.demilich.metastone.tests.util.TestBase.assertThrows;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AccountsTest extends SpellsourceTestBase {
 
 	@Test
-	public void testChangePassword(TestContext context) {
-		sync(() -> {
-			CreateAccountResponse account = createRandomAccount();
+	public void testChangePassword(Vertx vertx, VertxTestContext context) {
+		runOnFiberContext(() -> {
+			var account = createRandomAccount();
 			assertTrue(Accounts.isAuthorizedWithToken(account.getUserId(), account.getLoginToken().getSecret()));
-			ChangePasswordResponse res = Accounts.changePassword(ChangePasswordRequest.request(new UserId(account.getUserId()), "test"));
-			assertFalse("should log out user", Accounts.isAuthorizedWithToken(account.getUserId(), account.getLoginToken().getSecret()));
-		}, context);
+			Accounts.changePassword(ChangePasswordRequest.request(new UserId(account.getUserId()), "test"));
+			assertFalse(Accounts.isAuthorizedWithToken(account.getUserId(), account.getLoginToken().getSecret()), "should log out user");
+		}, context, vertx);
 	}
 
 	@Test
-	public void testChangePasswordRejectsInvalidPassword(TestContext context) {
-		sync(() -> {
-			CreateAccountResponse account = createRandomAccount();
+	public void testChangePasswordRejectsInvalidPassword(Vertx vertx, VertxTestContext context) {
+		runOnFiberContext(() -> {
+			var account = createRandomAccount();
 			assertTrue(Accounts.isAuthorizedWithToken(account.getUserId(), account.getLoginToken().getSecret()));
-			assertThrows(SecurityException.class, () -> {
-				ChangePasswordResponse res = Accounts.changePassword(ChangePasswordRequest.request(new UserId(account.getUserId()), "*"));
-			});
-			assertTrue("should not log out user", Accounts.isAuthorizedWithToken(account.getUserId(), account.getLoginToken().getSecret()));
-		}, context);
+			assertThrows(SecurityException.class, () -> Accounts.changePassword(ChangePasswordRequest.request(new UserId(account.getUserId()), "*")));
+			assertTrue(Accounts.isAuthorizedWithToken(account.getUserId(), account.getLoginToken().getSecret()), "should not log out user");
+		}, context, vertx);
 	}
 
 	@Test
-	public void testCreateAccount(TestContext context) throws Exception {
-		sync(() -> {
-			CreateAccountResponse response = Accounts.createAccount(getEmailAddress(), "destructoid", getUsername());
+	public void testCreateAccount(Vertx vertx, VertxTestContext context) throws Exception {
+		runOnFiberContext(() -> {
+			var response = Accounts.createAccount(getEmailAddress(), "destructoid", getUsername());
 			assertNotNull(response.getLoginToken());
 			assertFalse(response.isInvalidEmailAddress());
 			assertFalse(response.isInvalidName());
 			assertFalse(response.isInvalidPassword());
 			assertNotNull(response.getLoginToken().getToken());
 			assertTrue(response.getLoginToken().getExpiresAt().after(Date.from(Instant.now())));
-		}, context);
+		}, context, vertx);
 	}
 
 	@Test
-	public void testLogin(TestContext context) throws Exception {
-		sync(() -> {
-			String emailAddress = getEmailAddress();
+	public void testLogin(Vertx vertx, VertxTestContext context) throws Exception {
+		runOnFiberContext(() -> {
+			var emailAddress = getEmailAddress();
 			Accounts.createAccount(emailAddress, "password", getUsername());
-			LoginResponse loginResponse = Accounts.login(emailAddress, "password");
+			var loginResponse = Accounts.login(emailAddress, "password");
 			assertNotNull(loginResponse.getToken());
 			assertNotNull(loginResponse.getToken().getToken());
 			assertFalse(loginResponse.isBadPassword());
 			assertFalse(loginResponse.isBadEmail());
 
-			LoginRequest badEmail = new LoginRequest();
+			var badEmail = new LoginRequest();
 			badEmail.setEmail(RandomStringUtils.randomAlphanumeric(32) + "test@fidoas.com");
 			badEmail.setPassword("*****dddd");
-			LoginResponse badEmailResponse = Accounts.login(badEmail);
+			var badEmailResponse = Accounts.login(badEmail);
 			assertTrue(badEmailResponse.isBadEmail());
 			assertNull(badEmailResponse.getToken());
 
-			LoginRequest badPassword = new LoginRequest();
+			var badPassword = new LoginRequest();
 			badPassword.setEmail(emailAddress);
 			badPassword.setPassword("*****dddd");
-			LoginResponse basPasswordResponse = Accounts.login(badPassword);
+			var basPasswordResponse = Accounts.login(badPassword);
 			assertTrue(basPasswordResponse.isBadPassword());
 			assertNull(basPasswordResponse.getToken());
-		}, context);
+		}, context, vertx);
 	}
 
 	@NotNull
@@ -90,10 +90,10 @@ public class AccountsTest extends SpellsourceTestBase {
 	}
 
 	@Test
-	public void testIsAuthorizedWithToken(TestContext context) throws Exception {
-		sync(() -> {
-			CreateAccountResponse response = Accounts.createAccount(getEmailAddress(), "password", getUsername());
-			String secret = response.getLoginToken().getSecret();
+	public void testIsAuthorizedWithToken(Vertx vertx, VertxTestContext context) throws Exception {
+		runOnFiberContext(() -> {
+			var response = Accounts.createAccount(getEmailAddress(), "password", getUsername());
+			var secret = response.getLoginToken().getSecret();
 			assertTrue(Accounts.isAuthorizedWithToken(response.getUserId(), secret));
 			assertFalse(Accounts.isAuthorizedWithToken(response.getUserId(), null));
 			assertFalse(Accounts.isAuthorizedWithToken(response.getUserId(), ""));
@@ -101,7 +101,7 @@ public class AccountsTest extends SpellsourceTestBase {
 			assertFalse(Accounts.isAuthorizedWithToken("A", null));
 			assertFalse(Accounts.isAuthorizedWithToken("A", ""));
 			assertFalse(Accounts.isAuthorizedWithToken("A", "b"));
-		}, context);
+		}, context, vertx);
 	}
 
 	@NotNull
@@ -110,90 +110,73 @@ public class AccountsTest extends SpellsourceTestBase {
 	}
 
 	@Test
-	public void testGet(TestContext context) throws Exception {
-		sync(() -> {
-			String emailAddress = getEmailAddress();
-			String username = getUsername();
-			CreateAccountResponse response = Accounts.createAccount(emailAddress, "password", username);
-			UserRecord profile = Accounts.get(response.getUserId());
+	public void testGet(Vertx vertx, VertxTestContext context) throws Exception {
+		runOnFiberContext(() -> {
+			var emailAddress = getEmailAddress();
+			var username = getUsername();
+			var response = Accounts.createAccount(emailAddress, "password", username);
+			var profile = Accounts.get(response.getUserId());
 			assertNotNull(profile);
 			assertEquals(profile.getEmails().get(0).getAddress(), emailAddress);
 			assertEquals(profile.getUsername(), username);
 			assertNull(Accounts.get("a"));
 			assertNull(Accounts.get((String) null));
-		}, context);
+		}, context, vertx);
 	}
 
 
 	@Test
-	public void testPasswordReset(TestContext context) {
-		sync(() -> {
-			try (UnityClient client = new UnityClient(context)) {
-				Sync.invoke0(client::createUserAccount);
-				String token = Accounts.createResetToken(client.getUserId().toString()).getToken();
-				Sync.invoke0(() -> client.getApi().postPasswordReset(token, "test", "test"));
-				/*
-				HttpResponse<Buffer> res = awaitResult(h -> WebClient.create(contextRule.vertx())
-						.post(client.getApiClient().getBasePath() + "/reset/passwords/with-token")
-						.addQueryParam("token", token)
-						.sendForm(MultiMap.caseInsensitiveMultiMap()
-								.add("password1", "test")
-								.add("password2", "test"), h));
-				*/
-
-				try (UnityClient client2 = new UnityClient(context)) {
-					com.hiddenswitch.spellsource.client.models.LoginResponse res2 = Sync.invoke(client2.getApi()::login, new com.hiddenswitch.spellsource.client.models.LoginRequest().email(client.getAccount().getEmail()).password("test"));
-					context.assertNotNull(res2.getLoginToken());
+	public void testPasswordReset(Vertx vertx, VertxTestContext context) {
+		runOnFiberContext(() -> {
+			try (var client = new UnityClient(context)) {
+				invoke0(client::createUserAccount);
+				var token = Accounts.createResetToken(client.getUserId().toString()).getToken();
+				invoke0(() -> client.getApi().postPasswordReset(token, "test", "test"));
+				try (var client2 = new UnityClient(context)) {
+					var res2 = invoke(client2.getApi()::login, new com.hiddenswitch.spellsource.client.models.LoginRequest().email(client.getAccount().getEmail()).password("test"));
+					assertNotNull(res2.getLoginToken());
 				}
 			}
-		}, context);
+		}, context, vertx);
 	}
 
 	@Test
-	public void testPasswordResetWrongToken(TestContext context) {
-		sync(() -> {
-			try (UnityClient client = new UnityClient(context)) {
-				Sync.invoke0(client::createUserAccount);
-				String token = "faketoken";
-				Sync.invoke0(() -> client.getApi().postPasswordReset(token, "test", "test"));
-				/*
-				HttpResponse<Buffer> res = awaitResult(h -> WebClient.create(contextRule.vertx())
-						.post(client.getApiClient().getBasePath() + "/reset/passwords/with-token")
-						.addQueryParam("token", token)
-						.sendForm(MultiMap.caseInsensitiveMultiMap()
-								.add("password1", "test")
-								.add("password2", "test"), h));
-				*/
+	public void testPasswordResetWrongToken(Vertx vertx, VertxTestContext context) {
+		runOnFiberContext(() -> {
+			try (var client = new UnityClient(context)) {
+				invoke0(client::createUserAccount);
+				var token = "faketoken";
+				invoke0(() -> client.getApi().postPasswordReset(token, "test", "test"));
 
-				try (UnityClient client2 = new UnityClient(context)) {
+				try (var client2 = new UnityClient(context)) {
 					try {
-						com.hiddenswitch.spellsource.client.models.LoginResponse res2 = Sync.invoke(client2.getApi()::login, new com.hiddenswitch.spellsource.client.models.LoginRequest().email(client.getAccount().getEmail()).password("test"));
-						context.fail("should not reach");
+						invoke(client2.getApi()::login, new com.hiddenswitch.spellsource.client.models.LoginRequest().email(client.getAccount().getEmail()).password("test"));
+						fail("should not reach");
 					} catch (RuntimeException ex) {
-						context.assertTrue(((ApiException) ex.getCause()).getResponseBody().contains("Bad password"));
+						assertTrue(((ApiException) ex.getCause()).getResponseBody().contains("Bad password"));
 					}
 				}
 			}
-		}, context);
+		}, context, vertx);
 	}
 
 	@Test
-	public void testRemoveAccount(TestContext context) {
-		sync(() -> {
-			CreateAccountResponse account = createRandomAccount();
+	public void testRemoveAccount(Vertx vertx, VertxTestContext context) {
+		runOnFiberContext(() -> {
+			var account = createRandomAccount();
 			Accounts.removeAccount(new UserId(account.getUserId()));
-			context.assertNull(Accounts.get(account.getUserId()));
-		}, context);
+			assertNull(Accounts.get(account.getUserId()));
+		}, context, vertx);
 	}
 
 	@Test
-	public void testRemoveAccounts(TestContext context) {
-		sync(() -> {
-			CreateAccountResponse account1 = createRandomAccount();
-			CreateAccountResponse account2 = createRandomAccount();
+	public void testRemoveAccounts(Vertx vertx, VertxTestContext context) {
+		runOnFiberContext(() -> {
+			var account1 = createRandomAccount();
+			var account2 = createRandomAccount();
 			Accounts.removeAccounts(Arrays.asList(new UserId(account1.getUserId()), new UserId(account2.getUserId())));
-			context.assertNull(Accounts.get(account1.getUserId()));
-			context.assertNull(Accounts.get(account2.getUserId()));
-		}, context);
+			assertNull(Accounts.get(account1.getUserId()));
+			assertNull(Accounts.get(account2.getUserId()));
+		}, context, vertx);
 	}
 }

@@ -1,0 +1,21 @@
+{
+  "name": "Otherwordly Truth",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Shuffle a copy of the top 3 cards in your opponent's deck into your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ShuffleToDeckSpell",
+    "value": 3,
+    "cardSource": {
+      "class": "TopThreeCardsOfDeckSource",
+      "targetPlayer": "OPPONENT"
+    },
+    "exclusive": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

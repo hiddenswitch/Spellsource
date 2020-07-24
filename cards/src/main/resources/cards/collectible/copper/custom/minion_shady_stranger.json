@@ -1,0 +1,24 @@
+{
+  "name": "Shady Stranger",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "COPPER",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Guard. Opener: Your opponent draws a card.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrawCardSpell",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

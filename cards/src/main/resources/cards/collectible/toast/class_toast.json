@@ -1,0 +1,44 @@
+{
+  "name": "Chef",
+  "type": "CLASS",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 0.0,
+        "g": 0.0,
+        "r": 0.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.682,
+      "g": 0.855,
+      "r": 0.976
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.5294117647058824,
+      "g": 0.788235294117647,
+      "r": 0.9686274509803922
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.4,
+      "g": 0.659,
+      "r": 0.835
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.149,
+      "g": 0.4,
+      "r": 0.576
+    }
+  },
+  "hero": "hero_warchef_gordo"
+}

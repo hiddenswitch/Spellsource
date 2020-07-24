@@ -1,0 +1,81 @@
+{
+  "name": "Ruffian Shiro",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BLUEGREY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Opener: Give an allied Demon and a random Demon in your hand this minion's stats.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "DEMON"
+      },
+      "spells": [
+        {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "CardFilter",
+              "race": "DEMON"
+            }
+          },
+          "spell": {
+            "class": "BuffSpell",
+            "attackBonus": {
+              "class": "AttributeValueProvider",
+              "target": "SELF",
+              "attribute": "ATTACK"
+            },
+            "hpBonus": {
+              "class": "AttributeValueProvider",
+              "target": "SELF",
+              "attribute": "HP"
+            }
+          }
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HAND",
+          "attackBonus": {
+            "class": "AttributeValueProvider",
+            "target": "SELF",
+            "attribute": "ATTACK"
+          },
+          "filter": {
+            "class": "CardFilter",
+            "race": "DEMON",
+            "cardType": "MINION"
+          },
+          "hpBonus": {
+            "class": "AttributeValueProvider",
+            "target": "SELF",
+            "attribute": "HP"
+          },
+          "randomTarget": true
+        }
+      ]
+    },
+    "targetSelectionCondition": {
+      "class": "MinionOnBoardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DEMON"
+      },
+      "invert": true
+    },
+    "targetSelectionOverride": "NONE"
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

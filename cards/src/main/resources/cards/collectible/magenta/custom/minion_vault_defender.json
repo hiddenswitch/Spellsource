@@ -1,0 +1,30 @@
+{
+  "name": "Vault Defender",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "MAGENTA",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Opener: Destroy an even-Cost minion.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "DestroySpell",
+      "filter": {
+        "class": "OddCostFilter",
+        "invert": true
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "TRADER_VAUNTEDVAULTS"
+  ]
+}

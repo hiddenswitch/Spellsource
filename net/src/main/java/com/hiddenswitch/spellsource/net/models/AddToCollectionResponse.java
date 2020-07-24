@@ -8,9 +8,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by bberman on 1/19/17.
- */
 public final class AddToCollectionResponse implements Serializable {
 	private Map<String, Object> updateResult;
 	private List<String> inventoryIds;

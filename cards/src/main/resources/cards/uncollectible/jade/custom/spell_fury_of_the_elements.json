@@ -1,0 +1,28 @@
+{
+  "name": "Fury of the Elements",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "FREE",
+  "description": "Summon two different Elemental Spirits",
+  "condition": {
+    "class": "CanSummonCondition"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": 2,
+    "cardSource": {
+      "class": "SummonWithoutReplacementCardSource"
+    },
+    "cards": [
+      "token_bellowing_spirit",
+      "token_unearthed_spirit",
+      "token_burning_spirit"
+    ],
+    "randomTarget": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

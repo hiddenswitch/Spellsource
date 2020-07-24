@@ -1,0 +1,37 @@
+{
+  "name": "Incandescent Mutation",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "RARE",
+  "description": "Draw a card, then give all minions in your hand \"Opener: Deal 1 damage to a random enemy minion\".",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      },
+      {
+        "class": "AddBattlecrySpell",
+        "target": "FRIENDLY_HAND",
+        "battlecry": {
+          "targetSelection": "NONE",
+          "spell": {
+            "class": "DamageSpell",
+            "target": "ENEMY_MINIONS",
+            "value": 1,
+            "randomTarget": true
+          }
+        },
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

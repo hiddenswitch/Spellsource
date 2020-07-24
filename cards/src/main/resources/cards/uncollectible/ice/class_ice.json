@@ -1,0 +1,44 @@
+{
+  "name": "Ice Knight",
+  "type": "CLASS",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 0.0,
+        "g": 0.0,
+        "r": 0.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.976,
+      "g": 0.976,
+      "r": 0.816
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.9686274509803922,
+      "g": 0.9686274509803922,
+      "r": 0.7254901960784313
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.831,
+      "g": 0.831,
+      "r": 0.553
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.561,
+      "g": 0.561,
+      "r": 0.216
+    }
+  },
+  "hero": "hero_darion"
+}

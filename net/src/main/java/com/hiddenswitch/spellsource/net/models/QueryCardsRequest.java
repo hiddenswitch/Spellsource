@@ -8,9 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by bberman on 1/19/17.
- */
 public final class QueryCardsRequest implements Serializable {
 	private List<QueryCardsRequest> requests;
 	private String[] sets;

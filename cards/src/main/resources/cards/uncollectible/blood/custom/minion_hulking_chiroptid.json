@@ -1,0 +1,33 @@
+{
+  "name": "Hulking Chiroptid",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Dash. Whenever this minion attacks, Drain 1 Health from the target.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "sourceEntityType": "MINION",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "DrainSpell",
+      "target": "EVENT_TARGET",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "DRAIN": true,
+    "RUSH": true
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_CRIMSONCATACOMBS"
+  ]
+}

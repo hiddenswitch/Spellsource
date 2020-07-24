@@ -1,0 +1,50 @@
+{
+  "name": "The Oathbreaker",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "CRIMSON",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Guard, Opener: Draw a copy of each Pact in your deck. The first you play costs (0).",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "FromDeckToHandSpell",
+          "value": 10,
+          "cardFilter": {
+            "class": "CardFilter",
+            "attribute": "PACT"
+          },
+          "exclusive": true
+        },
+        {
+          "class": "CardCostModifierSpell",
+          "target": "FRIENDLY_PLAYER",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "value": 0,
+            "cardType": "SPELL",
+            "expirationTrigger": {
+              "class": "CardPlayedTrigger",
+              "requiredAttribute": "PACT",
+              "targetPlayer": "SELF"
+            },
+            "operation": "SET",
+            "requiredAttribute": "PACT"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,13 +1,10 @@
 package com.hiddenswitch.spellsource.net.models;
 
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutRequest;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import io.vertx.core.json.JsonObject;
 
 import java.io.Serializable;
 
-/**
- * Created by bberman on 1/23/17.
- */
 public class MatchmakingRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
 	protected boolean allowBots;
@@ -131,6 +128,6 @@ public class MatchmakingRequest implements Serializable {
 
 	@Override
 	public String toString() {
-		return new ReflectionToStringBuilder(this).build();
+		return JsonObject.mapFrom(this).encode();
 	}
 }

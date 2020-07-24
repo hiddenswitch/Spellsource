@@ -1,0 +1,27 @@
+{
+  "name": "Wretched Wrecker",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Opener: Deal 5 damage to all other minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_OTHER_MINIONS",
+      "value": 5
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "GOBLINS_VS_GNOMES"
+  ]
+}

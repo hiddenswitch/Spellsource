@@ -1,0 +1,30 @@
+{
+  "name": "Extract Nightmare",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "EPIC",
+  "description": "Destroy an allied minion. Deal 4 damage to all enemy minions.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 0,
+    "operation": "GREATER"
+  },
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 4
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

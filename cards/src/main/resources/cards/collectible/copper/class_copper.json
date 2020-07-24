@@ -1,0 +1,44 @@
+{
+  "name": "Outlaw",
+  "type": "CLASS",
+  "heroClass": "COPPER",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.467,
+      "g": 0.631,
+      "r": 0.812
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.2,
+      "g": 0.45098039215686275,
+      "r": 0.7215686274509804
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.173,
+      "g": 0.392,
+      "r": 0.631
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.125,
+      "g": 0.282,
+      "r": 0.459
+    }
+  },
+  "hero": "hero_handsome_joe"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Grasp of God",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Destroy an allied minion. At the start of your next turn, resummon it.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "JailMinionSpell",
+    "revertTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "secondaryTarget": "FRIENDLY_PLAYER"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

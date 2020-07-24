@@ -1,0 +1,33 @@
+{
+  "name": "Dream of Death",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "LEGENDARY",
+  "description": "Set your remaining Health to 1. Drain the Health of all minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SetHpSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 1
+      },
+      {
+        "class": "DrainSpell",
+        "target": "ALL_MINIONS",
+        "value": {
+          "class": "AttributeValueProvider",
+          "attribute": "HP"
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VERDANT_DREAMS"
+  ]
+}

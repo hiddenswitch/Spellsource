@@ -1,0 +1,28 @@
+{
+  "name": "Livid Zealot",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "After an allied minion dies, gain its card text.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "custom.AddActorEffectsToTargetActorSpell",
+      "target": "TRIGGER_HOST",
+      "secondaryTarget": "EVENT_TARGET"
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TWISTEDSPIRES"
+  ]
+}

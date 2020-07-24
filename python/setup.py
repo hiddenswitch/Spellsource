@@ -1,8 +1,9 @@
-from setuptools import setup
-from setuptools.command.install import install
 import os
 import subprocess
 import sys
+
+from setuptools import setup
+from setuptools.command.install import install
 
 if sys.version_info < (3, 6):
     sys.exit('Spellsource requires at least Python 3.6\n  Visit https://www.python.org/downloads/ to download it.')
@@ -11,7 +12,7 @@ try:
     java_version = subprocess.check_output(["java", "-version"], stderr=subprocess.STDOUT).decode('utf-8')
     if java_version == '':
         java_version = subprocess.check_output(["java", "-version"]).decode('utf-8')
-    if '11' not in java_version and '12' not in java_version and '13' not in java_version:
+    if all(str(x) + '.' not in java_version for x in range(11, 100)):
         raise ValueError
 except:
     sys.exit('Spellsource requires Java 11 or later.\n  Visit https://adoptopenjdk.net to download it.')
@@ -37,13 +38,13 @@ class CompileSpellsource(install):
         else:
             gradle_cmd = './gradlew'
         subprocess.check_call([f"{gradle_cmd} net:shadowJar"], cwd=SRC_PATH, shell=True)
-        subprocess.check_call([f"{gradle_cmd} hearthstone:jar"], cwd=SRC_PATH, shell=True)
+        subprocess.check_call([f"{gradle_cmd} internalcontent:jar"], cwd=SRC_PATH, shell=True)
         install.run(self)
 
 
 setup(name='spellsource',
-      version='0.8.77',
-      description='The Spellsource card game engine, supports Hearthstone AI and simulation',
+      version='0.8.79',
+      description='The Spellsource card game engine for card game AI and simulation',
       long_description=README,
       long_description_content_type="text/markdown",
       url='http://github.com/hiddenswitch/Spellsource-Server',
@@ -52,9 +53,9 @@ setup(name='spellsource',
       data_files=[
           ("share/spellsource/cards",
            list(_cards_in_directory(os.path.join(SRC_PATH, 'cards', 'src', 'main', 'resources', 'cards')))),
-          ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-0.8.77-all.jar'),
-                                 os.path.join(SRC_PATH, 'hearthstone', 'build', 'libs', 'internalcontent-0.8.77.jar'),
-                                 os.path.join(SRC_PATH, 'docs', 'hearthcards.pkl')]),
+          ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-0.8.79-all.jar'),
+                                 os.path.join(SRC_PATH, 'internalcontent', 'build', 'libs',
+                                              'internalcontent-0.8.79.jar')]),
       ],
       include_package_data=True,
       author_email='ben@hiddenswitch.com',
@@ -67,13 +68,12 @@ setup(name='spellsource',
                         'autoboto==0.4.3',
                         'scrapy',
                         'boto3',
-                        'hearthstone',
                         'pymongo',
                         'mistletoe',
                         'GitPython',
                         'SecretColors==1.1.0'],
       extras_require={
-          'ext': ['numpy', 'h5py', 'keras', 'hearthstone_data', 'nltk', 'gitpython']
+          'ext': ['numpy', 'h5py', 'keras', 'nltk', 'gitpython']
       },
       entry_points={
           'console_scripts': [
@@ -81,7 +81,7 @@ setup(name='spellsource',
           ]
       },
       packages=['spellsource', 'spellsource.ext', 'spellsource.tests'],
-      keywords=['hearthstone', 'artificial intelligence', 'ai', 'spellsource', 'cards', 'games', 'machine learning',
+      keywords=['artificial intelligence', 'ai', 'spellsource', 'cards', 'games', 'machine learning',
                 'ml'],
       classifiers=['Development Status :: 3 - Alpha',
                    # Indicate who your project is intended for

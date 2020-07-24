@@ -13,6 +13,8 @@ import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.statistics.Statistic;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
@@ -25,6 +27,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Simulation {
+	private static Logger LOGGER = LoggerFactory.getLogger(Simulation.class);
+
 	public static List<Supplier<Behaviour>> getBehaviourSuppliers(Map<String, Class<? extends Behaviour>> availableBehaviours, List<String> behaviours) {
 		return behaviours.stream()
 				.map(availableBehaviours::get)
@@ -145,11 +149,11 @@ public class Simulation {
 				while (counter.get() <= total) {
 					Strand.sleep(5000);
 					int matchesNow = counter.get();
-					System.err.println(String.format("Progress: %.2f%% (%d/%d completed)", (float) matchesNow / (float) total * 100.0f, matchesNow, total));
+					LOGGER.info(String.format("Simulation getMonitor progress: %.2f%% (%d/%d completed)", (float) matchesNow / (float) total * 100.0f, matchesNow, total));
 				}
 			} catch (InterruptedException | SuspendExecution e) {
 				int matchesNow = counter.get();
-				System.err.println(String.format("Progress: %.2f%% (%d/%d completed)", (float) matchesNow / (float) total * 100.0f, matchesNow, total));
+				LOGGER.info(String.format("Simulation getMonitor progress: %.2f%% (%d/%d completed)", (float) matchesNow / (float) total * 100.0f, matchesNow, total));
 			}
 		}));
 	}

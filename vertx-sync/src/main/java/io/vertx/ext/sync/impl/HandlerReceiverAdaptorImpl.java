@@ -3,6 +3,7 @@ package io.vertx.ext.sync.impl;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.FiberScheduler;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.channels.Channel;
 import co.paralleluniverse.strands.channels.Channels;
 import co.paralleluniverse.strands.channels.ReceivePort;
@@ -33,7 +34,7 @@ public class HandlerReceiverAdaptorImpl<T> implements HandlerReceiverAdaptor<T> 
   @Override
   @Suspendable
   public void handle(T t) {
-    new Fiber<Void>(null, fiberScheduler, Sync.DEFAULT_STACK_SIZE, () -> {
+	  new Fiber<Void>(Strand.currentStrand().getName() + "ephemeral-sender", fiberScheduler, Sync.DEFAULT_STACK_SIZE, () -> {
       try {
         channel.send(t);
       } catch (Exception e) {

@@ -13,10 +13,7 @@
  */
 package co.paralleluniverse.fibers;
 
-import co.paralleluniverse.common.monitoring.ForkJoinPoolMonitor;
-import co.paralleluniverse.common.monitoring.JMXForkJoinPoolMonitor;
-import co.paralleluniverse.common.monitoring.MetricsForkJoinPoolMonitor;
-import co.paralleluniverse.common.monitoring.MonitorType;
+import co.paralleluniverse.common.monitoring.*;
 import co.paralleluniverse.concurrent.forkjoin.ExtendedForkJoinWorkerFactory;
 import co.paralleluniverse.concurrent.forkjoin.ExtendedForkJoinWorkerThread;
 import co.paralleluniverse.concurrent.forkjoin.MonitoredForkJoinPool;
@@ -116,6 +113,8 @@ public class FiberForkJoinScheduler extends FiberScheduler {
         switch (monitorType) {
             case JMX:
                 return new JMXForkJoinPoolMonitor(name, fjPool);
+	          case MICROMETER:
+	        	    return new MicrometerForkJoinPoolMonitor(name, fjPool);
             case METRICS:
                 return new MetricsForkJoinPoolMonitor(name, fjPool);
             case NONE:

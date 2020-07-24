@@ -1,0 +1,53 @@
+{
+  "name": "Wicked Moonbrand",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "TWILIGHT",
+  "damage": 1,
+  "durability": 6,
+  "rarity": "COMMON",
+  "description": "Give any minions damaged by this weapon Decay.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "fireCondition": {
+        "class": "AttributeCondition",
+        "target": "EVENT_TARGET",
+        "attribute": "DECAY",
+        "invert": true,
+        "operation": "HAS"
+      },
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "EVENT_TARGET",
+      "spells": [
+        {
+          "class": "AddEnchantmentSpell",
+          "trigger": {
+            "eventTrigger": {
+              "class": "TurnEndTrigger",
+              "targetPlayer": "OWNER"
+            },
+            "spell": {
+              "class": "DecaySpell"
+            }
+          }
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "DECAY"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
+}

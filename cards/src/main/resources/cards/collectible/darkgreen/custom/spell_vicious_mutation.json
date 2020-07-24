@@ -1,0 +1,30 @@
+{
+  "name": "Vicious Mutation",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Give a minion +4/+2. It then attacks your champion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 4,
+        "hpBonus": 2
+      },
+      {
+        "class": "FightSpell",
+        "target": "FRIENDLY_HERO",
+        "secondaryTarget": "TARGET"
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "JOURNEY_TO_UNGORO"
+  ]
+}

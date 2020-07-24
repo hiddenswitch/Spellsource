@@ -1,0 +1,32 @@
+{
+  "name": "Ritual of Proliferation",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DARKBLUE",
+  "rarity": "FREE",
+  "description": "Summon [X copies] of an allied minion.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "target": "SELF",
+      "attribute": "RESERVED_INTEGER_1"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "RESERVED_INTEGER_1"
+      },
+      "description1": " copy",
+      "description2": " copies"
+    }
+  ]
+}

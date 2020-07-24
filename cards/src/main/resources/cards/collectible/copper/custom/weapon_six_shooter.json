@@ -1,0 +1,42 @@
+{
+  "name": "Six-shooter",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "COPPER",
+  "damage": 1,
+  "durability": 6,
+  "rarity": "RARE",
+  "description": "Quick Draw: Deal 3 damage to a random enemy minion and lose 1 Durability.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "QuickDrawTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "QuickDrawSpell",
+          "spell": {
+            "class": "DamageSpell",
+            "target": "ENEMY_MINIONS",
+            "value": 3,
+            "randomTarget": true
+          }
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "SELF",
+          "value": -1,
+          "attribute": "HP"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "QUICK_DRAW": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

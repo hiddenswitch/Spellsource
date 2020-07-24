@@ -1,0 +1,86 @@
+{
+  "name": "Part the Veil",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "OFFWHITE",
+  "rarity": "RARE",
+  "description": "Consume 2 to source spirits and summon them until the total cost of spirits you control is greater than 6.",
+  "targetSelection": "NONE",
+  "condition": {
+    "class": "ComparisonCondition",
+    "value1": {
+      "class": "CardCountValueProvider",
+      "offset": {
+        "class": "BoardCountValueProvider",
+        "offset": -1
+      }
+    },
+    "value2": 2,
+    "operation": "GREATER_OR_EQUAL"
+  },
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "QueryTargetSpell",
+        "howMany": 2,
+        "target": "FRIENDLY_MINIONS_LEFT_TO_RIGHT",
+        "value": {
+          "class": "AttributeValueProvider",
+          "attribute": "INDEX",
+          "multiplier": -1
+        },
+        "spell": {
+          "class": "DestroySpell"
+        }
+      },
+      {
+        "class": "MetaSpell",
+        "howMany": {
+          "class": "BoardCountValueProvider",
+          "offset": 2,
+          "multiplier": -1
+        },
+        "spells": [
+          {
+            "class": "DiscardSpell",
+            "target": "RIGHTMOST_FRIENDLY_CARD_HAND"
+          }
+        ]
+      },
+      {
+        "class": "RecastWhileSpell",
+        "howMany": 7,
+        "condition": {
+          "class": "ComparisonCondition",
+          "operation": "LESS_OR_EQUAL",
+          "value1": {
+            "class": "ReduceValueProvider",
+            "target": "FRIENDLY_MINIONS",
+            "operation": "ADD",
+            "value1": {
+              "class": "ManaCostProvider"
+            }
+          },
+          "value2": 6
+        },
+        "spell": {
+          "class": "DiscoverSpell",
+          "spell": {
+            "class": "SummonSpell"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "race": "SPIRIT"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

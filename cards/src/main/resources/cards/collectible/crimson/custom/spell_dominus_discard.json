@@ -1,0 +1,57 @@
+{
+  "name": "Devour",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "CRIMSON",
+  "rarity": "FREE",
+  "description": "Discard your lowest-cost card. Restore #5 Health to your Champion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DiscardSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "ManaCostFilter",
+          "value": {
+            "class": "ReduceValueProvider",
+            "target": "FRIENDLY_HAND",
+            "operation": "MINIMUM",
+            "value1": {
+              "class": "ManaCostProvider"
+            }
+          },
+          "operation": "EQUAL"
+        }
+      },
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 5
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "CardCountCondition",
+          "value": 1,
+          "operation": "GREATER_OR_EQUAL"
+        },
+        "spell": {
+          "class": "DiscoverSpell",
+          "spell": {
+            "class": "CastCardsSpell"
+          },
+          "cards": [
+            "spell_dominus_stop",
+            "spell_dominus_discard"
+          ],
+          "howMany": 2
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

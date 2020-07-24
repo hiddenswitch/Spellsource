@@ -1,0 +1,44 @@
+{
+  "name": "Mercenary",
+  "type": "CLASS",
+  "heroClass": "LEATHER",
+  "rarity": "FREE",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.333,
+      "g": 0.667,
+      "r": 0.914
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.0,
+      "g": 0.5019607843137255,
+      "r": 0.8745098039215686
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.0,
+      "g": 0.443,
+      "r": 0.773
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.0,
+      "g": 0.329,
+      "r": 0.573
+    }
+  },
+  "hero": "hero_quarnassio"
+}

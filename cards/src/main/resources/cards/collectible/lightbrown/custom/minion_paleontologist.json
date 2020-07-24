@@ -1,0 +1,28 @@
+{
+  "name": "Paleontologist",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "LIGHTBROWN",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Opener: Shuffle two random Fossils into your deck.",
+  "battlecry": {
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "cards": [
+        "token_bone_bouncer",
+        "token_bone_bruiser",
+        "token_bone_bowman"
+      ],
+      "howMany": 2,
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

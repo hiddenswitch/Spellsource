@@ -1,0 +1,44 @@
+{
+  "name": "Occultist",
+  "type": "CLASS",
+  "heroClass": "DARKGREEN",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 1.0,
+        "g": 1.0,
+        "r": 1.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.341,
+      "g": 0.545,
+      "r": 0.451
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.011764705882352941,
+      "g": 0.3215686274509804,
+      "r": 0.1803921568627451
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.012,
+      "g": 0.353,
+      "r": 0.196
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.012,
+      "g": 0.424,
+      "r": 0.235
+    }
+  },
+  "hero": "hero_jikr"
+}

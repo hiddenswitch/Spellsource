@@ -2,9 +2,6 @@ package com.hiddenswitch.spellsource.net.models;
 
 import java.io.Serializable;
 
-/**
- * Created by bberman on 6/6/17.
- */
 public class PersistAttributeResponse implements Serializable {
 	private LogicResponse logicResponse;
 	private Long updated;

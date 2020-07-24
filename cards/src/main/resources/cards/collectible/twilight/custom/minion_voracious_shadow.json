@@ -1,0 +1,22 @@
+{
+  "name": "Voracious Shadow",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TWILIGHT",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Your champion has +1 Attack.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "FRIENDLY_HERO",
+    "attackBonus": 1
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "VL_TIDESOFBLOOD"
+  ]
+}

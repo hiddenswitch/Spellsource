@@ -6,15 +6,15 @@ apply plugin: 'java-library'
 apply from: '../gradle/instrument.gradle'
 
 dependencies {
-    api 'io.vertx:vertx-core:3.9.1'
+    api 'io.vertx:vertx-core:3.9.2'
     implementation 'com.google.guava:guava:26.0-jre'
     implementation 'io.vertx:vertx-docgen:0.9.2'
-    implementation 'io.vertx:vertx-codetrans:3.9.1'
+    implementation 'io.vertx:vertx-codetrans:3.9.2'
 
-    testImplementation 'io.vertx:vertx-unit:3.9.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0-M1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.+'
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.0-M1"
+    testImplementation 'io.vertx:vertx-unit:3.9.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.6.2'
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
 }
 
 compileJava {
