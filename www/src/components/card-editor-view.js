@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useRef, useState} from 'react'
 import WorkspaceUtils from '../lib/workspace-utils'
 import {graphql, useStaticQuery} from 'gatsby'
 import styles from './card-editor-view.module.css'
@@ -14,6 +14,7 @@ import {Form} from 'react-bootstrap'
 import {useIndex} from '../hooks/use-index'
 import JsonConversionUtils from '../lib/json-conversion-utils'
 import BlocklyMiscUtils from "../lib/blockly-misc-utils";
+import BlocklyToolboxButton from "react-blockly/dist-modules/BlocklyToolboxButton";
 
 class FieldLabelSerializableHidden extends FieldLabelSerializable {
   constructor(opt_value, opt_validator, opt_config) {
@@ -130,6 +131,31 @@ const CardEditorView = () => {
   const index = useIndex()
 
   if (!inited) {
+    Blockly.Css.register([
+      '.blocklyFlyoutButton.invertConditions {',
+      'fill: #5EA53A;',
+      'cursor: default;',
+      '}',
+
+      '.blocklyFlyoutButton.invertConditions:hover {',
+      'fill: #72C947;',
+      '}',
+
+      '.blocklyFlyoutButton.invertFilters {',
+      'fill: #3AA53A;',
+      'cursor: default;',
+      '}',
+
+      '.blocklyFlyoutButton.invertFilters:hover {',
+      'fill: #47C947;',
+      '}',
+    ]);
+
+    let originalFunction = Blockly.FlyoutButton.prototype.createDom
+    Blockly.FlyoutButton.prototype.createDom = function() {
+      this.cssClass_ = this.callbackKey_
+      return originalFunction.apply(this, arguments)
+    }
 
     //use 2 half-width spacing rows instead of 1 full-width for the inner rows of blocks
     Blockly.blockRendering.RenderInfo.prototype.addRowSpacing_ = function () {
@@ -291,8 +317,7 @@ const CardEditorView = () => {
       if (has(Blockly.Blocks, type)) {
         return
       }
-      if (card.baseManaCost != null
-        && heroClassColors.hasOwnProperty(card.heroClass)) { //this check if it's *really* collectible
+      if (heroClassColors.hasOwnProperty(card.heroClass)) { //this check if it's *really* collectible
         let color = heroClassColors[card.heroClass]
         let block = {
           'type': type,
@@ -331,7 +356,9 @@ const CardEditorView = () => {
           }
         }
 
-        JsonConversionUtils.blockTypeColors[BlockTypePrefix] = ColorHex
+        if (!JsonConversionUtils.blockTypeColors[BlockTypePrefix]) {
+          JsonConversionUtils.blockTypeColors[BlockTypePrefix] = ColorHex
+        }
       } else if (CategoryName === 'Search Results') {
         results.forEach(value => {
           blocks.push({
@@ -350,7 +377,6 @@ const CardEditorView = () => {
           callbackKey: 'importCard'
         }
       }
-
 
       return {
         name: CategoryName,
@@ -459,7 +485,10 @@ const CardEditorView = () => {
 
   //make the message for a generated block for a catalogue/created card
   function cardMessage(card) {
-    let ret = '(' + card.baseManaCost + ') ';
+    let ret = ''
+    if (!!card.baseManaCost) {
+      ret = '(' + card.baseManaCost + ') ';
+    }
     if (card.type === 'MINION') {
       ret += card.baseAttack + '/' + card.baseHp;
     } else {
@@ -497,8 +526,8 @@ const CardEditorView = () => {
       }
 
 
-      if (!!card) {
-        //console.log(card)
+      if (!card) {
+       return
       }
 
       JsonConversionUtils.generateCard(Blockly.getMainWorkspace(), card)
@@ -507,6 +536,14 @@ const CardEditorView = () => {
     })
 
     setInited(true)
+
+    workspace.addChangeListener((event) => {
+      if (event.type === Blockly.Events.UI && event.element === 'category') {
+        if (event.newValue === 'Targets') {
+
+        }
+      }
+    })
   }
 
 
