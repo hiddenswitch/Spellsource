@@ -324,7 +324,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			var aftermath = new Aftermath(spellDesc, sourceCard, host);
 			aftermath
 					.setEffectSource(effectSource);
-			LOGGER.debug("tryPutAftermathIntoPlay {} {}: adding {} to host card {}", context.getGameId(), sourceCard, spellDesc, host);
+			LOGGER.debug("tryCreateAftermath {} {}: adding {} to host card {}", context.getGameId(), sourceCard, spellDesc, host);
 			return Optional.of(aftermath);
 		}
 
