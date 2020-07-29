@@ -116,6 +116,16 @@ const CardEditorView = () => {
         }
       }
     }
+    allFile(filter: {extension: {eq: "json"}, relativePath: {glob: "**collectible/**"}}) {
+      edges {
+        node {
+          internal {
+            content
+          }
+          name
+        }
+      }
+    }
   }`)
 
   const [heroClassColors, setHeroClassColors] = useState({
@@ -131,6 +141,7 @@ const CardEditorView = () => {
   const index = useIndex()
 
   if (!inited) {
+    /* Changing the color of buttons has to be done in a janky way lol
     Blockly.Css.register([
       '.blocklyFlyoutButton.invertConditions {',
       'fill: #5EA53A;',
@@ -150,12 +161,11 @@ const CardEditorView = () => {
       'fill: #47C947;',
       '}',
     ]);
-
     let originalFunction = Blockly.FlyoutButton.prototype.createDom
     Blockly.FlyoutButton.prototype.createDom = function() {
       this.cssClass_ = this.callbackKey_
       return originalFunction.apply(this, arguments)
-    }
+    }*/
 
     //use 2 half-width spacing rows instead of 1 full-width for the inner rows of blocks
     Blockly.blockRendering.RenderInfo.prototype.addRowSpacing_ = function () {
@@ -500,37 +510,7 @@ const CardEditorView = () => {
 
   function initializeWorkspace(workspace) {
     workspace.registerButtonCallback('importCard', () => {
-      let p = prompt("Input the name of the card (or the wiki page URL for more precision)")
-      let cardId = null
-      let card = null
-      if (p.includes('{')) {
-        card = JSON.parse(p)
-      } else if (p.includes('www')) {
-        cardId = p.split('cards/')[1]
-      } else {
-        for (let edge of data.allCard.edges) {
-          let card = edge.node
-          if (card.name.toLowerCase() === p.toLowerCase()) {
-            cardId = card.id
-            break
-          }
-        }
-      }
-      if (!!cardId) {
-        for (let edge of data.allCard.edges) {
-          if (edge.node.id === cardId) {
-            card = edge.node
-            break
-          }
-        }
-      }
-
-
-      if (!card) {
-       return
-      }
-
-      JsonConversionUtils.generateCard(Blockly.getMainWorkspace(), card)
+      generateCard()
       Blockly.getMainWorkspace().getToolbox().clearSelection()
       setToolboxCategories(getToolboxCategories())
     })
@@ -544,6 +524,41 @@ const CardEditorView = () => {
         }
       }
     })
+  }
+
+  function generateCard() {
+    let p = prompt("Input the name of the card (or the wiki page URL / Card ID for more precision)")
+    let cardId = null
+    let card = null
+    if (p.includes('{')) {
+      card = JSON.parse(p)
+    } else if (p.includes('www')) {
+      cardId = p.split('cards/')[1]
+    } else if (p.includes('_')) {
+      cardId = p
+    } else {
+      for (let edge of data.allCard.edges) {
+        if (edge.node.name.toLowerCase() === p.toLowerCase()) {
+          cardId = edge.node.id
+          break
+        }
+      }
+    }
+    if (!!cardId) {
+      for (let edge of data.allFile.edges) {
+        let node = edge.node
+        if (node.name === cardId) {
+          card = JSON.parse(node.internal.content)
+        }
+      }
+    }
+
+
+    if (!card) {
+      return
+    }
+
+    JsonConversionUtils.generateCard(Blockly.getMainWorkspace(), card)
   }
 
 

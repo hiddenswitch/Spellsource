@@ -5,7 +5,7 @@ import styles from './creative-layout.module.scss'
 export default ({ children }) => {
   return <div className={styles.container}>
     <Header />
-    <main>
+    <main style={{width: children?._source?.fileName?.includes('card-editor') ? 900 : 700}}>
       {children}
     </main>
     <br/>

@@ -2,14 +2,20 @@ import Blockly, {isNumber} from "blockly";
 import BlocklyMiscUtils from "./blockly-misc-utils";
 
 export default class JsonConversionUtils {
-  static classBlocksDictionary = {}
-  static enumBlocksDictionary = {}
-  static allArgNames = new Set()
+  static classBlocksDictionary = {} //A dictionary mapping the 'class' argument a block uses to the block itself
+  static enumBlocksDictionary = {} //A dictionary mapping the enum value of the block to the block itself
+  static allArgNames = new Set() //Every different possible arg name that appears on blocks, (for searching)
+
   static blockTypeColors = {
     IntAttribute: 210,
     BoolAttribute: 190
   }
 
+  /**
+   * Creates a reference for the block's json that's easily accessible by
+   * either its output or 'class' argument
+   * @param block The block to add
+   */
   static addBlockToMap(block) {
     if (block.type.endsWith('SHADOW')) {
       return
@@ -40,13 +46,26 @@ export default class JsonConversionUtils {
 
   }
 
-
+  /**
+   * Helper method to make sure added blocks have the correct shadows
+   * We still want those in case people decide to pull apart the converted stuff
+   * @param workspace The workspace
+   * @param type The block type to create
+   * @returns The created block
+   */
   static newBlock(workspace, type) {
     let block = workspace.newBlock(type)
     BlocklyMiscUtils.manuallyAddShadowBlocks(block, Blockly.Blocks[type].json)
     return block
   }
 
+  /**
+   * OVERALL METHOD TO CREATE THE CARD ON THE WORKSPACE
+   * PUBLIC STATIC VOID MAIN OVER HERE, CHAPS
+   * @param workspace The workspace
+   * @param card The card json to generate from
+   * @returns The created starter block
+   */
   static generateCard(workspace, card) {
     let block = this.newBlock(workspace, 'Starter_' + card.type)
     let args = ['baseManaCost', 'name', 'baseAttack', 'baseHp', 'description']
@@ -199,11 +218,27 @@ export default class JsonConversionUtils {
       lowestBlock = descriptionsBlock
     }
 
+    if (!!card.set) {
+      let setBlock = this.newBlock(workspace, 'Property_set')
+      setBlock.setFieldValue(card.set, 'set')
+      setBlock.previousConnection.connect(lowestBlock.nextConnection)
+      setBlock.initSvg()
+      lowestBlock = setBlock
+    }
+
     workspace.render()
 
     return block
   }
 
+  /**
+   * Copies over the dynamic description fields for a card
+   *
+   * @param workspace The workspace
+   * @param connection The statement connection for the list of descriptions
+   * @param descriptions The json array of descriptions
+   * @param inputName The name of the descriptions input argument on the block
+   */
   static dynamicDescription(workspace, connection, descriptions, inputName) {
     for (let dynamicDescription of descriptions) {
       let block = connection.targetBlock()
@@ -252,7 +287,12 @@ export default class JsonConversionUtils {
     }
   }
 
-  //handles finding an input on a block by what its name ends with
+  /**
+   * Handles finding an input on a block by what its name ends with
+   * @param block The block (its json definition) to search through
+   * @param inputName What the name has to end with
+   * @returns The json for the correct input, or null
+   */
   static getInputEndsWith(block, inputName) {
     for (let name of this.allArgNames) {
       let input = block.getInput(name)
@@ -265,10 +305,28 @@ export default class JsonConversionUtils {
     return null
   }
 
+  /**
+   * Whether we need to use the EnchantmentOptions block and not just the Enchantment block
+   *
+   * Used to be more complicated, but the trigger conditions got streamlined
+   * @param trigger
+   * @param props
+   * @returns {boolean}
+   */
   static enchantmentNeedsOptions(trigger, props) {
     return !(props.length === 2 && !!trigger.eventTrigger && !!trigger.spell)
   }
 
+  /**
+   * Enchantments are special enough to need their own method
+   * because of the unique option blocks
+   *
+   * @param trigger The json of the trigger to be blockified
+   * @param workspace The workspace
+   * @param triggerBlock The enchantment block that may or may not already be
+   * present in the list of enchantment statements
+   * @returns The created block
+   */
   static enchantment(trigger, workspace, triggerBlock = null) {
     let props = this.relevantProperties(trigger);
     if (!this.enchantmentNeedsOptions(trigger, props)) {
@@ -310,7 +368,17 @@ export default class JsonConversionUtils {
     return triggerBlock
   }
 
-  //handles the auras on a card
+  /**
+   * Auras are also weird enough to need their own method,
+   * since they're the only typical 'Desc' style json object
+   * that's statement style and not value style
+   *
+   * Functions both for json.aura and json.auras
+   *
+   * @param block The block that has the aura statement input
+   * @param json The json of the aura / auras
+   * @param workspace The workspace
+   */
   static auras(block, json, workspace) {
     let auras
     if (!!json.aura) {
@@ -325,7 +393,24 @@ export default class JsonConversionUtils {
     }
   }
 
-  //finds the best block match for a given bit of json
+  /**
+   * Finds the best block match for a given bit of json
+   *
+   * For Enums/Strings, it just simply finds the corresponding Block
+   *
+   * For actual JSON objects, the tl; dr is it finds the block that:
+   *  - covers all the required json properties, determined by this.relevantProperties()
+   *  - has a lot of arguments that the json does actually have
+   *  - doesn't have too many arguments that the json doesn't have
+   *
+   * If no blocks match the first criteria, nothing is returned
+   * The other criteria are for picking the best block to return
+   *
+   * @param json The json we need to find a match for
+   * @param inputName The name of the argument that json is assigned to
+   * @param parentJson The level of json above json
+   * @returns The Block that's the best match (its JSON definition), or null if no good matches
+   */
   static getMatch(json, inputName, parentJson) {
     let matches = null
     let bestMatch = null
@@ -360,7 +445,7 @@ export default class JsonConversionUtils {
       let relevantProperties = this.relevantProperties(json)
       let goodMatches = []
       for (let match of matches) { //for each possible match
-        let reallyHasIt = true
+        let hasAllProps = true
         for (let property of relevantProperties) { //check the json's relevant properties
           if ((relevantProperties.includes('target') || match.output === 'SpellDesc') && property === 'filter') {
             continue
@@ -371,25 +456,25 @@ export default class JsonConversionUtils {
           if ((className.endsWith('Trigger') || json.targetPlayer === 'BOTH') && property === 'targetPlayer') {
             continue
           }
-          let hasIt = false
+          let hasThisProp = false
           for (let arg of this.argsList(match)) { //see if the match has a corresponding prop
-            if (arg.name.split('.')[0] === property) {
+            if (arg.name.split('.')[0] === property) { //just a surface level check, not traversing nested args
               if (arg.type === 'field_label_serializable_hidden') {
                 if ((arg.value === 'TRUE' ? true : arg.value) === json[property]) {
-                  hasIt = true
+                  hasThisProp = true
                 }
               } else {
-                hasIt = true
+                hasThisProp = true
               }
             }
 
           }
-          if (!hasIt) { //if it doesn't, it's not good enough
-            reallyHasIt = false
+          if (!hasThisProp) { //if it doesn't, it's not good enough
+            hasAllProps = false
             break
           }
         }
-        if (reallyHasIt) { //if it covers all the json's properties, it's good enough
+        if (hasAllProps) { //if it covers all the json's properties, it's good enough
           goodMatches.push(match)
         }
       }
@@ -401,59 +486,46 @@ export default class JsonConversionUtils {
           let score = 0
           for (let arg of argsList) {
             let delta = 0
-            let property = this.traverseJsonByArgName(arg.name, json)
+            let property = this.traverseJsonByArgName(arg.name, json, parentJson)
             if (property !== null && property !== undefined) {
               if (arg.type === 'field_label_serializable_hidden') {
                 if ((arg.value === 'TRUE' ? true : arg.value) === property) {
                   delta = 1
+                } else {
+                  delta = -2 // an unchangeable field on the block is wrong... not a good look
                 }
               } else {
-                delta = 1
+                delta = 1 //if it's an input, we assume the correct block can be put here
               }
             } else {
-              delta = -.5
+              delta = -.5 //it's kinda bad to straight up not have the property
             }
             score += delta
           }
           if (bestScore === null || score > bestScore
             || (score >= bestScore && bestMatch.type.localeCompare(goodMatch.type) > 0)) {
+            //for tied scores, do the one that comes alphabetically first
+            //e.g. choosing ExampleSpell1 instead of ExampleSpell2
             bestMatch = goodMatch
             bestScore = score
           }
         }
       }
+    } else {
+      //what the heck could it even be if it doesn't have a class?
     }
     return bestMatch
   }
 
-  static traverseJsonByArgName(argName, json) {
-    if (json === undefined || json === null) {
-      return null
-    }
-    if (argName.includes(',')) {
-      let names = argName.split(',')
-      return this.traverseJsonByArgName(names[0], json) || this.traverseJsonByArgName(names.slice(1).join(','), json)
-    }
-    if (!argName.includes('.')) {
-      return json[argName]
-    }
-    let names = argName.split('.')
-    return this.traverseJsonByArgName(names.slice(1).join('.'), json[names[0]])
-  }
-
   /**
-   * a scoring system for the potential matches between a block and json, potentially
-   *
-   * factors:
-   *  -block needs to be able to fully represent the json
-   *  -inputs should be weighted better than fields
-   *  -
+   * Handles an argument on a block, recursively constructing the relevant blocks based on the json
+   * @param connection The Blockly connection object where the new Block will have to go
+   * @param json The json to determine the newBlock from
+   * @param inputName The name of the argument that json is assigned to
+   * @param workspace The workspace
+   * @param parentJson The level of json above json
+   * @param statement Whether we're connected a statement rather than an input
    */
-  static scoreMatch() {
-
-  }
-
-  //handles an argument on a block, recursively constructing the relevant blocks based on the json
   static handleArg(connection, json, inputName, workspace, parentJson, statement = false) {
     json = this.mutateJson(json)
 
@@ -463,6 +535,8 @@ export default class JsonConversionUtils {
       //bestMatch = this.generateDummyBlock(json, inputName, parentJson)
       this.generateDummyBlock(json, inputName, parentJson)
       newBlock = this.handleNoMatch(json, inputName, parentJson, workspace)
+    } else if (!!connection.targetBlock() && connection.targetBlock().type === bestMatch.type) {
+
     } else {
       newBlock = this.newBlock(workspace, bestMatch.type)
     }
@@ -485,7 +559,7 @@ export default class JsonConversionUtils {
     for (let dropdown of this.dropdownsList(bestMatch)) {
       let jsonElement = json[dropdown.name]
       if (!jsonElement && (dropdown.name.includes('.') || dropdown.name.includes('super') || dropdown.name.includes(','))) {
-        jsonElement = this.tryToFindCorrectElement(dropdown.name, json, parentJson)
+        jsonElement = this.traverseJsonByArgName(dropdown.name, json, parentJson)
       }
 
       if (!jsonElement) {
@@ -501,7 +575,7 @@ export default class JsonConversionUtils {
       let argName = name
       let jsonElement = json[name];
       if (!jsonElement && (name.includes('.') || name.includes('super') || name.includes(','))) {
-        jsonElement = this.tryToFindCorrectElement(name, json, parentJson)
+        jsonElement = this.traverseJsonByArgName(name, json, parentJson)
         name = name.split('.').slice(-1)[0]
       }
 
@@ -547,13 +621,30 @@ export default class JsonConversionUtils {
     }
   }
 
-  static wrapperBlocks(outerBlock, json, inputName, workspace, parentJson, connection, bestMatch) {
+  /**
+   * Many blocks serve as 'wrappers' for other blocks, ending up being converted
+   * to card json as a modification of what they hold inside (think, random from [Target(s)])
+   *
+   * This method handles all the wrapper blocks that could be encountered
+   * when handling an arg, successfully wrapping even in cases where
+   * multipler wrappers are needed.
+   * @param block The original block in need of wrapping
+   * @param json The json that the block corresponds to
+   * @param inputName The name of the argument that json is assigned to
+   * @param workspace The workspace
+   * @param parentJson The level of json above json
+   * @param connection The connection that the block was originally supposed to connect to
+   * @param bestMatch The block that was decided to be the best match
+   * @returns The eventual outermost block
+   */
+  static wrapperBlocks(block, json, inputName, workspace, parentJson, connection, bestMatch) {
     const wrap = (blockType, inputName = 'super') => {
       let newOuterBlock = this.newBlock(workspace, blockType)
       newOuterBlock.getInput(inputName).connection.connect(outerBlock.outputConnection)
       newOuterBlock.initSvg()
       outerBlock = newOuterBlock
     }
+    let outerBlock = block
 
     if (json.hasOwnProperty('targetPlayer') && !!bestMatch && json.targetPlayer !== 'SELF' &&
       (bestMatch.output === 'ValueProviderDesc' || bestMatch.output === 'SpellDesc')) {
@@ -596,7 +687,13 @@ export default class JsonConversionUtils {
         this.simpleHandleArg(outerBlock, 'race', json, workspace)
       }
       if (!!json.requiredAttribute) {
-
+        let match = this.getMatch(json.requiredAttribute, 'attribute', json)
+        if (!!match && match.output === 'IntAttribute') {
+          wrap('Trigger_Attribute2')
+        } else {
+          wrap('Trigger_Attribute')
+        }
+        this.simpleHandleArg(outerBlock, 'requiredAttribute', json, workspace)
       }
     }
 
@@ -636,18 +733,38 @@ export default class JsonConversionUtils {
     return outerBlock
   }
 
+  /**
+   * In many places specifying everything needed by handleArg is redundent,
+   * so this method can handle the simple cases simply
+   * @param block The block being connected to
+   * @param inputName The name of BOTH the block argument and the json argument
+   * @param json The PARENT json in which the real json is found by inputName
+   * @param workspace The workspace
+   * @returns The block that handleArg returns
+   */
   static simpleHandleArg(block, inputName, json, workspace) {
     return this.handleArg(block.getInput(inputName).connection, json[inputName], inputName, workspace, json)
   }
 
-  static tryToFindCorrectElement(name, json, parentJson) {
+  /**
+   * Traverses through the json of card to try to find the element
+   * being referred to by a block's argument, which could include
+   * features like 'super', '.' and ',' as explained in WorkspaceUtils
+   *
+   * In cases of ',' this returns the first match it encounters
+   * @param name The name to search for, possibly containing special elements
+   * @param json The json to search in
+   * @param parentJson The level above the json to search in (for super purposes)
+   * @returns What's in the correct spot, or undefined if it can't find the right spot
+   */
+  static traverseJsonByArgName(name, json, parentJson) {
     if (!name || !json) {
       return undefined
     }
     if (name.includes(',')) {
       let names = name.split(',')
       for (let name of names) {
-        let elem = this.tryToFindCorrectElement(name, json, parentJson)
+        let elem = this.traverseJsonByArgName(name, json, parentJson)
         if (elem !== undefined) {
           return elem
         }
@@ -661,14 +778,23 @@ export default class JsonConversionUtils {
       let start = name.substring(0, i)
       let rest = name.substring(i + 1)
       if (start === 'super' && !!parentJson) {
-        return this.tryToFindCorrectElement(rest, parentJson, null)
-      }
-      {
-        return this.tryToFindCorrectElement(rest, json[start], json)
+        return this.traverseJsonByArgName(rest, parentJson, null)
+      } else {
+        return this.traverseJsonByArgName(rest, json[start], json)
       }
     }
   }
 
+  /**
+   * Specifically handles a spot where an integer value is needed
+   *
+   * Uses the shadow int block if it's already there,
+   * or makes a nonshadow one if it isn't
+   * @param newBlock The block that the int block should be connected to
+   * @param inputArg The name of the int argument
+   * @param workspace The workspace
+   * @param int The number that should actually end up in the int block
+   */
   static handleIntArg(newBlock, inputArg, workspace, int) {
     let valueBlock
     if (!!newBlock.getInput(inputArg).connection.targetBlock()
@@ -682,6 +808,20 @@ export default class JsonConversionUtils {
     valueBlock.setFieldValue(int, 'int')
   }
 
+  /**
+   * The old way of doing custom blocks, which was actually defining
+   * a new block with the needed input types and field values built into it
+   *
+   * Now, this is only used to generate some json to print to the console
+   * that you can use to quickly make the block yourself,
+   * but the actual block(s) that end up on the workspace
+   * are from handleNoMatch and use stuff from the Custom tab
+   *
+   * @param json The json of the card that needs its own block
+   * @param inputName The name of the argument json is assigned to
+   * @param parentJson The level of json that's above json
+   * @returns The block it generated
+   * */
   static generateDummyBlock(json, inputName, parentJson) {
     inputName = inputName.split('.').slice(-1)[0]
     let type = BlocklyMiscUtils.inputNameToBlockType(inputName)
@@ -780,6 +920,18 @@ export default class JsonConversionUtils {
     return consoleBlock
   }
 
+  /**
+   * Handles the construction of a custom block for a given bit of json
+   *
+   * No longer actually generates any new blocks, but uses the tools
+   * in the Custom tab of the toolbox
+   *
+   * @param json The json that needs to be turned into a custom block
+   * @param inputName The name of the argument json is assigned to
+   * @param parentJson The level of json that's above json
+   * @param workspace The workspace
+   * @returns {Blockly.Block}
+   */
   static handleNoMatch(json, inputName, parentJson, workspace) {
     inputName = inputName.split('.').slice(-1)[0]
     let type = BlocklyMiscUtils.inputNameToBlockType(inputName)
@@ -838,14 +990,20 @@ export default class JsonConversionUtils {
     return newBlock
   }
 
-  //the arguments of a desc that should be used in deciding on a block representation
+  /**
+   * The arguments of a desc that should be used in deciding on a block representation
+   * @param json
+   * @returns array of the relevant properties (strings)
+   */
   static relevantProperties(json) {
     let relevantProperties = []
     for (let property in json) {
       if ((property === 'randomTarget' && !!json.target) || property === 'class'
         || property === 'fireCondition' || property === 'queueCondition'
-        || property === 'invert' || property === 'offset' || property === 'multiplier') {
-        continue
+        || property === 'invert' || property === 'offset' || property === 'multiplier'
+        || property === 'requiredAttribute'
+      ) {
+        continue //these ones can be handled by other blocks
       }
       if (!!json[property]) {
         relevantProperties.push(property)
@@ -854,8 +1012,12 @@ export default class JsonConversionUtils {
     return relevantProperties
   }
 
-  //deals with places in the json that could be equivalent in function to different json,
-  //but need special handling to be creatable in the card editor
+  /**
+   * Deals with places in card json that could be equivalent in function to different json,
+   * but need special handling to be creatable in the card editor
+   * @param json
+   * @returns The mutated json
+   */
   static mutateJson(json) {
     if ((json === null || json === undefined)) {
       json = 'NONE'
@@ -949,6 +1111,9 @@ export default class JsonConversionUtils {
     if (className === 'FromDeckToHandSpell') {
       json.class = 'DrawCardSpell'
     }
+    if (className === 'CloneMinionSpell') {
+      json.class = 'SummonSpell'
+    }
 
     //would be redundant to add this functionality separately
     if (className === 'MinionCountCondition') {
@@ -1014,7 +1179,12 @@ export default class JsonConversionUtils {
     return json
   }
 
-
+  /**
+   * Returns a list of the all the arguments in a block's json
+   * that are are input args
+   * @param block
+   * @returns An array of the input args
+   */
   static inputsList(block) {
     let inputsList = []
     for (let i = 0; i < 10; i++) {
@@ -1030,6 +1200,12 @@ export default class JsonConversionUtils {
     return inputsList
   }
 
+  /**
+   * Returns a list of the all the arguments in a block's json
+   * that are are dropdown args
+   * @param block
+   * @returns An array of the dropdown args
+   */
   static dropdownsList(block) {
     let inputsList = []
     for (let i = 0; i < 10; i++) {
@@ -1045,6 +1221,11 @@ export default class JsonConversionUtils {
     return inputsList
   }
 
+  /**
+   * Returns a list of the all the arguments in a block's json
+   * @param block
+   * @returns An array of the args
+   */
   static argsList(block) {
     let argsList = []
     for (let i = 0; i < 10; i++) {

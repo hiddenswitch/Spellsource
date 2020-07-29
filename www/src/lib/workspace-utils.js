@@ -3,9 +3,6 @@ import { extend, filter, find, fromPairs, isArray, map, merge } from 'lodash'
 import format from 'string-format'
 
 export default class WorkspaceUtils {
-  static BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILDREN = 'BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILDREN'
-  static BLOCKLY_ADD_EVENT_TARGET_TO_CHILDREN = 'BLOCKLY_ADD_EVENT_TARGET_TO_CHILDREN'
-  static BLOCKLY_REMOVE_SPELL_TARGET_FROM_CHILDREN = 'BLOCKLY_REMOVE_SPELL_TARGET_FROM_CHILDREN'
   static BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = 'BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE'
   static BLOCKLY_INT_ATTRIBUTE = 'BLOCKLY_INT_ATTRIBUTE'
   static BLOCKLY_ARRAY_ELEMENT = 'BLOCKLY_ARRAY_ELEMENT'
@@ -150,25 +147,6 @@ export default class WorkspaceUtils {
                   }
                 }
                 break
-              /*
-              case WorkspaceUtils.BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILDREN:
-                if (!!obj['spell.spell'] && !obj['spell.target'] && obj['spell.spell'].target === 'SPELL_TARGET') {
-                  obj['spell.spell'].target = 'OUTPUT'
-                } else if (!!obj.spell && (!obj.spell.target || obj.spell.target === 'SPELL_TARGET')) {
-                  obj.spell.target = 'OUTPUT'
-                }
-                break
-              case WorkspaceUtils.BLOCKLY_ADD_EVENT_TARGET_TO_CHILDREN:
-                if (!!obj.spell && (obj.spell.target === 'IT')) {
-                  obj.spell.target = 'EVENT_TARGET'
-                }
-                break
-              case WorkspaceUtils.BLOCKLY_REMOVE_SPELL_TARGET_FROM_CHILDREN:
-                if (!!obj.spell && obj.spell.target === 'SPELL_TARGET') {
-                  delete obj.spell.target
-                }
-                break
-               */
               default:
                 const allValues = filter(childNodes, cn =>
                   cn.nodeName === 'field')

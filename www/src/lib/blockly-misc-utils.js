@@ -127,6 +127,7 @@ export default class BlocklyMiscUtils {
       case 'offset':
       case 'attackBonus':
       case 'hpBonus':
+      case 'armorBonus':
         return 'ValueProvider'
       case 'aura':
         return 'Aura'
