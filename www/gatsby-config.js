@@ -23,6 +23,7 @@ module.exports = {
       options: {
         name: `src`,
         path: `${__dirname}/src/`,
+        ignore: [`${__dirname}/src/main/`, `${__dirname}/src/test/`, `**/*\.java`]
       },
     },
     {
@@ -95,7 +96,7 @@ module.exports = {
                 if (!!newArgs[i] && !!newArgs[i].args) {
                   for (let j = 0; j < newArgs[i].args.length; j++) {
                     let arg = newArgs[i].args[j]
-                    let token = '%' + (j+1).toString()
+                    let token = '%' + (j + 1).toString()
                     if (arg.type === 'field_label_serializable_hidden'
                       && !newMessage.includes(token)) {
                       newMessage = token + newMessage

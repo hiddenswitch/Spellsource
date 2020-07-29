@@ -3,7 +3,6 @@ package com.hiddenswitch.spellsource.conversiontest.tests;
 import com.hiddenswitch.spellsource.conversiontest.ConversionHarness;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;

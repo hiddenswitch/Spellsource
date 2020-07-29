@@ -1,10 +1,10 @@
 plugins {
+    id "com.github.node-gradle.node" version "2.2.4"
     id 'java-library'
-    id 'com.github.johnrengelman.shadow' version "5.2.0"
 }
 
+apply plugin: "com.github.node-gradle.node"
 apply plugin: 'java-library'
-apply plugin: 'com.github.johnrengelman.shadow'
 
 dependencies {
     api project(':core')
@@ -16,4 +16,14 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+node {
+    download = false
+}
+
+task run(type: NpxTask) {
+    dependsOn += [npmInstall]
+    command = 'gatsby'
+    args = ['develop', '-o']
 }
