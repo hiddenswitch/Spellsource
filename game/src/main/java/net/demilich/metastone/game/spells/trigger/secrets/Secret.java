@@ -1,9 +1,11 @@
 package net.demilich.metastone.game.spells.trigger.secrets;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import com.hiddenswitch.spellsource.client.models.EntityType;
+import net.demilich.metastone.game.cards.desc.EnchantmentSerializer;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.aura.SecretsTriggerTwiceAura;
@@ -15,6 +17,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 
+@JsonSerialize(using = EnchantmentSerializer.class)
 public class Secret extends Enchantment {
 	private static final Zones[] ZONES = new Zones[]{Zones.SECRET};
 

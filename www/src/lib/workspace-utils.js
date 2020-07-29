@@ -1,4 +1,4 @@
-import {isNumber, Xml} from 'blockly'
+import { Xml } from 'blockly'
 import { extend, filter, find, fromPairs, isArray, map, merge } from 'lodash'
 import format from 'string-format'
 
@@ -183,7 +183,7 @@ export default class WorkspaceUtils {
    * @param cardScript
    * @returns the modified cardScript
    */
-  static postProcessCardScript(cardScript) {
+  static postProcessCardScript (cardScript) {
     if (isArray(cardScript)) {
       for (const cardScriptElement of cardScript) {
         this.postProcessCardScript(cardScriptElement)
@@ -205,18 +205,18 @@ export default class WorkspaceUtils {
       if (!cardScript.attributes) {
         cardScript.attributes = {}
       }
-      cardScript.attributes.BATTLECRY = true;
+      cardScript.attributes.BATTLECRY = true
     }
 
     if (!!cardScript.deathrattle) {
       if (!cardScript.attributes) {
         cardScript.attributes = {}
       }
-      cardScript.attributes.DEATHRATTLES = true;
+      cardScript.attributes.DEATHRATTLES = true
     }
 
     if (!!cardScript.class && cardScript.class.endsWith('Aura')
-    && !!cardScript.attribute && !cardScript.attribute.startsWith('AURA_')) {
+      && !!cardScript.attribute && !cardScript.attribute.startsWith('AURA_')) {
       cardScript.attribute = 'AURA_' + cardScript.attribute
     }
 
@@ -288,23 +288,21 @@ export default class WorkspaceUtils {
    *    }
    * @param cardScript
    */
-  static rearrangeInputValues(cardScript) {
+  static rearrangeInputValues (cardScript) {
     if (typeof cardScript === 'string') {
       return
     }
 
-
     //first, split up any args with ','
     for (const cardScriptKey in cardScript) {
-      if (cardScriptKey.includes(",")) {
-        let newKeys = cardScriptKey.split(",")
+      if (cardScriptKey.includes(',')) {
+        let newKeys = cardScriptKey.split(',')
         for (const key of newKeys) {
           cardScript[key] = cardScript[cardScriptKey]
         }
         delete cardScript[cardScriptKey]
       }
     }
-
 
     //go through the children to bring super.* up
     for (const cardScriptKey in cardScript) {
@@ -325,7 +323,7 @@ export default class WorkspaceUtils {
         //then do the last one that might override what we're working with
         if (!!cardScript[cardScriptKey]['super']
           && typeof cardScript[cardScriptKey]['super'] === 'string') {
-            cardScript[cardScriptKey] = cardScript[cardScriptKey]['super']
+          cardScript[cardScriptKey] = cardScript[cardScriptKey]['super']
         } else if (!!cardScript['super'] && cardScript.propertyIsEnumerable('super')
           && typeof cardScript['super'] !== 'string') {
           let andWhenEveryonesSuper = !!cardScript.super.super

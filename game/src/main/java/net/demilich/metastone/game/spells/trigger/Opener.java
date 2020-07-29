@@ -12,7 +12,7 @@ public final class Opener extends Enchantment {
 	private final OpenerDesc openerDesc;
 
 	public Opener(OpenerDesc desc, Card sourceCard, Entity host) {
-		super();
+		super(desc);
 		setHostReference(host.getReference());
 		setSourceCard(sourceCard);
 		openerDesc = desc;

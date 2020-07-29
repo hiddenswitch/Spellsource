@@ -17,6 +17,6 @@ public class ConversionHarnessTests {
 		CardCatalogue.loadCardsFromPackage();
 		var desc = CardCatalogue.getCardById(CardCatalogue.getOneOneNeutralMinionCardId()).getDesc();
 		var json = Json.encodePrettily(desc);
-		assertTrue(ConversionHarness.assertCardReplaysTheSame(1L, CardCatalogue.getOneOneNeutralMinionCardId(), json), "json was " + json);
+		assertTrue(ConversionHarness.assertCardReplaysTheSame(new long[]{1L}, CardCatalogue.getOneOneNeutralMinionCardId(), json), "json was " + json);
 	}
 }

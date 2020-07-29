@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.desc.source;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.Lists;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -9,19 +10,18 @@ import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
+import net.demilich.metastone.game.cards.desc.HasDescSerializer;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 
+@JsonSerialize(using = HasDescSerializer.class)
 public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc> {
 
 	private CardSourceDesc desc;

@@ -5,33 +5,46 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 
+import java.util.stream.LongStream;
+
 public class ConversionHarness {
 	private static Object PROBE = new Object();
 
-	public static boolean assertCardReplaysTheSame(long seed, String cardId, String replacementJson) {
+	protected static class Tuple {
+		GameContext context;
+		long seed;
+
+		public Tuple(GameContext context, long seed) {
+			this.context = context;
+			this.seed = seed;
+		}
+	}
+
+	public static boolean assertCardReplaysTheSame(long[] seeds, String cardId, String replacementJson) {
 		synchronized (PROBE) {
 			var originalCard = CardCatalogue.getCards().get(cardId);
 			var originalCardDesc = CardCatalogue.getRecords().get(cardId).getDesc();
 			try {
-				GameContext context = GameContext.fromTwoRandomDecks(seed);
-				ensureCardIsInDeck(context, cardId);
-				context.play();
+				return LongStream.of(seeds)
+						.mapToObj(seed -> {
+							GameContext context = GameContext.fromTwoRandomDecks(seed);
+							ensureCardIsInDeck(context, cardId);
+							context.play();
+							return new Tuple(context, seed);
+						})
+						.filter(tuple -> !(tuple.context.getTrace().getRawActions().stream().noneMatch(ga -> ga
+								.getSourceReference() != null && ga.getSource(tuple.context).getSourceCard().getCardId().equals(cardId))))
+						.allMatch(tuple -> {
+							var desc = Json.decodeValue(replacementJson, CardDesc.class);
+							CardCatalogue.getRecords().get(cardId).setDesc(desc);
+							CardCatalogue.getCards().replace(cardId, desc.create());
 
-				if (context.getTrace().getRawActions().stream().noneMatch(ga -> ga
-						.getSourceReference() != null && ga.getSource(context).getSourceCard().getCardId().equals(cardId))) {
-					throw new AssertionError("this seed will never use the card ID");
-				}
+							GameContext reproduction = GameContext.fromTwoRandomDecks(tuple.seed);
+							ensureCardIsInDeck(reproduction, cardId);
+							reproduction.play();
 
-
-				var desc = Json.decodeValue(replacementJson, CardDesc.class);
-				CardCatalogue.getRecords().get(cardId).setDesc(desc);
-				CardCatalogue.getCards().replace(cardId, desc.create());
-
-				GameContext reproduction = GameContext.fromTwoRandomDecks(seed);
-				ensureCardIsInDeck(reproduction, cardId);
-				reproduction.play();
-
-				return context.getTurn() == reproduction.getTurn();
+							return tuple.context.getTurn() == reproduction.getTurn();
+						});
 			} finally {
 				CardCatalogue.getCards().replace(cardId, originalCard);
 				CardCatalogue.getRecords().get(cardId).setDesc(originalCardDesc);

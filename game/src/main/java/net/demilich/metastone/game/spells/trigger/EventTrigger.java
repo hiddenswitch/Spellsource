@@ -1,14 +1,15 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
-import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
+import net.demilich.metastone.game.cards.desc.HasDescSerializer;
 import net.demilich.metastone.game.entities.Entity;
-import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
-;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
@@ -19,6 +20,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+
+;
 
 /**
  * This is the base class of all effects that react to events in the game.
@@ -36,6 +39,7 @@ import java.io.Serializable;
  *   }
  * </pre>
  */
+@JsonSerialize(using = HasDescSerializer.class)
 public abstract class EventTrigger extends CustomCloneable implements Serializable, HasDesc<EventTriggerDesc> {
 	private EventTriggerDesc desc;
 
