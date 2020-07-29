@@ -1,21 +1,21 @@
 import typing
-from itertools import chain
 from os import makedirs
 from os.path import join, abspath
 from typing import List
 
 import click
+from itertools import chain
 from tqdm import tqdm
 
 from .context import Context
 from .ext.admin import Admin
 from .ext.cardformatter import fix_cards, fix_card
 from .ext.datasources import HSReplayMatchups
+from .ext.fixcolor import fix_colors as _fix_colors
 from .ext.fixpullrequest import PullRequestFixSession
 from .ext.hearthcards import write_set_stubs
 from .ext.populatedecklists import write_decklists
 from .ext.updatedbf import write_dbf_json
-from .ext.fixcolor import fix_colors as _fix_colors
 
 
 @click.group()
@@ -529,6 +529,28 @@ def sort_and_fix():
     from .ext.sortcards import sort_cards
     sort_cards()
     fix_cards()
+
+
+@_cli.command()
+@click.argument('source', type=str)
+@click.argument('destination_prefix', type=str)
+def psb_2_png_layers(source: str, destination_prefix: str = './'):
+    """
+    Exports the visible layers in the specified PSB file to files with the destination prefix.
+    """
+    from psd_tools import PSDImage
+    import os
+    from os.path import dirname
+    psd = PSDImage.open(source)
+    for layer in psd.descendants():
+        if not layer.kind == 'pixel':
+            continue
+        if not layer.visible:
+            continue
+        layer_image = layer.composite()
+        s = join(destination_prefix, '%s.png' % layer.name)
+        os.makedirs(dirname(s), exist_ok=True)
+        layer_image.save(s)
 
 
 def main():
