@@ -1,9 +1,11 @@
 package net.demilich.metastone.game.cards.dynamicdescription;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
+import net.demilich.metastone.game.cards.desc.HasDescSerializer;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.CustomCloneable;
 
@@ -42,6 +44,7 @@ import net.demilich.metastone.game.logic.CustomCloneable;
  *   ]
  * </pre>
  */
+@JsonSerialize(using = HasDescSerializer.class)
 public abstract class DynamicDescription extends CustomCloneable implements HasDesc<DynamicDescriptionDesc> {
 
 	private DynamicDescriptionDesc desc;

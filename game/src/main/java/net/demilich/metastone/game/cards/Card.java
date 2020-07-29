@@ -558,7 +558,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		if (isSecret() && getDesc().getSecret() != null) {
 			return AddSecretSpell.create(new Secret(getDesc().getSecret().create(), getDesc().getSpell(), this));
 		} else if (isQuest() && getDesc().getQuest() != null) {
-			return AddQuestSpell.create(new Quest(getDesc().getQuest().create(), getDesc().getSpell(), this, getDesc().getCountUntilCast(), getDesc().isCountByValue()));
+			return AddQuestSpell.create(new Quest(null, getDesc().getQuest().create(), getDesc().getSpell(), this, getDesc().getCountUntilCast(), getDesc().isCountByValue()));
 		} else {
 			return getDesc().getSpell();
 		}

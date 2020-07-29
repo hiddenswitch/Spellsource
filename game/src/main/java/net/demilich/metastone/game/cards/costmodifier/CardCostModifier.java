@@ -1,16 +1,18 @@
 package net.demilich.metastone.game.cards.costmodifier;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
-import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
+import net.demilich.metastone.game.cards.desc.HasDescSerializer;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.events.GameEvent;
-;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -20,9 +22,11 @@ import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
-import net.demilich.metastone.game.spells.trigger.*;
+import net.demilich.metastone.game.spells.trigger.AfterCardPlayedTrigger;
+import net.demilich.metastone.game.spells.trigger.CardReceivedTrigger;
+import net.demilich.metastone.game.spells.trigger.DidEndSequenceTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +34,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+;
 
 /**
  * A card cost modifier.
@@ -55,6 +61,7 @@ import java.util.stream.Collectors;
  * effects into play.
  * @see CardCostModifierArg for a list of arguments for card cost modification.
  */
+@JsonSerialize(using = HasDescSerializer.class)
 public class CardCostModifier extends Enchantment implements HasDesc<CardCostModifierDesc> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CardCostModifier.class);
 	private static final EventTriggerDesc[] DEFAULT_TRIGGERS = new EventTriggerDesc[]{new EventTriggerDesc(CardReceivedTrigger.class), new EventTriggerDesc(AfterCardPlayedTrigger.class), new EventTriggerDesc(DidEndSequenceTrigger.class)};
@@ -67,7 +74,7 @@ public class CardCostModifier extends Enchantment implements HasDesc<CardCostMod
 	private CardCostModifierDesc desc;
 
 	public CardCostModifier(CardCostModifierDesc desc) {
-		super();
+		super(desc);
 		// Updates at end of sequence and when cards are added to the hand
 		setDesc(desc);
 

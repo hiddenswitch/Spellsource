@@ -1,6 +1,6 @@
 {
   "name": "Brass Hero",
-  "heroPower": "hero_power_lesser_heal",
+  "heroPower": "hero_power_1_1_weapon",
   "baseManaCost": 0,
   "type": "HERO",
   "heroClass": "BRASS",

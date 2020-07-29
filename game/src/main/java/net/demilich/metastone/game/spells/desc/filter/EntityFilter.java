@@ -1,10 +1,12 @@
 package net.demilich.metastone.game.spells.desc.filter;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
+import net.demilich.metastone.game.cards.desc.HasDescSerializer;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
@@ -17,6 +19,7 @@ import java.util.function.Predicate;
 /**
  * Filters {@link Entity} objects using its {@link #test(GameContext, Player, Entity, Entity)} implementation.
  */
+@JsonSerialize(using = HasDescSerializer.class)
 public abstract class EntityFilter implements Serializable, HasDesc<EntityFilterDesc> {
 	private EntityFilterDesc desc;
 

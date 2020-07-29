@@ -119,7 +119,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	 */
 	@JsonIgnore
 	public Enchantment create() {
-		Enchantment enchantment = new Enchantment();
+		Enchantment enchantment = new Enchantment(this);
 		// may be null if a card is being used as an enchantment
 		if (getEventTrigger() != null) {
 			enchantment.getTriggers().add(getEventTrigger().create());

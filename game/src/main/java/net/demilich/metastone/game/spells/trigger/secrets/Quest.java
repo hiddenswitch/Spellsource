@@ -1,9 +1,11 @@
 package net.demilich.metastone.game.spells.trigger.secrets;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import com.hiddenswitch.spellsource.client.models.EntityType;
+import net.demilich.metastone.game.cards.desc.EnchantmentSerializer;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
@@ -47,13 +49,14 @@ import net.demilich.metastone.game.targeting.Zones;
  * enchantment put into play a special way, the way it should be implemented is exactly the same as any other
  * enchantment.
  */
+@JsonSerialize(using = EnchantmentSerializer.class)
 public class Quest extends Enchantment {
 
 	private static final Zones[] ZONES = new Zones[]{Zones.QUEST};
 	private boolean isPact;
 
-	public Quest(EventTrigger trigger, SpellDesc spell, Card source, int countUntilCast, boolean countByValue) {
-		super();
+	public Quest(EnchantmentDesc desc, EventTrigger trigger, SpellDesc spell, Card source, int countUntilCast, boolean countByValue) {
+		super(desc);
 		getTriggers().add(trigger);
 		setSpell(spell);
 		setSourceCard(source);
@@ -62,7 +65,7 @@ public class Quest extends Enchantment {
 	}
 
 	public Quest(EnchantmentDesc desc, Card source) {
-		this(desc.getEventTrigger().create(), desc.getSpell(), source, desc.getCountUntilCast(), desc.isCountByValue());
+		this(desc, desc.getEventTrigger().create(), desc.getSpell(), source, desc.getCountUntilCast(), desc.isCountByValue());
 		setMaxFires(desc.getMaxFires());
 		setKeepAfterTransform(desc.isKeepAfterTransform());
 		setCountByValue(desc.isCountByValue());

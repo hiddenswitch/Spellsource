@@ -11,7 +11,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "PlayCardsRandomlySpell",
-      "card": "spell_the_coin"
+      "card": "spell_lunstone"
     }
   },
   "attributes": {

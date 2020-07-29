@@ -1,10 +1,12 @@
 package net.demilich.metastone.game.spells.desc.condition;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
+import net.demilich.metastone.game.cards.desc.HasDescSerializer;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.TargetPlayer;
@@ -21,6 +23,7 @@ import java.util.Objects;
  * <p>
  * The core function is {@link #isFulfilled(GameContext, Player, Entity, Entity)}.
  */
+@JsonSerialize(using = HasDescSerializer.class)
 public abstract class Condition implements Serializable, HasDesc<ConditionDesc> {
 
 	private ConditionDesc desc;

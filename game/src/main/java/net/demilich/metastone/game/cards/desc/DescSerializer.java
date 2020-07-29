@@ -18,7 +18,16 @@ public class DescSerializer extends StdSerializer<Desc> {
 
 		for (Object key : value.keySet()) {
 			gen.writeFieldName(ParseUtils.toCamelCase(key.toString()));
-			gen.writeObject(value.get(key));
+			var descValue = value.get(key);
+			if (key.equals(value.getClassArg())) {
+				var descClass = (Class<?>) descValue;
+				gen.writeString(descClass.getSimpleName());
+			} else if (descValue instanceof HasDesc) {
+				var descValueDesc = (HasDesc<?>) descValue;
+				gen.writeObject(descValueDesc.getDesc());
+			} else {
+				gen.writeObject(descValue);
+			}
 		}
 		gen.writeEndObject();
 	}

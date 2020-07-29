@@ -6,13 +6,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.CaseFormat;
+import com.hiddenswitch.spellsource.client.models.ActionType;
 import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import com.hiddenswitch.spellsource.client.models.Rarity;
 import io.vertx.core.json.jackson.DatabindCodec;
-import com.hiddenswitch.spellsource.client.models.ActionType;
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.CardDescType;
+import net.demilich.metastone.game.cards.ChooseOneOverride;
 import net.demilich.metastone.game.cards.dynamicdescription.*;
-import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.spells.GameValue;
 import net.demilich.metastone.game.spells.PlayerAttribute;
@@ -55,7 +57,7 @@ public class ParseUtils {
 	@SuppressWarnings("deprecation")
 	private static EntityReference parseEntityReference(String str) {
 		String lowerCaseName = str.toLowerCase();
-		if (lowerCaseName.length() > 0 && Character.isDigit(lowerCaseName.charAt(0))) {
+		if (lowerCaseName.length() > 0 && (lowerCaseName.charAt(0) == '-' || Character.isDigit(lowerCaseName.charAt(0)))) {
 			return new EntityReference(Integer.parseInt(lowerCaseName));
 		}
 		switch (lowerCaseName) {
@@ -260,6 +262,9 @@ public class ParseUtils {
 			case TARGET_SELECTION:
 				return Enum.valueOf(TargetSelection.class, jsonData.asText());
 			case TARGET_REFERENCE:
+				if (jsonData.isInt()) {
+					return new EntityReference(jsonData.asInt());
+				}
 				return parseEntityReference(jsonData.asText());
 			case TARGET_PLAYER:
 				return Enum.valueOf(TargetPlayer.class, jsonData.asText());

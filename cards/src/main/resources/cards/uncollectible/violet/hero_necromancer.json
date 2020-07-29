@@ -1,6 +1,6 @@
 {
   "name": "Necromancer",
-  "heroPower": "hero_power_life_tap",
+  "heroPower": "hero_power_1_1_weapon",
   "baseManaCost": 0,
   "type": "HERO",
   "heroClass": "VIOLET",

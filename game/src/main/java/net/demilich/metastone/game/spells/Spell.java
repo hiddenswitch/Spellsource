@@ -1,10 +1,12 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
+import net.demilich.metastone.game.cards.desc.HasDescSerializer;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -26,6 +28,7 @@ import java.util.*;
  * These classes are the value for {@link SpellArg#CLASS}, i.e., what you write after {@code "class": ...} in the card
  * JSON for spell objects. Each string in the {@code "class"} values corresponds exactly to a subclass of this class.
  */
+@JsonSerialize(using = HasDescSerializer.class)
 public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 
 	private SpellDesc desc;

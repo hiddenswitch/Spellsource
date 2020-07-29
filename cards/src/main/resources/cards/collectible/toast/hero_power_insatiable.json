@@ -1,7 +1,7 @@
 {
   "name": "Insatiable",
   "baseManaCost": 2,
-  "type": "SPELL",
+  "type": "HERO_POWER",
   "heroClass": "TOAST",
   "rarity": "FREE",
   "description": "Passive Skill: After you play a card, shuffle a copy of it into your deck.",

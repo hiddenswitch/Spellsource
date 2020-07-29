@@ -1,15 +1,17 @@
 package net.demilich.metastone.game.targeting;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.desc.EntityReferenceSerializer;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,6 +63,7 @@ import java.util.List;
  * @see net.demilich.metastone.game.spells.Spell#cast(GameContext, Player, SpellDesc, Entity, List) to see more about
  * how group references are used in the casting of spells.
  */
+@JsonSerialize(using = EntityReferenceSerializer.class)
 public final class EntityReference implements Serializable {
 	/**
 	 * Indicates a spell should take no target. It will receive {@code null} as its {@code target} argument.
@@ -216,8 +219,8 @@ public final class EntityReference implements Serializable {
 	 */
 	public static final EntityReference SPELL_TARGET = new EntityReference(-26);
 	/**
-	 * This reference retrieves the (possibly {@code null}) entity pointed to by {@link GameEvent#getTarget()}. An
-	 * event target is never itself a group reference; it always retrieves a specific entity.
+	 * This reference retrieves the (possibly {@code null}) entity pointed to by {@link GameEvent#getTarget()}. An event
+	 * target is never itself a group reference; it always retrieves a specific entity.
 	 * <p>
 	 * To see which game events generate targets, which can be counter-intuitive, look at the constructors of the various
 	 * {@link GameEvent} classes and see how they're called.
@@ -235,8 +238,8 @@ public final class EntityReference implements Serializable {
 	 * Inside an enchantment's {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#FIRE_CONDITION} and
 	 * {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#QUEUE_CONDITION}, which are the conditions
 	 * that evaluate whether or not the trigger for the enchantment should fire, the source entity is the {@link
-	 * GameEvent#getSource()}; it is <b>not</b> the entity hosting the trigger. To get the entity hosting the
-	 * trigger, use {@link #TRIGGER_HOST} instead.
+	 * GameEvent#getSource()}; it is <b>not</b> the entity hosting the trigger. To get the entity hosting the trigger, use
+	 * {@link #TRIGGER_HOST} instead.
 	 */
 	public static final EntityReference SELF = new EntityReference(-28);
 	/**
@@ -404,8 +407,8 @@ public final class EntityReference implements Serializable {
 	 * fire condition or spell is currently being evaluated.
 	 * <p>
 	 * During a condition evaluation on an {@link net.demilich.metastone.game.spells.trigger.EventTrigger}, {@link #SELF}
-	 * refers to {@link GameEvent#getSource()}, not the host of the trigger whose condition is being evaluated. Use
-	 * this reference to get the host of the trigger currently being evaluated.
+	 * refers to {@link GameEvent#getSource()}, not the host of the trigger whose condition is being evaluated. Use this
+	 * reference to get the host of the trigger currently being evaluated.
 	 *
 	 * @see #SELF for an important comparison about how this reference is used.
 	 */

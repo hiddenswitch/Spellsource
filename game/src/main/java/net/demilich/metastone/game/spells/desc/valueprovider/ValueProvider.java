@@ -1,10 +1,12 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
+import net.demilich.metastone.game.cards.desc.HasDescSerializer;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.TargetPlayer;
@@ -43,6 +45,7 @@ import java.io.Serializable;
  * <p>
  * Refer to the class hierarchy of this class for all the possible value providers.
  */
+@JsonSerialize(using = HasDescSerializer.class)
 public abstract class ValueProvider implements Serializable, HasDesc<ValueProviderDesc> {
 	private ValueProviderDesc desc;
 
