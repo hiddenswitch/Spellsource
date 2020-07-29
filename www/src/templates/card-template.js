@@ -28,6 +28,8 @@ export default function Template ({
   )
 }
 
+// once sprites set, need to add a field to query for sprite
+
 export const pageQuery = graphql`
   query($path: String!) {
     card(path: { eq: $path }) {

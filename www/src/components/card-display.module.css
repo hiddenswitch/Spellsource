@@ -6,7 +6,8 @@
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
-    height: 320px;
+    width: 256px;
+    height: 310px;
 }
 
 .layer-one {
@@ -64,7 +65,7 @@
     width: 96px;
     height: 48px;
     left: 84px;
-    top: 145px;
+    top: 145.7px;
     mask-image: url('../card-images/pedestal-primary.png');
     -webkit-mask-image: url('../card-images/pedestal-primary.png');
 }
