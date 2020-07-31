@@ -18,6 +18,7 @@ module.exports = {
     title: `Spellsource`,
   },
   plugins: [
+    `gatsby-plugin-flow`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
