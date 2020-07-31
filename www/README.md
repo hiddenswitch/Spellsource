@@ -14,8 +14,14 @@ After gatsby-cli is installed,
 gatsby clean
 ```
 
-On modern JDKs, `node` should be invoked with the following environment variable:
+On modern JDKs to run the test, `node` should be invoked with the following environment variable:
 
 ```
 DYLD_INSERT_LIBRARIES=${JAVA_HOME}/lib/server/libjvm.dylib
+```
+
+Additionally, the `shadowJar` task will need to be built:
+
+```
+gradle www:shadowJar
 ```
