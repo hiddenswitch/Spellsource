@@ -19,8 +19,7 @@ for (const f of walkSync(cardsPath)) {
   cards.push([id, f])
 }
 
-java.classpath.push('./build/libs/www-0.8.79-all.jar')
-const ConversionHarness = java.import('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
+java.classpath.push(`${__dirname}/../../../../www/build/libs/www-0.8.79-all.jar`)
 
 describe('WorkspaceUtils', () => {
   beforeAll(async () => {
@@ -72,6 +71,7 @@ describe('WorkspaceUtils', () => {
   })
 
   test.each(cards)('replays the same %s', async (id, cardPath) => {
+    const ConversionHarness = java.import('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
     const workspace = new Workspace()
     const srcCard = JSON.parse(await fs.promises.readFile(cardPath))
     JsonConversionUtils.generateCard(workspace, srcCard)
