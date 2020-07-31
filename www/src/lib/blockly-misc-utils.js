@@ -87,6 +87,7 @@ export default class BlocklyMiscUtils {
       inputName = inputName.split('.').slice(-1)[0]
     }
     switch (inputName) {
+      case 'heroPower':
       case 'card':
         return 'Card'
       case 'queueCondition':
@@ -119,6 +120,8 @@ export default class BlocklyMiscUtils {
       case 'eventTrigger':
       case 'revertTrigger':
       case 'secondaryTrigger':
+      case 'secret':
+      case 'quest':
         return 'Trigger'
       case 'value':
       case 'howMany':
@@ -132,6 +135,7 @@ export default class BlocklyMiscUtils {
       case 'attackBonus':
       case 'hpBonus':
       case 'armorBonus':
+      case 'manaCost':
         return 'ValueProvider'
       case 'aura':
         return 'Aura'

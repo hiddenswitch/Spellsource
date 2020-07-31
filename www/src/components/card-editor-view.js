@@ -170,9 +170,17 @@ const CardEditorView = () => {
 
   function createCard (card, workspace, cardsStillInUse) {
     if (!!card && !!card.name) {
-      let cardId = card.type.toLowerCase()
+      let cardType = !!card.secret ? 'SECRET' : !!card.quest ? 'QUEST' : card.type
+      let cardId = cardType.toLowerCase()
         + '_'
-        + card.name.toLowerCase().replace(' ', '_')
+        + card.name
+          .toLowerCase()
+          .replace(' ', '_')
+          .replace(',', '')
+          .replace("'", '')
+      if (card.type === 'MINION' && card.collectible === false || card.collectible === 'FALSE') {
+        cardId.replace('minion_', 'token_')
+      }
       let type = 'WorkspaceCard_' + cardId
       let color = '#888888'
       if (!!card.heroClass) {
@@ -203,6 +211,11 @@ const CardEditorView = () => {
     let p = prompt('Input the name of the card (or the wiki page URL / Card ID for more precision)')
     let cardId = null
     let card = null
+
+    if (!p) {
+      return
+    }
+
     if (p.includes('{')) {
       card = JSON.parse(p)
     } else if (p.includes('www')) {
