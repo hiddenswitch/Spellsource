@@ -67,16 +67,28 @@ export default class JsonConversionUtils {
    * @returns The created starter block
    */
   static generateCard (workspace, card) {
-    let block = this.newBlock(workspace, 'Starter_' + card.type)
-    let args = ['baseManaCost', 'name', 'baseAttack', 'baseHp', 'description']
+    let type = card.type
+    if (!!card.quest) {
+      type = 'QUEST'
+    } else if (!!card.secret) {
+      type = 'SECRET'
+    } else if (type === 'HERO' && !card.attributes.hasOwnProperty('HP')) {
+      type = 'HERO2'
+    }
+    let block = this.newBlock(workspace, 'Starter_' + type)
+    let args = ['baseManaCost', 'name', 'baseAttack', 'baseHp', 'description', 'countUntilCast',
+    'damage', 'durability']
     args.forEach(arg => {
       if (!!card[arg] && !!block.getField(arg)) {
-        block.getField(arg).setValue(card[arg])
+        block.setFieldValue(card[arg], arg)
       }
     })
 
     if (!!block.initSvg) {
       block.initSvg()
+    }
+    if (!!card.attributes && !!card.attributes.HP) {
+      block.setFieldValue(card.attributes.HP, 'attributes.HP,attributes.MAX_HP')
     }
 
     if (!!block.getInput('name')) {
@@ -88,17 +100,18 @@ export default class JsonConversionUtils {
 
     let lowestBlock = block
 
-    if (!!card.heroClass) {
-      this.simpleHandleArg(block, 'heroClass', card, workspace)
+    for (let arg of ['heroClass', 'rarity', 'spell', 'targetSelection', 'secret', 'quest', 'heroPower']) {
+      if (card.hasOwnProperty(arg) && !!block.getInput(arg)) {
+        this.simpleHandleArg(block, arg, card, workspace)
+      }
     }
 
-    if (!!card.rarity) {
-      this.simpleHandleArg(block, 'rarity', card, workspace)
+    if (!!card.race && card.type === 'MINION') {
+      this.simpleHandleArg(block, 'race', card, workspace)
     }
 
-    if (!!card.spell) {
-      this.simpleHandleArg(block, 'targetSelection', card, workspace)
-      this.simpleHandleArg(block, 'spell', card, workspace)
+    if (!!card.countByValue && (card.countByValue === 'TRUE' || card.countByValue === true)) {
+      block.setFieldValue('TRUE', 'countByValue')
     }
 
     if (!!card.battlecry) {
@@ -159,11 +172,12 @@ export default class JsonConversionUtils {
     }
 
     if (!!card.attributes) {
-      if (!!card.attributes.BATTLECRY) {
-        delete card.attributes.BATTLECRY
-      }
-      if (!!card.attributes.DEATHRATTLES) {
-        delete card.attributes.DEATHRATTLES
+      delete card.attributes.SPELLSOURCE_NAME
+      delete card.attributes.BATTLECRY
+      delete card.attributes.DEATHRATTLES
+      if (card.type === 'HERO') {
+        delete card.attributes.HP
+        delete card.attributes.MAX_HP
       }
       if (Object.values(card.attributes).length > 0) {
         let attributesBlock = this.newBlock(workspace, 'Property_attributes')
@@ -221,7 +235,7 @@ export default class JsonConversionUtils {
       lowestBlock = descriptionsBlock
     }
 
-    if (!!card.set) {
+    if (card.set !== 'CUSTOM') {
       let setBlock = this.newBlock(workspace, 'Property_set')
       setBlock.setFieldValue(card.set, 'set')
       setBlock.previousConnection.connect(lowestBlock.nextConnection)
@@ -229,9 +243,25 @@ export default class JsonConversionUtils {
       lowestBlock = setBlock
     }
 
+    if (!!card.condition) {
+      let conditionBlock = this.newBlock(workspace, 'Property_condition')
+      this.simpleHandleArg(conditionBlock, 'condition', card, workspace)
+      conditionBlock.previousConnection.connect(lowestBlock.nextConnection)
+      conditionBlock.initSvg()
+      lowestBlock = conditionBlock
+    }
+
+    if ((card.collectible === false || card.collectible === 'FALSE') && type !== 'HERO') {
+      let uncollectibleBlock = this.newBlock(workspace, 'Property_uncollectible')
+      uncollectibleBlock.previousConnection.connect(lowestBlock.nextConnection)
+      uncollectibleBlock.initSvg()
+      lowestBlock = uncollectibleBlock
+    }
+
     if (!!workspace.render) {
       workspace.render()
     }
+
 
     return block
   }
@@ -537,7 +567,12 @@ export default class JsonConversionUtils {
     let newBlock
     if (!bestMatch) {
       //bestMatch = this.generateDummyBlock(json, inputName, parentJson)
-      this.generateDummyBlock(json, inputName, parentJson)
+      try {
+        this.generateDummyBlock(json, inputName, parentJson)
+      } catch (e) {
+        //generating this quality of life dummy block is never worth crashing about
+        console.log('Tried to generate a dummy block for ' + json + ' but failed because of ' + e)
+      }
       newBlock = this.handleNoMatch(json, inputName, parentJson, workspace)
     } else if (!!connection.targetBlock() && connection.targetBlock().type === bestMatch.type) {
 
@@ -676,7 +711,7 @@ export default class JsonConversionUtils {
       }
     }
 
-    if (inputName.endsWith('Trigger') && !!json.class && json.class.endsWith('Trigger')) {
+    if (!!json.class && json.class.endsWith('Trigger')) {
       if (!!json.fireCondition) {
         wrap('Trigger_FireCondition')
         this.simpleHandleArg(outerBlock, 'fireCondition', json, workspace)
@@ -1176,6 +1211,11 @@ export default class JsonConversionUtils {
       json.value += json.attackBonus
       delete json.attackBonus
     }
+
+    if (json.sourcePlayer === 'BOTH') {
+      delete json.sourcePlayer
+    }
+
 
     return json
   }
