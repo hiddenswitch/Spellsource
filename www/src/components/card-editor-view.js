@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import WorkspaceUtils from '../lib/workspace-utils'
-import { graphql, useStaticQuery } from 'gatsby'
 import styles from './card-editor-view.module.css'
 import ReactBlocklyComponent from 'react-blockly'
 import Blockly from 'blockly'
@@ -14,91 +13,10 @@ import { useIndex } from '../hooks/use-index'
 import JsonConversionUtils from '../lib/json-conversion-utils'
 import BlocklyMiscUtils from '../lib/blockly-misc-utils'
 import useComponentWillMount from '../hooks/use-component-will-mount'
+import useBlocklyData from '../hooks/use-blockly-data'
 
 const CardEditorView = () => {
-  const data = useStaticQuery(graphql`
-  query {
-    toolbox {
-      BlockCategoryList {
-        BlockTypePrefix
-        CategoryName
-        ColorHex
-      }
-    }
-    allBlock {
-      edges {
-        node {
-          id
-          args {
-            i
-            args {
-              type
-              check
-              name
-              valueS
-              valueI
-              valueB
-              min
-              max
-              int
-              text
-              options
-              shadow {
-                type
-                fields {
-                  name
-                  valueS
-                  valueI
-                }
-                notActuallyShadow
-              }
-            }
-          }
-          inputsInline
-          colour
-          messages
-          nextStatement
-          output
-          previousStatement
-          type
-          data
-          hat
-        }
-      }
-    }
-    allCard {
-      edges {
-        node {
-          id
-          name
-          baseManaCost
-          baseAttack
-          baseHp
-          heroClass
-          type
-          collectible
-          description
-          art {
-            primary {
-              r
-              g
-              b
-            }
-          }
-        }
-      }
-    }
-    allFile(filter: {extension: {eq: "json"}, relativePath: {glob: "**collectible/**"}}) {
-      edges {
-        node {
-          internal {
-            content
-          }
-          name
-        }
-      }
-    }
-  }`)
+  const data = useBlocklyData()
 
   const heroClassColors = useMemo(() => BlocklyMiscUtils.getHeroClassColors(data))
   const [code, setCode] = useState(``)

@@ -62,8 +62,10 @@ export default class BlocklyMiscUtils {
               const connection = arg.type.endsWith('statement') ?
                 shadowBlock.previousConnection : shadowBlock.outputConnection
               thisBlock.getInput(arg.name).connection.connect(connection)
-              shadowBlock.initSvg()
-              this.manuallyAddShadowBlocks(shadowBlock, Blockly.Blocks[shadow.type].json)
+              if (!!shadowBlock.initSvg) {
+                shadowBlock.initSvg()
+              }
+              BlocklyMiscUtils.manuallyAddShadowBlocks(shadowBlock, Blockly.Blocks[shadow.type].json)
             }
           }
         }
@@ -74,7 +76,9 @@ export default class BlocklyMiscUtils {
       let shadowBlock = thisBlock.workspace.newBlock('Property_SHADOW')
       shadowBlock.setShadow(true)
       thisBlock.nextConnection.connect(shadowBlock.previousConnection)
-      shadowBlock.initSvg()
+      if (!!shadowBlock.initSvg) {
+        shadowBlock.initSvg()
+      }
     }
   }
 
