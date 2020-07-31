@@ -4,13 +4,18 @@ This website is authored using Gatsby.js. You can add new pages by duplicating a
 
 ```shell script
 npm install -g gatsby-cli
-npm install --save
+CXX="clang++ -I${JAVA_HOME}/include/darwin/" npm install --save
 gatsby develop
 ```
 
 After gatsby-cli is installed, 
 
 ```shell script
-npm install --save
 gatsby clean
+```
+
+On modern JDKs, `node` should be invoked with the following environment variable:
+
+```
+DYLD_INSERT_LIBRARIES=${JAVA_HOME}/lib/server/libjvm.dylib
 ```

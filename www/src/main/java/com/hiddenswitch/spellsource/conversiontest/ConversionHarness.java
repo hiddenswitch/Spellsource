@@ -5,9 +5,14 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 
+import java.util.Objects;
 import java.util.stream.LongStream;
 
 public class ConversionHarness {
+	static {
+		CardCatalogue.loadCardsFromPackage();
+	}
+
 	private static Object PROBE = new Object();
 
 	protected static class Tuple {
@@ -18,6 +23,10 @@ public class ConversionHarness {
 			this.context = context;
 			this.seed = seed;
 		}
+	}
+
+	public static boolean assertCardReplaysTheSame(int seed1, int seed2, String cardId, String replacementJson) {
+		return assertCardReplaysTheSame(new long[]{seed1, seed2}, cardId, replacementJson);
 	}
 
 	public static boolean assertCardReplaysTheSame(long[] seeds, String cardId, String replacementJson) {
@@ -32,8 +41,20 @@ public class ConversionHarness {
 							context.play();
 							return new Tuple(context, seed);
 						})
-						.filter(tuple -> !(tuple.context.getTrace().getRawActions().stream().noneMatch(ga -> ga
-								.getSourceReference() != null && ga.getSource(tuple.context).getSourceCard().getCardId().equals(cardId))))
+						.filter(tuple -> tuple.context.getTrace().getRawActions().stream().anyMatch(ga -> {
+							if (ga.getSourceReference() == null) {
+								return false;
+							}
+							var source = ga.getSource(tuple.context);
+							if (source == null) {
+								return false;
+							}
+							var sourceCard = source.getSourceCard();
+							if (sourceCard == null) {
+								return false;
+							}
+							return Objects.equals(sourceCard.getCardId(), cardId);
+						}))
 						.allMatch(tuple -> {
 							var desc = Json.decodeValue(replacementJson, CardDesc.class);
 							CardCatalogue.getRecords().get(cardId).setDesc(desc);

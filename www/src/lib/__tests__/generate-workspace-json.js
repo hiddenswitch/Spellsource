@@ -7,6 +7,7 @@ import { beforeAll, describe, expect, test } from '@jest/globals'
 import { jsonTransformFileNode } from '../json-transforms'
 import BlocklyMiscUtils from '../blockly-misc-utils'
 import { walk, walkSync } from '../walk'
+import java from 'java'
 
 const cardsPath = `${__dirname}/../../../../cards/src/main/resources/cards/collectible`
 const blocksPath = `${__dirname}/../../../../unityclient/Assets/UBlockly/JsonBlocks/`
@@ -14,9 +15,12 @@ const blocksPath = `${__dirname}/../../../../unityclient/Assets/UBlockly/JsonBlo
 const cards = []
 for (const f of walkSync(cardsPath)) {
   const strings = f.split('/')
-  const id = strings[strings.length - 1]
+  const id = strings[strings.length - 1].replace(/.json$/, '')
   cards.push([id, f])
 }
+
+java.classpath.push('./build/libs/www-0.8.79-all.jar')
+const ConversionHarness = java.import('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
 
 describe('WorkspaceUtils', () => {
   beforeAll(async () => {
@@ -65,5 +69,13 @@ describe('WorkspaceUtils', () => {
     JsonConversionUtils.generateCard(workspace, srcCard)
     const json = WorkspaceUtils.workspaceToCardScript(workspace)
     expect(json).toEqual(srcCard)
+  })
+
+  test.each(cards)('replays the same %s', async (id, cardPath) => {
+    const workspace = new Workspace()
+    const srcCard = JSON.parse(await fs.promises.readFile(cardPath))
+    JsonConversionUtils.generateCard(workspace, srcCard)
+    const json = WorkspaceUtils.workspaceToCardScript(workspace)
+    expect(ConversionHarness.assertCardReplaysTheSameSync(1, 2, id, JSON.stringify(json))).toEqual(true)
   })
 })

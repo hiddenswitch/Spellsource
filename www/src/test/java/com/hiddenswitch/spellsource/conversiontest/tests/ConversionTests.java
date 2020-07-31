@@ -14,6 +14,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @Execution(ExecutionMode.SAME_THREAD)
 public class ConversionTests {
 
@@ -48,6 +50,6 @@ public class ConversionTests {
 	@ParameterizedTest()
 	@MethodSource("getCardIds")
 	public void testAllCardsReproduce(String cardId) {
-		ConversionHarness.assertCardReplaysTheSame(new long[]{1L, 2L}, cardId, Json.encodePrettily(CardCatalogue.getCards().get(cardId).getDesc()));
+		assertTrue(ConversionHarness.assertCardReplaysTheSame(new long[]{1L, 2L}, cardId, Json.encodePrettily(CardCatalogue.getCards().get(cardId).getDesc())));
 	}
 }
