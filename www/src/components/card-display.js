@@ -87,6 +87,14 @@ function CardDisplay (props) {
     }
   }
 
+  const checkTokens = () => {
+    if ((props.baseAttack === null || props.baseAttack === undefined) && (props.baseHp === null || props.baseHp === undefined)) {
+      return (`none`)
+    } else {
+      return (`initial`)
+    }
+  }
+
   return (
     <div className={styles.cardDisplayTemplate}>
       <img src={backgroundLayer} className={styles.layerOne} alt='card'/>
@@ -118,10 +126,12 @@ function CardDisplay (props) {
       <div className={styles.pedestalShadow}
            style={{ background: `linear-gradient(${art.shadow}, ${art.shadow}), url(${pedestalShadow}) no-repeat` }}/>
       <img src={windowBackground} className={styles.windowBackground} alt=""/>
-      <img src={baseAttack} className={styles.attackToken} alt=""/>
-      <p className={styles.baseAttack}>{props.baseAttack}</p>
-      <img src={baseHp} className={styles.hpToken} alt=""/>
-      <p className={styles.baseHp}>{props.baseHp}</p>
+      <div style={{ display: checkTokens() }}>
+        <img src={baseAttack} className={styles.attackToken} alt=""/>
+        <p className={styles.baseAttack}>{props.baseAttack}</p>
+        <img src={baseHp} className={styles.hpToken} alt=""/>
+        <p className={styles.baseHp}>{props.baseHp}</p>
+      </div>
       <div className={styles.heroAndShadow}>
         <img src={art.sprite.named} className={styles.hero} alt="hero"/>
         <img src={art.sprite.shadow} className={styles.heroShadow} alt=""/>
