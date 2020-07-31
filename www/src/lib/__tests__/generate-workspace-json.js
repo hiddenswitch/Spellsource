@@ -34,7 +34,7 @@ describe('WorkspaceUtils', () => {
 
       const blocksJson = JSON.parse(await fs.promises.readFile(blocksDefPath))
       for (const blockJson of blocksJson) {
-        jsonTransformFileNode(blockJson, { base: blocksDefPath })
+        jsonTransformFileNode(blockJson, { base: path.basename(blocksDefPath) })
         blockEdges.push({ node: blockJson })
       }
     }
