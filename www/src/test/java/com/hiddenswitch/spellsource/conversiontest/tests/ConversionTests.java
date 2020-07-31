@@ -28,6 +28,7 @@ public class ConversionTests {
 			"spell_icy_talon",
 			"spell_the_cyntanami",
 			"spell_marble_spellstone",
+			"minion_fifi_fizzlewarp",
 			"spell_zagroz__inferno_bomb");
 
 	public static Stream<String> getCardIds() {
@@ -37,7 +38,6 @@ public class ConversionTests {
 			var cardType = card.getCardType();
 			return DeckFormat.spellsource().isInFormat(card)
 					&& !omitted.contains(cardId)
-					&& !cardId.equals("minion_fifi_fizzlewarp")
 					&& cardType != CardType.HERO_POWER
 					&& (GameLogic.isCardType(cardType, CardType.SPELL)
 					|| GameLogic.isCardType(cardType, CardType.MINION)
