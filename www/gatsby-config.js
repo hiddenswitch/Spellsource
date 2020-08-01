@@ -1,5 +1,6 @@
 const remark = require('remark')
 const visit = require('unist-util-visit')
+const { resolveArt } = require('./src/lib/resolve-art')
 const { jsonTransformFileNode, jsonType } = require('./src/lib/json-transforms')
 
 module.exports = {
@@ -123,7 +124,13 @@ module.exports = {
             nodeType: node => 'Card',
             heroClass: node => node.heroClass,
             baseManaCost: node => node.baseManaCost,
-            art: node => node.art,
+            art: (node, getNode) => {
+              return resolveArt(node, {
+                nodeModel: {
+                  getNodeById: ({ id }) => getNode(id)
+                }
+              })
+            },
             baseAttack: node => node.baseAttack,
             baseHp: node => node.baseHp,
             type: node => node.type,

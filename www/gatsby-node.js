@@ -1,5 +1,6 @@
 const lodash = require(`lodash`)
 const path = require(`path`)
+const { resolveArt } = require('./src/lib/resolve-art')
 const { createFilePath } = require("gatsby-source-filesystem")
 
 exports.onCreateWebpackConfig = ({
@@ -157,30 +158,7 @@ exports.createResolvers = ({ createResolvers }) => {
     Card: {
       art: {
         resolve (source, args, context, info) {
-          if (source.type === 'CLASS') {
-            return source.art
-          }
-
-          // if the art field already exists, just extend it
-          // with the appropriate class colors
-          let heroClass = source.heroClass
-          if (!heroClass) {
-            return source.art
-          }
-
-          // The card JSON uses ANY as the enum to mean a neutral card
-          if (heroClass === 'ANY') {
-            // the name of the class card is going to be class_neutral not class_any
-            heroClass = 'neutral'
-          }
-          const classCard = context.nodeModel.getNodeById({ id: `class_${heroClass.toLowerCase()}` })
-          if (!classCard) {
-            return source.art
-          }
-
-          const art = source.art || {}
-          lodash.defaultsDeep(art, classCard.art)
-          return art
+          return resolveArt(source, context)
         }
       }
     },
