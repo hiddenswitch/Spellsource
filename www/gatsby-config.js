@@ -1,28 +1,19 @@
 const remark = require('remark')
 const visit = require('unist-util-visit')
-
-function isString (str) {
-  return typeof str === 'string'
-}
-
-function isNumber (num) {
-  return typeof num == 'number'
-}
-
-function isArray (arr) {
-  return Array.isArray(arr)
-}
+const { jsonTransformFileNode, jsonType } = require('./src/lib/json-transforms')
 
 module.exports = {
   siteMetadata: {
     title: `Spellsource`,
   },
   plugins: [
+    `gatsby-plugin-flow`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `src`,
         path: `${__dirname}/src/`,
+        ignore: [`${__dirname}/src/main/`, `${__dirname}/src/test/`, `**/*\.java`]
       },
     },
     {
@@ -42,84 +33,11 @@ module.exports = {
       resolve: `gatsby-transformer-json-hooks`,
       options: {
         onTransformObject: ({ fileNode, object }) => {
-          // this is a card JSON
-          if (object.hasOwnProperty('fileFormatVersion')) {
-            if (!object.id) {
-              // Set the id
-              object.id = fileNode.base.replace(/.json$/, '')
-            }
-            // Also set a path on the cards node which corresponds to its URL in the website
-            object.path = '/cards/' + object.id
-          } else if ((object.hasOwnProperty('args0') || object.hasOwnProperty('message0')) && object.hasOwnProperty('type')) {
-            // this is a blockly block
-            if (!object.id && !!object.type) {
-              object.id = object.type
-            }
-
-            const newArgs = []
-            // Patch up types
-            for (let i = 0; i <= 9; i++) {
-              if (!!object['args' + i.toString()]) {
-                const args = object['args' + i.toString()]
-                args.forEach(arg => {
-                  if (arg.hasOwnProperty('value')) {
-                    if (isNumber(arg.value)) {
-                      arg['valueI'] = arg.value
-                    } else if (isString(arg.value)) {
-                      arg['valueS'] = arg.value
-                    } else if (arg.value === true) {
-                      arg['valueB'] = true
-                    } else if (arg.value === false) {
-                      arg['valueB'] = false
-                    }
-                    delete arg.value
-                  }
-                  if (!!arg.check) {
-                    if (isArray(arg.check)) {
-                      return
-                    }
-
-                    arg['check'] = [arg.check]
-                  }
-                })
-                newArgs.push({ i: i, args: args })
-                delete object['args' + i.toString()]
-              } else {
-                break
-              }
-            }
-            const newMessages = []
-            for (let i = 0; i <= 9; i++) {
-              if (!!object['message' + i.toString()]) {
-                newMessages.push(object['message' + i.toString()])
-              } else {
-                break
-              }
-              delete object['message' + i.toString()]
-            }
-            object.args = newArgs
-            object.messages = newMessages
-            object.path = '/blocks/' + object.id
-          } else if (object.hasOwnProperty('Style') && object.hasOwnProperty('BlockCategoryList')) {
-            // this is a toolbox definition
-            if (!object.id && !!object.Style) {
-              object.id = object.Style
-            }
-            object.path = '/toolboxes/' + object.id
-          }
+          jsonTransformFileNode(object, fileNode)
         },
         typeName: ({ node, object, isArray }) => {
           // This is card JSON
-          if (object.hasOwnProperty('fileFormatVersion')) {
-            return 'Card'
-          } else if ((object.hasOwnProperty('args') || object.hasOwnProperty('messages')) && object.hasOwnProperty('type')) {
-            // this is a blockly block
-            return 'Block'
-          } else if (object.hasOwnProperty('Style') && object.hasOwnProperty('BlockCategoryList')) {
-            // this is a toolbox definition
-            return 'Toolbox'
-          }
-          // return 'Json'
+          return jsonType(object)
         }
       }
     },

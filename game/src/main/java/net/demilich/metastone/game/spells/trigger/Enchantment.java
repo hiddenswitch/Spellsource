@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.desc.HasEntrySet;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
@@ -72,6 +73,7 @@ public class Enchantment extends Entity implements Trigger {
 	private static final Zones[] DEFAULT_GAME_ZONES = new Zones[]{Zones.DISCOVER, Zones.SET_ASIDE_ZONE, Zones.DECK, Zones.HAND};
 	private static final Zones[] DEFAULT_DECK_ZONES = new Zones[]{Zones.DECK};
 	private static final Set<Zones> DEFAULT_BATTLEFIELD_ZONES_SET = Arrays.stream(Enchantment.getDefaultBattlefieldZones()).collect(Collectors.toSet());
+	private final HasEntrySet<?, ?> entrySet;
 	protected List<EventTrigger> triggers = new ArrayList<>();
 	protected List<EventTrigger> expirationTriggers = new ArrayList<>();
 	protected List<EventTrigger> activationTriggers = new ArrayList<>();
@@ -94,6 +96,11 @@ public class Enchantment extends Entity implements Trigger {
 	protected boolean added;
 
 	public Enchantment() {
+		this.entrySet = null;
+	}
+
+	public Enchantment(HasEntrySet<?, ?> entrySet) {
+		this.entrySet = entrySet;
 	}
 
 	@Override
@@ -572,5 +579,9 @@ public class Enchantment extends Entity implements Trigger {
 	public Enchantment setCopyToActor(boolean giveToActor) {
 		this.copyToActor = giveToActor;
 		return this;
+	}
+
+	public HasEntrySet<?, ?> getEntrySet() {
+		return entrySet;
 	}
 }

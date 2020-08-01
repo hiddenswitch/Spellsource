@@ -71,6 +71,7 @@ setup(name='spellsource',
                         'pymongo',
                         'mistletoe',
                         'GitPython',
+                        'psd-tools',
                         'SecretColors==1.1.0'],
       extras_require={
           'ext': ['numpy', 'h5py', 'keras', 'nltk', 'gitpython']

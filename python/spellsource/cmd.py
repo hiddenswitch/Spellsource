@@ -1,21 +1,20 @@
 import typing
-from itertools import chain
 from os import makedirs
 from os.path import join, abspath
-from typing import List
 
 import click
+from itertools import chain
 from tqdm import tqdm
 
 from .context import Context
 from .ext.admin import Admin
 from .ext.cardformatter import fix_cards, fix_card
 from .ext.datasources import HSReplayMatchups
+from .ext.fixcolor import fix_colors as _fix_colors
 from .ext.fixpullrequest import PullRequestFixSession
 from .ext.hearthcards import write_set_stubs
 from .ext.populatedecklists import write_decklists
 from .ext.updatedbf import write_dbf_json
-from .ext.fixcolor import fix_colors as _fix_colors
 
 
 @click.group()
@@ -424,104 +423,6 @@ def fix_merge():
 
 
 @_cli.command()
-@click.option('--mongo-url', required=False, default=None, show_default=True,
-              help='when empty, starts a mongod, otherwise this is the db URL')
-@click.option('--gradle-cmd', required=False, default='gradle', show_default=True,
-              help='specifies the gradle command, if it is not installed use --default-gradle')
-@click.option('--default-gradle', required=False, default=False, show_default=True,
-              help='when TRUE, use the gradle distribution that comes with the source directory')
-def run(mongo_url: str = None, gradle_cmd: str = 'gradle', default_gradle: bool = False):
-    """
-    Runs the server.
-
-    Starts a mongod instance if installed and no MONGO_URL environment variable is specified.
-
-    Additional configuration can be set with the following environment variables:
-
-      PORT=8080                The HTTP serving port (TCP)
-      VERTX_CLUSTER_PORT=5701  The cluster traffic port (TCP)
-      ATOMIX_PORT=5710         The management traffic port (TCP)
-
-    If gradle is not installed, uses the local distribution.
-    """
-    from subprocess import Popen, DEVNULL
-    from shlex import split
-    from os import environ, makedirs
-    from platform import platform
-    from contextlib import ExitStack
-    import errno
-    start_mongo = mongo_url is None
-    mongo_url = mongo_url or 'mongodb://localhost/metastone'
-
-    def get_gradle_cmd():
-        if 'win' in platform():
-            return './gradlew.bat'
-        else:
-            return './gradlew'
-
-    def java_main():
-        # No gradle, try running from jar
-        from threading import Thread
-
-        class _JavaMain:
-            def __init__(self):
-                self.thread = Thread(target=self.run)
-
-            def __enter__(self):
-                self.thread.start()
-
-            def run(self):
-                from .context import Context
-                with Context() as context:
-                    context.root_namespace().com.hiddenswitch.spellsource.net.applications.LocalClustered.main(
-                        context.string_array(0))
-
-            def __exit__(self, exc_type, exc_val, exc_tb):
-                pass
-
-            def wait(self):
-                click.echo('Started server')
-                self.thread.join()
-
-        return _JavaMain()
-
-    if default_gradle:
-        gradle_cmd = get_gradle_cmd()
-
-    cmds: List[Popen] = []
-
-    if start_mongo and 'MONGO_URL' not in environ:
-        makedirs('.mongo', exist_ok=True)
-        cmds += [Popen(split('mongod --bind_ip_all --dbpath=.mongo/'), stdout=DEVNULL)]
-        click.echo('Started mongod')
-        environ['MONGO_URL'] = mongo_url
-
-    import os.path
-    if os.path.isfile('build.gradle'):
-        try:
-            java = Popen(split(f'{gradle_cmd} net:run'))
-        except OSError as e:
-            if e.errno == errno.ENOENT:
-                gradle_cmd = get_gradle_cmd()
-                try:
-                    java = Popen(split(f'{gradle_cmd} net:run'))
-                except OSError as e2:
-                    if e2.errno == errno.ENOENT:
-                        java = java_main()
-                    else:
-                        raise e2
-    else:
-        java = java_main()
-    cmds += [java]
-
-    with ExitStack() as stack:
-        for cmd in cmds[::-1]:
-            stack.enter_context(cmd)
-
-        java.wait()
-
-
-@_cli.command()
 def sort_and_fix():
     """
     Sorts the cards and fixes their formatting
@@ -529,6 +430,43 @@ def sort_and_fix():
     from .ext.sortcards import sort_cards
     sort_cards()
     fix_cards()
+
+
+@_cli.command()
+@click.argument('source', type=str)
+@click.argument('destination_prefix', type=str, nargs=-1)
+@click.option('--lists', type=bool, show_default=True, required=False, default=False,
+              help='when TRUE, just lists the output files')
+@click.option('--extension', type=str, show_default=True, required=False, default='.png',
+              help='sets the image extension')
+def psb_2_png_layers(source: str, destination_prefix: tuple = (), lists: bool = False, extension: str = '.png'):
+    """
+    Exports the visible layers in the specified PSB file to files with the destination prefix.
+    """
+    from psd_tools import PSDImage
+    import os
+    from os.path import dirname
+    if len(destination_prefix) == 0:
+        destination_prefix = ''
+    else:
+        destination_prefix = destination_prefix[0]
+    psd = PSDImage.open(source)
+    for layer in psd.descendants():
+        if not layer.kind == 'pixel':
+            continue
+        if not layer.visible:
+            continue
+        layer_image = layer.composite()
+        s = join(destination_prefix, '%s%s' % (layer.name, extension))
+        try:
+            dirname(s)
+            os.makedirs(dirname(s), exist_ok=True)
+        except:
+            pass
+        if lists:
+            click.echo(s)
+        else:
+            layer_image.save(s)
 
 
 def main():

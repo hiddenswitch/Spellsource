@@ -4,23 +4,23 @@ import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
-import co.paralleluniverse.strands.SuspendableAction1;
+import com.hiddenswitch.spellsource.client.models.ActionType;
+import com.hiddenswitch.spellsource.common.GameState;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
-import net.demilich.metastone.game.decks.DeckCreateRequest;
-import com.hiddenswitch.spellsource.common.GameState;
-import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.EndTurnAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.PlayGameLogicRandomBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Actor;
@@ -1717,6 +1717,17 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	public static GameContext fromTwoRandomDecks() {
 		return fromDecks(Arrays.asList(Deck.randomDeck(), Deck.randomDeck()));
+	}
+
+	public static GameContext fromTwoRandomDecks(long seed) {
+		var random = new XORShiftRandom(seed);
+		return fromDecks(random.nextLong(), Arrays.asList(Deck.randomDeck(random.nextLong()), Deck.randomDeck(random.nextLong())));
+	}
+
+	public static GameContext fromDecks(long seed, List<GameDeck> decks) {
+		var context = fromDecks(decks, new PlayGameLogicRandomBehaviour(), new PlayGameLogicRandomBehaviour());
+		context.setLogic(new GameLogic(seed));
+		return context;
 	}
 
 	/**

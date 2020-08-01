@@ -28,7 +28,8 @@ public class PlayRandomBehaviour extends IntelligentBehaviour {
 
 	@Override
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
-		return new ArrayList<>(randomSubset(cards, getRandom(context).nextInt(3) + 1, getRandom(context)));
+		return new ArrayList<>(randomSubset(cards, getRandom(context).nextInt(cards
+				.size()), getRandom(context)));
 	}
 
 	protected Random getRandom(GameContext context) {
@@ -41,20 +42,22 @@ public class PlayRandomBehaviour extends IntelligentBehaviour {
 			return validActions.get(0);
 		}
 
-		int randomIndex = getRandom(context).nextInt(validActions.size());
+		var randomIndex = getRandom(context).nextInt(validActions.size());
 		return validActions.get(randomIndex);
 	}
 
 	public <T> Set<T> randomSubset(List<T> items, int m, Random random) {
-		HashSet<T> res = new HashSet<T>(m);
-		int n = items.size();
-		for (int i = n - m; i < n; i++) {
-			int pos = random.nextInt(i + 1);
-			T item = items.get(pos);
-			if (res.contains(item))
+		Set<T> res = Collections.newSetFromMap(new LinkedHashMap<>());
+		var n = items.size();
+		for (var i = n - m; i < n; i++) {
+			var pos = random.nextInt(i + 1);
+			var item = items.get(pos);
+			if (res.contains(item)) {
 				res.add(items.get(i));
-			else
+
+			} else {
 				res.add(item);
+			}
 		}
 		return res;
 	}

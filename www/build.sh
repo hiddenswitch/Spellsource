@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
-source ../.venv/bin/activate
 set -e
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+source "${DIR}"/.venv/bin/activate
+pip3 install -e "${DIR}"/../python
 echo "Getting the latest versions of dependencies"
 npm install
 echo "Building and deploying..."

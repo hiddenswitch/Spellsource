@@ -1,25 +1,27 @@
 package net.demilich.metastone.game.spells.aura;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.common.collect.ObjectArrays;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.Streams;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
+import net.demilich.metastone.game.cards.desc.HasDescSerializer;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.BoardChangedEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.WillEndSequenceEvent;
-import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.trigger.*;
+import net.demilich.metastone.game.spells.trigger.BoardChangedTrigger;
+import net.demilich.metastone.game.spells.trigger.DidEndSequenceTrigger;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
@@ -83,6 +85,7 @@ import java.util.stream.Stream;
  * @see AttributeAura for an aura that adds an attribute
  * @see CardAura that temporarily makes one card behave like another
  */
+@JsonSerialize(using = HasDescSerializer.class)
 public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	protected static EventTriggerDesc[] DEFAULT_TRIGGERS = new EventTriggerDesc[]{new EventTriggerDesc(DidEndSequenceTrigger.class), new EventTriggerDesc(BoardChangedTrigger.class)};
 	protected static EventTriggerDesc[] EMPTY_TRIGGERS = new EventTriggerDesc[0];
@@ -91,7 +94,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	private AuraDesc desc;
 
 	public Aura(AuraDesc desc) {
-		super();
+		super(desc);
 		constructAura(desc);
 	}
 
