@@ -26,6 +26,7 @@ setup.cfg
 !internalcontent/*
 !discordbot/*
 !vertx-redis-cluster/*
+!conversiontest/*
 # Omit intermediate build data
 **/build/
 **/classes/

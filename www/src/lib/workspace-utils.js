@@ -1,11 +1,8 @@
-import {isNumber, Xml} from 'blockly'
+import { Xml } from 'blockly'
 import { extend, filter, find, fromPairs, isArray, map, merge } from 'lodash'
 import format from 'string-format'
 
 export default class WorkspaceUtils {
-  static BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILDREN = 'BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILDREN'
-  static BLOCKLY_ADD_EVENT_TARGET_TO_CHILDREN = 'BLOCKLY_ADD_EVENT_TARGET_TO_CHILDREN'
-  static BLOCKLY_REMOVE_SPELL_TARGET_FROM_CHILDREN = 'BLOCKLY_REMOVE_SPELL_TARGET_FROM_CHILDREN'
   static BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = 'BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE'
   static BLOCKLY_INT_ATTRIBUTE = 'BLOCKLY_INT_ATTRIBUTE'
   static BLOCKLY_ARRAY_ELEMENT = 'BLOCKLY_ARRAY_ELEMENT'
@@ -106,8 +103,13 @@ export default class WorkspaceUtils {
             const value = values[i]
             switch (value) {
               case WorkspaceUtils.BLOCKLY_EXTEND_PREVIOUS:
+                if (!!obj.customArg && !!obj.customValue) {
+                  obj[obj.customArg] = obj.customValue
+                  delete obj.customArg
+                  delete obj.customValue
+                }
                 if (!!prev) {
-                  extend(prev, obj)
+                  merge(prev, obj)
                 }
                 retValue = obj
                 break
@@ -143,23 +145,6 @@ export default class WorkspaceUtils {
                   } else {
                     retValue = retValue.concat([next])
                   }
-                }
-                break
-              case WorkspaceUtils.BLOCKLY_ADD_TARGET_OUTPUT_TO_CHILDREN:
-                if (!!obj['spell.spell'] && !obj['spell.target'] && obj['spell.spell'].target === 'SPELL_TARGET') {
-                  obj['spell.spell'].target = 'OUTPUT'
-                } else if (!!obj.spell && (!obj.spell.target || obj.spell.target === 'SPELL_TARGET')) {
-                  obj.spell.target = 'OUTPUT'
-                }
-                break
-              case WorkspaceUtils.BLOCKLY_ADD_EVENT_TARGET_TO_CHILDREN:
-                if (!!obj.spell && (obj.spell.target === 'IT')) {
-                  obj.spell.target = 'EVENT_TARGET'
-                }
-                break
-              case WorkspaceUtils.BLOCKLY_REMOVE_SPELL_TARGET_FROM_CHILDREN:
-                if (!!obj.spell && obj.spell.target === 'SPELL_TARGET') {
-                  delete obj.spell.target
                 }
                 break
               default:
@@ -198,7 +183,7 @@ export default class WorkspaceUtils {
    * @param cardScript
    * @returns the modified cardScript
    */
-  static postProcessCardScript(cardScript) {
+  static postProcessCardScript (cardScript) {
     if (isArray(cardScript)) {
       for (const cardScriptElement of cardScript) {
         this.postProcessCardScript(cardScriptElement)
@@ -212,23 +197,26 @@ export default class WorkspaceUtils {
     if (cardScript.target === 'IT') {
       delete cardScript.target
     }
+    if (cardScript.cardType === 'ANY') {
+      delete cardScript.cardType
+    }
 
     if (!!cardScript.battlecry) {
       if (!cardScript.attributes) {
         cardScript.attributes = {}
       }
-      cardScript.attributes.BATTLECRY = true;
+      cardScript.attributes.BATTLECRY = true
     }
 
     if (!!cardScript.deathrattle) {
       if (!cardScript.attributes) {
         cardScript.attributes = {}
       }
-      cardScript.attributes.DEATHRATTLES = true;
+      cardScript.attributes.DEATHRATTLES = true
     }
 
     if (!!cardScript.class && cardScript.class.endsWith('Aura')
-    && !!cardScript.attribute && !cardScript.attribute.startsWith('AURA_')) {
+      && !!cardScript.attribute && !cardScript.attribute.startsWith('AURA_')) {
       cardScript.attribute = 'AURA_' + cardScript.attribute
     }
 
@@ -300,22 +288,21 @@ export default class WorkspaceUtils {
    *    }
    * @param cardScript
    */
-  static rearrangeInputValues(cardScript) {
+  static rearrangeInputValues (cardScript) {
     if (typeof cardScript === 'string') {
       return
     }
 
     //first, split up any args with ','
     for (const cardScriptKey in cardScript) {
-      if (cardScriptKey.includes(",")) {
-        let newKeys = cardScriptKey.split(",")
+      if (cardScriptKey.includes(',')) {
+        let newKeys = cardScriptKey.split(',')
         for (const key of newKeys) {
           cardScript[key] = cardScript[cardScriptKey]
         }
         delete cardScript[cardScriptKey]
       }
     }
-
 
     //go through the children to bring super.* up
     for (const cardScriptKey in cardScript) {
@@ -324,14 +311,19 @@ export default class WorkspaceUtils {
         for (const cardScriptElementKey in cardScript[cardScriptKey]) {
           if (cardScriptElementKey.startsWith('super.')) {
             let newKey = cardScriptElementKey.substring(cardScriptElementKey.indexOf('.') + 1)
-            cardScript[newKey] = cardScript[cardScriptKey][cardScriptElementKey]
+            if (cardScriptKey.includes('.')) {
+              let correctPrefix = cardScriptKey.split('.').slice(0, -1).join('.')
+              cardScript[correctPrefix + '.' + newKey] = cardScript[cardScriptKey][cardScriptElementKey]
+            } else {
+              cardScript[newKey] = cardScript[cardScriptKey][cardScriptElementKey]
+            }
             delete cardScript[cardScriptKey][cardScriptElementKey]
           }
         }
         //then do the last one that might override what we're working with
         if (!!cardScript[cardScriptKey]['super']
           && typeof cardScript[cardScriptKey]['super'] === 'string') {
-            cardScript[cardScriptKey] = cardScript[cardScriptKey]['super']
+          cardScript[cardScriptKey] = cardScript[cardScriptKey]['super']
         } else if (!!cardScript['super'] && cardScript.propertyIsEnumerable('super')
           && typeof cardScript['super'] !== 'string') {
           let andWhenEveryonesSuper = !!cardScript.super.super
@@ -356,7 +348,7 @@ export default class WorkspaceUtils {
         if (cardScript.propertyIsEnumerable(newKey)) {
           cardScript[newKey][newKey2] = cardScript[cardScriptKey]
           delete cardScript[cardScriptKey]
-          this.rearrangeInputValues(cardScript[newKey])
+          this.postProcessCardScript(cardScript[newKey])
         }
       }
 
@@ -372,7 +364,6 @@ export default class WorkspaceUtils {
 
   static workspaceToCardScript (workspace) {
     const xml = Xml.workspaceToDom(workspace)
-    //console.log(xml)
     return WorkspaceUtils.xmlToCardScript(xml)
   }
 }

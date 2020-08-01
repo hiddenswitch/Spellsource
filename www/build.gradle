@@ -1,0 +1,37 @@
+plugins {
+    id "com.github.node-gradle.node" version "2.2.4"
+    id 'com.github.johnrengelman.shadow' version "5.2.0"
+    id 'java-library'
+}
+
+apply plugin: "com.github.node-gradle.node"
+apply plugin: 'java-library'
+
+version = '0.8.79'
+
+dependencies {
+    api project(':core')
+    api project(':game')
+    api project(':cards')
+    api project(':testutils')
+    runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+shadowJar {
+    mergeServiceFiles()
+    zip64 true
+}
+
+node {
+    download = false
+}
+
+task run(type: NpxTask) {
+    dependsOn += [npmInstall]
+    command = 'gatsby'
+    args = ['develop', '-o']
+}

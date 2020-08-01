@@ -31,7 +31,6 @@ public final class FormlessAgonyMissilesSpell extends MissilesSpell {
 		if (hits.stream().allMatch(desc.getCardFilter().matcher(context, player, source))) {
 			SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL1), source, null);
 		}
-		targets = null;
 	}
 
 	@Override

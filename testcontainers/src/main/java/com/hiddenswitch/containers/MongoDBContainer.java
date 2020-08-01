@@ -26,7 +26,7 @@ public class MongoDBContainer extends GenericContainer<MongoDBContainer> {
 	public MongoDBContainer(@NotNull String dockerImageName) {
 		super(dockerImageName);
 		this.withExposedPorts(27017);
-		this.waitingFor(Wait.forLogMessage(".*waiting for connections on port.*", 1));
+		waitingFor(Wait.forLogMessage(".*waiting for connections on port.*", 1));
 	}
 
 	public String getReplicaSetUrl() {

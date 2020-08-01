@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.decks;
 
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -45,6 +46,13 @@ public interface Deck extends Cloneable {
 	static @NotNull
 	GameDeck deckList(@NotNull String deckList) {
 		return DeckCreateRequest.fromDeckList(deckList).toGameDeck();
+	}
+
+	static @NotNull GameDeck randomDeck(long seed) {
+		var random = new XORShiftRandom(seed);
+		var baseClasses = HeroClass.getBaseClasses(DeckFormat.spellsource());
+		var heroClass = baseClasses.get(random.nextInt(baseClasses.size()));
+		return new RandomDeck(random.getState(), heroClass, DeckFormat.spellsource());
 	}
 
 	String getDeckId();

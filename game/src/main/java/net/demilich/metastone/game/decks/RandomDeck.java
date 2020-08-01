@@ -1,13 +1,14 @@
 package net.demilich.metastone.game.decks;
 
+import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
-import com.hiddenswitch.spellsource.client.models.CardType;
-import net.demilich.metastone.game.decks.validation.DefaultDeckValidator;
 import net.demilich.metastone.game.decks.validation.DeckValidator;
+import net.demilich.metastone.game.decks.validation.DefaultDeckValidator;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -24,11 +25,16 @@ final class RandomDeck extends GameDeck {
 	 * @param deckFormat The format
 	 */
 	RandomDeck(String heroClass, DeckFormat deckFormat) {
-		super(heroClass);
-		populate(deckFormat);
+		this(ThreadLocalRandom.current().nextLong(), heroClass, deckFormat);
 	}
 
-	private void populate(DeckFormat deckFormat) {
+	public RandomDeck(long seed, String heroClass, DeckFormat deckFormat) {
+		super(heroClass);
+		populate(seed, deckFormat);
+	}
+
+	private void populate(long seed, DeckFormat deckFormat) {
+		var random = new XORShiftRandom(seed);
 		DeckValidator deckValidator = new DefaultDeckValidator();
 		CardList classCards = CardCatalogue.query(deckFormat, card -> card.isCollectible()
 				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO)
@@ -48,13 +54,13 @@ final class RandomDeck extends GameDeck {
 			// cards
 			Card randomCard;
 			if (classCards.isEmpty() && !neutralCards.isEmpty()) {
-				randomCard = neutralCards.get(ThreadLocalRandom.current().nextInt(neutralCards.size()));
+				randomCard = neutralCards.get(random.nextInt(neutralCards.size()));
 			} else if (classCards.isEmpty()) {
 				break;
 			} else {
-				randomCard = ThreadLocalRandom.current().nextBoolean()
-						? classCards.get(ThreadLocalRandom.current().nextInt(classCards.size()))
-						: neutralCards.get(ThreadLocalRandom.current().nextInt(neutralCards.size()));
+				randomCard = random.nextBoolean()
+						? classCards.get(random.nextInt(classCards.size()))
+						: neutralCards.get(random.nextInt(neutralCards.size()));
 			}
 			if (deckValidator.canAddCardToDeck(randomCard, this)) {
 				this.getCards().addCard(randomCard.clone());
