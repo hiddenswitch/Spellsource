@@ -292,10 +292,10 @@ public class ClusterTest extends SpellsourceTestBase {
 					v.complete();
 				}, false, succeeding);
 			});
-			var inGame = Games.getUsersInGames().containsKey(new UserId(userId));
+			var inGame = Games.isInGame(new UserId(userId));
 			assertTrue(inGame, "should be in game before host closed");
 			Void t = awaitResult(instanceWithGame::close);
-			inGame = Games.getUsersInGames().containsKey(new UserId(userId));
+			inGame = Games.isInGame(new UserId(userId));
 			assertFalse(inGame, "should not be in game now that host is closed");
 			var inQueue = Matchmaking.getUsersInQueues().containsKey(userId);
 			assertFalse(inQueue, "should not be in queue now that host is closed");

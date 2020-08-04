@@ -344,7 +344,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Clears state to ensure this context isn't referencing it anymore.
 	 */
 	@Suspendable
-	protected void dispose() {
+	protected void close() {
 		getLogic().dispose();
 	}
 
@@ -1558,7 +1558,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 				innerResult.setExceptionCount(innerResult.getExceptionCount() + 1);
 				return innerResult;
 			} finally {
-				newGame.dispose();
+				newGame.close();
 			}
 
 			return innerResult;

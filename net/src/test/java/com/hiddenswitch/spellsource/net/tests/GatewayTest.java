@@ -161,8 +161,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				invoke0(client::waitUntilDone);
 				var account = invoke(client.getApi()::getAccount, client.getAccount().getId());
 				assertFalse(account.getAccounts().get(0).isInMatch());
-				var games = Games.getUsersInGames();
-				var hasUser = games.containsKey(new UserId(client.getAccount().getId()));
+				var hasUser = Games.isInGame(new UserId(client.getAccount().getId()));
 				assertFalse(hasUser);
 
 				// Can go into another game
@@ -203,7 +202,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				var userId = client.getAccount().getId();
 				// wait 10 seconds
 				Strand.sleep(10000L);
-				assertNull(Games.getUsersInGames().get(new UserId(userId)));
+				assertFalse(Games.isInGame(new UserId(userId)));
 
 				var done = invoke(() -> {
 					var client2 = new UnityClient(context, token);
@@ -326,7 +325,7 @@ public class GatewayTest extends SpellsourceTestBase {
 					invoke0(client2::createUserAccount);
 					Future<Void> other = client2.matchmake(null, "constructed");
 					Strand.sleep(2000L);
-					assertFalse(Games.getUsersInGames().containsKey(new UserId(client1.getAccount().getId())));
+					assertFalse(Games.isInGame(new UserId(client1.getAccount().getId())));
 					other.cancel(true);
 					Strand.sleep(2000L);
 				}

@@ -832,7 +832,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 							.collect(toList()) : Collections.emptyList())
 					.personalCollection(personalCollection.asInventoryCollection())
 					.email(record.getEmails().get(0).getAddress())
-					.inMatch(Games.getUsersInGames().containsKey(new UserId(userId)))
+					.inMatch(Games.isInGame(new UserId(userId)))
 					.name(displayName + "#" + record.getPrivacyToken())
 					.privacyToken(record.getPrivacyToken());
 		} catch (RuntimeException runtimeException) {

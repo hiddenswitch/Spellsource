@@ -93,16 +93,15 @@ public class BotsTest extends SpellsourceTestBase {
 				Sync.invoke0(playAndWait);
 				var botIds = Bots.getBotIds();
 				assertEquals(botIds.size(), 1, "Only one bot document should have been created");
-				var games = Games.getUsersInGames();
 
 				for (var id : botIds) {
-					assertFalse(games.containsKey(new UserId(id)));
+					assertFalse(Games.isInGame(new UserId(id)));
 				}
 
 				Sync.invoke0(playAndWait);
 				assertEquals(botIds.size(), 1, "Only one bot document should have been created");
 				for (var id : botIds) {
-					assertFalse(games.containsKey(new UserId(id)));
+					assertFalse(Games.isInGame(new UserId(id)));
 				}
 			}
 		}, context, vertx);

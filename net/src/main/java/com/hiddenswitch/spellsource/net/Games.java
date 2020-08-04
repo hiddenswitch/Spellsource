@@ -3,30 +3,34 @@ package com.hiddenswitch.spellsource.net;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.client.models.ActionType;
-import com.hiddenswitch.spellsource.client.models.CardEvent;
 import com.hiddenswitch.spellsource.common.Tracing;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.net.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.net.impl.GameId;
 import com.hiddenswitch.spellsource.net.impl.UserId;
-import com.hiddenswitch.spellsource.net.models.*;
+import com.hiddenswitch.spellsource.net.models.ConfigurationRequest;
+import com.hiddenswitch.spellsource.net.models.CreateGameSessionResponse;
+import com.hiddenswitch.spellsource.net.models.MatchCreateResponse;
 import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.*;
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
-import com.hiddenswitch.spellsource.client.models.EntityType;
-import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.HasCard;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.events.*;
+import net.demilich.metastone.game.events.DamageEvent;
+import net.demilich.metastone.game.events.HasValue;
+import net.demilich.metastone.game.events.JoustEvent;
+import net.demilich.metastone.game.events.SecretRevealedEvent;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.AddAttributeSpell;
 import net.demilich.metastone.game.spells.BuffSpell;
@@ -36,7 +40,6 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Aftermath;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.WhereverTheyAreEnchantment;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
@@ -271,16 +274,6 @@ public interface Games extends Verticle {
 		}
 
 		return clientEvent;
-	}
-
-	/**
-	 * Retrieves the current game a player is part of.
-	 *
-	 * @return
-	 * @throws SuspendExecution
-	 */
-	static SuspendableMap<UserId, GameId> getUsersInGames() throws SuspendExecution {
-		return SuspendableMap.getOrCreate(GAMES_PLAYERS_MAP);
 	}
 
 	/**
@@ -604,7 +597,7 @@ public interface Games extends Verticle {
 		entity.rush(actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
 		entity.tribe(actor.getRace());
 		var triggers = workingContext.getLogic().getActiveTriggers(actor.getReference());
-		entity.hostsTrigger(triggers.stream().anyMatch(t->!(t instanceof Aftermath) && !(t instanceof Aura)));
+		entity.hostsTrigger(triggers.stream().anyMatch(t -> !(t instanceof Aftermath) && !(t instanceof Aura)));
 		return entity;
 	}
 
@@ -776,6 +769,47 @@ public interface Games extends Verticle {
 		}
 
 		return entity;
+	}
+
+	/**
+	 * Register that the specified user is now in a game
+	 *
+	 * @param thisGameId
+	 * @param userId
+	 * @return
+	 */
+	static @NotNull MessageConsumer<String> registerInGame(@NotNull GameId thisGameId, @NotNull UserId userId) {
+		var eb = Vertx.currentContext().owner().eventBus();
+		var consumer = eb.consumer(userId.toString() + ".isInGame", (Message<String> req) -> req.reply(thisGameId.toString()));
+		return consumer;
+	}
+
+	/**
+	 * Returns the ID of the game the user is in, if they are currently in a game. Otherwise returns {@code null.}
+	 *
+	 * @param userId
+	 * @return
+	 */
+	@Suspendable
+	static boolean isInGame(@NotNull UserId userId) {
+		var eb = Vertx.currentContext().owner().eventBus();
+		try {
+			Message<String> res = awaitResult(h -> eb.request(userId.toString() + ".isInGame",
+					Buffer.buffer(0),
+					new DeliveryOptions().setSendTimeout(200L), h));
+			return res.body() != null;
+		} catch (Throwable any) {
+			return false;
+		}
+	}
+
+	@Suspendable
+	static GameId getGameId(@NotNull UserId userId) {
+		var eb = Vertx.currentContext().owner().eventBus();
+		Message<String> res = awaitResult(h -> eb.request(userId.toString() + ".isInGame",
+				Buffer.buffer(0),
+				new DeliveryOptions().setSendTimeout(200L), h));
+		return new GameId(res.body());
 	}
 
 	/**
