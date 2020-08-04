@@ -30,7 +30,7 @@ public interface Presence {
 		// A node that is updating presences may not be the same node that has a user that needs to be notified
 		Connection.connected((connection, fut) -> {
 			connection.addCloseHandler(fiber(v -> {
-				SuspendableCounter connections = connections(connection.userId());
+				var connections = connections(connection.userId());
 				if (connections.decrementAndGet() == 0L) {
 					notifyFriendsOfPresence(new UserId(connection.userId()), PresenceEnum.OFFLINE);
 				}
@@ -39,8 +39,8 @@ public interface Presence {
 
 			defer(v -> {
 				// Once the user is connected, set their status to online
-				SuspendableCounter connections = connections(connection.userId());
-				long numConnections = connections.incrementAndGet();
+				var connections = connections(connection.userId());
+				var numConnections = connections.incrementAndGet();
 				if (numConnections == 1L) {
 					updatePresence(connection.userId());
 				}
@@ -54,7 +54,7 @@ public interface Presence {
 
 	@Suspendable
 	static void notifyFriendsOfPresence(UserId userId, PresenceEnum presence) {
-		FindOptions findOptions = new FindOptions()
+		var findOptions = new FindOptions()
 				.setFields(json("_id", 1, "friends.friendId", 1));
 
 		// Friends of userId, notify them of userId presence's
@@ -64,7 +64,7 @@ public interface Presence {
 				return;
 			}
 
-			for (JsonObject user : res.result()) {
+			for (var user : res.result()) {
 				Connection.writeStream(user.getString("_id"))
 						.write(new Envelope()
 								.changed(new EnvelopeChanged()
@@ -77,8 +77,8 @@ public interface Presence {
 
 	@Suspendable
 	static PresenceEnum getPresence(String userId) throws SuspendExecution {
-		SuspendableCounter connections = connections(userId);
-		boolean isInGame = Games.getUsersInGames().containsKey(new UserId(userId));
+		var connections = connections(userId);
+		var isInGame = Games.isInGame(new UserId(userId));
 		if (connections.get() == 0L) {
 			return PresenceEnum.OFFLINE;
 		} else {

@@ -112,8 +112,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				configuration.setPlayerAttributes(playerAttributes);
 			}
 
-			var games = Games.getUsersInGames();
-			var timeToLiveMillis = Duration.ofMinutes(60).toMillis();
 			// If we're the ones deploying this match...
 			var context = new ServerGameContext(
 					request.getGameId(),
@@ -124,10 +122,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			context.setSpanContext(span.context());
 
 			try {
-				for (var configuration : request.getConfigurations()) {
-					games.put(configuration.getUserId(), request.getGameId(), timeToLiveMillis);
-				}
-
 				// Deal with ending the game
 				context.addEndGameHandler(session -> {
 					// Do not record replays if we're interrupting
@@ -152,10 +146,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 					span.log("timeout");
 				}
 				Tracing.error(any, span, true);
-				// If an error occurred, make sure to remove users from the games we just put them into.
-				for (var configuration : request.getConfigurations()) {
-					games.remove(configuration.getUserId(), request.getGameId());
-				}
 				throw any;
 			}
 		} finally {

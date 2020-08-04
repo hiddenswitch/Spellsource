@@ -26,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -63,12 +62,12 @@ public interface Matchmaking {
 
 			// Check if the user is already in a game
 			var userId = new UserId(request.getUserId());
-			if (Games.getUsersInGames().containsKey(userId)) {
+			if (Games.isInGame(userId)) {
 				throw new IllegalStateException("User is already in a game");
 			}
 
 			var currentQueue = getUsersInQueues();
-			var alreadyQueued = currentQueue.putIfAbsent(request.getUserId(), request.getQueueId(), Duration.ofMinutes(60).toMillis()) != null;
+			var alreadyQueued = currentQueue.putIfAbsent(request.getUserId(), request.getQueueId()) != null;
 			if (alreadyQueued) {
 				throw new IllegalStateException("User is already enqueued in a different queue.");
 			}

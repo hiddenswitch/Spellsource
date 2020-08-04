@@ -163,6 +163,18 @@ public class ServerGameContext extends GameContext implements Server {
 					player.getAttributes().put(kv.getKey(), kv.getValue());
 				}
 
+				// Register that the user is in this game
+				var inGameConsumer = Games.registerInGame(gameId, userId);
+				closeables.add(inGameConsumer::unregister);
+				Promise<Void> inGameRegistration = Promise.promise();
+				inGameConsumer.completionHandler(inGameRegistration);
+				registrationsReady.add(inGameRegistration);
+
+				// When the game ends remove the fact that the user is in this game
+				addEndGameHandler(ctx -> {
+					Void t = awaitResult(inGameConsumer::unregister);
+				});
+
 				Closeable closeableBehaviour = null;
 				// Bots simply forward their requests to a bot service provider, that executes the bot logic on a worker thread
 				if (configuration.isBot()) {
@@ -185,14 +197,8 @@ public class ServerGameContext extends GameContext implements Server {
 					registrationsReady.add(registration);
 
 					// We'll want to unregister and close these when this instance is disposed
-					closeables.add(fut -> {
-						LOGGER.debug("closeables {}: unregistering consumer", gameId);
-						consumer.unregister(fut);
-					});
-					closeables.add(fut -> {
-						LOGGER.debug("closeables {}: unregistering producer", gameId);
-						producer.close(fut);
-					});
+					closeables.add(consumer::unregister);
+					closeables.add(producer::close);
 
 					// Create a client that handles game events and action/mulligan requests
 					UnityClientBehaviour client = new UnityClientBehaviour(this,
@@ -565,13 +571,15 @@ public class ServerGameContext extends GameContext implements Server {
 
 				} finally {
 					// Regardless of what happens that causes an event loop exception, make certain the user is released from their game
+					var interrupted = Strand.interrupted();
+					close();
+					if (interrupted) {
+						Strand.currentStrand().interrupt();
+					}
 					// Always set the trace
 					span.setTag("trace", getTrace().dump());
 					span.finish();
 					scope.close();
-					UserId[] userIds = getPlayerConfigurations().stream().map(Configuration::getUserId).toArray(UserId[]::new);
-					Vertx.currentContext().runOnContext((ctx) -> ServerGameContext.releaseUsers(gameId, userIds));
-					dispose();
 				}
 				return null;
 			}));
@@ -882,69 +890,24 @@ public class ServerGameContext extends GameContext implements Server {
 			}
 		} finally {
 			releaseUsers();
-			dispose();
+			close();
 			lock.unlock();
 		}
 	}
 
 	@Suspendable
 	public void releaseUsers() {
-		GameId gameId = new GameId(getGameId());
 		if (Fiber.isCurrentFiber() && Vertx.currentContext() != null) {
-			SuspendableMap<UserId, GameId> games = null;
+			// everything else is handled in closeables
 			SuspendableMap<String, String> queues;
-			try {
-				games = Games.getUsersInGames();
-				queues = Matchmaking.getUsersInQueues();
-			} catch (SuspendExecution suspendExecution) {
-				throw new RuntimeException(suspendExecution);
-			}
-
+			queues = Matchmaking.getUsersInQueues();
 
 			for (UserId userId : getUserIds()) {
-				var res = games.get(userId);
-				if (!games.remove(userId, gameId)) {
-					LOGGER.warn("releaseUsers {}: failed to release {} because it contains {}", gameId, userId, res);
-				}
 				queues.remove(userId.toString());
 			}
 		} else {
-			UserId[] userIds = getUserIds().toArray(new UserId[0]);
-			releaseUsers(gameId, userIds);
+			throw new UnsupportedOperationException();
 		}
-	}
-
-	private static void releaseUsers(GameId gameId, @NotNull UserId[] userIds) {
-		Tracer tracer = GlobalTracer.get();
-		Tracer.SpanBuilder spanBuilder = tracer.buildSpan("ServerGameContext/releaseUsers")
-				.withTag("gameId", gameId.toString());
-
-		for (int i = 0; i < userIds.length; i++) {
-			spanBuilder.withTag("userId." + i, userIds[i].toString());
-		}
-		Span span = spanBuilder.start();
-
-		try (Scope s1 = tracer.activateSpan(span)) {
-			Context context = Vertx.currentContext();
-			if (context == null) {
-				return;
-			}
-			context.owner().sharedData().<UserId, GameId>getAsyncMap(Games.GAMES_PLAYERS_MAP, res -> {
-				try (Scope s2 = tracer.activateSpan(span)) {
-					if (res.failed()) {
-						Tracing.error(res.cause());
-						return;
-					}
-
-					for (UserId userId : userIds) {
-						res.result().removeIfPresent(userId, gameId, Promise.promise());
-					}
-				} finally {
-					span.finish();
-				}
-			});
-		}
-
 	}
 
 	/**
@@ -967,7 +930,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	@Suspendable
-	public void dispose() {
+	public void close() {
 		Tracer tracer = GlobalTracer.get();
 		Span span = tracer.buildSpan("ServerGameContext/dispose")
 				.asChildOf(getSpanContext())
@@ -987,7 +950,7 @@ public class ServerGameContext extends GameContext implements Server {
 				}
 			}
 			LOGGER.debug("dispose {}: closers closed", gameId);
-			super.dispose();
+			super.close();
 		} finally {
 			span.finish();
 		}
@@ -1172,7 +1135,7 @@ public class ServerGameContext extends GameContext implements Server {
 				registrationsReady.stream().map(Promise::future),
 				Stream.of(initialization.future())
 		).collect(toList()));
-		CompositeFuture res = awaitResult(join::setHandler, REGISTRATION_TIMEOUT);
+		CompositeFuture res = awaitResult(join::onComplete, REGISTRATION_TIMEOUT);
 	}
 
 	/**

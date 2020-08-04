@@ -7,10 +7,7 @@ import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.*;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
-import com.hiddenswitch.spellsource.net.impl.GameId;
 import com.hiddenswitch.spellsource.net.impl.InviteId;
-import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.core.Vertx;
@@ -355,9 +352,8 @@ public class InvitesTest extends SpellsourceTestBase {
 									.deckId(recipient.getAccount().getDecks().get(0).getId())), Accounts.get(recipient.getUserId().toString()));
 
 
-					SuspendableMap<UserId, GameId> usersInGames = Games.getUsersInGames();
-					assertTrue(usersInGames.containsKey(recipient.getUserId()), "Both players should be in a game now");
-					assertTrue(usersInGames.containsKey(sender.getUserId()), "Both players should be in a game now");
+					assertTrue(Games.isInGame(recipient.getUserId()), "Both players should be in a game now");
+					assertTrue(Games.isInGame(sender.getUserId()), "Both players should be in a game now");
 					sender.play();
 					recipient.play();
 
@@ -369,8 +365,8 @@ public class InvitesTest extends SpellsourceTestBase {
 					assertTrue(sender.getTurnsPlayed() > 0);
 
 					// Check that the queue has been destroyed.
-					assertFalse(usersInGames.containsKey(recipient.getUserId()), "Neither players should be in a game now");
-					assertFalse(usersInGames.containsKey(sender.getUserId()), "Neither players should be in a game now");
+					assertFalse(Games.isInGame(recipient.getUserId()), "Neither players should be in a game now");
+					assertFalse(Games.isInGame(sender.getUserId()), "Neither players should be in a game now");
 				}
 			}
 		}, testContext, vertx);

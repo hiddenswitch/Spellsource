@@ -38,7 +38,6 @@ import java.util.concurrent.TimeoutException;
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.fromJson;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
@@ -180,19 +179,17 @@ public interface Editor {
 
 			if (hasSource && putCard.isDraw() != null && putCard.isDraw()) {
 				// Get the game context the player is currently in.
-				var gameId = Games.getUsersInGames().get(new UserId(userId));
-				if (gameId != null) {
-					Message<JsonObject> resultJson = awaitResult(h -> eventBus.request(getPutCardAddress(gameId.toString()),
-							json(
-									"userId", userId,
-									"putCard", json(putCard)
-							), h));
-					var drawJson = fromJson(resultJson.body(), EnvelopeResultPutCard.class);
-					putResult.cardId(drawJson.getCardId());
-					if (drawJson.getCardScriptErrors() != null) {
-						for (var error : drawJson.getCardScriptErrors()) {
-							putResult.addCardScriptErrorsItem(error);
-						}
+				var gameId = Games.getGameId(new UserId(userId));
+				Message<JsonObject> resultJson = awaitResult(h -> eventBus.request(getPutCardAddress(gameId.toString()),
+						json(
+								"userId", userId,
+								"putCard", json(putCard)
+						), h));
+				var drawJson = fromJson(resultJson.body(), EnvelopeResultPutCard.class);
+				putResult.cardId(drawJson.getCardId());
+				if (drawJson.getCardScriptErrors() != null) {
+					for (var error : drawJson.getCardScriptErrors()) {
+						putResult.addCardScriptErrorsItem(error);
 					}
 				}
 			}

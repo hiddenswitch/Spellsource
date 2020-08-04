@@ -250,7 +250,7 @@ public interface Invites {
 					throw new IllegalStateException("User is currently in a queue already. Dequeue first");
 				}
 
-				if (Games.getUsersInGames().containsKey(new UserId(user.getId()))) {
+				if (Games.isInGame(new UserId(user.getId()))) {
 					throw new IllegalStateException("User is currently in a game already. That game must be ended first.");
 				}
 

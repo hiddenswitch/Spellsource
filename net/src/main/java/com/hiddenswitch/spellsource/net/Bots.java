@@ -2,32 +2,32 @@ package com.hiddenswitch.spellsource.net;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.fasterxml.jackson.core.type.TypeReference;
 import co.paralleluniverse.strands.Strand;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.hiddenswitch.spellsource.common.Tracing;
-import io.vertx.core.Promise;
-import io.vertx.core.json.jackson.JacksonCodec;
-import net.demilich.metastone.game.decks.DeckCreateRequest;
+import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.net.impl.GameId;
+import com.hiddenswitch.spellsource.net.impl.Mongo;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.net.models.*;
-import com.hiddenswitch.spellsource.net.impl.Mongo;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.json.jackson.JacksonCodec;
 import io.vertx.ext.mongo.FindOptions;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
+import net.demilich.metastone.game.decks.DeckCreateRequest;
+import net.demilich.metastone.game.logic.GameLogic;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 
@@ -177,11 +177,10 @@ public interface Bots {
 			List<String> bots = getBotIds();
 
 			Collections.shuffle(bots);
-			SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
 
 			for (String id : bots) {
 				UserId key = new UserId(id);
-				if (!games.containsKey(key)) {
+				if (!Games.isInGame(key)) {
 					return key;
 				}
 			}

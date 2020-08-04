@@ -39,7 +39,7 @@ public class GamesTest extends SpellsourceTestBase {
 				invoke0(client::waitUntilDone);
 				Strand.sleep(100L);
 				assertFalse(client.isConnected());
-				assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
+				assertTrue(Games.isInGame(new UserId(client.getAccount().getId())));
 				// Reconnect
 				client.getTurnsToPlay().set(999);
 				client.play();
@@ -81,7 +81,7 @@ public class GamesTest extends SpellsourceTestBase {
 				assertFalse(client.isConnected());
 				Strand.sleep(100L);
 				// Game should still be running
-				assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
+				assertTrue(Games.isInGame(new UserId(client.getAccount().getId())));
 				Strand.sleep(100L);
 				// Reconnect
 				invoke0(client::play);
