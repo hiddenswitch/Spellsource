@@ -21,8 +21,8 @@ dependencies {
 
     implementation 'com.google.guava:guava:26.0-jre'
     implementation 'org.apache.commons:commons-lang3:3.7'
-    implementation 'commons-io:commons-io:2.5'
-    implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
+    implementation 'commons-io:commons-io:2.4'
+    implementation group: 'commons-cli', name: 'commons-cli', version: '1.2'
     implementation group: 'io.jenetics', name: 'jenetics', version: '6.0.1'
     implementation group: 'io.jenetics', name: 'jenetics.ext', version: '6.0.1'
     runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'

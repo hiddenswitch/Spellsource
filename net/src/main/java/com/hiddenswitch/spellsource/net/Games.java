@@ -31,8 +31,10 @@ import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.AddAttributeSpell;
 import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.MetaSpell;
+import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.Aftermath;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.WhereverTheyAreEnchantment;
@@ -269,16 +271,6 @@ public interface Games extends Verticle {
 		}
 
 		return clientEvent;
-	}
-
-	/**
-	 * Retrieves the current connections by Game ID
-	 *
-	 * @return A map.
-	 */
-	@Suspendable
-	static SuspendableMap<GameId, CreateGameSessionResponse> getConnections() throws SuspendExecution {
-		return SuspendableMap.getOrCreate("Games.connections");
 	}
 
 	/**
@@ -612,7 +604,7 @@ public interface Games extends Verticle {
 		entity.rush(actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
 		entity.tribe(actor.getRace());
 		var triggers = workingContext.getLogic().getActiveTriggers(actor.getReference());
-		entity.hostsTrigger(triggers.size() > 0);
+		entity.hostsTrigger(triggers.stream().anyMatch(t->!(t instanceof Aftermath) && !(t instanceof Aura)));
 		return entity;
 	}
 

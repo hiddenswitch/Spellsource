@@ -87,8 +87,7 @@ sourceSets {
 }
 
 dependencies {
-    implementation 'ch.qos.logback:logback-classic:1.2.3'
-    implementation 'org.slf4j:slf4j-api:1.7.20'
+    implementation 'org.slf4j:slf4j-api:1.7.22'
 
     implementation("io.dropwizard.metrics:metrics-core:4.1.9") {
         exclude group: 'org.slf4j', module: '*'
@@ -127,7 +126,9 @@ dependencies {
 
     annotationProcessor 'org.kohsuke.metainf-services:metainf-services:1.8'
 
-    implementation "org.hdrhistogram:HdrHistogram:2.1.+"
+    implementation ("org.hdrhistogram:HdrHistogram:2.1.+") {
+        exclude group: 'org.slf4j', module: '*'
+    }
     implementation("org.latencyutils:LatencyUtils:2.0.3") {
         exclude group: "org.hdrhistogram", module: '*'
     }

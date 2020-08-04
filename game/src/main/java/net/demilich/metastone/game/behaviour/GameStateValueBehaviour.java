@@ -1,23 +1,22 @@
 package net.demilich.metastone.game.behaviour;
 
-import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
+import com.hiddenswitch.spellsource.client.models.ActionType;
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import com.hiddenswitch.spellsource.common.Tracing;
 import io.opentracing.util.GlobalTracer;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.heuristic.FeatureVector;
 import net.demilich.metastone.game.behaviour.heuristic.Heuristic;
 import net.demilich.metastone.game.behaviour.heuristic.ThreatBasedHeuristic;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
-import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.TurnState;
 import net.demilich.metastone.game.spells.BuffSpell;
@@ -26,7 +25,10 @@ import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.*;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.TurnEndTrigger;
+import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
+import net.demilich.metastone.game.spells.trigger.TurnTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.jetbrains.annotations.NotNull;
@@ -146,7 +148,6 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 */
 	protected GameContext getClone(GameContext original) {
 		var context = original.clone();
-		context.setLoggingLevel(Level.ERROR);
 		return context;
 	}
 
