@@ -22,7 +22,7 @@ subprojects {
             failOnVersionConflict()
             eachDependency { DependencyResolveDetails details ->
                 if (details.requested.module.name == 'slf4j-api') {
-                    details.useVersion '1.7.29'
+                    details.useVersion '1.7.22'
                 }
                 if ([
                         'com.fasterxml.jackson.core',
@@ -73,7 +73,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'commons-io') {
-                    details.useVersion "2.5"
+                    details.useVersion "2.4"
                 }
 
                 if (details.requested.group == 'commons-logging') {
@@ -149,7 +149,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'com.google.code.findbugs') {
-                    details.useVersion '3.0.2'
+                    details.useVersion '3.0.1'
                 }
 
                 if (details.requested.group == 'com.google.errorprone') {
@@ -189,7 +189,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'org.yaml' && details.requested.name == 'snakeyaml') {
-                    details.useVersion '1.20'
+                    details.useVersion '1.17'
                 }
 
                 if (details.requested.group == 'io.micrometer') {

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game;
 
-import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
@@ -1534,7 +1533,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 		return deckStream.map(decksPair -> {
 			GameContext newGame = GameContext.fromDecks(Arrays.asList(decksPair));
-			newGame.setLoggingLevel(Level.OFF);
 			newGame.behaviours[0] = player1.get();
 			newGame.behaviours[1] = player2.get();
 			if (mutateConstructedGameContext != null) {
@@ -1825,15 +1823,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	@Suspendable
 	public GameDeck getDeck(Player player, String name) {
 		return null;
-	}
-
-	/**
-	 * Sets the logging level on this instance.
-	 *
-	 * @param loggingLevel A preferred logging level.
-	 */
-	public void setLoggingLevel(Level loggingLevel) {
-		((ch.qos.logback.classic.Logger) LOGGER).setLevel(loggingLevel);
 	}
 
 	/**

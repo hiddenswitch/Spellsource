@@ -112,62 +112,51 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				configuration.setPlayerAttributes(playerAttributes);
 			}
 
-			var pending = CreateGameSessionResponse.pending(deploymentID());
-			var connections = Games.getConnections();
 			var games = Games.getUsersInGames();
 			var timeToLiveMillis = Duration.ofMinutes(60).toMillis();
-			var connection = connections.putIfAbsent(request.getGameId(), pending, timeToLiveMillis);
 			// If we're the ones deploying this match...
-			if (connection == null) {
-				var context = new ServerGameContext(
-						request.getGameId(),
-						new VertxScheduler(Vertx.currentContext().owner()),
-						request.getConfigurations());
+			var context = new ServerGameContext(
+					request.getGameId(),
+					new VertxScheduler(Vertx.currentContext().owner()),
+					request.getConfigurations());
 
-				// Enable tracing
-				context.setSpanContext(span.context());
+			// Enable tracing
+			context.setSpanContext(span.context());
 
-				try {
-					for (var configuration : request.getConfigurations()) {
-						games.put(configuration.getUserId(), request.getGameId(), timeToLiveMillis);
-					}
-
-					// Deal with ending the game
-					context.addEndGameHandler(session -> {
-						// Do not record replays if we're interrupting
-						if (Strand.currentStrand().isInterrupted()) {
-							return;
-						}
-						Games.LOGGER.debug("onGameOver: Handling on game over for session " + session.getGameId());
-						var gameOverId = new GameId(session.getGameId());
-						// The players should not accidentally wind back up in games
-						removeGameAndRecordReplay(gameOverId);
-					});
-
-					var response = CreateGameSessionResponse.session(deploymentID(), context);
-					connections.replace(request.getGameId(), response);
-					contexts.put(request.getGameId(), context);
-					// Plays the game context in its own fiber
-					context.play(true);
-					span.log("awaitingRegistration");
-					context.awaitReadyForConnections();
-					return response;
-				} catch (RuntimeException any) {
-					if (Throwables.getRootCause(any) instanceof TimeoutException) {
-						span.log("timeout");
-					}
-					Tracing.error(any, span, true);
-					// If an error occurred, make sure to remove users from the games we just put them into.
-					for (var configuration : request.getConfigurations()) {
-						games.remove(configuration.getUserId(), request.getGameId());
-					}
-					connections.remove(request.getGameId());
-					throw any;
+			try {
+				for (var configuration : request.getConfigurations()) {
+					games.put(configuration.getUserId(), request.getGameId(), timeToLiveMillis);
 				}
-			} else {
-				Games.LOGGER.debug("createGameSession: Repeat createGameSessionRequest suspected because actually deploymentId " + connection.deploymentId + " is responsible for deploying this match.");
-				// Otherwise, return its state, whatever it is
-				return connection;
+
+				// Deal with ending the game
+				context.addEndGameHandler(session -> {
+					// Do not record replays if we're interrupting
+					if (Strand.currentStrand().isInterrupted()) {
+						return;
+					}
+					Games.LOGGER.debug("onGameOver: Handling on game over for session " + session.getGameId());
+					var gameOverId = new GameId(session.getGameId());
+					// The players should not accidentally wind back up in games
+					removeGameAndRecordReplay(gameOverId);
+				});
+
+				var response = CreateGameSessionResponse.session(deploymentID(), context);
+				contexts.put(request.getGameId(), context);
+				// Plays the game context in its own fiber
+				context.play(true);
+				span.log("awaitingRegistration");
+				context.awaitReadyForConnections();
+				return response;
+			} catch (RuntimeException any) {
+				if (Throwables.getRootCause(any) instanceof TimeoutException) {
+					span.log("timeout");
+				}
+				Tracing.error(any, span, true);
+				// If an error occurred, make sure to remove users from the games we just put them into.
+				for (var configuration : request.getConfigurations()) {
+					games.remove(configuration.getUserId(), request.getGameId());
+				}
+				throw any;
 			}
 		} finally {
 			span.finish();
@@ -197,7 +186,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			}
 			Games.LOGGER.debug("removeGameAndRecordReplay {}", gameId);
 			var gameContext = contexts.remove(gameId);
-			Games.getConnections().remove(gameId);
 
 			UserId winner = null;
 
