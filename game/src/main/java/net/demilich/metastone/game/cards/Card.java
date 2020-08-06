@@ -2,6 +2,7 @@ package net.demilich.metastone.game.cards;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import com.hiddenswitch.spellsource.client.models.Rarity;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -9,14 +10,15 @@ import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.spells.*;
+import net.demilich.metastone.game.spells.AddQuestSpell;
+import net.demilich.metastone.game.spells.AddSecretSpell;
+import net.demilich.metastone.game.spells.EquipWeaponSpell;
 import net.demilich.metastone.game.spells.desc.OpenerDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -37,7 +39,9 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * The Card class is an entity that contains card information.
