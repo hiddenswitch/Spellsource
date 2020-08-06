@@ -704,6 +704,8 @@ public interface Games extends Verticle {
 		entity.collectible(card.isCollectible());
 		entity.discarded(card.hasAttribute(Attribute.DISCARDED));
 		entity.roasted(card.hasAttribute(Attribute.ROASTED));
+		entity.taunt(card.hasAttribute(Attribute.TAUNT));
+		entity.hostsTrigger(card.hasTrigger() || card.hasAura() || card.hasCardCostModifier());
 		var heroClass = card.getHeroClass();
 
 		// Put the condition met glow on the card
