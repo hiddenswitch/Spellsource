@@ -5,9 +5,9 @@
   "heroClass": "OFFWHITE",
   "rarity": "COMMON",
   "description": "Consume 2 to draw two cards.",
-  "targetSelection": "NONE",
   "condition": {
     "class": "ComparisonCondition",
+    "operation": "GREATER_OR_EQUAL",
     "value1": {
       "class": "CardCountValueProvider",
       "offset": {
@@ -15,15 +15,14 @@
         "offset": -1
       }
     },
-    "value2": 2,
-    "operation": "GREATER_OR_EQUAL"
+    "value2": 2
   },
+  "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "QueryTargetSpell",
-        "howMany": 2,
         "target": "FRIENDLY_MINIONS_LEFT_TO_RIGHT",
         "value": {
           "class": "AttributeValueProvider",
@@ -32,14 +31,15 @@
         },
         "spell": {
           "class": "DestroySpell"
-        }
+        },
+        "howMany": 2
       },
       {
         "class": "MetaSpell",
         "howMany": {
           "class": "BoardCountValueProvider",
-          "offset": 2,
-          "multiplier": -1
+          "multiplier": -1,
+          "offset": 2
         },
         "spells": [
           {
@@ -55,9 +55,9 @@
     ]
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

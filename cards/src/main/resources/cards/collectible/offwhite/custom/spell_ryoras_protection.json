@@ -24,14 +24,14 @@
         "trigger": {
           "eventTrigger": {
             "class": "TurnStartTrigger",
-            "targetPlayer": "SELF",
             "fireCondition": {
               "class": "MinionOnBoardCondition",
               "cardFilter": {
                 "class": "RaceFilter",
                 "race": "BEAST"
               }
-            }
+            },
+            "targetPlayer": "SELF"
           },
           "spell": {
             "class": "ReceiveCardSpell",
@@ -44,9 +44,9 @@
     ]
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

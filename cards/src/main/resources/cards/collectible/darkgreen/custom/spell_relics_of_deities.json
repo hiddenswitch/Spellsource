@@ -7,7 +7,7 @@
   "description": "Draw a Spell. If it costs (5) or more, transform it into a random Artifact.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "FromDeckToHandSpell",
+    "class": "DrawCardSpell",
     "value": 1,
     "spell": {
       "class": "ConditionalSpell",
@@ -19,7 +19,6 @@
       },
       "spell": {
         "class": "ReplaceCardsSpell",
-        "target": "OUTPUT",
         "cardFilter": {
           "class": "CardFilter",
           "attribute": "ARTIFACT"

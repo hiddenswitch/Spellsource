@@ -4,13 +4,13 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Choose a minion. Each time you play a minion this turn, give that minion +3/+3.",
+  "description": "Choose a minion. Whenever you play a minion this turn, give that minion +3/+3.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",
     "trigger": {
       "eventTrigger": {
-        "class": "MinionPlayedTrigger",
+        "class": "MinionSummonedTrigger",
         "targetPlayer": "SELF"
       },
       "spell": {

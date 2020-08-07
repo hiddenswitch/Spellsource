@@ -10,11 +10,9 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "BothPlayersSpell",
-        "spell": {
-          "class": "DrawCardSpell",
-          "value": 2
-        }
+        "class": "DrawCardSpell",
+        "value": 2,
+        "targetPlayer": "BOTH"
       },
       {
         "class": "custom.VolatileWisdomSpell"

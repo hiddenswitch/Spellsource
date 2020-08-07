@@ -1,24 +1,17 @@
 {
   "name": "Chord",
-  "heroPower": "hero_power_polychord",
+  "heroPower": "hero_power_melody",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "CORAL",
   "rarity": "FREE",
-  "description": "Give a random minion in your hand +1/+1.",
+  "description": "Give the leftmost unit in your hand +1/+1",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "FRIENDLY_HAND",
-    "attackBonus": 1,
-    "filter": {
-      "class": "CardFilter",
-      "cardType": "MINION"
-    },
-    "hpBonus": 1,
-    "randomTarget": true
+    "class": "custom.BuffLeftmostMinionInHandSpell",
+    "value": 1
   },
   "collectible": false,
-  "set": "SPELLSOURCE_BASIC",
+  "set": "CORE",
   "fileFormatVersion": 1
 }

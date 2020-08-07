@@ -5,9 +5,9 @@
   "heroClass": "OFFWHITE",
   "rarity": "EPIC",
   "description": "Consume 3 to take an extra turn.",
-  "targetSelection": "NONE",
   "condition": {
     "class": "ComparisonCondition",
+    "operation": "GREATER_OR_EQUAL",
     "value1": {
       "class": "CardCountValueProvider",
       "offset": {
@@ -15,15 +15,14 @@
         "offset": -1
       }
     },
-    "value2": 3,
-    "operation": "GREATER_OR_EQUAL"
+    "value2": 3
   },
+  "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "QueryTargetSpell",
-        "howMany": 3,
         "target": "FRIENDLY_MINIONS_LEFT_TO_RIGHT",
         "value": {
           "class": "AttributeValueProvider",
@@ -32,14 +31,15 @@
         },
         "spell": {
           "class": "DestroySpell"
-        }
+        },
+        "howMany": 3
       },
       {
         "class": "MetaSpell",
         "howMany": {
           "class": "BoardCountValueProvider",
-          "offset": 3,
-          "multiplier": -1
+          "multiplier": -1,
+          "offset": 3
         },
         "spells": [
           {
@@ -57,9 +57,9 @@
     ]
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

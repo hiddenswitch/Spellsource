@@ -5,9 +5,9 @@
   "heroClass": "OFFWHITE",
   "rarity": "RARE",
   "description": "Consume 2 to source spirits and summon them until the total cost of spirits you control is greater than 6.",
-  "targetSelection": "NONE",
   "condition": {
     "class": "ComparisonCondition",
+    "operation": "GREATER_OR_EQUAL",
     "value1": {
       "class": "CardCountValueProvider",
       "offset": {
@@ -15,15 +15,14 @@
         "offset": -1
       }
     },
-    "value2": 2,
-    "operation": "GREATER_OR_EQUAL"
+    "value2": 2
   },
+  "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "QueryTargetSpell",
-        "howMany": 2,
         "target": "FRIENDLY_MINIONS_LEFT_TO_RIGHT",
         "value": {
           "class": "AttributeValueProvider",
@@ -32,14 +31,15 @@
         },
         "spell": {
           "class": "DestroySpell"
-        }
+        },
+        "howMany": 2
       },
       {
         "class": "MetaSpell",
         "howMany": {
           "class": "BoardCountValueProvider",
-          "offset": 2,
-          "multiplier": -1
+          "multiplier": -1,
+          "offset": 2
         },
         "spells": [
           {
@@ -50,7 +50,6 @@
       },
       {
         "class": "RecastWhileSpell",
-        "howMany": 7,
         "condition": {
           "class": "ComparisonCondition",
           "operation": "LESS_OR_EQUAL",
@@ -73,14 +72,15 @@
             "class": "CardFilter",
             "race": "SPIRIT"
           }
-        }
+        },
+        "howMany": 7
       }
     ]
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

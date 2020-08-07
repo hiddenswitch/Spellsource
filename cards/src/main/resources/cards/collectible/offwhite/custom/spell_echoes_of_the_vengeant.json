@@ -9,12 +9,6 @@
   "spell": {
     "class": "ResurrectSpell",
     "value": 7,
-    "cardFilter": {
-      "class": "CardFilter",
-      "attribute": "DECAY",
-      "operation": "HAS",
-      "invert": true
-    },
     "spell": {
       "class": "MetaSpell",
       "target": "OUTPUT",
@@ -28,12 +22,18 @@
           "value": 1
         }
       ]
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "DECAY",
+      "invert": true,
+      "operation": "HAS"
     }
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }
