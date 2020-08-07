@@ -5,7 +5,7 @@
   "heroClass": "DARKMAGENTA",
   "baseAttack": 2,
   "baseHp": 2,
-  "rarity": "BASIC",
+  "rarity": "FREE",
   "race": "DEMON",
   "description": "After you summon a minion, give it +2 Health.",
   "trigger": {

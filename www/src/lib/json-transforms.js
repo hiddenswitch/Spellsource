@@ -77,11 +77,11 @@ module.exports = {
           if (!!newArgs[i] && !!newArgs[i].args) {
             for (let j = 0; j < newArgs[i].args.length; j++) {
               let arg = newArgs[i].args[j]
-              let token = '%' + (j + 1).toString()
+              let token = '%' + (1 + j).toString()
               if (arg.type === 'field_label_serializable_hidden'
                 && !newMessage.includes(token)) {
                 newMessage = token + newMessage
-                console.warn('Block ' + object.type + ' forgot arg ' + token + ' in message' + i.toString())
+                //console.warn('Block ' + object.type + ' forgot arg ' + token + ' in message' + i.toString())
               }
             }
           }

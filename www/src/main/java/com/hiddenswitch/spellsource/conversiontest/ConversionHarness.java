@@ -1,9 +1,13 @@
 package com.hiddenswitch.spellsource.conversiontest;
 
+import com.hiddenswitch.spellsource.client.models.CardType;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
+import net.demilich.metastone.game.spells.SpellUtils;
 
 import java.util.Objects;
 import java.util.stream.LongStream;
@@ -57,6 +61,7 @@ public class ConversionHarness {
 						}))
 						.allMatch(tuple -> {
 							var desc = Json.decodeValue(replacementJson, CardDesc.class);
+							desc.setId(cardId);
 							CardCatalogue.getRecords().get(cardId).setDesc(desc);
 							CardCatalogue.getCards().replace(cardId, desc.create());
 
@@ -74,6 +79,11 @@ public class ConversionHarness {
 	}
 
 	static void ensureCardIsInDeck(GameContext context, String cardId) {
+		var cardType = context.getCardById(cardId).getCardType();
+		if (cardType == CardType.CLASS || cardType == CardType.ENCHANTMENT || cardType == CardType.HERO_POWER ||
+				(cardType == CardType.HERO && context.getCardById(cardId).hasAttribute(Attribute.HP))) {
+			return;
+		}
 		for (var player : context.getPlayers()) {
 			for (var i = 0; i < 5; i++) {
 				player.getDeck().addCard(cardId);
