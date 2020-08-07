@@ -4,12 +4,31 @@
   "type": "CHOOSE_ONE",
   "heroClass": "PEACH",
   "rarity": "FREE",
-  "description": "Choose to give a unit +1/+1 or Spellpower +1.",
-  "targetSelection": "NONE",
-  "chooseOneCardIds": [
-    "spell_fox_dance_1",
-    "spell_fox_dance_2"
-  ],
+  "description": "Choose to give a unit +1/+1 or Spellpower +1. Gain an Imbue charge.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ChooseOneSpell",
+    "spell1": {
+      "class": "ChooseOneOptionSpell",
+      "name": "Fortitude",
+      "description": "Give it +1/+1.",
+      "spell": {
+        "class": "BuffSpell",
+        "attackBonus": 1,
+        "hpBonus": 1
+      }
+    },
+    "spell2": {
+      "class": "ChooseOneOptionSpell",
+      "name": "Cunning",
+      "description": "Give it Spellpower +1.",
+      "spell": {
+        "class": "ModifyAttributeSpell",
+        "value": 1,
+        "attribute": "SPELL_DAMAGE"
+      }
+    }
+  },
   "collectible": false,
   "set": "CORE",
   "fileFormatVersion": 1

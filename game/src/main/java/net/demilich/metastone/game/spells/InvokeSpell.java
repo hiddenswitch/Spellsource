@@ -20,7 +20,7 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
  * By default, casts the effect in {@link SpellArg#SPELL1}. If the player can afford the extra cost, {@link
  * SpellArg#SPELL2} is printed on a card, and the player is given a discover choice between the two effects.
  */
-public class InvokeSpell extends Spell {
+public class InvokeSpell extends ChooseOneSpell {
 
 	@Suspendable
 	@Override
@@ -36,46 +36,17 @@ public class InvokeSpell extends Spell {
 			}
 			return;
 		}
-		var spell1 = (SpellDesc) desc.get(SpellArg.SPELL1);
-		var spell2 = (SpellDesc) desc.get(SpellArg.SPELL2);
-
-		var card1 = InvokeOptionSpell.getTempCard(context, spell1, source.getSourceCard());
-		var card2 = InvokeOptionSpell.getTempCard(context, spell2, source.getSourceCard());
-
-		CardList cards = new CardArrayList();
-		if (spell1.containsKey(SpellArg.CONDITION)) {
-			var condition = (Condition) spell1.get(SpellArg.CONDITION);
-			if (condition.isFulfilled(context, player, source, target)) {
-				cards.add(card1);
-			}
-		} else {
-			cards.add(card1);
-		}
-		if (spell2.containsKey(SpellArg.CONDITION)) {
-			var condition = (Condition) spell2.get(SpellArg.CONDITION);
-			if (condition.isFulfilled(context, player, source, target)) {
-				cards.add(card2);
-			}
-		} else {
-			cards.add(card2);
-		}
-
-		// add aura invoke cards
-		cards.removeIf(card -> card.getBaseManaCost() > manaRemaining);
-
-		if (cards.isEmpty()) {
-			if (desc.containsKey(SpellArg.SPELL)) {
-				SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target);
-			}
-			return;
-		}
-
-		var clone = desc.clone();
-		clone.put(SpellArg.SPELL, NullSpell.create());
-		var discoverAction = SpellUtils.discoverCard(context, player, source, clone, cards);
-
-		SpellUtils.castChildSpell(context, player, discoverAction.getCard().getSpell(), source, target);
+		super.onCast(context, player, desc, source, target);
 	}
 
+	@Override
+	public boolean shouldRemoveCard(Card card, Player player, GameContext context) {
+		return card.getBaseManaCost() > player.getMana();
+	}
+
+	@Override
+	public Card getTempCard(GameContext context, SpellDesc spellDesc, Card sourceCard) {
+		return ChooseOneOptionSpell.getTempCard(context, spellDesc, sourceCard, "invoke_");
+	}
 
 }

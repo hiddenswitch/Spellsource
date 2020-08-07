@@ -1201,7 +1201,13 @@ public enum Attribute {
 	/**
 	 * The number of aftermaths active on this entity.
 	 */
-	AFTERMATH_COUNT;
+	AFTERMATH_COUNT,
+	/**
+	 * Indicates that a card makes use of the Imbue keyword, specifically using up a charge
+	 *
+	 * Also used to store the number of Imbue charges on the player
+	 */
+	IMBUE;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

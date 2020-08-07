@@ -1,0 +1,39 @@
+{
+  "name": "Fox's Gifts",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "PEACH",
+  "rarity": "FREE",
+  "description": "Receive a random Fox spell.[]",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "spell_fox_dance",
+      "spell_fox_fire",
+      "spell_fox_kiss"
+    ],
+    "randomTarget": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        " (",
+        {
+          "class": "PluralDescription",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_PLAYER",
+            "value": "IMBUE"
+          },
+          "description1": " Imbue charge)",
+          "description2": " Imbue charges)"
+        }
+      ]
+    }
+  ]
+}
