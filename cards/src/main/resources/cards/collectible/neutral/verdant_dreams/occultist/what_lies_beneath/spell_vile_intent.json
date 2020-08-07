@@ -1,0 +1,55 @@
+{
+  "name": "Vile Intent",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "RARE",
+    "description": "Give +2/+2 to all minions in your hand and deck that have a copy of them in your Graveyard.",
+   "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+	   "class": "BuffSpell",
+          "target": "FRIENDLY_HAND",
+          "value": 2,
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "OrCondition",
+          "condition": {
+              "class": "GraveyardContainsCondition",
+              "target": "SPELL_TARGET",
+              "targetPlayer": "SELF"
+           }
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "value": 2
+        }
+      },
+	  {
+	   "class": "BuffSpell",
+          "target": "FRIENDLY_DECK",
+          "value": 2,
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "OrCondition",
+          "condition": {
+              "class": "GraveyardContainsCondition",
+              "target": "SPELL_TARGET",
+              "targetPlayer": "SELF"
+           }
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "value": 2
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ],
+  "fileFormatVersion": 1,
+ }

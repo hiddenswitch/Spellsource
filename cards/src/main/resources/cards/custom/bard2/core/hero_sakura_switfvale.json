@@ -1,0 +1,16 @@
+{
+  "name": "Sakura Swiftvale",
+  "heroPower": "hero_power_chord",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "CORAL",
+  "rarity": "FREE",
+  "description": ""
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

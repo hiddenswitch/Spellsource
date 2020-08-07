@@ -1,0 +1,27 @@
+{
+  "name": "Six Feet Under",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "RARE",
+    "description": "Destroy a minion. Shuffle 3 copies of it into your deck",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ShuffleToDeckSpell",
+		"howMany": 3
+      },
+      {
+        "class": "DestroySpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ],
+  "fileFormatVersion": 1,
+ }

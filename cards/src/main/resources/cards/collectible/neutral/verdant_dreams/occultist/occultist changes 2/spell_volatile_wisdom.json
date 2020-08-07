@@ -1,0 +1,35 @@
+{
+  "name": "Volatile Wisdom",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "EPIC",
+  "description": "Both players draw 2 cards then swap their leftmost and rightmost cards with their opponent.",
+  "targetSelection": "NONE",
+  "spell": {
+   "class": "MetaSpell",
+   "spells": [
+    {
+	"class": "DrawCardSpell",
+	"value": 1,
+	"targetplayer": "BOTH"
+	},
+    {
+    "class": "BothPlayersSpell",
+    "spell": {
+      "class": "StealCardSpell",
+      "target": "ENEMY_TOP_CARD",
+      "cardLocation": "HAND"
+    }
+	},
+	{
+      "class": "SwapCardsSpell",
+      "target": "LEFTMOST_ENEMY_CARD_HAND",
+      "secondaryTarget": "LEFTMOST_FRIENDLY_CARD_HAND"
+    }
+	]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

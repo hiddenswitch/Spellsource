@@ -1,0 +1,23 @@
+  
+{
+  "name": "Brass Blast",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "RARE",
+  "description": "Deal damage equal to the amount of spells you played this turn.",
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": {
+        "class": "PlayedThisTurnValueProvider",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+		}
+}
+	},
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

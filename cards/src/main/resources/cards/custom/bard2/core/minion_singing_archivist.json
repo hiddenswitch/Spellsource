@@ -1,0 +1,40 @@
+{
+  "name": "Singing Archivist",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Opener: Reshuffle two spells. Draw three spells.",
+  "battlecry": {
+  "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ChooseAndReshuffleSpell",
+          "value": 2,
+			"cardFilter": {
+			"class": "CardFilter",
+			"cardType": "SPELL"
+         }
+        },
+        {
+         "class": "DrawCardSpell",
+		 "value": 3,
+	      "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        }
+       }
+      ]
+	 }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+	"DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

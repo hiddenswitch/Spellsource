@@ -1,0 +1,31 @@
+{
+  "name": "Bloody Blow",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "FREE",
+  "description": "Take 2 damage. Deal $1 damage to all minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ALL_MINIONS",
+        "value": 1
+      },
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 2,
+        "IgnoreSpellDamage ": true
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

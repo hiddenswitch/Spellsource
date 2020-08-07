@@ -1,0 +1,24 @@
+  
+{
+  "name": "Amplify",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "EPIC",
+  "description": "The next spell you cast this turn casts twice.",
+   "targetSelection": "NONE",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "FRIENDLY_PLAYER",
+      "attribute": "SPELLS_CAST_TWICE",
+      "revertTrigger": {
+        "class": "TurnEndTrigger"
+      },
+      "secondRevertTrigger": {
+        "class": "AfterSpellCastedTrigger"
+      }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
