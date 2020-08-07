@@ -1,0 +1,30 @@
+  
+{
+  "name": "Seductive Charm",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "RARE",
+  "description": "Silence a unit. Give it -2 Attack for one round.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SilenceSpell"
+      },
+       {
+        "class": "ModifyAttributeSpell",
+        "value": -2,
+        "attribute": "ATTACK_BONUS",
+        "revertTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "SELF"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

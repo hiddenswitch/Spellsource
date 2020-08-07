@@ -1,0 +1,26 @@
+{
+  "name": "Trilling Trumpet",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "CORAL",
+  "damage": 1,
+  "durability": 1,
+  "rarity": "COMMON",
+  "description": "After your champion attacks, give your units Dash.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+            "class": "AddAttributeSpell",
+            "target": "FRIENDLY_MINIONS",
+            "attribute": "RUSH"
+        }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

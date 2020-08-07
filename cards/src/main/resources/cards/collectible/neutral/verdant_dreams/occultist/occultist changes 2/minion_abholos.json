@@ -1,0 +1,23 @@
+{
+  "name": "Abholos",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 9,
+  "baseHp": 9,
+  "rarity": "LEGENDARY",
+  "description": "Aftermath: Destroy friendly minions. Resummon this with the combined stats.",
+  "deathrattle": {
+    "class": "custom.AbholosSpell",
+    "card": "minion_abholos"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ],
+  "fileFormatVersion": 1
+}

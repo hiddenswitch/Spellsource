@@ -1,0 +1,35 @@
+{
+  "name": "Rising Popstar",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Opener: If you cast a spell this turn, gain Dash.",
+   "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "PlayedThisTurnValueProvider",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        }
+      },
+      "value2": 1
+    },
+    "spell": {
+            "class": "AddAttributeSpell",
+            "target": "SELF",
+            "attribute": "RUSH"
+        }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,16 @@
+  
+{
+  "name": "Reflective Duet",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "EPIC",
+  "description": "Summon a copy of a friendly minion.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "CloneMinionSpell"
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,71 @@
+  
+{
+  "name": "Collaboration",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "RARE",
+  "description": "Source 2 spells. They cost (1) less.",
+    "targetSelection": "NONE",
+    "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+      "class": "DiscoverSpell",
+	  "value": 2,
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF",
+        "spell": {
+          "class": "CardCostModifierSpell",
+          "target": "OUTPUT",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "target": "SELF",
+            "value": 1,
+            "operation": "SUBTRACT"
+          }
+        }
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
+      },
+      "cardSource": {
+        "class": "CatalogueSource"
+		}
+      },
+      {
+      "class": "DiscoverSpell",
+	  "value": 2,
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF",
+        "spell": {
+          "class": "CardCostModifierSpell",
+          "target": "OUTPUT",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "target": "SELF",
+            "value": 1,
+            "operation": "SUBTRACT"
+          }
+        }
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
+      },
+      "cardSource": {
+        "class": "CatalogueSource"
+      }  
+	   }
+    ]
+  },
+  "attributes": {
+  "DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
