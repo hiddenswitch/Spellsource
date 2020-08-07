@@ -6,8 +6,8 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Decay.",
   "race": "SPIRIT",
+  "description": "Decay.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
@@ -21,9 +21,9 @@
     "DECAY": true
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

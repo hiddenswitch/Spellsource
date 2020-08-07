@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "Whenever you target this with a spell, cast it on all other minions.",
+  "description": "Whenever you target this minion with a spell, also cast it on all other minions.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

@@ -18,7 +18,6 @@
       "spells": [
         {
           "class": "QueryTargetSpell",
-          "howMany": 1,
           "target": "ENEMY_MINIONS",
           "value": {
             "class": "AttributeValueProvider",
@@ -27,46 +26,47 @@
           },
           "spell": {
             "class": "DestroySpell"
-          }
+          },
+          "howMany": 1
         },
         {
           "class": "MetaSpell",
           "howMany": {
             "class": "BoardCountValueProvider",
-            "offset": {
-			  "class": "ConditionalValueProvider",
-			  "condition": {
-			    "class": "ComparisonCondition",
-				"operation": "EQUAL",
-				"value1": {
-				  "class": "AttributeValueProvider",
-				  "target": "EVENT_TARGET",
-				  "attribute": "INDEX"
-				},
-				"value2": {
-				  "class": "CardCountValueProvider",
-				  "targetPlayer": "OPPONENT",
-				  "offset": -1
-				}
-			  },
-			  "ifTrue": 2,
-			  "ifFalse": 1
-			},
             "multiplier": -1,
-			"targetPlayer": "OPPONENT"
+            "offset": {
+              "class": "ConditionalValueProvider",
+              "condition": {
+                "class": "ComparisonCondition",
+                "operation": "EQUAL",
+                "value1": {
+                  "class": "AttributeValueProvider",
+                  "target": "EVENT_TARGET",
+                  "attribute": "INDEX"
+                },
+                "value2": {
+                  "class": "CardCountValueProvider",
+                  "offset": -1,
+                  "targetPlayer": "OPPONENT"
+                }
+              },
+              "ifFalse": 1,
+              "ifTrue": 2
+            },
+            "targetPlayer": "OPPONENT"
           },
           "spells": [
             {
               "class": "DiscardSpell",
+              "cardFilter": {
+                "class": "HighestAttributeFilter",
+                "target": "ENEMY_HAND",
+                "attribute": "INDEX"
+              },
               "cardSource": {
-			    "class": "HandSource",
-				"targetPlayer": "OPPONENT"
-			  },
-			  "cardFilter": {
-			    "class": "HighestAttributeFilter",
-				"target": "ENEMY_HAND",
-				"attribute": "INDEX"
-			  }
+                "class": "HandSource",
+                "targetPlayer": "OPPONENT"
+              }
             }
           ]
         }
@@ -74,9 +74,9 @@
     }
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
-	"CORE"
-  ],
-  "fileFormatVersion": 1
+    "CORE"
+  ]
 }

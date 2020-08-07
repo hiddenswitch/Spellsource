@@ -7,32 +7,18 @@
   "description": "Summon two random 1-Cost minions from your deck. Give them Dash",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "RecruitSpell",
-        "value": 2,
-        "cardFilter": {
-          "class": "AndFilter",
-          "filters": [
-            {
-              "class": "CardFilter",
-              "cardType": "MINION"
-            },
-            {
-              "class": "ManaCostFilter",
-              "value": 1,
-              "operation": "EQUAL"
-            }
-          ]
-        }
-      },
-      {
-        "class": "AddAttributeSpell",
-        "target": "OUTPUT",
-        "attribute": "RUSH"
-      }
-    ]
+    "class": "RecruitSpell",
+    "value": 2,
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "OUTPUT",
+      "attribute": "RUSH"
+    },
+    "cardFilter": {
+      "class": "ManaCostFilter",
+      "value": 1,
+      "operation": "EQUAL"
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

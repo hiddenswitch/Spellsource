@@ -15,12 +15,9 @@
       "value1": {
         "class": "EntityCountValueProvider",
         "target": "FRIENDLY_HAND",
-        "cardFilter": {
+        "filter": {
           "class": "CardFilter",
           "attribute": "ARTIFACT"
-        },
-        "cardSource": {
-          "class": "UncollectibleCatalogueSource"
         }
       },
       "value2": 8

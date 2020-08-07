@@ -1,8 +1,11 @@
 {
   "name": "Dreamer",
   "type": "CLASS",
-  "hero": "hero_abraham",
   "heroClass": "OFFWHITE",
+  "rarity": "FREE",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
   "art": {
     "body": {
       "vertex": {
@@ -37,7 +40,5 @@
       "r": 0.69
     }
   },
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "hero": "hero_abraham"
 }

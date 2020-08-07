@@ -6,41 +6,41 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Each player discards a spell at random and draws a spell.",
   "race": "BEAST",
+  "description": "Opener: Each player discards a spell at random and draws a spell.",
   "battlecry": {
     "targetSelection": "NONE",
-	"spell": {
-	  "class": "BothPlayersSpell",
-	  "spell": {
-	    "class": "MetaSpell",
-		"spells": [
-		  {
-		    "class": "DiscardSpell",
-			"cardFilter": {
-			  "class": "CardFilter",
-			  "cardType": "SPELL"
-			}
-		  },
-		  {
-		    "class": "FromDeckToHandSpell",
-			"value": 1,
-			"cardFilter": {
-			  "class": "CardFilter",
-			  "cardType": "SPELL"
-			}
-		  }
-		]
-	  }
-	}
+    "spell": {
+      "class": "BothPlayersSpell",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "DiscardSpell",
+            "cardFilter": {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            }
+          },
+          {
+            "class": "FromDeckToHandSpell",
+            "value": 1,
+            "cardFilter": {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            }
+          }
+        ]
+      }
+    }
   },
   "attributes": {
-	"BATTLECRY": true
+    "BATTLECRY": true
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

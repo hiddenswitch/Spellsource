@@ -8,31 +8,25 @@
   "rarity": "LEGENDARY",
   "description": "Opener: Consume 3 to gain control of all enemy units.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
       "value1": {
         "class": "CardCountValueProvider",
         "offset": {
           "class": "BoardCountValueProvider",
-		  "offset": -1
+          "offset": -1
         }
       },
-      "value2": 3,
-      "operation": "GREATER_OR_EQUAL"
+      "value2": 3
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
           "class": "QueryTargetSpell",
-          "howMany": 3,
           "target": "OTHER_FRIENDLY_MINIONS",
-	      "filter": {
-	        "class": "EntityEqualsFilter",
-		    "invert": true,
-		    "secondaryTarget": "TRIGGER_HOST"
-	      },
           "value": {
             "class": "AttributeValueProvider",
             "attribute": "INDEX",
@@ -40,14 +34,20 @@
           },
           "spell": {
             "class": "DestroySpell"
-          }
+          },
+          "filter": {
+            "class": "EntityEqualsFilter",
+            "invert": true,
+            "secondaryTarget": "TRIGGER_HOST"
+          },
+          "howMany": 3
         },
         {
           "class": "MetaSpell",
           "howMany": {
             "class": "BoardCountValueProvider",
-            "offset": 4,
-            "multiplier": -1
+            "multiplier": -1,
+            "offset": 4
           },
           "spells": [
             {
@@ -56,10 +56,10 @@
             }
           ]
         },
-		{
+        {
           "class": "MindControlSpell",
           "target": "ENEMY_MINIONS"
-		}
+        }
       ]
     }
   },
@@ -67,9 +67,9 @@
     "BATTLECRY": true
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
-	"CORE"
-  ],
-  "fileFormatVersion": 1
+    "CORE"
+  ]
 }

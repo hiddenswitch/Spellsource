@@ -7,9 +7,6 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "description": "Dash. This has Guard and Lifedrain while your hand is full.",
-  "attributes": {
-    "RUSH": true
-  },
   "collectible": true,
   "fileFormatVersion": 1,
   "auras": [
