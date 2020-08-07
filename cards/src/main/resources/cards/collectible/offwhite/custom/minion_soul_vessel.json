@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Consume 1 to summon another Soul Vessel.",
+  "description": "Opener: Consume 1 to summon another Soul Vessel.",
   "battlecry": {
     "targetSelection": "NONE",
     "condition": {

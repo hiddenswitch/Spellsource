@@ -7,10 +7,10 @@
   "baseHp": 6,
   "rarity": "EPIC",
   "race": "SPIRIT",
-  "description": "Whenever your opponent plays a card, they Consume 1.",
+  "description": "Your opponent's cards Consume 1.",
   "trigger": {
     "eventTrigger": {
-      "class": "AfterCardPlayedTrigger",
+      "class": "CardPlayedTrigger",
       "targetPlayer": "OPPONENT"
     },
     "spell": {
@@ -33,7 +33,25 @@
           "class": "MetaSpell",
           "howMany": {
             "class": "BoardCountValueProvider",
-            "offset": 1,
+            "offset": {
+			  "class": "ConditionalValueProvider",
+			  "condition": {
+			    "class": "ComparisonCondition",
+				"operation": "EQUAL",
+				"value1": {
+				  "class": "AttributeValueProvider",
+				  "target": "EVENT_TARGET",
+				  "attribute": "INDEX"
+				},
+				"value2": {
+				  "class": "CardCountValueProvider",
+				  "targetPlayer": "OPPONENT",
+				  "offset": -1
+				}
+			  },
+			  "ifTrue": 2,
+			  "ifFalse": 1
+			},
             "multiplier": -1,
 			"targetPlayer": "OPPONENT"
           },

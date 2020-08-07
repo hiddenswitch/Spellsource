@@ -1,6 +1,6 @@
 {
   "name": "Var'Mendel, the Corruptor",
-  "baseManaCost": 8,
+  "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "OFFWHITE",
   "baseAttack": 8,
