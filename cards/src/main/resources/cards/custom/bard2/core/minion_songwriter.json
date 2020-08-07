@@ -1,0 +1,27 @@
+{
+  "name": "Songwriter",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Opener: Receive a random Bard spell.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "BLUE",
+        "cardType": "SPELL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

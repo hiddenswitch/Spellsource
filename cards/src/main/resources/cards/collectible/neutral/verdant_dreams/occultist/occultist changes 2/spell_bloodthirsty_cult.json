@@ -1,0 +1,26 @@
+{
+  "name": "Bloodthirsty Cult",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Summon two random 1-Cost minions from your deck. Give them Dash",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecruitSpell",
+    "value": 2,
+    "cardFilter": {
+      "class": "ManaCostFilter",
+      "value": 1,
+      "operation": "EQUAL"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "OUTPUT",
+      "attribute": "RUSH"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

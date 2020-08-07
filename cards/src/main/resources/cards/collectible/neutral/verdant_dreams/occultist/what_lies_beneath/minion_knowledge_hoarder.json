@@ -1,0 +1,48 @@
+{
+  "name": "Knowledge Hoarder",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Dash. This has Guard and Lifedrain while your hand is full.",
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "SELF",
+      "condition": {
+        "class": "CardCountCondition",
+        "value": 10,
+        "operation": "GREATER_OR_EQUAL",
+        "targetPlayer": "SELF"
+      },
+      "attribute": "AURA_TAUNT",
+      "secondaryTrigger": {
+        "class": "GameStateChangedTrigger",
+        "targetPlayer": "SELF"
+      }
+    },
+    {
+      "class": "AttributeAura",
+      "target": "SELF",
+      "condition": {
+        "class": "CardCountCondition",
+        "value": 10,
+        "operation": "GREATER_OR_EQUAL",
+        "targetPlayer": "SELF"
+      },
+      "attribute": "AURA_LIFESTEAL",
+      "secondaryTrigger": {
+        "class": "GameStateChangedTrigger",
+        "targetPlayer": "SELF"
+      }
+    }
+  ],
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "WHAT_LIES_BENEATH"
+  ],
+  "fileFormatVersion": 1
+}
