@@ -11,13 +11,13 @@
     "class": "ReceiveCardSpell",
     "value": {
       "class": "CardCountValueProvider",
-      "cardFilter": {
+      "cardSource": {
+        "class": "GraveyardActorsSource",
+        "targetPlayer": "SELF"
+      },
+      "filter": {
         "class": "SpecificCardFilter",
         "card": "minion_primordial_miner"
-      },
-      "cardSource": {
-        "class": "GraveyardCardAndActorSourceCardSource",
-        "targetPlayer": "SELF"
       }
     },
     "cardFilter": {
@@ -39,13 +39,13 @@
       "class": "PluralDescription",
       "value": {
         "class": "CardCountValueProvider",
-        "cardFilter": {
+        "cardSource": {
+          "class": "GraveyardActorsSource",
+          "targetPlayer": "SELF"
+        },
+        "filter": {
           "class": "SpecificCardFilter",
           "card": "minion_primordial_miner"
-        },
-        "cardSource": {
-          "class": "GraveyardCardAndActorSourceCardSource",
-          "targetPlayer": "SELF"
         },
         "offset": 1
       },

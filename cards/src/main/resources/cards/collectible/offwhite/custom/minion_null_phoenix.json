@@ -9,13 +9,13 @@
   "race": "SPIRIT",
   "description": "Aftermath: If you have exactly 7 cards in hand, return this to your hand. Your Null Phoenixes cost (1) less this game.",
   "deathrattle": {
+    "class": "ConditionalSpell",
     "condition": {
       "class": "CardCountCondition",
       "value": 7,
       "operation": "EQUAL",
       "targetPlayer": "SELF"
     },
-    "class": "ConditionalSpell",
     "spell": {
       "class": "MetaSpell",
       "spells": [
@@ -24,11 +24,11 @@
           "target": "FRIENDLY_PLAYER",
           "cardCostModifier": {
             "class": "CardCostModifier",
+            "value": -1,
             "filter": {
               "class": "SpecificCardFilter",
               "card": "minion_null_phoenix"
-            },
-            "value": -1
+            }
           }
         },
         {
@@ -37,15 +37,15 @@
           "targetPlayer": "SELF"
         }
       ]
-	}
+    }
   },
   "attributes": {
     "DEATHRATTLES": true
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

@@ -1,0 +1,29 @@
+{
+  "name": "Wizened Instructor",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 1,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "description": "Whenever you equip an item, give all units in your hand +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "WeaponEquippedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HAND",
+      "attackBonus": 1,
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "hpBonus": 1
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

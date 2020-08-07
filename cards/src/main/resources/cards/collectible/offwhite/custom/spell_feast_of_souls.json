@@ -46,10 +46,7 @@
     ]
   },
   "collectible": true,
-  "sets": [
-    "CUSTOM",
-    "CORE"
-  ],
+  "fileFormatVersion": 1,
   "dynamicDescription": [
     {
       "class": "ValueDescription",
@@ -59,5 +56,8 @@
       }
     }
   ],
-  "fileFormatVersion": 1
+  "sets": [
+    "CUSTOM",
+    "CORE"
+  ]
 }

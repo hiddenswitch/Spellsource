@@ -1,0 +1,29 @@
+{
+  "name": "Overture",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "COMMON",
+  "description": "Source a spell that costs (2) or less.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "value": 2,
+      "attribute": "BASE_MANA_COST",
+      "cardType": "SPELL",
+      "operation": "LESS_OR_EQUAL"
+    }
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

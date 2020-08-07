@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Permanent. When your hand becomes full, awaken this and give it Guard.",
+  "description": "Starts dormant. Guard. When your hand becomes full, awaken this.",
   "trigger": {
     "eventTrigger": {
       "class": "CardReceivedTrigger",
@@ -20,13 +20,14 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "TransformMinionSpell",
+      "class": "RemoveAttributeSpell",
       "target": "SELF",
-      "card": "token_slumbering_nurikabe"
+      "attribute": "PERMANENT"
     }
   },
   "attributes": {
-    "PERMANENT": true
+    "PERMANENT": true,
+    "TAUNT": true
   },
   "collectible": true,
   "fileFormatVersion": 1,
