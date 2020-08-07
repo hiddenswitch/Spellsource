@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "PEACH",
   "rarity": "FREE",
-  "description": "Restore #2 Health. Restores double Health to champions.",
+  "description": "Restore #2 Health. Restores double Health to champions. Gain an Imbue Charge.",
   "targetSelection": "ANY",
   "spell": {
     "class": "HealSpell",
@@ -25,7 +25,6 @@
       }
     }
   },
-  #I am not sure about this code#
   "collectible": false,
   "set": "CORE",
   "fileFormatVersion": 1

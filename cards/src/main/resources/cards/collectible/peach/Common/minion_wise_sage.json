@@ -7,45 +7,25 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "description": "Opener: Source a spell. <b>Imbue</b>: It costs (2) less.",
-  "battlecry":
+  "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ImbueSpell", #Noting for the future
+      "class": "ChooseOneSpell",
+      "condition": {
+        "class": "AttributeCondition",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "IMBUE",
+        "value": 1,
+        "operation": "GREATER_OR_EQUAL"
+      },
       "spell1": {
-        "class": "ImbueOptionSpell",
+        "class": "ChooseOneOptionSpell",
         "name": "Normal",
-        "description": "Source a spell."
+        "description": "Source a spell.",
         "spell": {
           "class": "DiscoverSpell",
           "spell": {
             "class": "ReceiveCardSpell",
-            "targetPlayer": "SELF"
-          },
-          "cardFilter": {
-            "class": "CardFilter",
-			"heroClass": "SELF",
-            "cardType": "SPELL"
-          }
-	    }
-      },
-      "spell2": {
-        "class": "ImbueOptionSpell", #Noting for the future
-        "name": "Imbue",
-        "description": "Source a spell and reduce its cost by (2).",
-	    "spell": {
-          "class": "DiscoverSpell",
-          "spell": {
-            "class": "ReceiveCardSpell",
-            "spell": {
-              "class": "CardCostModifierSpell",
-              "target": "OUTPUT",
-              "cardCostModifier": {
-                "class": "CardCostModifier",
-                "target": "SELF",
-                "value": 2,
-                "operation": "SUBTRACT"
-              }
-            },
             "targetPlayer": "SELF"
           },
           "cardFilter": {
@@ -55,7 +35,42 @@
           }
         }
       },
-	  "spell": {
+      "spell2": {
+        "class": "ChooseOneOptionSpell",
+        "name": "Imbue",
+        "description": "Source a spell and reduce its cost by (2).",
+        "spells": [
+          {
+            "class": "DiscoverSpell",
+            "spell": {
+              "class": "ReceiveCardSpell",
+              "spell": {
+                "class": "CardCostModifierSpell",
+                "target": "OUTPUT",
+                "cardCostModifier": {
+                  "class": "CardCostModifier",
+                  "target": "SELF",
+                  "value": 2,
+                  "operation": "SUBTRACT"
+                }
+              },
+              "targetPlayer": "SELF"
+            },
+            "cardFilter": {
+              "class": "CardFilter",
+              "heroClass": "SELF",
+              "cardType": "SPELL"
+            }
+          },
+          {
+            "class": "ModifyAttributeSpell",
+            "value": -1,
+            "attribute": "IMBUE",
+            "target": "FRIENDLY_PLAYER"
+          }
+        ]
+      },
+      "spell": {
         "class": "DiscoverSpell",
         "spell": {
           "class": "ReceiveCardSpell",
@@ -69,9 +84,9 @@
     }
   },
   "attributes": {
-    "IMBUE": true, #Noting for the future
-	"DISCOVER": true,
-	"BATTLECRY": true
+    "IMBUE": true,
+    "DISCOVER": true,
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "CORE",

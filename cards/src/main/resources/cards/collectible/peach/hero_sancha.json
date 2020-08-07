@@ -1,0 +1,16 @@
+{
+  "name": "Sancha",
+  "heroPower": "hero_power_foxs_gifts",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "PEACH",
+  "rarity": "FREE",
+  "description": "Skill: Receive a random Fox spell.",
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

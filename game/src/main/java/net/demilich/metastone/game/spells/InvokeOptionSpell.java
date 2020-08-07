@@ -1,12 +1,10 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.InvokedEvent;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -18,17 +16,14 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  * When presenting choices for the invoke effect, the card's name and description are read from {@link SpellArg#NAME}
  * and {@link SpellArg#DESCRIPTION} on this spell.
  */
-public class InvokeOptionSpell extends Spell {
+public class InvokeOptionSpell extends ChooseOneOptionSpell {
 
 	@Suspendable
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		var mana = desc.getInt(SpellArg.MANA, 0);
 		context.getLogic().modifyCurrentMana(player.getId(), -mana, true);
-		if (desc.containsKey(SpellArg.SPELL)) {
-			SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target);
-		}
-		context.getLogic().revealCard(player, getTempCard(context, desc, source.getSourceCard()));
+		super.onCast(context, player, desc, source, target);
 		if (mana > 0) {
 			player.modifyAttribute(Attribute.INVOKED, 1);
 			context.getLogic().fireGameEvent(new InvokedEvent(context, player.getId(), source.getSourceCard(), mana));
@@ -36,36 +31,8 @@ public class InvokeOptionSpell extends Spell {
 	}
 
 
-	/**
-	 * Gets or create the temporary card representing the invoke option.
-	 *
-	 * @param context
-	 * @param invokeOptionSpellDesc
-	 * @param sourceCard
-	 * @return
-	 */
-	public static Card getTempCard(GameContext context, SpellDesc invokeOptionSpellDesc, Card sourceCard) {
-		var name = invokeOptionSpellDesc.getString(SpellArg.NAME);
-		var tempCardId = "invoke_" + sourceCard.getCardId() + "_" + format(name);
-		if (context.getTempCards().containsCard(tempCardId)) {
-			return context.getCardById(tempCardId);
-		}
-		var description = invokeOptionSpellDesc.getString(SpellArg.DESCRIPTION);
-		var mana = invokeOptionSpellDesc.getInt(SpellArg.MANA, 0);
-		var cardDesc = new CardDesc();
-		cardDesc.setId(tempCardId);
-		cardDesc.setName(name);
-		cardDesc.setDescription(description);
-		cardDesc.setBaseManaCost(mana);
-		cardDesc.setType(CardType.SPELL);
-		cardDesc.setHeroClass(sourceCard.getHeroClass());
-		cardDesc.setSpell(invokeOptionSpellDesc);
-		var card = cardDesc.create();
-		context.addTempCard(card);
-		return card;
-	}
-
-	public static String format(String str) {
-		return str.toLowerCase().replace(" ", "_").replace("-", "_").replace("'", "");
+	@Override
+	public Card getTempCard(GameContext context, SpellDesc spellDesc, Card sourceCard) {
+		return ChooseOneOptionSpell.getTempCard(context, spellDesc, sourceCard, "invoke_");
 	}
 }

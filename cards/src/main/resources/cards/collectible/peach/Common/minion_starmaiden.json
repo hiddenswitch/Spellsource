@@ -6,34 +6,67 @@
   "baseAttack": 1,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Spellpower +1. Imbue: Gain Spellpower +1.",
+  "description": "Spellpower +1. Imbue: Gain Spellpower +1.[]",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ImbueSpell", #Noting for Later
+      "class": "ChooseOneSpell",
+      "condition": {
+        "class": "AttributeCondition",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "IMBUE",
+        "value": 1,
+        "operation": "GREATER_OR_EQUAL"
+      },
       "spell1": {
-        "class": "ImbueOptionSpell",
+        "class": "ChooseOneOptionSpell",
         "name": "Normal",
         "description": "Don't Imbue."
       },
       "spell2": {
-        "class": "ImbueOptionSpell",
+        "class": "ChooseOneOptionSpell",
         "name": "Imbue",
         "description": "Give this unit Spellpower +1.",
-        "spell": {
-          "class": "ModifyAttributeSpell",
-          "value": 1,
-          "attribute": "SPELL_DAMAGE",
-		  "target": "SELF"
-        }
+        "spells": [
+          {
+            "class": "ModifyAttributeSpell",
+            "value": 1,
+            "attribute": "SPELL_DAMAGE",
+            "target": "SELF"
+          },
+          {
+            "class": "ModifyAttributeSpell",
+            "value": -1,
+            "attribute": "IMBUE",
+            "target": "FRIENDLY_PLAYER"
+          }
+        ]
       }
     }
   },
   "attributes": {
-    "IMBUE": true, #Noting for later
+    "IMBUE": true,
 	"SPELL_DAMAGE": 1
   },
   "collectible": true,
   "fileFormatVersion": 1,
-  "set": "CORE"
+  "set": "CORE",
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        " (",
+        {
+          "class": "PluralDescription",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_PLAYER",
+            "value": "IMBUE"
+          },
+          "description1": " charge)",
+          "description2": " charges)"
+        }
+      ]
+    }
+  ]
 }

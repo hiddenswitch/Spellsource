@@ -3,7 +3,7 @@
   "type": "CLASS",
   "heroClass": "ROSE",
   "rarity": "FREE",
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
   "art": {
