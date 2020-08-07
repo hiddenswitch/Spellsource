@@ -1,24 +1,25 @@
 package com.hiddenswitch.spellsource.net.tests;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.client.models.EntityLocation;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import com.hiddenswitch.spellsource.net.Games;
+import com.hiddenswitch.spellsource.net.impl.UnityClientBehaviour;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.behaviour.ChooseLastBehaviour;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.Zones;
 import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ModelsTest {
 
@@ -89,9 +90,40 @@ public class ModelsTest {
 		});
 	}
 
+	@Test
+	public void testSendsBothPlayersDecks() {
+		runGym((context, player, opponent) -> {
+			context.getLogic().shuffleToDeck(context.getPlayer1(), CardCatalogue.getCardById(CardCatalogue.getOneOneNeutralMinionCardId()));
+			context.getLogic().shuffleToDeck(context.getPlayer2(), CardCatalogue.getCardById(CardCatalogue.getOneOneNeutralMinionCardId()));
+			context.getLogic().shuffleToDeck(context.getPlayer2(), CardCatalogue.getCardById(CardCatalogue.getOneOneNeutralMinionCardId()));
+			var gameState = Games.getGameState(context, player, opponent);
+			assertEquals(1L, gameState.getEntities().stream().filter(e -> e.getL().getZ() == EntityLocation.ZEnum.D && e.getOwner() == player.getId()).count());
+			assertEquals(2L, gameState.getEntities().stream().filter(e -> e.getL().getZ() == EntityLocation.ZEnum.D && e.getOwner() == opponent.getId()).count());
+			gameState = Games.getGameState(context, opponent, player);
+			assertEquals(1L, gameState.getEntities().stream().filter(e -> e.getL().getZ() == EntityLocation.ZEnum.D && e.getOwner() == player.getId()).count());
+			assertEquals(2L, gameState.getEntities().stream().filter(e -> e.getL().getZ() == EntityLocation.ZEnum.D && e.getOwner() == opponent.getId()).count());
+		});
+	}
+
+	@Test
+	public void testSendsBothPlayersDecksInBehaviour() {
+		runGym((context, player, opponent) -> {
+			context.getLogic().shuffleToDeck(context.getPlayer1(), CardCatalogue.getCardById(CardCatalogue.getOneOneNeutralMinionCardId()));
+			context.getLogic().shuffleToDeck(context.getPlayer2(), CardCatalogue.getCardById(CardCatalogue.getOneOneNeutralMinionCardId()));
+			context.getLogic().shuffleToDeck(context.getPlayer2(), CardCatalogue.getCardById(CardCatalogue.getOneOneNeutralMinionCardId()));
+			var gameState = UnityClientBehaviour.getClientGameState(player.getId(), context.getGameStateCopy());
+			assertEquals(1L, gameState.getEntities().stream().filter(e -> e.getL().getZ() == EntityLocation.ZEnum.D && e.getOwner() == player.getId()).count());
+			assertEquals(2L, gameState.getEntities().stream().filter(e -> e.getL().getZ() == EntityLocation.ZEnum.D && e.getOwner() == opponent.getId()).count());
+			gameState = UnityClientBehaviour.getClientGameState(opponent.getId(), context.getGameStateCopy());
+			assertEquals(1L, gameState.getEntities().stream().filter(e -> e.getL().getZ() == EntityLocation.ZEnum.D && e.getOwner() == player.getId()).count());
+			assertEquals(2L, gameState.getEntities().stream().filter(e -> e.getL().getZ() == EntityLocation.ZEnum.D && e.getOwner() == opponent.getId()).count());
+			var res = Json.encode(gameState);
+		});
+	}
+
 	private void runGym(GymConsumer consume) {
 		CardCatalogue.loadCardsFromPackage();
-		var context = new GameContext("BLACK", "BLACK");
+		var context = new GameContext(HeroClass.NAVY, HeroClass.NAVY);
 		context.setLogic(new GameLogic(101010L));
 		context.setBehaviour(0, new ChooseLastBehaviour());
 		context.setBehaviour(1, new ChooseLastBehaviour());
