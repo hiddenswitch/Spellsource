@@ -1,0 +1,26 @@
+{
+  "name": "Valorous Hymn",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "COMMON",
+  "description": "Give a unit +3/+3 and Dash",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 3,
+        "hpBonus": 3
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "RUSH"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

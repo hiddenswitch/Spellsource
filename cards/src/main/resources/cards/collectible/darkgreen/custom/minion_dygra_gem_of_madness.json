@@ -11,17 +11,6 @@
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_CHARACTERS",
-    "triggers": [
-      {
-        "class": "TurnStartTrigger"
-      },
-      {
-        "class": "CardReceivedTrigger"
-      },
-      {
-        "class": "CardPlayedTrigger"
-      }
-    ],
     "condition": {
       "class": "AndCondition",
       "conditions": [
@@ -37,7 +26,10 @@
         }
       ]
     },
-    "attribute": "AURA_IMMUNE"
+    "attribute": "AURA_IMMUNE",
+    "secondaryTrigger": {
+      "class": "TurnStartTrigger"
+    }
   },
   "collectible": true,
   "fileFormatVersion": 1,

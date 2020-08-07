@@ -11,19 +11,19 @@
     "class": "CardCostModifier",
     "target": "BOTH_HANDS",
     "value": 3,
-	"filter": {
-	  "class": "AttributeFilter",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": 3,
       "attribute": "BASE_MANA_COST",
-	  "value": 3,
-	  "operation": "LESS"
-	},
+      "operation": "LESS"
+    },
     "operation": "SET",
     "targetPlayer": "BOTH"
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

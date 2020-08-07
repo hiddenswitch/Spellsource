@@ -17,7 +17,7 @@
         "class": "DamageSpell",
         "target": "FRIENDLY_HERO",
         "value": 3,
-        "ignoreSpellDamage": true
+        "IgnoreSpellDamage": true
       }
     ]
   },

@@ -19,12 +19,12 @@
   },
   "attributes": {
     "CHARGE": true,
-	"DECAY": true
+    "DECAY": true
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

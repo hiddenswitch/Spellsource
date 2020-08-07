@@ -14,35 +14,35 @@
       "attribute": "ATTACK",
       "operation": "LESS_OR_EQUAL"
     },
-	"spells": [
-	  {
-	    "class": "MindControlSpell"
-	  },
-	  {
-	    "class": "AddAttributeSpell",
-		"attribute": "TAUNT"
-	  },
-	  {
-	    "class": "AddEnchantmentSpell",
-		"trigger": {
-		  "eventTrigger": {
-		    "class": "TurnStartTrigger",
-			"targetPlayer": "SELF"
-		  },
-		  "spell": {
-		    "class": "MindControlSpell",
-			"targetPlayer": "OPPONENT",
-			"target": "TRIGGER_HOST"
-		  },
-		  "maxFires": 1
-		}
-	  }
-	]
+    "spells": [
+      {
+        "class": "MindControlSpell"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "MindControlSpell",
+            "target": "TRIGGER_HOST",
+            "targetPlayer": "OPPONENT"
+          },
+          "maxFires": 1
+        }
+      }
+    ]
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }
