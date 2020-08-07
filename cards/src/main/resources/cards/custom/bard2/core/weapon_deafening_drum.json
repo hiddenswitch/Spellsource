@@ -1,0 +1,26 @@
+{
+  "name": "Deafening Drum",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "CORAL",
+  "damage": 1,
+  "durability": 3,
+  "rarity": "RARE",
+  "description": "After your champion attacks, deal 1 damage to the enemy champion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell":  {
+        "class": "DamageSpell",
+		"target": "ENEMY_HERO",
+        "value": 1
+      }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
