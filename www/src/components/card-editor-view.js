@@ -70,7 +70,7 @@ const CardEditorView = () => {
             blocks.push({
               type: blocksKey,
               values: shadowBlockJsonCreation(blocksKey),
-              next: blocksKey.startsWith('Starter') ?
+              next: blocksKey.startsWith('Starter') && !!Blockly.Blocks[blocksKey].json.nextStatement ?
                 { type: 'Property_SHADOW', shadow: true }
                 : undefined
             })
@@ -85,7 +85,7 @@ const CardEditorView = () => {
           blocks.push({
             type: value.id,
             values: shadowBlockJsonCreation(value.id),
-            next: value.id.startsWith('Starter') ?
+            next: value.id.startsWith('Starter') && !!Blockly.Blocks[value.id].json.nextStatement ?
               { type: 'Property_SHADOW', shadow: true }
               : undefined
           })
@@ -169,7 +169,7 @@ const CardEditorView = () => {
   }
 
   function createCard (card, workspace, cardsStillInUse) {
-    if (!!card && !!card.name) {
+    if (!!card && !!card.name && !!card.type) {
       let cardType = !!card.secret ? 'SECRET' : !!card.quest ? 'QUEST' : card.type
       let cardId = cardType.toLowerCase()
         + '_'
@@ -180,6 +180,9 @@ const CardEditorView = () => {
           .replace("'", '')
       if (card.type === 'MINION' && card.collectible === false || card.collectible === 'FALSE') {
         cardId.replace('minion_', 'token_')
+      }
+      if (card.type === 'CLASS') {
+        cardId = 'class_' + card.heroClass.toLowerCase()
       }
       let type = 'WorkspaceCard_' + cardId
       let color = '#888888'
@@ -197,7 +200,9 @@ const CardEditorView = () => {
           this.data = cardId
         }
       }
-      cardsStillInUse.push(type)
+      if (!Blockly.Blocks[type.replace('WorkspaceCard_', 'CatalogueCard_')]) {
+        cardsStillInUse.push(type)
+      }
       if (Blockly.Blocks[type] !== block) {
         Blockly.Blocks[type] = block
         return true
@@ -273,7 +278,7 @@ const CardEditorView = () => {
         .search(query, { expand: true }) // accept partial matches
         .map(({ ref }) => index.documentStore.getDoc(ref))
         .filter(doc => doc.nodeType === 'Block' || (doc.nodeType === 'Card' && checked
-          && heroClassColors.hasOwnProperty(doc.heroClass) && !!doc.baseManaCost))
+          && heroClassColors.hasOwnProperty(doc.heroClass) && doc.hasOwnProperty('baseManaCost')))
         .map(doc => {
           if (doc.nodeType === 'Card') {
             return {

@@ -1,5 +1,5 @@
-import { Xml } from 'blockly'
-import { extend, filter, find, fromPairs, isArray, map, merge } from 'lodash'
+import {isNumber, Xml} from 'blockly'
+import {extend, filter, find, fromPairs, isArray, isPlainObject, isEmpty, map, merge} from 'lodash'
 import format from 'string-format'
 
 export default class WorkspaceUtils {
@@ -225,6 +225,16 @@ export default class WorkspaceUtils {
       delete cardScript.triggers
     }
 
+    if (!!cardScript.aura && isArray(cardScript.aura)) {
+      cardScript.aura = cardScript.aura[0]
+    }
+
+    for (let arg of ['r', 'g', 'b', 'a']) {
+      if (cardScript.hasOwnProperty(arg) && isNumber(cardScript[arg])) {
+        cardScript[arg] = Math.round(1000 * cardScript[arg] / 255) / 1000
+      }
+    }
+
     return cardScript
   }
 
@@ -358,6 +368,9 @@ export default class WorkspaceUtils {
       }
       if (cardScript[cardScriptKey] === 'FALSE') {
         cardScript[cardScriptKey] = false
+      }
+      if (isPlainObject(cardScript[cardScriptKey]) && isEmpty(cardScript[cardScriptKey])) {
+        delete cardScript[cardScriptKey]
       }
     }
   }

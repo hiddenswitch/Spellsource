@@ -39,10 +39,12 @@ export default class BlocklyMiscUtils {
           const arg = block['args' + i.toString()][j]
           if (!!arg) {
             const shadow = arg.shadow
-            if (!!shadow) {
+            if (!!shadow && !thisBlock.getInput(arg.name).connection.targetBlock()) {
               let shadowBlock = JsonConversionUtils.newBlock(thisBlock.workspace, shadow.type)
-              if (shadow.notActuallyShadow) {
-                shadowBlock.setMovable(false)
+              if (shadow.notActuallyShadow && !thisBlock.isShadow()) {
+                if (shadow.type.endsWith('SHADOW')) {
+                  shadowBlock.setMovable(false)
+                }
               } else {
                 shadowBlock.setShadow(true)
               }
@@ -90,6 +92,8 @@ export default class BlocklyMiscUtils {
       case 'heroPower':
       case 'card':
         return 'Card'
+      case 'cards':
+        return 'Cards'
       case 'queueCondition':
       case 'fireCondition':
       case 'condition':
@@ -97,6 +101,7 @@ export default class BlocklyMiscUtils {
       case 'spell':
       case 'spell1':
       case 'spell2':
+      case 'deathrattle':
         return 'Spell'
       case 'filter':
       case 'cardFilter':
@@ -114,6 +119,7 @@ export default class BlocklyMiscUtils {
       case 'rarity':
         return 'Rarity'
       case 'attribute':
+      case 'requiredAttribute':
         return 'Attribute'
       case 'targetSelection':
         return 'TargetSelection'
@@ -122,6 +128,7 @@ export default class BlocklyMiscUtils {
       case 'secondaryTrigger':
       case 'secret':
       case 'quest':
+      case 'expirationTrigger':
         return 'Trigger'
       case 'value':
       case 'howMany':
@@ -136,9 +143,13 @@ export default class BlocklyMiscUtils {
       case 'hpBonus':
       case 'armorBonus':
       case 'manaCost':
+      case 'mana':
+      case 'manaCostModifier':
         return 'ValueProvider'
       case 'aura':
         return 'Aura'
+      case 'cardSource':
+        return 'Source'
       default:
         return null
     }
@@ -159,7 +170,7 @@ export default class BlocklyMiscUtils {
   //make the message for a generated block for a catalogue/created card
   static cardMessage (card) {
     let ret = ''
-    if (!!card.baseManaCost) {
+    if (card.hasOwnProperty('baseManaCost')) {
       ret = '(' + card.baseManaCost + ') '
     }
     if (card.type === 'MINION') {
@@ -301,10 +312,31 @@ export default class BlocklyMiscUtils {
         delete block.messages
       }
 
+      if (!!block.output && !JsonConversionUtils.blockTypeColors[block.output]) {
+        JsonConversionUtils.blockTypeColors[block.output] = block.colour
+      }
+
       BlocklyMiscUtils.addBlock(block)
     })
 
-    BlocklyMiscUtils.initHeroClassColorBlocks(data)
+    BlocklyMiscUtils.initCardBlocks(data)
+
+
+    let defaultFunction = Blockly.Field.prototype.setValue;
+    Blockly.Field.prototype.setValue = function (newValue) {
+      defaultFunction.call(this, newValue)
+      let source = this.sourceBlock_
+      if (!!source && !!Blockly.Blocks[source.type].json) {
+        let json = Blockly.Blocks[source.type].json
+        if (json.output === 'Color') {
+          let r = source.getFieldValue('r')
+          let g = source.getFieldValue('g')
+          let b = source.getFieldValue('b')
+          let color = Blockly.utils.colour.rgbToHex(r, g, b)
+          source.setColour(color)
+        }
+      }
+    }
   }
 
   static getHeroClassColors (data) {
@@ -343,7 +375,7 @@ export default class BlocklyMiscUtils {
     return newHeroClassColors
   }
 
-  static initHeroClassColorBlocks (data) {
+  static initCardBlocks (data) {
     const heroClassColors = BlocklyMiscUtils.getHeroClassColors(data)
     //second pass through to actually get the cards
     data.allCard.edges.forEach(edge => {
