@@ -6,7 +6,7 @@
   "rarity": "RARE",
   "description": "If your opponent controls exactly one unit, silence and destroy it.",
   "condition": {
-    "class": "MinionOnBoardCondition",
+    "class": "MinionCountCondition",
     "value": 1,
     "operation": "EQUAL",
     "targetPlayer": "OPPONENT"
