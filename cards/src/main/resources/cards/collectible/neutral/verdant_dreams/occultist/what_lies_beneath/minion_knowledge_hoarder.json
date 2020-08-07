@@ -37,12 +37,12 @@
         "class": "GameStateChangedTrigger",
         "targetPlayer": "SELF"
       }
-    ]
-  },
+    }
+  ],
   "collectible": true,
   "sets": [
     "CUSTOM",
     "WHAT_LIES_BENEATH"
   ],
-  "fileFormatVersion": 1,
- }
+  "fileFormatVersion": 1
+}

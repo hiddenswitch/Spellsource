@@ -1,11 +1,11 @@
 {
   "name": "Chord",
   "heroPower": "hero_power_melody",
-  "baseManaCost": ,
+  "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "CORAL",
   "rarity": "FREE",
-  "description": "Give the leftmost unit in your hand +1+1",
+  "description": "Give the leftmost unit in your hand +1/+1",
   "targetSelection": "NONE",
   "spell": {
     "class": "custom.BuffLeftmostMinionInHandSpell",

@@ -4,44 +4,48 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-    "description": "Give +2/+2 to all minions in your hand and deck that have a copy of them in your Graveyard.",
-   "spell": {
+  "description": "Give +2/+2 to all minions in your hand and deck that have a copy of them in your Graveyard.",
+  "spell": {
     "class": "MetaSpell",
     "spells": [
       {
-	   "class": "BuffSpell",
-          "target": "FRIENDLY_HAND",
-          "value": 2,
-        "class": "ConditionalSpell",
-        "condition": {
-          "class": "OrCondition",
-          "condition": {
-              "class": "GraveyardContainsCondition",
-              "target": "SPELL_TARGET",
-              "targetPlayer": "SELF"
-           }
-        },
+        "class": "MetaSpell",
+        "target": "FRIENDLY_HAND",
         "spell": {
-          "class": "BuffSpell",
-          "value": 2
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "GraveyardContainsCondition",
+            "target": "SPELL_TARGET",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "BuffSpell",
+            "value": 2
+          }
+        },
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
         }
       },
-	  {
-	   "class": "BuffSpell",
-          "target": "FRIENDLY_DECK",
-          "value": 2,
-        "class": "ConditionalSpell",
-        "condition": {
-          "class": "OrCondition",
-          "condition": {
-              "class": "GraveyardContainsCondition",
-              "target": "SPELL_TARGET",
-              "targetPlayer": "SELF"
-           }
-        },
+      {
+        "class": "MetaSpell",
+        "target": "FRIENDLY_DECK",
         "spell": {
-          "class": "BuffSpell",
-          "value": 2
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "GraveyardContainsCondition",
+            "target": "SPELL_TARGET",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "BuffSpell",
+            "value": 2
+          }
+        },
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
         }
       }
     ]
@@ -51,5 +55,5 @@
     "CUSTOM",
     "WHAT_LIES_BENEATH"
   ],
-  "fileFormatVersion": 1,
- }
+  "fileFormatVersion": 1
+}

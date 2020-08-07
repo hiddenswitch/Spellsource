@@ -15,10 +15,10 @@
       "targetPlayer": "BOTH"
     },
     "spell": {
-    "class": "DamageSpell",
-	"target": "ALL_ENEMIES",
-	"value": 1
-	}
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1
+    }
   },
   "collectible": true,
   "set": "CORE",

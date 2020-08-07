@@ -6,7 +6,7 @@
   "rarity": "COMMON",
   "description": "After an enemy minion attacks next turn, destroy a random enemy minion.",
   "targetSelection": "NONE",
-     "spell": {
+  "spell": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",
     "trigger": {
@@ -16,11 +16,12 @@
         "sourcePlayer": "OPPONENT"
       },
       "spell": {
-       "class": "DestroySpell",
-       "target": "ENEMY_MINIONS",
-       "randomTarget": true
-      },  
-      "revertTrigger": {
+        "class": "DestroySpell",
+        "target": "ENEMY_MINIONS",
+        "randomTarget": true
+      }
+    },
+    "revertTrigger": {
       "class": "TurnStartTrigger",
       "targetPlayer": "SELF"
     }
@@ -30,5 +31,5 @@
     "CUSTOM",
     "WHAT_LIES_BENEATH"
   ],
-  "fileFormatVersion": 1,
- }
+  "fileFormatVersion": 1
+}

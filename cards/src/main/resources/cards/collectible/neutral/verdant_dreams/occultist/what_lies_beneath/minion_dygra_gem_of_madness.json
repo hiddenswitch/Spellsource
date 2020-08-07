@@ -8,18 +8,23 @@
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
   "description": "While your hand is full, allies are Immune on your turn.",
-   "condition": {
-      "class": "CardCountCondition",
-      "value": 10,
-      "operation": "GREATER_OR_EQUAL",
-      "targetPlayer": "SELF"
-    },
-	"aura": {
+  "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_CHARACTERS",
     "condition": {
-      "class": "OwnedByPlayerCondition",
-      "targetPlayer": "ACTIVE"
+      "class": "AndCondition",
+      "conditions": [
+        {
+          "class": "CardCountCondition",
+          "value": 10,
+          "operation": "GREATER_OR_EQUAL",
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "OwnedByPlayerCondition",
+          "targetPlayer": "ACTIVE"
+        }
+      ]
     },
     "attribute": "AURA_IMMUNE",
     "secondaryTrigger": {
@@ -31,5 +36,5 @@
     "CUSTOM",
     "WHAT_LIES_BENEATH"
   ],
-  "fileFormatVersion": 1,
- }
+  "fileFormatVersion": 1
+}

@@ -8,34 +8,31 @@
   "rarity": "EPIC",
   "race": "ELEMENTAL",
   "description": "Starts dormant. Guard. When your hand becomes full, awaken this.",
-   "trigger": {
+  "trigger": {
     "eventTrigger": {
       "class": "CardReceivedTrigger",
-      "targetPlayer": "SELF"
-    },
-    "fireCondition": {
-        "class": "ConditionalValueProvider",
-    "condition": {
-      "class": "CardCountCondition",
-      "value": 10,
-      "operation": "GREATER_OR_EQUAL",
-      "targetPlayer": "SELF"
-     }
+      "targetPlayer": "SELF",
+      "fireCondition": {
+        "class": "CardCountCondition",
+        "value": 10,
+        "operation": "GREATER_OR_EQUAL",
+        "targetPlayer": "SELF"
+      }
     },
     "spell": {
       "class": "RemoveAttributeSpell",
-	  "target": "SELF",
+      "target": "SELF",
       "attribute": "PERMANENT"
-	  }
-    },
+    }
+  },
   "attributes": {
     "TAUNT": true,
-	"PERMANENT": true
+    "PERMANENT": true
   },
   "collectible": true,
   "sets": [
     "CUSTOM",
     "WHAT_LIES_BENEATH"
   ],
-  "fileFormatVersion": 1,
- }
+  "fileFormatVersion": 1
+}
