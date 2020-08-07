@@ -1,0 +1,21 @@
+{
+  "name": "Duality Dance",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "EPIC",
+  "description": "Choose a unit. Cast a spell from your deck on it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "RandomCardTargetSpell",
+    "target": "FRIENDLY_DECK",
+    "exclusive": true,
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    }
+  },
+  "collectible": true, #This code 100% does not work, I did test it.
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

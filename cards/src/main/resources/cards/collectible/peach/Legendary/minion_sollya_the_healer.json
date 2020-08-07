@@ -1,0 +1,30 @@
+{
+  "name": "Sollya the Healer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "PEACH",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "After you restore Health, receive a random Fox Spell.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HealingTrigger",
+      "sourcePlayer": "SELF"
+    },
+	{
+	  "spell": {
+        "class": "ReceiveCardSpell",
+        "cards": [
+          "spell_fox_dance",
+          "spell_fox_fire",
+          "spell_fox_kiss"
+        ]
+        "randomTarget": true
+	  }
+	}
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

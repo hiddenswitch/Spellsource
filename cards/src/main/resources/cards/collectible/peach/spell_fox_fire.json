@@ -1,0 +1,31 @@
+{
+  "name": "Fox Fire",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "FREE",
+  "description": "Deal $1 damage. Deals double damage to units.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 1,
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "CardPropertyCondition",
+        "cardType": "MINION"
+      },
+      "spell1": {
+        "class": "ModifyDamageSpell",
+        "value": 2,
+        "operation": "MULTIPLY"
+      },
+      "spell2": {
+        "class": "NullSpell"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

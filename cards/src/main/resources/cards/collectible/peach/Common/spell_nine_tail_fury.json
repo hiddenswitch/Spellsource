@@ -1,0 +1,52 @@
+{
+  "name": "Nine Tail Fury",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "COMMON",
+  "description": "Deal $4 damage to a unit. Imbue: And to the enemy champion.",
+  "spell": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "ImbueSpell", #Noting for the future
+      "spell1": {
+        "class": "ImbueOptionSpell",
+        "name": "Normal",
+        "description": "Deal $4 damage to a unit."
+        "spell": {
+          "class": "DamageSpell",
+		  "value": 4
+	    }
+      },
+      "spell2": {
+        "class": "ImbueOptionSpell", #Noting for the future
+        "name": "Imbue",
+        "description": "Deal $4 damage to a unit and the enemy champion",
+	    "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "DamageSpell",
+              "value": 4
+            },
+            {
+              "class": "DamageSpell",
+              "target": "ENEMY_HERO",
+              "value": 4
+            }
+          ]
+        }
+      },
+	  "spell": {
+	    "class": "DamageSpell",
+		"value": 4
+	  }
+    }
+  },
+  "attributes": {
+    "IMBUE": true #Noting for the future
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

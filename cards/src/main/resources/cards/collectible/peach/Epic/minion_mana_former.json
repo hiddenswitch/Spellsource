@@ -1,0 +1,29 @@
+{
+  "name": "Manaformer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "PEACH",
+  "baseAttack": 2,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "After a spell is cast on this, receive a random Witch spell.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "SPELL",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "sourcePlayer": ""
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "PEACH",
+        "cardType": "SPELL"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

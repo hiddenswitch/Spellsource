@@ -1,0 +1,17 @@
+{
+  "name": "Kumiho",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "PEACH",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "Spellpower +2",
+  "attributes": {
+    "SPELL_DAMAGE": 2
+  },
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

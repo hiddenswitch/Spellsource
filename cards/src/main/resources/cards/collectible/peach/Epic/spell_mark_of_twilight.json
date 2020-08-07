@@ -1,0 +1,19 @@
+{
+  "name": "Mark of Twilight",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "EPIC",
+  "description": "Choose a unit. When it dies, destroy all units.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "spell": {
+      "class": "DestroySpell",
+      "target": "ALL_MINIONS"
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

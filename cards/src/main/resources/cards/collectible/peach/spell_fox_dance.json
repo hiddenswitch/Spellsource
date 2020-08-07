@@ -1,0 +1,16 @@
+{
+  "name": "Fox Dance",
+  "baseManaCost": 1,
+  "type": "CHOOSE_ONE",
+  "heroClass": "PEACH",
+  "rarity": "FREE",
+  "description": "Choose to give a unit +1/+1 or Spellpower +1.",
+  "targetSelection": "NONE",
+  "chooseOneCardIds": [
+    "spell_fox_dance_1",
+    "spell_fox_dance_2"
+  ],
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

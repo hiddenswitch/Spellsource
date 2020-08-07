@@ -1,0 +1,35 @@
+{
+  "name": "Dormant Obelisk",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "PEACH",
+  "baseAttack": 0,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "description": "After a spell is cast on this, gain +3 Attack and Elusive.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "SPELL",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "sourcePlayer": "BOTH"
+    },
+    "spell": {
+	  "class": "MetaSpell",
+	  "spells": [
+	    {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": 3
+	    },
+	    {
+          "class": "AddAttributeSpell",
+          "attribute": "UNTARGETABLE_BY_SPELLS"
+        }
+	  ]
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

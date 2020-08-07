@@ -1,0 +1,17 @@
+{
+  "name": "Fortitude",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "FREE",
+  "description": "Give a unit +1/+1.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "attackBonus": 1,
+	"hpBonus": 1
+  },
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

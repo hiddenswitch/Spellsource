@@ -1,0 +1,38 @@
+{
+  "name": "Kumimarch",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "EPIC",
+  "description": "Summon two 5/5 Kumihos. If your deck has no units, give them Spellpower +2.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "EQUAL",
+      "value1": {
+        "class": "EntityCountValueProvider",
+        "target": "FRIENDLY_DECK",
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      },
+      "value2": 0
+    },
+    "spell1": {
+      "class": "SummonSpell",
+      "value": 2,
+      "card": "token_kumiho_spellpower"
+    },
+    "spell2": {
+      "class": "SummonSpell",
+	  "value": 2,
+	  "card": "token_kumiho"
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
