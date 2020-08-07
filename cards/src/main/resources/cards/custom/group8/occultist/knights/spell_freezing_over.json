@@ -7,20 +7,19 @@
   "description": "Choose a minion. Whenever you play a minion this turn, give that minion +3/+3.",
   "targetSelection": "MINIONS",
   "spell": {
-        "class": "AddEnchantmentSpell",
-        "trigger": {
-          "eventTrigger": {
-            "class": "MinionSummonedTrigger",
-            "targetPlayer": "SELF"
-          },
-          "oneTurn": true,
-          "spell": {
-            "class": "BuffSpell",
-            "target": "SELF",
-            "value": 3
-          }
-        }
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "MinionSummonedTrigger",
+        "targetPlayer": "SELF"
+      },
+      "oneTurn": true,
+      "spell": {
+        "class": "BuffSpell",
+        "target": "SELF",
+        "value": 3
       }
+    }
   },
   "sets": [
     "CUSTOM",

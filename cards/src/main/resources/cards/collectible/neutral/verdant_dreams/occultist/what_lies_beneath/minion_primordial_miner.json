@@ -6,29 +6,26 @@
   "baseAttack": 8,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Aftermath: Add [1] Artifacts to your hand. (Increases for each copy of this in your Graveyard)",
+  "description": "Aftermath: Add [1 Artifact] to your hand. (Increases for each copy of this in your Graveyard)",
   "deathrattle": {
-    "spell": {
-      "class": "ReceiveCardSpell",
-      "value": {
-         "class": "CardCountValueProvider",
-    "filter": {
-          "class": "SpecificCardFilter",
-          "card": "minion_primordial_miner"
-        },
-    "cardSource": {
-      "class": "GraveyardActorsSource",
-      "targetPlayer": "SELF"
-    },
-	"offset": 1
+    "class": "ReceiveCardSpell",
+    "value": {
+      "class": "CardCountValueProvider",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "minion_primordial_miner"
       },
-      "cardFilter": {
-            "class": "CardFilter",
-            "attribute": "ARTIFACT"
-          },
-          "cardSource": {
-            "class": "UncollectibleCatalogueSource"
-          }
+      "cardSource": {
+        "class": "GraveyardActorsSource",
+        "targetPlayer": "SELF"
+      }
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "ARTIFACT"
+    },
+    "cardSource": {
+      "class": "UncollectibleCatalogueSource"
     }
   },
   "sets": [
@@ -38,21 +35,26 @@
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
-   "dynamicDescription": [
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "dynamicDescription": [
     {
-      "class": "ValueDescription",
+      "class": "PluralDescription",
       "value": {
-         "class": "CardCountValueProvider",
-    "filter": {
+        "class": "CardCountValueProvider",
+        "filter": {
           "class": "SpecificCardFilter",
           "card": "minion_primordial_miner"
         },
-    "cardSource": {
-      "class": "GraveyardActorsSource",
-      "targetPlayer": "SELF"
-    },
-	"offset": 1
-      }
+        "cardSource": {
+          "class": "GraveyardActorsSource",
+          "targetPlayer": "SELF"
+        },
+        "offset": 1
+      },
+      "description1": " Artifact",
+      "description2": " Artifacts"
     }
   ]
 }

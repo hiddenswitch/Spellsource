@@ -8,7 +8,7 @@
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
   "description": "Opener: If you have 8 Artifacts in your hand, reduce their cost to (0).",
-   "battlecry": {
+  "battlecry": {
     "targetSelection": "NONE",
     "condition": {
       "class": "ComparisonCondition",
@@ -16,30 +16,29 @@
       "value1": {
         "class": "EntityCountValueProvider",
         "target": "FRIENDLY_HAND",
-        "cardFilter": {
-            "class": "CardFilter",
-            "attribute": "ARTIFACT"
-          },
-          "cardSource": {
-            "class": "UncollectibleCatalogueSource"
-          }
+        "filter": {
+          "class": "CardFilter",
+          "attribute": "ARTIFACT"
+        }
       },
       "value2": 8
     },
-     "class": "CardCostModifierSpell",
-        "target": "FRIENDLY_HAND",
-        "cardCostModifier": {
-          "class": "CardCostModifier",
-          "value": 0,
-          "operation": "SET",
-          "target": "SELF"
-        },
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_HAND",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "value": 0,
+        "operation": "SET",
+        "target": "SELF"
+      },
       "filter": {
-      "class": "CardFilter",
-      "attribute": "ARTIFACT",
-      "cardType": "SPELL",
-      "operation": "HAS"
-     }
+        "class": "CardFilter",
+        "attribute": "ARTIFACT",
+        "cardType": "SPELL",
+        "operation": "HAS"
+      }
+    }
   },
   "attributes": {
     "BATTLECRY": true
@@ -49,5 +48,5 @@
     "CUSTOM",
     "WHAT_LIES_BENEATH"
   ],
-  "fileFormatVersion": 1,
- }
+  "fileFormatVersion": 1
+}

@@ -7,27 +7,17 @@
   "description": "Both players draw 2 cards then swap their leftmost and rightmost cards with their opponent.",
   "targetSelection": "NONE",
   "spell": {
-   "class": "MetaSpell",
-   "spells": [
-    {
-	"class": "DrawCardSpell",
-	"value": 1,
-	"targetplayer": "BOTH"
-	},
-    {
-    "class": "BothPlayersSpell",
-    "spell": {
-      "class": "StealCardSpell",
-      "target": "ENEMY_TOP_CARD",
-      "cardLocation": "HAND"
-    }
-	},
-	{
-      "class": "SwapCardsSpell",
-      "target": "LEFTMOST_ENEMY_CARD_HAND",
-      "secondaryTarget": "LEFTMOST_FRIENDLY_CARD_HAND"
-    }
-	]
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 2,
+        "targetPlayer": "BOTH"
+      },
+      {
+        "class": "custom.VolatileWisdomSpell"
+      }
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

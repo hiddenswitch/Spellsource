@@ -1,7 +1,6 @@
 {
   "name": "Melody",
-  "heroPower": "hero_power_melody",
-  "baseManaCost": ,
+  "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "CORAL",
   "rarity": "FREE",
