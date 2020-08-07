@@ -1,0 +1,39 @@
+{
+  "name": "Starmaiden",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "PEACH",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Spellpower +1. Imbue: Gain Spellpower +1.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ImbueSpell", #Noting for Later
+      "spell1": {
+        "class": "ImbueOptionSpell",
+        "name": "Normal",
+        "description": "Don't Imbue."
+      },
+      "spell2": {
+        "class": "ImbueOptionSpell",
+        "name": "Imbue",
+        "description": "Give this unit Spellpower +1.",
+        "spell": {
+          "class": "ModifyAttributeSpell",
+          "value": 1,
+          "attribute": "SPELL_DAMAGE",
+		  "target": "SELF"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "IMBUE": true, #Noting for later
+	"SPELL_DAMAGE": 1
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "set": "CORE"
+}

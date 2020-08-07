@@ -1,0 +1,50 @@
+{
+  "name": "Fire Ring",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "RARE",
+  "description": "Give a unit +2/+2. <b>Imbue</b>: Deal 1 damage to all enemies.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ImbueSpell", #Noting for the future
+    "spell1": {
+      "class": "ImbueOptionSpell",
+      "name": "Normal",
+      "description": "Give a unit +2/+2.",
+	  "spell": {
+        "class": "BuffSpell",
+		"value": 2
+	  }
+    },
+    "spell2": {
+      "class": "ImbueOptionSpell", #Noting for the future
+      "name": "Imbue",
+      "description": "Give a unit +2/+2 and deal 1 damage to all enemies.",
+	  "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "value": 2
+          },
+          {
+            "class": "DamageSpell",
+            "target": "ENEMY_CHARACTERS",
+            "value": 1
+          }
+        ]
+      }
+    },
+	"spell": {
+      "class": "BuffSpell",
+	  "value": 2
+	}
+  },
+  "attributes": {
+    "IMBUE": true #Noting for the future
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

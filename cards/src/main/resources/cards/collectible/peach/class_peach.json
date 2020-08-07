@@ -1,0 +1,11 @@
+{
+  "name": "Witch",
+  "type": "CLASS",
+  "hero": "hero_sancha",
+  "heroClass": "PEACH",
+  "color": [255, 218, 185],
+  "blackText": true,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

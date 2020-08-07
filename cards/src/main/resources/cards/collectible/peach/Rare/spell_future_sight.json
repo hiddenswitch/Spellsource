@@ -1,0 +1,73 @@
+{
+  "name": "Future Sight",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "RARE",
+  "description": "Source and draw a card from your deck. <b>Imbue:</b> Reduce its cost by (3).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ImbueSpell", #Noting for the future
+    "spell1": {
+      "class": "ImbueOptionSpell",
+      "name": "Normal",
+      "description": "Source and draw a card."
+      "class": "DiscoverSpell",
+      "attribute": "RESERVED_BOOLEAN_5",
+      "cardSource": {
+        "class": "DeckSource",
+        "targetPlayer": "SELF"
+      },
+      "exclusive": true,
+      "spell1": {
+        "class": "FromDeckToHandSpell"
+      }
+    },
+    "spell2": {
+      "class": "ImbueOptionSpell", #Noting for the future
+      "name": "Imbue",
+      "description": "Source and draw a card. Reduce its cost by (3).",
+	  "spell": {
+        "class": "DiscoverSpell",
+		"attribute": "RESERVED_BOOLEAN_5",
+		"cardSource": {
+		  "class": "DeckSource",
+		  "targetPlayer": "SELF"
+		},
+		"exclusive": true,
+        "spell1": {
+          "class": "FromDeckToHandSpell",
+          "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "OUTPUT",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 3,
+              "operation": "SUBTRACT"
+            }
+          }
+        }
+      }
+    },
+	"spell": {
+      "class": "DiscoverSpell",
+      "attribute": "RESERVED_BOOLEAN_5",
+      "cardSource": {
+        "class": "DeckSource",
+        "targetPlayer": "SELF"
+      },
+      "exclusive": true,
+      "spell1": {
+        "class": "FromDeckToHandSpell"
+      }
+	}
+  },
+  "attributes": {
+    "DISCOVER": true,
+	"IMBUE": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,73 @@
+{
+  "name": "Mind Games",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "COMMON",
+  "description": "Enemy units cost (6) more next turn. <b>Imbue</b>: Spells instead.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ImbueSpell", #Noting for the future
+    "spell1": {
+      "class": "ImbueOptionSpell",
+      "name": "Normal",
+      "description": "Enemy units cost (6) more.",
+	  "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_PLAYER",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "value": 6,
+          "cardType": "MINION",
+          "expirationTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "OPPONENT"
+          },
+          "operation": "ADD",
+          "targetPlayer": "OPPONENT"
+        }
+	  }
+    },
+    "spell2": {
+      "class": "ImbueOptionSpell", #Noting for the future
+      "name": "Imbue",
+      "description": "Enemy spells cost (6) more.",
+	  "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_PLAYER",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "value": 6,
+          "cardType": "SPELL",
+          "expirationTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "OPPONENT"
+          },
+          "operation": "ADD",
+          "targetPlayer": "OPPONENT"
+        }
+      }
+    },
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "value": 6,
+        "cardType": "MINION",
+        "expirationTrigger": {
+          "class": "TurnEndTrigger",
+          "targetPlayer": "OPPONENT"
+        },
+        "operation": "ADD",
+        "targetPlayer": "OPPONENT"
+      }
+    }
+  },
+  "attributes": {
+    "IMBUE": true #Noting for the future
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

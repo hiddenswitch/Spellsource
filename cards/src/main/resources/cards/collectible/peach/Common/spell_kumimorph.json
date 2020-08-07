@@ -1,0 +1,40 @@
+{
+  "name": "Kumimorph",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "COMMON",
+  "description": "Transform a unit into a 5/5 Kumiho. <b>Imbue</b>: With Spellpower +2.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ImbueSpell", #Noting for the future
+    "spell1": {
+      "class": "ImbueOptionSpell",
+      "name": "Normal",
+      "description": "Transform a unit into a 5/5 Kumiho."
+	  "spell": {
+        "class": "TransformMinionSpell",
+        "card": "token_kumiho"
+	  }
+    },
+    "spell2": {
+      "class": "ImbueOptionSpell", #Noting for the future
+      "name": "Imbue",
+      "description": "Transform a unit into a 5/5 Kumiho with Spellpower +2."
+	  "spell": {
+	    "class": "TransformMinionSpell",
+        "card": "token_kumiho_spellpower"
+      }
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "card": "token_kumiho"
+    }
+  },
+  "attributes": {
+    "IMBUE": true #Noting for the future
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

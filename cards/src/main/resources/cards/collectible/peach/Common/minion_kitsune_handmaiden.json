@@ -1,0 +1,31 @@
+{
+  "name": "Kitsune Handmaiden",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "PEACH",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Opener: Source a Fox Spell.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell"
+      },
+      "cards": [
+        "spell_fox_dance",
+        "spell_fox_fire",
+        "spell_fox_kiss"
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

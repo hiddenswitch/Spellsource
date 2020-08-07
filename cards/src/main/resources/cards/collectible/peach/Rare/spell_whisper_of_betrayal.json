@@ -1,0 +1,17 @@
+{
+  "name": "Whisper of Betrayal",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "RARE",
+  "description": "Choose an enemy unit. It attacks adjacent units.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "FightSpell",
+    "target": "ADJACENT_TO_TARGET",
+    "secondaryTarget": "TARGET"
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

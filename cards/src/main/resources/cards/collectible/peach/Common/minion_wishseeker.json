@@ -1,0 +1,29 @@
+{
+  "name": "Wishseeker",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "PEACH",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "race": "FAE",
+  "description": "At the end of your turn, receive a random Witch spell.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+	"spell": {
+      "class": "ReceiveCardSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "PEACH",
+        "cardType": "SPELL"
+      }
+	}
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

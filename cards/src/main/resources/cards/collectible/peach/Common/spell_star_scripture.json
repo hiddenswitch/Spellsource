@@ -1,0 +1,39 @@
+{
+  "name": "Star Scripture",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "COMMON",
+  "description": "Give a unit +1/+1 for each other spell you've cast this turn.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "value": {
+      "class": "CardCountValueProvider",
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "SPELL"
+          },
+          {
+            "class": "AttributeFilter",
+            "value": {
+              "class": "CurrentTurnValueProvider"
+            },
+            "attribute": "PLAYED_FROM_HAND_OR_DECK",
+            "operation": "EQUAL"
+          }
+        ]
+      },
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

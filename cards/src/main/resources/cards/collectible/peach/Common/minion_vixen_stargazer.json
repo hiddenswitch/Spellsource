@@ -1,0 +1,27 @@
+{
+  "name": "Vixen Stargazer",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "PEACH",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Aftermath: Receive a random Fox Spell.",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "spell_fox_dance",
+      "spell_fox_fire",
+      "spell_fox_kiss"
+    ],
+    "randomTarget": true,
+    "targetPlayer": "SELF"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

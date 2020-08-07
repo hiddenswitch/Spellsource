@@ -1,0 +1,49 @@
+{
+  "name": "Fahrya the Flame",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "PEACH",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "When your spells deal damage, summon a Flame with stats equal to damage dealt.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "cardType": "SPELL",
+      "sourcePlayer": "SELF",
+	  "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "CreateSummonSpell",
+      "name": "Flame",
+      "race": "ELEMENTAL",
+      "spell": {
+        "class": "NullSpell"
+      },
+      "attackBonus": {
+        "class": "AttributeValueProvider",
+        "target": "EVENT_TARGET",
+        "attribute": "LAST_HIT"
+      },
+      "hpBonus": {
+        "class": "AttributeValueProvider",
+        "target": "EVENT_TARGET",
+        "attribute": "LAST_HIT"
+      },
+      "mana": {
+        "class": "AlgebraicValueProvider",
+        "operation": "MINIMUM",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "EVENT_TARGET",
+          "attribute": "LAST_HIT"
+        },
+        "value2": 10
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

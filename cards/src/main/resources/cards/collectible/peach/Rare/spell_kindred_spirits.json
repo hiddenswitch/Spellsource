@@ -1,0 +1,20 @@
+{
+  "name": "Kindred Spirits",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "PEACH",
+  "rarity": "RARE",
+  "description": "Summon $1 5/5 Kumiho. (Increases with Spellpower)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_kumiho",
+    "value": {
+      "class": "SpellDamageValueProvider",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
