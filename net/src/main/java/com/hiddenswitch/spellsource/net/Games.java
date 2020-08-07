@@ -95,8 +95,8 @@ public interface Games extends Verticle {
 	 * @param heroClass The hero class of the secret
 	 * @return A censored secret card.
 	 */
-	static com.hiddenswitch.spellsource.client.models.Entity getCensoredCard(int id, int owner, net.demilich.metastone.game.entities.EntityLocation location, String heroClass) {
-		return new com.hiddenswitch.spellsource.client.models.Entity()
+	static Entity getCensoredCard(int id, int owner, net.demilich.metastone.game.entities.EntityLocation location, String heroClass) {
+		return new Entity()
 				.cardId("hidden")
 				.entityType(CARD)
 				.description("A secret! This card will be revealed when a certain action occurs.")
@@ -176,8 +176,8 @@ public interface Games extends Verticle {
 										return Stream.of(new SpellAction()
 												.sourceId(kv.getKey().sourceReference)
 												.action(ga.getId())
-												.entity(ga instanceof net.demilich.metastone.game.entities.HasCard ?
-														getEntity(workingContext, ((net.demilich.metastone.game.entities.HasCard) ga).getSourceCard(), playerId) : null)
+												.entity(ga instanceof HasCard ?
+														getEntity(workingContext, ((HasCard) ga).getSourceCard(), playerId) : null)
 												.description(ga.getDescription(workingContext, playerId))
 												.actionType(ActionType.valueOf(ga.getActionType().name())));
 									} else {
@@ -210,8 +210,8 @@ public interface Games extends Verticle {
 	 * @param playerId The player requesting the view.
 	 * @return A client-specific view of the event.
 	 */
-	static com.hiddenswitch.spellsource.client.models.GameEvent getClientEvent(net.demilich.metastone.game.events.GameEvent event, int playerId) {
-		var clientEvent = new com.hiddenswitch.spellsource.client.models.GameEvent();
+	static GameEvent getClientEvent(net.demilich.metastone.game.events.GameEvent event, int playerId) {
+		var clientEvent = new GameEvent();
 
 		clientEvent.eventType(event.getEventType());
 
@@ -323,13 +323,13 @@ public interface Games extends Verticle {
 	 * @return A client view game state.
 	 */
 	static GameState getGameState(GameContext workingContext, Player local, Player opponent) {
-		List<com.hiddenswitch.spellsource.client.models.Entity> entities = new ArrayList<>();
+		List<Entity> entities = new ArrayList<>();
 		// Censor the opponent hand and deck entities
 		// All minions are visible
 		// Heroes and players are visible
 		var localPlayerId = local.getId();
 
-		List<com.hiddenswitch.spellsource.client.models.Entity> localHand = new ArrayList<>();
+		List<Entity> localHand = new ArrayList<>();
 		for (var card : local.getHand()) {
 			var entity = getEntity(workingContext, card, localPlayerId);
 			localHand.add(entity);
@@ -339,7 +339,7 @@ public interface Games extends Verticle {
 		entities.addAll(localHand);
 
 		for (var battlefield : Arrays.asList(local.getMinions(), opponent.getMinions())) {
-			List<com.hiddenswitch.spellsource.client.models.Entity> minions = new ArrayList<>();
+			List<Entity> minions = new ArrayList<>();
 			for (var minion : battlefield) {
 				var entity = getEntity(workingContext, minion, localPlayerId);
 				minions.add(entity);
@@ -349,7 +349,7 @@ public interface Games extends Verticle {
 			entities.addAll(minions);
 		}
 
-		List<com.hiddenswitch.spellsource.client.models.Entity> localSecrets = new ArrayList<>();
+		List<Entity> localSecrets = new ArrayList<>();
 		// Add complete information for the local secrets
 		for (var secret : local.getSecrets()) {
 			var entity = getEntity(workingContext, secret, localPlayerId);
@@ -359,9 +359,9 @@ public interface Games extends Verticle {
 		entities.addAll(localSecrets);
 
 		// Add limited information for opposing secrets
-		List<com.hiddenswitch.spellsource.client.models.Entity> opposingSecrets = new ArrayList<>();
+		List<Entity> opposingSecrets = new ArrayList<>();
 		for (var secret : opponent.getSecrets()) {
-			var entity = new com.hiddenswitch.spellsource.client.models.Entity()
+			var entity = new Entity()
 					.id(secret.getId())
 					.entityType(SECRET)
 					.owner(secret.getOwner())
@@ -379,10 +379,10 @@ public interface Games extends Verticle {
 						.collect(toList())
 		);
 
-		List<com.hiddenswitch.spellsource.client.models.Entity> playerEntities = new ArrayList<>();
+		List<Entity> playerEntities = new ArrayList<>();
 		// Create the heroes
 		for (var player : Arrays.asList(local, opponent)) {
-			var playerEntity = new com.hiddenswitch.spellsource.client.models.Entity()
+			var playerEntity = new Entity()
 					.id(player.getId())
 					.name(player.getName())
 					.entityType(PLAYER)
@@ -452,7 +452,7 @@ public interface Games extends Verticle {
 				.map(c -> getEntity(workingContext, c, localPlayerId))
 				.collect(toList()));
 
-		var visibleEntityIds = entities.stream().map(com.hiddenswitch.spellsource.client.models.Entity::getId).collect(Collectors.toSet());
+		var visibleEntityIds = entities.stream().map(Entity::getId).collect(Collectors.toSet());
 
 		// For now, do not send enchantments data
 		/*
@@ -464,11 +464,13 @@ public interface Games extends Verticle {
 		*/
 
 		// Any missing entities will get a stand-in entry
-		entities.addAll(workingContext.getEntities().filter(e -> !visibleEntityIds.contains(e.getId())).map(e -> new com.hiddenswitch.spellsource.client.models.Entity()
-				.id(e.getId())
-				.owner(e.getOwner())
-				.l(toClientLocation(e.getEntityLocation()))
-				.entityType(valueOf(e.getEntityType().toString()))).collect(toList()));
+		entities.addAll(workingContext.getEntities().filter(e -> !visibleEntityIds.contains(e.getId()))
+				.map(e -> new Entity()
+						.id(e.getId())
+						.owner(e.getOwner())
+						.l(toClientLocation(e.getEntityLocation()))
+						.entityType(e.getEntityType()))
+				.collect(toList()));
 
 		// Sort the entities by ID
 		entities.sort(Comparator.comparingInt(Entity::getId));
@@ -491,7 +493,7 @@ public interface Games extends Verticle {
 	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
-	static com.hiddenswitch.spellsource.client.models.Entity getEntity(GameContext workingContext, net.demilich.metastone.game.entities.Entity entity, int localPlayerId) {
+	static Entity getEntity(GameContext workingContext, net.demilich.metastone.game.entities.Entity entity, int localPlayerId) {
 		if (entity == null) {
 			return null;
 		}
@@ -518,7 +520,7 @@ public interface Games extends Verticle {
 	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
-	static com.hiddenswitch.spellsource.client.models.Entity getEntity(GameContext workingContext, Actor actor, int localPlayerId) {
+	static Entity getEntity(GameContext workingContext, Actor actor, int localPlayerId) {
 		if (actor == null) {
 			return null;
 		}
@@ -531,7 +533,7 @@ public interface Games extends Verticle {
 		var owner = workingContext.getPlayer(actor.getOwner());
 
 		var card = actor.getSourceCard();
-		var entity = new com.hiddenswitch.spellsource.client.models.Entity()
+		var entity = new Entity()
 				.description(actor.getDescription(workingContext, workingContext.getPlayer(actor.getOwner())))
 				.name(actor.getName())
 				.id(actor.getId())
@@ -609,7 +611,7 @@ public interface Games extends Verticle {
 	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
-	static com.hiddenswitch.spellsource.client.models.Entity getEntity(GameContext workingContext, Enchantment enchantment, int localPlayerId) {
+	static Entity getEntity(GameContext workingContext, Enchantment enchantment, int localPlayerId) {
 		if (enchantment == null) {
 			return null;
 		}
@@ -652,12 +654,12 @@ public interface Games extends Verticle {
 	 * @return A client entity view.
 	 */
 	@Suspendable
-	static com.hiddenswitch.spellsource.client.models.Entity getEntity(GameContext workingContext, Card card, int localPlayerId) {
+	static Entity getEntity(GameContext workingContext, Card card, int localPlayerId) {
 		if (card == null) {
 			return null;
 		}
 
-		var entity = new com.hiddenswitch.spellsource.client.models.Entity()
+		var entity = new Entity()
 				.entityType(CARD)
 				.name(card.getName())
 				.id(card.getId())
@@ -680,8 +682,8 @@ public interface Games extends Verticle {
 				entity.manaCost(card.getBaseManaCost());
 			}
 			owningPlayer = workingContext.getPlayer(card.getOwner());
-
 			description = card.getDescription(workingContext, owningPlayer);
+			entity.owner(card.getOwner());
 		} else {
 			entity.playable(false);
 			entity.manaCost(card.getBaseManaCost());
@@ -692,7 +694,6 @@ public interface Games extends Verticle {
 		entity.description(description.replace("$", "").replace("#", "")
 				.replace("[", "").replace("]", ""));
 
-		entity.owner(card.getOwner());
 		entity.cardSet(Objects.toString(card.getCardSet()));
 		entity.rarity(card.getRarity());
 		entity.l(Games.toClientLocation(card.getEntityLocation()));
@@ -820,9 +821,9 @@ public interface Games extends Verticle {
 	 * @param location A game engine entity location.
 	 * @return A client view entity location.
 	 */
-	static com.hiddenswitch.spellsource.client.models.EntityLocation toClientLocation(net.demilich.metastone.game.entities.EntityLocation location) {
-		return new com.hiddenswitch.spellsource.client.models.EntityLocation()
-				.z(com.hiddenswitch.spellsource.client.models.EntityLocation.ZEnum.valueOf(location.getZone().getSerialized()))
+	static EntityLocation toClientLocation(net.demilich.metastone.game.entities.EntityLocation location) {
+		return new EntityLocation()
+				.z(EntityLocation.ZEnum.valueOf(location.getZone().getSerialized()))
 				.i(location.getIndex());
 	}
 
@@ -906,7 +907,7 @@ public interface Games extends Verticle {
 
 	/**
 	 * Uses information from enchantments like {@link net.demilich.metastone.game.spells.aura.BuffAura} and {@link
-	 * net.demilich.metastone.game.spells.trigger.WhereverTheyAreEnchantment} to add the appropriate hand buff stats.
+	 * WhereverTheyAreEnchantment} to add the appropriate hand buff stats.
 	 *
 	 * @param context
 	 * @param playerId

@@ -6,6 +6,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.StrandLocalRandom;
 import co.paralleluniverse.strands.SuspendableAction1;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
+import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.net.Games;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.client.models.*;
@@ -66,7 +67,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final Server server;
 	private final TimerId turnTimer;
 
-	private com.hiddenswitch.spellsource.common.GameState lastStateSent;
+	private GameState lastStateSent;
 	private Deque<GameEvent> powerHistory = new ArrayDeque<>();
 	private boolean inboundMessagesClosed;
 	private boolean elapsed;
@@ -421,7 +422,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				if (!getRequests().isEmpty()) {
 					throw new RuntimeException("requesting action outside resume() loop");
 				}
-				com.hiddenswitch.spellsource.common.GameState state = context.getGameStateCopy();
+				GameState state = context.getGameStateCopy();
 				getRequests().add(request);
 				onRequestAction(id, state, actions);
 			}
@@ -540,7 +541,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	@Suspendable
-	public void sendNotification(Notification event, com.hiddenswitch.spellsource.common.GameState gameState) {
+	public void sendNotification(Notification event, GameState gameState) {
 		if (!event.isClientInterested()) {
 			return;
 		}
@@ -556,7 +557,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			// Build a touch event
 			final int id = touchingNotification.getEntityReference().getId();
 			final ServerToClientMessage message = new ServerToClientMessage()
-					.messageType(com.hiddenswitch.spellsource.client.models.MessageType.TOUCH)
+					.messageType(MessageType.TOUCH)
 					// Pack touch data into a game event object
 					.event(new GameEvent()
 							.eventType(touchingNotification.isTouched() ? GameEvent.EventTypeEnum.ENTITY_TOUCHED : GameEvent.EventTypeEnum.ENTITY_UNTOUCHED));
@@ -572,12 +573,12 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			return;
 		}
 
-		final com.hiddenswitch.spellsource.common.GameState state = gameState;
+		final GameState state = gameState;
 		GameContext workingContext = GameContext.fromState(state);
 		ServerToClientMessage message = new ServerToClientMessage()
-				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_GAME_EVENT)
+				.messageType(MessageType.ON_GAME_EVENT)
 				.changes(getChangeSet(state))
-				.gameState(getClientGameState(state));
+				.gameState(getClientGameState(playerId, state));
 
 		if (event instanceof net.demilich.metastone.game.events.GameEvent) {
 			message.event(Games.getClientEvent((net.demilich.metastone.game.events.GameEvent) event, playerId));
@@ -600,7 +601,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		} else if (event instanceof GameAction) {
 			var action = (GameAction) event;
 			final net.demilich.metastone.game.entities.Entity sourceEntity = event.getSource(workingContext);
-			com.hiddenswitch.spellsource.client.models.Entity source = Games.getEntity(workingContext, sourceEntity, playerId);
+			Entity source = Games.getEntity(workingContext, sourceEntity, playerId);
 
 			if (sourceEntity.getEntityType() == EntityType.CARD) {
 				Card card = (Card) sourceEntity;
@@ -611,9 +612,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				}
 			}
 
-			List<com.hiddenswitch.spellsource.client.models.Entity> targets = event.getTargets(workingContext, sourceEntity.getOwner())
+			List<Entity> targets = event.getTargets(workingContext, sourceEntity.getOwner())
 					.stream().map(e -> Games.getEntity(workingContext, e, playerId)).collect(Collectors.toList());
-			final com.hiddenswitch.spellsource.client.models.Entity target = targets.size() > 0 ? targets.get(0) : null;
+			final Entity target = targets.size() > 0 ? targets.get(0) : null;
 			message.event(new GameEvent()
 					.eventType(GameEvent.EventTypeEnum.PERFORMED_GAME_ACTION)
 					.performedGameAction(new GameEventPerformedGameAction()
@@ -643,18 +644,18 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	@Suspendable
-	public void sendGameOver(com.hiddenswitch.spellsource.common.GameState state, Player winner) {
+	public void sendGameOver(GameState state, Player winner) {
 		flush();
 		if (state == null || lastStateSent == null) {
 			this.gameOver = new GameOver()
 					.localPlayerWon(false);
 			sendMessage(new ServerToClientMessage()
-					.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_GAME_END)
+					.messageType(MessageType.ON_GAME_END)
 					.gameOver(gameOver));
 			return;
 		}
 
-		com.hiddenswitch.spellsource.client.models.GameState gameState = getClientGameState(state);
+		com.hiddenswitch.spellsource.client.models.GameState gameState = getClientGameState(playerId, state);
 		gameOver = new GameOver();
 		if (winner == null) {
 			gameOver.localPlayerWon(false)
@@ -664,7 +665,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					.winningPlayerId(winner.getId());
 		}
 		sendMessage(new ServerToClientMessage()
-				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_GAME_END)
+				.messageType(MessageType.ON_GAME_END)
 				.changes(getChangeSet(state))
 				.gameState(gameState)
 				.gameOver(gameOver));
@@ -683,19 +684,19 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	@Suspendable
-	public void onUpdate(com.hiddenswitch.spellsource.common.GameState state) {
-		final com.hiddenswitch.spellsource.client.models.GameState gameState = getClientGameState(state);
+	public void onUpdate(GameState state) {
+		final com.hiddenswitch.spellsource.client.models.GameState gameState = getClientGameState(playerId, state);
 		if (needsPowerHistory) {
 			gameState.powerHistory(new ArrayList<>(powerHistory));
 			needsPowerHistory = false;
 		}
 		sendMessage(new ServerToClientMessage()
-				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_UPDATE)
+				.messageType(MessageType.ON_UPDATE)
 				.changes(getChangeSet(state))
 				.gameState(gameState));
 	}
 
-	private com.hiddenswitch.spellsource.client.models.GameState getClientGameState(com.hiddenswitch.spellsource.common.GameState state) {
+	public static com.hiddenswitch.spellsource.client.models.GameState getClientGameState(int playerId, GameState state) {
 		GameContext simulatedContext = new GameContext();
 		simulatedContext.setGameState(state);
 
@@ -718,7 +719,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	@Suspendable
-	public void onRequestAction(String id, com.hiddenswitch.spellsource.common.GameState state, List<GameAction> availableActions) {
+	public void onRequestAction(String id, GameState state, List<GameAction> availableActions) {
 		flush();
 		// Set the ids on the available actions
 		for (int i = 0; i < availableActions.size(); i++) {
@@ -727,9 +728,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 		sendMessage(new ServerToClientMessage()
 				.id(id)
-				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_REQUEST_ACTION)
+				.messageType(MessageType.ON_REQUEST_ACTION)
 				.changes(getChangeSet(state))
-				.gameState(getClientGameState(state))
+				.gameState(getClientGameState(playerId, state))
 				.actions(Games.getClientActions(GameContext.fromState(state), availableActions, playerId)));
 	}
 
@@ -746,15 +747,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 */
 	@Override
 	@Suspendable
-	public void onMulligan(String id, com.hiddenswitch.spellsource.common.GameState state, List<Card> cards, int playerId) {
+	public void onMulligan(String id, GameState state, List<Card> cards, int playerId) {
 		flush();
 		final GameContext simulatedContext = new GameContext();
 		simulatedContext.setGameState(state);
 		sendMessage(new ServerToClientMessage()
 				.id(id)
-				.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_MULLIGAN)
+				.messageType(MessageType.ON_MULLIGAN)
 				.changes(getChangeSet(state))
-				.gameState(getClientGameState(state))
+				.gameState(getClientGameState(playerId, state))
 				.startingCards(cards.stream().map(c -> Games.getEntity(simulatedContext, c, playerId)).collect(Collectors.toList())));
 	}
 
@@ -798,7 +799,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 	}
 
-	private EntityChangeSet getChangeSet(com.hiddenswitch.spellsource.common.GameState current) {
+	private EntityChangeSet getChangeSet(GameState current) {
 		EntityChangeSet changes = Games.computeChangeSet(current);
 		lastStateSent = current;
 		return changes;
