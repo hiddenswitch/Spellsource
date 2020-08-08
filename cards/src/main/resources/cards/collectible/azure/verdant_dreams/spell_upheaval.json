@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AZURE",
   "rarity": "RARE",
-  "description": "Deal $3, then $2, then $1 damage to all minions.",
+  "description": "Deal $3, then $2, then $1 damage to all units.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

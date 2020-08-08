@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Destroy a minion you summoned.",
+  "description": "Opener: Destroy a unit you summoned.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

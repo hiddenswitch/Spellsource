@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: Gain +1/+1 for each Marked minion.",
+  "description": "Opener: Gain +1/+1 for each Marked unit.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

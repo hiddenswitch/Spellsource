@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Hidden",
+  "description": "Hidden.",
   "attributes": {
     "STEALTH": true
   },

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Deal $6 damage. Supremacy: Draw 2 cards.",
+  "description": "Deal $6 damage. Supremacy: Draw 2.",
   "targetSelection": "ANY",
   "spell": {
     "class": "ConditionalEffectSpell",

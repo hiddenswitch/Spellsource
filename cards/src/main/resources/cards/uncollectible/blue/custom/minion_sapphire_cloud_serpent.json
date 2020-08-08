@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Opener: If you're holding a Dragon, draw two cards.",
+  "description": "Opener: If you're holding a Dragon, draw 2.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

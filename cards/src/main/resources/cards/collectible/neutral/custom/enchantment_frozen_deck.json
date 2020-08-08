@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Can't draw cards until after you've finished your next full turn",
+  "description": "Can't draw until after you've finished your next full turn",
   "trigger": {
     "countUntilCast": 3,
     "eventTrigger": {

@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 9,
   "rarity": "LEGENDARY",
-  "description": "Aftermath: Stun all minions. Any already frozen minions are destroyed instead.",
+  "description": "Aftermath: Stun all units. Any already frozen units are destroyed instead.",
   "deathrattle": {
     "class": "EitherOrSpell",
     "target": "ALL_MINIONS",

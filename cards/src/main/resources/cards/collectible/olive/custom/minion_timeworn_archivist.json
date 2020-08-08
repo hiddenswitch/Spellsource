@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener and Aftermath: Draw a card.",
+  "description": "Opener and Aftermath: Draw.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

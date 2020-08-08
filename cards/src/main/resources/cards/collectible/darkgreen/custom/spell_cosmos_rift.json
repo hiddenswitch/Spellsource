@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "Summon a random 1, 3 and 5-Cost minion from your deck.",
+  "description": "Summon a random 1, 3 and 5-Cost unit from your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

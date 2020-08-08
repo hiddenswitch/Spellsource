@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",
-  "description": "Choose a minion. It cannot be targeted by spells or Skills.",
+  "description": "Choose a unit. It cannot be targeted by spells or Skills.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddAttributeSpell",

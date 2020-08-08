@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "EPIC",
-  "description": "Draw a Hidden minion. If your hand has duplicates, draw 3 instead.",
+  "description": "Draw a Hidden unit. If your hand has duplicates, draw 3 instead.",
   "targetSelection": "NONE",
   "spell": {
     "class": "EitherOrSpell",

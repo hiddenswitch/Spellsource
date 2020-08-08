@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "DEMON",
-  "description": "Whenever another allied minion survives damage, give it +2 Attack.",
+  "description": "Whenever another allied unit survives damage, give it +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

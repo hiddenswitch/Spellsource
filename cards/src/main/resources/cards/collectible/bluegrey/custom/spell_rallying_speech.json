@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "COMMON",
-  "description": "Give minions in your hand and battlefield +1 Attack.",
+  "description": "Give units in your hand and battlefield +1 Attack.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

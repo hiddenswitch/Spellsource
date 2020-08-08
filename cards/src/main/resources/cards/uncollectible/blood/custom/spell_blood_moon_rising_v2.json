@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "RARE",
-  "description": "All minions' Attack is equal to their Health this turn.",
+  "description": "All units' Attack is equal to their Health this turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddAttributeSpell",

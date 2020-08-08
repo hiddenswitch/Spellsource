@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 3,
   "rarity": "LEGENDARY",
-  "description": "Whenever you play a card, add a 0-Cost spell to your hand. At the end of your turn, destroy this.",
+  "description": "Whenever you play a card, receive a 0-Cost spell. At the end of your turns, destroy this.",
   "triggers": [
     {
       "eventTrigger": {

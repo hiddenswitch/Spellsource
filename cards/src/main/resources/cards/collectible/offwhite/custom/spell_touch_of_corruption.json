@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OFFWHITE",
   "rarity": "COMMON",
-  "description": "Take control of an enemy minion.",
+  "description": "Take control of an enemy unit.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "MindControlSpell"

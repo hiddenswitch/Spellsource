@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "RARE",
-  "description": "Restore 3 Health. If you've cast another spell this turn, draw a card.",
+  "description": "Restore 3 Health. If you've cast another spell this turn, draw.",
   "targetSelection": "ANY",
   "spell": {
     "class": "ConditionalEffectSpell",

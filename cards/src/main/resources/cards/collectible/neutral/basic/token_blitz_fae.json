@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "FAE",
-  "description": "Charge",
+  "description": "Charge.",
   "attributes": {
     "CHARGE": true
   },

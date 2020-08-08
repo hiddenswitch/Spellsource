@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "Summon the highest-Cost minion in your deck.",
+  "description": "Summon the highest-Cost unit in your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "RecruitSpell",

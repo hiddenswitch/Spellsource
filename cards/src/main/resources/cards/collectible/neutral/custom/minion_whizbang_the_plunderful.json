@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Opener: Swap the Cost and Health of all minions in your hand.",
+  "description": "Opener: Swap the Cost and Health of all units in your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

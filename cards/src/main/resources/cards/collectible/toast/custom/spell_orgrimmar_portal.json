@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "COMMON",
-  "description": "Roast 7 cards. Summon a random 7-Cost minion.",
+  "description": "Roast 7 cards. Summon a random 7-Cost unit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

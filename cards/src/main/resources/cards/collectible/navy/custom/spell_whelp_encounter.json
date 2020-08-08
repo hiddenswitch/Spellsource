@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",
-  "description": "Summon two 1/1 Whelps for your opponent. Draw 4 cards.",
+  "description": "Summon two 1/1 Whelps for your opponent. Draw 4.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

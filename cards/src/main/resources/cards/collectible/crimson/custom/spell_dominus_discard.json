@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "FREE",
-  "description": "Discard your lowest-cost card. Restore #5 Health to your Champion.",
+  "description": "Discard your lowest-cost card. Restore #5 Health to your champion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

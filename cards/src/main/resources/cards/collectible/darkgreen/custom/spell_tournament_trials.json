@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Choose a minion. Summon two 1/1 Tentacles to attack it.",
+  "description": "Choose a unit. Summon two 1/1 Tentacles to attack it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "SummonSpell",

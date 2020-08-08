@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: Reveal a minion in each deck. If yours costs less, destroy it, gain its stats and text.",
+  "description": "Opener: Reveal a unit in each deck. If yours costs less, destroy it, gain its stats and text.",
   "battlecry": {
     "spell": {
       "class": "JoustSpell",

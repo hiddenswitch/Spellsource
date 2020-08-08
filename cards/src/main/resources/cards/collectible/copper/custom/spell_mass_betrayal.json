@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "COPPER",
   "rarity": "EPIC",
-  "description": "Force each enemy minion to attack another random enemy minion.",
+  "description": "Force each enemy unit to attack another random enemy unit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DuelSpell",

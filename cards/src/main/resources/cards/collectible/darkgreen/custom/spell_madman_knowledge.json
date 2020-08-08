@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Take 2 damage. Draw a card.",
+  "description": "Take 2 damage. Draw.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Opener: Destroy your other minions. Gain +2/+2 for each destroyed.",
+  "description": "Opener: Destroy your other units. Gain +2/+2 for each destroyed.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

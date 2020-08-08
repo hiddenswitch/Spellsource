@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "COMMON",
-  "description": "Deal $3 damage to all enemy minions. Reservoir (20+): Restore #8 Health to your champion.",
+  "description": "Deal $3 damage to all enemy units. Reservoir (20+): Restore #8 Health to your champion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ReservoirSpell",

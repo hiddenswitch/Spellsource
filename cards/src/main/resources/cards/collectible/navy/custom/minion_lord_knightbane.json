@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Opener: Enemy minions take double damage this game",
+  "description": "Opener: Enemy units take double damage this game",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

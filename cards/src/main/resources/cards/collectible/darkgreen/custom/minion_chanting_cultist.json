@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Opener: If your Big Guy has at least 10 Attack, draw 10 cards.",
+  "description": "Opener: If your Big Guy has at least 10 Attack, draw 10.",
   "battlecry": {
     "condition": {
       "class": "OrCondition",

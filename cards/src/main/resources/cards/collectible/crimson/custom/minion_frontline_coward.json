@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: Discard a card. Give adjacent minions +1/+1 and Guard.",
+  "description": "Opener: Discard a card. Give adjacent units +1/+1 and Guard.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

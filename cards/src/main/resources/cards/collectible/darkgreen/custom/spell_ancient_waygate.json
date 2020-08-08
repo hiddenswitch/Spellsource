@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Deal $2 damage to all minions. Summon a random 2-Cost minion.",
+  "description": "Deal $2 damage to all units. Summon a random 2-Cost unit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

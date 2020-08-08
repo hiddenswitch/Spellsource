@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Opener: Deal 5 damage to all other minions.",
+  "description": "Opener: Deal 5 damage to all other units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

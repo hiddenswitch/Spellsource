@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "RARE",
-  "description": "Source a minion on curve.",
+  "description": "Source a unit on curve.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

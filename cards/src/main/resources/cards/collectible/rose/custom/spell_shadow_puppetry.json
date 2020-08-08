@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "FREE",
-  "description": "Choose an enemy minion. Force it to attack adjacent minions.",
+  "description": "Choose an enemy unit. Force it to attack adjacent units.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "FightSpell",

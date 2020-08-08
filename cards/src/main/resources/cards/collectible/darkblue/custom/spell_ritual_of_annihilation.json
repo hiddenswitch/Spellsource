@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "FREE",
-  "description": "Destroy an enemy minion and [X random enemy minions].",
+  "description": "Destroy an enemy unit and [X random enemy units].",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -40,8 +40,8 @@
         "target": "SELF",
         "attribute": "RESERVED_INTEGER_1"
       },
-      "description1": " random enemy minion",
-      "description2": " random enemy minions"
+      "description1": " random enemy unit",
+      "description2": " random enemy units"
     }
   ]
 }

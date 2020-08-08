@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Has +2 Attack while you have an Aftermath minion.",
+  "description": "Has +2 Attack while you have an Aftermath unit.",
   "aura": {
     "class": "BuffAura",
     "target": "SELF",

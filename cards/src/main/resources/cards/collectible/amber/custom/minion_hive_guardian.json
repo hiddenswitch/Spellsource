@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "Adjacent minions have +1/+1.",
+  "description": "Adjacent units have +1/+1.",
   "aura": {
     "class": "BuffAura",
     "target": "ADJACENT_MINIONS",

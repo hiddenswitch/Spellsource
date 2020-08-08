@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Guard. Whenever one of your other minions dies, gain +1/+1.",
+  "description": "Guard. Whenever one of your other units dies, gain +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "RARE",
-  "description": "Summon a minion from your deck. Stun it",
+  "description": "Summon a unit from your deck. Stun it",
   "targetSelection": "NONE",
   "spell": {
     "class": "RecruitSpell",

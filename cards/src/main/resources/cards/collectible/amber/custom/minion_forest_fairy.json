@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Source a copy of a 1-Attack minion in your deck.",
+  "description": "Opener: Source a copy of a 1-Attack unit in your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

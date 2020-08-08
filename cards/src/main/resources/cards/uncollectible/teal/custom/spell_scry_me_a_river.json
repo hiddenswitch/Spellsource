@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "FREE",
-  "description": "For each card added to your deck this turn, draw a card.",
+  "description": "For each card added to your deck this turn, draw.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

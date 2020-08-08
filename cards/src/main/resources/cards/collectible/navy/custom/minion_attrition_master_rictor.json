@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Your minions have Attack equal to their Health.",
+  "description": "Your units have Attack equal to their Health.",
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_MINIONS",

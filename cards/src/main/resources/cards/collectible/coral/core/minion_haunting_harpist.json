@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "SPIRIT",
-  "description": "Opener: If this has at least 3 Attack, give all enemy minions -3 Attack for one round.",
+  "description": "Opener: If this has at least 3 Attack, give all enemy units -3 Attack for one round.",
   "battlecry": {
     "condition": {
       "class": "AnyMatchFilterCondition",

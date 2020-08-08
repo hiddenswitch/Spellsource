@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "FREE",
-  "description": "Aftermath: Your opponent draws 3 cards.",
+  "description": "Aftermath: Your opponent draws 3.",
   "deathrattle": {
     "class": "DrawCardSpell",
     "value": 3,

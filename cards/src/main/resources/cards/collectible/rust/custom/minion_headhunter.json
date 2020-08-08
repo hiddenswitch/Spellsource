@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 9,
   "rarity": "EPIC",
-  "description": "Supremacy: Receive a copy of the destroyed minion. Remove it at the end of the turn.",
+  "description": "Supremacy: Receive a copy of the destroyed unit. Remove it at the end of the turn.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

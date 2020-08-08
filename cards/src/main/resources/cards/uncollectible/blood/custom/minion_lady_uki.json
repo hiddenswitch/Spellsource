@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Your weapon effects cast twice.",
+  "description": "Your item effects cast twice.",
   "aura": {
     "class": "SpellEffectsCastTwiceAura",
     "target": "FRIENDLY_CARDS",

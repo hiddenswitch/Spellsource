@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Aftermath: Give a random minion in your hand and deck +2/+2.",
+  "description": "Aftermath: Give a random unit in your hand and deck +2/+2.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

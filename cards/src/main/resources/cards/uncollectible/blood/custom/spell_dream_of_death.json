@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "LEGENDARY",
-  "description": "Set your remaining Health to 1. Drain the Health of all minions.",
+  "description": "Set your remaining Health to 1. Drain the Health of all units.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

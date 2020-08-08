@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Dash. Opener: Gain +1 Attack for each enemy minion.",
+  "description": "Dash. Opener: Gain +1 Attack for each enemy unit.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

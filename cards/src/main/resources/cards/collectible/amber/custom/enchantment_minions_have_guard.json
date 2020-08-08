@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "Your minions have Guard.",
+  "description": "Your units have Guard.",
   "attributes": {},
   "collectible": false,
   "set": "CUSTOM",

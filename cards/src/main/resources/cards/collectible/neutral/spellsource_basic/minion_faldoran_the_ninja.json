@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Hidden, Toxic. Aftermath: Draw a card",
+  "description": "Hidden, Toxic. Aftermath: Draw",
   "deathrattle": {
     "class": "DrawCardSpell",
     "value": 1

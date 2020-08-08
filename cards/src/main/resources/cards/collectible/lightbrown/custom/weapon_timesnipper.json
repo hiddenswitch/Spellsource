@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 2,
   "rarity": "RARE",
-  "description": "<b>Decay</b>. Opener: Destroy a minion. Aftermath: Resummon it.",
+  "description": "<b>Decay</b>. Opener: Destroy a unit. Aftermath: Resummon it.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "EPIC",
-  "description": "Force the left and rightmost enemy minions to attack their neighbour.",
+  "description": "Force the left and rightmost enemy units to attack their neighbour.",
   "targetSelection": "NONE",
   "spell": {
     "class": "custom.SowDistrustSpell"

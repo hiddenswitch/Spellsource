@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Opener: If you're holding a Dragon, gain \"Whenever you summon a Silver Hand Recruit, deal 2 damage to all enemies.\"",
+  "description": "Opener: If you're holding a Dragon, gain \"Whenever you summon a Silver Hand Recruit, deal 2 damage to all enemies\".",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

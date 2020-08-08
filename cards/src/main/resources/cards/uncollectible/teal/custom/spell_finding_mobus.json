@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "RARE",
-  "description": "Shuffle a 7/7 Whale Shark with Guard into your deck. Draw a card.",
+  "description": "Shuffle a 7/7 Whale Shark with Guard into your deck. Draw.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

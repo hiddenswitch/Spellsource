@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "COMMON",
-  "description": "Choose a minion. Whenever it attacks, summon a 1/1 Whelp.",
+  "description": "Choose a unit. Whenever it attacks, summon a 1/1 Whelp.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",

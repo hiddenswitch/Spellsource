@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Opener: Play all cards from your deck that didn't start in your deck.",
+  "description": "Opener: Play every card in your deck that didn't start there.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

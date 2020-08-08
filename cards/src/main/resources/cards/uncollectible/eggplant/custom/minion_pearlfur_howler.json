@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: Shuffle a minion that costs (1) or less into your opponent's deck.",
+  "description": "Opener: Shuffle a unit that costs (1) or less into your opponent's deck.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

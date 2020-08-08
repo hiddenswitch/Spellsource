@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Blitz. Can't attack minions with more Attack.",
+  "description": "Blitz. Can't attack units with more Attack.",
   "aura": {
     "class": "PhysicalAttackTargetOverrideAura",
     "target": "PHYSICAL_ATTACK_TARGETS",

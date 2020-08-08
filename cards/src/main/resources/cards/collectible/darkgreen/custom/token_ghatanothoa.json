@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Opener: Your Skill becomes \"Deal 2 damage or restore 4 Health. Swaps at each use.\"",
+  "description": "Opener: Your Skill becomes \"Deal 2 damage or restore 4 Health. Swaps at each use\".",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

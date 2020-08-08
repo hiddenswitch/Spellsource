@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "SPIRIT",
-  "description": "Aftermath: Restore #4 health to your champion.",
+  "description": "Aftermath: Restore #4 Health to your champion.",
   "deathrattle": {
     "class": "HealSpell",
     "target": "FRIENDLY_HERO",

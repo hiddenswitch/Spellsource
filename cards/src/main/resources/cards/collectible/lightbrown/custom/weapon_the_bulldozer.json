@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 3,
   "rarity": "LEGENDARY",
-  "description": "<b>Decay<b>. At the end of your turns, draw 5 cards.",
+  "description": "<b>Decay<b>. At the end of your turns, draw 5.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

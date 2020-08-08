@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "EPIC",
-  "description": "Choose a minion. It Drains the Health of the minions adjacent to it.",
+  "description": "Choose a unit. It Drains the Health of the units adjacent to it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "DrainSpell",

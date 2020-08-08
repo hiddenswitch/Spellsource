@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "COMMON",
-  "description": "Destroy a minion. Costs (1) less for each card in your hand.",
+  "description": "Destroy a unit. Costs (1) less for each card in your hand.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "DestroySpell"

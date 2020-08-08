@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "RARE",
-  "description": "Source a minion from other classes that costs (7) or more. Summon it.",
+  "description": "Source a unit from other classes that costs (7) or more. Summon it.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

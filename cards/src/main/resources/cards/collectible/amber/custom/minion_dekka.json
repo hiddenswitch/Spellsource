@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "After this attacks and kills a minion, gain its Attack, Health, and card text.",
+  "description": "After this attacks and kills a unit, gain its Attack, Health, and card text.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Guard. Opener: Draw a card.",
+  "description": "Guard. Opener: Draw.",
   "battlecry": {
     "spell": {
       "class": "DrawCardSpell"

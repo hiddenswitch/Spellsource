@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Opener: Destroy a Fae to draw a card.",
+  "description": "Opener: Destroy a Fae to draw.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

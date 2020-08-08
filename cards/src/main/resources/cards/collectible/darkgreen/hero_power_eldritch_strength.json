@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Passive Skill: Whenever you play a card, draw a card.",
+  "description": "Passive Skill: Whenever you play a card, draw.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",

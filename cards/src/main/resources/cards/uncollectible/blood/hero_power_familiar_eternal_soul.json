@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "BLOOD",
   "rarity": "FREE",
-  "description": "Give a minion or your champion +2 Health.",
+  "description": "Give a unit or your champion +2 Health.",
   "targetSelection": "FRIENDLY_HERO_AND_MINIONS",
   "spell": {
     "class": "HeroPowerSpell",

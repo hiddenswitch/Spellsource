@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "<b>Opener:</b> Give an enemy minion -2/-2. Its Attack cannot go below 1.",
+  "description": "<b>Opener:</b> Give an enemy unit -2/-2. Its Attack cannot go below 1.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {

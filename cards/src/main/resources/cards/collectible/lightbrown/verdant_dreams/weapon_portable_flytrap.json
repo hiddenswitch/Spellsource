@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 3,
   "rarity": "COMMON",
-  "description": "<b>Decay<b>. After a minion attacks your champion, destroy the attacker.",
+  "description": "<b>Decay<b>. After a unit attacks your champion, destroy the attacker.",
   "triggers": [
     {
       "eventTrigger": {

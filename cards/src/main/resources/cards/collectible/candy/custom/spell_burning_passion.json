@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CANDY",
   "rarity": "EPIC",
-  "description": "Give an allied minion +4/+4, then deal damage equal to its Attack to a random enemy minion.",
+  "description": "Give an allied unit +4/+4, then deal damage equal to its Attack to a random enemy unit.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

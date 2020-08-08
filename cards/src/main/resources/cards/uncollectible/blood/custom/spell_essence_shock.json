@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "EPIC",
-  "description": "Deal [0] damage to a minion. (Increases by the Health of minions in your hand)",
+  "description": "Deal [0] damage to a unit. (Increases by the Health of units in your hand)",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "DamageSpell",

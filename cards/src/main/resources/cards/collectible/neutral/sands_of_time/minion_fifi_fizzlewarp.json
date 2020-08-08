@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "When the game starts, if your other minions are textless, give each one a random minion's effect.",
+  "description": "Start of Game: If all your other units are textless, give each one a random unit's effect.",
   "collectible": true,
   "set": "SANDS_OF_TIME",
   "fileFormatVersion": 1,

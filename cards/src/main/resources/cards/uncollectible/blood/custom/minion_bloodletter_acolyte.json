@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "Whenever this minion takes damage, give all minions in your hand +1 Health.",
+  "description": "Whenever this unit takes damage, give all units in your hand +1 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

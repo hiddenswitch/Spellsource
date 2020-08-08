@@ -6,7 +6,7 @@
   "damage": 5,
   "durability": 3,
   "rarity": "LEGENDARY",
-  "description": "Aftermath: Summon every minion killed by this weapon.",
+  "description": "Aftermath: Summon every unit killed by this item.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "LEGENDARY",
   "race": "MECH",
-  "description": "Opener: Infect an allied minion, giving it +2/+2. When it dies, infect another random one.",
+  "description": "Opener: Infect an allied unit, giving it +2/+2. When it dies, infect another random one.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

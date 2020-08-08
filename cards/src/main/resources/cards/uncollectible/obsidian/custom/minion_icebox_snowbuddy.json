@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Opener: Deal damage equal to this minion's Attack randomly split among all enemies.",
+  "description": "Opener: Deal damage equal to this unit's Attack randomly split among all enemies.",
   "battlecry": {
     "spell": {
       "class": "MissilesSpell",

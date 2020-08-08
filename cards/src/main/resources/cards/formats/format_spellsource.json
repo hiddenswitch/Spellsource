@@ -8,7 +8,7 @@
     "conditions": [
       {
         "class": "ComparisonCondition",
-        "description": "Decks must have 30 cards",
+        "description": "Decks must have 30 cards.",
         "operation": "EQUAL",
         "value1": {
           "class": "EntityCountValueProvider",
@@ -18,7 +18,7 @@
       },
       {
         "class": "DeckContainsCondition",
-        "description": "Decks must not contain cards from other classes",
+        "description": "Decks must not contain cards from other classes.",
         "cardFilter": {
           "class": "AndFilter",
           "filters": [
@@ -47,7 +47,7 @@
         "class": "NumberOfCopiesCondition",
         "target": "FRIENDLY_DECK",
         "value": 1,
-        "description": "Decks can only have 1 copy of Legendary cards",
+        "description": "Decks can only have 1 copy of Legendary cards.",
         "filter": {
           "class": "CardFilter",
           "rarity": "LEGENDARY"

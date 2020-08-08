@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Guard",
+  "description": "Guard.",
   "attributes": {
     "TAUNT": true
   },

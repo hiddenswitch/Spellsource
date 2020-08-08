@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BRASS",
   "rarity": "FREE",
-  "description": "Give a minion +4/+1.",
+  "description": "Give a unit +4/+1.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",

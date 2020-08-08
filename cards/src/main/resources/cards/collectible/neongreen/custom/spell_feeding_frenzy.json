@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "RARE",
-  "description": "Destroy an allied minion. Distribute its stats randomly among your other minions. Draw a card.",
+  "description": "Destroy an allied unit. Distribute its stats randomly among your other units. Draw.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "COMMON",
-  "description": "Give an allied minion and its copies +2 attack, wherever they are.",
+  "description": "Give an allied unit and its copies +2 attack, wherever they are.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "WhereverTheyAreSpell",

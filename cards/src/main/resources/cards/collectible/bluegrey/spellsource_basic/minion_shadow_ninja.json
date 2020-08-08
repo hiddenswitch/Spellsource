@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Hidden. Opener: Give another allied Hidden minion Dodge.",
+  "description": "Hidden. Opener: Give another allied Hidden unit Dodge.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

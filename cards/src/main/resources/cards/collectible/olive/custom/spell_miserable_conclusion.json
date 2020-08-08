@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OLIVE",
   "rarity": "EPIC",
-  "description": "Destroy all minions except the opponent's highest Attack minion.",
+  "description": "Destroy all units except the opponent's highest Attack unit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

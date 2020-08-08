@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 3,
   "rarity": "RARE",
-  "description": "After your champion attacks, give all minions in your hand +1/+1.",
+  "description": "After your champion attacks, give all units in your hand +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

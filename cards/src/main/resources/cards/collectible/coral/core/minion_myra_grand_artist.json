@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "At the end of your turn, summon a Spirit with stats equal to the number of spells you've cast this turn.",
+  "description": "At the end of your turns, summon a Spirit with stats equal to the number of spells you've cast this turn.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "COMMON",
-  "description": "Destroy an allied minion to draw 3 cards.",
+  "description": "Destroy an allied unit to draw 3.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

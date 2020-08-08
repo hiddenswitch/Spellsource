@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "FREE",
-  "description": "Both players equip a 3/2 weapon.",
+  "description": "Both players equip a 3/2 Sword.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BothPlayersSpell",

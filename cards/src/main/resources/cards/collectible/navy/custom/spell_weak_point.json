@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",
-  "description": "Choose a minion. When it takes damage, destroy it.",
+  "description": "Choose a unit. When it takes damage, destroy it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",

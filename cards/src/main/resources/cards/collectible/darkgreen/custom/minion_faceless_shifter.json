@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "After you play a minion, copy its Attack and Health.",
+  "description": "After you play a unit, copy its Attack and Health.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",

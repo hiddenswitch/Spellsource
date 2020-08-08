@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Dash. Aftermath: If you have less Health remaining than your opponent, draw a card.",
+  "description": "Dash. Aftermath: If you have less Health remaining than your opponent, draw.",
   "deathrattle": {
     "class": "ConditionalSpell",
     "condition": {

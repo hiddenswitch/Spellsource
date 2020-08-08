@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Give a minion +2/+4 and fully heal it.",
+  "description": "Give a unit +2/+4 and fully heal it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

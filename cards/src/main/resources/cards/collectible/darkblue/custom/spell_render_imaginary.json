@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "COMMON",
-  "description": "Destroy a minion. Its owner draws 2 cards.",
+  "description": "Destroy a unit. Its owner draws 2.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

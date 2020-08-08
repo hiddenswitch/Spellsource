@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "RARE",
-  "description": "Take 3 damage. Give a minion \"Aftermath: Return this to your hand\".",
+  "description": "Take 3 damage. Give a unit \"Aftermath: Return this to your hand\".",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

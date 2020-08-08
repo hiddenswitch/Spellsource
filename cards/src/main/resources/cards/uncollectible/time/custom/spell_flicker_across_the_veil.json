@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "COMMON",
-  "description": "Destroy a minion. At the end of your opponent's turn, resummon it.",
+  "description": "Destroy a unit. At the end of your opponent's turn, resummon it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "JailMinionSpell",

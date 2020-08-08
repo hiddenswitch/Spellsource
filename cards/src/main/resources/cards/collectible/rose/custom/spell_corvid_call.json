@@ -4,11 +4,19 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",
-  "description": "Receive a random Beast. Draw a Beast from your deck.",
+  "description": "Draw a Beast. Receive a random Beast.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "BEAST"
+        }
+      },
       {
         "class": "ReceiveCardSpell",
         "cardFilter": {
@@ -17,14 +25,6 @@
         },
         "cardSource": {
           "class": "UnweightedCatalogueSource"
-        }
-      },
-      {
-        "class": "FromDeckToHandSpell",
-        "value": 1,
-        "cardFilter": {
-          "class": "CardFilter",
-          "race": "BEAST"
         }
       }
     ]

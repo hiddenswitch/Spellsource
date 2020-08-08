@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "After an enemy minion attacks next turn, destroy a random enemy minion.",
+  "description": "After an enemy unit attacks next turn, destroy a random enemy unit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

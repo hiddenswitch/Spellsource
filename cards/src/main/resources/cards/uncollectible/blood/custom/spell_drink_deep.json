@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "COMMON",
-  "description": "Restore #5 Health to your champion. If it's still damaged, draw a card.",
+  "description": "Restore #5 Health to your champion. If it's still damaged, draw.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ConditionalEffectSpell",

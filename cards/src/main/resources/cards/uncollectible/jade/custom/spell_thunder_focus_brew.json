@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "COMMON",
-  "description": "Give a minion +3 Health and 'Cannot be targeted by spells or Skills.'",
+  "description": "Give a unit +3 Health and 'Cannot be targeted by spells or Skills.'",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

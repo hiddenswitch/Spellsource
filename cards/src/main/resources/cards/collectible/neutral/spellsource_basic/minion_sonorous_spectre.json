@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "EPIC",
   "race": "SPIRIT",
-  "description": "Opener and Aftermath: Silence all other minions.",
+  "description": "Opener and Aftermath: Silence all other units.",
   "battlecry": {
     "spell": {
       "class": "SilenceSpell",

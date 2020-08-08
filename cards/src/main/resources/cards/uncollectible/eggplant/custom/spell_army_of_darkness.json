@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "COMMON",
-  "description": "Shuffle a copy of each allied minion into your deck.",
+  "description": "Shuffle a copy of each allied unit into your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ShuffleToDeckSpell",

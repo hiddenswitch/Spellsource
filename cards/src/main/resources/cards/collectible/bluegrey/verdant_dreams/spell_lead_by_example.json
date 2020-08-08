@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "RARE",
-  "description": "Give a minion Attack equal to your champion's Attack.",
+  "description": "Give a unit Attack equal to your champion's Attack.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",

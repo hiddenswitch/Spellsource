@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Aftermath: Shuffle this minion into your opponent's deck and give it \"When drawn, draw 3 cards\"",
+  "description": "Aftermath: Shuffle this unit into your opponent's deck and give it \"When drawn, draw 3\"",
   "deathrattle": {
     "class": "ShuffleMinionToDeckSpell",
     "target": "SELF",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Give a minion +2/+2 and \"Supremacy: Gain +2/+2\".",
+  "description": "Give a unit +2/+2 and \"Supremacy: Gain +2/+2\".",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

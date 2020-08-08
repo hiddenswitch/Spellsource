@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "COMMON",
-  "description": "Adjacent minions have Blitz.",
+  "description": "Adjacent units have Blitz.",
   "aura": {
     "class": "AttributeAura",
     "target": "ADJACENT_MINIONS",

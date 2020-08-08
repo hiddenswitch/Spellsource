@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "COMMON",
-  "description": "Return an allied minion to your hand to draw a card.",
+  "description": "Return an allied unit to your hand to draw.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,

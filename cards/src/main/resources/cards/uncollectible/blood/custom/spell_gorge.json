@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "RARE",
-  "description": "Destroy your opponent's leftmost minion and give its Health to all minions in your hand.",
+  "description": "Destroy your opponent's leftmost unit and give its Health to all units in your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

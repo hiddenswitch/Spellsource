@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Whenever one of your other minions dies, restore #3 health to your champion.",
+  "description": "Whenever one of your other units dies, restore #3 Health to your champion.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

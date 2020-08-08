@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "<b>Opener</b>: Summon two 0/3 Source Mines as your opponent's left and right-most minions.",
+  "description": "<b>Opener</b>: Summon two 0/3 Source Mines as your opponent's left and right-most units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

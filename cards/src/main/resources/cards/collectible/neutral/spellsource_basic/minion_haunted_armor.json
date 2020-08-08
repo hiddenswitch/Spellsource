@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "FREE",
   "race": "SPIRIT",
-  "description": "Dodge. Whenever another allied minion loses Dodge, gain Dodge.",
+  "description": "Dodge. Whenever another allied unit loses Dodge, gain Dodge.",
   "trigger": {
     "eventTrigger": {
       "class": "LoseDivineShieldTrigger",

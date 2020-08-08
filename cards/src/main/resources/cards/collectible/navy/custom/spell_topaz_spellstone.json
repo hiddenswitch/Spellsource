@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",
-  "description": "Give your minions +3 Attack. (Cast 2 spells to upgrade.)",
+  "description": "Give your units +3 Attack. (Cast 2 spells to upgrade.)",
   "passiveTrigger": {
     "countUntilCast": 2,
     "eventTrigger": {

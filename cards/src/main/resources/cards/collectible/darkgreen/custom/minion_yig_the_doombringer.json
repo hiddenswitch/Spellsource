@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Aftermath: Receive \"Voltiyig\". It has three times this minion's Attack and Health and costs (10).",
+  "description": "Aftermath: Receive \"Voltiyig\". It has three times this unit's Attack and Health and costs (10).",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "spell": {

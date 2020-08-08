@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Skill: Draw a card. After you play a minion, change back.",
+  "description": "Skill: Draw. After you play a unit, change back.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

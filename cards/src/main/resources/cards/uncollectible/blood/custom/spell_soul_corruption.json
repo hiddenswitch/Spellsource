@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "RARE",
-  "description": "Give a minion +3/+3, then destroy the minions adjacent to it.",
+  "description": "Give a unit +3/+3, then destroy the units adjacent to it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AdjacentEffectSpell",

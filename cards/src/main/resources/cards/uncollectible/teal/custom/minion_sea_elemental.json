@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Whenever you add a card to your deck, gain +1/+1.",
+  "description": "Whenever you receive a card to your deck, gain +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "CardAddedToDeckTrigger",

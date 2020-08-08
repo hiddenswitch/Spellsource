@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "EPIC",
-  "description": "Draw 10 weapons.",
+  "description": "Draw 10 items.",
   "spell": {
     "class": "FromDeckToHandSpell",
     "value": 10,

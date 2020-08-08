@@ -6,7 +6,7 @@
   "baseAttack": 9,
   "baseHp": 9,
   "rarity": "LEGENDARY",
-  "description": "Aftermath: Destroy friendly minions. Resummon this with the combined stats.",
+  "description": "Aftermath: Destroy friendly units. Resummon this with the combined stats.",
   "deathrattle": {
     "class": "custom.AbholosSpell",
     "card": "minion_abholos"

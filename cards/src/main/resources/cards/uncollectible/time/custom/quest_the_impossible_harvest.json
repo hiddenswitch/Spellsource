@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "LEGENDARY",
-  "description": "Quest: Add 50 cards to your hand. Reward: Bountiful Por'zora.",
+  "description": "Quest: Receive 50 cards. Reward: Bountiful Por'zora.",
   "quest": {
     "class": "CardReceivedTrigger",
     "targetPlayer": "SELF"

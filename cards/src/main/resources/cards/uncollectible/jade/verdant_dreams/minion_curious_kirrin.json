@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Deflect. Extra Strike. Whenever this minion attacks, add an Emerald Secret to your hand.",
+  "description": "Deflect. Extra Strike. Whenever this unit attacks, receive an Emerald Secret.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",

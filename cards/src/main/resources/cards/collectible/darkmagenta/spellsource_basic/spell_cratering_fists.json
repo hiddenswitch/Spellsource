@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKMAGENTA",
   "rarity": "FREE",
-  "description": "Deal $4 damage to two random enemy minions.",
+  "description": "Deal $4 damage to two random enemy units.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MultiTargetSpell",

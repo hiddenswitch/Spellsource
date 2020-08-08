@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",
-  "description": "Enemy minions cost (5) more this round.",
+  "description": "Enemy units cost (5) more this round.",
   "targetSelection": "NONE",
   "spell": {
     "class": "CardCostModifierSpell",

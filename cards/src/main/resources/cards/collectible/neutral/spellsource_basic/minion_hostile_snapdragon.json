@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Whenever you draw a card, deal 4 damage to your champion.",
+  "description": "Whenever you draw, deal 4 damage to your champion.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

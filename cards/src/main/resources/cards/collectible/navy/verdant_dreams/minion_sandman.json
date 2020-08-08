@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Opener: Summon 1/2 Gales with Dash until you control 3 minions.",
+  "description": "Opener: Summon 1/2 Gales with Dash until you control 3 units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

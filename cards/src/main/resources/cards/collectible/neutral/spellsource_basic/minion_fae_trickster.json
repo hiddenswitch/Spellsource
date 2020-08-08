@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "FAE",
-  "description": "Opener: Swap the Attack and Health of a minion.",
+  "description": "Opener: Swap the Attack and Health of a unit.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

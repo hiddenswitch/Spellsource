@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "NONE",
-  "description": "Any excess damage this deals is dealt to all other minions.",
+  "description": "Any excess damage this deals is dealt to all other units.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

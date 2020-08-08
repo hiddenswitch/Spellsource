@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Aftermath: If this minion is Frozen, draw a card.",
+  "description": "Aftermath: If this unit is Frozen, draw.",
   "deathrattle": {
     "class": "ConditionalSpell",
     "condition": {

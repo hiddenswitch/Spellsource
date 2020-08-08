@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Opener: Source an allied minion that died this game. Give it +1/+1",
+  "description": "Opener: Source an allied unit that died this game. Give it +1/+1",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

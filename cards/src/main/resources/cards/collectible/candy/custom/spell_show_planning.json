@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CANDY",
   "rarity": "RARE",
-  "description": "Shuffle two copies of your Signature into your deck. Draw a card.",
+  "description": "Shuffle two copies of your Signature into your deck. Draw.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

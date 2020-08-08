@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 3,
   "rarity": "RARE",
-  "description": "Also damages the minions next to whomever your champion attacks.",
+  "description": "Also damages the units next to whomever your champion attacks.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageCausedTrigger",

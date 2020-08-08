@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Opener: Source an Aftermath minion. Gain its Aftermath.",
+  "description": "Opener: Source an Aftermath unit. Gain its Aftermath.",
   "battlecry": {
     "spell": {
       "class": "DiscoverSpell",

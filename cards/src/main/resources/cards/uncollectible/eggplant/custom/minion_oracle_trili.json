@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "At the end of your turns, shuffle a copy of another random minion into your deck with +4/+4.",
+  "description": "At the end of your turns, shuffle a copy of another random unit into your deck with +4/+4.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

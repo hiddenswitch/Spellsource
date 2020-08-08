@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "SPIRIT",
-  "description": "Opener: If a Spirit attacked this turn, draw a card.",
+  "description": "Opener: If a Spirit attacked this turn, draw.",
   "battlecry": {
     "condition": {
       "class": "HasAttackedCondition",

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "Opener: Give all enemy minions <b>Decay<b>.",
+  "description": "Opener: Give all enemy units <b>Decay<b>.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

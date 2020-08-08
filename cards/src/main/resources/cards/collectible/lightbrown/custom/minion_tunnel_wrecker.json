@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Whenever you draw a card that didn't start in your deck, draw a card.",
+  "description": "Whenever you draw a card that didn't start in your deck, draw.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

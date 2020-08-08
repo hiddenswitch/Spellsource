@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "COMMON",
-  "description": "Give three random minions in your hand +3 Attack.",
+  "description": "Give three random units in your hand +3 Attack.",
   "condition": {
     "class": "ComparisonCondition",
     "operation": "GREATER_OR_EQUAL",

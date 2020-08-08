@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Draw a spell. It Costs (3) less if you're holding a 10-Cost minion.",
+  "description": "Draw a spell. It Costs (3) less if you're holding a 10-Cost unit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ConditionalEffectSpell",

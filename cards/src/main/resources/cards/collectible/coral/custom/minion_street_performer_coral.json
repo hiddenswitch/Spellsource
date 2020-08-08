@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Whenever you play a Lunstone, give your other minions +1/+1.",
+  "description": "Whenever you play a Lunstone, give your other units +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",

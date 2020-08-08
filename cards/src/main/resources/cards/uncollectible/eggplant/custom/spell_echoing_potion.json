@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "RARE",
-  "description": "Summon a 3/3 copy of the next minion you summon this turn.",
+  "description": "Summon a 3/3 copy of the next unit you summon this turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

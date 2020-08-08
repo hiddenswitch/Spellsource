@@ -6,7 +6,7 @@
   "damage": 5,
   "durability": 2,
   "rarity": "EPIC",
-  "description": "Reservoir (0-5): Double this weapon's Attack.",
+  "description": "Reservoir (0-5): Double this item's Attack.",
   "battlecry": {
     "condition": {
       "class": "ReservoirCondition",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "RARE",
-  "description": "Shuffle an allied minion into your deck. Add Emerald Secrets to your hand equal to its cost.",
+  "description": "Shuffle an allied unit into your deck. Add Emerald Secrets to your hand equal to its cost.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "ShuffleMinionToDeckSpell",

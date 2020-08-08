@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 8,
   "rarity": "EPIC",
-  "description": "Opener: Take control of an enemy minion with 3 or less remaining Health.",
+  "description": "Opener: Take control of an enemy unit with 3 or less remaining Health.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {

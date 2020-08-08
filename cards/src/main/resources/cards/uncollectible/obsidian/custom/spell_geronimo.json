@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
-  "description": "Choose a minion. Stun all other minions.",
+  "description": "Choose a unit. Stun all other units.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddAttributeSpell",

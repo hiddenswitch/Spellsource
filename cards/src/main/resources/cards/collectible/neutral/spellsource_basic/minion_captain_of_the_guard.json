@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Guard. Opener: Give adjacent minions Guard.",
+  "description": "Guard. Opener: Give adjacent units Guard.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

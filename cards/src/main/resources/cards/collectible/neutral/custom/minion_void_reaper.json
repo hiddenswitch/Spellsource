@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Opener: Destroy a minion. Destroy every copy of it (wherever they are).",
+  "description": "Opener: Destroy a unit and all copies of it (wherever they are).",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

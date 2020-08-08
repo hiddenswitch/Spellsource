@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Casts when drawn. Draw a card. Destroy all minions",
+  "description": "Casts When Drawn. Draw. Destroy all units",
   "targetSelection": "NONE",
   "spell": {
     "class": "DestroySpell",

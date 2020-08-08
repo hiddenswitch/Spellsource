@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "When you Roast this, deal 3 damage to all enemy minions.",
+  "description": "When you Roast this, deal 3 damage to all enemy units.",
   "deckTrigger": {
     "eventTrigger": {
       "class": "RoastTrigger",

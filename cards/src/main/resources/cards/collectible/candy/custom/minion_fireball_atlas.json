@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "After you cast a spell, deal damage equal to its Cost to a random enemy minion.",
+  "description": "After you cast a spell, deal damage equal to its Cost to a random enemy unit.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",

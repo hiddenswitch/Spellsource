@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Destroy a minion. Shuffle 3 copies of it into your deck",
+  "description": "Destroy a unit. Shuffle 3 copies of it into your deck",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

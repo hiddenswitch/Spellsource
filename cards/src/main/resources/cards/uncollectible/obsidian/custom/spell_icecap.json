@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "RARE",
-  "description": "Draw 3 cards. Stun your deck. (Can't draw until after next turn)",
+  "description": "Draw 3. Stun your deck. (Can't draw until after next turn)",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
