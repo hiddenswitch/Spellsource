@@ -1,4 +1,4 @@
-### Witch Doctor: Burn Doctor
+### Burn Doctor
 # Class: ROSE
 # Format: Spellsource
 #

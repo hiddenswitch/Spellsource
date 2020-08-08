@@ -1,4 +1,4 @@
-### Chef: A Well Roasted Meal
+### A Well Roasted Meal
 Class: TOAST
 Format: Spellsource
 2x Pastry Cook

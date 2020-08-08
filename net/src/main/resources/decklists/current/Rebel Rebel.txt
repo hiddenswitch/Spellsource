@@ -1,0 +1,22 @@
+### Rebel Rebel
+# Class: CAMO
+# Format: Spellsource
+#
+# 2x (1) Double Strike
+# 2x (2) Burrows Sniper
+# 2x (2) Low Sweep
+# 2x (2) Power of the People
+# 2x (2) Smokescreen
+# 2x (3) Chokehold
+# 2x (3) Pilfered Dagger
+# 2x (3) Skirmish
+# 1x (4) Bogovanis
+# 2x (7) Last Man Standing
+# 1x (8) Primalist Kirra
+# 2x (8) Soup Savant
+# 1x (9) Smogg
+# 1x (10) Dream of Freedom
+# 1x (10) End
+# 2x (10) Fel Manticore
+# 2x (10) Mollusk Meister
+# 1x (10) Sourceborn Aelin

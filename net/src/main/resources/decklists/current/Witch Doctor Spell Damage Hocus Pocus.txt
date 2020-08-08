@@ -1,4 +1,4 @@
-### Witch Doctor: Spell Damage Hocus Pocus
+### Spell Damage Hocus Pocus
 # Class: ROSE
 # Format: Spellsource
 #
