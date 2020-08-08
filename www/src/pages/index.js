@@ -15,10 +15,10 @@ const Index = () => {
   let parallax
 
   const parallaxPages = () => {
-    if (window.matchMedia("(max-width: 500px)").matches) {
-      return(2.15)
+    if (typeof window !== 'undefined' && window.matchMedia('(max-width: 500px)').matches) {
+      return (2.15)
     } else {
-      return(1.99)
+      return (1.99)
     }
   }
 
@@ -79,8 +79,8 @@ const Index = () => {
                 to="/contribute">[Contribute]</Link>
               </h3>
               <p></p>
-              <p>Spellsource is a community-driven digital card game <b>where every card is free</b>. Spellsource features
-                thousands of community-authored cards. </p>
+              <p>Spellsource is a community-driven digital card game <b>where every card is free</b>. Spellsource
+                features thousands of community-authored cards. </p>
               <p>Learn more about the game <Link to="/wiki/Main_Page">here</Link> and the keywords <Link
                 to="/keywords">here</Link>. </p>
               <p>Support us by <Link to="/contribute">authoring your own cards</Link> and <a
