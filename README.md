@@ -166,7 +166,12 @@ Make sure the Public group is [added here](https://appstoreconnect.apple.com/Web
 
 Add the class or the package containing it to end of the list of classes in the `Args = --initialize-at-build-time=...` line to [native-image.properties](discordbot/src/main/resources/META-INF/native-image/com.hiddenswitch/discordbot/native-image.properties).
 
-You may have to regenerate reflection config using **sdkman**'s Graal distributable. Then, `sdk use java 20.0.0.r11-grl; ./gradlew --no-daemon clean; ./gradlew --no-daemon discordbot:genReflectionProps`.
+You may have to regenerate reflection config using **sdkman**'s Graal distributable. The following commands will fix this issue:
+
+```
+sdk use java 20.1.0.r11-grl
+./gradlew --no-daemon clean
+./gradlew --no-daemon discordbot:genReflectionProps`.
 
 > `./gradlew distSwarm` fails with the message of the form:
 

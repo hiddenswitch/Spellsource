@@ -54,6 +54,11 @@
   "allDeclaredConstructors":true
 },
 {
+  "name":"com.hiddenswitch.spellsource.client.models.Sprite$PivotEnum",
+  "allDeclaredFields":true,
+  "allDeclaredMethods":true
+},
+{
   "name":"java.io.Serializable",
   "allDeclaredMethods":true
 },
@@ -758,6 +763,9 @@
   "name":"net.demilich.metastone.game.spells.custom.BrothersInBloodSpell"
 },
 {
+  "name":"net.demilich.metastone.game.spells.custom.BuffLeftmostMinionInHandSpell"
+},
+{
   "name":"net.demilich.metastone.game.spells.custom.CalamityBeckonsSpell"
 },
 {
@@ -894,9 +902,6 @@
 },
 {
   "name":"net.demilich.metastone.game.spells.custom.UpgradeHeroPowerSpell"
-},
-{
-  "name":"net.demilich.metastone.game.spells.custom.VileIntentSpell"
 },
 {
   "name":"net.demilich.metastone.game.spells.custom.VohkrovanisSpell"
