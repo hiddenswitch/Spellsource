@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "MAGENTA",
   "rarity": "FREE",
-  "description": "Both players draw 2 cards.",
+  "description": "Both players draw 2.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",

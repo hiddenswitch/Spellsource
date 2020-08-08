@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "FREE",
-  "description": "Casts When Drawn. Give an enemy minion in your opponent's hand +2/+2. Give a minion in your hand -2/-2.",
+  "description": "Casts When Drawn. Give an enemy unit in your opponent's hand +2/+2. Give a unit in your hand -2/-2.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

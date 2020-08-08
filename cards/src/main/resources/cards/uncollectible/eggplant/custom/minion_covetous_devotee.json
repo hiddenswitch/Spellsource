@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Whenever you summon a minion, add its Attack and Health to your Big Guy's (wherever it is).",
+  "description": "Whenever you summon a unit, add its Attack and Health to your Big Guy's (wherever it is).",
   "trigger": {
     "eventTrigger": {
       "class": "MinionSummonedTrigger",

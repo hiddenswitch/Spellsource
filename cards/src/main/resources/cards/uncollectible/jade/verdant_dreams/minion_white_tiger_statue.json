@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Your Champion has +2 Attack during your turn.",
+  "description": "Your champion has +2 Attack during your turn.",
   "aura": {
     "class": "BuffAura",
     "target": "FRIENDLY_HERO",

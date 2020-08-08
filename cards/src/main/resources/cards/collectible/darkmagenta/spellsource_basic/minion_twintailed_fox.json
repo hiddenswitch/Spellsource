@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Invoke (2): Choose a minion. Add a copy of it to your hand.",
+  "description": "Invoke (2): Choose a unit. Receive a copy of it.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -15,13 +15,13 @@
       "spell1": {
         "class": "InvokeOptionSpell",
         "name": "Don't Invoke",
-        "description": "Do nothing to the targeted minion.",
+        "description": "Do nothing to the targeted unit.",
         "mana": 0
       },
       "spell2": {
         "class": "InvokeOptionSpell",
         "name": "Twin Tails",
-        "description": "Add a copy of the targeted minion to your hand.",
+        "description": "Receive a copy of the targeted unit.",
         "spell": {
           "class": "CopyCardSpell"
         },

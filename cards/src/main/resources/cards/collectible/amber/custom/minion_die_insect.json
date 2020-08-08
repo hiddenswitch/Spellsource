@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Aftermath: Deal 8 damage to a random enemy minion.",
+  "description": "Aftermath: Deal 8 damage to a random enemy unit.",
   "deathrattle": {
     "class": "MissilesSpell",
     "target": "ENEMY_MINIONS",

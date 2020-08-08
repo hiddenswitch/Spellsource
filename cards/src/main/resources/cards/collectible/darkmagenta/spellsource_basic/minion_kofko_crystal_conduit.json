@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Whenever you summon a minion, give it +3/+3.",
+  "description": "Whenever you summon a unit, give it +3/+3.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionSummonedTrigger",

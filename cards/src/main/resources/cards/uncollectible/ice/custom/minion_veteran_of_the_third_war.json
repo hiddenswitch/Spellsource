@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Guard. Opener: Gain Health equal to the Attack of your weapon.",
+  "description": "Guard. Opener: Gain Health equal to the Attack of your item.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

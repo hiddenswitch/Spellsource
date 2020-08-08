@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Opener: For each allied minion, draw a copy of your Signature from your deck.",
+  "description": "Opener: For each allied unit, draw a copy of your Signature.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

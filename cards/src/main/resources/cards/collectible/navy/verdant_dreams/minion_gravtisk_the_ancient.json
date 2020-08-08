@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Minions you play minions cost (0) and die at the end of your turn.",
+  "description": "Units you play units cost (0) and die at the end of your turn.",
   "cardCostModifier": {
     "class": "CardCostModifier",
     "value": 0,

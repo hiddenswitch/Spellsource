@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Guard. Aftermath: Give a random allied minion Guard.",
+  "description": "Guard. Aftermath: Give a random allied unit Guard.",
   "deathrattle": {
     "class": "AddAttributeSpell",
     "target": "FRIENDLY_MINIONS",

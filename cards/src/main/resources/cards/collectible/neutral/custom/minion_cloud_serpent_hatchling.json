@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Opener: If you're holding a Dragon, add a random Cloud Serpent to your hand.",
+  "description": "Opener: If you're holding a Dragon, receive a random Cloud Serpent.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

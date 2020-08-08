@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "FREE",
-  "description": "Restore #2 Health to your champion for each allied minion.",
+  "description": "Restore #2 Health to your champion for each allied unit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HealSpell",

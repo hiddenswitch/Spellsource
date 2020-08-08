@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: If the total cost of your hand is less than (5), draw a card.",
+  "description": "Opener: If the total cost of your hand is less than (5), draw.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

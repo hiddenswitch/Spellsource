@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: Roast three 1-Cost minions.",
+  "description": "Opener: Roast three 1-Cost units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

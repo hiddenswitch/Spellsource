@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "RARE",
-  "description": "Discard all 1-cost spells in your hand. Give a minion +2/+2 for each spell discarded.",
+  "description": "Discard all 1-cost spells in your hand. Give a unit +2/+2 for each spell discarded.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "EPIC",
-  "description": "Draw 2 cards. If either one of them costs (5) or more, draw 2 more.",
+  "description": "Draw 2. If either card costs (5) or more, draw 2 more.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ConditionalEffectSpell",

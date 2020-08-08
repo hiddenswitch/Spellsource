@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Blitz",
+  "description": "Blitz.",
   "attributes": {
     "CHARGE": true
   },

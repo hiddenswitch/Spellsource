@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 12,
   "rarity": "FREE",
-  "description": "Your minions have Guard.",
+  "description": "Your units have Guard.",
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_MINIONS",

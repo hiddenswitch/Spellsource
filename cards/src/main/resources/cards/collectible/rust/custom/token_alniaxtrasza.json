@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Guard. At the end of your turn, restore #7 Health to your champion.",
+  "description": "Guard. At the end of your turns, restore #7 Health to your champion.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

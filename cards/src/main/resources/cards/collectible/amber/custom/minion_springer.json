@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: Return a random enemy minion to your opponent's hand.",
+  "description": "Opener: Return a random enemy unit to your opponent's hand.",
   "battlecry": {
     "spell": {
       "class": "ReturnTargetToHandSpell",

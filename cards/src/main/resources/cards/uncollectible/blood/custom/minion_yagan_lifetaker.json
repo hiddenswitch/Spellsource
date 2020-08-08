@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Opener: Drain half your champion's Health and distribute it randomly among your minions.",
+  "description": "Opener: Drain half your champion's Health and distribute it randomly among your units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

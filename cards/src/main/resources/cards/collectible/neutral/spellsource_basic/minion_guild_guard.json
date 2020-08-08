@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Opener: Give your other minions +1/+1.",
+  "description": "Opener: Give your other units +1/+1.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

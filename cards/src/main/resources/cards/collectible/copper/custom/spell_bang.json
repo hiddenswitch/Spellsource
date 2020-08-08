@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "COPPER",
   "rarity": "FREE",
-  "description": "Deal $2 damage. Draw a card.",
+  "description": "Deal $2 damage. Draw.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

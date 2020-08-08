@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OFFWHITE",
   "rarity": "RARE",
-  "description": "Spend all your lun and draw a card with cost equal to the lun used.",
+  "description": "Spend all your lun and draw with cost equal to the lun used.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

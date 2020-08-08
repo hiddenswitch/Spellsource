@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Opener: Destroy an allied minion. Then, resummon it with Dash.",
+  "description": "Opener: Destroy an allied unit. Then, resummon it with Dash.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

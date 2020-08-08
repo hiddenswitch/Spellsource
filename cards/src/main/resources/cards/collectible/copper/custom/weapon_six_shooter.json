@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 6,
   "rarity": "RARE",
-  "description": "Quick Draw: Deal 3 damage to a random enemy minion and lose 1 Durability.",
+  "description": "Quick Draw: Deal 3 damage to a random enemy unit and lose 1 Durability.",
   "trigger": {
     "eventTrigger": {
       "class": "QuickDrawTrigger",

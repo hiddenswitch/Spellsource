@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Quick Draw: Deal 3 damage randomly split among all enemy minions.",
+  "description": "Quick Draw: Deal 3 damage randomly split among all enemy units.",
   "trigger": {
     "eventTrigger": {
       "class": "QuickDrawTrigger",

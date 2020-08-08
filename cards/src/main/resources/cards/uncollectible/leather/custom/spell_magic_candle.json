@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "FREE",
-  "description": "Repeatable this turn. Source a Legendary minion, then summon it.",
+  "description": "Repeatable this turn. Source a Legendary unit, then summon it.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

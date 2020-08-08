@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Opener: Destroy a 0-Attack minion. If it's an enemy one, Silence it first.",
+  "description": "Opener: Destroy a 0-Attack unit. If it's an enemy one, Silence it first.",
   "battlecry": {
     "condition": {
       "class": "AnyMatchFilterCondition",

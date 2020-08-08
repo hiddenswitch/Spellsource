@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "RARE",
-  "description": "Guard. At the end of your turn, deal 4 damage to a random enemy minion.",
+  "description": "Guard. At the end of your turns, deal 4 damage to a random enemy unit.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

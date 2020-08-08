@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: If you're holding a Dragon, deal 1 damage to all enemy minions.",
+  "description": "Opener: If you're holding a Dragon, deal 1 damage to all enemy units.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "EPIC",
-  "description": "Deal damage equal to your Armor to a minion.",
+  "description": "Deal damage equal to your Armor to a unit.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "DamageSpell",

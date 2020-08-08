@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Hidden. All enemy minions have Decay.",
+  "description": "Hidden. All enemy units have Decay.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Whenever your opponent draws a card, deal 2 damage to the enemy champion.",
+  "description": "Whenever your opponent draws, deal 2 damage to the enemy champion.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

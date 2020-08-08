@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "FREE",
-  "description": "Give a minion\u00a0+2/+2. Draw a card.",
+  "description": "Give a unit +2/+2. Draw.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

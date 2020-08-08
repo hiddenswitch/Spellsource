@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "RARE",
-  "description": "Deal 3 damage to all minions. Roast a card for each minion that was destroyed.",
+  "description": "Deal 3 damage to all units. Roast a card for each unit that was destroyed.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

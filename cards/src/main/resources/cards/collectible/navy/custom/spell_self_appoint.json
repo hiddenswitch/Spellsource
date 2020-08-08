@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "EPIC",
-  "description": "Transform a minion into a copy of a random minion in your deck.",
+  "description": "Transform a unit into a copy of a random unit in your deck.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ConditionalSpell",

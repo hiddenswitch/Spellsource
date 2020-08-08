@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "FREE",
-  "description": "Restore #8 Health to your champion. Draw 2 cards.",
+  "description": "Restore #8 Health to your champion. Draw 2.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

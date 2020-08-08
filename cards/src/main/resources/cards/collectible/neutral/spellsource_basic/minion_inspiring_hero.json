@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "FREE",
-  "description": "Opener: Give an allied minion +2 Attack.",
+  "description": "Opener: Give an allied unit +2 Attack.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

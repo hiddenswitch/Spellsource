@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Opener: Destroy all Marked minions.",
+  "description": "Opener: Destroy all Marked units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

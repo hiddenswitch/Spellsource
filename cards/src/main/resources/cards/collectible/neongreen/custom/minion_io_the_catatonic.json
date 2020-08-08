@@ -7,7 +7,7 @@
   "baseHp": 20,
   "rarity": "LEGENDARY",
   "race": "TITAN",
-  "description": "At the end of your turn, deal damage equal to this minion's health randomly split among all minions.",
+  "description": "At the end of your turns, deal damage equal to this unit's Health randomly split among all units.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "COMMON",
-  "description": "Whenever a character is healed this turn, draw a card.",
+  "description": "Whenever a character is healed this turn, draw.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

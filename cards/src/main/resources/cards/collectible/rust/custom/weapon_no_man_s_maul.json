@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 2,
   "rarity": "COMMON",
-  "description": "Opener: If you control no minions, gain +1 Attack.",
+  "description": "Opener: If you control no units, gain +1 Attack.",
   "battlecry": {
     "condition": {
       "class": "MinionCountCondition",

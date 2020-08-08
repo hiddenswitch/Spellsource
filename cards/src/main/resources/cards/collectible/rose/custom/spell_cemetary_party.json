@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "RARE",
-  "description": "Resurrect an allied Aftermath minion. Receive a copy of it.",
+  "description": "Resurrect an allied Aftermath unit. Receive a copy of it.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ResurrectSpell",

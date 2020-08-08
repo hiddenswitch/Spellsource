@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Add a Rune to your hand.",
+  "description": "Receive a Rune.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",

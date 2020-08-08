@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: Transform a random minion in your hand into a copy of your Signature.",
+  "description": "Opener: Transform a random unit in your hand into a copy of your Signature.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

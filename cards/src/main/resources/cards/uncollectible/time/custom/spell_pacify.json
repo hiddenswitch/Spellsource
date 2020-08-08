@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "COMMON",
-  "description": "Change all but one of a minion's attack into health. Draw a card.",
+  "description": "Change all but one of a unit's attack into Health. Draw.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

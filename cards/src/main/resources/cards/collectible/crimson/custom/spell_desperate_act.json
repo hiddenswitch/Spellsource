@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "EPIC",
-  "description": "Draw a card. If your champion has 15 Health or less, draw 3 instead.",
+  "description": "Draw. If your champion has 15 Health or less, draw 3 instead.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardSpell",

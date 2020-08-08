@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "COMMON",
-  "description": "Change a minion's Health to be equal to its Attack.",
+  "description": "Change a unit's Health to be equal to its Attack.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "SetHpSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OFFWHITE",
   "rarity": "COMMON",
-  "description": "Consume 2 to draw two cards and deal $4 damage to a unit.",
+  "description": "Consume 2 to draw 2 and deal $4 damage to a unit.",
   "condition": {
     "class": "ComparisonCondition",
     "operation": "GREATER_OR_EQUAL",

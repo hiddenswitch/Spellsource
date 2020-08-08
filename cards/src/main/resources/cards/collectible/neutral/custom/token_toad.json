@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "Guard",
+  "description": "Guard.",
   "attributes": {
     "TAUNT": true
   },

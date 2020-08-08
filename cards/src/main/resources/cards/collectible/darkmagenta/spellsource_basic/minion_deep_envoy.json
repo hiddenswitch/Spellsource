@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Opener: Choose a minion. Your Skill now summons Eidolons with the same Tribe as it.",
+  "description": "Opener: Choose a unit. Your Skill now summons Eidolons with the same Tribe as it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

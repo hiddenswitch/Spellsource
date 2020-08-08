@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 7,
   "rarity": "RARE",
-  "description": "Opener: Gain the text of a random enemy minion that died this game.",
+  "description": "Opener: Gain the text of a random enemy unit that died this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

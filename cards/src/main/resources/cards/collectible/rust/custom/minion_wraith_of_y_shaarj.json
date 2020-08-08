@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Aftermath: Summon a random minion from your hand.",
+  "description": "Aftermath: Summon a random unit from your hand.",
   "deathrattle": {
     "class": "RecruitSpell",
     "cardFilter": {

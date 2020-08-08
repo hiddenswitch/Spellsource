@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "COMMON",
-  "description": "Draw 2 cards. Put a Hangover that does nothing on top of your deck.",
+  "description": "Draw 2. Put a Hangover that does nothing on top of your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

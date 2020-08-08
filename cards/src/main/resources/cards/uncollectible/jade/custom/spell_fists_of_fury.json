@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "EPIC",
-  "description": "Deal $10 damage randomly split among all enemy minions.",
+  "description": "Deal $10 damage randomly split among all enemy units.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MissilesSpell",

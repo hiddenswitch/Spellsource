@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 9,
   "rarity": "FREE",
-  "description": "At the end of your turn, give your champion +3 Health.",
+  "description": "At the end of your turns, give your champion +3 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

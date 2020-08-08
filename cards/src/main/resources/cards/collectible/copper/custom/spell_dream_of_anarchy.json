@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "COPPER",
   "rarity": "LEGENDARY",
-  "description": "Summon every minion in both players' hands, then force them all to attack other random minions.",
+  "description": "Summon every unit in both players' hands, then force them all to attack other random units.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

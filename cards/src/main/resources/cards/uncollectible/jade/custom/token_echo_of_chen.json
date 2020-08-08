@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Opener: Give your other minions +8 Health.",
+  "description": "Opener: Give your other units +8 Health.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

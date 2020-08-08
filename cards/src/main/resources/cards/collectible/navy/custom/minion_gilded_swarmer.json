@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Opener: Swap adjacent minions for ones in your deck.",
+  "description": "Opener: Swap adjacent units for ones in your deck.",
   "battlecry": {
     "condition": {
       "class": "DeckContainsCondition",

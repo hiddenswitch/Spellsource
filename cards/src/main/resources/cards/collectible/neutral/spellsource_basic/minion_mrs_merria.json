@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "FAE",
-  "description": "Opener: If you played four other cards this turn, take control of an enemy minion.",
+  "description": "Opener: If you played four other cards this turn, take control of an enemy unit.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "COMMON",
-  "description": "Plague every minion. They take 3 damage when they attack.",
+  "description": "Plague every unit. They take 3 damage when they attack.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

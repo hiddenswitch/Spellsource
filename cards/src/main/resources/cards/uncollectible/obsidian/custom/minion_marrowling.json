@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Opener: Draw a card. If it's a 'Bone Storm', cast it.",
+  "description": "Opener: Draw. If it's a 'Bone Storm', cast it.",
   "battlecry": {
     "spell": {
       "class": "DrawCardSpell",

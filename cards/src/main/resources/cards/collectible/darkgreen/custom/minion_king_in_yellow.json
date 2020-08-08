@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Your undamaged minions have Dash. Your damaged minions have Guard.",
+  "description": "Your undamaged units have Dash. Your damaged units have Guard.",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

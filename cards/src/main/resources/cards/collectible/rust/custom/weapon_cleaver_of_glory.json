@@ -6,7 +6,7 @@
   "damage": 4,
   "durability": 2,
   "rarity": "COMMON",
-  "description": "Supremacy: Draw a card.",
+  "description": "Supremacy: Draw.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

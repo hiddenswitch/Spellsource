@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "FREE",
-  "description": "Deal $2 damage randomly split among all enemy minions.",
+  "description": "Deal $2 damage randomly split among all enemy units.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MissilesSpell",

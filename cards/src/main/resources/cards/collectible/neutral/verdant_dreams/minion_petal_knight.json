@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Dash. After this attacks and kills a minion, receive a random Emerald Secret.",
+  "description": "Dash. After this attacks and kills a unit, receive a random Emerald Secret.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

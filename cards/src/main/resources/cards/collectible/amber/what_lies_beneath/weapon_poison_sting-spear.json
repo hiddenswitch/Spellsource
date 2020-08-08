@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 2,
   "rarity": "RARE",
-  "description": "Toxic",
+  "description": "Toxic.",
   "attributes": {
     "POISONOUS": true
   },

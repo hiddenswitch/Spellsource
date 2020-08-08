@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AZURE",
   "rarity": "EPIC",
-  "description": "Cast every Soar spell in your hand. If there are none, add one to it.",
+  "description": "Cast every Soar spell in your hand. If there are none, receive one.",
   "spell": {
     "class": "MetaSpell",
     "spell": {

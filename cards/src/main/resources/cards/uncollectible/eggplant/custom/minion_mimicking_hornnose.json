@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Hidden. Invoke (5): Copy a minion's Attack and Health.",
+  "description": "Hidden. Invoke (5): Copy a unit's Attack and Health.",
   "battlecry": {
     "condition": {
       "class": "InvokeCondition"

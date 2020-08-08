@@ -7,7 +7,7 @@
   "baseHp": 10,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Minions cost (10) and are 10/10 when played.",
+  "description": "Units cost (10) and are 10/10 when played.",
   "cardCostModifier": {
     "class": "CardCostModifier",
     "target": "BOTH_HANDS",

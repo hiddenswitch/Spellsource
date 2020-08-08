@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "COMMON",
-  "description": "Deal $1 damage. Add a spell to your hand that deal 2 damage.",
+  "description": "Deal $1 damage. Receive a spell  that deal 2 damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "FAE",
-  "description": "Whenever you draw a card, reduce its Cost by (1).",
+  "description": "Whenever you draw, reduce its Cost by (1).",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "RARE",
-  "description": "Frozen. After this minion takes damage, Silence it.",
+  "description": "Frozen. After this unit takes damage, Silence it.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

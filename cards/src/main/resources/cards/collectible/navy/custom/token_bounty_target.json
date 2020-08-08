@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Aftermath: Summon a Bounty Target. Your opponent draws a card.",
+  "description": "Aftermath: Summon a Bounty Target. Your opponent draws.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

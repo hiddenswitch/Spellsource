@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "NONE",
-  "description": "Opener: Deal damage to a minion equal to the lowest Cost in your hand.",
+  "description": "Opener: Deal damage to a unit equal to the lowest Cost in your hand.",
   "battlecry": {
     "condition": {
       "class": "CardCountCondition",

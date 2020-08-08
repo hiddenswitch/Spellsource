@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Extra Strike. After this attacks, your opponent draws a card.",
+  "description": "Extra Strike. After this attacks, your opponent draws.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

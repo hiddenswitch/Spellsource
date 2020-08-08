@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CANDY",
   "rarity": "COMMON",
-  "description": "Each time your champion is healed this turn, draw a card.",
+  "description": "Each time your champion is healed this turn, draw.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Guard",
+  "description": "Guard.",
   "attributes": {
     "TAUNT": true
   },

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "Opener: Deal 1 damage to a Fae; 2 damage to a Beast; or 3 damage to a Dragon.",
+  "description": "Opener: Deal 1 damage to a Fae, 2 damage to a Beast, or 3 damage to a Dragon.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "LEGENDARY",
-  "description": "Quest: Summon 2 minions for your opponent. Reward: It.",
+  "description": "Quest: Summon 2 units for your opponent. Reward: It.",
   "quest": {
     "class": "MinionSummonedTrigger",
     "sourcePlayer": "SELF",

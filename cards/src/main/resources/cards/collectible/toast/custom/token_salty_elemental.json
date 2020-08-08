@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Toxic",
+  "description": "Toxic.",
   "attributes": {
     "POISONOUS": true
   },

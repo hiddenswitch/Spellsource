@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Aftermath: Destroy a random enemy minion.",
+  "description": "Aftermath: Destroy a random enemy unit.",
   "deathrattle": {
     "class": "DestroySpell",
     "target": "ENEMY_MINIONS",

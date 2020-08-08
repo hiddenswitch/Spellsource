@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 2,
   "rarity": "COMMON",
-  "description": "Opener: Add an Ocean Depths to your deck.",
+  "description": "Opener: Receive an Ocean Depths to your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

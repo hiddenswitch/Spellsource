@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 9,
   "rarity": "LEGENDARY",
-  "description": "Whenever a minion takes fatal damage, Silence it.",
+  "description": "Whenever a unit takes fatal damage, Silence it.",
   "trigger": {
     "eventTrigger": {
       "class": "FatalDamageTrigger",

@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Hidden. Whenever this attacks a champion, draw a card.",
+  "description": "Hidden. Whenever this attacks a champion, draw.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

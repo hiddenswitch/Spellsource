@@ -4,7 +4,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Your minions Stun any characters they damage this turn.",
+  "description": "Your units Stun any characters they damage this turn.",
   "triggers": [
     {
       "eventTrigger": {

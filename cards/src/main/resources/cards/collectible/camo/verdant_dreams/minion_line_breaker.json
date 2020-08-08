@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Dash. Opener: If an enemy minion attacked last turn, gain Blitz.",
+  "description": "Dash. Opener: If an enemy unit attacked last turn, gain Blitz.",
   "battlecry": {
     "condition": {
       "class": "AnyMatchFilterCondition",

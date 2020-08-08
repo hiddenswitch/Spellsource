@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Opener: If your champion attacked 3 times this game, your minions have Dash this game.[]",
+  "description": "Opener: If your champion attacked 3 times this game, your units have Dash this game.[]",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

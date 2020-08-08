@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Aftermath: Give a random allied minion Guard and Lifedrain.",
+  "description": "Aftermath: Give a random allied unit Guard and Lifedrain.",
   "deathrattle": {
     "class": "MetaSpell",
     "target": "FRIENDLY_MINIONS",

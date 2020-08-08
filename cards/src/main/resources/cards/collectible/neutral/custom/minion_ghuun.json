@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Lifedrain. Damaged minions have +8/+8 and can't attack champions.",
+  "description": "Lifedrain. Damaged units have +8/+8 and can't attack champions.",
   "attributes": {
     "LIFESTEAL": true
   },

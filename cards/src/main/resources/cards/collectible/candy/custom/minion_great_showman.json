@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: If your Signature is in your deck, put it on top. Draw a card.",
+  "description": "Opener: If your Signature is in your deck, put it on top. Draw.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

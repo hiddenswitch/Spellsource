@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ICE",
   "rarity": "EPIC",
-  "description": "Destroy a Frozen minion and deal its Health as damage to all enemies.",
+  "description": "Destroy a Frozen unit and deal its Health as damage to all enemies.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

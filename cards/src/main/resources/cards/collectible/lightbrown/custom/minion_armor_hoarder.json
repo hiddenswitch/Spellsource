@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "Whenever you draw a card, gain 5 Armor.",
+  "description": "Whenever you draw, gain 5 Armor.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

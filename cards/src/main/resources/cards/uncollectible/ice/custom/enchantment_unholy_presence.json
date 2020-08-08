@@ -4,7 +4,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Whenever a minion dies this turn, summon a 2/2 Ghoul.",
+  "description": "Whenever a unit dies this turn, summon a 2/2 Ghoul.",
   "triggers": [
     {
       "eventTrigger": {

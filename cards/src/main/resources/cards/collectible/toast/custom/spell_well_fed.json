@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "COMMON",
-  "description": "Fully heal a minion and give it +2/+2.",
+  "description": "Fully heal a unit and give it +2/+2.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

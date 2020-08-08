@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "COMMON",
-  "description": "Give a minion +4 Health, <b>Guard</b>, and <b>Wither (1)</b>.",
+  "description": "Give a unit +4 Health, <b>Guard</b>, and <b>Wither (1)</b>.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

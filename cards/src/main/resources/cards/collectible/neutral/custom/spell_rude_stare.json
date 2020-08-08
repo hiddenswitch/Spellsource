@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Haha! You don't get to draw a card this turn!",
+  "description": "Haha! You don't get to draw this turn!",
   "targetSelection": "NONE",
   "spell": {
     "class": "NullSpell"

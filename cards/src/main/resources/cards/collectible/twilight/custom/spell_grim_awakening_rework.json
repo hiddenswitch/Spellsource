@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "EPIC",
-  "description": "Give all minions in your board and graveyard Lifedrain.",
+  "description": "Give all units in your board and graveyard Lifedrain.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

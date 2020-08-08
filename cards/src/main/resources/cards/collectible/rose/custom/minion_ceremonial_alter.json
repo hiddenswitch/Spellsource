@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 12,
   "rarity": "RARE",
-  "description": "Guard. Aftermath: Your opponent draws 2 cards.",
+  "description": "Guard. Aftermath: Your opponent draws 2.",
   "deathrattle": {
     "class": "DrawCardSpell",
     "value": 2,

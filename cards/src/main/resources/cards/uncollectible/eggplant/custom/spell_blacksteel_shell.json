@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "RARE",
-  "description": "Give the next minion you summon +1/+1 for each of your Mechs.",
+  "description": "Give the next unit you summon +1/+1 for each of your Mechs.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Opener: If you're holding a Dragon, gains \"Whenever you cast a spell, Source a spell.\"",
+  "description": "Opener: If you're holding a Dragon, gains \"Whenever you cast a spell, Source a spell\".",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

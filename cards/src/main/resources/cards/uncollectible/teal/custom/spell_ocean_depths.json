@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "FREE",
-  "description": "Casts when drawn. Restore #2 Health to your champion.",
+  "description": "Casts When Drawn. Restore #2 Health to your champion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HealSpell",

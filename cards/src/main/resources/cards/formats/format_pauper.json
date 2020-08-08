@@ -2,13 +2,13 @@
   "name": "Pauper",
   "type": "FORMAT",
   "rarity": "FREE",
-  "description": "Only Free and Common Cards",
+  "description": "Only Free and Common Cards.",
   "condition": {
     "class": "AndCondition",
     "conditions": [
       {
         "class": "ComparisonCondition",
-        "description": "Decks must have 30 cards",
+        "description": "Decks must have 30 cards.",
         "operation": "EQUAL",
         "value1": {
           "class": "EntityCountValueProvider",
@@ -18,7 +18,7 @@
       },
       {
         "class": "DeckContainsCondition",
-        "description": "Decks must not contain cards from other classes",
+        "description": "Decks must not contain cards from other classes.",
         "cardFilter": {
           "class": "AndFilter",
           "filters": [

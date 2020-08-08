@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Opener: If this has 5 or more Attack, draw a minion.",
+  "description": "Opener: If this has 5 or more Attack, draw a unit.",
   "battlecry": {
     "condition": {
       "class": "AttributeCondition",

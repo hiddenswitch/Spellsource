@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "Both players draw 2 cards then swap their leftmost and rightmost cards with their opponent.",
+  "description": "Both players draw 2 then swap their leftmost and rightmost cards with their opponent.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

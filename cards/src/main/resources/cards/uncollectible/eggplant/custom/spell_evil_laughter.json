@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "RARE",
-  "description": "Draw a card for each allied minion.",
+  "description": "Draw for each allied unit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardSpell",

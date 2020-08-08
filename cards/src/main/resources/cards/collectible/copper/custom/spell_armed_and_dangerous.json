@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "COPPER",
   "rarity": "RARE",
-  "description": "Double the damage of your Skill this turn. Draw a card.",
+  "description": "Double the damage of your Skill this turn. Draw.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

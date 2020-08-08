@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "FAE",
-  "description": "Opener: If you're holding a Spellpower card, draw a card.",
+  "description": "Opener: If you're holding a Spellpower card, draw.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

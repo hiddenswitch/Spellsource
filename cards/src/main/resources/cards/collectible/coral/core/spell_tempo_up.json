@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "EPIC",
-  "description": "The next spell you cast this turn costs (2) less. Draw a card.",
+  "description": "The next spell you cast this turn costs (2) less. Draw.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

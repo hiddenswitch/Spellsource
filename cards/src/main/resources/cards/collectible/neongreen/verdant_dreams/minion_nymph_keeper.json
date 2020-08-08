@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "TITAN",
-  "description": "<b>Opener:</b> Draw 3 of your lowest Cost minions from your deck.",
+  "description": "<b>Opener:</b> Draw 3 of your lowest-Cost units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

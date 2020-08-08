@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Opener: If your deck is empty, you have 15 or less Health remaining and you have no other minions, unleash the end.",
+  "description": "Opener: If your deck is empty, you have 15 or less Health remaining and you have no other units, unleash the end.",
   "battlecry": {
     "condition": {
       "class": "AndCondition",

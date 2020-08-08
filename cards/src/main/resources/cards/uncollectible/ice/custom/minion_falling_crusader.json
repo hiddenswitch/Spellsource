@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 0,
   "rarity": "COMMON",
-  "description": "Aftermath: Add a Rune to your hand (for your troubles).",
+  "description": "Aftermath: Receive a Rune  (for your troubles).",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "card": "spell_rune"

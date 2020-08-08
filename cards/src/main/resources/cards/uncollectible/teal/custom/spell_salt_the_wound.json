@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "RARE",
-  "description": "Deal $2 damage to all enemy minions. Reservoir (0-15): Then, Stun all enemy minions.",
+  "description": "Deal $2 damage to all enemy units. Reservoir (0-15): Then, Stun all enemy units.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ReservoirSpell",

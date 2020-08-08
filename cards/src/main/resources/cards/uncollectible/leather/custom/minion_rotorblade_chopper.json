@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "EPIC",
   "race": "MECH",
-  "description": "Dash. Also damages the minions next to whomever he attacks.",
+  "description": "Dash. Also damages the units next to whomever he attacks.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

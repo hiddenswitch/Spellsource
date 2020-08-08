@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 4,
   "rarity": "EPIC",
-  "description": "Opener: Your opponent summons a random minion from their hand. Give it Guard.",
+  "description": "Opener: Your opponent summons a random unit from their hand. Give it Guard.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

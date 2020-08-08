@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "COMMON",
-  "description": "Give a minion +2 Health and Guard.",
+  "description": "Give a unit +2 Health and Guard.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

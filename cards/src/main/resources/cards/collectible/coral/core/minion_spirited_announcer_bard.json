@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "Opener: If this has at least 5 Attack, draw 2 cards.",
+  "description": "Opener: If this has at least 5 Attack, draw 2.",
   "battlecry": {
     "condition": {
       "class": "AnyMatchFilterCondition",

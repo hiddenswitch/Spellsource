@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "RARE",
-  "description": "Whenever you draw a minion, summon it. Opener: Draw a card.",
+  "description": "Whenever you draw a unit, summon it. Opener: Draw.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

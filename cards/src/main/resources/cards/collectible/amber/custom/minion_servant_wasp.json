@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Dash",
+  "description": "Dash.",
   "attributes": {
     "RUSH": true
   },

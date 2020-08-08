@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "SPIRIT",
-  "description": "After this attacks and kills a minion, gain Dodge.",
+  "description": "After this attacks and kills a unit, gain Dodge.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

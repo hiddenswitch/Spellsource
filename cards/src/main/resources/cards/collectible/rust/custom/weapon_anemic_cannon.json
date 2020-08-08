@@ -6,7 +6,7 @@
   "damage": 5,
   "durability": 2,
   "rarity": "EPIC",
-  "description": "After your champion attacks, give enemy minions -3 Attack this turn.",
+  "description": "After your champion attacks, give enemy units -3 Attack this turn.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

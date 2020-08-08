@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Give a minion Guard and \"Can't attack\".",
+  "description": "Give a unit Guard and \"Can't attack\".",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

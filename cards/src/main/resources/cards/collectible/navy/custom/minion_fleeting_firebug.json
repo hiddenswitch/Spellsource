@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Aftermath: At the end of your turn, summon a Firebug for your opponent.",
+  "description": "Aftermath: At the end of your turns, summon a Firebug for your opponent.",
   "deathrattle": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Your champion and weapon are both Immune.",
+  "description": "Your champion and item are both Immune.",
   "collectible": true,
   "fileFormatVersion": 1,
   "auras": [

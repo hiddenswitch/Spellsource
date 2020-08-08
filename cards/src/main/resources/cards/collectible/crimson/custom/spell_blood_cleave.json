@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "COMMON",
-  "description": "Deal $6 damage to a minion. Deal 3 damage to your champion.",
+  "description": "Deal $6 damage to a unit. Deal 3 damage to your champion.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

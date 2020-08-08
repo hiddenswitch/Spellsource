@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "RARE",
-  "description": "Each time you restore, increase or Drain Health this turn, draw a card.",
+  "description": "Each time you restore, increase or Drain Health this turn, draw.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

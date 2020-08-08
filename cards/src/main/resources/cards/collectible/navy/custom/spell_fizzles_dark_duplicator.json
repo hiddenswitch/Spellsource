@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "LEGENDARY",
-  "description": "Summon a copy of each enemy minion and give it Dash.",
+  "description": "Summon a copy of each enemy unit and give it Dash.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

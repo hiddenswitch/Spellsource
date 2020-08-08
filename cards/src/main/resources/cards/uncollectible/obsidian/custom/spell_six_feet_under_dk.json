@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "EPIC",
-  "description": "Remove the top 6 cards of your deck. Add 6 Ghouls and Skeletons to your hand.",
+  "description": "Remove the top 6 cards of your deck. Receive 6 Ghouls and Skeletons.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Dash Supremacy: Destroy another random enemy minion and draw 2 cards.",
+  "description": "Dash Supremacy: Destroy another random enemy unit and draw 2.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

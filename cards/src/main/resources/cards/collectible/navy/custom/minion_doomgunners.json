@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Attacks minions thrice.",
+  "description": "Attacks units thrice.",
   "triggers": [
     {
       "eventTrigger": {

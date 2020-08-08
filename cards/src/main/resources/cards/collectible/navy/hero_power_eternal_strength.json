@@ -4,14 +4,14 @@
   "type": "HERO_POWER",
   "heroClass": "NAVY",
   "rarity": "FREE",
-  "description": "Draw a card. Refresh this.",
+  "description": "Draw. Refresh this.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "HeroPowerSpell",
-        "description": "Draw a card.",
+        "description": "Draw.",
         "spell": {
           "class": "DrawCardSpell",
           "value": 1

@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 2,
   "rarity": "EPIC",
-  "description": "If you've Drained Health this turn, attacking with this weapon doesn't cost Durability.",
+  "description": "If you've Drained Health this turn, attacking with this item doesn't cost Durability.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",

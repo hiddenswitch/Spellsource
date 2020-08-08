@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "FREE",
-  "description": "Choose a minion. It cannot take damage this turn.",
+  "description": "Choose a unit. It cannot take damage this turn.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddAttributeSpell",

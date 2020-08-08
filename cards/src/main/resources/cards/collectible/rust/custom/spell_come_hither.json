@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "EPIC",
-  "description": "Source a minion in your deck that costs (7) or more. Summon it.",
+  "description": "Source a unit in your deck that costs (7) or more. Summon it.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

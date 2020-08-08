@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Opener: Give all minions in your deck +5/+5. They deal 5 damage to your champion when drawn.",
+  "description": "Opener: Give all units in your deck +5/+5. They deal 5 damage to your champion when drawn.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

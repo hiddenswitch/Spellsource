@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Dash. Dodge. At the end of your turn, gain Dodge.",
+  "description": "Dash. Dodge. At the end of your turns, gain Dodge.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

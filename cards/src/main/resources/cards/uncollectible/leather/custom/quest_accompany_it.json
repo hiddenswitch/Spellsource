@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "LEGENDARY",
-  "description": "Quest: Play a 1-Cost minion. Reward: Unite It!",
+  "description": "Quest: Play a 1-Cost unit. Reward: Unite It!",
   "quest": {
     "class": "MinionPlayedTrigger",
     "queueCondition": {

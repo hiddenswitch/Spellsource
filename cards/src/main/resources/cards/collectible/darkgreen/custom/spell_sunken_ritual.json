@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Give a minion +4/+4 and Guard. It can't attack champions.",
+  "description": "Give a unit +4/+4 and Guard. It can't attack champions.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "<b>Guard</b> Opener: Gain +2/+2 for each minion that died this turn.",
+  "description": "<b>Guard</b> Opener: Gain +2/+2 for each unit that died this turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

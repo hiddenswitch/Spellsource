@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "FAE",
-  "description": "Whenever an allied Fae attacks, draw a card.",
+  "description": "Whenever an allied Fae attacks, draw.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "COMMON",
-  "description": "Shuffle an allied minion into your deck. Summon two 1/1 Raptors.",
+  "description": "Shuffle an allied unit into your deck. Summon two 1/1 Raptors.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

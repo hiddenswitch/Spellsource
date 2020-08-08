@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "FAE",
-  "description": "Whenever you draw a minion, transform it into two random Fae.",
+  "description": "Whenever you draw a unit, transform it into two random Fae.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

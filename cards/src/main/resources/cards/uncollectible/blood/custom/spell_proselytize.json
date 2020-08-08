@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "RARE",
-  "description": "Put the leftmost enemy minion into your hand. Double its Health.",
+  "description": "Put the leftmost enemy unit into your hand. Double its Health.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ReturnTargetToHandSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "For each enemy minion, summon a 1/1 Wasp with Toxic.",
+  "description": "For each enemy unit, summon a 1/1 Wasp with Toxic.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

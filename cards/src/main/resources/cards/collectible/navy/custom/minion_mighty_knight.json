@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 7,
   "rarity": "FREE",
-  "description": "Opener: Draw a card.",
+  "description": "Opener: Draw.",
   "battlecry": {
     "spell": {
       "class": "DrawCardSpell"

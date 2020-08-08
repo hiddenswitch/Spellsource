@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "SPIRIT",
-  "description": "Opener: Your opponent summons a random minion from their hand. This copies its stats.",
+  "description": "Opener: Your opponent summons a random unit from their hand. This copies its stats.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

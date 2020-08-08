@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Opener: If your deck contains only 1 Legendary, draw it. Otherwise, draw a card.",
+  "description": "Opener: If your deck contains only 1 Legendary, draw it. Otherwise, draw.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Casts When Drawn. Restore #4 Health to your Champion.",
+  "description": "Casts When Drawn. Restore #4 Health to your champion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HealSpell",

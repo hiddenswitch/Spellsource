@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Whenever you draw a card, deal 2 damage to a random enemy.",
+  "description": "Whenever you draw, deal 2 damage to a random enemy.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

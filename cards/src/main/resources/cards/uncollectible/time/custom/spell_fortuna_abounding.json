@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "FREE",
-  "description": "Draw 3 cards. Reduce their Costs by (2).",
+  "description": "Draw 3. Reduce their Costs by (2).",
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardSpell",

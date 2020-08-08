@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "After another minion attacks, receive a copy of it.",
+  "description": "After another unit attacks, receive a copy of it.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

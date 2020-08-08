@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "RARE",
-  "description": "Give a minion 'Can't attack' until the start of your next turn. Draw a card.",
+  "description": "Give a unit 'Can't attack' until the start of your next turn. Draw.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

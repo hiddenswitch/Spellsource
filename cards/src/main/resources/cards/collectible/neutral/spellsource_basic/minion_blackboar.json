@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Opener: The next Dash minion you play this turn costs (3) less.",
+  "description": "Opener: The next Dash unit you play this turn costs (3) less.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Opener: Give an allied minion +1/+4 and Guard.",
+  "description": "Opener: Give an allied unit +1/+4 and Guard.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
