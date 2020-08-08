@@ -11,7 +11,7 @@
     "value": 1,
     "attribute": "EXTRA_ATTACKS"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }
