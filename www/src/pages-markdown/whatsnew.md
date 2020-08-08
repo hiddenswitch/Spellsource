@@ -10,7 +10,73 @@ header: true
 Thanks for playing this beta of Spellsource! Read more at [our website](http://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)! See older updates [here](history).
 
-### Current Build 0.8.79-3.2.1 (July 20, 2020)
+### Current Build 0.8.80-3.2.2 (August 7, 2020)
+<details>
+<summary>Previewing UX changes and sprites, along with numerous bug fixes...</summary>
+
+ - Thanks to @matchaginseng for ongoing improvements to the website! This includes a big facelift, searchable collections and card previews.
+ - Thanks to @doombubbles for massive updates to the visual card editor. It will be rolled out very soon!  
+ - Many language changes by @DeepKhaos are now in the game, thanks!
+ - Significant updates to the Bard and Occultist classes (thanks @Muhframos), including a Bard set rework.
+ - Additional changes by @jtntimm to a variety of cards, thanks!
+ - Tooltips have been introduced to card previews. You can press and hold on mobile to view a tooltip.
+ - You can now toggle the description text on and off of cards on mobile in your hand tray by tapping on them. The game will remember your preferences.
+ - Desktop platforms no longer scale the battlefield along screen size. You will see significant amounts of negative space in this build that will be replaced by beautiful battlefield art.
+ - The snackbar is no longer colored incorrectly in portrait-like aspect ratios.
+ - The deck now shows the number of cards inside of it on the battlefield.
+ - In certain situations the game would crash due to a "zone move" command issued from the server. This is now resolved.
+ - A pixel particle effect is now used for the summoning aura and will be representative of future particle effects in the game.
+ - Now showing 3 columns in the collection view on portrait on the iPhone X instead of 2.
+ - Signature selection now appears correctly in the collections view.
+ - The large card rendered when scrolling through the collection's side panels now appears better.
+ - The Discord bot now works again after an API update by the Discord team.
+
+#### @Muhframos's Fixes
+
+ - Corrupting Tome now ignores Spellpower.
+ - Bloody Blow no longer scales with Spellpower in the text.
+ - King in Yellow has been reworked, now a (3) Lun 3/3 "Your undamaged minions have Dash. Your damaged minions have Guard."
+ - Freezing Over renamed to For Science! and its stun effect was removed.
+ - Defender of Tomorrow now requires (25) lun instead of (20).
+ - Sunken Terror Up now costs (9) Lun.
+ - Eldritch Experimenter 2 lun 1/4 -> 1/3 (Whenever this minion takes damage, give another random friendly minion +1/+1) 
+ - Star Sculptor 4 lun 3/3 -> Idol Sculptor, 5 lun (Opener: Summon a copy of a friendly minion. It has Guard and can't attack.)
+ - Distortoise 4 lun 3/7 -> 2/8 (Guard. Opener: Deal 3 damage to your champion)
+ - Decaying Colossus 2 lun 2/8 -> 2/7 (At the end of each turn, this takes 1 damage)
+ - Scourge Cultist 2 lun 2/3 -> Hastur's Acolyte, 2/2 (Opener: If a friendly minion died this turn, summon two 1/1 Tentacles with Guard.)
+ - Underwater Horrors 2 Lun -> 3 Lun (Shuffle a minion into its owner's deck. At the end of their turn, they draw it)
+ - Merciless Corruptor 3 Lun 1/1 -> 5 Lun 1/6 (Opener: Give all other minions "Aftermath: Deal 1 damage to all minions.")
+ - Towering Horror 4 lun 6/2 -> 5 Lun 4/2 (Opener: Gain +2 Health for each minion that died this turn.)
+ - Rain of Tentacles 6 Lun -> 7 Lun (Fill your board with 1/1 Tentacles with Guard.)
+ - Ancient's Aid (2 Lun, Take 3 damage and summon three 1/1 Tentacles with Guard replaced by: Abyssal Protector
+ - Lash Out (3 Lun, Deal 1 damage to all enemies and summon two 1/1 Tentacles with Guard replaced by: Bloodthirsty Cult
+ - Mind Flay (2 Lun, Deal 5 damage to a minion, its owner draws 2 cards) replaced by: Accumulated Rage
+ - Unholy Tremors (3 Lun, Deal 1 damage to all minions, twice) replaced by: Rite of Worship
+ - Monolith of Doom (2 Lun 0/5, Opener: Deal 1 damage (Doubles for each Monolith of Doom played this turn) replaced by: Volatile Wisdom
+ - Hulking Magmass 8 Lun 6/6 -> Reborn Champion 7 Lun (Guard, Opener: Gain +2/+2 for each minion that died this turn.)
+ - Party Pooper 3 Lun 3/5 -> Abyssal Lurker 5 lun 7/7 (Guard Opener: Shuffle all other friendly minions into your deck.)
+ - Tentacolossus 5 Lun 4/4 -> 4 Lun (Opener: Destroy all friendly Tentacles, gain +2/+2 for each destroyed.)
+ - Abholos 9 Lun 9/7 -> 7 Lun 9/9 (Aftermath: Destroy friendly minions. Resummon this with the combined stats.)
+ - Kahl of the Deep 5 Lun 3/5 -> 4 Lun (Aftermath: Shuffle this into your opponent's deck and give it "When drawn, draw 3 cards")
+ - Astral Anomaly 7 Lun 6/3 (After you cast a spell on this, cast it on all other minions.) -> (Whenever you cast a spell on this, cast it on all other minions.)
+
+#### Language Changes
+ - Minions are now units.
+ - Weapons are now items.
+ - Draw a card is now Draw.
+ - All card descriptions should end with a period (a full stop).
+ - Some additional stylistic and logic changes.
+ - "Add... to your deck" is now "Receive".
+ - "to your deck" and "from your deck" are ommitted where they are now redundant.
+ - Champion is no longer inappropriately capitalized.
+ - Cast When Drawn now replaces the more verbose explanations of that effect.
+ - Start of Game replaces some more verbose explanations of that effect.
+ 
+#### Server Improvements
+ - Games that last longer than 1 hour no longer cause issues when you attempt to reconnect to them.
+</details>
+
+### 0.8.79-3.2.1 (July 20, 2020)
 <details>
 <summary>Say hello to the Dreamer class! And other bug fixes...</summary>
 
