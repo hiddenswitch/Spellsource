@@ -1,4 +1,4 @@
-### Witch Doctor: Spell Power Doctor
+### Spell Power Doctor
 # Class: ROSE
 # Format: Spellsource
 #

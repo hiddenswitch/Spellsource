@@ -1,4 +1,4 @@
-### Witch Doctor: Aftermath Doctor
+### Aftermath Doctor
 # Class: ROSE
 # Format: Spellsource
 #

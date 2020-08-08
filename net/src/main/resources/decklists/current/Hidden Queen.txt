@@ -1,0 +1,21 @@
+### Hidden Queen
+# Class: BLUEGREY
+# Format: Spellsource
+#
+# 2x (0) Cloak and Dagger
+# 2x (0) Dimensiongate
+# 1x (1) Enenra
+# 2x (1) Gather in the Shadows
+# 2x (1) Shadow Ninja
+# 2x (1) Shinobi Infiltrator
+# 2x (1) Thin Smoke
+# 2x (2) Swiftfoot Shinobi
+# 2x (2) Terrified Tanuki
+# 2x (3) Shady Namahage
+# 2x (3) Smoke Flash
+# 2x (3) Smokeweaver
+# 2x (3) Stormcloud Assailant
+# 2x (3) Warmongering
+# 1x (5) Nurse Wounds
+# 2x (6) 8th Heaven Formation
+#

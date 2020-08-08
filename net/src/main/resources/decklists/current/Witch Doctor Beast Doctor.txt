@@ -1,4 +1,4 @@
-### Witch Doctor: Beast Doctor
+### Beast Doctor
 # Class: ROSE
 # Format: Spellsource
 #
