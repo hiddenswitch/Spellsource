@@ -15,7 +15,7 @@ Greetings, [settler](/wiki/Humans "wikilink")! The world's greatest explorer,
 source of all magic. After many months at sea, his ships pierce a
 [magical barrier](/wiki/Lunopause "wikilink") and crash on a mysterious
 [Volcanic island](/wiki/Moromah_Island "wikilink"). With his ships destroyed,
-he steps up a colony aided by local [Fae](/wiki/Fae "wikilink"), strange
+he sets up a colony aided by local [Fae](/wiki/Fae "wikilink"), strange
 humanoid creatures imbued with magic. This must be the spell-source
 they've been seeking. But unbeknownst to the colonists, the
 [Dragons](/wiki/Dragovians "wikilink") are watching and preparing to drive
