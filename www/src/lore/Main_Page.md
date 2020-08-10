@@ -8,7 +8,7 @@ layout: wiki
 <p />
 
 ![The Lung
-Archipelago](Map.png "fig:The Lung Archipelago")
+Archipelago](../assets/sector-5.png "fig:The Lung Archipelago")
 
 Greetings, [settler](/wiki/Humans "wikilink")! The world's greatest explorer,
 [Shun He](/wiki/Shun_He "wikilink"), leads an expedition to find the fabled
