@@ -27,7 +27,7 @@ const Index = () => {
       <section className={styles.fullscreenDiv}>
         <Parallax pages={parallaxPages()} scrolling={true} vertical ref={ref => (parallax = ref)}>
           <ParallaxLayer offset={0} speed={1}
-                         style={{ backgroundImage: 'linear-gradient(#21215c, #533B63, #341F42)' }}/>
+                         style={{ backgroundImage: 'linear-gradient(#21215c, rgb(89,153,215))' }}/>
 
           <ParallaxLayer offset={0.99} speed={1} style={{
             backgroundImage: `url(${gameEnvironment})`,
