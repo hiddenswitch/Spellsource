@@ -24,12 +24,13 @@
 	    },
 	    {
           "class": "AddAttributeSpell",
-          "attribute": "UNTARGETABLE_BY_SPELLS"
+          "attribute": "UNTARGETABLE_BY_SPELLS",
+          "target": "SELF"
         }
 	  ]
     }
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

@@ -7,24 +7,39 @@
   "description": "Transform a unit into a 5/5 Kumiho. <b>Imbue</b>: With Spellpower +2.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "ImbueSpell", #Noting for the future
+    "class": "ChooseOneSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_PLAYER",
+      "attribute": "IMBUE",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL"
+    },
     "spell1": {
-      "class": "ImbueOptionSpell",
+      "class": "ChooseOneOptionSpell",
       "name": "Normal",
-      "description": "Transform a unit into a 5/5 Kumiho."
-	  "spell": {
+      "description": "Transform a unit into a 5/5 Kumiho.",
+      "spell": {
         "class": "TransformMinionSpell",
         "card": "token_kumiho"
-	  }
+      }
     },
     "spell2": {
-      "class": "ImbueOptionSpell", #Noting for the future
+      "class": "ChooseOneOptionSpell",
       "name": "Imbue",
-      "description": "Transform a unit into a 5/5 Kumiho with Spellpower +2."
-	  "spell": {
-	    "class": "TransformMinionSpell",
-        "card": "token_kumiho_spellpower"
-      }
+      "description": "Transform a unit into a 5/5 Kumiho with Spellpower +2.",
+      "spells": [
+        {
+          "class": "TransformMinionSpell",
+          "card": "token_kumiho_spellpower"
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "value": -1,
+          "attribute": "IMBUE",
+          "target": "FRIENDLY_PLAYER"
+        }
+      ]
     },
     "spell": {
       "class": "TransformMinionSpell",
@@ -32,9 +47,9 @@
     }
   },
   "attributes": {
-    "IMBUE": true #Noting for the future
+    "IMBUE": true
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

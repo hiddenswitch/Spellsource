@@ -7,12 +7,19 @@
   "description": "Source a card in your graveyard. <b>Imbue</b>: Do it twice.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ImbueSpell", #Noting for the future
+    "class": "ChooseOneSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_PLAYER",
+      "attribute": "IMBUE",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL"
+    },
     "spell1": {
-      "class": "ImbueOptionSpell",
+      "class": "ChooseOneOptionSpell",
       "name": "Normal",
       "description": "Source a card in your graveyard.",
-	  "spell": {
+      "spell": {
         "class": "DiscoverSpell",
         "spell": {
           "class": "ReceiveCardSpell",
@@ -27,34 +34,42 @@
           "class": "GraveyardCardsSource",
           "targetPlayer": "SELF"
         }
-	  }
-    },
-    "spell2": {
-      "class": "ImbueOptionSpell", #Noting for the future
-      "name": "Imbue",
-      "description": "Source two cards in your graveyard.",
-	  "spell": {
-        "class": "CastRepeatedlySpell",
-        "howMany": 2,
-	    "spell": {
-          "class": "DiscoverSpell",
-          "spell": {
-            "class": "ReceiveCardSpell",
-            "targetPlayer": "SELF"
-          },
-          "cardFilter": {
-            "class": "CardFilter",
-            "attribute": "PLAYED_FROM_HAND_OR_DECK",
-            "operation": "HAS"
-          },
-          "cardSource": {
-            "class": "GraveyardCardsSource",
-            "targetPlayer": "SELF"
-          }
-	    }
       }
     },
-	"spell": {
+    "spell2": {
+      "class": "ChooseOneOptionSpell",
+      "name": "Imbue",
+      "description": "Source two cards in your graveyard.",
+      "spells": [
+        {
+          "class": "CastRepeatedlySpell",
+          "howMany": 2,
+          "spell": {
+            "class": "DiscoverSpell",
+            "spell": {
+              "class": "ReceiveCardSpell",
+              "targetPlayer": "SELF"
+            },
+            "cardFilter": {
+              "class": "CardFilter",
+              "attribute": "PLAYED_FROM_HAND_OR_DECK",
+              "operation": "HAS"
+            },
+            "cardSource": {
+              "class": "GraveyardCardsSource",
+              "targetPlayer": "SELF"
+            }
+          }
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "value": -1,
+          "attribute": "IMBUE",
+          "target": "FRIENDLY_PLAYER"
+        }
+      ]
+    },
+    "spell": {
       "class": "DiscoverSpell",
       "spell": {
         "class": "ReceiveCardSpell",
@@ -69,13 +84,30 @@
         "class": "GraveyardCardsSource",
         "targetPlayer": "SELF"
       }
-	}
+    }
+  },
+  "condition": {
+    "class": "ComparisonCondition",
+    "value1": {
+      "class": "CardCountValueProvider",
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "PLAYED_FROM_HAND_OR_DECK",
+        "operation": "HAS"
+      }
+    },
+    "operation": "GREATER_OR_EQUAL",
+    "value2": 1
   },
   "attributes": {
-    "IMBUE": true, #Noting for the future
-	"DISCOVER": true
+    "IMBUE": true,
+    "DISCOVER": true
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

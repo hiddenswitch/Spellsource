@@ -7,12 +7,19 @@
   "description": "Enemy units cost (6) more next turn. <b>Imbue</b>: Spells instead.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ImbueSpell", #Noting for the future
+    "class": "ChooseOneSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_PLAYER",
+      "attribute": "IMBUE",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL"
+    },
     "spell1": {
-      "class": "ImbueOptionSpell",
+      "class": "ChooseOneOptionSpell",
       "name": "Normal",
       "description": "Enemy units cost (6) more.",
-	  "spell": {
+      "spell": {
         "class": "CardCostModifierSpell",
         "target": "FRIENDLY_PLAYER",
         "cardCostModifier": {
@@ -26,27 +33,35 @@
           "operation": "ADD",
           "targetPlayer": "OPPONENT"
         }
-	  }
+      }
     },
     "spell2": {
-      "class": "ImbueOptionSpell", #Noting for the future
+      "class": "ChooseOneOptionSpell",
       "name": "Imbue",
       "description": "Enemy spells cost (6) more.",
-	  "spell": {
-        "class": "CardCostModifierSpell",
-        "target": "FRIENDLY_PLAYER",
-        "cardCostModifier": {
-          "class": "CardCostModifier",
-          "value": 6,
-          "cardType": "SPELL",
-          "expirationTrigger": {
-            "class": "TurnEndTrigger",
+      "spells": [
+        {
+          "class": "CardCostModifierSpell",
+          "target": "FRIENDLY_PLAYER",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "value": 6,
+            "cardType": "SPELL",
+            "expirationTrigger": {
+              "class": "TurnEndTrigger",
+              "targetPlayer": "OPPONENT"
+            },
+            "operation": "ADD",
             "targetPlayer": "OPPONENT"
-          },
-          "operation": "ADD",
-          "targetPlayer": "OPPONENT"
+          }
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "value": -1,
+          "attribute": "IMBUE",
+          "target": "FRIENDLY_PLAYER"
         }
-      }
+      ]
     },
     "spell": {
       "class": "CardCostModifierSpell",
@@ -65,9 +80,9 @@
     }
   },
   "attributes": {
-    "IMBUE": true #Noting for the future
+    "IMBUE": true
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

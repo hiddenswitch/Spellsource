@@ -12,6 +12,6 @@
     "SPELL_DAMAGE": 2
   },
   "collectible": false,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

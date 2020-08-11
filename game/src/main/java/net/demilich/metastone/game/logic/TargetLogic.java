@@ -129,7 +129,7 @@ public class TargetLogic implements Serializable {
 		return null;
 	}
 
-	private List<Entity> getEntities(GameContext context, Player player, TargetSelection targetRequirement, boolean omitPermanents) {
+	public List<Entity> getEntities(GameContext context, Player player, TargetSelection targetRequirement, boolean omitPermanents) {
 		Player opponent = context.getOpponent(player);
 		List<Entity> entities = new ArrayList<>();
 		if (targetRequirement == TargetSelection.ENEMY_HERO

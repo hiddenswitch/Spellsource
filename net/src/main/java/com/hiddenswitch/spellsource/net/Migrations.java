@@ -605,7 +605,13 @@ public interface Migrations extends Verticle {
 						.withUp(thisVertx -> {
 							removeCards("spell_earthquake");
 						}))
-				.migrateTo(45, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(46)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							Bots.updateBotDeckList();
+						}))
+				.migrateTo(46, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())))
 		;
 	}

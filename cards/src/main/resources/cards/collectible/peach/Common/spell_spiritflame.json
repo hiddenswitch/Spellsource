@@ -19,12 +19,12 @@
           "spell_fox_dance",
           "spell_fox_fire",
           "spell_fox_kiss"
-        ]
+        ],
         "randomTarget": true
 	  }
     ]
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

@@ -26,6 +26,6 @@
     "DISCOVER": true
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

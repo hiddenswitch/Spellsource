@@ -11,8 +11,7 @@
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",
       "actionType": "SPELL",
-      "hostTargetType": "IGNORE_OTHER_TARGETS",
-      "sourcePlayer": ""
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
       "class": "ReceiveCardSpell",
@@ -24,6 +23,6 @@
     }
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

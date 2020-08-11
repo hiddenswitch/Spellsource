@@ -2579,7 +2579,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	private int getTotalAttributeMultiplier(Player player, Attribute attribute) {
 		var total = 1;
 		if (player.getHero().hasAttribute(attribute)) {
-			player.getHero().getAttributeValue(attribute);
+			total *= player.getHero().getAttributeValue(attribute);
 		}
 		for (Entity minion : player.getMinions()) {
 			if (minion.hasAttribute(attribute)) {

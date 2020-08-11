@@ -5,48 +5,56 @@
   "heroClass": "PEACH",
   "rarity": "COMMON",
   "description": "Deal $4 damage to a unit. Imbue: And to the enemy champion.",
+  "targetSelection": "MINIONS",
   "spell": {
-    "targetSelection": "MINIONS",
-    "spell": {
-      "class": "ImbueSpell", #Noting for the future
-      "spell1": {
-        "class": "ImbueOptionSpell",
-        "name": "Normal",
-        "description": "Deal $4 damage to a unit."
-        "spell": {
+    "class": "ChooseOneSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_PLAYER",
+      "attribute": "IMBUE",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "spell1": {
+      "class": "ChooseOneOptionSpell",
+      "name": "Normal",
+      "description": "Deal $4 damage to a unit.",
+      "spell": {
+        "class": "DamageSpell",
+        "value": 4
+      }
+    },
+    "spell2": {
+      "class": "ChooseOneOptionSpell",
+      "name": "Imbue",
+      "description": "Deal $4 damage to a unit and the enemy champion",
+      "spells": [
+        {
           "class": "DamageSpell",
-		  "value": 4
-	    }
-      },
-      "spell2": {
-        "class": "ImbueOptionSpell", #Noting for the future
-        "name": "Imbue",
-        "description": "Deal $4 damage to a unit and the enemy champion",
-	    "spell": {
-          "class": "MetaSpell",
-          "spells": [
-            {
-              "class": "DamageSpell",
-              "value": 4
-            },
-            {
-              "class": "DamageSpell",
-              "target": "ENEMY_HERO",
-              "value": 4
-            }
-          ]
+          "value": 4
+        },
+        {
+          "class": "DamageSpell",
+          "target": "ENEMY_HERO",
+          "value": 4
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "value": -1,
+          "attribute": "IMBUE",
+          "target": "FRIENDLY_PLAYER"
         }
-      },
-	  "spell": {
-	    "class": "DamageSpell",
-		"value": 4
-	  }
+      ]
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "value": 4
     }
   },
   "attributes": {
-    "IMBUE": true #Noting for the future
+    "IMBUE": true
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

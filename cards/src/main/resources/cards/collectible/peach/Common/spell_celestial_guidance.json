@@ -7,12 +7,19 @@
   "description": "Receive two random Witch spells. <b>Imbue</b>: Source them instead.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ImbueSpell", #Noting for the future
+    "class": "ChooseOneSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_PLAYER",
+      "attribute": "IMBUE",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL"
+    },
     "spell1": {
-      "class": "ImbueOptionSpell",
+      "class": "ChooseOneOptionSpell",
       "name": "Normal",
       "description": "Receive two Witch spells.",
-	  "spell": {
+      "spell": {
         "class": "ReceiveCardSpell",
         "value": 2,
         "cardFilter": {
@@ -20,28 +27,36 @@
           "heroClass": "PEACH",
           "cardType": "SPELL"
         }
-	  }
+      }
     },
     "spell2": {
-      "class": "ImbueOptionSpell", #Noting for the future
+      "class": "ChooseOneOptionSpell",
       "name": "Imbue",
       "description": "Source two Witch spells.",
-	  "spell": {
-        "class": "CastRepeatedlySpell",
-        "howMany": 2,
-        "spell": {
-          "class": "DiscoverSpell",
+      "spells": [
+        {
+          "class": "CastRepeatedlySpell",
+          "howMany": 2,
           "spell": {
-            "class": "ReceiveCardSpell",
-            "targetPlayer": "SELF"
-          },
-          "cardFilter": {
-            "class": "CardFilter",
-			"heroClass": "SELF",
-            "cardType": "SPELL"
+            "class": "DiscoverSpell",
+            "spell": {
+              "class": "ReceiveCardSpell",
+              "targetPlayer": "SELF"
+            },
+            "cardFilter": {
+              "class": "CardFilter",
+              "heroClass": "SELF",
+              "cardType": "SPELL"
+            }
           }
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "value": -1,
+          "attribute": "IMBUE",
+          "target": "FRIENDLY_PLAYER"
         }
-      }
+      ]
     },
     "spell": {
       "class": "ReceiveCardSpell",
@@ -54,10 +69,10 @@
     }
   },
   "attributes": {
-    "IMBUE": true, #Noting for the future
-	"DISCOVER": true
+    "IMBUE": true,
+    "DISCOVER": true
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

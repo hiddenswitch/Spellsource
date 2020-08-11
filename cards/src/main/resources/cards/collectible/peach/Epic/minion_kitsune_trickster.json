@@ -27,6 +27,6 @@
     "attribute": "AURA_SPELL_DAMAGE"
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }
