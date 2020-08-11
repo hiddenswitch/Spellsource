@@ -10,6 +10,9 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+/**
+ * The definition of a {@link ChooseOneSpell}'s sub spells.
+ */
 public class ChooseOneOptionSpell extends MetaSpell {
 
 	@Suspendable
@@ -26,8 +29,8 @@ public class ChooseOneOptionSpell extends MetaSpell {
 	/**
 	 * Gets or create the temporary card representing the option.
 	 *
-	 * @param context the game context
-	 * @param spellDesc the dummy spell to make a card from
+	 * @param context    the game context
+	 * @param spellDesc  the dummy spell to make a card from
 	 * @param sourceCard the card making the choice
 	 * @return the temp card for the option
 	 */

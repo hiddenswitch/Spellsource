@@ -403,6 +403,9 @@ public interface Games extends Verticle {
 
 			// Include the player's mana, locked mana and max mana in the hero entity for convenience
 			heroEntity
+					// Include the number of "charges" to render
+					// Imbue is currently the only effect that takes advantage of this
+					.charges(player.hasAttribute(Attribute.IMBUE) ? player.getAttributeValue(Attribute.IMBUE) : null)
 					.mana(player.getMana())
 					.maxMana(player.getMaxMana())
 					.lockedMana(player.getLockedMana());

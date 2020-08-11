@@ -1783,6 +1783,11 @@ definitions:
           When set on the player entity, indicates the effects occuring now are during the player's turn start phase.
         type: 'boolean'
         default: false
+      charges:
+        description: |
+          An integer number of glowing orbs to render above the entity.
+        type: 'integer'
+        format: 'int32'
       art:
         $ref: '#/definitions/Art'
       tooltips:

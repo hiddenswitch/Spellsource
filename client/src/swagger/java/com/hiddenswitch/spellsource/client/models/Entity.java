@@ -235,6 +235,9 @@ public class Entity implements Serializable {
   @JsonProperty("isStartingTurn")
   private Boolean isStartingTurn = false;
 
+  @JsonProperty("charges")
+  private Integer charges = null;
+
   @JsonProperty("art")
   private Art art = null;
 
@@ -1437,6 +1440,24 @@ public class Entity implements Serializable {
     this.isStartingTurn = isStartingTurn;
   }
 
+  public Entity charges(Integer charges) {
+    this.charges = charges;
+    return this;
+  }
+
+   /**
+   * An integer number of glowing orbs to render above the entity. 
+   * @return charges
+  **/
+  @ApiModelProperty(value = "An integer number of glowing orbs to render above the entity. ")
+  public Integer getCharges() {
+    return charges;
+  }
+
+  public void setCharges(Integer charges) {
+    this.charges = charges;
+  }
+
   public Entity art(Art art) {
     this.art = art;
     return this;
@@ -1557,13 +1578,14 @@ public class Entity implements Serializable {
         Objects.equals(this.gameStarted, entity.gameStarted) &&
         Objects.equals(this.cardSets, entity.cardSets) &&
         Objects.equals(this.isStartingTurn, entity.isStartingTurn) &&
+        Objects.equals(this.charges, entity.charges) &&
         Objects.equals(this.art, entity.art) &&
         Objects.equals(this.tooltips, entity.tooltips);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, cardId, entityType, name, description, l, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, discarded, roasted, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, cardSets, isStartingTurn, art, tooltips);
+    return Objects.hash(id, cardId, entityType, name, description, l, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, discarded, roasted, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, cardSets, isStartingTurn, charges, art, tooltips);
   }
 
 
@@ -1638,6 +1660,7 @@ public class Entity implements Serializable {
     sb.append("    gameStarted: ").append(toIndentedString(gameStarted)).append("\n");
     sb.append("    cardSets: ").append(toIndentedString(cardSets)).append("\n");
     sb.append("    isStartingTurn: ").append(toIndentedString(isStartingTurn)).append("\n");
+    sb.append("    charges: ").append(toIndentedString(charges)).append("\n");
     sb.append("    art: ").append(toIndentedString(art)).append("\n");
     sb.append("    tooltips: ").append(toIndentedString(tooltips)).append("\n");
     sb.append("}");
