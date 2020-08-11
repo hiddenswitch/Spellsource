@@ -58,9 +58,16 @@
         },
 		{
           "class": "SummonSpell",
+<<<<<<< Updated upstream
           "value": 1,
           "target": "SELF"
 		}
+=======
+          "target": "SELF",
+          "boardPositionRelative": "RIGHT",
+          "value": 1
+        }
+>>>>>>> Stashed changes
       ]
     }
   },

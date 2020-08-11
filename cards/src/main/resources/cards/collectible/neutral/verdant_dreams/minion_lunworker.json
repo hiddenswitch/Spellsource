@@ -1,0 +1,26 @@
+{
+  "name": "Lunworker",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Whenever you cast a spell, give another allied unit +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attackBonus": 1,
+      "hpBonus": 1,
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Hold Hunter",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "PIRATE",
+  "description": "After this attacks and kills a unit, gain Dodge.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "IsDeadCondition",
+            "target": "EVENT_TARGET"
+          },
+          {
+            "class": "IsDeadCondition",
+            "target": "TRIGGER_HOST",
+            "invert": true
+          }
+        ]
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "DIVINE_SHIELD"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Silver Timekeeper",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Opener: Activate a unit's start and end of turn effects.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "custom.ActivateTriggeredEffectSpell",
+      "filter": {
+        "class": "HasTurnEffectsFilter"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

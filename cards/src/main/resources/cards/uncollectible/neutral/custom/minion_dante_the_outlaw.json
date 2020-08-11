@@ -1,0 +1,33 @@
+{
+  "name": "Dante the Outlaw",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Take control of an enemy unit with less Attack than this.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "MindControlSpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "SELF",
+          "attribute": "ATTACK"
+        },
+        "attribute": "ATTACK",
+        "operation": "LESS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "author": "Mike Pence"
+}

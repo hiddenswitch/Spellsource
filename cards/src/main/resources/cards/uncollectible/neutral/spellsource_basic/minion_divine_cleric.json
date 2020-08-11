@@ -1,0 +1,24 @@
+{
+  "name": "Divine Cleric",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "Opener: Restore #4 Health.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "HealSpell",
+      "value": 4
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

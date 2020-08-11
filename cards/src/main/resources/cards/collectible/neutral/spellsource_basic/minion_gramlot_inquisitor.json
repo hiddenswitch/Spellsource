@@ -1,0 +1,24 @@
+{
+  "name": "Gramlot Inquisitor",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Whenever you play a card, restore #2 Health to your champion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

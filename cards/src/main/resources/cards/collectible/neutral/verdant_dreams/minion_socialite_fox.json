@@ -1,0 +1,35 @@
+{
+  "name": "Socialite Fox",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Opener: Receive a random Beast. It costs (2) less.",
+  "targetSelection": "NONE",
+  "battlecry": {
+    "class": "ReceiveCardSpell",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "OUTPUT",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 2,
+        "operation": "SUBTRACT"
+      }
+    },
+    "cardFilter": {
+      "class": "RaceFilter",
+      "race": "BEAST"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

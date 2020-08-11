@@ -1,9 +1,9 @@
 {
   "name": "Flytrap Drake",
-  "baseManaCost": 6,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 6,
+  "baseAttack": 5,
   "baseHp": 4,
   "rarity": "FREE",
   "race": "DRAGON",

@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Opener: Your champion has +1 Attack while it has a weapon this game.",
+  "description": "Opener: Your items have +1 Attack while equipped this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

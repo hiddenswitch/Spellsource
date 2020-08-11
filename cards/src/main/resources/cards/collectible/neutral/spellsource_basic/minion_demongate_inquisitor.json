@@ -1,0 +1,25 @@
+{
+  "name": "Demongate Inquisitor",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Whenever another allied units dies, restore #4 Health to your champion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 4
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

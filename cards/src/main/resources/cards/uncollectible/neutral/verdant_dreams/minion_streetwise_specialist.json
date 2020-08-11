@@ -1,0 +1,25 @@
+{
+  "name": "Streetwise Specialist",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Whenever your opponent draws, deal 2 damage to the enemy champion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_HERO",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "author": "Basse22"
+}

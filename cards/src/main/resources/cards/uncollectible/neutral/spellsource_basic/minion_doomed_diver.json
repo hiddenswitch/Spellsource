@@ -1,0 +1,31 @@
+{
+  "name": "Doomed Diver",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "PIRATE",
+  "description": "Opener: If a Pirate attacked this turn, draw.",
+  "battlecry": {
+    "condition": {
+      "class": "HasAttackedCondition",
+      "target": "ALL_MINIONS",
+      "filter": {
+        "class": "CardFilter",
+        "race": "PIRATE"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

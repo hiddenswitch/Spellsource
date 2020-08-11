@@ -1,0 +1,47 @@
+{
+  "name": "Prince Tenris",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Opener: Your champion has +1 Attack while it has a weapon this game.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "aura": {
+        "class": "BuffAura",
+        "target": "FRIENDLY_HERO",
+        "condition": {
+          "class": "AndCondition",
+          "conditions": [
+            {
+              "class": "OwnedByPlayerCondition",
+              "targetPlayer": "ACTIVE"
+            },
+            {
+              "class": "HasWeaponCondition"
+            }
+          ]
+        },
+        "attackBonus": 1,
+        "hpBonus": 0,
+        "secondaryTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "BOTH"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "author": "Nekkit"
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Archivist Jerrard",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Source a card from a valid deck named \"The Archive\" in your collection.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardSource": {
+        "class": "DeckCollectionSource",
+        "collectionName": "The Archive",
+        "distinct": true,
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Flashbulb Spider",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "FAE",
+  "description": "Enemies opposite this can't attack.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "OPPOSITE_MINIONS",
+    "attribute": "AURA_CANNOT_ATTACK"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "author": "CattyNerd"
+}

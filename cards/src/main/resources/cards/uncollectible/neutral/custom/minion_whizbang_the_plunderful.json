@@ -1,0 +1,27 @@
+{
+  "name": "Whizbang the Plunderful",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Swap the Cost and Health of all units in your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.SwapHpAndCostSpell",
+      "target": "FRIENDLY_HAND",
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

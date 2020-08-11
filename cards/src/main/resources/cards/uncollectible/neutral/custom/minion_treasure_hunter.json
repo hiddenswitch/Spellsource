@@ -1,0 +1,27 @@
+{
+  "name": "Treasure Hunter",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "PIRATE",
+  "description": "Opener: Draw a 0-Cost card.",
+  "battlecry": {
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": 0
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

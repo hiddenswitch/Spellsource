@@ -1,0 +1,47 @@
+{
+  "name": "Acolyte of Peroth'arn",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Opener: If your deck contains only 1 Legendary, draw it. Otherwise, draw.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "EQUAL",
+        "value1": {
+          "class": "EntityCountValueProvider",
+          "target": "FRIENDLY_DECK",
+          "filter": {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY"
+          }
+        },
+        "value2": 1
+      },
+      "spell1": {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "rarity": "LEGENDARY"
+        }
+      },
+      "spell2": {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

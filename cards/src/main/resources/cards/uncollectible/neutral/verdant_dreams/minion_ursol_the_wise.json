@@ -1,0 +1,30 @@
+{
+  "name": "Ursol the Wise",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you cast a spell, receive a random spell that costs (3) or more.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "value": 3,
+        "attribute": "BASE_MANA_COST",
+        "cardType": "SPELL",
+        "operation": "GREATER_OR_EQUAL"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

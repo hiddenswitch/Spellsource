@@ -1,0 +1,34 @@
+{
+  "name": "Captain Stashin",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "PIRATE",
+  "description": "Whenever an allied Pirate attacks, receive a random card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
+      "fireCondition": {
+        "class": "RaceCondition",
+        "target": "EVENT_SOURCE",
+        "race": "PIRATE"
+      },
+      "sourceEntityType": "MINION",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      },
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
