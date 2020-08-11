@@ -198,6 +198,25 @@ On **macOS**, allocate more memory to your Docker host.
 
 Make sure to use your local `docker` context using `docker context use default`.
 
+> I receive an error starting the server with `gradle net:run` of the form:
+
+```shell script
+main ERROR o.t.d.DockerClientProviderStrategy Could not find a valid Docker environment. Please check configuration. Attempted configurations were:
+Exception in thread "main" 20200811T112136 main ERROR o.t.d.DockerClientProviderStrategy     UnixSocketClientProviderStrategy: failed with exception InvalidConfigurationException (ping failed). Root cause NoSuchFileException (/var/run/docker.sock)
+org.testcontainers.containers.ContainerLaunchException: Container startup failed
+main ERROR o.t.d.DockerClientProviderStrategy As no valid configuration was found, execution cannot continue
+```
+
+> The MongoDB container doesn't start with `gradle net:run` with the following error: `Timed out waiting for log output matching '.*waiting for connections on port.*'`
+
+Try deleting your local database which is automatically bind-mounted to the container at `.mongo`:
+
+```shell script
+rm -rf .mongo/
+```
+
+Make sure Docker is running.
+
 ### Special Thanks
 
 ![YourKit](https://www.yourkit.com/images/yklogo.png)

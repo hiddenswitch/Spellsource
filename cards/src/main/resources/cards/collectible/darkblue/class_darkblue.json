@@ -40,5 +40,11 @@
       "r": 0.165
     }
   },
-  "hero": "hero_ophelia"
+  "hero": "hero_ophelia",
+  "tooltips": [
+    {
+      "keywords": ["soulbind"],
+      "text": "<b>Soulbind</b>: Summon one of four random Souls."
+    }
+  ]
 }

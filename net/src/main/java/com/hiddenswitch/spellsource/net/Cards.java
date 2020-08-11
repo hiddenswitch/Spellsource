@@ -2,9 +2,11 @@ package com.hiddenswitch.spellsource.net;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.CardRecord;
+import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
-import com.hiddenswitch.spellsource.net.models.*;
+import com.hiddenswitch.spellsource.net.models.QueryCardsRequest;
+import com.hiddenswitch.spellsource.net.models.QueryCardsResponse;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
@@ -14,7 +16,6 @@ import io.vertx.ext.web.impl.Utils;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
-import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -24,7 +25,6 @@ import java.util.*;
 
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 /**
  * The cards service. This manages the base card definitions.
@@ -131,6 +131,8 @@ public interface Cards {
 						var entity = Games.getEntity(workingContext, card.create(), 0)
 								// Include the art specification
 								.art(card.getArt())
+								// Include the tooltips
+								.tooltips(card.getTooltips() != null ? Arrays.asList(card.getTooltips()) : Collections.emptyList())
 								// Do not store the location on the card database
 								.l(null);
 						return new CardRecord()

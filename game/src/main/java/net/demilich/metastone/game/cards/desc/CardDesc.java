@@ -6,12 +6,15 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Streams;
 import com.hiddenswitch.spellsource.client.models.Art;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardSet;
 import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.client.models.Rarity;
+import com.hiddenswitch.spellsource.client.models.Tooltip;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -26,7 +29,6 @@ import net.demilich.metastone.game.spells.desc.OpenerDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
-import net.demilich.metastone.game.spells.desc.condition.ComboCondition;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
@@ -38,8 +40,6 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.AttributeMap;
 
 import java.io.Serializable;
 import java.util.*;
@@ -167,6 +167,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	private TargetSelection targetSelectionOverride;
 	private ConditionDesc targetSelectionCondition;
 	private Art art;
+	private Tooltip[] tooltips;
 	@JsonIgnore
 	private transient List<Condition> glowConditions;
 
@@ -969,6 +970,25 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		this.countUntilCast = countUntilCast;
 	}
 
+	/**
+	 * Specifies tooltips for this card.
+	 * <p>
+	 * If {@link Tooltip#getKeywords()} is written on a card's tooltip, the game will make the tooltip appear wherever the
+	 * keyword appears in any card's {@link #getDescription()}.
+	 */
+	public Tooltip[] getTooltips() {
+		return tooltips;
+	}
+
+	public CardDesc setTooltips(Tooltip[] tooltips) {
+		this.tooltips = tooltips;
+		return this;
+	}
+
+	public CardDesc setGlowConditions(List<Condition> glowConditions) {
+		this.glowConditions = glowConditions;
+		return this;
+	}
 
 	/**
 	 * This makes it possible to iterate through a CardDesc.
