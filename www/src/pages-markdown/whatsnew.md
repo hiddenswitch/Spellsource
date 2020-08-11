@@ -10,7 +10,7 @@ header: true
 Thanks for playing this beta of Spellsource! Read more at [our website](http://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)! See older updates [here](history).
 
-### Current Build 0.8.81-3.2.3 (August 11, 2020)
+### Current Build 0.8.81-3.2.5 (August 11, 2020)
 
 <details>
 <summary>A new intro screen, updated fonts, and introducing the Witch class!</summary>
@@ -24,6 +24,14 @@ Thanks for playing this beta of Spellsource! Read more at [our website](http://w
  - Other small bug fixes.
 
 </details>
+
+### 0.8.80-3.2.4 (August 10, 2020)
+
+ - Intermediate testing build.
+ 
+### 0.8.80-3.2.3 (August 9, 2020)
+
+ - Intermediate testing build.
 
 ### 0.8.80-3.2.2 (August 7, 2020)
 <details>
