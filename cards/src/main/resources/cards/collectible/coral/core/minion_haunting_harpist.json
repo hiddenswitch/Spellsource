@@ -1,0 +1,40 @@
+{
+  "name": "Haunting Harpist",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "SPIRIT",
+  "description": "Opener: If this has at least 3 Attack, give all enemy units -3 Attack for one round.",
+  "battlecry": {
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "SELF",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 3,
+        "attribute": "ATTACK",
+        "operation": "GREATER_OR_EQUAL"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "ENEMY_MINIONS",
+      "value": -3,
+      "attribute": "ATTACK_BONUS",
+      "revertTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

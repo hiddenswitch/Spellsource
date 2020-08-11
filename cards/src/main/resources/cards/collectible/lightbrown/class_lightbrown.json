@@ -40,5 +40,11 @@
       "r": 0.604
     }
   },
-  "hero": "hero_izzy_jameson"
+  "hero": "hero_izzy_jameson",
+  "tooltips": [
+    {
+      "keywords": ["fossil"],
+      "text": "<b>Fossil</b>: A powerful unit with a basic keyword."
+    }
+  ]
 }

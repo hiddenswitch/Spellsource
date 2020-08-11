@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "Your minions have Hidden for 3 turns. Draw a card.",
+  "description": "Your units have Hidden for 3 turns. Draw.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

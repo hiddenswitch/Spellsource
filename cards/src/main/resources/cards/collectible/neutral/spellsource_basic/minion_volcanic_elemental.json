@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Aftermath: Deal 2 damage to all minions.",
+  "description": "Aftermath: Deal 2 damage to all units.",
   "deathrattle": {
     "class": "DamageSpell",
     "target": "ALL_MINIONS",

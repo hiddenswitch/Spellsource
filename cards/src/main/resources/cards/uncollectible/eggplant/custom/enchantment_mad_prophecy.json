@@ -4,7 +4,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "EGGPLANT",
   "rarity": "LEGENDARY",
-  "description": "The next spell you cast has \"Invoke (10): Summon Yoth'al.\"",
+  "description": "The next spell you cast has \"Invoke (10): Summon Yoth'al\".",
   "trigger": {
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",

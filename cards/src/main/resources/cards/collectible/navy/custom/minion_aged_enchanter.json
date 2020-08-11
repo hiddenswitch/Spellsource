@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: Give your minions that attacked this turn +2/+2.",
+  "description": "Opener: Give your units that attacked this turn +2/+2.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",

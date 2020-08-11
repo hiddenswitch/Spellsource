@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Also damages the minions next to whomever this attacks. Deals double damage to the target minion if it is Frozen.",
+  "description": "Also damages the units next to whomever this attacks. Deals double damage to the target unit if it is Frozen.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

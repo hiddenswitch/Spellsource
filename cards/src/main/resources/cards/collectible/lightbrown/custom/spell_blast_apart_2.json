@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "EPIC",
-  "description": "Destroy an enemy minion. Deal its Health to the minions next to it.",
+  "description": "Destroy an enemy unit. Deal its Health to the units next to it.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "MetaSpell",

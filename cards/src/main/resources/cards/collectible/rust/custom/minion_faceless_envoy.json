@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Whenever you draw a card, gain +2 Attack.",
+  "description": "Whenever you draw, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

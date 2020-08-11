@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "RARE",
-  "description": "Give your minions Guard and Dodge.",
+  "description": "Give your units Guard and Dodge.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

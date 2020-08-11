@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Fully heal your champion. Draw a card.",
+  "description": "Fully heal your champion. Draw.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

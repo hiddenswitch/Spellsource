@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKMAGENTA",
   "rarity": "FREE",
-  "description": "Add a copy of the last card you played to your hand.",
+  "description": "Receive a copy of the last card you played.",
   "targetSelection": "NONE",
   "spell": {
     "class": "CopyCardSpell",

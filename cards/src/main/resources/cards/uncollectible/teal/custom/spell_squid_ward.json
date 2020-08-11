@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "RARE",
-  "description": "Give an allied minion +2/+2 and \"Aftermath: Shuffle this minion into your deck.\"",
+  "description": "Give an allied unit +2/+2 and \"Aftermath: Shuffle this unit into your deck\".",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

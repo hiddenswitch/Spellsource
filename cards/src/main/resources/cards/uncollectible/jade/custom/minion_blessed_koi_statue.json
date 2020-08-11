@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "At the end of your turn, restore #2 Health to your champion and a random damaged allied minion.",
+  "description": "At the end of your turns, restore #2 Health to your champion and a random damaged allied unit.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

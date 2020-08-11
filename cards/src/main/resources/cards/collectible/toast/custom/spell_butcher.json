@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "COMMON",
-  "description": "Destroy a minion. Summon a 0/5 Pile of Meat to replace it.",
+  "description": "Destroy a unit. Summon a 0/5 Pile of Meat to replace it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "custom.DestroyAndSummonInPlaceSpell",

@@ -1,4 +1,4 @@
-### Baron: Big Baron
+### Big Baron
 # Class: NAVY
 # Format: Spellsource
 #

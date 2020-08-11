@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "COMMON",
-  "description": "Source a 3-Cost card. Summon a random 3-Cost minion.",
+  "description": "Source a 3-Cost card. Summon a random 3-Cost unit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

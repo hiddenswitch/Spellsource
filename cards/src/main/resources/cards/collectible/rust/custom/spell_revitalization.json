@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Choose a minion. Restore Health to your characters equal to its Attack.",
+  "description": "Choose a unit. Restore Health to your characters equal to its Attack.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "HealSpell",

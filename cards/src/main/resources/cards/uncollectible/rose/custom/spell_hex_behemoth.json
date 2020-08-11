@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "FREE",
-  "description": "Transform a minion into a 5/5 Rage Behemoth.",
+  "description": "Transform a unit into a 5/5 Rage Behemoth.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "TransformMinionSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "LEGENDARY",
-  "description": "Draw 5 cards. Shuffle 15 random Otherworlder cards into your deck.",
+  "description": "Draw 5. Shuffle 15 random Otherworlder cards into your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

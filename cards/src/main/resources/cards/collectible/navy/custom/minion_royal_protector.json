@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Guard. Adjacent minions have +1/+1.",
+  "description": "Guard. Adjacent units have +1/+1.",
   "aura": {
     "class": "BuffAura",
     "target": "ADJACENT_MINIONS",

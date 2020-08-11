@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Whenever a minion takes damage, gain +1 Health.",
+  "description": "Whenever a unit takes damage, gain +1 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
@@ -22,5 +22,5 @@
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
-  "wiki": "If this minion has 1 Health and is dealt 1 damage, it will survive with 1 Health."
+  "wiki": "If this unit has 1 Health and is dealt 1 damage, it will survive with 1 Health."
 }

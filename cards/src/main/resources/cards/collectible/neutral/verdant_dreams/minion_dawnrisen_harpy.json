@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Dash. Extra Strike. After this attacks and kills a minion, restore this to full Health.",
+  "description": "Dash. Extra Strike. After this attacks and kills a unit, restore this to full Health.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

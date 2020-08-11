@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Invoke (4): For each other minion you control, summon a 2/3 Crocolisk.",
+  "description": "Invoke (4): For each other unit you control, summon a 2/3 Crocolisk.",
   "battlecry": {
     "condition": {
       "class": "InvokeCondition"

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Shuffle a copy of a minion into your deck.",
+  "description": "Opener: Shuffle a copy of a unit into your deck.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

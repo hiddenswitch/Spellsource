@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 4,
   "rarity": "EPIC",
-  "description": "Whenever you cast a Rune, give this weapon +1 Attack.",
+  "description": "Whenever you cast a Rune, give this item +1 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",

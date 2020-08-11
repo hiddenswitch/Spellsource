@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKMAGENTA",
   "rarity": "RARE",
-  "description": "Deal $3 damage to all minions. Invoke (2): Summon a 5/5 Worm.",
+  "description": "Deal $3 damage to all units. Invoke (2): Summon a 5/5 Worm.",
   "targetSelection": "NONE",
   "spell": {
     "class": "InvokeSpell",
@@ -16,7 +16,7 @@
     "spell1": {
       "class": "InvokeOptionSpell",
       "name": "Don't Invoke",
-      "description": "Just deal $3 damage to all minions.",
+      "description": "Just deal $3 damage to all units.",
       "spell": {
         "class": "DamageSpell",
         "target": "ALL_MINIONS",

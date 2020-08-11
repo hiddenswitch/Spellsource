@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "<b>Dash</b>. Whenever this attacks, add a random <b>Emerald Secret</b> to your hand.",
+  "description": "<b>Dash</b>. Whenever this attacks, receive a random <b>Emerald Secret</b>.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",

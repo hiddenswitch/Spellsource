@@ -4,14 +4,14 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "FREE",
-  "description": "Choose an allied minion. It can attack again this turn.",
+  "description": "Choose an allied unit. It can attack again this turn.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "ModifyAttributeSpell",
     "value": 1,
     "attribute": "EXTRA_ATTACKS"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }

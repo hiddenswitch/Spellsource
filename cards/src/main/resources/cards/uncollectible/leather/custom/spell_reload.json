@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "FREE",
-  "description": "Secret: When your opponent casts a spell, draw 2 cards.",
+  "description": "Secret: When your opponent casts a spell, draw 2.",
   "secret": {
     "class": "SpellCastedTrigger",
     "sourcePlayer": "OPPONENT"

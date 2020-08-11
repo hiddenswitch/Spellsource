@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "RARE",
-  "description": "Secret: When a spell is cast on an allied minion, it targets a random allied minion instead.",
+  "description": "Secret: When a spell is cast on an allied unit, it targets a random allied unit instead.",
   "secret": {
     "class": "TargetAcquisitionTrigger",
     "actionType": "SPELL",

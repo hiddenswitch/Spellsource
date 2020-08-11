@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 12,
   "rarity": "EPIC",
-  "description": "After this attacks and kills a minion, lose Attack equal to its Cost.",
+  "description": "After this attacks and kills a unit, lose Attack equal to its Cost.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

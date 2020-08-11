@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Dash. After this attacks a minion, restore #4 health to this.",
+  "description": "Dash. After this attacks a unit, restore #4 Health to this.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

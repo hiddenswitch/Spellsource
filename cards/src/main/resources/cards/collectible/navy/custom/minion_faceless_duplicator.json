@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "Opener: Summon a copy of a minion.",
+  "description": "Opener: Summon a copy of a unit.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

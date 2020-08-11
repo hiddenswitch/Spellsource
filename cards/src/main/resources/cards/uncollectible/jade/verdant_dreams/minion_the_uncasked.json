@@ -7,7 +7,7 @@
   "baseHp": 10,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Opener: Draw Elementals from your deck until your hand is full.",
+  "description": "Opener: Draw Elementals  until your hand is full.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

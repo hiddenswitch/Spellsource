@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "EPIC",
   "race": "DEMON",
-  "description": "Opener: Your opponent summons a random minion from their hand. Attack it.",
+  "description": "Opener: Your opponent summons a random unit from their hand. Attack it.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

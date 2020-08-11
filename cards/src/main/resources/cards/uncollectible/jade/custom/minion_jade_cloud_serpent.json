@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Opener: If you're holding a Dragon, give your minions +2 Health.",
+  "description": "Opener: If you're holding a Dragon, give your units +2 Health.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

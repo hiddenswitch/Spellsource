@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Aftermath: Draw a minion.",
+  "description": "Aftermath: Draw a unit.",
   "deathrattle": {
     "class": "FromDeckToHandSpell",
     "value": 1,

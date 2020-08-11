@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Opener: Give all other minions \"Aftermath: Deal 1 damage to all minions\".",
+  "description": "Opener: Give all other units \"Aftermath: Deal 1 damage to all units\".",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

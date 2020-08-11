@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "EPIC",
-  "description": "Source a minion, spell and weapon from your opponent's class. They all cost (1) less.",
+  "description": "Source a unit, spell and item from your opponent's class. They all cost (1) less.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

@@ -4,7 +4,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Spells you cast on minions also target adjacent minions.",
+  "description": "Spells you cast on units also target adjacent units.",
   "aura": {
     "class": "SpellTargetsAdjacentAura",
     "target": "FRIENDLY_CARDS",

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Opener: Your next Signature gives your minions +2/+2",
+  "description": "Opener: Your next Signature gives your units +2/+2",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

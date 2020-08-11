@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "OBSIDIAN",
   "rarity": "FREE",
-  "description": "Your minions don't die from fatal damage until the start of your next turn.",
+  "description": "Your units don't die from fatal damage until the start of your next turn.",
   "triggers": [
     {
       "eventTrigger": {

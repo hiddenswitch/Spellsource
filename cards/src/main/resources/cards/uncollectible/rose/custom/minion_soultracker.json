@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "Dash. Opener: Give an enemy minion Guard.",
+  "description": "Dash. Opener: Give an enemy unit Guard.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {

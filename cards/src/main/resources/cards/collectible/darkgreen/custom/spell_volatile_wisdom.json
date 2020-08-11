@@ -4,17 +4,15 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "Both players draw 2 cards then swap their leftmost and rightmost cards with their opponent.",
+  "description": "Both players draw 2 then swap their leftmost and rightmost cards with their opponent.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "BothPlayersSpell",
-        "spell": {
-          "class": "DrawCardSpell",
-          "value": 2
-        }
+        "class": "DrawCardSpell",
+        "value": 2,
+        "targetPlayer": "BOTH"
       },
       {
         "class": "custom.VolatileWisdomSpell"

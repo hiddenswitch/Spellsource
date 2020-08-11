@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "SPIRIT",
-  "description": "Your champion also damages adjacent minions.",
+  "description": "Your champion also damages adjacent units.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",

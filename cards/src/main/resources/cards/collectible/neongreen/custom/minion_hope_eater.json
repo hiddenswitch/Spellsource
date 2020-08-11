@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "FREE",
   "race": "TITAN",
-  "description": "Enemy minions have -2 Attack but not less than 1.",
+  "description": "Enemy units have -2 Attack but not less than 1.",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

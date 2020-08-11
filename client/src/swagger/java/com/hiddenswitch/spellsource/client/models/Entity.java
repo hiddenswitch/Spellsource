@@ -22,6 +22,7 @@ import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.client.models.EntityLocation;
 import com.hiddenswitch.spellsource.client.models.EntityType;
 import com.hiddenswitch.spellsource.client.models.Rarity;
+import com.hiddenswitch.spellsource.client.models.Tooltip;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -236,6 +237,9 @@ public class Entity implements Serializable {
 
   @JsonProperty("art")
   private Art art = null;
+
+  @JsonProperty("tooltips")
+  private List<Tooltip> tooltips = null;
 
   public Entity id(Integer id) {
     this.id = id;
@@ -1451,6 +1455,32 @@ public class Entity implements Serializable {
     this.art = art;
   }
 
+  public Entity tooltips(List<Tooltip> tooltips) {
+    this.tooltips = tooltips;
+    return this;
+  }
+
+  public Entity addTooltipsItem(Tooltip tooltipsItem) {
+    if (this.tooltips == null) {
+      this.tooltips = new ArrayList<>();
+    }
+    this.tooltips.add(tooltipsItem);
+    return this;
+  }
+
+   /**
+   * Get tooltips
+   * @return tooltips
+  **/
+  @ApiModelProperty(value = "")
+  public List<Tooltip> getTooltips() {
+    return tooltips;
+  }
+
+  public void setTooltips(List<Tooltip> tooltips) {
+    this.tooltips = tooltips;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -1527,12 +1557,13 @@ public class Entity implements Serializable {
         Objects.equals(this.gameStarted, entity.gameStarted) &&
         Objects.equals(this.cardSets, entity.cardSets) &&
         Objects.equals(this.isStartingTurn, entity.isStartingTurn) &&
-        Objects.equals(this.art, entity.art);
+        Objects.equals(this.art, entity.art) &&
+        Objects.equals(this.tooltips, entity.tooltips);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, cardId, entityType, name, description, l, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, discarded, roasted, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, cardSets, isStartingTurn, art);
+    return Objects.hash(id, cardId, entityType, name, description, l, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, discarded, roasted, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, cardSets, isStartingTurn, art, tooltips);
   }
 
 
@@ -1608,6 +1639,7 @@ public class Entity implements Serializable {
     sb.append("    cardSets: ").append(toIndentedString(cardSets)).append("\n");
     sb.append("    isStartingTurn: ").append(toIndentedString(isStartingTurn)).append("\n");
     sb.append("    art: ").append(toIndentedString(art)).append("\n");
+    sb.append("    tooltips: ").append(toIndentedString(tooltips)).append("\n");
     sb.append("}");
     return sb.toString();
   }

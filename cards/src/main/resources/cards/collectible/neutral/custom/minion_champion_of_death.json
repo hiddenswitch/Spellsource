@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Opener: Destroy a minion and discard a random card.",
+  "description": "Opener: Destroy a unit and discard a random card.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

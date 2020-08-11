@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Guard. Opener: Discover a minion that costs (5) or more.",
+  "description": "Guard. Opener: Discover a unit that costs (5) or more.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "After an allied minion dies, gain its card text.",
+  "description": "After an allied unit dies, gain its card text.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

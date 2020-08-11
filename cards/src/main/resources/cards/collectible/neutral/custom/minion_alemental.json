@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Whenever an allied Elemental dies, return it to your hand instead.",
+  "description": "Whenever another allied Elemental dies, return it to your hand instead.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

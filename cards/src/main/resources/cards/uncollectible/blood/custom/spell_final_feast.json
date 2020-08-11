@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "LEGENDARY",
-  "description": "All allied minions Drain 4 Health from the enemy (or enemies) opposite them.",
+  "description": "All allied units Drain 4 Health from the enemy (or enemies) opposite them.",
   "targetSelection": "NONE",
   "spell": {
     "class": "custom.FinalFeastSpell",

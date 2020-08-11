@@ -6,7 +6,7 @@
   "damage": 4,
   "durability": 3,
   "rarity": "COMMON",
-  "description": "After your champion attacks and kills a minion, it gains +4 Health.",
+  "description": "After your champion attacks and kills a unit, it gains +4 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

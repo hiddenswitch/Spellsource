@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "RARE",
-  "description": "Choose an allied minion. Deal its Attack to minions opposite it.",
+  "description": "Choose an allied unit. Deal its Attack to units opposite it.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "OppositeEffectSpell",

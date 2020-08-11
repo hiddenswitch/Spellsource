@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Opener: Reveal a minion in each deck. If yours costs more, summon two 1/1 Beetles.",
+  "description": "Opener: Reveal a unit in each deck. If yours costs more, summon two 1/1 Beetles.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

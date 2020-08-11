@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Your leftmost minion has +3/+3.",
+  "description": "Your leftmost unit has +3/+3.",
   "aura": {
     "class": "BuffAura",
     "target": "LEFTMOST_FRIENDLY_MINION",

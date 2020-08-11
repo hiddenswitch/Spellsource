@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Whenever you summon a minion, give your Big Guy +1/+1 (wherever it is).",
+  "description": "Whenever you summon a unit, give your Big Guy +1/+1 (wherever it is).",
   "trigger": {
     "eventTrigger": {
       "class": "MinionSummonedTrigger",

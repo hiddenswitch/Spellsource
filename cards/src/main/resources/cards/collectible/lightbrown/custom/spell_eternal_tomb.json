@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "EPIC",
-  "description": "Shuffle all minions into your deck.",
+  "description": "Shuffle all units into your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ShuffleMinionToDeckSpell",

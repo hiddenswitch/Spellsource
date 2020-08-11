@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "RARE",
-  "description": "Give a minion Elusive and \"Aftermath: Return this to your hand\".",
+  "description": "Give a unit Elusive and \"Aftermath: Return this to your hand\".",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

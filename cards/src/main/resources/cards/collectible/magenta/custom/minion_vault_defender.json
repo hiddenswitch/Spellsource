@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Opener: Destroy an even-Cost minion.",
+  "description": "Opener: Destroy an even-Cost unit.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

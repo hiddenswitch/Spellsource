@@ -11,20 +11,20 @@
     "spells": [
       {
         "class": "AddAttributeSpell",
-        "attribute": "FROZEN",
-        "target": "ENEMY_MINIONS"
+        "target": "ENEMY_MINIONS",
+        "attribute": "FROZEN"
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "CHARGE",
-        "target": "FRIENDLY_MINIONS"
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "CHARGE"
       }
     ]
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OLIVE",
   "rarity": "FREE",
-  "description": "Restore 3 Health to an allied minion and 6 Health to your champion.",
+  "description": "Restore 3 Health to an allied unit and 6 Health to your champion.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

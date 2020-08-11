@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "RARE",
-  "description": "Shuffle a minion into its owner's deck. It costs (2) more.",
+  "description": "Shuffle a unit into its owner's deck. It costs (2) more.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ShuffleMinionToDeckSpell",

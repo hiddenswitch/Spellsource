@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "COMMON",
-  "description": "Source a minion you control.",
+  "description": "Source a unit you control.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "EPIC",
-  "description": "Spend all your Lun. Give a minion that much Attack this turn.",
+  "description": "Spend all your Lun. Give a unit that much Attack this turn.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Destroy a minion. Give its Attack to a random minion in your hand.",
+  "description": "Destroy a unit. Give its Attack to a random unit in your hand.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Also damages minions next to whomever this attacks.",
+  "description": "Also damages units next to whomever this attacks.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

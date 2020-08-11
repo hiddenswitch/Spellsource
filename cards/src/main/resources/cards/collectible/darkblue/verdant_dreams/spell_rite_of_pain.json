@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "EPIC",
-  "description": "Soulbind, then give your minions +1 Attack.",
+  "description": "Soulbind, then give your units +1 Attack.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",
-  "description": "Draw a card for each Knight in your hand.",
+  "description": "Draw for each Knight in your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardSpell",

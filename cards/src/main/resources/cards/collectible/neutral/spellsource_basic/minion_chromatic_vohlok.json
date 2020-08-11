@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Spellpower +1. Opener: Transform adjacent minions into copies of this.",
+  "description": "Spellpower +1. Opener: Transform adjacent units into copies of this.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

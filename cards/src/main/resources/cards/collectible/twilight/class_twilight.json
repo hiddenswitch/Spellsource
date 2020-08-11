@@ -40,5 +40,11 @@
       "r": 0.502
     }
   },
-  "hero": "hero_jian_shin"
+  "hero": "hero_jian_shin",
+  "tooltips": [
+    {
+      "keywords": ["drain"],
+      "text": "<b>Drain (X)</b>: Deal damage, then give the source bonus Health for each excess damage dealt."
+    }
+  ]
 }

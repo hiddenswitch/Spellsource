@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "EPIC",
-  "description": "Shoot [0] missiles that deal $[0] damage each. (Increases for each attack your Champion has).",
+  "description": "Shoot [0] missiles that deal $[0] damage each. (Increases for each attack your champion has).",
   "targetSelection": "NONE",
   "spell": {
     "class": "MissilesSpell",

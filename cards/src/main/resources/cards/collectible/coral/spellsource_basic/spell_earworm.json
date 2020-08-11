@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "RARE",
-  "description": "Take control of an enemy minion with 1 or less Attack.",
+  "description": "Take control of an enemy unit with 1 or less Attack.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "MindControlSpell",

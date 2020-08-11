@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "COMMON",
-  "description": "Drain the Health of an allied minion.",
+  "description": "Drain the Health of an allied unit.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "DrainSpell",

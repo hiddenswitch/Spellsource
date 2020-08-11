@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Deflect. At the end of your turn, summon two Blessed Koi Statues.",
+  "description": "Deflect. At the end of your turns, summon two Blessed Koi Statues.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Destroy your opponent's left and right-most minions.",
+  "description": "Destroy your opponent's left and right-most units.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

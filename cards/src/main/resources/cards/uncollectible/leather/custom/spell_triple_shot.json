@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "FREE",
-  "description": "Deal $1 damage to a minion and 3 damage to adjacent ones.",
+  "description": "Deal $1 damage to a unit and 3 damage to adjacent ones.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AdjacentEffectSpell",

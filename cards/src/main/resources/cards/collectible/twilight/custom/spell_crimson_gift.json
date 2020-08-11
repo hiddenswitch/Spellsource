@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "EPIC",
-  "description": "Restore #[5] Health. If you target a minion, give it +[5] Health. Otherwise, draw [1] card.",
+  "description": "Restore #[5] Health. If you target a unit, give it +[5] Health. Otherwise, draw [1].",
   "targetSelection": "ANY",
   "spell": {
     "class": "HealSpell",

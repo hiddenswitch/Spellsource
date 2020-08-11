@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "EPIC",
-  "description": "Summon a random 3-Cost minion. Invoke (8): 8-Cost.",
+  "description": "Summon a random 3-Cost unit. Invoke (8): 8-Cost.",
   "targetSelection": "NONE",
   "spell": {
     "class": "EitherOrSpell",

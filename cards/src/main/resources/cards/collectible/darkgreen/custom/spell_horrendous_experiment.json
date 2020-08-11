@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Choose an allied minion. Receive two copies of it with +3/+3.",
+  "description": "Choose an allied unit. Receive two copies of it with +3/+3.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "CopyCardSpell",

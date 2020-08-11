@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "LEGENDARY",
-  "description": "Remove the top cards of your deck until you remove a minion. Summon it.",
+  "description": "Remove the top cards of your deck until you remove a unit. Summon it.",
   "condition": {
     "class": "CanSummonCondition"
   },

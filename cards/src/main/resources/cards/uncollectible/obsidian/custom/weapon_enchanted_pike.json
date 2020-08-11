@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 4,
   "rarity": "COMMON",
-  "description": "Opener: Draw a card that didn't start in your deck.",
+  "description": "Opener: Draw that didn't start in your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

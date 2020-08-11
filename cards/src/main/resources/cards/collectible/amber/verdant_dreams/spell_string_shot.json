@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "If you control a Beast, return an enemy minion to your opponent's hand.",
+  "description": "If you control a Beast, return an enemy unit to your opponent's hand.",
   "condition": {
     "class": "AnyMatchFilterCondition",
     "target": "FRIENDLY_MINIONS",

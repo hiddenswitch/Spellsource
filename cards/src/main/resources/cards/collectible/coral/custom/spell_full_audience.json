@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "FREE",
-  "description": "Reduce the cost of minions in your hand by (1).",
+  "description": "Reduce the cost of units in your hand by (1).",
   "targetSelection": "NONE",
   "spell": {
     "class": "CardCostModifierSpell",

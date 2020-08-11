@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Guard. Aftermath: Summon the Markless Manhorse's Mask.",
+  "description": "Guard. Aftermath: Summon the Maskless Manhorse's Mask.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "permanent_headless_horsemans_head"

@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 10,
   "rarity": "RARE",
-  "description": "Deflect. This minion takes double damage.",
+  "description": "Deflect. This unit takes double damage.",
   "attributes": {
     "DEFLECT": true,
     "TAKE_DOUBLE_DAMAGE": true

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Dash. After this attacks and kills a minion, gain +3 Health.",
+  "description": "Dash. After this attacks and kills a unit, gain +3 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Opener: Gain adjacent minions' stats and text.",
+  "description": "Opener: Gain adjacent units' stats and text.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

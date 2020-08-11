@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Supremacy: Give a random minion in your hand +4 Attack.",
+  "description": "Supremacy: Give a random unit in your hand +4 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Opener: Give another minion Immune this turn.",
+  "description": "Opener: Give another unit Immune this turn.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

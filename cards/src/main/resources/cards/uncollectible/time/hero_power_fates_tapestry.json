@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "TIME",
   "rarity": "FREE",
-  "description": "Reshuffle 2 cards. Draw 2 cards.",
+  "description": "Reshuffle 2 cards. Draw 2.",
   "spell": {
     "class": "HeroPowerSpell",
     "spells": [

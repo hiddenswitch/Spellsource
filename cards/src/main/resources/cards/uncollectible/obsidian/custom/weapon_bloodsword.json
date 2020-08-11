@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 3,
   "rarity": "COMMON",
-  "description": "Lifedrain",
+  "description": "Lifedrain.",
   "attributes": {
     "LIFESTEAL": true
   },

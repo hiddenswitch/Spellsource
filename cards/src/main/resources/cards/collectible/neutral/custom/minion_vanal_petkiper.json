@@ -12,7 +12,7 @@
   "baseHp": 2,
   "rarity": "LEGENDARY",
   "race": "ALL",
-  "description": "Opener: Choose a tribal minion. For the rest of your game, your minions have +1/+1 while you control that tribe.",
+  "description": "Opener: Choose a tribal unit. For the rest of your game, your units have +1/+1 while you control that tribe.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

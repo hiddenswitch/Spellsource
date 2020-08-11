@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "OBSIDIAN",
   "rarity": "FREE",
-  "description": "Passive Skill: After an enemy minion dies, summon it.",
+  "description": "Passive Skill: After an enemy unit dies, summon it.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

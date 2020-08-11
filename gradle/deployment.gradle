@@ -225,7 +225,7 @@ task distWWW(type: Exec, group: 'Spellsource') {
 
 task deployAll(group: 'Spellsource') {
     description("Deploys the server, the client and the website")
-    dependsOn += [distSteam, distIOS, distAndroid, distWebGL, distSwarm, distWWW]
+    dependsOn += [distSteam, distIOS, distAndroid, distSwarm, distWWW]
 }
 
 task bumpVersion(type: Exec, group: 'Spellsource') {

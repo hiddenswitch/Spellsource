@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "EPIC",
-  "description": "Give a minion Immune until the end of your turn. Draw a card.",
+  "description": "Give a unit Immune until the end of your turn. Draw.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

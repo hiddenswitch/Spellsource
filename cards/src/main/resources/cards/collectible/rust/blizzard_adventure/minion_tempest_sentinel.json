@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Your spells cast on minions cost (1) less.",
+  "description": "Your spells cast on units cost (1) less.",
   "cardCostModifier": {
     "class": "CardCostModifier",
     "value": 1,

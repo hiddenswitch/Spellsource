@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Opener: Deal 2 damage to a minion. If that kills it, gain Spellpower +2.",
+  "description": "Opener: Deal 2 damage to a unit. If that kills it, gain Spellpower +2.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

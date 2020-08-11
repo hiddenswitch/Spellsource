@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "EPIC",
   "race": "MECH",
-  "description": "Whenever you summon a minion, it deals its Attack to a random enemy minion.",
+  "description": "Whenever you summon a unit, it deals its Attack to a random enemy unit.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionSummonedTrigger",

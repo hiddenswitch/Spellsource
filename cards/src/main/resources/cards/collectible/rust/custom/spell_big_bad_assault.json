@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "EPIC",
-  "description": "Choose an enemy minion. All your minions attack it.",
+  "description": "Choose an enemy unit. All your units attack it.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "FightSpell",

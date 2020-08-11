@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "DEMON",
-  "description": "After you summon a minion, give it +2 Health.",
+  "description": "After you summon a unit, give it +2 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionSummonedTrigger",

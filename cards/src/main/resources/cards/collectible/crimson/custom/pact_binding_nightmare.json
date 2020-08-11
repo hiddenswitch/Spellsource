@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "EPIC",
-  "description": "<b>Pact:</b> After you play a <b>Pact</b>, draw 3 cards.",
+  "description": "<b>Pact:</b> After you play a <b>Pact</b>, draw 3.",
   "condition": {
     "class": "CanPlayPactCondition"
   },

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "LEGENDARY",
-  "description": "Quest: Summon two minions with 5 or more Attack. Reward: Enchant It!",
+  "description": "Quest: Summon two units with 5 or more Attack. Reward: Enchant It!",
   "quest": {
     "class": "MinionSummonedTrigger",
     "queueCondition": {

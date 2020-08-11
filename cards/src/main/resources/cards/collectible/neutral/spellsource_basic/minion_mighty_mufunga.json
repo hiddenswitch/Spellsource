@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Your other minions have +2 Attack.",
+  "description": "Your other units have +2 Attack.",
   "aura": {
     "class": "BuffAura",
     "target": "OTHER_FRIENDLY_MINIONS",

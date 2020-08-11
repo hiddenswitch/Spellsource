@@ -1,0 +1,33 @@
+{
+  "name": "Spirited Announcer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "CORAL",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "description": "Opener: If this has at least 5 Attack, draw 2.",
+  "battlecry": {
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "SELF",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 5,
+        "attribute": "ATTACK",
+        "operation": "GREATER_OR_EQUAL"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

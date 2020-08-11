@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: If your hand has duplicates, destroy a random enemy minion.",
+  "description": "Opener: If your hand has duplicates, destroy a random enemy unit.",
   "battlecry": {
     "condition": {
       "class": "HighlanderHandCondition",

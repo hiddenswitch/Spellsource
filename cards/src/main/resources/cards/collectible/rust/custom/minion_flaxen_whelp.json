@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Opener: If there are at least 3 minions on the board, draw a card.",
+  "description": "Opener: If there are at least 3 units on the board, draw.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

@@ -190,6 +190,7 @@ public class DeckTest extends SpellsourceTestBase {
 			try (var client = new UnityClient(context)) {
 				invoke0(client::createUserAccount);
 				var createDeckResult = createDeckForUserId(client.getUserId().toString());
+				var createAnotherDeckShouldNotGetUpdate = createDeckForUserId(client.getUserId().toString());
 				var gameDeck = createDeckResult.getCollection().asDeck(client.getUserId().toString());
 				var signatureCardId = gameDeck.getCards().get(0).getCardId();
 
@@ -210,6 +211,9 @@ public class DeckTest extends SpellsourceTestBase {
 				var deck = invoke(client.getApi()::decksGet, createDeckResult.getDeckId());
 				assertEquals(PlayerEntityAttributes.SIGNATURE, deck.getCollection().getPlayerEntityAttributes().get(0).getAttribute());
 				assertEquals(signatureCardId, deck.getCollection().getPlayerEntityAttributes().get(0).getStringValue());
+				deck = invoke(client.getApi()::decksGet, createAnotherDeckShouldNotGetUpdate.getDeckId());
+
+				assertTrue(deck.getCollection().getPlayerEntityAttributes().isEmpty(), "should not update multiple decks' player attributes");
 			}
 		}, context, vertx);
 	}

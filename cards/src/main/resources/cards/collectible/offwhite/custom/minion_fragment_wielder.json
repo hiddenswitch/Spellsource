@@ -11,11 +11,11 @@
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
       "fireCondition": {
         "class": "CardPropertyCondition",
         "card": "token_fragment"
       },
-      "actionType": "PHYSICAL_ATTACK",
       "hostTargetType": "IGNORE_AS_SOURCE",
       "sourceEntityType": "MINION",
       "sourcePlayer": "SELF"
@@ -27,9 +27,9 @@
     }
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "EPIC",
-  "description": "Each time an allied minion attacks this turn, summon a random minion from your hand and give it Dash.",
+  "description": "Each time an allied unit attacks this turn, summon a random unit from your hand and give it Dash.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

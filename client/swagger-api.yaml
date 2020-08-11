@@ -1785,6 +1785,10 @@ definitions:
         default: false
       art:
         $ref: '#/definitions/Art'
+      tooltips:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Tooltip'
   Art:
     type: 'object'
     description: |
@@ -1804,6 +1808,25 @@ definitions:
         $ref: '#/definitions/Color'
       body:
         $ref: '#/definitions/Font'
+  Tooltip:
+    type: 'object'
+    description: |
+      Provides an explanation for an effect or keyword that will appear beside the card.
+
+      Only delivered in the Entities from the CardRecords.
+    properties:
+      keywords:
+        description: |
+          When set, this tooltip will only show if cards that have the same class as the card this tooltip appears on
+          has the specified keyword appearing in its description. Typically used on the class card to provide tooltips
+          for its entire class.
+        type: 'array'
+        items:
+          type: 'string'
+      text:
+        type: 'string'
+        description: |
+          The text that should appear on the tooltip.
   Sprite:
     type: 'object'
     description: |

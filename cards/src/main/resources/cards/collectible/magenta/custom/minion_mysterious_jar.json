@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "At the end of your turns, summon a random 1-Cost minion.",
+  "description": "At the end of your turns, summon a random 1-Cost unit.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

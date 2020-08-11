@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Whenever this minion attacks a minion, add a Lunstone to your hand.",
+  "description": "Whenever this unit attacks a unit, receive a Lunstone.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",

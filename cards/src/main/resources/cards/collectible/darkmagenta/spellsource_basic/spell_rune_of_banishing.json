@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKMAGENTA",
   "rarity": "EPIC",
-  "description": "Destroy a minion that costs (4) or more. Invoke (4): All minions.",
+  "description": "Destroy a unit that costs (4) or more. Invoke (4): All units.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "InvokeSpell",
@@ -19,7 +19,7 @@
     "spell1": {
       "class": "InvokeOptionSpell",
       "name": "Banishing",
-      "description": "Destroy just the targeted minion.",
+      "description": "Destroy just the targeted unit.",
       "condition": {
         "class": "MinionOnBoardCondition",
         "cardFilter": {
@@ -37,7 +37,7 @@
     "spell2": {
       "class": "InvokeOptionSpell",
       "name": "Banishest",
-      "description": "Destroy ALL minions.",
+      "description": "Destroy ALL units.",
       "spell": {
         "class": "DestroySpell",
         "target": "ALL_MINIONS"

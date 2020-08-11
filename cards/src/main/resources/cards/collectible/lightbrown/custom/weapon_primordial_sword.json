@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "RARE",
-  "description": "After your champion attacks, return a weapon from the graveyard to your hand.",
+  "description": "After your champion attacks, return an item from your graveyard to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

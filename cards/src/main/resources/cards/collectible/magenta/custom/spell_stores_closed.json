@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "COMMON",
-  "description": "Shuffle all minions into their owners' decks.",
+  "description": "Shuffle all units into their owners' decks.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

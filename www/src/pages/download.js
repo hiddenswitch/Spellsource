@@ -24,15 +24,15 @@ const Download = () => {
           <figcaption>Android</figcaption>
         </figure>
 
-        <figure>
-          <a href="/game"><img src={firefox} alt="Firefox" className={styles.smallLogo}  /></a>
-          <figcaption>Firefox</figcaption>
-        </figure>
+        {/*<figure>*/}
+        {/*  <a href="/game"><img src={firefox} alt="Firefox" className={styles.smallLogo}  /></a>*/}
+        {/*  <figcaption>Firefox</figcaption>*/}
+        {/*</figure>*/}
 
-        <figure>
-          <a href="/game"><img src={chrome} alt="Chrome" className={styles.smallLogo}/></a>
-          <figcaption>Chrome</figcaption>
-        </figure>
+        {/*<figure>*/}
+        {/*  <a href="/game"><img src={chrome} alt="Chrome" className={styles.smallLogo}/></a>*/}
+        {/*  <figcaption>Chrome</figcaption>*/}
+        {/*</figure>*/}
       </section>
       <p>For users on other browsers, go to our <a href="https://discord.gg/HmbESh2">Discord</a> and ask for the Steam key.</p>
       <section>

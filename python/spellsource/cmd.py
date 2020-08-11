@@ -1,9 +1,8 @@
+import click
 import typing
+from itertools import chain
 from os import makedirs
 from os.path import join, abspath
-
-import click
-from itertools import chain
 from tqdm import tqdm
 
 from .context import Context
@@ -439,11 +438,17 @@ def sort_and_fix():
               help='when TRUE, just lists the output files')
 @click.option('--extension', type=str, show_default=True, required=False, default='.png',
               help='sets the image extension')
-def psb_2_png_layers(source: str, destination_prefix: tuple = (), lists: bool = False, extension: str = '.png'):
+@click.option('--merge', type=bool, show_default=True, required=False, default=False,
+              help='merge the layers and export a single file')
+@click.option('--scale', type=int, show_default=True, required=False, default=1,
+              help='scale the art using nearest neighbor')
+def psb_2_png_layers(source: str, destination_prefix: tuple = (), lists: bool = False, extension: str = '.png',
+                     merge: bool = False, scale: int = 1):
     """
     Exports the visible layers in the specified PSB file to files with the destination prefix.
     """
     from psd_tools import PSDImage
+    from PIL import Image
     import os
     from os.path import dirname
     if len(destination_prefix) == 0:
@@ -451,6 +456,27 @@ def psb_2_png_layers(source: str, destination_prefix: tuple = (), lists: bool = 
     else:
         destination_prefix = destination_prefix[0]
     psd = PSDImage.open(source)
+    if merge:
+        if destination_prefix == '':
+            destination_prefix = os.path.basename(source).replace('.psd', '').replace('.psb', '')
+        full_image = psd.composite()
+        if extension not in destination_prefix:
+            s = '%s%s' % (destination_prefix, extension)
+        else:
+            s = destination_prefix
+        try:
+            dirname(s)
+            os.makedirs(dirname(s), exist_ok=True)
+        except:
+            pass
+        if scale != 1:
+            full_image = full_image.resize((full_image.width * scale, full_image.height * scale), Image.NEAREST)
+        if lists:
+            click.echo(s)
+        else:
+            full_image.save(s)
+        return
+
     for layer in psd.descendants():
         if not layer.kind == 'pixel':
             continue
@@ -463,6 +489,8 @@ def psb_2_png_layers(source: str, destination_prefix: tuple = (), lists: bool = 
             os.makedirs(dirname(s), exist_ok=True)
         except:
             pass
+        if scale != 1:
+            layer_image = layer_image.resize((layer_image.width * scale, layer_image.height * scale), Image.NEAREST)
         if lists:
             click.echo(s)
         else:

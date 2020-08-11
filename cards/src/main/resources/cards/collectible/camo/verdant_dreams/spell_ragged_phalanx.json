@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "COMMON",
-  "description": "Give your minions +1/+2 and Guard. They can't attack.",
+  "description": "Give your units +1/+2 and Guard. They can't attack.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

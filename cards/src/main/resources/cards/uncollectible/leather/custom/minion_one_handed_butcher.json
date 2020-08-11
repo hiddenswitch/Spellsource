@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Opener: Set a minion's attack to 1.",
+  "description": "Opener: Set a unit's attack to 1.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

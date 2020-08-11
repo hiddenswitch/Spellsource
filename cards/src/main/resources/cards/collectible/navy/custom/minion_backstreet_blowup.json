@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Opener: Summon a 0/3 Bomb for your opponent that damages enemy minions.",
+  "description": "Opener: Summon a 0/3 Bomb for your opponent that damages enemy units.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

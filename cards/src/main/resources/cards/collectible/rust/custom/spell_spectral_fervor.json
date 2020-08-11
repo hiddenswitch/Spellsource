@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "COMMON",
-  "description": "Give a minion +2 Attack. Draw a card.",
+  "description": "Give a unit +2 Attack. Draw.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

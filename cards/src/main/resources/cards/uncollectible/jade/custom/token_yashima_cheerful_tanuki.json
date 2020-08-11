@@ -7,7 +7,7 @@
   "baseHp": 10,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Guard, Deflect. Aftermath: Give your minions Guard and Deflect.",
+  "description": "Guard, Deflect. Aftermath: Give your units Guard and Deflect.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "FREE",
-  "description": "Give a minion +2/+1. Give a minion in your hand +2/+2.",
+  "description": "Give a unit +2/+1. Give a unit in your hand +2/+2.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

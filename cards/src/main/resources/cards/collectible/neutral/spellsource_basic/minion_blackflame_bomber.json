@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Dash",
+  "description": "Dash.",
   "attributes": {
     "RUSH": true
   },

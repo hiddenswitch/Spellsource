@@ -166,7 +166,12 @@ Make sure the Public group is [added here](https://appstoreconnect.apple.com/Web
 
 Add the class or the package containing it to end of the list of classes in the `Args = --initialize-at-build-time=...` line to [native-image.properties](discordbot/src/main/resources/META-INF/native-image/com.hiddenswitch/discordbot/native-image.properties).
 
-You may have to regenerate reflection config using **sdkman**'s Graal distributable. Then, `sdk use java 20.0.0.r11-grl; ./gradlew --no-daemon clean; ./gradlew --no-daemon discordbot:genReflectionProps`.
+You may have to regenerate reflection config using **sdkman**'s Graal distributable. The following commands will fix this issue:
+
+```
+sdk use java 20.1.0.r11-grl
+./gradlew --no-daemon clean
+./gradlew --no-daemon discordbot:genReflectionProps`.
 
 > `./gradlew distSwarm` fails with the message of the form:
 
@@ -192,6 +197,25 @@ On **macOS**, allocate more memory to your Docker host.
 > `./gradlew net:run` hangs with error `Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out waiting for log output matching '.*waiting for connections on port.*'`
 
 Make sure to use your local `docker` context using `docker context use default`.
+
+> I receive an error starting the server with `gradle net:run` of the form:
+
+```shell script
+main ERROR o.t.d.DockerClientProviderStrategy Could not find a valid Docker environment. Please check configuration. Attempted configurations were:
+Exception in thread "main" 20200811T112136 main ERROR o.t.d.DockerClientProviderStrategy     UnixSocketClientProviderStrategy: failed with exception InvalidConfigurationException (ping failed). Root cause NoSuchFileException (/var/run/docker.sock)
+org.testcontainers.containers.ContainerLaunchException: Container startup failed
+main ERROR o.t.d.DockerClientProviderStrategy As no valid configuration was found, execution cannot continue
+```
+
+> The MongoDB container doesn't start with `gradle net:run` with the following error: `Timed out waiting for log output matching '.*waiting for connections on port.*'`
+
+Try deleting your local database which is automatically bind-mounted to the container at `.mongo`:
+
+```shell script
+rm -rf .mongo/
+```
+
+Make sure Docker is running.
 
 ### Special Thanks
 

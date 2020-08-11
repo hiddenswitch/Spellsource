@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Deal 2 damage to a minion. If that kills it, gain Hidden.",
+  "description": "Opener: Deal 2 damage to a unit. If that kills it, gain Hidden.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

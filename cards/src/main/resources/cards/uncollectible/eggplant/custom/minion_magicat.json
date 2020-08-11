@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: Give all 0-Cost minions in your hand and deck +1/+2.",
+  "description": "Opener: Give all 0-Cost units in your hand and deck +1/+2.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

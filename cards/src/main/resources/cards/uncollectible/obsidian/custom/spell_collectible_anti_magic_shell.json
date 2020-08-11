@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "FREE",
-  "description": "Give your minions +2/+2 and \"Can't be targeted by spells or Skills.\"",
+  "description": "Give your units +2/+2 and \"Can't be targeted by spells or Skills\".",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
-  "description": "Stun a character. If it was already Stunned, draw a card instead.",
+  "description": "Stun a character. If it was already Stunned, draw instead.",
   "targetSelection": "ANY",
   "spell": {
     "class": "EitherOrSpell",

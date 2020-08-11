@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "TIME",
   "rarity": "FREE",
-  "description": "Draw cards until you draw one that costs more than (0)",
+  "description": "Draw until you draw a card that costs more than (0)",
   "spell": {
     "class": "HeroPowerSpell",
     "spell": {

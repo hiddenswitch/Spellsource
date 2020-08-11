@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "COMMON",
-  "description": "Give a minion +1/+1, <b>Wither (1)</b>, and \"At the end of your turns, deal 3 damage randomly split among all other characters\".",
+  "description": "Give a unit +1/+1, <b>Wither (1)</b>, and \"At the end of your turns, deal 3 damage randomly split among all other characters\".",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

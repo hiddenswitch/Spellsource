@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Permanent. Adjacent minions have +1 Attack. When an adjacent minion is also a permanent, destroy this.",
+  "description": "Permanent. Adjacent units have +1 Attack. When an adjacent unit is also a permanent, destroy this.",
   "triggers": [
     {
       "eventTrigger": {

@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "Deflect. After this minion Deflects, gain Dodge.",
+  "description": "Deflect. After this unit Deflects, gain Dodge.",
   "trigger": {
     "eventTrigger": {
       "class": "LoseDeflectTrigger",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CANDY",
   "rarity": "FREE",
-  "description": "Give a minion +3 Attack and restore 3 Health to your champion.",
+  "description": "Give a unit +3 Attack and restore 3 Health to your champion.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "Deal $3 damage to all minions and give them Toxic.",
+  "description": "Deal $3 damage to all units and give them Toxic.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

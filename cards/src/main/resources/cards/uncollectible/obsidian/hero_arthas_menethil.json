@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "OBSIDIAN",
   "rarity": "LEGENDARY",
-  "description": "Opener: Stun all characters and decks. (Players can't draw cards this turn and next)",
+  "description": "Opener: Stun all characters and decks. (Players can't draw this turn and next)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "After you play a Quick Draw card, draw a card.",
+  "description": "After you play a Quick Draw card, draw.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",

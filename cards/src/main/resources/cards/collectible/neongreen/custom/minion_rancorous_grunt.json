@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "<b>Dash</b>. <b>Wither (2)</b>. Whenever this attacks, deal 1 damage to this minion's target.",
+  "description": "<b>Dash</b>. <b>Wither (2)</b>. Whenever this attacks, deal 1 damage to this unit's target.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",

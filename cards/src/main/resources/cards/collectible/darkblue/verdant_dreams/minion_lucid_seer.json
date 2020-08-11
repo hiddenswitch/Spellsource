@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: Return adjacent minions to your hand and gain +1/+1 for each.",
+  "description": "Opener: Return adjacent units to your hand and gain +1/+1 for each.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

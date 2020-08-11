@@ -6,18 +6,18 @@
   "baseAttack": 8,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Aftermath: Add [1 Artifact] to your hand. (Increases for each copy of this in your Graveyard)",
+  "description": "Aftermath: Receive [1 random Artifact]. (Increases for each copy of this in your Graveyard)",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "value": {
       "class": "CardCountValueProvider",
-      "cardFilter": {
+      "cardSource": {
+        "class": "GraveyardActorsSource",
+        "targetPlayer": "SELF"
+      },
+      "filter": {
         "class": "SpecificCardFilter",
         "card": "minion_primordial_miner"
-      },
-      "cardSource": {
-        "class": "GraveyardCardAndActorSourceCardSource",
-        "targetPlayer": "SELF"
       }
     },
     "cardFilter": {
@@ -39,18 +39,18 @@
       "class": "PluralDescription",
       "value": {
         "class": "CardCountValueProvider",
-        "cardFilter": {
+        "cardSource": {
+          "class": "GraveyardActorsSource",
+          "targetPlayer": "SELF"
+        },
+        "filter": {
           "class": "SpecificCardFilter",
           "card": "minion_primordial_miner"
         },
-        "cardSource": {
-          "class": "GraveyardCardAndActorSourceCardSource",
-          "targetPlayer": "SELF"
-        },
         "offset": 1
       },
-      "description1": " Artifact",
-      "description2": " Artifacts"
+      "description1": " random Artifact",
+      "description2": " random Artifacts"
     }
   ],
   "sets": [

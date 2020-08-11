@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ICE",
   "rarity": "EPIC",
-  "description": "Choose a minion. Whenever your opponent starts a turn, deal 2 damage to it and Stun adjacent minions.",
+  "description": "Choose a unit. Whenever your opponent starts a turn, deal 2 damage to it and Stun adjacent units.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",

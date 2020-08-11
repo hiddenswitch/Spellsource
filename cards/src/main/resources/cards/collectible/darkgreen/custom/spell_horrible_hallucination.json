@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Summon a copy of a random enemy minion.",
+  "description": "Summon a copy of a random enemy unit.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,

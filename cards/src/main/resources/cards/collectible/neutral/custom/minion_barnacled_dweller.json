@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Opener: Destroy a minion that costs (3) or less.",
+  "description": "Opener: Destroy a unit that costs (3) or less.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

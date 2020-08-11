@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "COMMON",
-  "description": "Give a minion 'Aftermath: Deal 1 damage to all other minions, then give them this Aftermath.'",
+  "description": "Give a unit 'Aftermath: Deal 1 damage to all other units, then give them this Aftermath.'",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddDeathrattleSpell",

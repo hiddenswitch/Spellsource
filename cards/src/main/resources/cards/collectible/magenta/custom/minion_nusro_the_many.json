@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "Whenever you draw a card, transform it into a random Beast, Fae and Dragon.",
+  "description": "Whenever you draw, transform it into a random Beast, Fae and Dragon.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Whenever you Drain Health from another minion, add a copy of it to your hand.",
+  "description": "Whenever you Drain Health from another unit, receive a copy of it.",
   "trigger": {
     "eventTrigger": {
       "class": "DrainTrigger",

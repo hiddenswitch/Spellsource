@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "ICE",
   "rarity": "LEGENDARY",
-  "description": "Opener: Give your minions +2/+2 and Guard.",
+  "description": "Opener: Give your units +2/+2 and Guard.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

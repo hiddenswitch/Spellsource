@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Has +1/+1 for each other Common minion.",
+  "description": "Has +1/+1 for each other Common unit.",
   "aura": {
     "class": "BuffAura",
     "target": "SELF",

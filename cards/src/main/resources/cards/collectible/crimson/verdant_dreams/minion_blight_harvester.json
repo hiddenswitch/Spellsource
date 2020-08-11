@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "FAE",
-  "description": "Opener: Draw a card for each Captive and Underling you control.",
+  "description": "Opener: Draw for each Captive and Underling you control.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

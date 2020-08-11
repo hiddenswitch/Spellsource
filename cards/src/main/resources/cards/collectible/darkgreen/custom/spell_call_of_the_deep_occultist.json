@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Summon a 1/1 Tentacle with Guard for each enemy minion.",
+  "description": "Summon a 1/1 Tentacle with Guard for each enemy unit.",
   "spell": {
     "class": "SummonSpell",
     "value": {

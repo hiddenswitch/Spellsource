@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Choose a minion. It attacks a random allied minion.",
+  "description": "Opener: Choose a unit. It attacks a random allied unit.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

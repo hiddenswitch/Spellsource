@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Opener: Shuffle 5/5 copies of all minions into your deck.",
+  "description": "Opener: Shuffle 5/5 copies of all units into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

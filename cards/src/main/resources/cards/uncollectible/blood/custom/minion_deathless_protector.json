@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 8,
   "rarity": "EPIC",
-  "description": "Guard. At the start of your turn, Drain 2 Health from the minion(s) opposite this one.",
+  "description": "Guard. At the start of your turn, Drain 2 Health from the unit(s) opposite this one.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",

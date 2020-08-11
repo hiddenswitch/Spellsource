@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Deal $5 damage to all enemy minions.",
+  "description": "Deal $5 damage to all enemy units.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

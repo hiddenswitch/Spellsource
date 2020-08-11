@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Give your minions +2 Attack and the Aftermath, \"Add a Rune to your hand.\"",
+  "description": "Give your units +2 Attack and the Aftermath, \"Receive a Rune\".",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

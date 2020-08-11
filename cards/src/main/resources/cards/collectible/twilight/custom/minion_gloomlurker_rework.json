@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Guard. Aftermath: Destroy the lowest-Health enemy minion.",
+  "description": "Guard. Aftermath: Destroy the lowest-Health enemy unit.",
   "deathrattle": {
     "class": "DestroySpell",
     "target": "ENEMY_MINIONS",

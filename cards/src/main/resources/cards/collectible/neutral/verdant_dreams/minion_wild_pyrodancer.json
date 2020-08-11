@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "After a player casts a spell, deal 1 damage to all minions.",
+  "description": "After a player casts a spell, deal 1 damage to all units.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",

@@ -8,9 +8,9 @@
   "rarity": "COMMON",
   "race": "SPIRIT",
   "collectible": false,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

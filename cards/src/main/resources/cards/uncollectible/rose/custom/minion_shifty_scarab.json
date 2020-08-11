@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: Source a minion in your opponent's graveyard.",
+  "description": "Opener: Source a unit in your opponent's graveyard.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

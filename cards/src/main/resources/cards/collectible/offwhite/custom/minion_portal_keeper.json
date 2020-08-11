@@ -12,6 +12,7 @@
     "class": "ConditionalSpell",
     "condition": {
       "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
       "value1": {
         "class": "CardCountValueProvider",
         "offset": {
@@ -19,21 +20,14 @@
           "offset": -1
         }
       },
-      "value2": 1,
-      "operation": "GREATER_OR_EQUAL"
+      "value2": 1
     },
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
           "class": "QueryTargetSpell",
-          "howMany": 1,
           "target": "OTHER_FRIENDLY_MINIONS",
-          "filter": {
-            "class": "EntityEqualsFilter",
-            "invert": true,
-            "secondaryTarget": "TRIGGER_HOST"
-          },
           "value": {
             "class": "AttributeValueProvider",
             "attribute": "INDEX",
@@ -41,14 +35,20 @@
           },
           "spell": {
             "class": "DestroySpell"
-          }
+          },
+          "filter": {
+            "class": "EntityEqualsFilter",
+            "invert": true,
+            "secondaryTarget": "TRIGGER_HOST"
+          },
+          "howMany": 1
         },
         {
           "class": "MetaSpell",
           "howMany": {
             "class": "BoardCountValueProvider",
-            "offset": 1,
-            "multiplier": -1
+            "multiplier": -1,
+            "offset": 1
           },
           "spells": [
             {
@@ -71,9 +71,9 @@
     "DEATHRATTLES": true
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

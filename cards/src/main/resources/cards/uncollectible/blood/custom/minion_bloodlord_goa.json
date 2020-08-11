@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Opener: Gain the aftermath, \"Repeat all other allied aftermaths.\"",
+  "description": "Opener: Gain the aftermath, \"Repeat all other allied aftermaths\".",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

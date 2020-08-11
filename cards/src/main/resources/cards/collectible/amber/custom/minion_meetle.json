@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Whenever this minion deals damage, gain that much Armor.",
+  "description": "Whenever this unit deals damage, gain that much Armor.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageCausedTrigger",

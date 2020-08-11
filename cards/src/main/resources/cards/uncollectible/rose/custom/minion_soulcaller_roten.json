@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Opener: Summon all [(0)-Cost minions from your hand]. (Equals the Cost of the last minion you played)",
+  "description": "Opener: Summon all [(0)-Cost units from your hand]. (Equals the Cost of the last unit you played)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -44,7 +44,7 @@
             "attribute": "MANA_SPENT"
           }
         },
-        ")-Cost minions from your hand"
+        ")-Cost units from your hand"
       ]
     }
   ]

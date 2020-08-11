@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "RARE",
-  "description": "Put a minion into your hand.",
+  "description": "Put a unit into your hand.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ReturnTargetToHandSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "After you cast a spell, transform into a random minion of the same Cost.",
+  "description": "After you cast a spell, transform into a random unit of the same Cost.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",
