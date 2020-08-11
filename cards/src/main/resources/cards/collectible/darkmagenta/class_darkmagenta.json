@@ -40,5 +40,11 @@
       "r": 0.49
     }
   },
-  "hero": "hero_sephilia"
+  "hero": "hero_sephilia",
+  "tooltips": [
+    {
+      "keywords": ["invoke"],
+      "text": "<b>Invoke (X)</b>: Spend (X) more Lun to gain a bonus."
+    }
+  ]
 }

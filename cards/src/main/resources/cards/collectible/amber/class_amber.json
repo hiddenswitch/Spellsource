@@ -40,5 +40,11 @@
       "r": 0.604
     }
   },
-  "hero": "hero_zara"
+  "hero": "hero_zara",
+  "tooltips": [
+    {
+      "keywords": ["larva"],
+      "text": "<b>Larva</b>: A 1/1 unit."
+    }
+  ]
 }

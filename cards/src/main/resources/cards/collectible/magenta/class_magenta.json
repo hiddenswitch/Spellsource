@@ -40,5 +40,11 @@
       "r": 0.537
     }
   },
-  "hero": "hero_yasha"
+  "hero": "hero_yasha",
+  "tooltips": [
+    {
+      "keywords": ["coin"],
+      "text": "<b>Coin</b>: Decreases the cost of cards."
+    }
+  ]
 }
