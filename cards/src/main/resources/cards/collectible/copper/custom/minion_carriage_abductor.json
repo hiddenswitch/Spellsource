@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Quick Draw: Deal 2 damage to the left-most enemy minion.",
+  "description": "Quick Draw: Deal 2 damage to the left-most enemy unit.",
   "trigger": {
     "eventTrigger": {
       "class": "QuickDrawTrigger",

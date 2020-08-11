@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "EPIC",
-  "description": "Summon a 5/5 Dragon for your opponent. When it dies, draw 3 cards.",
+  "description": "Summon a 5/5 Dragon for your opponent. When it dies, draw 3.",
   "spell": {
     "class": "SummonSpell",
     "cards": [

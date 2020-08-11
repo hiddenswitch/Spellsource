@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Opener: Give all minions in your hand \"Opener: Summon a 0/2 Sandpile with Guard\".",
+  "description": "Opener: Give all units in your hand \"Opener: Summon a 0/2 Sandpile with Guard\".",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

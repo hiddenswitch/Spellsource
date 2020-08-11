@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Give an allied minion Dash.",
+  "description": "Opener: Give an allied unit Dash.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

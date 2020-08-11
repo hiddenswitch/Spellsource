@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Magnetic",
+  "description": "Magnetic.",
   "attributes": {
     "MAGNETIC": true
   },

@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "AMBER",
   "rarity": "LEGENDARY",
-  "description": "Opener: Return an enemy minion to your opponent's hand.",
+  "description": "Opener: Return an enemy unit to your opponent's hand.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {

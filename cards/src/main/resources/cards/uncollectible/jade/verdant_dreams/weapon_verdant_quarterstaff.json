@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 6,
   "rarity": "COMMON",
-  "description": "Extra Strike",
+  "description": "Extra Strike.",
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_HERO",

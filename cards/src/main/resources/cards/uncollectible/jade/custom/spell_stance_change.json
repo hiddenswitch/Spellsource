@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "EPIC",
-  "description": "Swap your minions' Attack and Health. Choose a bonus effect.",
+  "description": "Swap your units' Attack and Health. Choose a bonus effect.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

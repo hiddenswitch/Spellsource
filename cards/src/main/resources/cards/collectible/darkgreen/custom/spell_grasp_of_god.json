@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Destroy an allied minion. At the start of your next turn, resummon it.",
+  "description": "Destroy an allied unit. At the start of your next turn, resummon it.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "JailMinionSpell",

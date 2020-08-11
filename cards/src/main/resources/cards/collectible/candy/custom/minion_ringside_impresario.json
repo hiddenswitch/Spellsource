@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Whenever you play a minion, shuffle a copy of your Signature into your deck.",
+  "description": "Whenever you play a unit, shuffle a copy of your Signature into your deck.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",

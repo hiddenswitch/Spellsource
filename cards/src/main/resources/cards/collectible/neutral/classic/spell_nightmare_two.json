@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Give a minion +4/+4. At the end of your turn, destroy it.",
+  "description": "Give a unit +4/+4. At the end of your turns, destroy it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

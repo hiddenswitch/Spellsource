@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Dash. <b>Aftermath:</b> Give your minions +1/+1.",
+  "description": "Dash. <b>Aftermath:</b> Give your units +1/+1.",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",

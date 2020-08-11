@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "LEGENDARY",
-  "description": "Both players summon random minions from their deck until their board is full. Give your minions Dash.",
+  "description": "Both players summon random units from their deck until their board is full. Give your units Dash.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

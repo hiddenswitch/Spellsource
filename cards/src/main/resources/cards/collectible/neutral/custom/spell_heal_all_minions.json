@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "COMMON",
-  "description": "Restore #4 Health to ALL minions.",
+  "description": "Restore #4 Health to ALL units.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HealSpell",

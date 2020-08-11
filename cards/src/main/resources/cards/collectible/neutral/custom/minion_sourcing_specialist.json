@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Opener: Summon the last minion this destroyed. Legacy: In any match.",
+  "description": "Opener: Summon the last unit this destroyed. Legacy: In any match.",
   "battlecry": {
     "spell": {
       "class": "SummonCardFromAttributeSpell",

@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Opener: If you're holding a Dragon, gain 5 Armor and draw a card.",
+  "description": "Opener: If you're holding a Dragon, gain 5 Armor and draw.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

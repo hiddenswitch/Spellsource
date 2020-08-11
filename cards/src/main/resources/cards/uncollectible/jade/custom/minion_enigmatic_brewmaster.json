@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Deflect. Opener: Return adjacent minions to your hand.",
+  "description": "Deflect. Opener: Return adjacent units to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

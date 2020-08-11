@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "RARE",
-  "description": "Drain 5 Health from the central enemy minion (or minions). Add a copy of any that die to your hand.",
+  "description": "Drain 5 Health from the central enemy unit (or units). Receive a copy of any that die.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ConditionalEffectSpell",

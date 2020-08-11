@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "RARE",
-  "description": "Restore #3 Health to a minion. If it's still damaged, destroy it.",
+  "description": "Restore #3 Health to a unit. If it's still damaged, destroy it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ConditionalEffectSpell",

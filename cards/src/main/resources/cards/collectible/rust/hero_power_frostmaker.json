@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "RUST",
   "rarity": "FREE",
-  "description": "Deal 3 damage. (Against minions, deals any excess to adjacent minions)",
+  "description": "Deal 3 damage. (Against units, deals any excess to adjacent units)",
   "targetSelection": "ANY",
   "spell": {
     "class": "HeroPowerSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKMAGENTA",
   "rarity": "EPIC",
-  "description": "Summon a copy of a minion. Invoke (3): Two copies.",
+  "description": "Summon a copy of a unit. Invoke (3): Two copies.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "InvokeSpell",
@@ -14,7 +14,7 @@
     "spell1": {
       "class": "InvokeOptionSpell",
       "name": "Summon",
-      "description": "Summon 1 copy of the targeted minion.",
+      "description": "Summon 1 copy of the targeted unit.",
       "spell": {
         "class": "SummonSpell"
       },
@@ -23,7 +23,7 @@
     "spell2": {
       "class": "InvokeOptionSpell",
       "name": "Chain Summon",
-      "description": "Summon 2 copies of the targeted minion.",
+      "description": "Summon 2 copies of the targeted unit.",
       "spell": {
         "class": "SummonSpell",
         "value": 2

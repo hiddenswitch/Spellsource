@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "FREE",
   "race": "PIRATE",
-  "description": "Blitz",
+  "description": "Blitz.",
   "attributes": {
     "CHARGE": true
   },

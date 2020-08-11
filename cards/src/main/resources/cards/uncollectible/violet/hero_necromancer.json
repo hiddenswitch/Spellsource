@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "VIOLET",
   "rarity": "FREE",
-  "description": "Add 'Aftermath: Summon a minion that costs (1) less' to the first minion you play each turn.",
+  "description": "Add 'Aftermath: Summon a unit that costs (1) less' to the first unit you play each turn.",
   "triggers": [
     {
       "eventTrigger": {

@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Dash. Opener: Source a minion from other classes. Give it Dash.",
+  "description": "Dash. Opener: Source a unit from other classes. Give it Dash.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

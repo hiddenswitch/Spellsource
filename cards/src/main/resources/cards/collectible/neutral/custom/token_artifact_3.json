@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Draw 3 cards.",
+  "description": "Draw 3.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardSpell",

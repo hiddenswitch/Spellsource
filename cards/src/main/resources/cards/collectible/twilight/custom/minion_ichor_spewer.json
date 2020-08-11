@@ -7,7 +7,7 @@
   "baseHp": 12,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Guard. Your other minions have Dash and Toxic.",
+  "description": "Guard. Your other units have Dash and Toxic.",
   "attributes": {
     "TAUNT": true
   },

@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Permanent. At the end of your turn, deal 1 damage to all characters. After dealing 10, destroy it and summon an 8/8 Titan.",
+  "description": "Permanent. At the end of your turns, deal 1 damage to all characters. After dealing 10, destroy it and summon an 8/8 Titan.",
   "triggers": [
     {
       "eventTrigger": {

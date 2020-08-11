@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Immune during your turn",
+  "description": "Immune during your turn.",
   "aura": {
     "class": "AttributeAura",
     "target": "SELF",

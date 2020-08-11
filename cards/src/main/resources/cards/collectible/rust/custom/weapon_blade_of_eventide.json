@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 3,
   "rarity": "RARE",
-  "description": "Aftermath: If your deck has only even-Cost cards, destroy the lowest Attack enemy minion.",
+  "description": "Aftermath: If your deck has only even-Cost cards, destroy the lowest Attack enemy unit.",
   "deathrattle": {
     "class": "ConditionalSpell",
     "condition": {

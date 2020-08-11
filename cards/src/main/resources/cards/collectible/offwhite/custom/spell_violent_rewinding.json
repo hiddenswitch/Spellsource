@@ -8,21 +8,21 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DestroySpell",
-	"target": "ALL_MINIONS",
-	"filter": {
-	  "class": "AttributeFilter",
-	  "value": {
-	    "class": "CurrentTurnValueProvider",
-		"offset": -1
-	  },
-	  "attribute": "SUMMONED_ON_TURN",
-	  "operation": "EQUAL"
-	}
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": {
+        "class": "CurrentTurnValueProvider",
+        "offset": -1
+      },
+      "attribute": "SUMMONED_ON_TURN",
+      "operation": "EQUAL"
+    }
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

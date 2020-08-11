@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: Take control of an enemy minion with 3 or less Health.",
+  "description": "Opener: Take control of an enemy unit with 3 or less Health.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {
@@ -23,9 +23,9 @@
     "BATTLECRY": true
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CORE"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

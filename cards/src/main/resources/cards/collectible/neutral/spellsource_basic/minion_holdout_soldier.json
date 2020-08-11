@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Opener: If your opponent has 4 or more minions, draw 3 cards.",
+  "description": "Opener: If your opponent has 4 or more units, draw 3.",
   "battlecry": {
     "spell": {
       "class": "ConditionalSpell",

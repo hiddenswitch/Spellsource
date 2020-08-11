@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Opener: Change a minion's stats to be equal to its Cost.",
+  "description": "Opener: Change a unit's stats to be equal to its Cost.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

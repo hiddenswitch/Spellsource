@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "COMMON",
-  "description": "Give all enemy minions -2/-2. Their Attack is not reduced below 1.",
+  "description": "Give all enemy units -2/-2. Their Attack is not reduced below 1.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",

@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Aftermath: Equip a random weapon for enemy champion.",
+  "description": "Aftermath: Equip a random item for enemy champion.",
   "deathrattle": {
     "class": "EquipWeaponSpell",
     "cardFilter": {

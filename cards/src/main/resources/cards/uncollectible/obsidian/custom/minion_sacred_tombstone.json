@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Aftermath: At the end of your turn, summon a Sacred Tombstone.",
+  "description": "Aftermath: At the end of your turns, summon a Sacred Tombstone.",
   "deathrattle": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",

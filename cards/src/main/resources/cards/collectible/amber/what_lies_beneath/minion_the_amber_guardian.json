@@ -7,7 +7,7 @@
   "baseHp": 9,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Guard. Opener: If your hand contains 9 cards, destroy all other minions.",
+  "description": "Guard. Opener: If your hand contains 9 cards, destroy all other units.",
   "battlecry": {
     "condition": {
       "class": "CardCountCondition",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CANDY",
   "rarity": "RARE",
-  "description": "Each time you draw a card this turn, give your minions +1/+1.",
+  "description": "Each time you draw this turn, give your units +1/+1.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

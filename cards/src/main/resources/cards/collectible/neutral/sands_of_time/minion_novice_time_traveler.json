@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Shuffle a random Legendary minion into your deck.",
+  "description": "Opener: Shuffle a random Legendary unit into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

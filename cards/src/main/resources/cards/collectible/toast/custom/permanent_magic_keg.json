@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "At the end of your turn, add a random Chef spell to your hand.",
+  "description": "At the end of your turns, receive a random Chef spell.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

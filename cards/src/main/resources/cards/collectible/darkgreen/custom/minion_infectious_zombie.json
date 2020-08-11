@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Aftermath: Transform a random allied minion into a Failed Experiment.",
+  "description": "Aftermath: Transform a random allied unit into a Failed Experiment.",
   "deathrattle": {
     "class": "TransformMinionSpell",
     "target": "OTHER_FRIENDLY_MINIONS",

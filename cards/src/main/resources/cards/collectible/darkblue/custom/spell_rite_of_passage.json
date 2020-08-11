@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "EPIC",
-  "description": "Soulbind, then trigger all your minions' Aftermaths.",
+  "description": "Soulbind, then trigger all your units' Aftermaths.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

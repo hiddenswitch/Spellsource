@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Guard. Opener: Shuffle 7 'Ocean Depths' into your deck. Draw 2 cards.",
+  "description": "Guard. Opener: Shuffle 7 'Ocean Depths' into your deck. Draw 2.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

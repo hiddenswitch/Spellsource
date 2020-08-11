@@ -1,10 +1,10 @@
 {
   "name": "Crescendo",
-  "baseManaCost": 6,
+  "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "CORAL",
-  "rarity": "FREE",
-  "description": "Give your minions +2/+2.",
+  "rarity": "COMMON",
+  "description": "Give your units +2/+2.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",
@@ -12,6 +12,6 @@
     "value": 2
   },
   "collectible": true,
-  "set": "SPELLSOURCE_BASIC",
+  "set": "CORE",
   "fileFormatVersion": 1
 }

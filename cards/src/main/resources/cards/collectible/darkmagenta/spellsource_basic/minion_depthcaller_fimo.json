@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "race": "FAE",
-  "description": "Opener: The next spell you cast has Opener: \"Invoke (10): Summon a 10/10 Colossus with Guard.\"",
+  "description": "Opener: The next spell you cast has Opener: \"Invoke (10): Summon a 10/10 Colossus with Guard\".",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

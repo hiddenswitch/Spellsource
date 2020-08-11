@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "COMMON",
-  "description": "Give a minion +2/+2. It can't attack champions anymore.",
+  "description": "Give a unit +2/+2. It can't attack champions anymore.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

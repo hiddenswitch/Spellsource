@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "FREE",
-  "description": "Give a minion +4/+4. Summon a 2/2 Spirit.",
+  "description": "Give a unit +4/+4. Summon a 2/2 Spirit.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: Add a 'Blood Melon' to your hand that restores 8 Health.",
+  "description": "Opener: Receive a 'Blood Melon'  that restores 8 Health.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OLIVE",
   "rarity": "FREE",
-  "description": "Give an allied minion +1/+1. Gain an empty Lun.",
+  "description": "Give an allied unit +1/+1. Gain an empty Lun.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

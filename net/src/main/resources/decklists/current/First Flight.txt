@@ -1,0 +1,21 @@
+### First Flight
+# Class: AZURE
+# Format: Spellsource
+#
+# 2x (1) Enhancing Shaman
+# 2x (1) Skywalker
+# 2x (1) Solis Caster
+# 2x (2) Blow Away
+# 2x (2) Channeled Spirit
+# 2x (2) Fluttering Songbird
+# 2x (2) Lightning Strike
+# 2x (2) Nimbus Strider
+# 1x (3) Explore the Endless Skies
+# 2x (3) Spirited Sprite
+# 2x (3) Wind's Grace
+# 2x (4) Evasive Cirrus
+# 2x (4) Fae Harbinger
+# 2x (6) Faerie Squadron
+# 2x (6) Typhoon
+# 1x (7) Stormbringer Kurt
+#

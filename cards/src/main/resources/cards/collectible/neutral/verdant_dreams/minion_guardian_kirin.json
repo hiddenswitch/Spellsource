@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "Guard. Aftermath: Give adjacent minions Guard.",
+  "description": "Guard. Aftermath: Give adjacent units Guard.",
   "deathrattle": {
     "class": "custom.AdjacentDeathrattleSpell",
     "target": "SELF",

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Opener: Add a Magic Candle to your hand.",
+  "description": "Opener: Receive a Magic Candle.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

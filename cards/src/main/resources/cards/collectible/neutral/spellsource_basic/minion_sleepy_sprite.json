@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "FAE",
-  "description": "Opener: Set a minion's Attack to 2.",
+  "description": "Opener: Set a unit's Attack to 2.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

@@ -4,14 +4,14 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "COMMON",
-  "description": "At the end of your turn, draw 3 cards.",
+  "description": "At the end of the turn, draw 3.",
   "spell": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",
     "trigger": {
       "eventTrigger": {
         "class": "TurnEndTrigger",
-        "targetPlayer": "SELF"
+        "targetPlayer": "BOTH"
       },
       "spell": {
         "class": "DrawCardSpell",

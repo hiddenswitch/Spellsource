@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Opener: Deal 4 damage randomly split among all enemy minions.",
+  "description": "Opener: Deal 4 damage randomly split among all enemy units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

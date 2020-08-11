@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Opener: Draw an 'Ocean Depths' from your deck.",
+  "description": "Opener: Draw an 'Ocean Depths'.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "FREE",
-  "description": "Return a minion and the ones next to it to their owner's hand.",
+  "description": "Return a unit and the ones next to it to their owner's hand.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AdjacentEffectSpell",

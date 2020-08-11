@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Guard. Aftermath: Add a copy of a card from your deck to your hand.",
+  "description": "Guard. Aftermath: Receive a copy of a card from your deck.",
   "deathrattle": {
     "class": "CopyCardSpell",
     "target": "FRIENDLY_DECK",

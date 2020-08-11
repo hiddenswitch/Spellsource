@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "COMMON",
-  "description": "Give your Hidden minions Toxic.",
+  "description": "Give your Hidden units Toxic.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddAttributeSpell",

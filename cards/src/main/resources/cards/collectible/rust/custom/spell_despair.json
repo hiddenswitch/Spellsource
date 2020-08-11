@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "COMMON",
-  "description": "Set a minion's Attack to 0 this turn.",
+  "description": "Set a unit's Attack to 0 this turn.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "TemporaryAttackSpell",

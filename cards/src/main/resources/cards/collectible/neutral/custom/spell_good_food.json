@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Randomly throw 12 bits of food at all minions. Each one gives +1/+1.",
+  "description": "Randomly throw 12 bits of food at all units. Each one gives +1/+1.",
   "targetSelection": "NONE",
   "spell": {
     "class": "CastRepeatedlySpell",

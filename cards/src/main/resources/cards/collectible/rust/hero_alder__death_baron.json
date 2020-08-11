@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "RUST",
   "rarity": "LEGENDARY",
-  "description": "Opener: Equip a 5/3 Coldsteel that summons a 4/4 Dragon each time it kills a minion.",
+  "description": "Opener: Equip a 5/3 Coldsteel that summons a 4/4 Dragon each time it kills a unit.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

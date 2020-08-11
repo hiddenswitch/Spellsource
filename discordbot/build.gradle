@@ -22,7 +22,7 @@ dependencies {
     implementation project(':client')
     implementation project(':core')
     implementation project(':cards')
-    implementation('net.dv8tion:JDA:4.1.1_142') {
+    implementation('net.dv8tion:JDA:4.2.0_187') {
         exclude module: 'opus-java'
     }
 }

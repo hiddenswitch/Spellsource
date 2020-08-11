@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "FREE",
   "race": "DEMON",
-  "description": "Whenever an enemy minion dies, draw a card.",
+  "description": "Whenever an enemy unit dies, draw.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

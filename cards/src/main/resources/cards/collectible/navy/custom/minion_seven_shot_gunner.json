@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Destroy all enemy minions you summoned this turn.",
+  "description": "Opener: Destroy all enemy units you summoned this turn.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

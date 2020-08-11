@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Opener: Source a spell and put it on top of your deck.",
+  "description": "Opener: Source a spell. Put it on top of your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "RARE",
-  "description": "Both players draw a card from their opponent's deck.",
+  "description": "Both players draw from their opponent's deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BothPlayersSpell",

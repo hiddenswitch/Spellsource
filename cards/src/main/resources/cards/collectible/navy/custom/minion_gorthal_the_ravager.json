@@ -7,7 +7,7 @@
   "baseHp": 9,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Whenever you play a minion, summon a random minion from your deck.",
+  "description": "Whenever you play a unit, summon a random unit from your deck.",
   "trigger": {
     "eventTrigger": {
       "class": "BeforeMinionPlayedTrigger",

@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "At the end of your turn, reduce the duration of The End Time by 2.",
+  "description": "At the end of your turns, reduce the duration of The End Time by 2.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

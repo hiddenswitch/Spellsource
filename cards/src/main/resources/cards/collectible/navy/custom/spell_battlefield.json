@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",
-  "description": "Give all minions Guard.",
+  "description": "Give all units Guard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddAttributeSpell",

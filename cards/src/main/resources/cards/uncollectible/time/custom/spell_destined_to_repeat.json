@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "FREE",
-  "description": "Destroy a minion. Add a copy of it to its owner's hand. It costs (2) less.",
+  "description": "Destroy a unit. Receive a copy of it to its owner's hand. It costs (2) less.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

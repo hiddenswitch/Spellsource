@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "After you target this minion with a spell, give your Big Guy +2/+2 (wherever it is).",
+  "description": "After you target this unit with a spell, give your Big Guy +2/+2 (wherever it is).",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Your Beasts gain an extra attack after attacking and killing minions.",
+  "description": "Your Beasts gain an extra attack after attacking and killing units.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

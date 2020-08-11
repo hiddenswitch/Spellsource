@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "Passive Skill. Whenever a non-Larva minion dies, summon two 1/1 Larva.",
+  "description": "Passive Skill. Whenever a non-Larva unit dies, summon two 1/1 Larva.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

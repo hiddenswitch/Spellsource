@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Dash. After this attacks and kills a 1-Health minion, deal 2 damage to all enemies.",
+  "description": "Dash. After this attacks and kills a 1-Health unit, deal 2 damage to all enemies.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

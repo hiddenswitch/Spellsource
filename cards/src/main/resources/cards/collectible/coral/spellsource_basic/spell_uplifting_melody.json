@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "FREE",
-  "description": "Give your minions +1/+1. Draw a card.",
+  "description": "Give your units +1/+1. Draw.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

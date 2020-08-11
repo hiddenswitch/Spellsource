@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Opener: Drain 1 Health from a minion. If it has an Aftermath, trigger it.",
+  "description": "Opener: Drain 1 Health from a unit. If it has an Aftermath, trigger it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

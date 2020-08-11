@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "Receive four random Common minions.",
+  "description": "Receive four random Common units.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",

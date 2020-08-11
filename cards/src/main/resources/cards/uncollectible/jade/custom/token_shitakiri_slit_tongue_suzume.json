@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Deflect. Your other minions have Deflect during your opponent's turn.",
+  "description": "Deflect. Your other units have Deflect during your opponent's turn.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",

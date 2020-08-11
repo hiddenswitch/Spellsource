@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "EPIC",
-  "description": "Transform all minions in your hand into 5/5 Rage Behemoths.",
+  "description": "Transform all units in your hand into 5/5 Rage Behemoths.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ReplaceCardsSpell",

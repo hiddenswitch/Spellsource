@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TWILIGHT",
   "rarity": "RARE",
-  "description": "Destroy the lowest-Health minion on the field. Repeatable this turn.",
+  "description": "Destroy the lowest-Health unit on the field. Repeatable this turn.",
   "condition": {
     "class": "ComparisonCondition",
     "operation": "GREATER",

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Immune while you control 3 or more minions.",
+  "description": "Immune while you control 3 or more units.",
   "aura": {
     "class": "AttributeAura",
     "target": "SELF",

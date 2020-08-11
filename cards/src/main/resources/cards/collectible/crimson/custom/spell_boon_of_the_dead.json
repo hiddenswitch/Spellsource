@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "COMMON",
-  "description": "Give your minions \"Aftermath: Deal 2 damage to the enemy champion\".",
+  "description": "Give your units \"Aftermath: Deal 2 damage to the enemy champion\".",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddDeathrattleSpell",

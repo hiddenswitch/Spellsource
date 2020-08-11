@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Whenever this minion takes damage, give another random allied minion +1/+1.",
+  "description": "Whenever this unit takes damage, give another random friendly unit +1/+1",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",

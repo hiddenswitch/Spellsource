@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ICE",
   "rarity": "RARE",
-  "description": "Deal your Weapon's Attack in damage. Restore #6 Health to your champion.",
+  "description": "Deal your Item's Attack in damage. Restore #6 Health to your champion.",
   "condition": {
     "class": "HasWeaponCondition"
   },

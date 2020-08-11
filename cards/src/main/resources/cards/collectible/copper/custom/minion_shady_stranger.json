@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Guard. Opener: Your opponent draws a card.",
+  "description": "Guard. Opener: Your opponent draws.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "SPIRIT",
-  "description": "Aftermath: Take control of a random enemy minion.",
+  "description": "Aftermath: Take control of a random enemy unit.",
   "deathrattle": {
     "class": "MindControlSpell",
     "target": "ENEMY_MINIONS",

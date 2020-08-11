@@ -4,7 +4,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "The next card you play this turn costs Roasted cards instead of mana.",
+  "description": "The next card you play this turn costs Roasted cards instead of lun.",
   "triggers": [
     {
       "eventTrigger": {

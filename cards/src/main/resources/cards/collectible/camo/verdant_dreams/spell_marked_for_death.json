@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "RARE",
-  "description": "Choose a minion. It takes double damage.",
+  "description": "Choose a unit. It takes double damage.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddAttributeSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Can only attack if another minion attacked this turn.",
+  "description": "Can only attack if another unit attacked this turn.",
   "aura": {
     "class": "AttributeAura",
     "target": "SELF",

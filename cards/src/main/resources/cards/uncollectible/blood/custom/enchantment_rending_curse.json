@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "BLOOD",
   "rarity": "FREE",
-  "description": "Aftermath: Deal 1 damage to all other minions, then give them this Aftermath.",
+  "description": "Aftermath: Deal 1 damage to all other units, then give them this Aftermath.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "Choose a minion. Summon 1/1 Larva equal to its Cost.",
+  "description": "Choose a unit. Summon 1/1 Larva equal to its Cost.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "SummonSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "COMMON",
-  "description": "Summon a random 3-Cost minion for both players.",
+  "description": "Summon a random 3-Cost unit for both players.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BothPlayersSpell",

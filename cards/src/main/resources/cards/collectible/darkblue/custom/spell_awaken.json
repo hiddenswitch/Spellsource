@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "FREE",
-  "description": "Destroy an allied minion. Summon a 4/4 Awoken.",
+  "description": "Destroy an allied unit. Summon a 4/4 Awoken.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

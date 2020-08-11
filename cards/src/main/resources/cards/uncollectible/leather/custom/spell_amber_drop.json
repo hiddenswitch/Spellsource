@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LEATHER",
   "rarity": "RARE",
-  "description": "Repeatable this turn. Source a 1-cost minion, then summon three copies of it",
+  "description": "Repeatable this turn. Source a 1-cost unit, then summon three copies of it",
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",

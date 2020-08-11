@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "After you play a minion, destroy it.",
+  "description": "After you play a unit, destroy it.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",

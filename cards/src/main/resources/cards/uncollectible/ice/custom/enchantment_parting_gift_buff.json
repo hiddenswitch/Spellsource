@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Allied minions have +3/+3 this turn only.",
+  "description": "Allied units have +3/+3 this turn only.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger"

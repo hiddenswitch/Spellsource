@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Aftermath: Draw a Legendary minion.",
+  "description": "Aftermath: Draw a Legendary unit.",
   "deathrattle": {
     "class": "FromDeckToHandSpell",
     "value": 1,

@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "NAVY",
   "rarity": "LEGENDARY",
-  "description": "Opener: Summon a 1/2 Bounty Target for your opponent that draws you cards when it dies.",
+  "description": "Opener: Summon a 1/2 Bounty Target for your opponent that draws for you when it dies.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Permanent. At the end of your turns, give a random allied minion +2 Health. When you have no minions, destroy this.",
+  "description": "Permanent. At the end of your turns, give a random allied unit +2 Health. When you have no units, destroy this.",
   "triggers": [
     {
       "eventTrigger": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "RARE",
-  "description": "Summon 2 random minions with stats equal to this Cost. Costs (1) more for each minion that died this turn.",
+  "description": "Summon 2 random units with stats equal to this Cost. Costs (1) more for each unit that died this turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "Give a minion +10/+10. Then, watch and despair!",
+  "description": "Give a unit +10/+10. Then, watch and despair!",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",

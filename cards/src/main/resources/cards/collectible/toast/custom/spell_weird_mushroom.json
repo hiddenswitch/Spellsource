@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "COMMON",
-  "description": "Give a minion +3/+3 or destroy it (at random).",
+  "description": "Give a unit +3/+3 or destroy it (at random).",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "EitherOrSpell",

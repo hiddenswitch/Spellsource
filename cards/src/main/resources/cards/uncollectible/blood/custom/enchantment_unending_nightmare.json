@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "BLOOD",
   "rarity": "FREE",
-  "description": "Whenever your turn ends, destroy this minion and resummon it,",
+  "description": "Whenever your turn ends, destroy this unit and resummon it,",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

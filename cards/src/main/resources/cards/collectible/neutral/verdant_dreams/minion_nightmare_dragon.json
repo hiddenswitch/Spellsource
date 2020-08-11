@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Opener: Give a minion +3/+3. At the start of your next turn, destroy it.",
+  "description": "Opener: Give a unit +3/+3. At the start of your next turn, destroy it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

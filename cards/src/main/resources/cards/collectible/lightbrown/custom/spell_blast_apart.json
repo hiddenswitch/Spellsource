@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "LIGHTBROWN",
   "rarity": "EPIC",
-  "description": "Spend up to 10 Armor. Give a minion that much Health.",
+  "description": "Spend up to 10 Armor. Give a unit that much Health.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

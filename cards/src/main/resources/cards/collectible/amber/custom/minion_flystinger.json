@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Opener: Deal 1 damage for each allied Common minion.",
+  "description": "Opener: Deal 1 damage for each allied Common unit.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

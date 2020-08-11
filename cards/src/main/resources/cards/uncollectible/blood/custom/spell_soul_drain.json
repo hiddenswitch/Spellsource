@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "RARE",
-  "description": "Return a minion to its owner's hand. It costs Health instead of Lun.",
+  "description": "Return a unit to its owner's hand. It costs Health instead of Lun.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ReturnTargetToHandSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "RARE",
-  "description": "Swap the Attack and Health of your minions, then give them +2 Health.",
+  "description": "Swap the Attack and Health of your units, then give them +2 Health.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

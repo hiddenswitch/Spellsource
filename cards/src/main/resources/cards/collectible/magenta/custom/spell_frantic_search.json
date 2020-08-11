@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "RARE",
-  "description": "Draw 3 cards. Discard any even-Cost cards drawn.",
+  "description": "Draw 3. Discard any even-Cost cards drawn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardSpell",

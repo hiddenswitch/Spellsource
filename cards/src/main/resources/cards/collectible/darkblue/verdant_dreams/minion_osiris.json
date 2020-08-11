@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Opener: Return your other minions to your hand. Summon random minions of the same Costs.",
+  "description": "Opener: Return your other units to your hand. Summon random units of the same Costs.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

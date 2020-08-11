@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Whenever you summon a 0-Cost minion, give it +1/+1.",
+  "description": "Whenever you summon a 0-Cost unit, give it +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionSummonedTrigger",

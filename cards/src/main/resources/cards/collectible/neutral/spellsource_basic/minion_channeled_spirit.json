@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "SPIRIT",
-  "description": "Aftermath: Give a random allied minion +2/+2.",
+  "description": "Aftermath: Give a random allied unit +2/+2.",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",

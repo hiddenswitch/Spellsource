@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "SPIRIT",
-  "description": "Dash. Opener: Both players draw 2 cards.",
+  "description": "Dash. Opener: Both players draw 2.",
   "battlecry": {
     "spell": {
       "class": "DrawCardSpell",

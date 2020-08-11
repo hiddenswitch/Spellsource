@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ROSE",
   "rarity": "FREE",
-  "description": "Passive Skill. During your turn, resurrect enemy minions that die. On your side.",
+  "description": "Passive Skill. During your turn, resurrect enemy units that die. On your side.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",

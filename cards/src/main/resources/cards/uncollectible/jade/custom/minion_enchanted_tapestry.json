@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Whenever you summon a minion, give it Deflect.",
+  "description": "Whenever you summon a unit, give it Deflect.",
   "trigger": {
     "eventTrigger": {
       "class": "BeforeMinionSummonedTrigger",

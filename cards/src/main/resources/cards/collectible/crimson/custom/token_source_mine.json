@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "At the start of your turn, deal 2 damage to adjacent minions. If this kills any, repeat.",
+  "description": "At the start of your turn, deal 2 damage to adjacent units. If this kills any, repeat.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",

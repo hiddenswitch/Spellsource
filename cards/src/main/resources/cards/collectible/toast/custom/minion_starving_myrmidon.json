@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Opener: If your deck contains 8 or fewer cards, destroy a minion.",
+  "description": "Opener: If your deck contains 8 or fewer cards, destroy a unit.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Whenever you shuffle a card into your deck, play a copy of it.",
+  "description": "Whenever you shuffle a card into your deck, play it instead.",
   "trigger": {
     "eventTrigger": {
       "class": "ShuffledTrigger",

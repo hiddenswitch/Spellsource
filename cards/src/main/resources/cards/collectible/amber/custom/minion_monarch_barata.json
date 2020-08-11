@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Aftermath: Give a random minion in your hand +1/+3 and this Aftermath.",
+  "description": "Aftermath: Give a random unit in your hand +1/+3 and this Aftermath.",
   "deathrattle": {
     "class": "MetaSpell",
     "target": "FRIENDLY_HAND",

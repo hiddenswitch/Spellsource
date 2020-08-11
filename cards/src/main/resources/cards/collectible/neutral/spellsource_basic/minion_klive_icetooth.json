@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Spellpower +1. Opener: Stun a minion and restore 5 Health to your champion.",
+  "description": "Spellpower +1. Opener: Stun a unit and restore 5 Health to your champion.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

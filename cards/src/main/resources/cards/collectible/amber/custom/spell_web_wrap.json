@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "Return an enemy minion and a random enemy minion to your opponent's hand.",
+  "description": "Return an enemy unit and a random enemy unit to your opponent's hand.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 2,

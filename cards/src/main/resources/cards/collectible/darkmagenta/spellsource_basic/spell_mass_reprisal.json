@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKMAGENTA",
   "rarity": "FREE",
-  "description": "Summon a 2/2 Fae with Dash for each enemy minion.",
+  "description": "Summon a 2/2 Fae with Dash for each enemy unit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "RARE",
-  "description": "Destroy a minion. Your champion takes damage equal to its Health.",
+  "description": "Destroy a unit. Your champion takes damage equal to its Health.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

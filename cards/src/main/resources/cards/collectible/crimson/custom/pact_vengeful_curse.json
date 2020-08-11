@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CRIMSON",
   "rarity": "RARE",
-  "description": "<b>Pact:</b> After an allied minion dies, destroy a random enemy minion.",
+  "description": "<b>Pact:</b> After an allied unit dies, destroy a random enemy unit.",
   "condition": {
     "class": "CanPlayPactCondition"
   },

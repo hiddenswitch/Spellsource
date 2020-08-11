@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",
-  "description": "Deal $2 damage to an enemy minion and the enemy champion.",
+  "description": "Deal $2 damage to an enemy unit and the enemy champion.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",
-  "description": "Casts when drawn. Take 7 damage.",
+  "description": "Casts When Drawn. Take 7 damage.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

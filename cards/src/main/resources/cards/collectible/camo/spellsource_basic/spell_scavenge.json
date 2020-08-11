@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CAMO",
   "rarity": "COMMON",
-  "description": "Gain [0] Armor. Draw a card. (Increases for each minion that died this turn)",
+  "description": "Gain [0] Armor. Draw. (Increases for each unit that died this turn)",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

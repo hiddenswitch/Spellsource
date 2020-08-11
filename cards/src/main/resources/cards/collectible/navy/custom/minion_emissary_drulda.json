@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Opener: Transform your Knights in your hand into random Legendary minions.",
+  "description": "Opener: Transform your Knights in your hand into random Legendary units.",
   "battlecry": {
     "spell": {
       "class": "ReplaceCardsSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "MAGENTA",
   "rarity": "FREE",
-  "description": "Summon a random 5-Cost minion.",
+  "description": "Summon a random 5-Cost unit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "COMMON",
-  "description": "Transform an allied minion into a 4/4 Dragon.",
+  "description": "Transform an allied unit into a 4/4 Dragon.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "TransformMinionSpell",

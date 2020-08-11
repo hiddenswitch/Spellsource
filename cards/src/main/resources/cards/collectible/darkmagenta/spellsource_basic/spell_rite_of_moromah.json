@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKMAGENTA",
   "rarity": "RARE",
-  "description": "Draw a card for each friendly minion. Invoke (2): Each minion.",
+  "description": "Draw for each friendly unit. Invoke (2): Each unit.",
   "targetSelection": "NONE",
   "spell": {
     "class": "InvokeSpell",
@@ -18,7 +18,7 @@
     "spell1": {
       "class": "InvokeOptionSpell",
       "name": "Don't Invoke",
-      "description": "Only draw from friendly minions",
+      "description": "Only draw from friendly units.",
       "spell": {
         "class": "DrawCardSpell",
         "value": {
@@ -31,7 +31,7 @@
     "spell2": {
       "class": "InvokeOptionSpell",
       "name": "Rite of Moro-cards",
-      "description": "Draw from all minions.",
+      "description": "Draw from all units.",
       "spell": {
         "class": "DrawCardSpell",
         "value": {

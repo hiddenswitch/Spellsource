@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "EPIC",
-  "description": "Give a minion +1 Attack for each card in your hand.",
+  "description": "Give a unit +1 Attack for each card in your hand.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",

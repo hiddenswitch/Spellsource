@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "FREE",
-  "description": "Lifedrain. Opener: Draw a card.",
+  "description": "Lifedrain. Opener: Draw.",
   "battlecry": {
     "spell": {
       "class": "DrawCardSpell"

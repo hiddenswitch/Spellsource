@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "RARE",
-  "description": "Give a minion \"Aftermath: Deal 3 damage to all minions\".",
+  "description": "Give a unit \"Aftermath: Deal 3 damage to all units\".",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddDeathrattleSpell",

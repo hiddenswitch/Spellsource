@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "At the end of your turn, add a Lunstone to your hand.",
+  "description": "At the end of your turns, receive a Lunstone.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

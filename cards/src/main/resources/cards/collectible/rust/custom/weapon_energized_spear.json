@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 2,
   "rarity": "COMMON",
-  "description": "Supremacy: Restore your minions to full Health.",
+  "description": "Supremacy: Restore your units to full Health.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

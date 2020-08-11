@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Start of Game: If all minions in your deck have 0 Attack, give them +1/-1.",
+  "description": "Start of Game: If all units in your deck have 0 Attack, give them +1/-1.",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

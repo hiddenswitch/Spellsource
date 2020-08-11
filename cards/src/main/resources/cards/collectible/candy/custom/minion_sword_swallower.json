@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "Aftermath: Give adjacent minions +3 Attack.",
+  "description": "Aftermath: Give adjacent units +3 Attack.",
   "deathrattle": {
     "class": "custom.AdjacentDeathrattleSpell",
     "target": "SELF",

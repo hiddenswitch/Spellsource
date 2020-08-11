@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "SPIRIT",
-  "description": "Costs (1) less for each Spirit you control. Opener: Give a minion +3/+3.",
+  "description": "Costs (1) less for each Spirit you control. Opener: Give a unit +3/+3.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

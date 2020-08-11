@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Guard. Opener: Summon a random 4-Cost minion for your opponent.",
+  "description": "Guard. Opener: Summon a random 4-Cost unit for your opponent.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

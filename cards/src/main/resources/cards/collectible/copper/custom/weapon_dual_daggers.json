@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 4,
   "rarity": "EPIC",
-  "description": "After your champion attacks and kills a minion, swap Attack and Durability.",
+  "description": "After your champion attacks and kills a unit, swap Attack and Durability.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "After your weapon is destroyed, refresh your champion's Attacks.",
+  "description": "After your item is destroyed, refresh your champion's Attacks.",
   "trigger": {
     "eventTrigger": {
       "class": "WeaponDestroyedTrigger",

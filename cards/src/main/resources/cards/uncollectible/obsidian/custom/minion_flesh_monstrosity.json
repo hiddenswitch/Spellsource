@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Opener: Destroy an allied minion and gain its stats and text.",
+  "description": "Opener: Destroy an allied unit and gain its stats and text.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "FREE",
-  "description": "Whenever you play a minion, gain +1 Attack this turn.",
+  "description": "Whenever you play a unit, gain +1 Attack this turn.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionPlayedTrigger",

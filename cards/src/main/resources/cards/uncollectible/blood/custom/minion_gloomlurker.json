@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Guard. Aftermath: Destroy the leftmost enemy minion.",
+  "description": "Guard. Aftermath: Destroy the leftmost enemy unit.",
   "deathrattle": {
     "class": "DestroySpell",
     "target": "LEFTMOST_ENEMY_MINION"

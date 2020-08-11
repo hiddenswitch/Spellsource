@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "EPIC",
-  "description": "Draw a weapon from your deck. Drain Health from a random enemy equal to its Attack.",
+  "description": "Draw an item. Drain Health from a random enemy equal to its Attack.",
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",

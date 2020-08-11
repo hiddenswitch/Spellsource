@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Opener: If you're holding two Dragons, deal 5 damage to two random enemy minions.",
+  "description": "Opener: If you're holding two Dragons, deal 5 damage to two random enemy units.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

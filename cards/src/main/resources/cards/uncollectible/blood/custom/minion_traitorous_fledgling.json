@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Opener: Drain 3 Health from adjacent minions.",
+  "description": "Opener: Drain 3 Health from adjacent units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

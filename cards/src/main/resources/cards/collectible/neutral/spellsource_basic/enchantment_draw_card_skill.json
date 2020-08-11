@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "ANY",
   "rarity": "LEGENDARY",
-  "description": "Your skill is \"Draw a card\".",
+  "description": "Your skill is \"Draw\".",
   "aura": {
     "class": "CardAura",
     "target": "FRIENDLY_HERO_POWER",

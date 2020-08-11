@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 2,
   "rarity": "FREE",
-  "description": "Opener: Silence a minion.",
+  "description": "Opener: Silence a unit.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

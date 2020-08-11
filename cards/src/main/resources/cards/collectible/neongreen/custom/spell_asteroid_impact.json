@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "RARE",
-  "description": "Deal $10 damage to an enemy minion, then deal its excess damage randomly split among all enemies.",
+  "description": "Deal $10 damage to an enemy unit, then deal its excess damage randomly split among all enemies.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "ExcessDamageSpell",

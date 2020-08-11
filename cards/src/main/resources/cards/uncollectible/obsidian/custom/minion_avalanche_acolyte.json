@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Stuns the minions next to whomever this attacks.",
+  "description": "Stuns the units next to whomever this attacks.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

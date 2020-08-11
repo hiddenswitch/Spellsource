@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Guard. Aftermath: Deal 1 damage to all minions.",
+  "description": "Guard. Aftermath: Deal 1 damage to all units.",
   "deathrattle": {
     "class": "DamageSpell",
     "target": "ALL_MINIONS",

@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Opener: The first minion you play next turn costs (6) less.",
+  "description": "Opener: The first unit you play next turn costs (6) less.",
   "battlecry": {
     "spell": {
       "class": "AddEnchantmentSpell",

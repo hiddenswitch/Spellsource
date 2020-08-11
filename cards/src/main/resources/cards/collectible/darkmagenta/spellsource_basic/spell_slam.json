@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKMAGENTA",
   "rarity": "COMMON",
-  "description": "Deal $4 damage to a minion. Invoke (2): Deal $8 instead.",
+  "description": "Deal $4 damage to a unit. Invoke (2): Deal $8 instead.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "InvokeSpell",

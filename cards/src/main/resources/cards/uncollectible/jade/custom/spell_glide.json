@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "FREE",
-  "description": "Return an allied minion to your hand, then summon it.",
+  "description": "Return an allied unit to your hand, then summon it.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "ReturnTargetToHandSpell",

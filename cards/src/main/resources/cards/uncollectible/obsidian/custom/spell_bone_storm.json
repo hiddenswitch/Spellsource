@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
-  "description": "Deal $1 damage to all enemies. Draw a card.",
+  "description": "Deal $1 damage to all enemies. Draw.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

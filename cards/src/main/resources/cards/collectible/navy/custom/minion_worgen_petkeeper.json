@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Summon a random 0-Cost minion for your opponent.",
+  "description": "Opener: Summon a random 0-Cost unit for your opponent.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

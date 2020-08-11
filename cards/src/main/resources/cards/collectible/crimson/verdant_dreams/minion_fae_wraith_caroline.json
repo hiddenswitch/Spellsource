@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "FAE",
-  "description": "Guard. Opener: Draw a card. Aftermath: Shuffle this into your deck",
+  "description": "Guard. Opener: Draw. Aftermath: Shuffle this into your deck",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

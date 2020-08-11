@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Passive Skill. Whenever a minion dies this turn, summon a 2/2 Ghoul.",
+  "description": "Passive Skill. Whenever a unit dies this turn, summon a 2/2 Ghoul.",
   "passiveTriggers": [
     {
       "eventTrigger": {
@@ -36,7 +36,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
-    "description": "Whenever a minion dies this turn, summon a 2/2 Ghoul.",
+    "description": "Whenever a unit dies this turn, summon a 2/2 Ghoul.",
     "spell": {
       "class": "AddEnchantmentSpell",
       "target": "FRIENDLY_PLAYER",

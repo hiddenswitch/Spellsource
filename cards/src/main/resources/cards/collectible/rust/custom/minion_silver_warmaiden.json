@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "Opener: Damage an enemy minion until it has 1 Health.",
+  "description": "Opener: Damage an enemy unit until it has 1 Health.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {

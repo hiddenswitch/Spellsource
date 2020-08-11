@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Opener: If you control another Elemental, attack an enemy minion.",
+  "description": "Opener: If you control another Elemental, attack an enemy unit.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

@@ -1,0 +1,26 @@
+{
+  "name": "Low Note",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "CORAL",
+  "rarity": "COMMON",
+  "description": "Deal $1 damage. Receive a spell  that deal 2 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "value": 1,
+        "card": "spell_high_note"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}

@@ -4,11 +4,51 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Give +2/+2 to all minions in your hand and deck that have a copy of them in your Graveyard.",
+  "description": "Give +2/+2 to all units in your hand and deck that have a copy of them in your Graveyard.",
   "spell": {
-    "class": "custom.VileIntentSpell",
-    "attackBonus": 2,
-    "hpBonus": 2
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "MetaSpell",
+        "target": "FRIENDLY_HAND",
+        "spell": {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "GraveyardContainsCondition",
+            "target": "SPELL_TARGET",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "BuffSpell",
+            "value": 2
+          }
+        },
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      },
+      {
+        "class": "MetaSpell",
+        "target": "FRIENDLY_DECK",
+        "spell": {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "GraveyardContainsCondition",
+            "target": "SPELL_TARGET",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "BuffSpell",
+            "value": 2
+          }
+        },
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      }
+    ]
   },
   "collectible": true,
   "fileFormatVersion": 1,

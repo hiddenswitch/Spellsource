@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "EPIC",
-  "description": "Your minions can attack an additional time this turn.",
+  "description": "Your units can attack an additional time this turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "ModifyAttributeSpell",

@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "At the end of your turns, give a random minion in your hand +1/+1.",
+  "description": "At the end of your turns, give a random unit in your hand +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

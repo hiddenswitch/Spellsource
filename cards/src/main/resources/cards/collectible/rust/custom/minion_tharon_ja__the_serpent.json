@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "Whenever you draw a card, draw all your other copies of it.",
+  "description": "Whenever you draw, draw all your other copies of that card.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

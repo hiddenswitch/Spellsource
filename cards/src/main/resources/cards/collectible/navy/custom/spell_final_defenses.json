@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "EPIC",
-  "description": "Transform your minions into 0/6 Guardians with Guard.",
+  "description": "Transform your units into 0/6 Guardians with Guard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "TransformMinionSpell",

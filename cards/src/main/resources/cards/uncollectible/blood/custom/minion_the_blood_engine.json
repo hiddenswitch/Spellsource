@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "MECH",
-  "description": "Opener: Deal [0] damage randomly split among all enemies. (Increases for each health your champion Drained your last turn)",
+  "description": "Opener: Deal [0] damage randomly split among all enemies. (Increases for each Health your champion Drained your last turn)",
   "battlecry": {
     "spell": {
       "class": "MissilesSpell",

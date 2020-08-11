@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "At the end of your turn, give your other minions +1/+1 and restore them to full Health.",
+  "description": "At the end of your turns, give your other units +1/+1 and restore them to full Health.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

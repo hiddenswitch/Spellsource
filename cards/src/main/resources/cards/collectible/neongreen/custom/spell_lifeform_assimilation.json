@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "RARE",
-  "description": "Draw a card. Copy your opponent's skill. Yours costs (1) this game.",
+  "description": "Draw. Copy your opponent's skill. Yours costs (1) this game.",
   "spell": {
     "class": "MetaSpell",
     "spells": [

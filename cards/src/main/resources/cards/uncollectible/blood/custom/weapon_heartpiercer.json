@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "EPIC",
-  "description": "Aftermath: Your champion Drains the Health of all minions damaged by this weapon.",
+  "description": "Aftermath: Your champion Drains the Health of all units damaged by this item.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageCausedTrigger",

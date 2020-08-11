@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "EPIC",
-  "description": "Take $[0] damage. Then, summon copies of all your Mechs. (Increases for each health your Mechs have)",
+  "description": "Take $[0] damage. Then, summon copies of all your Mechs. (Increases for each Health your Mechs have)",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

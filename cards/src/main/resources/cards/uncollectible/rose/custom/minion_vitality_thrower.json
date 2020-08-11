@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Opener: Restore #5 Health to a minion. If it's still damaged, set its Attack to 10.",
+  "description": "Opener: Restore #5 Health to a unit. If it's still damaged, set its Attack to 10.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Opener: Summon two 1/1 Pagelings with Dash. Draw a card.",
+  "description": "Opener: Summon two 1/1 Pagelings with Dash. Draw.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

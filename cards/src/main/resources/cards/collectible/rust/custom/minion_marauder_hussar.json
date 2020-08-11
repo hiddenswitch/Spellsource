@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Adjacent minions deal their excess damage to the enemy champion.",
+  "description": "Adjacent units deal their excess damage to the enemy champion.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",

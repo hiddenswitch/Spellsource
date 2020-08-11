@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Opener: Give an allied Hidden minion +1 Attack and Dash.",
+  "description": "Opener: Give an allied Hidden unit +1 Attack and Dash.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

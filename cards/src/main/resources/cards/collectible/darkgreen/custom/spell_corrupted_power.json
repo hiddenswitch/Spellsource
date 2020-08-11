@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Give a minion +3/+3. At the start of your next turn, destroy it.",
+  "description": "Give a unit +3/+3. At the start of your next turn, destroy it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

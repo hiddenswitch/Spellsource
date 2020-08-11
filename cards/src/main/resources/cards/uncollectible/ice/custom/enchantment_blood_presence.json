@@ -4,7 +4,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Your minions have Lifedrain this turn.",
+  "description": "Your units have Lifedrain this turn.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger"

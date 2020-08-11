@@ -40,5 +40,11 @@
       "r": 0.49
     }
   },
-  "hero": "hero_regina"
+  "hero": "hero_regina",
+  "tooltips": [
+    {
+      "keywords": ["signature"],
+      "text": "<b>Signature</b>: A card chosen during deck building."
+    }
+  ]
 }

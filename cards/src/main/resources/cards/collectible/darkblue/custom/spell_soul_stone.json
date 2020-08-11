@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKBLUE",
   "rarity": "FREE",
-  "description": "Destroy an allied minion. If you've played all five of these, awaken Magoria!",
+  "description": "Destroy an allied unit. If you've played all five of these, awaken Magoria!",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",

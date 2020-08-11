@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Blitz",
+  "description": "Blitz.",
   "attributes": {
     "CHARGE": true
   },

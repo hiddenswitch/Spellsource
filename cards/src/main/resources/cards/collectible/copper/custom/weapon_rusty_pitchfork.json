@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "RARE",
-  "description": "Opener: if you control a Quick Draw minion, gain +1 Durability.",
+  "description": "Opener: if you control a Quick Draw unit, gain +1 Durability.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

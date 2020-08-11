@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Costs (0) if you control exactly two minions",
+  "description": "Costs (0) if you control exactly two units",
   "collectible": false,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1,

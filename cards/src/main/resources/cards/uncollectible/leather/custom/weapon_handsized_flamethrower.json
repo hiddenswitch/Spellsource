@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 2,
   "rarity": "COMMON",
-  "description": "Aftermath: Give minions in your hand +2/+2.'",
+  "description": "Aftermath: Give units in your hand +2/+2.'",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_HAND",

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Whenever you use your Skill, draw a card.",
+  "description": "Whenever you use your Skill, draw.",
   "trigger": {
     "eventTrigger": {
       "class": "InspireTrigger",

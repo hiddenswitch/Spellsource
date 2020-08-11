@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "race": "NONE",
-  "description": "Opener: Replace your deck with 7 random 7-Cost minions.",
+  "description": "Opener: Replace your deck with seven random 7-Cost units.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

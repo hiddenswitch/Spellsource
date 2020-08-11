@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",
-  "description": "Summon all minions from your hand that cost (2) or less.",
+  "description": "Summon all units from your hand that cost (2) or less.",
   "targetSelection": "NONE",
   "spell": {
     "class": "RecruitSpell",

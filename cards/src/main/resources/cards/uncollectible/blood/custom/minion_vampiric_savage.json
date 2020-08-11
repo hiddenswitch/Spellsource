@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Whenever your champion gains Health, this minion gains that much as well.",
+  "description": "Whenever your champion gains Health, this unit gains that much as well.",
   "trigger": {
     "eventTrigger": {
       "class": "MaxHpIncreasedTrigger",

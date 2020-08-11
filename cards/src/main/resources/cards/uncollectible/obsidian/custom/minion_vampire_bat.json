@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Lifedrain",
+  "description": "Lifedrain.",
   "attributes": {
     "LIFESTEAL": true
   },

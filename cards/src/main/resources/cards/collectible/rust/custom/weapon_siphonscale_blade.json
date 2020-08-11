@@ -6,7 +6,7 @@
   "damage": 6,
   "durability": 3,
   "rarity": "EPIC",
-  "description": "Can attack again after an allied minion attacks and kills a minion.",
+  "description": "Can attack again after an allied unit attacks and kills a unit.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

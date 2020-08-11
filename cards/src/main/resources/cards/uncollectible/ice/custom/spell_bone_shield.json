@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ICE",
   "rarity": "RARE",
-  "description": "Gain 3 Armor. Give your weapon +3 Durability.",
+  "description": "Gain 3 Armor. Give your item +3 Durability.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

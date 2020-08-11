@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Skill: Restore #4 health. Swap to deal 2 damage.",
+  "description": "Skill: Restore #4 Health. Swap to deal 2 damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "HeroPowerSpell",
