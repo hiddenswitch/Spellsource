@@ -7,9 +7,16 @@
   "description": "Give a unit +2/+2. <b>Imbue</b>: Deal 1 damage to all enemies.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "ImbueSpell", #Noting for the future
+    "class": "ChooseOneSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_PLAYER",
+      "attribute": "IMBUE",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL"
+    },
     "spell1": {
-      "class": "ImbueOptionSpell",
+      "class": "ChooseOneOptionSpell",
       "name": "Normal",
       "description": "Give a unit +2/+2.",
 	  "spell": {
@@ -18,23 +25,26 @@
 	  }
     },
     "spell2": {
-      "class": "ImbueOptionSpell", #Noting for the future
+      "class": "ChooseOneOptionSpell",
       "name": "Imbue",
       "description": "Give a unit +2/+2 and deal 1 damage to all enemies.",
-	  "spell": {
-        "class": "MetaSpell",
-        "spells": [
-          {
-            "class": "BuffSpell",
-            "value": 2
-          },
-          {
-            "class": "DamageSpell",
-            "target": "ENEMY_CHARACTERS",
-            "value": 1
-          }
-        ]
-      }
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "value": 2
+        },
+        {
+          "class": "DamageSpell",
+          "target": "ENEMY_CHARACTERS",
+          "value": 1
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "value": -1,
+          "attribute": "IMBUE",
+          "target": "FRIENDLY_PLAYER"
+        }
+      ]
     },
 	"spell": {
       "class": "BuffSpell",
@@ -42,9 +52,9 @@
 	}
   },
   "attributes": {
-    "IMBUE": true #Noting for the future
+    "IMBUE": true
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

@@ -7,46 +7,71 @@
   "description": "Deal $6 damage. <b>Imbue:</b> Cast 3 random spells on the target instead.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "ImbueSpell", #Noting for the future
-    "spell1": {
-      "class": "ImbueOptionSpell",
-      "name": "Normal",
-      "description": "Deal 6 damage."
-      "class": "DamageSpell",
-	  "value": 6
+    "class": "ChooseOneSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_PLAYER",
+      "attribute": "IMBUE",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL"
     },
-    "spell2": {
-      "class": "ImbueOptionSpell", #Noting for the future, also need to know how to get targetted spells to work
-      "name": "Imbue",
-      "description": "Cast 3 random spells on the target.",
-	  "spell": {
-        "class": "CastRandomSpellSpell",
-		"value": 3,
-		"target": "EVENT_TARGET",
-		"cardFilter": {
-		  "class": 	"AndFilter",
-		  "filters": [
-		    {
-			  "class": "CardFilter",
-			  "cardType": "SPELL"
-			},
-			{
-			  "class": "TargetSelectionFilter",
-              "targetSelection": "ANY"
-			}
-		  ]
-		}
+    "spell1": {
+      "class": "ChooseOneOptionSpell",
+      "name": "Normal",
+      "description": "Deal 6 damage.",
+      "spell": {
+        "class": "DamageSpell",
+        "value": 6
       }
     },
-	"spell": {
+    "spell2": {
+      "class": "ChooseOneOptionSpell",
+      "name": "Imbue",
+      "description": "Cast 3 random spells on the target.",
+      "spells": [
+        {
+          "class": "ModifyAttributeSpell",
+          "value": -1,
+          "attribute": "IMBUE",
+          "target": "FRIENDLY_PLAYER"
+        },
+        {
+          "class": "CastRepeatedlySpell",
+          "target": "TARGET",
+          "howMany": 3,
+          "spell": {
+            "class": "RevealCardSpell",
+            "cardFilter": {
+              "class": "AndFilter",
+              "filters": [
+                {
+                  "class": "CardFilter",
+                  "cardType": "SPELL"
+                },
+                {
+                  "class": "TargetSelectionFilter",
+                  "secondaryTarget": "TARGET"
+                }
+              ]
+            },
+            "spell": {
+              "class": "CastCardsSpell",
+              "secondaryTarget": "OUTPUT",
+              "target": "TARGET"
+            }
+          }
+        }
+      ]
+    },
+    "spell": {
       "class": "DamageSpell",
-	  "value": 6
-	}
+      "value": 6
+    }
   },
   "attributes": {
-	"IMBUE": true
+    "IMBUE": true
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

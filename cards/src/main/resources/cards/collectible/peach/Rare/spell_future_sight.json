@@ -7,50 +7,67 @@
   "description": "Source and draw a card from your deck. <b>Imbue:</b> Reduce its cost by (3).",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ImbueSpell", #Noting for the future
-    "spell1": {
-      "class": "ImbueOptionSpell",
-      "name": "Normal",
-      "description": "Source and draw a card."
-      "class": "DiscoverSpell",
-      "attribute": "RESERVED_BOOLEAN_5",
-      "cardSource": {
-        "class": "DeckSource",
-        "targetPlayer": "SELF"
-      },
-      "exclusive": true,
-      "spell1": {
-        "class": "FromDeckToHandSpell"
-      }
+    "class": "ChooseOneSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_PLAYER",
+      "attribute": "IMBUE",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL"
     },
-    "spell2": {
-      "class": "ImbueOptionSpell", #Noting for the future
-      "name": "Imbue",
-      "description": "Source and draw a card. Reduce its cost by (3).",
-	  "spell": {
+    "spell1": {
+      "class": "ChooseOneOptionSpell",
+      "name": "Normal",
+      "description": "Source and draw a card.",
+      "spell": {
         "class": "DiscoverSpell",
-		"attribute": "RESERVED_BOOLEAN_5",
-		"cardSource": {
-		  "class": "DeckSource",
-		  "targetPlayer": "SELF"
-		},
-		"exclusive": true,
+        "attribute": "RESERVED_BOOLEAN_5",
+        "cardSource": {
+          "class": "DeckSource",
+          "targetPlayer": "SELF"
+        },
+        "exclusive": true,
         "spell1": {
-          "class": "FromDeckToHandSpell",
-          "spell": {
-            "class": "CardCostModifierSpell",
-            "target": "OUTPUT",
-            "cardCostModifier": {
-              "class": "CardCostModifier",
-              "target": "SELF",
-              "value": 3,
-              "operation": "SUBTRACT"
-            }
-          }
+          "class": "FromDeckToHandSpell"
         }
       }
     },
-	"spell": {
+    "spell2": {
+      "class": "ChooseOneOptionSpell",
+      "name": "Imbue",
+      "description": "Source and draw a card. Reduce its cost by (3).",
+      "spells": [
+        {
+          "class": "DiscoverSpell",
+          "attribute": "RESERVED_BOOLEAN_5",
+          "cardSource": {
+            "class": "DeckSource",
+            "targetPlayer": "SELF"
+          },
+          "exclusive": true,
+          "spell1": {
+            "class": "FromDeckToHandSpell",
+            "spell": {
+              "class": "CardCostModifierSpell",
+              "target": "OUTPUT",
+              "cardCostModifier": {
+                "class": "CardCostModifier",
+                "target": "SELF",
+                "value": 3,
+                "operation": "SUBTRACT"
+              }
+            }
+          }
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "value": -1,
+          "attribute": "IMBUE",
+          "target": "FRIENDLY_PLAYER"
+        }
+      ]
+    },
+    "spell": {
       "class": "DiscoverSpell",
       "attribute": "RESERVED_BOOLEAN_5",
       "cardSource": {
@@ -61,13 +78,13 @@
       "spell1": {
         "class": "FromDeckToHandSpell"
       }
-	}
+    }
   },
   "attributes": {
     "DISCOVER": true,
-	"IMBUE": true
+    "IMBUE": true
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

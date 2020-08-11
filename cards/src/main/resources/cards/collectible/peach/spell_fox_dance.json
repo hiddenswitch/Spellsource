@@ -1,35 +1,56 @@
 {
   "name": "Fox Dance",
   "baseManaCost": 1,
-  "type": "CHOOSE_ONE",
+  "type": "SPELL",
   "heroClass": "PEACH",
   "rarity": "FREE",
   "description": "Choose to give a unit +1/+1 or Spellpower +1. Gain an Imbue charge.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "ChooseOneSpell",
-    "spell1": {
-      "class": "ChooseOneOptionSpell",
-      "name": "Fortitude",
-      "description": "Give it +1/+1.",
-      "spell": {
-        "class": "BuffSpell",
-        "attackBonus": 1,
-        "hpBonus": 1
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ChooseOneSpell",
+        "spell1": {
+          "class": "ChooseOneOptionSpell",
+          "name": "Fortitude",
+          "description": "Give it +1/+1.",
+          "spell": {
+            "class": "BuffSpell",
+            "attackBonus": 1,
+            "hpBonus": 1
+          }
+        },
+        "spell2": {
+          "class": "ChooseOneOptionSpell",
+          "name": "Cunning",
+          "description": "Give it Spellpower +1.",
+          "spell": {
+            "class": "ModifyAttributeSpell",
+            "value": 1,
+            "attribute": "SPELL_DAMAGE"
+          }
+        }
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "IMBUE",
+          "value": 3,
+          "operation": "LESS"
+        },
+        "spell": {
+          "class": "ModifyAttributeSpell",
+          "value": 1,
+          "attribute": "IMBUE",
+          "target": "FRIENDLY_PLAYER"
+        }
       }
-    },
-    "spell2": {
-      "class": "ChooseOneOptionSpell",
-      "name": "Cunning",
-      "description": "Give it Spellpower +1.",
-      "spell": {
-        "class": "ModifyAttributeSpell",
-        "value": 1,
-        "attribute": "SPELL_DAMAGE"
-      }
-    }
+    ]
   },
   "collectible": false,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

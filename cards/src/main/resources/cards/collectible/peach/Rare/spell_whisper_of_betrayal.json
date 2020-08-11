@@ -12,6 +12,6 @@
     "secondaryTarget": "TARGET"
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

@@ -39,40 +39,55 @@
       "value2": 3
     },
     "spell": {
-	  "class": "ImbueSpell", #Noting for Later
-	  "spell1": {
-	    "class": "ImbueOptionSpell",
-		"name": "Normal",
-		"description": "Don't Imbue."
-	  },
-	  "spell2": {
-	    "class": "ImbueOptionSpell",
-		"name": "Imbue",
-		"description": "Your next spell costs (1) this turn.",
-		"spell": {
-          "class": "CardCostModifierSpell",
-          "target": "FRIENDLY_PLAYER",
-          "cardCostModifier": {
-            "class": "OneTurnCostModifier",
-            "value": 1,
-		    "filter": {
-		      "class": "CardFilter",
-              "cardType": "SPELL"
-		    },
-            "expirationTrigger": {
-              "class": "CardPlayedTrigger",
-              "targetPlayer": "SELF"
-            },
-            "operation": "SET"
+      "class": "ChooseOneSpell",
+      "condition": {
+        "class": "AttributeCondition",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "IMBUE",
+        "value": 1,
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "spell1": {
+        "class": "ChooseOneOptionSpell",
+        "name": "Normal",
+        "description": "Don't Imbue."
+      },
+      "spell2": {
+        "class": "ChooseOneOptionSpell",
+        "name": "Imbue",
+        "description": "Your next spell costs (1) this turn.",
+        "spells": [
+          {
+            "class": "CardCostModifierSpell",
+            "target": "FRIENDLY_PLAYER",
+            "cardCostModifier": {
+              "class": "OneTurnCostModifier",
+              "value": 1,
+              "filter": {
+                "class": "CardFilter",
+                "cardType": "SPELL"
+              },
+              "expirationTrigger": {
+                "class": "CardPlayedTrigger",
+                "targetPlayer": "SELF"
+              },
+              "operation": "SET"
+            }
+          },
+          {
+            "class": "ModifyAttributeSpell",
+            "value": -1,
+            "attribute": "IMBUE",
+            "target": "FRIENDLY_PLAYER"
           }
-        }
+        ]
       }
-	}
+    }
   },
   "attributes": {
-    "IMBUE": true #Noting for later
+    "IMBUE": true
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

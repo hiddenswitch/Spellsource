@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Spellpower +1. Imbue: Gain Spellpower +1.[]",
+  "description": "Spellpower +1. Imbue: Gain Spellpower +1.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -50,23 +50,5 @@
   },
   "collectible": true,
   "fileFormatVersion": 1,
-  "set": "CORE",
-  "dynamicDescription": [
-    {
-      "class": "MetaDescription",
-      "descriptions": [
-        " (",
-        {
-          "class": "PluralDescription",
-          "value": {
-            "class": "AttributeValueProvider",
-            "target": "FRIENDLY_PLAYER",
-            "value": "IMBUE"
-          },
-          "description1": " charge)",
-          "description2": " charges)"
-        }
-      ]
-    }
-  ]
+  "set": "CUSTOM"
 }

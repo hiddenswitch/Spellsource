@@ -3,9 +3,41 @@
   "type": "CLASS",
   "hero": "hero_sancha",
   "heroClass": "PEACH",
-  "color": [255, 218, 185],
-  "blackText": true,
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "body": {
+      "vertex": {
+        "a": 1.0,
+        "b": 0.0,
+        "g": 0.0,
+        "r": 0.0
+      }
+    },
+    "highlight": {
+      "a": 1.0,
+      "b": 0.482,
+      "g": 0.725,
+      "r": 1.0
+    },
+    "primary": {
+      "a": 1.0,
+      "b": 0.725,
+      "g": 0.854,
+      "r": 1.0
+    },
+    "secondary": {
+      "a": 1.0,
+      "b": 0.608,
+      "g": 0.721,
+      "r": 0.843
+    },
+    "shadow": {
+      "a": 1.0,
+      "b": 0.384,
+      "g": 0.451,
+      "r": 0.525
+    }
+  }
 }

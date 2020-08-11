@@ -2,7 +2,7 @@
   "name": "Moon Fox",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": ":PEACH",
+  "heroClass": "PEACH",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "RARE",
@@ -13,22 +13,20 @@
       "class": "AfterPhysicalAttackTrigger",
       "hostTargetType": "IGNORE_OTHER_SOURCES"
     },
-	{
-	  "spell": {
-        "class": "ReceiveCardSpell",
-        "cards": [
-          "spell_fox_dance",
-          "spell_fox_fire",
-          "spell_fox_kiss"
-        ]
-        "randomTarget": true
-	  }
-	}
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "spell_fox_dance",
+        "spell_fox_fire",
+        "spell_fox_kiss"
+      ],
+      "randomTarget": true
+    }
   },
   "attributes": {
 	"SPELL_DAMAGE": 1
   },
   "collectible": true,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

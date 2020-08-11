@@ -7,25 +7,42 @@
   "description": "Deal $1 damage. Deals double damage to units. Gain an Imbue charge.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "DamageSpell",
-    "value": 1,
-    "spell": {
-      "class": "EitherOrSpell",
-      "condition": {
-        "class": "CardPropertyCondition",
-        "cardType": "MINION"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ConditionalEffectSpell",
+        "condition": {
+          "class": "CardPropertyCondition",
+          "cardType": "MINION"
+        },
+        "spell1": {
+          "class": "DamageSpell",
+          "value": 1
+        },
+        "spell2": {
+          "class": "DamageSpell",
+          "value": 1
+        }
       },
-      "spell1": {
-        "class": "ModifyDamageSpell",
-        "value": 2,
-        "operation": "MULTIPLY"
-      },
-      "spell2": {
-        "class": "NullSpell"
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "IMBUE",
+          "value": 3,
+          "operation": "LESS"
+        },
+        "spell": {
+          "class": "ModifyAttributeSpell",
+          "value": 1,
+          "attribute": "IMBUE",
+          "target": "FRIENDLY_PLAYER"
+        }
       }
-    }
+    ]
   },
   "collectible": false,
-  "set": "CORE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }
