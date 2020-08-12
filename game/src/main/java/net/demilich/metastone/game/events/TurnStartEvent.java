@@ -9,6 +9,6 @@ import net.demilich.metastone.game.entities.Entity;
 public class TurnStartEvent extends BasicGameEvent {
 
 	public TurnStartEvent(GameContext context, int playerId) {
-		super(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_START, true, context, null, null , playerId, -1);
+		super(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.TURN_START, true, context, null, null , playerId, playerId);
 	}
 }
