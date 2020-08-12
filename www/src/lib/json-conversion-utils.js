@@ -57,9 +57,7 @@ export default class JsonConversionUtils {
    * @returns The created block
    */
   static newBlock(workspace, type) {
-    let block = workspace.newBlock(type)
-    BlocklyMiscUtils.manuallyAddShadowBlocks(block, Blockly.Blocks[type].json)
-    return block
+    return BlocklyMiscUtils.newBlock(workspace, type)
   }
 
   /**

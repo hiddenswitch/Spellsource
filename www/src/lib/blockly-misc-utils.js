@@ -190,6 +190,80 @@ export default class BlocklyMiscUtils {
       // already registered
     }
 
+    this.blocklyFunctionModification()
+
+    // All of our spells, triggers, entity reference enum values, etc.
+    data.allBlock.edges.forEach(edge => {
+      if (has(Blockly.Blocks, edge.node.type)) {
+        return
+      }
+
+      const block = recursiveOmitBy(edge.node, ({ node }) => node === null)
+
+      // Patch back in values from union type
+      if (!!block.args) {
+        block.args.forEach(args => {
+          args.args.forEach(arg => {
+            if (!!arg.valueI) {
+              arg.value = arg.valueI
+              delete arg.valueI
+            }
+            if (!!arg.valueS) {
+              arg.value = arg.valueS
+              delete arg.valueS
+            }
+            if (arg.hasOwnProperty('valueB')) {
+              //arg.value = arg.valueB
+              //gotta do this because it seems like the block -> xml conversion hates booleans
+              if (arg.valueB === true) {
+                arg.value = 'TRUE'
+              } else if (arg.valueB === false) {
+                arg.value = 'FALSE'
+              }
+              delete arg.valueB
+            }
+          })
+
+          block['args' + args.i.toString()] = args.args
+        })
+        delete block.args
+      }
+
+      if (!!block.messages) {
+        block.messages.forEach((message, i) => {
+          block['message' + i.toString()] = message
+        })
+        delete block.messages
+      }
+
+      if (!!block.output && !JsonConversionUtils.blockTypeColors[block.output]) {
+        JsonConversionUtils.blockTypeColors[block.output] = block.colour
+      }
+
+      BlocklyMiscUtils.addBlock(block)
+    })
+
+    BlocklyMiscUtils.initCardBlocks(data)
+
+
+    let defaultFunction = Blockly.Field.prototype.setValue;
+    Blockly.Field.prototype.setValue = function (newValue) {
+      defaultFunction.call(this, newValue)
+      let source = this.sourceBlock_
+      if (!!source && !!Blockly.Blocks[source.type].json) {
+        let json = Blockly.Blocks[source.type].json
+        if (json.output === 'Color') {
+          let r = source.getFieldValue('r')
+          let g = source.getFieldValue('g')
+          let b = source.getFieldValue('b')
+          let color = Blockly.utils.colour.rgbToHex(r, g, b)
+          source.setColour(color)
+        }
+      }
+    }
+  }
+
+  static blocklyFunctionModification() {
     Blockly.HSV_SATURATION = .65
     Blockly.Blocks = {} //we don't use any of the default Blockly blocks
 
@@ -269,75 +343,69 @@ export default class BlocklyMiscUtils {
       }
     }
 
-    // All of our spells, triggers, entity reference enum values, etc.
-    data.allBlock.edges.forEach(edge => {
-      if (has(Blockly.Blocks, edge.node.type)) {
-        return
+    Blockly.BlockSvg.prototype.bumpNeighbours = function() {
+      if (!this.workspace) {
+        return  // Deleted block.
       }
+      if (this.workspace.isDragging()) {
+        return  // Don't bump blocks during a drag.
+      }
+      var rootBlock = this.getRootBlock();
+      if (rootBlock.isInFlyout) {
+        return  // Don't move blocks around in a flyout.
+      }
+      // Loop through every connection on this block.
+      var myConnections = this.getConnections_(false);
+      for (var i = 0, connection; (connection = myConnections[i]); i++) {
 
-      const block = recursiveOmitBy(edge.node, ({ node }) => node === null)
+        // Spider down from this block bumping all sub-blocks.
+        if (connection.isConnected() && connection.isSuperior()) {
+          connection.targetBlock().bumpNeighbours()
+        }
 
-      // Patch back in values from union type
-      if (!!block.args) {
-        block.args.forEach(args => {
-          args.args.forEach(arg => {
-            if (!!arg.valueI) {
-              arg.value = arg.valueI
-              delete arg.valueI
-            }
-            if (!!arg.valueS) {
-              arg.value = arg.valueS
-              delete arg.valueS
-            }
-            if (arg.hasOwnProperty('valueB')) {
-              //arg.value = arg.valueB
-              //gotta do this because it seems like the block -> xml conversion hates booleans
-              if (arg.valueB === true) {
-                arg.value = 'TRUE'
-              } else if (arg.valueB === false) {
-                arg.value = 'FALSE'
+        var neighbours = connection.neighbours(Blockly.SNAP_RADIUS);
+        for (var j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
+
+          // If both connections are connected, that's probably fine.  But if
+          // either one of them is unconnected, then there could be confusion.
+          if (!connection.isConnected() || !otherConnection.isConnected()) {
+            let bumper = otherConnection.getSourceBlock()
+            let bumpee = this
+            let workspace = bumper.workspace
+            if (bumper.type.startsWith('Starter_') || bumper.type.startsWith('Property_')) {
+              if (bumpee.type.startsWith('Aura_')) {
+                let aurasBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_auras')
+                bumper.nextConnection.connect(aurasBlock.previousConnection)
+                aurasBlock.initSvg()
+                aurasBlock.getFirstStatementConnection().connect(bumpee.previousConnection)
+                workspace.render()
+              } else if (bumpee.type.startsWith('Spell')) {
+                let openerBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_opener')
+                bumper.nextConnection.connect(openerBlock.previousConnection)
+                openerBlock.initSvg()
+                openerBlock.getInput('battlecry.spell').connect(bumpee.outputConnection)
+                workspace.render()
+              } else if (bumpee.type.startsWith('TargetSelection')) {
+                let openerBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_opener')
+                bumper.nextConnection.connect(openerBlock.previousConnection)
+                openerBlock.initSvg()
+                openerBlock.getInput('battlecry.targetSelection').connect(bumpee.outputConnection)
+                workspace.render()
               }
-              delete arg.valueB
+
+              
+            } else if (otherConnection.getSourceBlock().getRootBlock() != rootBlock) {
+              // Always bump the inferior block.
+              if (connection.isSuperior()) {
+                otherConnection.bumpAwayFrom(connection)
+              } else {
+                connection.bumpAwayFrom(otherConnection)
+              }
             }
-          })
-
-          block['args' + args.i.toString()] = args.args
-        })
-        delete block.args
-      }
-
-      if (!!block.messages) {
-        block.messages.forEach((message, i) => {
-          block['message' + i.toString()] = message
-        })
-        delete block.messages
-      }
-
-      if (!!block.output && !JsonConversionUtils.blockTypeColors[block.output]) {
-        JsonConversionUtils.blockTypeColors[block.output] = block.colour
-      }
-
-      BlocklyMiscUtils.addBlock(block)
-    })
-
-    BlocklyMiscUtils.initCardBlocks(data)
-
-
-    let defaultFunction = Blockly.Field.prototype.setValue;
-    Blockly.Field.prototype.setValue = function (newValue) {
-      defaultFunction.call(this, newValue)
-      let source = this.sourceBlock_
-      if (!!source && !!Blockly.Blocks[source.type].json) {
-        let json = Blockly.Blocks[source.type].json
-        if (json.output === 'Color') {
-          let r = source.getFieldValue('r')
-          let g = source.getFieldValue('g')
-          let b = source.getFieldValue('b')
-          let color = Blockly.utils.colour.rgbToHex(r, g, b)
-          source.setColour(color)
+          }
         }
       }
-    }
+    };
   }
 
   static getHeroClassColors (data) {
@@ -398,5 +466,18 @@ export default class BlocklyMiscUtils {
         BlocklyMiscUtils.addBlock(block)
       }
     })
+  }
+
+  /**
+   * Helper method to make sure added blocks have the correct shadows
+   * We still want those in case people decide to pull apart the converted stuff
+   * @param workspace The workspace
+   * @param type The block type to create
+   * @returns The created block
+   */
+  static newBlock(workspace, type) {
+    let block = workspace.newBlock(type)
+    this.manuallyAddShadowBlocks(block, Blockly.Blocks[type].json)
+    return block
   }
 }
