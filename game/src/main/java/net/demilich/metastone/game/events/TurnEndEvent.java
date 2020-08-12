@@ -10,6 +10,6 @@ import net.demilich.metastone.game.entities.Entity;
 public class TurnEndEvent extends BasicGameEvent {
 
 	public TurnEndEvent(GameContext context, int playerId) {
-		super(GameEvent.EventTypeEnum.TURN_END, true, context, context.getPlayer(playerId), playerId, -1);
+		super(GameEvent.EventTypeEnum.TURN_END, true, context, context.getPlayer(playerId), playerId, playerId);
 	}
 }

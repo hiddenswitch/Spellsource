@@ -6,28 +6,28 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.StrandLocalRandom;
 import co.paralleluniverse.strands.SuspendableAction1;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
-import com.hiddenswitch.spellsource.common.GameState;
-import com.hiddenswitch.spellsource.net.Games;
-import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.common.GameState;
+import com.hiddenswitch.spellsource.common.Tracing;
+import com.hiddenswitch.spellsource.net.Games;
 import com.hiddenswitch.spellsource.net.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.net.impl.util.Scheduler;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.*;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Closeable;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import com.hiddenswitch.spellsource.client.models.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
-import com.hiddenswitch.spellsource.client.models.CardType;
-import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
@@ -40,7 +40,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 import static io.vertx.ext.sync.Sync.awaitEvent;
 import static java.util.stream.Collectors.toList;
 import static net.demilich.metastone.game.GameContext.PLAYER_1;
@@ -616,6 +615,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					.stream().map(e -> Games.getEntity(workingContext, e, playerId)).collect(Collectors.toList());
 			final Entity target = targets.size() > 0 ? targets.get(0) : null;
 			message.event(new GameEvent()
+					.description(event.getDescription(workingContext,playerId))
+					.isSourcePlayerLocal(source == null ? workingContext.getActivePlayerId() == playerId : source.getOwner() == playerId)
+					.isTargetPlayerLocal(target != null && target.getOwner() == playerId)
 					.eventType(GameEvent.EventTypeEnum.PERFORMED_GAME_ACTION)
 					.performedGameAction(new GameEventPerformedGameAction()
 							.actionType(action.getActionType()))
