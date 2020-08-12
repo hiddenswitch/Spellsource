@@ -1,6 +1,6 @@
 import React from 'react'
 import Loadable from 'react-loadable'
-import Layout from '../components/creative-layout'
+import Layout from '../components/card-editor-layout'
 
 const LoadableComponent = Loadable.Map({
   loader: {

@@ -372,6 +372,9 @@ export default class WorkspaceUtils {
       if (isPlainObject(cardScript[cardScriptKey]) && isEmpty(cardScript[cardScriptKey])) {
         delete cardScript[cardScriptKey]
       }
+      if (cardScript[cardScriptKey] === 'SHADOW') {
+        delete cardScript[cardScriptKey]
+      }
     }
   }
 

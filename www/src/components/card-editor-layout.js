@@ -5,7 +5,7 @@ import styles from './creative-layout.module.scss'
 export default ({ children }) => {
   return <div className={styles.container}>
     <Header />
-    <main>
+    <main style={{width: 900}}>
       {children}
     </main>
     <br/>
