@@ -250,6 +250,10 @@ export default class JsonConversionUtils {
       lowestBlock = costyBlock
     }
 
+    if (!!card.cardCostModifier) {
+
+    }
+
     if (!!card.dynamicDescription) {
       let descriptionsBlock = this.newBlock(workspace, 'Property_descriptions')
 
@@ -660,7 +664,8 @@ export default class JsonConversionUtils {
         connection.disconnect()
         //just simpler to disconnect it and then reconnect it
       }
-    } else {
+    }
+    if (!newBlock) {
       newBlock = this.newBlock(workspace, bestMatch.type)
     }
     if (!!newBlock.initSvg) {
@@ -780,7 +785,7 @@ export default class JsonConversionUtils {
     }
     let outerBlock = block
 
-    if (json.hasOwnProperty('targetPlayer') && !!bestMatch && json.targetPlayer !== 'SELF' &&
+    if (!!json.targetPlayer && !!bestMatch && json.targetPlayer !== 'SELF' &&
       (bestMatch.output === 'ValueProviderDesc' || bestMatch.output === 'SpellDesc')) {
       switch (bestMatch.output) {
         case 'ValueProviderDesc':
@@ -797,7 +802,8 @@ export default class JsonConversionUtils {
     }
 
     if (inputName === 'target' && !!parentJson.target && !!parentJson.filter
-      && !this.getInputEndsWith(connection.getSourceBlock(), 'filter')) {
+      && !this.getInputEndsWith(connection.getSourceBlock(), 'filter')
+      && !connection.getSourceBlock().getInput('filter')) {
       wrap('EntityReference_FILTER')
       this.handleArg(outerBlock.getInput('super.filter').connection, parentJson.filter, 'filter', workspace, json)
     }
@@ -1100,6 +1106,8 @@ export default class JsonConversionUtils {
           if (argValue === true || argValue === false) {
             blockType = 'Boolean'
             argValue = argValue.toString().toUpperCase()
+          } else if (isArray(argValue)) {
+            blockType = BlocklyMiscUtils.inputNameToBlockType(arg.slice(0, -1)) + 's'
           } else {
             blockType = 'text'
           }
@@ -1238,6 +1246,12 @@ export default class JsonConversionUtils {
           filters.push({
             class: 'CardFilter',
             manaCost: json.manaCost
+          })
+        }
+        if (!!json.heroClass) {
+          filters.push({
+            class: 'CardFilter',
+            heroClass: json.heroClass
           })
         }
         return {
@@ -1380,6 +1394,17 @@ export default class JsonConversionUtils {
       delete json.attribute
     }
 
+    if (className === 'DiscoverSpell' && !json.cards && !json.cardSource) {
+      json.cardSource = {
+        class: 'CatalogueSource'
+      }
+    }
+
+    if (className === 'AlgebraicValueProvider' && json.operation === 'NEGATE'
+    && !json.hasOwnProperty('value2')) {
+      json.operation = 'MULTIPLIY'
+      json.value2 = -1
+    }
 
     return json
   }

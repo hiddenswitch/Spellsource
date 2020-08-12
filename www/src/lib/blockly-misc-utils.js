@@ -129,6 +129,7 @@ export default class BlocklyMiscUtils {
       case 'secret':
       case 'quest':
       case 'expirationTrigger':
+      case 'secondRevertTrigger':
         return 'Trigger'
       case 'value':
       case 'howMany':
@@ -170,7 +171,7 @@ export default class BlocklyMiscUtils {
   //make the message for a generated block for a catalogue/created card
   static cardMessage (card) {
     let ret = ''
-    if (card.hasOwnProperty('baseManaCost')) {
+    if (card.baseManaCost !== null) {
       ret = '(' + card.baseManaCost + ') '
     }
     if (card.type === 'MINION') {
