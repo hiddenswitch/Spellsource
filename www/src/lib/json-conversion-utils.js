@@ -1042,8 +1042,8 @@ export default class JsonConversionUtils {
       }
       if (type === 'Aura') {
         delete consoleBlock.output
-        consoleBlock.previousStatement = 'Auras'
-        consoleBlock.nextStatement = 'Auras'
+        consoleBlock.previousStatement = ['Auras']
+        consoleBlock.nextStatement = ['Auras']
       }
       for (let j = 1; j <= messages.length; j++) {
         //block['message' + j.toString()] = messages[j - 1]

@@ -357,44 +357,24 @@ export default class BlocklyMiscUtils {
       // Loop through every connection on this block.
       var myConnections = this.getConnections_(false);
       for (var i = 0, connection; (connection = myConnections[i]); i++) {
-
+        if (autoDecorate(this, connection)) {
+          return
+        }
         // Spider down from this block bumping all sub-blocks.
         if (connection.isConnected() && connection.isSuperior()) {
           connection.targetBlock().bumpNeighbours()
         }
 
         var neighbours = connection.neighbours(Blockly.SNAP_RADIUS);
+
+
+
         for (var j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
 
           // If both connections are connected, that's probably fine.  But if
           // either one of them is unconnected, then there could be confusion.
           if (!connection.isConnected() || !otherConnection.isConnected()) {
-            let bumper = otherConnection.getSourceBlock()
-            let bumpee = this
-            let workspace = bumper.workspace
-            if (bumper.type.startsWith('Starter_') || bumper.type.startsWith('Property_')) {
-              if (bumpee.type.startsWith('Aura_')) {
-                let aurasBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_auras')
-                bumper.nextConnection.connect(aurasBlock.previousConnection)
-                aurasBlock.initSvg()
-                aurasBlock.getFirstStatementConnection().connect(bumpee.previousConnection)
-                workspace.render()
-              } else if (bumpee.type.startsWith('Spell')) {
-                let openerBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_opener')
-                bumper.nextConnection.connect(openerBlock.previousConnection)
-                openerBlock.initSvg()
-                openerBlock.getInput('battlecry.spell').connect(bumpee.outputConnection)
-                workspace.render()
-              } else if (bumpee.type.startsWith('TargetSelection')) {
-                let openerBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_opener')
-                bumper.nextConnection.connect(openerBlock.previousConnection)
-                openerBlock.initSvg()
-                openerBlock.getInput('battlecry.targetSelection').connect(bumpee.outputConnection)
-                workspace.render()
-              }
-
-              
-            } else if (otherConnection.getSourceBlock().getRootBlock() != rootBlock) {
+            if (otherConnection.getSourceBlock().getRootBlock() !== rootBlock) {
               // Always bump the inferior block.
               if (connection.isSuperior()) {
                 otherConnection.bumpAwayFrom(connection)
@@ -406,6 +386,116 @@ export default class BlocklyMiscUtils {
         }
       }
     };
+
+    const autoDecorate = function (bumpee, connection) {
+      if (connection.type === Blockly.NEXT_STATEMENT || bumpee.type.endsWith('SHADOW')) {
+        return false
+      }
+      let workspace = bumpee.workspace
+      let nexts = workspace.connectionDBList[Blockly.NEXT_STATEMENT];
+      let neighbours = nexts.getNeighbours(connection, Blockly.SNAP_RADIUS)
+
+      for (var j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
+        if ((!connection.isConnected() || connection.targetBlock().isShadow())
+        && (!otherConnection.isConnected() || otherConnection.targetBlock().isShadow())
+        && otherConnection.type === Blockly.NEXT_STATEMENT) {
+          let bumper = otherConnection.getSourceBlock()
+          let addedBlock
+          if (otherConnection.getCheck().includes('Properties')) {
+            if (bumpee.type.startsWith('Aura_')) {
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_auras')
+              addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection)
+            } else if (bumpee.type.startsWith('Spell')) {
+              if (bumper.getInput('description')?.connection
+                .targetBlock()?.getFieldValue('text')?.toLowerCase().includes('aftermath')) {
+                addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_aftermath')
+                addedBlock.getInput('deathrattle').connection.connect(bumpee.outputConnection)
+              } else {
+                addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_opener1')
+                addedBlock.getInput('battlecry.spell').connection.connect(bumpee.outputConnection)
+              }
+            } else if (bumpee.type.startsWith('TargetSelection')) {
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_opener1')
+              addedBlock.getInput('battlecry.targetSelection').connection.connect(bumpee.outputConnection)
+            } else if (bumpee.type.startsWith('ValueProvider')) {
+              if (bumper.getInput('description')?.connection
+                .targetBlock()?.getFieldValue('text')?.toLowerCase().includes('if')) {
+                addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_cost_modifier_conditional')
+                addedBlock.getInput('manaCostModifier.ifTrue').connection.connect(bumpee.outputConnection)
+              } else {
+                addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_cost_modifier')
+                addedBlock.getInput('manaCostModifier').connection.connect(bumpee.outputConnection)
+              }
+            } else if (bumpee.type.startsWith('Condition')) {
+              if (bumper.getInput('description')?.connection
+                .targetBlock()?.getFieldValue('text')?.toLowerCase().includes('opener')) {
+                addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_opener2')
+                addedBlock.getInput('battlecry.condition').connection.connect(bumpee.outputConnection)
+              } else {
+                addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_condition')
+                addedBlock.getInput('condition').connection.connect(bumpee.outputConnection)
+              }
+            } else if (bumpee.type.startsWith('Property_attributes_')) {
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes')
+              addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection)
+            } else if (bumpee.type.startsWith('Attribute')) {
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes')
+              let anotherBlock
+              if (bumpee.json?.output === 'IntAttribute') {
+                anotherBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes_int')
+              } else {
+                anotherBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes_boolean')
+              }
+              anotherBlock.getInput('attribute').connection.connect(bumpee.outputConnection)
+              if (anotherBlock.initSvg) {
+                anotherBlock.initSvg()
+              }
+              addedBlock.getFirstStatementConnection().connect(anotherBlock.previousConnection)
+            } else if (bumpee.type.startsWith('Enchantment')) {
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_triggers')
+              addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection)
+            } else if (bumpee.type.startsWith('Trigger')) {
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_triggers')
+              let anotherBlock = BlocklyMiscUtils.newBlock(workspace, 'Enchantment')
+              anotherBlock.getInput('eventTrigger').connection.connect(bumpee.outputConnection)
+              if (anotherBlock.initSvg) {
+                anotherBlock.initSvg()
+              }
+              addedBlock.getFirstStatementConnection().connect(anotherBlock.previousConnection)
+            } else {
+              continue
+            }
+          } else if (otherConnection.getCheck().includes('Property_attributes') && bumpee.type.startsWith('Attribute_')) {
+            if (bumpee.json?.output === 'IntAttribute') {
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes_int')
+            } else {
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes_boolean')
+            }
+            addedBlock.getInput('attribute').connection.connect(bumpee.outputConnection)
+          } else if ((otherConnection.getCheck().includes('Spells') && bumpee.type.startsWith('Spell_'))
+            || (otherConnection.getCheck().includes('Cards') && bumpee.type.startsWith('Card_'))
+            || (otherConnection.getCheck().includes('Conditions') && bumpee.type.startsWith('Condition_'))
+            || (otherConnection.getCheck().includes('Sources') && bumpee.type.startsWith('Source_'))
+            || (otherConnection.getCheck().includes('Filters') && bumpee.type.startsWith('Filter_'))) {
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, bumpee.type.split('_')[0] + '_I')
+            addedBlock.getInput('i').connection.connect(bumpee.outputConnection)
+          } else {
+            continue
+          }
+
+          if (!!addedBlock) {
+            otherConnection.connect(addedBlock.previousConnection)
+            if (addedBlock.initSvg) {
+              addedBlock.initSvg()
+              workspace.render()
+            }
+            return true
+          }
+        }
+      }
+
+      return false
+    }
   }
 
   static getHeroClassColors (data) {
