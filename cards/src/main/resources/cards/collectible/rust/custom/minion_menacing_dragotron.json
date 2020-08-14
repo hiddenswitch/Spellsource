@@ -13,10 +13,19 @@
       "class": "ComparisonCondition",
       "operation": "GREATER_OR_EQUAL",
       "value1": {
-        "class": "PlayedThisTurnValueProvider",
-        "filter": {
-          "class": "RaceFilter",
-          "race": "ELEMENTAL"
+        "class": "CardCountValueProvider",
+        "cardFilter": {
+          "class": "CardFilter",
+          "value": {
+            "class": "CurrentTurnValueProvider"
+          },
+          "race": "ELEMENTAL",
+          "attribute": "PLAYED_FROM_HAND_OR_DECK",
+          "cardType": "MINION",
+          "operation": "EQUAL"
+        },
+        "cardSource": {
+          "class": "GraveyardCardsSource"
         }
       },
       "value2": 1
