@@ -3467,7 +3467,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
 			// Implements Electra Stormsurge w/ Overload spells
-			if (spellsCastTwice(player, card, target)) {
+			if (spellsCastThrice(player, card, target)) {
+				fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
+			}
+			if (spellsCastTwice(player, card, target) || spellsCastThrice(player, card, target)) {
 				fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
 			}
 			fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
@@ -3488,7 +3491,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
 			// Implements Electra Stormsurge w/ Overload spells
-			if (spellsCastTwice(player, card, target)) {
+			if (spellsCastThrice(player, card, target)) {
+				player.modifyAttribute(Attribute.OVERLOAD, card.getAttributeValue(Attribute.OVERLOAD));
+				player.modifyAttribute(Attribute.OVERLOADED_THIS_GAME, card.getAttributeValue(Attribute.OVERLOAD));
+			}
+			if (spellsCastTwice(player, card, target) || spellsCastThrice(player, card, target)) {
 				player.modifyAttribute(Attribute.OVERLOAD, card.getAttributeValue(Attribute.OVERLOAD));
 				player.modifyAttribute(Attribute.OVERLOADED_THIS_GAME, card.getAttributeValue(Attribute.OVERLOAD));
 			}
@@ -3511,6 +3518,29 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		var playerHasAura = false;
 		if (card != null) {
 			for (var aura : SpellUtils.getAuras(context, SpellsCastTwiceAura.class, card)) {
+				if (aura.isFulfilled(context, player, card, target)) {
+					playerHasAura = true;
+					break;
+				}
+			}
+		}
+
+		return playerHasAttribute || playerHasAura;
+	}
+
+	/**
+	 * Determines if spells should be casting thrice. Allows auras to control triple spell casting.
+	 *
+	 * @param player The player casting the spell
+	 * @param card   The card that is the spell being cast
+	 * @param target The spell's target, if there is one
+	 * @return
+	 */
+	public boolean spellsCastThrice(Player player, Card card, Entity target) {
+		var playerHasAttribute = context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_THRICE);
+		var playerHasAura = false;
+		if (card != null) {
+			for (var aura : SpellUtils.getAuras(context, SpellsCastThriceAura.class, card)) {
 				if (aura.isFulfilled(context, player, card, target)) {
 					playerHasAura = true;
 					break;
