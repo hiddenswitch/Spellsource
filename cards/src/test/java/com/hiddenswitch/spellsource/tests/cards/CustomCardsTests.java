@@ -438,7 +438,7 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			context.endTurn();
 			playCard(context, player, "minion_recurring_torrent");
-			assertEquals(player.getHand().size(), 0);
+			assertEquals(player.getHand().size(), 1);
 		});
 
 		runGym((context, player, opponent) -> {
@@ -446,7 +446,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, opponent, "spell_cost_2_card");
 			context.endTurn();
 			playCard(context, player, "minion_recurring_torrent");
-			assertEquals(player.getHand().size(), 0);
+			assertEquals(player.getHand().size(), 1);
 		});
 	}
 

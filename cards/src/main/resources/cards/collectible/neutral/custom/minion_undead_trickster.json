@@ -4,9 +4,9 @@
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 3,
-  "baseHp": 1,
+  "baseHp": 3,
   "rarity": "RARE",
-  "description": "Opener: Shuffle 3 Tricks and 3 Treats into your deck.",
+  "description": "Opener: Shuffle a Trick and a Treat into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -15,13 +15,13 @@
         {
           "class": "ShuffleToDeckSpell",
           "card": "spell_trick",
-          "howMany": 3,
+          "howMany": 1,
           "targetPlayer": "SELF"
         },
         {
           "class": "ShuffleToDeckSpell",
           "card": "spell_treat",
-          "howMany": 3,
+          "howMany": 1,
           "targetPlayer": "SELF"
         }
       ]

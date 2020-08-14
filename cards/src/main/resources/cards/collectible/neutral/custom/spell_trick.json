@@ -4,12 +4,12 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Casts When Drawn. Deal 4 damage to the enemy champion.",
+  "description": "Casts When Drawn. Deal 3 damage to the enemy champion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",
     "target": "ENEMY_HERO",
-    "value": 4
+    "value": 3
   },
   "attributes": {
     "CASTS_WHEN_DRAWN": true
