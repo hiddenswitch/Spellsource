@@ -30,7 +30,8 @@
           },
           "spell": {
             "class": "CastSpellWithTargetOrElseSpell",
-            "target": "EVENT_TARGET",
+            "target": "EVENT_SOURCE",
+            "secondaryTarget": "EVENT_TARGET",
             "trigger": {
               "eventTrigger": {
                 "class": "TurnStartTrigger",
@@ -40,8 +41,7 @@
             },
             "spell": {
               "class": "PlayCardsRandomlySpell"
-            },
-            "card": "EVENT_SOURCE"
+            }
           }
         },
         {
