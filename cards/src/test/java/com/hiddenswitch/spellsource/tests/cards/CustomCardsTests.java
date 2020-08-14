@@ -4963,4 +4963,28 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(sum >= 15 || player.getHand().size() == 10, "" + sum);
 		});
 	}
+
+	@Test
+	public void testPlayedThisTurnElementals() {
+		runGym((context, player, opponent) -> {
+			Minion min = playMinionCard(context, player, "minion_lundurr_the_reborn");
+			assertEquals(5, min.getAttack());
+			min = playMinionCard(context, player, "minion_lundurr_the_reborn");
+			assertEquals(10, min.getAttack());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion min = playMinionCard(context, player, "minion_menacing_dragotron");
+			assertEquals(4, min.getHp());
+			playMinionCard(context, player, "minion_menacing_dragotron");
+			assertEquals(1, min.getHp());
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_stalagmite_stomper");
+			assertEquals(0, player.getHero().getArmor());
+			playCard(context, player, "minion_stalagmite_stomper");
+			assertEquals(8, player.getHero().getArmor());
+		});
+	}
 }
