@@ -1207,7 +1207,11 @@ public enum Attribute {
 	 *
 	 * Also used to store the number of Imbue charges on the player
 	 */
-	IMBUE;
+	IMBUE,
+	/**
+	 * Indicates the player has drawn their starting hand. Essentially the end of the start-of-game phase.
+	 */
+	STARTING_HAND_DRAWN;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

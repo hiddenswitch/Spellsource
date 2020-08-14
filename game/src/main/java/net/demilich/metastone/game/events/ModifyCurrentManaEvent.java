@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 
@@ -9,6 +10,6 @@ import net.demilich.metastone.game.entities.Entity;
 public final class ModifyCurrentManaEvent extends ValueEvent {
 
 	public ModifyCurrentManaEvent(GameContext context, int targetPlayerId, int amount) {
-		super(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.MANA_MODIFIED, context, targetPlayerId, targetPlayerId, null, amount);
+		super(EventTypeEnum.MANA_MODIFIED, true, context, targetPlayerId, targetPlayerId, null, amount);
 	}
 }

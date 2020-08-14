@@ -2875,6 +2875,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		for (var card : player.getHand()) {
 			fireGameEvent(new DrawCardEvent(context, player.getId(), card, true));
 		}
+
+		player.setAttribute(Attribute.STARTING_HAND_DRAWN);
 	}
 
 	/**
