@@ -4987,4 +4987,20 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(8, player.getHero().getArmor());
 		});
 	}
+
+	@Test
+	public void testSonOfTheEmperor() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_infinite_behemoth");
+			context.endTurn();
+			context.endTurn();
+			assertEquals(opponent, context.getActivePlayer());
+			context.endTurn();
+			assertEquals(player, context.getActivePlayer());
+			context.endTurn();
+			assertEquals(opponent, context.getActivePlayer());
+			context.endTurn();
+			assertEquals(player, context.getActivePlayer());
+		});
+	}
 }
