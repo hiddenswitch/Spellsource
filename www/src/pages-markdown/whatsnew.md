@@ -10,7 +10,24 @@ header: true
 Thanks for playing this beta of Spellsource! Read more at [our website](http://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)! See older updates [here](history).
 
-### Current Build 0.8.81-3.2.5 (August 11, 2020)
+### Current Build 0.8.82-3.2.6 (August 13, 2020)
+
+<details>
+<summary>Usability improvements to the prototype visual card editor, animating in-game events and a font tweak</summary>
+
+ - The visual card editor now automatically adds "decorator" blocks when your description text suggests the presence of an Aftermath, Opener, etc.
+ - Damage is now rendered more legibly and is animated.
+ - Healing is now rendered.
+ - Whenever you permanently gain Lun, your Lun token will show an effect.
+ - The deck now shows a draw card animation, and cards enter your hand gracefully.
+ - Minions that die by true, physical destruction will now disappear in a poof.
+ - Triggers will show a small firing animation.
+ - The spacing between characters in Adumu has been increased.
+ - The descriptions on the cards in the mulligan will be shown by default on all platforms.
+
+</details>
+
+### 0.8.81-3.2.5 (August 11, 2020)
 
 <details>
 <summary>A new intro screen, updated fonts, and introducing the Witch class!</summary>

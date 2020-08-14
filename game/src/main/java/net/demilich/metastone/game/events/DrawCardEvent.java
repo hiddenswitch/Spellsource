@@ -1,9 +1,9 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.HasCard;
 
 /**
  * A card was put into the hand.
@@ -15,7 +15,7 @@ public final class DrawCardEvent extends CardEvent {
 	private final boolean drawn;
 
 	public DrawCardEvent(GameContext context, int playerId, Card card, boolean drawn) {
-		super(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.DRAW_CARD, context, playerId, -1, card);
+		super(EventTypeEnum.DRAW_CARD, context.getPlayer(playerId).hasAttribute(Attribute.STARTING_HAND_DRAWN) && drawn, context, playerId, -1, card);
 		this.drawn = drawn;
 	}
 
