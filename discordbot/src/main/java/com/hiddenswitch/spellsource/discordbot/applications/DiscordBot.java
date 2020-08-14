@@ -206,7 +206,27 @@ public class DiscordBot extends ListenerAdapter {
 		if (card.getHeroClass().equalsIgnoreCase(HeroClass.ANY)) {
 			builder.append("Neutral) ");
 		} else builder.append(HeroClass.getClassCard(card.getHeroClass()).getName()).append(") ");
-		builder.append(card.getCardType().toString()).append(" ");
+		if (!card.getRace().isBlank()) {
+			builder.append(card.getRace()).append(" ");
+		} else {
+			switch (card.getCardType()) {
+				case HERO:
+					builder.append("CHAMPION ");
+					break;
+				case MINION:
+					builder.append("UNIT ");
+					break;
+				case HERO_POWER:
+					builder.append("SKILL ");
+					break;
+				case WEAPON:
+					builder.append("ITEM ");
+					break;
+				default:
+					builder.append(card.getCardType().toString()).append(" ");
+					break;
+			}
+		}
 		if (!card.getDescription().equals("")) {
 			builder.append("\"").append(card.getDescription().replace("#", "").replace("$", "")
 					.replace("[", "").replace("]", "").trim()).append("\"");
