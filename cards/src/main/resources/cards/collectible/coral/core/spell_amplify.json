@@ -4,17 +4,26 @@
   "type": "SPELL",
   "heroClass": "CORAL",
   "rarity": "EPIC",
-  "description": "The next spell you cast this turn casts twice.",
+  "description": "The next spell you cast this turn casts thrice.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddAttributeSpell",
     "target": "FRIENDLY_PLAYER",
-    "attribute": "SPELLS_CAST_TWICE",
+    "attribute": "SPELLS_CAST_THRICE",
     "revertTrigger": {
       "class": "TurnEndTrigger"
     },
     "secondRevertTrigger": {
-      "class": "AfterSpellCastedTrigger"
+      "class": "AfterSpellCastedTrigger",
+      "queueCondition": {
+        "class": "AnyMatchFilterCondition",
+        "invert": true,
+        "target": "EVENT_SOURCE",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "spell_amplify"
+        }
+      }
     }
   },
   "collectible": true,

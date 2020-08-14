@@ -968,6 +968,10 @@ public enum Attribute {
 	 */
 	SPELLS_CAST_TWICE,
 	/**
+	 * Self explanatory.
+	 */
+	SPELLS_CAST_THRICE,
+	/**
 	 * Applies a multiplier to the base attack plus bonus attack on an {@link Actor}.
 	 */
 	ATTACK_MULTIPLIER,

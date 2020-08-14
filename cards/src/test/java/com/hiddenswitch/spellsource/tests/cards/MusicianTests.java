@@ -238,4 +238,14 @@ public class MusicianTests extends TestBase {
 			assertEquals(player.getHand().get(1).getSourceCard().getCardId(), "spell_lunstone");
 		});
 	}
+
+	@Test
+	public void testAmplify() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_amplify");
+			player.setMana(0);
+			playCard(context, player, "spell_lunstone");
+			assertEquals(3, player.getMana());
+		});
+	}
 }
