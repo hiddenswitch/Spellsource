@@ -726,7 +726,7 @@ public class AdvancedMechanicTests extends TestBase {
 			context.getLogic().drawCard(player.getId(), null);
 			assertEquals(player.getDeck().size(), 0);
 			assertEquals(player.getHand().size(), 0);
-			assertEquals(opponent.getHero().getBaseHp() - 8, opponent.getHero().getHp());
+			assertEquals(opponent.getHero().getBaseHp() - 6, opponent.getHero().getHp());
 		});
 
 

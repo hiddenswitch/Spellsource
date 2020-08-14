@@ -1,17 +1,26 @@
 {
   "name": "Recurring Torrent",
-  "baseManaCost": 5,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 4,
-  "baseHp": 5,
+  "baseAttack": 3,
+  "baseHp": 3,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Opener: Receive a copy of the last spell you cast this turn.",
+  "description": "Opener: Receive a copy of a spell cast this game.",
   "battlecry": {
     "spell": {
-      "class": "CopyCardSpell",
-      "target": "FRIENDLY_LAST_SPELL_PLAYED_THIS_TURN"
+      "class": "ReceiveCardSpell",
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "targetPlayer": "BOTH"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "PLAYED_FROM_HAND_OR_DECK",
+        "operation": "HAS",
+        "cardType": "SPELL"
+      }
     }
   },
   "attributes": {
