@@ -20,11 +20,12 @@ public class TargetSelectionFilter extends EntityFilter {
 		if (getDesc().containsKey(EntityFilterArg.SECONDARY_TARGET) && card.isSpell()) {
 			Entity target = context.resolveSingleTarget(player, host, (EntityReference) getDesc().get(EntityFilterArg.SECONDARY_TARGET));
 
-			if (card.isSpell() && !card.canBeCastOn(context, player, target)) {
+			if (target == null || (card.isSpell() && !card.canBeCastOn(context, player, target))) {
 				return false;
 			}
 			TargetSelection targetSelection = card.getTargetSelection();
 			List<Entity> entities = context.getTargetLogic().getEntities(context, player, targetSelection, true);
+
 			return entities.stream().anyMatch(e -> e.getId() == target.getId());
 		}
 
