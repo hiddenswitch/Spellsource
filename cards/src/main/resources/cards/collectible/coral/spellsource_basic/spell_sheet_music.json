@@ -10,7 +10,7 @@
     "class": "DrawCardSpell",
     "value": 3
   },
-  "collectible": true,
+  "collectible": false,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }

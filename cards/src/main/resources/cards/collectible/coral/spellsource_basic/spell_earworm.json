@@ -15,7 +15,7 @@
       "operation": "LESS_OR_EQUAL"
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }

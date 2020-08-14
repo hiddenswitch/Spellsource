@@ -16,7 +16,7 @@
       "token_patron"
     ]
   },
-  "collectible": true,
+  "collectible": false,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1
 }
