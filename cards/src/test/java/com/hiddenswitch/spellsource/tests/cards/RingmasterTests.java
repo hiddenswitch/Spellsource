@@ -423,6 +423,29 @@ public class RingmasterTests extends TestBase {
 			context.endTurn();
 			assertEquals(surprise.getBaseAttack() + 3, surprise.getAttack());
 		});
+
+
+		runGym((context, player, opponent) -> {
+			Minion arc = playMinionCard(context, player, "minion_finale_architect");
+			player.setMana(0);
+			player.setMaxMana(1);
+			Card spell = receiveCard(context, player, "spell_lunstone");
+			playCard(context, player, spell, opponent.getHero());
+			assertEquals(0, player.getMana());
+			context.endTurn();
+			context.endTurn();
+			assertEquals(3, player.getMana());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion arc = playMinionCard(context, player, "minion_finale_architect");
+			Card spell = receiveCard(context, player, "spell_jaunty_tune");
+			playCard(context, player, spell);
+			assertEquals(1, player.getMinions().size());
+			context.endTurn();
+			context.endTurn();
+			assertEquals(4, player.getMinions().size());
+		});
 	}
 
 }

@@ -8,6 +8,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +33,13 @@ public class CastSpellWithTargetOrElseSpell extends Spell {
 		checkArguments(LOGGER, context, source, desc, SpellArg.TARGET, SpellArg.SECONDARY_TARGET, SpellArg.CARD, SpellArg.TRIGGER, SpellArg.SPELL);
 
 		Card card;
-		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
-			card = (Card) context.resolveSingleTarget(desc.getSecondaryTarget());
+		if (desc.containsKey(SpellArg.TARGET) && target instanceof Card) {
+			card = (Card) target;
 		} else {
 			card = SpellUtils.getCard(context, desc);
 		}
+
+		Entity secondaryTarget = context.resolveSingleTarget(player, source, desc.getSecondaryTarget());
 
 		if (!card.isSpell()) {
 			LOGGER.error("Needs to be a spell");
@@ -48,20 +51,20 @@ public class CastSpellWithTargetOrElseSpell extends Spell {
 
 		if (trigger != null) {
 			SpellDesc thisButLater = desc.removeArg(SpellArg.TRIGGER);
-			if (target != null) {
-				thisButLater.put(SpellArg.TARGET, target.getReference());
+			if (card.getTargetSelection() != TargetSelection.NONE && target != null) {
+				thisButLater.put(SpellArg.SECONDARY_TARGET, target.getReference());
 			}
-			thisButLater.put(SpellArg.SECONDARY_TARGET, card.getReference());
+			thisButLater.put(SpellArg.TARGET, card.getReference());
 			trigger.setSpell(thisButLater);
 			SpellDesc addEnchantmentSpellDesc = AddEnchantmentSpell.create(trigger);
 			SpellUtils.castChildSpell(context, player, addEnchantmentSpellDesc, source, player);
 		} else {
-			if (target == null) {
+			if (secondaryTarget == null) {
 				SpellUtils.castChildSpell(context, player, card.getSpell(), source, null);
 				context.getLogic().revealCard(player, card);
 			} else {
 				List<Entity> targets = context.getTargetLogic().getValidTargets(context, player, card.play());
-				if (targets.contains(target)) {
+				if (targets.contains(secondaryTarget)) {
 					SpellUtils.castChildSpell(context, player, card.getSpell(), source, target);
 					context.getLogic().revealCard(player, card);
 				} else {
