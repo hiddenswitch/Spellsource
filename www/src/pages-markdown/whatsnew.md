@@ -10,7 +10,30 @@ header: true
 Thanks for playing this beta of Spellsource! Read more at [our website](http://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)! See older updates [here](history).
 
-### Current Build 0.8.83-3.2.7 (August 14, 2020)
+## Current Build 0.8.83-3.2.8 (August 15, 2020)
+
+<details>
+<summary>Bug fixes.</summary>
+
+ - The pacing of events has been improved. Previously, every event would incur an 8-frame (133ms) delay regardless of whether or not it was rendered on screen. That no longer happens.
+ - The character sprites now move separately from their base cards.
+ - Damage events appear together more cohesively.
+ - Summoning no longer has a delay when multiple units are summoned together. A separate effect may soon be introduced to animate the actual summoning magical effects.
+ - Triggers firing now correctly delays and now correctly no longer groups with other events.
+ - Receiving cards now takes a beat of time.
+ - Hovering or holding to inspect a minion now takes longer on desktop platforms.
+ - You can now press the end turn button without waiting for animations.
+ - At the start of the game, the second player no longer is able to issue commands during the first player's turn.
+ - Hitting back in the card editor after reconnecting to a game no longer takes you to the connecting screen.
+ - Power history no longer takes any time to hover over to inspect.
+ - When units die, the death animations are grouped together.
+ - Physical attacks should no longer abruptly fail to animate.
+ - When deckbuilding, the first view shows relevant cards only. Use search to filter back into the champion's specific cards.
+ - Healing and damage indicators now correctly show multiple digits without wrapping  
+
+</details>
+
+### 0.8.83-3.2.7 (August 14, 2020)
 
 <details>
 <summary>Bug fixes.</summary>
