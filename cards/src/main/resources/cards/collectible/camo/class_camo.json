@@ -38,6 +38,9 @@
       "b": 0.231,
       "g": 0.259,
       "r": 0.239
+    },
+    "sprite": {
+      "named": "Qach Champion"
     }
   },
   "hero": "hero_hanlao"

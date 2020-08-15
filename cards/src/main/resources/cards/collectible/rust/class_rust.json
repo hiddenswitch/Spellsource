@@ -38,6 +38,9 @@
       "b": 0.035,
       "g": 0.18,
       "r": 0.51
+    },
+    "sprite": {
+      "named": "Princess Briila Champion"
     }
   },
   "hero": "hero_alder_ravenwald"

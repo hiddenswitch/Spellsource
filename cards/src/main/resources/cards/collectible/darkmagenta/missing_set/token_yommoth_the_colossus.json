@@ -10,6 +10,7 @@
   "attributes": {
     "TAUNT": true
   },
+  "set": "CUSTOM",
   "collectible": false,
   "fileFormatVersion": 1
 }

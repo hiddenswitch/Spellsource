@@ -38,6 +38,9 @@
       "b": 0.169,
       "g": 0.431,
       "r": 0.604
+    },
+    "sprite": {
+      "named": "Ai Champion"
     }
   },
   "hero": "hero_izzy_jameson",

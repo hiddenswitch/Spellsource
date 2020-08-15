@@ -38,6 +38,9 @@
       "b": 0.125,
       "g": 0.282,
       "r": 0.459
+    },
+    "sprite": {
+      "named": "Mouse Assassin Outlaw Champion"
     }
   },
   "hero": "hero_handsome_joe"

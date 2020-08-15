@@ -38,6 +38,9 @@
       "b": 0.016,
       "g": 0.435,
       "r": 0.471
+    },
+    "sprite": {
+      "named": "Inora Ikthal Champion"
     }
   },
   "hero": "hero_lomenia"

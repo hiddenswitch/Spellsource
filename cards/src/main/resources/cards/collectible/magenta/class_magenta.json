@@ -38,6 +38,9 @@
       "b": 0.357,
       "g": 0.059,
       "r": 0.537
+    },
+    "sprite": {
+      "named": "Trader Greed Oni Champion"
     }
   },
   "hero": "hero_yasha",

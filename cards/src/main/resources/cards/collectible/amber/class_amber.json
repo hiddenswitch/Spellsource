@@ -7,6 +7,9 @@
   "set": "CUSTOM",
   "fileFormatVersion": 1,
   "art": {
+    "sprite": {
+      "named": "Hive Queen Oni Champion"
+    },
     "body": {
       "vertex": {
         "a": 1.0,

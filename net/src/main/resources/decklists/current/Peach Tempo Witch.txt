@@ -1,0 +1,21 @@
+### Tempo Witch
+# Class: PEACH
+# Format: Spellsource
+#
+# 2x (1) Star Scripture
+# 2x (1) Timelost Sarcophagus
+# 2x (1) Vixen Stargazer
+# 2x (2) Celestial Guidance
+# 2x (2) Fire Ring
+# 2x (2) Floating Crystal
+# 2x (2) Kitsune Handmaiden
+# 2x (2) Moon Fox
+# 2x (2) Playful Fires
+# 2x (2) Wise Sage
+# 2x (3) Spiritflame
+# 2x (3) Starmaiden
+# 1x (4) Caster Illiura
+# 2x (4) Nine Tail Fury
+# 1x (5) The Imperial Soul
+# 2x (5) Wild Magic
+#

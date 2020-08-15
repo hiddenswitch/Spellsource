@@ -38,6 +38,9 @@
       "b": 0.094,
       "g": 0.094,
       "r": 0.49
+    },
+    "sprite": {
+      "named": "Lady Loremaster Fae Champion"
     }
   },
   "hero": "hero_regina",

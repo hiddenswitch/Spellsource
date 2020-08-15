@@ -1,0 +1,20 @@
+### Token Otherworlder
+# Class: NEONGREEN
+# Format: Spellsource
+#
+# 2x (1) Enhancing Shaman
+# 2x (1) Formless Celerity
+# 2x (1) Formless Immortal
+# 2x (1) Tiny Persecutor
+# 2x (1) Xenobulwark
+# 1x (2) Hoffis the Dunewalker
+# 2x (2) Ninja Aspirants
+# 2x (2) Temporal Acceleration
+# 1x (3) Formless Rancour
+# 2x (3) Hybreeder
+# 2x (3) Nature Rager
+# 2x (3) Observer
+# 2x (3) Primordial Supremacy
+# 2x (3) Reconnoitre
+# 2x (3) Skeletal Warrior
+# 2x (3) Terrain Devourer

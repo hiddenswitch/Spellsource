@@ -156,8 +156,8 @@ public class DeckTest extends SpellsourceTestBase {
 
 	@Test
 	public void testGetStandardDecks() {
-		assertTrue(Spellsource.spellsource().getStandardDecks().size() > 0);
-		Spellsource.spellsource().getStandardDecks().forEach(d -> assertEquals(30, d.getCardIds().size()));
+		assertEquals(39, Spellsource.spellsource().getStandardDecks().size());
+		Spellsource.spellsource().getStandardDecks().forEach(d -> assertEquals(30, d.getCardIds().size(), d.getName()));
 	}
 
 	@Test

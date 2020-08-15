@@ -38,6 +38,9 @@
       "b": 0.541,
       "g": 0.604,
       "r": 0.039
+    },
+    "sprite": {
+      "named": "Blue Sparrow Skyward Champion"
     }
   },
   "hero": "hero_ascella_aeon",
