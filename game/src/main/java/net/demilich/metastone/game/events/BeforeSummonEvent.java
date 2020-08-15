@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.events;
 
-import com.hiddenswitch.spellsource.client.models.GameEvent;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.OpenerAction;
 import net.demilich.metastone.game.entities.Actor;
@@ -19,6 +18,6 @@ import static com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum
 public final class BeforeSummonEvent extends SummonEvent {
 
 	public BeforeSummonEvent(@NotNull GameContext context, @NotNull Actor minion, @NotNull Entity source, boolean didResolveOpener, OpenerAction[] openerActions) {
-		super(BEFORE_SUMMON, context, minion, source, didResolveOpener, openerActions);
+		super(BEFORE_SUMMON, true, context, minion, source, didResolveOpener, openerActions);
 	}
 }
