@@ -1,16 +1,16 @@
 package net.demilich.metastone.game.spells.desc.filter;
 
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
 import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.client.models.Rarity;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.List;
 

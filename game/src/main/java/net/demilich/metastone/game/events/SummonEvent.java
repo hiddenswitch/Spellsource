@@ -22,8 +22,12 @@ public class SummonEvent extends CardEvent {
 	}
 
 	SummonEvent(EventTypeEnum eventType, GameContext context, Actor minion, Entity source, boolean resolvedOpener, OpenerAction[] openerActions) {
-		super(eventType, true, context, context.getPlayer(source.getOwner()), source, minion, source.getSourceCard());
-		this.resolvedOpener = resolvedOpener;
+		this(eventType, true, context, minion, source, resolvedOpener, openerActions);
+	}
+
+	SummonEvent(EventTypeEnum eventType, boolean isClientInterested, GameContext context, Actor minion, Entity source, boolean didResolveOpener, OpenerAction[] openerActions) {
+		super(eventType, isClientInterested, context, context.getPlayer(source.getOwner()), source, minion, source.getSourceCard());
+		this.resolvedOpener = didResolveOpener;
 		this.openerActions = openerActions;
 	}
 

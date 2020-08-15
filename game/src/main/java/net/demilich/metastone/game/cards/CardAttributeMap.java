@@ -125,7 +125,16 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 					return desc.getQuest() != null;
 			}
 
-			CardType cardType = getCard().getCardType();
+			CardType cardType;
+
+			if (getCard() == null) {
+				// TODO: Ascertain why in high performance situations the weak reference is null. Weak references here should
+				// never be null.
+				cardType = CardType.MINION;
+			} else {
+				cardType = getCard().getCardType();
+			}
+
 			switch (cardType) {
 				case WEAPON:
 					switch (attr) {
