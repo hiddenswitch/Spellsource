@@ -10,6 +10,38 @@ header: true
 Thanks for playing this beta of Spellsource! Read more at [our website](http://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)! See older updates [here](history).
 
+### Current Build 0.8.83-3.2.7 (August 14, 2020)
+
+<details>
+<summary>Bug fixes.</summary>
+
+ - The Discord bot now shows the card's tribe in its lookup. ([1810](https://github.com/hiddenswitch/Spellsource/issues/1810))
+ - The Discord bot now shows a more graceful card type message. ([1810](https://github.com/hiddenswitch/Spellsource/issues/1810))
+ - Recurring Torrent and Undead Trickster have been updated. ([commit](https://github.com/hiddenswitch/Spellsource/commit/dca6834c4947002fb6370129316681f94e84ee30))
+ - Son of the Emperor now correctly gives the opponent two turns. ([1789](https://github.com/hiddenswitch/Spellsource/issues/1789)) 
+ - Firegate Inquisitor no longer can overkill units. ([1788](https://github.com/hiddenswitch/Spellsource/issues/1788))
+ - Stalagmite Stomper no longer triggers off itself. ([1804](https://github.com/hiddenswitch/Spellsource/issues/1804))
+ - Exploblaze no longer triggers off itself. ([1804](https://github.com/hiddenswitch/Spellsource/issues/1804))
+ - Amplify no longer immediately expires and now correctly triggers. ([1802](https://github.com/hiddenswitch/Spellsource/issues/1802))
+ - Some Bard cards have been marked as uncollectible. ((1801)[https://github.com/hiddenswitch/Spellsource/issues/1801])
+ - Finale Architect now works correctly. ((1825)[https://github.com/hiddenswitch/Spellsource/issues/1825])
+ - Mana gained and spent animations now play in the correct place.
+ - The death particles now bounce off the floor correctly.
+ - The minimum time a card must be activated to be playable is now reduced to 1 frame. This means it is easier to play cards from the hand by flicking.
+ - The summon aura is now more clear.
+ - The summon aura will only show if the summon command will actually issue.
+ - The leftmost summon no longer flickers with the special rightmost summon.
+ - Cards now fade out from the hand when they are played.
+ - The intro screen text is not too wide on portrait devices anymore.
+ - Physical attack activation time only has to be at least 1 frame. This means it is easier to issue physical attacks rapidly.
+ - The Unity splash screen has been removed.
+ - Imbue, Elusive and Consume have tooltips now.
+ - The default delay handler is only 1 frame, and summon events now have no delay, improving the pacing of the game and other events.
+ - The text color written on tokens has been improved (the deck count and Quest fire count).
+ - The leftmost and rightmost cards in the hand now have an indicator to help you identify them when you have many rows of cards.
+
+</details>
+
 ### Current Build 0.8.82-3.2.6 (August 13, 2020)
 
 <details>
