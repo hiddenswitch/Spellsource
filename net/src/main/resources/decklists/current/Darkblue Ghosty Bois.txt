@@ -1,0 +1,19 @@
+### Ghosty Bois
+# Class: DARKBLUE
+# Format: Spellsource
+#
+# 3x (0) Buffeting Elemental
+# 2x (0) Deathwalk
+# 2x (1) Dormant Spirits
+# 2x (1) Infusion
+# 2x (1) Soultender
+# 2x (1) Timelost Sarcophagus
+# 2x (2) Awaken
+# 2x (2) Seeker Initiate
+# 2x (2) Ravenous Soul
+# 2x (2) Spectral Host
+# 2x (2) Dormant Soul
+# 2x (3) Rite of Pain
+# 2x (4) Ethereal Vanguard
+# 3x (6) Osiris
+#

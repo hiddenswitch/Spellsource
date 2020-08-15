@@ -38,6 +38,9 @@
       "b": 0.525,
       "g": 0.616,
       "r": 0.69
+    },
+    "sprite": {
+      "named": "Log Guy Land Fae Champion"
     }
   },
   "hero": "hero_abraham"

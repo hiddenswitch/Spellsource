@@ -38,6 +38,9 @@
       "b": 0.012,
       "g": 0.424,
       "r": 0.235
+    },
+    "sprite": {
+      "named": "Bogovar Champion"
     }
   },
   "hero": "hero_jikr"

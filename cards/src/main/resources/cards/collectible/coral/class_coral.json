@@ -38,6 +38,9 @@
       "b": 0.09,
       "g": 0.204,
       "r": 0.592
+    },
+    "sprite": {
+      "named": "Musician Dragovian Champion"
     }
   },
   "hero": "hero_loralyn"

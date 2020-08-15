@@ -38,6 +38,9 @@
       "b": 0.502,
       "g": 0.0,
       "r": 0.502
+    },
+    "sprite": {
+      "named": "Faloran Champion"
     }
   },
   "hero": "hero_jian_shin",

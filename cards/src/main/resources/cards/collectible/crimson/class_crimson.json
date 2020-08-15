@@ -38,6 +38,9 @@
       "b": 0.145,
       "g": 0.047,
       "r": 0.541
+    },
+    "sprite": {
+      "named": "Bone Oni Champion"
     }
   },
   "hero": "hero_wraith_mandron"

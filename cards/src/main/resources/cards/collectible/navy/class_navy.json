@@ -38,6 +38,9 @@
       "b": 0.478,
       "g": 0.267,
       "r": 0.145
+    },
+    "sprite": {
+      "named": "Brass Champion"
     }
   },
   "hero": "hero_baron_aldus"

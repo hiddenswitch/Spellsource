@@ -38,12 +38,17 @@
       "b": 0.408,
       "g": 0.149,
       "r": 0.165
+    },
+    "sprite": {
+      "named": "Venus Flytrap Mouth Head Guy Champion"
     }
   },
   "hero": "hero_ophelia",
   "tooltips": [
     {
-      "keywords": ["soulbind"],
+      "keywords": [
+        "soulbind"
+      ],
       "text": "<b>Soulbind</b>: Summon one of four random Souls."
     }
   ]

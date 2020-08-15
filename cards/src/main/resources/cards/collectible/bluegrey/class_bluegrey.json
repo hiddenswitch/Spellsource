@@ -38,6 +38,9 @@
       "b": 0.463,
       "g": 0.302,
       "r": 0.247
+    },
+    "sprite": {
+      "named": "Paucha Champion"
     }
   },
   "hero": "hero_paucha"

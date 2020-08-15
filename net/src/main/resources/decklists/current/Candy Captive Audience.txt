@@ -1,0 +1,21 @@
+### Captive Audience
+# Class: CANDY
+# Format: Spellsource
+#
+# 2x (1) Costume Draft
+# 2x (1) Initial Act
+# 2x (2) Stage Fright
+# 2x (3) Chain Dance
+# 2x (3) Great Showman
+# 2x (3) Prestidigitation
+# 2x (3) Terrifying Display
+# 2x (4) Bugbiter
+# 2x (4) Firedancer
+# 2x (4) Highmountain Primalist
+# 2x (5) Fantastical Play
+# 2x (5) Talent Scout
+# 2x (6) Center-Stage Screamer
+# 1x (6) Storyteller Dobo
+# 2x (8) Captivate
+# 1x (8) Primalist Kirra
+#

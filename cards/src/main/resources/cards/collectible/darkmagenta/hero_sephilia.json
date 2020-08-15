@@ -10,6 +10,11 @@
     "HP": 30,
     "MAX_HP": 30
   },
+  "art": {
+    "sprite": {
+      "named": "Agfen Champion"
+    }
+  },
   "collectible": false,
   "set": "SPELLSOURCE_BASIC",
   "fileFormatVersion": 1

@@ -38,6 +38,9 @@
       "b": 0.149,
       "g": 0.4,
       "r": 0.576
+    },
+    "sprite": {
+      "named": "Chef Dragovian Jerbrod Champion"
     }
   },
   "hero": "hero_warchef_gordo"

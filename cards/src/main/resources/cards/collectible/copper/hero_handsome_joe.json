@@ -10,6 +10,11 @@
     "HP": 30,
     "MAX_HP": 30
   },
+  "art": {
+    "sprite": {
+      "named": "Mouse Assassin Outlaw Champion"
+    }
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

@@ -1,0 +1,19 @@
+### Sourcestorm
+# Class: AZURE
+# Format: Spellsource
+#
+# 2x (0) Blurred Rains
+# 2x (0) Unfurl Wings
+# 2x (0) Wander
+# 2x (1) Drop From the Sky
+# 2x (1) Jack In The Box
+# 2x (1) Solis Caster
+# 2x (2) Aerial Maneuver
+# 2x (2) Dimensional Courier
+# 2x (2) Flow
+# 2x (3) Thunder
+# 2x (3) Undead Trickster
+# 2x (3) Updraft
+# 2x (4) Nephomancy
+# 2x (5) Nilfheim Needlegunner
+# 2x (5) Seeing Selkie

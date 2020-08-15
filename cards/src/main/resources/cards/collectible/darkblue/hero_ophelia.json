@@ -6,6 +6,11 @@
   "heroClass": "DARKBLUE",
   "rarity": "FREE",
   "description": "Skill: Summon a 1/1 Spirit.",
+  "art": {
+    "sprite": {
+      "named": "Venus Flytrap Mouth Head Guy Champion"
+    }
+  },
   "attributes": {
     "HP": 30,
     "MAX_HP": 30

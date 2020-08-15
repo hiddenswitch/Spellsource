@@ -38,6 +38,9 @@
       "b": 0.024,
       "g": 0.584,
       "r": 0.235
+    },
+    "sprite": {
+      "named": "Psychedelic Oni Champion"
     }
   },
   "hero": "hero_oth"
