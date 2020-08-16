@@ -15,6 +15,7 @@ Thanks for playing this beta of Spellsource! Read more at [our website](http://w
 <details>
 <summary>Champion art assignments and bug fixes.</summary>
 
+ - A preview of champion art is ready in the game.
  - Morning Flame, Flame Ring and other imbue option spells correctly show spellpower buffs now in their descriptions. ([1819](https://github.com/hiddenswitch/Spellsource/issues/1819))
  - Reflective Duet and other cloning effects no longer put units into play with blitz. ([1820](https://github.com/hiddenswitch/Spellsource/issues/1820))
  - The pacing of events has been improved. Previously, every event would incur an 8-frame (133ms) delay regardless of whether or not it was rendered on screen. That no longer happens.
