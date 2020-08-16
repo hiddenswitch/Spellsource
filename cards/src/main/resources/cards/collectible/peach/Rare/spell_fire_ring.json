@@ -27,7 +27,7 @@
     "spell2": {
       "class": "ChooseOneOptionSpell",
       "name": "Imbue",
-      "description": "Give a unit +2/+2 and deal 1 damage to all enemies.",
+      "description": "Give a unit +2/+2 and deal $1 damage to all enemies.",
       "spells": [
         {
           "class": "BuffSpell",

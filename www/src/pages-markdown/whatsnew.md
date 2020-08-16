@@ -10,7 +10,12 @@ header: true
 Thanks for playing this beta of Spellsource! Read more at [our website](http://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)! See older updates [here](history).
 
-## Current Build 0.8.83-3.2.8 (August 15, 2020)
+### In Progress
+
+ - Morning Flame, Flame Ring and other imbue option spells correctly show spellpower buffs now in their descriptions. ([1819](https://github.com/hiddenswitch/Spellsource/issues/1819))
+ - Reflective Duet and other cloning effects no longer put units into play with blitz. ([1820](https://github.com/hiddenswitch/Spellsource/issues/1820))
+ 
+### Current Build 0.8.83-3.2.8 (August 15, 2020)
 
 <details>
 <summary>Bug fixes.</summary>
@@ -46,8 +51,8 @@ Thanks for playing this beta of Spellsource! Read more at [our website](http://w
  - Stalagmite Stomper no longer triggers off itself. ([1804](https://github.com/hiddenswitch/Spellsource/issues/1804))
  - Exploblaze no longer triggers off itself. ([1804](https://github.com/hiddenswitch/Spellsource/issues/1804))
  - Amplify no longer immediately expires and now correctly triggers. ([1802](https://github.com/hiddenswitch/Spellsource/issues/1802))
- - Some Bard cards have been marked as uncollectible. ((1801)[https://github.com/hiddenswitch/Spellsource/issues/1801])
- - Finale Architect now works correctly. ((1825)[https://github.com/hiddenswitch/Spellsource/issues/1825])
+ - Some Bard cards have been marked as uncollectible. ([1801](https://github.com/hiddenswitch/Spellsource/issues/1801))
+ - Finale Architect now works correctly. ([1825](https://github.com/hiddenswitch/Spellsource/issues/1825))
  - Mana gained and spent animations now play in the correct place.
  - The death particles now bounce off the floor correctly.
  - The minimum time a card must be activated to be playable is now reduced to 1 frame. This means it is easier to play cards from the hand by flicking.

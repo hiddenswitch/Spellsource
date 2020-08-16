@@ -18,7 +18,7 @@
     "spell1": {
       "class": "ChooseOneOptionSpell",
       "name": "Normal",
-      "description": "Deal 6 damage.",
+      "description": "Deal $6 damage.",
       "spell": {
         "class": "DamageSpell",
         "value": 6

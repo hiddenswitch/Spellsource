@@ -248,4 +248,17 @@ public class MusicianTests extends TestBase {
 			assertEquals(3, player.getMana());
 		});
 	}
+
+	@Test
+	public void testReflectiveDuet() {
+		runGym((context, player, opponent) -> {
+			var target = playMinionCard(context, player, 1, 1);
+			context.endTurn();
+			context.endTurn();
+			assertTrue(target.canAttackThisTurn(context));
+			playCard(context, player, "spell_reflective_duet", target);
+			var otherMinion = player.getMinions().get(1);
+			assertFalse(otherMinion.canAttackThisTurn(context), "should not be summoned into play with blitz");
+		});
+	}
 }
