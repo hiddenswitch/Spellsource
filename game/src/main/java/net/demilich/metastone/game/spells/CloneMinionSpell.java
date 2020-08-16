@@ -33,7 +33,9 @@ public class CloneMinionSpell extends Spell {
 		}
 		Minion template = (Minion) target;
 		Minion clone = template.getCopy();
-		context.getLogic().summon(player.getId(), clone, source, -1, false);
+		if (context.getLogic().summon(player.getId(), clone, source, -1, false)) {
+			clone.setAttribute(Attribute.SUMMONING_SICKNESS);
+		}
 	}
 
 }

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "PEACH",
   "rarity": "RARE",
-  "description": "Deal 4 damage. If your deck has no units, gain two empty Lun.",
+  "description": "Deal $4 damage. If your deck has no units, gain two empty Lun.",
   "targetSelection": "ANY",
   "spell": {
     "class": "EitherOrSpell",
