@@ -7,6 +7,19 @@ header: true
 
 ### Upcoming Changes
  - Parallel Protector now has a happy little dynamic description. ([1795](https://github.com/hiddenswitch/Spellsource/issues/1795))
+ - The Ringmaster class has become the Festivalist! The new core set is made up of some previous cards, some reflavorings of previous cards, and some entirely new cards. The rest of the old Ringmaster cards have been uncollectiblified. ([1826](https://github.com/hiddenswitch/Spellsource/issues/1826))
+ - Recurring Torrent is changed from:
+   5 Cost 4/5 RARE ANY (Neutral) MINION "Opener: Receive a copy of the last spell you cast this turn."
+   to 3 Cost 3/3 RARE ANY (Neutral) MINION "Opener: Receive a copy of a spell cast this game." ([1791](https://github.com/hiddenswitch/Spellsource/issues/1791))
+ - Undead Trickster is changed from:
+   3 Cost 3/1 RARE ANY (Neutral) MINION "Opener: Shuffle 3 Tricks and 3 Treats into your deck."
+   to
+   3 Cost 3/3 RARE ANY (Neutral) MINION "Opener: Shuffle a Trick and a Treat into your deck." (Trick and Treats do 3 instead of 4 damage/healing now too). ([1791](https://github.com/hiddenswitch/Spellsource/issues/1791))
+ - Son of the Emperor's opener now actually works. ([1789](https://github.com/hiddenswitch/Spellsource/issues/1789))
+ - Firegate Inquisitor no longer wastes damage overkilling ([1788](https://github.com/hiddenswitch/Spellsource/issues/1788))
+ - Stalagmite Stomper no longer activates itself (nor does Exploblaze). ([1804](https://github.com/hiddenswitch/Spellsource/issues/1804))
+ - The Bard card Amplify was fixed and now has updated effect "The next spell you cast this turn casts thrice." ([1802](https://github.com/hiddenswitch/Spellsource/issues/1802))
+ - A number of Bard cards were uncollectiblified. ([1801](https://github.com/hiddenswitch/Spellsource/issues/1801))
 
 
 ## What's New
