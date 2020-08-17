@@ -1,0 +1,17 @@
+{
+  "name": "Raw Talent",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "FREE",
+  "description": "Give a unit +2/+1.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "attackBonus": 2,
+    "hpBonus": 1
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

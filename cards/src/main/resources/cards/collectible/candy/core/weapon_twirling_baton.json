@@ -1,0 +1,41 @@
+{
+  "type": "WEAPON",
+  "fileFormatVersion": 1,
+  "set": "CUSTOM",
+  "collectible": true,
+  "baseManaCost": 3,
+  "damage": 0,
+  "durability": 3,
+  "name": "Twirling Baton",
+  "rarity": "COMMON",
+  "heroClass": "CANDY",
+  "description": "After you target an allied unit with a spell, give it +2/+2 and lose 1 Durability.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "SPELL",
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "CastAfterSequenceSpell",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "value": 2,
+            "target": "EVENT_TARGET"
+          },
+          {
+            "class": "BuffSpell",
+            "target": "FRIENDLY_WEAPON",
+            "hpBonus": -1
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Burning Passion",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "EPIC",
+  "description": "Give an allied unit +4/+4, then deal damage equal to its Attack to a random enemy unit.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "AlgebraicValueProvider",
+      "operation": "ADD",
+      "value1": {
+        "class": "AttributeValueProvider",
+        "attribute": "ATTACK"
+      },
+      "value2": 4
+    },
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "value": 4
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        },
+        "randomTarget": true
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Aperration",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Opener: Transform a random unit in your hand into a copy of your Signature.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReplaceCardsSpell",
+      "target": "FRIENDLY_HAND",
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "secondaryTarget": "FRIENDLY_SIGNATURE"
+      },
+      "cardSource": {
+        "class": "UncollectibleCatalogueSource"
+      },
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Meteor Spin",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "RARE",
+  "description": "Sweep. Deal $6 damage to a unit.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 6
+    },
+    "spell2": {
+      "class": "DamageSpell",
+      "value": 6
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

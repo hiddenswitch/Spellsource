@@ -1,0 +1,31 @@
+{
+  "name": "Baton of Thrills",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "CANDY",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "After you cast a spell, cast a random spell of the same Cost.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "CastRandomSpellSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL",
+        "manaCost": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "LAST_MANA_COST"
+        }
+      },
+      "randomTarget": true
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

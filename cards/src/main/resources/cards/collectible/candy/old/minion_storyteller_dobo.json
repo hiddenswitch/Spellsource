@@ -1,0 +1,29 @@
+{
+  "name": "Storyteller Dobo",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 2,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Take control of all enemy units with 1 or less Attack.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MindControlSpell",
+      "target": "ENEMY_MINIONS",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 1,
+        "attribute": "ATTACK",
+        "operation": "LESS_OR_EQUAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

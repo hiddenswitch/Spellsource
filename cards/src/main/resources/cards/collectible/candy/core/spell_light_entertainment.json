@@ -1,0 +1,16 @@
+{
+  "type": "SPELL",
+  "fileFormatVersion": 1,
+  "set": "CUSTOM",
+  "collectible": true,
+  "baseManaCost": 3,
+  "name": "Light Entertainment",
+  "rarity": "COMMON",
+  "heroClass": "CANDY",
+  "description": "Draw 2 cards.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": 2
+  }
+}

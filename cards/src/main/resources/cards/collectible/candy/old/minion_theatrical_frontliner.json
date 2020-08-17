@@ -1,0 +1,36 @@
+{
+  "name": "Theatrical Frontliner",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Opener: Give a unit Guard and +1 Health for each card in your hand.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "hpBonus": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "HAND_COUNT",
+            "targetPlayer": "SELF"
+          }
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "TAUNT"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

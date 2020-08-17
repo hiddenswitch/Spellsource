@@ -1,0 +1,30 @@
+{
+  "name": "Handsome Handler",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Opener: For each allied unit, draw a copy of your Signature.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "value": {
+        "class": "EntityCountValueProvider",
+        "target": "FRIENDLY_MINIONS"
+      },
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "secondaryTarget": "FRIENDLY_SIGNATURE"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

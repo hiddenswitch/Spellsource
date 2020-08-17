@@ -1,0 +1,24 @@
+{
+  "name": "Sword Swallower",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 5,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "description": "Aftermath: Give adjacent units +3 Attack.",
+  "deathrattle": {
+    "class": "custom.AdjacentDeathrattleSpell",
+    "target": "SELF",
+    "spell2": {
+      "class": "BuffSpell",
+      "attackBonus": 3
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

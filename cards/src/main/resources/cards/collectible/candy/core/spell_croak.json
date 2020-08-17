@@ -1,0 +1,25 @@
+{
+  "name": "Croak",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "FREE",
+  "description": "Deal $3 damage. Summon a 1/1 Frog.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 3
+      },
+      {
+        "class": "SummonSpell",
+        "card": "token_festivalist_frog"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

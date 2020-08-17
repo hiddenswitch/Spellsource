@@ -1,0 +1,23 @@
+{
+  "name": "Big Winners",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "COMMON",
+  "description": "Give a unit and the units next to it +2/+2.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+      "class": "BuffSpell",
+      "value": 2
+    },
+    "spell2": {
+      "class": "BuffSpell",
+      "value": 2
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

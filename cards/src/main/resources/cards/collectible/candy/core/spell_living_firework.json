@@ -1,0 +1,25 @@
+{
+  "type": "SPELL",
+  "fileFormatVersion": 1,
+  "set": "CUSTOM",
+  "collectible": true,
+  "baseManaCost": 4,
+  "name": "Living Firework",
+  "rarity": "EPIC",
+  "heroClass": "CANDY",
+  "description": "Summon a random unit from your hand that costs the same as your Signature.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecruitSpell",
+    "cardFilter": {
+      "class": "ManaCostFilter",
+      "value": {
+        "class": "ManaCostProvider",
+        "target": "FRIENDLY_SIGNATURE"
+      },
+      "operation": "EQUAL"
+    },
+    "cardLocation": "HAND",
+    "targetPlayer": "SELF"
+  }
+}

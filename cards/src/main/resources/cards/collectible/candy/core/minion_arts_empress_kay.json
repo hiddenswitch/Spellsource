@@ -1,0 +1,47 @@
+{
+  "type": "MINION",
+  "fileFormatVersion": 1,
+  "set": "CUSTOM",
+  "collectible": true,
+  "baseManaCost": 1,
+  "baseAttack": 1,
+  "baseHp": 1,
+  "name": "Arts Empress Kay",
+  "rarity": "LEGENDARY",
+  "heroClass": "CANDY",
+  "description": "Opener: If you've cast your Signature 5 times this game, take control of an enemy unit.",
+  "race": "BEAST",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "CardCountValueProvider",
+        "cardSource": {
+          "class": "GraveyardCardsSource"
+        },
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "attribute": "PLAYED_FROM_HAND_OR_DECK"
+            },
+            {
+              "class": "SpecificCardFilter",
+              "secondaryTarget": "FRIENDLY_SIGNATURE"
+            }
+          ]
+        }
+      },
+      "operation": "GREATER_OR_EQUAL",
+      "value2": 5
+    },
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "MindControlSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  }
+}

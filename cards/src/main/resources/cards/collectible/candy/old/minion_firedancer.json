@@ -1,0 +1,43 @@
+{
+  "name": "Firedancer",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Opener: Your next Signature also targets adjacent units.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "aura": {
+        "class": "SpellTargetsAdjacentAura",
+        "target": "FRIENDLY_CARDS",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "FRIENDLY_SIGNATURE"
+        }
+      },
+      "revertTrigger": {
+        "class": "AfterCardPlayedTrigger",
+        "fireCondition": {
+          "class": "AnyMatchFilterCondition",
+          "target": "EVENT_SOURCE",
+          "filter": {
+            "class": "SpecificCardFilter",
+            "secondaryTarget": "FRIENDLY_SIGNATURE"
+          }
+        },
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

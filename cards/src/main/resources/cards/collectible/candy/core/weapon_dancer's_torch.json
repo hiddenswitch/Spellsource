@@ -1,0 +1,36 @@
+{
+  "type": "WEAPON",
+  "fileFormatVersion": 1,
+  "set": "CUSTOM",
+  "collectible": true,
+  "baseManaCost": 4,
+  "damage": 0,
+  "durability": 4,
+  "name": "Dancer's Torch",
+  "rarity": "EPIC",
+  "heroClass": "CANDY",
+  "description": "After you cast your Signature, this gains Spellpower +1. Decay.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterCardPlayedTrigger",
+      "fireCondition": {
+        "class": "AnyMatchFilterCondition",
+        "target": "EVENT_SOURCE",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "FRIENDLY_SIGNATURE"
+        }
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "FRIENDLY_WEAPON",
+      "attribute": "SPELL_DAMAGE",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "DECAY": true
+  }
+}

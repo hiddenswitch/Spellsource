@@ -1,0 +1,24 @@
+{
+  "name": "Captivate",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "FREE",
+  "description": "Change an enemy unit's Attack to 1. Take control of it",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SetAttackSpell",
+        "value": 1
+      },
+      {
+        "class": "MindControlSpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

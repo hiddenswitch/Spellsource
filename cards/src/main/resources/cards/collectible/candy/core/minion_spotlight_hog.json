@@ -1,0 +1,38 @@
+{
+  "type": "MINION",
+  "fileFormatVersion": 1,
+  "set": "CUSTOM",
+  "collectible": true,
+  "baseManaCost": 3,
+  "baseAttack": 2,
+  "baseHp": 5,
+  "name": "Spotlight Hog",
+  "rarity": "EPIC",
+  "heroClass": "CANDY",
+  "description": "While this has 3 or more Attack, it has Elusive and Guard.",
+  "race": "BEAST",
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "SELF",
+      "attribute": "AURA_UNTARGETABLE_BY_SPELLS",
+      "condition": {
+        "class": "AttributeCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "attribute": "ATTACK",
+        "value": 3
+      }
+    },
+    {
+      "class": "AttributeAura",
+      "target": "SELF",
+      "attribute": "AURA_TAUNT",
+      "condition": {
+        "class": "AttributeCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "attribute": "ATTACK",
+        "value": 3
+      }
+    }
+  ]
+}

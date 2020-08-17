@@ -1,0 +1,17 @@
+{
+  "name": "Food Festival",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "COMMON",
+  "description": "Restore 12 Health to your champion.",
+  "targetSelection": "NONE",
+  "spell": {
+     "class": "HealSpell",
+     "target": "FRIENDLY_HERO",
+     "value": 3
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Warm Up",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "COMMON",
+  "description": "Sweep. Give a unit +1/+1.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+     "class": "BuffSpell",
+     "value": 1
+  },
+    "spell2": {
+     "class": "BuffSpell",
+     "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

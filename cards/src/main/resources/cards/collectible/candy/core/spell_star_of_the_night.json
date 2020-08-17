@@ -1,0 +1,23 @@
+{
+  "type": "SPELL",
+  "fileFormatVersion": 1,
+  "set": "CUSTOM",
+  "collectible": true,
+  "baseManaCost": 6,
+  "name": "Star of the Night",
+  "rarity": "RARE",
+  "heroClass": "CANDY",
+  "description": "Give a unit +4/+4. Draw 2 cards.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spell1": {
+      "class": "BuffSpell",
+      "value": 4
+    },
+    "spell2": {
+      "class": "DrawCardSpell",
+      "value": 2
+    }
+  }
+}
