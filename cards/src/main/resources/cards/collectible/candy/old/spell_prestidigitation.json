@@ -1,0 +1,25 @@
+{
+  "name": "Prestidigitation",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "FREE",
+  "description": "Deal $2 damage. Summon a 2/2 Image.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "SummonSpell",
+        "card": "token_thrilling_image"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,16 @@
+{
+  "type": "SPELL",
+  "fileFormatVersion": 1,
+  "set": "CUSTOM",
+  "collectible": true,
+  "baseManaCost": 5,
+  "name": "Classic Tale",
+  "rarity": "RARE",
+  "heroClass": "CANDY",
+  "description": "Draw 3.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": 3
+  }
+}

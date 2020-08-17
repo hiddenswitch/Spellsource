@@ -1,0 +1,59 @@
+{
+  "name": "Finale Architect",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Your spells cost (1) less, but don't cast until the start of your next turn.",
+  "race": "BEAST",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": -1,
+    "cardType": "SPELL"
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "AttributeCondition",
+            "target": "EVENT_SOURCE",
+            "attribute": "COUNTERED",
+            "invert": true
+          },
+          "spell": {
+            "class": "CastSpellWithTargetOrElseSpell",
+            "target": "EVENT_SOURCE",
+            "secondaryTarget": "EVENT_TARGET",
+            "trigger": {
+              "eventTrigger": {
+                "class": "TurnStartTrigger",
+                "targetPlayer": "SELF"
+              },
+              "maxFires": 1
+            },
+            "spell": {
+              "class": "PlayCardsRandomlySpell"
+            }
+          }
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "EVENT_SOURCE",
+          "attribute": "COUNTERED"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

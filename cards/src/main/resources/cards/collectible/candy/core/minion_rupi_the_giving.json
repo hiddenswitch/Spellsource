@@ -1,0 +1,82 @@
+{
+  "type": "MINION",
+  "fileFormatVersion": 1,
+  "set": "CUSTOM",
+  "collectible": true,
+  "baseManaCost": 4,
+  "baseAttack": 4,
+  "baseHp": 4,
+  "name": "Rupi the Giving",
+  "rarity": "LEGENDARY",
+  "heroClass": "CANDY",
+  "description": "Opener: If you've restored 15 Health this game, fill your board with 2/2 Frogs with Guard.[]",
+  "race": "BEAST",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "HEALING_DONE",
+        "targetPlayer": "SELF"
+      },
+      "value2": 15
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "card": "token_big_frog"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_big_frog"
+        }
+      ],
+      "howMany": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "dynamicDescription": [
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "HEALING_DONE",
+          "targetPlayer": "SELF"
+        },
+        "value2": 15
+      },
+      "description1": " (Ready!)",
+      "description2": {
+        "class": "MetaDescription",
+        "descriptions": [
+          " (",
+          {
+            "class": "ValueDescription",
+            "value": {
+              "class": "AlgebraicValueProvider",
+              "operation": "SUBTRACT",
+              "value1": 15,
+              "value2": {
+                "class": "PlayerAttributeValueProvider",
+                "playerAttribute": "HEALING_DONE",
+                "targetPlayer": "SELF"
+              }
+            }
+          },
+          " left!)"
+        ]
+      }
+    }
+  ]
+}

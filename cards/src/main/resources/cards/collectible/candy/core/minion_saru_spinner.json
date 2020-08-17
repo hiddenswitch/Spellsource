@@ -1,0 +1,27 @@
+{
+  "type": "MINION",
+  "fileFormatVersion": 1,
+  "set": "CUSTOM",
+  "collectible": true,
+  "baseManaCost": 1,
+  "baseAttack": 1,
+  "baseHp": 3,
+  "name": "Saru Spinner",
+  "rarity": "COMMON",
+  "heroClass": "CANDY",
+  "description": "While this has 2 or more Attack, it has Guard.",
+  "race": "BEAST",
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "SELF",
+      "attribute": "AURA_TAUNT",
+      "condition": {
+        "class": "AttributeCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "attribute": "ATTACK",
+        "value": 2
+      }
+    }
+  ]
+}

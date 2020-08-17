@@ -1,0 +1,44 @@
+{
+  "type": "MINION",
+  "fileFormatVersion": 1,
+  "set": "CUSTOM",
+  "collectible": true,
+  "baseManaCost": 2,
+  "baseAttack": 2,
+  "baseHp": 2,
+  "name": "Kuroko Puppet",
+  "rarity": "RARE",
+  "heroClass": "CANDY",
+  "description": "Opener: Your next Signature gives targeted units Hidden.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "AfterSpellCastedTrigger",
+          "fireCondition": {
+            "class": "AnyMatchFilterCondition",
+            "target": "EVENT_SOURCE",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "secondaryTarget": "FRIENDLY_SIGNATURE"
+            }
+          },
+          "sourcePlayer": "SELF",
+          "targetEntityType": "MINION"
+        },
+        "spell": {
+          "class": "AddAttributeSpell",
+          "target": "EVENT_TARGET",
+          "attribute": "STEALTH"
+        },
+        "maxFires": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  }
+}

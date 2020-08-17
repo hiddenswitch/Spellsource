@@ -1,0 +1,40 @@
+{
+  "name": "Guest Announcer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Opener: Draw. Prioritizes your Signature first.",
+  "race": "FAE",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "DeckContainsCondition",
+        "cardFilter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "FRIENDLY_SIGNATURE"
+        }
+      },
+      "spell1": {
+        "class": "DrawCardSpell",
+        "cardFilter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "FRIENDLY_SIGNATURE"
+        }
+      },
+      "spell2": {
+        "class": "DrawCardSpell"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

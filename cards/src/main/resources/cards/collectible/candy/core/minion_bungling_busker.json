@@ -1,0 +1,29 @@
+{
+  "name": "Gambitday Klutz",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Spellpower +2. After you cast a spell on an enemy, cast a copy of it on this.",
+  "race": "BEAST",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "CastCardsSpell",
+      "target": "SELF",
+      "secondaryTarget": "EVENT_SOURCE"
+    }
+  },
+  "attributes": {
+    "SPELL_DAMAGE": 2
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

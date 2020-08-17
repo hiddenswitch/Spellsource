@@ -1,0 +1,46 @@
+{
+  "name": "Excited Usagi",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Opener: Your next Signature costs (1) less.",
+  "race": "BEAST",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "value": 1,
+        "cardType": "SPELL",
+        "expirationTrigger": {
+          "class": "CardPlayedTrigger",
+          "queueCondition": {
+            "class": "AnyMatchFilterCondition",
+            "target": "EVENT_TARGET",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "secondaryTarget": "FRIENDLY_SIGNATURE"
+            }
+          },
+          "sourcePlayer": "SELF"
+        },
+        "filter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "FRIENDLY_SIGNATURE"
+        },
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

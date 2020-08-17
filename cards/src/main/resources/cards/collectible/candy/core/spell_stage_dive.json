@@ -1,0 +1,27 @@
+{
+  "type": "SPELL",
+  "fileFormatVersion": 1,
+  "set": "CUSTOM",
+  "collectible": true,
+  "baseManaCost": 2,
+  "name": "Stage Dive",
+  "rarity": "EPIC",
+  "heroClass": "CANDY",
+  "description": "Give a unit +3 Attack and Immune this turn.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spell1": {
+      "class": "TemporaryAttackSpell",
+      "value": 3
+    },
+    "spell2": {
+      "class": "AddAttributeSpell",
+      "attribute": "IMMUNE",
+      "revertTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "BOTH"
+      }
+    }
+  }
+}

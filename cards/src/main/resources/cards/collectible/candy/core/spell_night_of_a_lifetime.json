@@ -1,0 +1,23 @@
+{
+  "name": "Night of a Lifetime",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "COMMON",
+  "description": "Sweep. Give a unit +2/+2.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+      "class": "BuffSpell",
+      "value": 2
+    },
+    "spell2": {
+      "class": "BuffSpell",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

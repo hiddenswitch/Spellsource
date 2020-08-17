@@ -1,0 +1,14 @@
+{
+  "name": "Frog",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "race": "BEAST",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Faws",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "After you play a unit, transform it into a 4/4 Shark with Blitz and Lifedrain.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "EVENT_TARGET",
+      "card": "token_freakshow_shark"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,26 @@
+{
+  "type": "MINION",
+  "fileFormatVersion": 1,
+  "set": "CUSTOM",
+  "collectible": true,
+  "baseManaCost": 4,
+  "baseAttack": 3,
+  "baseHp": 5,
+  "name": "Opa, Master's Mentor",
+  "rarity": "LEGENDARY",
+  "heroClass": "CANDY",
+  "description": "Your spells targeting this also target the unit to its right.",
+  "race": "BEAST",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "CastCardsSpell",
+      "target": "RIGHT_ADJACENT_MINION",
+      "secondaryTarget": "EVENT_SOURCE"
+    }
+  }
+}

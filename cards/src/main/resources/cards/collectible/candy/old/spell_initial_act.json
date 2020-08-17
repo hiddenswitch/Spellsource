@@ -1,0 +1,17 @@
+{
+  "name": "Initial Act",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "FREE",
+  "description": "Receive two 1/3 Performers.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "value": 2,
+    "card": "token_performer"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

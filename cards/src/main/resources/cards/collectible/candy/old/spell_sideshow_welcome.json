@@ -1,0 +1,25 @@
+{
+  "name": "Sideshow Welcome",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "CANDY",
+  "rarity": "COMMON",
+  "description": "Deal 1 damage to a unit for each unit that attacked this turn.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": {
+      "class": "EntityCountValueProvider",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 1,
+        "attribute": "ATTACKS_THIS_TURN",
+        "operation": "GREATER_OR_EQUAL"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

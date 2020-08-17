@@ -1,0 +1,31 @@
+{
+  "name": "Fete Impresario",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "CANDY",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Whenever you play a unit, shuffle a copy of your Signature into your deck.",
+  "race": "BEAST",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "secondaryTarget": "FRIENDLY_SIGNATURE"
+      },
+      "cardSource": {
+        "class": "UncollectibleCatalogueSource"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

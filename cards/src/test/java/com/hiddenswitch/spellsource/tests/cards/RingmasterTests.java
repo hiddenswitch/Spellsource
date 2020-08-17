@@ -448,4 +448,74 @@ public class RingmasterTests extends TestBase {
 		});
 	}
 
+	@Test
+	public void testArtsEmpressKey() {
+		runGym((context, player, opponent) -> {
+			player.setAttribute(Attribute.SIGNATURE, "spell_chain_dance");
+			Minion big = playMinionCard(context, opponent, "minion_neutral_test_big");
+
+			playCard(context, player, "minion_arts_empress_kay", big);
+			assertEquals(player.getMinions().size(), 1);
+
+			playCard(context, player, "spell_chain_dance", big);
+			playCard(context, player, "minion_arts_empress_kay", big);
+			assertEquals(player.getMinions().size(), 2);
+
+			playCard(context, player, "spell_chain_dance", big);
+			playCard(context, player, "minion_arts_empress_kay", big);
+			assertEquals(player.getMinions().size(), 3);
+
+			playCard(context, player, "spell_chain_dance", big);
+			playCard(context, player, "minion_arts_empress_kay", big);
+			assertEquals(player.getMinions().size(), 4);
+
+			playCard(context, player, "spell_chain_dance", big);
+			playCard(context, player, "minion_arts_empress_kay", big);
+			assertEquals(player.getMinions().size(), 5);
+
+			playCard(context, player, "spell_chain_dance", big);
+			playCard(context, player, "minion_arts_empress_kay", big);
+			assertEquals(player.getMinions().size(), 7);
+
+			assertEquals(opponent.getMinions().size(), 0);
+		});
+	}
+
+	@Test
+	public void testKurokoPuppet() {
+		runGym((context, player, opponent) -> {
+			player.setAttribute(Attribute.SIGNATURE, "spell_costume_draft");
+			playCard(context, player, "minion_kuroko_puppet");
+			Minion big = playMinionCard(context, player, "minion_neutral_test_big");
+			playCard(context, player, "spell_chain_dance", big);
+			assertFalse(big.hasAttribute(Attribute.STEALTH));
+			playCard(context, player, "spell_costume_draft", big);
+			assertTrue(big.hasAttribute(Attribute.STEALTH));
+
+		});
+	}
+
+	@Test
+	public void testOpaMastersMentor() {
+		runGym((context, player, opponent) -> {
+			Minion bigLeft = playMinionCard(context, player, "minion_neutral_test_big");
+			Minion opa = playMinionCard(context, player, "minion_opa_masters_mentor");
+			Minion bigRight = playMinionCard(context, player, "minion_neutral_test_big");
+
+			playCard(context, player, "spell_costume_draft", bigLeft);
+			assertEquals(bigLeft.getBaseAttack() + 1, bigLeft.getAttack());
+			assertEquals(opa.getBaseAttack(), opa.getAttack());
+			assertEquals(bigRight.getBaseAttack(), bigRight.getAttack());
+
+			playCard(context, player, "spell_costume_draft", opa);
+			assertEquals(bigLeft.getBaseAttack() + 1, bigLeft.getAttack());
+			assertEquals(opa.getBaseAttack() + 1, opa.getAttack());
+			assertEquals(bigRight.getBaseAttack() + 1, bigRight.getAttack());
+
+			playCard(context, player, "spell_costume_draft", bigRight);
+			assertEquals(bigLeft.getBaseAttack() + 1, bigLeft.getAttack());
+			assertEquals(opa.getBaseAttack() + 1, opa.getAttack());
+			assertEquals(bigRight.getBaseAttack() + 2, bigRight.getAttack());
+		});
+	}
 }
