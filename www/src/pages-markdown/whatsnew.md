@@ -5,6 +5,10 @@ path: "/whats-new"
 header: true
 ---
 
+### Upcoming Changes
+ - Parallel Protector now has a happy little dynamic description. ([1795](https://github.com/hiddenswitch/Spellsource/issues/1795))
+
+
 ## What's New
 
 Thanks for playing this beta of Spellsource! Read more at [our website](http://www.playspellsource.com) and join our 

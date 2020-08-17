@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Guard. Opener: Gain +1 Health for each spell in your hand.",
+  "description": "Guard. Opener: Gain +1 Health for each spell in your hand.[]",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",
@@ -40,5 +40,25 @@
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        " (",
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "EntityCountValueProvider",
+            "target": "FRIENDLY_HAND",
+            "filter": {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            }
+          }
+        },
+        ")"
+      ]
+    }
+  ]
 }
