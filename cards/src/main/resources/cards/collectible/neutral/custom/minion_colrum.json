@@ -10,61 +10,17 @@
   "description": "Opener: Transform all Fae (wherever they are) to random non-Fae units.",
   "battlecry": {
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "ReplaceCardsSpell",
-          "target": "BOTH_DECKS",
-          "cardFilter": {
-            "class": "AndFilter",
-            "filters": [
-              {
-                "class": "RaceFilter",
-                "race": "FAE",
-                "invert": true
-              },
-              {
-                "class": "CardFilter",
-                "cardType": "MINION"
-              }
-            ]
-          },
-          "cardSource": {
-            "class": "UnweightedCatalogueSource"
-          },
-          "filter": {
-            "class": "RaceFilter",
-            "race": "FAE"
-          }
-        },
-        {
-          "class": "ReplaceCardsSpell",
-          "target": "BOTH_HANDS",
-          "cardFilter": {
-            "class": "AndFilter",
-            "filters": [
-              {
-                "class": "RaceFilter",
-                "race": "FAE",
-                "invert": true
-              },
-              {
-                "class": "CardFilter",
-                "cardType": "MINION"
-              }
-            ]
-          },
-          "cardSource": {
-            "class": "UnweightedCatalogueSource"
-          },
-          "filter": {
-            "class": "RaceFilter",
-            "race": "FAE"
-          }
-        },
-        {
+      "class": "WhereverTheyAreSpell",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "FAE"
+      },
+      "targetPlayer": "BOTH",
+      "zones": ["BATTLEFIELD", "HAND", "DECK"],
+      "spell": {
+        "class": "ActorOrCardSpell",
+        "spell1": {
           "class": "TransformToRandomMinionSpell",
-          "target": "ALL_MINIONS",
           "cardFilter": {
             "class": "AndFilter",
             "filters": [
@@ -81,13 +37,29 @@
           },
           "cardSource": {
             "class": "UnweightedCatalogueSource"
+          }
+        },
+        "spell2": {
+          "class": "ReplaceCardsSpell",
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "RaceFilter",
+                "race": "FAE",
+                "invert": true
+              },
+              {
+                "class": "CardFilter",
+                "cardType": "MINION"
+              }
+            ]
           },
-          "filter": {
-            "class": "RaceFilter",
-            "race": "FAE"
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
           }
         }
-      ]
+      }
     }
   },
   "attributes": {

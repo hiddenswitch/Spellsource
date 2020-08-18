@@ -42,6 +42,7 @@ import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -5001,6 +5002,26 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(opponent, context.getActivePlayer());
 			context.endTurn();
 			assertEquals(player, context.getActivePlayer());
+		});
+	}
+
+	@Test
+	public void testColrum() {
+		runGym((context, player, opponent) -> {
+			var faes = CardCatalogue.query(context.getDeckFormat(), card -> card.getRace().equals(Race.FAE));
+			faes.shuffle(context.getLogic().getRandom());
+			for (int i = 0; i < 5; i++) {
+				shuffleToDeck(context, player, faes.removeFirst().getCardId());
+				shuffleToDeck(context, opponent, faes.removeFirst().getCardId());
+				receiveCard(context, player, faes.removeFirst().getCardId());
+				receiveCard(context, opponent, faes.removeFirst().getCardId());
+				playMinionCard(context, player, faes.removeFirst().getCardId());
+				playMinionCard(context, opponent, faes.removeFirst().getCardId());
+			}
+			playCard(context, player, "minion_colrum");
+			Stream.of(player.getDeck(), opponent.getDeck(), player.getHand(), opponent.getHand(),
+					player.getMinions(), opponent.getMinions())
+					.forEach(cards -> cards.forEach(card -> assertNotEquals(card.getRace(), Race.FAE)));
 		});
 	}
 }
