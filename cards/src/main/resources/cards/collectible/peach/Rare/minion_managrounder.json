@@ -11,42 +11,33 @@
     "class": "CardCostModifier",
     "value": 3,
     "condition": {
-      "class": "AndCondition",
-      "conditions": [
-        {
-          "class": "OwnedByPlayerCondition",
-          "targetPlayer": "BOTH"
-        },
-        {
-          "class": "ComparisonCondition",
-          "operation": "EQUAL",
-          "value1": {
-            "class": "CardCountValueProvider",
-            "cardFilter": {
-              "class": "AndFilter",
-              "filters": [
-                {
-                  "class": "CardFilter",
-                  "cardType": "SPELL"
-                },
-                {
-                  "class": "AttributeFilter",
-                  "value": {
-                    "class": "CurrentTurnValueProvider"
-                  },
-                  "attribute": "PLAYED_FROM_HAND_OR_DECK",
-                  "operation": "EQUAL"
-                }
-              ]
+      "class": "ComparisonCondition",
+      "operation": "EQUAL",
+      "value1": {
+        "class": "CardCountValueProvider",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "SPELL"
             },
-            "cardSource": {
-              "class": "GraveyardCardsSource",
-              "targetPlayer": "SELF"
+            {
+              "class": "AttributeFilter",
+              "value": {
+                "class": "CurrentTurnValueProvider"
+              },
+              "attribute": "PLAYED_FROM_HAND_OR_DECK",
+              "operation": "EQUAL"
             }
-          },
-          "value2": 0
+          ]
+        },
+        "cardSource": {
+          "class": "GraveyardCardsSource",
+          "targetPlayer": "SELF"
         }
-      ]
+      },
+      "value2": 0
     },
     "cardType": "SPELL",
     "targetPlayer": "BOTH"

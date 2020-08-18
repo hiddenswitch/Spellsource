@@ -6,6 +6,7 @@ header: true
 ---
 
 ### Upcoming Changes
+ - The Witch card Managrounder now functions properly. ([1817](https://github.com/hiddenswitch/Spellsource/issues/1817))
  - Parallel Protector now has a happy little dynamic description. ([1795](https://github.com/hiddenswitch/Spellsource/issues/1795))
  - The Ringmaster class has become the Festivalist! The new core set is made up of some previous cards, some reflavorings of previous cards, and some entirely new cards. The rest of the old Ringmaster cards have been uncollectiblified. ([1826](https://github.com/hiddenswitch/Spellsource/issues/1826))
  - Recurring Torrent is changed from:
