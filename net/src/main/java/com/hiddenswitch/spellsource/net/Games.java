@@ -457,14 +457,11 @@ public interface Games extends Verticle {
 
 		var visibleEntityIds = entities.stream().map(Entity::getId).collect(Collectors.toSet());
 
-		// For now, do not send enchantments data
-		/*
 		entities.addAll(workingContext.getTriggers()
 				.stream()
 				.filter(f -> f instanceof Enchantment && visibleEntityIds.contains(f.getHostReference().getId()))
 				.map(t -> getEntity(workingContext, (Enchantment) t, localPlayerId))
 				.collect(toList()));
-		*/
 
 		// Any missing entities will get a stand-in entry
 		entities.addAll(workingContext.getEntities().filter(e -> !visibleEntityIds.contains(e.getId()))
@@ -643,6 +640,8 @@ public interface Games extends Verticle {
 				.entityType(entityType)
 				.l(Games.toClientLocation(enchantment.getEntityLocation()))
 				.owner(enchantment.getOwner())
+				.host(enchantment.getHostReference() != null ? enchantment.getHostReference().getId() : -1)
+				.enchantmentType(enchantment.getClass().getSimpleName())
 				.playable(false);
 		return entity;
 	}

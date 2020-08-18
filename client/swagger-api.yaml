@@ -241,10 +241,6 @@ definitions:
             $ref: '#/definitions/ServerToClientMessage'
           clientToServer:
             $ref: '#/definitions/ClientToServerMessage'
-  Enchantment:
-    type: 'object'
-    description: |
-      An enchantment
   ChatMessage:
     description: |
       A chat message.
@@ -1517,6 +1513,16 @@ definitions:
         format: 'int32'
         default: -1
         x-nullable: false
+      host:
+        description: An integer corresponding to the enchantment's host
+        type: 'integer'
+        format: 'int32'
+        default: -1
+        x-nullable: false
+      enchantmentType:
+        description: |
+          The class hierarchy of this enchantment
+        type: 'string'
       heroClass:
         description: The string enum value that corresponds to this entity's hero class.
         type: 'string'
