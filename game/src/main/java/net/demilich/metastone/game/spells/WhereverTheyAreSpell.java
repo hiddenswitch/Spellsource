@@ -6,6 +6,9 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc;
+import net.demilich.metastone.game.spells.desc.filter.SpecificCardFilter;
 import net.demilich.metastone.game.spells.trigger.WhereverTheyAreEnchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
@@ -57,11 +60,13 @@ public final class WhereverTheyAreSpell extends MetaSpell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		String cardId;
+		EntityFilter filter;
 		if (target == null && desc.containsKey(SpellArg.CARD)) {
-			cardId = SpellUtils.getCard(context, desc).getCardId();
+			filter = SpecificCardFilter.create(SpellUtils.getCard(context, desc).getCardId()).create();
+		} else if (desc.containsKey(SpellArg.FILTER)) {
+			filter = desc.getEntityFilter();
 		} else {
-			cardId = target.getSourceCard().getCardId();
+			filter = SpecificCardFilter.create(target.getSourceCard().getCardId()).create();
 		}
 		Zones[] zones;
 		if (desc.containsKey(SpellArg.ZONES)) {
@@ -86,7 +91,7 @@ public final class WhereverTheyAreSpell extends MetaSpell {
 
 		if (Arrays.stream(zones).anyMatch(Predicate.isEqual(Zones.GRAVEYARD))) {
 			// Cast on minions brought into play, however they are
-			context.getLogic().addEnchantment(player, new WhereverTheyAreEnchantment(cardId, desc, source.getSourceCard()), source, player);
+			context.getLogic().addEnchantment(player, new WhereverTheyAreEnchantment(filter, desc, source.getSourceCard()), source, player);
 		}
 
 		List<Entity> targets = context.getEntities()
@@ -100,7 +105,7 @@ public final class WhereverTheyAreSpell extends MetaSpell {
 					}
 					return zoneMatches && e.getOwner() == player.getId();
 				})
-				.filter(e -> e.getSourceCard().getCardId().equals(cardId))
+				.filter(e -> filter.matches(context, player, e, source))
 				.collect(Collectors.toList());
 		for (Entity copyTarget : targets) {
 			super.onCast(context, player, desc, source, copyTarget);

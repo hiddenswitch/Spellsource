@@ -10,36 +10,18 @@
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
+      "class": "WhereverTheyAreSpell",
+      "targetPlayer": "BOTH",
+      "zones": ["BATTLEFIELD", "HAND", "DECK"],
+      "spell": {
+        "class": "ActorOrCardSpell",
+        "spell1": {
           "class": "DestroySpell"
         },
-        {
-          "class": "RemoveCardSpell",
-          "target": "BOTH_DECKS",
-          "filter": {
-            "class": "SpecificCardFilter",
-            "secondaryTarget": "TARGET"
-          }
-        },
-        {
-          "class": "RemoveCardSpell",
-          "target": "BOTH_HANDS",
-          "filter": {
-            "class": "SpecificCardFilter",
-            "secondaryTarget": "TARGET"
-          }
-        },
-        {
-          "class": "DestroySpell",
-          "target": "ALL_MINIONS",
-          "filter": {
-            "class": "SpecificCardFilter",
-            "secondaryTarget": "TARGET"
-          }
+        "spell2": {
+          "class": "RemoveCardSpell"
         }
-      ]
+      }
     }
   },
   "attributes": {

@@ -5,7 +5,9 @@ import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.WhereverTheyAreSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.condition.AnyMatchFilterCondition;
 import net.demilich.metastone.game.spells.desc.condition.CardPropertyCondition;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -21,16 +23,16 @@ import org.slf4j.LoggerFactory;
 public class WhereverTheyAreEnchantment extends Enchantment {
 	private static Logger LOGGER = LoggerFactory.getLogger(WhereverTheyAreEnchantment.class);
 
-	private final String cardId;
+	private final EntityFilter filter;
 
-	public WhereverTheyAreEnchantment(String cardId, SpellDesc desc, Card sourceCard) {
+	public WhereverTheyAreEnchantment(EntityFilter filter, SpellDesc desc, Card sourceCard) {
 		super();
 		usesSpellTrigger = true;
 		setSourceCard(sourceCard);
 		if (!desc.getDescClass().equals(WhereverTheyAreSpell.class)) {
 			LOGGER.warn("constructor: This (sourceCard {}) was not created with a WhereverTheyAreSpell", sourceCard);
 		}
-		this.cardId = cardId;
+		this.filter = filter;
 		SpellDesc enchantmentSpell = desc.clone();
 		enchantmentSpell.put(SpellArg.CLASS, MetaSpell.class);
 		enchantmentSpell.put(SpellArg.TARGET, EntityReference.EVENT_TARGET);
@@ -38,11 +40,7 @@ public class WhereverTheyAreEnchantment extends Enchantment {
 		enchantmentSpell.remove(SpellArg.CARD);
 		setSpell(enchantmentSpell);
 		EventTriggerDesc eventTrigger = BeforeMinionSummonedTrigger.create();
-		eventTrigger.put(EventTriggerArg.FIRE_CONDITION, CardPropertyCondition.create(cardId));
+		eventTrigger.put(EventTriggerArg.FIRE_CONDITION, AnyMatchFilterCondition.create(EntityReference.EVENT_TARGET, filter));
 		getTriggers().add(eventTrigger.create());
-	}
-
-	public String getCardId() {
-		return cardId;
 	}
 }
