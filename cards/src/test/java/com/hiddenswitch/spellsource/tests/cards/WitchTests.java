@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -34,6 +35,25 @@ public class WitchTests extends TestBase {
 				return discoverActions.get(0);
 			});
 			playCard(context, player, "spell_nine_tail_fury", target);
+		});
+	}
+
+	@Test
+	public void testManagrounder() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_managrounder");
+			Card spell = receiveCard(context, player, "spell_fox_fire");
+			Card spell2 = receiveCard(context, player, "spell_fox_fire");
+			assertEquals(4, costOf(context, player, spell));
+			playCard(context, player, spell, opponent.getHero());
+			assertEquals(1, costOf(context, player, spell2));
+			context.endTurn();
+
+			spell = receiveCard(context, opponent, "spell_fox_fire");
+			spell2 = receiveCard(context, opponent, "spell_fox_fire");
+			assertEquals(4, costOf(context, opponent, spell));
+			playCard(context, opponent, spell, player.getHero());
+			assertEquals(1, costOf(context, opponent, spell2));
 		});
 	}
 }
