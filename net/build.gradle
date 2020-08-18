@@ -14,7 +14,8 @@ def debugSystemProperties = ["rootProject.projectDir"                  : rootPro
                              "spellsource.port"                        : System.getenv().getOrDefault("PORT", "8080"),
                              "spellsource.root.logger.level"           : "DEBUG",
                              "games.defaultNoActivityTimeout"          : "999999000",
-                             "vertx.logger-delegate-factory-class-name": "io.vertx.core.logging.SLF4JLogDelegateFactory"]
+                             "vertx.logger-delegate-factory-class-name": "io.vertx.core.logging.SLF4JLogDelegateFactory",
+                             "gradle"                                  : "true"]
 
 
 shadowJar {

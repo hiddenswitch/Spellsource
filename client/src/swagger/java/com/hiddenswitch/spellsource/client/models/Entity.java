@@ -64,6 +64,12 @@ public class Entity implements Serializable {
   @JsonProperty("owner")
   private Integer owner = -1;
 
+  @JsonProperty("host")
+  private Integer host = -1;
+
+  @JsonProperty("enchantmentType")
+  private String enchantmentType = null;
+
   @JsonProperty("heroClass")
   private String heroClass = null;
 
@@ -404,6 +410,42 @@ public class Entity implements Serializable {
 
   public void setOwner(Integer owner) {
     this.owner = owner;
+  }
+
+  public Entity host(Integer host) {
+    this.host = host;
+    return this;
+  }
+
+   /**
+   * An integer corresponding to the enchantment&#39;s host
+   * @return host
+  **/
+  @ApiModelProperty(value = "An integer corresponding to the enchantment's host")
+  public Integer getHost() {
+    return host;
+  }
+
+  public void setHost(Integer host) {
+    this.host = host;
+  }
+
+  public Entity enchantmentType(String enchantmentType) {
+    this.enchantmentType = enchantmentType;
+    return this;
+  }
+
+   /**
+   * The class hierarchy of this enchantment 
+   * @return enchantmentType
+  **/
+  @ApiModelProperty(value = "The class hierarchy of this enchantment ")
+  public String getEnchantmentType() {
+    return enchantmentType;
+  }
+
+  public void setEnchantmentType(String enchantmentType) {
+    this.enchantmentType = enchantmentType;
   }
 
   public Entity heroClass(String heroClass) {
@@ -1521,6 +1563,8 @@ public class Entity implements Serializable {
         Objects.equals(this.gold, entity.gold) &&
         Objects.equals(this.boardPosition, entity.boardPosition) &&
         Objects.equals(this.owner, entity.owner) &&
+        Objects.equals(this.host, entity.host) &&
+        Objects.equals(this.enchantmentType, entity.enchantmentType) &&
         Objects.equals(this.heroClass, entity.heroClass) &&
         Objects.equals(this.baseHp, entity.baseHp) &&
         Objects.equals(this.hp, entity.hp) &&
@@ -1585,7 +1629,7 @@ public class Entity implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, cardId, entityType, name, description, l, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, discarded, roasted, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, cardSets, isStartingTurn, charges, art, tooltips);
+    return Objects.hash(id, cardId, entityType, name, description, l, gold, boardPosition, owner, host, enchantmentType, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, discarded, roasted, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted, cardSets, isStartingTurn, charges, art, tooltips);
   }
 
 
@@ -1603,6 +1647,8 @@ public class Entity implements Serializable {
     sb.append("    gold: ").append(toIndentedString(gold)).append("\n");
     sb.append("    boardPosition: ").append(toIndentedString(boardPosition)).append("\n");
     sb.append("    owner: ").append(toIndentedString(owner)).append("\n");
+    sb.append("    host: ").append(toIndentedString(host)).append("\n");
+    sb.append("    enchantmentType: ").append(toIndentedString(enchantmentType)).append("\n");
     sb.append("    heroClass: ").append(toIndentedString(heroClass)).append("\n");
     sb.append("    baseHp: ").append(toIndentedString(baseHp)).append("\n");
     sb.append("    hp: ").append(toIndentedString(hp)).append("\n");
