@@ -20,7 +20,11 @@ header: true
  - Stalagmite Stomper no longer activates itself (nor does Exploblaze). ([1804](https://github.com/hiddenswitch/Spellsource/issues/1804))
  - The Bard card Amplify was fixed and now has updated effect "The next spell you cast this turn casts thrice." ([1802](https://github.com/hiddenswitch/Spellsource/issues/1802))
  - A number of Bard cards were uncollectiblified. ([1801](https://github.com/hiddenswitch/Spellsource/issues/1801))
-
+ - The tooltips will now show aftermaths that were given by other cards.
+ - Tooltips for decay, surge, and other mechanics were added.
+ - A work in progress battlefield background is now visible in the client.
+ - The small card's appearance has been improved for better usability.
+ - The champion sprites are now correctly shown on the battlefield.
 
 ## What's New
 
