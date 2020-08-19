@@ -5,17 +5,20 @@ path: "/whats-new"
 header: true
 ---
 
-### Upcoming Changes
+## What's New
+
+Thanks for playing this beta of Spellsource! Read more at [our website](https://www.playspellsource.com) and join our 
+[Discord](https://discord.gg/HmbESh2)!
+
+### Current Build 0.8.85-3.3.0 (August 18, 2020)
+
  - The Witch card Managrounder now functions properly. ([1817](https://github.com/hiddenswitch/Spellsource/issues/1817))
  - Parallel Protector now has a happy little dynamic description. ([1795](https://github.com/hiddenswitch/Spellsource/issues/1795))
  - The Ringmaster class has become the Festivalist! The new core set is made up of some previous cards, some reflavorings of previous cards, and some entirely new cards. The rest of the old Ringmaster cards have been uncollectiblified. ([1826](https://github.com/hiddenswitch/Spellsource/issues/1826))
  - Recurring Torrent is changed from:
    5 Cost 4/5 RARE ANY (Neutral) MINION "Opener: Receive a copy of the last spell you cast this turn."
    to 3 Cost 3/3 RARE ANY (Neutral) MINION "Opener: Receive a copy of a spell cast this game." ([1791](https://github.com/hiddenswitch/Spellsource/issues/1791))
- - Undead Trickster is changed from:
-   3 Cost 3/1 RARE ANY (Neutral) MINION "Opener: Shuffle 3 Tricks and 3 Treats into your deck."
-   to
-   3 Cost 3/3 RARE ANY (Neutral) MINION "Opener: Shuffle a Trick and a Treat into your deck." (Trick and Treats do 3 instead of 4 damage/healing now too). ([1791](https://github.com/hiddenswitch/Spellsource/issues/1791))
+ - Undead Trickster is changed from: 3 Cost 3/1 RARE ANY (Neutral) MINION "Opener: Shuffle 3 Tricks and 3 Treats into your deck." to 3 Cost 3/3 RARE ANY (Neutral) MINION "Opener: Shuffle a Trick and a Treat into your deck." (Trick and Treats do 3 instead of 4 damage/healing now too). ([1791](https://github.com/hiddenswitch/Spellsource/issues/1791))
  - Son of the Emperor's opener now actually works. ([1789](https://github.com/hiddenswitch/Spellsource/issues/1789))
  - Firegate Inquisitor no longer wastes damage overkilling ([1788](https://github.com/hiddenswitch/Spellsource/issues/1788))
  - Stalagmite Stomper no longer activates itself (nor does Exploblaze). ([1804](https://github.com/hiddenswitch/Spellsource/issues/1804))
@@ -27,12 +30,7 @@ header: true
  - The small card's appearance has been improved for better usability.
  - The champion sprites are now correctly shown on the battlefield.
 
-## What's New
-
-Thanks for playing this beta of Spellsource! Read more at [our website](http://www.playspellsource.com) and join our 
-[Discord](https://discord.gg/HmbESh2)! See older updates [here](history).
-
-### Current Build 0.8.84-3.2.8 (August 15, 2020)
+### 0.8.84-3.2.8 (August 15, 2020)
 
 <details>
 <summary>Champion art assignments and bug fixes.</summary>
