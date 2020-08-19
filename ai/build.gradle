@@ -18,6 +18,7 @@ repositories {
 dependencies {
     implementation project(':game')
     implementation project(':cards')
+    runtimeOnly 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'org.slf4j:slf4j-api:1.7.22'
     implementation 'com.google.guava:guava:26.0-jre'
     implementation 'org.apache.commons:commons-lang3:3.7'

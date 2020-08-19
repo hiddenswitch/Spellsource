@@ -80,7 +80,7 @@ dependencies {
 
     implementation group: 'javax.cache', name: 'cache-api', version: '1.1.1'
     implementation group: 'net.sf.py4j', name: 'py4j', version: '0.10.8.1'
-    implementation group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.0.0'
+    runtimeOnly 'ch.qos.logback:logback-classic:1.2.3'
 
     implementation project(':cards')
     implementation(project(':client')) {
