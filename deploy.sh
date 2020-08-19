@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.84
+SPELLSOURCE_VERSION=0.8.85
 
 usage="$(basename "$0") [-hvCsS] -- bash source for Spellsource
 
