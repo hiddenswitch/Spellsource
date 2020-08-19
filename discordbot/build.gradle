@@ -11,7 +11,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 dependencies {
     implementation 'org.slf4j:slf4j-api:1.7.22'
     implementation 'org.jetbrains:annotations:16.0.2'
-    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    runtimeOnly 'ch.qos.logback:logback-classic:1.2.3'
     implementation 'com.google.guava:guava:26.0-jre'
 
     testImplementation project(':testutils')

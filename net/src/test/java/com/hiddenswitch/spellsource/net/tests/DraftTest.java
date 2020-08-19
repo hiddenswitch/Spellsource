@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.net.tests;
 
-import com.amazonaws.util.Throwables;
+import com.google.common.base.Throwables;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.draft.DraftStatus;
