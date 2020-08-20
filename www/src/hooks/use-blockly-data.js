@@ -28,6 +28,10 @@ export default function useBlocklyData () {
               int
               text
               options
+              width
+              height
+              src
+              alt
               shadow {
                 type
                 fields {
