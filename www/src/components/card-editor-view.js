@@ -33,6 +33,7 @@ const CardEditorView = () => {
   // Run once after the workspace has been created
   useEffect(() => {
     const workspace = Blockly.getMainWorkspace()
+    workspace.options.disable = false
     const importCardCallback = () => {
       generateCard()
       workspace.getToolbox().clearSelection()

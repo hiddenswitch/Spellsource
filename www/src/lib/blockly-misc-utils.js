@@ -25,9 +25,12 @@ export default class BlocklyMiscUtils {
         if (block.type.endsWith('SHADOW')) {
           this.setMovable(false)
         }
-      }
+        if (!!block.comment && !this.isShadow()) {
+          this.setCommentText(block.comment)
+        }
+      },
+      json: block
     }
-    Blockly.Blocks[block.type].json = block
     JsonConversionUtils.addBlockToMap(block)
   }
 
@@ -472,7 +475,8 @@ export default class BlocklyMiscUtils {
               addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes_boolean')
             }
             addedBlock.getInput('attribute').connection.connect(bumpee.outputConnection)
-          } else if ((otherConnection.getCheck().includes('Spells') && bumpee.type.startsWith('Spell_'))
+          } else if ((otherConnection.getCheck().includes('Spells') && bumpee.type.startsWith('Spell_')
+            && !bumpee.type.endsWith('I'))
             || (otherConnection.getCheck().includes('Cards') && bumpee.type.startsWith('Card_'))
             || (otherConnection.getCheck().includes('Conditions') && bumpee.type.startsWith('Condition_'))
             || (otherConnection.getCheck().includes('Sources') && bumpee.type.startsWith('Source_'))
@@ -495,6 +499,51 @@ export default class BlocklyMiscUtils {
       }
 
       return false
+    }
+
+
+    const createIcon = Blockly.Icon.prototype.createIcon;
+    Blockly.Icon.prototype.createIcon = function() {
+      createIcon.call(this)
+      Blockly.bindEvent_(
+        this.iconGroup_, 'mouseenter', this, () => {
+          if (this.block_.isInFlyout) {
+            if (this.isVisible()) {
+              return
+            }
+            Blockly.Events.fire(
+              new Blockly.Events.Ui(this.block_, 'commentOpen', false, true));
+            this.model_.pinned = true;
+            this.createNonEditableBubble_();
+          }
+        });
+
+
+      Blockly.bindEvent_(
+        this.iconGroup_, 'mouseleave', this, () => {
+          if (this.block_.isInFlyout) {
+            if (!this.isVisible()) {
+              return
+            }
+            Blockly.Events.fire(
+              new Blockly.Events.Ui(this.block_, 'commentOpen', true, false));
+            this.model_.pinned = false;
+            this.disposeBubble_();
+          }
+        });
+    }
+
+    const placeNewBlock = Blockly.Flyout.prototype.placeNewBlock_
+    Blockly.Flyout.prototype.placeNewBlock_ = function (oldBlock) {
+      let block = placeNewBlock.call(this, oldBlock)
+      const removeComments = function(block) {
+        block.setCommentText(null)
+        for (let childBlock of block.childBlocks_) {
+          removeComments(childBlock)
+        }
+      }
+      removeComments(block)
+      return block
     }
   }
 

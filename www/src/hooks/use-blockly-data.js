@@ -52,6 +52,7 @@ export default function useBlocklyData () {
           type
           data
           hat
+          comment
         }
       }
     }
