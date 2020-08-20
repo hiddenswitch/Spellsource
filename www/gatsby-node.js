@@ -57,6 +57,10 @@ exports.createSchemaCustomization = ({ actions }) => {
     text: String
     options: [[String]]
     shadow: Shadow
+    width: Int
+    height: Int
+    alt: String
+    src: String
   }
   type Shadow {
     type: String

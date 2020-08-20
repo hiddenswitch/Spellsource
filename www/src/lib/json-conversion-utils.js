@@ -28,6 +28,9 @@ export default class JsonConversionUtils {
       let className = null
 
       for (let arg of list) {
+        if (!arg.name) {
+          continue
+        }
         this.allArgNames.add(arg.name)
         if (arg.name.endsWith('class')) {
           className = arg.value
