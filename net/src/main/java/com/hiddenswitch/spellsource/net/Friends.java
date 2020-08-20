@@ -2,9 +2,10 @@ package com.hiddenswitch.spellsource.net;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.net.impl.Mongo;
+import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.FriendRecord;
 import com.hiddenswitch.spellsource.net.impl.util.UserRecord;
-import com.hiddenswitch.spellsource.net.impl.Mongo;
 import io.vertx.core.Future;
 import io.vertx.core.streams.WriteStream;
 
@@ -27,7 +28,7 @@ public interface Friends {
 					for (FriendRecord friend : user.getFriends()) {
 						connection.write(new Envelope().added(new EnvelopeAdded().friend(
 								friend.toFriendDto()
-										.presence(Presence.connections(friend.getFriendId()).get() == 0L ? PresenceEnum.OFFLINE : PresenceEnum.ONLINE))));
+										.presence(Presence.presence(new UserId(friend.getFriendId()))))));
 					}
 					fut.handle(Future.succeededFuture());
 				} catch (RuntimeException any) {
@@ -91,13 +92,13 @@ public interface Friends {
 		// Update both users with the new friend records
 		WriteStream<Envelope> userConnection = Connection.writeStream(userId);
 		Friend clientFriendRecord = friendRecord.toFriendDto()
-				.presence(Presence.getPresence(friendRecord.getFriendId()));
+				.presence(Presence.presence(new UserId(friendRecord.getFriendId())));
 		userConnection.write(new Envelope().added(new EnvelopeAdded().friend(clientFriendRecord)));
 
 		WriteStream<Envelope> friendConnection = Connection.writeStream(friendId);
 		friendConnection.write(new Envelope().added(
 				new EnvelopeAdded().friend(friendOfFriendRecord.toFriendDto()
-						.presence(Presence.getPresence(friendOfFriendRecord.getFriendId())))));
+						.presence(Presence.presence(new UserId(friendOfFriendRecord.getFriendId()))))));
 
 		return new FriendPutResponse().friend(clientFriendRecord);
 	}

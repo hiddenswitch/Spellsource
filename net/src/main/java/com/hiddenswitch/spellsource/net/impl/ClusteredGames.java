@@ -29,7 +29,6 @@ import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.logic.GameStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.Duration;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
@@ -220,16 +219,8 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				}
 			}
 
-			// Set the player's presence to no longer be in a game
 			var userIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getUserId).map(UserId::toString).collect(toList());
-			for (var userId : userIds) {
-				var interrupted = Strand.interrupted();
-				Presence.updatePresence(userId);
-				if (interrupted) {
-					Strand.currentStrand().interrupt();
-				}
-			}
-
+			// Presence is automatically updated by a timer
 			try {
 				var botGame = gameContext.getPlayerConfigurations().stream().anyMatch(Configuration::isBot);
 				var deckIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getDeck).map(Deck::getDeckId).collect(toList());
