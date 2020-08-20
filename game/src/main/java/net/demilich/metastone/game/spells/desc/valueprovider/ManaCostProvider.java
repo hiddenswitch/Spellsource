@@ -25,7 +25,11 @@ public class ManaCostProvider extends ValueProvider {
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
 		EntityReference targetOverride = (EntityReference) getDesc().get(ValueProviderArg.TARGET);
 		if (targetOverride != null) {
-			target = context.resolveTarget(player, host, targetOverride).get(0);
+			var entities = context.resolveTarget(player, host, targetOverride);
+			if (entities.size() == 0) {
+				return 0;
+			}
+			target = entities.get(0);
 		}
 		Card targetCard = target.getSourceCard();
 		if (targetCard == null) {
