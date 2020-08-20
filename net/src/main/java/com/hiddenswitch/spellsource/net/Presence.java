@@ -46,6 +46,9 @@ public interface Presence {
 
 			connection.addCloseHandler(fiber(v -> {
 				vertx.cancelTimer(timer);
+				var presence = SuspendableMap.<UserId, JsonObject>getOrCreate("Presence");
+				presence.remove(userId);
+				notifyFriendsOfPresence(userId, PresenceEnum.OFFLINE);
 				v.complete();
 			}));
 
@@ -59,7 +62,11 @@ public interface Presence {
 
 	@Suspendable
 	static void notifyFriendsOfPresence(UserId userId) {
-		var presence = presence(userId);
+		notifyFriendsOfPresence(userId, presence(userId));
+	}
+
+	@Suspendable
+	static void notifyFriendsOfPresence(UserId userId, PresenceEnum presence) {
 		var findOptions = new FindOptions()
 				.setFields(json("_id", 1, "friends.friendId", 1));
 
