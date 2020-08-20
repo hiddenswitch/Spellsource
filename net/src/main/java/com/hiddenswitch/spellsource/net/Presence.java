@@ -1,17 +1,17 @@
 package com.hiddenswitch.spellsource.net;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.client.models.EnvelopeChanged;
 import com.hiddenswitch.spellsource.client.models.Friend;
 import com.hiddenswitch.spellsource.client.models.PresenceEnum;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableCounter;
+import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import io.vertx.core.Future;
+import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,35 +25,41 @@ import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
  */
 public interface Presence {
 	Logger LOGGER = LoggerFactory.getLogger(Presence.class);
+	int TIMEOUT_MILLIS = 10000;
 
 	static void handleConnections() {
 		// A node that is updating presences may not be the same node that has a user that needs to be notified
 		Connection.connected((connection, fut) -> {
-			connection.addCloseHandler(fiber(v -> {
-				var connections = connections(connection.userId());
-				if (connections.decrementAndGet() == 0L) {
-					notifyFriendsOfPresence(new UserId(connection.userId()), PresenceEnum.OFFLINE);
+			var userId = new UserId(connection.userId());
+			SuspendableAction1<Long> connectedPresence = ignored -> {
+				var presence = SuspendableMap.<UserId, JsonObject>getOrCreate("Presence");
+				var latestPresence = (Games.isInGame(userId) || Matchmaking.getUsersInQueues().containsKey(userId.toString())) ? PresenceEnum.IN_GAME : PresenceEnum.ONLINE;
+
+				var currentPresence = presence.put(userId, json("time", System.currentTimeMillis(), "presence", latestPresence.getValue()), TIMEOUT_MILLIS * 2);
+				if (currentPresence == null || PresenceEnum.fromValue(currentPresence.getString("presence")) != latestPresence) {
+					notifyFriendsOfPresence(userId);
 				}
+			};
+
+			var vertx = Vertx.currentContext().owner();
+			var timer = vertx.setPeriodic(TIMEOUT_MILLIS / 2, fiber(connectedPresence));
+
+			connection.addCloseHandler(fiber(v -> {
+				vertx.cancelTimer(timer);
 				v.complete();
 			}));
 
 			defer(v -> {
-				// Once the user is connected, set their status to online
-				var connections = connections(connection.userId());
-				var numConnections = connections.incrementAndGet();
-				if (numConnections == 1L) {
-					updatePresence(connection.userId());
-				}
-				if (numConnections > 20L) {
-					LOGGER.warn("handleConnections: User has {} connections", numConnections);
-				}
+				connectedPresence.call(timer);
+				notifyFriendsOfPresence(userId);
 			});
 			fut.handle(Future.succeededFuture());
 		});
 	}
 
 	@Suspendable
-	static void notifyFriendsOfPresence(UserId userId, PresenceEnum presence) {
+	static void notifyFriendsOfPresence(UserId userId) {
+		var presence = presence(userId);
 		var findOptions = new FindOptions()
 				.setFields(json("_id", 1, "friends.friendId", 1));
 
@@ -75,24 +81,18 @@ public interface Presence {
 		});
 	}
 
+
 	@Suspendable
-	static PresenceEnum getPresence(String userId) throws SuspendExecution {
-		var connections = connections(userId);
-		var isInGame = Games.isInGame(new UserId(userId));
-		if (connections.get() == 0L) {
+	static PresenceEnum presence(UserId userId) {
+		var presence = SuspendableMap.<UserId, JsonObject>getOrCreate("Presence");
+		var res = presence.get(userId);
+		if (res == null) {
 			return PresenceEnum.OFFLINE;
-		} else {
-			return isInGame ? PresenceEnum.IN_GAME : PresenceEnum.ONLINE;
 		}
-	}
+		if (System.currentTimeMillis() - res.getLong("time") > TIMEOUT_MILLIS) {
+			return PresenceEnum.OFFLINE;
+		}
 
-	static void updatePresence(String userId) throws SuspendExecution {
-		notifyFriendsOfPresence(new UserId(userId), getPresence(userId));
-	}
-
-	@NotNull
-	@Suspendable
-	static SuspendableCounter connections(String userId) {
-		return SuspendableCounter.getOrCreate("Presence.connections." + userId);
+		return PresenceEnum.fromValue(res.getString("presence"));
 	}
 }

@@ -816,7 +816,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 			var friends = record.getFriends().stream().map(FriendRecord::toFriendDto).collect(toList());
 
 			for (var friend : friends) {
-				friend.presence(Presence.getPresence(friend.getFriendId()));
+				friend.presence(Presence.presence(new UserId(friend.getFriendId())));
 			}
 
 			return new Account()
