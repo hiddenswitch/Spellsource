@@ -1,12 +1,12 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Entity;
 import com.hiddenswitch.spellsource.client.models.EntityType;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.AfterPhysicalAttackTrigger;
 import net.demilich.metastone.game.spells.trigger.DamageCausedTrigger;
@@ -39,7 +39,7 @@ public final class SplashDamageSpell extends DamageSpell {
 
 	@Override
 	protected EnumSet<DamageTypeEnum> getDamageType(GameContext context, Player player, Entity source) {
-		if (Entity.hasEntityType(source.getEntityType(), EntityType.ACTOR)) {
+		if (GameLogic.isEntityType(source.getEntityType(), EntityType.ACTOR)) {
 			return EnumSet.of(DamageTypeEnum.PHYSICAL, DamageTypeEnum.SPLASH);
 		}
 		var damageType = super.getDamageType(context, player, source);

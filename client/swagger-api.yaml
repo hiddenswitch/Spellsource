@@ -1019,6 +1019,12 @@ definitions:
         $ref: '#/definitions/Entity'
       target:
         $ref: '#/definitions/Entity'
+      targets:
+        description: |
+          An array of targets
+        type: 'array'
+        items:
+          $ref: '#/definitions/Entity'
       value:
         type: 'integer'
         format: 'int32'
@@ -1074,6 +1080,7 @@ definitions:
           - 'MAX_HP_INCREASED'
           - 'MAX_MANA'
           - 'MANA_MODIFIED'
+          - 'MISSILE_FIRED'
           - 'OVERLOAD'
           - 'PERFORMED_GAME_ACTION'
           - 'PHYSICAL_ATTACK'
@@ -1809,6 +1816,14 @@ definitions:
         $ref: '#/definitions/Sprite'
       spriteShadow:
         $ref: '#/definitions/Sprite'
+      missile:
+        $ref: '#/definitions/Prefab'
+      onHit:
+        $ref: '#/definitions/Prefab'
+      onCast:
+        $ref: '#/definitions/Prefab'
+      loop:
+        $ref: '#/definitions/Prefab'
       primary:
         $ref: '#/definitions/Color'
       secondary:
@@ -1838,6 +1853,15 @@ definitions:
         type: 'string'
         description: |
           The text that should appear on the tooltip.
+  Prefab:
+    type: 'object'
+    description: |
+      Specifies a prefab (game object)
+    properties:
+      named:
+        type: 'string'
+        description: |
+          The name of the prefab.
   Sprite:
     type: 'object'
     description: |

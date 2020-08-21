@@ -79,22 +79,6 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		attributes = new AttributeMap();
 	}
 
-	public static boolean hasEntityType(EntityType thisEntity, EntityType other) {
-		if (thisEntity == EntityType.ANY || other == EntityType.ANY) {
-			return true;
-		}
-
-		if (thisEntity == EntityType.ACTOR) {
-			return other == EntityType.HERO || other == EntityType.MINION || other == EntityType.WEAPON;
-		}
-
-		if (other == EntityType.ACTOR) {
-			return thisEntity == EntityType.HERO || thisEntity == EntityType.MINION || thisEntity == EntityType.WEAPON;
-		}
-
-		return Objects.equals(thisEntity, other);
-	}
-
 	/**
 	 * Clone an entity, including its ID and location.
 	 * <p>

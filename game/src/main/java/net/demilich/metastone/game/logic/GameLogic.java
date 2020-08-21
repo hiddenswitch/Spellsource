@@ -2,7 +2,7 @@ package net.demilich.metastone.game.logic;
 
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
-import com.google.common.collect.*;
+import com.google.common.collect.Multiset;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum;
 import io.opentracing.util.GlobalTracer;
@@ -13,18 +13,18 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.decks.GameDeck;
-import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
+import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.environment.Environment;
-import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.PhysicalAttackEvent;
+import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.aura.*;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
@@ -41,7 +41,6 @@ import net.demilich.metastone.game.spells.desc.valueprovider.OriginalValueProvid
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
 import net.demilich.metastone.game.spells.trigger.*;
-import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.*;
@@ -292,6 +291,52 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Returns {@code true} if {@code thisEntity} is a subset of {@code other} or {@code other} is a subset of {@code
+	 * thisEntity}.
+	 *
+	 * @param thisEntity
+	 * @param other
+	 * @return
+	 */
+	public static boolean isEntityType(EntityType thisEntity, EntityType other) {
+		if (thisEntity == EntityType.ANY || other == EntityType.ANY) {
+			return true;
+		}
+
+		if (thisEntity == EntityType.ACTOR) {
+			return other == EntityType.HERO || other == EntityType.MINION || other == EntityType.WEAPON;
+		}
+
+		if (other == EntityType.ACTOR) {
+			return thisEntity == EntityType.HERO || thisEntity == EntityType.MINION || thisEntity == EntityType.WEAPON;
+		}
+
+		return Objects.equals(thisEntity, other);
+	}
+
+	/**
+	 * Fires a missile event if the criteria are met.
+	 *
+	 * @param context
+	 * @param player
+	 * @param source
+	 * @param targets
+	 * @param damageType
+	 */
+	@Suspendable
+	public static void fireMissileEvent(GameContext context, Player player, Entity source, List<Entity> targets, EnumSet<DamageTypeEnum> damageType) {
+		if (damageType.size() == 1
+				&& damageType.contains(DamageTypeEnum.MAGICAL)
+				&& source != null
+				&& targets != null
+				&& !targets.isEmpty()
+				&& (isEntityType(source.getEntityType(), EntityType.ACTOR)
+				|| isEntityType(source.getEntityType(), EntityType.CARD))) {
+			context.getLogic().fireGameEvent(new MissileFired(context, player.getId(), source, targets));
+		}
 	}
 
 	/**
@@ -1605,7 +1650,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 							var secondaries = context.resolveTarget(player, host, aura.getSecondaryTarget());
 							secondaries.remove(source);
 							for (var secondary : secondaries) {
-								if (!Entity.hasEntityType(secondary.getEntityType(), EntityType.ACTOR)) {
+								if (!isEntityType(secondary.getEntityType(), EntityType.ACTOR)) {
 									continue;
 								}
 								heal(sourceOwner, (Actor) secondary, damageDealt, source);
@@ -4665,13 +4710,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param entity
 	 */
 	protected void startTurnForEntity(Player player, Entity entity) {
-		if (Entity.hasEntityType(entity.getEntityType(), EntityType.ACTOR)) {
+		if (isEntityType(entity.getEntityType(), EntityType.ACTOR)) {
 			((Actor) entity).refreshAttacksPerRound();
 			stealthForTurns(player, entity);
 			entity.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 		}
 
-		if (Entity.hasEntityType(entity.getEntityType(), EntityType.MINION)) {
+		if (isEntityType(entity.getEntityType(), EntityType.MINION)) {
 			entity.getAttributes().remove(Attribute.SUMMONING_SICKNESS);
 		}
 

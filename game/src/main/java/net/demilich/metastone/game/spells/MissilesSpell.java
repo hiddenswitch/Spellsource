@@ -1,22 +1,23 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
-import com.hiddenswitch.spellsource.client.models.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -74,6 +75,7 @@ public class MissilesSpell extends DamageSpell {
 				return;
 			}
 			Actor randomTarget = getRandomTarget(context, validTargets);
+			GameLogic.fireMissileEvent(context, player, source, Collections.singletonList(randomTarget), getDamageType(context, player, source));
 			context.getLogic().damage(player, randomTarget, damage, source, true);
 
 			if (subSpell != null) {

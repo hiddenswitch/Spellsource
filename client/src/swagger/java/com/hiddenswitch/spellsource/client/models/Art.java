@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.Color;
 import com.hiddenswitch.spellsource.client.models.Font;
+import com.hiddenswitch.spellsource.client.models.Prefab;
 import com.hiddenswitch.spellsource.client.models.Sprite;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -38,6 +39,18 @@ public class Art implements Serializable {
 
   @JsonProperty("spriteShadow")
   private Sprite spriteShadow = null;
+
+  @JsonProperty("missile")
+  private Prefab missile = null;
+
+  @JsonProperty("onHit")
+  private Prefab onHit = null;
+
+  @JsonProperty("onCast")
+  private Prefab onCast = null;
+
+  @JsonProperty("loop")
+  private Prefab loop = null;
 
   @JsonProperty("primary")
   private Color primary = null;
@@ -88,6 +101,78 @@ public class Art implements Serializable {
 
   public void setSpriteShadow(Sprite spriteShadow) {
     this.spriteShadow = spriteShadow;
+  }
+
+  public Art missile(Prefab missile) {
+    this.missile = missile;
+    return this;
+  }
+
+   /**
+   * Get missile
+   * @return missile
+  **/
+  @ApiModelProperty(value = "")
+  public Prefab getMissile() {
+    return missile;
+  }
+
+  public void setMissile(Prefab missile) {
+    this.missile = missile;
+  }
+
+  public Art onHit(Prefab onHit) {
+    this.onHit = onHit;
+    return this;
+  }
+
+   /**
+   * Get onHit
+   * @return onHit
+  **/
+  @ApiModelProperty(value = "")
+  public Prefab getOnHit() {
+    return onHit;
+  }
+
+  public void setOnHit(Prefab onHit) {
+    this.onHit = onHit;
+  }
+
+  public Art onCast(Prefab onCast) {
+    this.onCast = onCast;
+    return this;
+  }
+
+   /**
+   * Get onCast
+   * @return onCast
+  **/
+  @ApiModelProperty(value = "")
+  public Prefab getOnCast() {
+    return onCast;
+  }
+
+  public void setOnCast(Prefab onCast) {
+    this.onCast = onCast;
+  }
+
+  public Art loop(Prefab loop) {
+    this.loop = loop;
+    return this;
+  }
+
+   /**
+   * Get loop
+   * @return loop
+  **/
+  @ApiModelProperty(value = "")
+  public Prefab getLoop() {
+    return loop;
+  }
+
+  public void setLoop(Prefab loop) {
+    this.loop = loop;
   }
 
   public Art primary(Color primary) {
@@ -192,6 +277,10 @@ public class Art implements Serializable {
     Art art = (Art) o;
     return Objects.equals(this.sprite, art.sprite) &&
         Objects.equals(this.spriteShadow, art.spriteShadow) &&
+        Objects.equals(this.missile, art.missile) &&
+        Objects.equals(this.onHit, art.onHit) &&
+        Objects.equals(this.onCast, art.onCast) &&
+        Objects.equals(this.loop, art.loop) &&
         Objects.equals(this.primary, art.primary) &&
         Objects.equals(this.secondary, art.secondary) &&
         Objects.equals(this.highlight, art.highlight) &&
@@ -201,7 +290,7 @@ public class Art implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(sprite, spriteShadow, primary, secondary, highlight, shadow, body);
+    return Objects.hash(sprite, spriteShadow, missile, onHit, onCast, loop, primary, secondary, highlight, shadow, body);
   }
 
 
@@ -212,6 +301,10 @@ public class Art implements Serializable {
     
     sb.append("    sprite: ").append(toIndentedString(sprite)).append("\n");
     sb.append("    spriteShadow: ").append(toIndentedString(spriteShadow)).append("\n");
+    sb.append("    missile: ").append(toIndentedString(missile)).append("\n");
+    sb.append("    onHit: ").append(toIndentedString(onHit)).append("\n");
+    sb.append("    onCast: ").append(toIndentedString(onCast)).append("\n");
+    sb.append("    loop: ").append(toIndentedString(loop)).append("\n");
     sb.append("    primary: ").append(toIndentedString(primary)).append("\n");
     sb.append("    secondary: ").append(toIndentedString(secondary)).append("\n");
     sb.append("    highlight: ").append(toIndentedString(highlight)).append("\n");

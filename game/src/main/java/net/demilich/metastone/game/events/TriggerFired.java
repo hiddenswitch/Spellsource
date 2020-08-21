@@ -13,18 +13,18 @@ import java.util.List;
  */
 public final class TriggerFired implements Notification {
 
-	private final Enchantment enchantment;
+	private final WeakReference<Enchantment> enchantment;
 	private final EntityReference eventTarget;
 	private final WeakReference<Entity> source;
 
 	public TriggerFired(GameContext context, Enchantment enchantment) {
-		this.enchantment = enchantment;
+		this.enchantment = new WeakReference<>(enchantment);
 		this.source = new WeakReference<>(context.resolveSingleTarget(enchantment.getHostReference()));
 		this.eventTarget = context.getEventTargetStack().peek();
 	}
 
 	public Enchantment getEnchantment() {
-		return enchantment;
+		return enchantment.get();
 	}
 
 	@Override
@@ -68,3 +68,4 @@ public final class TriggerFired implements Notification {
 		return true;
 	}
 }
+

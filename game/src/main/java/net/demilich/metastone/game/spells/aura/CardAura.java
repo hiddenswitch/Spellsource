@@ -6,6 +6,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.Entity;
 import com.hiddenswitch.spellsource.client.models.EntityType;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.SetCardSpell;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -48,7 +49,7 @@ public class CardAura extends SpellAura {
 			return false;
 		}
 
-		if (!Entity.hasEntityType(target.getEntityType(), EntityType.CARD)) {
+		if (!GameLogic.isEntityType(target.getEntityType(), EntityType.CARD)) {
 			return false;
 		}
 

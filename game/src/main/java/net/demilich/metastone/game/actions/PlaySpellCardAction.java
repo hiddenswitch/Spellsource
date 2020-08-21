@@ -41,7 +41,7 @@ public class PlaySpellCardAction extends PlayCardAction {
 			context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), true, this);
 		}
 		if (context.getLogic().spellsCastTwice(context.getPlayer(playerId), (Card) source, target)
-		|| context.getLogic().spellsCastThrice(context.getPlayer(playerId), (Card) source, target)) {
+				|| context.getLogic().spellsCastThrice(context.getPlayer(playerId), (Card) source, target)) {
 			context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), true, this);
 		}
 		context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
