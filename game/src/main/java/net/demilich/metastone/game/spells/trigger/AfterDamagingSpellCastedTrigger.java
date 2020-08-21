@@ -2,12 +2,15 @@ package net.demilich.metastone.game.spells.trigger;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.entities.HasCard;
+import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
+/**
+ * Fires when a spell that deals any kind of damage is cast.
+ */
 public final class AfterDamagingSpellCastedTrigger extends AfterSpellCastedTrigger {
 
 	public AfterDamagingSpellCastedTrigger(EventTriggerDesc desc) {

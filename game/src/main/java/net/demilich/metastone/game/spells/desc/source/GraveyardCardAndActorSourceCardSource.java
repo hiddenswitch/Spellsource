@@ -8,6 +8,7 @@ import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import com.hiddenswitch.spellsource.client.models.EntityType;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,7 +50,7 @@ public class GraveyardCardAndActorSourceCardSource extends CardSource {
 				.filter(Entity::isInPlay)
 				.map(Entity::getSourceCard)
 				.collect(Collectors.toUnmodifiableSet());
-		Set<Card> removedPeacefully = context.getEntities().filter(e -> Entity.hasEntityType(e.getEntityType(), EntityType.ACTOR)
+		Set<Card> removedPeacefully = context.getEntities().filter(e -> GameLogic.isEntityType(e.getEntityType(), EntityType.ACTOR)
 				&& e.isRemovedPeacefully()).map(Entity::getSourceCard).collect(Collectors.toUnmodifiableSet());
 		return player.getGraveyard().stream()
 				.map(entity -> {

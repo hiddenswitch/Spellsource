@@ -1,19 +1,21 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import com.hiddenswitch.spellsource.client.models.DamageTypeEnum;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -126,6 +128,14 @@ public class DamageSpell extends Spell {
 
 	public static SpellDesc create() {
 		return new SpellDesc(DamageSpell.class);
+	}
+
+	@Override
+	@Suspendable
+	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
+		// For now, ALL damage spell effects will emit a missile
+		GameLogic.fireMissileEvent(context, player, source, targets, getDamageType(context, player, source));
+		super.cast(context, player, desc, source, targets);
 	}
 
 	@Override

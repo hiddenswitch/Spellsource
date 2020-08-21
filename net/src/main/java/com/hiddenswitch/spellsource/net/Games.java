@@ -218,6 +218,7 @@ public interface Games extends Verticle {
 		var workingContext = event.getGameContext().clone();
 		var source = event.getSource(workingContext);
 		var target = event.getTarget();
+		var targets = event.getTargets(workingContext, playerId);
 		var value = event instanceof HasValue ? ((HasValue) event).getValue() : null;
 		var card = event instanceof HasCard ? ((HasCard) event).getSourceCard() : null;
 		var description = event.isPowerHistory() ? event.getDescription(workingContext, playerId) : null;
@@ -255,9 +256,26 @@ public interface Games extends Verticle {
 			clientEvent.target(getEntity(workingContext, target, playerId));
 		}
 
+		// Support plural targets
+		if (targets != null) {
+			if (targets.size()==1) {
+				clientEvent.target(getEntity(workingContext, targets.get(0), playerId));
+			} else {
+				clientEvent.targets(targets.stream().map(e -> getEntity(workingContext, e, playerId)).collect(toList()));
+			}
+		}
+
+		var isSourcePlayerLocal = event.getSourcePlayerId() == playerId;
+		var isTargetPlayerLocal = event.getTargetPlayerId() == playerId;
+
+		// Gracefully handle events that do not specify a source player ID
+		if (event.getSourcePlayerId() == -1) {
+			isSourcePlayerLocal = workingContext.getActivePlayerId() == playerId;
+		}
+
 		clientEvent
-				.isTargetPlayerLocal(event.getTargetPlayerId() == playerId)
-				.isSourcePlayerLocal(event.getSourcePlayerId() == playerId);
+				.isTargetPlayerLocal(isTargetPlayerLocal)
+				.isSourcePlayerLocal(isSourcePlayerLocal);
 
 		// Only a handful of special cases need to be dealt with
 		if (event instanceof DamageEvent) {

@@ -12,9 +12,6 @@ import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.Games;
 import com.hiddenswitch.spellsource.net.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.net.impl.util.Scheduler;
-import io.opentracing.Scope;
-import io.opentracing.Span;
-import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Closeable;
@@ -88,7 +85,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		this.server = server;
 		this.turnTimer = scheduler.setInterval(1000L, this::secondIntervalElapsed);
 		if (noActivityTimeout > 0L) {
-			ActivityMonitor activityMonitor = new ActivityMonitor(scheduler, noActivityTimeout, this::noActivity, null);
+			var activityMonitor = new ActivityMonitor(scheduler, noActivityTimeout, this::noActivity, null);
 			activityMonitor.activity();
 			getActivityMonitors().add(activityMonitor);
 		} else if (noActivityTimeout < 0L) {
@@ -99,7 +96,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	private void secondIntervalElapsed(Long timer) {
-		Long millisRemaining = server.getMillisRemaining();
+		var millisRemaining = server.getMillisRemaining();
 		if (millisRemaining == null) {
 			return;
 		}
@@ -141,11 +138,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			while ((request = requests.poll()) != null) {
 				if (request.getType() == GameplayRequestType.ACTION) {
 					@SuppressWarnings("unchecked")
-					Handler<GameAction> callback = (Handler<GameAction>) request.getCallback();
+					var callback = (Handler<GameAction>) request.getCallback();
 					processActionForElapsedTurn(request.getActions(), callback::handle);
 				} else if (request.getType() == GameplayRequestType.MULLIGAN) {
 					@SuppressWarnings("unchecked")
-					Handler<List<Card>> handler = (Handler<List<Card>>) request.getCallback();
+					var handler = (Handler<List<Card>>) request.getCallback();
 					handler.handle(new ArrayList<>());
 				}
 			}
@@ -158,7 +155,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private GameplayRequest getMulliganRequest() {
 		requestsLock.lock();
 		try {
-			for (GameplayRequest request : getRequests()) {
+			for (var request : getRequests()) {
 				if (request.getType() == GameplayRequestType.MULLIGAN) {
 					return request;
 				}
@@ -173,7 +170,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private GameplayRequest getRequest(String messageId) {
 		requestsLock.lock();
 		try {
-			for (GameplayRequest request : getRequests()) {
+			for (var request : getRequests()) {
 				if (request.getCallbackId().equals(messageId)) {
 					return request;
 				}
@@ -192,15 +189,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 */
 	@Suspendable
 	protected void handleWebSocketMessage(ClientToServerMessage message) throws SuspendExecution {
-		Tracer tracer = GlobalTracer.get();
-		Span span = tracer.buildSpan("UnityClientBehaviour/handleWebSocketMessage")
+		var tracer = GlobalTracer.get();
+		var span = tracer.buildSpan("UnityClientBehaviour/handleWebSocketMessage")
 				.withTag("message.messageType", message.getMessageType().getValue())
 				.withTag("playerId", getPlayerId())
 				.withTag("userId", getUserId())
 				.withTag("gameId", server.getGameId())
 				.asChildOf(server.getSpanContext())
 				.start();
-		Scope scope = tracer.activateSpan(span);
+		var scope = tracer.activateSpan(span);
 		try {
 			if (inboundMessagesClosed) {
 				Tracing.error(new IllegalStateException("inbound messages closed"), span, false);
@@ -209,7 +206,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 			switch (message.getMessageType()) {
 				case PINGPONG:
-					for (ActivityMonitor activityMonitor : getActivityMonitors()) {
+					for (var activityMonitor : getActivityMonitors()) {
 						activityMonitor.activity();
 					}
 					// Server is responsible for replying
@@ -218,7 +215,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				case FIRST_MESSAGE:
 					lastStateSent = null;
 					// The first message indicates the player has connected or reconnected.
-					for (ActivityMonitor activityMonitor : getActivityMonitors()) {
+					for (var activityMonitor : getActivityMonitors()) {
 						activityMonitor.activity();
 					}
 
@@ -235,14 +232,14 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					break;
 				case UPDATE_ACTION:
 					// Indicates the player has made a choice about which action to take.
-					for (ActivityMonitor activityMonitor : getActivityMonitors()) {
+					for (var activityMonitor : getActivityMonitors()) {
 						activityMonitor.activity();
 					}
-					final String messageId = message.getRepliesTo();
+					final var messageId = message.getRepliesTo();
 					onActionReceived(messageId, message.getActionIndex());
 					break;
 				case UPDATE_MULLIGAN:
-					for (ActivityMonitor activityMonitor : getActivityMonitors()) {
+					for (var activityMonitor : getActivityMonitors()) {
 						activityMonitor.activity();
 					}
 					onMulliganReceived(message.getDiscardedCardIndices());
@@ -251,7 +248,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					server.onEmote(this, message.getEmote().getEntityId(), message.getEmote().getMessage());
 					break;
 				case TOUCH:
-					for (ActivityMonitor activityMonitor : getActivityMonitors()) {
+					for (var activityMonitor : getActivityMonitors()) {
 						activityMonitor.activity();
 					}
 					if (null != message.getEntityTouch()) {
@@ -277,7 +274,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	protected void retryRequests() {
 		requestsLock.lock();
 		try {
-			for (GameplayRequest request : getRequests()) {
+			for (var request : getRequests()) {
 				switch (request.getType()) {
 					case ACTION:
 						onRequestAction(request.getCallbackId(), lastStateSent, request.getActions());
@@ -307,7 +304,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	@Suspendable
 	public void mulliganAsync(GameContext context, Player player, List<Card> cards, Handler<List<Card>> next) {
-		String id = Integer.toString(callbackIdCounter.getAndIncrement());
+		var id = Integer.toString(callbackIdCounter.getAndIncrement());
 		requestsLock.lock();
 		try {
 			getRequests().add(new GameplayRequest()
@@ -333,7 +330,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	public void onMulliganReceived(List<Integer> discardedCardIndices) {
 		requestsLock.lock();
 		try {
-			GameplayRequest request = getMulliganRequest();
+			var request = getMulliganRequest();
 			if (request == null) {
 				// The game may have ended, a mulligan is being received twice, or the game was conceded.
 				return;
@@ -344,7 +341,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				// the mulligan is being received twice
 				discardedCardIndices = Collections.emptyList();
 			}
-			List<Card> discardedCards = discardedCardIndices
+			var discardedCards = discardedCardIndices
 					.stream()
 					.flatMap(i -> {
 						if (request.getStarterCards() == null || request.getStarterCards().size() <= i) {
@@ -405,8 +402,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	public void requestActionAsync(GameContext context, Player player, List<GameAction> actions, Handler<GameAction> callback) {
 		requestsLock.lock();
 		try {
-			String id = Integer.toString(callbackIdCounter.getAndIncrement());
-			GameplayRequest request = new GameplayRequest()
+			var id = Integer.toString(callbackIdCounter.getAndIncrement());
+			var request = new GameplayRequest()
 					.setCallbackId(id)
 					.setType(GameplayRequestType.ACTION)
 					.setActions(actions)
@@ -421,7 +418,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				if (!getRequests().isEmpty()) {
 					throw new RuntimeException("requesting action outside resume() loop");
 				}
-				GameState state = context.getGameStateCopy();
+				var state = context.getGameStateCopy();
 				getRequests().add(request);
 				onRequestAction(id, state, actions);
 			}
@@ -443,7 +440,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private void processActionForElapsedTurn(List<GameAction> actions, SuspendableAction1<GameAction> callback) {
 		// If the request contains an end turn action, execute it. Otherwise, choose an action
 		// at random.
-		final GameAction action = actions.stream()
+		final var action = actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.END_TURN)
 				.findFirst().orElse(getRandom(actions));
 
@@ -482,13 +479,13 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		// The action may have been removed due to the timer or because the game ended, so it's okay if it doesn't exist.
 		requestsLock.lock();
 		try {
-			GameplayRequest request = getRequest(messageId);
+			var request = getRequest(messageId);
 			if (request == null) {
 				return;
 			}
 
 			getRequests().remove(request);
-			GameAction action = request.getActions().get(actionIndex);
+			var action = request.getActions().get(actionIndex);
 
 			@SuppressWarnings("unchecked")
 			Handler<GameAction> callback = request.getCallback();
@@ -509,7 +506,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	@Suspendable
 	public void onGameOver(GameContext context, int playerId, int winningPlayerId) {
-		for (ActivityMonitor activityMonitor : getActivityMonitors()) {
+		for (var activityMonitor : getActivityMonitors()) {
 			activityMonitor.cancel();
 		}
 		sendGameOver(context.getGameStateCopy(), context.getWinner());
@@ -547,15 +544,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 		// Quickly send touch notifications
 		if (TouchingNotification.class.isAssignableFrom(event.getClass())) {
-			TouchingNotification touchingNotification = (TouchingNotification) event;
+			var touchingNotification = (TouchingNotification) event;
 			// Only send touch notifications to the opponent
 			if (touchingNotification.getPlayerId() == playerId) {
 				return;
 			}
 
 			// Build a touch event
-			final int id = touchingNotification.getEntityReference().getId();
-			final ServerToClientMessage message = new ServerToClientMessage()
+			final var id = touchingNotification.getEntityReference().getId();
+			final var message = new ServerToClientMessage()
 					.messageType(MessageType.TOUCH)
 					// Pack touch data into a game event object
 					.event(new GameEvent()
@@ -572,9 +569,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			return;
 		}
 
-		final GameState state = gameState;
-		GameContext workingContext = GameContext.fromState(state);
-		ServerToClientMessage message = new ServerToClientMessage()
+		final var state = gameState;
+		var workingContext = GameContext.fromState(state);
+		var message = new ServerToClientMessage()
 				.messageType(MessageType.ON_GAME_EVENT)
 				.changes(getChangeSet(state))
 				.gameState(getClientGameState(playerId, state));
@@ -582,12 +579,12 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		if (event instanceof net.demilich.metastone.game.events.GameEvent) {
 			message.event(Games.getClientEvent((net.demilich.metastone.game.events.GameEvent) event, playerId));
 		} else if (event instanceof TriggerFired) {
-			TriggerFired triggerEvent = (TriggerFired) event;
-			GameEvent clientTriggerEvent = new GameEvent()
+			var triggerEvent = (TriggerFired) event;
+			var clientTriggerEvent = new GameEvent()
 					.eventType(GameEvent.EventTypeEnum.TRIGGER_FIRED)
 					.triggerFired(new GameEventTriggerFired()
 							.triggerSourceId(triggerEvent.getEnchantment().getHostReference().getId()));
-			net.demilich.metastone.game.entities.Entity source = triggerEvent.getSource();
+			var source = triggerEvent.getSource();
 			var hasSource = source != null && source.getSourceCard() != null;
 			// Send the source entity if there is one. Always send it if the source is owned by the receiving player or if
 			// the source is in play.
@@ -599,11 +596,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			message.event(clientTriggerEvent);
 		} else if (event instanceof GameAction) {
 			var action = (GameAction) event;
-			final net.demilich.metastone.game.entities.Entity sourceEntity = event.getSource(workingContext);
-			Entity source = Games.getEntity(workingContext, sourceEntity, playerId);
+			final var sourceEntity = event.getSource(workingContext);
+			var source = Games.getEntity(workingContext, sourceEntity, playerId);
 
 			if (sourceEntity.getEntityType() == EntityType.CARD) {
-				Card card = (Card) sourceEntity;
+				var card = (Card) sourceEntity;
 				if (card.getCardType() == CardType.SPELL
 						&& card.isSecret()
 						&& card.getOwner() != playerId) {
@@ -611,9 +608,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				}
 			}
 
-			List<Entity> targets = event.getTargets(workingContext, sourceEntity.getOwner())
+			var targets = event.getTargets(workingContext, sourceEntity.getOwner())
 					.stream().map(e -> Games.getEntity(workingContext, e, playerId)).collect(Collectors.toList());
-			final Entity target = targets.size() > 0 ? targets.get(0) : null;
+			var target = targets.size() > 0 ? targets.get(0) : null;
 			message.event(new GameEvent()
 					.description(event.getDescription(workingContext,playerId))
 					.isSourcePlayerLocal(source == null ? workingContext.getActivePlayerId() == playerId : source.getOwner() == playerId)
@@ -628,7 +625,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 
 		// Set the description on this event.
-		final GameEvent toClient = message.getEvent()
+		final var toClient = message.getEvent()
 				.isPowerHistory(event.isPowerHistory());
 
 		if (event.isPowerHistory()) {
@@ -657,7 +654,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			return;
 		}
 
-		com.hiddenswitch.spellsource.client.models.GameState gameState = getClientGameState(playerId, state);
+		var gameState = getClientGameState(playerId, state);
 		gameOver = new GameOver();
 		if (winner == null) {
 			gameOver.localPlayerWon(false)
@@ -687,7 +684,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	@Suspendable
 	public void onUpdate(GameState state) {
-		final com.hiddenswitch.spellsource.client.models.GameState gameState = getClientGameState(playerId, state);
+		final var gameState = getClientGameState(playerId, state);
 		if (needsPowerHistory) {
 			gameState.powerHistory(new ArrayList<>(powerHistory));
 			needsPowerHistory = false;
@@ -699,7 +696,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	public static com.hiddenswitch.spellsource.client.models.GameState getClientGameState(int playerId, GameState state) {
-		GameContext simulatedContext = new GameContext();
+		var simulatedContext = new GameContext();
 		simulatedContext.setGameState(state);
 
 		// Compute the local player
@@ -724,7 +721,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	public void onRequestAction(String id, GameState state, List<GameAction> availableActions) {
 		flush();
 		// Set the ids on the available actions
-		for (int i = 0; i < availableActions.size(); i++) {
+		for (var i = 0; i < availableActions.size(); i++) {
 			availableActions.get(i).setId(i);
 		}
 
@@ -751,7 +748,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Suspendable
 	public void onMulligan(String id, GameState state, List<Card> cards, int playerId) {
 		flush();
-		final GameContext simulatedContext = new GameContext();
+		final var simulatedContext = new GameContext();
 		simulatedContext.setGameState(state);
 		sendMessage(new ServerToClientMessage()
 				.id(id)
@@ -802,7 +799,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	private EntityChangeSet getChangeSet(GameState current) {
-		EntityChangeSet changes = Games.computeChangeSet(current);
+		var changes = Games.computeChangeSet(current);
 		lastStateSent = current;
 		return changes;
 	}
@@ -817,7 +814,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	public void close(Handler<AsyncResult<Void>> completionHandler) {
 		closeInboundMessages();
 		scheduler.cancelTimer(turnTimer);
-		for (ActivityMonitor activityMonitor : getActivityMonitors()) {
+		for (var activityMonitor : getActivityMonitors()) {
 			activityMonitor.cancel();
 		}
 		getActivityMonitors().clear();
