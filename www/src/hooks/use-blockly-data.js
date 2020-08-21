@@ -8,6 +8,7 @@ export default function useBlocklyData () {
         BlockTypePrefix
         CategoryName
         ColorHex
+        Subcategories
       }
     }
     allBlock {
@@ -53,6 +54,7 @@ export default function useBlocklyData () {
           data
           hat
           comment
+          subcategory
         }
       }
     }

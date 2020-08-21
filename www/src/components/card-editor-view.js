@@ -57,7 +57,7 @@ const CardEditorView = () => {
   function getToolboxCategories (onlyCategory = null) {
     let index = -1
     return data.toolbox.BlockCategoryList.map(({
-      BlockTypePrefix, CategoryName, ColorHex
+      BlockTypePrefix, CategoryName, ColorHex, Subcategories
     }) => {
       index++
       if (!!onlyCategory && CategoryName !== onlyCategory) {
@@ -100,7 +100,45 @@ const CardEditorView = () => {
         }
       }
 
-      return {
+      if (!!Subcategories && isArray(Subcategories)) {
+        let categories = []
+
+        for (let category of Subcategories) {
+          categories[category] = {
+            name: category,
+            blocks: [],
+            colour: ColorHex
+          }
+        }
+
+        for (let block of blocks) {
+          let subcategory = Blockly.Blocks[block.type].json?.subcategory
+          if (!!subcategory) {
+            if (subcategory.includes(',')) {
+              for (let splitKey of subcategory.split(',')) {
+                if (categories[splitKey] != null) {
+                  categories[splitKey].blocks.push(block)
+                }
+              }
+            } else if (categories[subcategory] != null) {
+              categories[subcategory].blocks.push(block)
+            } else {
+              categories['Misc'].blocks.push(block)
+            }
+          } else {
+            categories['Misc'].blocks.push(block)
+          }
+        }
+
+
+
+        return {
+          name: CategoryName,
+          colour: ColorHex,
+          categories: Object.values(categories)
+        }
+
+      } else return {
         name: CategoryName,
         blocks: blocks,
         colour: ColorHex,

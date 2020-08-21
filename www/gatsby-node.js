@@ -26,6 +26,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     BlockTypePrefix: String
     CategoryName: String
     ColorHex: String
+    Subcategories: [String]
   }
   type Block implements Node {
     type: String
@@ -40,6 +41,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     hat: String
     searchMessage: String
     comment: String
+    subcategory: String
   }
   type Args1 {
     i: Int!
