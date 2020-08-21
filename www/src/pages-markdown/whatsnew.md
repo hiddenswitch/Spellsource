@@ -10,16 +10,27 @@ header: true
 Thanks for playing this beta of Spellsource! Read more at [our website](https://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)!
 
-### Current Build 0.8.86-3.3.1 (August 19, 2020)
+### Current Build 0.8.87-3.3.2 (August 20, 2020)
 
+ - Missiles now appear for damaging effects, communicating their source.
+ - The battlefield has been updated.
+ - Hitboxes on the card tray have been improved.
+
+### 0.8.86-3.3.1 (August 19, 2020)
+
+<details>
+<summary>Bug fixes.</summary>
 Known issue: The hitbox on the card tray on portrait for mobile devices does not register a tray close when pressing around the center of the screen.
 
  - User presence and friend counts are now fixed.
+
+</details>
 
 ### 0.8.85-3.3.0 (August 18, 2020)
 
 <details>
 <summary>Bug fixes.</summary>
+
  - The Witch card Managrounder now functions properly. ([1817](https://github.com/hiddenswitch/Spellsource/issues/1817))
  - Parallel Protector now has a happy little dynamic description. ([1795](https://github.com/hiddenswitch/Spellsource/issues/1795))
  - The Ringmaster class has become the Festivalist! The new core set is made up of some previous cards, some reflavorings of previous cards, and some entirely new cards. The rest of the old Ringmaster cards have been uncollectiblified. ([1826](https://github.com/hiddenswitch/Spellsource/issues/1826))
@@ -37,6 +48,7 @@ Known issue: The hitbox on the card tray on portrait for mobile devices does not
  - A work in progress battlefield background is now visible in the client.
  - The small card's appearance has been improved for better usability.
  - The champion sprites are now correctly shown on the battlefield.
+ 
 </details>
 
 ### 0.8.84-3.2.8 (August 15, 2020)
