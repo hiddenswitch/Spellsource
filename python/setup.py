@@ -43,7 +43,7 @@ class CompileSpellsource(install):
 
 
 setup(name='spellsource',
-      version='0.8.86',
+      version='0.8.87',
       description='The Spellsource card game engine for card game AI and simulation',
       long_description=README,
       long_description_content_type="text/markdown",
@@ -53,9 +53,9 @@ setup(name='spellsource',
       data_files=[
           ("share/spellsource/cards",
            list(_cards_in_directory(os.path.join(SRC_PATH, 'cards', 'src', 'main', 'resources', 'cards')))),
-          ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-0.8.86-all.jar'),
+          ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-0.8.87-all.jar'),
                                  os.path.join(SRC_PATH, 'internalcontent', 'build', 'libs',
-                                              'internalcontent-0.8.86.jar')]),
+                                              'internalcontent-0.8.87.jar')]),
       ],
       include_package_data=True,
       author_email='ben@hiddenswitch.com',
