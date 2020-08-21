@@ -1,18 +1,18 @@
 import Blockly from 'blockly'
 import JsonConversionUtils from './json-conversion-utils'
-import { has } from 'lodash'
+import {has} from 'lodash'
 import recursiveOmitBy from 'recursive-omit-by'
-import { FieldLabelSerializableHidden } from '../components/field-label-serializable-hidden'
+import {FieldLabelSerializableHidden} from '../components/field-label-serializable-hidden'
 
 export default class BlocklyMiscUtils {
 
-  static toHappyFormatting (string) {
+  static toHappyFormatting(string) {
     return string.split('_')
       .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
       .join(' ')
   }
 
-  static addBlock (block) {
+  static addBlock(block) {
     Blockly.Blocks[block.type] = {
       init: function () {
         this.jsonInit(block)
@@ -25,7 +25,7 @@ export default class BlocklyMiscUtils {
         if (block.type.endsWith('SHADOW')) {
           this.setMovable(false)
         }
-        if (!!block.comment && !this.isShadow()) {
+        if (!!block.comment && !this.isShadow() && this.isInFlyout) {
           this.setCommentText(block.comment)
         }
       },
@@ -35,7 +35,7 @@ export default class BlocklyMiscUtils {
   }
 
   //initializes the json specified shadow blocks of a block on the workspace
-  static manuallyAddShadowBlocks (thisBlock, block) {
+  static manuallyAddShadowBlocks(thisBlock, block) {
     for (let i = 0; i < 10; i++) {
       if (!!block['args' + i.toString()]) {
         for (let j = 0; j < 10; j++) {
@@ -87,7 +87,7 @@ export default class BlocklyMiscUtils {
     }
   }
 
-  static inputNameToBlockType (inputName) {
+  static inputNameToBlockType(inputName) {
     if (inputName.includes('.')) {
       inputName = inputName.split('.').slice(-1)[0]
     }
@@ -159,7 +159,7 @@ export default class BlocklyMiscUtils {
     }
   }
 
-  static blockTypeToOuput (type) {
+  static blockTypeToOuput(type) {
     switch (type) {
       case 'Spell':
       case 'ValueProvider':
@@ -172,7 +172,7 @@ export default class BlocklyMiscUtils {
   }
 
   //make the message for a generated block for a catalogue/created card
-  static cardMessage (card) {
+  static cardMessage(card) {
     let ret = ''
     if (card.baseManaCost !== null) {
       ret = '(' + card.baseManaCost + ') '
@@ -186,7 +186,7 @@ export default class BlocklyMiscUtils {
     return ret
   }
 
-  static initializeBlocks (data) {
+  static initializeBlocks(data) {
     try {
       Blockly.fieldRegistry.register('field_label_serializable_hidden', FieldLabelSerializableHidden)
     } catch (e) {
@@ -201,7 +201,7 @@ export default class BlocklyMiscUtils {
         return
       }
 
-      const block = recursiveOmitBy(edge.node, ({ node }) => node === null)
+      const block = recursiveOmitBy(edge.node, ({node}) => node === null)
 
       // Patch back in values from union type
       if (!!block.args) {
@@ -346,7 +346,7 @@ export default class BlocklyMiscUtils {
       }
     }
 
-    Blockly.BlockSvg.prototype.bumpNeighbours = function() {
+    Blockly.BlockSvg.prototype.bumpNeighbours = function () {
       if (!this.workspace) {
         return  // Deleted block.
       }
@@ -369,7 +369,6 @@ export default class BlocklyMiscUtils {
         }
 
         var neighbours = connection.neighbours(Blockly.SNAP_RADIUS);
-
 
 
         for (var j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
@@ -400,8 +399,8 @@ export default class BlocklyMiscUtils {
 
       for (var j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
         if ((!connection.isConnected() || connection.targetBlock().isShadow())
-        && (!otherConnection.isConnected() || otherConnection.targetBlock().isShadow())
-        && otherConnection.type === Blockly.NEXT_STATEMENT) {
+          && (!otherConnection.isConnected() || otherConnection.targetBlock().isShadow())
+          && otherConnection.type === Blockly.NEXT_STATEMENT) {
           let bumper = otherConnection.getSourceBlock()
           let addedBlock
           if (otherConnection.getCheck().includes('Properties')) {
@@ -475,12 +474,12 @@ export default class BlocklyMiscUtils {
               addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes_boolean')
             }
             addedBlock.getInput('attribute').connection.connect(bumpee.outputConnection)
-          } else if ((otherConnection.getCheck().includes('Spells') && bumpee.type.startsWith('Spell_')
-            && !bumpee.type.endsWith('I'))
+          } else if (((otherConnection.getCheck().includes('Spells') && bumpee.type.startsWith('Spell_'))
             || (otherConnection.getCheck().includes('Cards') && bumpee.type.startsWith('Card_'))
             || (otherConnection.getCheck().includes('Conditions') && bumpee.type.startsWith('Condition_'))
             || (otherConnection.getCheck().includes('Sources') && bumpee.type.startsWith('Source_'))
-            || (otherConnection.getCheck().includes('Filters') && bumpee.type.startsWith('Filter_'))) {
+            || (otherConnection.getCheck().includes('Filters') && bumpee.type.startsWith('Filter_')))
+            && !bumpee.type.endsWith('I')) {
             addedBlock = BlocklyMiscUtils.newBlock(workspace, bumpee.type.split('_')[0] + '_I')
             addedBlock.getInput('i').connection.connect(bumpee.outputConnection)
           } else {
@@ -503,7 +502,7 @@ export default class BlocklyMiscUtils {
 
 
     const createIcon = Blockly.Icon.prototype.createIcon;
-    Blockly.Icon.prototype.createIcon = function() {
+    Blockly.Icon.prototype.createIcon = function () {
       createIcon.call(this)
       Blockly.bindEvent_(
         this.iconGroup_, 'mouseenter', this, () => {
@@ -536,7 +535,7 @@ export default class BlocklyMiscUtils {
     const placeNewBlock = Blockly.Flyout.prototype.placeNewBlock_
     Blockly.Flyout.prototype.placeNewBlock_ = function (oldBlock) {
       let block = placeNewBlock.call(this, oldBlock)
-      const removeComments = function(block) {
+      const removeComments = function (block) {
         block.setCommentText(null)
         for (let childBlock of block.childBlocks_) {
           removeComments(childBlock)
@@ -547,7 +546,7 @@ export default class BlocklyMiscUtils {
     }
   }
 
-  static getHeroClassColors (data) {
+  static getHeroClassColors(data) {
     const newHeroClassColors = {
       ANY: '#A6A6A6'
     }
@@ -583,7 +582,7 @@ export default class BlocklyMiscUtils {
     return newHeroClassColors
   }
 
-  static initCardBlocks (data) {
+  static initCardBlocks(data) {
     const heroClassColors = BlocklyMiscUtils.getHeroClassColors(data)
     //second pass through to actually get the cards
     data.allCard.edges.forEach(edge => {

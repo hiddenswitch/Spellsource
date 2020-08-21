@@ -310,6 +310,18 @@ export default class JsonConversionUtils {
           }
         }
       }
+      if (!!card.art.glow) {
+        let glowBlock = this.newBlock(workspace, 'Property_glow')
+        glowBlock.previousConnection.connect(lowestBlock.nextConnection)
+        let colorBlock = glowBlock.getInput('art.glow').connection.targetBlock()
+        for (let i of ['r', 'g', 'b', 'a']) {
+          colorBlock.setFieldValue(Math.round(card.art.glow[i] * 255), i)
+        }
+        if (!!glowBlock.initSvg) {
+          glowBlock.initSvg()
+        }
+        lowestBlock = glowBlock
+      }
     }
 
     if (!!workspace.render) {
