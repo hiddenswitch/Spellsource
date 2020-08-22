@@ -1104,6 +1104,7 @@ definitions:
           - 'WEAPON_DESTROYED'
           - 'WEAPON_EQUIPPED'
           - 'WILL_END_SEQUENCE'
+          - 'DESTROY_WILL_QUEUE'
       cardEvent:
         $ref: '#/definitions/CardEvent'
       performedGameAction:
@@ -1125,6 +1126,13 @@ definitions:
         properties:
           damageType:
             $ref: '#/definitions/DamageTypeEnum'
+      destroy:
+        type: 'object'
+        properties:
+          objects:
+            type: 'array'
+            items:
+              $ref: '#/definitions/Destroy'
       triggerFired:
         type: 'object'
         properties:
@@ -1140,6 +1148,21 @@ definitions:
             items:
               type: 'integer'
               x-nullable: false
+  Destroy:
+    type: 'object'
+    description: |
+      Contains information about an actor being destroyed.
+    properties:
+      target:
+        $ref: '#/definitions/Entity'
+      source:
+        $ref: '#/definitions/Entity'
+      aftermaths:
+        description: |
+          Aftermaths that will fire due to this actor being destroyed.
+        type: 'array'
+        items:
+          $ref: '#/definitions/Entity'
   MatchmakingQueuePutRequest:
     type: 'object'
     properties:

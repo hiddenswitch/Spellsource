@@ -30,6 +30,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.environment.*;
 import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.logic.*;
 import net.demilich.metastone.game.services.Inventory;
 import net.demilich.metastone.game.spells.DrawCardSpell;
@@ -2032,10 +2033,10 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	@Suspendable
-	public void onGameEventWillFire(GameEvent event) {
+	public void onNotificationWillFire(Notification event) {
 	}
 
 	@Suspendable
-	public void onGameEventDidFire(GameEvent event) {
+	public void onNotificationDidFire(Notification event) {
 	}
 }

@@ -25,6 +25,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.events.DestroyWillQueue;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
@@ -612,7 +613,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					.stream().map(e -> Games.getEntity(workingContext, e, playerId)).collect(Collectors.toList());
 			var target = targets.size() > 0 ? targets.get(0) : null;
 			message.event(new GameEvent()
-					.description(event.getDescription(workingContext,playerId))
+					.description(event.getDescription(workingContext, playerId))
 					.isSourcePlayerLocal(source == null ? workingContext.getActivePlayerId() == playerId : source.getOwner() == playerId)
 					.isTargetPlayerLocal(target != null && target.getOwner() == playerId)
 					.eventType(GameEvent.EventTypeEnum.PERFORMED_GAME_ACTION)
@@ -620,12 +621,27 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 							.actionType(action.getActionType()))
 					.source(source)
 					.target(target));
+		} else if (event instanceof DestroyWillQueue) {
+			var destroyWillQueue = (DestroyWillQueue) event;
+			message.event(new GameEvent()
+					.description(destroyWillQueue.getDescription(workingContext, playerId))
+					.isSourcePlayerLocal(workingContext.getActivePlayerId() == playerId)
+					.isTargetPlayerLocal(false)
+					.eventType(GameEvent.EventTypeEnum.DESTROY_WILL_QUEUE)
+					.destroy(new GameEventDestroy()
+							.objects(destroyWillQueue.getDestroys()
+									.stream()
+									.map(destroy -> new Destroy()
+											.source(Games.getEntity(workingContext, destroy.getSource(), playerId))
+											.target(Games.getEntity(workingContext, destroy.getTarget(), playerId))
+											.aftermaths(destroy.getAftermaths().stream().map(aftermath -> Games.getEntity(workingContext, aftermath, playerId)).collect(toList())))
+									.collect(toList()))));
 		} else {
 			throw new RuntimeException("Unsupported notification.");
 		}
 
 		// Set the description on this event.
-		final var toClient = message.getEvent()
+		var toClient = message.getEvent()
 				.isPowerHistory(event.isPowerHistory());
 
 		if (event.isPowerHistory()) {

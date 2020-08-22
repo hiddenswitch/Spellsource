@@ -37,7 +37,7 @@ import java.util.function.Predicate;
  *   }
  * </pre>
  *
- * @see GameLogic#markAsDestroyed(Actor) for the underlying effect that adds the {@link Attribute#DESTROYED} attribute.
+ * @see GameLogic#markAsDestroyed(Actor, Entity) for the underlying effect that adds the {@link Attribute#DESTROYED} attribute.
  * @see GameLogic#endOfSequence() for more about how minions, heroes and weapons are removed from play.
  */
 public class DestroySpell extends Spell {
@@ -76,7 +76,7 @@ public class DestroySpell extends Spell {
 		if (!target.isDestroyed()) {
 			source.modifyAttribute(Attribute.TOTAL_KILLS, 1);
 		}
-		context.getLogic().markAsDestroyed((Actor) target);
+		context.getLogic().markAsDestroyed((Actor) target, source);
 	}
 }
 

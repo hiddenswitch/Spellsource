@@ -10,11 +10,31 @@ header: true
 Thanks for playing this beta of Spellsource! Read more at [our website](https://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)!
 
-### Current Build 0.8.87-3.3.2 (August 20, 2020)
+### 0.8.88-3.3.3 (August 22, 2020)
+
+<details>
+<summary>Visualization of deaths, background update.</summary>
+
+ - The background has been updated and is almost complete. Additional stages are on their way!
+ - Whenever units die, their death status is now visualized throughout the sequence before they are removed from the board.
+ - New icons have been drawn for the power history and various status effects.
+ - Update the power history icons.
+ - Spellpower and Exhausted are now visualized on the battlefield.
+ - Improved legibility in places where numbers are in front of icons. However, we are still exploring a change for the confusing Trenco 1 versus 7 numerals.
+
+</details>
+
+### 0.8.87-3.3.2 (August 20, 2020)
+
+<details>
+
+<summary>Bug fixes.</summary>
 
  - Missiles now appear for damaging effects, communicating their source.
  - The battlefield has been updated.
  - Hitboxes on the card tray have been improved.
+
+</details>
 
 ### 0.8.86-3.3.1 (August 19, 2020)
 

@@ -78,6 +78,10 @@ public interface Applications {
 					return promise.future().map(ignored -> vertx);
 				})
 				.compose(vertx -> {
+					// Do not set a shutdown hook when running from gradle net:run
+					if (System.getProperties().containsKey("gradle")) {
+						return Future.succeededFuture(vertx);
+					}
 					var hook = new Thread(BareCommand.getTerminationRunnable(vertx, io.vertx.core.logging.LoggerFactory.getLogger(Applications.class), null));
 					hook.setName("vertx-shutdown-hook");
 					Runtime.getRuntime().addShutdownHook(hook);

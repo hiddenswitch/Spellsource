@@ -36,7 +36,7 @@ public final class DestroyAllExceptOneAndMindControlSpell extends DestroySpell {
 			Entity randomTarget = context.getLogic().getRandom(potentialSurvivors);
 			destroyedTargets.remove(randomTarget);
 			Minion minion = (Minion) randomTarget;
-			context.getLogic().mindControl(player, minion);
+			context.getLogic().mindControl(player, minion, source);
 		}
 
 		for (Entity entity : destroyedTargets) {

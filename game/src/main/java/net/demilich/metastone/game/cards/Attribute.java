@@ -15,7 +15,10 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -1208,14 +1211,18 @@ public enum Attribute {
 	AFTERMATH_COUNT,
 	/**
 	 * Indicates that a card makes use of the Imbue keyword, specifically using up a charge
-	 *
+	 * <p>
 	 * Also used to store the number of Imbue charges on the player
 	 */
 	IMBUE,
 	/**
 	 * Indicates the player has drawn their starting hand. Essentially the end of the start-of-game phase.
 	 */
-	STARTING_HAND_DRAWN;
+	STARTING_HAND_DRAWN,
+	/**
+	 * The {@link EntityReference} of the entity that destroyed this one.
+	 */
+	DESTROYED_BY;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

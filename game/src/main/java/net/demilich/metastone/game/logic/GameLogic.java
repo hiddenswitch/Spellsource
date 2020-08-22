@@ -12,6 +12,7 @@ import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
@@ -1250,19 +1251,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Changes the player's hero.
 	 * <p>
 	 * A hero consists of the actual {@link Hero} actor, the hero's hero power {@link Card} specified on its {@link
-	 * net.demilich.metastone.game.cards.desc.CardDesc#heroPower} field, and possibly a {@link Weapon} equipped by an
-	 * {@link EquipWeaponSpell} specified in its battlecry. Heroes that do not resolve battlecries (i.e., heroes that are
-	 * not played from the hand) generally do not equip weapons, while heroes coming into play in any way generally change
-	 * the hero powers.
+	 * CardDesc#getHeroPower()} field, and possibly a {@link Weapon} equipped by an {@link EquipWeaponSpell} specified in
+	 * its battlecry. Heroes that do not resolve battlecries (i.e., heroes that are not played from the hand) generally do
+	 * not equip weapons, while heroes coming into play in any way generally change the hero powers.
 	 * <p>
 	 * Many attributes of the current hero are retained, like its {@link Attribute#NUMBER_OF_ATTACKS}. Enchantments are
 	 * removed. When the hero card specifies a new {@link Attribute#MAX_HP} and {@link Attribute#HP}, the hitpoints of the
 	 * new hero are changed; otherwise, the old hitpoints are retained. An {@link Attribute#ARMOR} amount is added to the
 	 * previous hero's armor, not replaced.
 	 * <p>
-	 * Hero powers have their {@link net.demilich.metastone.game.cards.desc.CardDesc#passiveTrigger} processed, because
-	 * the hero power behaves like an extension of the hand, not a zone in play. Otherwise, the {@link
-	 * net.demilich.metastone.game.cards.desc.CardDesc#trigger} is activated when the hero comes into play.
+	 * Hero powers have their {@link CardDesc#getPassiveTrigger()} processed, because the hero power behaves like an
+	 * extension of the hand, not a zone in play. Otherwise, the {@link CardDesc#getTrigger()} is activated when the hero
+	 * comes into play.
 	 * <p>
 	 * The previous hero is not moved to the graveyard, because it was not destroyed. It is moved to {@link
 	 * Zones#REMOVED_FROM_PLAY}.
@@ -1622,7 +1622,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 					&& weapon != null
 					&& (weapon.hasAttribute(Attribute.POISONOUS)
 					|| weapon.hasAttribute(Attribute.AURA_POISONOUS))))) {
-				markAsDestroyed(target);
+				markAsDestroyed(target, source);
 			}
 
 			// Implement lifesteal
@@ -1873,16 +1873,28 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		reversed.sort((a, b) -> -Integer.compare(a.getEntityLocation().getIndex(), b.getEntityLocation().getIndex()));
 
+		var aftermaths = context.getTriggers().stream()
+				.filter(t -> t instanceof Aftermath)
+				.map(t -> (Aftermath) t)
+				.collect(Collectors.groupingBy(Aftermath::getHostReference));
+
+		// Fire a destroy will queue notification so that the client can render which actors will be destroyed this sequence
+		fireNotification(
+				new DestroyWillQueue(
+						reversed.stream()
+								.map(actor -> new DestroyWillQueue.DestroyEvent(actor.hasAttribute(Attribute.DESTROYED_BY) ?
+										context.resolveSingleTarget((EntityReference) actor.getAttribute(Attribute.DESTROYED_BY), false) : null,
+										actor, aftermaths.getOrDefault(actor.getReference(), Collections.emptyList())))
+								.collect(toList())));
+
 		for (var target : reversed) {
 			removeEnchantments(target, true, false, false);
 			previousLocations.put(target, target.getEntityLocation());
 			target.moveOrAddTo(context, Zones.GRAVEYARD);
 			// Aftermaths are only active when their hosts are in the graveyard
-			context.getTriggers().stream()
-					.filter(t -> t instanceof Aftermath)
-					.map(t -> (Aftermath) t)
-					.filter(a -> Objects.equals(a.getHostReference(), target.getReference()))
-					.forEach(a -> a.setActivated(true));
+			if (aftermaths.containsKey(target.getReference())) {
+				aftermaths.get(target.getReference()).forEach(aftermath -> aftermath.setActivated(true));
+			}
 		}
 
 		for (var i = 0; i < targets.length; i++) {
@@ -1908,6 +1920,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 			resolveAftermaths(owner, target, previousLocations.get(target));
 		}
+
 		for (var target : targets) {
 			removeEnchantments(target, true, false, true);
 		}
@@ -2222,7 +2235,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// We've definitely replaced the existing weapon, whether or not the new weapon is still in play, so its deathrattle
 		// will still need to be evaluated (at a later time).
 		if (currentWeapon != null) {
-			markAsDestroyed(currentWeapon);
+			markAsDestroyed(currentWeapon, weaponCard);
 		}
 
 		// Resolving the battlecry may have destroyed the weapon we are currently putting into play
@@ -3055,13 +3068,17 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * An actor marked this way gets moved to the {@link Zones#GRAVEYARD} by a {@link #endOfSequence()} call.
 	 *
 	 * @param target The {@link Actor} to mark as destroyed.
+	 * @param source
 	 */
-	public void markAsDestroyed(Actor target) {
+	public void markAsDestroyed(Actor target, Entity source) {
 		if (target != null) {
 			if (!target.isDestroyed()) {
 				incrementedDestroyedThisSequenceCount();
 			}
 			target.setAttribute(Attribute.DESTROYED);
+			if (source != null) {
+				target.setAttribute(Attribute.DESTROYED_BY, source.getReference());
+			}
 		}
 	}
 
@@ -3110,9 +3127,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param player The new owner of a minion.
 	 * @param minion The minion to mind control.
+	 * @param source
 	 */
 	@Suspendable
-	public void mindControl(Player player, Minion minion) {
+	public void mindControl(Player player, Minion minion, Entity source) {
 		var opponent = context.getOpponent(player);
 		if (!opponent.getMinions().contains(minion)) {
 			// logger.warn("Minion {} cannot be mind-controlled, because
@@ -3126,7 +3144,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			minion.refreshAttacksPerRound();
 			changeOwner(minion, player.getId());
 		} else {
-			markAsDestroyed(minion);
+			markAsDestroyed(minion, source);
 		}
 	}
 
@@ -3134,7 +3152,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Steals the card, transferring its owner and moving its current zones. Keeps all associated {@link Trigger} objects
 	 * and changes all trigger owners whose {@link Trigger#isPersistentOwner()} property is {@code false}.
 	 * <p>
-	 * Similar to {@link #mindControl(Player, Minion)} but for {@link Card} entities.
+	 * Similar to {@link #mindControl(Player, Minion, Entity)} but for {@link Card} entities.
 	 * <p>
 	 * To implement King Togwaggle, stealing to the {@link Zones#SET_ASIDE_ZONE} first is supported.
 	 *
@@ -5365,6 +5383,25 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
+	 * Fires a notification, which has no gameplay side effects.
+	 *
+	 * @param notification
+	 */
+	@Suspendable
+	public void fireNotification(Notification notification) {
+		if (context.getIgnoreEvents()) {
+			return;
+		}
+
+		if (Strand.currentStrand().isInterrupted()) {
+			return;
+		}
+
+		context.onNotificationWillFire(notification);
+		context.onNotificationDidFire(notification);
+	}
+
+	/**
 	 * The core implementation of firing game events.
 	 * <p>
 	 * This method processes an {@code event}, checking each trigger to see if it should respond to that particular
@@ -5391,7 +5428,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			throw new IllegalStateException("infinite recursion");
 		}
 
-		context.onGameEventWillFire(event);
+		context.onNotificationWillFire(event);
 
 		// Push the event data onto the event data stack, used by effects to determine what the EntityReference.EVENT_TARGET
 		// is and the value of EventValueProvider
@@ -5477,7 +5514,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		} finally {
 			popEventData(event);
 			triggerDepth--;
-			context.onGameEventDidFire(event);
+			context.onNotificationDidFire(event);
 		}
 	}
 
