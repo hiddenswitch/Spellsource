@@ -87,7 +87,7 @@ public class ReturnTargetToHandSpell extends Spell {
 		if (owner.getHand().getCount() >= GameLogic.MAX_HAND_CARDS
 				&& Actor.class.isAssignableFrom(target.getClass())) {
 			logger.debug("onCast: {} is destroyed because {}'s hand is full", target, owner.getName());
-			context.getLogic().markAsDestroyed((Actor) target);
+			context.getLogic().markAsDestroyed((Actor) target, source);
 		} else {
 			logger.debug("onCast: {} is returned to {}'s hand", target, owner.getName());
 			// The minion might be destroyed or already returned to hand due to Baron Rivendare at this point.

@@ -41,7 +41,7 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
-import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -98,7 +98,7 @@ public class ServerGameContext extends GameContext implements Server {
 	private final Deque<Trigger> gameTriggers = new ConcurrentLinkedDeque<>();
 	private final Scheduler scheduler;
 	private boolean isRunning = false;
-	private final AtomicInteger eventCounter = new AtomicInteger(0);
+	private final AtomicInteger notificationCounter = new AtomicInteger(0);
 	private Long timerStartTimeMillis;
 	private Long timerLengthMillis;
 
@@ -742,9 +742,9 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	@Suspendable
-	public void onGameEventWillFire(GameEvent event) {
-		super.onGameEventWillFire(event);
-		eventCounter.incrementAndGet();
+	public void onNotificationWillFire(Notification event) {
+		super.onNotificationWillFire(event);
+		notificationCounter.incrementAndGet();
 		// Do not build game state for events the client is not interested in
 		if (event.isClientInterested()) {
 			GameState gameStateCopy = getGameStateCopy();
@@ -756,9 +756,9 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	@Suspendable
-	public void onGameEventDidFire(GameEvent event) {
-		super.onGameEventDidFire(event);
-		if (eventCounter.decrementAndGet() == 0) {
+	public void onNotificationDidFire(Notification event) {
+		super.onNotificationDidFire(event);
+		if (notificationCounter.decrementAndGet() == 0) {
 			for (Client client : getClients()) {
 				client.lastEvent();
 			}

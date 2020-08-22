@@ -24,7 +24,7 @@ import java.util.Map;
  *
  * @see net.demilich.metastone.game.spells.custom.MindControlOneTurnSpell for the version that lasts one turn and does
  * 		not add summoning sickness.
- * @see net.demilich.metastone.game.logic.GameLogic#mindControl(Player, Minion) for the full mind control rules.
+ * @see net.demilich.metastone.game.logic.GameLogic#mindControl(Player, Minion, Entity) for the full mind control rules.
  */
 public class MindControlSpell extends Spell {
 
@@ -46,6 +46,6 @@ public class MindControlSpell extends Spell {
 			return;
 		}
 		Minion minion = (Minion) target;
-		context.getLogic().mindControl(player, minion);
+		context.getLogic().mindControl(player, minion, source);
 	}
 }

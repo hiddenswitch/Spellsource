@@ -558,6 +558,7 @@ public interface Games extends Verticle {
 				.entityType(actor.getEntityType())
 				.cardId(card.getCardId());
 
+		// TODO: Why are we computing extra attack?
 		var extraAttack = 0;
 		if (actor instanceof Minion) {
 			entity.boardPosition(actor.getEntityLocation().getIndex());
@@ -605,7 +606,7 @@ public interface Games extends Verticle {
 		entity.divineShield(actor.hasAttribute(Attribute.DIVINE_SHIELD));
 		entity.deflect(actor.hasAttribute(Attribute.DEFLECT));
 		entity.enraged(actor.hasAttribute(Attribute.ENRAGED));
-		entity.destroyed(actor.hasAttribute(Attribute.DESTROYED));
+		entity.destroyed(actor.isDestroyed());
 		entity.cannotAttack(actor.hasAttribute(Attribute.CANNOT_ATTACK) || actor.hasAttribute(Attribute.AURA_CANNOT_ATTACK));
 		entity.spellDamage(actor.getAttributeValue(Attribute.SPELL_DAMAGE) + actor.getAttributeValue(Attribute.AURA_SPELL_DAMAGE));
 		entity.windfury(actor.hasAttribute(Attribute.WINDFURY) || actor.hasAttribute(Attribute.AURA_WINDFURY));

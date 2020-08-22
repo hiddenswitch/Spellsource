@@ -7,7 +7,7 @@ dependencies {
 }
 
 allprojects {
-    project.version = '0.8.87'
+    project.version = '0.8.88'
 }
 
 subprojects {
