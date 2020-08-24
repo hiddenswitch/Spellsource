@@ -1,29 +1,34 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, {useEffect, useMemo, useRef, useState} from 'react'
 import WorkspaceUtils from '../lib/workspace-utils'
 import styles from './card-editor-view.module.css'
 import ReactBlocklyComponent from 'react-blockly'
 import Blockly from 'blockly'
-import { isArray } from 'lodash'
+import {isArray} from 'lodash'
 import AceEditor from 'react-ace'
 import 'ace-builds/src-noconflict/mode-json'
 import 'ace-builds/src-noconflict/mode-xml'
 import 'ace-builds/src-noconflict/theme-github'
-import { Form } from 'react-bootstrap'
-import { useIndex } from '../hooks/use-index'
+import {Form} from 'react-bootstrap'
+import {useIndex} from '../hooks/use-index'
 import JsonConversionUtils from '../lib/json-conversion-utils'
 import BlocklyMiscUtils from '../lib/blockly-misc-utils'
 import useComponentWillMount from '../hooks/use-component-will-mount'
 import useBlocklyData from '../hooks/use-blockly-data'
 
 const CardEditorView = () => {
+  const defaultCard = true
+
   const data = useBlocklyData()
 
   const heroClassColors = useMemo(() => BlocklyMiscUtils.getHeroClassColors(data))
   const [code, setCode] = useState(``)
   const [query, setQuery] = useState(``)
-  const [checked, setChecked] = useState(false)
+  const [showCatalogueBlocks, setShowCatalogueBlocks] = useState(false)
+  const [showBlockComments, setShowBlockComments] = useState(true)
   const [results, setResults] = useState([])
   const index = useIndex()
+  const blockCommentsTooltip = 'Toggles the helpful/informational comments that display on certain blocks in the toolbox'
+  const catalogueBlocksTooltip = 'Toggles whether the blocks for real cards from the catalogue show up in search'
 
   // Run once before the workspace has been created
   useComponentWillMount(() => {
@@ -35,7 +40,8 @@ const CardEditorView = () => {
     const workspace = Blockly.getMainWorkspace()
     workspace.options.disable = false
     const importCardCallback = () => {
-      generateCard()
+      let p = prompt('Input the name of the card (or the wiki page URL / Card ID for more precision)')
+      generateCard(p)
       workspace.getToolbox().clearSelection()
       setToolboxCategories(getToolboxCategories())
     }
@@ -48,17 +54,28 @@ const CardEditorView = () => {
       }
     }
     workspace.addChangeListener(changeListenerCallback)
+
+    if (defaultCard) {
+      setTimeout(() => {
+        const array = ["Daring Duelist", "Ninja Aspirants", "Redhide Butcher",
+          "Sly Conquistador", "Stormcloud Assailant", "Peacock Mystic"]
+        generateCard(array[Math.floor(Math.random() * array.length)])
+        Blockly.getMainWorkspace().getTopBlocks(true)[0].setCommentText("This card was imported automatically as an example.")
+      }, 100)
+    }
+
     return () => {
       workspace.removeButtonCallback('importCard')
       workspace.removeChangeListener(changeListenerCallback)
     }
   }, [])
 
-  function getToolboxCategories (onlyCategory = null) {
+  function getToolboxCategories(onlyCategory = null) {
     let index = -1
-    return data.toolbox.BlockCategoryList.map(({
-      BlockTypePrefix, CategoryName, ColorHex, Subcategories
-    }) => {
+    return data.toolbox.BlockCategoryList.map((
+      {
+        BlockTypePrefix, CategoryName, ColorHex, Subcategories
+      }) => {
       index++
       if (!!onlyCategory && CategoryName !== onlyCategory) {
         return toolboxCategories[index] //my attempt to reduce the runtime a bit
@@ -72,7 +89,7 @@ const CardEditorView = () => {
               type: blocksKey,
               values: shadowBlockJsonCreation(blocksKey),
               next: blocksKey.startsWith('Starter') && !!Blockly.Blocks[blocksKey].json.nextStatement ?
-                { type: 'Property_SHADOW', shadow: true }
+                {type: 'Property_SHADOW', shadow: true}
                 : undefined
             })
           }
@@ -87,7 +104,7 @@ const CardEditorView = () => {
             type: value.id,
             values: shadowBlockJsonCreation(value.id),
             next: value.id.startsWith('Starter') && !!Blockly.Blocks[value.id].json.nextStatement ?
-              { type: 'Property_SHADOW', shadow: true }
+              {type: 'Property_SHADOW', shadow: true}
               : undefined
           })
         })
@@ -95,7 +112,7 @@ const CardEditorView = () => {
       let button = []
       if (CategoryName === 'Cards') {
         button[0] = {
-          text: 'Add External Card Code to Workspace',
+          text: 'Import Catalogue Card Code',
           callbackKey: 'importCard'
         }
       }
@@ -131,7 +148,6 @@ const CardEditorView = () => {
         }
 
 
-
         return {
           name: CategoryName,
           colour: ColorHex,
@@ -149,7 +165,7 @@ const CardEditorView = () => {
 
   //Turns our own json formatting for shadow blocks into the formatting
   //that's used for specifying toolbox categories (recursively)
-  function shadowBlockJsonCreation (type) {
+  function shadowBlockJsonCreation(type) {
     let block = Blockly.Blocks[type]
     let values = {}
     if (!!block && !!block.json) {
@@ -181,7 +197,7 @@ const CardEditorView = () => {
 
   const [toolboxCategories, setToolboxCategories] = useState(getToolboxCategories())
 
-  function onWorkspaceChanged (workspace) {
+  function onWorkspaceChanged(workspace) {
     const cardScript = WorkspaceUtils.workspaceToCardScript(workspace)
     // Generate the blocks that correspond to the cards in the workspace
     let cardsStillInUse = []
@@ -207,7 +223,7 @@ const CardEditorView = () => {
     }
   }
 
-  function createCard (card, workspace, cardsStillInUse) {
+  function createCard(card, workspace, cardsStillInUse) {
     if (!!card && !!card.name && !!card.type) {
       let cardType = !!card.secret ? 'SECRET' : !!card.quest ? 'QUEST' : card.type
       let cardId = cardType.toLowerCase()
@@ -251,8 +267,7 @@ const CardEditorView = () => {
 
   }
 
-  function generateCard () {
-    let p = prompt('Input the name of the card (or the wiki page URL / Card ID for more precision)')
+  function generateCard(p) {
     let cardId = null
     let card = null
 
@@ -314,9 +329,9 @@ const CardEditorView = () => {
     setQuery(query)
     setResults(index
         // Query the index with search string to get an [] of IDs
-        .search(query, { expand: true }) // accept partial matches
-        .map(({ ref }) => index.documentStore.getDoc(ref))
-        .filter(doc => doc.nodeType === 'Block' || (doc.nodeType === 'Card' && checked
+        .search(query, {expand: true}) // accept partial matches
+        .map(({ref}) => index.documentStore.getDoc(ref))
+        .filter(doc => doc.nodeType === 'Block' || (doc.nodeType === 'Card' && showCatalogueBlocks
           && heroClassColors.hasOwnProperty(doc.heroClass) && doc.hasOwnProperty('baseManaCost')))
         .map(doc => {
           if (doc.nodeType === 'Card') {
@@ -332,7 +347,6 @@ const CardEditorView = () => {
   }
 
   return (<span>
-    <Form inline onSubmit={(event) => event.preventDefault()}>
       <Form.Control type="text" placeholder={'Search blocks'}
                     value={query}
                     onChange={e => {
@@ -340,28 +354,41 @@ const CardEditorView = () => {
                       search(e)
                       handleSearchResults(e)
                     }}
-                    style={{ width: '50%' }}
+                    style={{width: '40%'}}
       />
-      <Form.Check style={{ display: 'inline' }}>
-        <Form.Check.Input onChange={e => {
-          setChecked(!checked)
+      <Form.Check style={{display: 'inline'}}>
+        <Form.Check.Input defaultChcked={showCatalogueBlocks} onChange={e => {
+          setShowCatalogueBlocks(!showCatalogueBlocks)
+          Blockly.getMainWorkspace().getToolbox().clearSelection()
           if (query.length > 0) {
-            search({ target: { value: query } })
-            handleSearchResults({ target: { value: query } })
+            search({target: {value: query}})
+            handleSearchResults({target: {value: query}})
           }
-        }}
-                          value={checked}
-                          style={
-                            {
-                              height: '15px',
-                              width: '15px',
-                              webkitAppearance: 'checkbox'
-                            }
-                          }
+        }} value={showCatalogueBlocks} title={catalogueBlocksTooltip} style={
+          {
+            height: '15px',
+            width: '15px',
+            webkitAppearance: 'checkbox'
+          }
+        }
         />
-        <Form.Check.Label> Show Card Catalogue Blocks</Form.Check.Label>
+        <Form.Check.Label title={catalogueBlocksTooltip}> Search Card Catalogue   </Form.Check.Label>
       </Form.Check>
-    </Form>
+      <Form.Check style={{display: 'inline'}}>
+        <Form.Check.Input defaultChecked={showBlockComments} onChange={e => {
+          setShowBlockComments(!showBlockComments)
+          Blockly.getMainWorkspace().getToolbox().clearSelection()
+          Blockly.getMainWorkspace().hideSpellsourceComments = showBlockComments
+        }} value={showBlockComments} title={blockCommentsTooltip} style={
+          {
+            height: '15px',
+            width: '15px',
+            webkitAppearance: 'checkbox'
+          }
+        }
+        />
+        <Form.Check.Label title={blockCommentsTooltip}> Show Block Comments</Form.Check.Label>
+      </Form.Check>
     <ReactBlocklyComponent.BlocklyEditor
       workspaceDidChange={onWorkspaceChanged}
       wrapperDivClassName={styles.codeEditor}
@@ -376,7 +403,7 @@ const CardEditorView = () => {
       }}
       readOnly={true}
       value={code}
-      editorProps={{ $blockScrolling: true }}
+      editorProps={{$blockScrolling: true}}
     />
   </span>)
 }
