@@ -70,6 +70,7 @@ export default function useBlocklyData () {
           type
           collectible
           description
+          race
           art {
             primary {
               r

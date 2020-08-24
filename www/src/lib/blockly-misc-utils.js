@@ -25,7 +25,8 @@ export default class BlocklyMiscUtils {
         if (block.type.endsWith('SHADOW')) {
           this.setMovable(false)
         }
-        if (!!block.comment && !this.isShadow() && this.isInFlyout) {
+        if (!!block.comment && this.isInFlyout
+        && !Blockly.getMainWorkspace().hideSpellsourceComments) {
           this.setCommentText(block.comment)
         }
       },
@@ -94,6 +95,7 @@ export default class BlocklyMiscUtils {
     switch (inputName) {
       case 'heroPower':
       case 'card':
+      case 'hero':
         return 'Card'
       case 'cards':
         return 'Cards'
@@ -599,11 +601,39 @@ export default class BlocklyMiscUtils {
           'message0': BlocklyMiscUtils.cardMessage(card),
           'output': 'Card',
           'colour': color,
-          'data': card.id
+          'data': card.id,
+          'comment': this.cardDescription(card)
         }
         BlocklyMiscUtils.addBlock(block)
       }
     })
+  }
+
+  static cardDescription(card) {
+    if (!card.description) {
+      return null
+    }
+    const newLine = 25
+    let words = card.description.split(' ')
+    if (words.length === 0) {
+      return ''
+    }
+    let desc = '"' + words[0]
+    if (!!card.race) {
+      desc = this.toHappyFormatting(card.race) + ' ' + desc
+    }
+    let counter = desc.length
+    for (let word of words.slice(1)) {
+      if (counter + word.length > newLine) {
+        desc += '\n'
+        counter = 0
+      } else {
+        desc += ' '
+      }
+      counter += word.length
+      desc += word
+    }
+    return desc + '"'
   }
 
   /**
