@@ -1847,6 +1847,8 @@ definitions:
         $ref: '#/definitions/Prefab'
       loop:
         $ref: '#/definitions/Prefab'
+      spell:
+        $ref: '#/definitions/Prefab'
       primary:
         $ref: '#/definitions/Color'
       secondary:
