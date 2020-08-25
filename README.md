@@ -6,7 +6,9 @@
 
 This is a simulator and game server for Spellsource, a community-authored card game, licensed under the Affero GPLv3.
 
-**[Play now in your browser, or download for your platform here.](https://www.playspellsource.com/download)**
+**[Download for your platform here.](https://www.playspellsource.com/download)**
+
+Steam keys for the Alpha are available for bonafide testers. Contact us in the Discord.
 
 Please see the [Issues](https://github.com/hiddenswitch/Spellsource/issues) tab to report bugs or request functionality. 
 
@@ -150,10 +152,6 @@ sudo launchctl limit maxfiles 524288 5242880
 
 You had failures in `testRandomMassPlay`, the fuzzer for Spellsource. These are real issues.
 
-> I receive an error from `fastlane` for the `gradle distIOS` command: `(<unknown>): found unexpected end of stream while scanning a quoted scalar at line 1 column 1`
-
-Log into Apple using `fastlane spaceauth` and paste the new session into [unityclient-build.env](secrets/spellsource/unityclient-build.env).
-
 > I uploaded to Steam, but I do not see the build.
 
 Visit the [Steam partner's page](https://partner.steamgames.com/apps/builds/987160) and promote the build.
@@ -171,7 +169,8 @@ You may have to regenerate reflection config using **sdkman**'s Graal distributa
 ```
 sdk use java 20.1.0.r11-grl
 ./gradlew --no-daemon clean
-./gradlew --no-daemon discordbot:genReflectionProps`.
+./gradlew --no-daemon discordbot:genReflectionProps
+```
 
 > `./gradlew distSwarm` fails with the message of the form:
 
@@ -207,6 +206,8 @@ org.testcontainers.containers.ContainerLaunchException: Container startup failed
 main ERROR o.t.d.DockerClientProviderStrategy As no valid configuration was found, execution cannot continue
 ```
 
+Restart Docker. Make sure Docker is running.
+
 > The MongoDB container doesn't start with `gradle net:run` with the following error: `Timed out waiting for log output matching '.*waiting for connections on port.*'`
 
 Try deleting your local database which is automatically bind-mounted to the container at `.mongo`:
@@ -215,7 +216,9 @@ Try deleting your local database which is automatically bind-mounted to the cont
 rm -rf .mongo/
 ```
 
-Make sure Docker is running.
+> I cannot connect to the Hidden Switch cluster to deploy the servers.
+
+You need special authorization for this. It is accessed via an audited API key.
 
 ### Special Thanks
 
