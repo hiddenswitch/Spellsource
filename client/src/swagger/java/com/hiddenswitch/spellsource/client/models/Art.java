@@ -52,6 +52,9 @@ public class Art implements Serializable {
   @JsonProperty("loop")
   private Prefab loop = null;
 
+  @JsonProperty("spell")
+  private Prefab spell = null;
+
   @JsonProperty("primary")
   private Color primary = null;
 
@@ -175,6 +178,24 @@ public class Art implements Serializable {
     this.loop = loop;
   }
 
+  public Art spell(Prefab spell) {
+    this.spell = spell;
+    return this;
+  }
+
+   /**
+   * Get spell
+   * @return spell
+  **/
+  @ApiModelProperty(value = "")
+  public Prefab getSpell() {
+    return spell;
+  }
+
+  public void setSpell(Prefab spell) {
+    this.spell = spell;
+  }
+
   public Art primary(Color primary) {
     this.primary = primary;
     return this;
@@ -281,6 +302,7 @@ public class Art implements Serializable {
         Objects.equals(this.onHit, art.onHit) &&
         Objects.equals(this.onCast, art.onCast) &&
         Objects.equals(this.loop, art.loop) &&
+        Objects.equals(this.spell, art.spell) &&
         Objects.equals(this.primary, art.primary) &&
         Objects.equals(this.secondary, art.secondary) &&
         Objects.equals(this.highlight, art.highlight) &&
@@ -290,7 +312,7 @@ public class Art implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(sprite, spriteShadow, missile, onHit, onCast, loop, primary, secondary, highlight, shadow, body);
+    return Objects.hash(sprite, spriteShadow, missile, onHit, onCast, loop, spell, primary, secondary, highlight, shadow, body);
   }
 
 
@@ -305,6 +327,7 @@ public class Art implements Serializable {
     sb.append("    onHit: ").append(toIndentedString(onHit)).append("\n");
     sb.append("    onCast: ").append(toIndentedString(onCast)).append("\n");
     sb.append("    loop: ").append(toIndentedString(loop)).append("\n");
+    sb.append("    spell: ").append(toIndentedString(spell)).append("\n");
     sb.append("    primary: ").append(toIndentedString(primary)).append("\n");
     sb.append("    secondary: ").append(toIndentedString(secondary)).append("\n");
     sb.append("    highlight: ").append(toIndentedString(highlight)).append("\n");
