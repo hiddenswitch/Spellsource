@@ -32,7 +32,7 @@ public class MigratorImpl implements Migrator {
 			impl.add(req);
 		}
 		vertx.runOnContext(v1 -> {
-			vertx.runOnContext(Sync.fiber((SuspendableAction1<Void>) v2 -> {
+			vertx.runOnContext(Sync.<Void>fiber(v2 -> {
 				response.handle(impl.migrateTo(new MigrateToRequest().withVersion(version)));
 			}));
 		});

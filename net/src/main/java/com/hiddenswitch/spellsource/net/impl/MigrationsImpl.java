@@ -135,8 +135,7 @@ public class MigrationsImpl extends SyncVerticle implements Migrations {
 			}
 		}
 
-		// currentVersion was updated
-		unlock(currentVersion);
+		unlock();
 		return MigrationToResponse.succeededMigration();
 	}
 

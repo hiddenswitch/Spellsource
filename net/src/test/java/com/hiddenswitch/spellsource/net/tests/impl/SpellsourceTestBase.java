@@ -7,27 +7,25 @@ import co.paralleluniverse.strands.SettableFuture;
 import co.paralleluniverse.strands.SuspendableRunnable;
 import com.hiddenswitch.containers.MongoDBContainer;
 import com.hiddenswitch.containers.RedisContainer;
-import com.hiddenswitch.containers.ZookeeperContainer;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
-import com.hiddenswitch.spellsource.net.*;
+import com.hiddenswitch.spellsource.net.Accounts;
+import com.hiddenswitch.spellsource.net.Bots;
+import com.hiddenswitch.spellsource.net.Migrations;
+import com.hiddenswitch.spellsource.net.Spellsource;
 import com.hiddenswitch.spellsource.net.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.net.impl.UserId;
-import com.hiddenswitch.spellsource.net.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.net.impl.util.ServerGameContext;
-import com.hiddenswitch.spellsource.net.models.*;
+import com.hiddenswitch.spellsource.net.models.CreateAccountRequest;
+import com.hiddenswitch.spellsource.net.models.CreateAccountResponse;
 import io.opentracing.noop.NoopTracerFactory;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
+import io.vertx.core.*;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.decks.DeckCreateRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,13 +33,11 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
 import static io.vertx.core.Vertx.currentContext;
@@ -71,7 +67,7 @@ public abstract class SpellsourceTestBase {
 		try {
 			redisContainer.clear();
 		} catch (IOException | InterruptedException e) {
-		throw new RuntimeException(e);
+			throw new RuntimeException(e);
 		}
 		CardCatalogue.loadCardsFromPackage();
 		Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
@@ -157,6 +153,18 @@ public abstract class SpellsourceTestBase {
 		} catch (Throwable t) {
 			context.failNow(t);
 		}
+	}
+
+	@Suspendable
+	protected <T extends Verticle> Stream<T> getVerticles(Class<T> verticleType) {
+		var vertx = (VertxInternal) currentContext().owner();
+
+		return vertx.deploymentIDs()
+				.stream()
+				.map(vertx::getDeployment)
+				.flatMap(dep -> dep.getVerticles().stream())
+				.filter(verticleType::isInstance)
+				.map(verticleType::cast);
 	}
 
 	/**

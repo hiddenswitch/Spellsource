@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.net.Configuration;
 import com.hiddenswitch.spellsource.net.Connection;
 import com.hiddenswitch.spellsource.net.impl.SpellsourceAuthHandler;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
+import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.UpgradeRejectedException;
@@ -17,11 +18,33 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeoutException;
 
+import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
+import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class ConnectionTest extends SpellsourceTestBase {
+
+	@Test
+	public void testConnectionCloseHandlersCalled(Vertx vertx, VertxTestContext testContext) {
+		runOnFiberContext(() -> {
+			var latch = new CountDownLatch(1);
+			Connection.connected((connection, completionHandler) -> {
+				connection.addCloseHandler(fiber(v -> {
+					latch.countDown();
+					v.complete();
+				}));
+				completionHandler.handle(Future.succeededFuture());
+			});
+			try (var client = new UnityClient(testContext)) {
+				invoke0(client::createUserAccount);
+				client.ensureConnected();
+				client.disconnect();
+			}
+			latch.await();
+		}, testContext, vertx);
+	}
 
 	@Test
 	public void testConnectionNoAuthFails(Vertx vertx, VertxTestContext testContext) {

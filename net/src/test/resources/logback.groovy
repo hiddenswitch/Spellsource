@@ -37,6 +37,7 @@ logger("io.vertx.spi.cluster.redis", WARN)
 
 // Test group
 logger("com.hiddenswitch.spellsource.util.UnityClient", INFO)
+logger("com.hiddenswitch.spellsource.net.impl.MigrationsImpl", INFO)
 logger("com.hiddenswitch.spellsource.SimultaneousGamesTest", INFO)
 logger("com.hiddenswitch.spellsource.ClusterTest", INFO)
 logger("com.neovisionaries.ws.client", WARN)
