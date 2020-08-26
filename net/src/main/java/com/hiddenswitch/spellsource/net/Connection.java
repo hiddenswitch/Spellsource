@@ -7,9 +7,7 @@ import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.impl.*;
-import io.opentracing.Span;
 import io.opentracing.SpanContext;
-import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBus;
@@ -21,11 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.Set;
-import java.util.WeakHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.*;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
@@ -38,6 +32,7 @@ import static java.util.stream.Collectors.toList;
  */
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
 	Set<EventBus> CODECS_REGISTERED = Collections.newSetFromMap(new WeakHashMap<>());
+	Map<Vertx, Set<SetupHandler>> HANDLERS = new WeakHashMap<>();
 
 	/**
 	 * Retrieves a valid reference to write to a connection from anywhere, as long as the event bus on the other node is
@@ -64,7 +59,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * @return
 	 */
 	static Connection create(String userId) {
-		String eventBusAddress = toBusAddress(userId);
+		var eventBusAddress = toBusAddress(userId);
 		return new ConnectionImpl(userId, eventBusAddress);
 	}
 
@@ -106,16 +101,9 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		getHandlers().add(handler);
 	}
 
-	static Deque<SetupHandler> getHandlers() {
-		Vertx vertx = Vertx.currentContext().owner();
-		final Context context = vertx.getOrCreateContext();
-		Deque<SetupHandler> handlers = context.get("Connection.handlers");
-
-		if (handlers == null) {
-			handlers = new ConcurrentLinkedDeque<>();
-			context.put("Connection.handlers", handlers);
-		}
-		return handlers;
+	static Set<SetupHandler> getHandlers() {
+		var vertx = Vertx.currentContext().owner();
+		return HANDLERS.computeIfAbsent(vertx, k -> new LinkedHashSet<>());
 	}
 
 	/**
@@ -133,7 +121,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 		registerCodecs();
 
-		String userId = Accounts.userId(routingContext);
+		var userId = Accounts.userId(routingContext);
 
 		if (userId == null) {
 			routingContext.fail(403);
@@ -142,11 +130,11 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 		ServerWebSocket socket;
 
-		Tracer tracer = GlobalTracer.get();
-		Span span = tracer.buildSpan("Connection/connected")
+		var tracer = GlobalTracer.get();
+		var span = tracer.buildSpan("Connection/connected")
 				.withTag("userId", userId)
 				.start();
-		SpanContext spanContext = span.context();
+		var spanContext = span.context();
 
 		// By the time we try to upgrade the socket, the request might have been closed anyway
 		try {
@@ -158,8 +146,8 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			return;
 		}
 
-		Deque<SetupHandler> handlers = getHandlers();
-		Connection connection = create(userId);
+		var handlers = getHandlers();
+		var connection = create(userId);
 
 		try {
 			Void ready = awaitResult(h -> {
@@ -202,7 +190,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 */
 	static void registerCodecs() {
 		synchronized (CODECS_REGISTERED) {
-			Vertx owner = Vertx.currentContext().owner();
+			var owner = Vertx.currentContext().owner();
 
 			var eventBus = owner.eventBus();
 			if (CODECS_REGISTERED.add(eventBus)) {
@@ -293,6 +281,8 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	String userId();
 
 	Connection removeHandler(Handler<Envelope> handler);
+
+	boolean isOpen();
 
 	@FunctionalInterface
 	interface SetupHandler extends Handler<Connection> {

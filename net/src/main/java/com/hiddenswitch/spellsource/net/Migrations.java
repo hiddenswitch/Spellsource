@@ -3,16 +3,17 @@ package com.hiddenswitch.spellsource.net;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.cards.base.BaseCardResources;
-import com.hiddenswitch.spellsource.net.impl.*;
+import com.hiddenswitch.spellsource.net.impl.Migrator;
+import com.hiddenswitch.spellsource.net.impl.MigratorImpl;
+import com.hiddenswitch.spellsource.net.impl.Mongo;
+import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.*;
 import com.hiddenswitch.spellsource.net.models.*;
 import io.vertx.core.*;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.*;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -617,7 +618,12 @@ public interface Migrations extends Verticle {
 							CardCatalogue.loadCardsFromPackage();
 							Bots.updateBotDeckList();
 						}))
-				.migrateTo(47, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(48)
+						.withUp(thisVertx -> {
+							Presence.vacuum();
+						}))
+				.migrateTo(48, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())))
 		;
 	}

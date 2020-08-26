@@ -236,6 +236,11 @@ public class ConnectionImpl implements Connection {
 	}
 
 	@Override
+	public boolean isOpen() {
+		return !socket.isClosed();
+	}
+
+	@Override
 	public void close(Handler<AsyncResult<Void>> completionHandler) {
 		handleClose(v -> end(completionHandler));
 	}
