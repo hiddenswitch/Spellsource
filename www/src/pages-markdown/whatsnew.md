@@ -10,6 +10,36 @@ header: true
 Thanks for playing this beta of Spellsource! Read more at [our website](https://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)!
 
+### Current Version 0.8.88-3.3.6 (August 26, 2020)
+
+<details>
+<summary>Improvements to visualization of spells and hand tray on mobile.</summary>
+
+The card tray on mobile now behaves this way:
+
+ - Tap or drag to open tray
+ - Tap a card to see toggle its description text.
+ - Press and hold a card to inspect the card and see its tooltips.
+ - When the tray is open, drag to activate a card.
+ - When the tray is open, you can start dragging a unit to attack. The tray will close automatically.
+ - When a card is activated (i.e. it's in your finger, being played) the tray closes.
+ - Drag the card back to the lower part of the screen to deactivate (cancel) playing the card.
+ - Most cards issue (are played) when you are directly over the target or, when summoning, when the aura is visible.
+
+This resolves the following bugs before 3.3.4:
+
+ - When the tray is closed, dragging on a card in the closed tray would do nothing instead of opening the tray
+ - It appears you tapped on the floor, but if you tapped on an invisible placeholder where the summoning auras are stored, the tray would not close
+</details>
+
+### 0.8.88-3.3.5
+
+Visualization of spells in hand and improvements to hand tray behaviour on mobile.
+
+### 0.8.88-3.3.4
+
+Improvements to hand tray behaviour on mobile.
+
 ### 0.8.88-3.3.3 (August 22, 2020)
 
 <details>
