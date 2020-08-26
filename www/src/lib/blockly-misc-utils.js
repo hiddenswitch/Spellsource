@@ -1,8 +1,9 @@
-import Blockly from 'blockly'
+import Blockly, {FieldLabel} from 'blockly'
 import JsonConversionUtils from './json-conversion-utils'
 import {has} from 'lodash'
 import recursiveOmitBy from 'recursive-omit-by'
 import {FieldLabelSerializableHidden} from '../components/field-label-serializable-hidden'
+import {FieldLabelPlural} from "../components/field-label-plural";
 
 export default class BlocklyMiscUtils {
 
@@ -135,6 +136,9 @@ export default class BlocklyMiscUtils {
       case 'quest':
       case 'expirationTrigger':
       case 'secondRevertTrigger':
+      case 'toggleOn':
+      case 'toggleOff':
+      case "trigger":
         return 'Trigger'
       case 'value':
       case 'howMany':
@@ -151,11 +155,14 @@ export default class BlocklyMiscUtils {
       case 'manaCost':
       case 'mana':
       case 'manaCostModifier':
+      case 'minValue':
         return 'ValueProvider'
       case 'aura':
         return 'Aura'
       case 'cardSource':
         return 'Source'
+      case 'cardCostModifier':
+        return 'CostModifier'
       default:
         return null
     }
@@ -167,6 +174,7 @@ export default class BlocklyMiscUtils {
       case 'ValueProvider':
       case 'Condition':
       case 'Filter':
+      case 'CostModifier':
         return type + 'Desc'
       default:
         return type
@@ -191,11 +199,12 @@ export default class BlocklyMiscUtils {
   static initializeBlocks(data) {
     try {
       Blockly.fieldRegistry.register('field_label_serializable_hidden', FieldLabelSerializableHidden)
+      Blockly.fieldRegistry.register('field_label_plural', FieldLabelPlural)
+      this.blocklyModification()
     } catch (e) {
       // already registered
     }
 
-    this.blocklyFunctionModification()
 
     // All of our spells, triggers, entity reference enum values, etc.
     data.allBlock.edges.forEach(edge => {
@@ -268,7 +277,109 @@ export default class BlocklyMiscUtils {
     }
   }
 
-  static blocklyFunctionModification() {
+  static getHeroClassColors(data) {
+    const newHeroClassColors = {
+      ANY: '#A6A6A6'
+    }
+
+    /**
+     * first pass through the card catalogue to figure out all the collectible
+     * hero classes and their colors
+     */
+    data.allCard.edges.forEach(edge => {
+      let card = edge.node
+      let type = 'HeroClass_' + card.heroClass
+      if (has(Blockly.Blocks, type)) {
+        return
+      }
+      if (card.type === 'CLASS' && card.collectible) {
+        let color = Blockly.utils.colour.rgbToHex(
+          card.art.primary.r * 255,
+          card.art.primary.g * 255,
+          card.art.primary.b * 255
+        )
+
+        newHeroClassColors[card.heroClass] = color
+        let block = {
+          'type': type,
+          'message0': card.name,
+          'output': 'HeroClass',
+          'colour': color,
+          'data': card.heroClass
+        }
+        BlocklyMiscUtils.addBlock(block)
+      }
+    })
+    return newHeroClassColors
+  }
+
+  static initCardBlocks(data) {
+    const heroClassColors = BlocklyMiscUtils.getHeroClassColors(data)
+    //second pass through to actually get the cards
+    data.allCard.edges.forEach(edge => {
+      let card = edge.node
+      let type = 'CatalogueCard_' + card.id
+      if (has(Blockly.Blocks, type)) {
+        return
+      }
+      if (heroClassColors.hasOwnProperty(card.heroClass)) { //this check if it's *really* collectible
+        let color = heroClassColors[card.heroClass]
+        let block = {
+          'type': type,
+          'args0': [],
+          'message0': BlocklyMiscUtils.cardMessage(card),
+          'output': 'Card',
+          'colour': color,
+          'data': card.id,
+          'comment': this.cardDescription(card)
+        }
+        BlocklyMiscUtils.addBlock(block)
+      }
+    })
+  }
+
+  static cardDescription(card) {
+    if (!card.description) {
+      return null
+    }
+    const newLine = 25
+    let words = card.description.split(' ')
+    if (words.length === 0) {
+      return ''
+    }
+    let desc = '"' + words[0]
+    if (!!card.race) {
+      desc = this.toHappyFormatting(card.race) + ' ' + desc
+    }
+    let counter = desc.length
+    for (let word of words.slice(1)) {
+      if (counter + word.length > newLine) {
+        desc += '\n'
+        counter = 0
+      } else {
+        desc += ' '
+      }
+      counter += word.length
+      desc += word
+    }
+    return desc + '"'
+  }
+
+  /**
+   * Helper method to make sure added blocks have the correct shadows
+   * We still want those in case people decide to pull apart the converted stuff
+   * @param workspace The workspace
+   * @param type The block type to create
+   * @returns The created block
+   */
+  static newBlock(workspace, type) {
+    let block = workspace.newBlock(type)
+    this.manuallyAddShadowBlocks(block, Blockly.Blocks[type].json)
+    return block
+  }
+
+
+  static blocklyModification() {
     Blockly.HSV_SATURATION = .65
     Blockly.Blocks = {} //we don't use any of the default Blockly blocks
 
@@ -546,106 +657,30 @@ export default class BlocklyMiscUtils {
       removeComments(block)
       return block
     }
-  }
 
-  static getHeroClassColors(data) {
-    const newHeroClassColors = {
-      ANY: '#A6A6A6'
-    }
+    const getInRowSpacing = Blockly.geras.RenderInfo.prototype.getInRowSpacing_
+    Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
+      // Spacing between two fields of the same editability.
 
-    /**
-     * first pass through the card catalogue to figure out all the collectible
-     * hero classes and their colors
-     */
-    data.allCard.edges.forEach(edge => {
-      let card = edge.node
-      let type = 'HeroClass_' + card.heroClass
-      if (has(Blockly.Blocks, type)) {
-        return
+      if (prev && Blockly.blockRendering.Types.isField(prev) &&
+        next && Blockly.blockRendering.Types.isField(next) &&
+        prev.isEditable === next.isEditable &&
+        (prev.field instanceof FieldLabelPlural && !(next.field instanceof FieldLabelPlural))) {
+        return this.constants_.MEDIUM_PADDING
       }
-      if (card.type === 'CLASS' && card.collectible) {
-        let color = Blockly.utils.colour.rgbToHex(
-          card.art.primary.r * 255,
-          card.art.primary.g * 255,
-          card.art.primary.b * 255
-        )
-
-        newHeroClassColors[card.heroClass] = color
-        let block = {
-          'type': type,
-          'message0': card.name,
-          'output': 'HeroClass',
-          'colour': color,
-          'data': card.heroClass
+      if (prev && Blockly.blockRendering.Types.isField(prev) &&
+        prev.field instanceof FieldLabelPlural && prev.field.value_ === ' ') {
+        return 0
+      }
+      if (next && Blockly.blockRendering.Types.isField(next) &&
+        next.field instanceof FieldLabelPlural &&
+        (next.field.value_ === ' ' || next.field.value_ === 's')) {
+        if (prev?.field instanceof FieldLabel) {
+          return 0
         }
-        BlocklyMiscUtils.addBlock(block)
+        return 3
       }
-    })
-    return newHeroClassColors
-  }
-
-  static initCardBlocks(data) {
-    const heroClassColors = BlocklyMiscUtils.getHeroClassColors(data)
-    //second pass through to actually get the cards
-    data.allCard.edges.forEach(edge => {
-      let card = edge.node
-      let type = 'CatalogueCard_' + card.id
-      if (has(Blockly.Blocks, type)) {
-        return
-      }
-      if (heroClassColors.hasOwnProperty(card.heroClass)) { //this check if it's *really* collectible
-        let color = heroClassColors[card.heroClass]
-        let block = {
-          'type': type,
-          'args0': [],
-          'message0': BlocklyMiscUtils.cardMessage(card),
-          'output': 'Card',
-          'colour': color,
-          'data': card.id,
-          'comment': this.cardDescription(card)
-        }
-        BlocklyMiscUtils.addBlock(block)
-      }
-    })
-  }
-
-  static cardDescription(card) {
-    if (!card.description) {
-      return null
+      return getInRowSpacing.call(this, prev, next)
     }
-    const newLine = 25
-    let words = card.description.split(' ')
-    if (words.length === 0) {
-      return ''
-    }
-    let desc = '"' + words[0]
-    if (!!card.race) {
-      desc = this.toHappyFormatting(card.race) + ' ' + desc
-    }
-    let counter = desc.length
-    for (let word of words.slice(1)) {
-      if (counter + word.length > newLine) {
-        desc += '\n'
-        counter = 0
-      } else {
-        desc += ' '
-      }
-      counter += word.length
-      desc += word
-    }
-    return desc + '"'
-  }
-
-  /**
-   * Helper method to make sure added blocks have the correct shadows
-   * We still want those in case people decide to pull apart the converted stuff
-   * @param workspace The workspace
-   * @param type The block type to create
-   * @returns The created block
-   */
-  static newBlock(workspace, type) {
-    let block = workspace.newBlock(type)
-    this.manuallyAddShadowBlocks(block, Blockly.Blocks[type].json)
-    return block
   }
 }

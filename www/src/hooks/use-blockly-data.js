@@ -55,6 +55,7 @@ export default function useBlocklyData () {
           hat
           comment
           subcategory
+          plural
         }
       }
     }

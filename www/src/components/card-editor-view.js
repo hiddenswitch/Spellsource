@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useRef, useState} from 'react'
 import WorkspaceUtils from '../lib/workspace-utils'
 import styles from './card-editor-view.module.css'
 import ReactBlocklyComponent from 'react-blockly'
-import Blockly from 'blockly'
+import Blockly, {isNumber} from 'blockly'
 import {isArray} from 'lodash'
 import AceEditor from 'react-ace'
 import 'ace-builds/src-noconflict/mode-json'
@@ -16,7 +16,7 @@ import useComponentWillMount from '../hooks/use-component-will-mount'
 import useBlocklyData from '../hooks/use-blockly-data'
 
 const CardEditorView = () => {
-  const defaultCard = true
+  const defaultCard = false
 
   const data = useBlocklyData()
 
@@ -64,9 +64,63 @@ const CardEditorView = () => {
       }, 100)
     }
 
+    const pluralStuff = (event) => {
+      if (event.type !== Blockly.Events.UI && !workspace.isDragging()) {
+        for (let block of workspace.getAllBlocks()) {
+          let argsList = JsonConversionUtils.argsList(block.json);
+          for (let arg of argsList) {
+            if (arg.type === 'field_label_plural') {
+              let shouldBePlural = null
+              if (!!block && !!block.json) {
+                let connection
+                if (arg.src === 'OUTPUT') {
+                  connection = block.outputConnection
+                  if (!!block.outputConnection.targetBlock()) {
+                    let targetBlock = connection.targetBlock()
+                    let name = targetBlock.getInputWithBlock(block)?.name
+                    for (let arg of JsonConversionUtils.inputsList(targetBlock.json)) {
+                      if (arg.name === name && !!arg.src) {
+                        connection = targetBlock.getInput(arg.src).connection
+                      }
+                    }
+                  }
+                } else {
+                  connection = block.getInput(arg.src)?.connection
+                }
+                if (!connection && !!block.getField(arg.src)) {
+                  shouldBePlural = block.getFieldValue(arg.src) !== 1
+                } else if (!!connection.targetBlock()) {
+                  let targetBlock = connection.targetBlock()
+                  if (targetBlock.json?.plural != null) {
+                    shouldBePlural = targetBlock.json.plural
+                  } else if (targetBlock.type === 'ValueProvider_int') {
+                    shouldBePlural = targetBlock.getFieldValue('int') !== 1
+                  }
+                }
+              }
+              const options = arg.text.split('/')
+              if (shouldBePlural === null) {
+                if (arg.value) {
+                  block.setFieldValue(arg.value, arg.name)
+                } else {
+                  block.setFieldValue(arg.text, arg.name)
+                }
+              } else if (shouldBePlural) {
+                block.setFieldValue(options[1], arg.name)
+              } else {
+                block.setFieldValue(options[0], arg.name)
+              }
+            }
+          }
+        }
+      }
+    }
+    workspace.addChangeListener(pluralStuff)
+
     return () => {
       workspace.removeButtonCallback('importCard')
       workspace.removeChangeListener(changeListenerCallback)
+      workspace.removeChangeListener(pluralStuff)
     }
   }, [])
 
@@ -387,7 +441,7 @@ const CardEditorView = () => {
           }
         }
         />
-        <Form.Check.Label title={blockCommentsTooltip}> Show Block Comments</Form.Check.Label>
+        <Form.Check.Label title={blockCommentsTooltip}> Show Toolbox Comments</Form.Check.Label>
       </Form.Check>
     <ReactBlocklyComponent.BlocklyEditor
       workspaceDidChange={onWorkspaceChanged}

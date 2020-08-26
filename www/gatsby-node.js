@@ -42,6 +42,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     searchMessage: String
     comment: String
     subcategory: String
+    plural: Boolean
   }
   type Args1 {
     i: Int!
@@ -177,6 +178,9 @@ exports.createResolvers = ({ createResolvers }) => {
                 text += option[0] + ' '
               }
               return text
+            }
+            if (arg.type === 'field_label_plural') {
+              return arg.value
             }
             return ''
           }
