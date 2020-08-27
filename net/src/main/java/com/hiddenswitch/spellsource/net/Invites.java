@@ -51,7 +51,7 @@ public interface Invites {
 	 * Sends clients undelivered invites and marks them as pending.
 	 */
 	static void handleConnections() {
-		Connection.connected((connection, fut) -> {
+		Connection.connected("Invites/handleConnections", (connection, fut) -> {
 			var userId = connection.userId();
 			connection.addCloseHandler(fiber(v -> {
 				// Reject pending challenge invites

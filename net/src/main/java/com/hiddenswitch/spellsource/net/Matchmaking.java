@@ -503,7 +503,7 @@ public interface Matchmaking {
 	 * connected players of changes in queue status.
 	 */
 	static void handleConnections() {
-		Connection.connected((connection, fut) -> {
+		Connection.connected("Matchmaking/handleConnections", (connection, fut) -> {
 			LOGGER.trace("handleConnections {}: Matchmaking ready", connection.userId());
 			// If the user disconnects, dequeue them immediately.
 			connection.addCloseHandler(fiber(v -> {

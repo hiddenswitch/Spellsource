@@ -57,7 +57,7 @@ public interface Editor {
 	 */
 	@Suspendable
 	static void handleConnections() {
-		Connection.connected((connection, fut) -> {
+		Connection.connected("Editor/handleConnections", (connection, fut) -> {
 			// Notify the user of all their existing editable cards
 			if (!Fiber.isCurrentFiber()) {
 				throw new RuntimeException("not fiber");

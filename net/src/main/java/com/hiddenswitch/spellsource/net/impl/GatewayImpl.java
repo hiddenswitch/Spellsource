@@ -50,6 +50,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.array;
@@ -91,6 +92,8 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		server = vertx.createHttpServer(new HttpServerOptions()
 				.setHost("0.0.0.0")
 				.setPort(port)
+				.setIdleTimeout(30)
+				.setIdleTimeoutUnit(TimeUnit.SECONDS)
 				.setMaxWebSocketFrameSize(65536)
 				.setWebSocketAllowServerNoContext(true)
 				.setWebSocketPreferredClientNoContext(true)

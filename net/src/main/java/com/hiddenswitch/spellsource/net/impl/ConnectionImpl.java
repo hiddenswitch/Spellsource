@@ -56,11 +56,11 @@ public class ConnectionImpl implements Connection {
 			throw new UnsupportedOperationException();
 		}
 		this.socket = socket;
-		String eventBusAddress = getEventBusAddress();
-		EventBus eventBus = Vertx.currentContext().owner().eventBus();
+		var eventBusAddress = getEventBusAddress();
+		var eventBus = Vertx.currentContext().owner().eventBus();
 		consumer = eventBus.consumer(eventBusAddress);
-		Tracer tracer = GlobalTracer.get();
-		Span span = tracer.buildSpan("Connection/internal")
+		var tracer = GlobalTracer.get();
+		var span = tracer.buildSpan("Connection/internal")
 				.asChildOf(parentSpan)
 				.withTag("userId", userId)
 				.withTag(Tags.PEER_HOSTNAME, socket.remoteAddress().host())
@@ -75,9 +75,9 @@ public class ConnectionImpl implements Connection {
 
 		// Read handler
 		socket.handler(buf -> {
-			Envelope decoded = Json.decodeValue(buf, Envelope.class);
+			var decoded = Json.decodeValue(buf, Envelope.class);
 			span.log(ImmutableMap.of(Fields.EVENT, "received", "size", buf.length()));
-			for (Handler<Envelope> handler : handlers) {
+			for (var handler : handlers) {
 				try {
 					handler.handle(decoded);
 				} catch (RuntimeException runtimeException) {
@@ -88,14 +88,14 @@ public class ConnectionImpl implements Connection {
 
 		// Logging of exceptions is handled in caller
 		socket.exceptionHandler(t -> {
-			for (Handler<Throwable> handler : exceptionHandlers) {
+			for (var handler : exceptionHandlers) {
 				handler.handle(t);
 			}
 		});
 
 		socket.drainHandler(v -> {
 			span.log("drained");
-			for (Handler<Void> handler : drainHandlers) {
+			for (var handler : drainHandlers) {
 				handler.handle(v);
 			}
 		});
@@ -111,7 +111,7 @@ public class ConnectionImpl implements Connection {
 	private void handleClose(Handler<AsyncResult<Void>> completed) {
 		if (closing.compareAndSet(false, true)) {
 			var promises = new ArrayList<Promise<Void>>();
-			for (Handler<Promise<Void>> handler : closeHandlers) {
+			for (var handler : closeHandlers) {
 				var promise = Promise.<Void>promise();
 				promises.add(promise);
 				handler.handle(promise);

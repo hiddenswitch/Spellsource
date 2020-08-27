@@ -20,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
@@ -27,12 +28,12 @@ import static java.util.stream.Collectors.toList;
 /**
  * Manages the real time data connection users get when they connect to the Spellsource server.
  * <p>
- * To set up a behaviour that uses the real time connect, use {@link Connection#connected(SetupHandler)}, which passes
- * you a new connection to a unique user.
+ * To set up a behaviour that uses the real time connect, use {@link Connection#connected(String, SetupHandler)}, which
+ * passes you a new connection to a unique user.
  */
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
 	Set<EventBus> CODECS_REGISTERED = Collections.newSetFromMap(new WeakHashMap<>());
-	Map<Vertx, Set<SetupHandler>> HANDLERS = new WeakHashMap<>();
+	Map<String, SetupHandler> HANDLERS = new ConcurrentHashMap<>();
 
 	/**
 	 * Retrieves a valid reference to write to a connection from anywhere, as long as the event bus on the other node is
@@ -97,13 +98,12 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 *
 	 * @param handler a setup handler
 	 */
-	static void connected(SetupHandler handler) {
-		getHandlers().add(handler);
+	static void connected(String name, SetupHandler handler) {
+		HANDLERS.putIfAbsent(name, handler);
 	}
 
-	static Set<SetupHandler> getHandlers() {
-		var vertx = Vertx.currentContext().owner();
-		return HANDLERS.computeIfAbsent(vertx, k -> new LinkedHashSet<>());
+	static Collection<SetupHandler> getHandlers() {
+		return HANDLERS.values();
 	}
 
 	/**
