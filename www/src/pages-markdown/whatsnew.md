@@ -10,7 +10,11 @@ header: true
 Thanks for playing this beta of Spellsource! Read more at [our website](https://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)!
 
-### Current Version 0.8.88-3.3.6 (August 26, 2020)
+### Current Version 0.8.89-3.3.6 (August 27, 2020)
+
+Improvements to presence.
+
+### 0.8.88-3.3.6 (August 26, 2020)
 
 <details>
 <summary>Improvements to visualization of spells and hand tray on mobile.</summary>
