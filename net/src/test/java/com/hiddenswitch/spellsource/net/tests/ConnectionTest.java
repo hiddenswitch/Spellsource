@@ -29,20 +29,26 @@ public class ConnectionTest extends SpellsourceTestBase {
 	@Test
 	public void testConnectionCloseHandlersCalled(Vertx vertx, VertxTestContext testContext) {
 		runOnFiberContext(() -> {
-			var latch = new CountDownLatch(1);
-			Connection.connected((connection, completionHandler) -> {
-				connection.addCloseHandler(fiber(v -> {
-					latch.countDown();
-					v.complete();
-				}));
-				completionHandler.handle(Future.succeededFuture());
-			});
-			try (var client = new UnityClient(testContext)) {
-				invoke0(client::createUserAccount);
-				client.ensureConnected();
-				client.disconnect();
+			try {
+				var latch = new CountDownLatch(1);
+				Connection.connected("testCloseHandlers", (connection, completionHandler) -> {
+					connection.addCloseHandler(fiber(v -> {
+						latch.countDown();
+						v.complete();
+					}));
+					completionHandler.handle(Future.succeededFuture());
+				});
+				try (var client = new UnityClient(testContext)) {
+					invoke0(client::createUserAccount);
+					client.ensureConnected();
+					client.disconnect();
+				}
+				latch.await();
+			} finally {
+				Connection.HANDLERS.remove("testCloseHandlers");
+
 			}
-			latch.await();
+
 		}, testContext, vertx);
 	}
 
@@ -98,25 +104,28 @@ public class ConnectionTest extends SpellsourceTestBase {
 	@Test
 	public void testConnectionWithInvalidAuthFails(Vertx vertx, VertxTestContext testContext) {
 		runOnFiberContext(() -> {
-			var latch = new CountDownLatch(1);
-			createRandomAccount();
-			Connection.connected((connection, fut) -> {
-				verify(testContext, () -> {
-					fail("Should not connect");
-					fut.handle(Future.succeededFuture());
+			try {
+				var latch = new CountDownLatch(1);
+				createRandomAccount();
+				Connection.connected("testInvalidAuth", (connection, fut) -> {
+					verify(testContext, () -> {
+						fail("Should not connect");
+						fut.handle(Future.succeededFuture());
+					});
 				});
 
-			});
+				var client = Vertx.currentContext().owner().createHttpClient();
+				client.webSocket(Configuration.apiGatewayPort(), "localhost", "/realtime?" + SpellsourceAuthHandler.HEADER + "=invalid:auth", testContext.failing(cause -> {
+					verify(testContext, () -> {
+						assertTrue(UpgradeRejectedException.class.isAssignableFrom(cause.getClass()));
+						latch.countDown();
+					});
 
-			var client = Vertx.currentContext().owner().createHttpClient();
-			client.webSocket(Configuration.apiGatewayPort(), "localhost", "/realtime?" + SpellsourceAuthHandler.HEADER + "=invalid:auth", testContext.failing(cause -> {
-				verify(testContext, () -> {
-					assertTrue(UpgradeRejectedException.class.isAssignableFrom(cause.getClass()));
-					latch.countDown();
-				});
-
-			}));
-			latch.await();
+				}));
+				latch.await();
+			} finally {
+				Connection.HANDLERS.remove("testInvalidAuth");
+			}
 		}, testContext, vertx);
 	}
 }

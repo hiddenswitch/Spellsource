@@ -254,11 +254,15 @@ public class ServerGameContext extends GameContext implements Server {
 	 * @return A way to disconnect the machinery that makes the messaging happen for this particular server instance.
 	 */
 	public static Closeable handleConnections() {
-		Set<MessageConsumer<ServerToClientMessage>> consumers = new ConcurrentHashSet<>();
-
 		// Set up the connectivity for the user.
 		Connection.SetupHandler handler = (connection, fut) -> {
-			Vertx vertx = Vertx.currentContext().owner();
+			var context = Vertx.currentContext();
+			Set<MessageConsumer<ServerToClientMessage>> consumers = context.get("ServerGameContextConsumers");
+			if (consumers == null) {
+				consumers = new ConcurrentHashSet<>();
+				context.put("ServerGameContextConsumers", consumers);
+			}
+			Vertx vertx = context.owner();
 			EventBus bus = vertx.eventBus();
 			String userId = connection.userId();
 
@@ -290,26 +294,32 @@ public class ServerGameContext extends GameContext implements Server {
 			});
 
 			// When the connection is closed for any reason (client disconnect or server shutdown), make sure to remove these event bus registrations
+			Set<MessageConsumer<ServerToClientMessage>> finalConsumers = consumers;
 			connection.addCloseHandler(v1 -> {
-				consumers.remove(consumer);
+				finalConsumers.remove(consumer);
 				consumer.unregister(v1);
+			});
+
+			// Also shutdown the consumers that remain here
+			context.addCloseHook(v -> {
+				var copy = new ArrayList<>(finalConsumers);
+				finalConsumers.clear();
+				CompositeFuture.join(copy.stream().map(mc -> {
+					Promise<Void> promise = Promise.promise();
+					mc.unregister(promise);
+					return promise.future();
+				}).collect(toList())).onComplete(v1 -> v.handle(v1.mapEmpty()));
 			});
 
 			consumer.completionHandler(fut);
 		};
 
 		// Handle the connections here.
-		Connection.connected(handler);
+		Connection.connected("ServerGameContext/handleConnections", handler);
 
-		// Remove all remaining handlers
+		// Do nothing
 		return completionHandler -> {
-			Connection.getHandlers().remove(handler);
-
-			CompositeFuture.join(consumers.stream().map(mc -> {
-				Promise<Void> promise = Promise.promise();
-				mc.unregister(promise);
-				return promise.future();
-			}).collect(toList())).onComplete(v1 -> completionHandler.handle(v1.mapEmpty()));
+			completionHandler.handle(Future.succeededFuture());
 		};
 	}
 

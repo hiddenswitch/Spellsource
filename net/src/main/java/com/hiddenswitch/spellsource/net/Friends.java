@@ -21,7 +21,7 @@ public interface Friends {
 	 * Sends the player their friend list as "added" on their first connection
 	 */
 	static void handleConnections() {
-		Connection.connected((connection, fut) -> {
+		Connection.connected("Friends/handleConnections", (connection, fut) -> {
 			defer(v -> {
 				try {
 					UserRecord user = mongo().findOne(Accounts.USERS, json("_id", connection.userId()), UserRecord.class);

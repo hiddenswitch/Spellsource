@@ -46,7 +46,7 @@ public interface Presence {
 
 	static void handleConnections() {
 		// A node that is updating presences may not be the same node that has a user that needs to be notified
-		Connection.connected((connection, fut) -> {
+		Connection.connected("Presence/handleConnections", (connection, fut) -> {
 			var vertx = Vertx.currentContext().owner();
 
 			var userId = new UserId(connection.userId());
