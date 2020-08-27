@@ -135,7 +135,7 @@ public class MigrationsImpl extends SyncVerticle implements Migrations {
 			}
 		}
 
-		unlock();
+		unlock(currentVersion);
 		return MigrationToResponse.succeededMigration();
 	}
 
@@ -187,9 +187,9 @@ public class MigrationsImpl extends SyncVerticle implements Migrations {
 	}
 
 
-	private void unlock(int version) throws SuspendExecution, InterruptedException {
-		mongo().updateCollectionWithOptions(MIGRATIONS, json("_id", "control", "locked", true, "version", version),
-				json("$set", json("locked", false)),
+	private void unlock(int newVersion) throws SuspendExecution, InterruptedException {
+		mongo().updateCollectionWithOptions(MIGRATIONS, json("_id", "control", "locked", true),
+				json("$set", json("locked", false, "version", newVersion)),
 				new UpdateOptions()
 						.setWriteOption(WriteOption.FSYNCED));
 	}
