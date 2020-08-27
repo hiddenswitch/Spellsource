@@ -150,7 +150,7 @@ export default class JsonConversionUtils {
       if (!!aftermathBlock.initSvg) {
         aftermathBlock.initSvg()
       }
-      this.handleArg(aftermathBlock.getInput('deathrattle').connection, card.deathrattle, 'deathrattle', workspace, card)
+      this.simpleHandleArg(aftermathBlock, 'deathrattle', card, workspace)
       lowestBlock = aftermathBlock
     }
 
@@ -229,7 +229,7 @@ export default class JsonConversionUtils {
     if (!!card.manaCostModifier) {
       let costyBlock = null
       if (card.manaCostModifier.class === 'ConditionalValueProvider' && card.manaCostModifier.ifFalse === 0) {
-        costyBlock = this.newBlock(workspace, 'Property_cost_modifier_conditional')
+        costyBlock = this.newBlock(workspace, 'Property_manaCostModifierCondition')
         this.handleArg(costyBlock.getInput('manaCostModifier.condition').connection, card.manaCostModifier.condition,
           'condition', workspace, card)
         if (typeof card.manaCostModifier.ifTrue === 'object') {
@@ -240,7 +240,7 @@ export default class JsonConversionUtils {
         }
 
       } else {
-        costyBlock = this.newBlock(workspace, 'Property_cost_modifier')
+        costyBlock = this.newBlock(workspace, 'Property_manaCostModifier')
         this.handleArg(costyBlock.getInput('manaCostModifier').connection, card.manaCostModifier,
           'manaCostModifier', workspace, card)
       }
@@ -252,7 +252,15 @@ export default class JsonConversionUtils {
     }
 
     if (!!card.cardCostModifier) {
+      let costyBlock = this.newBlock(workspace, 'Property_cardCostModifier')
+      lowestBlock.nextConnection.connect(costyBlock.previousConnection)
+      if (!!costyBlock.initSvg) {
+        costyBlock.initSvg()
+      }
 
+      this.costModifier(costyBlock, card.cardCostModifier, workspace)
+
+      lowestBlock = costyBlock
     }
 
     if (!!card.dynamicDescription) {
@@ -309,6 +317,18 @@ export default class JsonConversionUtils {
             colorBlock.setFieldValue(Math.round(json[i] * 255), i)
           }
         }
+      }
+      if (!!card.art.glow) {
+        let glowBlock = this.newBlock(workspace, 'Property_glow')
+        glowBlock.previousConnection.connect(lowestBlock.nextConnection)
+        let colorBlock = glowBlock.getInput('art.glow').connection.targetBlock()
+        for (let i of ['r', 'g', 'b', 'a']) {
+          colorBlock.setFieldValue(Math.round(card.art.glow[i] * 255), i)
+        }
+        if (!!glowBlock.initSvg) {
+          glowBlock.initSvg()
+        }
+        lowestBlock = glowBlock
       }
     }
 
@@ -388,7 +408,7 @@ export default class JsonConversionUtils {
 
   /**
    * Handles finding an input on a block by what its name ends with
-   * @param block The block (its json definition) to search through
+   * @param block The block (not its json definition) to search through
    * @param inputName What the name has to end with
    * @returns The json for the correct input, or null
    */
@@ -470,6 +490,88 @@ export default class JsonConversionUtils {
   }
 
   /**
+   * Whether we need to use the EnchantmentOptions block and not just the Enchantment block
+   *
+   * Used to be more complicated, but the trigger conditions got streamlined
+   * @param costModifier
+   * @param props
+   * @returns {boolean}
+   */
+  static costModifierNeedsOptions(costModifier, props) {
+    if (costModifier.class === 'OneTurnCostModifier') return true
+    for (let prop of props) {
+      if (!!Blockly.Blocks['CostModifierOption_' + prop]) {
+        return true
+      }
+    }
+    return false
+  }
+
+  /**
+   * Cost Modifiers are special enough to need their own method
+   * because of the unique option blocks
+   *
+   * @param costModifier The json of the trigger to be blockified
+   * @param workspace The workspace
+   * @returns The created block
+   */
+  static costModifier(costyBlock, costModifier, workspace) {
+    if (typeof costModifier.value !== 'object' && costModifier.value < 0) {
+      if (costModifier.operation === 'SUBTRACT') {
+        costModifier.operation = 'ADD'
+      } else {
+        costModifier.operation = 'SUBTRACT'
+      }
+      costModifier.value *= -1
+    }
+    let props = this.relevantProperties(costModifier)
+    let costModifierBlock
+    let lowestOptionConnection
+    if (!this.costModifierNeedsOptions(costModifier, props)) {
+      costModifierBlock = this.newBlock(workspace, 'CostModifier')
+    } else {
+      costModifierBlock = this.newBlock(workspace, 'CostModifierOptions')
+      lowestOptionConnection = costModifierBlock.getFirstStatementConnection()
+      for (let prop of props) {
+        if (prop === 'value' || prop === 'operation' || prop === 'target') {
+          continue
+        }
+        let option = this.newBlock(workspace, 'CostModifierOption_' + prop)
+        this.handleInputs(Blockly.Blocks['CostModifierOption_' + prop].json, costModifier, option, workspace, null)
+        if (!!option.initSvg) {
+          option.initSvg()
+        }
+        lowestOptionConnection.connect(option.previousConnection)
+        lowestOptionConnection = lowestOptionConnection.targetBlock().nextConnection
+      }
+    }
+    if (costModifier.class === 'OneTurnCostModifier') {
+      let option = this.newBlock(workspace, 'CostModifierOption_oneTurn')
+      if (!!option.initSvg) {
+        option.initSvg()
+      }
+      lowestOptionConnection.connect(option.previousConnection)
+    }
+    if (typeof costModifier.value !== 'object') {
+      this.handleIntArg(costModifierBlock, 'value', workspace, costModifier.value)
+    } else {
+      this.simpleHandleArg(costModifierBlock, 'value', costModifier, workspace)
+    }
+    if (!!costModifier.target) {
+      this.simpleHandleArg(costModifierBlock, 'target', costModifier, workspace)
+    }
+    if (!!costModifier.operation) {
+      costModifierBlock.setFieldValue(costModifier.operation, 'operation')
+    }
+
+    if (costModifierBlock.initSvg) {
+      costModifierBlock.initSvg()
+    }
+
+    costyBlock.getInput('cardCostModifier').connection.connect(costModifierBlock.outputConnection)
+  }
+
+  /**
    * Auras are also weird enough to need their own method,
    * since they're the only typical 'Desc' style json object
    * that's statement style and not value style
@@ -537,6 +639,16 @@ export default class JsonConversionUtils {
           return Blockly.Blocks['Spell_AddEnchantment2'].json
         } else {
           return Blockly.Blocks['Spell_AddEnchantment'].json
+        }
+      }
+      if (className === 'CardCostModifierSpell') {
+        return Blockly.Blocks['Spell_CardCostModifier'].json
+      }
+      if (className.endsWith('CostModifier')) {
+        if (this.costModifierNeedsOptions(json, this.relevantProperties(json))) {
+          return Blockly.Blocks['CostModifierOptions'].json
+        } else {
+          return Blockly.Blocks['CostModifier'].json
         }
       }
       matches = this.classBlocksDictionary[className]
@@ -685,6 +797,10 @@ export default class JsonConversionUtils {
       return //args already taken care of by handleNoMatch
     }
 
+    this.handleInputs(bestMatch, json, newBlock, workspace, parentJson)
+  }
+
+  static handleInputs(bestMatch, json, newBlock, workspace, parentJson) {
     //now handle each dropdown on the new block (assumes stuff will just work)
     for (let dropdown of this.dropdownsList(bestMatch)) {
       let jsonElement = json[dropdown.name]
@@ -724,6 +840,8 @@ export default class JsonConversionUtils {
         this.enchantment(json.trigger, workspace, newBlock.getFirstStatementConnection().targetBlock())
       } else if (name === 'aura') {
         this.auras(newBlock, json, workspace)
+      } else if (name === 'cardCostModifier') {
+        this.costModifier(newBlock, json.cardCostModifier, workspace)
       } else { //default recursion case
         this.handleArg(newBlock.getInput(argName).connection, jsonElement, name, workspace, json)
       }
