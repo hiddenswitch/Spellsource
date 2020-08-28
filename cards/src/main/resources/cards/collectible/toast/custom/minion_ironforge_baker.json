@@ -15,7 +15,6 @@
       "spells": [
         {
           "class": "ShuffleToDeckSpell",
-          "value": 1,
           "spell": {
             "class": "CardCostModifierSpell",
             "target": "OUTPUT",

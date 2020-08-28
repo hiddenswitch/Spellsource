@@ -9,8 +9,18 @@
   "spell": {
     "class": "PlayCardsRandomlySpell",
     "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "SPELL"
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        },
+        {
+          "class": "SpecificCardFilter",
+          "card": "spell_titan_feast",
+          "invert": true
+        }
+      ]
     },
     "cardSource": {
       "class": "DeckSource",

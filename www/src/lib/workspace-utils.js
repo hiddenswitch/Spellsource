@@ -103,7 +103,8 @@ export default class WorkspaceUtils {
             const value = values[i]
             switch (value) {
               case WorkspaceUtils.BLOCKLY_EXTEND_PREVIOUS:
-                if (!!obj.customArg && !!obj.customValue) {
+                if (obj.customArg !== null && obj.customArg !== undefined
+                  && obj.customValue !== null && obj.customValue !== undefined) {
                   obj[obj.customArg] = obj.customValue
                   delete obj.customArg
                   delete obj.customValue
@@ -197,11 +198,14 @@ export default class WorkspaceUtils {
     if (cardScript.target === 'IT') {
       delete cardScript.target
     }
+    if (cardScript.secondaryTarget === 'IT') {
+      delete cardScript.secondaryTarget
+    }
     if (cardScript.cardType === 'ANY') {
       delete cardScript.cardType
     }
 
-    if (!!cardScript.battlecry) {
+    if (!!cardScript.battlecry && !!cardScript.fileFormatVersion) {
       if (!cardScript.attributes) {
         cardScript.attributes = {}
       }
@@ -215,15 +219,23 @@ export default class WorkspaceUtils {
       cardScript.attributes.DEATHRATTLES = true
     }
 
-    if (!!cardScript.class && cardScript.class.endsWith('Aura')
-      && !!cardScript.attribute && !cardScript.attribute.startsWith('AURA_')) {
-      cardScript.attribute = 'AURA_' + cardScript.attribute
+    if (!!cardScript.class && cardScript.class.endsWith('Aura')) {
+      if (!!cardScript.attribute && !cardScript.attribute.startsWith('AURA_')
+      && !cardScript.attribute.startsWith('RESERVED')) {
+        cardScript.attribute = 'AURA_' + cardScript.attribute
+      }
+
+      if (!!cardScript.trigger) {
+        cardScript.triggers = [cardScript.trigger]
+        delete cardScript.trigger
+      }
+    } else {
+      if (!!cardScript.triggers && cardScript.triggers.length === 1) {
+        cardScript.trigger = cardScript.triggers[0]
+        delete cardScript.triggers
+      }
     }
 
-    if (!!cardScript.triggers && cardScript.triggers.length === 1) {
-      cardScript.trigger = cardScript.triggers[0]
-      delete cardScript.triggers
-    }
 
     if (!!cardScript.aura && isArray(cardScript.aura)) {
       cardScript.aura = cardScript.aura[0]

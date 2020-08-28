@@ -154,32 +154,35 @@ export default class JsonConversionUtils {
       lowestBlock = aftermathBlock
     }
 
-    if (!!card.triggers || !!card.trigger) {
-      let triggersBlock = this.newBlock(workspace, 'Property_triggers')
-      lowestBlock.nextConnection.connect(triggersBlock.previousConnection)
-      if (!!triggersBlock.initSvg) {
-        triggersBlock.initSvg()
-      }
-
-      let triggers
-      if (!!card.trigger) {
-        triggers = [card.trigger]
-      } else {
-        triggers = card.triggers
-      }
-
-      let lowestConnection = triggersBlock.getFirstStatementConnection()
-      for (let trigger of triggers) {
-        let triggerBlock = this.enchantment(trigger, workspace)
-        lowestConnection.connect(triggerBlock.previousConnection)
-        lowestConnection = triggerBlock.nextConnection
-        if (!!triggerBlock.initSvg) {
-          triggerBlock.initSvg()
+    const triggers = (trigger, property) => {
+      if (!!card[trigger + 's'] || !!card[trigger]) {
+        let triggersBlock = this.newBlock(workspace, property)
+        lowestBlock.nextConnection.connect(triggersBlock.previousConnection)
+        if (!!triggersBlock.initSvg) {
+          triggersBlock.initSvg()
         }
+        let triggers
+        if (!!card[trigger]) {
+          triggers = [card[trigger]]
+        } else {
+          triggers = card[trigger + 's']
+        }
+        let lowestConnection = triggersBlock.getFirstStatementConnection()
+        for (let trigger of triggers) {
+          let triggerBlock = this.enchantment(trigger, workspace)
+          lowestConnection.connect(triggerBlock.previousConnection)
+          lowestConnection = triggerBlock.nextConnection
+          if (!!triggerBlock.initSvg) {
+            triggerBlock.initSvg()
+          }
+        }
+        lowestBlock = triggersBlock
       }
-
-      lowestBlock = triggersBlock
     }
+    triggers('trigger', 'Property_triggers')
+    triggers('passiveTrigger', 'Property_triggers2')
+    triggers('deckTrigger', 'Property_triggers3')
+    triggers( 'gameTrigger', 'Property_triggers4')
 
     if (!!card.auras || !!card.aura) {
       let aurasBlock = this.newBlock(workspace, 'Property_auras')
@@ -229,7 +232,7 @@ export default class JsonConversionUtils {
     if (!!card.manaCostModifier) {
       let costyBlock = null
       if (card.manaCostModifier.class === 'ConditionalValueProvider' && card.manaCostModifier.ifFalse === 0) {
-        costyBlock = this.newBlock(workspace, 'Property_manaCostModifierCondition')
+        costyBlock = this.newBlock(workspace, 'Property_manaCostModifierConditional')
         this.handleArg(costyBlock.getInput('manaCostModifier.condition').connection, card.manaCostModifier.condition,
           'condition', workspace, card)
         if (typeof card.manaCostModifier.ifTrue === 'object') {
@@ -308,7 +311,9 @@ export default class JsonConversionUtils {
       for (let path of ['art.primary', 'art.secondary', 'art.shadow', 'art.highlight', 'art.body.vertex']) {
         let json = card
         for (let arg of path.split('.')) {
-          json = json[arg]
+          if (!!json) {
+            json = json[arg]
+          }
         }
 
         if (!!json && !!block.getInput(path)) {
@@ -387,10 +392,10 @@ export default class JsonConversionUtils {
       if (!!dynamicDescription.string) {
         descBlock.setFieldValue(dynamicDescription.string, 'string')
       }
-      if (!!dynamicDescription.description1) {
+      if (dynamicDescription.hasOwnProperty('description1')) {
         this.dynamicDescription(workspace, block.getInput(inputName).connection, [dynamicDescription.description1], 'description1')
       }
-      if (!!dynamicDescription.description2) {
+      if (dynamicDescription.hasOwnProperty('description2')) {
         this.dynamicDescription(workspace, block.getInput(inputName).connection, [dynamicDescription.description2], 'description2')
       }
 
@@ -516,6 +521,7 @@ export default class JsonConversionUtils {
    * @returns The created block
    */
   static costModifier(costyBlock, costModifier, workspace) {
+    costModifier = this.mutateJson(costModifier)
     if (typeof costModifier.value !== 'object' && costModifier.value < 0) {
       if (costModifier.operation === 'SUBTRACT') {
         costModifier.operation = 'ADD'
@@ -533,7 +539,7 @@ export default class JsonConversionUtils {
       costModifierBlock = this.newBlock(workspace, 'CostModifierOptions')
       lowestOptionConnection = costModifierBlock.getFirstStatementConnection()
       for (let prop of props) {
-        if (prop === 'value' || prop === 'operation' || prop === 'target') {
+        if (prop === 'value' || prop === 'operation' || prop === 'target' || prop === 'filter') {
           continue
         }
         let option = this.newBlock(workspace, 'CostModifierOption_' + prop)
@@ -636,10 +642,21 @@ export default class JsonConversionUtils {
       let className = json.class
       if (className === 'AddEnchantmentSpell' && !!json.trigger) {
         if (this.enchantmentNeedsOptions(json.trigger, this.relevantProperties(json.trigger))) {
-          return Blockly.Blocks['Spell_AddEnchantment2'].json
+          if (!!json.revertTrigger) {
+            return Blockly.Blocks['Spell_AddEnchantment5'].json
+          } else {
+            return Blockly.Blocks['Spell_AddEnchantment2'].json
+          }
         } else {
-          return Blockly.Blocks['Spell_AddEnchantment'].json
+          if (!!json.revertTrigger) {
+            return Blockly.Blocks['Spell_AddEnchantment4'].json
+          } else {
+            return Blockly.Blocks['Spell_AddEnchantment'].json
+          }
         }
+      }
+      if (className === 'AddPactSpell') {
+        return Blockly.Blocks['Spell_AddPact'].json
       }
       if (className === 'CardCostModifierSpell') {
         return Blockly.Blocks['Spell_CardCostModifier'].json
@@ -673,13 +690,16 @@ export default class JsonConversionUtils {
             if (json.targetPlayer === 'BOTH' && property === 'targetPlayer') {
               continue
             }
-            if (property === 'race') {
+            if (property === 'race' || property === 'requiredAttribute') {
               continue
             }
           }
 
           let hasThisProp = false
           for (let arg of this.argsList(match)) { //see if the match has a corresponding prop
+            if (arg.type === 'field_label_plural') {
+              continue
+            }
             if (arg.name.split('.')[0] === property) { //just a surface level check, not traversing nested args
               if (arg.type === 'field_label_serializable_hidden') {
                 if ((arg.value === 'TRUE' ? true : arg.value) === json[property]) {
@@ -700,32 +720,47 @@ export default class JsonConversionUtils {
           goodMatches.push(match)
         }
       }
-      let bestScore = null
+      let bestScore = 0
       for (let goodMatch of goodMatches) { //choose the one with the highest number of correct properties
         let bestScore = null
         for (let goodMatch of matches) {
           let argsList = this.argsList(goodMatch)
+          let hasOneNormalArg = argsList.length === 0;
+          for (let arg of argsList) {
+            if (!arg.name.includes('.') && !arg.name.includes('super')) {
+              hasOneNormalArg = true
+            }
+          }
+          if (!hasOneNormalArg) {
+            continue
+          }
           let score = 0
           for (let arg of argsList) {
+            if (arg.type === 'field_label_plural') {
+              continue
+            }
             let delta = 0
             let property = this.traverseJsonByArgName(arg.name, json, parentJson)
             if (property !== null && property !== undefined) {
               if (arg.type === 'field_label_serializable_hidden') {
                 if ((arg.value === 'TRUE' ? true : arg.value) === property) {
-                  delta = 1
+                  delta = 2
                 } else {
-                  delta = -2 // an unchangeable field on the block is wrong... not a good look
+                  delta = -5 // an unchangeable field on the block is wrong... not a good look
                 }
               } else {
-                delta = 1 //if it's an input, we assume the correct block can be put here
+                delta = 2 //if it's an input, we assume the correct block can be put here
               }
             } else {
-              delta = -.5 //it's kinda bad to straight up not have the property
+              if (arg.type === 'field_label_serializable_hidden') {
+                delta = -5
+              } else {
+                delta = -1 //it's kinda bad to straight up not have the property
+              }
             }
             score += delta
           }
-          if (bestScore === null || score > bestScore
-            || (score >= bestScore && bestMatch.type.localeCompare(goodMatch.type) > 0)) {
+          if (score > bestScore || (score >= bestScore && bestMatch?.type.localeCompare(goodMatch.type) > 0)) {
             //for tied scores, do the one that comes alphabetically first
             //e.g. choosing ExampleSpell1 instead of ExampleSpell2
             bestMatch = goodMatch
@@ -770,9 +805,7 @@ export default class JsonConversionUtils {
       }
       newBlock = this.handleNoMatch(json, inputName, parentJson, workspace)
     } else if (!!connection.targetBlock() && connection.targetBlock().type === bestMatch.type) {
-      if (this.argsList(bestMatch).length <= 1) {
-        return
-      } else if (!connection.targetBlock().isShadow()) {
+      if (!connection.targetBlock().isShadow()) {
         newBlock = connection.targetBlock()
         connection.disconnect()
         //just simpler to disconnect it and then reconnect it
@@ -826,6 +859,14 @@ export default class JsonConversionUtils {
       }
 
       if (jsonElement === null || jsonElement === undefined) {
+        if (newBlock.getInput(name)?.connection.targetBlock()?.type === 'EntityReference_SHADOW'
+        || newBlock.getInput(name)?.connection.targetBlock()?.type === 'EntityReference_IT') {
+          let it = this.newBlock(workspace, 'EntityReference_IT')
+          newBlock.getInput(name).connection.connect(it.outputConnection)
+          if (it.initSvg) {
+            it.initSvg()
+          }
+        }
         continue
       }
 
@@ -836,8 +877,8 @@ export default class JsonConversionUtils {
       } else if (name === 'spells' || name === 'conditions'
         || name === 'filters' || name === 'cards') { //arrays of things stuff
         this.handleArrayArg(jsonElement, newBlock, workspace, name)
-      } else if (name === 'trigger') {
-        this.enchantment(json.trigger, workspace, newBlock.getFirstStatementConnection().targetBlock())
+      } else if (name === 'trigger' || name === 'pact') {
+        this.enchantment(json[name], workspace, newBlock.getFirstStatementConnection().targetBlock())
       } else if (name === 'aura') {
         this.auras(newBlock, json, workspace)
       } else if (name === 'cardCostModifier') {
@@ -859,6 +900,7 @@ export default class JsonConversionUtils {
           thingI = this.newBlock(workspace, 'Condition_I')
           break
         case 'filters':
+        case 'cardFilters':
           thingI = this.newBlock(workspace, 'Filter_I')
           break
         case 'cards':
@@ -904,8 +946,8 @@ export default class JsonConversionUtils {
     }
     let outerBlock = block
 
-    if (!!json.targetPlayer && !!bestMatch && json.targetPlayer !== 'SELF' &&
-      (bestMatch.output === 'ValueProviderDesc' || bestMatch.output === 'SpellDesc')) {
+    if (!!json.targetPlayer && !!bestMatch && (json.targetPlayer !== 'SELF' || json.class === 'ReturnTargetToHandSpell') &&
+      (bestMatch.output === 'ValueProviderDesc' || bestMatch.output === 'SpellDesc' || bestMatch.output === 'Source')) {
       switch (bestMatch.output) {
         case 'ValueProviderDesc':
           wrap('ValueProvider_targetPlayer')
@@ -951,13 +993,16 @@ export default class JsonConversionUtils {
       }
       if (!!json.requiredAttribute) {
         let match = this.getMatch(json.requiredAttribute, 'attribute', json)
-        if (!!match && match.output === 'IntAttribute') {
-          wrap('Trigger_Attribute2')
-        } else {
-          wrap('Trigger_Attribute')
-        }
+        wrap('Trigger_Attribute')
         this.simpleHandleArg(outerBlock, 'requiredAttribute', json, workspace)
       }
+    }
+
+    if (inputName.endsWith('targetSelection') && !!parentJson.targetSelectionCondition
+    && !!parentJson.targetSelectionOverride) {
+      wrap('TargetSelection_OVERRIDE')
+      this.handleArg(outerBlock.getInput('super.targetSelectionCondition').connection, parentJson.targetSelectionCondition, 'targetSelectionCondition', workspace, parentJson)
+      this.handleArg(outerBlock.getInput('super.targetSelectionOverride').connection, parentJson.targetSelectionOverride, 'targetSelectionOverride', workspace, parentJson)
     }
 
     if (inputName.endsWith('targetSelection') && !!parentJson.spell && !!parentJson.spell.filter
@@ -1269,11 +1314,11 @@ export default class JsonConversionUtils {
       if ((property === 'randomTarget' && !!json.target) || property === 'class'
         || property === 'fireCondition' || property === 'queueCondition'
         || property === 'invert' || property === 'offset' || property === 'multiplier'
-        || property === 'requiredAttribute' || property === 'distinct'
+        || property === 'distinct'
       ) {
         continue //these ones can be handled by other blocks
       }
-      if (!!json[property]) {
+      if (json[property] !== null && json[property] !== undefined) {
         relevantProperties.push(property)
       }
     }
@@ -1373,23 +1418,18 @@ export default class JsonConversionUtils {
             heroClass: json.heroClass
           })
         }
+        if (!!json.rarity) {
+          filters.push({
+            class: 'CardFilter',
+            rarity: json.rarity
+          })
+        }
         return {
           class: 'AndFilter',
           filters: filters,
           invert: json.invert
         }
       }
-    }
-
-    //functionality is the same
-    if (className === 'FromDeckToHandSpell') {
-      json.class = 'DrawCardSpell'
-    }
-    if (className === 'CloneMinionSpell') {
-      json.class = 'SummonSpell'
-    }
-    if (className === 'InspireTrigger') {
-      json.class = 'HeroPowerUsedTrigger'
     }
 
     //would be redundant to add this functionality separately
@@ -1406,19 +1446,6 @@ export default class JsonConversionUtils {
         value2: json.value
       }
     }
-    if (className === 'MinionOnBoardCondition') {
-      json = {
-        class: 'ComparisonCondition',
-        value1: {
-          class: 'EntityCountValueProvider',
-          target: json.targetPlayer === 'OPPONENT' ? 'ENEMY_MINIONS'
-            : json.targetPlayer === 'BOTH' ? 'ALL_MINIONS'
-              : 'FRIENDLY_MINIONS'
-        },
-        operation: "GREATER_OR_EQUAL",
-        value2: !!json.value ? json.value : 1
-      }
-    }
     if (className === 'CardCountCondition') {
       json = {
         class: 'ComparisonCondition',
@@ -1431,7 +1458,7 @@ export default class JsonConversionUtils {
         value2: json.value
       }
     }
-    if (className === 'DeckContainsCondition') {
+    /*if (className === 'DeckContainsCondition') {
       if (!!json.card) {
         json = {
           class: 'ComparisonCondition',
@@ -1462,9 +1489,7 @@ export default class JsonConversionUtils {
           value2: 1
         }
       }
-
-
-    }
+    }*/
 
     //some auras specify extra triggers unnecessarily
     if (className.endsWith('Aura') && !!json.triggers) {
@@ -1480,7 +1505,8 @@ export default class JsonConversionUtils {
     }
 
     //in spells, the targetPlayer of 'self' is always redundant
-    if ((json.targetPlayer === 'SELF' && json.class.endsWith('Spell'))
+    if ((json.targetPlayer === 'SELF' && json.class.endsWith('Spell')
+      && json.class !== 'ReturnTargetToHandSpell')
         //in triggers, it's 'both'
     || (json.targetPlayer === 'BOTH' && json.class.endsWith('Trigger'))) {
       delete json.targetPlayer
@@ -1521,8 +1547,21 @@ export default class JsonConversionUtils {
 
     if (className === 'AlgebraicValueProvider' && json.operation === 'NEGATE'
     && !json.hasOwnProperty('value2')) {
-      json.operation = 'MULTIPLIY'
+      json.operation = 'MULTIPLY'
       json.value2 = -1
+    }
+
+    if (className === 'RecruitSpell' && !json.cardLocation) {
+      json.cardLocation = 'DECK'
+    }
+
+    if (className.endsWith('Modifier') && !json.target) {
+      json.target = 'FRIENDLY_HAND'
+    }
+
+    if (className.endsWith('Aura') && !!json.triggers && json.triggers.length === 1) {
+      json.trigger = json.triggers[0]
+      delete json.triggers
     }
 
     return json

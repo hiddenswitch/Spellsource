@@ -32,24 +32,18 @@
             "class": "SilenceSpell"
           },
           {
-            "class": "DestroySpell",
-            "filter": {
-              "class": "AttributeFilter",
-              "value": 0,
-              "attribute": "ATTACK",
-              "operation": "EQUAL"
-            }
+            "class": "DestroySpell"
           }
         ]
       },
       "spell2": {
-        "class": "DestroySpell",
-        "filter": {
-          "class": "AttributeFilter",
-          "value": 0,
-          "attribute": "ATTACK",
-          "operation": "EQUAL"
-        }
+        "class": "DestroySpell"
+      },
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 0,
+        "attribute": "ATTACK",
+        "operation": "EQUAL"
       }
     }
   },
