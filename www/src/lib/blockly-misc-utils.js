@@ -103,11 +103,14 @@ export default class BlocklyMiscUtils {
       case 'queueCondition':
       case 'fireCondition':
       case 'condition':
+      case 'targetSelectionCondition':
         return 'Condition'
       case 'spell':
       case 'spell1':
       case 'spell2':
       case 'deathrattle':
+      case 'applyEffect':
+      case 'removeEffect':
         return 'Spell'
       case 'filter':
       case 'cardFilter':
@@ -128,6 +131,7 @@ export default class BlocklyMiscUtils {
       case 'requiredAttribute':
         return 'Attribute'
       case 'targetSelection':
+      case 'targetSelectionOverride':
         return 'TargetSelection'
       case 'eventTrigger':
       case 'revertTrigger':
@@ -156,6 +160,8 @@ export default class BlocklyMiscUtils {
       case 'mana':
       case 'manaCostModifier':
       case 'minValue':
+      case 'min':
+      case 'max':
         return 'ValueProvider'
       case 'aura':
         return 'Aura'
