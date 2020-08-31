@@ -71,7 +71,6 @@ import static java.util.stream.Collectors.toList;
 public interface Games extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Games.class);
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
-	String GAMES_PLAYERS_MAP = "Games.players";
 	String GAMES = "games";
 	Comparator<net.demilich.metastone.game.entities.Entity> ENTITY_NATURAL_ORDER = Comparator
 			.comparing(net.demilich.metastone.game.entities.Entity::getZone)

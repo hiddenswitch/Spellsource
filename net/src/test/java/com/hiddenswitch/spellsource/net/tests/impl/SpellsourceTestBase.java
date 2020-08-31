@@ -80,11 +80,13 @@ public abstract class SpellsourceTestBase {
 		return Runtime.getRuntime().availableProcessors();
 	}
 
+	@Suspendable
 	public static CreateAccountResponse createRandomAccount() throws SuspendExecution, InterruptedException {
 		return Accounts.createAccount(new CreateAccountRequest().withEmailAddress("test-" + RandomStringUtils.randomAlphanumeric(32) + "@test.com")
 				.withName("username" + RandomStringUtils.randomAlphanumeric(32)).withPassword("password"));
 	}
 
+	@Suspendable
 	public static CreateAccountResponse createRandomAccount(VertxTestContext testContext, Vertx vertx) throws ExecutionException, InterruptedException {
 		if (Fiber.isCurrentFiber()) {
 			try {
@@ -139,15 +141,15 @@ public abstract class SpellsourceTestBase {
 				action.run();
 				fut.set(null);
 			} catch (Throwable throwable) {
-				testContext.failNow(throwable);
 				fut.setException(throwable);
+				testContext.failNow(throwable);
 			}
 		}));
 		fut.get();
 	}
 
 	@Suspendable
-	protected void verify(VertxTestContext context, SuspendableRunnable block) {
+	protected static void verify(VertxTestContext context, SuspendableRunnable block) {
 		try {
 			block.run();
 		} catch (Throwable t) {
