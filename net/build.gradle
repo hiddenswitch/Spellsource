@@ -5,6 +5,7 @@ plugins {
 
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
+apply plugin: 'maven'
 apply from: '../gradle/instrument.gradle'
 
 def testMainClassName = "com.hiddenswitch.spellsource.net.tests.LocalClustered"

@@ -6,19 +6,17 @@ On **macOS**, from the root `Spellsource-Server` directory:
 # install basic dependencies
 brew install python@3
 # the following lines change CONSTANTLY so always search for how to install java
-brew tap mongodb/brew
-brew install mongodb-community
-brew link --force mongodb-community
-brew tap adoptopenjdk/openjdk # assuming this tap was not already added
-brew cask install adoptopenjdk11 # this command *may* need a password to succeed
+brew cask install docker
+brew install openjdk
 ```
 
-On all Unix platforms:
+Then, on all Unix platforms:
 
 ```shell script
 # build the spellsource dependencies
 ./gradlew net:shadowJar
-./gradlew hearthstone:jar
+# If you have access to internalcontent sources
+./gradlew internalcontent:jar
 # create a virtual environment using the python 3 interpreter
 virtualenv -m python3 .venv
 source .venv/bin/activate
