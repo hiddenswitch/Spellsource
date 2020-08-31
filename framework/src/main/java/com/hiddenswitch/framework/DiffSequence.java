@@ -1,4 +1,4 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.framework;
 
 
 import org.slf4j.Logger;

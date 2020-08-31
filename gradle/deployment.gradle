@@ -1,193 +1,54 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven { url 'https://plugins.gradle.org/m2/' }
-    }
-    dependencies {
-        classpath 'io.swagger:swagger-models:1.5.17'
-        classpath 'io.swagger:swagger-codegen:2.3.0'
-    }
-}
-
-// Limit the number of times we can run Unity3D on the same project directory
-// See https://github.com/gradle/gradle/pull/9914 for more about how this works
-def unity3d = gradle.sharedServices.registerIfAbsent("unity3d", BuildService) {
-    maxParallelUsages = 1
-}
-
-import io.swagger.codegen.ClientOptInput
-import io.swagger.codegen.ClientOpts
-import io.swagger.codegen.DefaultGenerator
-import io.swagger.models.Swagger
-import io.swagger.parser.SwaggerParser
-
-// Client deployment
 def unityClientPath = './unityclient'
-
-task generateSwaggerCsharp() {
-    description("Generates CSharp model files from the swagger-api.yaml file")
-    def inputPath = "${project(':client').projectDir}/swagger-api.yaml"
-    def outputPath = "${unityClientPath}/Assets/Plugins/Client"
-    def outputDir = file(outputPath)
-    def templatePath = "${project(':client').projectDir}/swagger-templates/csharp"
-    def templateDir = file(templatePath)
-    inputs.file(inputPath)
-    inputs.dir(templatePath)
-    outputs.dir(outputPath)
-    doLast {
-        delete(outputPath)
-        def config = new CSharpNullableGenerator()
-        config.setInputSpec(file(inputPath).absolutePath)
-        config.setOutputDir(outputDir.absolutePath)
-        config.setTemplateDir(templateDir.absolutePath)
-        config.additionalProperties().putAll([
-                'supportFiles'           : false,
-                'apiTests'               : false,
-                'excludeTests'           : true,
-                'modelTests'             : false,
-                'modelDocs'              : false,
-                'packageName'            : 'Spellsource.Client',
-                'targetFramework'        : 'v3.5',
-                'sourceFolder'           : 'Scripts',
-                'hideGenerationTimestamp': true,
-                'optionalProjectFile'    : false,
-                'optionalAssemblyFile'   : false
-        ])
-
-        def optInput = new ClientOptInput();
-        Swagger swagger = new SwaggerParser().read(file(inputPath).absolutePath, [], true);
-        optInput.config(config)
-                .opts(new ClientOpts())
-                .swagger(swagger)
-        new DefaultGenerator().opts(optInput).generate()
-
-        // Remove additional files
-        delete "${unityClientPath}/Assets/Plugins/Client/Scripts/Spellsource.Client/Api/", "${unityClientPath}/Assets/Plugins/Client/Scripts/Spellsource.Client/Properties/"
-    }
-}
-
-static def dotEnv(Exec task, File f) {
-    if (!f.exists()) {
-        return
-    }
-    f.readLines().each() {
-        def (key, value) = it.tokenize('=')
-        task.environment(key, value)
-    }
-}
-
-static def gitIgnore(File f) {
-    if (!f.exists()) {
-        return [] as List<String>
-    }
-    def ignores = []
-    f.eachLine { line ->
-        //ignore comments and empty lines
-        if (!line.startsWith('#') && !line.isEmpty()) {
-            ignores.add(line)
-        }
-    }
-    return ignores
-}
-
-task unitySources(type: SourceTask) {
-    dependsOn generateSwaggerCsharp
-    source unityClientPath + '/'
-    exclude gitIgnore(file("${unityClientPath}/.gitignore", PathValidation.NONE))
-}
-
-task secretSources(type: SourceTask) {
-    source 'secrets/'
-}
-
-task dockerSources(type: SourceTask) {
-    source 'docker/'
-    source 'mediawiki/'
-    source 'ddnsRoute53/'
-}
-
-task buildStandalone(type: Exec) {
-    description("Builds the macOS and Windows versions of the game using the ${unityClientPath}/deploy.sh file and your local Unity version.")
-    dependsOn += [generateSwaggerCsharp, unitySources]
-    usesService(unity3d)
-    inputs.file("${unityClientPath}/deploy.sh")
-    outputs.dir("${unityClientPath}/obj/win")
-    outputs.dir("${unityClientPath}/obj/osx")
-    workingDir "${unityClientPath}"
-    commandLine './deploy.sh', '-wm'
-}
 
 task distSteam(type: Exec, group: 'Spellsource') {
     description("Uploads the macOS and Windows builds to Steam")
-    dependsOn buildStandalone, secretSources
+    inputs.files('secrets/spellsource/steam')
+    dependsOn += [':unityclient:buildWindows', ':unityclient:buildMacOS']
     commandLine './deploy.sh', '-S'
 }
 
 task buildSwarm(type: Exec) {
     description("Builds all the images in the docker-compose.yml file")
-    dependsOn += [':net:classes', secretSources, dockerSources]
+    dependsOn += [':net:classes']
+    inputs.dir('docker/')
     commandLine './deploy.sh', '-C'
 }
 
 task distSwarm(type: Exec, group: 'Spellsource') { t ->
     description("Deploys to a Docker Swarm")
-    dependsOn += [buildSwarm, secretSources]
+    dependsOn += [buildSwarm]
     inputs.file('docker-compose.yml')
-    dotEnv(t, file('secrets/common-deployment.env', PathValidation.NONE))
+    inputs.file('secrets/common-deployment.env')
+    Utilities.dotEnv(t, file('secrets/common-deployment.env', PathValidation.NONE))
     commandLine './deploy.sh', '-s'
-}
-
-task buildIOS(type: Exec) {
-    description("Builds the iOS target of the Unity project")
-    dependsOn += [unitySources, secretSources]
-    usesService(unity3d)
-    inputs.file("${unityClientPath}/deploy.sh")
-    outputs.dir("${unityClientPath}/obj/ios")
-    workingDir "${unityClientPath}"
-    commandLine './deploy.sh', '-i'
 }
 
 task distIOS(type: Exec, group: 'Spellsource') { t ->
     description("Builds and uploads to Testflight the iOS project")
-    dependsOn += [buildIOS, secretSources]
+    dependsOn += [':unityclient:buildIOS']
+    inputs.file('secrets/spellsource/unityclient-build.env')
     workingDir "${unityClientPath}"
-    dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
+    Utilities.dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
     commandLine './deploy.sh', '-t'
-}
-
-task buildAndroid(type: Exec) {
-    description("Builds the Android target of the Unity project")
-    dependsOn unitySources
-    usesService(unity3d)
-    workingDir "${unityClientPath}"
-    outputs.dir("${unityClientPath}/obj/android")
-
-    commandLine './deploy.sh', '-a'
 }
 
 task distAndroid(type: Exec, group: 'Spellsource') { t ->
     description("Builds and uploads the Android project to Google Play")
-    dependsOn += [buildAndroid, secretSources]
-    dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
+    dependsOn += [':unityclient:buildAndroid']
+    inputs.file('secrets/spellsource/unityclient-build.env')
+    Utilities.dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
     environment('KEYSTORE_PATH', '../secrets/spellsource/android-keystore.keystore')
     workingDir "${unityClientPath}"
     commandLine './deploy.sh', '-d'
 }
 
-task buildWebGL(type: Exec) {
-    description("Builds the WebGL Unity3D project")
-    dependsOn unitySources
-    usesService(unity3d)
-    workingDir "${unityClientPath}"
-    outputs.dir("${unityClientPath}/obj/webgl")
-    commandLine './deploy.sh', '-W'
-}
-
 task distWebGL(type: Exec, group: 'Spellsource') { t ->
     description("Uploads the WebGL build to playspellsource.com")
-    dependsOn buildWebGL, secretSources
-    dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
-    dotEnv(t, file('secrets/common-deployment.env', PathValidation.NONE))
+    dependsOn ':unityclient:buildWebGL'
+    inputs.file('secrets/spellsource/unityclient-build.env')
+    inputs.file('secrets/common-deployment.env')
+    Utilities.dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
+    Utilities.dotEnv(t, file('secrets/common-deployment.env', PathValidation.NONE))
     workingDir "${unityClientPath}"
     commandLine './deploy.sh', '-G'
 }
@@ -210,7 +71,7 @@ task copyNetJavadoc(type: Copy) {
 task buildWWW(type: ExecSourceTask) {
     description("Builds the website")
     source './www/'
-    exclude gitIgnore(file("www/.gitignore"))
+    exclude Utilities.gitIgnore(file("www/.gitignore"))
     outputs.dir('./www/public')
     workingDir './www/'
     commandLine './build.sh'
@@ -232,7 +93,6 @@ task bumpVersion(type: Exec, group: 'Spellsource') {
     description('Bumps the server version')
     commandLine './deploy.sh', '-v'
 }
-
 
 task cloneMongo(type: Exec, group: 'Spellsource') {
     description("Connects to the production database, dumps its database file, then restores the database to your local mongo.")
