@@ -1,8 +1,6 @@
 package com.hiddenswitch.spellsource.net.tests.impl;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.fibers.futures.AsyncCompletionStage;
 import co.paralleluniverse.strands.SettableFuture;
 import co.paralleluniverse.strands.SuspendableRunnable;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
@@ -20,7 +18,6 @@ import com.hiddenswitch.spellsource.net.impl.BinaryCarrier;
 import com.hiddenswitch.spellsource.net.impl.NoOpLock;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import io.jaegertracing.internal.samplers.ProbabilisticSampler;
-import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.log.Fields;
@@ -57,7 +54,7 @@ public class UnityClient implements AutoCloseable {
 	private Handler<UnityClient> onGameOver;
 	private Account account;
 	private VertxTestContext context;
-	private NettyWebsocketClientEndpoint realtime;
+	private NettyWebSocketClientEndpoint realtime;
 	private AtomicReference<SettableFuture<Void>> matchmakingFut = new AtomicReference<>(new SettableFuture<>());
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
@@ -203,7 +200,7 @@ public class UnityClient implements AutoCloseable {
 				if (getAccount() != null) {
 					span.get().setTag("userId", getAccount().getId());
 				}
-				realtime = new NettyWebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
+				realtime = new NettyWebSocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
 				var firstMessage = new CountDownLatch(1);
 				LOGGER.debug("ensureConnected {}: Connected", id);
 				realtime.setMessageHandler((String message) -> {

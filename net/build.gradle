@@ -83,6 +83,7 @@ dependencies {
     runtimeOnly 'ch.qos.logback:logback-classic:1.2.3'
 
     implementation project(':cards')
+    implementation project(':framework')
     implementation(project(':client')) {
         exclude group: 'jakarta.activation', module: 'jakarta.activation-api'
         exclude group: 'javax.ws.rs', module: 'jsr311-api'

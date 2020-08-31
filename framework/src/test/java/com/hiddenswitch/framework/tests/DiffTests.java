@@ -1,9 +1,10 @@
-package com.hiddenswitch.spellsource.tests.cards;
+package com.hiddenswitch.framework.tests;
 
-import com.hiddenswitch.spellsource.util.DiffContext;
-import com.hiddenswitch.spellsource.util.DiffSequence;
+import com.hiddenswitch.framework.DiffContext;
+import com.hiddenswitch.framework.DiffSequence;
 import io.vertx.core.json.JsonObject;
 import org.jetbrains.annotations.Nullable;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -13,8 +14,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Execution(ExecutionMode.CONCURRENT)
 public class DiffTests {
@@ -38,7 +37,7 @@ public class DiffTests {
 		List<JsonObject> aaCopy = aa.stream().map(obj -> new JsonObject(obj.getMap())).collect(Collectors.toList());
 		TestDiffContext1<M> context = new TestDiffContext1<>(aaCopy);
 		DiffSequence.diffQueryOrderedChanges(aa, bb, context);
-		assertEquals(context.getResult(), bb);
+		Assertions.assertEquals(context.getResult(), bb);
 
 	}
 

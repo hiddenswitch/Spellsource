@@ -18,8 +18,8 @@ import static org.asynchttpclient.Dsl.asyncHttpClient;
 import static org.junit.jupiter.api.Assertions.fail;
 
 
-public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebsocket, AutoCloseable {
-	private static Logger LOGGER = LoggerFactory.getLogger(NettyWebsocketClientEndpoint.class);
+public class NettyWebSocketClientEndpoint implements WebSocketListener, TestWebSocket, AutoCloseable {
+	private static Logger LOGGER = LoggerFactory.getLogger(NettyWebSocketClientEndpoint.class);
 	private final String endpoint;
 	private final String auth;
 	private NettyWebSocket websocket;
@@ -32,7 +32,7 @@ public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebs
 			.setConnectTimeout(3000)
 			.setMaxConnections(256));
 
-	public NettyWebsocketClientEndpoint(String endpoint, String auth) {
+	public NettyWebSocketClientEndpoint(String endpoint, String auth) {
 		this.endpoint = endpoint;
 		this.auth = auth;
 	}
@@ -145,7 +145,7 @@ public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebs
 	}
 
 	@Override
-	public NettyWebsocketClientEndpoint setCloseHandler(Runnable closeHandler) {
+	public NettyWebSocketClientEndpoint setCloseHandler(Runnable closeHandler) {
 		this.closeHandler = closeHandler;
 		return this;
 	}

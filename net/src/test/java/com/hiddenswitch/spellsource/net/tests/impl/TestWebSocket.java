@@ -2,7 +2,7 @@ package com.hiddenswitch.spellsource.net.tests.impl;
 
 import io.vertx.core.Handler;
 
-public interface TestWebsocket {
+public interface TestWebSocket {
 	void setMessageHandler(Handler<String> msgHandler);
 
 	void sendMessage(String message);
@@ -11,5 +11,5 @@ public interface TestWebsocket {
 
 	boolean isOpen();
 
-	TestWebsocket setCloseHandler(Runnable closeHandler);
+	TestWebSocket setCloseHandler(Runnable closeHandler);
 }
