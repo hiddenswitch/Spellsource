@@ -3,6 +3,7 @@ plugins {
 }
 
 apply plugin: 'java-library'
+apply plugin: 'maven'
 apply from: '../gradle/instrument.gradle'
 
 group 'com.hiddenswitch'

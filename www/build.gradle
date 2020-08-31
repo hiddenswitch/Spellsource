@@ -6,8 +6,7 @@ plugins {
 
 apply plugin: "com.github.node-gradle.node"
 apply plugin: 'java-library'
-
-version = '0.8.79'
+apply plugin: 'maven'
 
 dependencies {
     api project(':core')

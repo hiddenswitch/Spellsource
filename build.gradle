@@ -1,3 +1,4 @@
+apply plugin: 'maven'
 apply from: 'gradle/deployment.gradle'
 apply from: 'gradle/development.gradle'
 
