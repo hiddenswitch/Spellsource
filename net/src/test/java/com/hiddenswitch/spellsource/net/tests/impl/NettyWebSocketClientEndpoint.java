@@ -25,7 +25,7 @@ public class NettyWebSocketClientEndpoint implements WebSocketListener, TestWebS
 	private NettyWebSocket websocket;
 	private Handler<String> messageHandler;
 	private Runnable closeHandler;
-	private static final int webSocketMaxFrameSize = 65536;
+	private static final int webSocketMaxFrameSize = 65536 * 10;
 	private static final AsyncHttpClient client = asyncHttpClient(new DefaultAsyncHttpClientConfig.Builder()
 			.setWebSocketMaxFrameSize(webSocketMaxFrameSize)
 			.setHandshakeTimeout(3000)

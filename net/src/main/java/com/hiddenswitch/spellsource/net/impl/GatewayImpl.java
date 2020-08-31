@@ -94,7 +94,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.setPort(port)
 				.setIdleTimeout((int) Games.DEFAULT_NO_ACTIVITY_TIMEOUT)
 				.setIdleTimeoutUnit(TimeUnit.MILLISECONDS)
-				.setMaxWebSocketFrameSize(65536)
+				.setMaxWebSocketFrameSize(10 * 65536)
 				.setWebSocketAllowServerNoContext(true)
 				.setWebSocketPreferredClientNoContext(true)
 				.setMaxWebSocketMessageSize(100 * 65536)
