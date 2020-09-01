@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.cards;
 
+import com.google.common.base.CaseFormat;
+import com.google.common.io.CharSource;
 import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.client.models.Rarity;
 import com.hiddenswitch.spellsource.core.CardResource;
@@ -8,10 +10,11 @@ import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
+import io.vertx.core.json.Json;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
+import org.apache.commons.io.input.ReaderInputStream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -247,6 +250,61 @@ public class CardCatalogue {
 	}
 
 	/**
+	 * Adds or replaces a card for the given JSON.
+	 * <p>
+	 * If a {@link CardDesc#getName()} {@code name} field is specified and no {@code id}, the
+	 *
+	 * @param json
+	 */
+	public static String addOrReplaceCard(String json) throws IOException {
+		var cardDesc = Json.decodeValue(json, CardDesc.class);
+		if (cardDesc.getName() == null || cardDesc.getName().isEmpty()) {
+			throw new NullPointerException("cardDesc.name");
+		}
+		if (cardDesc.getType() == null) {
+			throw new NullPointerException("cardDesc.type");
+		}
+		if (cardDesc.getId() == null) {
+			cardDesc.setId(CaseFormat.LOWER_CAMEL.converterTo(CaseFormat.LOWER_UNDERSCORE).convert((cardDesc.getType().getValue().toLowerCase() + "" + cardDesc.getName()).replace(" ", "")));
+		}
+
+		var id = cardDesc.getId();
+		ReaderInputStream targetStream = null;
+		try {
+			targetStream =
+					new ReaderInputStream(CharSource.wrap(Json.encode(cardDesc)).openStream());
+			loadCards(Collections.singletonList(new ResourceInputStream(id + ".json", targetStream)));
+		} finally {
+			if (targetStream != null) {
+				targetStream.close();
+			}
+		}
+		return id;
+	}
+
+	/**
+	 * Removes the specified card by ID from the catalogue.
+	 *
+	 * @param id
+	 */
+	public static void removeCard(String id) {
+		var res = records.remove(id);
+		cards.remove(id);
+		if (res != null) {
+			recordsByName.remove(res.getDesc().getName());
+			if (res.getDesc().getType() == CardType.FORMAT) {
+				formatCards.remove(res.getDesc().getName());
+			}
+			if (res.getDesc().getType() == CardType.CLASS) {
+				classCards.remove(res.getDesc().getHeroClass());
+				for (var format : classCardsForFormat.keySet()) {
+					classCardsForFormat.get(format).removeIf(c -> c.getDesc().getId().equals(res.getId()));
+				}
+			}
+		}
+	}
+
+	/**
 	 * Loads all the cards from the specified {@link ResourceInputStream} instances, which can be a mix of files and
 	 * resources.
 	 *
@@ -434,6 +492,7 @@ public class CardCatalogue {
 			FORMATS.clear();
 		}
 	}
+
 	/**
 	 * Loads all the cards specified in the {@code "cards/src/main/resources" + DEFAULT_CARDS_FOLDER } directory in the
 	 * {@code cards} module. This can be called multiple times, but will not "refresh" the catalogue file.
