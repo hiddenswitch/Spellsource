@@ -1,8 +1,9 @@
-import click
 import typing
 from itertools import chain
 from os import makedirs
 from os.path import join, abspath
+
+import click
 from tqdm import tqdm
 
 from .context import Context
@@ -480,10 +481,10 @@ def psb_2_png_layers(source: str, destination_prefix: tuple = (), lists: bool = 
     for layer in psd.descendants():
         if not layer.kind == 'pixel':
             continue
-        if not layer.visible:
+        if not layer.is_visible():
             continue
         layer_image = layer.composite()
-        s = join(destination_prefix, '%s%s' % (layer.name, extension))
+        s = join(destination_prefix, '%s%s' % (layer.name.replace('.', '_'), extension))
         try:
             dirname(s)
             os.makedirs(dirname(s), exist_ok=True)
