@@ -152,7 +152,7 @@ class Context(contextlib.AbstractContextManager):
         # local
         dirname = os.path.dirname(os.path.realpath(__file__))
         paths.append(os.path.join(dirname, '..', '..', 'net', 'build', 'libs', filename))
-        paths.append(os.path.join(dirname, '..', '..', 'hearthstone', 'build', 'libs', filename))
+        paths.append(os.path.join(dirname, '..', '..', 'internalcontent', 'build', 'libs', filename))
         paths.append(os.path.join(dirname, '..', 'docs', filename))
         paths.append(os.path.join(dirname, '..', 'share', 'spellsource', filename))
         paths.append(os.path.join(sys.prefix, 'share', 'spellsource', filename))

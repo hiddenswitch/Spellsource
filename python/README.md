@@ -18,7 +18,8 @@ Then, on all Unix platforms:
 # If you have access to internalcontent sources
 ./gradlew internalcontent:jar
 # create a virtual environment using the python 3 interpreter
-virtualenv -m python3 .venv
+pip3 install virtualenv
+virtualenv -p python3 .venv
 source .venv/bin/activate
 # now you're in the root directory of the module
 cd python

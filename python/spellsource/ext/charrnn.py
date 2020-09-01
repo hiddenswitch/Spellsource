@@ -44,7 +44,7 @@ class CharRNNWorkspace(Workspace):
     ])
 
     CUSTOM_CARDS_PATH = 'cards/src/main/resources/cards/custom'
-    HEARTHSTONE_CARDS_PATH = 'cards/src/main/resources/cards/hearthstone'
+    HEARTHSTONE_CARDS_PATH = 'internalcontent/src/main/resources/cards/'
     DESCRIPTION_CHARS = ' .,;/+-abcdefghijklmnopqrstuvwxyz'
     ATTACK_COUNT_CHAR = 'A'
     HEALTH_COUNT_CHAR = 'H'
