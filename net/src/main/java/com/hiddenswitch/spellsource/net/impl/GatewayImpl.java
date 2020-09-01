@@ -92,8 +92,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		server = vertx.createHttpServer(new HttpServerOptions()
 				.setHost("0.0.0.0")
 				.setPort(port)
-				.setIdleTimeout((int) Games.DEFAULT_NO_ACTIVITY_TIMEOUT)
-				.setIdleTimeoutUnit(TimeUnit.MILLISECONDS)
 				.setMaxWebSocketFrameSize(10 * 65536)
 				.setWebSocketAllowServerNoContext(true)
 				.setWebSocketPreferredClientNoContext(true)
