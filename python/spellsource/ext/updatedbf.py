@@ -10,6 +10,6 @@ try:
         f = open(path.join(path.dirname(__file__), '..', '..', 'game', 'src', 'main', 'resources', 'dbf.json'), 'w')
         dump(new_json, f, indent=2)
         f.close()
-except ImportError:
+except Exception:
     def write_dbf_json():
         pass
