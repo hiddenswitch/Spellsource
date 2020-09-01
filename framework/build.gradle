@@ -1,18 +1,19 @@
+apply plugin: 'base'
 apply plugin: 'java-library'
 apply plugin: 'maven'
 
+def csharpRootDir = 'src/csharp/HiddenSwitch'
+
 dependencies {
     api project(':core')
-
     testImplementation project(':testcontainers')
+    testImplementation project(':testutils')
     testImplementation "org.testcontainers:testcontainers"
     testImplementation "org.testcontainers:junit-jupiter"
     testImplementation group: 'io.vertx', name: 'vertx-junit5', version: '3.9.2'
-    testImplementation project(':quasar-core')
     testImplementation 'com.google.guava:guava:26.0-jre'
     testImplementation "io.github.classgraph:classgraph:$classgraphVersion"
     testImplementation 'org.jetbrains:annotations:16.0.2'
-    testImplementation project(':testutils')
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.6.2'
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
@@ -21,12 +22,33 @@ dependencies {
 }
 
 test {
-    description('Tests all custom cards. Failed fuzzing results are put in cards/src/test/resources/traces by testRandomMassPlay.')
-    maxParallelForks = 1; //Runtime.getRuntime().availableProcessors();
     useJUnitPlatform()
-    testLogging {
-        showStandardStreams true
-        exceptionFormat 'full'
-    }
     enableAssertions = false
+}
+
+clean {
+    delete csharpRootDir + '/Framework/bin'
+    delete csharpRootDir + '/Framework/obj'
+    delete csharpRootDir + '/Framework.Tests/bin'
+    delete csharpRootDir + '/Framework.Tests/obj'
+}
+
+task dll(type: Exec, group: 'build') {
+    inputs.files(csharpRootDir + '/Framework/*.cs', csharpRootDir + '/Framework/*.csproj')
+    outputs.files(csharpRootDir + '/Framework/bin/Debug/netstandard2.0/*.dll')
+    workingDir csharpRootDir
+    commandLine 'dotnet', 'build'
+}
+
+task testDll(type: Exec, group: 'verification') {
+    dependsOn dll
+    inputs.files(csharpRootDir + '/Framework.Tests/*.cs', csharpRootDir + '/Framework.Tests/*.csproj')
+    outputs.dir("$project.buildDir/nunit")
+    workingDir csharpRootDir
+    commandLine 'dotnet', 'test', '--results-directory', "$project.buildDir/nunit"
+}
+
+task installDll(type: Copy) {
+    dependsOn dll
+
 }
