@@ -11,17 +11,17 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "value": 7,
-        "filter": {
-          "class": "SpecificCardFilter",
-          "card": "token_spiderling"
-        }
+        "value": 7
       },
       {
         "class": "AddAttributeSpell",
         "attribute": "TAUNT"
       }
-    ]
+    ],
+    "filter": {
+      "class": "SpecificCardFilter",
+      "card": "token_spiderling"
+    }
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

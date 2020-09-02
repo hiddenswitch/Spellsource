@@ -82,13 +82,21 @@ export default function useBlocklyData () {
         }
       }
     }
-    allFile(filter: {extension: {eq: "json"}, relativePath: {glob: "**collectible/**"}}) {
+    allJSON: allFile(filter: {extension: {eq: "json"}, relativePath: {glob: "**collectible/**"}}) {
       edges {
         node {
           internal {
             content
           }
           name
+        }
+      }
+    }
+    allIcon: allFile(filter: {extension: {eq: "png"}, relativePath: {glob: "**assets/editor/**"}}) {
+      edges {
+        node {
+          name
+          publicURL
         }
       }
     }

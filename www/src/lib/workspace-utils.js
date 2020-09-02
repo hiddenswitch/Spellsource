@@ -247,6 +247,13 @@ export default class WorkspaceUtils {
       }
     }
 
+    if (cardScript.class === 'AlwaysCondition') {
+      cardScript.class = 'AndCondition'
+    }
+    if (cardScript.class === 'NeverCondition') {
+      cardScript.class = 'OrCondition'
+    }
+
     return cardScript
   }
 
@@ -315,6 +322,8 @@ export default class WorkspaceUtils {
       return
     }
 
+    console.log(cardScript)
+
     //first, split up any args with ','
     for (const cardScriptKey in cardScript) {
       if (cardScriptKey.includes(',')) {
@@ -336,6 +345,8 @@ export default class WorkspaceUtils {
             if (cardScriptKey.includes('.')) {
               let correctPrefix = cardScriptKey.split('.').slice(0, -1).join('.')
               cardScript[correctPrefix + '.' + newKey] = cardScript[cardScriptKey][cardScriptElementKey]
+            } else if (cardScriptKey === 'super') {
+              cardScript[cardScriptElementKey] = cardScript[cardScriptKey][cardScriptElementKey]
             } else {
               cardScript[newKey] = cardScript[cardScriptKey][cardScriptElementKey]
             }
@@ -388,6 +399,8 @@ export default class WorkspaceUtils {
         delete cardScript[cardScriptKey]
       }
     }
+
+    console.log(cardScript)
   }
 
   static workspaceToCardScript (workspace) {

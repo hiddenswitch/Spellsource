@@ -242,6 +242,15 @@ export default class BlocklyMiscUtils {
               }
               delete arg.valueB
             }
+
+            if (arg.type === 'field_image' && !!arg.src && !arg.src.includes('.')) {
+              for (let edge of data.allIcon.edges) {
+                let node = edge.node
+                if (node.name === arg.src) {
+                  arg.src = node.publicURL
+                }
+              }
+            }
           })
 
           block['args' + args.i.toString()] = args.args
