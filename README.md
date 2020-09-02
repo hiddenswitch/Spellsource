@@ -220,6 +220,10 @@ rm -rf .mongo/
 
 You need special authorization for this. It is accessed via an audited API key.
 
+> I receive an error related to `(sharp:42678): GLib-CRITICAL **: 17:17:14.186: g_hash_table_lookup: assertion 'hash_table != NULL' failed`
+
+Delete the NPM modules folder: `rm -rf www/npm_modules`, then rerun `./gradlew distWWW`.
+
 ### Special Thanks
 
 ![YourKit](https://www.yourkit.com/images/yklogo.png)
