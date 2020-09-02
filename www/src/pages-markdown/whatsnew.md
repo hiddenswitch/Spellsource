@@ -10,7 +10,15 @@ header: true
 Thanks for playing this beta of Spellsource! Read more at [our website](https://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)!
 
-### Current Version 0.8.89-3.3.6 (September 1, 2020)
+### Current Version 0.8.89-3.3.7 (September 2, 2020)
+
+ - The new large card art now appears on hovers / inspections.
+ - Hover / inspection positioning is now improved on devices. Left handed users will soon be given a preferences option to flip the positioning of the inspected card.
+ - Rarities are now shown on the large card.
+ - The hitboxes for units on the battlefield are now the base cards again. The local units will have a full outline drawn, while opposing units will draw their targeting outlines around the base card. Soon, a UI element will indicate which opposing units are targetable.
+ - Miscellaneous updates to the champion art.
+
+### 0.8.89-3.3.6 (September 1, 2020)
 
 Improvements to presence and fixing a timeout issue.
 
