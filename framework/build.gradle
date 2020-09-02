@@ -1,6 +1,7 @@
 apply plugin: 'base'
 apply plugin: 'java-library'
 apply plugin: 'maven'
+apply from: '../gradle/instrument.gradle'
 
 def csharpRootDir = 'src/csharp/HiddenSwitch'
 
