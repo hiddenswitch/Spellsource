@@ -42,7 +42,6 @@
     "string-format": "^2.0.0"
   },
   "devDependencies": {
-    "java": "^0.12.1",
     "babel-jest": "^26.0.0",
     "babel-preset-gatsby": "^0.4.0",
     "flow-bin": "^0.130.0",
@@ -51,5 +50,8 @@
     "jest": "^26.0.0",
     "react-test-renderer": "^16.13.1",
     "standard": "^14.3.1"
+  },
+  "optionalDependencies": {
+    "java": "^0.12.1"
   }
 }

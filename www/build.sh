@@ -4,7 +4,7 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 source "${DIR}"/../.venv/bin/activate
 pip3 install -e "${DIR}"/../python
 echo "Getting the latest versions of dependencies"
-npm install
+CXX="clang++ -I${JAVA_HOME:-`/usr/libexec/java_home`}/include/darwin/" npm install
 echo "Building and deploying..."
 mkdir -pv public/whats-new
 npx gatsby build
