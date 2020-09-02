@@ -178,8 +178,13 @@ class Context(contextlib.AbstractContextManager):
         # launch Java side with dynamic port and get back the port on which the
         # server was bound to.
         net_jar_path = Context.find_resource_path('net-0.8.89-all.jar')
+        try:
+            internalcontent_jar_path = Context.find_resource_path('internalcontent-0.8.89.jar')
+        except:
+            internalcontent_jar_path = None
         port = launch_gateway(port=port,
-                              classpath=os.pathsep.join((net_jar_path, )),
+                              classpath=os.pathsep.join(
+                                  list(filter(lambda x: x is not None, (net_jar_path, internalcontent_jar_path)))),
                               die_on_exit=True)
 
         # connect python side to Java side with Java dynamic port and start python
