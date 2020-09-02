@@ -27,7 +27,6 @@ class UnityTask extends AbstractExecTask<UnityTask> {
             maxParallelUsages = 1
         }
         usesService(unity3d)
-        inputs.file("src/unity/deploy.sh")
         inputs.dir("src/unity/Assets/")
         inputs.files("src/unity/ProjectSettings/EditorBuildSettings.asset")
         inputs.dir("src/unity/Packages/")

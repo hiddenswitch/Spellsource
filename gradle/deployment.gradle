@@ -1,4 +1,4 @@
-def unityClientPath = './unityclient'
+def unityClientPath = './unityclient/src/unity'
 
 task distSteam(type: Exec, group: 'Spellsource') {
     description("Uploads the macOS and Windows builds to Steam")
@@ -37,7 +37,8 @@ task distAndroid(type: Exec, group: 'Spellsource') { t ->
     dependsOn += [':unityclient:buildAndroid']
     inputs.file('secrets/spellsource/unityclient-build.env')
     Utilities.dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
-    environment('KEYSTORE_PATH', '../secrets/spellsource/android-keystore.keystore')
+    environment('KEYSTORE_PATH', '../../../secrets/spellsource/android-keystore.keystore')
+    environment('GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_PATH_TEMP', '../../../secrets/spellsource/google-play-service-account.json')
     workingDir "${unityClientPath}"
     commandLine './deploy.sh', '-d'
 }
