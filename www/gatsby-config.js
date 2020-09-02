@@ -20,13 +20,13 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `src`,
-        path: `${__dirname}/../unityclient/Assets/UBlockly/JsonBlocks/`,
+        path: `${__dirname}/../unityclient/src/unity/Assets/UBlockly/JsonBlocks/`,
       },
     }, {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `src`,
-        path: `${__dirname}/../unityclient/Assets/UBlockly/Toolboxes/Configs`,
+        path: `${__dirname}/../unityclient/src/unity/Assets/UBlockly/Toolboxes/Configs`,
       },
     },
     {

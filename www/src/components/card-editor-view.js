@@ -77,10 +77,18 @@ const CardEditorView = () => {
                   connection = block.outputConnection
                   if (!!block.outputConnection.targetBlock()) {
                     let targetBlock = connection.targetBlock()
-                    let name = targetBlock.getInputWithBlock(block)?.name
-                    for (let arg of JsonConversionUtils.inputsList(targetBlock.json)) {
-                      if (arg.name === name && !!arg.src) {
-                        connection = targetBlock.getInput(arg.src).connection
+                    if (targetBlock.type.endsWith('_I') && !!targetBlock.getPreviousBlock()) {
+                      let prevBlock = targetBlock.getPreviousBlock()
+                      while (!!prevBlock.getPreviousBlock()) {
+                        prevBlock = prevBlock.getPreviousBlock()
+                      }
+                      connection = prevBlock.outputConnection
+                    } else {
+                      let name = targetBlock.getInputWithBlock(block)?.name
+                      for (let arg of JsonConversionUtils.inputsList(targetBlock.json)) {
+                        if (arg.name === name && !!arg.src) {
+                          connection = targetBlock.getInput(arg.src).connection
+                        }
                       }
                     }
                   }
@@ -253,6 +261,7 @@ const CardEditorView = () => {
 
   function onWorkspaceChanged(workspace) {
     const cardScript = WorkspaceUtils.workspaceToCardScript(workspace)
+    setCode(JSON.stringify(cardScript, null, 2))
     // Generate the blocks that correspond to the cards in the workspace
     let cardsStillInUse = []
     let update = false
@@ -271,7 +280,6 @@ const CardEditorView = () => {
         update = true
       }
     }
-    setCode(JSON.stringify(cardScript, null, 2))
     if (update) {
       setToolboxCategories(getToolboxCategories('Cards'))
     }
@@ -344,7 +352,7 @@ const CardEditorView = () => {
       }
     }
     if (!!cardId) {
-      for (let edge of data.allFile.edges) {
+      for (let edge of data.allJSON.edges) {
         let node = edge.node
         if (node.name === cardId) {
           card = JSON.parse(node.internal.content)

@@ -13,16 +13,16 @@ const LoadableComponent = Loadable.Map({
     const Blockly = loaded.Blockly
     const CardEditorView = loaded.CardEditorView.default
 
-    Blockly.Css.register([
-      /* eslint-disable indent */
-      '.blocklyCommentTextarea {',
-      'color: black;',
-      'caret-color: black;',
-      'font-size: 12pt;',
-      'background-color: lightgray;',
-      '}'
-      /* eslint-enable indent */
-    ]);
+    if (!Blockly.Css.injected_) {
+      Blockly.Css.register([
+        '.blocklyCommentTextarea {',
+        'color: black;',
+        'caret-color: black;',
+        'font-size: 12pt;',
+        'background-color: lightgray;',
+        '}'
+      ]);
+    }
 
     setTimeout(() => {
       const all = Blockly.Workspace.getAll()
