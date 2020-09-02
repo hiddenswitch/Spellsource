@@ -1350,6 +1350,16 @@ export default class JsonConversionUtils {
       }
     }
 
+    if (className === 'AndCondition' && (!json.conditions || json.conditions?.length === 0)) {
+      delete json.conditions
+      json.class = 'AlwaysCondition'
+    }
+
+    if (className === 'OrCondition' && (!json.conditions || json.conditions?.length === 0)) {
+      delete json.conditions
+      json.class = 'NeverCondition'
+    }
+
     if (className === 'CardFilter') {
       if (props.length === 1) { //cardfilters for just a race can be race filters
         if (props[0] === 'race') {
