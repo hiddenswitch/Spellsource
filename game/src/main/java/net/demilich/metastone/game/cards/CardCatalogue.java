@@ -507,7 +507,7 @@ public class CardCatalogue {
 				     new ClassGraph()
 						     .enableClassInfo()
 						     .disableRuntimeInvisibleAnnotations()
-						     .whitelistPackages("com.hiddenswitch.spellsource.cards")
+						     .acceptPackages("com.hiddenswitch.spellsource.cards.*")
 						     .scan()) {
 			cardResources = scanResult
 					.getAllClasses()
