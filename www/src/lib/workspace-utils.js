@@ -322,8 +322,6 @@ export default class WorkspaceUtils {
       return
     }
 
-    console.log(cardScript)
-
     //first, split up any args with ','
     for (const cardScriptKey in cardScript) {
       if (cardScriptKey.includes(',')) {
@@ -399,8 +397,6 @@ export default class WorkspaceUtils {
         delete cardScript[cardScriptKey]
       }
     }
-
-    console.log(cardScript)
   }
 
   static workspaceToCardScript (workspace) {
