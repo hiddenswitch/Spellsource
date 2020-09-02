@@ -1259,7 +1259,7 @@ export default class JsonConversionUtils {
       let lowestConnection = newBlock.getFirstStatementConnection()
 
       for (let arg in json) {
-        if (arg === 'class') {
+        if (arg === 'class' || (arg === 'filter' && !!parentJson.targetSelection && parentJson.targetSelection !== "NONE")) {
           continue
         }
 
