@@ -2,11 +2,11 @@ import WorkspaceUtils from '../workspace-utils'
 import JsonConversionUtils from '../json-conversion-utils'
 import fs from 'fs'
 import path from 'path'
-import { Workspace } from 'blockly'
-import { beforeAll, describe, expect, test, afterAll } from '@jest/globals'
-import { jsonTransformFileNode } from '../json-transforms'
+import {Workspace} from 'blockly'
+import {beforeAll, describe, expect, test, afterAll} from '@jest/globals'
+import {jsonTransformFileNode} from '../json-transforms'
 import BlocklyMiscUtils from '../blockly-misc-utils'
-import { walk, walkSync } from '../walk'
+import {walk, walkSync} from '../walk'
 import java from 'java'
 
 const cardsPath = `${__dirname}/../../../../cards/src/main/resources/cards/collectible`
@@ -22,6 +22,8 @@ for (const f of walkSync(cardsPath)) {
 
 const usedBlocks = {}
 
+const weirdos = []
+
 java.classpath.push(`${__dirname}/../../../../www/build/libs/www-0.8.79-all.jar`)
 
 describe('WorkspaceUtils', () => {
@@ -29,8 +31,8 @@ describe('WorkspaceUtils', () => {
     const blockEdges = []
     const cardEdges = []
     const data = {
-      allBlock: { edges: blockEdges },
-      allCard: { edges: cardEdges }
+      allBlock: {edges: blockEdges},
+      allCard: {edges: cardEdges}
     }
 
     for await (const blocksDefPath of walk(blocksPath)) {
@@ -40,8 +42,8 @@ describe('WorkspaceUtils', () => {
 
       const blocksJson = JSON.parse(await fs.promises.readFile(blocksDefPath))
       for (const blockJson of blocksJson) {
-        jsonTransformFileNode(blockJson, { base: path.basename(blocksDefPath) })
-        blockEdges.push({ node: blockJson })
+        jsonTransformFileNode(blockJson, {base: path.basename(blocksDefPath)})
+        blockEdges.push({node: blockJson})
       }
     }
 
@@ -51,8 +53,8 @@ describe('WorkspaceUtils', () => {
       }
 
       const cardJson = JSON.parse(await fs.promises.readFile(cardPath))
-      jsonTransformFileNode(cardJson, { base: path.basename(cardPath) })
-      cardEdges.push({ node: cardJson })
+      jsonTransformFileNode(cardJson, {base: path.basename(cardPath)})
+      cardEdges.push({node: cardJson})
     }
 
     for await(const cardPath of walk(cardsPath)) {
@@ -94,7 +96,13 @@ describe('WorkspaceUtils', () => {
     const srcCard = JSON.parse(await fs.promises.readFile(cardPath))
     JsonConversionUtils.generateCard(workspace, srcCard)
     const json = WorkspaceUtils.workspaceToCardScript(workspace)
-    expect(ConversionHarness.assertCardReplaysTheSameSync(1, 2, id, JSON.stringify(json))).toEqual(true)
+    const result = ConversionHarness.assertCardReplaysTheSameSync(1, 2, id, JSON.stringify(json))
+    if (!result || result == 'false') {
+      expect(json).toEqual(srcCard)
+      weirdos.push(id)
+    } else {
+      expect(result).toEqual(true)
+    }
   })
 
   test.each(cards)('no custom and replays the same %s', async (id, cardPath) => {
@@ -107,7 +115,93 @@ describe('WorkspaceUtils', () => {
     expect(ConversionHarness.assertCardReplaysTheSameSync(1, 2, id, JSON.stringify(json))).toEqual(true)
   })
 
+  test('just dreams of strength', async () => {
+    const ConversionHarness = java.import('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
+    const json = `
+    {
+      "name": "Dreams of Strength",
+      "baseManaCost": 7,
+      "type": "SPELL",
+      "heroClass": "AMBER",
+      "rarity": "EPIC",
+      "description": "Give a Larva +7/+7 and Guard.",
+      "targetSelection": "FRIENDLY_MINIONS",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "value": 7
+          },
+          {
+            "class": "AddAttributeSpell",
+            "attribute": "TAUNT"
+          }
+        ],
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "token_spiderling"
+        }
+      },
+      "collectible": true,
+      "set": "VERDANT_DREAMS",
+      "fileFormatVersion": 1
+    }
+    `
+    expect(ConversionHarness.assertCardReplaysTheSameSync(1, 2, 'spell_dreams_of_strength', json)).toEqual(true)
+  })
+
+
+  test.each(cards)('bug test time %s', async (id, cardPath) => {
+    const ConversionHarness = java.import('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
+    const workspace = new Workspace()
+    const srcCard = JSON.parse(await fs.promises.readFile(cardPath))
+    JsonConversionUtils.generateCard(workspace, srcCard)
+    const json = WorkspaceUtils.workspaceToCardScript(workspace)
+    ConversionHarness.assertCardReplaysTheSameSync(1, 2, id, JSON.stringify(json))
+
+    const ConversionHarness2 = java.import('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
+    const workspace2 = new Workspace()
+    const srcCard2 = JSON.parse(`
+      {
+      "name": "Dreams of Strength",
+      "baseManaCost": 7,
+      "type": "SPELL",
+      "heroClass": "AMBER",
+      "rarity": "EPIC",
+      "description": "Give a Larva +7/+7 and Guard.",
+      "targetSelection": "FRIENDLY_MINIONS",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "value": 7
+          },
+          {
+            "class": "AddAttributeSpell",
+            "attribute": "TAUNT"
+          }
+        ],
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "token_spiderling"
+        }
+      },
+      "collectible": true,
+      "set": "VERDANT_DREAMS",
+      "fileFormatVersion": 1
+    }
+    `)
+    JsonConversionUtils.generateCard(workspace2, srcCard2)
+    const json2 = WorkspaceUtils.workspaceToCardScript(workspace)
+    expect(ConversionHarness.assertCardReplaysTheSameSync(1, 2, id, JSON.stringify(json))).toEqual(true)
+
+
+  })
+
   afterAll(async () => {
+
     let blocks = JsonConversionUtils.customBlocks
     let keyArray = Object.keys(blocks)
       .sort((a, b) => blocks[b] - blocks[a])
@@ -117,5 +211,12 @@ describe('WorkspaceUtils', () => {
       let count = blocks[key]
       console.log('Appearing ' + count + ' times is ' + key)
     }
+
+
+
+    for (let weirdo of weirdos) {
+      console.log('Weirdo: ' + weirdo)
+    }
+
   }, 1)
 })

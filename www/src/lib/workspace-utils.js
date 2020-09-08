@@ -219,6 +219,13 @@ export default class WorkspaceUtils {
       cardScript.attributes.DEATHRATTLES = true
     }
 
+    if (!!cardScript.fileFormatVersion && !!find(cardScript, {class: 'DiscoverSpell'})) {
+      if (!cardScript.attributes) {
+        cardScript.attributes = {}
+      }
+      cardScript.attributes.DISCOVER = true
+    }
+
     if (!!cardScript.class && cardScript.class.endsWith('Aura')) {
       if (!!cardScript.attribute && !cardScript.attribute.startsWith('AURA_')
       && !cardScript.attribute.startsWith('RESERVED')) {

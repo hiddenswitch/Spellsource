@@ -26,7 +26,8 @@
         "attribute": "HP",
         "operation": "MINIMUM"
       },
-      "attribute": "HP"
+      "attribute": "HP",
+      "operation": "EQUAL"
     },
     "randomTarget": true
   },

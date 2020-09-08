@@ -5,13 +5,13 @@ import Layout from '../components/card-editor-layout'
 const LoadableComponent = Loadable.Map({
   loader: {
     Blockly: () => import('blockly'),
-    CardEditorView: () => import('../components/card-editor-view2')
+    CardEditorWorkspace: () => import('../components/card-editor-workspace')
   },
   delay: 300,
   loading () {return (<span>Loading</span>)},
   render (loaded) {
     const Blockly = loaded.Blockly
-    const CardEditorView = loaded.CardEditorView.default
+    const CardEditorWorkspace = loaded.CardEditorWorkspace.default
 
     if (!Blockly.Css.injected_) {
       Blockly.Css.register([
@@ -33,7 +33,8 @@ const LoadableComponent = Loadable.Map({
         }
       }
     }, 1)
-    return <CardEditorView/>
+    
+    return <CardEditorWorkspace/>
   }
 })
 

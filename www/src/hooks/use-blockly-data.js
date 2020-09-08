@@ -82,7 +82,7 @@ export default function useBlocklyData () {
         }
       }
     }
-    allJSON: allFile(filter: {extension: {eq: "json"}, relativePath: {glob: "**collectible/**"}}) {
+    allJSON: allFile(filter: {extension: {eq: "json"}}) {
       edges {
         node {
           internal {
