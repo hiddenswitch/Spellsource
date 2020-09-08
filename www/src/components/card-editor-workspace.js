@@ -26,7 +26,48 @@ const CardEditorWorkspace = (props) => {
     BlocklyMiscUtils.initializeBlocks(data)
   })
 
+  // Run once after the workspace has been created
+  useEffect(() => {
+    const workspace = Blockly.getMainWorkspace()
+    workspace.options.disable = false
+    const importCardCallback = () => {
+      let p = prompt('Input the name of the card (or the wiki page URL / Card ID for more precision)')
+      generateCard(p)
+      workspace.getToolbox().clearSelection()
+      setToolboxCategories(getToolboxCategories())
+    }
+    workspace.registerButtonCallback('importCard', importCardCallback)
+    const changeListenerCallback = (event) => {
+      if (event.type === Blockly.Events.UI && event.element === 'category') {
+        if (event.newValue === 'Targets') {
+          // TODO: change listener callback work
+        }
+      }
+    }
+    workspace.addChangeListener(changeListenerCallback)
+
+    if (defaultCard) {
+      setTimeout(() => {
+        const array = ["Daring Duelist", "Ninja Aspirants", "Redhide Butcher",
+          "Sly Conquistador", "Stormcloud Assailant", "Peacock Mystic"]
+        generateCard(array[Math.floor(Math.random() * array.length)])
+        Blockly.getMainWorkspace().getTopBlocks(true)[0].setCommentText("This card was imported automatically as an example.")
+      }, 100)
+    }
+
+
+    workspace.addChangeListener((event) => pluralStuff(event, workspace))
+
+    return () => {
+      workspace.removeButtonCallback('importCard')
+      workspace.removeChangeListener(changeListenerCallback)
+      workspace.removeChangeListener(pluralStuff)
+    }
+  }, [])
+
   const pluralStuff = (event, workspace) => {
+    let anyChange = false
+
     if (event.type !== Blockly.Events.UI && !workspace.isDragging()) {
       for (let block of workspace.getAllBlocks()) {
         let argsList = JsonConversionUtils.argsList(block.json);
@@ -72,6 +113,7 @@ const CardEditorWorkspace = (props) => {
               }
             }
 
+            let before = block.getFieldValue(arg.name)
             const options = arg.text.split('/')
             if (shouldBePlural === null) {
               if (arg.value) { //on a plural field, 'value' is the default text to show (e.g. in the toolbox)
@@ -84,50 +126,28 @@ const CardEditorWorkspace = (props) => {
             } else {
               block.setFieldValue(options[0], arg.name)
             }
+
+            if (block.getFieldValue(arg.name) !== before) {
+              anyChange = true
+            }
+          }
+        }
+      }
+
+      if (anyChange) {
+
+        for (let block of workspace.getAllBlocks()) {
+          for (var i = 0, input; (input = block.inputList[i]); i++) {
+            for (var j = 0, field; (field = input.fieldRow[j]); j++) {
+              if (field.isBeingEdited_ && field.showEditor_) {
+                field.showEditor_()
+              }
+            }
           }
         }
       }
     }
   }
-
-  // Run once after the workspace has been created
-  useEffect(() => {
-    const workspace = Blockly.getMainWorkspace()
-    workspace.options.disable = false
-    const importCardCallback = () => {
-      let p = prompt('Input the name of the card (or the wiki page URL / Card ID for more precision)')
-      generateCard(p)
-      workspace.getToolbox().clearSelection()
-      setToolboxCategories(getToolboxCategories())
-    }
-    workspace.registerButtonCallback('importCard', importCardCallback)
-    const changeListenerCallback = (event) => {
-      if (event.type === Blockly.Events.UI && event.element === 'category') {
-        if (event.newValue === 'Targets') {
-          // TODO: change listener callback work
-        }
-      }
-    }
-    workspace.addChangeListener(changeListenerCallback)
-
-    if (defaultCard) {
-      setTimeout(() => {
-        const array = ["Daring Duelist", "Ninja Aspirants", "Redhide Butcher",
-          "Sly Conquistador", "Stormcloud Assailant", "Peacock Mystic"]
-        generateCard(array[Math.floor(Math.random() * array.length)])
-        Blockly.getMainWorkspace().getTopBlocks(true)[0].setCommentText("This card was imported automatically as an example.")
-      }, 100)
-    }
-
-
-    workspace.addChangeListener((event) => pluralStuff(event, workspace))
-
-    return () => {
-      workspace.removeButtonCallback('importCard')
-      workspace.removeChangeListener(changeListenerCallback)
-      workspace.removeChangeListener(pluralStuff)
-    }
-  }, [])
 
   const getToolboxCategories = (onlyCategory = null) => {
     let index = -1
@@ -168,6 +188,7 @@ const CardEditorWorkspace = (props) => {
           })
         })
       }
+      /*
       let button = []
       if (CategoryName === 'Cards') {
         button[0] = {
@@ -175,6 +196,7 @@ const CardEditorWorkspace = (props) => {
           callbackKey: 'importCard'
         }
       }
+       */
 
       if (!!Subcategories && isArray(Subcategories)) {
         let categories = []
@@ -216,8 +238,7 @@ const CardEditorWorkspace = (props) => {
       } else return {
         name: CategoryName,
         blocks: blocks,
-        colour: ColorHex,
-        button: button
+        colour: ColorHex
       }
     })
   }
@@ -311,8 +332,8 @@ const CardEditorWorkspace = (props) => {
             'output': 'Card',
             'colour': color
           })
-          this.data = cardId
-        }
+        },
+        data: cardId
       }
       if (!Blockly.Blocks[type.replace('WorkspaceCard_', 'CatalogueCard_')]) {
         cardsStillInUse.push(type)
@@ -327,12 +348,12 @@ const CardEditorWorkspace = (props) => {
   }
 
   const generateCard = (p) => {
-    let cardId = null
-    let card = null
-
     if (!p) {
       return
     }
+
+    let cardId = null
+    let card = null
 
     if (p.includes('{')) {
       card = JSON.parse(p)
@@ -398,6 +419,7 @@ const CardEditorWorkspace = (props) => {
     )
   }
 
+  //when this component reloads, check if the search query changed
   if (props.query !== query) {
     setQuery(props.query)
     search(props.query)

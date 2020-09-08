@@ -13,7 +13,8 @@
       "class": "DiscoverSpell",
       "value": 2,
       "cardFilter": {
-        "class": "CardFilter"
+        "class": "CardFilter",
+        "cardType": "MINION"
       },
       "cardSource": {
         "class": "GraveyardDiedMinionsSource",

@@ -18,9 +18,12 @@
         "spell": {
           "class": "ShuffleToDeckSpell",
           "value": 1,
-          "filter": {
+          "cardFilter": {
             "class": "CardFilter",
             "heroClass": "NEONGREEN"
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
           }
         },
         "howMany": 15

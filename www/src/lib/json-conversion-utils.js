@@ -23,7 +23,7 @@ export default class JsonConversionUtils {
     if (block.type.endsWith('SHADOW')) {
       return
     }
-    let list = this.argsList(block)
+    let list = this.argsList(block).filter(arg => arg.type !== 'field_image')
     if (list.length > 0) {
       let className = null
 
@@ -198,6 +198,7 @@ export default class JsonConversionUtils {
       delete card.attributes.SPELLSOURCE_NAME
       delete card.attributes.BATTLECRY
       delete card.attributes.DEATHRATTLES
+      delete card.attributes.DISCOVER
       if (card.type === 'HERO') {
         delete card.attributes.HP
         delete card.attributes.MAX_HP
@@ -755,7 +756,12 @@ export default class JsonConversionUtils {
               if (arg.type === 'field_label_serializable_hidden') {
                 delta = -5
               } else {
-                delta = -1 //it's kinda bad to straight up not have the property
+                //it's kinda bad to straight up not have the property
+                if (arg.name === 'targetPlayer' || arg.name === 'value') {
+                  delta = -.5
+                } else {
+                  delta = -1
+                }
               }
             }
             score += delta
@@ -1416,7 +1422,7 @@ export default class JsonConversionUtils {
             })
           }
         }
-        if (!!json.manaCost) {
+        if (json.hasOwnProperty('manaCost')) {
           filters.push({
             class: 'CardFilter',
             manaCost: json.manaCost
@@ -1572,6 +1578,14 @@ export default class JsonConversionUtils {
     if (className.endsWith('Aura') && !!json.triggers && json.triggers.length === 1) {
       json.trigger = json.triggers[0]
       delete json.triggers
+    }
+
+    //functionality is the same
+    if (className === 'CloneMinionSpell') {
+      json.class = 'SummonSpell'
+    }
+    if (className === 'InspireTrigger') {
+      json.class = 'HeroPowerUsedTrigger'
     }
 
     return json

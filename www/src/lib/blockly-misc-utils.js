@@ -1,4 +1,4 @@
-import Blockly, {FieldLabel} from 'blockly'
+import Blockly, {FieldLabel, Workspace} from 'blockly'
 import JsonConversionUtils from './json-conversion-utils'
 import {has} from 'lodash'
 import recursiveOmitBy from 'recursive-omit-by'
@@ -104,6 +104,7 @@ export default class BlocklyMiscUtils {
       case 'fireCondition':
       case 'condition':
       case 'targetSelectionCondition':
+      case 'andCondition':
         return 'Condition'
       case 'spell':
       case 'spell1':
@@ -243,7 +244,7 @@ export default class BlocklyMiscUtils {
               delete arg.valueB
             }
 
-            if (arg.type === 'field_image' && !!arg.src && !arg.src.includes('.')) {
+            if (!!data.allIcon && arg.type === 'field_image' && !!arg.src && !arg.src.includes('.')) {
               for (let edge of data.allIcon.edges) {
                 let node = edge.node
                 if (node.name === arg.src) {
@@ -331,9 +332,15 @@ export default class BlocklyMiscUtils {
   static initCardBlocks(data) {
     const heroClassColors = BlocklyMiscUtils.getHeroClassColors(data)
     //second pass through to actually get the cards
-    data.allCard.edges.forEach(edge => {
-      let card = edge.node
-      let type = 'CatalogueCard_' + card.id
+
+    for (let edge of data.allJSON.edges) {
+      let node = edge.node
+      let json = node.internal.content
+      let card = JSON.parse(json)
+      if (!card.type || card.type === 'FORMAT' || !card.fileFormatVersion) {
+        continue
+      }
+      let type = 'CatalogueCard_' + node.name
       if (has(Blockly.Blocks, type)) {
         return
       }
@@ -345,12 +352,13 @@ export default class BlocklyMiscUtils {
           'message0': BlocklyMiscUtils.cardMessage(card),
           'output': 'Card',
           'colour': color,
-          'data': card.id,
-          'comment': this.cardDescription(card)
+          'data': node.name,
+          'comment': this.cardDescription(card),
+          'json': json
         }
         BlocklyMiscUtils.addBlock(block)
       }
-    })
+    }
   }
 
   static cardDescription(card) {
@@ -674,7 +682,7 @@ export default class BlocklyMiscUtils {
     }
 
     const getInRowSpacing = Blockly.geras.RenderInfo.prototype.getInRowSpacing_
-    Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function(prev, next) {
+    Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function (prev, next) {
       // Spacing between two fields of the same editability.
 
       if (prev && Blockly.blockRendering.Types.isField(prev) &&
@@ -695,7 +703,51 @@ export default class BlocklyMiscUtils {
         }
         return 3
       }
+      if (prev && Blockly.blockRendering.Types.isField(prev) &&
+        next && Blockly.blockRendering.Types.isField(next) &&
+        prev.isEditable === next.isEditable &&
+        (!(prev.field instanceof FieldLabelPlural) && next.field instanceof FieldLabelPlural)
+        && !(prev.field instanceof FieldLabelSerializableHidden)) {
+        return this.constants_.MEDIUM_PADDING
+      }
       return getInRowSpacing.call(this, prev, next)
     }
+
+    const generateContextMenu = Blockly.BlockSvg.prototype.generateContextMenu
+    Blockly.BlockSvg.prototype.generateContextMenu = function () {
+      let menuOptions = generateContextMenu.call(this)
+      let block = this
+      if (block.type.startsWith('CatalogueCard')) {
+        menuOptions.push({
+          text: 'Copy CardScript',
+          enabled: true,
+          callback: function () {
+            if (!!block.json && !!block.json.json) {
+              let card = JSON.parse(block.json.json)
+              let dummyWorkspace = new Workspace()
+              JsonConversionUtils.generateCard(dummyWorkspace, card)
+
+              block = dummyWorkspace.getTopBlocks(false)[0]
+
+              let xml = Blockly.Xml.blockToDom(block, true);
+              var xy = block.getRelativeToSurfaceXY();
+              xml.setAttribute('x', xy.x);
+              xml.setAttribute('y', xy.y);
+              Blockly.clipboardXml_ = xml;
+              Blockly.clipboardSource_ = Blockly.getMainWorkspace();
+              Blockly.clipboardTypeCounts_ = Blockly.utils.getBlockTypeCounts(block, false);
+
+              dummyWorkspace.dispose()
+
+              Blockly.getMainWorkspace().getToolbox().clearSelection()
+            }
+          }
+        })
+      }
+
+      return menuOptions.filter(option => option.enabled)
+    }
+
   }
+
 }
