@@ -15,7 +15,7 @@ import useBlocklyData from '../hooks/use-blockly-data'
 
 const CardEditorWorkspace = (props) => {
   const data = useBlocklyData()
-  const heroClassColors = useMemo(() => BlocklyMiscUtils.getHeroClassColors(data))
+  const heroClassColors = useMemo(() => BlocklyMiscUtils.getHeroClassColors(data),[data])
   const [query, setQuery] = useState(``)
   const [results, setResults] = useState([])
   const defaultCard = props.defaultCard
@@ -284,29 +284,16 @@ const CardEditorWorkspace = (props) => {
     const cardScript = WorkspaceUtils.workspaceToCardScript(workspace)
     props.setCode(JSON.stringify(cardScript, null, 2))
     // Generate the blocks that correspond to the cards in the workspace
-    let cardsStillInUse = []
-    let update = false
-    if (isArray(cardScript)) {
-      cardScript.forEach(card => {
-        if (createCard(card, workspace, cardsStillInUse)) {
-          update = true
-        }
-      })
-    } else if (createCard(cardScript, workspace, cardsStillInUse)) {
-      update = true
-    }
-    for (let blocksKey in Blockly.Blocks) {
-      if (blocksKey.startsWith('WorkspaceCard') && !cardsStillInUse.includes(blocksKey)) {
-        delete Blockly.Blocks[blocksKey]
-        update = true
+    if (!workspace.isDragging()) {
+      let update = handleWorkspaceCards(workspace, cardScript)
+      if (update) {
+        setToolboxCategories(getToolboxCategories('Cards'))
       }
     }
-    if (update) {
-      setToolboxCategories(getToolboxCategories('Cards'))
-    }
+
   }
 
-  const createCard = (card, workspace, cardsStillInUse) => {
+  const createCard = (card) => {
     if (!!card && !!card.name && !!card.type) {
       let cardType = !!card.secret ? 'SECRET' : !!card.quest ? 'QUEST' : card.type
       let cardId = cardType.toLowerCase()
@@ -327,29 +314,86 @@ const CardEditorWorkspace = (props) => {
       if (!!card.heroClass) {
         color = heroClassColors[card.heroClass]
       }
+      let message = BlocklyMiscUtils.cardMessage(card)
       let json = {
         'type': type,
-        'message0': BlocklyMiscUtils.cardMessage(card),
+        'message0': '%1',
         'output': 'Card',
-        'colour': color
+        'colour': color,
+        'args0': [
+          {
+            'type': 'field_label',
+            'name': 'message',
+            'text': message
+          }
+        ]
       }
-      let block = {
+      return {
         init: function () {
           this.jsonInit(json)
         },
         data: cardId,
-        json: json
+        json: json,
+        message: message
       }
-      if (!Blockly.Blocks[type.replace('WorkspaceCard_', 'CatalogueCard_')]) {
-        cardsStillInUse.push(type)
-      }
-      if (Blockly.Blocks[type] !== block) {
-        Blockly.Blocks[type] = block
-        return true
-      }
-      return false
+    }
+  }
+
+  const handleWorkspaceCards = (workspace, cardScript) => {
+    let anythingChanged = false
+    if (!isArray(cardScript)) {
+      cardScript = [cardScript]
     }
 
+    let currentCards = []
+    for (let blocksKey in Blockly.Blocks) {
+      if (blocksKey.startsWith('WorkspaceCard')) {
+        currentCards.push(blocksKey)
+      }
+    }
+    let i = 0
+    workspace.getTopBlocks(true).forEach(block => {
+      if (block.type.startsWith('Starter_')) {
+        let blockType = 'WorkspaceCard_' + block.id
+        currentCards = currentCards.filter(value => value !== blockType)
+
+        let card = cardScript[i]
+        if (!!Blockly.Blocks[blockType]) {
+          anythingChanged = true
+        }
+        Blockly.Blocks[blockType] = createCard(card)
+      }
+      i++
+    })
+
+    currentCards.forEach(card => {
+      anythingChanged = true
+      delete Blockly.Blocks[card]
+    })
+
+    workspace.getAllBlocks(true).forEach(block => {
+      if (block.type.startsWith('WorkspaceCard')) {
+        let test = Blockly.Blocks
+        if (Blockly.Blocks.hasOwnProperty(block.type)) {
+          block.data = Blockly.Blocks[block.type].data
+          block.setFieldValue(Blockly.Blocks[block.type].message, 'message')
+          block.setColour(Blockly.Blocks[block.type].json.colour)
+          if (!!block.render) {
+            let textElement = block.getSvgRoot().lastElementChild.firstElementChild
+            if (!!Blockly.blackText && Blockly.blackText[block.getColour()]) {
+              textElement.setAttribute('class', 'blocklyText blackText')
+            } else {
+              textElement.setAttribute('class', 'blocklyText')
+            }
+            block.render()
+          }
+        } else {
+          block.dispose(true)
+        }
+      }
+    })
+
+    return anythingChanged
   }
 
   const generateCard = (p) => {

@@ -80,6 +80,13 @@ export default function useBlocklyData () {
               g
               b
             }
+            body {
+              vertex {
+                r
+                g
+                b
+              }
+            }
           }
         }
       }

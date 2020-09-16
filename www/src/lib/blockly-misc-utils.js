@@ -295,6 +295,9 @@ export default class BlocklyMiscUtils {
   }
 
   static getHeroClassColors(data) {
+    if (!Blockly.blackText) {
+      Blockly.blackText = {}
+    }
     const newHeroClassColors = {
       ANY: '#A6A6A6'
     }
@@ -316,6 +319,7 @@ export default class BlocklyMiscUtils {
           card.art.primary.b * 255
         )
 
+
         newHeroClassColors[card.heroClass] = color
         let block = {
           'type': type,
@@ -325,6 +329,9 @@ export default class BlocklyMiscUtils {
           'data': card.heroClass
         }
         BlocklyMiscUtils.addBlock(block)
+        if (card.art.body?.vertex?.r + card.art.body?.vertex?.g + card.art.body?.vertex?.b < .1) {
+          Blockly.blackText[color] = true
+        }
       }
     })
     return newHeroClassColors
@@ -433,6 +440,10 @@ export default class BlocklyMiscUtils {
           'opacity: 1;',
           'font-size: 10pt;',
         '}',
+
+        '.blackText {',
+          'fill: #000 !important;',
+        '}'
       ]);
     }
 
