@@ -135,12 +135,6 @@ summary:hover {
   width: 75px;
 }
 
-@media only screen and (max-device-width: 500px) {
-  * {
-    font-size: $base-font-size !important;
-  }
-}
-
 @media only screen and (max-device-width: 700px) {
   .emphasis-gif {
     width: 100vw;

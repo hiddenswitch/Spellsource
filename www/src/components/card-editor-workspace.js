@@ -3,7 +3,7 @@ import WorkspaceUtils from '../lib/workspace-utils'
 import styles from './card-editor-view.module.css'
 import ReactBlocklyComponent from 'react-blockly'
 import Blockly from 'blockly'
-import {isArray} from 'lodash'
+import {isArray, uniq} from 'lodash'
 import 'ace-builds/src-noconflict/mode-json'
 import 'ace-builds/src-noconflict/mode-xml'
 import 'ace-builds/src-noconflict/theme-github'
@@ -18,7 +18,7 @@ const CardEditorWorkspace = (props) => {
   const heroClassColors = useMemo(() => BlocklyMiscUtils.getHeroClassColors(data))
   const [query, setQuery] = useState(``)
   const [results, setResults] = useState([])
-  const defaultCard = false
+  const defaultCard = props.defaultCard
   const index = useIndex()
 
   // Run once before the workspace has been created
@@ -153,8 +153,12 @@ const CardEditorWorkspace = (props) => {
     let index = -1
     return data.toolbox.BlockCategoryList.map((
       {
-        BlockTypePrefix, CategoryName, ColorHex, Subcategories
+        BlockTypePrefix, CategoryName, ColorHex, Subcategories, Tooltip, Subtooltips
       }) => {
+      if (!!Blockly.categoryTooltips && !Blockly.categoryTooltips[CategoryName]) {
+        Blockly.categoryTooltips[CategoryName] = Tooltip
+        Blockly.tooltipColors[CategoryName] = BlocklyMiscUtils.tertiaryColor(BlocklyMiscUtils.colorToHex(ColorHex))
+      }
       index++
       if (!!onlyCategory && CategoryName !== onlyCategory) {
         return toolboxCategories[index] //my attempt to reduce the runtime a bit
@@ -188,24 +192,23 @@ const CardEditorWorkspace = (props) => {
           })
         })
       }
-      /*
-      let button = []
-      if (CategoryName === 'Cards') {
-        button[0] = {
-          text: 'Import Catalogue Card Code',
-          callbackKey: 'importCard'
-        }
-      }
-       */
 
       if (!!Subcategories && isArray(Subcategories)) {
         let categories = []
 
-        for (let category of Subcategories) {
+
+        for (let i = 0, category; (category = Subcategories[i]); i++) {
           categories[category] = {
             name: category,
             blocks: [],
             colour: ColorHex
+          }
+          if (!!Subtooltips && !!Subtooltips[i]) {
+            let name = CategoryName + '.' + category
+            if (!!Blockly.categoryTooltips && !Blockly.categoryTooltips[name]) {
+              Blockly.categoryTooltips[name] = Subtooltips[i]
+              Blockly.tooltipColors[name] = BlocklyMiscUtils.tertiaryColor(BlocklyMiscUtils.colorToHex(ColorHex))
+            }
           }
         }
 
@@ -310,9 +313,9 @@ const CardEditorWorkspace = (props) => {
         + '_'
         + card.name
           .toLowerCase()
-          .replace(' ', '_')
-          .replace(',', '')
-          .replace("'", '')
+          .replaceAll(' ', '_')
+          .replaceAll(',', '')
+          .replaceAll("'", '')
       if (card.type === 'MINION' && card.collectible === false || card.collectible === 'FALSE') {
         cardId.replace('minion_', 'token_')
       }
@@ -324,16 +327,18 @@ const CardEditorWorkspace = (props) => {
       if (!!card.heroClass) {
         color = heroClassColors[card.heroClass]
       }
+      let json = {
+        'type': type,
+        'message0': BlocklyMiscUtils.cardMessage(card),
+        'output': 'Card',
+        'colour': color
+      }
       let block = {
         init: function () {
-          this.jsonInit({
-            'type': type,
-            'message0': BlocklyMiscUtils.cardMessage(card),
-            'output': 'Card',
-            'colour': color
-          })
+          this.jsonInit(json)
         },
-        data: cardId
+        data: cardId,
+        json: json
       }
       if (!Blockly.Blocks[type.replace('WorkspaceCard_', 'CatalogueCard_')]) {
         cardsStillInUse.push(type)
@@ -404,7 +409,7 @@ const CardEditorWorkspace = (props) => {
         // Query the index with search string to get an [] of IDs
         .search(query, {expand: true}) // accept partial matches
         .map(({ref}) => index.documentStore.getDoc(ref))
-        .filter(doc => doc.nodeType === 'Block' || (doc.nodeType === 'Card' && props.showCatalogueBlocks
+        .filter(doc => !props.showCatalogueBlocks ? doc.nodeType === 'Block' : (doc.nodeType === 'Card'
           && heroClassColors.hasOwnProperty(doc.heroClass) && doc.hasOwnProperty('baseManaCost')))
         .map(doc => {
           if (doc.nodeType === 'Card') {
@@ -426,11 +431,14 @@ const CardEditorWorkspace = (props) => {
     handleSearchResults(props.query)
   }
 
-  return (<ReactBlocklyComponent.BlocklyEditor
-    workspaceDidChange={onWorkspaceChanged}
-    wrapperDivClassName={styles.codeEditor}
-    toolboxCategories={toolboxCategories}
-  />)
+  return (<span>
+    <ReactBlocklyComponent.BlocklyEditor
+      workspaceDidChange={onWorkspaceChanged}
+      wrapperDivClassName={styles.codeEditor}
+      toolboxCategories={toolboxCategories}
+    />
+   </span>
+  )
 }
 
 export default CardEditorWorkspace

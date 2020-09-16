@@ -27,6 +27,8 @@ exports.createSchemaCustomization = ({ actions }) => {
     CategoryName: String
     ColorHex: String
     Subcategories: [String]
+    Tooltip: String
+    Subtooltips: [String]
   }
   type Block implements Node {
     type: String
@@ -184,7 +186,7 @@ exports.createResolvers = ({ createResolvers }) => {
             }
             return ''
           }
-          return getTextForNode(node).replace(/\s+/g,' ').trim()
+          return getTextForNode(node).replaceAll(/\s+/g,' ').trim()
           //removing excess whitespace just in case ^^^
         }
       }
