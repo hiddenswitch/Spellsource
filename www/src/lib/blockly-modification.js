@@ -16,6 +16,7 @@ export default class BlocklyModification {
     this.pluralSpacing()
     this.contextMenu()
     this.tooltips()
+    this.blackText()
   }
 
   static modifyRendering() {
@@ -424,6 +425,16 @@ export default class BlocklyModification {
           Blockly.Tooltip.DIV.style.backgroundColor = '#ffffc7'
           Blockly.Tooltip.DIV.style.color = '#000'
         }
+      }
+    }
+  }
+
+  static blackText() {
+    const createTextElement = Blockly.Field.prototype.createTextElement_
+    Blockly.Field.prototype.createTextElement_ = function() {
+      createTextElement.call(this)
+      if (!!Blockly.blackText && Blockly.blackText[this.getSourceBlock().colour_]) {
+        this.textElement_.setAttribute('class', 'blocklyText blackText')
       }
     }
   }
