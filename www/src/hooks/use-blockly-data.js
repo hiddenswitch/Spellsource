@@ -9,6 +9,8 @@ export default function useBlocklyData () {
         CategoryName
         ColorHex
         Subcategories
+        Tooltip
+        Subtooltips
       }
     }
     allBlock {

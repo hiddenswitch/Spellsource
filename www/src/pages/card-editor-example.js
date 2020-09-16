@@ -6,24 +6,24 @@ import BlocklyMiscUtils from "../lib/blockly-misc-utils";
 const LoadableComponent = Loadable.Map({
   loader: {
     Blockly: () => import('blockly'),
-    CardEditorView: () => import('../components/card-editor-view')
+    CardEditorWorkspace: () => import('../components/card-editor-workspace')
   },
   delay: 300,
   loading () {return (<span>Loading</span>)},
   render (loaded) {
     const Blockly = loaded.Blockly
-    const CardEditorView = loaded.CardEditorView.default
+    const CardEditorWorkspace = loaded.CardEditorWorkspace.default
 
     BlocklyMiscUtils.loadableInit(Blockly)
-
-    return <CardEditorView defaultCard={false}/>
+    
+    return <CardEditorWorkspace defaultCard={true}/>
   }
 })
 
-const CardEditor = () => {
+const CardEditorExample = () => {
   return <Layout>
     <LoadableComponent/>
   </Layout>
 }
 
-export default CardEditor
+export default CardEditorExample
