@@ -192,7 +192,7 @@ export default class BlocklyMiscUtils {
   //make the message for a generated block for a catalogue/created card
   static cardMessage(card) {
     let ret = ''
-    if (card.baseManaCost !== null) {
+    if (card.baseManaCost !== null && card.baseManaCost !== undefined) {
       ret = '(' + card.baseManaCost + ') '
     }
     if (card.type === 'MINION') {
@@ -204,7 +204,7 @@ export default class BlocklyMiscUtils {
     return ret
   }
 
-  static initializeBlocks(data) {
+  static initBlocks(data) {
     try {
       Blockly.fieldRegistry.register('field_label_serializable_hidden', FieldLabelSerializableHidden)
       Blockly.fieldRegistry.register('field_label_plural', FieldLabelPlural)
@@ -273,32 +273,13 @@ export default class BlocklyMiscUtils {
 
       BlocklyMiscUtils.addBlock(block)
     })
-
-    BlocklyMiscUtils.initCardBlocks(data)
-
-
-    let defaultFunction = Blockly.Field.prototype.setValue;
-    Blockly.Field.prototype.setValue = function (newValue) {
-      defaultFunction.call(this, newValue)
-      let source = this.sourceBlock_
-      if (!!source && !!Blockly.Blocks[source.type].json) {
-        let json = Blockly.Blocks[source.type].json
-        if (json.output === 'Color') {
-          let r = source.getFieldValue('r')
-          let g = source.getFieldValue('g')
-          let b = source.getFieldValue('b')
-          let color = Blockly.utils.colour.rgbToHex(r, g, b)
-          source.setColour(color)
-        }
-      }
-    }
   }
 
-  static getHeroClassColors(data) {
-    if (!Blockly.blackText) {
-      Blockly.blackText = {}
+  static initHeroClassColors(data) {
+    if (!Blockly.textColor) {
+      Blockly.textColor = {}
     }
-    const newHeroClassColors = {
+    Blockly.heroClassColors = {
       ANY: '#A6A6A6'
     }
 
@@ -320,7 +301,7 @@ export default class BlocklyMiscUtils {
         )
 
 
-        newHeroClassColors[card.heroClass] = color
+        Blockly.heroClassColors[card.heroClass] = color
         let block = {
           'type': type,
           'message0': card.name,
@@ -329,18 +310,18 @@ export default class BlocklyMiscUtils {
           'data': card.heroClass
         }
         BlocklyMiscUtils.addBlock(block)
-        if (card.art.body?.vertex?.r + card.art.body?.vertex?.g + card.art.body?.vertex?.b < .1) {
-          Blockly.blackText[color] = true
+        if (!!card.art.body?.vertex) {
+          Blockly.textColor[color] = Blockly.utils.colour.rgbToHex(
+            card.art.body.vertex.r * 255,
+            card.art.body.vertex.g * 255,
+            card.art.body.vertex.b * 255
+          )
         }
       }
     })
-    return newHeroClassColors
   }
 
   static initCardBlocks(data) {
-    const heroClassColors = BlocklyMiscUtils.getHeroClassColors(data)
-    //second pass through to actually get the cards
-
     for (let edge of data.allJSON.edges) {
       let node = edge.node
       let json = node.internal.content
@@ -352,8 +333,8 @@ export default class BlocklyMiscUtils {
       if (has(Blockly.Blocks, type)) {
         return
       }
-      if (heroClassColors.hasOwnProperty(card.heroClass)) { //this check if it's *really* collectible
-        let color = heroClassColors[card.heroClass]
+      if (Blockly.heroClassColors.hasOwnProperty(card.heroClass)) { //this check if it's *really* collectible
+        let color = Blockly.heroClassColors[card.heroClass]
         let block = {
           'type': type,
           'args0': [],

@@ -1,5 +1,5 @@
 .code-editor {
-    height: 540px;
+    height: 530px;
     width: 900px;
     color: black;
 }
@@ -11,4 +11,21 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.editorOption {
+    border-style: ridge;
+    display: inline;
+    padding: 2px 2px 3px 1px;
+}
+
+.editorCheck {
+    height: 15px;
+    width: 15px;
+    -webkit-appearance: checkbox;
+}
+
+.editorSearch {
+    width: 40% !important;
+    border-style: ridge;
 }
