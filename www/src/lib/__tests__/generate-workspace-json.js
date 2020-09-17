@@ -64,7 +64,9 @@ describe('WorkspaceUtils', () => {
       await handleWalk(cardPath)
     }
 
-    BlocklyMiscUtils.initializeBlocks(data)
+    BlocklyMiscUtils.initBlocks(data)
+    BlocklyMiscUtils.initHeroClassColors(data)
+    BlocklyMiscUtils.initCardBlocks(data)
   })
 
   test.each(cards)('generates card %s ', async (id, cardPath) => {

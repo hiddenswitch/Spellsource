@@ -12,13 +12,21 @@ const CardEditorView = (props) => {
   const [query, setQuery] = useState(``)
   const [showCatalogueBlocks, setShowCatalogueBlocks] = useState(false)
   const [showBlockComments, setShowBlockComments] = useState(true)
+  const [compactBlocks, setCompactBlocks] = useState(true)
+  const [showJSON, setShowJSON] = useState(true)
   const blockCommentsTooltip = 'Toggles the helpful/informational comments that display on certain blocks in the toolbox'
   const catalogueBlocksTooltip = 'Toggles whether the blocks for real cards from the catalogue show up in search'
+  const compactBlocksTooltip = 'Render the blocks compactly rather than as always full rectangles'
+  const showJSONTooltip = 'Show the JSON representation of the workspace below'
 
   const catalogueBlocksCheck = useRef(null)
   const catalogueBlocksLabel = useRef(null)
   const blockCommentsCheck = useRef(null)
   const blockCommentsLabel = useRef(null)
+  const compactBlocksCheck = useRef(null)
+  const compactBlocksLabel = useRef(null)
+  const showJSONCheck = useRef(null)
+  const showJSONLabel = useRef(null)
 
   const search = evt => {
     const query = evt.target.value
@@ -53,64 +61,83 @@ const CardEditorView = (props) => {
     addTooltip(catalogueBlocksLabel, catalogueBlocksTooltip)
     addTooltip(blockCommentsCheck, blockCommentsTooltip)
     addTooltip(blockCommentsLabel, blockCommentsTooltip)
+    addTooltip(compactBlocksCheck, compactBlocksTooltip)
+    addTooltip(compactBlocksLabel, compactBlocksTooltip)
+    addTooltip(showJSONCheck, showJSONTooltip)
+    addTooltip(showJSONLabel, showJSONTooltip)
   })
 
-  return (<span className={styles.unselectable}>
+  return (<span>
       <Form.Control type="text"
                     placeholder={'Search blocks'}
                     value={query}
                     onChange={e => search(e)}
-                    style={{
-                      width: '40%',
-                      borderStyle: 'ridge'
-                    }}
+                    className={styles.editorSearch}
       />
-      <Form.Check style={{display: 'inline'}}>
+      <Form.Check className={styles.editorOption}>
         <Form.Check.Input defaultChcked={showCatalogueBlocks}
                           onChange={e => toggleCatalogueBlocks(e)}
                           value={showCatalogueBlocks}
-                          style={{
-                            height: '15px',
-                            width: '15px',
-                            webkitAppearance: 'checkbox'
-                          }}
+                          className={styles.editorCheck}
                           ref={catalogueBlocksCheck}
                           bsPrefix={styles.unselectable}
         />
         <Form.Check.Label bsPrefix={styles.unselectable}
-                          ref={catalogueBlocksLabel}> Search Card Catalogue  </Form.Check.Label>
-      </Form.Check>
-      <Form.Check style={{display: 'inline'}}>
-        <Form.Check.Input defaultChecked={showBlockComments}
-                          onChange={e => toggleBlockTooltips(e)}
-                          value={showBlockComments}
-                          style={{
-                            height: '15px',
-                            width: '15px',
-                            webkitAppearance: 'checkbox'
-                          }}
-                          ref={blockCommentsCheck}
-                          bsPrefix={styles.unselectable}
-        />
-        <Form.Check.Label ref={blockCommentsLabel}
-                          bsPrefix={styles.unselectable}> Show Toolbox Comments</Form.Check.Label>
+                          ref={catalogueBlocksLabel}> Search Card Catalogue</Form.Check.Label>
       </Form.Check>
     <CardEditorWorkspace setCode={setCode}
                          showCatalogueBlocks={showCatalogueBlocks}
                          query={query}
                          defaultCard={props.defaultCard}
+                         renderer={compactBlocks ? 'spellsource' : 'geras'}
     />
-    <AceEditor
-      width={'100%'}
-      mode="json"
-      theme="github"
-      setOptions={{
-        'wrap': true
-      }}
-      readOnly={true}
-      value={code}
-      editorProps={{$blockScrolling: true}}
-    />
+    <Form.Check className={styles.editorOption}>
+      <Form.Check.Input defaultChecked={showBlockComments}
+                        onChange={e => toggleBlockTooltips(e)}
+                        value={showBlockComments}
+                        className={styles.editorCheck}
+                        ref={blockCommentsCheck}
+                        bsPrefix={styles.unselectable}
+      />
+      <Form.Check.Label ref={blockCommentsLabel}
+                        bsPrefix={styles.unselectable}> Show Toolbox Comments</Form.Check.Label>
+    </Form.Check>
+    <Form.Check className={styles.editorOption}>
+      <Form.Check.Input defaultChecked={compactBlocks}
+                        onChange={e => setCompactBlocks(!compactBlocks)}
+                        value={compactBlocks}
+                        className={styles.editorCheck}
+                        ref={compactBlocksCheck}
+                        bsPrefix={styles.unselectable}
+      />
+      <Form.Check.Label ref={compactBlocksLabel}
+                        bsPrefix={styles.unselectable}> Compact Blocks</Form.Check.Label>
+    </Form.Check>
+    <Form.Check className={styles.editorOption}>
+      <Form.Check.Input defaultChecked={showJSON}
+                        onChange={e => setShowJSON(!showJSON)}
+                        value={showJSON}
+                        className={styles.editorCheck}
+                        ref={showJSONCheck}
+                        bsPrefix={styles.unselectable}
+      />
+      <Form.Check.Label ref={showJSONLabel}
+                        bsPrefix={styles.unselectable}> Show JSON</Form.Check.Label>
+    </Form.Check>
+    {
+      showJSON ? <AceEditor
+        width={'100%'}
+        mode="json"
+        theme="github"
+        setOptions={{
+          'wrap': true
+        }}
+        readOnly={true}
+        value={code}
+        editorProps={{$blockScrolling: true}}
+      /> : <div/>
+    }
+
   </span>)
 }
 

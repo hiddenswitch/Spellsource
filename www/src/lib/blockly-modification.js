@@ -10,91 +10,14 @@ export default class BlocklyModification {
     Blockly.HSV_SATURATION = .65
     Blockly.Blocks = {} //we don't use any of the default Blockly blocks
 
-    this.modifyRendering()
     this.autoDecoration()
     this.hoverComments()
     this.pluralSpacing()
     this.contextMenu()
     this.tooltips()
     this.blackText()
-  }
-
-  static modifyRendering() {
-    //use 2 half-width spacing rows instead of 1 full-width for the inner rows of blocks
-    Blockly.blockRendering.RenderInfo.prototype.addRowSpacing_ = function () {
-      let oldRows = this.rows
-      this.rows = []
-
-      for (let r = 0; r < oldRows.length; r++) {
-        this.rows.push(oldRows[r])
-        if (r !== oldRows.length - 1) {
-          let spacerRow = this.makeSpacerRow_(oldRows[r], oldRows[r + 1])
-          if (r !== oldRows.length - 2 && r !== 0) {
-            spacerRow.height = spacerRow.height / 2
-
-            let spacerRow2 = this.makeSpacerRow_(oldRows[r], oldRows[r + 1])
-            spacerRow2.height = spacerRow2.height / 2
-            this.rows.push(spacerRow2)
-          }
-          this.rows.push(spacerRow)
-        }
-      }
-    }
-    //now every single important row has a spacer or equivalent both above and below
-
-    Blockly.blockRendering.RenderInfo.prototype.alignRowElements_ = function () {
-      const Types = Blockly.blockRendering.Types
-      //align statement rows normally and align input rows to nearest 10 pixels
-      for (let i = 0, row; (row = this.rows[i]); i++) {
-        if (row.hasStatement) {
-          this.alignStatementRow_(row)
-        }
-        if (row.hasExternalInput && row.width > 1) {
-          let happyWidth
-          if (row.width < 50) {
-            happyWidth = Math.ceil(row.width / 10) * 10
-          } else {
-            happyWidth = Math.round(row.width / 10) * 10
-          }
-          let missingSpace = happyWidth - row.width
-          this.addAlignmentPadding_(row, missingSpace)
-        }
-        if (this.block_.hat && i === 2 && row.width < this.topRow.width) {
-          let missingSpace = this.topRow.width - row.width
-          this.addAlignmentPadding_(row, missingSpace)
-        }
-      }
-      //spacer/top/bottom rows take on the width of their adjacent non-spacer row
-      for (let i = 0, row; (row = this.rows[i]); i++) {
-        if (Types.isSpacer(row) || Types.isTopOrBottomRow(row)) {
-          let currentWidth = row.width
-          let desiredWidth = 0
-
-          if (Types.isSpacer(row)) {
-            let aboveRow = this.rows[i + 1]
-            let belowRow = this.rows[i - 1]
-            if (!!aboveRow && !Types.isSpacer(aboveRow) && !Types.isTopOrBottomRow(aboveRow)) {
-              desiredWidth = aboveRow.width
-            }
-            if (!!belowRow && !Types.isSpacer(belowRow) && !Types.isTopOrBottomRow(belowRow)) {
-              desiredWidth = belowRow.width
-            }
-          } else if (Types.isTopRow(row)) {
-            desiredWidth = this.rows[2].width
-          } else if (Types.isBottomRow(row)) {
-            desiredWidth = this.rows[i - 2].width
-          }
-
-          let missingSpace = desiredWidth - currentWidth
-          if (missingSpace > 0) {
-            this.addAlignmentPadding_(row, missingSpace)
-          }
-          if (Types.isTopOrBottomRow(row)) {
-            row.widthWithConnectedBlocks = row.width
-          }
-        }
-      }
-    }
+    this.colorfulColors()
+    this.noToolboxZoom()
   }
 
   static autoDecoration() {
@@ -433,8 +356,52 @@ export default class BlocklyModification {
     const createTextElement = Blockly.Field.prototype.createTextElement_
     Blockly.Field.prototype.createTextElement_ = function() {
       createTextElement.call(this)
-      if (!!Blockly.blackText && Blockly.blackText[this.getSourceBlock().colour_]) {
-        this.textElement_.setAttribute('class', 'blocklyText blackText')
+      if (!!Blockly.textColor && Blockly.textColor[this.getSourceBlock().colour_]) {
+        this.textElement_.style.fill = Blockly.textColor[this.getSourceBlock().colour_]
+      }
+    }
+  }
+
+  static colorfulColors() {
+    let defaultFunction = Blockly.Field.prototype.setValue
+    Blockly.Field.prototype.setValue = function (newValue) {
+      defaultFunction.call(this, newValue)
+      let source = this.sourceBlock_
+      if (!!source && !!Blockly.Blocks[source.type].json) {
+        let json = Blockly.Blocks[source.type].json
+        if (json.output === 'Color') {
+          let r = source.getFieldValue('r')
+          let g = source.getFieldValue('g')
+          let b = source.getFieldValue('b')
+          let color = Blockly.utils.colour.rgbToHex(r, g, b)
+          source.setColour(color)
+        }
+      }
+    }
+  }
+
+  static noToolboxZoom() {
+    const layout2 = Blockly.VerticalFlyout.prototype.layout_
+    Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
+      if (!!this.targetWorkspace_) {
+        const reset = this.targetWorkspace_.scale
+        this.targetWorkspace_.scale = 1.0
+        layout2.call(this, contents, gaps)
+        this.targetWorkspace_.scale = reset
+      } else {
+        layout2.call(this, contents, gaps)
+      }
+    }
+
+    const reflowInternal2 = Blockly.VerticalFlyout.prototype.reflowInternal_
+    Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
+      if (!!this.targetWorkspace_) {
+        const reset = this.targetWorkspace_.scale
+        this.targetWorkspace_.scale = 1.0
+        reflowInternal2.call(this)
+        this.targetWorkspace_.scale = reset
+      } else {
+        reflowInternal2.call(this)
       }
     }
   }
