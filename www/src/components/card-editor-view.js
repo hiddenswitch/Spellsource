@@ -13,7 +13,7 @@ const CardEditorView = (props) => {
   const [showCatalogueBlocks, setShowCatalogueBlocks] = useState(false)
   const [showBlockComments, setShowBlockComments] = useState(true)
   const [compactBlocks, setCompactBlocks] = useState(true)
-  const [showJSON, setShowJSON] = useState(true)
+  const [showJSON, setShowJSON] = useState(false)
   const blockCommentsTooltip = 'Toggles the helpful/informational comments that display on certain blocks in the toolbox'
   const catalogueBlocksTooltip = 'Toggles whether the blocks for real cards from the catalogue show up in search'
   const compactBlocksTooltip = 'Render the blocks compactly rather than as always full rectangles'
@@ -80,10 +80,8 @@ const CardEditorView = (props) => {
                           value={showCatalogueBlocks}
                           className={styles.editorCheck}
                           ref={catalogueBlocksCheck}
-                          bsPrefix={styles.unselectable}
         />
-        <Form.Check.Label bsPrefix={styles.unselectable}
-                          ref={catalogueBlocksLabel}> Search Card Catalogue</Form.Check.Label>
+        <Form.Check.Label ref={catalogueBlocksLabel}> Search Card Catalogue</Form.Check.Label>
       </Form.Check>
     <CardEditorWorkspace setCode={setCode}
                          showCatalogueBlocks={showCatalogueBlocks}
@@ -97,10 +95,8 @@ const CardEditorView = (props) => {
                         value={showBlockComments}
                         className={styles.editorCheck}
                         ref={blockCommentsCheck}
-                        bsPrefix={styles.unselectable}
       />
-      <Form.Check.Label ref={blockCommentsLabel}
-                        bsPrefix={styles.unselectable}> Show Toolbox Comments</Form.Check.Label>
+      <Form.Check.Label> Show Toolbox Comments</Form.Check.Label>
     </Form.Check>
     <Form.Check className={styles.editorOption}>
       <Form.Check.Input defaultChecked={compactBlocks}
@@ -108,10 +104,8 @@ const CardEditorView = (props) => {
                         value={compactBlocks}
                         className={styles.editorCheck}
                         ref={compactBlocksCheck}
-                        bsPrefix={styles.unselectable}
       />
-      <Form.Check.Label ref={compactBlocksLabel}
-                        bsPrefix={styles.unselectable}> Compact Blocks</Form.Check.Label>
+      <Form.Check.Label ref={compactBlocksLabel}> Compact Blocks</Form.Check.Label>
     </Form.Check>
     <Form.Check className={styles.editorOption}>
       <Form.Check.Input defaultChecked={showJSON}
@@ -119,10 +113,8 @@ const CardEditorView = (props) => {
                         value={showJSON}
                         className={styles.editorCheck}
                         ref={showJSONCheck}
-                        bsPrefix={styles.unselectable}
       />
-      <Form.Check.Label ref={showJSONLabel}
-                        bsPrefix={styles.unselectable}> Show JSON</Form.Check.Label>
+      <Form.Check.Label ref={showJSONLabel}> Show JSON</Form.Check.Label>
     </Form.Check>
     {
       showJSON ? <AceEditor

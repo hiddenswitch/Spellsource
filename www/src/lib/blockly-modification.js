@@ -18,6 +18,7 @@ export default class BlocklyModification {
     this.blackText()
     this.colorfulColors()
     this.noToolboxZoom()
+    this.multiline()
   }
 
   static autoDecoration() {
@@ -403,6 +404,38 @@ export default class BlocklyModification {
       } else {
         reflowInternal2.call(this)
       }
+    }
+  }
+
+  static multiline() {
+    Blockly.FieldMultilineInput.prototype.getDisplayText_ = function() {
+      let value = this.value_
+      if (!value) {
+        // Prevent the field from disappearing if empty.
+        return Blockly.Field.NBSP
+      }
+
+      if (value.length < this.maxDisplayLength) {
+        return value.replaceAll(/\s/g, Blockly.Field.NBSP);
+      }
+
+      let text = ''
+      let words = value.replaceAll('\n', '').split(' ')
+      let i = 0
+      for (let wordsKey of words) {
+        if (i + wordsKey.length + 1 > this.maxDisplayLength) {
+          text += '\n'
+          text += wordsKey
+          text += Blockly.Field.NBSP
+          i = 0
+        } else {
+          text += wordsKey
+          text += Blockly.Field.NBSP
+        }
+        i += wordsKey.length + 1
+      }
+
+      return text
     }
   }
 }

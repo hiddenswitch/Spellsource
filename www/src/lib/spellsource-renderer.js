@@ -60,7 +60,7 @@ SpellsourceRenderInfo.prototype.alignRowElements_ = function () {
       let missingSpace = happyWidth - row.width
       this.addAlignmentPadding_(row, missingSpace)
     }
-    if (this.block_.hat && i === 2 && row.width < this.topRow.width) {
+    if ((this.block_.hat || this.block_.json?.hat) && i === 2 && row.width < this.topRow.width) {
       let missingSpace = this.topRow.width - row.width
       this.addAlignmentPadding_(row, missingSpace)
     }
