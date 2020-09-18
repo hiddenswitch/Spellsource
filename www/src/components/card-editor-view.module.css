@@ -1,16 +1,7 @@
 .code-editor {
-    height: 530px;
+    height: 533px;
     width: 900px;
     color: black;
-}
-
-.unselectable {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 .editorOption {
@@ -28,4 +19,9 @@
 .editorSearch {
     width: 40% !important;
     border-style: ridge;
+}
+
+body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
 }

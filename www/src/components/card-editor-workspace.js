@@ -16,10 +16,7 @@ import SpellsourceRenderer from '../lib/spellsource-renderer'
 
 const CardEditorWorkspace = (props) => {
   const data = useBlocklyData()
-  const [query, setQuery] = useState(``)
-  const [renderer, setRenderer] = useState('spellsource')
   const [results, setResults] = useState([])
-  const defaultCard = props.defaultCard
   const index = useIndex()
 
   // Run once before the workspace has been created
@@ -49,7 +46,7 @@ const CardEditorWorkspace = (props) => {
     }
     workspace.addChangeListener(changeListenerCallback)
 
-    if (defaultCard) {
+    if (props.defaultCard) {
       setTimeout(() => {
         const array = ["Daring Duelist", "Ninja Aspirants", "Redhide Butcher",
           "Sly Conquistador", "Stormcloud Assailant", "Peacock Mystic"]
@@ -61,12 +58,22 @@ const CardEditorWorkspace = (props) => {
 
     workspace.addChangeListener((event) => pluralStuff(event, workspace))
 
+    workspace.getTheme().setStartHats(true)
     return () => {
       workspace.removeButtonCallback('importCard')
       workspace.removeChangeListener(changeListenerCallback)
       workspace.removeChangeListener(pluralStuff)
     }
   }, [])
+
+  useEffect(() => {
+    search(props.query)
+    handleSearchResults(props.query)
+  }, [props.query])
+
+  useEffect(() => {
+    switchRenderer(props.renderer)
+  }, [props.renderer])
 
   const pluralStuff = (event, workspace) => {
     let anyChange = false
@@ -535,26 +542,15 @@ const CardEditorWorkspace = (props) => {
     )
   }
 
-  //when this component reloads, check if the search query changed
-  if (props.query !== query) {
-    setQuery(props.query)
-    search(props.query)
-    handleSearchResults(props.query)
-  }
-  if (props.renderer !== renderer) {
-    setRenderer(props.renderer)
-    if (!!Blockly.getMainWorkspace().render) {
-      Blockly.getMainWorkspace().renderer_ = Blockly.blockRendering.init(props.renderer,
+  const switchRenderer = (renderer) => {
+    if (!!Blockly.getMainWorkspace().render && renderer !== Blockly.getMainWorkspace().getRenderer().name) {
+      Blockly.getMainWorkspace().renderer_ = Blockly.blockRendering.init(renderer,
         Blockly.getMainWorkspace().getTheme(), Blockly.getMainWorkspace().options.rendererOverrides)
 
-      Blockly.getMainWorkspace().getToolbox().flyout_.workspace_.renderer_ = Blockly.blockRendering.init(props.renderer,
-        Blockly.getMainWorkspace().getTheme(), Blockly.getMainWorkspace().options.rendererOverrides)
+      Blockly.getMainWorkspace().getToolbox().getFlyout().getWorkspace().renderer_ = Blockly.blockRendering.init(renderer,
+        Blockly.getMainWorkspace().getToolbox().getFlyout().getWorkspace().getTheme(), Blockly.getMainWorkspace().options.rendererOverrides)
 
-      if (Blockly.getMainWorkspace().setVisible && Blockly.getMainWorkspace().isVisible) {
-        Blockly.getMainWorkspace().setVisible(true)
-      }
-
-      Blockly.getMainWorkspace().refreshToolboxSelection()
+      Blockly.getMainWorkspace().refreshTheme()
     }
   }
 
