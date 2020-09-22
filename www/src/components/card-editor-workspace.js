@@ -1,9 +1,9 @@
-import React, {useEffect, useMemo, useState} from 'react'
+import React, {useEffect, useRef, useState, forwardRef} from 'react'
 import WorkspaceUtils from '../lib/workspace-utils'
 import styles from './card-editor-view.module.css'
 import ReactBlocklyComponent from 'react-blockly'
 import Blockly from 'blockly'
-import {isArray, uniq} from 'lodash'
+import {isArray} from 'lodash'
 import 'ace-builds/src-noconflict/mode-json'
 import 'ace-builds/src-noconflict/mode-xml'
 import 'ace-builds/src-noconflict/theme-github'
@@ -14,10 +14,14 @@ import useComponentWillMount from '../hooks/use-component-will-mount'
 import useBlocklyData from '../hooks/use-blockly-data'
 import SpellsourceRenderer from '../lib/spellsource-renderer'
 
-const CardEditorWorkspace = (props) => {
+const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
   const data = useBlocklyData()
   const [results, setResults] = useState([])
   const index = useIndex()
+
+  const mainWorkspace = () => {
+    return blocklyEditor.current.workspace.state.workspace
+  }
 
   // Run once before the workspace has been created
   useComponentWillMount(() => {
@@ -29,41 +33,15 @@ const CardEditorWorkspace = (props) => {
 
   // Run once after the workspace has been created
   useEffect(() => {
-    const workspace = Blockly.getMainWorkspace()
-    const importCardCallback = () => {
-      let p = prompt('Input the name of the card (or the wiki page URL / Card ID for more precision)')
-      generateCard(p)
-      workspace.getToolbox().clearSelection()
-      setToolboxCategories(getToolboxCategories())
-    }
-    workspace.registerButtonCallback('importCard', importCardCallback)
-    const changeListenerCallback = (event) => {
-      if (event.type === Blockly.Events.UI && event.element === 'category') {
-        if (event.newValue === 'Targets') {
-          // TODO: change listener callback work
-        }
-      }
-    }
-    workspace.addChangeListener(changeListenerCallback)
-
     if (props.defaultCard) {
       setTimeout(() => {
         const array = ["Daring Duelist", "Ninja Aspirants", "Redhide Butcher",
           "Sly Conquistador", "Stormcloud Assailant", "Peacock Mystic"]
         generateCard(array[Math.floor(Math.random() * array.length)])
-        Blockly.getMainWorkspace().getTopBlocks(true)[0].setCommentText("This card was imported automatically as an example.")
+        mainWorkspace().getTopBlocks(true)[0].setCommentText("This card was imported automatically as an example.")
       }, 100)
     }
-
-
-    workspace.addChangeListener((event) => pluralStuff(event, workspace))
-
-    workspace.getTheme().setStartHats(true)
-    return () => {
-      workspace.removeButtonCallback('importCard')
-      workspace.removeChangeListener(changeListenerCallback)
-      workspace.removeChangeListener(pluralStuff)
-    }
+    mainWorkspace().getTheme().setStartHats(true)
   }, [])
 
   useEffect(() => {
@@ -72,96 +50,12 @@ const CardEditorWorkspace = (props) => {
   }, [props.query])
 
   useEffect(() => {
-    switchRenderer(props.renderer)
+    BlocklyMiscUtils.switchRenderer(props.renderer, mainWorkspace())
   }, [props.renderer])
-
-  const pluralStuff = (event, workspace) => {
-    let anyChange = false
-
-    if (event.type !== Blockly.Events.UI && !workspace.isDragging()) {
-      for (let block of workspace.getAllBlocks()) {
-        let argsList = JsonConversionUtils.argsList(block.json);
-        for (let arg of argsList) {
-          if (arg.type === 'field_label_plural') {
-            let shouldBePlural = null
-            let connection
-            //on a plural field, 'src' is where it should look to to know whether it's plural or not
-            if (arg.src === 'OUTPUT') {
-              connection = block.outputConnection
-              if (!!block.outputConnection.targetBlock()) {
-                let targetBlock = connection.targetBlock()
-                if (targetBlock.type.endsWith('_I') && !!targetBlock.getPreviousBlock()) {
-                  let prevBlock = targetBlock.getPreviousBlock()
-                  while (!!prevBlock.getPreviousBlock()) {
-                    prevBlock = prevBlock.getPreviousBlock()
-                  }
-                  connection = prevBlock.outputConnection
-                  targetBlock = connection.targetBlock()
-                }
-                if (!!targetBlock) { //if the 'src' arg appears on the 'input_value' it's connected to, redirect to that
-                  let name = targetBlock.getInputWithBlock(block)?.name
-                  for (let arg of JsonConversionUtils.inputsList(targetBlock.json)) {
-                    if (arg.name === name && !!arg.src) { //
-                      connection = targetBlock.getInput(arg.src).connection
-                    }
-                  }
-                }
-              }
-            } else {
-              connection = block.getInput(arg.src)?.connection
-            }
-            if (!connection) {
-              if (!!block.getField(arg.src)) {
-                shouldBePlural = block.getFieldValue(arg.src) !== 1
-              }
-            } else if (!!connection.targetBlock()) {
-              let targetBlock = connection.targetBlock()
-              if (targetBlock.json?.plural != null) {
-                shouldBePlural = targetBlock.json.plural
-              } else if (targetBlock.type === 'ValueProvider_int') {
-                shouldBePlural = targetBlock.getFieldValue('int') !== 1
-              }
-            }
-
-            let before = block.getFieldValue(arg.name)
-            const options = arg.text.split('/')
-            if (shouldBePlural === null) {
-              if (arg.value) { //on a plural field, 'value' is the default text to show (e.g. in the toolbox)
-                block.setFieldValue(arg.value, arg.name)
-              } else {
-                block.setFieldValue(arg.text, arg.name)
-              }
-            } else if (shouldBePlural) {
-              block.setFieldValue(options[1], arg.name)
-            } else {
-              block.setFieldValue(options[0], arg.name)
-            }
-
-            if (block.getFieldValue(arg.name) !== before) {
-              anyChange = true
-            }
-          }
-        }
-      }
-
-      if (anyChange) {
-
-        for (let block of workspace.getAllBlocks()) {
-          for (var i = 0, input; (input = block.inputList[i]); i++) {
-            for (var j = 0, field; (field = input.fieldRow[j]); j++) {
-              if (field.isBeingEdited_ && field.showEditor_) {
-                field.showEditor_()
-              }
-            }
-          }
-        }
-      }
-    }
-  }
 
   const getToolboxCategories = (onlyCategory = null) => {
     let index = -1
-    return data.toolbox.BlockCategoryList.map((
+    return data.editorToolbox.BlockCategoryList.map((
       {
         BlockTypePrefix, CategoryName, ColorHex, Subcategories, Tooltip, Subtooltips
       }) => {
@@ -175,7 +69,7 @@ const CardEditorWorkspace = (props) => {
       }
       let blocks = []
       if (!!BlockTypePrefix) {
-        for (let blocksKey in Blockly.Blocks) {
+        for (let blocksKey of BlocklyMiscUtils.allEditorBlocks()) {
           if ((!blocksKey.endsWith('SHADOW') && blocksKey.startsWith(BlockTypePrefix))
             || (CategoryName === 'Cards' && blocksKey.startsWith('WorkspaceCard_'))
             || (CategoryName === 'Classes' && blocksKey.startsWith('WorkspaceHeroClass_'))) {
@@ -312,8 +206,8 @@ const CardEditorWorkspace = (props) => {
       if (update) {
         setToolboxCategories(getToolboxCategories())
       }
+      BlocklyMiscUtils.pluralStuff(workspace)
     }
-
   }
 
   const createCard = (card, blockType) => {
@@ -409,32 +303,31 @@ const CardEditorWorkspace = (props) => {
     }
 
     let currentCards = []
-    for (let blocksKey in Blockly.Blocks) {
-      if (blocksKey.startsWith('WorkspaceCard')
-      || blocksKey.startsWith('WorkspaceHeroClass')) {
+    for (let blocksKey of BlocklyMiscUtils.allEditorBlocks()) {
+      if (blocksKey.startsWith('WorkspaceCard') || blocksKey.startsWith('WorkspaceHeroClass')) {
         currentCards.push(blocksKey)
       }
     }
-    let i = 0
+    let i = 0 //this works because the cardScript also uses the ordered getTopBlocks
     workspace.getTopBlocks(true).forEach(block => {
       if (block.type.startsWith('Starter_')) {
-        let blockType = 'WorkspaceCard_' + block.id
-        currentCards = currentCards.filter(value => value !== blockType)
         let card = cardScript[i]
-        if (!!Blockly.Blocks[blockType]) {
-          anythingChanged = true
-        }
 
+        //if it's a class card, make the class first to init the color
         if (block.type === 'Starter_CLASS') {
           let type = 'WorkspaceHeroClass_' + block.id
           currentCards = currentCards.filter(value => value !== type)
-
           if (!!Blockly.Blocks[type]) {
             anythingChanged = true
           }
           Blockly.Blocks[type] = createClass(card, type)
         }
 
+        let blockType = 'WorkspaceCard_' + block.id
+        currentCards = currentCards.filter(value => value !== blockType)
+        if (!!Blockly.Blocks[blockType]) {
+          anythingChanged = true
+        }
         Blockly.Blocks[blockType] = createCard(card, blockType)
       }
       i++
@@ -445,29 +338,37 @@ const CardEditorWorkspace = (props) => {
       delete Blockly.Blocks[card]
     })
 
-    workspace.getAllBlocks(true).forEach(block => {
-      if (block.type.startsWith('WorkspaceCard') || block.type.startsWith('WorkspaceHeroClass')) {
-        let test = Blockly.Blocks
-        if (Blockly.Blocks.hasOwnProperty(block.type)) {
-          block.data = Blockly.Blocks[block.type].data
-          block.setFieldValue(Blockly.Blocks[block.type].message, 'message')
-          block.setColour(Blockly.Blocks[block.type].json.colour)
-          if (!!block.render) {
-            let textElement = block.getSvgRoot().lastElementChild.firstElementChild
-            if (!!Blockly.textColor && Blockly.textColor[block.getColour()]) {
-              this.textElement_.style.fill = Blockly.textColor[this.getSourceBlock().colour_]
-            } else {
-              this.textElement_.style.fill = "#fff"
-            }
-            block.render()
+    Blockly.Workspace.getAll().forEach(aWorkspace => {
+      aWorkspace.getAllBlocks(true).forEach(block => {
+        if (block.type.startsWith('WorkspaceCard') || block.type.startsWith('WorkspaceHeroClass')) {
+          let test = Blockly.Blocks
+          if (Blockly.Blocks.hasOwnProperty(block.type)) {
+            refreshBlock(block)
+          } else {
+            block.dispose(true)
           }
-        } else {
-          block.dispose(true)
         }
-      }
+      })
     })
 
+
+
     return anythingChanged
+  }
+
+  const refreshBlock = (block) => {
+    block.data = Blockly.Blocks[block.type].data
+    block.setFieldValue(Blockly.Blocks[block.type].message, 'message')
+    block.setColour(Blockly.Blocks[block.type].json.colour)
+    if (!!block.render) {
+      let textElement = block.getSvgRoot().lastElementChild.firstElementChild
+      if (!!Blockly.textColor && Blockly.textColor[block.getColour()]) {
+        textElement.style.fill = Blockly.textColor[block.getColour()]
+      } else {
+        textElement.style.fill = "#fff"
+      }
+      block.render()
+    }
   }
 
   const generateCard = (p) => {
@@ -505,7 +406,7 @@ const CardEditorWorkspace = (props) => {
       return
     }
 
-    JsonConversionUtils.generateCard(Blockly.getMainWorkspace(), card)
+    JsonConversionUtils.generateCard(mainWorkspace(), card)
   }
 
   const handleSearchResults = (query) => {
@@ -513,12 +414,11 @@ const CardEditorWorkspace = (props) => {
       setResults([])
     }
     setToolboxCategories(getToolboxCategories('Search Results'))
-    const workspace = Blockly.getMainWorkspace()
     if (query.length > 0) {
-      workspace.getToolbox().selectFirstCategory()
-      workspace.getToolbox().refreshSelection()
+      mainWorkspace().getToolbox().selectFirstCategory()
+      mainWorkspace().getToolbox().refreshSelection()
     } else {
-      workspace.getToolbox().clearSelection()
+      mainWorkspace().getToolbox().clearSelection()
     }
   }
 
@@ -542,22 +442,10 @@ const CardEditorWorkspace = (props) => {
     )
   }
 
-  const switchRenderer = (renderer) => {
-    if (!!Blockly.getMainWorkspace().render && renderer !== Blockly.getMainWorkspace().getRenderer().name) {
-      Blockly.getMainWorkspace().renderer_ = Blockly.blockRendering.init(renderer,
-        Blockly.getMainWorkspace().getTheme(), Blockly.getMainWorkspace().options.rendererOverrides)
-
-      Blockly.getMainWorkspace().getToolbox().getFlyout().getWorkspace().renderer_ = Blockly.blockRendering.init(renderer,
-        Blockly.getMainWorkspace().getToolbox().getFlyout().getWorkspace().getTheme(), Blockly.getMainWorkspace().options.rendererOverrides)
-
-      Blockly.getMainWorkspace().refreshTheme()
-    }
-  }
-
   return (<span>
     <ReactBlocklyComponent.BlocklyEditor
       workspaceDidChange={onWorkspaceChanged}
-      wrapperDivClassName={styles.codeEditor}
+      wrapperDivClassName={styles.cardEditor}
       toolboxCategories={toolboxCategories}
       workspaceConfiguration={
         {
@@ -574,9 +462,10 @@ const CardEditorWorkspace = (props) => {
           renderer: props.renderer || 'spellsource'
         }
       }
+      ref={blocklyEditor}
     />
    </span>
   )
-}
+})
 
 export default CardEditorWorkspace

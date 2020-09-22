@@ -3,7 +3,17 @@ import { graphql, useStaticQuery } from 'gatsby'
 export default function useBlocklyData () {
   return useStaticQuery(graphql`
   query {
-    toolbox {
+    editorToolbox: toolbox(Style: {eq: "editor"}) {
+      BlockCategoryList {
+        BlockTypePrefix
+        CategoryName
+        ColorHex
+        Subcategories
+        Tooltip
+        Subtooltips
+      }
+    }
+    testingToolbox: toolbox(Style: {eq: "testing"}) {
       BlockCategoryList {
         BlockTypePrefix
         CategoryName

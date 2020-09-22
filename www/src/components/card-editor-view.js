@@ -28,6 +28,12 @@ const CardEditorView = (props) => {
   const showJSONCheck = useRef(null)
   const showJSONLabel = useRef(null)
 
+  const blocklyEdior = useRef(null)
+
+  const workspace = () => {
+    return blocklyEdior.current.workspace.state.workspace
+  }
+
   const search = evt => {
     const query = evt.target.value
     setQuery(query)
@@ -35,7 +41,7 @@ const CardEditorView = (props) => {
 
   const toggleCatalogueBlocks = evt => {
     setShowCatalogueBlocks(!showCatalogueBlocks)
-    Blockly.getMainWorkspace().getToolbox().clearSelection()
+    workspace().getToolbox().clearSelection()
     if (query.length > 0) {
       search({target: {value: query}})
     }
@@ -43,8 +49,8 @@ const CardEditorView = (props) => {
 
   const toggleBlockTooltips = evt => {
     setShowBlockComments(!showBlockComments)
-    Blockly.getMainWorkspace().getToolbox().clearSelection()
-    Blockly.getMainWorkspace().hideSpellsourceComments = showBlockComments
+    workspace().getToolbox().clearSelection()
+    Blockly.hideSpellsourceComments = showBlockComments
   }
 
   const addTooltip = (ref, tooltip) => {
@@ -88,6 +94,7 @@ const CardEditorView = (props) => {
                          query={query}
                          defaultCard={props.defaultCard}
                          renderer={compactBlocks ? 'spellsource' : 'geras'}
+                         ref={blocklyEdior}
     />
     <Form.Check className={styles.editorOption}>
       <Form.Check.Input defaultChecked={showBlockComments}

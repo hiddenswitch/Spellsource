@@ -28,7 +28,7 @@ export default class BlocklyMiscUtils {
           this.setMovable(false)
         }
         if (!!block.comment && this.isInFlyout
-        && !Blockly.getMainWorkspace().hideSpellsourceComments) {
+        && !Blockly.hideSpellsourceComments) {
           this.setCommentText(block.comment)
         }
       },
@@ -437,5 +437,101 @@ export default class BlocklyMiscUtils {
         }
       }
     }, 1)
+  }
+
+  static allEditorBlocks() {
+    return Object.keys(Blockly.Blocks).filter(key => !key.startsWith('Test'))
+  }
+
+  static switchRenderer(renderer, workspace) {
+    if (!!workspace.render && renderer !== workspace.getRenderer().name) {
+      workspace.renderer_ = Blockly.blockRendering.init(renderer,
+        workspace.getTheme(), workspace.options.rendererOverrides)
+
+      workspace.getToolbox().getFlyout().getWorkspace().renderer_ = Blockly.blockRendering.init(renderer,
+        workspace.getToolbox().getFlyout().getWorkspace().getTheme(), workspace.options.rendererOverrides)
+
+      workspace.refreshTheme()
+    }
+  }
+
+  static pluralStuff(workspace) {
+    let anyChange = false
+    for (let block of workspace.getAllBlocks()) {
+      let argsList = JsonConversionUtils.argsList(block.json);
+      for (let arg of argsList) {
+        if (arg.type === 'field_label_plural') {
+          let shouldBePlural = null
+          let connection
+          //on a plural field, 'src' is where it should look to to know whether it's plural or not
+          if (arg.src === 'OUTPUT') {
+            connection = block.outputConnection
+            if (!!block.outputConnection.targetBlock()) {
+              let targetBlock = connection.targetBlock()
+              if (targetBlock.type.endsWith('_I') && !!targetBlock.getPreviousBlock()) {
+                let prevBlock = targetBlock.getPreviousBlock()
+                while (!!prevBlock.getPreviousBlock()) {
+                  prevBlock = prevBlock.getPreviousBlock()
+                }
+                connection = prevBlock.outputConnection
+                targetBlock = connection.targetBlock()
+              }
+              if (!!targetBlock) { //if the 'src' arg appears on the 'input_value' it's connected to, redirect to that
+                let name = targetBlock.getInputWithBlock(block)?.name
+                for (let arg of JsonConversionUtils.inputsList(targetBlock.json)) {
+                  if (arg.name === name && !!arg.src) { //
+                    connection = targetBlock.getInput(arg.src).connection
+                  }
+                }
+              }
+            }
+          } else {
+            connection = block.getInput(arg.src)?.connection
+          }
+          if (!connection) {
+            if (!!block.getField(arg.src)) {
+              shouldBePlural = block.getFieldValue(arg.src) !== 1
+            }
+          } else if (!!connection.targetBlock()) {
+            let targetBlock = connection.targetBlock()
+            if (targetBlock.json?.plural != null) {
+              shouldBePlural = targetBlock.json.plural
+            } else if (targetBlock.type === 'ValueProvider_int') {
+              shouldBePlural = targetBlock.getFieldValue('int') !== 1
+            }
+          }
+
+          let before = block.getFieldValue(arg.name)
+          const options = arg.text.split('/')
+          if (shouldBePlural === null) {
+            if (arg.value) { //on a plural field, 'value' is the default text to show (e.g. in the toolbox)
+              block.setFieldValue(arg.value, arg.name)
+            } else {
+              block.setFieldValue(arg.text, arg.name)
+            }
+          } else if (shouldBePlural) {
+            block.setFieldValue(options[1], arg.name)
+          } else {
+            block.setFieldValue(options[0], arg.name)
+          }
+
+          if (block.getFieldValue(arg.name) !== before) {
+            anyChange = true
+          }
+        }
+      }
+    }
+
+    if (anyChange) {
+      for (let block of workspace.getAllBlocks()) {
+        for (var i = 0, input; (input = block.inputList[i]); i++) {
+          for (var j = 0, field; (field = input.fieldRow[j]); j++) {
+            if (field.isBeingEdited_ && field.showEditor_) {
+              field.showEditor_()
+            }
+          }
+        }
+      }
+    }
   }
 }
