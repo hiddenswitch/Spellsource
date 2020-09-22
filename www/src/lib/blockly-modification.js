@@ -3,6 +3,7 @@ import {FieldLabelPlural} from "../components/field-label-plural";
 import {FieldLabelSerializableHidden} from "../components/field-label-serializable-hidden";
 import JsonConversionUtils from "./json-conversion-utils";
 import BlocklyMiscUtils from "./blockly-misc-utils";
+import BlocklyEditor from "react-blockly/dist-modules/BlocklyEditor";
 
 export default class BlocklyModification {
 
@@ -272,16 +273,21 @@ export default class BlocklyModification {
               let dummyWorkspace = new Workspace()
               JsonConversionUtils.generateCard(dummyWorkspace, card)
 
-              block = dummyWorkspace.getTopBlocks(false)[0]
+              let top = dummyWorkspace.getTopBlocks(false)[0]
 
-              let xml = Blockly.Xml.blockToDom(block, true);
-              var xy = block.getRelativeToSurfaceXY();
+              let xml = Blockly.Xml.blockToDom(top, true);
+              var xy = top.getRelativeToSurfaceXY();
               xml.setAttribute('x', xy.x);
               xml.setAttribute('y', xy.y);
 
-              Blockly.getMainWorkspace().paste(xml)
+              let workspace = block.workspace
+              if (!!workspace.targetWorkspace) {
+                workspace = workspace.targetWorkspace
+              }
+
+              workspace.paste(xml)
               dummyWorkspace.dispose()
-              Blockly.getMainWorkspace().getToolbox().clearSelection()
+              workspace.getToolbox().clearSelection()
 
             }
           }
