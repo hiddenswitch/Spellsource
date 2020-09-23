@@ -20,5 +20,10 @@
     },
     "ifFalse": 0,
     "ifTrue": 2
+  },
+  "art": {
+    "sprite": {
+      "named": "Brownie"
+    }
   }
 }

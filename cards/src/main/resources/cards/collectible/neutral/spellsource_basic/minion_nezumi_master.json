@@ -34,5 +34,10 @@
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "art": {
+    "sprite": {
+      "named": "Mythic Black Ice Fox"
+    }
+  }
 }
