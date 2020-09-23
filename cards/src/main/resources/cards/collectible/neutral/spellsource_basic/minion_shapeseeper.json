@@ -29,5 +29,10 @@
     "class": "EntityCountValueProvider",
     "target": "ALL_MINIONS",
     "multiplier": -1
+  },
+  "art": {
+    "sprite": {
+      "named": "Masked Spider"
+    }
   }
 }

@@ -34,5 +34,10 @@
         "targetPlayer": "SELF"
       }
     }
-  ]
+  ],
+  "art": {
+    "sprite": {
+      "named": "Ogre"
+    }
+  }
 }
