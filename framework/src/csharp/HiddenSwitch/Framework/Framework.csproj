@@ -5,7 +5,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="reactiveui" Version="11.5.35" />
+    <Reference Include="Google.Protobuf">
+      <HintPath>Plugins/Google.Protobuf/lib/net45/Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="Grpc.Core">
+      <HintPath>Plugins/Grpc.Core/lib/net45/Grpc.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Grpc.Core.Api">
+      <HintPath>Plugins/Grpc.Core/lib/net45/Grpc.Core.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers">
+      <HintPath>Plugins/System.Buffers/lib/net45/System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory">
+      <HintPath>Plugins/System.Memory/lib/net45/System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>Plugins/System.Runtime.CompilerServices.Unsafe/lib/net45/System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
   </ItemGroup>
-
 </Project>

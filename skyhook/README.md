@@ -19,7 +19,7 @@ https://skyhook.glitch.me/api/webhooks/firstPartOfWebhook/secondPartOfWebhook
 https://skyhook.glitch.me/api/webhooks/firstPartOfWebhook/secondPartOfWebhook/providerGoesHere
 ```
 ## Supported Providers
-- [AppVeyor](https://www.appveyor.com/docs/notifications/#webhook-payload-default) - `/appveyor`
+- [AppVeyor](https://www.appveyor.com/docs/notifications/#webhook-updateRecord-default) - `/appveyor`
 - [Bintray](https://bintray.com/docs/api/#_webhooks) - `/bintray`
 - [BitBucket](https://confluence.atlassian.com/bitbucket/manage-webhooks-735643732.html) - `/bitbucket`
 - [circleci](https://circleci.com/docs/1.0/configuration/#notify) - `/circleci`
@@ -29,7 +29,7 @@ https://skyhook.glitch.me/api/webhooks/firstPartOfWebhook/secondPartOfWebhook/pr
 - [Heroku](https://devcenter.heroku.com/articles/deploy-hooks#http-post-hook) - `/heroku`
 - [Jenkins](https://plugins.jenkins.io/notification) - `/jenkins` (requires the [notification plugin](https://wiki.jenkins.io/display/JENKINS/Notification+Plugin))
 - [Jira](https://developer.atlassian.com/server/jira/platform/webhooks/) - `/jira`
-- [NewRelic](https://docs.newrelic.com/docs/alerts/new-relic-alerts/managing-notification-channels/customize-your-webhook-payload) - `/newrelic`
+- [NewRelic](https://docs.newrelic.com/docs/alerts/new-relic-alerts/managing-notification-channels/customize-your-webhook-updateRecord) - `/newrelic`
 - [Patreon](https://www.patreon.com/platform/documentation/webhooks) - `/patreon`
 - [Pingdom](https://www.pingdom.com/resources/webhooks) - `/pingdom`
 - [Travis](https://docs.travis-ci.com/user/notifications/#Webhooks-Delivery-Format) - `/travis`

@@ -1,0 +1,55 @@
+syntax = "proto3";
+import "google/rpc/error_details.proto";
+
+option java_multiple_files = true;
+option java_package = "com.hiddenswitch.framework.rpc";
+option java_outer_classname = "Proto";
+package hiddenswitch;
+
+service Unauthenticated {
+    rpc CreateAccount (CreateAccountRequest) returns (LoginOrCreateReply) {}
+    rpc Login (LoginRequest) returns (LoginOrCreateReply) {}
+}
+
+service Accounts {
+    rpc GetAccounts(GetAccountsRequest) returns (GetAccountsReply) {}
+}
+
+message LoginRequest {
+    string usernameOrEmail = 1;
+    string password = 2;
+}
+
+// The request message containing the user's name.
+message CreateAccountRequest {
+    string email = 1;
+    string username = 2;
+    string password = 3;
+}
+
+message CreateAccountReply {
+    // Ignored
+}
+
+message LoginOrCreateReply {
+    AccessTokenResponse accessTokenResponse = 1;
+    UserEntity userEntity = 2;
+}
+
+message AccessTokenResponse {
+    string token = 1;
+}
+
+message UserEntity {
+    string id = 1;
+    string email = 2;
+    string username = 10;
+}
+
+message GetAccountsRequest {
+    repeated string ids = 1;
+}
+
+message GetAccountsReply {
+    repeated UserEntity userEntities = 1;
+}

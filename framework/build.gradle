@@ -1,25 +1,108 @@
+buildscript {
+    ext {
+        vertxJooqVersion = '5.2.0'
+        postgresqlVersion = '42.2.16'
+        flywayVersion = '6.5.5'
+    }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "io.github.jklingsporn:vertx-jooq-generate:$vertxJooqVersion"
+        classpath "org.postgresql:postgresql:$postgresqlVersion"
+    }
+}
+
+plugins {
+    id 'com.bmuschko.docker-remote-api' version '6.6.1'
+    id "org.flywaydb.flyway" version "$flywayVersion"
+    id 'com.google.protobuf' version '0.8.13'
+}
+
+
 apply plugin: 'base'
 apply plugin: 'java-library'
 apply plugin: 'maven'
+apply plugin: 'com.bmuschko.docker-remote-api'
+apply plugin: 'idea'
+apply plugin: 'com.google.protobuf'
 apply from: '../gradle/instrument.gradle'
 
+import com.bmuschko.gradle.docker.domain.LivenessProbe
+import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer
+import com.bmuschko.gradle.docker.tasks.container.DockerStartContainer
+import com.bmuschko.gradle.docker.tasks.container.DockerStopContainer
+import com.bmuschko.gradle.docker.tasks.container.extras.DockerLivenessContainer
+import org.jooq.codegen.GenerationTool
+import org.jooq.meta.jaxb.*
+
 def csharpRootDir = 'src/csharp/HiddenSwitch'
+def localUsername = 'admin'
+def localPassword = 'password'
+def localDatabaseName = 'spellsource'
+def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
+
 
 dependencies {
     api project(':core')
+    api project(':vertx-sync')
+    api 'io.vertx:vertx-rx-java2:3.9.2'
+
+    implementation ("com.avast.grpc.jwt:grpc-java-jwt:0.4.0") {
+        exclude group: 'com.google.code.gson'
+        exclude group: 'io.grpc'
+        exclude group: 'org.keycloak'
+    }
+
+    implementation("org.postgresql:postgresql:$postgresqlVersion") {
+        exclude group: 'org.checkerframework', module: 'checker-qual'
+    }
+    implementation(group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.13.0') {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+
+    implementation('org.jboss.resteasy:resteasy-client-vertx:4.5.6.Final') {
+        exclude group: 'io.vertx', module: 'vertx-core'
+    }
+
+    implementation 'org.jooq:jooq:3.13.3'
+    implementation 'io.vertx:vertx-pg-client:3.9.2'
+    implementation "io.github.jklingsporn:vertx-jooq-classic-reactive:$vertxJooqVersion"
+    implementation('com.google.protobuf:protobuf-java:3.13.0') {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+    implementation group: 'io.vertx', name: 'vertx-web-client', version: '3.9.2'
+    implementation(group: 'io.vertx', name: 'vertx-grpc', version: '3.9.2') {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+    implementation group: 'io.vertx', name: 'vertx-service-discovery', version: '3.9.2'
+    implementation group: 'io.vertx', name: 'vertx-web', version: '3.9.2'
+    implementation group: 'io.vertx', name: 'vertx-auth-common', version: '3.9.2'
+    implementation platform('org.keycloak.bom:keycloak-bom-parent:11.0.2')
+    implementation(group: 'org.keycloak', name: 'keycloak-admin-client', version: '11.0.2') {
+        exclude group: 'org.jboss.resteasy', module: 'resteasy-client'
+    }
+
+    implementation group: 'org.graalvm.truffle', name: 'truffle-api', version: '20.2.0'
+    implementation group: 'org.graalvm.js', name: 'js', version: '20.2.0'
+    implementation "org.flywaydb:flyway-core:$flywayVersion"
+
     testImplementation project(':testcontainers')
     testImplementation project(':testutils')
     testImplementation "org.testcontainers:testcontainers"
     testImplementation "org.testcontainers:junit-jupiter"
     testImplementation group: 'io.vertx', name: 'vertx-junit5', version: '3.9.2'
+    testImplementation group: 'io.vertx', name: 'vertx-junit5-web-client', version: '3.9.2'
+
     testImplementation 'com.google.guava:guava:26.0-jre'
     testImplementation "io.github.classgraph:classgraph:$classgraphVersion"
     testImplementation 'org.jetbrains:annotations:16.0.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.6.2'
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
-    testRuntimeOnly "ch.qos.logback:logback-classic:1.2.3"
-    testRuntimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
+    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+    runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
 }
 
 test {
@@ -34,22 +117,170 @@ clean {
     delete csharpRootDir + '/Framework.Tests/obj'
 }
 
+task copyCsharpGrpc(type: Copy, group: 'build') {
+    dependsOn compileJava
+    from("$project.buildDir/generated/source/proto/main/csharp") {
+        include '**/*.cs'
+    }
+    from("$project.buildDir/generated/source/proto/main/csharp_grpc") {
+        include '**/*.cs'
+    }
+    into(csharpRootDir + '/Framework/')
+}
+
 task dll(type: Exec, group: 'build') {
-    inputs.files(csharpRootDir + '/Framework/*.cs', csharpRootDir + '/Framework/*.csproj')
-    outputs.files(csharpRootDir + '/Framework/bin/Debug/netstandard2.0/*.dll')
+    dependsOn copyCsharpGrpc
+    inputs.files(csharpRootDir + '/Framework/**/*.cs', csharpRootDir + '/Framework/**/*.csproj')
+    outputs.dir("$project.buildDir/dlls")
     workingDir csharpRootDir
-    commandLine 'dotnet', 'build'
+    // this is using docker-wrapped dotnet
+    commandLine "$project.projectDir/bin/dotnet", 'publish', '--output', "/git/framework/build/dlls"
 }
 
 task testDll(type: Exec, group: 'verification') {
     dependsOn dll
-    inputs.files(csharpRootDir + '/Framework.Tests/*.cs', csharpRootDir + '/Framework.Tests/*.csproj')
+    inputs.files(csharpRootDir + '/Framework.Tests/**/*.cs', csharpRootDir + '/Framework.Tests/**/*.csproj')
     outputs.dir("$project.buildDir/nunit")
     workingDir csharpRootDir
-    commandLine 'dotnet', 'test', '--results-directory', "$project.buildDir/nunit"
+    // this is using docker-wrapped dotnet
+    commandLine "$project.projectDir/bin/dotnet", 'test', '--results-directory', "/git/framework/build/nunit"
 }
 
 task installDll(type: Copy) {
     dependsOn dll
+    from("$project.buildDir/dlls") {
+        include 'Framework.dll'
+        include 'Framework.pdb'
+    }
+    from("$csharpRootDir/Framework/Plugins")
+    into(project(':unityclient').projectDir.absolutePath + '/src/unity/Assets/Client')
+}
 
+task createPostgresContainer(type: DockerCreateContainer) {
+    targetImageId 'supabase/postgres'
+    containerName = 'gradleSupabasePostgres'
+    hostConfig.portBindings = ['5432:5432']
+    envVars.putAll(['POSTGRES_DB': localDatabaseName, 'POSTGRES_USER': localUsername, 'POSTGRES_PASSWORD': localPassword])
+    hostConfig.autoRemove = true
+}
+
+task startPostgresContainer(type: DockerStartContainer) {
+    dependsOn createPostgresContainer
+    targetContainerId createPostgresContainer.getContainerId()
+}
+
+task stopPostgresContainer(type: DockerStopContainer) {
+    targetContainerId createPostgresContainer.getContainerId()
+}
+
+task createKeycloakContainer(type: DockerCreateContainer) {
+    dependsOn createPostgresContainer
+    targetImageId 'jboss/keycloak:11.0.2'
+    envVars.putAll([
+            'DB_VENDOR'  : 'postgres',
+            'DB_ADDR'    : 'database:5432',
+            'DB_USER'    : 'admin',
+            'DB_PASSWORD': 'password',
+            'DB_DATABASE': 'spellsource'
+    ])
+    hostConfig.autoRemove = true
+    hostConfig.links = ['gradleSupabasePostgres:database']
+}
+
+task startKeycloakContainer(type: DockerStartContainer) {
+    dependsOn += [createKeycloakContainer, startPostgresContainer]
+    targetContainerId createKeycloakContainer.getContainerId()
+}
+
+task startAndWaitOnHealthyKeycloakContainer(type: DockerLivenessContainer) {
+    dependsOn startKeycloakContainer
+    livenessProbe = new LivenessProbe(100000, 1000, 'Admin console listening on')
+    targetContainerId createKeycloakContainer.getContainerId()
+}
+
+task stopKeycloakContainer(type: DockerStopContainer) {
+    targetContainerId createKeycloakContainer.getContainerId()
+}
+
+task jooqGenerate() {
+    // Do all migrations first
+    dependsOn flywayMigrate
+    finalizedBy = [stopKeycloakContainer, stopPostgresContainer]
+    def outputDir = "$projectDir/src/main/java"
+    outputs.files(outputDir + '/com/hiddenswitch/framework/schema/**/*.java')
+
+    def configuration = new Configuration()
+    configuration
+            .withJdbc(new Jdbc()
+                    .withDriver('org.postgresql.Driver')
+                    .withUrl(jdbcUrl)
+                    .withUser(localUsername)
+                    .withPassword(localPassword))
+            .withGenerator(new Generator()
+                    .withName('io.github.jklingsporn.vertx.jooq.generate.classic.ClassicReactiveVertxGenerator')
+                    .withDatabase(new Database()
+                            .withName('org.jooq.meta.postgres.PostgresDatabase')
+                            .withInputSchema('public')
+                            .withIncludeTables(true)
+                            .withIncludeRoutines(true)
+                            .withIncludePackages(false)
+                            .withIncludeUDTs(true)
+                            .withIncludeSequences(true)
+                            .withExcludes('schema_version')
+                            .withIncludes('.*'))
+                    .withGenerate(new Generate()
+                            .withDeprecated(false)
+                            .withRecords(true)
+                            .withInterfaces(true)
+                            .withFluentSetters(true)
+                            .withPojos(true)
+                            .withDaos(true))
+                    .withTarget(new Target()
+                            .withPackageName('com.hiddenswitch.framework.schema')
+                            .withDirectory(outputDir))
+                    .withStrategy(new Strategy()
+                            .withName('io.github.jklingsporn.vertx.jooq.generate.VertxGeneratorStrategy')))
+
+    doLast() {
+        GenerationTool.generate(configuration)
+    }
+}
+
+flyway {
+    url = jdbcUrl
+    user = localUsername
+    password = localPassword
+    schemas = ['hiddenswitch']
+    locations = ['classpath:db/migration']
+}
+
+// Make sure keycloak has done its migration first
+flywayMigrate.dependsOn += [classes, startAndWaitOnHealthyKeycloakContainer]
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.13.0'
+    }
+    plugins {
+        grpc_java {
+            artifact = "io.vertx:protoc-gen-grpc-java:1.25.0"
+        }
+        grpc_csharp {
+            path = project.projectDir.absolutePath + "/bin/grpc_csharp_plugin"
+        }
+    }
+    generateProtoTasks {
+        all()*.builtins {
+            java {}
+            csharp {}
+        }
+        all()*.plugins {
+            grpc_java {
+                outputSubDir = "java"
+            }
+            grpc_csharp {
+                outputSubDir = "csharp_grpc"
+            }
+        }
+    }
 }

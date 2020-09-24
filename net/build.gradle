@@ -75,10 +75,6 @@ dependencies {
     implementation 'io.netty:netty-transport-native-epoll:4.1.43.Final:linux-x86_64'
     implementation 'io.micrometer:micrometer-registry-prometheus:1.5.1'
 
-    implementation('com.esotericsoftware:kryo:4.0.2') {
-        exclude group: 'org.objenesis', module: '*'
-    }
-
     implementation group: 'javax.cache', name: 'cache-api', version: '1.1.1'
     implementation group: 'net.sf.py4j', name: 'py4j', version: '0.10.8.1'
     runtimeOnly 'ch.qos.logback:logback-classic:1.2.3'
@@ -113,7 +109,7 @@ dependencies {
     testImplementation "org.testcontainers:testcontainers"
     testImplementation "org.testcontainers:junit-jupiter"
     testImplementation group: 'io.vertx', name: 'vertx-junit5', version: '3.9.2'
-    testImplementation(group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.11.2.Final') {
+    testImplementation(group: 'org.jboss.resteasy', name: 'resteasy-client', version: '4.5.6.Final') {
         exclude group: 'javax.activation', module: 'activation'
         exclude group: 'org.jboss.spec.javax.annotation', module: '*'
         exclude group: 'org.jboss.spec.javax.ws.rs', module: '*'

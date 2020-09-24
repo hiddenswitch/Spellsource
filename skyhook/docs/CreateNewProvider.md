@@ -1,7 +1,7 @@
 ## Resources available in a provider class  
 `this.headers` - The headers of the request ([Reference](http://expressjs.com/de/4x/api.html#req))  
 `this.body` - only the body of the request object  
-`this.payload` - a [DiscordPayload](util/DiscordPayload.md)  
+`this.updateRecord` - a [DiscordPayload](util/DiscordPayload.md)  
 `this.logger` - a [winston](https://github.com/winstonjs/winston) logger.
 
 ## Example for providers without multiple methods
@@ -14,7 +14,7 @@ class NewProvider extends BaseProvider {
     }
     
     async parseData() {
-        //do your stuff here and add things to this.payload
+        //do your stuff here and add things to this.updateRecord
     }
 }
 
@@ -46,7 +46,7 @@ class NewProvider extends BaseProvider {
     //every type will be formated as camelCase
     //e.g. merge_request will be mergeRequest
     public async {typeName}() {
-        //do your stuff here and add things to this.payload
+        //do your stuff here and add things to this.updateRecord
     }
 }
 
