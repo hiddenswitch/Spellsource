@@ -1,7 +1,7 @@
 package com.hiddenswitch.framework.tests;
 
-import com.hiddenswitch.framework.DiffContext;
-import com.hiddenswitch.framework.DiffSequence;
+import com.hiddenswitch.framework.model.DiffContext;
+import com.hiddenswitch.framework.model.DiffSequence;
 import io.vertx.core.json.JsonObject;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Assertions;

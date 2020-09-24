@@ -49,6 +49,10 @@ subprojects {
                     details.useVersion "4.1.49.Final"
                 }
 
+                if (details.requested.group == 'org.checkerframework' && details.requested.module.name == 'checker-qual') {
+                    details.useVersion '3.5.0'
+                }
+
                 if (details.requested.group == 'org.apache.zookeeper') {
                     details.useVersion '3.5.8'
                 }
@@ -101,8 +105,16 @@ subprojects {
                     details.useVersion '26.0-jre'
                 }
 
+                if (details.requested.group == 'com.google.protobuf' && details.requested.module.name == 'protobuf-java') {
+                    details.useVersion '3.13.0'
+                }
+
                 if (details.requested.name == 'micronaut-inject' || details.requested.name == 'micronaut-runtime') {
-                    details.useVersion '1.3.5'
+                    details.useVersion '1.3.7'
+                }
+
+                if (details.requested.group == 'org.graalvm.nativeimage') {
+                    details.useVersion '20.2.0'
                 }
 
                 if (details.requested.group == 'org.junit.jupiter') {
@@ -186,7 +198,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'org.jboss.resteasy') {
-                    details.useVersion '3.11.2.Final'
+                    details.useVersion '4.5.6.Final'
                 }
 
                 if (details.requested.group == 'org.yaml' && details.requested.name == 'snakeyaml') {

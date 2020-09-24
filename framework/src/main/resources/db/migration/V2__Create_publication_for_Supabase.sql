@@ -1,0 +1,1 @@
+CREATE PUBLICATION supabase_realtime FOR ALL TABLES;
