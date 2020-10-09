@@ -6,8 +6,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
-import net.demilich.metastone.game.spells.SpellUtils;
 
 import java.util.Objects;
 import java.util.stream.LongStream;

@@ -1,6 +1,4 @@
-import Blockly, {FieldLabel} from 'blockly'
-import {FieldLabelPlural} from "../components/field-label-plural";
-import {FieldLabelSerializableHidden} from "../components/field-label-serializable-hidden";
+import Blockly from 'blockly'
 
 const SpellsourceRenderer = function (name) {
   SpellsourceRenderer.superClass_.constructor.call(this, name)

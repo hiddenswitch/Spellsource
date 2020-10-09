@@ -13,6 +13,7 @@ import BlocklyMiscUtils from '../lib/blockly-misc-utils'
 import useComponentWillMount from '../hooks/use-component-will-mount'
 import useBlocklyData from '../hooks/use-blockly-data'
 import SpellsourceRenderer from '../lib/spellsource-renderer'
+import SpellsourceGenerator from "../lib/spellsource-generator";
 
 const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
   const data = useBlocklyData()
@@ -29,6 +30,7 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
     BlocklyMiscUtils.initHeroClassColors(data)
     BlocklyMiscUtils.initCardBlocks(data)
     Blockly.blockRendering.register('spellsource', SpellsourceRenderer);
+    SpellsourceGenerator.generateJavaScript()
   })
 
   // Run once after the workspace has been created
@@ -42,6 +44,9 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
       }, 100)
     }
     mainWorkspace().getTheme().setStartHats(true)
+    mainWorkspace().registerButtonCallback('cardsInfo', button => {
+      alert("For each card Starter in the workspace, a card block will appear in here that references it. That's how you can create interactions with your custom cards like summoning them or receiving them.")
+    })
   }, [])
 
   useEffect(() => {
@@ -54,145 +59,8 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
   }, [props.renderer])
 
   const getToolboxCategories = (onlyCategory = null) => {
-    let index = -1
-    return data.editorToolbox.BlockCategoryList.map((
-      {
-        BlockTypePrefix, CategoryName, ColorHex, Subcategories, Tooltip, Subtooltips
-      }) => {
-      if (!!Blockly.categoryTooltips && !Blockly.categoryTooltips[CategoryName]) {
-        Blockly.categoryTooltips[CategoryName] = Tooltip
-        Blockly.tooltipColors[CategoryName] = BlocklyMiscUtils.tertiaryColor(BlocklyMiscUtils.colorToHex(ColorHex))
-      }
-      index++
-      if (!!onlyCategory && CategoryName !== onlyCategory) {
-        return toolboxCategories[index] //my attempt to reduce the runtime a bit
-      }
-      let blocks = []
-      if (!!BlockTypePrefix) {
-        for (let blocksKey of BlocklyMiscUtils.allEditorBlocks()) {
-          if ((!blocksKey.endsWith('SHADOW') && blocksKey.startsWith(BlockTypePrefix))
-            || (CategoryName === 'Cards' && blocksKey.startsWith('WorkspaceCard_'))
-            || (CategoryName === 'Classes' && blocksKey.startsWith('WorkspaceHeroClass_'))) {
-            blocks.push({
-              type: blocksKey,
-              values: shadowBlockJsonCreation(blocksKey),
-              next: blocksKey.startsWith('Starter') && !!Blockly.Blocks[blocksKey].json.nextStatement ?
-                {type: 'Property_SHADOW', shadow: true}
-                : undefined
-            })
-          }
-        }
-
-        if (!JsonConversionUtils.blockTypeColors[BlockTypePrefix]) {
-          JsonConversionUtils.blockTypeColors[BlockTypePrefix] = ColorHex
-        }
-      } else if (CategoryName === 'Search Results') {
-        results.forEach(value => {
-          blocks.push({
-            type: value.id,
-            values: shadowBlockJsonCreation(value.id),
-            next: value.id.startsWith('Starter') && !!Blockly.Blocks[value.id].json.nextStatement ?
-              {type: 'Property_SHADOW', shadow: true}
-              : undefined
-          })
-        })
-      }
-
-      if (CategoryName === 'Classes') {
-        blocks = blocks.sort((a, b) => {
-          if (a.type.startsWith('WorkspaceHeroClass')) {
-            return -1
-          }
-          if (b.type.startsWith('WorkspaceHeroClass')) {
-            return 1
-          }
-          return 0
-        })
-      }
-
-      if (!!Subcategories && isArray(Subcategories)) {
-        let categories = []
-
-
-        for (let i = 0, category; (category = Subcategories[i]); i++) {
-          categories[category] = {
-            name: category,
-            blocks: [],
-            colour: ColorHex
-          }
-          if (!!Subtooltips && !!Subtooltips[i]) {
-            let name = CategoryName + '.' + category
-            if (!!Blockly.categoryTooltips && !Blockly.categoryTooltips[name]) {
-              Blockly.categoryTooltips[name] = Subtooltips[i]
-              Blockly.tooltipColors[name] = BlocklyMiscUtils.tertiaryColor(BlocklyMiscUtils.colorToHex(ColorHex))
-            }
-          }
-        }
-
-        for (let block of blocks) {
-          let subcategory = Blockly.Blocks[block.type].json?.subcategory
-          if (!!subcategory) {
-            if (subcategory.includes(',')) {
-              for (let splitKey of subcategory.split(',')) {
-                if (categories[splitKey] != null) {
-                  categories[splitKey].blocks.push(block)
-                }
-              }
-            } else if (categories[subcategory] != null) {
-              categories[subcategory].blocks.push(block)
-            } else {
-              categories['Misc'].blocks.push(block)
-            }
-          } else {
-            categories['Misc'].blocks.push(block)
-          }
-        }
-
-
-        return {
-          name: CategoryName,
-          colour: ColorHex,
-          categories: Object.values(categories)
-        }
-
-      } else return {
-        name: CategoryName,
-        blocks: blocks,
-        colour: ColorHex
-      }
-    })
-  }
-
-  //Turns our own json formatting for shadow blocks into the formatting
-  //that's used for specifying toolbox categories (recursively)
-  const shadowBlockJsonCreation = (type) => {
-    let block = Blockly.Blocks[type]
-    let values = {}
-    if (!!block && !!block.json) {
-      let json = block.json
-      for (let i = 0; i < 10; i++) {
-        if (!!json['args' + i.toString()]) {
-          for (let j = 0; j < 10; j++) {
-            const arg = json['args' + i.toString()][j]
-            if (!!arg && !!arg.shadow) {
-              let fields = {}
-              if (!!arg.shadow.fields) {
-                for (let field of arg.shadow.fields) {
-                  fields[field.name] = field.valueI || field.valueS || field.valueB
-                }
-              }
-              values[arg.name] = {
-                type: arg.shadow.type,
-                shadow: !arg.shadow.notActuallyShadow,
-                fields: fields,
-                values: shadowBlockJsonCreation(arg.shadow.type)
-              }
-            }
-          }
-        }
-      }
-    }
-    return values
+    return BlocklyMiscUtils.getToolboxCategories(data.editorToolbox.BlockCategoryList,
+      toolboxCategories, onlyCategory, results)
   }
 
   const [toolboxCategories, setToolboxCategories] = useState(getToolboxCategories())
@@ -303,7 +171,7 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
     }
 
     let currentCards = []
-    for (let blocksKey of BlocklyMiscUtils.allEditorBlocks()) {
+    for (let blocksKey in Blockly.Blocks) {
       if (blocksKey.startsWith('WorkspaceCard') || blocksKey.startsWith('WorkspaceHeroClass')) {
         currentCards.push(blocksKey)
       }

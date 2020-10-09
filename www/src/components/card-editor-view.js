@@ -1,34 +1,36 @@
-import {Form} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 import styles from './card-editor-view.module.css'
 import Blockly from "blockly";
 import AceEditor from "react-ace";
 import React, {useRef, useState} from "react";
 import CardEditorWorkspace from "./card-editor-workspace";
 import useComponentWillMount from "../hooks/use-component-will-mount";
+import CardTesterWorkspace from "./card-tester-workspace";
 
 const CardEditorView = (props) => {
+
+  const SHOW_TESTER = false
 
   const [code, setCode] = useState(``)
   const [query, setQuery] = useState(``)
   const [showCatalogueBlocks, setShowCatalogueBlocks] = useState(false)
-  const [showBlockComments, setShowBlockComments] = useState(true)
   const [compactBlocks, setCompactBlocks] = useState(true)
   const [showJSON, setShowJSON] = useState(false)
-  const blockCommentsTooltip = 'Toggles the helpful/informational comments that display on certain blocks in the toolbox'
   const catalogueBlocksTooltip = 'Toggles whether the blocks for real cards from the catalogue show up in search'
   const compactBlocksTooltip = 'Render the blocks compactly rather than as always full rectangles'
   const showJSONTooltip = 'Show the JSON representation of the workspace below'
 
   const catalogueBlocksCheck = useRef(null)
   const catalogueBlocksLabel = useRef(null)
-  const blockCommentsCheck = useRef(null)
-  const blockCommentsLabel = useRef(null)
   const compactBlocksCheck = useRef(null)
   const compactBlocksLabel = useRef(null)
   const showJSONCheck = useRef(null)
   const showJSONLabel = useRef(null)
 
   const blocklyEdior = useRef(null)
+  const blocklyTester = useRef(null)
+
+  const [realCode, setRealCode] = useState(``)
 
   const workspace = () => {
     return blocklyEdior.current.workspace.state.workspace
@@ -47,12 +49,6 @@ const CardEditorView = (props) => {
     }
   }
 
-  const toggleBlockTooltips = evt => {
-    setShowBlockComments(!showBlockComments)
-    workspace().getToolbox().clearSelection()
-    Blockly.hideSpellsourceComments = showBlockComments
-  }
-
   const addTooltip = (ref, tooltip) => {
     if (!!ref.current) {
       ref.current.tooltip = tooltip
@@ -65,8 +61,6 @@ const CardEditorView = (props) => {
   useComponentWillMount(() => {
     addTooltip(catalogueBlocksCheck, catalogueBlocksTooltip)
     addTooltip(catalogueBlocksLabel, catalogueBlocksTooltip)
-    addTooltip(blockCommentsCheck, blockCommentsTooltip)
-    addTooltip(blockCommentsLabel, blockCommentsTooltip)
     addTooltip(compactBlocksCheck, compactBlocksTooltip)
     addTooltip(compactBlocksLabel, compactBlocksTooltip)
     addTooltip(showJSONCheck, showJSONTooltip)
@@ -80,15 +74,6 @@ const CardEditorView = (props) => {
                     onChange={e => search(e)}
                     className={styles.editorSearch}
       />
-      <Form.Check className={styles.editorOption}>
-        <Form.Check.Input defaultChcked={showCatalogueBlocks}
-                          onChange={e => toggleCatalogueBlocks(e)}
-                          value={showCatalogueBlocks}
-                          className={styles.editorCheck}
-                          ref={catalogueBlocksCheck}
-        />
-        <Form.Check.Label ref={catalogueBlocksLabel}> Search Card Catalogue</Form.Check.Label>
-      </Form.Check>
     <CardEditorWorkspace setCode={setCode}
                          showCatalogueBlocks={showCatalogueBlocks}
                          query={query}
@@ -96,15 +81,6 @@ const CardEditorView = (props) => {
                          renderer={compactBlocks ? 'spellsource' : 'geras'}
                          ref={blocklyEdior}
     />
-    <Form.Check className={styles.editorOption}>
-      <Form.Check.Input defaultChecked={showBlockComments}
-                        onChange={e => toggleBlockTooltips(e)}
-                        value={showBlockComments}
-                        className={styles.editorCheck}
-                        ref={blockCommentsCheck}
-      />
-      <Form.Check.Label> Show Toolbox Comments</Form.Check.Label>
-    </Form.Check>
     <Form.Check className={styles.editorOption}>
       <Form.Check.Input defaultChecked={compactBlocks}
                         onChange={e => setCompactBlocks(!compactBlocks)}
@@ -136,7 +112,27 @@ const CardEditorView = (props) => {
         editorProps={{$blockScrolling: true}}
       /> : <div/>
     }
-
+    {
+      SHOW_TESTER && !showJSON ? <div>
+          <CardTesterWorkspace renderer={'geras'}
+                               ref={blocklyTester}
+                               setCode={setRealCode}
+          />
+          <AceEditor
+            width={'100%'}
+            height={'200px'}
+            mode="javascript"
+            theme="github"
+            setOptions={{
+              'wrap': true
+            }}
+            readOnly={true}
+            value={realCode}
+            editorProps={{$blockScrolling: true}}
+          />
+        </div>
+        : <div/>
+    }
   </span>)
 }
 
