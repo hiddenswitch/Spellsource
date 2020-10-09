@@ -11,6 +11,9 @@ export default function useBlocklyData () {
         Subcategories
         Tooltip
         Subtooltips
+        Custom
+        ButtonName
+        ButtonCallback
       }
     }
     testingToolbox: toolbox(Style: {eq: "testing"}) {
@@ -21,6 +24,9 @@ export default function useBlocklyData () {
         Subcategories
         Tooltip
         Subtooltips
+        Custom
+        ButtonName
+        ButtonCallback
       }
     }
     allBlock {

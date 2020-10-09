@@ -3,16 +3,26 @@ import {FieldLabelPlural} from "../components/field-label-plural";
 import {FieldLabelSerializableHidden} from "../components/field-label-serializable-hidden";
 import JsonConversionUtils from "./json-conversion-utils";
 import BlocklyMiscUtils from "./blockly-misc-utils";
-import BlocklyEditor from "react-blockly/dist-modules/BlocklyEditor";
+import DefaultOverrides from "./default-overrides";
+import SpellsourceGenerator from "./spellsource-generator";
 
 export default class BlocklyModification {
 
   static modifyAll() {
     Blockly.HSV_SATURATION = .65
-    Blockly.Blocks = {} //we don't use any of the default Blockly blocks
+
+    for (let blocksKey in Blockly.Blocks) {
+      let block = Blockly.Blocks[blocksKey]
+      if (!block.init) {
+        delete Blockly.Blocks[blocksKey]
+      }
+    }
+    Blockly.Blocks['math_change'].testKey = 'variable_change'
+    Blockly.Blocks['controls_if'].testKey = 'logic_if'
+    Blockly.Blocks['controls_ifelse'].testKey = 'logic_ifelse'
 
     this.autoDecoration()
-    this.hoverComments()
+    //this.hoverComments()
     this.pluralSpacing()
     this.contextMenu()
     this.tooltips()
@@ -20,6 +30,8 @@ export default class BlocklyModification {
     this.colorfulColors()
     this.noToolboxZoom()
     this.multiline()
+
+    DefaultOverrides.overrideAll()
   }
 
   static autoDecoration() {
@@ -80,6 +92,10 @@ export default class BlocklyModification {
           && otherConnection.type === Blockly.NEXT_STATEMENT) {
           let bumper = otherConnection.getSourceBlock()
           let addedBlock
+          if (!otherConnection.getCheck()) {
+            continue
+          }
+
           if (otherConnection.getCheck().includes('Properties')) {
             if (bumpee.type.startsWith('Aura_')) {
               addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_auras')

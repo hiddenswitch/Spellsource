@@ -29,6 +29,9 @@ exports.createSchemaCustomization = ({ actions }) => {
     Subcategories: [String]
     Tooltip: String
     Subtooltips: [String]
+    Custom: String
+    ButtonName: String
+    ButtonCallback: String
   }
   type Block implements Node {
     type: String

@@ -24,15 +24,17 @@ const usedBlocks = {}
 
 const weirdos = []
 
-java.classpath.push(`${__dirname}/../../../../www/build/libs/www-0.8.79-all.jar`)
+java.classpath.push(`${__dirname}/../../../../www/build/libs/www-0.8.89-all.jar`)
 
 describe('WorkspaceUtils', () => {
   beforeAll(async () => {
     const blockEdges = []
     const cardEdges = []
+    const jsonEdges = []
     const data = {
       allBlock: {edges: blockEdges},
-      allCard: {edges: cardEdges}
+      allCard: {edges: cardEdges},
+      allJSON: {edges: jsonEdges}
     }
 
     for await (const blocksDefPath of walk(blocksPath)) {
@@ -51,10 +53,11 @@ describe('WorkspaceUtils', () => {
       if (!cardPath.endsWith('.json')) {
         return
       }
-
-      const cardJson = JSON.parse(await fs.promises.readFile(cardPath))
+      const file = await fs.promises.readFile(cardPath)
+      const cardJson = JSON.parse(file)
       jsonTransformFileNode(cardJson, {base: path.basename(cardPath)})
       cardEdges.push({node: cardJson})
+      jsonEdges.push({node: {internal: {content: file}}})
     }
 
     for await(const cardPath of walk(cardsPath)) {
@@ -115,6 +118,14 @@ describe('WorkspaceUtils', () => {
     JsonConversionUtils.generateCard(workspace, srcCard)
     const json = WorkspaceUtils.workspaceToCardScript(workspace)
     expect(ConversionHarness.assertCardReplaysTheSameSync(1, 2, id, JSON.stringify(json))).toEqual(true)
+  })
+
+  test('java test', async () => {
+    const TestMain = java.import('com.hiddenswitch.spellsource.gameplaytest.TestMain')
+    let context = TestMain.runGymSync()
+    let player = context.getActivePlayerSync()
+    let hero = player.getHeroSync()
+    console.log(hero.getHpSync())
   })
 
   test('just dreams of strength', async () => {
@@ -202,6 +213,7 @@ describe('WorkspaceUtils', () => {
 
   })
 
+  /*
   afterAll(async () => {
 
     let blocks = JsonConversionUtils.customBlocks
@@ -221,4 +233,6 @@ describe('WorkspaceUtils', () => {
     }
 
   }, 1)
+
+   */
 })

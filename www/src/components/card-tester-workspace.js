@@ -21,19 +21,13 @@ const CardTesterWorkspace = forwardRef((props, blocklyEditor) => {
   }, [props.renderer])
 
   const getToolboxCategories = () => {
-
-    return data.testingToolbox.BlockCategoryList.map((
-      {
-        BlockTypePrefix, CategoryName, ColorHex, Subcategories, Tooltip, Subtooltips
-      }) => {
-
-    })
+    return BlocklyMiscUtils.getToolboxCategories(data.testingToolbox.BlockCategoryList)
   }
 
   const [toolboxCategories, setToolboxCategories] = useState(getToolboxCategories())
 
   const onWorkspaceChanged = (workspace) => {
-
+    props.setCode(Blockly.JavaScript.workspaceToCode(workspace))
   }
 
 
