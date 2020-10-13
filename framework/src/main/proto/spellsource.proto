@@ -1,0 +1,1706 @@
+syntax = "proto3";
+
+package spellsource;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_multiple_files = true;
+option java_package = "com.hiddenswitch.spellsource.rpc";
+option java_outer_classname = "Proto";
+option csharp_namespace = "Spellsource.Proto";
+
+enum ActionType {
+    ACTION_TYPE_SYSTEM = 0;
+    ACTION_TYPE_END_TURN = 1;
+    ACTION_TYPE_PHYSICAL_ATTACK = 2;
+    ACTION_TYPE_SPELL = 3;
+    ACTION_TYPE_SUMMON = 4;
+    ACTION_TYPE_HERO_POWER = 5;
+    ACTION_TYPE_BATTLECRY = 6;
+    ACTION_TYPE_EQUIP_WEAPON = 7;
+    ACTION_TYPE_DISCOVER = 8;
+    ACTION_TYPE_HERO = 9;
+}
+
+enum CardType {
+    CARD_TYPE_HERO = 0;
+    CARD_TYPE_MINION = 1;
+    CARD_TYPE_SPELL = 2;
+    CARD_TYPE_WEAPON = 3;
+    CARD_TYPE_HERO_POWER = 4;
+    CARD_TYPE_GROUP = 5;
+    CARD_TYPE_CHOOSE_ONE = 6;
+    CARD_TYPE_ENCHANTMENT = 7;
+    CARD_TYPE_CLASS = 8;
+    CARD_TYPE_FORMAT = 9;
+}
+
+enum DamageTypeEnum {
+    DAMAGE_TYPE_ENUM_PHYSICAL = 0;
+    DAMAGE_TYPE_ENUM_FATIGUE = 1;
+    DAMAGE_TYPE_ENUM_MAGICAL = 2;
+    DAMAGE_TYPE_ENUM_DECAY = 3;
+    DAMAGE_TYPE_ENUM_DEFLECT = 4;
+    DAMAGE_TYPE_ENUM_DRAIN = 5;
+    DAMAGE_TYPE_ENUM_IGNORES_ARMOR = 6;
+    DAMAGE_TYPE_ENUM_SPLASH = 7;
+}
+
+enum EntityType {
+    ENTITY_TYPE_ANY = 0;
+    ENTITY_TYPE_ACTOR = 1;
+    ENTITY_TYPE_HERO = 2;
+    ENTITY_TYPE_MINION = 3;
+    ENTITY_TYPE_WEAPON = 4;
+    ENTITY_TYPE_CARD = 5;
+    ENTITY_TYPE_PLAYER = 6;
+    ENTITY_TYPE_ENCHANTMENT = 7;
+    ENTITY_TYPE_QUEST = 8;
+    ENTITY_TYPE_SECRET = 9;
+}
+
+enum MessageType {
+    MESSAGE_TYPE_UPDATE_ACTION = 0;
+    MESSAGE_TYPE_ON_GAME_EVENT = 1;
+    MESSAGE_TYPE_ON_GAME_END = 2;
+    MESSAGE_TYPE_ON_UPDATE = 3;
+    MESSAGE_TYPE_ON_REQUEST_ACTION = 4;
+    MESSAGE_TYPE_FIRST_MESSAGE = 5;
+    MESSAGE_TYPE_ON_MULLIGAN = 6;
+    MESSAGE_TYPE_UPDATE_MULLIGAN = 7;
+    MESSAGE_TYPE_EMOTE = 8;
+    MESSAGE_TYPE_TOUCH = 9;
+    MESSAGE_TYPE_CONCEDE = 10;
+    MESSAGE_TYPE_PINGPONG = 11;
+    MESSAGE_TYPE_TIMER = 12;
+}
+
+enum PlayerEntityAttributes {
+    PLAYER_ENTITY_ATTRIBUTES_SIGNATURE = 0;
+}
+
+enum PresenceEnum {
+    PRESENCE_ENUM_UNKNOWN = 0;
+    PRESENCE_ENUM_OFFLINE = 1;
+    PRESENCE_ENUM_IN_GAME = 2;
+    PRESENCE_ENUM_ONLINE = 3;
+}
+
+enum Rarity {
+    RARITY_FREE = 0;
+    RARITY_COMMON = 1;
+    RARITY_RARE = 2;
+    RARITY_EPIC = 3;
+    RARITY_LEGENDARY = 4;
+    RARITY_ALLIANCE = 5;
+}
+
+enum Zones {
+    ZONES_NONE = 0;
+    ZONES_HAND = 1;
+    ZONES_DECK = 2;
+    ZONES_GRAVEYARD = 3;
+    ZONES_BATTLEFIELD = 4;
+    ZONES_SECRET = 5;
+    ZONES_QUEST = 6;
+    ZONES_HERO_POWER = 7;
+    ZONES_HERO = 8;
+    ZONES_WEAPON = 9;
+    ZONES_SET_ASIDE_ZONE = 10;
+    ZONES_HIDDEN = 11;
+    ZONES_DISCOVER = 12;
+    ZONES_REMOVED_FROM_PLAY = 13;
+    ZONES_PLAYER = 14;
+    ZONES_ENCHANTMENT = 15;
+}
+
+enum GameEventType {
+    GAME_EVENT_TYPE_ALL = 0;
+    GAME_EVENT_TYPE_AFTER_PHYSICAL_ATTACK = 1;
+    GAME_EVENT_TYPE_AFTER_PLAY_CARD = 2;
+    GAME_EVENT_TYPE_AFTER_SPELL_CASTED = 3;
+    GAME_EVENT_TYPE_AFTER_SUMMON = 4;
+    GAME_EVENT_TYPE_ATTRIBUTE_APPLIED = 5;
+    GAME_EVENT_TYPE_ARMOR_GAINED = 6;
+    GAME_EVENT_TYPE_BEFORE_PHYSICAL_ATTACK = 7;
+    GAME_EVENT_TYPE_BEFORE_SUMMON = 8;
+    GAME_EVENT_TYPE_BOARD_CHANGED = 9;
+    GAME_EVENT_TYPE_CARD_ADDED_TO_DECK = 10;
+    GAME_EVENT_TYPE_CARD_SHUFFLED = 11;
+    GAME_EVENT_TYPE_DAMAGE = 12;
+    GAME_EVENT_TYPE_DECAY = 13;
+    GAME_EVENT_TYPE_DID_END_SEQUENCE = 14;
+    GAME_EVENT_TYPE_DISCARD = 15;
+    GAME_EVENT_TYPE_DISCOVER = 16;
+    GAME_EVENT_TYPE_DRAIN = 17;
+    GAME_EVENT_TYPE_DRAW_CARD = 18;
+    GAME_EVENT_TYPE_ENRAGE_CHANGED = 19;
+    GAME_EVENT_TYPE_ENTITY_TOUCHED = 20;
+    GAME_EVENT_TYPE_ENTITY_UNTOUCHED = 21;
+    GAME_EVENT_TYPE_EXCESS_HEAL = 22;
+    GAME_EVENT_TYPE_FATIGUE = 23;
+    GAME_EVENT_TYPE_GAME_START = 24;
+    GAME_EVENT_TYPE_HEAL = 25;
+    GAME_EVENT_TYPE_HERO_POWER_USED = 26;
+    GAME_EVENT_TYPE_INVOKED = 27;
+    GAME_EVENT_TYPE_JOUST = 28;
+    GAME_EVENT_TYPE_KILL = 29;
+    GAME_EVENT_TYPE_LOSE_DIVINE_SHIELD = 30;
+    GAME_EVENT_TYPE_LOSE_DEFLECT = 31;
+    GAME_EVENT_TYPE_LOSE_STEALTH = 32;
+    GAME_EVENT_TYPE_MAX_HP_INCREASED = 33;
+    GAME_EVENT_TYPE_MAX_MANA = 34;
+    GAME_EVENT_TYPE_MANA_MODIFIED = 35;
+    GAME_EVENT_TYPE_MISSILE_FIRED = 36;
+    GAME_EVENT_TYPE_OVERLOAD = 37;
+    GAME_EVENT_TYPE_PERFORMED_GAME_ACTION = 38;
+    GAME_EVENT_TYPE_PHYSICAL_ATTACK = 39;
+    GAME_EVENT_TYPE_PLAY_CARD = 40;
+    GAME_EVENT_TYPE_PRE_DAMAGE = 41;
+    GAME_EVENT_TYPE_PRE_GAME_START = 42;
+    GAME_EVENT_TYPE_QUEST_PLAYED = 43;
+    GAME_EVENT_TYPE_QUEST_SUCCESSFUL = 44;
+    GAME_EVENT_TYPE_RETURNED_TO_HAND = 45;
+    GAME_EVENT_TYPE_ROASTED = 46;
+    GAME_EVENT_TYPE_REVEAL_CARD = 47;
+    GAME_EVENT_TYPE_SECRET_PLAYED = 48;
+    GAME_EVENT_TYPE_SECRET_REVEALED = 49;
+    GAME_EVENT_TYPE_SPELL_CASTED = 50;
+    GAME_EVENT_TYPE_SUMMON = 51;
+    GAME_EVENT_TYPE_TARGET_ACQUISITION = 52;
+    GAME_EVENT_TYPE_TRIGGER_FIRED = 53;
+    GAME_EVENT_TYPE_TURN_END = 54;
+    GAME_EVENT_TYPE_TURN_START = 55;
+    GAME_EVENT_TYPE_SILENCE = 56;
+    GAME_EVENT_TYPE_WEAPON_DESTROYED = 57;
+    GAME_EVENT_TYPE_WEAPON_EQUIPPED = 58;
+    GAME_EVENT_TYPE_WILL_END_SEQUENCE = 59;
+    GAME_EVENT_TYPE_DESTROY_WILL_QUEUE = 60;
+}
+
+// Accepts an invite to a match or a friend invite.
+message AcceptInviteRequest {
+    // When true, specifies that the method call should only return when the game is actually ready to join
+    bool awaitGameStart = 1;
+    MatchmakingQueuePutRequest match = 2;
+}
+
+message AcceptInviteResponse {
+    FriendPutResponse friend = 1;
+    Invite invite = 2;
+    MatchmakingQueuePutResponse match = 3;
+}
+
+message Account {
+    // The user ID
+    string _id = 1;
+
+    // A list of decks belonging to the player
+    repeated InventoryCollection decks = 2;
+
+    // The user's email address
+    string email = 3;
+
+    // The user's friends at the moment of receiving this account document. This may be out of date as the latest
+    // friends information will come from receiving friend documents.
+    repeated Friend friends = 4;
+
+    // True if the client should attempt to connect to a match with its token.
+    bool inMatch = 5;
+
+    // The username that is displayed to toher players
+    string name = 6;
+    InventoryCollection personalCollection = 7;
+
+    // The token that is appended to the end of the user's name to allow friending without sharing an e-mail address.
+    string privacyToken = 8;
+}
+
+// Contains information the client needs for an art asset.
+message Art {
+    Font body = 1;
+    Color highlight = 2;
+    Prefab loop = 3;
+    Prefab missile = 4;
+    Prefab onCast = 5;
+    Prefab onHit = 6;
+    Color primary = 7;
+    Color secondary = 8;
+    Color shadow = 9;
+    Prefab spell = 10;
+    Sprite sprite = 11;
+    Sprite spriteShadow = 12;
+}
+
+// A tuple of attribute, attribute-value.
+message AttributeValueTuple {
+    PlayerEntityAttributes attribute = 1;
+    string stringValue = 2;
+}
+
+message CardEvent {
+    Entity card = 1;
+
+    // Forces this card event to be shown locally
+    bool showLocal = 2;
+}
+
+message CardRecord {
+    string _id = 1;
+    string allianceId = 2;
+    string borrowedByUserId = 3;
+    repeated string collectionIds = 4;
+    string donorUserId = 5;
+    Entity entity = 6;
+    string userId = 7;
+}
+
+message ChangePasswordRequest {
+    // The new password
+    string password = 1;
+}
+
+// An empty response signifying your password was correctly changed
+message ChangePasswordResponse {}
+
+// A chat message.
+message ChatMessage {
+    // A conversation ID looks like userId1,userId2 where the first user ID is the one that comes first
+    // lexicographically.
+    string conversationId = 1;
+
+    // The text that should be used to render when this message was sent.
+    string dateLabel = 2;
+
+    // The contents of this message.
+    string message = 3;
+
+    // The ID of the message.
+    string messageId = 4;
+
+    // The text to render in the sender name field.
+    string senderName = 5;
+
+    // The user ID of the sender. Useful for looking up against the presence notifications.
+    string senderUserId = 6;
+
+    // The timestamp of the message.
+    int64 timestamp = 7;
+}
+
+message ClientToServerMessage {
+    message FirstMessageMessage {
+        // A key authenticating this connection. Used only for the first message.
+        string playerKey = 1;
+
+        // A server-signed secret that authenticates this player for this match. Used only for the first message.
+        string playerSecret = 2;
+    }
+
+    // The index of the available actions to use.
+    int32 actionIndex = 1;
+
+    // The indices of cards to discard in a mulligan.
+    repeated int32 discardedCardIndices = 2;
+    Emote emote = 3;
+
+    // When specified with an entity ID, indicates the client is "touching" this entity.
+    int32 entityTouch = 4;
+
+    // When specified with an entity ID, indicates the client is no longer touching the specified entity.
+    int32 entityUntouch = 5;
+    FirstMessageMessage firstMessage = 6;
+    MessageType messageType = 7;
+
+    // The ID of the server message this client message is replying to.
+    string repliesTo = 8;
+}
+
+// Describes a Unity color.
+message Color {
+    // Alpha in units of 0.0-1.0
+    float a = 1;
+
+    // Blue channel in units of 0.0-1.0
+    float b = 2;
+
+    // Green channel in units of 0.0-1.0
+    float g = 3;
+
+    // Red channel in units of 0.0-1.0
+    float r = 4;
+}
+
+message CreateAccountRequest {
+    // An email account for password resets.
+    string email = 1;
+
+    // A display name for the user.
+    string name = 2;
+
+    // A password used to login to Spellsource.
+    string password = 3;
+}
+
+message CreateAccountResponse {
+    Account account = 1;
+
+    // A string containing the token to login with via the standard Spellsource authentication method.
+    string loginToken = 2;
+}
+
+message DecksDeleteRequest {
+    // The Deck ID to delete.
+    string deckId = 1;
+}
+
+message DecksGetAllResponse {
+    repeated DecksGetResponse decks = 1;
+}
+
+message DecksGetRequest {
+    // The Deck ID to get.
+    string deckId = 1;
+}
+
+message DecksGetResponse {
+    InventoryCollection collection = 1;
+
+    // The current number of cards in this deck.
+    int32 inventoryIdsSize = 2;
+}
+
+// This request allows a user to specify a decklist or deck properies for creating a new deck. Whenever a deck list
+// is specified (non-null and not equal to the empty string), the deck list will be preferred. Decks created without
+// a deck list may have no properties specified, and the deck will still be successfully created.
+message DecksPutRequest {
+    // A community-standard decklist.
+    string deckList = 1;
+
+    // The format of this deck. Format specifies which cards are allowable in this deck for validation. It also
+    // specifies which cards will appear in discovers during matchmaking.
+    // 
+    // Currenly, matchmaking occurs between decks of all formats, regardless of your choice of format. The smallest
+    // possible format encompassing both decks in a match is selected when the formats of the decks do not match.
+    // 
+    // Certain queues only support certain formats. Typically, when requesting the listing of queues with
+    // matchmakingGet, the queues will specify which current decks can be chosen.
+    string format = 2;
+
+    // A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless
+    // otherwise specified.
+    string heroClass = 3;
+    repeated string inventoryIds = 4;
+
+    // The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to
+    // see this name.
+    // 
+    // Some custom cards interact with specific named decks in your collection. For those purposes, the deck names
+    // are case sensitive. When multiple decks share a name, one will be chosen arbitrarily (not at random).
+    string name = 5;
+}
+
+// The deck that was created by a deck put request.
+message DecksPutResponse {
+    InventoryCollection collection = 1;
+    string deckId = 2;
+}
+
+// This command contains a variable number of changes to apply to a deck. Whenever multiple fields are set, the
+// server will try to resolve their effects in the least surprising way possible.
+// 
+// Specifically, if setInventoryIds is set, it will override all other changes to the inventory. Otherwise, removals
+// will be evaluated first, preferring inventory ID removals over card ID removals, followed by adds.
+message DecksUpdateCommand {
+    message PushCardIdsMessage {
+        // The items in this array specify which card IDs should be added.
+        repeated string _each = 1;
+    }
+
+    message PushInventoryIdsMessage {
+        // The items in this array specify which inventory IDs should be added.
+        repeated string _each = 1;
+    }
+
+    message SetPlayerEntityAttributeMessage {
+        PlayerEntityAttributes attribute = 1;
+
+        // The string value of the attribute.
+        string stringValue = 2;
+    }
+
+    // Removes all the specified card IDs from the user's deck. Does nothing if the deck does not contain any of the
+    // specified card IDs. This method will still succeed for deck IDs that are found.
+    repeated string pullAllCardIds = 1;
+
+    // Removes all the specified inventory IDs from the user's deck. Does nothing if the deck does not contain any of
+    // the specified inventory IDs. This method will still succeed for inventory IDs that are found.
+    repeated string pullAllInventoryIds = 2;
+
+    // Adds the specified card IDs to the deck with this command. If the player doesn't own the card IDs, the current
+    // Spellsource inventory rules will grant the cards to the user. Duplicates are allowed. Under standard rules,
+    // the deck becomes invalid if the number of duplicates exceeds 2; or, if the hero class isn't neutral or the
+    // same as the deck's hero class.
+    PushCardIdsMessage pushCardIds = 3;
+
+    // Adds the specified inventory IDs to the deck in this command. Duplicate inventory IDs will cause the update to
+    // be rejected. If the user does not own these inventory IDs, the deck becomes invalid. Under standard rules,
+    // duplicate card IDs also make the deck invalid. Finally, adding cards whose hero class isn't neutral or the
+    // same as the deck's hero class marks the deck as invalid.
+    PushInventoryIdsMessage pushInventoryIds = 4;
+
+    // Sets the hero class of the deck in this command. If the deck now contains cards that no longer belong to this
+    // hero class, the deck becomes invalid under standard rules.
+    string setHeroClass = 5;
+
+    // Sets the entire deck's inventory IDs in this command. Duplicate inventory IDs will cause the update to
+    // be rejected. If the user does not own these inventory IDs, the deck becomes invalid. Under standard rules,
+    // duplicate card IDs also make the deck invalid. Finally, adding cards whose hero class isn't neutral or the
+    // same as the deck's hero class marks the deck as invalid.
+    repeated string setInventoryIds = 6;
+
+    // Sets the name of the deck in this command. If the name is null, the deck becomes invalid.
+    string setName = 7;
+
+    // Sets a player entity attribute in CAMEL_CASE, like SIGNATURE.
+    SetPlayerEntityAttributeMessage setPlayerEntityAttribute = 8;
+
+    // Unsets (clears) the player entity attribute specified here.
+    string unsetPlayerEntityAttribute = 9;
+}
+
+message DecksUpdateRequest {
+    // The Deck ID to update.
+    string deckId = 1;
+
+    // An update command modifying specified properties of the deck.
+    DecksUpdateCommand updateCommand = 2;
+}
+
+// Indicates a default, successful response.
+message DefaultMethodResponse {}
+
+message DeleteInviteRequest {
+    string inviteId = 1;
+}
+
+// Contains information about an actor being destroyed.
+message Destroy {
+    // Aftermaths that will fire due to this actor being destroyed.
+    repeated Entity aftermaths = 1;
+    Entity source = 2;
+    Entity target = 3;
+}
+
+// Describes the current state of a draft, including the deck in progress, the new choices,
+// and the hero choices.
+message DraftState {
+    enum DraftStateStatus {
+        DRAFT_STATE_STATUS_IN_PROGRESS = 0;
+        DRAFT_STATE_STATUS_SELECT_HERO = 1;
+        DRAFT_STATE_STATUS_COMPLETE = 2;
+        DRAFT_STATE_STATUS_RETIRED = 3;
+    }
+
+    // Gets the number of card choices remaining to make.
+    int32 cardsRemaining = 1;
+
+    // When not null, contains the cards that correspond to your choices for the next draft selection.
+    repeated Entity currentCardChoices = 2;
+
+    // The deck that corresponds to your finished draft deck.
+    string deckId = 3;
+
+    // Gets the current draft index.
+    int32 draftIndex = 4;
+    Entity heroClass = 5;
+
+    // When not null, contains three choices you should reply with to choose the hero of your draft.
+    repeated Entity heroClassChoices = 6;
+
+    // The number of losses you have suffered with your current draft deck.
+    int32 losses = 7;
+    repeated string selectedCardIds = 8;
+
+    // Gets the status of the draft.
+    DraftStateStatus status = 9;
+
+    // The number of wins you have achieved with your current draft deck.
+    int32 wins = 10;
+}
+
+message DraftsChooseCardRequest {
+    int32 cardIndex = 1;
+}
+
+message DraftsChooseHeroRequest {
+    int32 heroIndex = 1;
+}
+
+message DraftsPostRequest {
+    // Retires a draft early. Typically this costs some number of lives.
+    bool retireEarly = 1;
+
+    // Starts a new draft.
+    bool startDraft = 2;
+}
+
+// Stores data about a card currently being edited.
+// 
+// For now, the text-editable view of the card is just stored as a string.
+message EditableCard {
+    // The ID of the card in the database.
+    string _id = 1;
+
+    // The user ID of the owner of this card, i.e. its creator.
+    string ownerUserId = 2;
+
+    // The CardScript source code of the card.
+    string source = 3;
+}
+
+// An emote that should play from the specified entity.
+message Emote {
+    enum EmoteMessage {
+        EMOTE_MESSAGE_HELLO = 0;
+        EMOTE_MESSAGE_AMAZING = 1;
+        EMOTE_MESSAGE_WHOOPS = 2;
+        EMOTE_MESSAGE_GOOD_GAME = 3;
+        EMOTE_MESSAGE_FACE_MY_WRATH = 4;
+        EMOTE_MESSAGE_WELL_PLAYED = 5;
+    }
+
+    int32 entityId = 1;
+    EmoteMessage message = 2;
+}
+
+message Entity {
+    // The entity's ID in the game.
+    int32 id = 1;
+
+    // The entity's armor. Conventionally, this value should be rendered on a hero entity's armor token.
+    google.protobuf.Int32Value armor = 41;
+    Art art = 2;
+
+    // The entity's current attack value. Conventionally, this value should be rendered on the attack token.
+    google.protobuf.Int32Value attack = 3;
+
+    // The entity's base attack value.
+    google.protobuf.Int32Value baseAttack = 4;
+
+    // The base hitpoints of the entity.
+    google.protobuf.Int32Value baseHp = 5;
+
+    // The entity's base mana cost.
+    google.protobuf.Int32Value baseManaCost = 6;
+
+    // When true, this entity has an effect that gets triggered when it is played from the hand.
+    bool battlecry = 7;
+
+    // The index of the entity in its zone.
+    int32 boardPosition = 8;
+
+    // When true, indicates this minion cannot attack, even though it normally can.
+    bool cannotAttack = 9;
+
+    // The entity's Card ID. When null, it typically should not be rendered.
+    string cardId = 10;
+
+    // The card expansion set this entity belongs to.
+    string cardSet = 11;
+
+    // The card sets listed by the card
+    repeated string cardSets = 12;
+    CardType cardType = 13;
+
+    // When true, the entity can attack the same turn it is summoned.
+    bool charge = 14;
+
+    // An integer number of glowing orbs to render above the entity.
+    google.protobuf.Int32Value charges = 15;
+
+    // Indicates this card has a choose-one effect.
+    bool chooseOne = 16;
+
+    // Indicates the card is collectible - valid for putting into decks.
+    bool collectible = 17;
+
+    // Indicates this minion has a combo effect.
+    bool combo = 18;
+
+    // When true, indicates that a condition written on the card is met and the player should be informed.
+    bool conditionMet = 19;
+
+    // The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is
+    // triggered.
+    google.protobuf.Int32Value countUntilCast = 20;
+
+    // When true, this entity has an effect that gets triggered when it is destroyed.
+    bool deathrattles = 23;
+
+    // When true, the entity's first incoming hit will hit its owner rather than itself.
+    bool deflect = 24;
+
+    // The text that would go into the entity's description field.
+    string description = 25;
+
+    // When true, indicates that this entity is destroyed. During event evaluation, an entity can be destroyed but
+    // still in a zone other than the graveyard; render a death icon over the entity when it is so marked.
+    bool destroyed = 26;
+
+    // Indicates the entity was discarded from the hand.
+    bool discarded = 27;
+
+    // When true, the entity will take no loss in hitpoints the first time it would ordinarily take damage.
+    bool divineShield = 28;
+
+    // The durability (number of uses) that the weapon still has.
+    google.protobuf.Int32Value durability = 29;
+
+    // The class hierarchy of this enchantment
+    string enchantmentType = 30;
+
+    // When true, this entity is under the influence of "enrage," or a bonus when it takes damage the first time.
+    bool enraged = 31;
+    EntityType entityType = 32;
+
+    // The number of times this enchantment (secret, quest or trigger on card) has fired.
+    google.protobuf.Int32Value fires = 33;
+
+    // When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when
+    // it would normally be able to attack.
+    bool frozen = 34;
+
+    // For player entities, indicates whether or not the player has finished the mulligan phase and is awaiting the
+    // other player to finish mulligan or, if both players have this field as true, indicates the game has begun on
+    // turn 0.
+    bool gameStarted = 35;
+
+    // Render this entity with a "gold" effect.
+    bool gold = 36;
+
+    // The string enum value that corresponds to this entity's hero class.
+    string heroClass = 37;
+
+    // An integer corresponding to the enchantment's host
+    int32 host = 38;
+
+    // When true, indicates this entity has an effect that triggers on game events.
+    bool hostsTrigger = 39;
+
+    // The current hitpoints of the entity. Conventionally, this value should be rendered on the hitpoints token.
+    google.protobuf.Int32Value hp = 40;
+
+    // Indicates the entity does not take damage.
+    bool immune = 42;
+
+    // When set on the player entity, indicates the effects occuring now are during the player's turn start phase.
+    bool isStartingTurn = 43;
+    EntityLocation location = 44;
+
+    // When true, the entity heals its owner when it deals damage.
+    bool lifesteal = 45;
+
+    // The amount of mana that was locked due to overload.
+    google.protobuf.Int32Value lockedMana = 46;
+
+    // The player's current mana.
+    google.protobuf.Int32Value mana = 47;
+
+    // The entity's current mana cost. Conventionally, this value should be rendered on the mana token.
+    google.protobuf.Int32Value manaCost = 48;
+
+    // The maximum number of hitpoints this entity can have.
+    google.protobuf.Int32Value maxHp = 49;
+
+    // The player's maximum amount of mana.
+    google.protobuf.Int32Value maxMana = 50;
+
+    // The text that would go into the entity's name field.
+    string name = 51;
+
+    // A renderable note attached to this entity.
+    string note = 52;
+
+    // Indicates the amount of mana that would be locked if this card were played.
+    google.protobuf.Int32Value overload = 53;
+
+    // An integer corresponding to the entity's owner.
+    int32 owner = 54;
+
+    // Indicates the entity is an on-battlefield permanent.
+    bool permanent = 55;
+
+    // When true, indicates the card can be played, or the hero / minion can initiate a physical attack.
+    bool playable = 56;
+
+    // When true, the entity will destroy any target it damages.
+    bool poisonous = 57;
+    Rarity rarity = 58;
+
+    // Indicates the entity was roasted (removed due to excess cards or otherwise discarded from the deck).
+    bool roasted = 59;
+
+    // When true, the entity can attack a minion the same turn it is summoned.
+    bool rush = 60;
+
+    // Indicates that the entity was silenced.
+    bool silenced = 61;
+
+    // Indicates the amount of additional spell damage this entity gives its owning player.
+    google.protobuf.Int32Value spellDamage = 62;
+
+    // When true, the minion cannot be targeted by the opponent until the entity attacks for the first time.
+    bool stealth = 63;
+
+    // When true, the entity cannot attack this turn because it has "summoning sickness," or a disability related
+    // to the first turn the entity came into play. Typically rendered with snooze icons.
+    bool summoningSickness = 64;
+
+    // Indicates the entity and other taunt entities must be targeted by enemy actors first during an opponent's
+    // physical attack action targeting.
+    bool taunt = 65;
+    repeated Tooltip tooltips = 66;
+
+    // When not null, indicates the card's tribe/race. Typically only minions have this field set.
+    string tribe = 67;
+
+    // When true, indicates that this entity that is ordinarily censored to this user is not. It can be "flipped" and
+    // shown to the opponent.
+    bool uncensored = 68;
+
+    // When true, indicates this minion is benefiting from the aura of another effect.
+    bool underAura = 69;
+
+    // Indicates this entity cannot be targeted by spells.
+    bool untargetableBySpells = 70;
+
+    // Indicates the entity can attack twice a turn.
+    bool windfury = 71;
+}
+
+// An array that corresponds to the visible entities in this game state notification. The client is responsible for
+// determining which indices have been added, changed or removed.
+message EntityChangeSet {
+    repeated int32 ids = 1;
+}
+
+// Encodes the location of the entity. Its index should be ordered in the entity change set.
+message EntityLocation {
+    // The index of the entity inside its zone.
+    int32 index = 1;
+    Zones zone = 2;
+    int32 player = 3;
+}
+
+// A container for data to and from the server. This envelope is the type of every message sent through the
+// /realtime websocket endpoint.
+message Envelope {
+    message GameMessage {
+        ClientToServerMessage clientToServer = 1;
+        ServerToClientMessage serverToClient = 2;
+    }
+
+    message MethodMessage {
+        message DeleteCardMessage {
+            // The editable card record ID, or null if one should be created.
+            string editableCardId = 1;
+        }
+
+        message DequeueMessage {
+            // The queue to which the server should direct this request.
+            string queueId = 1;
+        }
+
+        message PutCardMessage {
+            // When true, indicates that the editor should draw the card in a live game, if there is one.
+            bool draw = 1;
+
+            // The editable card record ID, or null if one should be created.
+            string editableCardId = 2;
+
+            // A JSON-formatted specification for the card.
+            // 
+            // The ID is auto-generated and ignored, which means drawing tokens at the moment is not supported.
+            string source = 3;
+        }
+
+        message SendMessageMessage {
+            // A conversation ID looks like userId1,userId2 where the first user ID is the one that comes first
+            // lexicographically.
+            string conversationId = 1;
+
+            // The contents of the message to send to the conversation.
+            string message = 2;
+        }
+
+        // Removes the card with the specified record ID from the editable cards list.
+        DeleteCardMessage deleteCard = 1;
+
+        // Leave the specified queue
+        DequeueMessage dequeue = 2;
+        MatchmakingQueuePutRequest enqueue = 3;
+
+        // The client-specified ID that will be used to mark the reply (the result) of this method call.
+        string methodId = 4;
+
+        // Upserts and draws a card with the specified JSON representation.
+        //
+        // Only available in bot games.
+        PutCardMessage putCard = 5;
+
+        // Send a change message to the indicated conversationId.
+        SendMessageMessage sendMessage = 6;
+    }
+
+    message RemovedMessage {
+        oneof id {
+            // The unique ID of the editable card.
+            string editableCardId = 1;
+
+            // The unique ID of the friend that should be removed,
+            string friendId = 2;
+
+            // The unique ID of the invitation that should be removed.
+            string inviteId = 3;
+
+            // The unique ID of the match that should be removed.
+            string matchId = 4;
+        }
+    }
+
+    message ResultMessage {
+        message PutCardMessage {
+            // The card ID that was put into the game.
+            string cardId = 1;
+
+            // An array of errors with the card, if applicable.
+            repeated string cardScriptErrors = 2;
+
+            // When not null, contains the editable card ID that was created by putting a record
+            string editableCardId = 3;
+        }
+
+        message SendMessageMessage {
+            // The new message ID.
+            string messageId = 1;
+        }
+    }
+}
+
+// Contains a font (type, size, styling, etc.) specification
+message Font {
+    Color vertex = 1;
+}
+
+message Friend {
+    string friendId = 1;
+    string friendName = 2;
+    PresenceEnum presence = 3;
+    int64 since = 4;
+}
+
+message FriendDeleteRequest {
+    // id of friend to unfriend.
+    string friendId = 1;
+}
+
+// Adds two users to each other's friends list.
+message FriendPutRequest {
+    // Not supported. Throws an error if this is specified on the client.
+    string friendId = 1;
+
+    // The username with the privacy token, like "username#1234".
+    string usernameWithToken = 2;
+}
+
+message FriendPutResponse {
+    Friend friend = 1;
+}
+
+// An object representing all valid game actions in this action request.
+message GameActions {
+    // An array of actions containing source, target, type and a short description of the action. Some actions make come with additional display data like a specific card, card ID or other content.
+    repeated SpellAction all = 1;
+
+    // An array of game action indices. Choose one at random for compatibility purposes until the client can support
+    // all actions
+    repeated int32 compatibility = 2;
+}
+
+message GameEvent {
+
+
+    message DamageMessage {
+        DamageTypeEnum damageType = 1;
+    }
+
+    message DestroyMessage {
+        repeated Destroy objects = 1;
+    }
+
+    message JoustMessage {
+        Entity opponentCard = 1;
+        Entity ownCard = 2;
+        bool won = 3;
+    }
+
+    message PerformedGameActionMessage {
+        ActionType actionType = 1;
+    }
+
+    message TriggerFiredMessage {
+        // The entity ID corresponding to the source of the trigger that got fired.
+        int32 triggerSourceId = 1;
+
+        // The targets of the trigger's effect.
+        repeated int32 triggerTargetIds = 2;
+    }
+
+    CardEvent cardEvent = 1;
+    DamageMessage damage = 2;
+
+    // A plain text description of this event that should be shown to the user.
+    string description = 3;
+    DestroyMessage destroy = 4;
+
+    // The ID of the entity that has starting being touched by the opponent.
+    int32 entityTouched = 5;
+
+    // The ID of the entity that is no longer being touched by the opponent.
+    int32 entityUntouched = 6;
+
+    // The game event type corresponding to this game event.
+    GameEventType eventType = 7;
+
+    // An integer ID corresponding to the order of this event from the client's point of view.
+    int32 id = 8;
+
+    // Should this event be rendered in the power history?
+    bool isPowerHistory = 9;
+
+    // Stores the source player according to the game event data. Typically this is the player who is casting the
+    // card or otherwise the source of an event.
+    bool isSourcePlayerLocal = 10;
+
+    // Stores the target player according to the game event data.
+    bool isTargetPlayerLocal = 11;
+    JoustMessage joust = 12;
+    PerformedGameActionMessage performedGameAction = 13;
+    Entity source = 14;
+    Entity target = 15;
+
+    // An array of targets
+    repeated Entity targets = 16;
+    TriggerFiredMessage triggerFired = 17;
+
+    // When not null, indicates this game event comes with a value. This is typically the damage dealt, the amount of
+    // healing, etc.
+    int32 value = 18;
+}
+
+// An object that describes the winner and loser of a game
+message GameOver {
+    // True when the local player has won.
+    bool localPlayerWon = 1;
+
+    // The ID of the player who has won. Null if no player has won.
+    int32 winningPlayerId = 2;
+}
+
+message GameState {
+    repeated Entity entities = 1;
+
+    // When true, it is the local player's turn.
+    bool isLocalPlayerTurn = 2;
+
+    // The last ten game event objects with isPowerHistory == true.
+    repeated GameEvent powerHistory = 3;
+    int64 timestamp = 4;
+    int32 turnNumber = 5;
+    string turnState = 6;
+}
+
+message GetAccountRequest {
+    string targetUserId = 1;
+}
+
+message GetAccountsRequest {
+    // An array of user IDs to fetch.
+    repeated string userIds = 1;
+}
+
+message GetAccountsResponse {
+    repeated Account accounts = 1;
+}
+
+message GetCardsRequest {
+    // The value returned in the ETag header from the server when this was last called, or empty if this is the
+    // first call to this resource.
+    string If_None_Match = 1;
+}
+
+// A cacheable copy of the entire card catalogue.
+message GetCardsResponse {
+    // The actual array of cards representing the complete Spellsource catalogue.
+    repeated CardRecord cards = 1;
+
+    // A token used in the If-None-Match argument when checking for new card catalogue content.
+    string version = 2;
+}
+
+// Retrieves an array of game IDs played by this player. Eventually will require paging.
+message GetGameRecordIdsResponse {
+    // All the game IDs ever played by this player
+    repeated string gameIds = 1;
+}
+
+message GetGameRecordRequest {
+    string gameId = 1;
+}
+
+// Information about a game.
+// 
+// Statistics about the game will be stored at a later point in time.
+message GetGameRecordResponse {
+    // A timestamp for when this game was finished (approximate).
+    int64 completedAt = 1;
+
+    // The date and time when this game was finished in the client's local time.
+    string completedAtLocalized = 2;
+
+    // True if this game was played against a bot (or was played entirely by bots)
+    bool isBotGame = 3;
+
+    // The names of the players in this game, without their privacy tokens
+    repeated string playerNames = 4;
+    Replay replay = 5;
+}
+
+message GetInviteRequest {
+    string inviteId = 1;
+}
+
+// A collection of cards.
+message InventoryCollection {
+    enum InventoryCollectionDeckType {
+        INVENTORY_COLLECTION_DECK_TYPE_DRAFT = 0;
+        INVENTORY_COLLECTION_DECK_TYPE_CONSTRUCTED = 1;
+    }
+
+    enum InventoryCollectionType {
+        INVENTORY_COLLECTION_TYPE_USER = 0;
+        INVENTORY_COLLECTION_TYPE_ALLIANCE = 1;
+        INVENTORY_COLLECTION_TYPE_DECK = 2;
+    }
+
+    // The identifier of this collection. Corresponds to a deckId when this is a deck collection.
+    string _id = 1;
+
+    // Indicates whether this is a deck meant for draft or constructed play.
+    InventoryCollectionDeckType deckType = 2;
+
+    // The format when this is a deck collection.
+    string format = 3;
+
+    // The hero class when this is a deck collection.
+    string heroClass = 4;
+    repeated CardRecord inventory = 5;
+
+    // When true, indicates this is a standard deck provided by the server.
+    bool isStandardDeck = 6;
+
+    // The name of this collection. Corresponds to the deck name when this is a deck collection.
+    string name = 7;
+
+    // A list of player entity attributes associated with this deck.
+    // 
+    // A player entity attribute is an attribute that comes into play before the game starts. It is used to implement
+    // the Signature spell of the Ringmaster class.
+    repeated AttributeValueTuple playerEntityAttributes = 8;
+
+    // The type of collection this object is. A user's personal collection is of type USER. A deck is of type DECK.
+    InventoryCollectionType type = 9;
+
+    // The owner of this collection.
+    string userId = 10;
+    ValidationReport validationReport = 11;
+}
+
+// An object that indicates the player has a pending invitation to a game.
+message Invite {
+    enum InviteStatus {
+        INVITE_STATUS_UNDELIVERED = 0;
+        INVITE_STATUS_PENDING = 1;
+        INVITE_STATUS_TIMEOUT = 2;
+        INVITE_STATUS_ACCEPTED = 3;
+        INVITE_STATUS_REJECTED = 4;
+        INVITE_STATUS_CANCELLED = 5;
+    }
+
+    // The ID of the invite.
+    string _id = 1;
+
+    // An expiration timestamp.
+    int64 expiresAt = 2;
+
+    // When set, indicates this is an invitation to become friends.
+    string friendId = 3;
+
+    // The user from whom the invite originates
+    string fromName = 4;
+
+    // The user ID from whom the invite originates
+    string fromUserId = 5;
+
+    // The description of this invite. Typically includes the queue contents and possibly a note from the user.
+    string message = 6;
+
+    // When set, indicates this is an invitation to play a game. The queue ID to put into the matchmaking request to
+    // fulfill this invite.
+    string queueId = 7;
+
+    // Indicates the status of the invite.
+    //  * UNDELIVERED: The invitation was created and is awaiting delivery, either due to ordinary networking delay
+    //    or because the recipient is not yet online.
+    //  * PENDING: The invitation is delivered and awaiting a response.
+    //  * TIMEOUT: The recipient did not respond by the expiration time and the invitation expired.
+    //  * ACCEPTED: The recipient accepted the invitation. The sender should enter the queue if they haven't already
+    //    done so.
+    //  * REJECTED: The recipient rejected the invitation.
+    //  * CANCELLED: The sender cancelled the invitation.
+    InviteStatus status = 8;
+
+    // The name of the user to whom the invite is addressed
+    string toName = 9;
+
+    // The user ID to whom the invite is addressed
+    string toUserId = 10;
+}
+
+// The invites where this user is either the sender or recipient.
+message InviteGetResponse {
+    repeated Invite invites = 1;
+}
+
+// Requests to send an invite to play a 1v1 match, to friend a player, or both.
+message InvitePostRequest {
+    // The deck the user is creating this invite with. Used for 1v1 queues. If this is specified, the user is
+    // automatically enqueued.
+    string deckId = 1;
+
+    // When true, indicates that this request is a friend invitation.
+    bool friend = 2;
+
+    // An optional message to add to the invite request
+    string message = 3;
+
+    // The queue that the player would like to 1v1 inside of. These may differ from the competitive queues.
+    string queueId = 4;
+
+    // The user who should receive the invite
+    string toUserId = 5;
+
+    // The username and privacy token (#1234 part) to send the request to
+    string toUserNameWithToken = 6;
+}
+
+// The invitation that was sent, or the updated invite
+message InviteResponse {
+    Invite invite = 1;
+}
+
+message LoginRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    Account account = 1;
+    string loginToken = 2;
+}
+
+// A document that describes an awaiting match.
+message Match {
+    // The ID of the match.
+    string _id = 1;
+
+    // A timestamp for when this game was created (approximate).
+    int64 createdAt = 2;
+}
+
+message MatchCancelResponse {
+    bool isCanceled = 1;
+}
+
+message MatchConcedeResponse {
+    bool isConceded = 1;
+}
+
+// A queue the user can enter to play a match in.
+message MatchmakingQueueItem {
+    message RequiresMessage {
+        // Indicates that a deck choice is required.
+        bool deck = 1;
+
+        // Indicates that the player must choose from the specified decks.
+        repeated InventoryCollection deckChoices = 2;
+
+        // Indicates that the player must choose from the specified deck IDs in the player's account.
+        repeated string deckIdChoices = 3;
+
+        // Indicates that a hero class choice is required. When a deck choice is not required, the user only
+        // picks a hero.
+        bool heroClass = 4;
+    }
+
+    // A detailed description for this queue.
+    string description = 1;
+
+    // The renderable name of the queue
+    string name = 2;
+
+    // The ID of the queue the user should put a MatchmakingQueuePutRequest into.
+    string queueId = 3;
+
+    // The arguments required for the matchmaking request.
+    RequiresMessage requires = 4;
+
+    // A tooltip for this queue.
+    string tooltip = 5;
+}
+
+message MatchmakingQueuePutRequest {
+    // When set, specifies that the bot should play the provided deck.
+    string botDeckId = 1;
+
+    // When set, specifies the deck for this queue. Some queues do not accept deck IDs.
+    string deckId = 2;
+
+    // Indicates which queue this request is for.
+    string queueId = 3;
+}
+
+message MatchmakingQueuePutResponse {
+    MatchmakingQueuePutRequest retry = 1;
+    MatchmakingQueuePutResponseUnityConnection unityConnection = 2;
+}
+
+message MatchmakingQueuePutResponseUnityConnection {
+    ClientToServerMessage firstMessage = 1;
+
+    // The websocket URL to connect to.
+    string url = 2;
+}
+
+// Represents a list of queues.
+message MatchmakingQueuesResponse {
+    // The available queues.
+    repeated MatchmakingQueueItem queues = 1;
+}
+
+message PhysicalAttackEvent {
+    Entity attacker = 1;
+    int32 damageDealt = 2;
+    Entity defender = 3;
+}
+
+message PostInviteRequest {
+    InvitePostRequest request = 1;
+}
+
+message PostPasswordResetRequest {
+    string password1 = 1;
+    string password2 = 2;
+    string token = 3;
+}
+
+// Specifies a prefab (game object)
+message Prefab {
+    // The name of the prefab.
+    string named = 1;
+}
+
+// Description of a (possibly partially complete) match. Useful for viewing said match in retrospect.
+// Note: If there are `n` elements in `gameStates` then there should be `n-1` elements in `deltas`.
+message Replay {
+    repeated ReplayDeltas deltas = 1;
+    repeated ReplayGameStates gameStates = 2;
+}
+
+// The forward and backward deltas (change sets) required (along with player `GameState`s) to transition the client battlefield.
+message ReplayDeltas {
+    // Backward delta.
+    EntityChangeSet backward = 1;
+
+    // Forward delta.
+    EntityChangeSet forward = 2;
+}
+
+// A pair of game states. Used to capture a game from each player's point of view (useful for example in replays).
+message ReplayGameStates {
+    GameState first = 1;
+    GameState second = 2;
+}
+
+// An envelope for messages from the server during gameplay.
+message ServerToClientMessage {
+    GameActions actions = 1;
+    EntityChangeSet changes = 2;
+    Emote emote = 3;
+    GameEvent event = 4;
+    GameOver gameOver = 5;
+    GameState gameState = 6;
+
+    // An optional ID used to disambiguate multiple client replies. Include this ID in the repliesTo field of your
+    // ClientToServerMessage if this field is not null.
+    string id = 7;
+
+    // True iff this message is a part of a replay.
+    bool isReplayMessage = 8;
+
+    // The ID of the player that corresponds to the local player (the recipient).
+    int32 localPlayerId = 9;
+    MessageType messageType = 10;
+
+    // Used for a mulligan request. An array of entities representing the cards you may mulligan.
+    repeated Entity startingCards = 11;
+    Timers timers = 12;
+}
+
+// A piece of data that assists in OpenTracing from the client.
+message SpanContext {
+    // Binary carried opentracing span context
+    string data = 1;
+}
+
+// A spell action describes a possible action the player can take. The list of SpellAction objects in the ServerToClientMessage is exhaustive and represents every possible action.
+message SpellAction {
+    // The action index corresponding to this action.
+    // 
+    // If targetKeyToActions is length zero or null, the action is valid and set, corresponding to an action that
+    // does not take a user-specified target. This includes all DISCOVER actions, ENDTURN, but *never* a summon,
+    // even if no minions are on the board.
+    int32 action = 1;
+    ActionType actionType = 2;
+
+    // When set, represents a choose one action with entities set to render.
+    // Those entities' id property corresponds to the choices's sourceId property. The parent/root action's sourceId corresponds to the actual entity that reveals the choices.
+    repeated SpellAction choices = 3;
+
+    // A user-readable description of this action. This is typically not rendered in the client except in logs.
+    string description = 4;
+    Entity entity = 5;
+
+    // The ID of the entity (minion or card) that is the source of the action.
+    // The client is guaranteed to have this entity in its entities array.
+    // For a SpellAction whose actionType is DISCOVER, the source is the entity in the acting player's discover zone. In the engine, the source is the entity that is prompting the discover (e.g. a minion if an opener is causing the discover, or the spell card being played).
+    // Sometimes ENDTURN will not be available, this is because some actions like DISCOVER and BATTLECRY cannot be interrupted.
+    // Running out of time will result in ENDTURN being chosen or a random DISCOVER or BATTLECRY action. This will occur on the server, not the client.
+    int32 sourceId = 6;
+
+    // An array of entity ID-action pairs that let you convert a valid target to an action index to respond with.
+    // Defined if this spell is targetable.
+    // 
+    // This is null or length zero if the target does not have targeted actions. Use the action property instead for
+    // that situation.
+    // 
+    // A SpellAction with actionType SUMMON will have a targetKeyToActions entry with a target of -1 corresponding to
+    // the *last* (rightmost) minion position to summon, while all other targets correspond to minions on the board.
+    repeated TargetActionPair targetKeyToActions = 7;
+}
+
+// A server-side exception with content renderable to the client.
+message SpellsourceException {
+    // A user-renderable message explaining the source of the error.
+    string message = 1;
+}
+
+// Specifies a sprite or image
+message Sprite {
+    enum SpritePivot {
+        SPRITE_PIVOT_BOTTOM = 0;
+        SPRITE_PIVOT_DIMETRIC_2_X1_FLOOR = 1;
+        SPRITE_PIVOT_CENTER = 2;
+        SPRITE_PIVOT_FLYING = 3;
+    }
+
+    // The sprite name in the client.
+    string named = 1;
+
+    // The sprite's pivor point.
+    // 
+    //  - BOTTOM: The center bottom of the sprite (i.e. 0.5, 1.0)
+    //  - DIMETRIC_2X1_FLOOR: Calculates the pivot point by ascending one pixel from the bottom for every four pixels
+    //    of width, as though the pivot point is the middle of the rectangle formed at the bottom of the sprite.
+    //  - CENTER: The center middle of the sprite (i.e. 0.5, 0.5)
+    //  - FLYING: Beyond the bottom of the sprite (i.e. 0.5, 2.0)
+    SpritePivot pivot = 2;
+}
+
+// A pair combining a target (entity ID) and the correponding action for that target.
+message TargetActionPair {
+    int32 action = 1;
+
+    // The corresponding index on the friendly side of the battlefield for a summon action.
+    // The minion will be summoned to the left of this index.
+    int32 friendlyBattlefieldIndex = 2;
+
+    // The corresponding target for this action.
+    // When -1, this indicates there is no target for this particular pair. This is relevant for summon actions which would ordinarily have a null value. A -1 here indicates the rightmost position on the battlefield.
+    int32 target = 3;
+}
+
+// Information about timers. This helps the client render the countdown clock.
+message Timers {
+    // The number of milliseconds remaining before the server will end the mulligan or turn.
+    // When null or less than zero, no timer is set. This property will be valid with respect to the
+    // last timestamped message from the server. Since typically emotes and touches are not timestamped,
+    // while other game state messages are, this property will be updated with actions and data. It is
+    // the responsibility of the client to lerp the millis-remaining values with the actual animated
+    // timer to prevent choppy animation.
+    int64 millisRemaining = 1;
+}
+
+// Provides an explanation for an effect or keyword that will appear beside the card.
+// 
+// Only delivered in the Entities from the CardRecords.
+message Tooltip {
+    // When set, this tooltip will only show if cards that have the same class as the card this tooltip appears on
+    // has the specified keyword appearing in its description. Typically used on the class card to provide tooltips
+    // for its entire class.
+    repeated string keywords = 1;
+
+    // The text that should appear on the tooltip.
+    string text = 2;
+}
+
+message UnfriendResponse {
+    Friend deletedFriend = 1;
+}
+
+message ValidationReport {
+    repeated string errors = 1;
+    bool valid = 2;
+}
+
+service HiddenSwitchSpellsourceAPIService {
+    rpc Dequeue(Envelope.MethodMessage.DequeueMessage) returns (DefaultMethodResponse) {}
+    rpc PutCard(Envelope.MethodMessage.PutCardMessage) returns (Envelope.ResultMessage.PutCardMessage) {}
+    rpc SendMessage(Envelope.MethodMessage.SendMessageMessage) returns (Envelope.ResultMessage.SendMessageMessage) {}
+    rpc DeleteCard(Envelope.MethodMessage.DeleteCardMessage) returns (Envelope.RemovedMessage) {}
+    rpc Enqueue(MatchmakingQueuePutRequest) returns (stream MatchmakingQueuePutResponse) {}
+    rpc SubscribeFriends(google.protobuf.Empty) returns (stream Friend) {}
+    rpc SubscribeInvites(google.protobuf.Empty) returns (stream Invite) {}
+    rpc SubscribeEditableCards(google.protobuf.Empty) returns (stream EditableCard) {}
+    rpc SubscribeMatch(google.protobuf.Empty) returns (stream Match) {}
+    rpc SubscribeGame(stream ClientToServerMessage) returns (stream ServerToClientMessage) {}
+
+    // Accepts the invite. If this is an invite to friend the user, this method will perform the friending path for
+    // you. If this is an invite to play a match and a matchmaking queue put is specified (with the deck ID), this
+    // method will enter you into the special invite matchmaking queue.
+    rpc AcceptInvite(AcceptInviteRequest) returns (AcceptInviteResponse) {
+        option (google.api.http) = {
+            post: "/api/v3/invites/{inviteId}"
+            body: "request"
+        };
+    }
+
+    // Changes your password. Does not log you out after the password is changed.
+    rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {
+        option (google.api.http) = {
+            post: "/api/v3/accounts-password"
+            body: "request"
+        };
+    }
+
+    // Create an account with Spellsource.
+    rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse) {
+        option (google.api.http) = {
+            put: "/api/v3/accounts"
+            body: "request"
+        };
+    }
+
+    // Deletes the specified deck by ID.
+    rpc DecksDelete(DecksDeleteRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            delete: "/api/v3/decks/{deckId}"
+        };
+    }
+
+    // Gets a deck. Only viewable for the owner of the deck or players in the alliance.
+    rpc DecksGet(DecksGetRequest) returns (DecksGetResponse) {
+        option (google.api.http) = {
+            get: "/api/v3/decks/{deckId}"
+        };
+    }
+
+    // Gets all the user's decks.
+    rpc DecksGetAll(google.protobuf.Empty) returns (DecksGetAllResponse) {
+        option (google.api.http) = {
+            get: "/api/v3/decks"
+        };
+    }
+
+    // Creates a new deck with optionally specified inventory IDs, a name and a hero class.
+    rpc DecksPut(DecksPutRequest) returns (DecksPutResponse) {
+        option (google.api.http) = {
+            put: "/api/v3/decks"
+            body: "request"
+        };
+    }
+
+    // Updates the deck by adding or removing cards, changing the hero class, or renaming the deck.
+    // 
+    // Also gives players the ability to set special gameplay attributes (like the Signature) for the deck.
+    rpc DecksUpdate(DecksUpdateRequest) returns (DecksGetResponse) {
+        option (google.api.http) = {
+            post: "/api/v3/decks/{deckId}"
+            body: "updateCommand"
+        };
+    }
+
+    // When this user is the sender, cancels the invite. When this user is the recipient, rejects the specified invite.
+    rpc DeleteInvite(DeleteInviteRequest) returns (InviteResponse) {
+        option (google.api.http) = {
+            delete: "/api/v3/invites/{inviteId}"
+        };
+    }
+
+    // Make a selection for the given draft index.
+    rpc DraftsChooseCard(DraftsChooseCardRequest) returns (DraftState) {
+        option (google.api.http) = {
+            put: "/api/v3/drafts/cards"
+            body: "request"
+        };
+    }
+
+    // Choose a hero from your hero selection.
+    rpc DraftsChooseHero(DraftsChooseHeroRequest) returns (DraftState) {
+        option (google.api.http) = {
+            put: "/api/v3/drafts/hero"
+            body: "request"
+        };
+    }
+
+    // Gets your latest state of the draft.
+    rpc DraftsGet(google.protobuf.Empty) returns (DraftState) {
+        option (google.api.http) = {
+            get: "/api/v3/drafts"
+        };
+    }
+
+    // Starts a draft, or make a change to your draft, like retiring early.
+    rpc DraftsPost(DraftsPostRequest) returns (DraftState) {
+        option (google.api.http) = {
+            post: "/api/v3/drafts"
+            body: "request"
+        };
+    }
+
+    // Removes the friend relationship between two users.
+    rpc FriendDelete(FriendDeleteRequest) returns (UnfriendResponse) {
+        option (google.api.http) = {
+            delete: "/api/v3/friends/{friendId}"
+        };
+    }
+
+    // Adds a specified user to your friend list.
+    rpc FriendPut(FriendPutRequest) returns (FriendPutResponse) {
+        option (google.api.http) = {
+            put: "/api/v3/friends"
+            body: "request"
+        };
+    }
+
+    // Get a specific account. Contains more information if the userId matches the requesting user.
+    rpc GetAccount(GetAccountRequest) returns (GetAccountsResponse) {
+        option (google.api.http) = {
+            get: "/api/v3/accounts/{targetUserId}"
+        };
+    }
+
+    // Get a list of accounts including user profile information.
+    rpc GetAccounts(GetAccountsRequest) returns (GetAccountsResponse) {
+        option (google.api.http) = {
+            get: "/api/v3/accounts"
+            body: "request"
+        };
+    }
+
+    // Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
+    rpc GetCards(GetCardsRequest) returns (GetCardsResponse) {
+        option (google.api.http) = {
+            get: "/api/v3/cards"
+        };
+    }
+
+    // Retrieves a record of a game this player played. Games against bots retrieve a complete game record, while games
+    // against other players only receive this player's point of view.
+    rpc GetGameRecord(GetGameRecordRequest) returns (GetGameRecordResponse) {
+        option (google.api.http) = {
+            get: "/api/v3/games/{gameId}"
+        };
+    }
+
+    // Retrieves a list of game IDs corresponding to all the games this player played.
+    rpc GetGameRecordIds(google.protobuf.Empty) returns (GetGameRecordIdsResponse) {
+        option (google.api.http) = {
+            get: "/api/v3/games"
+        };
+    }
+
+    // Retrieves information about a specific invite, as long as this user is either the sender or recipient.
+    rpc GetInvite(GetInviteRequest) returns (InviteResponse) {
+        option (google.api.http) = {
+            get: "/api/v3/invites/{inviteId}"
+        };
+    }
+
+    // Retrieve all invites where this user is either the sender or recipient.
+    rpc GetInvites(google.protobuf.Empty) returns (InviteGetResponse) {
+        option (google.api.http) = {
+            get: "/api/v3/invites"
+        };
+    }
+
+    // Login with a username and password, receiving an authentication token to use for future sessions.
+    rpc Login(LoginRequest) returns (LoginResponse) {
+        option (google.api.http) = {
+            post: "/api/v3/accounts"
+            body: "request"
+        };
+    }
+
+    // Removes your client from the matchmaking queue, regardless of which queue it is in.
+    rpc MatchmakingDelete(google.protobuf.Empty) returns (MatchCancelResponse) {
+        option (google.api.http) = {
+            delete: "/api/v3/matchmaking"
+        };
+    }
+
+    // Gets a list of queues available for matchmaking.
+    rpc MatchmakingGet(google.protobuf.Empty) returns (MatchmakingQueuesResponse) {
+        option (google.api.http) = {
+            get: "/api/v3/matchmaking"
+        };
+    }
+
+    // Send an invite.
+    rpc PostInvite(PostInviteRequest) returns (InviteResponse) {
+        option (google.api.http) = {
+            post: "/api/v3/invites"
+            body: "request"
+        };
+    }
+
+    // Provided a valid reset token, resets a user's password.
+    rpc PostPasswordReset(PostPasswordResetRequest) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            post: "/api/v3/reset/passwords/with-token"
+        };
+    }
+}

@@ -20,12 +20,14 @@ import org.testcontainers.containers.Network;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.lifecycle.Startables;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 @ExtendWith({VertxExtension.class, VertxWebClientExtension.class})
 @Testcontainers
 public class FrameworkTestBase {
 
+	protected static AtomicBoolean started = new AtomicBoolean(false);
 	protected static final String CLIENT_SECRET = "clientsecret";
 	protected static final String CLIENT_ID = "spellsource";
 	protected static RedisContainer redis = new RedisContainer()
@@ -55,42 +57,48 @@ public class FrameworkTestBase {
 
 	@BeforeAll
 	protected static void startContainers(Vertx vertx, VertxTestContext testContext) throws InterruptedException {
-		Environment
-				.executeBlocking(() -> Startables.deepStart(Stream.of(redis, postgres, keycloak)).join())
-				.compose(ignored -> Environment.migrate("jdbc:postgresql://" + postgres.getHostAndPort() + "/spellsource", "admin", "password"))
-				.compose(count -> {
-					if (count < 4) {
-						return Future.failedFuture(new RuntimeException(Integer.toString(count)));
-					}
-					return Future.succeededFuture(count);
-				})
+		var startup = Future.<Void>succeededFuture();
+
+		if (started.compareAndSet(false, true)) {
+			startup = Environment
+					.executeBlocking(() -> Startables.deepStart(Stream.of(redis, postgres, keycloak)).join())
+					.compose(ignored -> Environment.migrate("jdbc:postgresql://" + postgres.getHostAndPort() + "/spellsource", "admin", "password"))
+					.compose(count -> {
+						if (count < 4) {
+							return Future.failedFuture(new RuntimeException(Integer.toString(count)));
+						}
+						return Future.succeededFuture(count);
+					})
+					.compose(ignored -> {
+						// inject the postgres connection parameters
+						System.getProperties().putIfAbsent("pg.port", Integer.toString(postgres.getMappedPort(5432)));
+						System.getProperties().putIfAbsent("pg.host", postgres.getHost());
+						System.getProperties().putIfAbsent("pg.database", "spellsource");
+						System.getProperties().putIfAbsent("pg.user", "admin");
+						System.getProperties().putIfAbsent("pg.password", "password");
+						// inject the keycloak parameters
+						System.getProperties().putIfAbsent("keycloak.auth.url", keycloak.getAuthServerUrl());
+						System.getProperties().putIfAbsent("keycloak.admin.username", keycloak.getAdminUsername());
+						System.getProperties().putIfAbsent("keycloak.admin.password", keycloak.getAdminPassword());
+						System.getProperties().putIfAbsent("keycloak.client.id", CLIENT_ID);
+						System.getProperties().putIfAbsent("keycloak.client.secret", CLIENT_SECRET);
+						System.getProperties().putIfAbsent("keycloak.realm.display.name", "Spellsource");
+
+						return Future.succeededFuture();
+					})
+					.compose(ignored -> Environment.executeBlocking(() -> Startables.deepStart(Stream.of(realtime)).join()))
+					.compose(ignored -> {
+						// inject the realtime setup
+						System.getProperties().putIfAbsent("realtime.uri", realtime.getRealtimeUrl());
+						return Future.succeededFuture();
+					});
+		}
+
+		startup
 				.compose(ignored -> {
-					// inject the postgres connection parameters
-					System.getProperties().putIfAbsent("pg.port", Integer.toString(postgres.getMappedPort(5432)));
-					System.getProperties().putIfAbsent("pg.host", postgres.getHost());
-					System.getProperties().putIfAbsent("pg.database", "spellsource");
-					System.getProperties().putIfAbsent("pg.user", "admin");
-					System.getProperties().putIfAbsent("pg.password", "password");
-					return Future.succeededFuture();
-				})
-				.compose(ignored -> Environment.executeBlocking(() -> Startables.deepStart(Stream.of(realtime)).join()))
-				.compose(ignored -> {
-					// inject the realtime setup
-					System.getProperties().putIfAbsent("realtime.uri", realtime.getRealtimeUrl());
-					return Future.succeededFuture();
-				})
-				.compose(ignored -> {
-					System.getProperties().putIfAbsent("keycloak.auth.url", keycloak.getAuthServerUrl());
 					var promise = Promise.<Void>promise();
 					vertx.runOnContext(v -> {
-						Accounts.getOrCreate(
-								keycloak.getAuthServerUrl(),
-								keycloak.getAdminUsername(),
-								keycloak.getAdminPassword(),
-								CLIENT_SECRET,
-								CLIENT_ID,
-								"hiddenswitch",
-								"Spellsource")
+						Accounts.createRealmIfAbsent()
 								.map((Void) null)
 								.onComplete(promise);
 					});

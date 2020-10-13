@@ -6,6 +6,7 @@ import co.paralleluniverse.strands.SuspendableCallable;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.hiddenswitch.framework.impl.WeakVertxMap;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
@@ -25,20 +26,17 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 public class Environment {
 
 	private static AtomicReference<Configuration> configuration = new AtomicReference<>();
-	private static AtomicReference<PgPool> defaultPool = new AtomicReference<>();
-	private static LoadingCache<Vertx, PgPool> pools = CacheBuilder.newBuilder()
-			.weakKeys()
-			.maximumSize(100)
-			.build(new CacheLoader<>() {
-				@Override
-				public PgPool load(Vertx vertx) {
-					var connectionOptions = connectOptions();
-					var poolOptions = new PoolOptions()
-							.setMaxSize(Runtime.getRuntime().availableProcessors() * 2);
+	private static final WeakVertxMap<PgPool> pools = new WeakVertxMap<>(Environment::poolConstructor);
 
-					return PgPool.pool(vertx, connectionOptions, poolOptions);
-				}
-			});
+	private static PgPool poolConstructor(Vertx vertx) {
+		var connectionOptions = connectOptions();
+		var poolOptions = new PoolOptions()
+				.setMaxSize(Runtime.getRuntime().availableProcessors() * 2);
+		if (vertx == null) {
+			return PgPool.pool(connectionOptions, poolOptions);
+		}
+		return PgPool.pool(vertx, connectionOptions, poolOptions);
+	}
 
 	public static PgConnectOptions connectOptions() {
 		var options = new PgConnectOptions();
@@ -62,26 +60,7 @@ public class Environment {
 	}
 
 	public static PgPool pool() {
-		if (Vertx.currentContext() == null) {
-			return defaultPool.updateAndGet(existing -> {
-				if (existing != null) {
-					return existing;
-				}
-
-				// Loads connection options from environment
-				var connectionOptions = connectOptions();
-				var poolOptions = new PoolOptions()
-						.setMaxSize(Runtime.getRuntime().availableProcessors() * 2);
-
-				return PgPool.pool(connectionOptions, poolOptions);
-			});
-		} else {
-			try {
-				return pools.get(Vertx.currentContext().owner());
-			} catch (ExecutionException executionException) {
-				throw new RuntimeException(executionException);
-			}
-		}
+		return pools.get();
 	}
 
 	public static Configuration jooq() {

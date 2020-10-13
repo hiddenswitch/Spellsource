@@ -41,7 +41,7 @@ configurations.runtime {
 }
 
 dependencies {
-    implementation platform('org.testcontainers:testcontainers-bom:1.14.3')
+    implementation platform('org.testcontainers:testcontainers-bom:1.15.+')
     implementation group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
 

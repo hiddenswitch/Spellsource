@@ -30,9 +30,8 @@ apply plugin: 'com.google.protobuf'
 apply from: '../gradle/instrument.gradle'
 
 import com.bmuschko.gradle.docker.domain.LivenessProbe
-import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer
-import com.bmuschko.gradle.docker.tasks.container.DockerStartContainer
-import com.bmuschko.gradle.docker.tasks.container.DockerStopContainer
+import com.bmuschko.gradle.docker.tasks.container.*
+import com.bmuschko.gradle.docker.tasks.image.*
 import com.bmuschko.gradle.docker.tasks.container.extras.DockerLivenessContainer
 import org.jooq.codegen.GenerationTool
 import org.jooq.meta.jaxb.*
@@ -49,7 +48,7 @@ dependencies {
     api project(':vertx-sync')
     api 'io.vertx:vertx-rx-java2:3.9.2'
 
-    implementation ("com.avast.grpc.jwt:grpc-java-jwt:0.4.0") {
+    implementation("com.avast.grpc.jwt:grpc-java-jwt:0.4.0") {
         exclude group: 'com.google.code.gson'
         exclude group: 'io.grpc'
         exclude group: 'org.keycloak'
@@ -149,6 +148,7 @@ task testDll(type: Exec, group: 'verification') {
 task installDll(type: Copy) {
     dependsOn dll
     from("$project.buildDir/dlls") {
+        exclude '**/*.*'
         include 'Framework.dll'
         include 'Framework.pdb'
     }
@@ -156,12 +156,32 @@ task installDll(type: Copy) {
     into(project(':unityclient').projectDir.absolutePath + '/src/unity/Assets/Client')
 }
 
+task pullPostgresImage(type: DockerPullImage) {
+    image.set('supabase/postgres:0.13.0')
+}
+
+task pullKeycloakImage(type: DockerPullImage) {
+    image.set('jboss/keycloak:11.0.2')
+}
+
+task stopExistingPostgresContainer(type: DockerStopContainer) {
+    containerId.set('gradleSupabasePostgres')
+    onError({})
+}
+
+task removeExistingPostgresContainer(type: DockerRemoveContainer) {
+    dependsOn stopExistingPostgresContainer
+    containerId.set('gradleSupabasePostgres')
+    onError({});
+}
+
 task createPostgresContainer(type: DockerCreateContainer) {
-    targetImageId 'supabase/postgres'
-    containerName = 'gradleSupabasePostgres'
-    hostConfig.portBindings = ['5432:5432']
+    dependsOn += [pullPostgresImage, removeExistingPostgresContainer]
+    targetImageId 'supabase/postgres:0.13.0'
+    containerName.set('gradleSupabasePostgres')
+    hostConfig.portBindings.set(['5432:5432'])
     envVars.putAll(['POSTGRES_DB': localDatabaseName, 'POSTGRES_USER': localUsername, 'POSTGRES_PASSWORD': localPassword])
-    hostConfig.autoRemove = true
+    hostConfig.autoRemove.set(true)
 }
 
 task startPostgresContainer(type: DockerStartContainer) {
@@ -174,17 +194,18 @@ task stopPostgresContainer(type: DockerStopContainer) {
 }
 
 task createKeycloakContainer(type: DockerCreateContainer) {
-    dependsOn createPostgresContainer
+    dependsOn += [createPostgresContainer, pullKeycloakImage]
     targetImageId 'jboss/keycloak:11.0.2'
     envVars.putAll([
             'DB_VENDOR'  : 'postgres',
             'DB_ADDR'    : 'database:5432',
             'DB_USER'    : 'admin',
             'DB_PASSWORD': 'password',
-            'DB_DATABASE': 'spellsource'
+            'DB_DATABASE': 'spellsource',
+            'DB_SCHEMA'  : 'keycloak'
     ])
-    hostConfig.autoRemove = true
-    hostConfig.links = ['gradleSupabasePostgres:database']
+    hostConfig.autoRemove.set(true)
+    hostConfig.links.set(['gradleSupabasePostgres:database'])
 }
 
 task startKeycloakContainer(type: DockerStartContainer) {
@@ -206,7 +227,9 @@ task jooqGenerate() {
     // Do all migrations first
     dependsOn flywayMigrate
     finalizedBy = [stopKeycloakContainer, stopPostgresContainer]
-    def outputDir = "$projectDir/src/main/java"
+    def outputDir = "$project.projectDir/src/main/java"
+
+    inputs.dir("$project.projectDir/src/main/resources/db/migration")
     outputs.files(outputDir + '/com/hiddenswitch/framework/schema/**/*.java')
 
     def configuration = new Configuration()
@@ -220,7 +243,8 @@ task jooqGenerate() {
                     .withName('io.github.jklingsporn.vertx.jooq.generate.classic.ClassicReactiveVertxGenerator')
                     .withDatabase(new Database()
                             .withName('org.jooq.meta.postgres.PostgresDatabase')
-                            .withInputSchema('public')
+                            .withSchemata(new SchemaMappingType().withInputSchema("keycloak").withOutputSchema('keycloak'),
+                                    new SchemaMappingType().withInputSchema("spellsource").withOutputSchema('spellsource'))
                             .withIncludeTables(true)
                             .withIncludeRoutines(true)
                             .withIncludePackages(false)
@@ -243,6 +267,16 @@ task jooqGenerate() {
 
     doLast() {
         GenerationTool.generate(configuration)
+        exec {
+            // dump the generated ddl to a file
+            workingDir project.projectDir
+            // this is using docker-wrapped dotnet
+            environment('PGPASSWORD', localPassword)
+            environment('PGDATABASE', localDatabaseName)
+            environment('PGUSER', localUsername)
+            environment('DOCKER_OPTS', "--link gradleSupabasePostgres:database")
+            commandLine "$project.projectDir/bin/pg_dump", '-h', "database", '-s', '-f', '/git/framework/src/main/resources/db/ddl.sql'
+        }
     }
 }
 
@@ -250,12 +284,12 @@ flyway {
     url = jdbcUrl
     user = localUsername
     password = localPassword
-    schemas = ['hiddenswitch']
-    locations = ['classpath:db/migration']
+    schemas = ['hiddenswitch', 'spellsource']
+    locations = ['filesystem:src/main/resources/db/migration']
 }
 
 // Make sure keycloak has done its migration first
-flywayMigrate.dependsOn += [classes, startAndWaitOnHealthyKeycloakContainer]
+flywayMigrate.dependsOn += [startAndWaitOnHealthyKeycloakContainer]
 
 protobuf {
     protoc {

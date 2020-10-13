@@ -2236,25 +2236,6 @@ responses:
     schema:
       $ref: '#/definitions/SpellsourceException'
 paths:
-  /:
-    get:
-      description: |
-        Returns an empty body if the server is available.
-      operationId: healthCheck
-      responses:
-        "200":
-          description: |
-            The server is healthy.
-          schema:
-            type: 'string'
-        "401":
-          description: |
-            The server did not successfully connect to a cluster yet.
-          schema:
-            type: 'string'
-        default:
-          $ref: '#/responses/InternalServerError'
-
   /accounts/{targetUserId}:
     get:
       description: |
@@ -2842,17 +2823,6 @@ paths:
         "403":
           description: |
             You are not permitted to view this game
-  /version:
-    get:
-      description: |
-        Retrieves the semver server version
-      operationId: getVersion
-      responses:
-        "200":
-          description: |
-            The semver version
-          schema:
-            type: 'string'
   /reset/passwords/with-token:
     post:
       description: >

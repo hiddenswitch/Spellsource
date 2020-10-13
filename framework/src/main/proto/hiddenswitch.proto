@@ -1,9 +1,9 @@
 syntax = "proto3";
-import "google/rpc/error_details.proto";
 
 option java_multiple_files = true;
 option java_package = "com.hiddenswitch.framework.rpc";
 option java_outer_classname = "Proto";
+option csharp_namespace = "HiddenSwitch.Proto";
 package hiddenswitch;
 
 service Unauthenticated {

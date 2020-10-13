@@ -2,9 +2,10 @@ package com.hiddenswitch.framework;
 
 import com.avast.grpc.jwt.server.JwtServerInterceptor;
 import com.google.common.collect.ImmutableMap;
+import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.rpc.*;
-import com.hiddenswitch.framework.schema.tables.daos.UserEntityDao;
-import com.hiddenswitch.framework.schema.tables.pojos.UserEntity;
+import com.hiddenswitch.framework.schema.public_.tables.daos.UserEntityDao;
+import com.hiddenswitch.framework.schema.public_.tables.pojos.UserEntity;
 import io.grpc.BindableService;
 import io.grpc.ServerInterceptor;
 import io.grpc.ServerInterceptors;
@@ -24,8 +25,10 @@ import org.keycloak.common.enums.SslRequired;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
 
+import javax.ws.rs.NotFoundException;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -36,9 +39,9 @@ public class Accounts {
 	protected static final String KEYCLOAK_LOGIN_PATH = "/realms/hiddenswitch/protocol/openid-connect/token";
 	protected static final String CLIENT_SECRET = "clientsecret";
 	protected static final String CLIENT_ID = "spellsource";
-	private static final AtomicReference<Keycloak> keycloakReference = new AtomicReference<>();
+	private static final WeakVertxMap<Keycloak> keycloakReference = new WeakVertxMap<>(Accounts::keycloakConstructor);
 	private static final AtomicReference<JwtServerInterceptor<AccessToken>> interceptor = new AtomicReference<>();
-	private static String realmId;
+	private static final String realmId = "hiddenswitch";
 
 	/**
 	 * Does not make blocking calls, so the interceptor can be synchronous on the event loop!
@@ -201,54 +204,42 @@ public class Accounts {
 				});
 	}
 
-	public static Future<RealmResource> getOrCreate(String authServerUrl,
-	                                                String adminUsername,
-	                                                String adminPassword,
-	                                                String clientSecret,
-	                                                String clientId,
-	                                                String realmId,
-	                                                String realmDisplayName) {
+	private static Keycloak keycloakConstructor(Vertx vertx) {
+		var client = (ResteasyClientBuilder) ResteasyClientBuilder.newBuilder();
+		if (vertx != null) {
+			var engine = new VertxClientHttpEngine(vertx);
+			client.httpEngine(engine);
+		}
+		var properties = System.getProperties();
+		return KeycloakBuilder.builder()
+				.serverUrl(properties.getProperty("keycloak.auth.url"))
+				.realm("master")
+				.username(properties.getProperty("keycloak.admin.username", "admin"))
+				.password(properties.getProperty("keycloak.admin.password", "admin"))
+				.clientId("admin-cli")
+				.grantType("password")
+				.resteasyClient(client.build())
+				.build();
+	}
+
+	public static Future<RealmResource> createRealmIfAbsent() {
 		return Environment.executeBlocking(() -> {
-			var context = Vertx.currentContext();
-			var keycloak = keycloakReference.updateAndGet(existing -> {
-				if (existing != null) {
-					return existing;
-				}
-				var client = (ResteasyClientBuilder) ResteasyClientBuilder.newBuilder();
-
-
-				if (context != null) {
-					var engine = new VertxClientHttpEngine(context.owner());
-					client.httpEngine(engine);
-				}
-
-				return KeycloakBuilder.builder()
-						.serverUrl(authServerUrl)
-						.realm("master")
-						.username(adminUsername)
-						.password(adminPassword)
-						.clientId("admin-cli")
-						.grantType("password")
-						.resteasyClient(client.build())
-						.build();
-			});
-
-			if (Accounts.realmId != null && !Objects.equals(Accounts.realmId, realmId)) {
-				// TODO: Warn that realm was already set.
+			var keycloak = keycloakReference.get();
+			var existing = Optional.<RealmRepresentation>empty();
+			try {
+				existing = keycloak.realms().findAll().stream().filter(realm -> realm.getRealm().equals(Accounts.realmId)).findFirst();
+			} catch (NotFoundException ignored) {
 			}
-
-			Accounts.realmId = realmId;
-
-			var existing = keycloak.realms().findAll().stream().filter(realm -> realm.getId().equals(Accounts.realmId)).findFirst();
 
 			if (existing.isPresent()) {
 				return keycloak.realm(Accounts.realmId);
 			}
 
+			var properties = System.getProperties();
 			// Create a default
 			var realmRepresentation = new RealmRepresentation();
 			realmRepresentation.setRealm(Accounts.realmId);
-			realmRepresentation.setDisplayName(realmDisplayName);
+			realmRepresentation.setDisplayName(properties.getProperty("keycloak.realm.display.name", "Spellsource"));
 			realmRepresentation.setSslRequired(SslRequired.EXTERNAL.toString());
 			realmRepresentation.setEnabled(true);
 
@@ -258,14 +249,14 @@ public class Accounts {
 			var flows = realm.flows().getFlows()
 					.stream().collect(toMap(AuthenticationFlowRepresentation::getAlias, AuthenticationFlowRepresentation::getId));
 			var client = new ClientRepresentation();
-			client.setClientId(clientId);
+			client.setClientId(properties.getProperty("keycloak.client.id", CLIENT_ID));
 			client.setDirectAccessGrantsEnabled(true);
 
 			// Should now be confidential
 			client.setClientAuthenticatorType("client-secret");
 			client.setServiceAccountsEnabled(false);
 			client.setStandardFlowEnabled(true);
-			client.setSecret(clientSecret);
+			client.setSecret(properties.getProperty("keycloak.client.secret", CLIENT_SECRET));
 			client.setRedirectUris(Collections.singletonList("/oauth2callback"));
 			client.setAuthenticationFlowBindingOverrides(ImmutableMap.of(
 					"direct_grant", flows.get("direct grant"),
