@@ -7,7 +7,7 @@ public class PostgresSupabaseContainer extends GenericContainer<PostgresSupabase
 	public static final int POSTGRESQL_PORT = 5432;
 
 	public PostgresSupabaseContainer(String username, String password, String databaseName) {
-		super("supabase/postgres");
+		super("supabase/postgres:0.13.0");
 		withExposedPorts(POSTGRESQL_PORT);
 		withEnv("POSTGRES_DB", databaseName);
 		withEnv("POSTGRES_USER", username);
