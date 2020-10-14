@@ -53,6 +53,7 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 
 		withEnv("KEYCLOAK_USER", adminUsername);
 		withEnv("KEYCLOAK_PASSWORD", adminPassword);
+		withEnv("DB_SCHEMA", "keycloak");
 
 		if (importFile != null) {
 			String importFileInContainer = "/tmp/" + importFile;
@@ -99,7 +100,6 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 		withEnv("DB_USER", username);
 		withEnv("DB_PASSWORD", password);
 		withEnv("DB_DATABASE", databaseName);
-		withEnv("DB_SCHEMA", "keycloak");
 		return self();
 	}
 
