@@ -3,8 +3,8 @@ create schema if not exists spellsource;
 create table spellsource.decks
 (
   id bigint generated always as identity primary key,
-  created_by character varying references public.user_entity (id) not null,
-  last_edited_by character varying references public.user_entity (id) not null,
+  created_by character varying references keycloak.user_entity (id) not null,
+  last_edited_by character varying references keycloak.user_entity (id) not null,
   name character varying,
   hero_class character varying,
   trashed boolean not null default false

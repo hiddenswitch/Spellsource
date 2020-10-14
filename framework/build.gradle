@@ -42,9 +42,11 @@ def localPassword = 'password'
 def localDatabaseName = 'spellsource'
 def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
 
+def createPostgresImage = tasks.getByPath(':testcontainers:createPostgresImage')
 
 dependencies {
     api project(':core')
+    api project(':game')
     api project(':vertx-sync')
     api 'io.vertx:vertx-rx-java2:3.9.2'
 
@@ -104,11 +106,6 @@ dependencies {
     runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
 }
 
-test {
-    useJUnitPlatform()
-    enableAssertions = false
-}
-
 clean {
     delete csharpRootDir + '/Framework/bin'
     delete csharpRootDir + '/Framework/obj'
@@ -156,9 +153,7 @@ task installDll(type: Copy) {
     into(project(':unityclient').projectDir.absolutePath + '/src/unity/Assets/Client')
 }
 
-task pullPostgresImage(type: DockerPullImage) {
-    image.set('supabase/postgres:0.13.0')
-}
+
 
 task pullKeycloakImage(type: DockerPullImage) {
     image.set('jboss/keycloak:11.0.2')
@@ -172,12 +167,12 @@ task stopExistingPostgresContainer(type: DockerStopContainer) {
 task removeExistingPostgresContainer(type: DockerRemoveContainer) {
     dependsOn stopExistingPostgresContainer
     containerId.set('gradleSupabasePostgres')
-    onError({});
+    onError({})
 }
 
 task createPostgresContainer(type: DockerCreateContainer) {
-    dependsOn += [pullPostgresImage, removeExistingPostgresContainer]
-    targetImageId 'supabase/postgres:0.13.0'
+    dependsOn += [createPostgresImage, removeExistingPostgresContainer]
+    targetImageId createPostgresImage.imageId
     containerName.set('gradleSupabasePostgres')
     hostConfig.portBindings.set(['5432:5432'])
     envVars.putAll(['POSTGRES_DB': localDatabaseName, 'POSTGRES_USER': localUsername, 'POSTGRES_PASSWORD': localPassword])
@@ -270,11 +265,12 @@ task jooqGenerate() {
         exec {
             // dump the generated ddl to a file
             workingDir project.projectDir
-            // this is using docker-wrapped dotnet
+            // this is using docker-wrapped pg_dump
             environment('PGPASSWORD', localPassword)
             environment('PGDATABASE', localDatabaseName)
             environment('PGUSER', localUsername)
-            environment('DOCKER_OPTS', "--link gradleSupabasePostgres:database")
+            def containerId = startPostgresContainer.containerId.get()
+            environment('DOCKER_OPTS', "--link " + containerId + ":database")
             commandLine "$project.projectDir/bin/pg_dump", '-h', "database", '-s', '-f', '/git/framework/src/main/resources/db/ddl.sql'
         }
     }
@@ -317,4 +313,10 @@ protobuf {
             }
         }
     }
+}
+
+test {
+    dependsOn += [createPostgresImage]
+    useJUnitPlatform()
+    enableAssertions = false
 }

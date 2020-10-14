@@ -1,11 +1,15 @@
 plugins {
     id 'java-library'
     id 'idea'
+    id 'com.bmuschko.docker-remote-api' version '6.6.1'
 }
 
 apply plugin: 'idea'
 apply plugin: 'maven'
 apply plugin: 'java-library'
+apply plugin: 'com.bmuschko.docker-remote-api'
+
+import com.bmuschko.gradle.docker.tasks.image.*
 
 repositories {
     jcenter()
@@ -15,7 +19,15 @@ dependencies {
     api "org.testcontainers:testcontainers"
 }
 
+task createPostgresImage(type: DockerBuildImage) {
+    inputDir.set(new File("$project.projectDir/src/docker/postgres"))
+    quiet.set(true)
+    images.set(["doctorpangloss/postgres:latest"])
+}
+
 compileJava {
+    // you won't really be able to use the postgres image unless you build it
+    dependsOn += [createPostgresImage]
     options.warnings = false
 }
 

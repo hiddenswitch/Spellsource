@@ -2,7 +2,7 @@ package com.hiddenswitch.framework;
 
 import com.avast.grpc.jwt.client.JwtCallCredentials;
 import com.hiddenswitch.framework.rpc.*;
-import com.hiddenswitch.framework.schema.public_.tables.pojos.UserEntity;
+import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
 import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.vertx.core.Future;
