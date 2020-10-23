@@ -14,6 +14,8 @@ import useComponentWillMount from '../hooks/use-component-will-mount'
 import useBlocklyData from '../hooks/use-blockly-data'
 import SpellsourceRenderer from '../lib/spellsource-renderer'
 import SpellsourceGenerator from "../lib/spellsource-generator";
+import SimpleReactBlockly from "./simple-react-blockly";
+import BlocklyToolbox from "../lib/blockly-toolbox";
 
 const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
   const data = useBlocklyData()
@@ -21,16 +23,19 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
   const index = useIndex()
 
   const mainWorkspace = () => {
-    return blocklyEditor.current.workspace.state.workspace
+    return blocklyEditor.current.workspace
   }
 
   // Run once before the workspace has been created
   useComponentWillMount(() => {
-    BlocklyMiscUtils.initBlocks(data)
-    BlocklyMiscUtils.initHeroClassColors(data)
-    BlocklyMiscUtils.initCardBlocks(data)
-    Blockly.blockRendering.register('spellsource', SpellsourceRenderer);
-    SpellsourceGenerator.generateJavaScript()
+    if (!Blockly.spellsourceInit) {
+      BlocklyMiscUtils.initBlocks(data)
+      BlocklyMiscUtils.initHeroClassColors(data)
+      BlocklyMiscUtils.initCardBlocks(data)
+      Blockly.blockRendering.register('spellsource', SpellsourceRenderer);
+      SpellsourceGenerator.generateJavaScript()
+      Blockly.spellsourceInit = true
+    }
   })
 
   // Run once after the workspace has been created
@@ -43,10 +48,12 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
         mainWorkspace().getTopBlocks(true)[0].setCommentText("This card was imported automatically as an example.")
       }, 100)
     }
+
     mainWorkspace().getTheme().setStartHats(true)
-    mainWorkspace().registerButtonCallback('cardsInfo', button => {
-      alert("For each card Starter in the workspace, a card block will appear in here that references it. That's how you can create interactions with your custom cards like summoning them or receiving them.")
-    })
+
+    BlocklyToolbox.initCallbacks(mainWorkspace())
+
+
   }, [])
 
   useEffect(() => {
@@ -58,23 +65,17 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
     BlocklyMiscUtils.switchRenderer(props.renderer, mainWorkspace())
   }, [props.renderer])
 
-  const getToolboxCategories = (onlyCategory = null) => {
-    return BlocklyMiscUtils.getToolboxCategories(data.editorToolbox.BlockCategoryList,
-      toolboxCategories, onlyCategory, results)
-  }
-
-  const [toolboxCategories, setToolboxCategories] = useState(getToolboxCategories())
-
-  const onWorkspaceChanged = (workspace) => {
-    const cardScript = WorkspaceUtils.workspaceToCardScript(workspace)
-    props.setCode(JSON.stringify(cardScript, null, 2))
+  const onWorkspaceChanged = () => {
+    const cardScript = WorkspaceUtils.workspaceToCardScript(mainWorkspace())
+    props.setJSON(JSON.stringify(cardScript, null, 2))
+    props.setJS(Blockly.JavaScript.workspaceToCode(mainWorkspace()))
     // Generate the blocks that correspond to the cards in the workspace
-    if (!workspace.isDragging()) {
-      let update = handleWorkspaceCards(workspace, cardScript)
+    if (!mainWorkspace().isDragging()) {
+      let update = handleWorkspaceCards(mainWorkspace(), cardScript)
       if (update) {
-        setToolboxCategories(getToolboxCategories())
+        mainWorkspace().updateToolbox(BlocklyToolbox.editorToolbox(results, mainWorkspace()))
       }
-      BlocklyMiscUtils.pluralStuff(workspace)
+      BlocklyMiscUtils.pluralStuff(mainWorkspace())
     }
   }
 
@@ -185,7 +186,7 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
         if (block.type === 'Starter_CLASS') {
           let type = 'WorkspaceHeroClass_' + block.id
           currentCards = currentCards.filter(value => value !== type)
-          if (!!Blockly.Blocks[type]) {
+          if (!Blockly.Blocks[type]) {
             anythingChanged = true
           }
           Blockly.Blocks[type] = createClass(card, type)
@@ -193,7 +194,7 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
 
         let blockType = 'WorkspaceCard_' + block.id
         currentCards = currentCards.filter(value => value !== blockType)
-        if (!!Blockly.Blocks[blockType]) {
+        if (!Blockly.Blocks[blockType]) {
           anythingChanged = true
         }
         Blockly.Blocks[blockType] = createCard(card, blockType)
@@ -210,7 +211,7 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
       aWorkspace.getAllBlocks(true).forEach(block => {
         if (block.type.startsWith('WorkspaceCard') || block.type.startsWith('WorkspaceHeroClass')) {
           let test = Blockly.Blocks
-          if (Blockly.Blocks.hasOwnProperty(block.type)) {
+          if (!!Blockly.Blocks[block.type]) {
             refreshBlock(block)
           } else {
             block.dispose(true)
@@ -281,9 +282,9 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
     if (query.length === 0) {
       setResults([])
     }
-    setToolboxCategories(getToolboxCategories('Search Results'))
+    mainWorkspace().updateToolbox(BlocklyToolbox.editorToolbox(results, mainWorkspace()))
     if (query.length > 0) {
-      mainWorkspace().getToolbox().selectFirstCategory()
+      mainWorkspace().getToolbox().selectItemByPosition(0)
       mainWorkspace().getToolbox().refreshSelection()
     } else {
       mainWorkspace().getToolbox().clearSelection()
@@ -310,30 +311,27 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
     )
   }
 
-  return (<span>
-    <ReactBlocklyComponent.BlocklyEditor
-      workspaceDidChange={onWorkspaceChanged}
-      wrapperDivClassName={styles.cardEditor}
-      toolboxCategories={toolboxCategories}
-      workspaceConfiguration={
-        {
-          disable: false,
-          zoom: {
-            controls: true,
-            minScale: .5,
-            maxScale: 2.0,
-            pinch: true
-          },
-          move: {
-            wheel: true
-          },
-          renderer: props.renderer || 'spellsource'
-        }
+  return <SimpleReactBlockly
+    workspaceDidChange={onWorkspaceChanged}
+    wrapperDivClassName={styles.cardEditor}
+    workspaceConfiguration={
+      {
+        disable: false,
+        zoom: {
+          controls: true,
+          minScale: .5,
+          maxScale: 2.0,
+          pinch: true
+        },
+        move: {
+          wheel: true
+        },
+        renderer: props.renderer || 'spellsource',
+        toolbox: BlocklyToolbox.editorToolbox(results)
       }
-      ref={blocklyEditor}
-    />
-   </span>
-  )
+    }
+    ref={blocklyEditor}
+  />
 })
 
 export default CardEditorWorkspace

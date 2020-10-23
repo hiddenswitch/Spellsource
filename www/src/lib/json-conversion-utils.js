@@ -800,12 +800,15 @@ export default class JsonConversionUtils {
     let bestMatch = this.getMatch(json, inputName, parentJson)
     let newBlock
     if (!bestMatch) {
+      /*
       try {
         this.generateDummyBlock(json, inputName, parentJson)
       } catch (e) {
         //generating this quality of life dummy block is never worth crashing about
         console.log('Tried to generate a dummy block for ' + json + ' but failed because of ' + e)
       }
+
+       */
       if (this.errorOnCustom) {
         throw Error("Couldn't generate without custom blocks")
       }

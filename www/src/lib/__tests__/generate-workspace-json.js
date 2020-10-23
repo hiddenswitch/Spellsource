@@ -2,12 +2,13 @@ import WorkspaceUtils from '../workspace-utils'
 import JsonConversionUtils from '../json-conversion-utils'
 import fs from 'fs'
 import path from 'path'
-import {Workspace} from 'blockly'
-import {beforeAll, describe, expect, test, afterAll} from '@jest/globals'
-import {jsonTransformFileNode} from '../json-transforms'
-import BlocklyMiscUtils from '../blockly-misc-utils'
-import {walk, walkSync} from '../walk'
 import java from 'java'
+import { Workspace } from 'blockly'
+import { beforeAll, describe, expect, test, afterAll } from '@jest/globals'
+import { jsonTransformFileNode } from '../json-transforms'
+import BlocklyMiscUtils from '../blockly-misc-utils'
+import { walk, walkSync } from '../walk'
+import SpellsourceTesting from '../spellsource-testing'
 
 const cardsPath = `${__dirname}/../../../../cards/src/main/resources/cards/collectible`
 const cardsPath2 = `${__dirname}/../../../../game/src/main/resources/basecards/standard`
@@ -32,9 +33,9 @@ describe('WorkspaceUtils', () => {
     const cardEdges = []
     const jsonEdges = []
     const data = {
-      allBlock: {edges: blockEdges},
-      allCard: {edges: cardEdges},
-      allJSON: {edges: jsonEdges}
+      allBlock: { edges: blockEdges },
+      allCard: { edges: cardEdges },
+      allJSON: { edges: jsonEdges }
     }
 
     for await (const blocksDefPath of walk(blocksPath)) {
@@ -44,8 +45,8 @@ describe('WorkspaceUtils', () => {
 
       const blocksJson = JSON.parse(await fs.promises.readFile(blocksDefPath))
       for (const blockJson of blocksJson) {
-        jsonTransformFileNode(blockJson, {base: path.basename(blocksDefPath)})
-        blockEdges.push({node: blockJson})
+        jsonTransformFileNode(blockJson, { base: path.basename(blocksDefPath) })
+        blockEdges.push({ node: blockJson })
       }
     }
 
@@ -55,9 +56,9 @@ describe('WorkspaceUtils', () => {
       }
       const file = await fs.promises.readFile(cardPath)
       const cardJson = JSON.parse(file)
-      jsonTransformFileNode(cardJson, {base: path.basename(cardPath)})
-      cardEdges.push({node: cardJson})
-      jsonEdges.push({node: {internal: {content: file}}})
+      jsonTransformFileNode(cardJson, { base: path.basename(cardPath) })
+      cardEdges.push({ node: cardJson })
+      jsonEdges.push({ node: { internal: { content: file } } })
     }
 
     for await(const cardPath of walk(cardsPath)) {
@@ -121,11 +122,12 @@ describe('WorkspaceUtils', () => {
   })
 
   test('java test', async () => {
-    const TestMain = java.import('com.hiddenswitch.spellsource.gameplaytest.TestMain')
-    let context = TestMain.runGymSync()
-    let player = context.getActivePlayerSync()
-    let hero = player.getHeroSync()
-    console.log(hero.getHpSync())
+    const context = SpellsourceTesting.runGym()
+    var minion1 = SpellsourceTesting.playMinion(context, 'PLAYER_1', 'minion_dead_horse')
+    var card1 = SpellsourceTesting.receiveCard(context, 'PLAYER_1', 'minion_tiny_persecutor')
+    var minion2 = SpellsourceTesting.playMinion(context, 'PLAYER_1', card1, minion1)
+
+    console.log(context.getPlayer1Sync().getMinionsSync().getSync(0).getHpSync())
   })
 
   test('just dreams of strength', async () => {
@@ -163,7 +165,6 @@ describe('WorkspaceUtils', () => {
     `
     expect(ConversionHarness.assertCardReplaysTheSameSync(1, 2, 'spell_dreams_of_strength', json)).toEqual(true)
   })
-
 
   test.each(cards)('bug test time %s', async (id, cardPath) => {
     const ConversionHarness = java.import('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
@@ -209,7 +210,6 @@ describe('WorkspaceUtils', () => {
     JsonConversionUtils.generateCard(workspace2, srcCard2)
     const json2 = WorkspaceUtils.workspaceToCardScript(workspace)
     expect(ConversionHarness.assertCardReplaysTheSameSync(1, 2, id, JSON.stringify(json))).toEqual(true)
-
 
   })
 

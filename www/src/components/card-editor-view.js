@@ -9,16 +9,16 @@ import CardTesterWorkspace from "./card-tester-workspace";
 
 const CardEditorView = (props) => {
 
-  const SHOW_TESTER = false
-
   const [code, setCode] = useState(``)
   const [query, setQuery] = useState(``)
   const [showCatalogueBlocks, setShowCatalogueBlocks] = useState(false)
   const [compactBlocks, setCompactBlocks] = useState(true)
   const [showJSON, setShowJSON] = useState(false)
+  const [showJS, setShowJS] = useState(false)
   const catalogueBlocksTooltip = 'Toggles whether the blocks for real cards from the catalogue show up in search'
   const compactBlocksTooltip = 'Render the blocks compactly rather than as always full rectangles'
-  const showJSONTooltip = 'Show the JSON representation of the workspace below'
+  const showJSONTooltip = 'Show the JSON representation of the blocks in the workspace'
+  const showJSTooltip = 'Show the JS representation of the code in the workspace'
 
   const catalogueBlocksCheck = useRef(null)
   const catalogueBlocksLabel = useRef(null)
@@ -26,14 +26,15 @@ const CardEditorView = (props) => {
   const compactBlocksLabel = useRef(null)
   const showJSONCheck = useRef(null)
   const showJSONLabel = useRef(null)
+  const showJSCheck = useRef(null)
+  const showJSLabel = useRef(null)
 
   const blocklyEdior = useRef(null)
-  const blocklyTester = useRef(null)
 
   const [realCode, setRealCode] = useState(``)
 
   const workspace = () => {
-    return blocklyEdior.current.workspace.state.workspace
+    return blocklyEdior.current.workspace
   }
 
   const search = evt => {
@@ -65,16 +66,28 @@ const CardEditorView = (props) => {
     addTooltip(compactBlocksLabel, compactBlocksTooltip)
     addTooltip(showJSONCheck, showJSONTooltip)
     addTooltip(showJSONLabel, showJSONTooltip)
+    addTooltip(showJSCheck, showJSTooltip)
+    addTooltip(showJSLabel, showJSTooltip)
   })
 
   return (<span>
-      <Form.Control type="text"
-                    placeholder={'Search blocks'}
-                    value={query}
-                    onChange={e => search(e)}
-                    className={styles.editorSearch}
+    <Form.Control type="text"
+                  placeholder={'Search blocks'}
+                  value={query}
+                  onChange={e => search(e)}
+                  className={styles.editorSearch}
+    />
+    <Form.Check className={styles.editorOption}>
+      <Form.Check.Input defaultChecked={showCatalogueBlocks}
+                        onChange={e => toggleCatalogueBlocks(e)}
+                        value={showCatalogueBlocks}
+                        className={styles.editorCheck}
+                        ref={catalogueBlocksCheck}
       />
-    <CardEditorWorkspace setCode={setCode}
+      <Form.Check.Label ref={showJSONLabel}> Search Card Catalogue</Form.Check.Label>
+    </Form.Check>
+    <CardEditorWorkspace setJSON={setCode}
+                         setJS={setRealCode}
                          showCatalogueBlocks={showCatalogueBlocks}
                          query={query}
                          defaultCard={props.defaultCard}
@@ -99,6 +112,15 @@ const CardEditorView = (props) => {
       />
       <Form.Check.Label ref={showJSONLabel}> Show JSON</Form.Check.Label>
     </Form.Check>
+    <Form.Check className={styles.editorOption}>
+      <Form.Check.Input defaultChecked={showJS}
+                        onChange={e => setShowJS(!showJS)}
+                        value={showJS}
+                        className={styles.editorCheck}
+                        ref={showJSCheck}
+      />
+      <Form.Check.Label ref={showJSLabel}> Show JS</Form.Check.Label>
+    </Form.Check>
     {
       showJSON ? <AceEditor
         width={'100%'}
@@ -113,25 +135,18 @@ const CardEditorView = (props) => {
       /> : <div/>
     }
     {
-      SHOW_TESTER && !showJSON ? <div>
-          <CardTesterWorkspace renderer={'geras'}
-                               ref={blocklyTester}
-                               setCode={setRealCode}
-          />
-          <AceEditor
-            width={'100%'}
-            height={'200px'}
-            mode="javascript"
-            theme="github"
-            setOptions={{
-              'wrap': true
-            }}
-            readOnly={true}
-            value={realCode}
-            editorProps={{$blockScrolling: true}}
-          />
-        </div>
-        : <div/>
+      showJS ? <AceEditor
+        width={'100%'}
+        height={'200px'}
+        mode="javascript"
+        theme="github"
+        setOptions={{
+          'wrap': true
+        }}
+        readOnly={true}
+        value={realCode}
+        editorProps={{$blockScrolling: true}}
+      /> : <div/>
     }
   </span>)
 }

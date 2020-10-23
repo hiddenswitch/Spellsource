@@ -11,7 +11,7 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@gatsby-contrib/gatsby-plugin-elasticlunr-search": "^2.3.0",
-    "blockly": "^3.20200402.1",
+    "blockly": "^3.20200924.2",
     "canvas": "^2.6.1",
     "enumify": "^2.0.0",
     "gatsby": "^2.20.24",

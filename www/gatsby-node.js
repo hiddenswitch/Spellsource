@@ -70,6 +70,9 @@ exports.createSchemaCustomization = ({ actions }) => {
     height: Int
     alt: String
     src: String
+    variable: String
+    variableTypes: [String]
+    defaultType: String
   }
   type Shadow {
     type: String

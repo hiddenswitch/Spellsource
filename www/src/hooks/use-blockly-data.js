@@ -51,6 +51,9 @@ export default function useBlocklyData () {
               height
               src
               alt
+              variable
+              variableTypes
+              defaultType
               shadow {
                 type
                 fields {

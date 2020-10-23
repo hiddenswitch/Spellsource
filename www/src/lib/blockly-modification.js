@@ -4,7 +4,7 @@ import {FieldLabelSerializableHidden} from "../components/field-label-serializab
 import JsonConversionUtils from "./json-conversion-utils";
 import BlocklyMiscUtils from "./blockly-misc-utils";
 import DefaultOverrides from "./default-overrides";
-import SpellsourceGenerator from "./spellsource-generator";
+import {isArray} from 'lodash'
 
 export default class BlocklyModification {
 
@@ -17,9 +17,6 @@ export default class BlocklyModification {
         delete Blockly.Blocks[blocksKey]
       }
     }
-    Blockly.Blocks['math_change'].testKey = 'variable_change'
-    Blockly.Blocks['controls_if'].testKey = 'logic_if'
-    Blockly.Blocks['controls_ifelse'].testKey = 'logic_ifelse'
 
     this.autoDecoration()
     //this.hoverComments()
@@ -30,6 +27,8 @@ export default class BlocklyModification {
     this.colorfulColors()
     this.noToolboxZoom()
     this.multiline()
+    this.jsonShadows()
+    this.connections()
 
     DefaultOverrides.overrideAll()
   }
@@ -316,12 +315,6 @@ export default class BlocklyModification {
   }
 
   static tooltips() {
-    if (!Blockly.categoryTooltips) {
-      Blockly.categoryTooltips = {}
-    }
-    if (!Blockly.tooltipColors) {
-      Blockly.tooltipColors = {}
-    }
 
     Blockly.Tooltip.OFFSET_X = 10;
     if (Blockly.Touch.TOUCH_ENABLED) {
@@ -329,19 +322,14 @@ export default class BlocklyModification {
     }
     Blockly.Tooltip.OFFSET_Y = 0;
 
-    const getRowDom = Blockly.tree.BaseNode.prototype.getRowDom
-    Blockly.tree.BaseNode.prototype.getRowDom = function () {
-      const element = getRowDom.call(this)
-      let name = this.content
-      if (!!this.parent_?.content) {
-        name = this.parent_.content + '.' + name
+    const init = Blockly.ToolboxCategory.prototype.init
+    Blockly.ToolboxCategory.prototype.init = function() {
+      init.call(this)
+      if (this.toolboxItemDef_['tooltip']) {
+        this.rowDiv_.tooltip = this.toolboxItemDef_['tooltip']
+        this.rowDiv_.tooltipColor = this.colour_
+        Blockly.Tooltip.bindMouseEvents(this.rowDiv_)
       }
-      if (!!name && !!Blockly.categoryTooltips[name]) {
-        element.tooltip = Blockly.categoryTooltips[name]
-        element.tooltipColor = Blockly.tooltipColors[name]
-        Blockly.Tooltip.bindMouseEvents(element)
-      }
-      return element
     }
 
     Blockly.Tooltip.bindMouseEvents = function (element) {
@@ -398,6 +386,15 @@ export default class BlocklyModification {
           let b = source.getFieldValue('b')
           let color = Blockly.utils.colour.rgbToHex(r, g, b)
           source.setColour(color)
+        }
+      }
+      if (source?.type === 'variables_get' || source?.type == 'variables_get_dynamic') {
+        let type = this.variable_?.type
+        if (type === 'EntityReference') {
+          source.setColour(30)
+        } else {
+          source.setColour(source?.type === 'variables_get' ? "#a53a6f"
+            : "#a53a93")
         }
       }
     }
@@ -458,6 +455,47 @@ export default class BlocklyModification {
       }
 
       return text
+    }
+  }
+
+  static jsonShadows() {
+    const handleContents = (element, info) => {
+      if (info['contents'] && isArray(info['contents']) && info['contents'].length > 0) {
+        for (let content of info['contents']) {
+          let child = Blockly.utils.xml.createElement(content['kind'])
+          if (content['name']) {
+            child.setAttribute('name', content['name'])
+          }
+          if (content['value']) {
+            child.textContent = content['value']
+            child.innerText = content['value']
+          }
+          if (content['type']) {
+            child.setAttribute('type', content['type'])
+          }
+          if (content['contents']) {
+            handleContents(child, content)
+          }
+          element.appendChild(child)
+        }
+      }
+    }
+
+    const getBlockXml = Blockly.Flyout.prototype.getBlockXml_
+    Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
+      const blockElement = getBlockXml.call(this, blockInfo)
+      handleContents(blockElement, blockInfo)
+      return blockElement
+    }
+  }
+
+  static connections() {
+    const setCheck = Blockly.Connection.prototype.setCheck
+    Blockly.Connection.prototype.setCheck = function(check) {
+      const ret = setCheck.call(this, check)
+      if (check === 'Boolean') {
+        this.check_.push('ConditionDesc')
+      }
     }
   }
 }

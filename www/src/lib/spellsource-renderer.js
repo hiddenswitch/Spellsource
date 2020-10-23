@@ -1,4 +1,5 @@
 import Blockly from 'blockly'
+import BlocklyMiscUtils from "./blockly-misc-utils";
 
 const SpellsourceRenderer = function (name) {
   SpellsourceRenderer.superClass_.constructor.call(this, name)
@@ -17,9 +18,19 @@ const SpellsourceRenderInfo = function (renderer, block) {
 Blockly.utils.object.inherits(SpellsourceRenderInfo,
   Blockly.geras.RenderInfo);
 
+const defaultAddRowSpacing = SpellsourceRenderInfo.prototype.addRowSpacing_
 
 //use 2 half-width spacing rows instead of 1 full-width for the inner rows of blocks
 SpellsourceRenderInfo.prototype.addRowSpacing_ = function () {
+  let type = this.block_.type
+  if (BlocklyMiscUtils.isSpellsourceBlock(type)) {
+    spellsourceAddRowSpacing.call(this)
+  } else {
+    defaultAddRowSpacing.call(this)
+  }
+}
+
+const spellsourceAddRowSpacing = function () {
   let oldRows = this.rows
   this.rows = []
 
@@ -39,9 +50,19 @@ SpellsourceRenderInfo.prototype.addRowSpacing_ = function () {
   }
 }
 
+const defaultAlignRowElements = SpellsourceRenderInfo.prototype.alignRowElements_
 
 //now every single important row has a spacer or equivalent both above and below
 SpellsourceRenderInfo.prototype.alignRowElements_ = function () {
+  let block = Blockly.Blocks[this.block_.type]
+  if (!!block.json && !!block.json.type) {
+    spellsourceAlignRowElements.call(this)
+  } else {
+    defaultAlignRowElements.call(this)
+  }
+}
+
+const spellsourceAlignRowElements = function () {
   const Types = Blockly.blockRendering.Types
   //align statement rows normally and align input rows to nearest 10 pixels
   for (let i = 0, row; (row = this.rows[i]); i++) {
