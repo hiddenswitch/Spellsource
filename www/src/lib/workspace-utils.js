@@ -1,6 +1,7 @@
-import {isNumber, Xml} from 'blockly'
+import Blockly, {isNumber, Xml} from 'blockly'
 import {extend, filter, find, fromPairs, isArray, isPlainObject, isEmpty, map, merge} from 'lodash'
 import format from 'string-format'
+import BlocklyMiscUtils from "./blockly-misc-utils";
 
 export default class WorkspaceUtils {
   static BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = 'BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE'
@@ -48,7 +49,9 @@ export default class WorkspaceUtils {
         break
       case 'xml':
         if (!!xml.firstElementChild) {
-          const elementNodes = filter(Array.from(xml.childNodes), cn => cn.nodeType === Node.ELEMENT_NODE)
+          const elementNodes = filter(Array.from(xml.childNodes), cn => {
+            return cn.nodeType === Node.ELEMENT_NODE && BlocklyMiscUtils.isSpellsourceBlock(cn.getAttribute('type'))
+          })
           if (elementNodes.length === 1) {
             return WorkspaceUtils.xmlToCardScript(elementNodes[0])
           }
@@ -166,7 +169,7 @@ export default class WorkspaceUtils {
         }
         return this.postProcessCardScript(obj)
       default:
-        throw new Error('invalid block type to pass here')
+        throw new Error('invalid block type to pass here: ' + xml.nodeName)
     }
   }
 
@@ -408,6 +411,7 @@ export default class WorkspaceUtils {
 
   static workspaceToCardScript (workspace) {
     const xml = Xml.workspaceToDom(workspace)
+    console.log(xml)
     return WorkspaceUtils.xmlToCardScript(xml)
   }
 }

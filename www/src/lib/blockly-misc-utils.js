@@ -1,4 +1,4 @@
-import Blockly, {FieldLabel, Workspace} from 'blockly'
+import Blockly from 'blockly'
 import JsonConversionUtils from './json-conversion-utils'
 import {has, isArray} from 'lodash'
 import recursiveOmitBy from 'recursive-omit-by'
@@ -410,19 +410,19 @@ export default class BlocklyMiscUtils {
     if (!Blockly.Css.injected_) {
       Blockly.Css.register([
         '.blocklyCommentTextarea {',
-          'color: black;',
-          'caret-color: black;',
-          'font-size: 12pt;',
-          'background-color: lightgray;',
+        'color: black;',
+        'caret-color: black;',
+        'font-size: 12pt;',
+        'background-color: lightgray;',
         '}',
 
         '.blocklyTooltipDiv {',
-          'opacity: 1;',
-          'font-size: 10pt;',
+        'opacity: 1;',
+        'font-size: 10pt;',
         '}',
 
         '.blackText {',
-          'fill: #000 !important;',
+        'fill: #000 !important;',
         '}'
       ]);
     }
@@ -453,6 +453,9 @@ export default class BlocklyMiscUtils {
   static pluralStuff(workspace) {
     let anyChange = false
     for (let block of workspace.getAllBlocks()) {
+      if (!block.json) {
+        continue
+      }
       let argsList = JsonConversionUtils.argsList(block.json);
       for (let arg of argsList) {
         if (arg.type === 'field_label_plural') {
@@ -530,162 +533,7 @@ export default class BlocklyMiscUtils {
     }
   }
 
-  //Turns our own json formatting for shadow blocks into the formatting
-  //that's used for specifying toolbox categories (recursively)
-  static shadowBlockJsonCreation (type) {
-    let block = Blockly.Blocks[type]
-    let values = {}
-    if (!!block && !!block.json) {
-      let json = block.json
-      for (let i = 0; i < 10; i++) {
-        if (!!json['args' + i.toString()]) {
-          for (let j = 0; j < 10; j++) {
-            const arg = json['args' + i.toString()][j]
-            if (!!arg && !!arg.shadow) {
-              let fields = {}
-              if (!!arg.shadow.fields) {
-                for (let field of arg.shadow.fields) {
-                  fields[field.name] = field.valueI || field.valueS || field.valueB
-                }
-              }
-              values[arg.name] = {
-                type: arg.shadow.type,
-                shadow: !arg.shadow.notActuallyShadow,
-                fields: fields,
-                values: BlocklyMiscUtils.shadowBlockJsonCreation(arg.shadow.type)
-              }
-            }
-          }
-        }
-      }
-    }
-    return values
-  }
-
-  static getToolboxCategories(blockCategoryList, existing = null, onlyCategory = null, results = null) {
-    let index = -1
-    return blockCategoryList.map((
-      {
-        BlockTypePrefix, CategoryName, ColorHex, Subcategories, Tooltip, Subtooltips, Custom, ButtonName, ButtonCallback
-      }) => {
-      if (!!Blockly.categoryTooltips && !Blockly.categoryTooltips[CategoryName]) {
-        Blockly.categoryTooltips[CategoryName] = Tooltip
-        Blockly.tooltipColors[CategoryName] = BlocklyMiscUtils.tertiaryColor(BlocklyMiscUtils.colorToHex(ColorHex))
-      }
-      index++
-      if (!!onlyCategory && CategoryName !== onlyCategory && !!existing) {
-        return existing[index] //my attempt to reduce the runtime a bit
-      }
-      let blocks = []
-      if (!!BlockTypePrefix) {
-        for (let blocksKey in Blockly.Blocks) {
-          let testKey = Blockly.Blocks[blocksKey].testKey ?? blocksKey
-          if (!testKey.endsWith('SHADOW') && !testKey.match(/^.*_.*_.*/)
-            && (testKey.startsWith(BlockTypePrefix)
-            || (CategoryName === 'Cards' && testKey.startsWith('WorkspaceCard_'))
-            || (CategoryName === 'Classes' && testKey.startsWith('WorkspaceHeroClass_')))
-          ) {
-            blocks.push({
-              type: blocksKey,
-              values: BlocklyMiscUtils.shadowBlockJsonCreation(blocksKey),
-              next: blocksKey.startsWith('Starter') && !!Blockly.Blocks[blocksKey].json.nextStatement ?
-                {type: 'Property_SHADOW', shadow: true}
-                : undefined
-            })
-          }
-        }
-
-        if (!JsonConversionUtils.blockTypeColors[BlockTypePrefix]) {
-          JsonConversionUtils.blockTypeColors[BlockTypePrefix] = ColorHex
-        }
-      } else if (CategoryName === 'Search Results' && !!results) {
-        results.forEach(value => {
-          blocks.push({
-            type: value.id,
-            values: BlocklyMiscUtils.shadowBlockJsonCreation(value.id),
-            next: value.id.startsWith('Starter') && !!Blockly.Blocks[value.id].json.nextStatement ?
-              {type: 'Property_SHADOW', shadow: true}
-              : undefined
-          })
-        })
-      }
-
-      //sort the classes cateogry so that custom ones are on top
-      if (CategoryName === 'Classes') {
-        blocks = blocks.sort((a, b) => {
-          if (a.type.startsWith('WorkspaceHeroClass')) {
-            return -1
-          }
-          if (b.type.startsWith('WorkspaceHeroClass')) {
-            return 1
-          }
-          return 0
-        })
-      }
-
-      if (!!Subcategories && isArray(Subcategories)) {
-        let categories = []
-
-        for (let i = 0, category; (category = Subcategories[i]); i++) {
-          categories[category] = {
-            name: category,
-            blocks: [],
-            colour: ColorHex
-          }
-          if (!!Subtooltips && !!Subtooltips[i]) {
-            let name = CategoryName + '.' + category
-            if (!!Blockly.categoryTooltips && !Blockly.categoryTooltips[name]) {
-              Blockly.categoryTooltips[name] = Subtooltips[i]
-              Blockly.tooltipColors[name] = BlocklyMiscUtils.tertiaryColor(BlocklyMiscUtils.colorToHex(ColorHex))
-            }
-          }
-        }
-
-        for (let block of blocks) {
-          let subcategory = Blockly.Blocks[block.type].json?.subcategory
-          if (!!subcategory) {
-            if (subcategory.includes(',')) {
-              for (let splitKey of subcategory.split(',')) {
-                if (categories[splitKey] != null) {
-                  categories[splitKey].blocks.push(block)
-                }
-              }
-            } else if (categories[subcategory] != null) {
-              categories[subcategory].blocks.push(block)
-            } else {
-              categories['Misc'].blocks.push(block)
-            }
-          } else {
-            categories['Misc'].blocks.push(block)
-          }
-        }
-
-
-        return {
-          name: CategoryName,
-          colour: ColorHex,
-          categories: Object.values(categories)
-        }
-
-      } else if (!!ButtonName && !!ButtonCallback) {
-        return {
-          name: CategoryName,
-          blocks: blocks,
-          colour: ColorHex,
-          custom: Custom,
-          button: [
-            {
-              text: ButtonName,
-              callbackKey: ButtonCallback
-            }
-          ]
-        }
-      } else return {
-        name: CategoryName,
-        blocks: blocks,
-        colour: ColorHex,
-        custom: Custom
-      }
-    })
+  static isSpellsourceBlock(type) {
+    return !!Blockly.Blocks[type]?.json?.type
   }
 }

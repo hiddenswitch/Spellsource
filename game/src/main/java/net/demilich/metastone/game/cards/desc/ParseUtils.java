@@ -55,7 +55,7 @@ public class ParseUtils {
 	private static DescDeserializer<CardCostModifierDesc, ?, ?> manaModifierParser = new CardCostModifierDescDeserializer();
 
 	@SuppressWarnings("deprecation")
-	private static EntityReference parseEntityReference(String str) {
+	public static EntityReference parseEntityReference(String str) {
 		String lowerCaseName = str.toLowerCase();
 		if (lowerCaseName.length() > 0 && (lowerCaseName.charAt(0) == '-' || Character.isDigit(lowerCaseName.charAt(0)))) {
 			return new EntityReference(Integer.parseInt(lowerCaseName));
