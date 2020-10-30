@@ -6,10 +6,7 @@ import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.rpc.*;
 import com.hiddenswitch.framework.schema.keycloak.tables.daos.UserEntityDao;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
-import io.grpc.BindableService;
-import io.grpc.ServerInterceptor;
-import io.grpc.ServerInterceptors;
-import io.grpc.ServerServiceDefinition;
+import io.grpc.*;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
@@ -138,6 +135,7 @@ public class Accounts {
 	}
 
 	public static Future<ServerServiceDefinition> authenticatedService() {
+		// Does not require vertx blocking service because it makes no blocking calls
 		return Future.succeededFuture(new AccountsGrpc.AccountsVertxImplBase() {
 
 			@Override
@@ -167,9 +165,11 @@ public class Accounts {
 						.onComplete(response);
 			}
 		})
-				.compose(service ->
-						// Does not require vertx blocking service because it makes no blocking calls
-						Future.succeededFuture(ServerInterceptors.intercept(service, Accounts.authorizationInterceptor().result())));
+				.compose(Accounts::requiresAuthorization);
+	}
+
+	public static Future<ServerServiceDefinition> requiresAuthorization(BindableService service) {
+		return Future.succeededFuture(ServerInterceptors.intercept(service, Accounts.authorizationInterceptor().result()));
 	}
 
 	public static Future<RealmResource> get() {

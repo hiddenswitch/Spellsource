@@ -33,6 +33,7 @@ import com.bmuschko.gradle.docker.domain.LivenessProbe
 import com.bmuschko.gradle.docker.tasks.container.*
 import com.bmuschko.gradle.docker.tasks.image.*
 import com.bmuschko.gradle.docker.tasks.container.extras.DockerLivenessContainer
+import com.github.dockerjava.api.exception.InternalServerErrorException
 import org.jooq.codegen.GenerationTool
 import org.jooq.meta.jaxb.*
 
@@ -153,10 +154,9 @@ task installDll(type: Copy) {
     into(project(':unityclient').projectDir.absolutePath + '/src/unity/Assets/Client')
 }
 
-
-
 task pullKeycloakImage(type: DockerPullImage) {
     image.set('jboss/keycloak:11.0.2')
+    onError({})
 }
 
 task stopExistingPostgresContainer(type: DockerStopContainer) {

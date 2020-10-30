@@ -7,6 +7,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
+import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
@@ -27,6 +28,11 @@ public class Environment {
 
 	private static AtomicReference<Configuration> configuration = new AtomicReference<>();
 	private static final WeakVertxMap<PgPool> pools = new WeakVertxMap<>(Environment::poolConstructor);
+	private static final WeakVertxMap<ReactiveClassicGenericQueryExecutor> queryExecutors = new WeakVertxMap<>(Environment::queryExecutorConstructor);
+
+	private static ReactiveClassicGenericQueryExecutor queryExecutorConstructor(Vertx vertx) {
+		return new ReactiveClassicGenericQueryExecutor(jooq(), pool());
+	}
 
 	private static PgPool poolConstructor(Vertx vertx) {
 		var connectionOptions = connectOptions();
@@ -61,6 +67,10 @@ public class Environment {
 
 	public static PgPool pool() {
 		return pools.get();
+	}
+
+	public static ReactiveClassicGenericQueryExecutor queryExecutor() {
+		return queryExecutors.get();
 	}
 
 	public static Configuration jooq() {

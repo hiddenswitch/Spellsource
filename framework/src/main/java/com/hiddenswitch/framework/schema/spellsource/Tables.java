@@ -4,7 +4,6 @@
 package com.hiddenswitch.framework.schema.spellsource;
 
 
-import com.hiddenswitch.framework.schema.spellsource.tables.CardDesc;
 import com.hiddenswitch.framework.schema.spellsource.tables.Cards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
@@ -17,12 +16,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
 public class Tables {
 
     /**
-     * a particular instance of a card desc, which may be referenced by a card
-     */
-    public static final CardDesc CARD_DESC = CardDesc.CARD_DESC;
-
-    /**
-     * references a card at a particular point in time
+     * The table <code>spellsource.cards</code>.
      */
     public static final Cards CARDS = Cards.CARDS;
 
