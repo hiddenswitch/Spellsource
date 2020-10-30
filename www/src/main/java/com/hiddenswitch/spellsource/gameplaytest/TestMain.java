@@ -4,6 +4,9 @@ import io.vertx.core.json.Json;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardCatalogueRecord;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
@@ -15,6 +18,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.tests.util.TestBase;
 import org.junit.platform.commons.util.StringUtils;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class TestMain extends TestBase {
@@ -41,6 +45,14 @@ public class TestMain extends TestBase {
 			gameContext.set(context);
 		}, friendlyClass, enemyClass);
 		return gameContext.get();
+	}
+
+	public static void addCard(String json) {
+		try {
+			CardCatalogue.addOrReplaceCard(json);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void spellEffect(String json, GameContext context, Entity source, Entity target) {

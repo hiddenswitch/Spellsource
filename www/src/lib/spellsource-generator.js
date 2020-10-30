@@ -15,6 +15,12 @@ export default class SpellsourceGenerator {
       return "const context = SpellsourceTesting.runGym(" + friendlyClass + ", " + enemyClass + ")\n"
     }
 
+    Blockly.JavaScript['TestAssertion'] = function (block) {
+      let condition = block.getInput('condition').connection.targetBlock()
+      let json = SpellsourceGenerator.blockToJson(condition)
+      return "expect(SpellsourceTesting.condition(`"  + JSON.stringify(json, null, 2) + "`, context)).toEqual(true)"
+    }
+
     Blockly.JavaScript['TestSpellEffect'] = function (block) {
       let spell = block.getInput('spell').connection.targetBlock()
       let json = SpellsourceGenerator.blockToJson(spell)
@@ -43,6 +49,7 @@ export default class SpellsourceGenerator {
       }
       return ret + ")\n"
     }
+
     Blockly.JavaScript['TestReceiveCard'] = function (block) {
       let card = Blockly.JavaScript.valueToCode(block, 'card', Blockly.JavaScript.ORDER_NONE)
       let player = Blockly.JavaScript.valueToCode(block, 'player', Blockly.JavaScript.ORDER_NONE)
@@ -69,8 +76,23 @@ export default class SpellsourceGenerator {
         }
       }
 
+      if (blocksKey.startsWith('Starter_')) {
+        Blockly.JavaScript[blocksKey] = function (block) {
+          let xml = Blockly.Xml.blockToDom(block, true)
+          let json = WorkspaceUtils.xmlToCardScript(xml)
+          let id = block.id
+          let cardId = Blockly.Blocks['WorkspaceCard_' + id]?.data
+
+          json.id = cardId
+
+          Blockly.JavaScript.cardsDB[cardId] = json
+
+          return ""
+        }
+      }
+
       if (!Blockly.JavaScript[blocksKey]) {
-        if (!!Blockly.Blocks[blocksKey].json?.data) {
+        if (!!Blockly.Blocks[blocksKey].json?.data && !!Blockly.Blocks[blocksKey].json?.output) {
           Blockly.JavaScript[blocksKey] = function (block) {
             return ["'" + Blockly.Blocks[blocksKey].json.data + "'", Blockly.JavaScript.ORDER_NONE]
           }
@@ -80,6 +102,25 @@ export default class SpellsourceGenerator {
           }
         }
       }
+    }
+
+    const init = Blockly.JavaScript.init
+    Blockly.JavaScript.init = function (workspace) {
+      Blockly.JavaScript.cardsDB = {}
+      return init.call(this, workspace)
+    }
+
+    const finish = Blockly.JavaScript.finish
+    Blockly.JavaScript.finish = function (code) {
+      for (let cardId in Blockly.JavaScript.cardsDB) {
+        let json = Blockly.JavaScript.cardsDB[cardId]
+        let addCode = "SpellsourceTesting.addCard(`" +
+          JSON.stringify(json, null, 2) + "`)"
+        let removeCode = "SpellsourceTesting.removeCard('" + cardId + "')"
+        code = addCode + '\n\n' + code + '\n\n' + removeCode
+      }
+      delete Blockly.JavaScript.cardsDB
+      return finish.call(this, code)
     }
   }
 

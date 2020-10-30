@@ -56,45 +56,42 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
 
   }, [])
 
+  //When the query is updated, do some searching
   useEffect(() => {
     search(props.query)
     handleSearchResults(props.query)
   }, [props.query])
 
+  //Switch the renderer
   useEffect(() => {
     BlocklyMiscUtils.switchRenderer(props.renderer, mainWorkspace())
   }, [props.renderer])
 
+  //The default workspace changed event handler
   const onWorkspaceChanged = () => {
     const cardScript = WorkspaceUtils.workspaceToCardScript(mainWorkspace())
-    props.setJSON(JSON.stringify(cardScript, null, 2))
-    props.setJS(Blockly.JavaScript.workspaceToCode(mainWorkspace()))
     // Generate the blocks that correspond to the cards in the workspace
     if (!mainWorkspace().isDragging()) {
       let update = handleWorkspaceCards(mainWorkspace(), cardScript)
       if (update) {
-        mainWorkspace().updateToolbox(BlocklyToolbox.editorToolbox(results, mainWorkspace()))
+        mainWorkspace().getToolbox().getToolboxItemById('Cards')
+          .updateFlyoutContents(BlocklyToolbox.cardsCategory())
+        mainWorkspace().getToolbox().getToolboxItemById('Classes')
+          .updateFlyoutContents(BlocklyToolbox.classesCategory())
       }
       BlocklyMiscUtils.pluralStuff(mainWorkspace())
     }
+
+
+    props.setJSON(JSON.stringify(cardScript, null, 2))
+    props.setJS(Blockly.JavaScript.workspaceToCode(mainWorkspace()))
   }
 
-  const createCard = (card, blockType) => {
+  //Create a new WorkspaceCard block
+  const createCard = (card, blockType, currentCards) => {
     if (!!card && !!card.name && !!card.type) {
-      let cardType = !!card.secret ? 'SECRET' : !!card.quest ? 'QUEST' : card.type
-      let cardId = cardType.toLowerCase()
-        + '_'
-        + card.name
-          .toLowerCase()
-          .replaceAll(' ', '_')
-          .replaceAll(',', '')
-          .replaceAll("'", '')
-      if (card.type === 'MINION' && card.collectible === false || card.collectible === 'FALSE') {
-        cardId.replace('minion_', 'token_')
-      }
-      if (card.type === 'CLASS') {
-        cardId = 'class_' + card.heroClass.toLowerCase()
-      }
+      let cardId = chooseId(card, currentCards)
+
       let color = '#888888'
       if (!!card.heroClass) {
         color = Blockly.heroClassColors[card.heroClass]
@@ -124,6 +121,49 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
     }
   }
 
+  const chooseId = (card, currentCards) => {
+    let cardType = !!card.secret ? 'SECRET' : !!card.quest ? 'QUEST' : card.type
+    if (card.type === 'MINION' && card.collectible === false || card.collectible === 'FALSE') {
+      cardType = 'TOKEN'
+    }
+    let cardId = cardType.toLowerCase()
+      + '_'
+      + card.name
+        .toLowerCase()
+        .replaceAll(' ', '_')
+        .replaceAll(',', '')
+        .replaceAll("'", '')
+
+    if (card.type === 'CLASS') {
+      cardId = 'class_' + card.heroClass.toLowerCase()
+        .replaceAll(' ', '_')
+        .replaceAll(',', '')
+        .replaceAll("'", '')
+    }
+
+    const cardExists = (id) => {
+      if (!!Blockly.Blocks['CatalogueCard_' + id]) {
+        return true
+      }
+      for (card of currentCards) {
+        if (Blockly.Blocks[card].data === id) {
+          return true
+        }
+      }
+      return false
+    }
+
+    if (cardExists(cardId)) {
+      let i = 2
+      while (cardExists(cardId + i.toString())) {
+        i++
+      }
+      cardId += i.toString()
+    }
+    return cardId
+  }
+
+  //Create a new WorkspaceHeroClass block
   const createClass = (card, blockType) => {
     if (!!card && !!card.heroClass && card.type === 'CLASS') {
       let color = Blockly.utils.colour.rgbToHex(
@@ -164,7 +204,7 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
     }
   }
 
-
+  //Managing the creation and deletion of WorkspaceCard and WorkspaceHeroClass blocks
   const handleWorkspaceCards = (workspace, cardScript) => {
     let anythingChanged = false
     if (!isArray(cardScript)) {
@@ -189,7 +229,9 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
           if (!Blockly.Blocks[type]) {
             anythingChanged = true
           }
-          Blockly.Blocks[type] = createClass(card, type)
+          let createdClass = createClass(card, type)
+          Blockly.Blocks[type] = createdClass
+          Blockly.JavaScript[type] = function(block) {return "'" + createdClass.data + "'"}
         }
 
         let blockType = 'WorkspaceCard_' + block.id
@@ -197,7 +239,9 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
         if (!Blockly.Blocks[blockType]) {
           anythingChanged = true
         }
-        Blockly.Blocks[blockType] = createCard(card, blockType)
+        let createdCard = createCard(card, blockType, currentCards)
+        Blockly.Blocks[blockType] = createdCard
+        Blockly.JavaScript[blockType] = function(block) {return "'" + createdCard.data + "'"}
       }
       i++
     })
@@ -282,12 +326,12 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
     if (query.length === 0) {
       setResults([])
     }
-    mainWorkspace().updateToolbox(BlocklyToolbox.editorToolbox(results, mainWorkspace()))
+    mainWorkspace().getToolbox().getToolboxItemById('Search Results')
+      .updateFlyoutContents(BlocklyToolbox.searchResultsCategory(results))
+    mainWorkspace().getToolbox().clearSelection()
     if (query.length > 0) {
       mainWorkspace().getToolbox().selectItemByPosition(0)
       mainWorkspace().getToolbox().refreshSelection()
-    } else {
-      mainWorkspace().getToolbox().clearSelection()
     }
   }
 

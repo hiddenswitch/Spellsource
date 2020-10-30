@@ -3,20 +3,26 @@ import BlocklyMiscUtils from './blockly-misc-utils'
 
 export default class BlocklyToolbox {
 
+  /**
+   * Initializes the necessary callbacks for the Variables tab's CUSTOM dynamic-ness
+   * @param workspace
+   */
   static initCallbacks(workspace) {
     workspace.registerToolboxCategoryCallback('SPELLSOURCE_VARIABLES', (workspace) => {
       var xmlList = [];
       var button = document.createElement('button');
+      button.setAttribute('text', 'Create entity variable...');
+      button.setAttribute('callbackKey', 'CREATE_VARIABLE_ENTITY');
+      xmlList.push(button);
+
+      button = document.createElement('button');
       button.setAttribute('text', Blockly.Msg['NEW_STRING_VARIABLE']);
       button.setAttribute('callbackKey', 'CREATE_VARIABLE_STRING');
       xmlList.push(button);
+
       button = document.createElement('button');
       button.setAttribute('text', Blockly.Msg['NEW_NUMBER_VARIABLE']);
       button.setAttribute('callbackKey', 'CREATE_VARIABLE_NUMBER');
-      xmlList.push(button);
-      button = document.createElement('button');
-      button.setAttribute('text', 'Create entity variable...');
-      button.setAttribute('callbackKey', 'CREATE_VARIABLE_ENTITY');
       xmlList.push(button);
 
       workspace.registerButtonCallback('CREATE_VARIABLE_STRING',
@@ -37,14 +43,16 @@ export default class BlocklyToolbox {
 
   }
 
-  static editorToolbox(results, workspace = null) {
+  /**
+   * Constructs the toolbox JSON for the card editor
+   * @param results The current search results
+   * @returns toolbox json
+   */
+  static editorToolbox(results = []) {
     return {
       kind: 'categoryToolbox',
       contents: [
-        this.category('Search Results', '#000000',
-          "The relevant blocks from your search will appear here",
-          results.map(value => this.getBlock(value.id))
-        ),
+        this.searchResultsCategory(results),
 
         {
           "kind": "sep"
@@ -52,43 +60,31 @@ export default class BlocklyToolbox {
 
         this.category('Card Starters', '#888888',
           "The core blocks that cards of any type will be built from",
-          this.simpleContents('Starter')
+          this.contents('Starter')
         ),
 
         this.category('Card Properties', '#888888',
           "Blocks to add additional properties to your card (placed connected to your Starter)",
-          this.simpleContents('Property')
+          this.contents('Property')
         ),
 
         this.category('Rarities', '#888888',
           "Blocks for the different Rarities that cards can have",
-          this.simpleContents('Rarity')
+          this.contents('Rarity')
         ),
 
-        this.category('Classes', '#888888',
-          "Blocks for the different playable champion classes",
-          this.simpleContents('HeroClass', 'WorkspaceHeroClass')
-        ),
+        this.classesCategory(),
 
-        this.category('Cards', '#888888',
-          "Blocks for referencing the cards you make in the workspace (use 'Search Card Catalogue' to reference existing cards)",
-          [
-            {
-              "kind": "label",
-              "text": "Blocks for your Workspace Cards will appear here"
-            },
-            ...this.simpleContents('Card', 'WorkspaceCard')
-          ]
-        ),
+        this.cardsCategory(),
 
         this.category('Targets', '30',
           "Blocks for the many different targets that effects can have",
-          this.simpleContents('EntityReference')
+          this.contents('EntityReference')
         ),
 
         this.category('Choices', '60',
           "Blocks for the actions that a card can make the player take when being played",
-          this.simpleContents('TargetSelection')
+          this.contents('TargetSelection')
         ),
 
         this.category('Attributes', '200',
@@ -131,12 +127,11 @@ export default class BlocklyToolbox {
             this.getBlock('TargetPlayer_1'),
             this.getBlock('TargetPlayer_2')
           ]
-
         ),
 
         this.category('Tribes', '160',
           "Blocks for the different tribes that units can be a part of",
-          this.simpleContents('Race')
+          this.contents('Race')
         ),
 
         this.category('Spells', '260',
@@ -186,22 +181,22 @@ export default class BlocklyToolbox {
 
         this.category('Values', '340',
           "Blocks for anything and everything numeric",
-          this.simpleContents('ValueProvider')
+          this.contents('ValueProvider')
         ),
 
         this.category('Conditions', '100',
           "Blocks that CAN handle the truth, because they evaluate it",
-          this.simpleContents('Condition')
+          this.contents('Condition')
         ),
 
         this.category('Filters', '120',
           "Blocks for narrowing down lists of entities based on desired properties",
-          this.simpleContents('Filter')
+          this.contents('Filter')
         ),
 
         this.category('Enchantment', '280',
           "Blocks for the creation of ongoing triggered effects",
-          this.simpleContents('Enchantment')
+          this.contents('Enchantment')
         ),
 
         this.category('Triggers', '300',
@@ -246,17 +241,17 @@ export default class BlocklyToolbox {
 
         this.category('Auras', '230',
           "Blocks for the specific type of Enchantment of ongoing effects",
-          this.simpleContents('Aura')
+          this.contents('Aura')
         ),
 
         this.category('Card Sources', '10',
           "Blocks for the different places that cards can be generated from",
-          this.simpleContents('Source')
+          this.contents('Source')
         ),
 
         this.category('Cost Modifier', '320',
           "Blocks for making more complex lun cost modification effects",
-          this.simpleContents('CostModifier')
+          this.contents('CostModifier')
         ),
 
         {
@@ -286,20 +281,24 @@ export default class BlocklyToolbox {
         this.category('Simulation', -1,
           "Blocks for creating simulation tests to see if your cards work",
           [
-            this.category('Test Starters', '#888888',
+            this.category('Testing', '#888888',
               "The blocks used to start a new test",
-              this.simpleContents('TestStarter')
+              this.inclusionContents('TestStarter',
+                'TestAssertion')
             ),
 
             this.category('Actions', '260',
               "Blocks for actions that you can simulate players taking",
-              this.simpleContents('TestAction')
+              this.contents('TestAction')
             ),
 
-            this.category('Assertions', '260',
-              "Blocks for actions that you can simulate players taking",
-              this.simpleContents('TestAssertion')
-            ),
+            this.category('Variables', '310',
+              "Blocks to save and refer back to specific targets/values in the simulation",
+              null, {custom: 'SPELLSOURCE_VARIABLES'}),
+
+            {
+              "kind": "sep"
+            },
 
             this.category('Logic', '210',
               "Blocks to help manage what actions are simulated",
@@ -314,7 +313,7 @@ export default class BlocklyToolbox {
             ),
 
             this.category('Math', '230',
-              "Test",
+              "Blocks for doing math in regards to actions. Don't try to use these blocks for cards or effects other than test actions.",
               this.exclusionContents('math',
                 'math_change')
             ),
@@ -330,17 +329,80 @@ export default class BlocklyToolbox {
               this.simpleContents('list')
             ),
             */
-
-            this.category('Variables', '310',
-              "Blocks to save and refer back to specific targets/values in the simulation",
-              null, 'SPELLSOURCE_VARIABLES')
           ]
         )
       ]
     }
   }
 
-  static category(name, color, tooltip, contents, custom = null) {
+  /**
+   * Specifically creates the JSON for the "Search Results" category.
+   * Defined here so that the category can be easily updated for new search results
+   * @returns category json
+   */
+  static searchResultsCategory(results) {
+    return this.category('Search Results', '#000000',
+      "The relevant blocks from your search will appear here",
+      results.map(value => this.getBlock(value.id)), {toolboxitemid: 'Search Results'}
+    )
+  }
+
+  /**
+   * Specifically creates the JSON for the "Classes" category.
+   * Defined here so that the category can be easily updated for new WorkspaceHeroClasss
+   * @returns category json
+   */
+  static classesCategory() {
+    let workspaceHeroClasses = this.contents('WorkspaceHeroClass')
+    let contents
+    if (workspaceHeroClasses.length > 0) {
+      contents = [
+        ...workspaceHeroClasses,
+        {
+          "kind": "label",
+          "text": " "
+        },
+        ...this.contents('HeroClass')
+      ]
+    } else {
+      contents = this.contents('HeroClass')
+    }
+
+    return this.category('Classes', '#888888',
+      "Blocks for the different playable champion classes",
+      contents, {toolboxitemid: 'Classes'}
+    )
+  }
+
+  /**
+   * Specifically creates the JSON for the "Cards" category.
+   * Defined here so that the category can be easily updated for new WorkspaceCards
+   * @returns category json
+   */
+  static cardsCategory() {
+    return this.category('Cards', '#888888',
+      "Blocks for referencing the cards you make in the workspace (use 'Search Card Catalogue' to reference existing cards)",
+      [
+        {
+          "kind": "label",
+          "text": "Blocks for your Workspace Cards will appear here"
+        },
+        ...this.contents('Card'),
+        ...this.contents('WorkspaceCard')
+      ], {toolboxitemid: 'Cards'}
+    )
+  }
+
+  /**
+   * Creates the blockly toolbox JSON for a new category
+   * @param name The category's name
+   * @param color The category's color
+   * @param tooltip The category's tooltip
+   * @param contents The contents of the category
+   * @param props The toolbox CUSTOM field, if it needs one
+   * @returns category json
+   */
+  static category(name, color, tooltip, contents, props = null) {
     let category = {
       kind: 'category',
       name: name,
@@ -350,12 +412,20 @@ export default class BlocklyToolbox {
     if (contents?.length) {
       category.contents = contents
     }
-    if (custom) {
-      category.custom = custom
+    if (!!props) {
+      for (let propsKey in props) {
+        category[propsKey] = props[propsKey]
+      }
     }
     return category
   }
 
+  /**
+   * Gets all valid blocks that start with a prefix and are part of a certain subcategory
+   * @param prefix The prefix to check from
+   * @param sub The subcategory to match
+   * @returns [category json blocks]
+   */
   static subContents(prefix, sub) {
     let contents = []
     for (let block in Blockly.Blocks) {
@@ -369,16 +439,27 @@ export default class BlocklyToolbox {
     return contents
   }
 
-  static simpleContents(prefix, prefix2 = null) {
+  /**
+   * Get all valid blocks that start with a prefix
+   * @param prefix The prefix to check from
+   * @returns [category json blocks]
+   */
+  static contents(prefix) {
     let contents = []
     for (let block in Blockly.Blocks) {
-      if (this.defaultTest(block) && (block.startsWith(prefix) || (!!prefix2 && block.startsWith(prefix2)))) {
+      if (this.defaultTest(block) && (block.startsWith(prefix))) {
         contents.push(this.getBlock(block))
       }
     }
     return contents
   }
 
+  /**
+   * Get all valid blocks that start with a prefix, minus some exclusions by type
+   * @param prefix The prefix to check from
+   * @param exclusions Specific blocks to not include
+   * @returns [category json blocks]
+   */
   static exclusionContents(prefix, ...exclusions) {
     let contents = []
     for (let block in Blockly.Blocks) {
@@ -389,6 +470,12 @@ export default class BlocklyToolbox {
     return contents
   }
 
+  /**
+   * Get all valid blocks that start with a prefix, plus some extras by type
+   * @param prefix The prefix to check from
+   * @param inclusions Additional blocks to include
+   * @returns [category json blocks]
+   */
   static inclusionContents(prefix, ...inclusions) {
     let contents = []
     for (let block in Blockly.Blocks) {
@@ -398,7 +485,15 @@ export default class BlocklyToolbox {
     }
     return contents
   }
-  
+
+  /**
+   * All blocks that appear in the toolbox should pass this, which means:
+   *  - Their type doesn't end in shadow
+   *  - If they're a default blockly block, then their type can't have two '_'s in it
+   *      (because of the blocks used in mutators)
+   * @param block The block type to check
+   * @returns boolean
+   */
   static defaultTest(block) {
     return !block.endsWith('SHADOW') && (!block.match(/^.*_.*_.*/) || BlocklyMiscUtils.isSpellsourceBlock(block))
   }
@@ -411,14 +506,6 @@ export default class BlocklyToolbox {
       contents: this.blockContents(type)
     }
   }
-
-  static xmlToJson(element) {
-    return {
-      "kind": "block",
-      "blockxml": element.outerHTML
-    }
-  }
-
 
   //Turns our own json formatting for shadow blocks into the formatting
   //that's used for specifying toolbox categories (recursively)
@@ -442,7 +529,7 @@ export default class BlocklyToolbox {
                   })
                 }
               }
-              shadowContents.push(this.blockContents(arg.shadow.type))
+              shadowContents.push(...this.blockContents(arg.shadow.type))
 
               contents.push({
                 kind: 'value',

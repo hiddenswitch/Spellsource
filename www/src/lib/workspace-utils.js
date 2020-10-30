@@ -411,7 +411,6 @@ export default class WorkspaceUtils {
 
   static workspaceToCardScript (workspace) {
     const xml = Xml.workspaceToDom(workspace)
-    console.log(xml)
     return WorkspaceUtils.xmlToCardScript(xml)
   }
 }
