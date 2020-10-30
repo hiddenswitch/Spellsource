@@ -19,12 +19,12 @@ public interface IDecks extends VertxPojo, Serializable {
     /**
      * Setter for <code>spellsource.decks.id</code>.
      */
-    public IDecks setId(Long value);
+    public IDecks setId(String value);
 
     /**
      * Getter for <code>spellsource.decks.id</code>.
      */
-    public Long getId();
+    public String getId();
 
     /**
      * Setter for <code>spellsource.decks.created_by</code>. who created this deck originally
@@ -76,6 +76,16 @@ public interface IDecks extends VertxPojo, Serializable {
      */
     public Boolean getTrashed();
 
+    /**
+     * Setter for <code>spellsource.decks.format</code>.
+     */
+    public IDecks setFormat(String value);
+
+    /**
+     * Getter for <code>spellsource.decks.format</code>.
+     */
+    public String getFormat();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -93,9 +103,9 @@ public interface IDecks extends VertxPojo, Serializable {
     @Override
     public default IDecks fromJson(io.vertx.core.json.JsonObject json) {
         try {
-            setId(json.getLong("id"));
+            setId(json.getString("id"));
         } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("id","java.lang.Long",e);
+            throw new UnexpectedJsonValueType("id","java.lang.String",e);
         }
         try {
             setCreatedBy(json.getString("created_by"));
@@ -122,6 +132,11 @@ public interface IDecks extends VertxPojo, Serializable {
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("trashed","java.lang.Boolean",e);
         }
+        try {
+            setFormat(json.getString("format"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("format","java.lang.String",e);
+        }
         return this;
     }
 
@@ -135,6 +150,7 @@ public interface IDecks extends VertxPojo, Serializable {
         json.put("name",getName());
         json.put("hero_class",getHeroClass());
         json.put("trashed",getTrashed());
+        json.put("format",getFormat());
         return json;
     }
 

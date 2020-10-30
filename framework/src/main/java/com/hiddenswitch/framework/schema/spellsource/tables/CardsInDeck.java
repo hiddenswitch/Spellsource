@@ -16,7 +16,7 @@ import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row3;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CardsInDeck extends TableImpl<CardsInDeckRecord> {
 
-    private static final long serialVersionUID = -555327098;
+    private static final long serialVersionUID = 1958233861;
 
     /**
      * The reference instance of <code>spellsource.cards_in_deck</code>
@@ -55,17 +55,12 @@ public class CardsInDeck extends TableImpl<CardsInDeckRecord> {
     /**
      * The column <code>spellsource.cards_in_deck.deck_id</code>. deleting a deck deletes all its card references
      */
-    public final TableField<CardsInDeckRecord, Long> DECK_ID = createField(DSL.name("deck_id"), org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "deleting a deck deletes all its card references");
+    public final TableField<CardsInDeckRecord, String> DECK_ID = createField(DSL.name("deck_id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "deleting a deck deletes all its card references");
 
     /**
      * The column <code>spellsource.cards_in_deck.card_id</code>. cannot delete cards that are currently used in decks
      */
     public final TableField<CardsInDeckRecord, String> CARD_ID = createField(DSL.name("card_id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "cannot delete cards that are currently used in decks");
-
-    /**
-     * The column <code>spellsource.cards_in_deck.version</code>.
-     */
-    public final TableField<CardsInDeckRecord, Long> VERSION = createField(DSL.name("version"), org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * Create a <code>spellsource.cards_in_deck</code> table reference
@@ -122,7 +117,7 @@ public class CardsInDeck extends TableImpl<CardsInDeckRecord> {
 
     @Override
     public List<ForeignKey<CardsInDeckRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<CardsInDeckRecord, ?>>asList(Keys.CARDS_IN_DECK__CARDS_IN_DECK_DECK_ID_FKEY, Keys.CARDS_IN_DECK__CARDS_IN_DECK_CARD_ID_VERSION_FKEY);
+        return Arrays.<ForeignKey<CardsInDeckRecord, ?>>asList(Keys.CARDS_IN_DECK__CARDS_IN_DECK_DECK_ID_FKEY, Keys.CARDS_IN_DECK__CARDS_IN_DECK_CARD_ID_FKEY);
     }
 
     public Decks decks() {
@@ -130,7 +125,7 @@ public class CardsInDeck extends TableImpl<CardsInDeckRecord> {
     }
 
     public Cards cards() {
-        return new Cards(this, Keys.CARDS_IN_DECK__CARDS_IN_DECK_CARD_ID_VERSION_FKEY);
+        return new Cards(this, Keys.CARDS_IN_DECK__CARDS_IN_DECK_CARD_ID_FKEY);
     }
 
     @Override
@@ -160,11 +155,11 @@ public class CardsInDeck extends TableImpl<CardsInDeckRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row3 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Long, Long, String, Long> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row3<Long, String, String> fieldsRow() {
+        return (Row3) super.fieldsRow();
     }
 }

@@ -29,12 +29,12 @@ public interface ICardsInDeck extends VertxPojo, Serializable {
     /**
      * Setter for <code>spellsource.cards_in_deck.deck_id</code>. deleting a deck deletes all its card references
      */
-    public ICardsInDeck setDeckId(Long value);
+    public ICardsInDeck setDeckId(String value);
 
     /**
      * Getter for <code>spellsource.cards_in_deck.deck_id</code>. deleting a deck deletes all its card references
      */
-    public Long getDeckId();
+    public String getDeckId();
 
     /**
      * Setter for <code>spellsource.cards_in_deck.card_id</code>. cannot delete cards that are currently used in decks
@@ -45,16 +45,6 @@ public interface ICardsInDeck extends VertxPojo, Serializable {
      * Getter for <code>spellsource.cards_in_deck.card_id</code>. cannot delete cards that are currently used in decks
      */
     public String getCardId();
-
-    /**
-     * Setter for <code>spellsource.cards_in_deck.version</code>.
-     */
-    public ICardsInDeck setVersion(Long value);
-
-    /**
-     * Getter for <code>spellsource.cards_in_deck.version</code>.
-     */
-    public Long getVersion();
 
     // -------------------------------------------------------------------------
     // FROM and INTO
@@ -78,19 +68,14 @@ public interface ICardsInDeck extends VertxPojo, Serializable {
             throw new UnexpectedJsonValueType("id","java.lang.Long",e);
         }
         try {
-            setDeckId(json.getLong("deck_id"));
+            setDeckId(json.getString("deck_id"));
         } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("deck_id","java.lang.Long",e);
+            throw new UnexpectedJsonValueType("deck_id","java.lang.String",e);
         }
         try {
             setCardId(json.getString("card_id"));
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("card_id","java.lang.String",e);
-        }
-        try {
-            setVersion(json.getLong("version"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("version","java.lang.Long",e);
         }
         return this;
     }
@@ -102,7 +87,6 @@ public interface ICardsInDeck extends VertxPojo, Serializable {
         json.put("id",getId());
         json.put("deck_id",getDeckId());
         json.put("card_id",getCardId());
-        json.put("version",getVersion());
         return json;
     }
 

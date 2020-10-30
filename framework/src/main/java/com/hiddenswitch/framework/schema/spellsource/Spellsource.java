@@ -5,7 +5,6 @@ package com.hiddenswitch.framework.schema.spellsource;
 
 
 import com.hiddenswitch.framework.schema.DefaultCatalog;
-import com.hiddenswitch.framework.schema.spellsource.tables.CardDesc;
 import com.hiddenswitch.framework.schema.spellsource.tables.Cards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
@@ -24,7 +23,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Spellsource extends SchemaImpl {
 
-    private static final long serialVersionUID = -1199313847;
+    private static final long serialVersionUID = -1681201534;
 
     /**
      * The reference instance of <code>spellsource</code>
@@ -32,12 +31,7 @@ public class Spellsource extends SchemaImpl {
     public static final Spellsource SPELLSOURCE = new Spellsource();
 
     /**
-     * a particular instance of a card desc, which may be referenced by a card
-     */
-    public final CardDesc CARD_DESC = CardDesc.CARD_DESC;
-
-    /**
-     * references a card at a particular point in time
+     * The table <code>spellsource.cards</code>.
      */
     public final Cards CARDS = Cards.CARDS;
 
@@ -67,7 +61,6 @@ public class Spellsource extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
-            CardDesc.CARD_DESC,
             Cards.CARDS,
             CardsInDeck.CARDS_IN_DECK,
             Decks.DECKS);

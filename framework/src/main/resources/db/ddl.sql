@@ -1506,80 +1506,21 @@ CREATE TABLE keycloak.web_origins (
 ALTER TABLE keycloak.web_origins OWNER TO admin;
 
 --
--- Name: card_desc; Type: TABLE; Schema: spellsource; Owner: admin
---
-
-CREATE TABLE spellsource.card_desc (
-    id bigint NOT NULL,
-    uri text,
-    blockly_workspace xml,
-    card_script jsonb
-);
-
-
-ALTER TABLE spellsource.card_desc OWNER TO admin;
-
---
--- Name: TABLE card_desc; Type: COMMENT; Schema: spellsource; Owner: admin
---
-
-COMMENT ON TABLE spellsource.card_desc IS 'a particular instance of a card desc, which may be referenced by a card';
-
-
---
--- Name: card_desc_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
---
-
-ALTER TABLE spellsource.card_desc ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME spellsource.card_desc_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
 -- Name: cards; Type: TABLE; Schema: spellsource; Owner: admin
 --
 
 CREATE TABLE spellsource.cards (
-    id bigint NOT NULL,
-    card_id text NOT NULL,
-    card_desc bigint NOT NULL
+    id text NOT NULL,
+    created_by character varying NOT NULL,
+    uri text,
+    blockly_workspace xml,
+    card_script jsonb,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    last_modified timestamp with time zone DEFAULT now() NOT NULL
 );
 
 
 ALTER TABLE spellsource.cards OWNER TO admin;
-
---
--- Name: TABLE cards; Type: COMMENT; Schema: spellsource; Owner: admin
---
-
-COMMENT ON TABLE spellsource.cards IS 'references a card at a particular point in time';
-
-
---
--- Name: COLUMN cards.card_desc; Type: COMMENT; Schema: spellsource; Owner: admin
---
-
-COMMENT ON COLUMN spellsource.cards.card_desc IS 'mutable reference to a card_desc allowing the author to dy';
-
-
---
--- Name: cards_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
---
-
-ALTER TABLE spellsource.cards ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME spellsource.cards_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
 
 --
 -- Name: cards_in_deck; Type: TABLE; Schema: spellsource; Owner: admin
@@ -1587,9 +1528,8 @@ ALTER TABLE spellsource.cards ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 CREATE TABLE spellsource.cards_in_deck (
     id bigint NOT NULL,
-    deck_id bigint NOT NULL,
-    card_id text NOT NULL,
-    version bigint NOT NULL
+    deck_id text NOT NULL,
+    card_id text NOT NULL
 );
 
 
@@ -1628,12 +1568,13 @@ ALTER TABLE spellsource.cards_in_deck ALTER COLUMN id ADD GENERATED ALWAYS AS ID
 --
 
 CREATE TABLE spellsource.decks (
-    id bigint NOT NULL,
+    id text NOT NULL,
     created_by character varying NOT NULL,
     last_edited_by character varying NOT NULL,
     name character varying,
     hero_class character varying,
-    trashed boolean DEFAULT false NOT NULL
+    trashed boolean DEFAULT false NOT NULL,
+    format text
 );
 
 
@@ -1651,20 +1592,6 @@ COMMENT ON COLUMN spellsource.decks.created_by IS 'who created this deck origina
 --
 
 COMMENT ON COLUMN spellsource.decks.last_edited_by IS 'who last edited this deck';
-
-
---
--- Name: decks_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
---
-
-ALTER TABLE spellsource.decks ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME spellsource.decks_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
 
 
 --
@@ -2540,14 +2467,6 @@ ALTER TABLE ONLY keycloak.user_entity
 
 
 --
--- Name: card_desc card_desc_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
---
-
-ALTER TABLE ONLY spellsource.card_desc
-    ADD CONSTRAINT card_desc_pkey PRIMARY KEY (id);
-
-
---
 -- Name: cards_in_deck cards_in_deck_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
@@ -2560,7 +2479,7 @@ ALTER TABLE ONLY spellsource.cards_in_deck
 --
 
 ALTER TABLE ONLY spellsource.cards
-    ADD CONSTRAINT cards_pkey PRIMARY KEY (card_id, id);
+    ADD CONSTRAINT cards_pkey PRIMARY KEY (id);
 
 
 --
@@ -3822,19 +3741,19 @@ ALTER TABLE ONLY keycloak.identity_provider_config
 
 
 --
--- Name: cards cards_card_desc_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+-- Name: cards cards_created_by_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
 ALTER TABLE ONLY spellsource.cards
-    ADD CONSTRAINT cards_card_desc_fkey FOREIGN KEY (card_desc) REFERENCES spellsource.card_desc(id) ON DELETE RESTRICT;
+    ADD CONSTRAINT cards_created_by_fkey FOREIGN KEY (created_by) REFERENCES keycloak.user_entity(id);
 
 
 --
--- Name: cards_in_deck cards_in_deck_card_id_version_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+-- Name: cards_in_deck cards_in_deck_card_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
 ALTER TABLE ONLY spellsource.cards_in_deck
-    ADD CONSTRAINT cards_in_deck_card_id_version_fkey FOREIGN KEY (card_id, version) REFERENCES spellsource.cards(card_id, id);
+    ADD CONSTRAINT cards_in_deck_card_id_fkey FOREIGN KEY (card_id) REFERENCES spellsource.cards(id);
 
 
 --

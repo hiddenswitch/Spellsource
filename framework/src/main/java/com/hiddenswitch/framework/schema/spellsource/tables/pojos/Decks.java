@@ -15,14 +15,15 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Decks implements VertxPojo, IDecks {
 
-    private static final long serialVersionUID = 1969919089;
+    private static final long serialVersionUID = -635205199;
 
-    private Long    id;
+    private String  id;
     private String  createdBy;
     private String  lastEditedBy;
     private String  name;
     private String  heroClass;
     private Boolean trashed;
+    private String  format;
 
     public Decks() {}
 
@@ -33,15 +34,17 @@ public class Decks implements VertxPojo, IDecks {
         this.name = value.getName();
         this.heroClass = value.getHeroClass();
         this.trashed = value.getTrashed();
+        this.format = value.getFormat();
     }
 
     public Decks(
-        Long    id,
+        String  id,
         String  createdBy,
         String  lastEditedBy,
         String  name,
         String  heroClass,
-        Boolean trashed
+        Boolean trashed,
+        String  format
     ) {
         this.id = id;
         this.createdBy = createdBy;
@@ -49,6 +52,7 @@ public class Decks implements VertxPojo, IDecks {
         this.name = name;
         this.heroClass = heroClass;
         this.trashed = trashed;
+        this.format = format;
     }
 
     public Decks(io.vertx.core.json.JsonObject json) {
@@ -57,12 +61,12 @@ public class Decks implements VertxPojo, IDecks {
     }
 
     @Override
-    public Long getId() {
+    public String getId() {
         return this.id;
     }
 
     @Override
-    public Decks setId(Long id) {
+    public Decks setId(String id) {
         this.id = id;
         return this;
     }
@@ -123,6 +127,17 @@ public class Decks implements VertxPojo, IDecks {
     }
 
     @Override
+    public String getFormat() {
+        return this.format;
+    }
+
+    @Override
+    public Decks setFormat(String format) {
+        this.format = format;
+        return this;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Decks (");
 
@@ -132,6 +147,7 @@ public class Decks implements VertxPojo, IDecks {
         sb.append(", ").append(name);
         sb.append(", ").append(heroClass);
         sb.append(", ").append(trashed);
+        sb.append(", ").append(format);
 
         sb.append(")");
         return sb.toString();
@@ -149,6 +165,7 @@ public class Decks implements VertxPojo, IDecks {
         setName(from.getName());
         setHeroClass(from.getHeroClass());
         setTrashed(from.getTrashed());
+        setFormat(from.getFormat());
     }
 
     @Override

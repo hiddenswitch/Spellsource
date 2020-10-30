@@ -39,14 +39,14 @@ public class CardsInDeckDao extends AbstractReactiveVertxDAO<CardsInDeckRecord, 
     /**
      * Find records that have <code>deck_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByDeckId(Collection<Long> values) {
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByDeckId(Collection<String> values) {
         return findManyByCondition(CardsInDeck.CARDS_IN_DECK.DECK_ID.in(values));
     }
 
     /**
      * Find records that have <code>deck_id IN (values)</code> asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByDeckId(Collection<Long> values, int limit) {
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByDeckId(Collection<String> values, int limit) {
         return findManyByCondition(CardsInDeck.CARDS_IN_DECK.DECK_ID.in(values),limit);
     }
 
@@ -62,20 +62,6 @@ public class CardsInDeckDao extends AbstractReactiveVertxDAO<CardsInDeckRecord, 
      */
     public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByCardId(Collection<String> values, int limit) {
         return findManyByCondition(CardsInDeck.CARDS_IN_DECK.CARD_ID.in(values),limit);
-    }
-
-    /**
-     * Find records that have <code>version IN (values)</code> asynchronously
-     */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByVersion(Collection<Long> values) {
-        return findManyByCondition(CardsInDeck.CARDS_IN_DECK.VERSION.in(values));
-    }
-
-    /**
-     * Find records that have <code>version IN (values)</code> asynchronously limited by the given limit
-     */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByVersion(Collection<Long> values, int limit) {
-        return findManyByCondition(CardsInDeck.CARDS_IN_DECK.VERSION.in(values),limit);
     }
 
     @Override

@@ -15,12 +15,11 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CardsInDeck implements VertxPojo, ICardsInDeck {
 
-    private static final long serialVersionUID = 1904407644;
+    private static final long serialVersionUID = -476101710;
 
     private Long   id;
-    private Long   deckId;
+    private String deckId;
     private String cardId;
-    private Long   version;
 
     public CardsInDeck() {}
 
@@ -28,19 +27,16 @@ public class CardsInDeck implements VertxPojo, ICardsInDeck {
         this.id = value.getId();
         this.deckId = value.getDeckId();
         this.cardId = value.getCardId();
-        this.version = value.getVersion();
     }
 
     public CardsInDeck(
         Long   id,
-        Long   deckId,
-        String cardId,
-        Long   version
+        String deckId,
+        String cardId
     ) {
         this.id = id;
         this.deckId = deckId;
         this.cardId = cardId;
-        this.version = version;
     }
 
     public CardsInDeck(io.vertx.core.json.JsonObject json) {
@@ -60,12 +56,12 @@ public class CardsInDeck implements VertxPojo, ICardsInDeck {
     }
 
     @Override
-    public Long getDeckId() {
+    public String getDeckId() {
         return this.deckId;
     }
 
     @Override
-    public CardsInDeck setDeckId(Long deckId) {
+    public CardsInDeck setDeckId(String deckId) {
         this.deckId = deckId;
         return this;
     }
@@ -82,24 +78,12 @@ public class CardsInDeck implements VertxPojo, ICardsInDeck {
     }
 
     @Override
-    public Long getVersion() {
-        return this.version;
-    }
-
-    @Override
-    public CardsInDeck setVersion(Long version) {
-        this.version = version;
-        return this;
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("CardsInDeck (");
 
         sb.append(id);
         sb.append(", ").append(deckId);
         sb.append(", ").append(cardId);
-        sb.append(", ").append(version);
 
         sb.append(")");
         return sb.toString();
@@ -114,7 +98,6 @@ public class CardsInDeck implements VertxPojo, ICardsInDeck {
         setId(from.getId());
         setDeckId(from.getDeckId());
         setCardId(from.getCardId());
-        setVersion(from.getVersion());
     }
 
     @Override

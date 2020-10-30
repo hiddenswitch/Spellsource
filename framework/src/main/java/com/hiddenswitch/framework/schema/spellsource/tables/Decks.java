@@ -14,10 +14,9 @@ import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -33,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Decks extends TableImpl<DecksRecord> {
 
-    private static final long serialVersionUID = 1244532662;
+    private static final long serialVersionUID = -478852275;
 
     /**
      * The reference instance of <code>spellsource.decks</code>
@@ -51,7 +50,7 @@ public class Decks extends TableImpl<DecksRecord> {
     /**
      * The column <code>spellsource.decks.id</code>.
      */
-    public final TableField<DecksRecord, Long> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<DecksRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.decks.created_by</code>. who created this deck originally
@@ -77,6 +76,11 @@ public class Decks extends TableImpl<DecksRecord> {
      * The column <code>spellsource.decks.trashed</code>.
      */
     public final TableField<DecksRecord, Boolean> TRASHED = createField(DSL.name("trashed"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>spellsource.decks.format</code>.
+     */
+    public final TableField<DecksRecord, String> FORMAT = createField(DSL.name("format"), org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * Create a <code>spellsource.decks</code> table reference
@@ -114,11 +118,6 @@ public class Decks extends TableImpl<DecksRecord> {
     @Override
     public Schema getSchema() {
         return Spellsource.SPELLSOURCE;
-    }
-
-    @Override
-    public Identity<DecksRecord, Long> getIdentity() {
-        return Keys.IDENTITY_DECKS;
     }
 
     @Override
@@ -171,11 +170,11 @@ public class Decks extends TableImpl<DecksRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Long, String, String, String, String, Boolean> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<String, String, String, String, String, Boolean, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }
