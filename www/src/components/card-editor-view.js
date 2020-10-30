@@ -5,7 +5,6 @@ import AceEditor from "react-ace";
 import React, {useRef, useState} from "react";
 import CardEditorWorkspace from "./card-editor-workspace";
 import useComponentWillMount from "../hooks/use-component-will-mount";
-import CardTesterWorkspace from "./card-tester-workspace";
 
 const CardEditorView = (props) => {
 
@@ -137,7 +136,6 @@ const CardEditorView = (props) => {
     {
       showJS ? <AceEditor
         width={'100%'}
-        height={'200px'}
         mode="javascript"
         theme="github"
         setOptions={{

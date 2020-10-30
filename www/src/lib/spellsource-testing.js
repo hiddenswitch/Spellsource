@@ -14,6 +14,11 @@ export default class SpellsourceTesting {
     return TestMain.runGymSync(heroclass1, heroclass2)
   }
 
+  static addCard(json) {
+    const TestMain = java.import('com.hiddenswitch.spellsource.gameplaytest.TestMain')
+    return TestMain.addCardSync(json)
+  }
+
   static spell(json, context, source = null, target = null) {
     const TestMain = java.import('com.hiddenswitch.spellsource.gameplaytest.TestMain')
     TestMain.spellEffectSync(json, context, source, target)

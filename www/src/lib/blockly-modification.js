@@ -29,6 +29,7 @@ export default class BlocklyModification {
     this.multiline()
     this.jsonShadows()
     this.connections()
+    this.categoryIndenting()
 
     DefaultOverrides.overrideAll()
   }
@@ -403,11 +404,11 @@ export default class BlocklyModification {
   static noToolboxZoom() {
     const layout2 = Blockly.VerticalFlyout.prototype.layout_
     Blockly.VerticalFlyout.prototype.layout_ = function(contents, gaps) {
-      if (!!this.targetWorkspace_) {
-        const reset = this.targetWorkspace_.scale
-        this.targetWorkspace_.scale = 1.0
+      if (!!this.targetWorkspace) {
+        const reset = this.targetWorkspace.scale
+        this.targetWorkspace.scale = 1.0
         layout2.call(this, contents, gaps)
-        this.targetWorkspace_.scale = reset
+        this.targetWorkspace.scale = reset
       } else {
         layout2.call(this, contents, gaps)
       }
@@ -415,11 +416,11 @@ export default class BlocklyModification {
 
     const reflowInternal2 = Blockly.VerticalFlyout.prototype.reflowInternal_
     Blockly.VerticalFlyout.prototype.reflowInternal_ = function() {
-      if (!!this.targetWorkspace_) {
-        const reset = this.targetWorkspace_.scale
-        this.targetWorkspace_.scale = 1.0
+      if (!!this.targetWorkspace) {
+        const reset = this.targetWorkspace.scale
+        this.targetWorkspace.scale = 1.0
         reflowInternal2.call(this)
-        this.targetWorkspace_.scale = reset
+        this.targetWorkspace.scale = reset
       } else {
         reflowInternal2.call(this)
       }
@@ -484,7 +485,10 @@ export default class BlocklyModification {
     const getBlockXml = Blockly.Flyout.prototype.getBlockXml_
     Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
       const blockElement = getBlockXml.call(this, blockInfo)
-      handleContents(blockElement, blockInfo)
+      if (!blockElement.contentsHandled) {
+        handleContents(blockElement, blockInfo)
+        blockElement.contentsHandled = true
+      }
       return blockElement
     }
   }
@@ -497,5 +501,19 @@ export default class BlocklyModification {
         this.check_.push('ConditionDesc')
       }
     }
+  }
+
+  static categoryIndenting() {
+    const createRowContainer = Blockly.ToolboxCategory.prototype.createRowContainer_
+
+    Blockly.ToolboxCategory.prototype.createRowContainer_ = function () {
+      const rowDiv = createRowContainer.call(this)
+      let nestedPadding = Blockly.ToolboxCategory.nestedPadding * this.getLevel()
+      rowDiv.style.paddingLeft = 0
+      rowDiv.style.marginLeft = (nestedPadding / 2).toFixed(0) + "px"
+
+      return rowDiv
+    }
+
   }
 }
