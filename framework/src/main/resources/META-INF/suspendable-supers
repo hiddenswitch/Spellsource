@@ -3,3 +3,4 @@ io.grpc.stub.ServerCalls$UnaryRequestMethod.invoke(Ljava/lang/Object;Lio/grpc/st
 io.grpc.stub.StreamObserver.onCompleted()V
 io.grpc.stub.StreamObserver.onError(Ljava/lang/Throwable;)V
 io.grpc.stub.StreamObserver.onNext(Ljava/lang/Object;)V
+org.flywaydb.core.api.migration.JavaMigration.migrate(Lorg/flywaydb/core/api/migration/Context;)V

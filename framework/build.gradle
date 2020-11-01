@@ -48,6 +48,7 @@ def createPostgresImage = tasks.getByPath(':testcontainers:createPostgresImage')
 dependencies {
     api project(':core')
     api project(':game')
+    api project(':cards')
     api project(':vertx-sync')
     api 'io.vertx:vertx-rx-java2:3.9.2'
 
@@ -274,6 +275,14 @@ task jooqGenerate() {
             commandLine "$project.projectDir/bin/pg_dump", '-h', "database", '-s', '-f', '/git/framework/src/main/resources/db/ddl.sql'
         }
     }
+}
+
+task migrationsOrSqlChanged(group: 'spellsource') {
+    dependsOn += [jooqGenerate]
+}
+
+task protosChanged(group: 'spellsource') {
+    dependsOn += [installDll, ':framework:generateProto']
 }
 
 flyway {

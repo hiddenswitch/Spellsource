@@ -5,6 +5,7 @@ package com.hiddenswitch.framework.schema.spellsource.tables;
 
 
 import com.hiddenswitch.framework.schema.keycloak.tables.UserEntity;
+import com.hiddenswitch.framework.schema.spellsource.Indexes;
 import com.hiddenswitch.framework.schema.spellsource.Keys;
 import com.hiddenswitch.framework.schema.spellsource.Spellsource;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
@@ -14,9 +15,10 @@ import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.Row10;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -32,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Decks extends TableImpl<DecksRecord> {
 
-    private static final long serialVersionUID = -478852275;
+    private static final long serialVersionUID = -110008032;
 
     /**
      * The reference instance of <code>spellsource.decks</code>
@@ -83,6 +85,21 @@ public class Decks extends TableImpl<DecksRecord> {
     public final TableField<DecksRecord, String> FORMAT = createField(DSL.name("format"), org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
+     * The column <code>spellsource.decks.deck_type</code>.
+     */
+    public final TableField<DecksRecord, Integer> DECK_TYPE = createField(DSL.name("deck_type"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+    /**
+     * The column <code>spellsource.decks.is_premade</code>.
+     */
+    public final TableField<DecksRecord, Boolean> IS_PREMADE = createField(DSL.name("is_premade"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>spellsource.decks.permitted_to_duplicate</code>.
+     */
+    public final TableField<DecksRecord, Boolean> PERMITTED_TO_DUPLICATE = createField(DSL.name("permitted_to_duplicate"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+
+    /**
      * Create a <code>spellsource.decks</code> table reference
      */
     public Decks() {
@@ -118,6 +135,11 @@ public class Decks extends TableImpl<DecksRecord> {
     @Override
     public Schema getSchema() {
         return Spellsource.SPELLSOURCE;
+    }
+
+    @Override
+    public List<Index> getIndexes() {
+        return Arrays.<Index>asList(Indexes.DECKS_CREATED_BY_IDX);
     }
 
     @Override
@@ -170,11 +192,11 @@ public class Decks extends TableImpl<DecksRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row10 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<String, String, String, String, String, Boolean, String> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row10<String, String, String, String, String, Boolean, String, Integer, Boolean, Boolean> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 }

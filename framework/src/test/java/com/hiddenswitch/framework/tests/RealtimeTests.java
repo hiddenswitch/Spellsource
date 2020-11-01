@@ -22,7 +22,7 @@ public class RealtimeTests extends FrameworkTestBase {
 	public static void realtimeSetup(Vertx vertx, VertxTestContext testContext) {
 		Handler<AsyncResult<RowSet<Row>>> completing = testContext.completing();
 		vertx.runOnContext(v -> {
-			pool = Environment.pool();
+			pool = Environment.sqlPoolAkaDaoDelegate();
 			pool.query("CREATE SCHEMA test;\n" +
 					"\n" +
 					"CREATE TYPE test.continents AS ENUM (\n" +

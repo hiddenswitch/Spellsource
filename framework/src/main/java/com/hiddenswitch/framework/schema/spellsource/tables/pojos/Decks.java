@@ -15,7 +15,7 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Decks implements VertxPojo, IDecks {
 
-    private static final long serialVersionUID = -635205199;
+    private static final long serialVersionUID = -2146551399;
 
     private String  id;
     private String  createdBy;
@@ -24,6 +24,9 @@ public class Decks implements VertxPojo, IDecks {
     private String  heroClass;
     private Boolean trashed;
     private String  format;
+    private Integer deckType;
+    private Boolean isPremade;
+    private Boolean permittedToDuplicate;
 
     public Decks() {}
 
@@ -35,6 +38,9 @@ public class Decks implements VertxPojo, IDecks {
         this.heroClass = value.getHeroClass();
         this.trashed = value.getTrashed();
         this.format = value.getFormat();
+        this.deckType = value.getDeckType();
+        this.isPremade = value.getIsPremade();
+        this.permittedToDuplicate = value.getPermittedToDuplicate();
     }
 
     public Decks(
@@ -44,7 +50,10 @@ public class Decks implements VertxPojo, IDecks {
         String  name,
         String  heroClass,
         Boolean trashed,
-        String  format
+        String  format,
+        Integer deckType,
+        Boolean isPremade,
+        Boolean permittedToDuplicate
     ) {
         this.id = id;
         this.createdBy = createdBy;
@@ -53,6 +62,9 @@ public class Decks implements VertxPojo, IDecks {
         this.heroClass = heroClass;
         this.trashed = trashed;
         this.format = format;
+        this.deckType = deckType;
+        this.isPremade = isPremade;
+        this.permittedToDuplicate = permittedToDuplicate;
     }
 
     public Decks(io.vertx.core.json.JsonObject json) {
@@ -138,6 +150,39 @@ public class Decks implements VertxPojo, IDecks {
     }
 
     @Override
+    public Integer getDeckType() {
+        return this.deckType;
+    }
+
+    @Override
+    public Decks setDeckType(Integer deckType) {
+        this.deckType = deckType;
+        return this;
+    }
+
+    @Override
+    public Boolean getIsPremade() {
+        return this.isPremade;
+    }
+
+    @Override
+    public Decks setIsPremade(Boolean isPremade) {
+        this.isPremade = isPremade;
+        return this;
+    }
+
+    @Override
+    public Boolean getPermittedToDuplicate() {
+        return this.permittedToDuplicate;
+    }
+
+    @Override
+    public Decks setPermittedToDuplicate(Boolean permittedToDuplicate) {
+        this.permittedToDuplicate = permittedToDuplicate;
+        return this;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Decks (");
 
@@ -148,6 +193,9 @@ public class Decks implements VertxPojo, IDecks {
         sb.append(", ").append(heroClass);
         sb.append(", ").append(trashed);
         sb.append(", ").append(format);
+        sb.append(", ").append(deckType);
+        sb.append(", ").append(isPremade);
+        sb.append(", ").append(permittedToDuplicate);
 
         sb.append(")");
         return sb.toString();
@@ -166,6 +214,9 @@ public class Decks implements VertxPojo, IDecks {
         setHeroClass(from.getHeroClass());
         setTrashed(from.getTrashed());
         setFormat(from.getFormat());
+        setDeckType(from.getDeckType());
+        setIsPremade(from.getIsPremade());
+        setPermittedToDuplicate(from.getPermittedToDuplicate());
     }
 
     @Override

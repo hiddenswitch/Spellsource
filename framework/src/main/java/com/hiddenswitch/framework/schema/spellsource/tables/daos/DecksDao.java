@@ -120,6 +120,48 @@ public class DecksDao extends AbstractReactiveVertxDAO<DecksRecord, com.hiddensw
         return findManyByCondition(Decks.DECKS.FORMAT.in(values),limit);
     }
 
+    /**
+     * Find records that have <code>deck_type IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks>> findManyByDeckType(Collection<Integer> values) {
+        return findManyByCondition(Decks.DECKS.DECK_TYPE.in(values));
+    }
+
+    /**
+     * Find records that have <code>deck_type IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks>> findManyByDeckType(Collection<Integer> values, int limit) {
+        return findManyByCondition(Decks.DECKS.DECK_TYPE.in(values),limit);
+    }
+
+    /**
+     * Find records that have <code>is_premade IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks>> findManyByIsPremade(Collection<Boolean> values) {
+        return findManyByCondition(Decks.DECKS.IS_PREMADE.in(values));
+    }
+
+    /**
+     * Find records that have <code>is_premade IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks>> findManyByIsPremade(Collection<Boolean> values, int limit) {
+        return findManyByCondition(Decks.DECKS.IS_PREMADE.in(values),limit);
+    }
+
+    /**
+     * Find records that have <code>permitted_to_duplicate IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks>> findManyByPermittedToDuplicate(Collection<Boolean> values) {
+        return findManyByCondition(Decks.DECKS.PERMITTED_TO_DUPLICATE.in(values));
+    }
+
+    /**
+     * Find records that have <code>permitted_to_duplicate IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks>> findManyByPermittedToDuplicate(Collection<Boolean> values, int limit) {
+        return findManyByCondition(Decks.DECKS.PERMITTED_TO_DUPLICATE.in(values),limit);
+    }
+
     @Override
     public ReactiveClassicQueryExecutor<DecksRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks,String> queryExecutor(){
         return (ReactiveClassicQueryExecutor<DecksRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks,String>) super.queryExecutor();

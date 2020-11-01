@@ -3,6 +3,7 @@ package com.hiddenswitch.framework;
 import com.avast.grpc.jwt.client.JwtCallCredentials;
 import com.hiddenswitch.framework.rpc.*;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
+import com.hiddenswitch.spellsource.rpc.HiddenSwitchSpellsourceAPIServiceGrpc;
 import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.vertx.core.Future;
@@ -16,6 +17,7 @@ import io.vertx.grpc.VertxChannelBuilder;
 import org.keycloak.representations.AccessTokenResponse;
 
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Client implements AutoCloseable {
@@ -55,6 +57,10 @@ public class Client implements AutoCloseable {
 				.setPassword(password).build(), promise);
 		return promise.future()
 				.onSuccess(this::handleCreateAccountReply);
+	}
+
+	public Future<LoginOrCreateReply> createAndLogin() {
+		return createAndLogin(UUID.randomUUID().toString(), UUID.randomUUID().toString().replace("-", ".") + "@hiddenswitch.com", UUID.randomUUID().toString());
 	}
 
 	public CallCredentials credentials() {
@@ -140,5 +146,10 @@ public class Client implements AutoCloseable {
 
 	private void handleAccountsCreateUser(UserEntity userEntity) {
 		this.userEntity = userEntity;
+	}
+
+	public HiddenSwitchSpellsourceAPIServiceGrpc.HiddenSwitchSpellsourceAPIServiceVertxStub legacy() {
+		return HiddenSwitchSpellsourceAPIServiceGrpc.newVertxStub(channel())
+				.withCallCredentials(credentials());
 	}
 }

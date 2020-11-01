@@ -62,13 +62,6 @@ public class FrameworkTestBase {
 		if (started.compareAndSet(false, true)) {
 			startup = Environment
 					.executeBlocking(() -> Startables.deepStart(Stream.of(redis, postgres, keycloak)).join())
-					.compose(ignored -> Environment.migrate("jdbc:postgresql://" + postgres.getHostAndPort() + "/spellsource", "admin", "password"))
-					.compose(count -> {
-						if (count < 4) {
-							return Future.failedFuture(new RuntimeException(Integer.toString(count)));
-						}
-						return Future.succeededFuture(count);
-					})
 					.compose(ignored -> {
 						// inject the postgres connection parameters
 						System.getProperties().putIfAbsent("pg.port", Integer.toString(postgres.getMappedPort(5432)));
@@ -86,6 +79,13 @@ public class FrameworkTestBase {
 
 						return Future.succeededFuture();
 					})
+					.compose(ignored -> Environment.migrate("jdbc:postgresql://" + postgres.getHostAndPort() + "/spellsource", "admin", "password"))
+					.compose(count -> {
+						if (count < 4) {
+							return Future.failedFuture(new RuntimeException(Integer.toString(count)));
+						}
+						return Future.succeededFuture(count);
+					})
 					.compose(ignored -> Environment.executeBlocking(() -> Startables.deepStart(Stream.of(realtime)).join()))
 					.compose(ignored -> {
 						// inject the realtime setup
@@ -95,15 +95,6 @@ public class FrameworkTestBase {
 		}
 
 		startup
-				.compose(ignored -> {
-					var promise = Promise.<Void>promise();
-					vertx.runOnContext(v -> {
-						Accounts.createRealmIfAbsent()
-								.map((Void) null)
-								.onComplete(promise);
-					});
-					return promise.future();
-				})
 				.compose(ignored -> {
 					// Start the application
 					var promise = Promise.<String>promise();
