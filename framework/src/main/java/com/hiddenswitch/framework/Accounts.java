@@ -23,6 +23,7 @@ import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
 
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
@@ -76,13 +77,29 @@ public class Accounts {
 				if (accessToken == null) {
 					return Future.succeededFuture();
 				} else {
-					return (new UserEntityDao(Environment.jooq(), Environment.pool())).findOneById(accessToken.getSubject());
+					return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate())).findOneById(accessToken.getSubject());
 				}
 			}
 		}
 
 		// For now we do not support getting the context any other way
 		return Future.failedFuture("no context");
+	}
+
+	public static String userId() {
+		var interceptor = Accounts.interceptor.get();
+		if (interceptor != null) {
+			var accessTokenContextKey = interceptor.AccessTokenContextKey;
+			if (accessTokenContextKey != null) {
+				var accessToken = accessTokenContextKey.get();
+				if (accessToken == null) {
+					return null;
+				} else {
+					return accessToken.getSubject();
+				}
+			}
+		}
+		return null;
 	}
 
 	public static Future<BindableService> unauthenticatedService() {
@@ -121,7 +138,7 @@ public class Accounts {
 							var token = TokenVerifier.create(accessTokenResponse.getToken(), AccessToken.class);
 							try {
 								var userId = token.getToken().getSubject();
-								var userEntityRes = (new UserEntityDao(Environment.jooq(), Environment.pool()))
+								var userEntityRes = (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate()))
 										.findOneById(userId);
 								return userEntityRes.map(userEntity -> new Object[]{accessTokenResponse, userEntity});
 							} catch (VerificationException e) {
@@ -147,7 +164,7 @@ public class Accounts {
 							}
 
 							// TODO: Join with friends
-							return (new UserEntityDao(Environment.jooq(), Environment.pool()))
+							return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate()))
 									.findManyByIds(request.getIdsList())
 									.map(users ->
 											GetAccountsReply.newBuilder()
@@ -190,17 +207,28 @@ public class Accounts {
 					credential.setTemporary(false);
 
 					// TODO: Not sure yet how to get the ID of the user you just created
-					return Environment.executeBlocking(() -> realm.users().create(user)).map(user);
+					return Environment.executeBlocking(() -> {
+						var response = realm.users().create(user);
+						if (response.getStatus() >= 400) {
+							throw new RuntimeException("was Accounts.createRealmIfAbsent called?");
+						}
+						return response;
+					}).map(response -> {
+						var parts = response.getLocation().getPath().split("/");
+						var id = parts[parts.length - 1];
+						user.setId(id);
+						return user;
+					});
 				})
 				.compose(userRepresentation -> {
-					var users = new UserEntityDao(Environment.jooq(), Environment.pool());
-					return users.findManyByEmail(Collections.singletonList(userRepresentation.getEmail()), 1);
+					var users = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate());
+					return users.findOneById(userRepresentation.getId());
 				})
-				.compose(result -> {
-					if (result.size() != 1) {
+				.compose(userEntity -> {
+					if (userEntity == null) {
 						return Future.failedFuture(new ArrayIndexOutOfBoundsException("invalid user creation result"));
 					}
-					return Future.succeededFuture(result.get(0));
+					return Future.succeededFuture(userEntity);
 				});
 	}
 

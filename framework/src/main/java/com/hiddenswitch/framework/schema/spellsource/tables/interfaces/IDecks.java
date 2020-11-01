@@ -86,6 +86,36 @@ public interface IDecks extends VertxPojo, Serializable {
      */
     public String getFormat();
 
+    /**
+     * Setter for <code>spellsource.decks.deck_type</code>.
+     */
+    public IDecks setDeckType(Integer value);
+
+    /**
+     * Getter for <code>spellsource.decks.deck_type</code>.
+     */
+    public Integer getDeckType();
+
+    /**
+     * Setter for <code>spellsource.decks.is_premade</code>.
+     */
+    public IDecks setIsPremade(Boolean value);
+
+    /**
+     * Getter for <code>spellsource.decks.is_premade</code>.
+     */
+    public Boolean getIsPremade();
+
+    /**
+     * Setter for <code>spellsource.decks.permitted_to_duplicate</code>.
+     */
+    public IDecks setPermittedToDuplicate(Boolean value);
+
+    /**
+     * Getter for <code>spellsource.decks.permitted_to_duplicate</code>.
+     */
+    public Boolean getPermittedToDuplicate();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -137,6 +167,21 @@ public interface IDecks extends VertxPojo, Serializable {
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("format","java.lang.String",e);
         }
+        try {
+            setDeckType(json.getInteger("deck_type"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("deck_type","java.lang.Integer",e);
+        }
+        try {
+            setIsPremade(json.getBoolean("is_premade"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("is_premade","java.lang.Boolean",e);
+        }
+        try {
+            setPermittedToDuplicate(json.getBoolean("permitted_to_duplicate"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("permitted_to_duplicate","java.lang.Boolean",e);
+        }
         return this;
     }
 
@@ -151,6 +196,9 @@ public interface IDecks extends VertxPojo, Serializable {
         json.put("hero_class",getHeroClass());
         json.put("trashed",getTrashed());
         json.put("format",getFormat());
+        json.put("deck_type",getDeckType());
+        json.put("is_premade",getIsPremade());
+        json.put("permitted_to_duplicate",getPermittedToDuplicate());
         return json;
     }
 

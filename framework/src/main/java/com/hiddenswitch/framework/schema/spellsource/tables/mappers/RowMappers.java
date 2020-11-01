@@ -31,6 +31,17 @@ public class RowMappers {
         };
     }
 
+    public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckPlayerAttributeTuples> getDeckPlayerAttributeTuplesMapper() {
+        return row -> {
+            com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckPlayerAttributeTuples pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckPlayerAttributeTuples();
+            pojo.setId(row.getLong("id"));
+            pojo.setDeckId(row.getString("deck_id"));
+            pojo.setAttribute(row.getInteger("attribute"));
+            pojo.setStringValue(row.getString("string_value"));
+            return pojo;
+        };
+    }
+
     public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks> getDecksMapper() {
         return row -> {
             com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks();
@@ -41,6 +52,9 @@ public class RowMappers {
             pojo.setHeroClass(row.getString("hero_class"));
             pojo.setTrashed(row.getBoolean("trashed"));
             pojo.setFormat(row.getString("format"));
+            pojo.setDeckType(row.getInteger("deck_type"));
+            pojo.setIsPremade(row.getBoolean("is_premade"));
+            pojo.setPermittedToDuplicate(row.getBoolean("permitted_to_duplicate"));
             return pojo;
         };
     }

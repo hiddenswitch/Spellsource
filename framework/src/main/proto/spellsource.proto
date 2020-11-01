@@ -392,7 +392,7 @@ message DecksPutRequest {
     // A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless
     // otherwise specified.
     string heroClass = 3;
-    repeated string inventoryIds = 4;
+    repeated string inventoryIds = 4 [deprecated = true];
 
     // The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to
     // see this name.
@@ -400,6 +400,8 @@ message DecksPutRequest {
     // Some custom cards interact with specific named decks in your collection. For those purposes, the deck names
     // are case sensitive. When multiple decks share a name, one will be chosen arbitrarily (not at random).
     string name = 5;
+
+    repeated string cardIds = 6;
 }
 
 // The deck that was created by a deck put request.
@@ -1562,6 +1564,9 @@ service HiddenSwitchSpellsourceAPIService {
             body: "updateCommand"
         };
     }
+
+    // Duplicates a deck. Creates a copy for the caller, not the owner
+    rpc DuplicateDeck(google.protobuf.StringValue) returns (DecksGetResponse) {}
 
     // When this user is the sender, cancels the invite. When this user is the recipient, rejects the specified invite.
     rpc DeleteInvite(DeleteInviteRequest) returns (InviteResponse) {

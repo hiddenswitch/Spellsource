@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-docker run -v "$(pwd)":/defs -w "/defs" --rm --entrypoint /usr/bin/grpc_csharp_plugin namely/protoc-all "$@"
+docker run -v "$(pwd)":/defs -w "/defs" --rm --entrypoint /usr/bin/grpc_csharp_plugin namely/protoc-all:1.31_0 "$@"

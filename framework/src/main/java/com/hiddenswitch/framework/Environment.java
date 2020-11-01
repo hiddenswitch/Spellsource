@@ -3,14 +3,12 @@ package com.hiddenswitch.framework;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableCallable;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.core.spi.FutureFactory;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
@@ -19,7 +17,6 @@ import org.jooq.Configuration;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DefaultConfiguration;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
@@ -31,7 +28,7 @@ public class Environment {
 	private static final WeakVertxMap<ReactiveClassicGenericQueryExecutor> queryExecutors = new WeakVertxMap<>(Environment::queryExecutorConstructor);
 
 	private static ReactiveClassicGenericQueryExecutor queryExecutorConstructor(Vertx vertx) {
-		return new ReactiveClassicGenericQueryExecutor(jooq(), pool());
+		return new ReactiveClassicGenericQueryExecutor(jooqAkaDaoConfiguration(), sqlPoolAkaDaoDelegate());
 	}
 
 	private static PgPool poolConstructor(Vertx vertx) {
@@ -65,7 +62,7 @@ public class Environment {
 		return options;
 	}
 
-	public static PgPool pool() {
+	public static PgPool sqlPoolAkaDaoDelegate() {
 		return pools.get();
 	}
 
@@ -73,7 +70,11 @@ public class Environment {
 		return queryExecutors.get();
 	}
 
-	public static Configuration jooq() {
+//	public static FutureFactory futureFactory() {
+//
+//	}
+
+	public static Configuration jooqAkaDaoConfiguration() {
 		return configuration.updateAndGet(existing -> {
 			if (existing != null) {
 				return existing;
@@ -89,7 +90,7 @@ public class Environment {
 		return executeBlocking(() -> {
 			var flyway = Flyway.configure()
 					.schemas("hiddenswitch")
-					.locations("classpath:db/migration")
+					.locations("classpath:db/migration", "classpath:com/hiddenswitch/framework/migrations")
 					.dataSource(url, username, password)
 					.load();
 			return flyway.migrate();
@@ -106,7 +107,7 @@ public class Environment {
 				try {
 					var res = blockingCallable.run();
 					promise.complete(res);
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					promise.fail(e);
 				}
 			}, false, result);

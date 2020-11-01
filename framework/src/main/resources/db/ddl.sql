@@ -1564,6 +1564,34 @@ ALTER TABLE spellsource.cards_in_deck ALTER COLUMN id ADD GENERATED ALWAYS AS ID
 
 
 --
+-- Name: deck_player_attribute_tuples; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.deck_player_attribute_tuples (
+    id bigint NOT NULL,
+    deck_id text NOT NULL,
+    attribute integer NOT NULL,
+    string_value text
+);
+
+
+ALTER TABLE spellsource.deck_player_attribute_tuples OWNER TO admin;
+
+--
+-- Name: deck_player_attribute_tuples_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.deck_player_attribute_tuples ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME spellsource.deck_player_attribute_tuples_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: decks; Type: TABLE; Schema: spellsource; Owner: admin
 --
 
@@ -1574,7 +1602,10 @@ CREATE TABLE spellsource.decks (
     name character varying,
     hero_class character varying,
     trashed boolean DEFAULT false NOT NULL,
-    format text
+    format text,
+    deck_type integer NOT NULL,
+    is_premade boolean DEFAULT false NOT NULL,
+    permitted_to_duplicate boolean DEFAULT false NOT NULL
 );
 
 
@@ -2483,6 +2514,14 @@ ALTER TABLE ONLY spellsource.cards
 
 
 --
+-- Name: deck_player_attribute_tuples deck_player_attribute_tuples_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.deck_player_attribute_tuples
+    ADD CONSTRAINT deck_player_attribute_tuples_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: decks decks_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
@@ -3034,6 +3073,13 @@ CREATE INDEX idx_usr_fed_prv_realm ON keycloak.user_federation_provider USING bt
 --
 
 CREATE INDEX idx_web_orig_client ON keycloak.web_origins USING btree (client_id);
+
+
+--
+-- Name: decks_created_by_idx; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX decks_created_by_idx ON spellsource.decks USING btree (created_by);
 
 
 --
@@ -3762,6 +3808,14 @@ ALTER TABLE ONLY spellsource.cards_in_deck
 
 ALTER TABLE ONLY spellsource.cards_in_deck
     ADD CONSTRAINT cards_in_deck_deck_id_fkey FOREIGN KEY (deck_id) REFERENCES spellsource.decks(id) ON DELETE CASCADE;
+
+
+--
+-- Name: deck_player_attribute_tuples deck_player_attribute_tuples_deck_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.deck_player_attribute_tuples
+    ADD CONSTRAINT deck_player_attribute_tuples_deck_id_fkey FOREIGN KEY (deck_id) REFERENCES spellsource.decks(id) ON DELETE CASCADE;
 
 
 --

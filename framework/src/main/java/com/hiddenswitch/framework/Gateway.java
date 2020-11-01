@@ -17,7 +17,9 @@ public class Gateway extends AbstractVerticle {
 		var builder = VertxServerBuilder.forPort(vertx, grpcPort());
 
 		// TODO: Just add all the services here
-		CompositeFuture.join(Accounts.unauthenticatedService(),
+		CompositeFuture.join(
+				Legacy.services(),
+				Accounts.unauthenticatedService(),
 				Accounts.authenticatedService())
 				.compose(services -> {
 					var list = services.list();
