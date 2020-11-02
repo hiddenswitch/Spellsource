@@ -53,7 +53,6 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
 
     BlocklyToolbox.initCallbacks(mainWorkspace())
 
-
   }, [])
 
   //When the query is updated, do some searching
@@ -69,7 +68,7 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
 
   //The default workspace changed event handler
   const onWorkspaceChanged = () => {
-    const cardScript = WorkspaceUtils.workspaceToCardScript(mainWorkspace())
+    const cardScript = []//WorkspaceUtils.workspaceToCardScript(mainWorkspace())
     // Generate the blocks that correspond to the cards in the workspace
     if (!mainWorkspace().isDragging()) {
       let update = handleWorkspaceCards(mainWorkspace(), cardScript)
@@ -79,11 +78,13 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
         mainWorkspace().getToolbox().getToolboxItemById('Classes')
           .updateFlyoutContents(BlocklyToolbox.classesCategory())
       }
+
       BlocklyMiscUtils.pluralStuff(mainWorkspace())
+
+      props.setJSON(JSON.stringify(cardScript, null, 2))
     }
 
 
-    props.setJSON(JSON.stringify(cardScript, null, 2))
     props.setJS(Blockly.JavaScript.workspaceToCode(mainWorkspace()))
   }
 
@@ -207,9 +208,6 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
   //Managing the creation and deletion of WorkspaceCard and WorkspaceHeroClass blocks
   const handleWorkspaceCards = (workspace, cardScript) => {
     let anythingChanged = false
-    if (!isArray(cardScript)) {
-      cardScript = [cardScript]
-    }
 
     let currentCards = []
     for (let blocksKey in Blockly.Blocks) {
@@ -220,7 +218,9 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
     let i = 0 //this works because the cardScript also uses the ordered getTopBlocks
     workspace.getTopBlocks(true).forEach(block => {
       if (block.type.startsWith('Starter_')) {
-        let card = cardScript[i]
+        let blockXml = Blockly.Xml.blockToDom(block, true)
+        let card = WorkspaceUtils.xmlToCardScript(blockXml)
+        cardScript.push(card)
 
         //if it's a class card, make the class first to init the color
         if (block.type === 'Starter_CLASS') {

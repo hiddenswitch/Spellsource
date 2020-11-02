@@ -308,6 +308,15 @@ export default class BlocklyModification {
             }
           }
         })
+      } else if (!block.workspace.targetWorkspace ||
+      block.workspace.targetWorkspace?.getToolbox()?.getSelectedItem()?.getId() === 'Search Results') {
+        menuOptions.push({
+          text: 'Show in Toolbox',
+          enabled: true,
+          callback: function () {
+            BlocklyMiscUtils.searchToolbox(block.type, block.workspace.targetWorkspace || block.workspace)
+          }
+        })
       }
 
       return menuOptions.filter(option => option.enabled)

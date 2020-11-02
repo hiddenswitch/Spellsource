@@ -536,4 +536,38 @@ export default class BlocklyMiscUtils {
   static isSpellsourceBlock(type) {
     return !!Blockly.Blocks[type]?.json?.type
   }
+
+  static searchToolbox(blockType, mainWorkspace) {
+    let toolbox = mainWorkspace.getToolbox()
+    let categories = toolbox.getToolboxItems().slice(1)
+
+    for (let category of categories) {
+      if (category.getContents) {
+        let contents = category.getContents()
+        for (let content of contents) {
+          if (content.kind === 'block' && content.type === blockType) {
+            if (category.getParent() && category.getParent().isCollapsible()) {
+              category.getParent().setExpanded(true)
+            }
+            toolbox.setSelectedItem(category)
+
+            if (toolbox.getFlyout() && toolbox.getFlyout().getWorkspace()) {
+              let workspace = toolbox.getFlyout().getWorkspace()
+              let totalHeight = 0
+              for (let topBlock of workspace.getTopBlocks(true)) {
+                if (topBlock.type === blockType) {
+                  toolbox.getFlyout().scrollbar.set(totalHeight)
+                  topBlock.addSelect()
+                } else {
+                  totalHeight += topBlock.height + 24
+                }
+              }
+            }
+
+            return
+          }
+        }
+      }
+    }
+  }
 }

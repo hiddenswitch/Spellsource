@@ -21,13 +21,13 @@ export default class SpellsourceGenerator {
       return "expect(SpellsourceTesting.condition(`"  + JSON.stringify(json, null, 2) + "`, context)).toEqual(true)"
     }
 
-    Blockly.JavaScript['TestSpellEffect'] = function (block) {
+    Blockly.JavaScript['TestActionSpellEffect'] = function (block) {
       let spell = block.getInput('spell').connection.targetBlock()
       let json = SpellsourceGenerator.blockToJson(spell)
       return "SpellsourceTesting.spell(`" + JSON.stringify(json, null, 2) + "`, context)\n"
     }
 
-    Blockly.JavaScript['TestPlayCard'] = function (block) {
+    Blockly.JavaScript['TestActionPlayCard'] = function (block) {
       let card = Blockly.JavaScript.valueToCode(block, 'card', Blockly.JavaScript.ORDER_NONE)
       let player = Blockly.JavaScript.valueToCode(block, 'player', Blockly.JavaScript.ORDER_NONE)
       let target = Blockly.JavaScript.valueToCode(block, 'target', Blockly.JavaScript.ORDER_NONE)
@@ -38,7 +38,7 @@ export default class SpellsourceGenerator {
       return ret + ")\n"
     }
 
-    Blockly.JavaScript['TestPlayMinion'] = function (block) {
+    Blockly.JavaScript['TestActionPlayMinion'] = function (block) {
       let card = Blockly.JavaScript.valueToCode(block, 'card', Blockly.JavaScript.ORDER_NONE)
       let player = Blockly.JavaScript.valueToCode(block, 'player', Blockly.JavaScript.ORDER_NONE)
       let target = Blockly.JavaScript.valueToCode(block, 'target', Blockly.JavaScript.ORDER_NONE)
@@ -50,7 +50,7 @@ export default class SpellsourceGenerator {
       return ret + ")\n"
     }
 
-    Blockly.JavaScript['TestReceiveCard'] = function (block) {
+    Blockly.JavaScript['TestActionReceiveCard'] = function (block) {
       let card = Blockly.JavaScript.valueToCode(block, 'card', Blockly.JavaScript.ORDER_NONE)
       let player = Blockly.JavaScript.valueToCode(block, 'player', Blockly.JavaScript.ORDER_NONE)
       let variable = block.getField('variable').getVariable().name
