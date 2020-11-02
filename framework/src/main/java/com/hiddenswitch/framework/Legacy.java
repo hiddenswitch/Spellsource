@@ -7,10 +7,8 @@ import com.google.protobuf.StringValue;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.CardsInDeckDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.DeckPlayerAttributeTuplesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.DecksDao;
-import com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckPlayerAttributeTuples;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks;
-import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsInDeckRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
 import com.hiddenswitch.spellsource.rpc.*;
 import io.grpc.ServerServiceDefinition;
@@ -27,17 +25,18 @@ import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
-import org.jooq.*;
 import org.jooq.Record;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 
 import java.util.*;
+import java.util.function.Function;
 
 import static com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS;
 import static com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck.CARDS_IN_DECK;
 import static com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES;
 import static com.hiddenswitch.framework.schema.spellsource.tables.Decks.DECKS;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 /**
  * The legacy services for Spellsource, to rapidly transition the game into a new backend.
@@ -126,6 +125,11 @@ public class Legacy {
 				var updateCommand = request.getUpdateCommand();
 				var queryExecutor = Environment.queryExecutor();
 
+				if (deckId == null) {
+					response.fail("deckId is null");
+					return;
+				}
+
 				if (!request.hasUpdateCommand()) {
 					getDeck(deckId, userId).onComplete(response);
 					return;
@@ -141,7 +145,7 @@ public class Legacy {
 						.limit(1)
 				).compose(authedCount -> {
 					if (authedCount < 1) {
-						return Future.failedFuture("not authorized to edit this deck");
+						return Future.failedFuture(new RuntimeException("not authorized to edit this deck"));
 					}
 
 					// Player entity attribute update
@@ -186,9 +190,16 @@ public class Legacy {
 					}
 
 					if (updateCommand.getPullAllCardIdsCount() > 0) {
-						futs.add(cardsInDeckDao.deleteByCondition(
-								CARDS_IN_DECK.DECK_ID.eq(deckId)
-										.and(CARDS_IN_DECK.CARD_ID.in(updateCommand.getPullAllCardIdsList()))));
+						futs.addAll(updateCommand.getPullAllCardIdsList().stream()
+								.collect(groupingBy(Function.identity(), counting()))
+								.entrySet()
+								.stream()
+								.map(entry ->
+										queryExecutor.execute(dsl ->
+												dsl.deleteFrom(CARDS_IN_DECK)
+														.where(CARDS_IN_DECK.DECK_ID.eq(deckId).and(CARDS_IN_DECK.CARD_ID.eq(entry.getKey())))
+														.limit(entry.getValue().intValue())))
+								.collect(toList()));
 					}
 
 					if (updateCommand.getPullAllInventoryIdsCount() > 0) {
@@ -435,7 +446,6 @@ public class Legacy {
 		var configuration = Environment.jooqAkaDaoConfiguration();
 		var delegate = Environment.sqlPoolAkaDaoDelegate();
 		var decksDao = new DecksDao(configuration, delegate);
-		var cardsInDeckDao = new CardsInDeckDao(configuration, delegate);
 		var deckId = UUID.randomUUID().toString();
 		return decksDao.insert(new Decks()
 				.setId(deckId)

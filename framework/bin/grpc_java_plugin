@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+set -e
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    "${DIR}"/x86_64-linux-gnu/protoc-gen-grpc-java "$@"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    "${DIR}"/x86_64-apple-darwin14/protoc-gen-grpc-java "$@"
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+    "${DIR}"/x86_64-w64-mingw32/protoc-gen-grpc-java.exe "$@"
+elif [[ "$OSTYPE" == "msys" ]]; then
+    "${DIR}"/x86_64-w64-mingw32/protoc-gen-grpc-java.exe "$@"
+elif [[ "$OSTYPE" == "win32" ]]; then
+    "${DIR}"/i686-w64-mingw32/protoc-gen-grpc-java.exe "$@"
+else
+    exit 137
+fi

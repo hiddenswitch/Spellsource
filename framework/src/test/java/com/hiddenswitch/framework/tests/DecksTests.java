@@ -2,11 +2,12 @@ package com.hiddenswitch.framework.tests;
 
 import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.spellsource.rpc.*;
-import io.vertx.core.*;
+import io.vertx.core.CompositeFuture;
+import io.vertx.core.Future;
+import io.vertx.core.Vertx;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -26,12 +27,10 @@ public class DecksTests extends FrameworkTestBase {
 		var client = new Client(vertx, webClient);
 		client.createAndLogin()
 				.compose(ignored -> createRandomDeck(client))
-				.compose(decksPutResponse -> {
+				.onSuccess(decksPutResponse -> {
 					testContext.verify(() -> {
 						assertEquals(30, decksPutResponse.getCollection().getInventoryCount(), "should have added cards");
 					});
-
-					return Future.succeededFuture();
 				})
 				.onComplete(testContext.completing());
 	}
@@ -54,55 +53,79 @@ public class DecksTests extends FrameworkTestBase {
 					var replacement = "spell_lunstone";
 					var toReplace = decksPutResponse.getCollection().getInventory(10).getId();
 					var service = client.legacy();
-					var promise = Promise.<DecksGetResponse>promise();
-					service.decksUpdate(DecksUpdateRequest.newBuilder()
+					return service.decksUpdate(DecksUpdateRequest.newBuilder()
 							.setDeckId(decksPutResponse.getDeckId())
 							.setUpdateCommand(DecksUpdateCommand.newBuilder()
 									.addPullAllInventoryIds(toReplace)
 									.setPushCardIds(DecksUpdateCommand.PushCardIdsMessage.newBuilder()
 											.addEach(replacement)
 											.build())
-									.build()).build(), promise);
-					return promise.future().onSuccess(decksGetResponse -> {
-						testContext.verify(() -> {
-							assertTrue(decksGetResponse.getCollection().getInventoryList().stream().anyMatch(cr -> cr.getEntity().getCardId().equals(replacement)), "should have added lunstone");
-							assertTrue(decksGetResponse.getCollection().getInventoryList().stream().noneMatch(cr -> cr.getId().equals(toReplace)), "should have removed by id");
-						});
-					});
+									.build()).build())
+							.onSuccess(decksGetResponse -> {
+								testContext.verify(() -> {
+									assertTrue(decksGetResponse.getCollection().getInventoryList().stream().anyMatch(cr -> cr.getEntity().getCardId().equals(replacement)), "should have added lunstone");
+									assertTrue(decksGetResponse.getCollection().getInventoryList().stream().noneMatch(cr -> cr.getId().equals(toReplace)), "should have removed by id");
+								});
+							});
 				})
 				.onComplete(testContext.completing());
 	}
 
-	/*
+
 	@Test
 	public void testUpdateDecksWithCardIds(WebClient webClient, Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx, webClient);
 		client.createAndLogin()
-				.compose(ignored -> {
+				.compose(ignored1 -> {
 					var service = client.legacy();
 
-					var decksPutResponsePromise = Promise.<DecksPutResponse>promise();
-					service.decksPut(DecksPutRequest.newBuilder()
+					return service.decksPut(DecksPutRequest.newBuilder()
 							.setName("Test Deck 2")
 							.setHeroClass(HeroClass.TEST)
-							.setFormat(DeckFormat.spellsource().getName()).build(), decksPutResponsePromise);
-
-
+							.setFormat(DeckFormat.spellsource().getName()).build())
+							.compose(decksPutResponse -> service.decksUpdate(DecksUpdateRequest.newBuilder()
+									.setDeckId(decksPutResponse.getCollection().getId())
+									.setUpdateCommand(DecksUpdateCommand.newBuilder()
+											.setPushCardIds(DecksUpdateCommand.PushCardIdsMessage.newBuilder()
+													.addEach("spell_test_summon_tokens")
+													.addEach("spell_test_summon_tokens")
+													.addEach("spell_test_summon_tokens")
+													.addEach("minion_test_3_2")
+													.build())
+											.build())
+									.build()))
+							.onSuccess(decksGetResponse -> {
+								testContext.verify(() -> {
+									assertEquals(4L, decksGetResponse.getCollection().getInventoryList().stream().map(CardRecord::getId).distinct().count());
+								});
+							})
+							.compose(decksGetResponse -> service.decksUpdate(DecksUpdateRequest.newBuilder()
+									.setDeckId(decksGetResponse.getCollection().getId())
+									.setUpdateCommand(DecksUpdateCommand.newBuilder()
+											.addPullAllCardIds("spell_test_summon_tokens")
+											.addPullAllCardIds("spell_test_summon_tokens")
+											.addPullAllCardIds("minion_test_3_2")
+											.build())
+									.build()))
+							.onSuccess(decksGetResponse -> {
+								testContext.verify(() -> {
+									assertEquals(1, decksGetResponse.getCollection().getInventoryCount(), "should only remove two of the three copies of spell test summon tokens");
+									assertEquals("spell_test_summon_tokens", decksGetResponse.getCollection().getInventory(0).getEntity().getCardId());
+								});
+							});
 				})
 				.onComplete(testContext.completing());
-	}*/
+	}
 
 	@NotNull
 	private Future<DecksPutResponse> createRandomDeck(Client client) {
 		var service = client.legacy();
-		var promise = Promise.<DecksPutResponse>promise();
 		var randomDeck = Deck.randomDeck();
-		service.decksPut(DecksPutRequest.newBuilder()
+		return service.decksPut(DecksPutRequest.newBuilder()
 				.setName("Test Deck")
 				.setFormat(randomDeck.getFormat().getName())
 				.setHeroClass(randomDeck.getHeroClass())
 				.addAllCardIds(randomDeck.getCards().stream().map(Card::getCardId).collect(Collectors.toList()))
-				.build(), promise);
-		return promise.future();
+				.build());
 	}
 }
