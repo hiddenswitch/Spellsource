@@ -1,0 +1,22 @@
+### Elemental Arch
+# Class: LIGHTBROWN
+# Format: Spellsource
+#
+# 2x (0) Scout
+# 2x (1) Selfburner
+# 2x (1) Steel Smash
+# 2x (2) Evergreen Grower
+# 1x (2) Hoffis the Dunewalker
+# 2x (3) Flamerunner
+# 2x (3) Molten Cauterizer
+# 2x (4) Rolling Boulder
+# 2x (4) Volcanic Elemental
+# 2x (5) Stalagmite Stomper
+# 2x (5) Trap Room
+# 1x (6) Farseer Kethaan
+# 1x (7) The Grudge
+# 2x (8) Cobble Elemental
+# 1x (8) Lundurr the Reborn
+# 2x (9) Awaken Defenders
+# 2x (10) Gemstone Giant
+#

@@ -1,0 +1,22 @@
+### Paven Paving The Way v1.1
+# Class: LIGHTBROWN
+# Format: All
+#
+# 2x (0) Scout
+# 2x (1) Avifauna
+# 1x (1) Carbon Copy
+# 2x (1) Gravedig
+# 2x (1) Steel Smash
+# 2x (2) Found Goods
+# 2x (2) Safeguard
+# 2x (2) Sand Filter
+# 1x (4) Bogovanis
+# 2x (4) Harbinger of Hope
+# 2x (4) Rolling Boulder
+# 2x (5) Atumjun Trapfinder
+# 1x (5) Paven, Elemental of Surprise
+# 1x (5) Sentry Orb
+# 2x (5) Trap Room
+# 1x (6) Quicksand
+# 2x (7) Cavern Collapse
+# 1x (8) Surveyor Skag

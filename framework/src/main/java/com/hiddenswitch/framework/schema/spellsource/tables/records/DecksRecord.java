@@ -22,7 +22,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DecksRecord extends UpdatableRecordImpl<DecksRecord> implements VertxPojo, Record10<String, String, String, String, String, Boolean, String, Integer, Boolean, Boolean>, IDecks {
 
-    private static final long serialVersionUID = -1164355606;
+    private static final long serialVersionUID = -172027950;
 
     /**
      * Setter for <code>spellsource.decks.id</code>.
@@ -161,7 +161,7 @@ public class DecksRecord extends UpdatableRecordImpl<DecksRecord> implements Ver
     }
 
     /**
-     * Setter for <code>spellsource.decks.is_premade</code>.
+     * Setter for <code>spellsource.decks.is_premade</code>. premades always shared with all users by application logic
      */
     @Override
     public DecksRecord setIsPremade(Boolean value) {
@@ -170,7 +170,7 @@ public class DecksRecord extends UpdatableRecordImpl<DecksRecord> implements Ver
     }
 
     /**
-     * Getter for <code>spellsource.decks.is_premade</code>.
+     * Getter for <code>spellsource.decks.is_premade</code>. premades always shared with all users by application logic
      */
     @Override
     public Boolean getIsPremade() {

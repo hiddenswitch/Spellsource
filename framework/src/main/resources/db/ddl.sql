@@ -1592,6 +1592,41 @@ ALTER TABLE spellsource.deck_player_attribute_tuples ALTER COLUMN id ADD GENERAT
 
 
 --
+-- Name: deck_shares; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.deck_shares (
+    id bigint NOT NULL,
+    deck_id text NOT NULL,
+    share_recipient_id character varying NOT NULL,
+    trashed boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE spellsource.deck_shares OWNER TO admin;
+
+--
+-- Name: TABLE deck_shares; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON TABLE spellsource.deck_shares IS 'indicates a deck shared to a player';
+
+
+--
+-- Name: deck_shares_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.deck_shares ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME spellsource.deck_shares_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: decks; Type: TABLE; Schema: spellsource; Owner: admin
 --
 
@@ -1623,6 +1658,13 @@ COMMENT ON COLUMN spellsource.decks.created_by IS 'who created this deck origina
 --
 
 COMMENT ON COLUMN spellsource.decks.last_edited_by IS 'who last edited this deck';
+
+
+--
+-- Name: COLUMN decks.is_premade; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON COLUMN spellsource.decks.is_premade IS 'premades always shared with all users by application logic';
 
 
 --
@@ -2522,6 +2564,22 @@ ALTER TABLE ONLY spellsource.deck_player_attribute_tuples
 
 
 --
+-- Name: deck_shares deck_shares_deck_id_share_recipient_id_key; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.deck_shares
+    ADD CONSTRAINT deck_shares_deck_id_share_recipient_id_key UNIQUE (deck_id, share_recipient_id);
+
+
+--
+-- Name: deck_shares deck_shares_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.deck_shares
+    ADD CONSTRAINT deck_shares_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: decks decks_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
@@ -3076,10 +3134,31 @@ CREATE INDEX idx_web_orig_client ON keycloak.web_origins USING btree (client_id)
 
 
 --
+-- Name: deck_shares_trashed_idx; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX deck_shares_trashed_idx ON spellsource.deck_shares USING btree (trashed) WHERE (trashed IS FALSE);
+
+
+--
 -- Name: decks_created_by_idx; Type: INDEX; Schema: spellsource; Owner: admin
 --
 
 CREATE INDEX decks_created_by_idx ON spellsource.decks USING btree (created_by);
+
+
+--
+-- Name: decks_is_premade_idx; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX decks_is_premade_idx ON spellsource.decks USING btree (is_premade) WHERE (is_premade IS TRUE);
+
+
+--
+-- Name: decks_trashed_idx; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX decks_trashed_idx ON spellsource.decks USING btree (trashed) WHERE (is_premade IS FALSE);
 
 
 --
@@ -3799,7 +3878,7 @@ ALTER TABLE ONLY spellsource.cards
 --
 
 ALTER TABLE ONLY spellsource.cards_in_deck
-    ADD CONSTRAINT cards_in_deck_card_id_fkey FOREIGN KEY (card_id) REFERENCES spellsource.cards(id);
+    ADD CONSTRAINT cards_in_deck_card_id_fkey FOREIGN KEY (card_id) REFERENCES spellsource.cards(id) ON DELETE CASCADE;
 
 
 --
@@ -3816,6 +3895,22 @@ ALTER TABLE ONLY spellsource.cards_in_deck
 
 ALTER TABLE ONLY spellsource.deck_player_attribute_tuples
     ADD CONSTRAINT deck_player_attribute_tuples_deck_id_fkey FOREIGN KEY (deck_id) REFERENCES spellsource.decks(id) ON DELETE CASCADE;
+
+
+--
+-- Name: deck_shares deck_shares_deck_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.deck_shares
+    ADD CONSTRAINT deck_shares_deck_id_fkey FOREIGN KEY (deck_id) REFERENCES spellsource.decks(id) ON DELETE CASCADE;
+
+
+--
+-- Name: deck_shares deck_shares_share_recipient_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.deck_shares
+    ADD CONSTRAINT deck_shares_share_recipient_id_fkey FOREIGN KEY (share_recipient_id) REFERENCES keycloak.user_entity(id);
 
 
 --

@@ -1,0 +1,23 @@
+### Ramp Storyteller
+# Class: OLIVE
+# Format: Spellsource
+#
+# 1x (1) Alagard, Mythologist
+# 2x (1) Flying Fiction
+# 2x (2) Engaging Story
+# 2x (3) Bored to Death
+# 2x (3) Captain of the Guard
+# 2x (3) Cinderslinger
+# 2x (4) Cursebrewing Witch
+# 2x (4) Defender of Tomorrow
+# 1x (4) Miserable Conclusion
+# 2x (4) Primal Mother
+# 1x (5) Lord of the Sea
+# 2x (5) Tome of Nourishing
+# 1x (6) Inora, Spellbound
+# 2x (7) Chained Chimera
+# 2x (7) Manly Mountaineer
+# 1x (9) Queen Cinderella
+# 2x (10) Mollusk Meister
+# 1x (10) Sourceborn Aelin
+#

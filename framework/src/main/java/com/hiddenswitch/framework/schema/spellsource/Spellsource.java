@@ -8,6 +8,7 @@ import com.hiddenswitch.framework.schema.DefaultCatalog;
 import com.hiddenswitch.framework.schema.spellsource.tables.Cards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples;
+import com.hiddenswitch.framework.schema.spellsource.tables.DeckShares;
 import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
 
 import java.util.Arrays;
@@ -24,7 +25,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Spellsource extends SchemaImpl {
 
-    private static final long serialVersionUID = -302531216;
+    private static final long serialVersionUID = -1396903083;
 
     /**
      * The reference instance of <code>spellsource</code>
@@ -45,6 +46,11 @@ public class Spellsource extends SchemaImpl {
      * The table <code>spellsource.deck_player_attribute_tuples</code>.
      */
     public final DeckPlayerAttributeTuples DECK_PLAYER_ATTRIBUTE_TUPLES = DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES;
+
+    /**
+     * indicates a deck shared to a player
+     */
+    public final DeckShares DECK_SHARES = DeckShares.DECK_SHARES;
 
     /**
      * The table <code>spellsource.decks</code>.
@@ -70,6 +76,7 @@ public class Spellsource extends SchemaImpl {
             Cards.CARDS,
             CardsInDeck.CARDS_IN_DECK,
             DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES,
+            DeckShares.DECK_SHARES,
             Decks.DECKS);
     }
 }

@@ -1,0 +1,21 @@
+### Aggro Baron
+# Class: NAVY
+# Format: Spellsource
+#
+# 2x (1) Doom Sergeant
+# 2x (1) Enhancing Shaman
+# 2x (1) Gather Strength
+# 2x (1) Infinite Futurist
+# 2x (1) Lonely Whelpling
+# 2x (1) Mini Knight
+# 1x (1) Mystiva
+# 2x (1) Undead Intern
+# 2x (1) Weak Point
+# 2x (2) Augmented Pixie
+# 2x (2) Pearl Bay Inquisitor
+# 1x (3) Faldoran, the Ninja
+# 2x (3) Hapless Knight
+# 2x (3) Skeletal Warrior
+# 2x (3) Soulclencher
+# 2x (4) Alternate Timeline
+#

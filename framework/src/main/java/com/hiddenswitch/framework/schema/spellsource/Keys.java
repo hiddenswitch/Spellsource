@@ -8,10 +8,12 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.UserEntityRecor
 import com.hiddenswitch.framework.schema.spellsource.tables.Cards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples;
+import com.hiddenswitch.framework.schema.spellsource.tables.DeckShares;
 import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsInDeckRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.DeckPlayerAttributeTuplesRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.DeckSharesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
 
 import org.jooq.ForeignKey;
@@ -34,6 +36,7 @@ public class Keys {
 
     public static final Identity<CardsInDeckRecord, Long> IDENTITY_CARDS_IN_DECK = Identities0.IDENTITY_CARDS_IN_DECK;
     public static final Identity<DeckPlayerAttributeTuplesRecord, Long> IDENTITY_DECK_PLAYER_ATTRIBUTE_TUPLES = Identities0.IDENTITY_DECK_PLAYER_ATTRIBUTE_TUPLES;
+    public static final Identity<DeckSharesRecord, Long> IDENTITY_DECK_SHARES = Identities0.IDENTITY_DECK_SHARES;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
@@ -42,6 +45,8 @@ public class Keys {
     public static final UniqueKey<CardsRecord> CARDS_PKEY = UniqueKeys0.CARDS_PKEY;
     public static final UniqueKey<CardsInDeckRecord> CARDS_IN_DECK_PKEY = UniqueKeys0.CARDS_IN_DECK_PKEY;
     public static final UniqueKey<DeckPlayerAttributeTuplesRecord> DECK_PLAYER_ATTRIBUTE_TUPLES_PKEY = UniqueKeys0.DECK_PLAYER_ATTRIBUTE_TUPLES_PKEY;
+    public static final UniqueKey<DeckSharesRecord> DECK_SHARES_PKEY = UniqueKeys0.DECK_SHARES_PKEY;
+    public static final UniqueKey<DeckSharesRecord> DECK_SHARES_DECK_ID_SHARE_RECIPIENT_ID_KEY = UniqueKeys0.DECK_SHARES_DECK_ID_SHARE_RECIPIENT_ID_KEY;
     public static final UniqueKey<DecksRecord> DECKS_PKEY = UniqueKeys0.DECKS_PKEY;
 
     // -------------------------------------------------------------------------
@@ -52,6 +57,8 @@ public class Keys {
     public static final ForeignKey<CardsInDeckRecord, DecksRecord> CARDS_IN_DECK__CARDS_IN_DECK_DECK_ID_FKEY = ForeignKeys0.CARDS_IN_DECK__CARDS_IN_DECK_DECK_ID_FKEY;
     public static final ForeignKey<CardsInDeckRecord, CardsRecord> CARDS_IN_DECK__CARDS_IN_DECK_CARD_ID_FKEY = ForeignKeys0.CARDS_IN_DECK__CARDS_IN_DECK_CARD_ID_FKEY;
     public static final ForeignKey<DeckPlayerAttributeTuplesRecord, DecksRecord> DECK_PLAYER_ATTRIBUTE_TUPLES__DECK_PLAYER_ATTRIBUTE_TUPLES_DECK_ID_FKEY = ForeignKeys0.DECK_PLAYER_ATTRIBUTE_TUPLES__DECK_PLAYER_ATTRIBUTE_TUPLES_DECK_ID_FKEY;
+    public static final ForeignKey<DeckSharesRecord, DecksRecord> DECK_SHARES__DECK_SHARES_DECK_ID_FKEY = ForeignKeys0.DECK_SHARES__DECK_SHARES_DECK_ID_FKEY;
+    public static final ForeignKey<DeckSharesRecord, UserEntityRecord> DECK_SHARES__DECK_SHARES_SHARE_RECIPIENT_ID_FKEY = ForeignKeys0.DECK_SHARES__DECK_SHARES_SHARE_RECIPIENT_ID_FKEY;
     public static final ForeignKey<DecksRecord, UserEntityRecord> DECKS__DECKS_CREATED_BY_FKEY = ForeignKeys0.DECKS__DECKS_CREATED_BY_FKEY;
     public static final ForeignKey<DecksRecord, UserEntityRecord> DECKS__DECKS_LAST_EDITED_BY_FKEY = ForeignKeys0.DECKS__DECKS_LAST_EDITED_BY_FKEY;
 
@@ -62,12 +69,15 @@ public class Keys {
     private static class Identities0 {
         public static Identity<CardsInDeckRecord, Long> IDENTITY_CARDS_IN_DECK = Internal.createIdentity(CardsInDeck.CARDS_IN_DECK, CardsInDeck.CARDS_IN_DECK.ID);
         public static Identity<DeckPlayerAttributeTuplesRecord, Long> IDENTITY_DECK_PLAYER_ATTRIBUTE_TUPLES = Internal.createIdentity(DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES, DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES.ID);
+        public static Identity<DeckSharesRecord, Long> IDENTITY_DECK_SHARES = Internal.createIdentity(DeckShares.DECK_SHARES, DeckShares.DECK_SHARES.ID);
     }
 
     private static class UniqueKeys0 {
         public static final UniqueKey<CardsRecord> CARDS_PKEY = Internal.createUniqueKey(Cards.CARDS, "cards_pkey", new TableField[] { Cards.CARDS.ID }, true);
         public static final UniqueKey<CardsInDeckRecord> CARDS_IN_DECK_PKEY = Internal.createUniqueKey(CardsInDeck.CARDS_IN_DECK, "cards_in_deck_pkey", new TableField[] { CardsInDeck.CARDS_IN_DECK.ID }, true);
         public static final UniqueKey<DeckPlayerAttributeTuplesRecord> DECK_PLAYER_ATTRIBUTE_TUPLES_PKEY = Internal.createUniqueKey(DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES, "deck_player_attribute_tuples_pkey", new TableField[] { DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES.ID }, true);
+        public static final UniqueKey<DeckSharesRecord> DECK_SHARES_PKEY = Internal.createUniqueKey(DeckShares.DECK_SHARES, "deck_shares_pkey", new TableField[] { DeckShares.DECK_SHARES.ID }, true);
+        public static final UniqueKey<DeckSharesRecord> DECK_SHARES_DECK_ID_SHARE_RECIPIENT_ID_KEY = Internal.createUniqueKey(DeckShares.DECK_SHARES, "deck_shares_deck_id_share_recipient_id_key", new TableField[] { DeckShares.DECK_SHARES.DECK_ID, DeckShares.DECK_SHARES.SHARE_RECIPIENT_ID }, true);
         public static final UniqueKey<DecksRecord> DECKS_PKEY = Internal.createUniqueKey(Decks.DECKS, "decks_pkey", new TableField[] { Decks.DECKS.ID }, true);
     }
 
@@ -76,6 +86,8 @@ public class Keys {
         public static final ForeignKey<CardsInDeckRecord, DecksRecord> CARDS_IN_DECK__CARDS_IN_DECK_DECK_ID_FKEY = Internal.createForeignKey(Keys.DECKS_PKEY, CardsInDeck.CARDS_IN_DECK, "cards_in_deck_deck_id_fkey", new TableField[] { CardsInDeck.CARDS_IN_DECK.DECK_ID }, true);
         public static final ForeignKey<CardsInDeckRecord, CardsRecord> CARDS_IN_DECK__CARDS_IN_DECK_CARD_ID_FKEY = Internal.createForeignKey(Keys.CARDS_PKEY, CardsInDeck.CARDS_IN_DECK, "cards_in_deck_card_id_fkey", new TableField[] { CardsInDeck.CARDS_IN_DECK.CARD_ID }, true);
         public static final ForeignKey<DeckPlayerAttributeTuplesRecord, DecksRecord> DECK_PLAYER_ATTRIBUTE_TUPLES__DECK_PLAYER_ATTRIBUTE_TUPLES_DECK_ID_FKEY = Internal.createForeignKey(Keys.DECKS_PKEY, DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES, "deck_player_attribute_tuples_deck_id_fkey", new TableField[] { DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID }, true);
+        public static final ForeignKey<DeckSharesRecord, DecksRecord> DECK_SHARES__DECK_SHARES_DECK_ID_FKEY = Internal.createForeignKey(Keys.DECKS_PKEY, DeckShares.DECK_SHARES, "deck_shares_deck_id_fkey", new TableField[] { DeckShares.DECK_SHARES.DECK_ID }, true);
+        public static final ForeignKey<DeckSharesRecord, UserEntityRecord> DECK_SHARES__DECK_SHARES_SHARE_RECIPIENT_ID_FKEY = Internal.createForeignKey(com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, DeckShares.DECK_SHARES, "deck_shares_share_recipient_id_fkey", new TableField[] { DeckShares.DECK_SHARES.SHARE_RECIPIENT_ID }, true);
         public static final ForeignKey<DecksRecord, UserEntityRecord> DECKS__DECKS_CREATED_BY_FKEY = Internal.createForeignKey(com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, Decks.DECKS, "decks_created_by_fkey", new TableField[] { Decks.DECKS.CREATED_BY }, true);
         public static final ForeignKey<DecksRecord, UserEntityRecord> DECKS__DECKS_LAST_EDITED_BY_FKEY = Internal.createForeignKey(com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, Decks.DECKS, "decks_last_edited_by_fkey", new TableField[] { Decks.DECKS.LAST_EDITED_BY }, true);
     }

@@ -2,6 +2,7 @@ package com.hiddenswitch.framework.migrations;
 
 import com.google.common.hash.Hashing;
 import com.hiddenswitch.framework.Accounts;
+import com.hiddenswitch.framework.impl.MigrationUtils;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS;
 
-public class R__Import_package_cards_into_database extends BaseJavaMigration {
+public class R__0001_Import_package_cards_into_database extends BaseJavaMigration {
 
 	static {
 		CardCatalogue.loadCardsFromPackage();
@@ -38,8 +39,7 @@ public class R__Import_package_cards_into_database extends BaseJavaMigration {
 	@Override
 	public void migrate(Context context) throws Exception {
 		var dsl = DSL.using(context.getConnection(), SQLDialect.POSTGRES);
-		var realm = Accounts.get().toCompletionStage().toCompletableFuture().join();
-		var ownerUserId = realm.users().search("Spellsource", true).stream().findFirst().get().getId();
+		var ownerUserId = MigrationUtils.getSpellsourceUserId();
 		var insertAndUpdate = CardCatalogue.getRecords().values().stream().map(record -> {
 			var now = OffsetDateTime.now();
 			var encoded = JSONB.valueOf(Json.encode(record.getDesc()));

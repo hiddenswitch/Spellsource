@@ -1,0 +1,22 @@
+### Big Defense Baron
+# Class: NAVY
+# Format: Spellsource
+#
+# 2x (1) Doom Sergeant
+# 2x (2) Double Defender
+# 2x (3) Defenses Up
+# 2x (3) Extract
+# 2x (3) Fellow Academite
+# 2x (3) Final Defenses
+# 2x (3) Oni Entrapper
+# 2x (3) Reinforcements
+# 2x (4) Double Down
+# 2x (4) Immunize
+# 2x (4) Stone Obelisk
+# 1x (5) Moon Gladiator
+# 2x (5) Royal Protector
+# 1x (6) Attrition Master Rictor
+# 1x (8) Shapesifter Ryal
+# 2x (10) Fel Manticore
+# 1x (10) Sourceborn Aelin
+#

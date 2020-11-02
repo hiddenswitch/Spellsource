@@ -7,6 +7,7 @@ package com.hiddenswitch.framework.schema.spellsource;
 import com.hiddenswitch.framework.schema.spellsource.tables.Cards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples;
+import com.hiddenswitch.framework.schema.spellsource.tables.DeckShares;
 import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
 
 
@@ -30,6 +31,11 @@ public class Tables {
      * The table <code>spellsource.deck_player_attribute_tuples</code>.
      */
     public static final DeckPlayerAttributeTuples DECK_PLAYER_ATTRIBUTE_TUPLES = DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES;
+
+    /**
+     * indicates a deck shared to a player
+     */
+    public static final DeckShares DECK_SHARES = DeckShares.DECK_SHARES;
 
     /**
      * The table <code>spellsource.decks</code>.

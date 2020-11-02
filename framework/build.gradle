@@ -52,6 +52,7 @@ dependencies {
     api project(':vertx-sync')
     api 'io.vertx:vertx-rx-java2:3.9.2'
 
+    implementation "io.github.classgraph:classgraph:$classgraphVersion"
     implementation("com.avast.grpc.jwt:grpc-java-jwt:0.4.0") {
         exclude group: 'com.google.code.gson'
         exclude group: 'io.grpc'

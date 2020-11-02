@@ -97,12 +97,12 @@ public interface IDecks extends VertxPojo, Serializable {
     public Integer getDeckType();
 
     /**
-     * Setter for <code>spellsource.decks.is_premade</code>.
+     * Setter for <code>spellsource.decks.is_premade</code>. premades always shared with all users by application logic
      */
     public IDecks setIsPremade(Boolean value);
 
     /**
-     * Getter for <code>spellsource.decks.is_premade</code>.
+     * Getter for <code>spellsource.decks.is_premade</code>. premades always shared with all users by application logic
      */
     public Boolean getIsPremade();
 
