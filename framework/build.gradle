@@ -116,7 +116,7 @@ clean {
 }
 
 task copyCsharpGrpc(type: Copy, group: 'build') {
-    dependsOn compileJava
+    dependsOn += [":framework:generateProto"]
     from("$project.buildDir/generated/source/proto/main/csharp") {
         include '**/*.cs'
     }
@@ -302,7 +302,7 @@ protobuf {
     }
     plugins {
         grpc_java {
-            artifact = "io.vertx:protoc-gen-grpc-java:1.25.0"
+            path = project.projectDir.absolutePath + "/bin/grpc_java_plugin"
         }
         grpc_csharp {
             path = project.projectDir.absolutePath + "/bin/grpc_csharp_plugin"
