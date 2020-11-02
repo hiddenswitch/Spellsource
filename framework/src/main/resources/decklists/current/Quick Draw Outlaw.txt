@@ -1,0 +1,24 @@
+### Quick Draw Outlaw
+# Class: COPPER
+# Format: Spellsource
+#
+# 1x (1) Doodles
+# 2x (1) Plan Ahead
+# 1x (2) Bang!
+# 2x (2) Beauregard Bouncer
+# 2x (2) Death Blow
+# 2x (2) Magic Muffler
+# 2x (2) Noble Stallion
+# 1x (2) Spooky Turret
+# 1x (3) Bullet With Your Name
+# 2x (3) Cheating Wrangler
+# 2x (3) Reloading
+# 2x (3) Shootout
+# 1x (3) Trigger Happy Rebel
+# 2x (4) Forged Defender
+# 1x (4) McGrief
+# 2x (5) Draining Ooze
+# 2x (6) Mass Betrayal
+# 1x (6) One in the Chamber
+# 1x (10) Sourceborn Aelin
+#

@@ -1,0 +1,21 @@
+### You Shall be a Bee
+# Class: AMBER
+# Format: Spellsource
+#
+# 2x (1) Backyard Portal
+# 2x (1) Enhancing Shaman
+# 2x (1) Larva Swarm
+# 2x (1) Sleepy Scarecrow
+# 2x (1) Wink Dog
+# 2x (2) Bait
+# 2x (2) Bee Bomb
+# 2x (2) Broodspawn
+# 2x (2) Come Little Ones
+# 2x (2) Flare Fireworker
+# 2x (2) Flystinger
+# 2x (2) Larva Lookout
+# 1x (3) Morris the Worm
+# 2x (3) Skeletal Warrior
+# 1x (4) Legionary Commander
+# 2x (5) Guild Guard
+#

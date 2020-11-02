@@ -1,6 +1,8 @@
 package com.hiddenswitch.framework.tests;
 
+import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.Client;
+import com.hiddenswitch.framework.Legacy;
 import com.hiddenswitch.spellsource.rpc.*;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
@@ -113,6 +115,55 @@ public class DecksTests extends FrameworkTestBase {
 									assertEquals("spell_test_summon_tokens", decksGetResponse.getCollection().getInventory(0).getEntity().getCardId());
 								});
 							});
+				})
+				.onComplete(testContext.completing());
+	}
+
+	@Test
+	public void testDeleteDecks(WebClient webClient, Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx, webClient);
+		client.createAndLogin()
+				.compose(ignored -> createRandomDeck(client))
+				.compose(decksPutResponse -> {
+					var service = client.legacy();
+					return service
+							.decksGetAll(Empty.getDefaultInstance())
+							.onSuccess(decksGetAll -> {
+								testContext.verify(() -> {
+									assertEquals(Legacy.getPremadeDecks().size() + 1, decksGetAll.getDecksCount(), "should have only premades deck + newly created deck");
+								});
+							})
+							.compose(ignored -> service.decksDelete(DecksDeleteRequest.newBuilder()
+									.setDeckId(decksPutResponse.getDeckId()).build()))
+							.compose(ignored -> service.decksGetAll(Empty.getDefaultInstance()))
+							.onSuccess(decksGetAll -> {
+								testContext.verify(() -> {
+									assertEquals(Legacy.getPremadeDecks().size(), decksGetAll.getDecksCount(), "should have deleted deck");
+								});
+							});
+				})
+				.onComplete(testContext.completing());
+	}
+
+	/*
+	@Test
+	public void testDeletePremadeDecks(WebClient webClient, Vertx vertx, VertxTestContext testContext) {
+		var client1 = new Client(vertx, webClient);
+		var client2 = new Client(vertx, webClient);
+	}*/
+
+	@Test
+	public void testGetPremadeDecks(WebClient webClient, Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx, webClient);
+		client.createAndLogin()
+				.compose(ignored -> {
+					var service = client.legacy();
+					return service.decksGetAll(Empty.getDefaultInstance());
+				})
+				.onSuccess(decksGetAll -> {
+					testContext.verify(() -> {
+						assertEquals(Legacy.getPremadeDecks().size(), decksGetAll.getDecksCount(), "should have only premade decks");
+					});
 				})
 				.onComplete(testContext.completing());
 	}

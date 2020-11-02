@@ -1,0 +1,22 @@
+### Control Outlaw
+# Class: COPPER
+# Format: Spellsource
+#
+# 2x (1) Plan Ahead
+# 2x (2) Beauregard Bouncer
+# 1x (2) Crate of Dynamite
+# 2x (2) Death Blow
+# 2x (2) Noble Stallion
+# 2x (3) Reloading
+# 2x (3) Shootout
+# 2x (4) Forged Defender
+# 2x (5) Draining Ooze
+# 2x (5) Mechanical Golem
+# 2x (5) Silver Scattershot
+# 2x (5) Six-shooter
+# 2x (6) Mass Betrayal
+# 2x (6) One in the Chamber
+# 1x (7) The Grudge
+# 1x (8) Captain Karver
+# 1x (10) Sourceborn Aelin
+#

@@ -42,6 +42,17 @@ public class RowMappers {
         };
     }
 
+    public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares> getDeckSharesMapper() {
+        return row -> {
+            com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares();
+            pojo.setId(row.getLong("id"));
+            pojo.setDeckId(row.getString("deck_id"));
+            pojo.setShareRecipientId(row.getString("share_recipient_id"));
+            pojo.setTrashed(row.getBoolean("trashed"));
+            return pojo;
+        };
+    }
+
     public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks> getDecksMapper() {
         return row -> {
             com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks();

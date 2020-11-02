@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Decks extends TableImpl<DecksRecord> {
 
-    private static final long serialVersionUID = -110008032;
+    private static final long serialVersionUID = 1094927608;
 
     /**
      * The reference instance of <code>spellsource.decks</code>
@@ -90,9 +90,9 @@ public class Decks extends TableImpl<DecksRecord> {
     public final TableField<DecksRecord, Integer> DECK_TYPE = createField(DSL.name("deck_type"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>spellsource.decks.is_premade</code>.
+     * The column <code>spellsource.decks.is_premade</code>. premades always shared with all users by application logic
      */
-    public final TableField<DecksRecord, Boolean> IS_PREMADE = createField(DSL.name("is_premade"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<DecksRecord, Boolean> IS_PREMADE = createField(DSL.name("is_premade"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "premades always shared with all users by application logic");
 
     /**
      * The column <code>spellsource.decks.permitted_to_duplicate</code>.
@@ -139,7 +139,7 @@ public class Decks extends TableImpl<DecksRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.DECKS_CREATED_BY_IDX);
+        return Arrays.<Index>asList(Indexes.DECKS_CREATED_BY_IDX, Indexes.DECKS_IS_PREMADE_IDX, Indexes.DECKS_TRASHED_IDX);
     }
 
     @Override

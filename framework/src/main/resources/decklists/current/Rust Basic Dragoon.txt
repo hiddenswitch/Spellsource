@@ -1,0 +1,21 @@
+### Basic Dragoon
+# Class: RUST
+# Format: All
+#
+# 1x (0) Rapier Rodent
+# 1x (0) Zagrosz's Inferno Bomb
+# 2x (1) Ember
+# 2x (1) Eye of The Dragon
+# 2x (2) Forewarn Blast
+# 2x (2) Gobble
+# 2x (2) Spectral Fervor
+# 2x (2) Vehemence
+# 2x (3) Rending Claws
+# 2x (3) Verdant Vitality
+# 2x (4) Sweeping Swarm
+# 2x (5) Cinder Breath
+# 2x (5) Dawn Drake
+# 2x (5) Royal Healer
+# 2x (7) Blackflame Bomber
+# 2x (9) Red Agressor
+#
