@@ -16,7 +16,6 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
 import com.hiddenswitch.spellsource.rpc.*;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
-import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
 import io.grpc.ServerServiceDefinition;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
@@ -112,31 +111,27 @@ public class Legacy {
 								// retrieves all decks that are premade and which the user has not explicitly deleted (the share of)
 								// and all the user's decks they've created and not deleted
 								// and all other decks shared with the user that they have not deleted (the share of)
-						{
-//							var DECKS_TRASHED = DECKS.TRASHED.as("decks_trashed");
-//							var DECK_SHARES_TRASHED = DECK_SHARES.TRASHED.as("shares_trashed");
-							return dsl.select(DECKS.ID /*, DECKS.CREATED_BY, DECKS.IS_PREMADE, DECK_SHARES.ID, DECKS_TRASHED, DECK_SHARES_TRASHED*/)
-									.from(DECKS)
-									// check the share settings on the decks
-									.join(DECK_SHARES, JoinType.LEFT_OUTER_JOIN)
-									// if it has a deck share record...
-									.on(DECKS.ID.eq(DECK_SHARES.DECK_ID)
-											// the record must match this user
-											.and(DECK_SHARES.SHARE_RECIPIENT_ID.eq(userId)))
-									.where(
-											// the deck is not trashed and, if there is a deck share record, the deck share's trashed
-											// value is null or false
-											DECKS.TRASHED.eq(false),
-											// the user can edit the deck
-											canEditDeck(userId)
-													.or(
-															// this is a premade deck
-															DECKS.IS_PREMADE.eq(true).and(DECK_SHARES.ID.isNull().or(DECK_SHARES.TRASHED.eq(false))))
-													.or(
-															// this deck is shared with the user
-															DECKS.IS_PREMADE.eq(false).and(DECK_SHARES.ID.isNotNull().and(DECK_SHARES.TRASHED.eq(false)))
-													));
-						})
+								dsl.select(DECKS.ID)
+										.from(DECKS)
+										// check the share settings on the decks
+										.join(DECK_SHARES, JoinType.LEFT_OUTER_JOIN)
+										// if it has a deck share record...
+										.on(DECKS.ID.eq(DECK_SHARES.DECK_ID)
+												// the record must match this user
+												.and(DECK_SHARES.SHARE_RECIPIENT_ID.eq(userId)))
+										.where(
+												// the deck is not trashed and, if there is a deck share record, the deck share's trashed
+												// value is null or false
+												DECKS.TRASHED.eq(false),
+												// the user can edit the deck
+												canEditDeck(userId)
+														.or(
+																// this is a premade deck
+																DECKS.IS_PREMADE.eq(true).and(DECK_SHARES.ID.isNull().or(DECK_SHARES.TRASHED.eq(false))))
+														.or(
+																// this deck is shared with the user
+																DECKS.IS_PREMADE.eq(false).and(DECK_SHARES.ID.isNotNull().and(DECK_SHARES.TRASHED.eq(false)))
+														)))
 						.compose(rows -> CompositeFuture.all(rows.stream()
 								.map(row -> {
 									var deckId = row.getString(0);
