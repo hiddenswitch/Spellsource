@@ -97,7 +97,7 @@ public class ClusterTest extends SpellsourceTestBase {
 	public void testMultiHostMultiClientCluster(VertxTestContext context) throws ExecutionException, InterruptedException {
 		System.setProperty("games.defaultNoActivityTimeout", "14000");
 		var numberOfGames = 1;
-		var baseRate = 2;
+		var baseRate = 1;
 		var ports = new int[]{8080, 9090};
 		var x = Math.max((Runtime.getRuntime().availableProcessors() / ports.length - 1) * baseRate, 1);
 		// Get nearest odd number
