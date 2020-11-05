@@ -1,0 +1,811 @@
+[
+  {
+    "type": "Property_opener1",
+    "colour": 160,
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "Opener: %1",
+    "message1": "(then) %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "battlecry.targetSelection",
+        "check": "TargetSelection",
+        "shadow": {
+          "type": "TargetSelection_SHADOW"
+        }
+      }
+    ],
+    "args1": [
+      {
+        "type": "input_value",
+        "name": "battlecry.spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_attributes",
+    "colour": 200,
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "Attributes",
+    "args0": [],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "attributes",
+        "check": [
+          "Property_attributes"
+        ],
+        "shadow": {
+          "type": "Property_attributes_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_attributes_int",
+    "colour": 210,
+    "message0": "%1 is %2",
+    "inputsInline": true,
+    "previousStatement": [
+      "Property_attributes"
+    ],
+    "nextStatement": [
+      "Property_attributes"
+    ],
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "IntAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_INT_SHADOW"
+        }
+      },
+      {
+        "type": "field_number",
+        "name": "value",
+        "value": 1,
+        "min": 0,
+        "max": 99,
+        "int": true
+      }
+    ],
+    "data": "BLOCKLY_INT_ATTRIBUTE"
+  },
+  {
+    "type": "Property_attributes_boolean",
+    "colour": 190,
+    "message0": "has%1",
+    "inputsInline": true,
+    "previousStatement": [
+      "Property_attributes"
+    ],
+    "nextStatement": [
+      "Property_attributes"
+    ],
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "BoolAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_BOOL_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE"
+  },
+  {
+    "type": "Property_attributes_SHADOW",
+    "colour": 200,
+    "message0": "Attributes",
+    "previousStatement": [
+      "Property_attributes"
+    ],
+    "nextStatement": [
+      "Property_attributes"
+    ],
+    "comment": "Use the two blocks below to\nadd numbered or non-numbered\nattributes to this list"
+  },
+  {
+    "type": "Property_aftermath",
+    "colour": "#A6A6A6",
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "Aftermath: %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "deathrattle",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+
+  {
+    "type": "Property_auras",
+    "colour": 230,
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "On the battlefield",
+    "args0": [],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "auras",
+        "check": [
+          "Auras"
+        ],
+        "shadow": {
+          "type": "Aura_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+
+  {
+    "type": "Property_opener2",
+    "colour": 160,
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "inputsInline": false,
+    "message0": "Opener: if %1",
+    "message1": "(then) %1 (then) %2",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "battlecry.condition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      }
+    ],
+    "args1": [
+      {
+        "type": "input_value",
+        "name": "battlecry.targetSelection",
+        "check": "TargetSelection",
+        "shadow": {
+          "type": "TargetSelection_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "battlecry.spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_triggers",
+    "colour": 280,
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "On the battlefield",
+    "args0": [],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "triggers",
+        "check": [
+          "Enchantments"
+        ],
+        "shadow": {
+          "type": "Enchantment_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_triggers2",
+    "colour": 280,
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "In your hand",
+    "args0": [],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "passiveTriggers",
+        "check": [
+          "Enchantments"
+        ],
+        "shadow": {
+          "type": "Enchantment_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_triggers3",
+    "colour": 280,
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "In your deck",
+    "args0": [],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "deckTriggers",
+        "check": [
+          "Enchantments"
+        ],
+        "shadow": {
+          "type": "Enchantment_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_triggers4",
+    "colour": 280,
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "Anywhere",
+    "args0": [],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "gameTriggers",
+        "check": [
+          "Enchantments"
+        ],
+        "shadow": {
+          "type": "Enchantment_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_condition",
+    "colour": 100,
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "Only playable if %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "condition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_manaCostModifier",
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "colour": 10,
+    "inputsInline": false,
+    "message0": "Costs %1 less",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "manaCostModifier",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_manaCostModifierConditional",
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "colour": 10,
+    "message0": "%3%4Costs %1 less if %2",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "manaCostModifier.ifTrue",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "manaCostModifier.condition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "manaCostModifier.class",
+        "value": "ConditionalValueProvider"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "manaCostModifier.ifFalse",
+        "value": 0
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_cardCostModifier",
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "colour": 320,
+    "inputsInline": false,
+    "message0": "Hosts Cost Modifier: %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "cardCostModifier",
+        "check": "CostModifierDesc",
+        "shadow": {
+          "type": "CostModifier_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_uncollectible",
+    "colour": "#A6A6A6",
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "%1Uncollectible",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "collectible",
+        "value": false
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_set",
+    "colour": "#A6A6A6",
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "Part of Set: %1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "set",
+        "text": "CUSTOM"
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_glow",
+    "colour": "#A6A6A6",
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "Custom Glow Color: %1",
+    "args0": [
+      {
+        "name": "art.glow",
+        "type": "input_value",
+        "check": "Color",
+        "shadow": {
+          "type": "Property_color_SHADOW",
+          "notActuallyShadow": true
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_descriptions",
+    "colour": "#888888",
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "Dynamic Description",
+    "args0": [],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "dynamicDescription",
+        "check": [
+          "Descriptions"
+        ],
+        "shadow": {
+          "type": "Property_description",
+          "notActuallyShadow": true
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_description",
+    "colour": "#888888",
+    "previousStatement": [
+      "Descriptions"
+    ],
+    "nextStatement": [
+      "Descriptions"
+    ],
+    "message0": "- %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "i",
+        "check": "Description",
+        "shadow": {
+          "type": "Property_description_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "Property_MetaDescription",
+    "colour": "#888888",
+    "output": "Description",
+    "message0": "Multiple Descriptions:",
+    "message1": "%1",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MetaDescription"
+      }
+    ],
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "descriptions",
+        "check": [
+          "Descriptions"
+        ],
+        "shadow": {
+          "type": "Property_description",
+          "notActuallyShadow": true
+        }
+      }
+    ]
+  },
+  {
+    "type": "Property_StringDescription",
+    "colour": "#888888",
+    "output": "Description",
+    "message0": "Text %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "StringDescription"
+      },
+      {
+        "type": "field_input",
+        "name": "string",
+        "text": "String"
+      }
+    ]
+  },
+  {
+    "type": "Property_ValueDescription",
+    "colour": "#888888",
+    "output": "Description",
+    "message0": "Value of %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ValueDescription"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Property_PluralDescription",
+    "colour": "#888888",
+    "output": "Description",
+    "message0": "When %2 is 1 then %3 otherwise %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "PluralDescription"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "description1",
+        "shadow": {
+          "type": "Property_description_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "description2",
+        "shadow": {
+          "type": "Property_description_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Property_GatekeeperShaValueDescription",
+    "colour": "#888888",
+    "output": "Description",
+    "message0": "Gatekeeper Sha Value of %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "GatekeeperShaValueDescription"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Property_ConditionalDescription",
+    "colour": "#888888",
+    "output": "Description",
+    "message0": "If %2 then %3 otherwise %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ConditionalDescription"
+      },
+      {
+        "type": "input_value",
+        "check": "ConditionDesc",
+        "name": "condition",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "description1",
+        "shadow": {
+          "type": "Property_description_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "description2",
+        "shadow": {
+          "type": "Property_description_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Property_description_SHADOW",
+    "colour": "#888888",
+    "output": "Description",
+    "message0": "Description"
+  },
+  {
+    "type": "Property_SHADOW",
+    "colour": "#6A6A6A",
+    "previousStatement": [
+      "Properties"
+    ],
+    "message0": "Card Properties"
+  },
+  {
+    "type": "Property_text_SHADOW",
+    "colour": "#888888",
+    "output": "Text",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "text",
+        "text": "Text"
+      }
+    ],
+    "data": "{text}"
+  },
+  {
+    "type": "Property_heroPower",
+    "colour": "#A6A6A6",
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "Upgrades into Skill %1",
+    "args0": [
+      {
+        "name": "heroPower",
+        "type": "input_value",
+        "check": "Card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "Property_color_SHADOW",
+    "colour": "#A6A6A6",
+    "output": "Color",
+    "message0": "R: %1 G: %2",
+    "args0": [
+      {
+        "type": "field_number",
+        "name": "r",
+        "value": 166,
+        "min": 0,
+        "max": 255,
+        "int": true
+      },
+      {
+        "type": "field_number",
+        "name": "g",
+        "value": 166,
+        "min": 0,
+        "max": 255,
+        "int": true
+      }
+    ],
+    "message1": "B: %1 A: %2",
+    "args1": [
+      {
+        "type": "field_number",
+        "name": "b",
+        "value": 166,
+        "min": 0,
+        "max": 255,
+        "int": true
+      },
+      {
+        "type": "field_number",
+        "name": "a",
+        "value": 255,
+        "min": 0,
+        "max": 255,
+        "int": true
+      }
+    ]
+  },
+  {
+    "type": "Property_multilinetext_SHADOW",
+    "colour": "#888888",
+    "output": "Text",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_multilinetext",
+        "name": "text",
+        "text": "Text"
+      }
+    ],
+    "data": "{text}"
+  }
+]

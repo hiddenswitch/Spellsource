@@ -1,0 +1,709 @@
+[
+  {
+    "type": "ValueProvider_SHADOW",
+    "message0": "Value",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "plural": true
+  },
+  {
+    "type": "ValueProvider_targetPlayer",
+    "subcategory": "Util",
+    "message0": "%2 for %1",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "targetPlayer",
+        "check": "TargetPlayer",
+        "shadow": {
+          "type": "TargetPlayer_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "super",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_multiplier",
+    "subcategory": "Util",
+    "message0": "%2 with multiplier %1",
+    "output": "ValueProviderDesc",
+    "inputsInline": false,
+    "colour": 340,
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "multiplier",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "super",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ],
+    "comment": "Mutlipliers will happen before offsets"
+  },
+  {
+    "type": "ValueProvider_offset",
+    "subcategory": "Util",
+    "message0": "%2 with offset %1",
+    "output": "ValueProviderDesc",
+    "inputsInline": false,
+    "colour": 340,
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "offset",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "super",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ],
+    "comment": "Offsets will happen after multipliers."
+  },
+  {
+    "type": "ValueProvider_int",
+    "message0": "%1",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "args0": [
+      {
+        "type": "field_number",
+        "name": "int",
+        "value": 1,
+        "int": true
+      }
+    ],
+    "data": "{int}"
+  },
+  {
+    "type": "ValueProvider_Algebraic",
+    "subcategory": "Util",
+    "message0": "%1%2",
+    "message1": "%1",
+    "message2": "%1",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AlgebraicValueProvider"
+      },
+      {
+        "type": "input_value",
+        "name": "value1",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ],
+    "args1": [
+      {
+        "type": "field_dropdown",
+        "name": "operation",
+        "options": [
+          [
+            "+",
+            "ADD"
+          ],
+          [
+            "-",
+            "SUBTRACT"
+          ],
+          [
+            "x",
+            "MULTIPLY"
+          ],
+          [
+            "÷",
+            "DIVIDE"
+          ],
+          [
+            "%",
+            "MODULO"
+          ],
+          [
+            "^",
+            "POWER"
+          ],
+          [
+            "min",
+            "MINIMUM"
+          ],
+          [
+            "max",
+            "MAXIMUM"
+          ]
+        ]
+      }
+    ],
+    "args2": [
+      {
+        "type": "input_value",
+        "name": "value2",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_CardCount",
+    "subcategory": "Number",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "%1number of cards in %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardCountValueProvider"
+      },
+      {
+        "type": "input_value",
+        "name": "cardSource",
+        "check": "Source",
+        "shadow": {
+          "type": "Source_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_CardCount2",
+    "subcategory": "Number",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "%1number of cards in %3 that %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardCountValueProvider"
+      },
+      {
+        "type": "input_value",
+        "name": "cardFilter",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "cardSource",
+        "check": "Source",
+        "shadow": {
+          "type": "Source_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_Attribute2",
+    "subcategory": "Properties",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "%1 %3's %2",
+    "inputsInline": true,
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AttributeValueProvider"
+      },
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "IntAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_INT_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_EntityCount",
+    "subcategory": "Number",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "%1number of entities in %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "EntityCountValueProvider"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_EntityCount2",
+    "subcategory": "Number",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "%1number of entites in %2 that %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "EntityCountValueProvider"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "filter",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_Conditional",
+    "subcategory": "Util",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "%1if %3 then %2 otherwise %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ConditionalValueProvider"
+      },
+      {
+        "type": "input_value",
+        "name": "ifTrue",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "condition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "ifFalse",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_DiedThisTurn",
+    "subcategory": "Number",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "%1number of units that died this turn",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DiedThisTurnValueProvider"
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_CardsPlayed",
+    "subcategory": "Number",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "%1number of cards you've played that %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardsPlayedValueProvider"
+      },
+      {
+        "type": "input_value",
+        "name": "filter",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_Armor",
+    "subcategory": "Properties",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "%1%2 your armor",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AttriibuteValueProvider"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "attribute",
+        "value": "ARMOR"
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_CurrentTurn",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "current turn number",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CurrentTurnValueProvider"
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_LastTurn",
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "last turn number",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "LastTurnValueProvider"
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_SpellsCast",
+    "subcategory": "Number",
+    "inputsInline": false,
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "number of spells you've cast",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "PlayerAttributeValueProvider"
+      },
+      {
+        "name": "playerAttribute",
+        "type": "field_label_serializable_hidden",
+        "value": "SPELLS_CAST"
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_CurrentLun",
+    "subcategory": "Properties",
+    "inputsInline": false,
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "your current lun",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "PlayerAttributeValueProvider"
+      },
+      {
+        "name": "playerAttribute",
+        "type": "field_label_serializable_hidden",
+        "value": "MANA"
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_HandCount",
+    "subcategory": "Number",
+    "inputsInline": false,
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "number of cards in hand",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "PlayerAttributeValueProvider"
+      },
+      {
+        "name": "playerAttribute",
+        "type": "field_label_serializable_hidden",
+        "value": "HAND_COUNT"
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_DeckCount",
+    "subcategory": "Number",
+    "inputsInline": false,
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "number of cards in deck",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "PlayerAttributeValueProvider"
+      },
+      {
+        "name": "playerAttribute",
+        "type": "field_label_serializable_hidden",
+        "value": "DECK_COUNT"
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_PlayedThisTurn",
+    "subcategory": "Number",
+    "inputsInline": false,
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "number of cards that %2 you've played this turn",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "PlayedThisTurnValueProvider"
+      },
+      {
+        "name": "filter",
+        "type": "input_value",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_GatekeeperSha",
+    "subcategory": "Properties",
+    "inputsInline": false,
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "The Gatekeeper Sha value",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "GatekeeperShaValueProvider"
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_Reduce",
+    "subcategory": "Util",
+    "inputsInline": false,
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "Apply %3 on the %4 of all %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReduceValueProvider"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "field_dropdown",
+        "name": "operation",
+        "options": [
+          [
+            "+",
+            "ADD"
+          ],
+          [
+            "-",
+            "SUBTRACT"
+          ],
+          [
+            "*",
+            "MULTIPLY"
+          ],
+          [
+            "^",
+            "POWER"
+          ],
+          [
+            "min",
+            "MINIMUM"
+          ],
+          [
+            "max",
+            "MAXIMUM"
+          ]
+        ]
+      },
+      {
+        "name": "value1",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_ManaCostProvider",
+    "subcategory": "Properties",
+    "inputsInline": false,
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "The lun cost of %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ManaCostProvider"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_BoardCount",
+    "subcategory": "Properties",
+    "inputsInline": false,
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "the total board count",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BoardCountValueProvider"
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_Event",
+    "inputsInline": false,
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "the value of the event",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "EventValueProvider"
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_LastManaCost",
+    "subcategory": "Properties",
+    "inputsInline": false,
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "The cost of the last card you played",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "PlayerAttributeValueProvider"
+      },
+      {
+        "name": "playerAttribute",
+        "type": "field_label_serializable_hidden",
+        "value": "LAST_MANA_COST"
+      }
+    ]
+  },
+  {
+    "type": "ValueProvider_SpellDamage",
+    "subcategory": "Util",
+    "inputsInline": false,
+    "output": "ValueProviderDesc",
+    "colour": 340,
+    "message0": "Your Spell Power applied to %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SpellDamageValueProvider"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ]
+  }
+]

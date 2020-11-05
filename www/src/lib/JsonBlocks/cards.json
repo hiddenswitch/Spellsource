@@ -1,0 +1,40 @@
+[
+  {
+    "type": "Card_SHADOW",
+    "output": "Card",
+    "colour": "#888888",
+    "message0": "Card",
+    "args0": [
+    ]
+  },
+  {
+    "type": "Card_I",
+    "colour": "#888888",
+    "previousStatement": [
+      "Cards"
+    ],
+    "nextStatement": [
+      "Cards"
+    ],
+    "message0": "-%1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "i",
+        "check": "Card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT",
+    "comment": "Used to make lists of Cards.\n(Remember you can always\nDuplicate with right-click)"
+  },
+  {
+    "type": "Card_IT",
+    "output": "Card",
+    "colour": "#888888",
+    "message0": "the chosen card",
+    "comment": "Used in the effects of Source spells"
+  }
+]

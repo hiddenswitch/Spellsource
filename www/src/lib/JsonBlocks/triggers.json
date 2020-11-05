@@ -1,0 +1,1444 @@
+[
+  {
+    "type": "Trigger_SHADOW",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1Trigger",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "GameStateChangedTrigger"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_QueueCondition",
+    "subcategory": "Util",
+    "output": "Trigger",
+    "colour": 300,
+    "inputsInline": false,
+    "message0": "%1 queueing only if %2",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "super",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "queueCondition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      }
+    ],
+    "comment": "Use a queue condition if you care about\nthe state of the board BEFORE any other\nenchantment effects may have happened."
+  },
+  {
+    "type": "Trigger_FireCondition",
+    "subcategory": "Util",
+    "output": "Trigger",
+    "colour": 300,
+    "inputsInline": false,
+    "message0": "%1 firing only if %2",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "super",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "fireCondition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      }
+    ],
+    "comment": "Use a fire condition if you care about\nthe state of the board AFTER any other\nenchantment effects may have happened."
+  },
+  {
+    "type": "Trigger_Race",
+    "subcategory": "Util",
+    "output": "Trigger",
+    "colour": 300,
+    "inputsInline": false,
+    "message0": "%1 requiring race %2",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "super",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "race",
+        "check": "Race",
+        "shadow": {
+          "type": "Race_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Trigger_Attribute",
+    "subcategory": "Util",
+    "output": "Trigger",
+    "colour": 300,
+    "inputsInline": false,
+    "message0": "%1 requiring attribute %2",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "super",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "requiredAttribute",
+        "check": [
+          "BoolAttribute",
+          "IntAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Trigger_MinionPlayed1",
+    "subcategory": "Unit",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1%2Whenever you play a unit",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MinionPlayedTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetPlayer",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_MinionPlayed2",
+    "subcategory": "Unit",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1%2Whenever your opponent plays a unit",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MinionPlayedTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetPlayer",
+        "value": "OPPONENT"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_MinionPlayed3",
+    "subcategory": "Unit",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1Whenever a unit is played",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MinionPlayedTrigger"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_MinionSummoned1",
+    "subcategory": "Unit",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1%2Whenever you summon a unit",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MinionSummonedTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetPlayer",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_MinionSummoned2",
+    "subcategory": "Unit",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1%2Whenever your opponent summons a unit",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MinionSummonedTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetPlayer",
+        "value": "OPPONENT"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_MinionSummoned3",
+    "subcategory": "Unit",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1Whenever a unit is summoned",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MinionSummonedTrigger"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_BeforeMinionSummoned",
+    "subcategory": "Unit",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Before you summon a unit",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BeforeMinionSummonedTrigger"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_DamageReceived",
+    "subcategory": "Damage",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1%2Whenever this takes damage",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DamageReceivedTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "hostTargetType",
+        "value": "IGNORE_OTHER_TARGETS"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_DamageReceived2",
+    "subcategory": "Damage",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever a character takes damage",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DamageReceivedTrigger"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_DamageReceived3",
+    "subcategory": "Damage",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever a unit takes damage",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DamageReceivedTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetEntityType",
+        "value": "MINION"
+      }
+
+    ]
+  },
+  {
+    "type": "Trigger_DamageReceived4",
+    "subcategory": "Damage",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever an allied unit takes damage",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DamageReceivedTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetEntityType",
+        "value": "MINION"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetPlayer",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_TurnStart",
+    "subcategory": "Turn",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1At the start of your turn",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TurnStartTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetPlayer",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_TurnEnd",
+    "subcategory": "Turn",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1At the end of your turn",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TurnEndTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetPlayer",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_GameStart",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1At the start of the game",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "GameStartTrigger"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_CardDrawn",
+    "subcategory": "Card",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1Whenever a card is drawn",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardDrawnTrigger"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_AfterPhysicalAttack",
+    "subcategory": "Attack",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1%2After this attacks",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AfterPhysicalAttackTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "hostTargetType",
+        "value": "IGNORE_OTHER_SOURCES"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_AfterPhysicalAttack2",
+    "subcategory": "Unit,Attack",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1%2After this attacks a unit%3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AfterPhysicalAttackTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "hostTargetType",
+        "value": "IGNORE_OTHER_SOURCES"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetEntityType",
+        "value": "MINION"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_MinionDeath1",
+    "subcategory": "Unit",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1%2Whenever an allied unit dies",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MinionDeathTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetPlayer",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_MinionDeath2",
+    "subcategory": "Unit",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1%2Whenever an enemy unit dies",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MinionDeathTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetPlayer",
+        "value": "OPPONENT"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_MinionDeath3",
+    "subcategory": "Unit",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1Whenever a unit dies",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MinionDeathTrigger"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_MinionDeath4",
+    "subcategory": "Unit",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever another unit dies",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MinionDeathTrigger"
+      },
+      {
+        "name": "hostTargetType",
+        "type": "field_label_serializable_hidden",
+        "value": "IGNORE_AS_TARGET"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_DamageCaused",
+    "subcategory": "Damage",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1%2Whenever this damages a character",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DamageCausedTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "hostTargetType",
+        "value": "IGNORE_OTHER_SOURCES"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_CardPlayed1",
+    "subcategory": "Card",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1%2Whenever you play a card",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardPlayedTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetPlayer",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_CardPlayed2",
+    "subcategory": "Card",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1%2Whenever your opponent plays a card",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardPlayedTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetPlayer",
+        "value": "OPPONENT"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_CardPlayed3",
+    "subcategory": "Card",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1Whenever a card is played",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardPlayedTrigger"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_WheneverEnemyMinionAttacks",
+    "subcategory": "Unit,Attack",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever an enemy unit attacks%1%2%3%4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TargetAcquisitionTrigger"
+      },
+      {
+        "name": "actionType",
+        "type": "field_label_serializable_hidden",
+        "value": "PHYSICAL_ATTACK"
+      },
+      {
+        "name": "sourceEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "MINION"
+      },
+      {
+        "name": "sourcePlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "OPPONENT"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_WheneverAlliedMinionAttacks",
+    "subcategory": "Unit,Attack",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever an allied unit attacks",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TargetAcquisitionTrigger"
+      },
+      {
+        "name": "actionType",
+        "type": "field_label_serializable_hidden",
+        "value": "PHYSICAL_ATTACK"
+      },
+      {
+        "name": "sourceEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "MINION"
+      },
+      {
+        "name": "sourcePlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_WheneverMinionAttacks",
+    "subcategory": "Unit,Attack",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever a unit attacks",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TargetAcquisitionTrigger"
+      },
+      {
+        "name": "actionType",
+        "type": "field_label_serializable_hidden",
+        "value": "PHYSICAL_ATTACK"
+      },
+      {
+        "name": "sourceEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "MINION"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_FatalDamage1",
+    "subcategory": "Unit,Damage",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "When an allied unit takes fatal damage%1%2%3%4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "FatalDamageTrigger"
+      },
+      {
+        "name": "sourcePlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "BOTH"
+      },
+      {
+        "name": "targetEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "MINION"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_TurnEnd2",
+    "subcategory": "Turn",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "At the end of each turn",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TurnEndTrigger"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_BeforeMinionPlayed",
+    "subcategory": "Unit",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Before you play a unit",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BeforeMinionPlayedTrigger"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_SpellCasted",
+    "subcategory": "Card",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever a player casts a spell",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SpellCastedTrigger"
+      },
+      {
+        "name": "sourcePlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "BOTH"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_SpellCasted2",
+    "subcategory": "Card",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever you cast a spell",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SpellCastedTrigger"
+      },
+      {
+        "name": "sourcePlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_LoseStealth",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever this loses Hidden",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "LoseStealthTrigger"
+      },
+      {
+        "name": "hostTargetType",
+        "type": "field_label_serializable_hidden",
+        "value": "IGNORE_OTHER_TARGETS"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_ChampionPhysicalAttack",
+    "subcategory": "Unit,Attack",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "When your champion attacks a unit",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "PhysicalAttackTrigger"
+      },
+      {
+        "name": "sourceEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "HERO"
+      },
+      {
+        "name": "sourcePlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      },
+      {
+        "name": "targetEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "MINION"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_PreDamage",
+    "subcategory": "Damage",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Before this damages %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "PreDamageTrigger"
+      },
+      {
+        "name": "hostTargetType",
+        "type": "field_label_serializable_hidden",
+        "value": "IGNORE_OTHER_SOURCES"
+      },
+      {
+        "name": "targetEntityType",
+        "type": "field_dropdown",
+        "options": [
+          [
+            "anything",
+            "ANY"
+          ],
+          [
+            "a champion",
+            "HERO"
+          ],
+          [
+            "a minion",
+            "MINION"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Trigger_HeroAttacked",
+    "subcategory": "Attack",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "When your hero is attacked",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "PhysicalAttackTrigger"
+      },
+      {
+        "name": "targetEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "HERO"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_AfterPhysicalAttack3",
+    "subcategory": "Attack",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "After your champion attacks",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AfterPhysicalAttackTrigger"
+      },
+      {
+        "name": "sourceEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "HERO"
+      },
+      {
+        "name": "sourcePlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_Supremacy",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "When a Supremacy occurs",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SupremacyTrigger"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_CardDrawn2",
+    "subcategory": "Card",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever you draw a card",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardDrawnTrigger"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_QuickDraw",
+    "subcategory": "Card",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "When you 'Quick Draw'",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "QuickDrawTrigger"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_HeroPowerUsed",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "When you use your Skill",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "HeroPowerUsedTrigger"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_WheneverThisAttacks",
+    "subcategory": "Attack",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever this attacks",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TargetAcquisitionTrigger"
+      },
+      {
+        "name": "actionType",
+        "type": "field_label_serializable_hidden",
+        "value": "PHYSICAL_ATTACK"
+      },
+      {
+        "name": "hostTargetType",
+        "type": "field_label_serializable_hidden",
+        "value": "IGNORE_OTHER_SOURCES"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_AfterThisAttacks",
+    "subcategory": "Attack",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "After this attacks",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "PhysicalAttackTrigger"
+      },
+      {
+        "name": "hostTargetType",
+        "type": "field_label_serializable_hidden",
+        "value": "IGNORE_OTHER_SOURCES"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_ChampionDamage",
+    "subcategory": "Damage",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever your champion takes damage",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DamageReceivedTrigger"
+      },
+      {
+        "name": "targetEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "HERO"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_AfterSpellCasted",
+    "subcategory": "Card",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "After you cast a spell",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AfterSpellCastedTrigger"
+      },
+      {
+        "name": "sourcePlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_CardReceived",
+    "subcategory": "Card",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever you receive a card",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardReceivedTrigger"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_TargetAcquisition",
+    "subcategory": "Card",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "When you cast a spell on this",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TargetAcquisitionTrigger"
+      },
+      {
+        "name": "actionType",
+        "type": "field_label_serializable_hidden",
+        "value": "SPELL"
+      },
+      {
+        "name": "hostTargetType",
+        "type": "field_label_serializable_hidden",
+        "value": "IGNORE_OTHER_TARGETS"
+      },
+      {
+        "name": "sourcePlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_AfterAlliedMinionAttacks",
+    "subcategory": "Unit,Attack",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "After an allied unit attacks",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AfterPhysicalAttackTrigger"
+      },
+      {
+        "name": "sourceEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "MINION"
+      },
+      {
+        "name": "sourcePlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_TurnEnd3",
+    "subcategory": "Turn",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "At the end of the owner's turn",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TurnEndTrigger"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "OWNER"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_OpponentSpellCasted",
+    "subcategory": "Card",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "When your opponent casts a spell",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SpellCastedTrigger"
+      },
+      {
+        "name": "sourcePlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "OPPONENT"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_BoardChanged",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever the board changes",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BoardChangedTrigger"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_AfterMinionPlayed",
+    "subcategory": "Unit",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "After you play a unit",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AfterMinionPlayedTrigger"
+      },
+      {
+        "name": "hostTargetType",
+        "type": "field_label_serializable_hidden",
+        "value": "IGNORE_AS_TARGET"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_CardDrawn3",
+    "subcategory": "Card",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "When you draw this",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardDrawnTrigger"
+      },
+      {
+        "name": "hostTargetType",
+        "type": "field_label_serializable_hidden",
+        "value": "IGNORE_OTHER_TARGETS"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_Discover",
+    "subcategory": "Card",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever you Source",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DiscoverTrigger"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_TurnEnd4",
+    "subcategory": "Turn",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "At the end of your opponent's turn",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TurnEndTrigger"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "OPPONENT"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_TurnStart4",
+    "subcategory": "Turn",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "At the start of your opponent's turn",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TurnStartTrigger"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "OPPONENT"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_ChampionDamageCaused",
+    "subcategory": "Unit,Damage",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever your champion damages a unit",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DamageCausedTrigger"
+      },
+      {
+        "name": "sourceEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "HERO"
+      },
+      {
+        "name": "sourcePlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      },
+      {
+        "name": "targetEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "MINION"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_AfterChampionAttacked",
+    "subcategory": "Attack",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "After your champion is attacked",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AfterPhysicalAttackTrigger"
+      },
+      {
+        "name": "targetEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "HERO"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_EnrageChanged",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever Enraged status changes",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "EnrageChangedTrigger"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_AfterSpellCastedOnMinion",
+    "subcategory": "Unit,Card",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "After you cast a spell on a unit",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AfterSpellCastedTrigger"
+      },
+      {
+        "name": "sourcePlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      },
+      {
+        "name": "targetEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "MINION"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_Shuffled",
+    "subcategory": "Card",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever you shuffle a card to a deck",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ShuffledTrigger"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_AnotherAlliedMinionDamaged",
+    "subcategory": "Unit,Damage",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "When another allied unit takes damage",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DamageReceivedTrigger"
+      },
+      {
+        "name": "hostTargetType",
+        "type": "field_label_serializable_hidden",
+        "value": "IGNORE_AS_TARGET"
+      },
+      {
+        "name": "targetEntityType",
+        "type": "field_label_serializable_hidden",
+        "value": "MINION"
+      },
+      {
+        "name": "targetPlayer",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      }
+    ]
+  }
+]

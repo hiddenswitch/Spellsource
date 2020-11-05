@@ -1,0 +1,307 @@
+[
+  {
+    "type": "Enchantment",
+    "colour": 280,
+    "previousStatement": [
+      "Enchantments"
+    ],
+    "nextStatement": [
+      "Enchantments"
+    ],
+    "message0": "Enchantment: %1 (then) %2",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "eventTrigger",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "EnchantmentOptions",
+    "colour": 280,
+    "previousStatement": [
+      "Enchantments"
+    ],
+    "nextStatement": [
+      "Enchantments"
+    ],
+    "message0": "Enchantment: %1 (then) %2",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "eventTrigger",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "super",
+        "check": [
+          "EnchantmentOption"
+        ],
+        "shadow": {
+          "type": "EnchantmentOption_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "Enchantment_SHADOW",
+    "previousStatement": [
+      "Enchantments"
+    ],
+    "colour": 280,
+    "message0": "Enchantment(s)",
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "EnchantmentOption_maxFires",
+    "previousStatement": [
+      "EnchantmentOption"
+    ],
+    "nextStatement": [
+      "EnchantmentOption"
+    ],
+    "colour": 280,
+    "message0": "Expires after %1 %2",
+    "args0": [
+      {
+        "type": "field_number",
+        "name": "maxFires",
+        "value": 1,
+        "int": true
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "maxFires",
+        "text": "cast/casts",
+        "value": "cast"
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "EnchantmentOption_oneTurn",
+    "previousStatement": [
+      "EnchantmentOption"
+    ],
+    "nextStatement": [
+      "EnchantmentOption"
+    ],
+    "colour": 280,
+    "message0": "%1Only active for one turn",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "oneTurn",
+        "value": true
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "EnchantmentOption_countUntilCast",
+    "previousStatement": [
+      "EnchantmentOption"
+    ],
+    "nextStatement": [
+      "EnchantmentOption"
+    ],
+    "colour": 280,
+    "message0": "Only casts every %1 fires",
+    "args0": [
+      {
+        "type": "field_number",
+        "name": "countUntilCast",
+        "value": 2,
+        "int": true
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "EnchantmentOption_maxFiresPerSequences",
+    "previousStatement": [
+      "EnchantmentOption"
+    ],
+    "nextStatement": [
+      "EnchantmentOption"
+    ],
+    "colour": 280,
+    "message0": "Can't fire more than %1 %2 per sequence",
+    "args0": [
+      {
+        "type": "field_number",
+        "name": "maxFiresPerSequence",
+        "value": 1,
+        "int": true
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "maxFiresPerSequence",
+        "text": "time/times",
+        "value": "time"
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "EnchantmentOption_persistentOwner",
+    "previousStatement": [
+      "EnchantmentOption"
+    ],
+    "nextStatement": [
+      "EnchantmentOption"
+    ],
+    "colour": 280,
+    "message0": "%1Always \"owned\" by the original player",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "persistentOwner",
+        "value": true
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "EnchantmentOption_countByValue",
+    "previousStatement": [
+      "EnchantmentOption"
+    ],
+    "nextStatement": [
+      "EnchantmentOption"
+    ],
+    "colour": 280,
+    "message0": "%1Counts by the value of the event",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "countByValue",
+        "value": true
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "EnchantmentOption_keepAfterTransform",
+    "previousStatement": [
+      "EnchantmentOption"
+    ],
+    "nextStatement": [
+      "EnchantmentOption"
+    ],
+    "colour": 280,
+    "message0": "%1Stays after host transforms",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "keepAfterTransform",
+        "value": true
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "EnchantmentOption_SHADOW",
+    "previousStatement": [
+      "EnchantmentOption"
+    ],
+    "colour": 280,
+    "message0": "Enchantment Options"
+  },
+  {
+    "type": "EnchantmentFake_SHADOW",
+    "colour": 280,
+    "previousStatement": [
+      "EnchantmentFake_SHADOW"
+    ],
+    "message0": "Enchantment: %1 (then) %2",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "eventTrigger",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "EnchantmentOptionsFake_SHADOW",
+    "colour": 280,
+    "previousStatement": [
+      "EnchantmentOptionsFake_SHADOW"
+    ],
+    "message0": "Enchantment: %1 (then) %2",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "eventTrigger",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "super",
+        "check": [
+          "EnchantmentOption"
+        ],
+        "shadow": {
+          "type": "EnchantmentOption_SHADOW"
+        }
+      }
+    ]
+  }
+]

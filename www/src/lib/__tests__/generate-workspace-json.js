@@ -12,7 +12,7 @@ import SpellsourceTesting from '../spellsource-testing'
 
 const cardsPath = `${__dirname}/../../../../cards/src/main/resources/cards/collectible`
 const cardsPath2 = `${__dirname}/../../../../game/src/main/resources/basecards/standard`
-const blocksPath = `${__dirname}/../../../../unityclient/src/unity/Assets/UBlockly/JsonBlocks/`
+const blocksPath = `${__dirname}/../JsonBlocks/`
 
 const cards = []
 for (const f of walkSync(cardsPath)) {

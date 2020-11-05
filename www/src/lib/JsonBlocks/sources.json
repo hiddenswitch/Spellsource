@@ -1,0 +1,261 @@
+[
+  {
+    "type": "Source_SHADOW",
+    "output": "Source",
+    "colour": 10,
+    "message0": "Card Source"
+  },
+  {
+    "type": "Source_targetPlayer",
+    "message0": "%2 for %1",
+    "output": "Source",
+    "colour": 10,
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "targetPlayer",
+        "check": "TargetPlayer",
+        "shadow": {
+          "type": "TargetPlayer_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "super",
+        "check": "Source",
+        "shadow": {
+          "type": "Source_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Source_distinct",
+    "message0": "distinct cards in %2",
+    "output": "Source",
+    "colour": 10,
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "distinct",
+        "value": true
+      },
+      {
+        "type": "input_value",
+        "name": "super",
+        "check": "Source",
+        "shadow": {
+          "type": "Source_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Source_Collectible",
+    "output": "Source",
+    "colour": 10,
+    "message0": "%1Collectible Cards",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CatalogueSource"
+      }
+    ]
+  },
+  {
+    "type": "Source_Uncollectible",
+    "output": "Source",
+    "colour": 10,
+    "message0": "%1All Cards",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "UncollectibleCatalogueSource"
+      }
+    ]
+  },
+  {
+    "type": "Source_Unweighted",
+    "output": "Source",
+    "colour": 10,
+    "message0": "%1Collectible Cards (unweighted)",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "UnweightedCatalogueSource"
+      }
+    ]
+  },
+  {
+    "type": "Source_GraveyardActors",
+    "output": "Source",
+    "colour": 10,
+    "message0": "%1Your unit/item Graveyard",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "GraveyardActorsSource"
+      }
+    ]
+  },
+  {
+    "type": "Source_GraveyardCards",
+    "output": "Source",
+    "colour": 10,
+    "message0": "%1Your card Graveyard",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "GraveyardCardsSource"
+      }
+    ]
+  },
+  {
+    "type": "Source_GraveyardCardsAndActors",
+    "output": "Source",
+    "colour": 10,
+    "message0": "%1Your entire Graveyard",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "GraveyardCardAndActorSourceSource"
+      }
+    ]
+  },
+  {
+    "type": "Source_Deck",
+    "output": "Source",
+    "colour": 10,
+    "message0": "%1Cards in deck",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DeckSource"
+      }
+    ]
+  },
+  {
+    "type": "Source_Hand",
+    "output": "Source",
+    "colour": 10,
+    "message0": "%1Cards in hand",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "HandSource"
+      }
+    ]
+  },
+  {
+    "type": "Source_TopCardsOfDeck",
+    "output": "Source",
+    "colour": 10,
+    "message0": "%1The top %2 cards in your deck",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TopCardsOfDeckSource"
+      },
+      {
+        "type": "input_value",
+        "name": "value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": [
+            {
+              "name": "int",
+              "valueI": 3
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "type": "Source_Combination",
+    "output": "Source",
+    "colour": 10,
+    "message0": "%1Combination of: %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CombinationSource"
+      },
+      {
+        "type": "input_statement",
+        "name": "cardSources",
+        "check": [
+          "Source_I"
+        ],
+        "shadow": {
+          "type": "Source_I",
+          "notActuallyShadow": true
+        }
+      }
+    ]
+  },
+  {
+    "type": "Source_I",
+    "colour": 10,
+    "message0": "-%1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "i",
+        "check": [
+          "Source"
+        ],
+        "shadow": {
+          "type": "Source_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT",
+    "previousStatement": [
+      "Source_I"
+    ],
+    "nextStatement": [
+      "Source_I"
+    ],
+    "comment": "Used to make lists of Sources.\n(Remember you can always\nDuplicate with right-click)"
+  },
+  {
+    "type": "Source_GraveyardCardAndActorCardSource",
+    "inputsInline": false,
+    "output": "Source",
+    "colour": 10,
+    "message0": "The source cards of everything in your graveyard",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "GraveyardCardAndActorSourceCardSource"
+      }
+    ]
+  },
+  {
+    "type": "Source_GraveyardDiedMinionsSource",
+    "inputsInline": false,
+    "output": "Source",
+    "colour": 10,
+    "message0": "The source cards of all your units that have died",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "GraveyardDiedMinionsSource"
+      }
+    ]
+  }
+]

@@ -1,0 +1,221 @@
+[
+  {
+    "type": "TestStarter_RunGym",
+    "nextStatement": [
+      "Code"
+    ],
+    "colour": 0,
+    "hat": "cap",
+    "message0": "Start a test game",
+    "inputsInline": false
+  },
+  {
+    "type": "TestStarter_RunGym2",
+    "nextStatement": [
+      "Code"
+    ],
+    "colour": 220,
+    "hat": "cap",
+    "message0": "Start a test game",
+    "args0": [],
+    "inputsInline": false,
+    "message1": "With allied class: %1",
+    "args1": [
+      {
+        "type": "input_value",
+        "name": "friendlyClass",
+        "check": "HeroClass",
+        "shadow": {
+          "type": "HeroClass_SHADOW"
+        }
+      }
+    ],
+    "message2": "And opposing class: %1",
+    "args2": [
+      {
+        "type": "input_value",
+        "name": "enemyClass",
+        "check": "HeroClass",
+        "shadow": {
+          "type": "HeroClass_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "TestActionSpellEffect",
+    "previousStatement": [
+      "Code"
+    ],
+    "nextStatement": [
+      "Code"
+    ],
+    "colour": "260",
+    "inputsInline": false,
+    "message0": "Do effect: %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "TestActionPlayCard",
+    "previousStatement": [
+      "Code"
+    ],
+    "nextStatement": [
+      "Code"
+    ],
+    "colour": "260",
+    "inputsInline": false,
+    "message0": "Play card %1 as %2 with target %3",
+    "args0": [
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": [
+          "Card",
+          "EntityReference"
+        ],
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      },
+      {
+        "name": "player",
+        "type": "input_value",
+        "check": "TargetPlayer",
+        "shadow": {
+          "type": "TargetPlayer_1"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_NONE"
+        }
+      }
+    ]
+  },
+  {
+    "type": "TestActionPlayMinion",
+    "previousStatement": [
+      "Code"
+    ],
+    "nextStatement": [
+      "Code"
+    ],
+    "colour": "260",
+    "inputsInline": false,
+    "message0": "Play minion card %1 as %2 with target %3 and call it %4",
+    "args0": [
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": [
+          "Card",
+          "EntityReference"
+        ],
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      },
+      {
+        "name": "player",
+        "type": "input_value",
+        "check": "TargetPlayer",
+        "shadow": {
+          "type": "TargetPlayer_1"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_NONE"
+        }
+      },
+      {
+        "type": "field_variable",
+        "name": "variable",
+        "variable": "minion",
+        "variableTypes": ["EntityReference"],
+        "defaultType": "EntityReference"
+      }
+    ]
+  },
+  {
+    "type": "TestActionReceiveCard",
+    "previousStatement": [
+      "Code"
+    ],
+    "nextStatement": [
+      "Code"
+    ],
+    "colour": "260",
+    "inputsInline": false,
+    "message0": "Receive card %1 as %2 and call it %3",
+    "args0": [
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": [
+          "Card",
+          "EntityReference"
+        ],
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      },
+      {
+        "name": "player",
+        "type": "input_value",
+        "check": "TargetPlayer",
+        "shadow": {
+          "type": "TargetPlayer_1"
+        }
+      },
+      {
+        "type": "field_variable",
+        "name": "variable",
+        "variable": "card",
+        "variableTypes": ["EntityReference"],
+        "defaultType": "EntityReference"
+      }
+    ]
+  },
+  {
+    "type": "TestAssertion",
+    "previousStatement": [
+      "Code"
+    ],
+    "nextStatement": [
+      "Code"
+    ],
+    "colour": "130",
+    "inputsInline": false,
+    "message0": "Assert that %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "condition",
+        "check": [
+          "Boolean",
+          "ConditionDesc"
+        ],
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      }
+    ]
+  }
+]

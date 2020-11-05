@@ -1,0 +1,32 @@
+[
+  {
+    "type": "HeroClass_SHADOW",
+    "message0": "Class",
+    "output": "HeroClass",
+    "colour": "#6A6A6A",
+    "data": "ANY"
+  },
+  {
+    "type": "HeroClass_OPPONENT",
+    "message0": "Your opponent's class",
+    "output": "HeroClass",
+    "colour": 1000,
+    "data": "OPPONENT",
+    "comment": "Not for use as a card's class,\nonly for game effects"
+  },
+  {
+    "type": "HeroClass_SELF",
+    "message0": "Your class",
+    "output": "HeroClass",
+    "colour": "#888888",
+    "data": "SELF",
+    "comment": "Not for use as a card's class,\nonly for game effects"
+  },
+  {
+    "type": "HeroClass_ANY",
+    "message0": "Neutral",
+    "output": "HeroClass",
+    "colour": "#888888",
+    "data": "ANY"
+  }
+]

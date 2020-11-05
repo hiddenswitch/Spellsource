@@ -1,0 +1,86 @@
+[
+  {
+    "type": "Race_SHADOW",
+    "message0": "Tribe",
+    "output": "Race",
+    "colour": 160,
+    "data": "NONE"
+  },
+  {
+    "type": "Race_BEAST",
+    "message0": "Beast",
+    "output": "Race",
+    "colour": 160,
+    "data": "BEAST"
+  },
+  {
+    "type": "Race_DEMON",
+    "message0": "Oni (Demon)",
+    "output": "Race",
+    "colour": 160,
+    "data": "DEMON"
+  },
+  {
+    "type": "Race_ELEMENTAL",
+    "message0": "Elemental",
+    "output": "Race",
+    "colour": 160,
+    "data": "ELEMENTAL"
+  },
+  {
+    "type": "Race_FAE",
+    "message0": "Fae",
+    "output": "Race",
+    "colour": 160,
+    "data": "FAE"
+  },
+  {
+    "type": "Race_SPIRIT",
+    "message0": "Spirit",
+    "output": "Race",
+    "colour": 160,
+    "data": "SPIRIT"
+  },
+  {
+    "type": "Race_NONE",
+    "message0": "No Tribe",
+    "output": "Race",
+    "colour": 160,
+    "data": "NONE"
+  },
+  {
+    "type": "Race_ALL",
+    "message0": "ALL Tribes",
+    "output": "Race",
+    "colour": 160,
+    "data": "ALL"
+  },
+  {
+    "type": "Race_DRAGON",
+    "data": "DRAGON",
+    "output": "Race",
+    "message0": "Dragon",
+    "colour": 160
+  },
+  {
+    "type": "Race_MECH",
+    "data": "MECH",
+    "colour": 160,
+    "output": "Race",
+    "message0": "Mech"
+  },
+  {
+    "type": "Race_PIRATE",
+    "data": "PIRATE",
+    "colour": 160,
+    "output": "Race",
+    "message0": "Pirate"
+  },
+  {
+    "type": "Race_TITAN",
+    "data": "TITAN",
+    "colour": 160,
+    "output": "Race",
+    "message0": "Titan"
+  }
+]

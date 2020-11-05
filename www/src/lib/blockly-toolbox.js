@@ -79,8 +79,35 @@ export default class BlocklyToolbox {
 
         this.category('Targets', '30',
           "Blocks for the many different targets that effects can have",
-          this.contents('EntityReference')
+          [
+            this.category('Ally', '30',
+              'Blocks that target allied things',
+              this.subContents('EntityReference', 'Ally')
+            ),
+
+            this.category('Enemy', '30',
+              'Blocks that target enemy things',
+              this.subContents('EntityReference', 'Enemy')
+            ),
+
+            this.category('Both', '30',
+              'Blocks that target both allied and enemy things',
+              this.subContents('EntityReference', 'Both')
+            ),
+
+            this.category('Misc', '30',
+              'Blocks that target other things',
+              this.subContents('EntityReference', 'Misc')
+            ),
+
+            this.category('Helper', '30',
+              'Blocks that help you target specific/niche things',
+              this.subContents('EntityReference', 'Util')
+            )
+          ]
         ),
+
+
 
         this.category('Choices', '60',
           "Blocks for the actions that a card can make the player take when being played",
@@ -143,7 +170,7 @@ export default class BlocklyToolbox {
             ),
 
             this.category('Damage', '260',
-              "Spell blocks that relate to dealing damage",
+              "Spell blocks that relate to dealing damage (and also the one block for healing)",
               this.subContents('Spell', 'Damage')
             ),
 
@@ -167,22 +194,59 @@ export default class BlocklyToolbox {
               this.subContents('Spell', 'Cost')
             ),
 
-            this.category('Util', '260',
-              "Spell blocks that help implement complex/combined effects",
-              this.subContents('Spell', 'Util')
+            this.category('Mechanics', '260',
+              "Spell blocks that employ specific custom mechanics",
+              this.subContents('Spell', 'Mechanic')
+            ),
+
+            this.category('Enchantment', '260',
+              "Spell blocks that add/remove enchantments/auras",
+              this.subContents('Spell', 'Enchant')
+            ),
+
+            this.category('Attacking', '260',
+              "Spell blocks about enities attacking",
+              this.subContents('Spell', 'Attack')
             ),
 
             this.category('Misc', '260',
               "Spell blocks that aren't otherwise categorized",
               this.subContents('Spell', 'Misc')
             ),
+
+            this.category('Helper', '260',
+              "Spell blocks that help implement complex/combined effects",
+              this.subContents('Spell', 'Util')
+            ),
           ]
         ),
 
         this.category('Values', '340',
           "Blocks for anything and everything numeric",
-          this.contents('ValueProvider')
+          [
+            this.category('Number of ...', '340',
+              "Blocks for counting the number of things",
+              this.subContents('ValueProvider', 'Number')
+            ),
+
+            this.category('Properties', '340',
+              "Blocks for numerical properties of things",
+              this.subContents('ValueProvider', 'Properties')
+            ),
+
+            this.category('Misc', '340',
+              "Blocks for other values",
+              this.subContents('ValueProvider', 'Misc')
+            ),
+
+            this.category('Helper', '340',
+              "Blocks for calculating more advanced values",
+              this.subContents('ValueProvider', 'Util')
+            )
+          ]
         ),
+
+
 
         this.category('Conditions', '100',
           "Blocks that CAN handle the truth, because they evaluate it",
@@ -227,14 +291,14 @@ export default class BlocklyToolbox {
               this.subContents('Trigger', 'Turn')
             ),
 
-            this.category('Util', '300',
-              "Trigger blocks that help with reacting to more specific events",
-              this.subContents('Trigger', 'Util')
-            ),
-
             this.category('Misc', '300',
               "Trigger blocks that aren't otherwise categorized",
               this.subContents('Trigger', 'Misc')
+            ),
+
+            this.category('Helper', '300',
+              "Trigger blocks that help with reacting to more specific events",
+              this.subContents('Trigger', 'Util')
             ),
           ]
         ),
@@ -314,8 +378,7 @@ export default class BlocklyToolbox {
 
             this.category('Math', '230',
               "Blocks for doing math in regards to actions. Don't try to use these blocks for cards or effects other than test actions.",
-              this.exclusionContents('math',
-                'math_change')
+              this.exclusionContents('math', 'math_change', 'math_trig', 'math_constant', 'math_atan2')
             ),
 
             /* Not sure if these are actually going to be needed
