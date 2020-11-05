@@ -16,11 +16,16 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
 import com.hiddenswitch.spellsource.rpc.*;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
+import io.grpc.Channel;
+import io.grpc.Context;
 import io.grpc.ServerServiceDefinition;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.core.streams.Pipe;
+import io.vertx.grpc.GrpcWriteStream;
+import io.vertx.grpc.VertxChannelBuilder;
 import io.vertx.sqlclient.Row;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -31,6 +36,9 @@ import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
+import openmatch.Frontend;
+import openmatch.FrontendServiceGrpc;
+import openmatch.Messages;
 import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
@@ -317,6 +325,24 @@ public class Legacy {
 						.compose(ignored -> queryExecutor.execute(dsl -> duplicateAllForeign(dsl, deckId, newDeckId, DECK_PLAYER_ATTRIBUTE_TUPLES.ID, DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID)))
 						.compose(ignored -> getDeck(newDeckId, userId))
 						.onComplete(response);
+			}
+
+			@Override
+			public void enqueue(MatchmakingQueuePutRequest request, GrpcWriteStream<MatchmakingQueuePutResponse> response) {
+				
+				var vertx = Vertx.currentContext().owner();
+				var configuration = Environment.configuration();
+
+				configuration.compose(serverConfiguration -> {
+					var channel = VertxChannelBuilder.forAddress(vertx, serverConfiguration.getOpenmatch().getHost(), serverConfiguration.getOpenmatch().getPort()).build();
+					var service = FrontendServiceGrpc.newVertxStub(channel);
+					return service.createTicket(Frontend.CreateTicketRequest.newBuilder()
+							.setTicket(Messages.Ticket.newBuilder().build()).build())
+							.compose(ticket -> service.watchAssignments(Frontend.WatchAssignmentsRequest.newBuilder()
+									.setTicketId(ticket.getId()).build()))
+							.compose(readStream->null);
+				});
+
 			}
 		})
 				.compose(Accounts::requiresAuthorization);

@@ -23,7 +23,6 @@ import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
 
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,11 +34,8 @@ import static java.util.stream.Collectors.toMap;
 
 public class Accounts {
 	protected static final String KEYCLOAK_LOGIN_PATH = "/realms/hiddenswitch/protocol/openid-connect/token";
-	protected static final String CLIENT_SECRET = "clientsecret";
-	protected static final String CLIENT_ID = "spellsource";
 	private static final WeakVertxMap<Keycloak> keycloakReference = new WeakVertxMap<>(Accounts::keycloakConstructor);
 	private static final AtomicReference<JwtServerInterceptor<AccessToken>> interceptor = new AtomicReference<>();
-	private static final String realmId = "hiddenswitch";
 
 	/**
 	 * Does not make blocking calls, so the interceptor can be synchronous on the event loop!
@@ -190,7 +186,10 @@ public class Accounts {
 	}
 
 	public static Future<RealmResource> get() {
-		return Environment.executeBlocking(() -> keycloakReference.get().realm(realmId));
+		return Environment.executeBlocking(() -> {
+			var realmId = Environment.cachedConfigurationOrGet().getKeycloak().getRealmId();
+			return keycloakReference.get().realm(realmId);
+		});
 	}
 
 	public static Future<UserEntity> createUser(String email, String username, String password) {
@@ -238,12 +237,12 @@ public class Accounts {
 			var engine = new VertxClientHttpEngine(vertx);
 			client.httpEngine(engine);
 		}
-		var properties = System.getProperties();
+		var config = Environment.cachedConfigurationOrGet();
 		return KeycloakBuilder.builder()
-				.serverUrl(properties.getProperty("keycloak.auth.url"))
+				.serverUrl(config.getKeycloak().getAuthUrl())
 				.realm("master")
-				.username(properties.getProperty("keycloak.admin.username", "admin"))
-				.password(properties.getProperty("keycloak.admin.password", "admin"))
+				.username(config.getKeycloak().getAdminUsername())
+				.password(config.getKeycloak().getAdminPassword())
 				.clientId("admin-cli")
 				.grantType("password")
 				.resteasyClient(client.build())
@@ -252,39 +251,40 @@ public class Accounts {
 
 	public static Future<RealmResource> createRealmIfAbsent() {
 		return Environment.executeBlocking(() -> {
+			var configuration = Environment.cachedConfigurationOrGet();
 			var keycloak = keycloakReference.get();
 			var existing = Optional.<RealmRepresentation>empty();
+			var realmId = configuration.getKeycloak().getRealmId();
 			try {
-				existing = keycloak.realms().findAll().stream().filter(realm -> realm.getRealm().equals(Accounts.realmId)).findFirst();
+				existing = keycloak.realms().findAll().stream().filter(realm -> realm.getRealm().equals(realmId)).findFirst();
 			} catch (NotFoundException ignored) {
 			}
 
 			if (existing.isPresent()) {
-				return keycloak.realm(Accounts.realmId);
+				return keycloak.realm(realmId);
 			}
 
-			var properties = System.getProperties();
 			// Create a default
 			var realmRepresentation = new RealmRepresentation();
-			realmRepresentation.setRealm(Accounts.realmId);
-			realmRepresentation.setDisplayName(properties.getProperty("keycloak.realm.display.name", "Spellsource"));
+			realmRepresentation.setRealm(realmId);
+			realmRepresentation.setDisplayName(configuration.getKeycloak().getRealmDisplayName());
 			realmRepresentation.setSslRequired(SslRequired.EXTERNAL.toString());
 			realmRepresentation.setEnabled(true);
 
 			keycloak.realms().create(realmRepresentation);
 
-			var realm = keycloak.realms().realm(Accounts.realmId);
+			var realm = keycloak.realms().realm(realmId);
 			var flows = realm.flows().getFlows()
 					.stream().collect(toMap(AuthenticationFlowRepresentation::getAlias, AuthenticationFlowRepresentation::getId));
 			var client = new ClientRepresentation();
-			client.setClientId(properties.getProperty("keycloak.client.id", CLIENT_ID));
+			client.setClientId(configuration.getKeycloak().getClientId());
 			client.setDirectAccessGrantsEnabled(true);
 
 			// Should now be confidential
 			client.setClientAuthenticatorType("client-secret");
 			client.setServiceAccountsEnabled(false);
 			client.setStandardFlowEnabled(true);
-			client.setSecret(properties.getProperty("keycloak.client.secret", CLIENT_SECRET));
+			client.setSecret(configuration.getKeycloak().getClientSecret());
 			client.setRedirectUris(Collections.singletonList("/oauth2callback"));
 			client.setAuthenticationFlowBindingOverrides(ImmutableMap.of(
 					"direct_grant", flows.get("direct grant"),
@@ -297,7 +297,7 @@ public class Accounts {
 		});
 	}
 
-	public static String keycloakAuthUrl() {
-		return (String) System.getProperties().getOrDefault("keycloak.auth.url", "http://localhost:8080/auth");
+	public synchronized static String keycloakAuthUrl() {
+		return Environment.cachedConfigurationOrGet().getKeycloak().getAuthUrl();
 	}
 }

@@ -7,6 +7,7 @@ import com.hiddenswitch.framework.rpc.AccountsGrpc;
 import com.hiddenswitch.framework.rpc.GetAccountsReply;
 import com.hiddenswitch.framework.rpc.GetAccountsRequest;
 import com.hiddenswitch.framework.rpc.UserEntity;
+import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;

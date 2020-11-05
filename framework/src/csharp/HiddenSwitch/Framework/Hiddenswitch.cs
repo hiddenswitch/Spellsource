@@ -24,29 +24,51 @@ namespace HiddenSwitch.Proto {
     static HiddenswitchReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChJoaWRkZW5zd2l0Y2gucHJvdG8SDGhpZGRlbnN3aXRjaCI5CgxMb2dpblJl",
-            "cXVlc3QSFwoPdXNlcm5hbWVPckVtYWlsGAEgASgJEhAKCHBhc3N3b3JkGAIg",
-            "ASgJIkkKFENyZWF0ZUFjY291bnRSZXF1ZXN0Eg0KBWVtYWlsGAEgASgJEhAK",
-            "CHVzZXJuYW1lGAIgASgJEhAKCHBhc3N3b3JkGAMgASgJIhQKEkNyZWF0ZUFj",
-            "Y291bnRSZXBseSKCAQoSTG9naW5PckNyZWF0ZVJlcGx5Ej4KE2FjY2Vzc1Rv",
-            "a2VuUmVzcG9uc2UYASABKAsyIS5oaWRkZW5zd2l0Y2guQWNjZXNzVG9rZW5S",
-            "ZXNwb25zZRIsCgp1c2VyRW50aXR5GAIgASgLMhguaGlkZGVuc3dpdGNoLlVz",
-            "ZXJFbnRpdHkiJAoTQWNjZXNzVG9rZW5SZXNwb25zZRINCgV0b2tlbhgBIAEo",
-            "CSI5CgpVc2VyRW50aXR5EgoKAmlkGAEgASgJEg0KBWVtYWlsGAIgASgJEhAK",
-            "CHVzZXJuYW1lGAogASgJIiEKEkdldEFjY291bnRzUmVxdWVzdBILCgNpZHMY",
-            "ASADKAkiQgoQR2V0QWNjb3VudHNSZXBseRIuCgx1c2VyRW50aXRpZXMYASAD",
-            "KAsyGC5oaWRkZW5zd2l0Y2guVXNlckVudGl0eTKzAQoPVW5hdXRoZW50aWNh",
-            "dGVkElcKDUNyZWF0ZUFjY291bnQSIi5oaWRkZW5zd2l0Y2guQ3JlYXRlQWNj",
-            "b3VudFJlcXVlc3QaIC5oaWRkZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJlcGx5",
-            "IgASRwoFTG9naW4SGi5oaWRkZW5zd2l0Y2guTG9naW5SZXF1ZXN0GiAuaGlk",
-            "ZGVuc3dpdGNoLkxvZ2luT3JDcmVhdGVSZXBseSIAMl0KCEFjY291bnRzElEK",
-            "C0dldEFjY291bnRzEiAuaGlkZGVuc3dpdGNoLkdldEFjY291bnRzUmVxdWVz",
-            "dBoeLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50c1JlcGx5IgBCPgoeY29tLmhp",
-            "ZGRlbnN3aXRjaC5mcmFtZXdvcmsucnBjQgVQcm90b1ABqgISSGlkZGVuU3dp",
-            "dGNoLlByb3RvYgZwcm90bzM="));
+            "ChJoaWRkZW5zd2l0Y2gucHJvdG8SDGhpZGRlbnN3aXRjaBoeZ29vZ2xlL3By",
+            "b3RvYnVmL3dyYXBwZXJzLnByb3RvIuwFChNTZXJ2ZXJDb25maWd1cmF0aW9u",
+            "EkMKAnBnGAEgASgLMjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRp",
+            "b24uUG9zdGdyZXNDb25maWd1cmF0aW9uEkkKCGtleWNsb2FrGAIgASgLMjcu",
+            "aGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRpb24uS2V5Y2xvYWtDb25m",
+            "aWd1cmF0aW9uEksKCW9wZW5tYXRjaBgDIAEoCzI4LmhpZGRlbnN3aXRjaC5T",
+            "ZXJ2ZXJDb25maWd1cmF0aW9uLk9wZW5tYXRjaENvbmZpZ3VyYXRpb24SSQoI",
+            "cmVhbHRpbWUYBCABKAsyNy5oaWRkZW5zd2l0Y2guU2VydmVyQ29uZmlndXJh",
+            "dGlvbi5SZWFsdGltZUNvbmZpZ3VyYXRpb24aZQoVUG9zdGdyZXNDb25maWd1",
+            "cmF0aW9uEgwKBGhvc3QYASABKAkSDAoEcG9ydBgCIAEoBRIQCghkYXRhYmFz",
+            "ZRgDIAEoCRIMCgR1c2VyGAQgASgJEhAKCHBhc3N3b3JkGAUgASgJGqkBChVL",
+            "ZXljbG9ha0NvbmZpZ3VyYXRpb24SDwoHYXV0aFVybBgBIAEoCRIVCg1hZG1p",
+            "blVzZXJuYW1lGAIgASgJEhUKDWFkbWluUGFzc3dvcmQYAyABKAkSEAoIY2xp",
+            "ZW50SWQYBCABKAkSFAoMY2xpZW50U2VjcmV0GAUgASgJEhgKEHJlYWxtRGlz",
+            "cGxheU5hbWUYBiABKAkSDwoHcmVhbG1JZBgHIAEoCRo+ChJSZWRpc0NvbmZp",
+            "Z3VyYXRpb24SDAoEaG9zdBgBIAEoCRIMCgRwb3J0GAIgASgFEgwKBHVzZXIY",
+            "AyABKAkaNAoWT3Blbm1hdGNoQ29uZmlndXJhdGlvbhIMCgRob3N0GAEgASgJ",
+            "EgwKBHBvcnQYAiABKAUaJAoVUmVhbHRpbWVDb25maWd1cmF0aW9uEgsKA3Vy",
+            "aRgBIAEoCSI5CgxMb2dpblJlcXVlc3QSFwoPdXNlcm5hbWVPckVtYWlsGAEg",
+            "ASgJEhAKCHBhc3N3b3JkGAIgASgJIkkKFENyZWF0ZUFjY291bnRSZXF1ZXN0",
+            "Eg0KBWVtYWlsGAEgASgJEhAKCHVzZXJuYW1lGAIgASgJEhAKCHBhc3N3b3Jk",
+            "GAMgASgJIhQKEkNyZWF0ZUFjY291bnRSZXBseSKCAQoSTG9naW5PckNyZWF0",
+            "ZVJlcGx5Ej4KE2FjY2Vzc1Rva2VuUmVzcG9uc2UYASABKAsyIS5oaWRkZW5z",
+            "d2l0Y2guQWNjZXNzVG9rZW5SZXNwb25zZRIsCgp1c2VyRW50aXR5GAIgASgL",
+            "MhguaGlkZGVuc3dpdGNoLlVzZXJFbnRpdHkiJAoTQWNjZXNzVG9rZW5SZXNw",
+            "b25zZRINCgV0b2tlbhgBIAEoCSI5CgpVc2VyRW50aXR5EgoKAmlkGAEgASgJ",
+            "Eg0KBWVtYWlsGAIgASgJEhAKCHVzZXJuYW1lGAogASgJIiEKEkdldEFjY291",
+            "bnRzUmVxdWVzdBILCgNpZHMYASADKAkiQgoQR2V0QWNjb3VudHNSZXBseRIu",
+            "Cgx1c2VyRW50aXRpZXMYASADKAsyGC5oaWRkZW5zd2l0Y2guVXNlckVudGl0",
+            "eTKzAQoPVW5hdXRoZW50aWNhdGVkElcKDUNyZWF0ZUFjY291bnQSIi5oaWRk",
+            "ZW5zd2l0Y2guQ3JlYXRlQWNjb3VudFJlcXVlc3QaIC5oaWRkZW5zd2l0Y2gu",
+            "TG9naW5PckNyZWF0ZVJlcGx5IgASRwoFTG9naW4SGi5oaWRkZW5zd2l0Y2gu",
+            "TG9naW5SZXF1ZXN0GiAuaGlkZGVuc3dpdGNoLkxvZ2luT3JDcmVhdGVSZXBs",
+            "eSIAMl0KCEFjY291bnRzElEKC0dldEFjY291bnRzEiAuaGlkZGVuc3dpdGNo",
+            "LkdldEFjY291bnRzUmVxdWVzdBoeLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50",
+            "c1JlcGx5IgBCPgoeY29tLmhpZGRlbnN3aXRjaC5mcmFtZXdvcmsucnBjQgVQ",
+            "cm90b1ABqgISSGlkZGVuU3dpdGNoLlByb3RvYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Parser, new[]{ "Pg", "Keycloak", "Openmatch", "Realtime" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration.Parser, new[]{ "Host", "Port", "Database", "User", "Password" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration.Parser, new[]{ "AuthUrl", "AdminUsername", "AdminPassword", "ClientId", "ClientSecret", "RealmDisplayName", "RealmId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Parser, new[]{ "Host", "Port", "User" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.OpenmatchConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.OpenmatchConfiguration.Parser, new[]{ "Host", "Port" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration.Parser, new[]{ "Uri" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.LoginRequest), global::HiddenSwitch.Proto.LoginRequest.Parser, new[]{ "UsernameOrEmail", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.CreateAccountRequest), global::HiddenSwitch.Proto.CreateAccountRequest.Parser, new[]{ "Email", "Username", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.CreateAccountReply), global::HiddenSwitch.Proto.CreateAccountReply.Parser, null, null, null, null, null),
@@ -61,6 +83,1660 @@ namespace HiddenSwitch.Proto {
 
   }
   #region Messages
+  /// <summary>
+  /// Specifies a complete server configuration
+  /// </summary>
+  public sealed partial class ServerConfiguration : pb::IMessage<ServerConfiguration>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ServerConfiguration> _parser = new pb::MessageParser<ServerConfiguration>(() => new ServerConfiguration());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ServerConfiguration> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[0]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ServerConfiguration() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ServerConfiguration(ServerConfiguration other) : this() {
+      pg_ = other.pg_ != null ? other.pg_.Clone() : null;
+      keycloak_ = other.keycloak_ != null ? other.keycloak_.Clone() : null;
+      openmatch_ = other.openmatch_ != null ? other.openmatch_.Clone() : null;
+      realtime_ = other.realtime_ != null ? other.realtime_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ServerConfiguration Clone() {
+      return new ServerConfiguration(this);
+    }
+
+    /// <summary>Field number for the "pg" field.</summary>
+    public const int PgFieldNumber = 1;
+    private global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration pg_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration Pg {
+      get { return pg_; }
+      set {
+        pg_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "keycloak" field.</summary>
+    public const int KeycloakFieldNumber = 2;
+    private global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration keycloak_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration Keycloak {
+      get { return keycloak_; }
+      set {
+        keycloak_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "openmatch" field.</summary>
+    public const int OpenmatchFieldNumber = 3;
+    private global::HiddenSwitch.Proto.ServerConfiguration.Types.OpenmatchConfiguration openmatch_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::HiddenSwitch.Proto.ServerConfiguration.Types.OpenmatchConfiguration Openmatch {
+      get { return openmatch_; }
+      set {
+        openmatch_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "realtime" field.</summary>
+    public const int RealtimeFieldNumber = 4;
+    private global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration realtime_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration Realtime {
+      get { return realtime_; }
+      set {
+        realtime_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ServerConfiguration);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ServerConfiguration other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Pg, other.Pg)) return false;
+      if (!object.Equals(Keycloak, other.Keycloak)) return false;
+      if (!object.Equals(Openmatch, other.Openmatch)) return false;
+      if (!object.Equals(Realtime, other.Realtime)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (pg_ != null) hash ^= Pg.GetHashCode();
+      if (keycloak_ != null) hash ^= Keycloak.GetHashCode();
+      if (openmatch_ != null) hash ^= Openmatch.GetHashCode();
+      if (realtime_ != null) hash ^= Realtime.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (pg_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Pg);
+      }
+      if (keycloak_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Keycloak);
+      }
+      if (openmatch_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Openmatch);
+      }
+      if (realtime_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(Realtime);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (pg_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Pg);
+      }
+      if (keycloak_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Keycloak);
+      }
+      if (openmatch_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Openmatch);
+      }
+      if (realtime_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(Realtime);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (pg_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Pg);
+      }
+      if (keycloak_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Keycloak);
+      }
+      if (openmatch_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Openmatch);
+      }
+      if (realtime_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Realtime);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ServerConfiguration other) {
+      if (other == null) {
+        return;
+      }
+      if (other.pg_ != null) {
+        if (pg_ == null) {
+          Pg = new global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration();
+        }
+        Pg.MergeFrom(other.Pg);
+      }
+      if (other.keycloak_ != null) {
+        if (keycloak_ == null) {
+          Keycloak = new global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration();
+        }
+        Keycloak.MergeFrom(other.Keycloak);
+      }
+      if (other.openmatch_ != null) {
+        if (openmatch_ == null) {
+          Openmatch = new global::HiddenSwitch.Proto.ServerConfiguration.Types.OpenmatchConfiguration();
+        }
+        Openmatch.MergeFrom(other.Openmatch);
+      }
+      if (other.realtime_ != null) {
+        if (realtime_ == null) {
+          Realtime = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration();
+        }
+        Realtime.MergeFrom(other.Realtime);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (pg_ == null) {
+              Pg = new global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration();
+            }
+            input.ReadMessage(Pg);
+            break;
+          }
+          case 18: {
+            if (keycloak_ == null) {
+              Keycloak = new global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration();
+            }
+            input.ReadMessage(Keycloak);
+            break;
+          }
+          case 26: {
+            if (openmatch_ == null) {
+              Openmatch = new global::HiddenSwitch.Proto.ServerConfiguration.Types.OpenmatchConfiguration();
+            }
+            input.ReadMessage(Openmatch);
+            break;
+          }
+          case 34: {
+            if (realtime_ == null) {
+              Realtime = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration();
+            }
+            input.ReadMessage(Realtime);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            if (pg_ == null) {
+              Pg = new global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration();
+            }
+            input.ReadMessage(Pg);
+            break;
+          }
+          case 18: {
+            if (keycloak_ == null) {
+              Keycloak = new global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration();
+            }
+            input.ReadMessage(Keycloak);
+            break;
+          }
+          case 26: {
+            if (openmatch_ == null) {
+              Openmatch = new global::HiddenSwitch.Proto.ServerConfiguration.Types.OpenmatchConfiguration();
+            }
+            input.ReadMessage(Openmatch);
+            break;
+          }
+          case 34: {
+            if (realtime_ == null) {
+              Realtime = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration();
+            }
+            input.ReadMessage(Realtime);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the ServerConfiguration message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      public sealed partial class PostgresConfiguration : pb::IMessage<PostgresConfiguration>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<PostgresConfiguration> _parser = new pb::MessageParser<PostgresConfiguration>(() => new PostgresConfiguration());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<PostgresConfiguration> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[0]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public PostgresConfiguration() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public PostgresConfiguration(PostgresConfiguration other) : this() {
+          host_ = other.host_;
+          port_ = other.port_;
+          database_ = other.database_;
+          user_ = other.user_;
+          password_ = other.password_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public PostgresConfiguration Clone() {
+          return new PostgresConfiguration(this);
+        }
+
+        /// <summary>Field number for the "host" field.</summary>
+        public const int HostFieldNumber = 1;
+        private string host_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string Host {
+          get { return host_; }
+          set {
+            host_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        /// <summary>Field number for the "port" field.</summary>
+        public const int PortFieldNumber = 2;
+        private int port_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int Port {
+          get { return port_; }
+          set {
+            port_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "database" field.</summary>
+        public const int DatabaseFieldNumber = 3;
+        private string database_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string Database {
+          get { return database_; }
+          set {
+            database_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        /// <summary>Field number for the "user" field.</summary>
+        public const int UserFieldNumber = 4;
+        private string user_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string User {
+          get { return user_; }
+          set {
+            user_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        /// <summary>Field number for the "password" field.</summary>
+        public const int PasswordFieldNumber = 5;
+        private string password_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string Password {
+          get { return password_; }
+          set {
+            password_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as PostgresConfiguration);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(PostgresConfiguration other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (Host != other.Host) return false;
+          if (Port != other.Port) return false;
+          if (Database != other.Database) return false;
+          if (User != other.User) return false;
+          if (Password != other.Password) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Host.Length != 0) hash ^= Host.GetHashCode();
+          if (Port != 0) hash ^= Port.GetHashCode();
+          if (Database.Length != 0) hash ^= Database.GetHashCode();
+          if (User.Length != 0) hash ^= User.GetHashCode();
+          if (Password.Length != 0) hash ^= Password.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (Host.Length != 0) {
+            output.WriteRawTag(10);
+            output.WriteString(Host);
+          }
+          if (Port != 0) {
+            output.WriteRawTag(16);
+            output.WriteInt32(Port);
+          }
+          if (Database.Length != 0) {
+            output.WriteRawTag(26);
+            output.WriteString(Database);
+          }
+          if (User.Length != 0) {
+            output.WriteRawTag(34);
+            output.WriteString(User);
+          }
+          if (Password.Length != 0) {
+            output.WriteRawTag(42);
+            output.WriteString(Password);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (Host.Length != 0) {
+            output.WriteRawTag(10);
+            output.WriteString(Host);
+          }
+          if (Port != 0) {
+            output.WriteRawTag(16);
+            output.WriteInt32(Port);
+          }
+          if (Database.Length != 0) {
+            output.WriteRawTag(26);
+            output.WriteString(Database);
+          }
+          if (User.Length != 0) {
+            output.WriteRawTag(34);
+            output.WriteString(User);
+          }
+          if (Password.Length != 0) {
+            output.WriteRawTag(42);
+            output.WriteString(Password);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (Host.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(Host);
+          }
+          if (Port != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(Port);
+          }
+          if (Database.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(Database);
+          }
+          if (User.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(User);
+          }
+          if (Password.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(Password);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(PostgresConfiguration other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Host.Length != 0) {
+            Host = other.Host;
+          }
+          if (other.Port != 0) {
+            Port = other.Port;
+          }
+          if (other.Database.Length != 0) {
+            Database = other.Database;
+          }
+          if (other.User.Length != 0) {
+            User = other.User;
+          }
+          if (other.Password.Length != 0) {
+            Password = other.Password;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 10: {
+                Host = input.ReadString();
+                break;
+              }
+              case 16: {
+                Port = input.ReadInt32();
+                break;
+              }
+              case 26: {
+                Database = input.ReadString();
+                break;
+              }
+              case 34: {
+                User = input.ReadString();
+                break;
+              }
+              case 42: {
+                Password = input.ReadString();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 10: {
+                Host = input.ReadString();
+                break;
+              }
+              case 16: {
+                Port = input.ReadInt32();
+                break;
+              }
+              case 26: {
+                Database = input.ReadString();
+                break;
+              }
+              case 34: {
+                User = input.ReadString();
+                break;
+              }
+              case 42: {
+                Password = input.ReadString();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      public sealed partial class KeycloakConfiguration : pb::IMessage<KeycloakConfiguration>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<KeycloakConfiguration> _parser = new pb::MessageParser<KeycloakConfiguration>(() => new KeycloakConfiguration());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<KeycloakConfiguration> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[1]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public KeycloakConfiguration() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public KeycloakConfiguration(KeycloakConfiguration other) : this() {
+          authUrl_ = other.authUrl_;
+          adminUsername_ = other.adminUsername_;
+          adminPassword_ = other.adminPassword_;
+          clientId_ = other.clientId_;
+          clientSecret_ = other.clientSecret_;
+          realmDisplayName_ = other.realmDisplayName_;
+          realmId_ = other.realmId_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public KeycloakConfiguration Clone() {
+          return new KeycloakConfiguration(this);
+        }
+
+        /// <summary>Field number for the "authUrl" field.</summary>
+        public const int AuthUrlFieldNumber = 1;
+        private string authUrl_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string AuthUrl {
+          get { return authUrl_; }
+          set {
+            authUrl_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        /// <summary>Field number for the "adminUsername" field.</summary>
+        public const int AdminUsernameFieldNumber = 2;
+        private string adminUsername_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string AdminUsername {
+          get { return adminUsername_; }
+          set {
+            adminUsername_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        /// <summary>Field number for the "adminPassword" field.</summary>
+        public const int AdminPasswordFieldNumber = 3;
+        private string adminPassword_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string AdminPassword {
+          get { return adminPassword_; }
+          set {
+            adminPassword_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        /// <summary>Field number for the "clientId" field.</summary>
+        public const int ClientIdFieldNumber = 4;
+        private string clientId_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string ClientId {
+          get { return clientId_; }
+          set {
+            clientId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        /// <summary>Field number for the "clientSecret" field.</summary>
+        public const int ClientSecretFieldNumber = 5;
+        private string clientSecret_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string ClientSecret {
+          get { return clientSecret_; }
+          set {
+            clientSecret_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        /// <summary>Field number for the "realmDisplayName" field.</summary>
+        public const int RealmDisplayNameFieldNumber = 6;
+        private string realmDisplayName_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string RealmDisplayName {
+          get { return realmDisplayName_; }
+          set {
+            realmDisplayName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        /// <summary>Field number for the "realmId" field.</summary>
+        public const int RealmIdFieldNumber = 7;
+        private string realmId_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string RealmId {
+          get { return realmId_; }
+          set {
+            realmId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as KeycloakConfiguration);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(KeycloakConfiguration other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (AuthUrl != other.AuthUrl) return false;
+          if (AdminUsername != other.AdminUsername) return false;
+          if (AdminPassword != other.AdminPassword) return false;
+          if (ClientId != other.ClientId) return false;
+          if (ClientSecret != other.ClientSecret) return false;
+          if (RealmDisplayName != other.RealmDisplayName) return false;
+          if (RealmId != other.RealmId) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (AuthUrl.Length != 0) hash ^= AuthUrl.GetHashCode();
+          if (AdminUsername.Length != 0) hash ^= AdminUsername.GetHashCode();
+          if (AdminPassword.Length != 0) hash ^= AdminPassword.GetHashCode();
+          if (ClientId.Length != 0) hash ^= ClientId.GetHashCode();
+          if (ClientSecret.Length != 0) hash ^= ClientSecret.GetHashCode();
+          if (RealmDisplayName.Length != 0) hash ^= RealmDisplayName.GetHashCode();
+          if (RealmId.Length != 0) hash ^= RealmId.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (AuthUrl.Length != 0) {
+            output.WriteRawTag(10);
+            output.WriteString(AuthUrl);
+          }
+          if (AdminUsername.Length != 0) {
+            output.WriteRawTag(18);
+            output.WriteString(AdminUsername);
+          }
+          if (AdminPassword.Length != 0) {
+            output.WriteRawTag(26);
+            output.WriteString(AdminPassword);
+          }
+          if (ClientId.Length != 0) {
+            output.WriteRawTag(34);
+            output.WriteString(ClientId);
+          }
+          if (ClientSecret.Length != 0) {
+            output.WriteRawTag(42);
+            output.WriteString(ClientSecret);
+          }
+          if (RealmDisplayName.Length != 0) {
+            output.WriteRawTag(50);
+            output.WriteString(RealmDisplayName);
+          }
+          if (RealmId.Length != 0) {
+            output.WriteRawTag(58);
+            output.WriteString(RealmId);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (AuthUrl.Length != 0) {
+            output.WriteRawTag(10);
+            output.WriteString(AuthUrl);
+          }
+          if (AdminUsername.Length != 0) {
+            output.WriteRawTag(18);
+            output.WriteString(AdminUsername);
+          }
+          if (AdminPassword.Length != 0) {
+            output.WriteRawTag(26);
+            output.WriteString(AdminPassword);
+          }
+          if (ClientId.Length != 0) {
+            output.WriteRawTag(34);
+            output.WriteString(ClientId);
+          }
+          if (ClientSecret.Length != 0) {
+            output.WriteRawTag(42);
+            output.WriteString(ClientSecret);
+          }
+          if (RealmDisplayName.Length != 0) {
+            output.WriteRawTag(50);
+            output.WriteString(RealmDisplayName);
+          }
+          if (RealmId.Length != 0) {
+            output.WriteRawTag(58);
+            output.WriteString(RealmId);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (AuthUrl.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(AuthUrl);
+          }
+          if (AdminUsername.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(AdminUsername);
+          }
+          if (AdminPassword.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(AdminPassword);
+          }
+          if (ClientId.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(ClientId);
+          }
+          if (ClientSecret.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(ClientSecret);
+          }
+          if (RealmDisplayName.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(RealmDisplayName);
+          }
+          if (RealmId.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(RealmId);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(KeycloakConfiguration other) {
+          if (other == null) {
+            return;
+          }
+          if (other.AuthUrl.Length != 0) {
+            AuthUrl = other.AuthUrl;
+          }
+          if (other.AdminUsername.Length != 0) {
+            AdminUsername = other.AdminUsername;
+          }
+          if (other.AdminPassword.Length != 0) {
+            AdminPassword = other.AdminPassword;
+          }
+          if (other.ClientId.Length != 0) {
+            ClientId = other.ClientId;
+          }
+          if (other.ClientSecret.Length != 0) {
+            ClientSecret = other.ClientSecret;
+          }
+          if (other.RealmDisplayName.Length != 0) {
+            RealmDisplayName = other.RealmDisplayName;
+          }
+          if (other.RealmId.Length != 0) {
+            RealmId = other.RealmId;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 10: {
+                AuthUrl = input.ReadString();
+                break;
+              }
+              case 18: {
+                AdminUsername = input.ReadString();
+                break;
+              }
+              case 26: {
+                AdminPassword = input.ReadString();
+                break;
+              }
+              case 34: {
+                ClientId = input.ReadString();
+                break;
+              }
+              case 42: {
+                ClientSecret = input.ReadString();
+                break;
+              }
+              case 50: {
+                RealmDisplayName = input.ReadString();
+                break;
+              }
+              case 58: {
+                RealmId = input.ReadString();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 10: {
+                AuthUrl = input.ReadString();
+                break;
+              }
+              case 18: {
+                AdminUsername = input.ReadString();
+                break;
+              }
+              case 26: {
+                AdminPassword = input.ReadString();
+                break;
+              }
+              case 34: {
+                ClientId = input.ReadString();
+                break;
+              }
+              case 42: {
+                ClientSecret = input.ReadString();
+                break;
+              }
+              case 50: {
+                RealmDisplayName = input.ReadString();
+                break;
+              }
+              case 58: {
+                RealmId = input.ReadString();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      public sealed partial class RedisConfiguration : pb::IMessage<RedisConfiguration>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<RedisConfiguration> _parser = new pb::MessageParser<RedisConfiguration>(() => new RedisConfiguration());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<RedisConfiguration> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[2]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public RedisConfiguration() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public RedisConfiguration(RedisConfiguration other) : this() {
+          host_ = other.host_;
+          port_ = other.port_;
+          user_ = other.user_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public RedisConfiguration Clone() {
+          return new RedisConfiguration(this);
+        }
+
+        /// <summary>Field number for the "host" field.</summary>
+        public const int HostFieldNumber = 1;
+        private string host_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string Host {
+          get { return host_; }
+          set {
+            host_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        /// <summary>Field number for the "port" field.</summary>
+        public const int PortFieldNumber = 2;
+        private int port_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int Port {
+          get { return port_; }
+          set {
+            port_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "user" field.</summary>
+        public const int UserFieldNumber = 3;
+        private string user_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string User {
+          get { return user_; }
+          set {
+            user_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as RedisConfiguration);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(RedisConfiguration other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (Host != other.Host) return false;
+          if (Port != other.Port) return false;
+          if (User != other.User) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Host.Length != 0) hash ^= Host.GetHashCode();
+          if (Port != 0) hash ^= Port.GetHashCode();
+          if (User.Length != 0) hash ^= User.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (Host.Length != 0) {
+            output.WriteRawTag(10);
+            output.WriteString(Host);
+          }
+          if (Port != 0) {
+            output.WriteRawTag(16);
+            output.WriteInt32(Port);
+          }
+          if (User.Length != 0) {
+            output.WriteRawTag(26);
+            output.WriteString(User);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (Host.Length != 0) {
+            output.WriteRawTag(10);
+            output.WriteString(Host);
+          }
+          if (Port != 0) {
+            output.WriteRawTag(16);
+            output.WriteInt32(Port);
+          }
+          if (User.Length != 0) {
+            output.WriteRawTag(26);
+            output.WriteString(User);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (Host.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(Host);
+          }
+          if (Port != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(Port);
+          }
+          if (User.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(User);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(RedisConfiguration other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Host.Length != 0) {
+            Host = other.Host;
+          }
+          if (other.Port != 0) {
+            Port = other.Port;
+          }
+          if (other.User.Length != 0) {
+            User = other.User;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 10: {
+                Host = input.ReadString();
+                break;
+              }
+              case 16: {
+                Port = input.ReadInt32();
+                break;
+              }
+              case 26: {
+                User = input.ReadString();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 10: {
+                Host = input.ReadString();
+                break;
+              }
+              case 16: {
+                Port = input.ReadInt32();
+                break;
+              }
+              case 26: {
+                User = input.ReadString();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      public sealed partial class OpenmatchConfiguration : pb::IMessage<OpenmatchConfiguration>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<OpenmatchConfiguration> _parser = new pb::MessageParser<OpenmatchConfiguration>(() => new OpenmatchConfiguration());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<OpenmatchConfiguration> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[3]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public OpenmatchConfiguration() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public OpenmatchConfiguration(OpenmatchConfiguration other) : this() {
+          host_ = other.host_;
+          port_ = other.port_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public OpenmatchConfiguration Clone() {
+          return new OpenmatchConfiguration(this);
+        }
+
+        /// <summary>Field number for the "host" field.</summary>
+        public const int HostFieldNumber = 1;
+        private string host_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string Host {
+          get { return host_; }
+          set {
+            host_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        /// <summary>Field number for the "port" field.</summary>
+        public const int PortFieldNumber = 2;
+        private int port_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int Port {
+          get { return port_; }
+          set {
+            port_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as OpenmatchConfiguration);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(OpenmatchConfiguration other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (Host != other.Host) return false;
+          if (Port != other.Port) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Host.Length != 0) hash ^= Host.GetHashCode();
+          if (Port != 0) hash ^= Port.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (Host.Length != 0) {
+            output.WriteRawTag(10);
+            output.WriteString(Host);
+          }
+          if (Port != 0) {
+            output.WriteRawTag(16);
+            output.WriteInt32(Port);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (Host.Length != 0) {
+            output.WriteRawTag(10);
+            output.WriteString(Host);
+          }
+          if (Port != 0) {
+            output.WriteRawTag(16);
+            output.WriteInt32(Port);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (Host.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(Host);
+          }
+          if (Port != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(Port);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(OpenmatchConfiguration other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Host.Length != 0) {
+            Host = other.Host;
+          }
+          if (other.Port != 0) {
+            Port = other.Port;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 10: {
+                Host = input.ReadString();
+                break;
+              }
+              case 16: {
+                Port = input.ReadInt32();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 10: {
+                Host = input.ReadString();
+                break;
+              }
+              case 16: {
+                Port = input.ReadInt32();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      public sealed partial class RealtimeConfiguration : pb::IMessage<RealtimeConfiguration>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<RealtimeConfiguration> _parser = new pb::MessageParser<RealtimeConfiguration>(() => new RealtimeConfiguration());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<RealtimeConfiguration> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[4]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public RealtimeConfiguration() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public RealtimeConfiguration(RealtimeConfiguration other) : this() {
+          uri_ = other.uri_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public RealtimeConfiguration Clone() {
+          return new RealtimeConfiguration(this);
+        }
+
+        /// <summary>Field number for the "uri" field.</summary>
+        public const int UriFieldNumber = 1;
+        private string uri_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public string Uri {
+          get { return uri_; }
+          set {
+            uri_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as RealtimeConfiguration);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(RealtimeConfiguration other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (Uri != other.Uri) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Uri.Length != 0) hash ^= Uri.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (Uri.Length != 0) {
+            output.WriteRawTag(10);
+            output.WriteString(Uri);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (Uri.Length != 0) {
+            output.WriteRawTag(10);
+            output.WriteString(Uri);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (Uri.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(Uri);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(RealtimeConfiguration other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Uri.Length != 0) {
+            Uri = other.Uri;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 10: {
+                Uri = input.ReadString();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 10: {
+                Uri = input.ReadString();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+    }
+    #endregion
+
+  }
+
   public sealed partial class LoginRequest : pb::IMessage<LoginRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -73,7 +1749,7 @@ namespace HiddenSwitch.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[0]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -284,7 +1960,7 @@ namespace HiddenSwitch.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[1]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -531,7 +2207,7 @@ namespace HiddenSwitch.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[2]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -667,7 +2343,7 @@ namespace HiddenSwitch.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[3]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -893,7 +2569,7 @@ namespace HiddenSwitch.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[4]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1065,7 +2741,7 @@ namespace HiddenSwitch.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[5]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1309,7 +2985,7 @@ namespace HiddenSwitch.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[6]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1470,7 +3146,7 @@ namespace HiddenSwitch.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[7]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

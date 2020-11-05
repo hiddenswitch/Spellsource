@@ -4,7 +4,7 @@ import static ch.qos.logback.classic.Level.ERROR
 
 appender("STDOUT", ConsoleAppender) {
     encoder(PatternLayoutEncoder) {
-        pattern = "%d{yyyyMMdd'T'HHmmss} %thread %level %logger{15} %msg%n"
+        pattern = "%level %logger{24} %msg%n"
     }
 
     filter(ThresholdFilter) {
@@ -14,4 +14,5 @@ appender("STDOUT", ConsoleAppender) {
 
 
 root(ERROR, ["STDOUT"])
+logger("com.hiddenswitch", ERROR)
 logger("com.hiddenswitch.containers", INFO)

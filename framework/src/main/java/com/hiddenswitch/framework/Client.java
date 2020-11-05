@@ -3,13 +3,11 @@ package com.hiddenswitch.framework;
 import com.avast.grpc.jwt.client.JwtCallCredentials;
 import com.hiddenswitch.framework.rpc.*;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
+import com.hiddenswitch.spellsource.rpc.DecksPutResponse;
 import com.hiddenswitch.spellsource.rpc.HiddenSwitchSpellsourceAPIServiceGrpc;
 import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
-import io.vertx.core.Future;
-import io.vertx.core.MultiMap;
-import io.vertx.core.Promise;
-import io.vertx.core.Vertx;
+import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
@@ -18,6 +16,7 @@ import org.keycloak.representations.AccessTokenResponse;
 
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Client implements AutoCloseable {
@@ -35,6 +34,10 @@ public class Client implements AutoCloseable {
 		this.vertx = vertx;
 		this.webClient = webClient;
 		this.keycloakPath = keycloakPath;
+		vertx.getOrCreateContext().addCloseHook(handler -> {
+			close();
+			handler.handle(Future.succeededFuture());
+		});
 	}
 
 	public Client(Vertx vertx, WebClient webClient, String username, String email, String password) {
@@ -50,12 +53,10 @@ public class Client implements AutoCloseable {
 
 	public Future<LoginOrCreateReply> createAndLogin(String username, String email, String password) {
 		var stub = UnauthenticatedGrpc.newVertxStub(channel());
-		var promise = Promise.<LoginOrCreateReply>promise();
-		stub.createAccount(CreateAccountRequest.newBuilder()
+		return stub.createAccount(CreateAccountRequest.newBuilder()
 				.setUsername(username)
 				.setEmail(email)
-				.setPassword(password).build(), promise);
-		return promise.future()
+				.setPassword(password).build())
 				.onSuccess(this::handleCreateAccountReply);
 	}
 
@@ -88,18 +89,20 @@ public class Client implements AutoCloseable {
 
 	public Future<AccessTokenResponse> login(String usernameOrEmail, String password) {
 		Objects.requireNonNull(webClient);
-		var promise = Promise.<HttpResponse<Buffer>>promise();
-		webClient.postAbs(keycloakPath + Accounts.KEYCLOAK_LOGIN_PATH)
-				.sendForm(MultiMap.caseInsensitiveMultiMap()
-						.add("client_id", Accounts.CLIENT_ID)
-						.add("grant_type", "password")
-						.add("client_secret", Accounts.CLIENT_SECRET)
-						.add("scope", "openid")
-						// username or password can be used here
-						.add("username", usernameOrEmail)
-						.add("password", password), promise);
-
-		return promise.future()
+		return Environment.configuration()
+				.compose(serverConfiguration -> {
+					var promise = Promise.<HttpResponse<Buffer>>promise();
+					webClient.postAbs(keycloakPath + Accounts.KEYCLOAK_LOGIN_PATH)
+							.sendForm(MultiMap.caseInsensitiveMultiMap()
+									.add("client_id", serverConfiguration.getKeycloak().getClientId())
+									.add("grant_type", "password")
+									.add("client_secret", serverConfiguration.getKeycloak().getClientSecret())
+									.add("scope", "openid")
+									// username or password can be used here
+									.add("username", usernameOrEmail)
+									.add("password", password), promise);
+					return promise.future();
+				})
 				.map(res -> res.bodyAsJson(AccessTokenResponse.class))
 				.onSuccess(this::handleLogin);
 	}
@@ -129,9 +132,14 @@ public class Client implements AutoCloseable {
 	}
 
 	@Override
-	public void close() throws Exception {
-		if (managedChannel.get() != null) {
-			managedChannel.get().shutdownNow();
+	public void close() {
+		var managedChannel = this.managedChannel.get();
+		if (managedChannel != null && !managedChannel.isShutdown()) {
+			managedChannel.shutdownNow();
+			try {
+				managedChannel.awaitTermination(1900L, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException e) {
+			}
 		}
 	}
 
@@ -151,5 +159,14 @@ public class Client implements AutoCloseable {
 	public HiddenSwitchSpellsourceAPIServiceGrpc.HiddenSwitchSpellsourceAPIServiceVertxStub legacy() {
 		return HiddenSwitchSpellsourceAPIServiceGrpc.newVertxStub(channel())
 				.withCallCredentials(credentials());
+	}
+
+	public Future<Void> close(Object ignored) {
+		close();
+		return Future.succeededFuture();
+	}
+
+	public void close(AsyncResult<?> ignored) {
+		close();
 	}
 }

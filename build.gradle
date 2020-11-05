@@ -202,7 +202,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'org.yaml' && details.requested.name == 'snakeyaml') {
-                    details.useVersion '1.17'
+                    details.useVersion '1.27'
                 }
 
                 if (details.requested.group == 'io.micrometer') {

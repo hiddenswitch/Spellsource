@@ -26,7 +26,7 @@ public class Realtime {
 			.build(new CacheLoader<>() {
 				@Override
 				public Future<RealtimeClient.Channel> load(ChannelSpec topic) {
-					var realtimeUri = (String) System.getProperties().getOrDefault("realtime.uri", System.getenv().getOrDefault("REALTIME_URI", "ws://localhost:4000"));
+					var realtimeUri = Environment.cachedConfigurationOrGet().getRealtime().getUri();
 					var socket = new RealtimeClient(realtimeUri);
 					return socket.connect()
 							.compose(client -> socket.channel(topic.getSchema(), topic.getTable(), topic.getWhereColumn(), topic.getEqualsValue()).joined());

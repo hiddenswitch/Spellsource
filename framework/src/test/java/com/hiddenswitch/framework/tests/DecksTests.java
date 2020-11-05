@@ -3,6 +3,7 @@ package com.hiddenswitch.framework.tests;
 import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.Legacy;
+import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import com.hiddenswitch.spellsource.rpc.*;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
@@ -34,6 +35,7 @@ public class DecksTests extends FrameworkTestBase {
 						assertEquals(30, decksPutResponse.getCollection().getInventoryCount(), "should have added cards");
 					});
 				})
+				.onComplete(client::close)
 				.onComplete(testContext.completing());
 	}
 
@@ -42,6 +44,7 @@ public class DecksTests extends FrameworkTestBase {
 		var client = new Client(vertx, webClient);
 		client.createAndLogin()
 				.compose(ignored -> CompositeFuture.all(IntStream.range(0, 100).mapToObj(i -> createRandomDeck(client)).collect(Collectors.toList())))
+				.onComplete(client::close)
 				.onComplete(testContext.completing());
 	}
 
@@ -70,6 +73,7 @@ public class DecksTests extends FrameworkTestBase {
 								});
 							});
 				})
+				.onComplete(client::close)
 				.onComplete(testContext.completing());
 	}
 
@@ -116,6 +120,7 @@ public class DecksTests extends FrameworkTestBase {
 								});
 							});
 				})
+				.onComplete(client::close)
 				.onComplete(testContext.completing());
 	}
 
@@ -142,6 +147,7 @@ public class DecksTests extends FrameworkTestBase {
 								});
 							});
 				})
+				.onComplete(client::close)
 				.onComplete(testContext.completing());
 	}
 
@@ -165,6 +171,7 @@ public class DecksTests extends FrameworkTestBase {
 						assertEquals(Legacy.getPremadeDecks().size(), decksGetAll.getDecksCount(), "should have only premade decks");
 					});
 				})
+				.onComplete(client::close)
 				.onComplete(testContext.completing());
 	}
 

@@ -333,6 +333,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		}, context, vertx);
 	}
 
+	/*
 	@Test
 	public void testHealthcheck(Vertx vertx, VertxTestContext context) {
 		runOnFiberContext(() -> {
@@ -341,5 +342,5 @@ public class GatewayTest extends SpellsourceTestBase {
 				assertEquals(res, "OK");
 			}
 		}, context, vertx);
-	}
+	}*/
 }

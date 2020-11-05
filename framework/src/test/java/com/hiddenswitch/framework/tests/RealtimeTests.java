@@ -2,6 +2,7 @@ package com.hiddenswitch.framework.tests;
 
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.impl.RealtimeClient;
+import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import io.vertx.core.*;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.pgclient.PgPool;
