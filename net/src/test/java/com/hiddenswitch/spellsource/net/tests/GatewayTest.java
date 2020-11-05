@@ -319,15 +319,15 @@ public class GatewayTest extends SpellsourceTestBase {
 			try (var client1 = new UnityClient(context)) {
 				invoke0(client1::createUserAccount);
 				Future<Void> matchmaking = client1.matchmake(null, "constructed");
-				Strand.sleep(2000L);
+				Strand.sleep(4000L);
 				invoke0(matchmaking::cancel, true);
 				try (var client2 = new UnityClient(context)) {
 					invoke0(client2::createUserAccount);
 					Future<Void> other = client2.matchmake(null, "constructed");
-					Strand.sleep(2000L);
+					Strand.sleep(4000L);
 					assertFalse(Games.isInGame(new UserId(client1.getAccount().getId())));
 					other.cancel(true);
-					Strand.sleep(2000L);
+					Strand.sleep(4000L);
 				}
 			}
 		}, context, vertx);

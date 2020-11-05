@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.net.tests;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.*;
 import com.hiddenswitch.spellsource.net.impl.util.CollectionRecord;
@@ -9,6 +10,7 @@ import com.hiddenswitch.spellsource.net.models.*;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.core.Vertx;
+import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
@@ -184,6 +186,7 @@ public class DeckTest extends SpellsourceTestBase {
 	}
 
 	@Test
+	@Timeout(45000)
 	public void testPlayerEntityAttributeUpdate(Vertx vertx, VertxTestContext context) {
 		runOnFiberContext(() -> {
 			try (var client = new UnityClient(context)) {
@@ -201,6 +204,7 @@ public class DeckTest extends SpellsourceTestBase {
 
 				invoke0(client::matchmakeQuickPlay, createDeckResult.getDeckId());
 				invoke0(client::play);
+				Strand.sleep(200L);
 				var serverGameContext = getServerGameContext(client.getUserId());
 				// In AI games, the player is always player zero.
 				var player = serverGameContext.orElseThrow().getPlayers().stream().filter(p -> p.getUserId().equals(client.getUserId().toString())).findFirst().orElseThrow();

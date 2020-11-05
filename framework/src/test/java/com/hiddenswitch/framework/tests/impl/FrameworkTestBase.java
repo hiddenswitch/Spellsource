@@ -26,7 +26,7 @@ public class FrameworkTestBase {
 
 	protected static final String PGDATABASE = "spellsource";
 	protected static final String CLIENT_SECRET = "clientsecret";
-	protected static final String CLIENT_ID = PGDATABASE;
+	protected static final String CLIENT_ID = "spellsource";
 	protected static final String PGUSER = "admin";
 	protected static final String PGPASSWORD = "password";
 	protected static final String PGHOST = "postgres";
