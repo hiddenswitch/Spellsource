@@ -6,6 +6,49 @@ option java_outer_classname = "Proto";
 option csharp_namespace = "HiddenSwitch.Proto";
 package hiddenswitch;
 
+import "google/protobuf/wrappers.proto";
+
+// Specifies a complete server configuration
+message ServerConfiguration {
+    message PostgresConfiguration {
+        string host = 1;
+        int32 port = 2;
+        string database = 3;
+        string user = 4;
+        string password = 5;
+    }
+
+    message KeycloakConfiguration {
+        string authUrl = 1;
+        string adminUsername = 2;
+        string adminPassword = 3;
+        string clientId = 4;
+        string clientSecret = 5;
+        string realmDisplayName = 6;
+        string realmId = 7;
+    }
+
+    message RedisConfiguration {
+        string host = 1;
+        int32 port = 2;
+        string user = 3;
+    }
+
+    message OpenmatchConfiguration {
+        string host = 1;
+        int32 port = 2;
+    }
+
+    message RealtimeConfiguration {
+        string uri = 1;
+    }
+
+    PostgresConfiguration pg = 1;
+    KeycloakConfiguration keycloak = 2;
+    OpenmatchConfiguration openmatch = 3;
+    RealtimeConfiguration realtime = 4;
+}
+
 service Unauthenticated {
     rpc CreateAccount (CreateAccountRequest) returns (LoginOrCreateReply) {}
     rpc Login (LoginRequest) returns (LoginOrCreateReply) {}

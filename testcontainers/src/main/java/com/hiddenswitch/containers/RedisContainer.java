@@ -34,6 +34,14 @@ public class RedisContainer extends GenericContainer<RedisContainer> {
 	}
 
 	public String getRedisUrl() {
-		return "redis://" + getHost() + ":" + getMappedPort(6379);
+		return "redis://" + getHost() + ":" + getMappedPort();
+	}
+
+	public int getMappedPort() {
+		return getMappedPort(getPortInsideNetwork());
+	}
+
+	public int getPortInsideNetwork() {
+		return 6379;
 	}
 }

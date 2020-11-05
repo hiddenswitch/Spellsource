@@ -45,12 +45,32 @@ def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
 
 def createPostgresImage = tasks.getByPath(':testcontainers:createPostgresImage')
 
+sourceSets {
+    main {
+        proto {
+            srcDir 'src/main/proto-openmatch'
+        }
+    }
+}
+
 dependencies {
     api project(':core')
     api project(':game')
     api project(':cards')
     api project(':vertx-sync')
     api 'io.vertx:vertx-rx-java2:3.9.2'
+
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$jacksonVersion") {
+        exclude group: 'jakarta.xml.bind', module: '*'
+        exclude group: 'jakarta.activation', module: '*'
+    }
+    implementation("com.fasterxml.jackson.module:jackson-module-afterburner:$jacksonVersion") {
+        exclude group: 'jakarta.xml.bind', module: '*'
+        exclude group: 'jakarta.activation', module: '*'
+    }
+    implementation("com.hubspot.jackson:jackson-datatype-protobuf:0.9.12") {
+        exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
+    }
 
     implementation "io.github.classgraph:classgraph:$classgraphVersion"
     implementation("com.avast.grpc.jwt:grpc-java-jwt:0.4.0") {
@@ -83,6 +103,7 @@ dependencies {
     implementation group: 'io.vertx', name: 'vertx-service-discovery', version: '3.9.2'
     implementation group: 'io.vertx', name: 'vertx-web', version: '3.9.2'
     implementation group: 'io.vertx', name: 'vertx-auth-common', version: '3.9.2'
+    implementation group: 'io.vertx', name: 'vertx-config', version: '3.9.2'
     implementation platform('org.keycloak.bom:keycloak-bom-parent:11.0.2')
     implementation(group: 'org.keycloak', name: 'keycloak-admin-client', version: '11.0.2') {
         exclude group: 'org.jboss.resteasy', module: 'resteasy-client'
