@@ -1,0 +1,382 @@
+[
+  {
+    "type": "CostModifier",
+    "colour": 320,
+    "output": "CostModifierDesc",
+    "message0": "Cost Modifier: %2 %5 cost %3 %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardCostModifier"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_FRIENDLY_HAND"
+        }
+      },
+      {
+        "type": "field_dropdown",
+        "name": "operation",
+        "options": [
+          [
+            "increased by",
+            "ADD"
+          ],
+          [
+            "reduced by",
+            "SUBTRACT"
+          ],
+          [
+            "set to",
+            "SET"
+          ]
+        ]
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "target",
+        "text": "has/have",
+        "value": "have"
+      }
+    ]
+  },
+  {
+    "type": "CostModifierOptions",
+    "colour": 320,
+    "output": "CostModifierDesc",
+    "message0": "Cost Modifier: %2 %5 cost %3 %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardCostModifier"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_FRIENDLY_HAND"
+        }
+      },
+      {
+        "type": "field_dropdown",
+        "name": "operation",
+        "options": [
+          [
+            "increased by",
+            "ADD"
+          ],
+          [
+            "reduced by",
+            "SUBTRACT"
+          ],
+          [
+            "set to",
+            "SET"
+          ]
+        ]
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "target",
+        "text": "has/have",
+        "value": "have"
+      }
+    ],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "super",
+        "check": [
+          "CostModifierOption"
+        ],
+        "shadow": {
+          "type": "CostModifierOption_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "CostModifier_SHADOW",
+    "output": "CostModifierDesc",
+    "colour": 320,
+    "message0": "Cost Modifier"
+  },
+  {
+    "type": "CostModifierOption_SHADOW",
+    "previousStatement": [
+      "CostModifierOption"
+    ],
+    "nextStatement": [
+      "CostModifierOption"
+    ],
+    "colour": 320,
+    "message0": "Cost Modifier Options",
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "CostModifierOption_requiredAttribute",
+    "previousStatement": [
+      "CostModifierOption"
+    ],
+    "nextStatement": [
+      "CostModifierOption"
+    ],
+    "colour": 320,
+    "message0": "Requires Attribute %1",
+    "args0": [
+      {
+        "name": "requiredAttribute",
+        "type": "input_value",
+        "check": [
+          "Attribute",
+          "BoolAttribute",
+          "IntAttribute"
+        ],
+        "shadow": {
+          "type": "Attribute_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "CostModifierOption_race",
+    "previousStatement": [
+      "CostModifierOption"
+    ],
+    "nextStatement": [
+      "CostModifierOption"
+    ],
+    "colour": 320,
+    "message0": "Requires Tribe %1",
+    "args0": [
+      {
+        "name": "race",
+        "type": "input_value",
+        "check": "Race",
+        "shadow": {
+          "type": "Race_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "CostModifierOption_cardType",
+    "previousStatement": [
+      "CostModifierOption"
+    ],
+    "nextStatement": [
+      "CostModifierOption"
+    ],
+    "colour": 320,
+    "message0": "Requires Card Type %1",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "cardType",
+        "options": [
+          [
+            "Unit",
+            "MINION"
+          ],
+          [
+            "Spell",
+            "SPELL"
+          ],
+          [
+            "Item",
+            "WEAPON"
+          ]
+        ]
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "CostModifierOption_oneTurn",
+    "previousStatement": [
+      "CostModifierOption"
+    ],
+    "nextStatement": [
+      "CostModifierOption"
+    ],
+    "colour": 320,
+    "message0": "One Turn Only",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "OneTurnCostModifier"
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "CostModifierOption_expirationTrigger",
+    "previousStatement": [
+      "CostModifierOption"
+    ],
+    "nextStatement": [
+      "CostModifierOption"
+    ],
+    "colour": 320,
+    "message0": "Expires %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "check": "Trigger",
+        "name": "expirationTrigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "CostModifierOption_minValue",
+    "previousStatement": [
+      "CostModifierOption"
+    ],
+    "nextStatement": [
+      "CostModifierOption"
+    ],
+    "colour": 320,
+    "message0": "Doesn't reduce below %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "minValue",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "CostModifierOption_condition",
+    "previousStatement": [
+      "CostModifierOption"
+    ],
+    "nextStatement": [
+      "CostModifierOption"
+    ],
+    "colour": 320,
+    "message0": "Only Active if %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "condition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "CostModifierOption_targetPlayer",
+    "previousStatement": [
+      "CostModifierOption"
+    ],
+    "nextStatement": [
+      "CostModifierOption"
+    ],
+    "colour": 320,
+    "message0": "Affects %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "check": "TargetPlayer",
+        "name": "targetPlayer",
+        "shadow": {
+          "type": "TargetPlayer_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "CostModifierOption_toggleOn",
+    "previousStatement": [
+      "CostModifierOption"
+    ],
+    "nextStatement": [
+      "CostModifierOption"
+    ],
+    "colour": 320,
+    "message0": "Toggles On %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "check": "Trigger",
+        "name": "toggleOn",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ToggleCostModifier"
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "CostModifierOption_toggleOff",
+    "previousStatement": [
+      "CostModifierOption"
+    ],
+    "nextStatement": [
+      "CostModifierOption"
+    ],
+    "colour": 320,
+    "message0": "Toggles Off %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "check": "Trigger",
+        "name": "toggleOff",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ToggleCostModifier"
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  }
+]

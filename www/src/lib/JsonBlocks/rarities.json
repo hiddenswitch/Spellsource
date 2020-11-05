@@ -1,0 +1,44 @@
+[
+  {
+    "type": "Rarity_FREE",
+    "message0": "Basic",
+    "colour": "#A6A6A6",
+    "output": "Rarity",
+    "data": "FREE"
+  },
+  {
+    "type": "Rarity_SHADOW",
+    "message0": "Rarity",
+    "colour": "#6A6A6A",
+    "output": "Rarity",
+    "data": "FREE"
+  },
+  {
+    "type": "Rarity_COMMON",
+    "message0": "Common",
+    "colour": "#D9D9D9",
+    "output": "Rarity",
+    "data": "COMMON"
+  },
+  {
+    "type": "Rarity_RARE",
+    "message0": "Rare",
+    "colour": "#0070DD",
+    "output": "Rarity",
+    "data": "RARE"
+  },
+  {
+    "type": "Rarity_EPIC",
+    "message0": "Epic",
+    "colour": "#A335EE",
+    "output": "Rarity",
+    "data": "EPIC"
+  },
+  {
+    "type": "Rarity_LEGENDARY",
+    "message0": "Legendary",
+    "colour": "#FF8000",
+    "output": "Rarity",
+    "data": "LEGENDARY"
+  }
+]

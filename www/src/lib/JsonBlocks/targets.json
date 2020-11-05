@@ -1,0 +1,408 @@
+[
+  {
+    "type": "EntityReference_FILTER",
+    "subcategory": "Util",
+    "message0": "%2 that %1",
+    "output": "EntityReference",
+    "inputsInline": false,
+    "colour": 30,
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "super.filter",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "super",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "plural": true
+  },
+  {
+    "type": "EntityReference_RANDOM",
+    "subcategory": "Util",
+    "message0": "%2random from %1",
+    "output": "EntityReference",
+    "colour": 30,
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "super",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "super.randomTarget",
+        "value": true
+      }
+    ],
+    "plural": false
+  },
+  {
+    "type": "EntityReference_ENEMY_MINIONS",
+    "subcategory": "Enemy",
+    "message0": "enemy units",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "ENEMY_MINIONS",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_FRIENDLY_MINIONS",
+    "subcategory": "Ally",
+    "message0": "allied units",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "FRIENDLY_MINIONS",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_ALL_MINIONS",
+    "subcategory": "Both",
+    "message0": "(all) units",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "ALL_MINIONS",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_ENEMY_CHARACTERS",
+    "subcategory": "Enemy",
+    "message0": "(all) enemies",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "ENEMY_CHARACTERS",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_FRIENDLY_CHARACTERS",
+    "subcategory": "Ally",
+    "message0": "(all) allies",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "FRIENDLY_CHARACTERS",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_OTHER_FRIENDLY_MINIONS",
+    "subcategory": "Ally",
+    "message0": "other allied units",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "OTHER_FRIENDLY_MINIONS",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_OTHER_MINIONS",
+    "subcategory": "Both",
+    "message0": "(all) other units",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "ALL_OTHER_MINIONS",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_ADJACENT_MINIONS",
+    "message0": "adjacent units",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "ADJACENT_MINIONS",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_FRIENDLY_HERO",
+    "subcategory": "Ally",
+    "message0": "your champion",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "FRIENDLY_HERO",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_ENEMY_HERO",
+    "subcategory": "Enemy",
+    "message0": "the enemy champion",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "ENEMY_HERO",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_FRIENDLY_WEAPON",
+    "subcategory": "Ally",
+    "message0": "your item",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "FRIENDLY_WEAPON",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_ENEMY_WEAPON",
+    "subcategory": "Enemy",
+    "message0": "your opponent's item",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "ENEMY_WEAPON",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_IT",
+    "message0": "it",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "IT",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_SELF",
+    "message0": "this",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "SELF",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_SHADOW",
+    "message0": "Target(s)",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "IT",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_NONE",
+    "message0": "none",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "NONE",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_FRIENDLY_HAND",
+    "subcategory": "Ally",
+    "message0": "your cards in hand",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "FRIENDLY_HAND",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_ENEMY_HAND",
+    "subcategory": "Enemy",
+    "message0": "your opponent's cards in hand",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "ENEMY_HAND",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_FRIENDLY_DECK",
+    "subcategory": "Ally",
+    "message0": "your cards in deck",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "FRIENDLY_DECK",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_ENEMY_DECK",
+    "subcategory": "Enemy",
+    "message0": "your opponent's cards in deck",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "ENEMY_DECK",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_FRIENDLY_PLAYER",
+    "subcategory": "Ally",
+    "data": "FRIENDLY_PLAYER",
+    "colour": "30",
+    "output": "EntityReference",
+    "message0": "the allied player",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_ENEMY_PLAYER",
+    "subcategory": "Enemy",
+    "data": "ENEMY_PLAYER",
+    "colour": "30",
+    "output": "EntityReference",
+    "message0": "the enemy player",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_LEFTMOST_FRIENDLY_CARD_HAND",
+    "subcategory": "Ally",
+    "message0": "your leftmost card",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "LEFTMOST_FRIENDLY_CARD_HAND",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_TRIGGER_HOST",
+    "message0": "the enchantment host",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "TRIGGER_HOST",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_ATTACKER",
+    "data": "ATTACKER",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "the attacker",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_TARGET",
+    "data": "TARGET",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "the player's target",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_SPELL_TARGET",
+    "message0": "the spell's target",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "SPELL_TARGET",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_OUTPUT",
+    "data": "OUTPUT",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "the spell's output",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_EVENT_TARGET",
+    "message0": "the event's target",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "EVENT_TARGET",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_EVENT_SOURCE",
+    "message0": "the event's source",
+    "output": "EntityReference",
+    "colour": 30,
+    "data": "EVENT_SOURCE",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_FRIENDLY_GRAVEYARD",
+    "subcategory": "Ally",
+    "data": "FRIENDLY_GRAVEYARD",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "ally graveyard",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_FRIENDLY_MINIONS_LEFT_TO_RIGHT",
+    "subcategory": "Ally",
+    "data": "FRIENDLY_MINIONS_LEFT_TO_RIGHT",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "allied units (left To right)",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_FRIENDLY_SIGNATURE",
+    "subcategory": "Ally",
+    "data": "FRIENDLY_SIGNATURE",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "the allied Signature card",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_RIGHTMOST_FRIENDLY_CARD_HAND",
+    "subcategory": "Ally",
+    "data": "RIGHTMOST_FRIENDLY_CARD_HAND",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "the rightmost card in your hand",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_ALL_OTHER_CHARACTERS",
+    "subcategory": "Both",
+    "data": "ALL_OTHER_CHARACTERS",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "(all) other characters",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_ALL_CHARACTERS",
+    "subcategory": "Both",
+    "data": "ALL_CHARACTERS",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "(all) characters",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_LEFTMOST_ENEMY_MINION",
+    "subcategory": "Enemy",
+    "data": "LEFTMOST_ENEMY_MINION",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "the leftmost enemy unit",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_FRIENDLY_HERO_POWER",
+    "subcategory": "Ally",
+    "data": "FRIENDLY_HERO_POWER",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "your Skill",
+    "plural": false
+  },
+  {
+    "type": "EntityReference_ENEMY_MINIONS_LEFT_TO_RIGHT",
+    "subcategory": "Enemy",
+    "data": "ENEMY_MINIONS_LEFT_TO_RIGHT",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "enemy units (left To right)",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_ADJACENT_TO_TARGET",
+    "data": "ADJACENT_TO_TARGET",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "adjacent units to the player's target",
+    "plural": true
+  },
+  {
+    "type": "EntityReference_FRIENDLY_CARDS",
+    "subcategory": "Ally",
+    "data": "FRIENDLY_CARDS",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "allied cards",
+    "plural": true
+  }
+]

@@ -1,0 +1,620 @@
+[
+  {
+    "type": "Attribute_BOOL_SHADOW",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Attribute (T/F)",
+    "data": "SHADOW"
+  },
+  {
+    "type": "Attribute_INT_SHADOW",
+    "output": "IntAttribute",
+    "colour": 210,
+    "message0": "Attribute (Number)",
+    "data": "SHADOW"
+  },
+  {
+    "type": "Attribute_SHADOW",
+    "output": "Attribute",
+    "colour": 200,
+    "message0": "Attribute",
+    "data": "SHADOW"
+  },
+  {
+    "type": "Attribute_ATTACK",
+    "subcategory": "Infrequent",
+    "output": "IntAttribute",
+    "colour": 210,
+    "message0": "Attack%1",
+    "data": "ATTACK",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Attack Icon Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_HP",
+    "subcategory": "Infrequent",
+    "output": "IntAttribute",
+    "colour": 210,
+    "message0": "Health%1",
+    "data": "HP",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Health Icon Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_MAX_HP",
+    "subcategory": "Infrequent",
+    "output": "IntAttribute",
+    "colour": 210,
+    "message0": "Max Health%1",
+    "data": "MAX_HP",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Health Icon Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_HIDDEN",
+    "subcategory": "Frequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Hidden%1",
+    "data": "STEALTH",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Icon Hidden",
+        "width": 27,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_GUARD",
+    "subcategory": "Frequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Guard%1",
+    "data": "TAUNT",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Icon Guard",
+        "width": 14,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_DASH",
+    "subcategory": "Frequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Dash%1",
+    "data": "RUSH",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Icon Dash",
+        "width": 14,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_BLITZ",
+    "subcategory": "Frequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Blitz%1",
+    "data": "CHARGE",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Icon Blitz",
+        "width": 16,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_LIFEDRAIN",
+    "subcategory": "Frequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Lifedrain %1",
+    "data": "LIFESTEAL",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Life Drain Icon Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_DODGE",
+    "subcategory": "Frequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Dodge",
+    "data": "DIVINE_SHIELD"
+  },
+  {
+    "type": "Attribute_SPELL_DAMAGE",
+    "subcategory": "Frequent",
+    "output": "IntAttribute",
+    "colour": 210,
+    "message0": "Spell Power%1",
+    "data": "SPELL_DAMAGE",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Spell UI Icon Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_ELUSIVE",
+    "subcategory": "Frequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Elusive",
+    "data": "UNTARGETABLE_BY_SPELLS"
+  },
+  {
+    "type": "Attribute_CANT_ATTACK",
+    "subcategory": "Infrequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Can't Attack",
+    "data": "CANNOT_ATTACK"
+  },
+  {
+    "type": "Attribute_BASE_ATTACK",
+    "subcategory": "Infrequent",
+    "output": "IntAttribute",
+    "colour": 210,
+    "message0": "Base Attack%1",
+    "data": "BASE_ATTACK",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Attack Icon Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_BASE_HP",
+    "subcategory": "Infrequent",
+    "output": "IntAttribute",
+    "colour": 210,
+    "message0": "Base Health%1",
+    "data": "BASE_HP",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Health Icon Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_BASE_MANA_COST",
+    "subcategory": "Infrequent",
+    "output": "IntAttribute",
+    "colour": 210,
+    "message0": "Base Cost",
+    "data": "BASE_MANA_COST"
+  },
+  {
+    "type": "Attribute_STUNNED",
+    "subcategory": "Infrequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Stunned%1",
+    "data": "FROZEN",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Icon Stunned",
+        "width": 13,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_TOXIC",
+    "subcategory": "Frequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Toxic%1",
+    "data": "POISONOUS",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Icon Toxic",
+        "width": 12,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_DECAY",
+    "subcategory": "Frequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Decay",
+    "data": "DECAY"
+  },
+  {
+    "type": "Attribute_EXTRA_STRIKE",
+    "subcategory": "Frequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Extra-Strike%1",
+    "data": "WINDFURY",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Icon Double Strike",
+        "width": 19,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_OPENER",
+    "subcategory": "Infrequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Opener%1",
+    "data": "BATTLECRY",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Opener Icon Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_AFTERMATH",
+    "subcategory": "Infrequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Aftermath%1",
+    "data": "DEATHRATTLES",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Aftermath Icon Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_HIDDEN_FOR_TURNS",
+    "subcategory": "Infrequent",
+    "output": "IntAttribute",
+    "colour": 210,
+    "message0": "Hidden for Turns",
+    "data": "STEALTH_FOR_TURNS"
+  },
+  {
+    "type": "Attribute_CANNOT_REDUCE_HP_BELOW_1",
+    "subcategory": "Infrequent",
+    "output": "BoolAttribute",
+    "colour": 190,
+    "message0": "Can't be Reduced Below 1 HP",
+    "data": "CANNOT_REDUCE_HP_BELOW_1"
+  },
+  {
+    "type": "Attribute_PLAYED_FROM_HAND_OR_DECK",
+    "data": "PLAYED_FROM_HAND_OR_DECK",
+    "colour": 210,
+    "output": "IntAttribute",
+    "message0": "Turn Number When Played"
+  },
+  {
+    "type": "Attribute_ATTACK_BONUS",
+    "data": "ATTACK_BONUS",
+    "colour": 210,
+    "output": "IntAttribute",
+    "message0": "Bonus Attack%1",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Attack Icon Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_HP_BONUS",
+    "data": "HP_BONUS",
+    "colour": 210,
+    "output": "IntAttribute",
+    "message0": "Bonus Health%1",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Health Icon Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_RESERVED_INTEGER_1",
+    "data": "RESERVED_INTEGER_1",
+    "colour": 210,
+    "output": "IntAttribute",
+    "message0": "Reserved Integer 1"
+  },
+  {
+    "type": "Attribute_INDEX",
+    "data": "INDEX",
+    "colour": 210,
+    "output": "IntAttribute",
+    "message0": "Index"
+  },
+  {
+    "type": "Attribute_LAST_HIT",
+    "data": "LAST_HIT",
+    "colour": 210,
+    "output": "IntAttribute",
+    "message0": "Last Hit"
+  },
+  {
+    "type": "Attribute_DISCOVER",
+    "subcategory": "Infrequent",
+    "data": "DISCOVER",
+    "output": "BoolAttribute",
+    "message0": "Source",
+    "colour": 190
+  },
+  {
+    "type": "Attribute_ARTIFACT",
+    "subcategory": "Infrequent",
+    "data": "ARTIFACT",
+    "colour": 190,
+    "output": "BoolAttribute",
+    "message0": "Artifact"
+  },
+  {
+    "type": "Attribute_SUPREMACY",
+    "subcategory": "Infrequent",
+    "data": "SUPREMACY",
+    "colour": 190,
+    "output": "BoolAttribute",
+    "message0": "Supremacy%1",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Supremacy Icon Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_IMMUNE",
+    "subcategory": "Infrequent",
+    "data": "IMMUNE",
+    "colour": 190,
+    "output": "BoolAttribute",
+    "message0": "Immune%1",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Immune Icon Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_ARMOR",
+    "subcategory": "Infrequent",
+    "data": "ARMOR",
+    "colour": 210,
+    "output": "IntAttribute",
+    "message0": "Armor%1",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Armor Icon 1 Digit Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_WITHER",
+    "subcategory": "Infrequent",
+    "data": "WITHER",
+    "colour": 200,
+    "output": "Attribute",
+    "message0": "Wither"
+  },
+  {
+    "type": "Attribute_INVOKE",
+    "subcategory": "Infrequent",
+    "data": "INVOKE",
+    "colour": 210,
+    "output": "IntAttribute",
+    "message0": "Invoke"
+  },
+  {
+    "type": "Attribute_QUICK_DRAW",
+    "subcategory": "Infrequent",
+    "data": "QUICK_DRAW",
+    "colour": 190,
+    "output": "BoolAttribute",
+    "message0": "Quick Draw"
+  },
+  {
+    "type": "Attribute_PERMANENT",
+    "subcategory": "Infrequent",
+    "data": "PERMANENT",
+    "colour": 190,
+    "output": "BoolAttribute",
+    "message0": "Permanent"
+  },
+  {
+    "type": "Attribute_COUNTERED",
+    "subcategory": "Infrequent",
+    "data": "COUNTERED",
+    "colour": 190,
+    "output": "BoolAttribute",
+    "message0": "Countered"
+  },
+  {
+    "type": "Attribute_CTHUN_ATTACK_BUFF",
+    "data": "CTHUN_ATTACK_BUFF",
+    "colour": 210,
+    "output": "IntAttribute",
+    "message0": "C'thulu Attack Buff"
+  },
+  {
+    "type": "Attribute_CTHUN_HEALTH_BUFF",
+    "data": "CTHUN_HEALTH_BUFF",
+    "colour": 210,
+    "output": "IntAttribute",
+    "message0": "C'thulu Health Buff"
+  },
+  {
+    "type": "Attribute_CASTS_WHEN_DRAWN",
+    "subcategory": "Infrequent",
+    "data": "CASTS_WHEN_DRAWN",
+    "colour": 190,
+    "output": "BoolAttribute",
+    "message0": "Casts When Drawn"
+  },
+  {
+    "type": "Attribute_EXTRA_ATTACKS",
+    "data": "EXTRA_ATTACKS",
+    "colour": 210,
+    "output": "IntAttribute",
+    "message0": "Extra Attacks%1",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Icon Double Strike",
+        "width": 19,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_ECHO",
+    "data": "ECHO",
+    "colour": 190,
+    "output": "BoolAttribute",
+    "message0": "Echoable this Turn lol idk"
+  },
+  {
+    "type": "Attribute_COPIED_FROM",
+    "data": "COPIED_FROM",
+    "colour": 200,
+    "output": "Attribute",
+    "message0": "Copied From"
+  },
+  {
+    "type": "Attribute_CANNOT_ATTACK_HEROES",
+    "subcategory": "Infrequent",
+    "data": "CANNOT_ATTACK_HEROES",
+    "colour": 190,
+    "output": "BoolAttribute",
+    "message0": "Cannot Attack Heroes"
+  },
+  {
+    "type": "Attribute_STARTED_IN_DECK",
+    "data": "STARTED_IN_DECK",
+    "colour": 190,
+    "output": "BoolAttribute",
+    "message0": "Started In Deck"
+  },
+  {
+    "type": "Attribute_RESERVED_BOOLEAN_1",
+    "data": "RESERVED_BOOLEAN_1",
+    "colour": 200,
+    "output": "Attribute",
+    "message0": "Reserved Boolean 1"
+  },
+  {
+    "type": "Attribute_ROASTED",
+    "data": "ROASTED",
+    "colour": 200,
+    "output": "Attribute",
+    "message0": "Roasted%1",
+    "args0": [
+      {
+        "type": "field_image",
+        "src": "Roasted Icon Color",
+        "width": 15,
+        "height": 15
+      }
+    ]
+  },
+  {
+    "type": "Attribute_EXTRA_TURN",
+    "data": "EXTRA_TURN",
+    "colour": 200,
+    "output": "Attribute",
+    "message0": "Extra Turn"
+  },
+  {
+    "type": "Attribute_ENRAGABLE",
+    "data": "ENRAGABLE",
+    "colour": 190,
+    "output": "BoolAttribute",
+    "message0": "Enragable"
+  },
+  {
+    "type": "Attribute_INVERT_HEALING",
+    "data": "INVERT_HEALING",
+    "colour": 190,
+    "output": "BoolAttribute",
+    "message0": "Inverted Healing"
+  },
+  {
+    "type": "Attribute_DIED_ON_TURN",
+    "data": "DIED_ON_TURN",
+    "colour": 210,
+    "output": "IntAttribute",
+    "message0": "Died On Turn"
+  },
+  {
+    "type": "Attribute_PACT",
+    "data": "PACT",
+    "colour": 190,
+    "output": "BoolAttribute",
+    "message0": "Pact"
+  }
+]

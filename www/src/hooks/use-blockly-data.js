@@ -3,32 +3,6 @@ import { graphql, useStaticQuery } from 'gatsby'
 export default function useBlocklyData () {
   return useStaticQuery(graphql`
   query {
-    editorToolbox: toolbox(Style: {eq: "editor"}) {
-      BlockCategoryList {
-        BlockTypePrefix
-        CategoryName
-        ColorHex
-        Subcategories
-        Tooltip
-        Subtooltips
-        Custom
-        ButtonName
-        ButtonCallback
-      }
-    }
-    testingToolbox: toolbox(Style: {eq: "testing"}) {
-      BlockCategoryList {
-        BlockTypePrefix
-        CategoryName
-        ColorHex
-        Subcategories
-        Tooltip
-        Subtooltips
-        Custom
-        ButtonName
-        ButtonCallback
-      }
-    }
     allBlock {
       edges {
         node {

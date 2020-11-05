@@ -1,0 +1,145 @@
+[
+  {
+    "type": "TargetSelection_NONE",
+    "message0": "(no choice required)",
+    "output": "TargetSelection",
+    "colour": 60,
+    "data": "NONE"
+  },
+  {
+    "type": "TargetSelection_SHADOW",
+    "message0": "Choice",
+    "output": "TargetSelection",
+    "colour": 60,
+    "data": "NONE"
+  },
+  {
+    "type": "TargetSelection_ANY",
+    "message0": "Choose any character",
+    "output": "TargetSelection",
+    "colour": 60,
+    "data": "ANY"
+  },
+  {
+    "type": "TargetSelection_MINIONS",
+    "message0": "Choose a unit",
+    "output": "TargetSelection",
+    "colour": 60,
+    "data": "MINIONS"
+  },
+  {
+    "type": "TargetSelection_ENEMY_MINIONS",
+    "message0": "Choose an enemy unit",
+    "output": "TargetSelection",
+    "colour": 60,
+    "data": "ENEMY_MINIONS"
+  },
+  {
+    "type": "TargetSelection_FRIENDLY_MINIONS",
+    "message0": "Choose an allied unit",
+    "output": "TargetSelection",
+    "colour": 60,
+    "data": "FRIENDLY_MINIONS"
+  },
+  {
+    "type": "TargetSelection_ENEMY_CHARACTERS",
+    "message0": "Choose an enemy",
+    "output": "TargetSelection",
+    "colour": 60,
+    "data": "ENEMY_CHARACTERS"
+  },
+  {
+    "type": "TargetSelection_FRIENDLY_CHARACTERS",
+    "message0": "Choose an ally",
+    "output": "TargetSelection",
+    "colour": 60,
+    "data": "FRIENDLY_CHARACTERS"
+  },
+  {
+    "type": "TargetSelection_FILTER",
+    "message0": "%1 that %2",
+    "output": "TargetSelection",
+    "colour": 60,
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "super",
+        "check": "TargetSelection",
+        "shadow": {
+          "type": "TargetSelection_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "super.spell.filter",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      }
+    ],
+    "plural": false
+  },
+  {
+    "type": "TargetSelection_RACE",
+    "message0": "%1%2 that is a %3",
+    "output": "TargetSelection",
+    "colour": 60,
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "super.spell.filter.class",
+        "value": "RaceFilter"
+      },
+      {
+        "type": "input_value",
+        "name": "super",
+        "check": "TargetSelection",
+        "shadow": {
+          "type": "TargetSelection_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "super.spell.filter.race",
+        "check": "Race",
+        "shadow": {
+          "type": "Race_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "TargetSelection_OVERRIDE",
+    "message0": "%1 except if %2 instead %3",
+    "output": "TargetSelection",
+    "colour": 60,
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "super",
+        "check": "TargetSelection",
+        "shadow": {
+          "type": "TargetSelection_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "super.targetSelectionCondition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "super.targetSelectionOverride",
+        "check": "TargetSelection",
+        "shadow": {
+          "type": "TargetSelection_SHADOW"
+        }
+      }
+    ],
+    "plural": false
+  }
+]

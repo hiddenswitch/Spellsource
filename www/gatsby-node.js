@@ -192,7 +192,7 @@ exports.createResolvers = ({ createResolvers }) => {
             }
             return ''
           }
-          return getTextForNode(node).replaceAll(/\s+/g,' ').trim()
+          return getTextForNode(node).replace(/\s+/g,' ').trim()
           //removing excess whitespace just in case ^^^
         }
       }

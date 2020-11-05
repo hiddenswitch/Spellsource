@@ -1,0 +1,544 @@
+[
+  {
+    "type": "Aura_SHADOW",
+    "message0": "Aura(s)",
+    "colour": 230,
+    "previousStatement": [
+      "Auras"
+    ]
+  },
+  {
+    "type": "Aura_Single_SHADOW",
+    "message0": "Aura (max 1)",
+    "colour": 230,
+    "previousStatement": [
+      "Auras"
+    ]
+  },
+  {
+    "type": "Aura_Attribute",
+    "colour": 230,
+    "previousStatement": [
+      "Auras"
+    ],
+    "nextStatement": [
+      "Auras"
+    ],
+    "message0": "%1Aura: %2 have %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AttributeAura"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "BoolAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_BOOL_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "Aura_Buff",
+    "colour": 230,
+    "previousStatement": [
+      "Auras"
+    ],
+    "nextStatement": [
+      "Auras"
+    ],
+    "message0": "%1Aura: Buff %2 Bonus Attack: %3 Bonus Health: %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BuffAura"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "attackBonus",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": [
+            {
+              "name": "int",
+              "valueI": 0
+            }
+          ]
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "hpBonus",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": [
+            {
+              "name": "int",
+              "valueI": 0
+            }
+          ]
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "Aura_AttributeValue",
+    "colour": 230,
+    "previousStatement": [
+      "Auras"
+    ],
+    "nextStatement": [
+      "Auras"
+    ],
+    "message0": "%1Aura: %2 have %3 bonus %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AttributeValueAura"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "field_number",
+        "name": "value",
+        "value": 0,
+        "min": 0,
+        "max": 99,
+        "int": true
+      },
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "IntAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_INT_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "Aura_StatefulAttributeValue",
+    "inputsInline": false,
+    "colour": 230,
+    "message0": "Aura: %2 have %3 bonus %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "StatefulAttributeValueAura"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "name": "attribute",
+        "type": "input_value",
+        "check": [
+          "IntAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_INT_SHADOW"
+        }
+      }
+    ],
+    "previousStatement": [
+      "Auras"
+    ],
+    "nextStatement": [
+      "Auras"
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "Aura_Attribute2",
+    "colour": 230,
+    "previousStatement": [
+      "Auras"
+    ],
+    "nextStatement": [
+      "Auras"
+    ],
+    "message0": "%1Aura: %2 have %3 if %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AttributeAura"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "BoolAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_BOOL_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "condition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "Aura_Buff2",
+    "colour": 230,
+    "previousStatement": [
+      "Auras"
+    ],
+    "nextStatement": [
+      "Auras"
+    ],
+    "message0": "%1Aura: Buff %2 Bonus Attack: %3 Bonus Health: %4 if %5",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BuffAura"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "attackBonus",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "hpBonus",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "condition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "Aura_Attribute4",
+    "colour": 230,
+    "previousStatement": [
+      "Auras"
+    ],
+    "nextStatement": [
+      "Auras"
+    ],
+    "message0": "%1Aura: %2 have %3 bonus %4 if %5",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AttributeValueAura"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW",
+          "fields": [
+            {
+              "name": "int",
+              "valueI": 0
+            }
+          ]
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "IntAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_INT_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "condition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "Aura_DoubleOpener",
+    "colour": 230,
+    "previousStatement": [
+      "Auras"
+    ],
+    "nextStatement": [
+      "Auras"
+    ],
+    "message0": "%1Aura: Your Openers trigger twice",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DoubleBattlecriesAura"
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "Aura_DoubleAftermaths",
+    "colour": 230,
+    "previousStatement": [
+      "Auras"
+    ],
+    "nextStatement": [
+      "Auras"
+    ],
+    "message0": "%1Aura: Your Aftermaths trigger twice",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DoubleDeathrattlesAura"
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "Aura_TurnAttribute",
+    "colour": 230,
+    "previousStatement": [
+      "Auras"
+    ],
+    "nextStatement": [
+      "Auras"
+    ],
+    "inputsInline": false,
+    "message0": "%1Aura: %2 have %3 during your turn%4%5%6",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AttributeAura"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "BoolAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_BOOL_SHADOW"
+        }
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "condition.class",
+        "value": "OwnedByPlayerCondition"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "condition.targetPlayer",
+        "value": "ACTIVE"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "secondaryTrigger.class",
+        "value": "TurnStartTrigger"
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "Aura_Attribute5",
+    "inputsInline": false,
+    "colour": 230,
+    "message0": "Aura: If %3 then %2 have %4 rechecking %5",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AttributeAura"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "name": "condition",
+        "type": "input_value",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      },
+      {
+        "name": "attribute",
+        "type": "input_value",
+        "check": [
+          "BoolAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_BOOL_SHADOW"
+        }
+      },
+      {
+        "name": "secondaryTrigger",
+        "type": "input_value",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      }
+    ],
+    "previousStatement": [
+      "Auras"
+    ],
+    "nextStatement": [
+      "Auras"
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  },
+  {
+    "type": "Aura_Card",
+    "inputsInline": false,
+    "colour": 230,
+    "message0": "Replace %2 with %3 (while this is active)",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardAura"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": "Card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ],
+    "previousStatement": [
+      "Auras"
+    ],
+    "nextStatement": [
+      "Auras"
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT"
+  }
+]

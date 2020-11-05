@@ -20,13 +20,7 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `src`,
-        path: `${__dirname}/../unityclient/src/unity/Assets/UBlockly/JsonBlocks/`,
-      },
-    }, {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `src`,
-        path: `${__dirname}/../unityclient/src/unity/Assets/UBlockly/Toolboxes/Configs`,
+        path: `${__dirname}/src/lib/JsonBlocks/`,
       },
     },
     {
@@ -133,7 +127,7 @@ module.exports = {
           Block: {
             title: node => node.type.replace('_', ' '),
             nodeType: node => 'Block',
-            rawMarkdownBody: node => node.searchMessage
+            rawMarkdownBody: node => node.searchMessage + ' ' + (node.comment || '')
           }
         },
         // Optional filter to limit indexed nodes

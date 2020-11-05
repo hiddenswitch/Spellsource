@@ -1,0 +1,23 @@
+[
+  {
+    "type": "Type_MINION",
+    "message0": "unit card type",
+    "output": "CardType",
+    "colour": 4,
+    "data": "MINION"
+  },
+  {
+    "type": "Type_WEAPON",
+    "message0": "weapon card type",
+    "output": "CardType",
+    "colour": 5,
+    "data": "WEAPON"
+  },
+  {
+    "type": "Sets_CUSTOM",
+    "output": "Set",
+    "colour": 200,
+    "message0": "Spellsource community",
+    "data": "CUSTOM"
+  }
+]

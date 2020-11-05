@@ -1,0 +1,72 @@
+[
+  {
+    "type": "TargetPlayer_SHADOW",
+    "output": "TargetPlayer",
+    "colour": 45,
+    "message0": "Player",
+    "data": "SELF"
+  },
+  {
+    "type": "TargetPlayer_SELF",
+    "output": "TargetPlayer",
+    "colour": 45,
+    "message0": "you",
+    "data": "SELF"
+  },
+  {
+    "type": "TargetPlayer_OPPONENT",
+    "output": "TargetPlayer",
+    "colour": 45,
+    "message0": "the opponent",
+    "data": "OPPONENT"
+  },
+  {
+    "type": "TargetPlayer_BOTH",
+    "output": "TargetPlayer",
+    "colour": 45,
+    "message0": "both players",
+    "data": "BOTH"
+  },
+  {
+    "type": "TargetPlayer_OWNER",
+    "output": "TargetPlayer",
+    "colour": 45,
+    "message0": "its owner",
+    "data": "OWNER"
+  },
+  {
+    "type": "TargetPlayer_ACTIVE",
+    "output": "TargetPlayer",
+    "colour": 45,
+    "message0": "the player whose turn it is",
+    "data": "ACTIVE"
+  },
+  {
+    "type": "TargetPlayer_INACTIVE",
+    "output": "TargetPlayer",
+    "colour": 45,
+    "message0": "the player whose turn it isn't",
+    "data": "INACTIVE"
+  },
+  {
+    "type": "TargetPlayer_NONE",
+    "output": "TargetPlayer",
+    "colour": 45,
+    "message0": "no player",
+    "data": "NONE"
+  },
+  {
+    "type": "TargetPlayer_1",
+    "output": "TargetPlayer",
+    "colour": 45,
+    "message0": "Player 1",
+    "data": "PLAYER_1"
+  },
+  {
+    "type": "TargetPlayer_2",
+    "output": "TargetPlayer",
+    "colour": 45,
+    "message0": "Player 2",
+    "data": "PLAYER_2"
+  }
+]

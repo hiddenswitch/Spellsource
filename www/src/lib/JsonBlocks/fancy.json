@@ -1,0 +1,39 @@
+[
+  {
+    "type": "Fancy_1",
+    "output": "ValueProviderDesc",
+    "colour": 7,
+    "message0": "the number of times you played this today"
+  },
+  {
+    "type": "Fancy_2",
+    "output": "ValueProviderDesc",
+    "colour": 7,
+    "message0": "the number of times you played this last game"
+  },
+  {
+    "type": "Fancy_3",
+    "output": "Card",
+    "colour": 100,
+    "message0": "the last unit destroyed by this (for all games)"
+  },
+  {
+    "type": "Fancy_4",
+    "output": "ConditionDesc",
+    "colour": 120,
+    "message0": "another player attacked with this today"
+  },
+  {
+    "type": "Fancy_5",
+    "output": "SpellDesc",
+    "colour": 120,
+    "message0": "PERMANENTLY %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "check": "SpellDesc",
+        "name": "spell"
+      }
+    ]
+  }
+]
