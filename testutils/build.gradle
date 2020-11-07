@@ -18,7 +18,7 @@ dependencies {
     api 'org.slf4j:slf4j-api:1.7.22'
     api 'org.junit.jupiter:junit-jupiter-api:5.6.2'
     api 'org.junit.jupiter:junit-jupiter-params:5.6.2'
-    api 'io.vertx:vertx-core:3.9.2'
+    api "io.vertx:vertx-core:$vertxVersion"
     api 'org.jsoup:jsoup:1.11.2'
     api 'org.mockito:mockito-core:2.24.5'
     implementation 'org.jetbrains:annotations:16.0.2'

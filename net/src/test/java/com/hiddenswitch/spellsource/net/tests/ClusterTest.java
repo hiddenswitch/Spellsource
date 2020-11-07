@@ -93,6 +93,7 @@ public class ClusterTest extends SpellsourceTestBase {
 	}
 
 	@Test()
+	@Timeout(145000)
 	@Suspendable
 	public void testMultiHostMultiClientCluster(VertxTestContext context) throws ExecutionException, InterruptedException {
 		System.setProperty("games.defaultNoActivityTimeout", "14000");
@@ -118,7 +119,7 @@ public class ClusterTest extends SpellsourceTestBase {
 			var executor = vertx
 					.createSharedWorkerExecutor("testers",
 							count * 2,
-							90000L, TimeUnit.MILLISECONDS);
+							130000L, TimeUnit.MILLISECONDS);
 			for (var i = 0; i < count; i++) {
 				var queueNumber = i;
 				var queueId = "private-queue-" + i;

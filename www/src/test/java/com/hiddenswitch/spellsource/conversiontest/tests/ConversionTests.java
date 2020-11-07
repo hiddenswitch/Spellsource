@@ -32,7 +32,8 @@ public class ConversionTests {
 			"spell_the_cyntanami",
 			"spell_marble_spellstone",
 			"minion_fifi_fizzlewarp",
-			"spell_zagroz__inferno_bomb");
+			"spell_zagroz__inferno_bomb",
+			"minion_bloodsoaked_construct");
 
 	public static Stream<String> getCardIds() {
 		CardCatalogue.loadCardsFromPackage();

@@ -25,7 +25,7 @@ public class PresenceTests extends SpellsourceTestBase {
 				userId = user.getUserId();
 				assertEquals(PresenceEnum.ONLINE, Presence.presence(userId));
 			}
-			Strand.sleep(Presence.TIMEOUT_MILLIS + 1);
+			Strand.sleep(Presence.TIMEOUT_MILLIS + 100);
 			assertEquals(PresenceEnum.OFFLINE, Presence.presence(userId));
 		}, context, vertx);
 	}

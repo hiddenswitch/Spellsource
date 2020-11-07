@@ -27,6 +27,8 @@ import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.nio.file.spi.FileSystemProvider;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -67,7 +69,7 @@ public class CardCatalogue {
 	private static final Set<String> bannedCardIds = new HashSet<>();
 	private static AtomicBoolean loaded = new AtomicBoolean();
 	private static final Set<String> hardRemovalCardIds = new HashSet<>();
-	private final static Map<String, Card> cards = new LinkedHashMap<>(8196);
+	private final static Map<String, Card> cards = new ConcurrentHashMap<>(8196);
 	private final static Map<String, CardCatalogueRecord> records = new LinkedHashMap<>(8196);
 	private final static Map<String, List<CardCatalogueRecord>> recordsByName = new LinkedHashMap<>(8196);
 

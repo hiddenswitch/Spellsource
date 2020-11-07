@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GamesTest extends SpellsourceTestBase {
 
 	@Test
-	@Timeout(15000)
+	@Timeout(24000)
 	public void testReconnectsResumesMulligan(Vertx vertx, VertxTestContext context) {
 		runOnFiberContext(() -> {
 			AtomicInteger mulligans = new AtomicInteger(0);

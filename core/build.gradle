@@ -8,7 +8,7 @@ apply plugin: 'maven'
 group 'com.hiddenswitch'
 
 dependencies {
-    api 'io.vertx:vertx-core:3.9.2'
+    api "io.vertx:vertx-core:$vertxVersion"
     api 'org.slf4j:slf4j-api:1.7.22'
     api 'com.google.guava:guava:26.0-jre'
     api 'org.jetbrains:annotations:16.0.2'

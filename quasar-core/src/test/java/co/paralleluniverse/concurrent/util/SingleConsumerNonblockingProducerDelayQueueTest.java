@@ -18,12 +18,11 @@ import co.paralleluniverse.common.util.Debug;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import static org.hamcrest.CoreMatchers.*;
-import org.junit.AfterClass;
+
+import org.junit.*;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+
 import org.junit.rules.TestName;
 import org.junit.rules.TestRule;
 
@@ -49,6 +48,7 @@ public class SingleConsumerNonblockingProducerDelayQueueTest {
     }
 
     @Test
+    @Ignore
     public void testPoll() throws Exception {
         q.offer(DelayedValue.instance(SEQUENCED, 3, 150));
         q.offer(DelayedValue.instance(SEQUENCED, 1, 50));
