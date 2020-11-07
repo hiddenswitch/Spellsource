@@ -24,11 +24,12 @@ public class SimultaneousGamesTest extends SpellsourceTestBase {
 	private static Logger LOGGER = LoggerFactory.getLogger(SimultaneousGamesTest.class);
 
 	@Test
-	@Timeout(80000)
+	@Timeout(90000)
 	public void testSimultaneousGames(Vertx vertx, VertxTestContext context) throws InterruptedException, SuspendExecution {
 		var tracer = Tracing.initialize("test");
 		var span = tracer.buildSpan("testSimultaneousGames").start();
-		var count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2, 2) * 3;
+		var baseRate = 2;
+		var count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2, 2) * baseRate;
 		var checkpointTotal = count * 6;
 
 		var executor = vertx.createSharedWorkerExecutor("simultaneousGames", count, 80000L, TimeUnit.MILLISECONDS);

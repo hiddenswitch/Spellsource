@@ -410,6 +410,13 @@ public class DiscoverSpell extends Spell {
 			return;
 		}
 
+		// Choices should be cloned if they are directly from the card catalogue
+		for (var i = 0; i < choices.size(); i++) {
+			if (choices.get(i).getId() == -1) {
+				choices.set(i, choices.get(i).clone());
+			}
+		}
+
 		List<GameAction> discoverActions = new ArrayList<>();
 		Card[] cardsInDiscover = new Card[choices.size()];
 		for (int i = 0; i < choices.size(); i++) {

@@ -58,7 +58,7 @@ dependencies {
     api project(':game')
     api project(':cards')
     api project(':vertx-sync')
-    api 'io.vertx:vertx-rx-java2:3.9.2'
+    api "io.vertx:vertx-rx-java2:$vertxVersion"
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$jacksonVersion") {
         exclude group: 'jakarta.xml.bind', module: '*'
@@ -91,19 +91,21 @@ dependencies {
     }
 
     implementation 'org.jooq:jooq:3.13.3'
-    implementation 'io.vertx:vertx-pg-client:3.9.2'
-    implementation "io.github.jklingsporn:vertx-jooq-classic-reactive:$vertxJooqVersion"
+    implementation "io.vertx:vertx-pg-client:$vertxVersion"
+    implementation ("io.github.jklingsporn:vertx-jooq-classic-reactive:$vertxJooqVersion") {
+        exclude group: "io.vertx", module: '*'
+    }
     implementation('com.google.protobuf:protobuf-java:3.13.0') {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
-    implementation group: 'io.vertx', name: 'vertx-web-client', version: '3.9.2'
-    implementation(group: 'io.vertx', name: 'vertx-grpc', version: '3.9.2') {
+    implementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
+    implementation(group: 'io.vertx', name: 'vertx-grpc', version: vertxVersion) {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
-    implementation group: 'io.vertx', name: 'vertx-service-discovery', version: '3.9.2'
-    implementation group: 'io.vertx', name: 'vertx-web', version: '3.9.2'
-    implementation group: 'io.vertx', name: 'vertx-auth-common', version: '3.9.2'
-    implementation group: 'io.vertx', name: 'vertx-config', version: '3.9.2'
+    implementation group: 'io.vertx', name: 'vertx-service-discovery', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-web', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-auth-common', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-config', version: vertxVersion
     implementation platform('org.keycloak.bom:keycloak-bom-parent:11.0.2')
     implementation(group: 'org.keycloak', name: 'keycloak-admin-client', version: '11.0.2') {
         exclude group: 'org.jboss.resteasy', module: 'resteasy-client'
@@ -117,8 +119,8 @@ dependencies {
     testImplementation project(':testutils')
     testImplementation "org.testcontainers:testcontainers"
     testImplementation "org.testcontainers:junit-jupiter"
-    testImplementation group: 'io.vertx', name: 'vertx-junit5', version: '3.9.2'
-    testImplementation group: 'io.vertx', name: 'vertx-junit5-web-client', version: '3.9.2'
+    testImplementation group: 'io.vertx', name: 'vertx-junit5', version: vertxVersion
+    testImplementation group: 'io.vertx', name: 'vertx-junit5-web-client', version: vertxVersion
 
     testImplementation 'com.google.guava:guava:26.0-jre'
     testImplementation "io.github.classgraph:classgraph:$classgraphVersion"

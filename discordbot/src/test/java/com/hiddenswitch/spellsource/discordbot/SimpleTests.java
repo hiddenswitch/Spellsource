@@ -4,6 +4,7 @@ import com.hiddenswitch.spellsource.discordbot.applications.DiscordBot;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.dv8tion.jda.api.entities.Message;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,6 +34,7 @@ public class SimpleTests {
 	}
 
 	@Test
+	@Disabled
 	public void testMultipleCards() {
 		Message response = DiscordBot.handleMessage("!card fae", null);
 
