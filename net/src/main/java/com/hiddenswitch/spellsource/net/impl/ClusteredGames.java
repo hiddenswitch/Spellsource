@@ -38,9 +38,9 @@ import java.util.concurrent.TimeoutException;
 
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
+import static io.vertx.ext.sync.Sync.fiber;
 import static io.vertx.core.json.JsonObject.mapFrom;
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.await;
 import static java.util.stream.Collectors.toList;
 
 public class ClusteredGames extends SyncVerticle implements Games {
@@ -267,7 +267,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		if (contexts.size() != 0) {
 			Games.LOGGER.warn("stop: Did not succeed in stopping all sessions");
 		}
-		Void t = awaitResult(h -> registration.unregister(h));
+		Void t = io.vertx.ext.sync.Sync.await(h -> registration.unregister(h));
 		Games.LOGGER.debug("stop: Activity monitors unregistered");
 		Games.LOGGER.debug("stop: Sessions killed");
 	}

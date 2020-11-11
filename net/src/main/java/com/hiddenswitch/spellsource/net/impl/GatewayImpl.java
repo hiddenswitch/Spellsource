@@ -50,12 +50,13 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.array;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.invoke;
+import static io.vertx.ext.sync.Sync.awaitPromise;
+import static io.vertx.ext.sync.Sync.await;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -110,12 +111,8 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.setPreallocateBodyBuffer(true);
 
 		// Handle all realtime messaging here
+		// Handles its own authorization
 		router.route("/realtime")
-				.method(HttpMethod.GET)
-				.handler(authHandler);
-
-		router.route("/realtime")
-				.method(HttpMethod.GET)
 				.handler(Connection.handler());
 
 		// Send game traffic over the Connection nowadays.
@@ -137,9 +134,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 			var closed2 = Promise.<Void>promise();
 			var closed3 = Promise.<Void>promise();
 			CompositeFuture.join(closed1.future(), closed2.future(), closed3.future()).onComplete(res -> fut.handle(res.mapEmpty()));
-			draftQueue.close(closed1.future());
-			defaultQueues.close(closed2.future());
-			serverMessaging.close(closed3.future());
+			draftQueue.close(closed1);
+			defaultQueues.close(closed2);
+			serverMessaging.close(closed3);
 		};
 
 		// Handle the enqueue and dequeue methods through the matchmaker
@@ -192,7 +189,13 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.exposedHeader("WebSocket")
 				.exposedHeader("Upgrade")
 				.allowCredentials(true)
-				.allowedMethods(Sets.newHashSet(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS, HttpMethod.HEAD)));
+				.allowedMethods(Sets.newHashSet(HttpMethod.GET,
+						HttpMethod.CONNECT,
+						HttpMethod.POST,
+						HttpMethod.PUT,
+						HttpMethod.DELETE,
+						HttpMethod.OPTIONS,
+						HttpMethod.HEAD)));
 
 		// Add body handling to all routes
 		router.route().handler(bodyHandler);
@@ -379,7 +382,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		Cards.invalidateCardCache();
 
 		server.requestHandler(router);
-		HttpServer listening = awaitResult(server::listen);
+		HttpServer listening = await(server.listen());
 
 		LOGGER.info("start: Router configured.");
 	}
@@ -848,11 +851,11 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	@Suspendable
 	protected void syncStop() throws SuspendExecution {
 		if (customCloseables != null) {
-			Sync.invoke1(customCloseables::close);
+			awaitPromise(customCloseables::close);
 		}
 
 		if (server != null) {
-			Void t = Sync.invoke1(server::close);
+			Void t = io.vertx.ext.sync.Sync.invoke1(server::close);
 		}
 	}
 }

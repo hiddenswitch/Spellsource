@@ -26,8 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class DecksTests extends FrameworkTestBase {
 
 	@Test
-	public void testCreateDeck(WebClient webClient, Vertx vertx, VertxTestContext testContext) {
-		var client = new Client(vertx, webClient);
+	public void testCreateDeck( Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
 		client.createAndLogin()
 				.compose(ignored -> createRandomDeck(client))
 				.onSuccess(decksPutResponse -> {
@@ -36,21 +36,21 @@ public class DecksTests extends FrameworkTestBase {
 					});
 				})
 				.onComplete(client::close)
-				.onComplete(testContext.completing());
+				.onComplete(testContext.succeedingThenComplete());
 	}
 
 	@Test
-	public void testCreateManyDecks(WebClient webClient, Vertx vertx, VertxTestContext testContext) {
-		var client = new Client(vertx, webClient);
+	public void testCreateManyDecks( Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
 		client.createAndLogin()
 				.compose(ignored -> CompositeFuture.all(IntStream.range(0, 100).mapToObj(i -> createRandomDeck(client)).collect(Collectors.toList())))
 				.onComplete(client::close)
-				.onComplete(testContext.completing());
+				.onComplete(testContext.succeedingThenComplete());
 	}
 
 	@Test
-	public void testUpdateDecks(WebClient webClient, Vertx vertx, VertxTestContext testContext) {
-		var client = new Client(vertx, webClient);
+	public void testUpdateDecks( Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
 
 		client.createAndLogin()
 				.compose(ignored -> createRandomDeck(client))
@@ -74,13 +74,13 @@ public class DecksTests extends FrameworkTestBase {
 							});
 				})
 				.onComplete(client::close)
-				.onComplete(testContext.completing());
+				.onComplete(testContext.succeedingThenComplete());
 	}
 
 
 	@Test
-	public void testUpdateDecksWithCardIds(WebClient webClient, Vertx vertx, VertxTestContext testContext) {
-		var client = new Client(vertx, webClient);
+	public void testUpdateDecksWithCardIds( Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
 		client.createAndLogin()
 				.compose(ignored1 -> {
 					var service = client.legacy();
@@ -121,12 +121,12 @@ public class DecksTests extends FrameworkTestBase {
 							});
 				})
 				.onComplete(client::close)
-				.onComplete(testContext.completing());
+				.onComplete(testContext.succeedingThenComplete());
 	}
 
 	@Test
-	public void testDeleteDecks(WebClient webClient, Vertx vertx, VertxTestContext testContext) {
-		var client = new Client(vertx, webClient);
+	public void testDeleteDecks( Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
 		client.createAndLogin()
 				.compose(ignored -> createRandomDeck(client))
 				.compose(decksPutResponse -> {
@@ -148,19 +148,19 @@ public class DecksTests extends FrameworkTestBase {
 							});
 				})
 				.onComplete(client::close)
-				.onComplete(testContext.completing());
+				.onComplete(testContext.succeedingThenComplete());
 	}
 
 	/*
 	@Test
-	public void testDeletePremadeDecks(WebClient webClient, Vertx vertx, VertxTestContext testContext) {
+	public void testDeletePremadeDecks( Vertx vertx, VertxTestContext testContext) {
 		var client1 = new Client(vertx, webClient);
 		var client2 = new Client(vertx, webClient);
 	}*/
 
 	@Test
-	public void testGetPremadeDecks(WebClient webClient, Vertx vertx, VertxTestContext testContext) {
-		var client = new Client(vertx, webClient);
+	public void testGetPremadeDecks( Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
 		client.createAndLogin()
 				.compose(ignored -> {
 					var service = client.legacy();
@@ -172,7 +172,7 @@ public class DecksTests extends FrameworkTestBase {
 					});
 				})
 				.onComplete(client::close)
-				.onComplete(testContext.completing());
+				.onComplete(testContext.succeedingThenComplete());
 	}
 
 	@NotNull

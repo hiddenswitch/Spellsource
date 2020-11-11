@@ -6,19 +6,17 @@ import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.Invite.StatusEnum;
 import com.hiddenswitch.spellsource.net.impl.InviteId;
-import com.hiddenswitch.spellsource.net.impl.Sync;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.net.models.MatchmakingRequest;
 import com.hiddenswitch.spellsource.net.impl.MatchmakingQueueConfiguration;
 import io.vertx.core.Closeable;
 import io.vertx.core.Future;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.mongo.FindOptions;
-import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.jetbrains.annotations.NotNull;
@@ -31,8 +29,8 @@ import java.util.stream.Collectors;
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.array;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static com.hiddenswitch.spellsource.net.impl.Sync.defer;
-import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
+import static io.vertx.ext.sync.Sync.defer;
+import static io.vertx.ext.sync.Sync.fiber;
 import static io.vertx.core.json.JsonObject.mapFrom;
 
 /**
@@ -119,7 +117,7 @@ public interface Invites {
 		var totalExpired = shouldBeExpiredInvites.size();
 
 		// Cache retrieved connections
-		Map<String, WriteStream<Envelope>> connections = new HashMap<>();
+		Map<String, MessageProducer<Envelope>> connections = new HashMap<>();
 		for (var shouldBeExpiredInvite : shouldBeExpiredInvites) {
 			var fromConnection = connections.computeIfAbsent(shouldBeExpiredInvite.getFromUserId(), Connection::writeStream);
 			fromConnection.write(new Envelope().changed(new EnvelopeChanged().invite(new Invite().id(shouldBeExpiredInvite.getId()).status(StatusEnum.TIMEOUT))));
@@ -294,8 +292,7 @@ public interface Invites {
 		} catch (RuntimeException any) {
 			// Make sure to clean up resources
 			if (matchmaker != null) {
-				matchmaker.close((ignored) -> {
-				});
+				matchmaker.close(Promise.promise());
 			}
 
 			// If we queued, make sure to dequeue.

@@ -4,12 +4,13 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
 import io.vertx.core.Future;
 import io.vertx.core.shareddata.AsyncMap;
+import io.vertx.ext.sync.Sync;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.await;
 
 public final class SuspendableAsyncMap<K, V> extends SuspendableMap<K, V> {
 	private final String name;
@@ -23,7 +24,7 @@ public final class SuspendableAsyncMap<K, V> extends SuspendableMap<K, V> {
 	@Override
 	@Suspendable
 	public int size() {
-		return awaitResult(map::size);
+		return Sync.await(map::size);
 	}
 
 	@Override
@@ -39,7 +40,7 @@ public final class SuspendableAsyncMap<K, V> extends SuspendableMap<K, V> {
 			throw new NullPointerException("key");
 		}
 
-		return awaitResult(done -> {
+		return Sync.await(done -> {
 			map.get(key, then -> {
 				done.handle(Future.succeededFuture(then.succeeded() && then.result() != null));
 			});
@@ -56,58 +57,58 @@ public final class SuspendableAsyncMap<K, V> extends SuspendableMap<K, V> {
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public V get(Object key) {
-		return awaitResult(h -> map.get((K) key, h));
+		return Sync.await(h -> map.get((K) key, h));
 	}
 
 	@Override
 	@Suspendable
 	public V put(K key, V value) {
-		return awaitResult(h -> map.put(key, value, then -> h.handle(then.map(value))));
+		return Sync.await(h -> map.put(key, value, then -> h.handle(then.map(value))));
 	}
 
 	@Override
 	@Suspendable
 	public V put(K key, V value, long timeToLiveMillis) {
-		return awaitResult(h -> map.put(key, value, timeToLiveMillis, then -> h.handle(then.map(value))));
+		return Sync.await(h -> map.put(key, value, timeToLiveMillis, then -> h.handle(then.map(value))));
 	}
 
 	@Override
 	@Suspendable
 	public V putIfAbsent(K key, V value) {
-		return awaitResult(h -> map.putIfAbsent(key, value, h));
+		return Sync.await(h -> map.putIfAbsent(key, value, h));
 	}
 
 	@Override
 	@Suspendable
 	public V putIfAbsent(K key, V value, long timeToLiveMillis) {
-		return awaitResult(h -> map.putIfAbsent(key, value, timeToLiveMillis, h));
+		return Sync.await(h -> map.putIfAbsent(key, value, timeToLiveMillis, h));
 	}
 
 	@Override
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public V remove(K key) {
-		return awaitResult(h -> map.remove(key, h));
+		return Sync.await(h -> map.remove(key, h));
 	}
 
 	@Override
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public boolean remove(K key, V value) {
-		Boolean res = awaitResult(h -> map.removeIfPresent((K) key, (V) value, h));
+		Boolean res = Sync.await(h -> map.removeIfPresent((K) key, (V) value, h));
 		return res;
 	}
 
 	@Override
 	@Suspendable
 	public boolean replace(K key, V oldValue, V newValue) {
-		return awaitResult(h -> map.replaceIfPresent(key, oldValue, newValue, h));
+		return Sync.await(h -> map.replaceIfPresent(key, oldValue, newValue, h));
 	}
 
 	@Override
 	@Suspendable
 	public V replace(K key, V value) {
-		return awaitResult(h -> map.replace(key, value, h));
+		return Sync.await(h -> map.replace(key, value, h));
 	}
 
 	@Override
@@ -121,30 +122,26 @@ public final class SuspendableAsyncMap<K, V> extends SuspendableMap<K, V> {
 	@Override
 	@Suspendable
 	public void clear() {
-		awaitResult(map::clear);
+		Void t = Sync.await(map::clear);
 	}
 
 	@Override
 	@Suspendable
 	public Set<K> keySet() {
-		return awaitResult(map::keys);
+		return Sync.await(map::keys);
 	}
 
 	@Override
 	@Suspendable
-	public Collection<V> values() {
-		return awaitResult(map::values);
+	public List<V> values() {
+		return Sync.await(map::values);
 	}
 
 	@Override
 	@Suspendable
 	public Set<Map.Entry<K, V>> entrySet() {
-		return awaitResult(map::entries).entrySet();
-	}
-
-	@Override
-	public AsyncMap<K, V> async() {
-		return map;
+		Map<K,V> v = Sync.await(map::entries);
+		return v.entrySet();
 	}
 
 	@Override

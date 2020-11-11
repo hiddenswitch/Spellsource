@@ -10,7 +10,7 @@ import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Test;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
+import static io.vertx.ext.sync.Sync.invoke0;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PresenceTests extends SpellsourceTestBase {

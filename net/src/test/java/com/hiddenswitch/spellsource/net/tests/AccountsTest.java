@@ -17,8 +17,8 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke;
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
+import static io.vertx.ext.sync.Sync.invoke;
+import static io.vertx.ext.sync.Sync.invoke0;
 import static net.demilich.metastone.tests.util.TestBase.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 

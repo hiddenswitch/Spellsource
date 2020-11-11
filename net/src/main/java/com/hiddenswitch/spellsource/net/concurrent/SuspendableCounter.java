@@ -5,15 +5,16 @@ import com.hiddenswitch.spellsource.net.concurrent.impl.SuspendableVertxCounter;
 import io.vertx.core.Context;
 import io.vertx.core.Vertx;
 import io.vertx.core.shareddata.Counter;
+import io.vertx.ext.sync.Sync;
 
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.await;
 
 public interface SuspendableCounter {
 
 	@Suspendable
 	static SuspendableCounter getOrCreate(String name) {
 		Context context = Vertx.currentContext();
-		Counter counter = awaitResult(h -> context.owner().sharedData().getCounter(name, h));
+		Counter counter = Sync.await(h -> context.owner().sharedData().getCounter(name, h));
 		return new SuspendableVertxCounter(counter);
 	}
 

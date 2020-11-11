@@ -5,10 +5,13 @@ import com.hiddenswitch.framework.rpc.*;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
 import com.hiddenswitch.spellsource.rpc.DecksPutResponse;
 import com.hiddenswitch.spellsource.rpc.HiddenSwitchSpellsourceAPIServiceGrpc;
+import com.hiddenswitch.spellsource.rpc.VertxHiddenSwitchSpellsourceAPIServiceGrpc;
 import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.impl.ContextInternal;
+import io.vertx.core.impl.VertxInternal;
 import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.grpc.VertxChannelBuilder;
@@ -34,7 +37,7 @@ public class Client implements AutoCloseable {
 		this.vertx = vertx;
 		this.webClient = webClient;
 		this.keycloakPath = keycloakPath;
-		vertx.getOrCreateContext().addCloseHook(handler -> {
+		((ContextInternal)vertx.getOrCreateContext()).addCloseHook(handler -> {
 			close();
 			handler.handle(Future.succeededFuture());
 		});
@@ -51,8 +54,12 @@ public class Client implements AutoCloseable {
 		this(vertx, webClient, Accounts.keycloakAuthUrl());
 	}
 
+	public Client(Vertx vertx) {
+		this(vertx, WebClient.create(vertx));
+	}
+
 	public Future<LoginOrCreateReply> createAndLogin(String username, String email, String password) {
-		var stub = UnauthenticatedGrpc.newVertxStub(channel());
+		var stub = VertxUnauthenticatedGrpc.newVertxStub(channel());
 		return stub.createAccount(CreateAccountRequest.newBuilder()
 				.setUsername(username)
 				.setEmail(email)
@@ -156,8 +163,8 @@ public class Client implements AutoCloseable {
 		this.userEntity = userEntity;
 	}
 
-	public HiddenSwitchSpellsourceAPIServiceGrpc.HiddenSwitchSpellsourceAPIServiceVertxStub legacy() {
-		return HiddenSwitchSpellsourceAPIServiceGrpc.newVertxStub(channel())
+	public VertxHiddenSwitchSpellsourceAPIServiceGrpc.HiddenSwitchSpellsourceAPIServiceVertxStub legacy() {
+		return VertxHiddenSwitchSpellsourceAPIServiceGrpc.newVertxStub(channel())
 				.withCallCredentials(credentials());
 	}
 

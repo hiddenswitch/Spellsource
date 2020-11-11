@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource.net.impl;
 
-import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.net.models.MigrateToRequest;
 import com.hiddenswitch.spellsource.net.models.MigrationRequest;
 import com.hiddenswitch.spellsource.net.models.MigrationToResponse;
@@ -9,7 +8,7 @@ import io.vertx.core.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
+import static io.vertx.ext.sync.Sync.fiber;
 
 public class MigratorImpl implements Migrator {
 	Vertx vertx;
@@ -32,7 +31,7 @@ public class MigratorImpl implements Migrator {
 			impl.add(req);
 		}
 		vertx.runOnContext(v1 -> {
-			vertx.runOnContext(Sync.<Void>fiber(v2 -> {
+			vertx.runOnContext(io.vertx.ext.sync.Sync.<Void>fiber(v2 -> {
 				response.handle(impl.migrateTo(new MigrateToRequest().withVersion(version)));
 			}));
 		});

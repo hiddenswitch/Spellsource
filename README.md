@@ -96,10 +96,10 @@ Requirements: **Java 11 or later** and **Docker**. Check your current version of
     # Docker. Look carefully at any messages brew tells you and do them
     brew cask install docker
     # Java (if required)
-    brew install java
+    brew install openjdk@11
     # Not sure why brew doesn't just do this for you
     sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
-    brew link --force java
+    brew link --force openjdk@11
     ```
  2. Clone the repository:
     ```shell script

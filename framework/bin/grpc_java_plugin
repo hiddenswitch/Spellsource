@@ -1,17 +1,9 @@
 #!/usr/bin/env bash
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
-set -e
+read -r -d '' SCRIPT <<EOF
+mvn dependency:get -DremoteRepositories=https://repo1.maven.org/maven2/ -DgroupId=io.vertx -DartifactId=vertx-grpc-protoc-plugin -Dversion=4.0.0.CR1 -Dtransitive=true > /dev/null
+MVN_REPO=\$(mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout)
+CLASSPATH=\$(find \$MVN_REPO -type f -path '*.jar' | tr '\\n' ':')
+java -cp "\$CLASSPATH" io.vertx.grpc.protoc.plugin.VertxGrpcGenerator
+EOF
 
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    "${DIR}"/x86_64-linux-gnu/protoc-gen-grpc-java "$@"
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-    "${DIR}"/x86_64-apple-darwin14/protoc-gen-grpc-java "$@"
-elif [[ "$OSTYPE" == "cygwin" ]]; then
-    "${DIR}"/x86_64-w64-mingw32/protoc-gen-grpc-java.exe "$@"
-elif [[ "$OSTYPE" == "msys" ]]; then
-    "${DIR}"/x86_64-w64-mingw32/protoc-gen-grpc-java.exe "$@"
-elif [[ "$OSTYPE" == "win32" ]]; then
-    "${DIR}"/i686-w64-mingw32/protoc-gen-grpc-java.exe "$@"
-else
-    exit 137
-fi
+docker run -v "$(pwd)":/defs -w "/defs" --rm -i maven:latest bash -c "${SCRIPT}"

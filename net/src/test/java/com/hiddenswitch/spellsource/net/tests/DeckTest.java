@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke;
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
+import static io.vertx.ext.sync.Sync.invoke;
+import static io.vertx.ext.sync.Sync.invoke0;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 import static org.junit.jupiter.api.Assertions.*;
 

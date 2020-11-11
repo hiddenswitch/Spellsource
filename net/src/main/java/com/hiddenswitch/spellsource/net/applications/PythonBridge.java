@@ -35,7 +35,7 @@ public class PythonBridge {
 	public static void startServer() {
 		CompletableFuture<String> cf = new CompletableFuture<>();
 		Promise<String> fut = Promise.promise();
-		fut.future().setHandler(res -> {
+		fut.future().onComplete(res -> {
 			if (res.succeeded()) {
 				cf.complete(res.result());
 			} else {

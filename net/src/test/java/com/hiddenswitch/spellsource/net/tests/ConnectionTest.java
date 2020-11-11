@@ -18,9 +18,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeoutException;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.fiber;
+import static io.vertx.ext.sync.Sync.invoke0;
+import static io.vertx.ext.sync.Sync.await;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -60,10 +60,13 @@ public class ConnectionTest extends SpellsourceTestBase {
 			client.webSocket(Configuration.apiGatewayPort(), "localhost", "/realtime", (ws) -> {
 				verify(testContext, () -> {
 					if (ws.succeeded()) {
-						fail("Should not be connected");
+						// Sleep shortly, then see if it's still connected
+						ws.result().endHandler(v -> {
+							latch.countDown();
+						});
+
 					} else {
-						assertTrue(UpgradeRejectedException.class.isAssignableFrom(ws.cause().getClass()));
-						latch.countDown();
+						fail("Should always connect, and close later");
 					}
 				});
 			});
@@ -89,14 +92,16 @@ public class ConnectionTest extends SpellsourceTestBase {
 				var account = createRandomAccount();
 
 				var client = Vertx.currentContext().owner().createHttpClient();
-				socket = awaitResult(h -> client.webSocket(Configuration.apiGatewayPort(), "localhost", "/realtime?X-Auth-Token=" + account.getLoginToken().getToken(), h));
+				socket = await(client.webSocket(Configuration.apiGatewayPort(), "localhost", "/realtime?X-Auth-Token=" + account.getLoginToken().getToken()));
 				socket.handler(buf -> {
 					Json.decodeValue(buf, Envelope.class);
 					latch.countDown();
 				});
 				latch.await();
 			} finally {
-				socket.close();
+				if (socket != null) {
+					socket.close();
+				}
 			}
 		}, testContext, vertx);
 	}
@@ -109,18 +114,16 @@ public class ConnectionTest extends SpellsourceTestBase {
 				createRandomAccount();
 				Connection.connected("testInvalidAuth", (connection, fut) -> {
 					verify(testContext, () -> {
-						fail("Should not connect");
+						fail("Should not run handlers");
 						fut.handle(Future.succeededFuture());
 					});
 				});
 
 				var client = Vertx.currentContext().owner().createHttpClient();
-				client.webSocket(Configuration.apiGatewayPort(), "localhost", "/realtime?" + SpellsourceAuthHandler.HEADER + "=invalid:auth", testContext.failing(cause -> {
-					verify(testContext, () -> {
-						assertTrue(UpgradeRejectedException.class.isAssignableFrom(cause.getClass()));
+				client.webSocket(Configuration.apiGatewayPort(), "localhost", "/realtime?" + SpellsourceAuthHandler.HEADER + "=invalid:auth", testContext.succeeding(ws -> {
+					ws.endHandler(v -> {
 						latch.countDown();
 					});
-
 				}));
 				latch.await();
 			} finally {

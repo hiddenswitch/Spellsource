@@ -50,7 +50,7 @@ public class BroadcastTest {
 							async.flag();
 						});
 
-						var testHandler = context.<DatagramSocket>succeeding();
+						var testHandler = context.<Void>succeeding();
 						vertx.setTimer(2000L, v -> {
 							socket.send(verticle.getClientCall(), verticle.getMulticastPort(), verticle.getMulticastAddress(), testHandler);
 							LOGGER.info("BroadcastTest: packet sent");

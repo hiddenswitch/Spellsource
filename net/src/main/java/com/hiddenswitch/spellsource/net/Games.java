@@ -17,6 +17,7 @@ import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -59,7 +60,7 @@ import java.util.stream.Stream;
 
 import static com.hiddenswitch.spellsource.client.models.EntityType.*;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.await;
 import static java.util.stream.Collectors.toList;
 
 
@@ -305,7 +306,7 @@ public interface Games extends Verticle {
 		Matchmaking.LOGGER.debug("createMatch: Creating match for request {}", request);
 
 		var eb = Vertx.currentContext().owner().eventBus();
-		Message<JsonObject> response = awaitResult(h -> eb.request("Games.createGameSession", json(request), h));
+		Message<JsonObject> response = Sync.await(h -> eb.request("Games.createGameSession", json(request), h));
 		return new MatchCreateResponse(response.body().mapTo(CreateGameSessionResponse.class));
 	}
 
@@ -817,7 +818,7 @@ public interface Games extends Verticle {
 	static boolean isInGame(@NotNull UserId userId) {
 		var eb = Vertx.currentContext().owner().eventBus();
 		try {
-			Message<String> res = awaitResult(h -> eb.request(userId.toString() + ".isInGame",
+			Message<String> res = Sync.await(h -> eb.request(userId.toString() + ".isInGame",
 					Buffer.buffer(0),
 					new DeliveryOptions().setSendTimeout(200L), h));
 			return res.body() != null;
@@ -829,7 +830,7 @@ public interface Games extends Verticle {
 	@Suspendable
 	static GameId getGameId(@NotNull UserId userId) {
 		var eb = Vertx.currentContext().owner().eventBus();
-		Message<String> res = awaitResult(h -> eb.request(userId.toString() + ".isInGame",
+		Message<String> res = Sync.await(h -> eb.request(userId.toString() + ".isInGame",
 				Buffer.buffer(0),
 				new DeliveryOptions().setSendTimeout(200L), h));
 		return new GameId(res.body());

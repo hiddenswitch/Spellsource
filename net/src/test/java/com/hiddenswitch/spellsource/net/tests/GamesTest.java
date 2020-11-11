@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
+import static io.vertx.ext.sync.Sync.invoke0;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GamesTest extends SpellsourceTestBase {

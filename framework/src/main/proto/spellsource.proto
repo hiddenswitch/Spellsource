@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package spellsource;
 
+// cache buster 5
+
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
@@ -1283,6 +1285,9 @@ message MatchmakingQueuePutRequest {
 
     // Indicates which queue this request is for.
     string queueId = 3;
+
+    // Set to true if this is a request to cancel any queues the user is currently in
+    bool cancel = 4;
 }
 
 message MatchmakingQueuePutResponse {
@@ -1488,12 +1493,28 @@ message ValidationReport {
     bool valid = 2;
 }
 
+service Matchmaking {
+    rpc Enqueue(stream MatchmakingQueuePutRequest) returns (stream MatchmakingQueuePutResponse) {}
+
+    // Removes your client from the matchmaking queue, regardless of which queue it is in.
+    rpc MatchmakingDelete(google.protobuf.Empty) returns (MatchCancelResponse) {
+        option (google.api.http) = {
+            delete: "/api/v3/matchmaking"
+        };
+    }
+
+    // Gets a list of queues available for matchmaking.
+    rpc MatchmakingGet(google.protobuf.Empty) returns (MatchmakingQueuesResponse) {
+        option (google.api.http) = {
+            get: "/api/v3/matchmaking"
+        };
+    }
+}
+
 service HiddenSwitchSpellsourceAPIService {
-    rpc Dequeue(Envelope.MethodMessage.DequeueMessage) returns (DefaultMethodResponse) {}
     rpc PutCard(Envelope.MethodMessage.PutCardMessage) returns (Envelope.ResultMessage.PutCardMessage) {}
     rpc SendMessage(Envelope.MethodMessage.SendMessageMessage) returns (Envelope.ResultMessage.SendMessageMessage) {}
     rpc DeleteCard(Envelope.MethodMessage.DeleteCardMessage) returns (Envelope.RemovedMessage) {}
-    rpc Enqueue(MatchmakingQueuePutRequest) returns (stream MatchmakingQueuePutResponse) {}
     rpc SubscribeFriends(google.protobuf.Empty) returns (stream Friend) {}
     rpc SubscribeInvites(google.protobuf.Empty) returns (stream Invite) {}
     rpc SubscribeEditableCards(google.protobuf.Empty) returns (stream EditableCard) {}
@@ -1677,20 +1698,6 @@ service HiddenSwitchSpellsourceAPIService {
         option (google.api.http) = {
             post: "/api/v3/accounts"
             body: "request"
-        };
-    }
-
-    // Removes your client from the matchmaking queue, regardless of which queue it is in.
-    rpc MatchmakingDelete(google.protobuf.Empty) returns (MatchCancelResponse) {
-        option (google.api.http) = {
-            delete: "/api/v3/matchmaking"
-        };
-    }
-
-    // Gets a list of queues available for matchmaking.
-    rpc MatchmakingGet(google.protobuf.Empty) returns (MatchmakingQueuesResponse) {
-        option (google.api.http) = {
-            get: "/api/v3/matchmaking"
         };
     }
 

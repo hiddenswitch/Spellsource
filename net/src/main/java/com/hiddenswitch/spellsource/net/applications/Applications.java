@@ -82,7 +82,77 @@ public interface Applications {
 					if (System.getProperties().containsKey("gradle")) {
 						return Future.succeededFuture(vertx);
 					}
-					var hook = new Thread(BareCommand.getTerminationRunnable(vertx, io.vertx.core.logging.LoggerFactory.getLogger(Applications.class), null));
+					var hook = new Thread(BareCommand.getTerminationRunnable(vertx, new io.vertx.core.impl.logging.Logger() {
+						@Override
+						public boolean isTraceEnabled() {
+							return false;
+						}
+
+						@Override
+						public void trace(Object o) {
+
+						}
+
+						@Override
+						public void trace(Object o, Throwable throwable) {
+
+						}
+
+						@Override
+						public boolean isDebugEnabled() {
+							return false;
+						}
+
+						@Override
+						public void debug(Object o) {
+
+						}
+
+						@Override
+						public void debug(Object o, Throwable throwable) {
+
+						}
+
+						@Override
+						public boolean isInfoEnabled() {
+							return false;
+						}
+
+						@Override
+						public void info(Object o) {
+
+						}
+
+						@Override
+						public void info(Object o, Throwable throwable) {
+
+						}
+
+						@Override
+						public boolean isWarnEnabled() {
+							return false;
+						}
+
+						@Override
+						public void warn(Object o) {
+
+						}
+
+						@Override
+						public void warn(Object o, Throwable throwable) {
+
+						}
+
+						@Override
+						public void error(Object o) {
+							LOGGER.error(o.toString());
+						}
+
+						@Override
+						public void error(Object o, Throwable throwable) {
+							LOGGER.error(o.toString(), throwable);
+						}
+					}, null));
 					hook.setName("vertx-shutdown-hook");
 					Runtime.getRuntime().addShutdownHook(hook);
 					return Future.succeededFuture(vertx);

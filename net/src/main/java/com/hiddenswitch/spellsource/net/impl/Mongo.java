@@ -9,6 +9,7 @@ import io.opentracing.tag.Tags;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.*;
+import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.*;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.fromJson;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
+import static io.vertx.ext.sync.Sync.await;
 import static io.vertx.ext.sync.Sync.awaitResultUninterruptibly;
 
 /**
@@ -52,7 +54,7 @@ public class Mongo implements Closeable {
 	}
 
 	public synchronized static Mongo mongo() {
-		@Nullable Context context = Vertx.currentContext();
+		@Nullable ContextInternal context = (ContextInternal) Vertx.currentContext();
 		if (context == null) {
 			throw new RuntimeException("not in context");
 		}
@@ -605,9 +607,9 @@ public class Mongo implements Closeable {
 	}
 
 	@Override
-	public void close(Handler<AsyncResult<Void>> completionHandler) {
+	public void close(Promise<Void> promise) {
 		if (isClosing.compareAndSet(false, true)) {
-			closeFut = completionHandler;
+			closeFut = promise;
 			createdOnContext.runOnContext(v -> {
 				if (pending.get() == 0) {
 					// Check if there's still nothing pending in a short while
@@ -618,11 +620,15 @@ public class Mongo implements Closeable {
 	}
 
 	private void closeShortly() {
-		createdOnContext.owner().setTimer(1000L, timerId -> {
-			if (pending.get() == 0) {
-				closeNow();
-			}
-		});
+		try {
+			createdOnContext.owner().setTimer(1000L, timerId -> {
+				if (pending.get() == 0) {
+					closeNow();
+				}
+			});
+		} catch (IllegalStateException hooksAlreadyClose) {
+			closeNow();
+		}
 	}
 
 	private void closeNow() {

@@ -15,6 +15,7 @@ import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
+import io.vertx.ext.sync.Sync;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
@@ -26,7 +27,7 @@ import org.jooq.impl.DefaultConfiguration;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.await;
 
 public class Environment {
 
@@ -140,7 +141,7 @@ public class Environment {
 			}, false, result);
 			if (fiber != null) {
 				try {
-					T out = awaitResult(h -> result.future().onComplete(h));
+					T out = Sync.await(h -> result.future().onComplete(h));
 					return Future.succeededFuture(out);
 				} catch (Throwable t) {
 					return Future.failedFuture(t);

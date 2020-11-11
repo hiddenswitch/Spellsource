@@ -7,7 +7,6 @@ import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.*;
 import com.hiddenswitch.spellsource.net.models.*;
 import com.hiddenswitch.spellsource.net.impl.PasswordResetRecord;
-import com.hiddenswitch.spellsource.net.impl.Sync;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.opentracing.Scope;
 import io.opentracing.Span;
@@ -23,6 +22,7 @@ import io.vertx.ext.mail.MailMessage;
 import io.vertx.ext.mail.MailResult;
 import io.vertx.ext.mongo.MongoClientDeleteResult;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
+import io.vertx.ext.sync.Sync;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -45,7 +45,8 @@ import java.util.stream.Collectors;
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.*;
 import static io.vertx.core.json.JsonObject.mapFrom;
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.await;
+import static io.vertx.ext.sync.Sync.fiber;
 
 
 /**
@@ -91,6 +92,7 @@ public interface Accounts {
 	 * @param context The routing context from which to retrieve the user ID
 	 * @return The User ID
 	 */
+	@Suspendable
 	static String userId(RoutingContext context) {
 		return context.user().principal().getString("_id");
 	}
@@ -636,7 +638,7 @@ public interface Accounts {
 
 		router.route(resetUrl)
 				.method(HttpMethod.GET)
-				.handler(Sync.fiber(routingContext -> {
+				.handler(fiber(routingContext -> {
 					routingContext.response().setStatusCode(303);
 
 					if (routingContext.queryParam("token").size() != 1) {
@@ -713,7 +715,7 @@ public interface Accounts {
 
 		router.route(requestUrl)
 				.method(HttpMethod.POST)
-				.handler(Sync.fiber(routingContext -> {
+				.handler(fiber(routingContext -> {
 					routingContext.response().setStatusCode(303);
 					String email = routingContext.request().getFormAttribute("email");
 					boolean isValid = EmailValidator.getInstance().isValid(email);
@@ -739,7 +741,7 @@ public interface Accounts {
 							boolean sent = false;
 							try {
 								String emailUrl = com.hiddenswitch.spellsource.client.Configuration.getDefaultApiClient().getBasePath() + resetUrl + "?token=" + token;
-								MailResult mailResult = awaitResult(h -> mailClient.sendMail(new MailMessage()
+								MailResult mailResult = io.vertx.ext.sync.Sync.await(h -> mailClient.sendMail(new MailMessage()
 										.setFrom("no-reply@hiddenswitch.com")
 										.setTo(email)
 										.setSubject("Your Password Reset Request from Spellsource")

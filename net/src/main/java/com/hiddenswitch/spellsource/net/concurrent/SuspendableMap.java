@@ -8,20 +8,18 @@ import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.shareddata.SharedData;
+import io.vertx.ext.sync.Sync;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.await;
 
 public abstract class SuspendableMap<K, V> {
 	@Suspendable
 	private static <K, V> SuspendableMap<K, V> create(Vertx vertx, String name) {
 		SharedData client = vertx.sharedData();
 		if (vertx.isClustered()) {
-			AsyncMap<K, V> map = awaitResult(done -> client.getClusterWideMap(name, done));
+			AsyncMap<K, V> map = Sync.await(done -> client.getClusterWideMap(name, done));
 			return new SuspendableAsyncMap<>(name, map);
 		} else {
 			return new SuspendableWrappedMap<>(client.getLocalMap(name));
@@ -82,12 +80,10 @@ public abstract class SuspendableMap<K, V> {
 	public abstract Set<K> keySet();
 
 	@Suspendable
-	public abstract Collection<V> values();
+	public abstract List<V> values();
 
 	@Suspendable
 	public abstract Set<Map.Entry<K, V>> entrySet();
-
-	public abstract AsyncMap<K, V> async();
 
 	@Suspendable
 	public V replace(K key, V value) {

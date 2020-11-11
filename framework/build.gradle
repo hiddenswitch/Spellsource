@@ -120,7 +120,8 @@ dependencies {
     testImplementation "org.testcontainers:testcontainers"
     testImplementation "org.testcontainers:junit-jupiter"
     testImplementation group: 'io.vertx', name: 'vertx-junit5', version: vertxVersion
-    testImplementation group: 'io.vertx', name: 'vertx-junit5-web-client', version: vertxVersion
+    testImplementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
+    testImplementation group: 'io.vertx', name: 'vertx-web-common', version: vertxVersion
 
     testImplementation 'com.google.guava:guava:26.0-jre'
     testImplementation "io.github.classgraph:classgraph:$classgraphVersion"
@@ -326,6 +327,9 @@ protobuf {
     }
     plugins {
         grpc_java {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.33.1'
+        }
+        grpc_java_vertx {
             path = project.projectDir.absolutePath + "/bin/grpc_java_plugin"
         }
         grpc_csharp {
@@ -339,6 +343,9 @@ protobuf {
         }
         all()*.plugins {
             grpc_java {
+                outputSubDir = "java"
+            }
+            grpc_java_vertx {
                 outputSubDir = "java"
             }
             grpc_csharp {

@@ -15,6 +15,8 @@ java {
     sourceCompatibility(JavaVersion.VERSION_1_8)
 }
 
+def vertxVersion = '3.9.4'
+
 dependencies {
     api "io.vertx:vertx-core:$vertxVersion"
     api 'org.redisson:redisson:3.13.+'
@@ -26,7 +28,6 @@ dependencies {
     testImplementation project(':testcontainers')
     testImplementation platform('org.testcontainers:testcontainers-bom:1.15.+')
     compileOnly "javax.annotation:javax.annotation-api:1.3.2"
-//    testImplementation 'ch.qos.logback:logback-classic:1.2.3'
     testImplementation "io.vertx:vertx-unit:$vertxVersion"
     testImplementation "org.testcontainers:testcontainers"
     testImplementation group: 'io.vertx', name: 'vertx-core', version: vertxVersion, classifier: 'tests'

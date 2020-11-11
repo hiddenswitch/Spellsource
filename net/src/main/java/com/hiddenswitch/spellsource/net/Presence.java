@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static com.hiddenswitch.spellsource.net.impl.Sync.defer;
-import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
+import static io.vertx.ext.sync.Sync.defer;
+import static io.vertx.ext.sync.Sync.fiber;
 
 /**
  * Provides presence information to players who are each other's friends.
@@ -97,7 +97,7 @@ public interface Presence {
 		// Friends of userId, notify them of userId presence's
 		mongo().client().findWithOptions(Accounts.USERS, json("friends.friendId", userId.toString()), findOptions, res -> {
 			if (res.failed()) {
-				LOGGER.error("updatePresence {} {}: {}", userId, presence, res.cause().getMessage(), res.cause());
+				LOGGER.error("notifyFriendsOfPresence {} {}: {}", userId, presence, res.cause().getMessage(), res.cause());
 				return;
 			}
 

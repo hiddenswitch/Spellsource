@@ -13,6 +13,7 @@ import io.vertx.ext.web.impl.Utils;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
@@ -33,6 +34,7 @@ public class SpellsourceLogger implements LoggerHandler {
 	private final LoggerFormat format;
 
 	private Pattern pattern = Pattern.compile(SpellsourceAuthHandler.HEADER + "=[^&]+&?");
+	private Function<HttpServerRequest, String> customFormatter;
 
 	public SpellsourceLogger(boolean immediate, LoggerFormat format) {
 		this.immediate = immediate;
@@ -154,5 +156,15 @@ public class SpellsourceLogger implements LoggerHandler {
 
 		context.next();
 
+	}
+	@Override
+	public LoggerHandler customFormatter(Function<HttpServerRequest, String> formatter) {
+		if (format != LoggerFormat.CUSTOM) {
+			throw new IllegalStateException("Setting a formatter requires the handler to be set to CUSTOM format");
+		}
+
+		this.customFormatter = formatter;
+
+		return this;
 	}
 }

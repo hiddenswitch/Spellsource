@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version "5.2.0"
+    id 'com.github.johnrengelman.shadow' version "$shadowPluginVersion"
     id 'application'
 }
 
@@ -61,7 +61,7 @@ dependencies {
     api group: 'io.vertx', name: 'vertx-core', version: vertxVersion
     implementation 'org.apache.commons:commons-lang3:3.7'
     implementation 'com.google.guava:guava:26.0-jre'
-    implementation project(':vertx-redis-cluster')
+    implementation group: 'io.vertx', name: 'vertx-infinispan', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-mongo-client', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-service-discovery', version: vertxVersion
@@ -80,7 +80,6 @@ dependencies {
     runtimeOnly 'ch.qos.logback:logback-classic:1.2.3'
 
     implementation project(':cards')
-    implementation project(':framework')
     implementation(project(':client')) {
         exclude group: 'jakarta.activation', module: 'jakarta.activation-api'
         exclude group: 'javax.ws.rs', module: 'jsr311-api'
@@ -89,7 +88,6 @@ dependencies {
 
     implementation project(':game')
     implementation project(':vertx-sync')
-    implementation project(':game')
 
     testRuntimeOnly group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
     testRuntimeOnly 'org.glassfish.jersey.core:jersey-common:2.+'

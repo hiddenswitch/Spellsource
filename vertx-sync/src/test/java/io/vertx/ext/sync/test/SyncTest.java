@@ -3,8 +3,7 @@ package io.vertx.ext.sync.test;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.test.core.VertxTestBase;
-import org.junit.jupiter.api.Test;
-
+import org.junit.Test;
 /**
  *
  * @author <a href="http://tfox.org">Tim Fox</a>
