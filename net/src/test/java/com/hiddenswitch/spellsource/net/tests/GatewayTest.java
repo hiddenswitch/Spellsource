@@ -28,8 +28,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke;
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
+import static io.vertx.ext.sync.Sync.invoke;
+import static io.vertx.ext.sync.Sync.invoke0;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GatewayTest extends SpellsourceTestBase {
@@ -110,7 +110,7 @@ public class GatewayTest extends SpellsourceTestBase {
 			api.getAccount(car.getAccount().getId());
 			fail("Successfully received account when we shouldn't have had.");
 		} catch (ApiException ex) {
-			assertEquals(ex.getCode(), 403, "Assert not authorized");
+			assertEquals(ex.getCode(), 401, "Assert not authorized");
 		}
 		// Change the key to something invalid
 		api.getApiClient().setApiKey(car.getAccount().getId() + ":invalidtoken");
@@ -118,7 +118,7 @@ public class GatewayTest extends SpellsourceTestBase {
 			accountsResponse = api.getAccount(car.getAccount().getId());
 			fail("Successfully received account when we shouldn't have had.");
 		} catch (ApiException ex) {
-			assertEquals(ex.getCode(), 403, "Assert not authorized");
+			assertEquals(ex.getCode(), 401, "Assert not authorized");
 		}
 		context.completeNow();
 	}

@@ -16,16 +16,11 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
 import com.hiddenswitch.spellsource.rpc.*;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
-import io.grpc.Channel;
-import io.grpc.Context;
 import io.grpc.ServerServiceDefinition;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
-import io.vertx.core.streams.Pipe;
-import io.vertx.grpc.GrpcWriteStream;
-import io.vertx.grpc.VertxChannelBuilder;
 import io.vertx.sqlclient.Row;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -36,9 +31,6 @@ import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
-import openmatch.Frontend;
-import openmatch.FrontendServiceGrpc;
-import openmatch.Messages;
 import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
@@ -61,17 +53,17 @@ public class Legacy {
 	private static final WeakVertxMap<List<DeckCreateRequest>> premadeDecks = new WeakVertxMap<>(Legacy::getPremadeDecksPrivate);
 
 	public static Future<ServerServiceDefinition> services() {
-		return Future.succeededFuture(new HiddenSwitchSpellsourceAPIServiceGrpc.HiddenSwitchSpellsourceAPIServiceVertxImplBase() {
+		return Future.succeededFuture(new VertxHiddenSwitchSpellsourceAPIServiceGrpc.HiddenSwitchSpellsourceAPIServiceVertxImplBase() {
 
 			@Override
-			public void decksDelete(DecksDeleteRequest request, Promise<Empty> response) {
+			public Future<Empty> decksDelete(DecksDeleteRequest request) {
 				var userId = Accounts.userId();
 				var deckId = request.getDeckId();
 				// first, try to trash the share if it exists
 				// otherwise, the if it's a premade deck and the trash record does not exist, insert a share record that is trashed
 				// otherwise, if we own the deck, trash the deck.
 				var queryExecutor = Environment.queryExecutor();
-				queryExecutor.execute(dsl -> dsl.update(DECK_SHARES)
+				return queryExecutor.execute(dsl -> dsl.update(DECK_SHARES)
 						.set(DECK_SHARES.TRASHED, true)
 						.where(DECK_SHARES.DECK_ID.eq(deckId), DECK_SHARES.SHARE_RECIPIENT_ID.eq(userId)))
 						.compose(updated -> {
@@ -98,23 +90,21 @@ public class Legacy {
 										}
 									});
 						})
-						.map(Empty.getDefaultInstance())
-						.onComplete(response);
+						.map(Empty.getDefaultInstance());
 			}
 
 			@Override
-			public void decksGet(DecksGetRequest request, Promise<DecksGetResponse> response) {
+			public Future<DecksGetResponse> decksGet(DecksGetRequest request) {
 				var deckId = request.getDeckId();
 				var userId = Accounts.userId();
 
-				getDeck(deckId, userId)
-						.onComplete(response);
+				return getDeck(deckId, userId);
 			}
 
 			@Override
-			public void decksGetAll(Empty request, Promise<DecksGetAllResponse> response) {
+			public Future<DecksGetAllResponse> decksGetAll(Empty request) {
 				var userId = Accounts.userId();
-				Environment.queryExecutor()
+				return Environment.queryExecutor()
 						.findManyRow(dsl ->
 								// retrieves all decks that are premade and which the user has not explicitly deleted (the share of)
 								// and all the user's decks they've created and not deleted
@@ -152,12 +142,11 @@ public class Legacy {
 								reply.addDecks(getDeckResponse);
 							}
 							return Future.succeededFuture(reply.build());
-						})
-						.onComplete(response);
+						});
 			}
 
 			@Override
-			public void decksPut(DecksPutRequest request, Promise<DecksPutResponse> response) {
+			public Future<DecksPutResponse> decksPut(DecksPutRequest request) {
 				var userId = Accounts.userId();
 
 				DeckCreateRequest createRequest;
@@ -171,12 +160,11 @@ public class Legacy {
 							.withHeroClass(request.getHeroClass());
 				}
 
-				createDeck(userId, createRequest)
-						.onComplete(response);
+				return createDeck(userId, createRequest);
 			}
 
 			@Override
-			public void decksUpdate(DecksUpdateRequest request, Promise<DecksGetResponse> response) {
+			public Future<DecksGetResponse> decksUpdate(DecksUpdateRequest request) {
 				var configuration = Environment.jooqAkaDaoConfiguration();
 				var delegate = Environment.sqlPoolAkaDaoDelegate();
 				var decks = new DecksDao(configuration, delegate);
@@ -186,19 +174,17 @@ public class Legacy {
 				var queryExecutor = Environment.queryExecutor();
 
 				if (deckId == null) {
-					response.fail("deckId is null");
-					return;
+					return Future.failedFuture("deckId is null");
 				}
 
 				if (!request.hasUpdateCommand()) {
-					getDeck(deckId, userId).onComplete(response);
-					return;
+					return getDeck(deckId, userId);
 				}
 
 				var futs = new ArrayList<Future>();
 
 				// Assert that we have permissions to edit this deck
-				decks.queryExecutor().execute(dsl -> dsl
+				return decks.queryExecutor().execute(dsl -> dsl
 						.select(DECKS.ID)
 						.from(DECKS)
 						.where(DECKS.ID.eq(deckId).and(canEditDeck(userId)))
@@ -295,18 +281,17 @@ public class Legacy {
 
 					return CompositeFuture.all(futs);
 				})
-						.compose(ignored -> getDeck(deckId, userId))
-						.onComplete(response);
+						.compose(ignored -> getDeck(deckId, userId));
 			}
 
 			@Override
-			public void duplicateDeck(StringValue request, Promise<DecksGetResponse> response) {
+			public Future<DecksGetResponse> duplicateDeck(StringValue request) {
 				var userId = Accounts.userId();
 				var deckId = request.getValue();
 				var newDeckId = UUID.randomUUID().toString();
 
 				var queryExecutor = Environment.queryExecutor();
-				queryExecutor
+				return queryExecutor
 						.execute(dsl -> {
 							// new deckId, deck fields...
 							var newDeckIdAndOtherFields = ObjectArrays.concat(DSL.val(newDeckId), without(DECKS.fields(), DECKS.ID));
@@ -323,26 +308,7 @@ public class Legacy {
 						.compose(Legacy::insertOrFail)
 						.compose(ignored -> queryExecutor.execute(dsl -> duplicateAllForeign(dsl, deckId, newDeckId, CARDS_IN_DECK.ID, CARDS_IN_DECK.DECK_ID)))
 						.compose(ignored -> queryExecutor.execute(dsl -> duplicateAllForeign(dsl, deckId, newDeckId, DECK_PLAYER_ATTRIBUTE_TUPLES.ID, DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID)))
-						.compose(ignored -> getDeck(newDeckId, userId))
-						.onComplete(response);
-			}
-
-			@Override
-			public void enqueue(MatchmakingQueuePutRequest request, GrpcWriteStream<MatchmakingQueuePutResponse> response) {
-				
-				var vertx = Vertx.currentContext().owner();
-				var configuration = Environment.configuration();
-
-				configuration.compose(serverConfiguration -> {
-					var channel = VertxChannelBuilder.forAddress(vertx, serverConfiguration.getOpenmatch().getHost(), serverConfiguration.getOpenmatch().getPort()).build();
-					var service = FrontendServiceGrpc.newVertxStub(channel);
-					return service.createTicket(Frontend.CreateTicketRequest.newBuilder()
-							.setTicket(Messages.Ticket.newBuilder().build()).build())
-							.compose(ticket -> service.watchAssignments(Frontend.WatchAssignmentsRequest.newBuilder()
-									.setTicketId(ticket.getId()).build()))
-							.compose(readStream->null);
-				});
-
+						.compose(ignored -> getDeck(newDeckId, userId));
 			}
 		})
 				.compose(Accounts::requiresAuthorization);

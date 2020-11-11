@@ -10,7 +10,6 @@ import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
-import io.vertx.junit5.web.VertxWebClientExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.Network;
@@ -20,7 +19,7 @@ import org.testcontainers.lifecycle.Startables;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
-@ExtendWith({VertxExtension.class, VertxWebClientExtension.class})
+@ExtendWith({VertxExtension.class})
 @Testcontainers
 public class FrameworkTestBase {
 
@@ -59,10 +58,11 @@ public class FrameworkTestBase {
 			.withEnv("DB_PORT", Integer.toString(PGPORT))
 			.withReuse(false);
 
+	/*
 	protected static OpenMatchContainer openMatch = new OpenMatchContainer()
 			.dependsOn(redis)
 			.withNetwork(Network.SHARED)
-			.withReuse(false);
+			.withReuse(false);*/
 
 	@BeforeAll
 	protected static void startContainers(Vertx vertx, VertxTestContext testContext) throws InterruptedException {
@@ -70,8 +70,8 @@ public class FrameworkTestBase {
 
 		if (started.compareAndSet(false, true)) {
 			startup = Environment
-					.executeBlocking(() -> Startables.deepStart(Stream.of(redis, postgres, keycloak, openMatch)).join())
-					.compose(ignored -> Environment.executeBlocking(() -> {
+					.executeBlocking(() -> Startables.deepStart(Stream.of(redis, postgres, keycloak /*, openMatch*/)).join())
+					/*.compose(ignored -> Environment.executeBlocking(() -> {
 						// Connect OpenMatch to redis
 						var config = openMatch.getConfig();
 						config.setRedis(new OpenMatchContainer.OpenMatchOverrideConfig.Redis()
@@ -80,7 +80,7 @@ public class FrameworkTestBase {
 								.setUser("default"));
 						openMatch.setConfig(config);
 						return null;
-					}))
+					}))*/
 					.compose(ignored -> {
 						// Set the configuration (typed)
 						var serverConfiguration = ServerConfiguration.newBuilder()
@@ -100,10 +100,11 @@ public class FrameworkTestBase {
 										.setRealmDisplayName("Spellsource")
 										.setRealmId("hiddenswitch")
 										.build())
+								/*
 								.setOpenmatch(ServerConfiguration.OpenmatchConfiguration.newBuilder()
 										.setHost(openMatch.getHost())
 										.setPort(openMatch.getPort())
-										.build())
+										.build())*/
 								.build();
 
 						Environment.setConfiguration(serverConfiguration);

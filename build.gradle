@@ -150,7 +150,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'io.reactivex.rxjava2') {
-                    details.useVersion '2.2.12'
+                    details.useVersion '2.2.20'
                 }
 
                 if (details.requested.group == 'javax.xml.bind' && details.requested.module.name == 'jaxb-api') {
@@ -215,6 +215,10 @@ subprojects {
 
                 if (details.requested.group == 'javax.cache') {
                     details.useVersion '1.1.1'
+                }
+
+                if (details.requested.group == 'com.github.ben-manes.caffeine') {
+                    details.useVersion '2.8.4'
                 }
             }
         }

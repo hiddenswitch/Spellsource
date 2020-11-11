@@ -1,6 +1,2 @@
-com.hiddenswitch.framework.rpc.UnauthenticatedGrpc$UnauthenticatedVertxImplBase.createAccount(Lcom/hiddenswitch/framework/rpc/CreateAccountRequest;Lio/vertx/core/Promise;)V
-io.grpc.stub.ServerCalls$UnaryRequestMethod.invoke(Ljava/lang/Object;Lio/grpc/stub/StreamObserver;)V
-io.grpc.stub.StreamObserver.onCompleted()V
-io.grpc.stub.StreamObserver.onError(Ljava/lang/Throwable;)V
-io.grpc.stub.StreamObserver.onNext(Ljava/lang/Object;)V
+com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc$UnauthenticatedVertxImplBase.createAccount(Lcom/hiddenswitch/framework/rpc/CreateAccountRequest;)Lio/vertx/core/Future;
 org.flywaydb.core.api.migration.JavaMigration.migrate(Lorg/flywaydb/core/api/migration/Context;)V

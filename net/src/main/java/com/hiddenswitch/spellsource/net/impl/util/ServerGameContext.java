@@ -30,6 +30,7 @@ import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.impl.ConcurrentHashSet;
+import io.vertx.core.impl.ContextInternal;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -64,8 +65,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.stream.Stream;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.fiber;
+import static io.vertx.ext.sync.Sync.await;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -172,7 +173,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 				// When the game ends remove the fact that the user is in this game
 				addEndGameHandler(ctx -> {
-					Void t = awaitResult(inGameConsumer::unregister);
+					Void t = Sync.await(inGameConsumer::unregister);
 				});
 
 				Closeable closeableBehaviour = null;
@@ -190,7 +191,6 @@ public class ServerGameContext extends GameContext implements Server {
 					// By using a publisher, we do not require that there be a working connection while sending
 					MessageProducer<ServerToClientMessage> producer = toServer(userId, bus);
 					consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
-					producer.setWriteQueueMaxSize(Integer.MAX_VALUE);
 
 					Promise<Void> registration = Promise.promise();
 					consumer.completionHandler(registration);
@@ -256,7 +256,7 @@ public class ServerGameContext extends GameContext implements Server {
 	public static Closeable handleConnections() {
 		// Set up the connectivity for the user.
 		Connection.SetupHandler handler = (connection, fut) -> {
-			var context = Vertx.currentContext();
+			var context = (ContextInternal) Vertx.currentContext();
 			Set<MessageConsumer<ServerToClientMessage>> consumers = context.get("ServerGameContextConsumers");
 			if (consumers == null) {
 				consumers = new ConcurrentHashSet<>();
@@ -415,7 +415,7 @@ public class ServerGameContext extends GameContext implements Server {
 			long timeout = Math.min(Games.getDefaultNoActivityTimeout(), Games.getDefaultConnectionTime());
 			if (!clientsReady.values().stream().allMatch(fut -> fut.future().isComplete())) {
 				// If this is interrupted, it will bubble up to the general interrupt handler
-				bothClientsReady = awaitResult(CompositeFuture.join(clientsReady.values().stream().map(Promise::future).collect(toList()))::setHandler, timeout);
+				bothClientsReady = await(CompositeFuture.join(clientsReady.values().stream().map(Promise::future).collect(toList()))::onComplete, timeout);
 			} else {
 				bothClientsReady = Future.succeededFuture();
 			}
@@ -496,7 +496,7 @@ public class ServerGameContext extends GameContext implements Server {
 			}
 
 			// If this is interrupted, it'll bubble up to the general interrupt handler
-			CompositeFuture simultaneousMulligans = awaitResult(CompositeFuture.join(mulligansActive.future(), mulligansNonActive.future())::setHandler);
+			CompositeFuture simultaneousMulligans = Sync.await(CompositeFuture.join(mulligansActive.future(), mulligansNonActive.future())::onComplete);
 
 			// If we got this far, we should cancel the time
 			if (mulliganTimerId != null) {
@@ -554,7 +554,7 @@ public class ServerGameContext extends GameContext implements Server {
 						.write(new Envelope()
 								.added(new EnvelopeAdded()
 										.spanContext(new com.hiddenswitch.spellsource.client.models.SpanContext()
-												.data(carrier.getBytes())))).end());
+												.data(carrier.getBytes())))));
 
 				try {
 					LOGGER.debug("play {}: Starting forked game", gameId);
@@ -596,7 +596,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 			// Closing the context should interrupt the fiber
 			// Not sure if this should be done at construction time.
-			Vertx.currentContext().addCloseHook(v -> {
+			((ContextInternal) Vertx.currentContext()).addCloseHook(v -> {
 				if (getFiber() != null && !getFiber().isInterrupted()) {
 					getFiber().interrupt();
 				}
@@ -952,7 +952,11 @@ public class ServerGameContext extends GameContext implements Server {
 			while (iter.hasNext()) {
 				try {
 					Closeable closeable = iter.next();
-					Void res = awaitResult(closeable::close, CLOSE_TIMEOUT_MILLIS);
+					Void res = await(h -> {
+						Promise<Void> promise = Promise.promise();
+						closeable.close(promise);
+						promise.future().onComplete(h);
+					}, CLOSE_TIMEOUT_MILLIS);
 				} catch (Throwable any) {
 					Tracing.error(any, span, false);
 				} finally {
@@ -1145,7 +1149,7 @@ public class ServerGameContext extends GameContext implements Server {
 				registrationsReady.stream().map(Promise::future),
 				Stream.of(initialization.future())
 		).collect(toList()));
-		CompositeFuture res = awaitResult(join::onComplete, REGISTRATION_TIMEOUT);
+		CompositeFuture res = await(join::onComplete, REGISTRATION_TIMEOUT);
 	}
 
 	/**

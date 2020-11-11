@@ -5,14 +5,11 @@ import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.core.JsonConfiguration;
 import com.hiddenswitch.spellsource.net.Connection;
 import com.hiddenswitch.spellsource.common.Tracing;
-import io.opentracing.Span;
 import io.opentracing.SpanContext;
-import io.opentracing.Tracer;
 import io.opentracing.log.Fields;
 import io.opentracing.tag.Tags;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
-import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.Json;
@@ -24,9 +21,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
+import static io.vertx.ext.sync.Sync.fiber;
 import static io.vertx.ext.sync.Sync.awaitEvent;
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.await;
 
 public class ConnectionImpl implements Connection {
 	static {
@@ -150,22 +147,23 @@ public class ConnectionImpl implements Connection {
 	}
 
 	@Override
-	public Connection write(@NotNull Envelope data) {
-		socket.write(Json.encodeToBuffer(data));
-		return this;
+	public Future<Void> write(@NotNull Envelope data) {
+		var promise = Promise.<Void>promise();
+		socket.write(Json.encodeToBuffer(data),promise);
+		return promise.future();
 	}
 
 	@Override
-	public Connection write(Envelope data, Handler<AsyncResult<Void>> handler) {
+	public void write(Envelope data, Handler<AsyncResult<Void>> handler) {
 		socket.write(Json.encodeToBuffer(data), handler);
-		return this;
 	}
 
 	@Override
-	public void end() {
+	public Future<Void> end() {
 		if (socket != null) {
-			socket.end();
+			return socket.end();
 		}
+		return Future.succeededFuture();
 	}
 
 	@Override
@@ -241,7 +239,7 @@ public class ConnectionImpl implements Connection {
 	}
 
 	@Override
-	public void close(Handler<AsyncResult<Void>> completionHandler) {
+	public void close(Promise<Void> completionHandler) {
 		handleClose(v -> end(completionHandler));
 	}
 

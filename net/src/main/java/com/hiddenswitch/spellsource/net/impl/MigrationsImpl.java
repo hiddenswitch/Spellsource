@@ -11,7 +11,7 @@ import com.hiddenswitch.spellsource.net.models.MigrationToResponse;
 import com.mongodb.MongoWriteException;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
-import io.vertx.ext.mongo.WriteOption;
+import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ import java.util.stream.IntStream;
 
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.await;
 
 public class MigrationsImpl extends SyncVerticle implements Migrations {
 	public static final String MIGRATIONS = "migrations";
@@ -166,12 +166,12 @@ public class MigrationsImpl extends SyncVerticle implements Migrations {
 
 	private boolean lock() throws SuspendExecution, InterruptedException {
 		try {
-			MongoClientUpdateResult res = awaitResult(h -> mongo().client().updateCollectionWithOptions(MIGRATIONS, json("_id", "control", "locked", false), json(
+			MongoClientUpdateResult res = Sync.await(h -> mongo().client().updateCollectionWithOptions(MIGRATIONS, json("_id", "control", "locked", false), json(
 					"$set", json("locked", true, "lockedAt", Instant.now()),
 					"$setOnInsert", json("version", 0)),
 					new UpdateOptions()
 							.setUpsert(true)
-							.setWriteOption(WriteOption.FSYNCED), h));
+							/*.setWriteOption(WriteOption.FSYNCED)*/, h));
 			return res.getDocModified() == 1 || !res.getDocUpsertedId().isEmpty();
 		} catch (Throwable ex) {
 			var cause = Throwables.getRootCause(ex);
@@ -191,13 +191,15 @@ public class MigrationsImpl extends SyncVerticle implements Migrations {
 		mongo().updateCollectionWithOptions(MIGRATIONS, json("_id", "control", "locked", true),
 				json("$set", json("locked", false, "version", newVersion)),
 				new UpdateOptions()
-						.setWriteOption(WriteOption.FSYNCED));
+						/*
+						.setWriteOption(WriteOption.FSYNCED)*/);
 	}
 
 	private void unlock() throws SuspendExecution, InterruptedException {
 		mongo().updateCollectionWithOptions(MIGRATIONS, json("_id", "control", "locked", true),
 				json("$set", json("locked", false)),
 				new UpdateOptions()
-						.setWriteOption(WriteOption.FSYNCED));
+						/*
+						.setWriteOption(WriteOption.FSYNCED)*/);
 	}
 }

@@ -4,12 +4,11 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.net.impl.GameId;
-import com.hiddenswitch.spellsource.net.impl.Sync;
 import com.hiddenswitch.spellsource.net.impl.TimerId;
 
 import java.lang.ref.WeakReference;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
+import static io.vertx.ext.sync.Sync.fiber;
 
 /**
  * A timer for keeping track of a client's activity. Uses a {@link Scheduler} (typically implemented from vertx) for
@@ -41,7 +40,7 @@ public class ActivityMonitor {
 
 		cancel();
 
-		lastTimerId = scheduler.setTimer(noActivityTimeout, Sync.fiber(this::handleTimeout));
+		lastTimerId = scheduler.setTimer(noActivityTimeout, io.vertx.ext.sync.Sync.fiber(this::handleTimeout));
 	}
 
 	@Suspendable

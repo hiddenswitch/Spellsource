@@ -18,6 +18,7 @@ import io.vertx.core.eventbus.impl.clustered.ClusteredEventBus;
 import io.vertx.core.impl.VertxImpl;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.impl.utils.ConcurrentCyclicSequence;
+import io.vertx.ext.sync.Sync;
 import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.desc.CardDesc;
@@ -40,8 +41,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.fiber;
+import static io.vertx.ext.sync.Sync.await;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -227,7 +228,7 @@ public class ClusterTest extends SpellsourceTestBase {
 			assertTrue(res, "should have enqueued");
 			var usersInQueues = Matchmaking.getUsersInQueues();
 			assertTrue(usersInQueues.containsKey(account.getUserId()), "should be in queue");
-			Void t = awaitResult(instanceWithQueue::close);
+			Void t = Sync.await(instanceWithQueue::close);
 			Strand.sleep(8000);
 			assertFalse(usersInQueues.containsKey(account.getUserId()), "should not be in queue");
 			res = Matchmaking.enqueue(new MatchmakingRequest()
@@ -268,7 +269,7 @@ public class ClusterTest extends SpellsourceTestBase {
 		var checkpoint = context.checkpoint(1);
 		runOnFiberContext(() -> {
 			var succeeding = context.succeeding();
-			String userId = awaitResult(h -> {
+			String userId = Sync.await(h -> {
 				vertx.executeBlocking(v -> {
 					var client = new AtomicReference<UnityClient>();
 					client.set(new UnityClient(context, port) {
@@ -295,7 +296,7 @@ public class ClusterTest extends SpellsourceTestBase {
 			});
 			var inGame = Games.isInGame(new UserId(userId));
 			assertTrue(inGame, "should be in game before host closed");
-			Void t = awaitResult(instanceWithGame::close);
+			Void t = Sync.await(instanceWithGame::close);
 			inGame = Games.isInGame(new UserId(userId));
 			assertFalse(inGame, "should not be in game now that host is closed");
 			var inQueue = Matchmaking.getUsersInQueues().containsKey(userId);

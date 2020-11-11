@@ -25,53 +25,48 @@ namespace HiddenSwitch.Proto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChJoaWRkZW5zd2l0Y2gucHJvdG8SDGhpZGRlbnN3aXRjaBoeZ29vZ2xlL3By",
-            "b3RvYnVmL3dyYXBwZXJzLnByb3RvIuwFChNTZXJ2ZXJDb25maWd1cmF0aW9u",
+            "b3RvYnVmL3dyYXBwZXJzLnByb3RvIukEChNTZXJ2ZXJDb25maWd1cmF0aW9u",
             "EkMKAnBnGAEgASgLMjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRp",
             "b24uUG9zdGdyZXNDb25maWd1cmF0aW9uEkkKCGtleWNsb2FrGAIgASgLMjcu",
             "aGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRpb24uS2V5Y2xvYWtDb25m",
-            "aWd1cmF0aW9uEksKCW9wZW5tYXRjaBgDIAEoCzI4LmhpZGRlbnN3aXRjaC5T",
-            "ZXJ2ZXJDb25maWd1cmF0aW9uLk9wZW5tYXRjaENvbmZpZ3VyYXRpb24SSQoI",
-            "cmVhbHRpbWUYBCABKAsyNy5oaWRkZW5zd2l0Y2guU2VydmVyQ29uZmlndXJh",
-            "dGlvbi5SZWFsdGltZUNvbmZpZ3VyYXRpb24aZQoVUG9zdGdyZXNDb25maWd1",
-            "cmF0aW9uEgwKBGhvc3QYASABKAkSDAoEcG9ydBgCIAEoBRIQCghkYXRhYmFz",
-            "ZRgDIAEoCRIMCgR1c2VyGAQgASgJEhAKCHBhc3N3b3JkGAUgASgJGqkBChVL",
-            "ZXljbG9ha0NvbmZpZ3VyYXRpb24SDwoHYXV0aFVybBgBIAEoCRIVCg1hZG1p",
-            "blVzZXJuYW1lGAIgASgJEhUKDWFkbWluUGFzc3dvcmQYAyABKAkSEAoIY2xp",
-            "ZW50SWQYBCABKAkSFAoMY2xpZW50U2VjcmV0GAUgASgJEhgKEHJlYWxtRGlz",
-            "cGxheU5hbWUYBiABKAkSDwoHcmVhbG1JZBgHIAEoCRo+ChJSZWRpc0NvbmZp",
-            "Z3VyYXRpb24SDAoEaG9zdBgBIAEoCRIMCgRwb3J0GAIgASgFEgwKBHVzZXIY",
-            "AyABKAkaNAoWT3Blbm1hdGNoQ29uZmlndXJhdGlvbhIMCgRob3N0GAEgASgJ",
-            "EgwKBHBvcnQYAiABKAUaJAoVUmVhbHRpbWVDb25maWd1cmF0aW9uEgsKA3Vy",
-            "aRgBIAEoCSI5CgxMb2dpblJlcXVlc3QSFwoPdXNlcm5hbWVPckVtYWlsGAEg",
-            "ASgJEhAKCHBhc3N3b3JkGAIgASgJIkkKFENyZWF0ZUFjY291bnRSZXF1ZXN0",
-            "Eg0KBWVtYWlsGAEgASgJEhAKCHVzZXJuYW1lGAIgASgJEhAKCHBhc3N3b3Jk",
-            "GAMgASgJIhQKEkNyZWF0ZUFjY291bnRSZXBseSKCAQoSTG9naW5PckNyZWF0",
-            "ZVJlcGx5Ej4KE2FjY2Vzc1Rva2VuUmVzcG9uc2UYASABKAsyIS5oaWRkZW5z",
-            "d2l0Y2guQWNjZXNzVG9rZW5SZXNwb25zZRIsCgp1c2VyRW50aXR5GAIgASgL",
-            "MhguaGlkZGVuc3dpdGNoLlVzZXJFbnRpdHkiJAoTQWNjZXNzVG9rZW5SZXNw",
-            "b25zZRINCgV0b2tlbhgBIAEoCSI5CgpVc2VyRW50aXR5EgoKAmlkGAEgASgJ",
-            "Eg0KBWVtYWlsGAIgASgJEhAKCHVzZXJuYW1lGAogASgJIiEKEkdldEFjY291",
-            "bnRzUmVxdWVzdBILCgNpZHMYASADKAkiQgoQR2V0QWNjb3VudHNSZXBseRIu",
-            "Cgx1c2VyRW50aXRpZXMYASADKAsyGC5oaWRkZW5zd2l0Y2guVXNlckVudGl0",
-            "eTKzAQoPVW5hdXRoZW50aWNhdGVkElcKDUNyZWF0ZUFjY291bnQSIi5oaWRk",
-            "ZW5zd2l0Y2guQ3JlYXRlQWNjb3VudFJlcXVlc3QaIC5oaWRkZW5zd2l0Y2gu",
-            "TG9naW5PckNyZWF0ZVJlcGx5IgASRwoFTG9naW4SGi5oaWRkZW5zd2l0Y2gu",
-            "TG9naW5SZXF1ZXN0GiAuaGlkZGVuc3dpdGNoLkxvZ2luT3JDcmVhdGVSZXBs",
-            "eSIAMl0KCEFjY291bnRzElEKC0dldEFjY291bnRzEiAuaGlkZGVuc3dpdGNo",
-            "LkdldEFjY291bnRzUmVxdWVzdBoeLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50",
-            "c1JlcGx5IgBCPgoeY29tLmhpZGRlbnN3aXRjaC5mcmFtZXdvcmsucnBjQgVQ",
-            "cm90b1ABqgISSGlkZGVuU3dpdGNoLlByb3RvYgZwcm90bzM="));
+            "aWd1cmF0aW9uEkkKCHJlYWx0aW1lGAQgASgLMjcuaGlkZGVuc3dpdGNoLlNl",
+            "cnZlckNvbmZpZ3VyYXRpb24uUmVhbHRpbWVDb25maWd1cmF0aW9uGmUKFVBv",
+            "c3RncmVzQ29uZmlndXJhdGlvbhIMCgRob3N0GAEgASgJEgwKBHBvcnQYAiAB",
+            "KAUSEAoIZGF0YWJhc2UYAyABKAkSDAoEdXNlchgEIAEoCRIQCghwYXNzd29y",
+            "ZBgFIAEoCRqpAQoVS2V5Y2xvYWtDb25maWd1cmF0aW9uEg8KB2F1dGhVcmwY",
+            "ASABKAkSFQoNYWRtaW5Vc2VybmFtZRgCIAEoCRIVCg1hZG1pblBhc3N3b3Jk",
+            "GAMgASgJEhAKCGNsaWVudElkGAQgASgJEhQKDGNsaWVudFNlY3JldBgFIAEo",
+            "CRIYChByZWFsbURpc3BsYXlOYW1lGAYgASgJEg8KB3JlYWxtSWQYByABKAka",
+            "PgoSUmVkaXNDb25maWd1cmF0aW9uEgwKBGhvc3QYASABKAkSDAoEcG9ydBgC",
+            "IAEoBRIMCgR1c2VyGAMgASgJGiQKFVJlYWx0aW1lQ29uZmlndXJhdGlvbhIL",
+            "CgN1cmkYASABKAkiOQoMTG9naW5SZXF1ZXN0EhcKD3VzZXJuYW1lT3JFbWFp",
+            "bBgBIAEoCRIQCghwYXNzd29yZBgCIAEoCSJJChRDcmVhdGVBY2NvdW50UmVx",
+            "dWVzdBINCgVlbWFpbBgBIAEoCRIQCgh1c2VybmFtZRgCIAEoCRIQCghwYXNz",
+            "d29yZBgDIAEoCSKCAQoSTG9naW5PckNyZWF0ZVJlcGx5Ej4KE2FjY2Vzc1Rv",
+            "a2VuUmVzcG9uc2UYASABKAsyIS5oaWRkZW5zd2l0Y2guQWNjZXNzVG9rZW5S",
+            "ZXNwb25zZRIsCgp1c2VyRW50aXR5GAIgASgLMhguaGlkZGVuc3dpdGNoLlVz",
+            "ZXJFbnRpdHkiJAoTQWNjZXNzVG9rZW5SZXNwb25zZRINCgV0b2tlbhgBIAEo",
+            "CSI5CgpVc2VyRW50aXR5EgoKAmlkGAEgASgJEg0KBWVtYWlsGAIgASgJEhAK",
+            "CHVzZXJuYW1lGAogASgJIiEKEkdldEFjY291bnRzUmVxdWVzdBILCgNpZHMY",
+            "ASADKAkiQgoQR2V0QWNjb3VudHNSZXBseRIuCgx1c2VyRW50aXRpZXMYASAD",
+            "KAsyGC5oaWRkZW5zd2l0Y2guVXNlckVudGl0eTKzAQoPVW5hdXRoZW50aWNh",
+            "dGVkElcKDUNyZWF0ZUFjY291bnQSIi5oaWRkZW5zd2l0Y2guQ3JlYXRlQWNj",
+            "b3VudFJlcXVlc3QaIC5oaWRkZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJlcGx5",
+            "IgASRwoFTG9naW4SGi5oaWRkZW5zd2l0Y2guTG9naW5SZXF1ZXN0GiAuaGlk",
+            "ZGVuc3dpdGNoLkxvZ2luT3JDcmVhdGVSZXBseSIAMl0KCEFjY291bnRzElEK",
+            "C0dldEFjY291bnRzEiAuaGlkZGVuc3dpdGNoLkdldEFjY291bnRzUmVxdWVz",
+            "dBoeLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50c1JlcGx5IgBCPgoeY29tLmhp",
+            "ZGRlbnN3aXRjaC5mcmFtZXdvcmsucnBjQgVQcm90b1ABqgISSGlkZGVuU3dp",
+            "dGNoLlByb3RvYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Parser, new[]{ "Pg", "Keycloak", "Openmatch", "Realtime" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration.Parser, new[]{ "Host", "Port", "Database", "User", "Password" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Parser, new[]{ "Pg", "Keycloak", "Realtime" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration.Parser, new[]{ "Host", "Port", "Database", "User", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration.Parser, new[]{ "AuthUrl", "AdminUsername", "AdminPassword", "ClientId", "ClientSecret", "RealmDisplayName", "RealmId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Parser, new[]{ "Host", "Port", "User" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.OpenmatchConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.OpenmatchConfiguration.Parser, new[]{ "Host", "Port" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration.Parser, new[]{ "Uri" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.LoginRequest), global::HiddenSwitch.Proto.LoginRequest.Parser, new[]{ "UsernameOrEmail", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.CreateAccountRequest), global::HiddenSwitch.Proto.CreateAccountRequest.Parser, new[]{ "Email", "Username", "Password" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.CreateAccountReply), global::HiddenSwitch.Proto.CreateAccountReply.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.LoginOrCreateReply), global::HiddenSwitch.Proto.LoginOrCreateReply.Parser, new[]{ "AccessTokenResponse", "UserEntity" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.AccessTokenResponse), global::HiddenSwitch.Proto.AccessTokenResponse.Parser, new[]{ "Token" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.UserEntity), global::HiddenSwitch.Proto.UserEntity.Parser, new[]{ "Id", "Email", "Username" }, null, null, null, null),
@@ -117,7 +112,6 @@ namespace HiddenSwitch.Proto {
     public ServerConfiguration(ServerConfiguration other) : this() {
       pg_ = other.pg_ != null ? other.pg_.Clone() : null;
       keycloak_ = other.keycloak_ != null ? other.keycloak_.Clone() : null;
-      openmatch_ = other.openmatch_ != null ? other.openmatch_.Clone() : null;
       realtime_ = other.realtime_ != null ? other.realtime_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -149,20 +143,12 @@ namespace HiddenSwitch.Proto {
       }
     }
 
-    /// <summary>Field number for the "openmatch" field.</summary>
-    public const int OpenmatchFieldNumber = 3;
-    private global::HiddenSwitch.Proto.ServerConfiguration.Types.OpenmatchConfiguration openmatch_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::HiddenSwitch.Proto.ServerConfiguration.Types.OpenmatchConfiguration Openmatch {
-      get { return openmatch_; }
-      set {
-        openmatch_ = value;
-      }
-    }
-
     /// <summary>Field number for the "realtime" field.</summary>
     public const int RealtimeFieldNumber = 4;
     private global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration realtime_;
+    /// <summary>
+    ///    OpenmatchConfiguration openmatch = 3;
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration Realtime {
       get { return realtime_; }
@@ -186,7 +172,6 @@ namespace HiddenSwitch.Proto {
       }
       if (!object.Equals(Pg, other.Pg)) return false;
       if (!object.Equals(Keycloak, other.Keycloak)) return false;
-      if (!object.Equals(Openmatch, other.Openmatch)) return false;
       if (!object.Equals(Realtime, other.Realtime)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -196,7 +181,6 @@ namespace HiddenSwitch.Proto {
       int hash = 1;
       if (pg_ != null) hash ^= Pg.GetHashCode();
       if (keycloak_ != null) hash ^= Keycloak.GetHashCode();
-      if (openmatch_ != null) hash ^= Openmatch.GetHashCode();
       if (realtime_ != null) hash ^= Realtime.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -222,10 +206,6 @@ namespace HiddenSwitch.Proto {
         output.WriteRawTag(18);
         output.WriteMessage(Keycloak);
       }
-      if (openmatch_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(Openmatch);
-      }
       if (realtime_ != null) {
         output.WriteRawTag(34);
         output.WriteMessage(Realtime);
@@ -247,10 +227,6 @@ namespace HiddenSwitch.Proto {
         output.WriteRawTag(18);
         output.WriteMessage(Keycloak);
       }
-      if (openmatch_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(Openmatch);
-      }
       if (realtime_ != null) {
         output.WriteRawTag(34);
         output.WriteMessage(Realtime);
@@ -269,9 +245,6 @@ namespace HiddenSwitch.Proto {
       }
       if (keycloak_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Keycloak);
-      }
-      if (openmatch_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Openmatch);
       }
       if (realtime_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Realtime);
@@ -298,12 +271,6 @@ namespace HiddenSwitch.Proto {
           Keycloak = new global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration();
         }
         Keycloak.MergeFrom(other.Keycloak);
-      }
-      if (other.openmatch_ != null) {
-        if (openmatch_ == null) {
-          Openmatch = new global::HiddenSwitch.Proto.ServerConfiguration.Types.OpenmatchConfiguration();
-        }
-        Openmatch.MergeFrom(other.Openmatch);
       }
       if (other.realtime_ != null) {
         if (realtime_ == null) {
@@ -339,13 +306,6 @@ namespace HiddenSwitch.Proto {
             input.ReadMessage(Keycloak);
             break;
           }
-          case 26: {
-            if (openmatch_ == null) {
-              Openmatch = new global::HiddenSwitch.Proto.ServerConfiguration.Types.OpenmatchConfiguration();
-            }
-            input.ReadMessage(Openmatch);
-            break;
-          }
           case 34: {
             if (realtime_ == null) {
               Realtime = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration();
@@ -379,13 +339,6 @@ namespace HiddenSwitch.Proto {
               Keycloak = new global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration();
             }
             input.ReadMessage(Keycloak);
-            break;
-          }
-          case 26: {
-            if (openmatch_ == null) {
-              Openmatch = new global::HiddenSwitch.Proto.ServerConfiguration.Types.OpenmatchConfiguration();
-            }
-            input.ReadMessage(Openmatch);
             break;
           }
           case 34: {
@@ -1352,214 +1305,6 @@ namespace HiddenSwitch.Proto {
 
       }
 
-      public sealed partial class OpenmatchConfiguration : pb::IMessage<OpenmatchConfiguration>
-      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-          , pb::IBufferMessage
-      #endif
-      {
-        private static readonly pb::MessageParser<OpenmatchConfiguration> _parser = new pb::MessageParser<OpenmatchConfiguration>(() => new OpenmatchConfiguration());
-        private pb::UnknownFieldSet _unknownFields;
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pb::MessageParser<OpenmatchConfiguration> Parser { get { return _parser; } }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pbr::MessageDescriptor Descriptor {
-          get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[3]; }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        pbr::MessageDescriptor pb::IMessage.Descriptor {
-          get { return Descriptor; }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public OpenmatchConfiguration() {
-          OnConstruction();
-        }
-
-        partial void OnConstruction();
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public OpenmatchConfiguration(OpenmatchConfiguration other) : this() {
-          host_ = other.host_;
-          port_ = other.port_;
-          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public OpenmatchConfiguration Clone() {
-          return new OpenmatchConfiguration(this);
-        }
-
-        /// <summary>Field number for the "host" field.</summary>
-        public const int HostFieldNumber = 1;
-        private string host_ = "";
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public string Host {
-          get { return host_; }
-          set {
-            host_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-          }
-        }
-
-        /// <summary>Field number for the "port" field.</summary>
-        public const int PortFieldNumber = 2;
-        private int port_;
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public int Port {
-          get { return port_; }
-          set {
-            port_ = value;
-          }
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public override bool Equals(object other) {
-          return Equals(other as OpenmatchConfiguration);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public bool Equals(OpenmatchConfiguration other) {
-          if (ReferenceEquals(other, null)) {
-            return false;
-          }
-          if (ReferenceEquals(other, this)) {
-            return true;
-          }
-          if (Host != other.Host) return false;
-          if (Port != other.Port) return false;
-          return Equals(_unknownFields, other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public override int GetHashCode() {
-          int hash = 1;
-          if (Host.Length != 0) hash ^= Host.GetHashCode();
-          if (Port != 0) hash ^= Port.GetHashCode();
-          if (_unknownFields != null) {
-            hash ^= _unknownFields.GetHashCode();
-          }
-          return hash;
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public override string ToString() {
-          return pb::JsonFormatter.ToDiagnosticString(this);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void WriteTo(pb::CodedOutputStream output) {
-        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-          output.WriteRawMessage(this);
-        #else
-          if (Host.Length != 0) {
-            output.WriteRawTag(10);
-            output.WriteString(Host);
-          }
-          if (Port != 0) {
-            output.WriteRawTag(16);
-            output.WriteInt32(Port);
-          }
-          if (_unknownFields != null) {
-            _unknownFields.WriteTo(output);
-          }
-        #endif
-        }
-
-        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-          if (Host.Length != 0) {
-            output.WriteRawTag(10);
-            output.WriteString(Host);
-          }
-          if (Port != 0) {
-            output.WriteRawTag(16);
-            output.WriteInt32(Port);
-          }
-          if (_unknownFields != null) {
-            _unknownFields.WriteTo(ref output);
-          }
-        }
-        #endif
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public int CalculateSize() {
-          int size = 0;
-          if (Host.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(Host);
-          }
-          if (Port != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeInt32Size(Port);
-          }
-          if (_unknownFields != null) {
-            size += _unknownFields.CalculateSize();
-          }
-          return size;
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(OpenmatchConfiguration other) {
-          if (other == null) {
-            return;
-          }
-          if (other.Host.Length != 0) {
-            Host = other.Host;
-          }
-          if (other.Port != 0) {
-            Port = other.Port;
-          }
-          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-        }
-
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(pb::CodedInputStream input) {
-        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-          input.ReadRawMessage(this);
-        #else
-          uint tag;
-          while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
-              default:
-                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-                break;
-              case 10: {
-                Host = input.ReadString();
-                break;
-              }
-              case 16: {
-                Port = input.ReadInt32();
-                break;
-              }
-            }
-          }
-        #endif
-        }
-
-        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-          uint tag;
-          while ((tag = input.ReadTag()) != 0) {
-            switch(tag) {
-              default:
-                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-                break;
-              case 10: {
-                Host = input.ReadString();
-                break;
-              }
-              case 16: {
-                Port = input.ReadInt32();
-                break;
-              }
-            }
-          }
-        }
-        #endif
-
-      }
-
       public sealed partial class RealtimeConfiguration : pb::IMessage<RealtimeConfiguration>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           , pb::IBufferMessage
@@ -1572,7 +1317,7 @@ namespace HiddenSwitch.Proto {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[4]; }
+          get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[3]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2192,145 +1937,6 @@ namespace HiddenSwitch.Proto {
 
   }
 
-  /// <summary>
-  /// Ignored
-  /// </summary>
-  public sealed partial class CreateAccountReply : pb::IMessage<CreateAccountReply>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<CreateAccountReply> _parser = new pb::MessageParser<CreateAccountReply>(() => new CreateAccountReply());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<CreateAccountReply> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[3]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CreateAccountReply() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CreateAccountReply(CreateAccountReply other) : this() {
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public CreateAccountReply Clone() {
-      return new CreateAccountReply(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as CreateAccountReply);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(CreateAccountReply other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(CreateAccountReply other) {
-      if (other == null) {
-        return;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-        }
-      }
-    }
-    #endif
-
-  }
-
   public sealed partial class LoginOrCreateReply : pb::IMessage<LoginOrCreateReply>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -2343,7 +1949,7 @@ namespace HiddenSwitch.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[4]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2569,7 +2175,7 @@ namespace HiddenSwitch.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[5]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2741,7 +2347,7 @@ namespace HiddenSwitch.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[6]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2985,7 +2591,7 @@ namespace HiddenSwitch.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[7]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3146,7 +2752,7 @@ namespace HiddenSwitch.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[8]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

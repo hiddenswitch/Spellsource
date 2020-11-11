@@ -40,12 +40,12 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 				.setReuseAddress(true)
 				.setReusePort(true))
 				.listen(getMulticastPort(), "0.0.0.0", next -> {
-					next.result().listenMulticastGroup(multicastAddress, networkInterface.getName(), null, listener -> {
-						if (listener.failed()) {
-							LOGGER.error("createDatagramSocket: Failed to listen to multicast group", listener.cause());
-							isListening.fail(listener.cause());
+					var socket = next.result();
+					socket.listenMulticastGroup(multicastAddress, networkInterface.getName(), null, multicastListen -> {
+						if (multicastListen.failed()) {
+							LOGGER.error("createDatagramSocket: Failed to listen to multicast group", multicastListen.cause());
+							isListening.fail(multicastListen.cause());
 						}
-						DatagramSocket socket = listener.result();
 						socket.handler(packet -> {
 							if (!packet.data().getString(0, clientCall.length()).equals(clientCall)) {
 								return;
@@ -68,7 +68,7 @@ public class BroadcasterImpl extends AbstractVerticle implements Broadcaster {
 			Promise<Void> future = Promise.promise();
 			ds.close(future);
 			return future.future();
-		}).collect(Collectors.toList())).setHandler(then -> stopFuture.complete());
+		}).collect(Collectors.toList())).onComplete(then -> stopFuture.complete());
 	}
 
 	@Override

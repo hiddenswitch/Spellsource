@@ -8,10 +8,7 @@ import com.hiddenswitch.spellsource.net.models.BotMulliganRequest;
 import com.hiddenswitch.spellsource.net.models.RequestActionRequest;
 import com.hiddenswitch.spellsource.net.models.RequestActionResponse;
 import io.opentracing.SpanContext;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Closeable;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
+import io.vertx.core.*;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import com.hiddenswitch.spellsource.client.models.ActionType;
@@ -72,9 +69,9 @@ public class BotsServiceBehaviour extends UtilityBehaviour implements Closeable 
 	}
 
 	@Override
-	public void close(Handler<AsyncResult<Void>> completionHandler) {
+	public void close(Promise<Void> completionHandler) {
 		// Remove the index plan entry
-		Bots.removeIndex(gameId).future().setHandler(h -> {
+		Bots.removeIndex(gameId).future().onComplete(h -> {
 			if (h.succeeded()) {
 				completionHandler.handle(Future.succeededFuture());
 			} else {

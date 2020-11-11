@@ -3,13 +3,11 @@ package com.hiddenswitch.framework.tests;
 import com.hiddenswitch.framework.Accounts;
 import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.Environment;
-import com.hiddenswitch.framework.rpc.AccountsGrpc;
-import com.hiddenswitch.framework.rpc.GetAccountsReply;
 import com.hiddenswitch.framework.rpc.GetAccountsRequest;
 import com.hiddenswitch.framework.rpc.UserEntity;
+import com.hiddenswitch.framework.rpc.VertxAccountsGrpc;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import io.vertx.core.MultiMap;
-import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.junit5.VertxTestContext;
@@ -20,7 +18,6 @@ import org.keycloak.representations.idm.UserRepresentation;
 import java.util.Collections;
 import java.util.function.Function;
 
-import static io.vertx.junit5.web.TestRequest.testRequest;
 import static java.util.stream.Collectors.toMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,31 +28,31 @@ public class AccountsTests extends FrameworkTestBase {
 	public void testCreateUser(Vertx vertx, VertxTestContext testContext) {
 		Accounts
 				.createUser("test2@hiddenswitch.com", "username", "password")
-				.onComplete(testContext.completing());
+				.onComplete(testContext.succeedingThenComplete());
 	}
 
 	@Test
-	public void testCreateAndLoginUserWithGrpc(WebClient webClient, Vertx vertx, VertxTestContext testContext) {
+	public void testCreateAndLoginUserWithGrpc(Vertx vertx, VertxTestContext testContext) {
+		var webClient = WebClient.create(vertx);
 		var client = new Client(vertx, webClient);
 		client.createAndLogin("testusername2", "email@hiddenswitch.com", "password")
-				.onComplete(testContext.completing());
+				.onComplete(testContext.succeedingThenComplete());
 	}
 
 	@Test
-	public void testCreateAndLoginUserWithGrpcAuth1(WebClient webClient, Vertx vertx, VertxTestContext testContext) {
+	public void testCreateAndLoginUserWithGrpcAuth1(Vertx vertx, VertxTestContext testContext) {
+		var webClient = WebClient.create(vertx);
 		var client = new Client(vertx, webClient);
 		Accounts.createUser("other@hiddenswitch.com", "username4", "password")
 				.compose(otherUser -> client.createAndLogin("testusername3", "email1@hiddenswitch.com", "password")
 						.compose(myAccountReply -> {
-							var stub = AccountsGrpc.newVertxStub(client.channel()).withCallCredentials(client.credentials());
-							var promise = Promise.<GetAccountsReply>promise();
+							var stub = VertxAccountsGrpc.newVertxStub(client.channel()).withCallCredentials(client.credentials());
 							var otherId = otherUser.getId();
 							var myAccount = myAccountReply.getUserEntity();
-							stub.getAccounts(GetAccountsRequest.newBuilder()
+							return stub.getAccounts(GetAccountsRequest.newBuilder()
 									.addIds(otherId)
 									.addIds(myAccount.getId())
-									.build(), promise);
-							return promise.future()
+									.build())
 									.onSuccess(reply2 -> {
 										testContext.verify(() -> {
 											var records = reply2.getUserEntitiesList().stream().collect(toMap(UserEntity::getId, Function.identity()));
@@ -64,11 +61,12 @@ public class AccountsTests extends FrameworkTestBase {
 										});
 									});
 						}))
-				.onComplete(testContext.completing());
+				.onComplete(testContext.succeedingThenComplete());
 	}
 
 	@Test
-	public void testLoginWithRestClient(WebClient webClient, Vertx vertx, VertxTestContext testContext) {
+	public void testLoginWithRestClient(Vertx vertx, VertxTestContext testContext) {
+		var webClient = WebClient.create(vertx);
 		var client = new Client(vertx, webClient);
 		client.privilegedCreateAndLogin("testusername1", "testemail@hiddenswitch.com", "password")
 				.onComplete(ignored -> {
@@ -77,11 +75,12 @@ public class AccountsTests extends FrameworkTestBase {
 						assertNotNull(client.getUserEntity());
 					});
 				})
-				.onComplete(testContext.completing());
+				.onComplete(testContext.succeedingThenComplete());
 	}
 
 	@Test
-	public void testLoginWithRest(WebClient client, Vertx vertx, VertxTestContext testContext) {
+	public void testLoginWithRest(Vertx vertx, VertxTestContext testContext) {
+		var webClient = WebClient.create(vertx);
 		var testUser = new UserRepresentation();
 		testUser.setEmail("test@hiddenswitch.com");
 		testUser.setUsername("DoctorTestgloss");
@@ -101,23 +100,23 @@ public class AccountsTests extends FrameworkTestBase {
 					var url = FrameworkTestBase.keycloak.getAuthServerUrl() + "/realms/hiddenswitch/protocol/openid-connect/token";
 
 					// Login
-					return testRequest(client.postAbs(url))
-							.with(req -> req.followRedirects(false))
-							.expect(res -> {
-								testContext.verify(() -> {
-									var tokenContainer = res.bodyAsJsonObject();
-									assertEquals("bearer", tokenContainer.getString("token_type"));
-								});
-							})
-							.sendURLEncodedForm(MultiMap.caseInsensitiveMultiMap()
+					return webClient.postAbs(url)
+							.followRedirects(true)
+							.sendForm(MultiMap.caseInsensitiveMultiMap()
 									.add("client_id", CLIENT_ID)
 									.add("grant_type", "password")
 									.add("client_secret", CLIENT_SECRET)
 									.add("scope", "openid")
 									// username or password can be used here
 									.add("username", testUser.getEmail())
-									.add("password", credential.getValue()), testContext);
+									.add("password", credential.getValue()))
+							.onSuccess(res -> {
+								testContext.verify(() -> {
+									var tokenContainer = res.bodyAsJsonObject();
+									assertEquals("bearer", tokenContainer.getString("token_type"));
+								});
+							});
 				})
-				.onComplete(testContext.completing());
+				.onComplete(testContext.succeedingThenComplete());
 	}
 }

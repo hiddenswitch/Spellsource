@@ -45,7 +45,7 @@ compileJava.dependsOn processResources
 compileJava {
     doLast {
         def classpath = configurations.compileClasspath.asPath + ':' + configurations.runtimeClasspath.asPath
-        /*
+
         ant.taskdef(name: 'scanSuspendables', classname: 'co.paralleluniverse.fibers.instrument.SuspendablesScanner', classpath: classpath)
         ant.scanSuspendables(
                 auto: true,
@@ -53,10 +53,10 @@ compileJava {
                 append: false) {
             fileset(dir: sourceSets.main.output.classesDirs.asPath)
         }
-        */
+
         ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask',
                 classpath: classpath)
-        ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
+        ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true', verbose: 'true', debug: 'true', check: 'true') {
             fileset(dir: sourceSets.main.output.classesDirs.asPath)
         }
     }

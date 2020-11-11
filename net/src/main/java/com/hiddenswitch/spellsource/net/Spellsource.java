@@ -188,7 +188,7 @@ public class Spellsource {
 			futures.add(future.future());
 		}
 
-		CompositeFuture.all(futures).setHandler(deployments);
+		CompositeFuture.all(futures).onComplete(deployments);
 	}
 
 	protected List<Supplier<Verticle>> services() {
@@ -207,7 +207,7 @@ public class Spellsource {
 	 * @throws InterruptedException
 	 */
 	public CompositeFuture deployAll(Vertx vertx) throws SuspendExecution, InterruptedException {
-		return Sync.awaitResult(h -> deployAll(vertx, h));
+		return Sync.await(h -> deployAll(vertx, h));
 	}
 
 	/**

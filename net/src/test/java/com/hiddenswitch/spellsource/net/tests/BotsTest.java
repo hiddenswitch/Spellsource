@@ -6,14 +6,13 @@ import com.hiddenswitch.spellsource.net.Accounts;
 import com.hiddenswitch.spellsource.net.Bots;
 import com.hiddenswitch.spellsource.net.Games;
 import com.hiddenswitch.spellsource.net.impl.GameId;
-import com.hiddenswitch.spellsource.net.impl.NoArgs;
-import com.hiddenswitch.spellsource.net.impl.Sync;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.models.BotMulliganRequest;
 import com.hiddenswitch.spellsource.net.models.RequestActionRequest;
 import com.hiddenswitch.spellsource.net.tests.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.net.tests.impl.UnityClient;
 import io.vertx.core.Vertx;
+import io.vertx.ext.sync.Sync;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
@@ -76,7 +75,7 @@ public class BotsTest extends SpellsourceTestBase {
 			try (var client = new UnityClient(context)) {
 				Sync.invoke0(client::createUserAccount);
 
-				NoArgs playAndWait = () -> {
+				Sync.NoArgs playAndWait = () -> {
 					verify(context, () -> {
 						client.matchmakeQuickPlay(null);
 						client.waitUntilDone();
@@ -90,7 +89,7 @@ public class BotsTest extends SpellsourceTestBase {
 					});
 				};
 				mongo().removeDocuments(Accounts.USERS, json("bot", true));
-				Sync.invoke0(playAndWait);
+				io.vertx.ext.sync.Sync.invoke0(playAndWait);
 				var botIds = Bots.getBotIds();
 				assertEquals(botIds.size(), 1, "Only one bot document should have been created");
 
@@ -98,7 +97,7 @@ public class BotsTest extends SpellsourceTestBase {
 					assertFalse(Games.isInGame(new UserId(id)));
 				}
 
-				Sync.invoke0(playAndWait);
+				io.vertx.ext.sync.Sync.invoke0(playAndWait);
 				assertEquals(botIds.size(), 1, "Only one bot document should have been created");
 				for (var id : botIds) {
 					assertFalse(Games.isInGame(new UserId(id)));

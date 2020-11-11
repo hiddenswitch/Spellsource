@@ -7,7 +7,6 @@ import com.google.common.base.Throwables;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.concurrent.SuspendableFunction;
-import com.hiddenswitch.spellsource.net.impl.Sync;
 import com.hiddenswitch.spellsource.net.impl.UnityClientBehaviour;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.ServerGameContext;
@@ -20,6 +19,7 @@ import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.UpdateOptions;
+import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.behaviour.Behaviour;
@@ -38,7 +38,7 @@ import java.util.concurrent.TimeoutException;
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.fromJson;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.await;
 
 /**
  * Allows players to edit content, including in a live game.
@@ -66,7 +66,7 @@ public interface Editor {
 			for (var existingCard : mongo().find(EDITABLE_CARDS, json("ownerUserId", userId), EditableCard.class)) {
 				connection.write(new Envelope().added(new EnvelopeAdded().editableCard(existingCard)));
 			}
-			connection.handler(Sync.fiber(env -> {
+			connection.handler(io.vertx.ext.sync.Sync.fiber(env -> {
 				var tracer = GlobalTracer.get();
 				// Process a delete card request
 				if (env.getMethod() != null && env.getMethod().getDeleteCard() != null) {
@@ -180,7 +180,7 @@ public interface Editor {
 			if (hasSource && putCard.isDraw() != null && putCard.isDraw()) {
 				// Get the game context the player is currently in.
 				var gameId = Games.getGameId(new UserId(userId));
-				Message<JsonObject> resultJson = awaitResult(h -> eventBus.request(getPutCardAddress(gameId.toString()),
+				Message<JsonObject> resultJson = io.vertx.ext.sync.Sync.await(h -> eventBus.request(getPutCardAddress(gameId.toString()),
 						json(
 								"userId", userId,
 								"putCard", json(putCard)

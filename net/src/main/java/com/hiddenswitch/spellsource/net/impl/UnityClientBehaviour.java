@@ -13,10 +13,8 @@ import com.hiddenswitch.spellsource.net.Games;
 import com.hiddenswitch.spellsource.net.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.net.impl.util.Scheduler;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Closeable;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
+import io.vertx.core.*;
+import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.sync.Sync;
@@ -60,7 +58,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final int playerId;
 	private final Scheduler scheduler;
 	private final ReentrantLock requestsLock = new ReentrantLock();
-	private final WriteStream<ServerToClientMessage> writer;
+	private final MessageProducer<ServerToClientMessage> writer;
 	private final Server server;
 	private final TimerId turnTimer;
 
@@ -75,7 +73,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	public UnityClientBehaviour(Server server,
 	                            Scheduler scheduler,
 	                            ReadStream<ClientToServerMessage> reader,
-	                            WriteStream<ServerToClientMessage> writer,
+	                            MessageProducer<ServerToClientMessage> writer,
 	                            UserId userId,
 	                            int playerId,
 	                            long noActivityTimeout) {
@@ -93,7 +91,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			throw new IllegalArgumentException("noActivityTimeout must be positive");
 		}
 
-		reader.handler(com.hiddenswitch.spellsource.net.impl.Sync.fiber(this::handleWebSocketMessage));
+		reader.handler(Sync.fiber(this::handleWebSocketMessage));
 	}
 
 	private void secondIntervalElapsed(Long timer) {
@@ -456,7 +454,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				throw new RuntimeException(execution);
 			}
 		} else {
-			com.hiddenswitch.spellsource.net.impl.Sync.fiber(callback).handle(action);
+			Sync.fiber(callback).handle(action);
 		}
 	}
 
@@ -520,7 +518,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	@Suspendable
-	private void sendMessage(WriteStream<ServerToClientMessage> socket, ServerToClientMessage message) {
+	private void sendMessage(MessageProducer<ServerToClientMessage> socket, ServerToClientMessage message) {
 		// Always include the playerId in the message
 		message.setLocalPlayerId(playerId);
 		// If the game is over, always include whether the current player has won
@@ -784,7 +782,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 						.message(emote)));
 	}
 
-	public WriteStream<ServerToClientMessage> getWriter() {
+	public MessageProducer<ServerToClientMessage> getWriter() {
 		return writer;
 	}
 
@@ -827,7 +825,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	@Suspendable
-	public void close(Handler<AsyncResult<Void>> completionHandler) {
+	public void close(Promise<Void> completionHandler) {
 		closeInboundMessages();
 		scheduler.cancelTimer(turnTimer);
 		for (var activityMonitor : getActivityMonitors()) {

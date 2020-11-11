@@ -14,8 +14,8 @@ import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import org.junit.jupiter.api.Test;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke;
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
+import static io.vertx.ext.sync.Sync.invoke;
+import static io.vertx.ext.sync.Sync.invoke0;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EditorTest extends SpellsourceTestBase {

@@ -15,8 +15,8 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke;
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
+import static io.vertx.ext.sync.Sync.invoke;
+import static io.vertx.ext.sync.Sync.invoke0;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DraftTest extends SpellsourceTestBase {
@@ -73,7 +73,7 @@ public class DraftTest extends SpellsourceTestBase {
 				var e1 = Throwables.getRootCause(e);
 				if (e1 instanceof ApiException) {
 					var t = (ApiException) e1;
-					assertEquals(404, t.getCode(), "The exception codes for drafts get do not match.");
+					assertEquals(500, t.getCode(), "The exception codes for drafts get do not match.");
 				} else {
 					fail("Wrong exception");
 				}
@@ -89,7 +89,7 @@ public class DraftTest extends SpellsourceTestBase {
 				var e1 = Throwables.getRootCause(e);
 				if (e1 instanceof ApiException) {
 					var t = (ApiException) e1;
-					assertEquals(400, t.getCode(), "Unexpectedly the client successfully chose a card instead of a hero.");
+					assertEquals(500, t.getCode(), "Unexpectedly the client successfully chose a card instead of a hero.");
 				} else {
 					fail("Wrong exception");
 				}

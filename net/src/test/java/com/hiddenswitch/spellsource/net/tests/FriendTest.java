@@ -47,7 +47,7 @@ public class FriendTest extends SpellsourceTestBase {
 		try {
 			friendPutResponseDoesNotExist = defaultApi.friendPut(new FriendPutRequest().friendId("illegal"));
 		} catch (ApiException e) {
-			assertEquals(409, e.getCode(), "Cannot use friendId. Should return 409");
+			assertEquals(500, e.getCode(), "Cannot use friendId. Should return 409");
 		}
 		assertNull(friendPutResponseDoesNotExist);
 		var usernameWithToken1 = createAccount1Response.getRecord().getUsername() + "#" + createAccount1Response.getRecord().getPrivacyToken();
@@ -70,7 +70,7 @@ public class FriendTest extends SpellsourceTestBase {
 			defaultApi.friendPut(new FriendPutRequest().usernameWithToken(usernameWithToken2));
 			fail("should not reach");
 		} catch (ApiException e) {
-			assertEquals(409, e.getCode(), "Adding existing friend. Should return 409");
+			assertEquals(500, e.getCode(), "Adding existing friend. Should return 409");
 		}
 
 		// test putting friend that already exists - second direction
@@ -79,7 +79,7 @@ public class FriendTest extends SpellsourceTestBase {
 			defaultApi.friendPut(new FriendPutRequest().usernameWithToken(usernameWithToken1));
 			fail("should not reach");
 		} catch (ApiException e) {
-			assertEquals(409, e.getCode(),
+			assertEquals(500, e.getCode(),
 					"Adding existing friend (second direction). Should return 409");
 		}
 
@@ -88,7 +88,7 @@ public class FriendTest extends SpellsourceTestBase {
 			defaultApi.friendDelete("idontexist");
 			fail("should not reach");
 		} catch (ApiException e) {
-			assertEquals(404, e.getCode(),
+			assertEquals(500, e.getCode(),
 					"Friend account doesn't exist. Should return 404");
 		}
 
@@ -110,7 +110,7 @@ public class FriendTest extends SpellsourceTestBase {
 			defaultApi.friendDelete(createAccount1Response.getUserId());
 			fail("should not reach");
 		} catch (ApiException e) {
-			assertEquals(404, e.getCode(), "Not friends. should return 404");
+			assertEquals(500, e.getCode(), "Not friends. should return 404");
 		}
 
 		// try to unfriend from the other direction
@@ -119,7 +119,7 @@ public class FriendTest extends SpellsourceTestBase {
 			defaultApi.friendDelete(createAccount2Response.getUserId());
 			fail("should not reach");
 		} catch (ApiException e) {
-			assertEquals(404, e.getCode(),
+			assertEquals(500, e.getCode(),
 					"Not friends (2nd direction). should return 404");
 		}
 

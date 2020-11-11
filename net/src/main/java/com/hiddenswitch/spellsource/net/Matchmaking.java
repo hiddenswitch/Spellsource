@@ -19,6 +19,7 @@ import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.streams.WriteStream;
 import net.demilich.metastone.game.cards.desc.CardDesc;
@@ -33,8 +34,8 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static com.hiddenswitch.spellsource.net.impl.Sync.fiber;
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.fiber;
+import static io.vertx.ext.sync.Sync.await;
 import static io.vertx.ext.sync.Sync.getContextScheduler;
 
 /**
@@ -73,7 +74,7 @@ public interface Matchmaking {
 			}
 
 			var eventBus = Vertx.currentContext().owner().eventBus();
-			Message<Buffer> res = awaitResult(h -> eventBus.request(getQueueAddress(request.getQueueId()), new MatchmakingQueueEntry()
+			Message<Buffer> res = io.vertx.ext.sync.Sync.await(h -> eventBus.request(getQueueAddress(request.getQueueId()), new MatchmakingQueueEntry()
 					.setCommand(MatchmakingQueueEntry.Command.ENQUEUE)
 					.setUserId(request.getUserId())
 					.setRequest(request), h));
@@ -168,7 +169,13 @@ public interface Matchmaking {
 				.setStillConnectedTimeout(4000L)
 				.setStartsAutomatically(true));
 
-		return (completionHandler -> constructed.close(v1 -> quickPlay.close(completionHandler)));
+		return (completionHandler -> {
+			var p = Promise.<Void>promise();
+			constructed.close(p);
+			p.future().onComplete(v -> {
+				quickPlay.close(completionHandler);
+			});
+		});
 	}
 
 	/**
@@ -224,7 +231,7 @@ public interface Matchmaking {
 						consumer = eventBus.consumer(getQueueAddress(queueId));
 						var adaptor = io.vertx.ext.sync.Sync.<Message<MatchmakingQueueEntry>>streamAdaptor();
 						consumer.handler(adaptor);
-						io.vertx.ext.sync.Sync.<Void>awaitResult(consumer::completionHandler);
+						io.vertx.ext.sync.Sync.<Void>await(consumer::completionHandler);
 
 						// Dequeue requests
 						do {
@@ -352,9 +359,9 @@ public interface Matchmaking {
 
 										LOGGER.trace("startMatchmaker {}: Created game for {} and {}", queueId, user1.getUserId(), user2.getUserId());
 
-										for (var innerConnection : new WriteStream[]{Connection.writeStream(user1.getUserId()), Connection.writeStream(user2.getUserId())}) {
+										for (var innerConnection : new MessageProducer[]{Connection.writeStream(user1.getUserId()), Connection.writeStream(user2.getUserId())}) {
 											@SuppressWarnings("unchecked")
-											var connection = (WriteStream<Envelope>) innerConnection;
+											var connection = (MessageProducer<Envelope>) innerConnection;
 											connection.write(gameReadyMessage());
 										}
 									}

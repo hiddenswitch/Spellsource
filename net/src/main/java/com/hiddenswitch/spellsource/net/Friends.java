@@ -7,11 +7,10 @@ import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.FriendRecord;
 import com.hiddenswitch.spellsource.net.impl.util.UserRecord;
 import io.vertx.core.Future;
-import io.vertx.core.streams.WriteStream;
 
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static com.hiddenswitch.spellsource.net.impl.Sync.defer;
+import static io.vertx.ext.sync.Sync.defer;
 
 /**
  * Provides a way for users to friend each other.
@@ -24,8 +23,8 @@ public interface Friends {
 		Connection.connected("Friends/handleConnections", (connection, fut) -> {
 			defer(v -> {
 				try {
-					UserRecord user = mongo().findOne(Accounts.USERS, json("_id", connection.userId()), UserRecord.class);
-					for (FriendRecord friend : user.getFriends()) {
+					var user = mongo().findOne(Accounts.USERS, json("_id", connection.userId()), UserRecord.class);
+					for (var friend : user.getFriends()) {
 						connection.write(new Envelope().added(new EnvelopeAdded().friend(
 								friend.toFriendDto()
 										.presence(Presence.presence(new UserId(friend.getFriendId()))))));
@@ -49,12 +48,12 @@ public interface Friends {
 	 * @throws InterruptedException
 	 */
 	static FriendPutResponse putFriend(UserRecord thisAccount, FriendPutRequest req) throws SuspendExecution, InterruptedException {
-		String userId = thisAccount.getId();
+		var userId = thisAccount.getId();
 
 		// lookup friend user record
 		UserRecord friendAccount;
 		if (req.getUsernameWithToken() != null) {
-			String[] tokens = req.getUsernameWithToken().split("#");
+			var tokens = req.getUsernameWithToken().split("#");
 			friendAccount = Mongo.mongo().findOne(Accounts.USERS, json("username", tokens[0], "privacyToken", tokens[1]), UserRecord.class);
 		} else if (req.getFriendId() != null) {
 			friendAccount = mongo().findOne(Accounts.USERS, json("_id", req.getFriendId()), UserRecord.class);
@@ -67,20 +66,20 @@ public interface Friends {
 			throw new NullPointerException("Friend account not found, or an invalid username and token were provided.");
 		}
 
-		String friendId = friendAccount.getId();
+		var friendId = friendAccount.getId();
 
 		//check if already friends
 		if (thisAccount.isFriend(friendId)) {
 			throw new IllegalArgumentException("Friend already friend");
 		}
 
-		long startOfFriendship = System.currentTimeMillis();
+		var startOfFriendship = System.currentTimeMillis();
 
-		FriendRecord friendRecord = new FriendRecord()
+		var friendRecord = new FriendRecord()
 				.setFriendId(friendId)
 				.setSince(startOfFriendship)
 				.setDisplayName(friendAccount.getUsername());
-		FriendRecord friendOfFriendRecord = new FriendRecord()
+		var friendOfFriendRecord = new FriendRecord()
 				.setFriendId(userId)
 				.setSince(startOfFriendship)
 				.setDisplayName(thisAccount.getUsername());
@@ -90,12 +89,12 @@ public interface Friends {
 		mongo().updateCollection(Accounts.USERS, json("_id", friendId), json("$push", json("friends", json(friendOfFriendRecord))));
 
 		// Update both users with the new friend records
-		WriteStream<Envelope> userConnection = Connection.writeStream(userId);
-		Friend clientFriendRecord = friendRecord.toFriendDto()
+		var userConnection = Connection.writeStream(userId);
+		var clientFriendRecord = friendRecord.toFriendDto()
 				.presence(Presence.presence(new UserId(friendRecord.getFriendId())));
 		userConnection.write(new Envelope().added(new EnvelopeAdded().friend(clientFriendRecord)));
 
-		WriteStream<Envelope> friendConnection = Connection.writeStream(friendId);
+		var friendConnection = Connection.writeStream(friendId);
 		friendConnection.write(new Envelope().added(
 				new EnvelopeAdded().friend(friendOfFriendRecord.toFriendDto()
 						.presence(Presence.presence(new UserId(friendOfFriendRecord.getFriendId()))))));
@@ -104,9 +103,9 @@ public interface Friends {
 	}
 
 	static UnfriendResponse unfriend(UserRecord myAccount, String friendId) throws SuspendExecution, InterruptedException {
-		String userId = myAccount.getId();
+		var userId = myAccount.getId();
 		// Lookup friend user record
-		UserRecord friendAccount = Accounts.get(friendId);
+		var friendAccount = Accounts.get(friendId);
 
 		// Doesn't exist?
 		if (friendAccount == null) {
@@ -114,13 +113,13 @@ public interface Friends {
 		}
 
 		// Friends?
-		FriendRecord friendRecord = myAccount.getFriendById(friendId);
+		var friendRecord = myAccount.getFriendById(friendId);
 		if (friendRecord == null) {
 			throw new NullPointerException("Not friends");
 		}
 
 		// Oops
-		FriendRecord friendOfFriendRecord = friendAccount.getFriendById(userId);
+		var friendOfFriendRecord = friendAccount.getFriendById(userId);
 		if (friendOfFriendRecord == null) {
 			throw new IllegalStateException("Presence not balanced.");
 		}
@@ -132,9 +131,9 @@ public interface Friends {
 				json("friends", json("friendId", userId))));
 
 		// Update both users with the new friend records
-		WriteStream<Envelope> userConnection = Connection.writeStream(userId);
+		var userConnection = Connection.writeStream(userId);
 		userConnection.write(new Envelope().removed(new EnvelopeRemoved().friendId(friendRecord.getFriendId())));
-		WriteStream<Envelope> friendConnection = Connection.writeStream(friendId);
+		var friendConnection = Connection.writeStream(friendId);
 		friendConnection.write(new Envelope().removed(new EnvelopeRemoved().friendId(friendOfFriendRecord.getFriendId())));
 
 		return new UnfriendResponse().deletedFriend(friendRecord.toFriendDto().presence(PresenceEnum.UNKNOWN));

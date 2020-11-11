@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.net;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.base.Throwables;
 import com.hiddenswitch.spellsource.client.models.ClientToServerMessage;
 import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
@@ -11,9 +11,11 @@ import io.opentracing.SpanContext;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
+import io.vertx.ext.sync.Sync;
 import io.vertx.ext.web.RoutingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +24,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.core.http.HttpHeaders.*;
+import static io.vertx.ext.sync.Sync.await;
+import static io.vertx.ext.sync.Sync.fiber;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -43,12 +47,12 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * @return A connection object.
 	 */
 	static @NotNull
-	WriteStream<Envelope> writeStream(@NotNull String userId) {
-		return Vertx.currentContext().owner().eventBus().publisher(toBusAddress(userId));
+	MessageProducer<Envelope> writeStream(@NotNull String userId) {
+		return Vertx.currentContext().owner().eventBus().<Envelope>publisher(toBusAddress(userId));
 	}
 
 	static @NotNull
-	WriteStream<Envelope> writeStream(@NotNull UserId userId) {
+	MessageProducer<Envelope> writeStream(@NotNull UserId userId) {
 		return writeStream(userId.toString());
 	}
 
@@ -75,7 +79,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * @return
 	 */
 	static Handler<RoutingContext> handler() {
-		return Sync.fiber(Connection::connected);
+		return fiber(Connection::connected);
 	}
 
 	/**
@@ -110,21 +114,17 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * A method that handles a routing context. For internal use only.
 	 *
 	 * @param routingContext
-	 * @throws SuspendExecution
 	 */
 	@Suspendable
-	static void connected(RoutingContext routingContext) throws SuspendExecution {
-		if (routingContext.failed()) {
+	static void connected(RoutingContext routingContext) {
+		var headers = routingContext.request().headers();
+		if (!(headers.contains(CONNECTION) && headers.contains(UPGRADE, WEBSOCKET, true))) {
 			routingContext.next();
 			return;
 		}
 
-		registerCodecs();
-
-		var userId = Accounts.userId(routingContext);
-
-		if (userId == null) {
-			routingContext.fail(403);
+		if (routingContext.failed()) {
+			routingContext.next();
 			return;
 		}
 
@@ -132,25 +132,46 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 		var tracer = GlobalTracer.get();
 		var span = tracer.buildSpan("Connection/connected")
-				.withTag("userId", userId)
 				.start();
 		var spanContext = span.context();
 
 		// By the time we try to upgrade the socket, the request might have been closed anyway
 		try {
 			span.log("upgrading");
-			socket = routingContext.request().upgrade();
+			socket = await(routingContext.request().toWebSocket());
 			span.log("upgraded");
 		} catch (RuntimeException any) {
+			Tracing.error(any, span, true);
 			routingContext.fail(403);
 			return;
 		}
+
+		String userId;
+		try {
+			SpellsourceAuthHandler.authorize(routingContext);
+			userId = Accounts.userId(routingContext);
+		} catch (Throwable t) {
+			socket.close();
+			routingContext.fail(403);
+			return;
+		}
+
+
+		registerCodecs();
+
+		if (userId == null) {
+			socket.close();
+			routingContext.fail(403);
+			return;
+		}
+
+		span.setTag("userId", userId);
 
 		var handlers = getHandlers();
 		var connection = create(userId);
 
 		try {
-			Void ready = awaitResult(h -> {
+			Void ready = await(h -> {
 				connection.setSocket(socket, h, spanContext);
 				span.log("ready");
 			});
@@ -161,20 +182,20 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			});
 			connection.exceptionHandler(ex -> {
 				// Wrap this so we can see where it actually occurs
-				if (!(ex instanceof IOException)) {
-					Tracing.error(new VertxException(ex), span, false);
+				if (!(Throwables.getRootCause(ex) instanceof IOException)) {
+					Tracing.error(ex, span, false);
 				}
 				connection.close(Promise.promise());
 			});
 			// All handlers should run simultaneously but we'll wait until the handlers have run
-			CompositeFuture r2 = awaitResult(h -> CompositeFuture.all(handlers.stream().map(setupHandler -> {
+			CompositeFuture r2 = await(h -> CompositeFuture.all(handlers.stream().map(setupHandler -> {
 				Promise<Void> fut = Promise.promise();
-				Vertx.currentContext().runOnContext(Sync.fiber(v -> {
+				Vertx.currentContext().runOnContext(fiber(v -> {
 					span.log("setupHandler");
 					setupHandler.handle(connection, fut);
 				}));
 				return fut.future();
-			}).collect(toList())).setHandler(h));
+			}).collect(toList())).onComplete(h));
 			// Send an envelope to indicate that the connection is ready.
 			connection.write(new Envelope());
 		} catch (RuntimeException runtimeException) {
@@ -216,19 +237,9 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		return this;
 	}
 
-	/**
-	 * Sends a message to the client.
-	 *
-	 * @param data The message to send.
-	 * @return This connection
-	 */
 	@Override
-	default Connection write(@NotNull Envelope data) {
-		return this;
-	}
-
-	@Override
-	default void end() {
+	default Future<Void> write(Envelope envelope) {
+		return Future.failedFuture(new NullPointerException("this"));
 	}
 
 	@Override

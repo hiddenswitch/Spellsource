@@ -22,6 +22,7 @@ import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.JacksonCodec;
 import io.vertx.ext.mongo.FindOptions;
+import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
@@ -38,7 +39,7 @@ import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.net.impl.Mongo.mongo;
 import static com.hiddenswitch.spellsource.net.impl.QuickJson.json;
-import static io.vertx.ext.sync.Sync.awaitResult;
+import static io.vertx.ext.sync.Sync.await;
 
 /**
  * A service that processes bot actions, mulligans and conveniently creates bot games.
@@ -144,7 +145,7 @@ public interface Bots {
 		}
 		context.setActivePlayerId(playerId);
 		try {
-			GameAction result = awaitResult(res -> Vertx.currentContext().executeBlocking(fut -> {
+			GameAction result = Sync.await(res -> Vertx.currentContext().executeBlocking(fut -> {
 				// TODO: We shouldn't really tie up a general blocking executor for this computation.
 				try {
 					long startTime = System.currentTimeMillis();

@@ -3,16 +3,16 @@ package com.hiddenswitch.spellsource.net.impl.util;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.AuthProvider;
 import io.vertx.ext.auth.User;
+import io.vertx.ext.auth.authorization.Authorization;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * A user record.
@@ -37,14 +37,9 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 	private List<String> roles = new ArrayList<>();
 	private List<FriendRecord> friends = new ArrayList<>();
 	private ServicesRecord services = new ServicesRecord();
+	private Map<String, Object> attributes = new HashMap<>();
 	private boolean bot;
 	private String privacyToken;
-
-	/**
-	 * A weak reference to the auth provider, automatically connected by Vertx.
-	 */
-	@JsonIgnore
-	private transient WeakReference<AuthProvider> authProvider;
 
 	/**
 	 * Creates an empty user record.
@@ -60,6 +55,17 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 	 */
 	public UserRecord(String id) {
 		super(id);
+	}
+
+	@Override
+	public JsonObject attributes() {
+		return new JsonObject(attributes == null ? new HashMap<>() : attributes);
+	}
+
+	@Override
+	public User isAuthorized(Authorization authorization, Handler<AsyncResult<Boolean>> handler) {
+		handler.handle(Future.succeededFuture(true));
+		return this;
 	}
 
 	/**
@@ -90,7 +96,6 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 	@Override
 	@JsonIgnore
 	public void setAuthProvider(AuthProvider authProvider) {
-		this.authProvider = new WeakReference<>(authProvider);
 	}
 
 	/**

@@ -19,8 +19,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static co.paralleluniverse.strands.Strand.sleep;
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke;
-import static com.hiddenswitch.spellsource.net.impl.Sync.invoke0;
+import static io.vertx.ext.sync.Sync.invoke;
+import static io.vertx.ext.sync.Sync.invoke0;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InvitesTest extends SpellsourceTestBase {
@@ -238,7 +238,7 @@ public class InvitesTest extends SpellsourceTestBase {
 									this.getApi().acceptInvite(invite.getId(), new AcceptInviteRequest());
 									fail("Should not be able to accept cancelled invite");
 								} catch (ApiException didFail) {
-									assertEquals(didFail.getCode(), 418);
+									assertEquals(didFail.getCode(), 500);
 									inviteChecks.countDown();
 								}
 							}

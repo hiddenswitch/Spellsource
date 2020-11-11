@@ -104,7 +104,7 @@ public class Accounts {
 
 		var webClient = WebClient.create(context.owner());
 
-		return Future.succeededFuture(new UnauthenticatedGrpc.UnauthenticatedVertxImplBase() {
+		return Future.succeededFuture(new VertxUnauthenticatedGrpc.UnauthenticatedVertxImplBase() {
 
 			private LoginOrCreateReply handleAccessTokenUserEntityTuple(Object[] tuple) {
 				var accessTokenResponse = (org.keycloak.representations.AccessTokenResponse) tuple[0];
@@ -115,21 +115,20 @@ public class Accounts {
 			}
 
 			@Override
-			public void createAccount(CreateAccountRequest request, Promise<LoginOrCreateReply> response) {
-				createUser(request.getEmail(), request.getUsername(), request.getPassword())
+			public Future<LoginOrCreateReply> createAccount(CreateAccountRequest request) {
+				return createUser(request.getEmail(), request.getUsername(), request.getPassword())
 						.compose(userEntity -> {
 							// Login here
 							var client = new Client(context.owner(), webClient);
 							return client.login(request.getEmail(), request.getPassword()).map(accessTokenResponse -> new Object[]{accessTokenResponse, userEntity});
 						})
-						.map(this::handleAccessTokenUserEntityTuple)
-						.onComplete(response);
+						.map(this::handleAccessTokenUserEntityTuple);
 			}
 
 			@Override
-			public void login(LoginRequest request, Promise<LoginOrCreateReply> response) {
+			public Future<LoginOrCreateReply> login(LoginRequest request) {
 				var client = new Client(context.owner(), webClient);
-				client.login(request.getUsernameOrEmail(), request.getPassword())
+				return client.login(request.getUsernameOrEmail(), request.getPassword())
 						.compose(accessTokenResponse -> {
 							var token = TokenVerifier.create(accessTokenResponse.getToken(), AccessToken.class);
 							try {
@@ -141,19 +140,18 @@ public class Accounts {
 								return Future.failedFuture(e);
 							}
 						})
-						.map(this::handleAccessTokenUserEntityTuple)
-						.onComplete(response);
+						.map(this::handleAccessTokenUserEntityTuple);
 			}
 		});
 	}
 
 	public static Future<ServerServiceDefinition> authenticatedService() {
 		// Does not require vertx blocking service because it makes no blocking calls
-		return Future.succeededFuture(new AccountsGrpc.AccountsVertxImplBase() {
+		return Future.succeededFuture(new VertxAccountsGrpc.AccountsVertxImplBase() {
 
 			@Override
-			public void getAccounts(GetAccountsRequest request, Promise<GetAccountsReply> response) {
-				user()
+			public Future<GetAccountsReply> getAccounts(GetAccountsRequest request) {
+				return user()
 						.compose(thisUser -> {
 							if (thisUser == null) {
 								return Future.failedFuture("must log in");
@@ -174,8 +172,7 @@ public class Accounts {
 														}
 														return build.build();
 													}).collect(Collectors.toList())).build());
-						})
-						.onComplete(response);
+						});
 			}
 		})
 				.compose(Accounts::requiresAuthorization);
@@ -233,10 +230,11 @@ public class Accounts {
 
 	private static Keycloak keycloakConstructor(Vertx vertx) {
 		var client = (ResteasyClientBuilder) ResteasyClientBuilder.newBuilder();
+		/* TODO: Use a regular blocking client for now, until this is updated for 4.0
 		if (vertx != null) {
 			var engine = new VertxClientHttpEngine(vertx);
 			client.httpEngine(engine);
-		}
+		}*/
 		var config = Environment.cachedConfigurationOrGet();
 		return KeycloakBuilder.builder()
 				.serverUrl(config.getKeycloak().getAuthUrl())
