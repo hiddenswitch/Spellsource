@@ -36,7 +36,9 @@ import com.bmuschko.gradle.docker.tasks.container.extras.DockerLivenessContainer
 import com.github.dockerjava.api.exception.InternalServerErrorException
 import org.jooq.codegen.GenerationTool
 import org.jooq.meta.jaxb.*
+import org.apache.tools.ant.taskdefs.condition.Os
 
+def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def csharpRootDir = 'src/csharp/HiddenSwitch'
 def localUsername = 'admin'
 def localPassword = 'password'
@@ -144,13 +146,15 @@ task copyCsharpGrpc(type: Copy, group: 'build') {
     into(csharpRootDir + '/Framework/')
 }
 
+def dotnetCmd = isWindows ? "C:\\Program Files\\dotnet\\dotnet.exe" : "$project.projectDir/bin/dotnet"
+
 task dll(type: Exec, group: 'build') {
     dependsOn copyCsharpGrpc
     inputs.files(csharpRootDir + '/Framework/**/*.cs', csharpRootDir + '/Framework/**/*.csproj')
     outputs.dir("$project.buildDir/dlls")
     workingDir csharpRootDir
     // this is using docker-wrapped dotnet
-    commandLine "$project.projectDir/bin/dotnet", 'publish', '--output', "/git/framework/build/dlls"
+    commandLine dotnetCmd, 'publish', '--output', isWindows ? "$project.buildDir/dlls" : "/git/framework/build/dlls"
 }
 
 task testDll(type: Exec, group: 'verification') {
@@ -159,7 +163,7 @@ task testDll(type: Exec, group: 'verification') {
     outputs.dir("$project.buildDir/nunit")
     workingDir csharpRootDir
     // this is using docker-wrapped dotnet
-    commandLine "$project.projectDir/bin/dotnet", 'test', '--results-directory', "/git/framework/build/nunit"
+    commandLine dotnetCmd, 'test', '--results-directory', isWindows ? "$project.buildDir/nunit" : "/git/framework/build/nunit"
 }
 
 task installDll(type: Copy) {
@@ -229,7 +233,7 @@ task startKeycloakContainer(type: DockerStartContainer) {
 
 task startAndWaitOnHealthyKeycloakContainer(type: DockerLivenessContainer) {
     dependsOn startKeycloakContainer
-    livenessProbe = new LivenessProbe(100000, 1000, 'Admin console listening on')
+    livenessProbe = new LivenessProbe(40000, 1000, 'Admin console')
     targetContainerId createKeycloakContainer.getContainerId()
 }
 
@@ -290,7 +294,11 @@ task jooqGenerate() {
             environment('PGUSER', localUsername)
             def containerId = startPostgresContainer.containerId.get()
             environment('DOCKER_OPTS', "--link " + containerId + ":database")
-            commandLine "$project.projectDir/bin/pg_dump", '-h', "database", '-s', '-f', '/git/framework/src/main/resources/db/ddl.sql'
+            if (isWindows) {
+                commandLine "$project.projectDir\\bin\\pg_dump.exe", '-h', "database", '-s', '-f', "$project.projectDir\\src\\main\\resources\\db\\ddl.sql"
+            } else {
+                commandLine "$project.projectDir/bin/pg_dump", '-h', "database", '-s', '-f', '/git/framework/src/main/resources/db/ddl.sql'
+            }
         }
     }
 }
@@ -323,10 +331,10 @@ protobuf {
             artifact = 'io.grpc:protoc-gen-grpc-java:1.33.1'
         }
         grpc_java_vertx {
-            path = project.projectDir.absolutePath + "/bin/grpc_java_plugin"
+            path = project.projectDir.absolutePath + "/bin/grpc_java_plugin" + isWindows ? ".exe" : ""
         }
         grpc_csharp {
-            path = project.projectDir.absolutePath + "/bin/grpc_csharp_plugin"
+            path = project.projectDir.absolutePath + "/bin/grpc_csharp_plugin" + isWindows ? ".exe" : ""
         }
     }
     generateProtoTasks {
