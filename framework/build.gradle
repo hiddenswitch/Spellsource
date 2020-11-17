@@ -322,6 +322,9 @@ flyway {
 // Make sure keycloak has done its migration first
 flywayMigrate.dependsOn += [startAndWaitOnHealthyKeycloakContainer]
 
+def javaGrpcPath = project.projectDir.absolutePath + "/bin/grpc_java_plugin" + (isWindows ? ".exe" : "")
+def csharpGrpcPath = project.projectDir.absolutePath + "/bin/grpc_csharp_plugin" + (isWindows ? ".exe" : "")
+
 protobuf {
     protoc {
         artifact = 'com.google.protobuf:protoc:3.13.0'
@@ -331,10 +334,10 @@ protobuf {
             artifact = 'io.grpc:protoc-gen-grpc-java:1.33.1'
         }
         grpc_java_vertx {
-            path = project.projectDir.absolutePath + "/bin/grpc_java_plugin" + isWindows ? ".exe" : ""
+            path = javaGrpcPath
         }
         grpc_csharp {
-            path = project.projectDir.absolutePath + "/bin/grpc_csharp_plugin" + isWindows ? ".exe" : ""
+            path = csharpGrpcPath
         }
     }
     generateProtoTasks {
