@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        vertxJooqVersion = '5.2.0'
+        vertxJooqVersion = '5.2.1'
         postgresqlVersion = '42.2.16'
         flywayVersion = '6.5.5'
     }
@@ -33,7 +33,6 @@ import com.bmuschko.gradle.docker.domain.LivenessProbe
 import com.bmuschko.gradle.docker.tasks.container.*
 import com.bmuschko.gradle.docker.tasks.image.*
 import com.bmuschko.gradle.docker.tasks.container.extras.DockerLivenessContainer
-import com.github.dockerjava.api.exception.InternalServerErrorException
 import org.jooq.codegen.GenerationTool
 import org.jooq.meta.jaxb.*
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -84,7 +83,7 @@ dependencies {
         exclude group: 'io.vertx', module: 'vertx-core'
     }
 
-    implementation 'org.jooq:jooq:3.13.3'
+    implementation 'org.jooq:jooq:3.13.5'
     implementation "io.vertx:vertx-pg-client:$vertxVersion"
     implementation ("io.github.jklingsporn:vertx-jooq-classic-reactive:$vertxJooqVersion") {
         exclude group: "io.vertx", module: '*'
@@ -248,7 +247,7 @@ task jooqGenerate() {
     def outputDir = "$project.projectDir/src/main/java"
 
     inputs.dir("$project.projectDir/src/main/resources/db/migration")
-    outputs.files(outputDir + '/com/hiddenswitch/framework/schema/**/*.java')
+    outputs.dir(outputDir + '/com/hiddenswitch/framework/schema')
 
     def configuration = new Configuration()
     configuration
@@ -295,7 +294,7 @@ task jooqGenerate() {
             def containerId = startPostgresContainer.containerId.get()
             environment('DOCKER_OPTS', "--link " + containerId + ":database")
             if (isWindows) {
-                commandLine "$project.projectDir\\bin\\pg_dump.exe", '-h', "database", '-s', '-f', "$project.projectDir\\src\\main\\resources\\db\\ddl.sql"
+                commandLine "$project.projectDir\\bin\\pg_dump.exe", '-h', 'gradleSupabasePostgres', '-s', '-f', "$project.projectDir\\src\\main\\resources\\db\\ddl.sql"
             } else {
                 commandLine "$project.projectDir/bin/pg_dump", '-h', "database", '-s', '-f', '/git/framework/src/main/resources/db/ddl.sql'
             }

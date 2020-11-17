@@ -121,9 +121,11 @@ Requirements: **Java 11 or later**, **Docker**, **bash** and **GNU binutils** li
     3. Git [2.29.2](https://github.com/git-for-windows/git/releases/download/v2.29.2.windows.2/Git-2.29.2.2-64-bit.exe) or later. During installation, choose **Use Git and optional Unix tools from the Windows Command Prompt**.
     4. PuTTY [0.74](https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.74-installer.msi) or later. Then, follow the instructions from [here](https://vladmihalcea.com/tutorials/git/windows-git-ssh-authentication-to-github/) starting with "Installing SSH Tools" to get authorization configured for GitHub.
     5. `dotnet` [3.1](https://download.visualstudio.microsoft.com/download/pr/3366b2e6-ed46-48ae-bf7b-f5804f6ee4c9/186f681ff967b509c6c9ad31d3d343da/dotnet-sdk-3.1.404-win-x64.exe
+    6. `git lfs` [2.12.2](https://github.com/git-lfs/git-lfs/releases/download/v2.12.1/git-lfs-windows-v2.12.1.exe) or later.
 ) or later.
  2. Right click in the folder where you'd like to store your Spellsource files, then choose **Git Bash Here**. Then, clone the repository:
     ```shell script
+    git lfs install
     git clone https://github.com/hiddenswitch/Spellsource.git
     cd Spellsource
     ``` 
