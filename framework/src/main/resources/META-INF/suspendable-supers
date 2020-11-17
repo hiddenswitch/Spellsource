@@ -1,2 +1,3 @@
 com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc$UnauthenticatedVertxImplBase.createAccount(Lcom/hiddenswitch/framework/rpc/CreateAccountRequest;)Lio/vertx/core/Future;
+com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpc$MatchmakingVertxImplBase.enqueue(Lio/vertx/core/streams/ReadStream;Lio/vertx/core/streams/WriteStream;)V
 org.flywaydb.core.api.migration.JavaMigration.migrate(Lorg/flywaydb/core/api/migration/Context;)V
