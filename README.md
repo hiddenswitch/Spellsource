@@ -107,13 +107,30 @@ Requirements: **Java 11 or later** and **Docker**. Check your current version of
     cd Spellsource
     ```
  3. See Spellsource-specific tasks using `./gradlew tasks --group spellsource`.
- 4. Run tests using `./gradlew testAll`
+ 4. Run tests using `./gradlew --no-parallel test`
  5. Start a local server using `./gradlew netRun`
  6. Generate project files using `./gradlew idea`, then open the project with **IntelliJ Community Edition**. You can install this with `brew cask install intellij-idea-ce`.
 
 ### Getting started with Development on Windows
 
-Development on Windows is currently not supported.
+Requirements: **Java 11 or later**, **Docker**, **bash** and **GNU binutils** like MinGW that comes with **git**.
+
+ 1. Install dependencies:
+    1. Java AdoptOpenJDK [11.0.9](https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.9%2B11.1/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.9_11.msi) or later. During installation, choose to set `JAVA_HOME` and add `java` to your `PATH`.
+    2. [Docker for Windows Desktop](https://desktop.docker.com/win/stable/Docker%20Desktop%20Installer.exe). You will be prompted to enable and install Windows Subsystem for Linux 2 (WSL2) features, carefully follow those instructions including the new MSI it downloads into your downloads folder.
+    3. Git [2.29.2](https://github.com/git-for-windows/git/releases/download/v2.29.2.windows.2/Git-2.29.2.2-64-bit.exe) or later. During installation, choose **Use Git and optional Unix tools from the Windows Command Prompt**.
+    4. PuTTY [0.74](https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.74-installer.msi) or later. Then, follow the instructions from [here](https://vladmihalcea.com/tutorials/git/windows-git-ssh-authentication-to-github/) starting with "Installing SSH Tools" to get authorization configured for GitHub.
+ 2. Right click in the folder where you'd like to store your Spellsource files, then choose **Git Bash Here**. Then, clone the repository:
+    ```shell script
+    git clone https://github.com/hiddenswitch/Spellsource.git
+    cd Spellsource
+    ``` 
+ 3. See Spellsource-specific tasks using `TERM=mintty ./gradlew tasks --group spellsource`.
+ 4. Run tests using `TERM=mintty ./gradlew --no-parallel test`
+ 5. Start a local server using `TERM=mintty ./gradlew netRun`
+ 6. Generate project files using `TERM=mintty ./gradlew idea`, then open the project with **IntelliJ Community Edition**. You can install this from [here](https://www.jetbrains.com/idea/download/download-thanks.html?platform=windows&code=IIC).
+
+Unfortunately, it's true, you have to prefix every `gradlew` command with `TERM=mintty` until a [bug in Gradle](https://github.com/gradle/gradle/issues/8204) is fixed.
 
 ### Contributing Cards
 
@@ -187,11 +204,11 @@ sdk use java 20.1.0.r11-grl
 #13 71.30           - None of the consumable configurations have attributes.
 ```
 
-Make sure to add the sub project directory and any others that need to be visible to doctor to [.dockerignore](.dockerignore) in the form of `!directory/*`.
+Make sure to add the sub project directory and any others that need to be visible to Docker to [.dockerignore](.dockerignore) in the form of `!directory/*`.
 
 > `discordbot` Swarm build (`./gradlew distSwarm`) fails with `com.oracle.svm.driver.NativeImage$NativeImageError: Image build request failed with exit status 137`
 
-On **macOS**, allocate more memory to your Docker host.
+On **macOS** and **Windows**, allocate more memory to your Docker host.
 
 > `./gradlew net:run` hangs with error `Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out waiting for log output matching '.*waiting for connections on port.*'`
 
