@@ -1,7 +1,7 @@
-package com.hiddenswitch.spellsource.net.concurrent.impl;
+package io.vertx.ext.sync.concurrent.impl;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableCounter;
+import io.vertx.ext.sync.concurrent.SuspendableCounter;
 import io.vertx.core.Closeable;
 import io.vertx.core.shareddata.Counter;
 

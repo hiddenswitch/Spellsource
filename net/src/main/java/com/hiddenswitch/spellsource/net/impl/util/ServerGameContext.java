@@ -12,16 +12,12 @@ import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.net.*;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.net.impl.*;
 import com.hiddenswitch.spellsource.net.impl.server.BotsServiceBehaviour;
 import com.hiddenswitch.spellsource.net.impl.server.Configuration;
 import com.hiddenswitch.spellsource.net.impl.server.VertxScheduler;
 import com.hiddenswitch.spellsource.net.models.GetCollectionResponse;
 import com.hiddenswitch.spellsource.net.models.LogicGetDeckRequest;
-import io.opentracing.Scope;
-import io.opentracing.Span;
-import io.opentracing.Tracer;
 import io.opentracing.log.Fields;
 import io.opentracing.propagation.Format;
 import io.opentracing.util.GlobalTracer;
@@ -32,6 +28,7 @@ import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.impl.ConcurrentHashSet;
 import io.vertx.core.impl.ContextInternal;
 import io.vertx.ext.sync.Sync;
+import io.vertx.ext.sync.concurrent.SuspendableMap;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -65,8 +62,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.stream.Stream;
 
-import static io.vertx.ext.sync.Sync.fiber;
 import static io.vertx.ext.sync.Sync.await;
+import static io.vertx.ext.sync.Sync.fiber;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -113,16 +110,16 @@ public class ServerGameContext extends GameContext implements Server {
 	 */
 	public ServerGameContext(@NotNull GameId gameId, @NotNull Scheduler scheduler, @NotNull List<Configuration> playerConfigurations) {
 		super();
-		Tracer tracer = GlobalTracer.get();
-		Tracer.SpanBuilder spanBuilder = tracer.buildSpan("ServerGameContext/init")
+		var tracer = GlobalTracer.get();
+		var spanBuilder = tracer.buildSpan("ServerGameContext/init")
 				.withTag("gameId", gameId.toString());
-		for (int i = 0; i < playerConfigurations.size(); i++) {
+		for (var i = 0; i < playerConfigurations.size(); i++) {
 			spanBuilder.withTag("playerConfigurations." + i + ".userId", playerConfigurations.get(i).getUserId().toString());
 			spanBuilder.withTag("playerConfigurations." + i + ".deckId", playerConfigurations.get(i).getDeck().getDeckId());
 			spanBuilder.withTag("playerConfigurations." + i + ".isBot", playerConfigurations.get(i).isBot());
 		}
-		Span span = spanBuilder.start();
-		try (Scope s1 = tracer.activateSpan(span)) {
+		var span = spanBuilder.start();
+		try (var s1 = tracer.activateSpan(span)) {
 			if (playerConfigurations.size() != 2) {
 				throw new IllegalArgumentException("playerConfigurations.size must be 2");
 			}
@@ -149,18 +146,18 @@ public class ServerGameContext extends GameContext implements Server {
 
 			// Each configuration corresponds to a human or bot player
 			// To accommodate spectators or multiple-controllers-per-game-player, use additional Client objects
-			for (Configuration configuration : getPlayerConfigurations()) {
-				UserId userId = configuration.getUserId();
+			for (var configuration : getPlayerConfigurations()) {
+				var userId = configuration.getUserId();
 
 				// Initialize the player objects
 				// This will create an actual valid deck and player object
-				GameDeck deck = (GameDeck) configuration.getDeck().clone();
+				var deck = (GameDeck) configuration.getDeck().clone();
 
-				Player player = Player.forUser(userId.toString(), configuration.getPlayerId(), deck);
+				var player = Player.forUser(userId.toString(), configuration.getPlayerId(), deck);
 				setPlayer(configuration.getPlayerId(), player);
 				// ...and import all the attributes that might be specific to the queue and its rules (typically just the
 				// DECK_ID and USER_ID attributes at the moment.
-				for (Map.Entry<Attribute, Object> kv : configuration.getPlayerAttributes().entrySet()) {
+				for (var kv : configuration.getPlayerAttributes().entrySet()) {
 					player.getAttributes().put(kv.getKey(), kv.getValue());
 				}
 
@@ -180,16 +177,16 @@ public class ServerGameContext extends GameContext implements Server {
 				// Bots simply forward their requests to a bot service provider, that executes the bot logic on a worker thread
 				if (configuration.isBot()) {
 					player.getAttributes().put(Attribute.AI_OPPONENT, true);
-					BotsServiceBehaviour behaviour = new BotsServiceBehaviour(gameId);
+					var behaviour = new BotsServiceBehaviour(gameId);
 					setBehaviour(configuration.getPlayerId(), behaviour);
 					closeableBehaviour = behaviour;
 					// Does not have a client representing it
 				} else {
 					// Connect to the websocket representing this user by connecting to its handler advertised on the event bus
-					EventBus bus = Vertx.currentContext().owner().eventBus();
-					MessageConsumer<ClientToServerMessage> consumer = toClient(userId, bus);
+					var bus = Vertx.currentContext().owner().eventBus();
+					var consumer = toClient(userId, bus);
 					// By using a publisher, we do not require that there be a working connection while sending
-					MessageProducer<ServerToClientMessage> producer = toServer(userId, bus);
+					var producer = toServer(userId, bus);
 					consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
 
 					Promise<Void> registration = Promise.promise();
@@ -201,7 +198,7 @@ public class ServerGameContext extends GameContext implements Server {
 					closeables.add(producer::close);
 
 					// Create a client that handles game events and action/mulligan requests
-					UnityClientBehaviour client = new UnityClientBehaviour(this,
+					var client = new UnityClientBehaviour(this,
 							new VertxScheduler(Vertx.currentContext().owner()),
 							consumer.bodyStream(),
 							producer,
@@ -223,7 +220,7 @@ public class ServerGameContext extends GameContext implements Server {
 					clientsReady.put(configuration.getPlayerId(), fut);
 				}
 
-				Closeable finalCloseableBehaviour = closeableBehaviour;
+				var finalCloseableBehaviour = closeableBehaviour;
 
 				closeables.add(fut -> {
 					LOGGER.debug("closeables {}: closing client {}", gameId, finalCloseableBehaviour);
@@ -263,18 +260,18 @@ public class ServerGameContext extends GameContext implements Server {
 				context.put("ServerGameContextConsumers", consumers);
 			}
 			Vertx vertx = context.owner();
-			EventBus bus = vertx.eventBus();
-			String userId = connection.userId();
+			var bus = vertx.eventBus();
+			var userId = connection.userId();
 
 			// Game messages
-			MessageConsumer<ServerToClientMessage> consumer = fromServer(bus, userId);
+			var consumer = fromServer(bus, userId);
 			consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
 			consumers.add(consumer);
 
 			// Read messages from the client and send them to the server processing this request.
 			connection.handler(fiber(env -> {
 				if (env.getGame() != null && env.getGame().getClientToServer() != null) {
-					ClientToServerMessage msg = env.getGame().getClientToServer();
+					var msg = env.getGame().getClientToServer();
 					if (msg.getMessageType() == MessageType.FIRST_MESSAGE) {
 						LOGGER.debug("handleConnections connection.handler {}: Received first message from socket, now sending", connection.userId());
 					}
@@ -294,7 +291,7 @@ public class ServerGameContext extends GameContext implements Server {
 			});
 
 			// When the connection is closed for any reason (client disconnect or server shutdown), make sure to remove these event bus registrations
-			Set<MessageConsumer<ServerToClientMessage>> finalConsumers = consumers;
+			var finalConsumers = consumers;
 			connection.addCloseHandler(v1 -> {
 				finalConsumers.remove(consumer);
 				consumer.unregister(v1);
@@ -374,11 +371,11 @@ public class ServerGameContext extends GameContext implements Server {
 	 * Enables this match to use custom networked triggers
 	 */
 	private void enableTriggers() {
-		for (com.hiddenswitch.spellsource.net.impl.Trigger trigger : Spellsource.spellsource().getGameTriggers().values()) {
+		for (var trigger : Spellsource.spellsource().getGameTriggers().values()) {
 			Map<SpellArg, Object> arguments = new SpellDesc(DelegateSpell.class);
 			arguments.put(SpellArg.NAME, trigger.getSpellId());
-			SpellDesc spell = new SpellDesc(arguments);
-			Enchantment enchantment = new Enchantment();
+			var spell = new SpellDesc(arguments);
+			var enchantment = new Enchantment();
 			enchantment.getTriggers().add(trigger.getEventTriggerDesc().create());
 			enchantment.setSpell(spell);
 			enchantment.setOwner(0);
@@ -394,15 +391,15 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	public void init() {
-		Tracer tracer = GlobalTracer.get();
-		Span span = tracer.buildSpan("ServerGameContext/init")
+		var tracer = GlobalTracer.get();
+		var span = tracer.buildSpan("ServerGameContext/init")
 				.asChildOf(tracer.activeSpan())
 				.start();
-		Scope scope = tracer.activateSpan(span);
+		var scope = tracer.activateSpan(span);
 		try {
 			LOGGER.trace("init {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
 			startTrace();
-			int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
+			var startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
 			getEnvironment().put(Environment.STARTING_PLAYER, startingPlayerId);
 			setActivePlayerId(startingPlayerId);
 
@@ -412,7 +409,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 			initialization.complete();
 			Future bothClientsReady;
-			long timeout = Math.min(Games.getDefaultNoActivityTimeout(), Games.getDefaultConnectionTime());
+			var timeout = Math.min(Games.getDefaultNoActivityTimeout(), Games.getDefaultConnectionTime());
 			if (!clientsReady.values().stream().allMatch(fut -> fut.future().isComplete())) {
 				// If this is interrupted, it will bubble up to the general interrupt handler
 				bothClientsReady = await(CompositeFuture.join(clientsReady.values().stream().map(Promise::future).collect(toList()))::onComplete, timeout);
@@ -424,7 +421,7 @@ public class ServerGameContext extends GameContext implements Server {
 					|| bothClientsReady.failed()) {
 				// Mark the players that have not connected in time as destroyed, which in updateAndGetGameOver will eventually
 				// lead to a double loss
-				for (Map.Entry<Integer, Promise<Client>> entry : clientsReady.entrySet()) {
+				for (var entry : clientsReady.entrySet()) {
 					if (!entry.getValue().future().isComplete()) {
 						LOGGER.warn("init {}: Game prematurely ended because player id={} did not connect in {}ms", getGameId(), entry.getKey(), timeout);
 						getLogic().concede(entry.getKey());
@@ -441,7 +438,7 @@ public class ServerGameContext extends GameContext implements Server {
 			// Signal to the game context has made everything have valid IDs.
 			getLogic().contextReady();
 
-			for (Client client : getClients()) {
+			for (var client : getClients()) {
 				client.onConnectionStarted(getActivePlayer());
 			}
 
@@ -470,8 +467,8 @@ public class ServerGameContext extends GameContext implements Server {
 			Promise<List<Card>> mulligansActive = Promise.promise();
 			Promise<List<Card>> mulligansNonActive = Promise.promise();
 
-			List<Card> firstHandActive = getActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
-			List<Card> firstHandNonActive = getNonActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
+			var firstHandActive = getActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
+			var firstHandNonActive = getNonActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
 			if (firstHandActive.isEmpty()) {
 				mulligansActive.complete(Collections.emptyList());
 			} else {
@@ -496,7 +493,7 @@ public class ServerGameContext extends GameContext implements Server {
 			}
 
 			// If this is interrupted, it'll bubble up to the general interrupt handler
-			CompositeFuture simultaneousMulligans = Sync.await(CompositeFuture.join(mulligansActive.future(), mulligansNonActive.future())::onComplete);
+			var simultaneousMulligans = Sync.await(CompositeFuture.join(mulligansActive.future(), mulligansNonActive.future())::onComplete);
 
 			// If we got this far, we should cancel the time
 			if (mulliganTimerId != null) {
@@ -509,8 +506,8 @@ public class ServerGameContext extends GameContext implements Server {
 				throw new VertxException(simultaneousMulligans == null ? new TimeoutException() : simultaneousMulligans.cause());
 			}
 
-			List<Card> discardedCardsActive = mulligansActive.future().result();
-			List<Card> discardedCardsNonActive = mulligansNonActive.future().result();
+			var discardedCardsActive = mulligansActive.future().result();
+			var discardedCardsNonActive = mulligansNonActive.future().result();
 			getLogic().handleMulligan(getActivePlayer(), true, discardedCardsActive);
 			getLogic().handleMulligan(getNonActivePlayer(), false, discardedCardsNonActive);
 
@@ -541,13 +538,13 @@ public class ServerGameContext extends GameContext implements Server {
 				throw new UnsupportedOperationException("Cannot play with a fork twice!");
 			}
 			setFiber(new Fiber<>(String.format("ServerGameContext/fiber[%s]", getGameId()), Sync.getContextScheduler(), 512, () -> {
-				Tracer tracer = GlobalTracer.get();
-				Span span = tracer.buildSpan("ServerGameContext/play")
+				var tracer = GlobalTracer.get();
+				var span = tracer.buildSpan("ServerGameContext/play")
 						.asChildOf(getSpanContext())
 						.start();
-				Scope scope = tracer.activateSpan(span);
+				var scope = tracer.activateSpan(span);
 				// Send the trace information to the clients since the game is now running
-				BinaryCarrier carrier = new BinaryCarrier();
+				var carrier = new BinaryCarrier();
 				tracer.inject(span.context(), Format.Builtin.BINARY, carrier);
 
 				getPlayerConfigurations().forEach(c -> Connection.writeStream(c.getUserId())
@@ -560,7 +557,7 @@ public class ServerGameContext extends GameContext implements Server {
 					LOGGER.debug("play {}: Starting forked game", gameId);
 					super.play(false);
 				} catch (Throwable throwable) {
-					Throwable rootCause = Throwables.getRootCause(throwable);
+					var rootCause = Throwables.getRootCause(throwable);
 					if (Strand.currentStrand().isInterrupted() || rootCause instanceof InterruptedException) {
 						// Generally only an interrupt from endGame() is allowed to gracefully interrupt this daemon.
 						span.log(ImmutableMap.of(
@@ -621,7 +618,7 @@ public class ServerGameContext extends GameContext implements Server {
 				turnTimerId = null;
 			}
 
-			for (Behaviour behaviour : getBehaviours()) {
+			for (var behaviour : getBehaviours()) {
 				if (behaviour instanceof HasElapsableTurns) {
 					((HasElapsableTurns) behaviour).setElapsed(false);
 				}
@@ -655,8 +652,8 @@ public class ServerGameContext extends GameContext implements Server {
 				LOGGER.debug("startTurn {}: Not setting timer because opponent is not human.", getGameId());
 			}
 			super.startTurn(playerId);
-			GameState state = new GameState(this, TurnState.TURN_IN_PROGRESS);
-			for (Client client : getClients()) {
+			var state = new GameState(this, TurnState.TURN_IN_PROGRESS);
+			for (var client : getClients()) {
 				client.onUpdate(state);
 			}
 		} finally {
@@ -673,7 +670,7 @@ public class ServerGameContext extends GameContext implements Server {
 			if (turnTimerId != null) {
 				scheduler.cancelTimer(turnTimerId);
 			}
-			for (Client client : getClients()) {
+			for (var client : getClients()) {
 				client.onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
 			}
 		} finally {
@@ -688,7 +685,7 @@ public class ServerGameContext extends GameContext implements Server {
 	 */
 	@Suspendable
 	private void endMulligans(long ignored) {
-		for (Client client : getClients()) {
+		for (var client : getClients()) {
 			client.elapseAwaitingRequests();
 		}
 	}
@@ -696,11 +693,11 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	public void resume() {
-		Tracer tracer = GlobalTracer.get();
-		Span span = tracer.buildSpan("ServerGameContext/resume")
+		var tracer = GlobalTracer.get();
+		var span = tracer.buildSpan("ServerGameContext/resume")
 				.asChildOf(tracer.activeSpan())
 				.start();
-		Scope scope = tracer.activateSpan(span);
+		var scope = tracer.activateSpan(span);
 		try {
 			if (!isRunning()) {
 				endGame();
@@ -734,16 +731,16 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Suspendable
 	private void updateClientsWithGameState() {
-		GameState state = getGameStateCopy();
-		for (Client client : getClients()) {
+		var state = getGameStateCopy();
+		for (var client : getClients()) {
 			client.onUpdate(state);
 		}
 	}
 
 	@Suspendable
 	private void updateClientWithGameState(int playerId) {
-		GameState state = getGameStateCopy();
-		for (Client client : getClients()) {
+		var state = getGameStateCopy();
+		for (var client : getClients()) {
 			if (client.getPlayerId() == playerId) {
 				client.onUpdate(state);
 			}
@@ -757,8 +754,8 @@ public class ServerGameContext extends GameContext implements Server {
 		notificationCounter.incrementAndGet();
 		// Do not build game state for events the client is not interested in
 		if (event.isClientInterested()) {
-			GameState gameStateCopy = getGameStateCopy();
-			for (Client client : getClients()) {
+			var gameStateCopy = getGameStateCopy();
+			for (var client : getClients()) {
 				client.sendNotification(event, gameStateCopy);
 			}
 		}
@@ -769,7 +766,7 @@ public class ServerGameContext extends GameContext implements Server {
 	public void onNotificationDidFire(Notification event) {
 		super.onNotificationDidFire(event);
 		if (notificationCounter.decrementAndGet() == 0) {
-			for (Client client : getClients()) {
+			for (var client : getClients()) {
 				client.lastEvent();
 			}
 		}
@@ -780,19 +777,19 @@ public class ServerGameContext extends GameContext implements Server {
 	public void onEnchantmentFired(Enchantment trigger) {
 		super.onEnchantmentFired(trigger);
 
-		TriggerFired triggerFired = new TriggerFired(this, trigger);
-		final GameState gameStateCopy = getGameStateCopy();
+		var triggerFired = new TriggerFired(this, trigger);
+		final var gameStateCopy = getGameStateCopy();
 
 		// If the trigger is in a private place, do not fire it for the public player
 		if (trigger.getHostReference() != null) {
-			Entity host = getEntities()
+			var host = getEntities()
 					.filter(e -> e.getId() == trigger.getHostReference().getId())
 					.findFirst()
 					.orElse(null);
 
 			if (host != null && Zones.PRIVATE.contains(host.getZone()) && host.getSourceCard() != null && !host.getSourceCard().getDesc().revealsSelf()) {
-				int owner = host.getOwner();
-				Client client = getClient(owner);
+				var owner = host.getOwner();
+				var client = getClient(owner);
 
 				// Don't send spurious, private notifications to bot players / players not represented by clients
 				if (client != null) {
@@ -802,7 +799,7 @@ public class ServerGameContext extends GameContext implements Server {
 			}
 		}
 
-		for (Client client : getClients()) {
+		for (var client : getClients()) {
 			client.sendNotification(triggerFired, gameStateCopy);
 		}
 	}
@@ -811,8 +808,8 @@ public class ServerGameContext extends GameContext implements Server {
 	@Suspendable
 	public void onWillPerformGameAction(int playerId, GameAction action) {
 		super.onWillPerformGameAction(playerId, action);
-		GameState gameStateCopy = getGameStateCopy();
-		for (Client client : getClients()) {
+		var gameStateCopy = getGameStateCopy();
+		for (var client : getClients()) {
 			client.sendNotification(action, gameStateCopy);
 		}
 	}
@@ -832,7 +829,7 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	protected void notifyPlayersGameOver() {
-		for (Client client : getClients()) {
+		for (var client : getClients()) {
 			LOGGER.debug("notifyPlayersGameOver: notifying {}", client.getUserId());
 			client.sendGameOver(getGameStateCopy(), getWinner());
 		}
@@ -858,7 +855,7 @@ public class ServerGameContext extends GameContext implements Server {
 			// Close the inbound messages from the client, they should be ignored by these client instances
 			// This way, a user doesn't accidentally trigger some other kind of processing that's only going to be interrupted
 			// later. However, this does block emote processing, which is unfortunate.
-			for (Client client : getClients()) {
+			for (var client : getClients()) {
 				client.closeInboundMessages();
 			}
 
@@ -912,7 +909,7 @@ public class ServerGameContext extends GameContext implements Server {
 			SuspendableMap<String, String> queues;
 			queues = Matchmaking.getUsersInQueues();
 
-			for (UserId userId : getUserIds()) {
+			for (var userId : getUserIds()) {
 				queues.remove(userId.toString());
 			}
 		} else {
@@ -941,17 +938,17 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	public void close() {
-		Tracer tracer = GlobalTracer.get();
-		Span span = tracer.buildSpan("ServerGameContext/dispose")
+		var tracer = GlobalTracer.get();
+		var span = tracer.buildSpan("ServerGameContext/dispose")
 				.asChildOf(getSpanContext())
 				.withTag("gameId", getGameId())
 				.start();
 
-		try (Scope s1 = tracer.activateSpan(span)) {
-			Iterator<Closeable> iter = closeables.iterator();
+		try (var s1 = tracer.activateSpan(span)) {
+			var iter = closeables.iterator();
 			while (iter.hasNext()) {
 				try {
-					Closeable closeable = iter.next();
+					var closeable = iter.next();
 					Void res = await(h -> {
 						Promise<Void> promise = Promise.promise();
 						closeable.close(promise);
@@ -977,7 +974,7 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	public void onEmote(Client sender, int entityId, Emote.MessageEnum message) {
-		for (Client client : getClients()) {
+		for (var client : getClients()) {
 			client.sendEmote(entityId, message);
 		}
 	}
@@ -999,9 +996,9 @@ public class ServerGameContext extends GameContext implements Server {
 	}
 
 	private void touch(Client sender, int entityId, boolean touching) {
-		TouchingNotification touch = new TouchingNotification(sender.getPlayerId(), entityId, touching);
+		var touch = new TouchingNotification(sender.getPlayerId(), entityId, touching);
 
-		for (Client client : getClients()) {
+		for (var client : getClients()) {
 			if (client.getPlayerId() != sender.getPlayerId()) {
 				client.sendNotification(touch, null);
 			}
@@ -1038,7 +1035,7 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	public GameDeck getDeck(Player player, String name) {
-		GetCollectionResponse response = Logic.getDeck(new LogicGetDeckRequest()
+		var response = Logic.getDeck(new LogicGetDeckRequest()
 				.withUserId(new UserId(player.getUserId()))
 				.withDeckName(name));
 
@@ -1054,7 +1051,7 @@ public class ServerGameContext extends GameContext implements Server {
 	public void onPlayerReady(Client client) {
 		if (clientsReady.containsKey(client.getPlayerId())) {
 			@SuppressWarnings("unchecked")
-			Promise<Client> fut = clientsReady.get(client.getPlayerId());
+			var fut = clientsReady.get(client.getPlayerId());
 			if (!fut.future().isComplete()) {
 				fut.complete(client);
 			}
@@ -1067,9 +1064,9 @@ public class ServerGameContext extends GameContext implements Server {
 		try {
 			lock.lock();
 			// Update the client
-			ListIterator<Client> listIterator = getClients().listIterator();
+			var listIterator = getClients().listIterator();
 			while (listIterator.hasNext()) {
-				Client next = listIterator.next();
+				var next = listIterator.next();
 				if (next.getPlayerId() == client.getPlayerId() && client != next) {
 					next.close(Promise.promise());
 					closeables.remove(next);
@@ -1098,7 +1095,7 @@ public class ServerGameContext extends GameContext implements Server {
 	}
 
 	public Client getClient(int playerId) {
-		for (Client client : getClients()) {
+		for (var client : getClients()) {
 			if (client.getPlayerId() == playerId) {
 				return client;
 			}
@@ -1145,11 +1142,11 @@ public class ServerGameContext extends GameContext implements Server {
 		if (!isRunning()) {
 			throw new IllegalStateException("must call play(true)");
 		}
-		CompositeFuture join = CompositeFuture.join(Stream.concat(
+		var join = CompositeFuture.join(Stream.concat(
 				registrationsReady.stream().map(Promise::future),
 				Stream.of(initialization.future())
 		).collect(toList()));
-		CompositeFuture res = await(join::onComplete, REGISTRATION_TIMEOUT);
+		var res = await(join::onComplete, REGISTRATION_TIMEOUT);
 	}
 
 	/**

@@ -1,0 +1,26 @@
+{
+  "seed" : -1920707154987414604,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "DARKBLUE", "OFFWHITE" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_ranabosh_in_memory", "minion_terrified_tanooki", "minion_sleepy_sprite", "secret_return_from_death", "minion_vindictive_spirit", "minion_gasbelly_oni", "minion_twisted_pathology", "secret_reverse_volition", "minion_devoted_denizen", "minion_disco_inferno", "minion_siege_elephant", "secret_reverse_volition", "minion_channeler_initiate", "minion_soultender", "minion_augmented_pixie", "secret_ancestral_effigy", "minion_psychopomp", "minion_osiris", "minion_stranded_thought", "minion_inspiring_hero", "spell_dominant_will", "spell_consign", "spell_rite_of_promise", "spell_domineer", "minion_treasure_hunter", "minion_bromeliad_pup", "minion_jekk_trinity", "spell_rite_of_pain", "minion_anarking", "minion_the_diamond_sultan" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_kawarimi_headbasher", "spell_echoes_of_the_vengeant", "minion_doodles_v2", "minion_nightmare_wraith", "minion_oppressor_defender", "minion_amathyst_panther", "spell_part_the_veil", "minion_chromatic_vohlok", "minion_gemstone_giant", "minion_sourcing_specialist", "minion_undead_trickster", "permanent_the_end_time", "minion_tree_giant", "minion_mutamite_terror", "token_fragment", "minion_kiljaeden_deceiver", "spell_part_the_veil", "minion_null_phoenix", "minion_tiny_persecutor", "minion_darkshard_duelist", "spell_banish_to_the_dream", "minion_varmendel_the_corruptor", "minion_miniature_gunner", "minion_disco_inferno", "minion_colrum", "minion_nightmare_wraith", "minion_fae_trickster", "minion_chromatic_vohlok", "minion_the_grudge", "minion_centaur_acumen" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "CORE", "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 61 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 19, 13, 15 ]
+  } ],
+  "actions" : [ 0, 0, 0, 3, 0, 0, 0, 3, 5, 0, 0, 5, 0, 1, 1, 0, 4, 7, 0, 0, 2, 1, 1, 0, 0, 12, 13, 4, 6, 1, 8, 2, 0, 33, 1, 0, 0, 22, 2, 3, 1, 0, 1, 1, 0, 0, 10, 4, 0, 3, 7, 21, 8, 4, 7, 14, 0, 8, 7, 3, 14, 4, 10, 9, 0, 11, 31, 2, 4, 7, 4, 1 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

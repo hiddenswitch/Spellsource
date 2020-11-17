@@ -9,6 +9,9 @@ import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckShares;
 import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
+import com.hiddenswitch.framework.schema.spellsource.tables.Games;
+import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
+import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
 
 
 /**
@@ -41,4 +44,19 @@ public class Tables {
      * The table <code>spellsource.decks</code>.
      */
     public static final Decks DECKS = Decks.DECKS;
+
+    /**
+     * The table <code>spellsource.games</code>.
+     */
+    public static final Games GAMES = Games.GAMES;
+
+    /**
+     * The table <code>spellsource.matchmaking_queues</code>.
+     */
+    public static final MatchmakingQueues MATCHMAKING_QUEUES = MatchmakingQueues.MATCHMAKING_QUEUES;
+
+    /**
+     * The table <code>spellsource.matchmaking_tickets</code>.
+     */
+    public static final MatchmakingTickets MATCHMAKING_TICKETS = MatchmakingTickets.MATCHMAKING_TICKETS;
 }

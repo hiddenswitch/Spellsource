@@ -4,7 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.CardRecord;
 import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.common.Tracing;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
+import io.vertx.ext.sync.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.net.models.QueryCardsRequest;
 import com.hiddenswitch.spellsource.net.models.QueryCardsResponse;
 import io.opentracing.Scope;

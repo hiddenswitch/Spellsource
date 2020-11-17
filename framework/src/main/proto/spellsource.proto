@@ -1300,6 +1300,8 @@ message MatchmakingQueuePutResponseUnityConnection {
 
     // The websocket URL to connect to.
     string url = 2;
+
+    string gameId = 3;
 }
 
 // Represents a list of queues.
@@ -1493,7 +1495,34 @@ message ValidationReport {
     bool valid = 2;
 }
 
+message MatchmakingQueueConfiguration {
+    string id = 1;
+    string name = 2;
+    repeated string ruleCardIds = 3;
+    int32 lobbySize = 4;
+    bool botOpponent = 5;
+    bool ranked = 6;
+    bool privateLobby = 7;
+    bool startsAutomatically = 8;
+    int64 stillConnectedTimeout = 9;
+    int64 emptyLobbyTimeout = 10;
+    int64 awaitingLobbyTimeout = 11;
+    bool once = 12;
+    bool join = 13;
+    bool automaticallyClose = 14;
+    int32 maxTicketsToProcess = 15;
+    int32 scanFrequency = 16;
+}
+
+message MatchmakingCreateQueueRequest {
+    MatchmakingQueueConfiguration configuration = 1;
+}
+
 service Matchmaking {
+    rpc CreateQueue(MatchmakingCreateQueueRequest) returns (google.protobuf.Empty) {}
+
+    rpc DeleteQueue(google.protobuf.StringValue) returns (google.protobuf.Empty) {}
+
     rpc Enqueue(stream MatchmakingQueuePutRequest) returns (stream MatchmakingQueuePutResponse) {}
 
     // Removes your client from the matchmaking queue, regardless of which queue it is in.

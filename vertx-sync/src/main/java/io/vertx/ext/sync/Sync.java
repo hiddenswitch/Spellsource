@@ -423,10 +423,18 @@ public class Sync {
 	}
 
 	@Suspendable
-	public static void fiber(SuspendableCallable<?> context) {
-		var fiber = new Fiber<>(getContextScheduler(), context);
+	public static <V> Future<V> fiber(SuspendableCallable<V> context) {
+		var promise = Promise.<V>promise();
+		var fiber = new Fiber<>(getContextScheduler(), () -> {
+			try {
+				promise.complete(context.run());
+			} catch (Throwable t) {
+				promise.fail(t);
+			}
+		});
 //		fiber.setUncaughtExceptionHandler((f, e) -> Tracing.error(e));
 		fiber.start();
+		return promise.future();
 	}
 
 	@Suspendable

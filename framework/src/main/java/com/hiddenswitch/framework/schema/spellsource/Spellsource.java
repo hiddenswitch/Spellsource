@@ -10,6 +10,9 @@ import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckShares;
 import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
+import com.hiddenswitch.framework.schema.spellsource.tables.Games;
+import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
+import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +28,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Spellsource extends SchemaImpl {
 
-    private static final long serialVersionUID = -1396903083;
+    private static final long serialVersionUID = -984254991;
 
     /**
      * The reference instance of <code>spellsource</code>
@@ -58,6 +61,21 @@ public class Spellsource extends SchemaImpl {
     public final Decks DECKS = Decks.DECKS;
 
     /**
+     * The table <code>spellsource.games</code>.
+     */
+    public final Games GAMES = Games.GAMES;
+
+    /**
+     * The table <code>spellsource.matchmaking_queues</code>.
+     */
+    public final MatchmakingQueues MATCHMAKING_QUEUES = MatchmakingQueues.MATCHMAKING_QUEUES;
+
+    /**
+     * The table <code>spellsource.matchmaking_tickets</code>.
+     */
+    public final MatchmakingTickets MATCHMAKING_TICKETS = MatchmakingTickets.MATCHMAKING_TICKETS;
+
+    /**
      * No further instances allowed
      */
     private Spellsource() {
@@ -77,6 +95,9 @@ public class Spellsource extends SchemaImpl {
             CardsInDeck.CARDS_IN_DECK,
             DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES,
             DeckShares.DECK_SHARES,
-            Decks.DECKS);
+            Decks.DECKS,
+            Games.GAMES,
+            MatchmakingQueues.MATCHMAKING_QUEUES,
+            MatchmakingTickets.MATCHMAKING_TICKETS);
     }
 }

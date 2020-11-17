@@ -6,7 +6,7 @@ import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.client.models.EnvelopeChanged;
 import com.hiddenswitch.spellsource.client.models.Friend;
 import com.hiddenswitch.spellsource.client.models.PresenceEnum;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
+import io.vertx.ext.sync.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;

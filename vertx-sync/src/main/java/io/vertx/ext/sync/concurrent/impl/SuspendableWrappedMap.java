@@ -1,8 +1,7 @@
-package com.hiddenswitch.spellsource.net.concurrent.impl;
+package io.vertx.ext.sync.concurrent.impl;
 
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
+import io.vertx.ext.sync.concurrent.SuspendableMap;
 import io.vertx.core.shareddata.LocalMap;
-import io.vertx.core.shareddata.impl.LocalAsyncMapImpl;
 
 import java.util.*;
 

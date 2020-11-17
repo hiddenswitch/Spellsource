@@ -2,6 +2,7 @@ package io.vertx.ext.sync;
 
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.channels.ReceivePort;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a synchronous receiver of events.
@@ -24,6 +25,7 @@ public interface Receiver<T> {
    * @return  the event
    */
   @Suspendable
+  @Nullable
   T receive();
 
   /**
