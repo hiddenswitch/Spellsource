@@ -294,7 +294,8 @@ task jooqGenerate() {
             def containerId = startPostgresContainer.containerId.get()
             environment('DOCKER_OPTS', "--link " + containerId + ":database")
             if (isWindows) {
-                commandLine "$project.projectDir\\bin\\pg_dump.exe", '-h', 'gradleSupabasePostgres', '-s', '-f', "$project.projectDir\\src\\main\\resources\\db\\ddl.sql"
+                // postgres is bound to localhost
+                commandLine "$project.projectDir\\bin\\pg_dump.exe", '-h', 'localhost', '-s', '-f', "$project.projectDir\\src\\main\\resources\\db\\ddl.sql"
             } else {
                 commandLine "$project.projectDir/bin/pg_dump", '-h', "database", '-s', '-f', '/git/framework/src/main/resources/db/ddl.sql'
             }
