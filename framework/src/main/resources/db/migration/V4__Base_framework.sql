@@ -62,4 +62,43 @@ create table spellsource.deck_shares
 
 create index on spellsource.deck_shares (trashed) where deck_shares.trashed is false;
 
-comment on table spellsource.deck_shares is 'indicates a deck shared to a player'
+comment on table spellsource.deck_shares is 'indicates a deck shared to a player';
+
+create table spellsource.games
+(
+  id bigint generated always as identity primary key unique,
+  git_hash text,
+  trace jsonb
+);
+
+create table spellsource.matchmaking_queues
+(
+  id text not null primary key unique,
+  name text not null,
+  bot_opponent boolean not null default false,
+  private_lobby boolean not null default false,
+  starts_automatically boolean not null default true,
+  still_connected_timeout bigint not null default 2000,
+  empty_lobby_timeout bigint not null default 0,
+  awaiting_lobby_timeout bigint not null default 0,
+  once boolean not null default false,
+  automatically_close boolean not null default true,
+  max_tickets_to_process integer not null default 10,
+  scan_frequency bigint not null default 3000
+);
+
+create table spellsource.matchmaking_tickets
+(
+  id text not null primary key unique,
+  queue_id text references spellsource.matchmaking_queues (id) on delete cascade,
+  user_id text references keycloak.user_entity (id),
+  deck_id text references spellsource.decks (id),
+  bot_deck_id text references spellsource.decks (id),
+  last_modified timestamptz not null default now(),
+  created_at timestamptz not null default now(),
+  assigned_at timestamptz,
+  game_id bigint null references spellsource.games (id)
+);
+
+create index on spellsource.matchmaking_tickets (queue_id);
+create index on spellsource.matchmaking_tickets (user_id);

@@ -14,7 +14,7 @@ import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.core.Version;
 import com.hiddenswitch.spellsource.net.*;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
+import io.vertx.ext.sync.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.net.impl.util.*;
 import com.hiddenswitch.spellsource.net.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.net.models.ChangePasswordResponse;

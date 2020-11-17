@@ -1,8 +1,8 @@
-package com.hiddenswitch.spellsource.net.concurrent;
+package io.vertx.ext.sync.concurrent;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.net.concurrent.impl.SuspendableAsyncMap;
-import com.hiddenswitch.spellsource.net.concurrent.impl.SuspendableWrappedMap;
+import io.vertx.ext.sync.concurrent.impl.SuspendableAsyncMap;
+import io.vertx.ext.sync.concurrent.impl.SuspendableWrappedMap;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;

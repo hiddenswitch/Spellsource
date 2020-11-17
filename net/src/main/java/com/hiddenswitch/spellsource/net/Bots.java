@@ -5,7 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.hiddenswitch.spellsource.common.Tracing;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableMap;
+import io.vertx.ext.sync.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.net.impl.GameId;
 import com.hiddenswitch.spellsource.net.impl.Mongo;
 import com.hiddenswitch.spellsource.net.impl.UserId;

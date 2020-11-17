@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource.net.impl;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableFunction;
+import io.vertx.ext.sync.concurrent.SuspendableFunction;
 import com.hiddenswitch.spellsource.util.Serialization;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.Message;

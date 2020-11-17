@@ -1,4 +1,4 @@
-package com.hiddenswitch.spellsource.net.concurrent;
+package io.vertx.ext.sync.concurrent;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;

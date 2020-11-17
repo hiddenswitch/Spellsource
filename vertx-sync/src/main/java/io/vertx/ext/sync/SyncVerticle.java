@@ -20,9 +20,9 @@ public abstract class SyncVerticle extends AbstractVerticle {
 
 
 	@Override
-	public void start(Promise<Void> startFuture) throws Exception {
+	public final void start(Promise<Void> startFuture) throws Exception {
 		instanceScheduler = Sync.getContextScheduler();
-		new Fiber<Void>(null, instanceScheduler, Sync.DEFAULT_STACK_SIZE, () -> {
+		new Fiber<Void>("starting verticle", instanceScheduler, Sync.DEFAULT_STACK_SIZE, () -> {
 			try {
 				syncStart();
 				startFuture.complete();
@@ -33,8 +33,8 @@ public abstract class SyncVerticle extends AbstractVerticle {
 	}
 
 	@Override
-	public void stop(Promise<Void> stopFuture) throws Exception {
-		new Fiber<Void>(null, instanceScheduler, Sync.DEFAULT_STACK_SIZE, () -> {
+	public final void stop(Promise<Void> stopFuture) throws Exception {
+		new Fiber<Void>("stopping verticle", instanceScheduler, Sync.DEFAULT_STACK_SIZE, () -> {
 			try {
 				syncStop();
 				stopFuture.complete();
@@ -69,5 +69,4 @@ public abstract class SyncVerticle extends AbstractVerticle {
 	public final void stop() {
 		throw new UnsupportedOperationException();
 	}
-
 }

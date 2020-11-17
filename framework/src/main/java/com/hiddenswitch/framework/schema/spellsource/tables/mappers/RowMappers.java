@@ -70,4 +70,49 @@ public class RowMappers {
         };
     }
 
+    public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games> getGamesMapper() {
+        return row -> {
+            com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games();
+            pojo.setId(row.getLong("id"));
+            pojo.setGitHash(row.getString("git_hash"));
+            // Omitting unrecognized type DataType [ t=jsonb; p=0; s=0; u="pg_catalog"."jsonb"; j=null ] (org.jooq.JSONB) for column trace!
+            return pojo;
+        };
+    }
+
+    public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues> getMatchmakingQueuesMapper() {
+        return row -> {
+            com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues();
+            pojo.setId(row.getString("id"));
+            pojo.setName(row.getString("name"));
+            pojo.setBotOpponent(row.getBoolean("bot_opponent"));
+            pojo.setPrivateLobby(row.getBoolean("private_lobby"));
+            pojo.setStartsAutomatically(row.getBoolean("starts_automatically"));
+            pojo.setStillConnectedTimeout(row.getLong("still_connected_timeout"));
+            pojo.setEmptyLobbyTimeout(row.getLong("empty_lobby_timeout"));
+            pojo.setAwaitingLobbyTimeout(row.getLong("awaiting_lobby_timeout"));
+            pojo.setOnce(row.getBoolean("once"));
+            pojo.setAutomaticallyClose(row.getBoolean("automatically_close"));
+            pojo.setMaxTicketsToProcess(row.getInteger("max_tickets_to_process"));
+            pojo.setScanFrequency(row.getLong("scan_frequency"));
+            return pojo;
+        };
+    }
+
+    public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets> getMatchmakingTicketsMapper() {
+        return row -> {
+            com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets();
+            pojo.setId(row.getString("id"));
+            pojo.setQueueId(row.getString("queue_id"));
+            pojo.setUserId(row.getString("user_id"));
+            pojo.setDeckId(row.getString("deck_id"));
+            pojo.setBotDeckId(row.getString("bot_deck_id"));
+            pojo.setLastModified(row.getOffsetDateTime("last_modified"));
+            pojo.setCreatedAt(row.getOffsetDateTime("created_at"));
+            pojo.setAssignedAt(row.getOffsetDateTime("assigned_at"));
+            pojo.setGameId(row.getLong("game_id"));
+            return pojo;
+        };
+    }
+
 }

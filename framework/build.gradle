@@ -45,14 +45,6 @@ def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
 
 def createPostgresImage = tasks.getByPath(':testcontainers:createPostgresImage')
 
-sourceSets {
-    main {
-        proto {
-            srcDir 'src/main/proto-openmatch'
-        }
-    }
-}
-
 dependencies {
     api project(':core')
     api project(':game')
@@ -98,6 +90,7 @@ dependencies {
     implementation('com.google.protobuf:protobuf-java:3.13.0') {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
+    implementation group: 'io.vertx', name: 'vertx-infinispan', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
     implementation(group: 'io.vertx', name: 'vertx-grpc', version: vertxVersion) {
         exclude group: 'com.google.code.gson', module: 'gson'

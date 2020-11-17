@@ -1668,6 +1668,74 @@ COMMENT ON COLUMN spellsource.decks.is_premade IS 'premades always shared with a
 
 
 --
+-- Name: games; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.games (
+    id bigint NOT NULL,
+    git_hash text,
+    trace jsonb
+);
+
+
+ALTER TABLE spellsource.games OWNER TO admin;
+
+--
+-- Name: games_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.games ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME spellsource.games_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: matchmaking_queues; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.matchmaking_queues (
+    id text NOT NULL,
+    name text NOT NULL,
+    bot_opponent boolean DEFAULT false NOT NULL,
+    private_lobby boolean DEFAULT false NOT NULL,
+    starts_automatically boolean DEFAULT true NOT NULL,
+    still_connected_timeout bigint DEFAULT 2000 NOT NULL,
+    empty_lobby_timeout bigint DEFAULT 0 NOT NULL,
+    awaiting_lobby_timeout bigint DEFAULT 0 NOT NULL,
+    once boolean DEFAULT false NOT NULL,
+    automatically_close boolean DEFAULT true NOT NULL,
+    max_tickets_to_process integer DEFAULT 10 NOT NULL,
+    scan_frequency bigint DEFAULT 3000 NOT NULL
+);
+
+
+ALTER TABLE spellsource.matchmaking_queues OWNER TO admin;
+
+--
+-- Name: matchmaking_tickets; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.matchmaking_tickets (
+    id text NOT NULL,
+    queue_id text,
+    user_id text,
+    deck_id text,
+    bot_deck_id text,
+    last_modified timestamp with time zone DEFAULT now() NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    assigned_at timestamp with time zone,
+    game_id bigint
+);
+
+
+ALTER TABLE spellsource.matchmaking_tickets OWNER TO admin;
+
+--
 -- Name: flyway_schema_history flyway_schema_history_pk; Type: CONSTRAINT; Schema: hiddenswitch; Owner: admin
 --
 
@@ -2588,6 +2656,30 @@ ALTER TABLE ONLY spellsource.decks
 
 
 --
+-- Name: games games_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.games
+    ADD CONSTRAINT games_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: matchmaking_queues matchmaking_queues_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.matchmaking_queues
+    ADD CONSTRAINT matchmaking_queues_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: matchmaking_tickets matchmaking_tickets_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.matchmaking_tickets
+    ADD CONSTRAINT matchmaking_tickets_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: flyway_schema_history_s_idx; Type: INDEX; Schema: hiddenswitch; Owner: admin
 --
 
@@ -3159,6 +3251,20 @@ CREATE INDEX decks_is_premade_idx ON spellsource.decks USING btree (is_premade) 
 --
 
 CREATE INDEX decks_trashed_idx ON spellsource.decks USING btree (trashed) WHERE (is_premade IS FALSE);
+
+
+--
+-- Name: matchmaking_tickets_queue_id_idx; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX matchmaking_tickets_queue_id_idx ON spellsource.matchmaking_tickets USING btree (queue_id);
+
+
+--
+-- Name: matchmaking_tickets_user_id_idx; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX matchmaking_tickets_user_id_idx ON spellsource.matchmaking_tickets USING btree (user_id);
 
 
 --
@@ -3927,6 +4033,46 @@ ALTER TABLE ONLY spellsource.decks
 
 ALTER TABLE ONLY spellsource.decks
     ADD CONSTRAINT decks_last_edited_by_fkey FOREIGN KEY (last_edited_by) REFERENCES keycloak.user_entity(id);
+
+
+--
+-- Name: matchmaking_tickets matchmaking_tickets_bot_deck_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.matchmaking_tickets
+    ADD CONSTRAINT matchmaking_tickets_bot_deck_id_fkey FOREIGN KEY (bot_deck_id) REFERENCES spellsource.decks(id);
+
+
+--
+-- Name: matchmaking_tickets matchmaking_tickets_deck_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.matchmaking_tickets
+    ADD CONSTRAINT matchmaking_tickets_deck_id_fkey FOREIGN KEY (deck_id) REFERENCES spellsource.decks(id);
+
+
+--
+-- Name: matchmaking_tickets matchmaking_tickets_game_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.matchmaking_tickets
+    ADD CONSTRAINT matchmaking_tickets_game_id_fkey FOREIGN KEY (game_id) REFERENCES spellsource.games(id);
+
+
+--
+-- Name: matchmaking_tickets matchmaking_tickets_queue_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.matchmaking_tickets
+    ADD CONSTRAINT matchmaking_tickets_queue_id_fkey FOREIGN KEY (queue_id) REFERENCES spellsource.matchmaking_queues(id) ON DELETE CASCADE;
+
+
+--
+-- Name: matchmaking_tickets matchmaking_tickets_user_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.matchmaking_tickets
+    ADD CONSTRAINT matchmaking_tickets_user_id_fkey FOREIGN KEY (user_id) REFERENCES keycloak.user_entity(id);
 
 
 --

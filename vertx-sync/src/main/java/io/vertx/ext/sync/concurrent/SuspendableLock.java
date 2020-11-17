@@ -1,6 +1,8 @@
-package com.hiddenswitch.spellsource.net.concurrent;
+package io.vertx.ext.sync.concurrent;
 
 import co.paralleluniverse.fibers.Suspendable;
+import io.vertx.core.Closeable;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
 import io.vertx.core.shareddata.Lock;
@@ -16,7 +18,7 @@ import static io.vertx.ext.sync.Sync.await;
 /**
  * A suspendable, cluster-wide lock.
  */
-public interface SuspendableLock {
+public interface SuspendableLock extends Closeable {
 	Logger LOGGER = LoggerFactory.getLogger(SuspendableLock.class);
 
 
@@ -31,7 +33,7 @@ public interface SuspendableLock {
 	}
 
 	/**
-	 * Obtains a lock using a Hazelcast cluster.
+	 * Obtains a lock using the cluster configured for Vertx.
 	 *
 	 * @param name    The unique identifier of this lock
 	 * @param timeout How long to wait for the lock. If the timeout is 0, the method waits indefinitely
@@ -41,7 +43,7 @@ public interface SuspendableLock {
 	 */
 	@Suspendable
 	@NotNull
-	static SuspendableLock lock(@NotNull String name, long timeout) {
+	static SuspendableLock lock(@NotNull String name, long timeout) throws VertxException {
 		return VertxLock.lock(name, timeout);
 	}
 
@@ -72,7 +74,7 @@ public interface SuspendableLock {
 		@NotNull
 		static VertxLock lock(String name, long timeout) {
 			var context = Vertx.currentContext();
-			Lock lock = Sync.await(h -> context.owner().sharedData().getLockWithTimeout(name, timeout, h));
+			Lock lock = await(context.owner().sharedData().getLockWithTimeout(name, timeout));
 			return new VertxLock(lock);
 		}
 
@@ -80,7 +82,7 @@ public interface SuspendableLock {
 		@Suspendable
 		static VertxLock lock(String name) {
 			var context = Vertx.currentContext();
-			Lock lock = Sync.await(h -> context.owner().sharedData().getLock(name, h));
+			Lock lock = await(context.owner().sharedData().getLock(name));
 			return new VertxLock(lock);
 		}
 
@@ -94,6 +96,13 @@ public interface SuspendableLock {
 		@Suspendable
 		public void destroy() {
 		}
+
+		@Override
+		@Suspendable
+		public void close(Promise<Void> promise) {
+			release();
+			promise.complete();
+		}
 	}
 
 	class NoOpLock implements SuspendableLock {
@@ -105,6 +114,11 @@ public interface SuspendableLock {
 		@Override
 		public void destroy() {
 
+		}
+
+		@Override
+		public void close(Promise<Void> promise) {
+			promise.complete();
 		}
 	}
 }

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.google.common.base.Throwables;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.Tracing;
-import com.hiddenswitch.spellsource.net.concurrent.SuspendableFunction;
+import io.vertx.ext.sync.concurrent.SuspendableFunction;
 import com.hiddenswitch.spellsource.net.impl.UnityClientBehaviour;
 import com.hiddenswitch.spellsource.net.impl.UserId;
 import com.hiddenswitch.spellsource.net.impl.util.ServerGameContext;

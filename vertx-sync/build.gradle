@@ -8,6 +8,8 @@ apply plugin: 'maven'
 
 dependencies {
     api "io.vertx:vertx-core:$vertxVersion"
+    api 'org.jetbrains:annotations:16.0.2'
+    implementation 'org.slf4j:slf4j-api:1.7.22'
     implementation 'com.google.guava:guava:26.0-jre'
     implementation 'io.vertx:vertx-docgen:0.9.2'
     implementation "io.vertx:vertx-codetrans:$vertxVersion"

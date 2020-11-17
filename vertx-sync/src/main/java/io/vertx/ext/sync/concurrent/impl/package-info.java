@@ -1,4 +1,4 @@
 /**
  * Contains implementation classes of concurrent, clustered data structures with fibers.
  */
-package com.hiddenswitch.spellsource.net.concurrent.impl;
+package io.vertx.ext.sync.concurrent.impl;
