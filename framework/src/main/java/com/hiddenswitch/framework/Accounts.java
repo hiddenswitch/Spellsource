@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework;
 
 import com.avast.grpc.jwt.server.JwtServerInterceptor;
+import com.avast.grpc.jwt.server.JwtTokenParser;
 import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.rpc.*;
@@ -19,13 +20,17 @@ import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.common.VerificationException;
 import org.keycloak.common.enums.SslRequired;
+import org.keycloak.crypto.Algorithm;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
 
 import javax.ws.rs.NotFoundException;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Optional;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -34,33 +39,57 @@ import static java.util.stream.Collectors.toMap;
 
 public class Accounts {
 	protected static final String KEYCLOAK_LOGIN_PATH = "/realms/hiddenswitch/protocol/openid-connect/token";
+	private static final String RSA = "RSA";
 	private static final WeakVertxMap<Keycloak> keycloakReference = new WeakVertxMap<>(Accounts::keycloakConstructor);
-	private static final AtomicReference<JwtServerInterceptor<AccessToken>> interceptor = new AtomicReference<>();
+	private static final WeakVertxMap<PublicKeyJwtServerInterceptor> interceptor = new WeakVertxMap<>(Accounts::authorizationInterceptorConstructor);
 
-	/**
-	 * Does not make blocking calls, so the interceptor can be synchronous on the event loop!
-	 *
-	 * @return
-	 */
-	public static Future<ServerInterceptor> authorizationInterceptor() {
-		try {
-			return Future.succeededFuture(interceptor.updateAndGet(existing -> {
-				if (existing != null) {
-					return existing;
-				}
+	private static PublicKeyJwtServerInterceptor authorizationInterceptorConstructor(Vertx vertx) {
+		var publicKey = new AtomicReference<PublicKey>();
+		return new PublicKeyJwtServerInterceptor(publicKey, jwtToken -> {
+			Objects.requireNonNull(publicKey.get(), "public key is null");
+			var verified = TokenVerifier.create(jwtToken, AccessToken.class);
+			verified.publicKey(publicKey.get());
+			try {
+				verified.verify();
+				return CompletableFuture.completedFuture(verified.getToken());
+			} catch (VerificationException e) {
+				return CompletableFuture.failedFuture(e);
+			}
+		});
+	}
 
-				return new JwtServerInterceptor<>(jwtToken -> {
-					var verified = TokenVerifier.create(jwtToken, AccessToken.class);
-					try {
-						return CompletableFuture.completedFuture(verified.getToken());
-					} catch (VerificationException e) {
-						return CompletableFuture.failedFuture(e);
-					}
-				});
-			}));
-		} catch (Throwable t) {
-			return Future.failedFuture(t);
+	private static class PublicKeyJwtServerInterceptor extends JwtServerInterceptor<AccessToken> {
+		private AtomicReference<PublicKey> publicKey;
+
+		public PublicKeyJwtServerInterceptor(AtomicReference<PublicKey> publicKey, JwtTokenParser<AccessToken> tokenParser) {
+			super(tokenParser);
+			this.publicKey = publicKey;
 		}
+
+		public AtomicReference<PublicKey> getPublicKey() {
+			return publicKey;
+		}
+	}
+
+	public static Future<ServerInterceptor> authorizationInterceptor() {
+		// retrieve public key
+		return get().compose(realm -> Environment.executeBlocking(() -> {
+			var keys = realm.keys().getKeyMetadata().getKeys();
+			var keyBase64 = keys.stream().filter(key -> key.getPublicKey() != null
+					&& key.getType().equals(RSA)).findFirst().orElseThrow().getPublicKey();
+			var keyBytes = Base64.getDecoder().decode(keyBase64);
+			var encodedKeySpec = new X509EncodedKeySpec(keyBytes);
+			try {
+				var factory = KeyFactory.getInstance(RSA);
+				return factory.generatePublic(encodedKeySpec);
+			} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+				throw new RuntimeException(e);
+			}
+		})).compose(publicKey -> {
+			var thisInterceptor = interceptor.get();
+			thisInterceptor.getPublicKey().set(publicKey);
+			return Future.succeededFuture(thisInterceptor);
+		});
 	}
 
 	public static Future<UserEntity> user() {
@@ -179,7 +208,9 @@ public class Accounts {
 	}
 
 	public static Future<ServerServiceDefinition> requiresAuthorization(BindableService service) {
-		return Future.succeededFuture(ServerInterceptors.intercept(service, Accounts.authorizationInterceptor().result()));
+		return Accounts.authorizationInterceptor()
+				.compose(interceptor -> Future.succeededFuture(ServerInterceptors.intercept(service, interceptor)));
+
 	}
 
 	public static Future<RealmResource> get() {

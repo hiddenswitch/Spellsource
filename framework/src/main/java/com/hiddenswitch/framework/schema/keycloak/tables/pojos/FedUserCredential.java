@@ -15,60 +15,72 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class FedUserCredential implements VertxPojo, IFedUserCredential {
 
-    private static final long serialVersionUID = -921740125;
+    private static final long serialVersionUID = 1292440032;
 
     private String  id;
+    private String  device;
+    private Integer hashIterations;
     private byte[]  salt;
     private String  type;
+    private String  value;
     private Long    createdDate;
+    private Integer counter;
+    private Integer digits;
+    private Integer period;
+    private String  algorithm;
     private String  userId;
     private String  realmId;
     private String  storageProviderId;
-    private String  userLabel;
-    private String  secretData;
-    private String  credentialData;
-    private Integer priority;
 
     public FedUserCredential() {}
 
     public FedUserCredential(IFedUserCredential value) {
         this.id = value.getId();
+        this.device = value.getDevice();
+        this.hashIterations = value.getHashIterations();
         this.salt = value.getSalt();
         this.type = value.getType();
+        this.value = value.getValue();
         this.createdDate = value.getCreatedDate();
+        this.counter = value.getCounter();
+        this.digits = value.getDigits();
+        this.period = value.getPeriod();
+        this.algorithm = value.getAlgorithm();
         this.userId = value.getUserId();
         this.realmId = value.getRealmId();
         this.storageProviderId = value.getStorageProviderId();
-        this.userLabel = value.getUserLabel();
-        this.secretData = value.getSecretData();
-        this.credentialData = value.getCredentialData();
-        this.priority = value.getPriority();
     }
 
     public FedUserCredential(
         String  id,
+        String  device,
+        Integer hashIterations,
         byte[]  salt,
         String  type,
+        String  value,
         Long    createdDate,
+        Integer counter,
+        Integer digits,
+        Integer period,
+        String  algorithm,
         String  userId,
         String  realmId,
-        String  storageProviderId,
-        String  userLabel,
-        String  secretData,
-        String  credentialData,
-        Integer priority
+        String  storageProviderId
     ) {
         this.id = id;
+        this.device = device;
+        this.hashIterations = hashIterations;
         this.salt = salt;
         this.type = type;
+        this.value = value;
         this.createdDate = createdDate;
+        this.counter = counter;
+        this.digits = digits;
+        this.period = period;
+        this.algorithm = algorithm;
         this.userId = userId;
         this.realmId = realmId;
         this.storageProviderId = storageProviderId;
-        this.userLabel = userLabel;
-        this.secretData = secretData;
-        this.credentialData = credentialData;
-        this.priority = priority;
     }
 
     public FedUserCredential(io.vertx.core.json.JsonObject json) {
@@ -84,6 +96,28 @@ public class FedUserCredential implements VertxPojo, IFedUserCredential {
     @Override
     public FedUserCredential setId(String id) {
         this.id = id;
+        return this;
+    }
+
+    @Override
+    public String getDevice() {
+        return this.device;
+    }
+
+    @Override
+    public FedUserCredential setDevice(String device) {
+        this.device = device;
+        return this;
+    }
+
+    @Override
+    public Integer getHashIterations() {
+        return this.hashIterations;
+    }
+
+    @Override
+    public FedUserCredential setHashIterations(Integer hashIterations) {
+        this.hashIterations = hashIterations;
         return this;
     }
 
@@ -110,6 +144,17 @@ public class FedUserCredential implements VertxPojo, IFedUserCredential {
     }
 
     @Override
+    public String getValue() {
+        return this.value;
+    }
+
+    @Override
+    public FedUserCredential setValue(String value) {
+        this.value = value;
+        return this;
+    }
+
+    @Override
     public Long getCreatedDate() {
         return this.createdDate;
     }
@@ -117,6 +162,50 @@ public class FedUserCredential implements VertxPojo, IFedUserCredential {
     @Override
     public FedUserCredential setCreatedDate(Long createdDate) {
         this.createdDate = createdDate;
+        return this;
+    }
+
+    @Override
+    public Integer getCounter() {
+        return this.counter;
+    }
+
+    @Override
+    public FedUserCredential setCounter(Integer counter) {
+        this.counter = counter;
+        return this;
+    }
+
+    @Override
+    public Integer getDigits() {
+        return this.digits;
+    }
+
+    @Override
+    public FedUserCredential setDigits(Integer digits) {
+        this.digits = digits;
+        return this;
+    }
+
+    @Override
+    public Integer getPeriod() {
+        return this.period;
+    }
+
+    @Override
+    public FedUserCredential setPeriod(Integer period) {
+        this.period = period;
+        return this;
+    }
+
+    @Override
+    public String getAlgorithm() {
+        return this.algorithm;
+    }
+
+    @Override
+    public FedUserCredential setAlgorithm(String algorithm) {
+        this.algorithm = algorithm;
         return this;
     }
 
@@ -154,64 +243,23 @@ public class FedUserCredential implements VertxPojo, IFedUserCredential {
     }
 
     @Override
-    public String getUserLabel() {
-        return this.userLabel;
-    }
-
-    @Override
-    public FedUserCredential setUserLabel(String userLabel) {
-        this.userLabel = userLabel;
-        return this;
-    }
-
-    @Override
-    public String getSecretData() {
-        return this.secretData;
-    }
-
-    @Override
-    public FedUserCredential setSecretData(String secretData) {
-        this.secretData = secretData;
-        return this;
-    }
-
-    @Override
-    public String getCredentialData() {
-        return this.credentialData;
-    }
-
-    @Override
-    public FedUserCredential setCredentialData(String credentialData) {
-        this.credentialData = credentialData;
-        return this;
-    }
-
-    @Override
-    public Integer getPriority() {
-        return this.priority;
-    }
-
-    @Override
-    public FedUserCredential setPriority(Integer priority) {
-        this.priority = priority;
-        return this;
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("FedUserCredential (");
 
         sb.append(id);
+        sb.append(", ").append(device);
+        sb.append(", ").append(hashIterations);
         sb.append(", ").append("[binary...]");
         sb.append(", ").append(type);
+        sb.append(", ").append(value);
         sb.append(", ").append(createdDate);
+        sb.append(", ").append(counter);
+        sb.append(", ").append(digits);
+        sb.append(", ").append(period);
+        sb.append(", ").append(algorithm);
         sb.append(", ").append(userId);
         sb.append(", ").append(realmId);
         sb.append(", ").append(storageProviderId);
-        sb.append(", ").append(userLabel);
-        sb.append(", ").append(secretData);
-        sb.append(", ").append(credentialData);
-        sb.append(", ").append(priority);
 
         sb.append(")");
         return sb.toString();
@@ -224,16 +272,19 @@ public class FedUserCredential implements VertxPojo, IFedUserCredential {
     @Override
     public void from(IFedUserCredential from) {
         setId(from.getId());
+        setDevice(from.getDevice());
+        setHashIterations(from.getHashIterations());
         setSalt(from.getSalt());
         setType(from.getType());
+        setValue(from.getValue());
         setCreatedDate(from.getCreatedDate());
+        setCounter(from.getCounter());
+        setDigits(from.getDigits());
+        setPeriod(from.getPeriod());
+        setAlgorithm(from.getAlgorithm());
         setUserId(from.getUserId());
         setRealmId(from.getRealmId());
         setStorageProviderId(from.getStorageProviderId());
-        setUserLabel(from.getUserLabel());
-        setSecretData(from.getSecretData());
-        setCredentialData(from.getCredentialData());
-        setPriority(from.getPriority());
     }
 
     @Override

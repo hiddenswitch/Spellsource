@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ProtocolMapper extends TableImpl<ProtocolMapperRecord> {
 
-    private static final long serialVersionUID = 1927240987;
+    private static final long serialVersionUID = -996252600;
 
     /**
      * The reference instance of <code>keycloak.protocol_mapper</code>
@@ -133,15 +133,11 @@ public class ProtocolMapper extends TableImpl<ProtocolMapperRecord> {
 
     @Override
     public List<ForeignKey<ProtocolMapperRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ProtocolMapperRecord, ?>>asList(Keys.PROTOCOL_MAPPER__FK_PCM_REALM, Keys.PROTOCOL_MAPPER__FK_CLI_SCOPE_MAPPER);
+        return Arrays.<ForeignKey<ProtocolMapperRecord, ?>>asList(Keys.PROTOCOL_MAPPER__FK_PCM_REALM);
     }
 
     public Client client() {
         return new Client(this, Keys.PROTOCOL_MAPPER__FK_PCM_REALM);
-    }
-
-    public ClientScope clientScope() {
-        return new ClientScope(this, Keys.PROTOCOL_MAPPER__FK_CLI_SCOPE_MAPPER);
     }
 
     @Override

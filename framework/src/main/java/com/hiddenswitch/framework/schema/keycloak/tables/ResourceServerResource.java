@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ResourceServerResource extends TableImpl<ResourceServerResourceRecord> {
 
-    private static final long serialVersionUID = 1473566078;
+    private static final long serialVersionUID = -2062956299;
 
     /**
      * The reference instance of <code>keycloak.resource_server_resource</code>
@@ -71,7 +71,7 @@ public class ResourceServerResource extends TableImpl<ResourceServerResourceReco
     /**
      * The column <code>keycloak.resource_server_resource.owner</code>.
      */
-    public final TableField<ResourceServerResourceRecord, String> OWNER = createField(DSL.name("owner"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<ResourceServerResourceRecord, String> OWNER = createField(DSL.name("owner"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.resource_server_resource.resource_server_id</code>.

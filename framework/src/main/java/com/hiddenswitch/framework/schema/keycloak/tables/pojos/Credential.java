@@ -15,52 +15,64 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Credential implements VertxPojo, ICredential {
 
-    private static final long serialVersionUID = 261214042;
+    private static final long serialVersionUID = 335081379;
 
     private String  id;
+    private String  device;
+    private Integer hashIterations;
     private byte[]  salt;
     private String  type;
+    private String  value;
     private String  userId;
     private Long    createdDate;
-    private String  userLabel;
-    private String  secretData;
-    private String  credentialData;
-    private Integer priority;
+    private Integer counter;
+    private Integer digits;
+    private Integer period;
+    private String  algorithm;
 
     public Credential() {}
 
     public Credential(ICredential value) {
         this.id = value.getId();
+        this.device = value.getDevice();
+        this.hashIterations = value.getHashIterations();
         this.salt = value.getSalt();
         this.type = value.getType();
+        this.value = value.getValue();
         this.userId = value.getUserId();
         this.createdDate = value.getCreatedDate();
-        this.userLabel = value.getUserLabel();
-        this.secretData = value.getSecretData();
-        this.credentialData = value.getCredentialData();
-        this.priority = value.getPriority();
+        this.counter = value.getCounter();
+        this.digits = value.getDigits();
+        this.period = value.getPeriod();
+        this.algorithm = value.getAlgorithm();
     }
 
     public Credential(
         String  id,
+        String  device,
+        Integer hashIterations,
         byte[]  salt,
         String  type,
+        String  value,
         String  userId,
         Long    createdDate,
-        String  userLabel,
-        String  secretData,
-        String  credentialData,
-        Integer priority
+        Integer counter,
+        Integer digits,
+        Integer period,
+        String  algorithm
     ) {
         this.id = id;
+        this.device = device;
+        this.hashIterations = hashIterations;
         this.salt = salt;
         this.type = type;
+        this.value = value;
         this.userId = userId;
         this.createdDate = createdDate;
-        this.userLabel = userLabel;
-        this.secretData = secretData;
-        this.credentialData = credentialData;
-        this.priority = priority;
+        this.counter = counter;
+        this.digits = digits;
+        this.period = period;
+        this.algorithm = algorithm;
     }
 
     public Credential(io.vertx.core.json.JsonObject json) {
@@ -76,6 +88,28 @@ public class Credential implements VertxPojo, ICredential {
     @Override
     public Credential setId(String id) {
         this.id = id;
+        return this;
+    }
+
+    @Override
+    public String getDevice() {
+        return this.device;
+    }
+
+    @Override
+    public Credential setDevice(String device) {
+        this.device = device;
+        return this;
+    }
+
+    @Override
+    public Integer getHashIterations() {
+        return this.hashIterations;
+    }
+
+    @Override
+    public Credential setHashIterations(Integer hashIterations) {
+        this.hashIterations = hashIterations;
         return this;
     }
 
@@ -102,6 +136,17 @@ public class Credential implements VertxPojo, ICredential {
     }
 
     @Override
+    public String getValue() {
+        return this.value;
+    }
+
+    @Override
+    public Credential setValue(String value) {
+        this.value = value;
+        return this;
+    }
+
+    @Override
     public String getUserId() {
         return this.userId;
     }
@@ -124,46 +169,46 @@ public class Credential implements VertxPojo, ICredential {
     }
 
     @Override
-    public String getUserLabel() {
-        return this.userLabel;
+    public Integer getCounter() {
+        return this.counter;
     }
 
     @Override
-    public Credential setUserLabel(String userLabel) {
-        this.userLabel = userLabel;
+    public Credential setCounter(Integer counter) {
+        this.counter = counter;
         return this;
     }
 
     @Override
-    public String getSecretData() {
-        return this.secretData;
+    public Integer getDigits() {
+        return this.digits;
     }
 
     @Override
-    public Credential setSecretData(String secretData) {
-        this.secretData = secretData;
+    public Credential setDigits(Integer digits) {
+        this.digits = digits;
         return this;
     }
 
     @Override
-    public String getCredentialData() {
-        return this.credentialData;
+    public Integer getPeriod() {
+        return this.period;
     }
 
     @Override
-    public Credential setCredentialData(String credentialData) {
-        this.credentialData = credentialData;
+    public Credential setPeriod(Integer period) {
+        this.period = period;
         return this;
     }
 
     @Override
-    public Integer getPriority() {
-        return this.priority;
+    public String getAlgorithm() {
+        return this.algorithm;
     }
 
     @Override
-    public Credential setPriority(Integer priority) {
-        this.priority = priority;
+    public Credential setAlgorithm(String algorithm) {
+        this.algorithm = algorithm;
         return this;
     }
 
@@ -172,14 +217,17 @@ public class Credential implements VertxPojo, ICredential {
         StringBuilder sb = new StringBuilder("Credential (");
 
         sb.append(id);
+        sb.append(", ").append(device);
+        sb.append(", ").append(hashIterations);
         sb.append(", ").append("[binary...]");
         sb.append(", ").append(type);
+        sb.append(", ").append(value);
         sb.append(", ").append(userId);
         sb.append(", ").append(createdDate);
-        sb.append(", ").append(userLabel);
-        sb.append(", ").append(secretData);
-        sb.append(", ").append(credentialData);
-        sb.append(", ").append(priority);
+        sb.append(", ").append(counter);
+        sb.append(", ").append(digits);
+        sb.append(", ").append(period);
+        sb.append(", ").append(algorithm);
 
         sb.append(")");
         return sb.toString();
@@ -192,14 +240,17 @@ public class Credential implements VertxPojo, ICredential {
     @Override
     public void from(ICredential from) {
         setId(from.getId());
+        setDevice(from.getDevice());
+        setHashIterations(from.getHashIterations());
         setSalt(from.getSalt());
         setType(from.getType());
+        setValue(from.getValue());
         setUserId(from.getUserId());
         setCreatedDate(from.getCreatedDate());
-        setUserLabel(from.getUserLabel());
-        setSecretData(from.getSecretData());
-        setCredentialData(from.getCredentialData());
-        setPriority(from.getPriority());
+        setCounter(from.getCounter());
+        setDigits(from.getDigits());
+        setPeriod(from.getPeriod());
+        setAlgorithm(from.getAlgorithm());
     }
 
     @Override

@@ -19,6 +19,7 @@ public class Gateway extends AbstractVerticle {
 		// TODO: Just add all the services here
 		CompositeFuture.join(
 				Legacy.services(),
+				Matchmaking.services(),
 				Accounts.unauthenticatedService(),
 				Accounts.authenticatedService())
 				.compose(services -> {

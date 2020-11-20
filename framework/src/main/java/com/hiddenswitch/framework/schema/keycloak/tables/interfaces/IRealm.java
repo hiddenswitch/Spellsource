@@ -516,26 +516,6 @@ public interface IRealm extends VertxPojo, Serializable {
      */
     public Boolean getAllowUserManagedAccess();
 
-    /**
-     * Setter for <code>keycloak.realm.sso_max_lifespan_remember_me</code>.
-     */
-    public IRealm setSsoMaxLifespanRememberMe(Integer value);
-
-    /**
-     * Getter for <code>keycloak.realm.sso_max_lifespan_remember_me</code>.
-     */
-    public Integer getSsoMaxLifespanRememberMe();
-
-    /**
-     * Setter for <code>keycloak.realm.sso_idle_timeout_remember_me</code>.
-     */
-    public IRealm setSsoIdleTimeoutRememberMe(Integer value);
-
-    /**
-     * Getter for <code>keycloak.realm.sso_idle_timeout_remember_me</code>.
-     */
-    public Integer getSsoIdleTimeoutRememberMe();
-
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -802,16 +782,6 @@ public interface IRealm extends VertxPojo, Serializable {
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("allow_user_managed_access","java.lang.Boolean",e);
         }
-        try {
-            setSsoMaxLifespanRememberMe(json.getInteger("sso_max_lifespan_remember_me"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("sso_max_lifespan_remember_me","java.lang.Integer",e);
-        }
-        try {
-            setSsoIdleTimeoutRememberMe(json.getInteger("sso_idle_timeout_remember_me"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("sso_idle_timeout_remember_me","java.lang.Integer",e);
-        }
         return this;
     }
 
@@ -869,8 +839,6 @@ public interface IRealm extends VertxPojo, Serializable {
         json.put("docker_auth_flow",getDockerAuthFlow());
         json.put("refresh_token_max_reuse",getRefreshTokenMaxReuse());
         json.put("allow_user_managed_access",getAllowUserManagedAccess());
-        json.put("sso_max_lifespan_remember_me",getSsoMaxLifespanRememberMe());
-        json.put("sso_idle_timeout_remember_me",getSsoIdleTimeoutRememberMe());
         return json;
     }
 

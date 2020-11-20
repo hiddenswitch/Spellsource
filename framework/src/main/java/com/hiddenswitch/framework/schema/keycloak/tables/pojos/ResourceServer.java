@@ -15,12 +15,11 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ResourceServer implements VertxPojo, IResourceServer {
 
-    private static final long serialVersionUID = 608212296;
+    private static final long serialVersionUID = -1880292429;
 
     private String  id;
     private Boolean allowRsRemoteMgmt;
     private String  policyEnforceMode;
-    private Short   decisionStrategy;
 
     public ResourceServer() {}
 
@@ -28,19 +27,16 @@ public class ResourceServer implements VertxPojo, IResourceServer {
         this.id = value.getId();
         this.allowRsRemoteMgmt = value.getAllowRsRemoteMgmt();
         this.policyEnforceMode = value.getPolicyEnforceMode();
-        this.decisionStrategy = value.getDecisionStrategy();
     }
 
     public ResourceServer(
         String  id,
         Boolean allowRsRemoteMgmt,
-        String  policyEnforceMode,
-        Short   decisionStrategy
+        String  policyEnforceMode
     ) {
         this.id = id;
         this.allowRsRemoteMgmt = allowRsRemoteMgmt;
         this.policyEnforceMode = policyEnforceMode;
-        this.decisionStrategy = decisionStrategy;
     }
 
     public ResourceServer(io.vertx.core.json.JsonObject json) {
@@ -82,24 +78,12 @@ public class ResourceServer implements VertxPojo, IResourceServer {
     }
 
     @Override
-    public Short getDecisionStrategy() {
-        return this.decisionStrategy;
-    }
-
-    @Override
-    public ResourceServer setDecisionStrategy(Short decisionStrategy) {
-        this.decisionStrategy = decisionStrategy;
-        return this;
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ResourceServer (");
 
         sb.append(id);
         sb.append(", ").append(allowRsRemoteMgmt);
         sb.append(", ").append(policyEnforceMode);
-        sb.append(", ").append(decisionStrategy);
 
         sb.append(")");
         return sb.toString();
@@ -114,7 +98,6 @@ public class ResourceServer implements VertxPojo, IResourceServer {
         setId(from.getId());
         setAllowRsRemoteMgmt(from.getAllowRsRemoteMgmt());
         setPolicyEnforceMode(from.getPolicyEnforceMode());
-        setDecisionStrategy(from.getDecisionStrategy());
     }
 
     @Override

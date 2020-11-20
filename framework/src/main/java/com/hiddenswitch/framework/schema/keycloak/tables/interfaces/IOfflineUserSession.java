@@ -47,14 +47,14 @@ public interface IOfflineUserSession extends VertxPojo, Serializable {
     public String getRealmId();
 
     /**
-     * Setter for <code>keycloak.offline_user_session.created_on</code>.
+     * Setter for <code>keycloak.offline_user_session.last_session_refresh</code>.
      */
-    public IOfflineUserSession setCreatedOn(Integer value);
+    public IOfflineUserSession setLastSessionRefresh(Integer value);
 
     /**
-     * Getter for <code>keycloak.offline_user_session.created_on</code>.
+     * Getter for <code>keycloak.offline_user_session.last_session_refresh</code>.
      */
-    public Integer getCreatedOn();
+    public Integer getLastSessionRefresh();
 
     /**
      * Setter for <code>keycloak.offline_user_session.offline_flag</code>.
@@ -75,16 +75,6 @@ public interface IOfflineUserSession extends VertxPojo, Serializable {
      * Getter for <code>keycloak.offline_user_session.data</code>.
      */
     public String getData();
-
-    /**
-     * Setter for <code>keycloak.offline_user_session.last_session_refresh</code>.
-     */
-    public IOfflineUserSession setLastSessionRefresh(Integer value);
-
-    /**
-     * Getter for <code>keycloak.offline_user_session.last_session_refresh</code>.
-     */
-    public Integer getLastSessionRefresh();
 
     // -------------------------------------------------------------------------
     // FROM and INTO
@@ -118,9 +108,9 @@ public interface IOfflineUserSession extends VertxPojo, Serializable {
             throw new UnexpectedJsonValueType("realm_id","java.lang.String",e);
         }
         try {
-            setCreatedOn(json.getInteger("created_on"));
+            setLastSessionRefresh(json.getInteger("last_session_refresh"));
         } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("created_on","java.lang.Integer",e);
+            throw new UnexpectedJsonValueType("last_session_refresh","java.lang.Integer",e);
         }
         try {
             setOfflineFlag(json.getString("offline_flag"));
@@ -132,11 +122,6 @@ public interface IOfflineUserSession extends VertxPojo, Serializable {
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("data","java.lang.String",e);
         }
-        try {
-            setLastSessionRefresh(json.getInteger("last_session_refresh"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("last_session_refresh","java.lang.Integer",e);
-        }
         return this;
     }
 
@@ -147,10 +132,9 @@ public interface IOfflineUserSession extends VertxPojo, Serializable {
         json.put("user_session_id",getUserSessionId());
         json.put("user_id",getUserId());
         json.put("realm_id",getRealmId());
-        json.put("created_on",getCreatedOn());
+        json.put("last_session_refresh",getLastSessionRefresh());
         json.put("offline_flag",getOfflineFlag());
         json.put("data",getData());
-        json.put("last_session_refresh",getLastSessionRefresh());
         return json;
     }
 

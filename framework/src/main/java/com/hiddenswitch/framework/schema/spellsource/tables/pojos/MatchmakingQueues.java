@@ -15,7 +15,7 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MatchmakingQueues implements VertxPojo, IMatchmakingQueues {
 
-    private static final long serialVersionUID = -1455527069;
+    private static final long serialVersionUID = -392520673;
 
     private String  id;
     private String  name;
@@ -29,6 +29,7 @@ public class MatchmakingQueues implements VertxPojo, IMatchmakingQueues {
     private Boolean automaticallyClose;
     private Integer maxTicketsToProcess;
     private Long    scanFrequency;
+    private Integer lobbySize;
 
     public MatchmakingQueues() {}
 
@@ -45,6 +46,7 @@ public class MatchmakingQueues implements VertxPojo, IMatchmakingQueues {
         this.automaticallyClose = value.getAutomaticallyClose();
         this.maxTicketsToProcess = value.getMaxTicketsToProcess();
         this.scanFrequency = value.getScanFrequency();
+        this.lobbySize = value.getLobbySize();
     }
 
     public MatchmakingQueues(
@@ -59,7 +61,8 @@ public class MatchmakingQueues implements VertxPojo, IMatchmakingQueues {
         Boolean once,
         Boolean automaticallyClose,
         Integer maxTicketsToProcess,
-        Long    scanFrequency
+        Long    scanFrequency,
+        Integer lobbySize
     ) {
         this.id = id;
         this.name = name;
@@ -73,6 +76,7 @@ public class MatchmakingQueues implements VertxPojo, IMatchmakingQueues {
         this.automaticallyClose = automaticallyClose;
         this.maxTicketsToProcess = maxTicketsToProcess;
         this.scanFrequency = scanFrequency;
+        this.lobbySize = lobbySize;
     }
 
     public MatchmakingQueues(io.vertx.core.json.JsonObject json) {
@@ -213,6 +217,17 @@ public class MatchmakingQueues implements VertxPojo, IMatchmakingQueues {
     }
 
     @Override
+    public Integer getLobbySize() {
+        return this.lobbySize;
+    }
+
+    @Override
+    public MatchmakingQueues setLobbySize(Integer lobbySize) {
+        this.lobbySize = lobbySize;
+        return this;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("MatchmakingQueues (");
 
@@ -228,6 +243,7 @@ public class MatchmakingQueues implements VertxPojo, IMatchmakingQueues {
         sb.append(", ").append(automaticallyClose);
         sb.append(", ").append(maxTicketsToProcess);
         sb.append(", ").append(scanFrequency);
+        sb.append(", ").append(lobbySize);
 
         sb.append(")");
         return sb.toString();
@@ -251,6 +267,7 @@ public class MatchmakingQueues implements VertxPojo, IMatchmakingQueues {
         setAutomaticallyClose(from.getAutomaticallyClose());
         setMaxTicketsToProcess(from.getMaxTicketsToProcess());
         setScanFrequency(from.getScanFrequency());
+        setLobbySize(from.getLobbySize());
     }
 
     @Override

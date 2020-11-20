@@ -46,16 +46,6 @@ public interface IResourceServer extends VertxPojo, Serializable {
      */
     public String getPolicyEnforceMode();
 
-    /**
-     * Setter for <code>keycloak.resource_server.decision_strategy</code>.
-     */
-    public IResourceServer setDecisionStrategy(Short value);
-
-    /**
-     * Getter for <code>keycloak.resource_server.decision_strategy</code>.
-     */
-    public Short getDecisionStrategy();
-
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -87,11 +77,6 @@ public interface IResourceServer extends VertxPojo, Serializable {
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("policy_enforce_mode","java.lang.String",e);
         }
-        try {
-            setDecisionStrategy(json.getInteger("decision_strategy")==null?null:json.getInteger("decision_strategy").shortValue());
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("decision_strategy","java.lang.Short",e);
-        }
         return this;
     }
 
@@ -102,7 +87,6 @@ public interface IResourceServer extends VertxPojo, Serializable {
         json.put("id",getId());
         json.put("allow_rs_remote_mgmt",getAllowRsRemoteMgmt());
         json.put("policy_enforce_mode",getPolicyEnforceMode());
-        json.put("decision_strategy",getDecisionStrategy());
         return json;
     }
 

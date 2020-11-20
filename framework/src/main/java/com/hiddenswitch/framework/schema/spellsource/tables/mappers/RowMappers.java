@@ -95,6 +95,7 @@ public class RowMappers {
             pojo.setAutomaticallyClose(row.getBoolean("automatically_close"));
             pojo.setMaxTicketsToProcess(row.getInteger("max_tickets_to_process"));
             pojo.setScanFrequency(row.getLong("scan_frequency"));
+            pojo.setLobbySize(row.getInteger("lobby_size"));
             return pojo;
         };
     }
