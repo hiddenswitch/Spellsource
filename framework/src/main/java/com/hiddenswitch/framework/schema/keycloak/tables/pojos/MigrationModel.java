@@ -15,28 +15,24 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MigrationModel implements VertxPojo, IMigrationModel {
 
-    private static final long serialVersionUID = 40655771;
+    private static final long serialVersionUID = -838493599;
 
     private String id;
     private String version;
-    private Long   updateTime;
 
     public MigrationModel() {}
 
     public MigrationModel(IMigrationModel value) {
         this.id = value.getId();
         this.version = value.getVersion();
-        this.updateTime = value.getUpdateTime();
     }
 
     public MigrationModel(
         String id,
-        String version,
-        Long   updateTime
+        String version
     ) {
         this.id = id;
         this.version = version;
-        this.updateTime = updateTime;
     }
 
     public MigrationModel(io.vertx.core.json.JsonObject json) {
@@ -67,23 +63,11 @@ public class MigrationModel implements VertxPojo, IMigrationModel {
     }
 
     @Override
-    public Long getUpdateTime() {
-        return this.updateTime;
-    }
-
-    @Override
-    public MigrationModel setUpdateTime(Long updateTime) {
-        this.updateTime = updateTime;
-        return this;
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("MigrationModel (");
 
         sb.append(id);
         sb.append(", ").append(version);
-        sb.append(", ").append(updateTime);
 
         sb.append(")");
         return sb.toString();
@@ -97,7 +81,6 @@ public class MigrationModel implements VertxPojo, IMigrationModel {
     public void from(IMigrationModel from) {
         setId(from.getId());
         setVersion(from.getVersion());
-        setUpdateTime(from.getUpdateTime());
     }
 
     @Override

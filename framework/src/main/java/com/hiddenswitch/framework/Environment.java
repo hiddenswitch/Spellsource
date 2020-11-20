@@ -95,6 +95,16 @@ public class Environment {
 		return queryExecutors.get();
 	}
 
+	public static Future<Void> sleep(Vertx vertx, long milliseconds) {
+		var fut = Promise.<Long>promise();
+		vertx.setTimer(milliseconds, fut::complete);
+		return fut.future().mapEmpty();
+	}
+
+	public static Future<Void> sleep(long milliseconds) {
+		return sleep(Vertx.currentContext().owner(), milliseconds);
+	}
+
 	public static Configuration jooqAkaDaoConfiguration() {
 		return jooqConfiguration.updateAndGet(existing -> {
 			if (existing != null) {

@@ -84,7 +84,8 @@ create table spellsource.matchmaking_queues
   once boolean not null default false,
   automatically_close boolean not null default true,
   max_tickets_to_process integer not null default 10,
-  scan_frequency bigint not null default 3000
+  scan_frequency bigint not null default 3000,
+  lobby_size int not null default 2 check (lobby_size <= 2 and lobby_size >= 0)
 );
 
 create table spellsource.matchmaking_tickets
@@ -93,12 +94,14 @@ create table spellsource.matchmaking_tickets
   queue_id text references spellsource.matchmaking_queues (id) on delete cascade,
   user_id text references keycloak.user_entity (id),
   deck_id text references spellsource.decks (id),
-  bot_deck_id text references spellsource.decks (id),
+  bot_deck_id text null default null references spellsource.decks (id),
   last_modified timestamptz not null default now(),
   created_at timestamptz not null default now(),
   assigned_at timestamptz,
   game_id bigint null references spellsource.games (id)
 );
 
-create index on spellsource.matchmaking_tickets (queue_id);
+create index on spellsource.matchmaking_tickets (queue_id) where spellsource.matchmaking_tickets.game_id is null;
 create index on spellsource.matchmaking_tickets (user_id);
+
+comment on index spellsource.matchmaking_tickets_queue_id_idx is 'only indexes null game ID tickets'

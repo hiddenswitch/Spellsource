@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Realm extends TableImpl<RealmRecord> {
 
-    private static final long serialVersionUID = -1422998292;
+    private static final long serialVersionUID = -944176490;
 
     /**
      * The reference instance of <code>keycloak.realm</code>
@@ -298,16 +298,6 @@ public class Realm extends TableImpl<RealmRecord> {
     public final TableField<RealmRecord, Boolean> ALLOW_USER_MANAGED_ACCESS = createField(DSL.name("allow_user_managed_access"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * The column <code>keycloak.realm.sso_max_lifespan_remember_me</code>.
-     */
-    public final TableField<RealmRecord, Integer> SSO_MAX_LIFESPAN_REMEMBER_ME = createField(DSL.name("sso_max_lifespan_remember_me"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
-
-    /**
-     * The column <code>keycloak.realm.sso_idle_timeout_remember_me</code>.
-     */
-    public final TableField<RealmRecord, Integer> SSO_IDLE_TIMEOUT_REMEMBER_ME = createField(DSL.name("sso_idle_timeout_remember_me"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
-
-    /**
      * Create a <code>keycloak.realm</code> table reference
      */
     public Realm() {
@@ -358,6 +348,15 @@ public class Realm extends TableImpl<RealmRecord> {
     @Override
     public List<UniqueKey<RealmRecord>> getKeys() {
         return Arrays.<UniqueKey<RealmRecord>>asList(Keys.CONSTRAINT_4A, Keys.UK_ORVSDMLA56612EAEFIQ6WL5OI);
+    }
+
+    @Override
+    public List<ForeignKey<RealmRecord, ?>> getReferences() {
+        return Arrays.<ForeignKey<RealmRecord, ?>>asList(Keys.REALM__FK_TRAF444KK6QRKMS7N56AIWQ5Y);
+    }
+
+    public Client client() {
+        return new Client(this, Keys.REALM__FK_TRAF444KK6QRKMS7N56AIWQ5Y);
     }
 
     @Override

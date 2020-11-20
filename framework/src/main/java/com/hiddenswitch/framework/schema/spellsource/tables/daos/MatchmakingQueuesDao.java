@@ -190,6 +190,20 @@ public class MatchmakingQueuesDao extends AbstractReactiveVertxDAO<MatchmakingQu
         return findManyByCondition(MatchmakingQueues.MATCHMAKING_QUEUES.SCAN_FREQUENCY.in(values),limit);
     }
 
+    /**
+     * Find records that have <code>lobby_size IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues>> findManyByLobbySize(Collection<Integer> values) {
+        return findManyByCondition(MatchmakingQueues.MATCHMAKING_QUEUES.LOBBY_SIZE.in(values));
+    }
+
+    /**
+     * Find records that have <code>lobby_size IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues>> findManyByLobbySize(Collection<Integer> values, int limit) {
+        return findManyByCondition(MatchmakingQueues.MATCHMAKING_QUEUES.LOBBY_SIZE.in(values),limit);
+    }
+
     @Override
     public ReactiveClassicQueryExecutor<MatchmakingQueuesRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues,String> queryExecutor(){
         return (ReactiveClassicQueryExecutor<MatchmakingQueuesRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues,String>) super.queryExecutor();

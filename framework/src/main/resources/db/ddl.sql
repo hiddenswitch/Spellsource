@@ -1710,7 +1710,9 @@ CREATE TABLE spellsource.matchmaking_queues (
     once boolean DEFAULT false NOT NULL,
     automatically_close boolean DEFAULT true NOT NULL,
     max_tickets_to_process integer DEFAULT 10 NOT NULL,
-    scan_frequency bigint DEFAULT 3000 NOT NULL
+    scan_frequency bigint DEFAULT 3000 NOT NULL,
+    lobby_size integer DEFAULT 2 NOT NULL,
+    CONSTRAINT matchmaking_queues_lobby_size_check CHECK (((lobby_size <= 2) AND (lobby_size >= 0)))
 );
 
 

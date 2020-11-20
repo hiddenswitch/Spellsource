@@ -66,17 +66,17 @@ public class OfflineUserSessionDao extends AbstractReactiveVertxDAO<OfflineUserS
     }
 
     /**
-     * Find records that have <code>created_on IN (values)</code> asynchronously
+     * Find records that have <code>last_session_refresh IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByCreatedOn(Collection<Integer> values) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.CREATED_ON.in(values));
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByLastSessionRefresh(Collection<Integer> values) {
+        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.LAST_SESSION_REFRESH.in(values));
     }
 
     /**
-     * Find records that have <code>created_on IN (values)</code> asynchronously limited by the given limit
+     * Find records that have <code>last_session_refresh IN (values)</code> asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByCreatedOn(Collection<Integer> values, int limit) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.CREATED_ON.in(values),limit);
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByLastSessionRefresh(Collection<Integer> values, int limit) {
+        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.LAST_SESSION_REFRESH.in(values),limit);
     }
 
     /**
@@ -105,20 +105,6 @@ public class OfflineUserSessionDao extends AbstractReactiveVertxDAO<OfflineUserS
      */
     public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByData(Collection<String> values, int limit) {
         return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.DATA.in(values),limit);
-    }
-
-    /**
-     * Find records that have <code>last_session_refresh IN (values)</code> asynchronously
-     */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByLastSessionRefresh(Collection<Integer> values) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.LAST_SESSION_REFRESH.in(values));
-    }
-
-    /**
-     * Find records that have <code>last_session_refresh IN (values)</code> asynchronously limited by the given limit
-     */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByLastSessionRefresh(Collection<Integer> values, int limit) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.LAST_SESSION_REFRESH.in(values),limit);
     }
 
     @Override

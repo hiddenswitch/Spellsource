@@ -1511,7 +1511,7 @@ message MatchmakingQueueConfiguration {
     bool join = 13;
     bool automaticallyClose = 14;
     int32 maxTicketsToProcess = 15;
-    int32 scanFrequency = 16;
+    int64 scanFrequency = 16;
 }
 
 message MatchmakingCreateQueueRequest {

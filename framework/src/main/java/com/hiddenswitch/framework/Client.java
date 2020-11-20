@@ -1,17 +1,17 @@
 package com.hiddenswitch.framework;
 
 import com.avast.grpc.jwt.client.JwtCallCredentials;
+import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.rpc.*;
+import com.hiddenswitch.framework.rpc.CreateAccountRequest;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
-import com.hiddenswitch.spellsource.rpc.DecksPutResponse;
-import com.hiddenswitch.spellsource.rpc.HiddenSwitchSpellsourceAPIServiceGrpc;
-import com.hiddenswitch.spellsource.rpc.VertxHiddenSwitchSpellsourceAPIServiceGrpc;
+import com.hiddenswitch.spellsource.rpc.*;
 import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.impl.ContextInternal;
-import io.vertx.core.impl.VertxInternal;
+import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.grpc.VertxChannelBuilder;
@@ -19,6 +19,7 @@ import org.keycloak.representations.AccessTokenResponse;
 
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -32,12 +33,14 @@ public class Client implements AutoCloseable {
 	private String username;
 	private String email;
 	private String password;
+	private Promise<MatchmakingQueuePutResponse> matchmakingResponseFut;
+	private Promise<Void> matchmakingCancelFut;
 
 	public Client(Vertx vertx, WebClient webClient, String keycloakPath) {
 		this.vertx = vertx;
 		this.webClient = webClient;
 		this.keycloakPath = keycloakPath;
-		((ContextInternal)vertx.getOrCreateContext()).addCloseHook(handler -> {
+		((ContextInternal) vertx.getOrCreateContext()).addCloseHook(handler -> {
 			close();
 			handler.handle(Future.succeededFuture());
 		});
@@ -56,6 +59,43 @@ public class Client implements AutoCloseable {
 
 	public Client(Vertx vertx) {
 		this(vertx, WebClient.create(vertx));
+	}
+
+	public Future<MatchmakingQueuePutResponse> matchmake(String queueId, String deckId) {
+		if (matchmakingResponseFut != null) {
+			throw new RuntimeException("already matchmaking");
+		}
+		var matchmaking = matchmaking();
+		var matchmakingRequestsFut = Promise.<WriteStream<MatchmakingQueuePutRequest>>promise();
+		var matchmakingResponses = matchmaking.enqueue(matchmakingRequestsFut::complete);
+		var request = matchmakingRequestsFut.future().compose(matchmakingRequests -> matchmakingRequests.write(MatchmakingQueuePutRequest.newBuilder()
+				.setDeckId(deckId)
+				.setQueueId(queueId).build()));
+		matchmakingResponseFut = Promise.<MatchmakingQueuePutResponse>promise();
+		matchmakingCancelFut = Promise.<Void>promise();
+		matchmakingResponses.handler(matchmakingResponseFut::complete);
+		var response = matchmakingResponseFut.future();
+		return CompositeFuture.join(request, response
+				.onFailure(t -> {
+					if (t instanceof CancellationException) {
+						matchmakingRequestsFut.future().result().write(MatchmakingQueuePutRequest.newBuilder().setQueueId(queueId).setCancel(true).build()).onComplete(matchmakingCancelFut);
+					}
+				}))
+				.onComplete(ignored -> matchmakingResponseFut = null)
+				.map(f -> f.resultAt(1));
+	}
+
+	public Future<MatchmakingQueuePutResponse> matchmake(String queueId) {
+		return legacy().decksGetAll(Empty.getDefaultInstance())
+				.compose(decks -> matchmake(queueId, decks.getDecks(0).getCollection().getId()));
+	}
+
+	public Future<Void> cancelMatchmaking() {
+		if (matchmakingResponseFut == null) {
+			throw new RuntimeException("not matchmaking");
+		}
+		matchmakingResponseFut.tryFail(new CancellationException("cancelling matchmaking"));
+		return matchmakingCancelFut.future();
 	}
 
 	public Future<LoginOrCreateReply> createAndLogin(String username, String email, String password) {
@@ -152,6 +192,10 @@ public class Client implements AutoCloseable {
 
 	private void handleCreateAccountReply(LoginOrCreateReplyOrBuilder reply) {
 		handleLogin(new AccessTokenResponse());
+		handleAccountsCreateUser(new UserEntity()
+				.setId(reply.getUserEntity().getId())
+				.setUsername(reply.getUserEntity().getUsername())
+				.setEmail(reply.getUserEntity().getEmail()));
 		this.accessToken.setToken(reply.getAccessTokenResponse().getToken());
 	}
 
@@ -168,9 +212,21 @@ public class Client implements AutoCloseable {
 				.withCallCredentials(credentials());
 	}
 
+	public VertxMatchmakingGrpc.MatchmakingVertxStub matchmaking() {
+		return VertxMatchmakingGrpc.newVertxStub(channel())
+				.withCallCredentials(credentials());
+	}
+
 	public Future<Void> close(Object ignored) {
 		close();
 		return Future.succeededFuture();
+	}
+
+	public Future<MatchmakingQueuePutResponse> matchmakingResponse() {
+		if (matchmakingResponseFut == null){
+			return Future.failedFuture("not matchmaking");
+		}
+		return matchmakingResponseFut.future();
 	}
 
 	public void close(AsyncResult<?> ignored) {

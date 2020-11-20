@@ -11,17 +11,19 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingQ
 import java.util.Arrays;
 import java.util.List;
 
+import org.jooq.Check;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row12;
+import org.jooq.Row13;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MatchmakingQueues extends TableImpl<MatchmakingQueuesRecord> {
 
-    private static final long serialVersionUID = -1801997465;
+    private static final long serialVersionUID = 1922132371;
 
     /**
      * The reference instance of <code>spellsource.matchmaking_queues</code>
@@ -107,6 +109,11 @@ public class MatchmakingQueues extends TableImpl<MatchmakingQueuesRecord> {
     public final TableField<MatchmakingQueuesRecord, Long> SCAN_FREQUENCY = createField(DSL.name("scan_frequency"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("3000", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     /**
+     * The column <code>spellsource.matchmaking_queues.lobby_size</code>.
+     */
+    public final TableField<MatchmakingQueuesRecord, Integer> LOBBY_SIZE = createField(DSL.name("lobby_size"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("2", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+
+    /**
      * Create a <code>spellsource.matchmaking_queues</code> table reference
      */
     public MatchmakingQueues() {
@@ -155,6 +162,13 @@ public class MatchmakingQueues extends TableImpl<MatchmakingQueuesRecord> {
     }
 
     @Override
+    public List<Check<MatchmakingQueuesRecord>> getChecks() {
+        return Arrays.<Check<MatchmakingQueuesRecord>>asList(
+              Internal.createCheck(this, DSL.name("matchmaking_queues_lobby_size_check"), "(((lobby_size <= 2) AND (lobby_size >= 0)))", true)
+        );
+    }
+
+    @Override
     public MatchmakingQueues as(String alias) {
         return new MatchmakingQueues(DSL.name(alias), this);
     }
@@ -181,11 +195,11 @@ public class MatchmakingQueues extends TableImpl<MatchmakingQueuesRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row12 type methods
+    // Row13 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row12<String, String, Boolean, Boolean, Boolean, Long, Long, Long, Boolean, Boolean, Integer, Long> fieldsRow() {
-        return (Row12) super.fieldsRow();
+    public Row13<String, String, Boolean, Boolean, Boolean, Long, Long, Long, Boolean, Boolean, Integer, Long, Integer> fieldsRow() {
+        return (Row13) super.fieldsRow();
     }
 }

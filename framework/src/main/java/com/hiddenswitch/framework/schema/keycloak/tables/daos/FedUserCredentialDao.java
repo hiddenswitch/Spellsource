@@ -37,6 +37,34 @@ public class FedUserCredentialDao extends AbstractReactiveVertxDAO<FedUserCreden
     }
 
     /**
+     * Find records that have <code>device IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByDevice(Collection<String> values) {
+        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.DEVICE.in(values));
+    }
+
+    /**
+     * Find records that have <code>device IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByDevice(Collection<String> values, int limit) {
+        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.DEVICE.in(values),limit);
+    }
+
+    /**
+     * Find records that have <code>hash_iterations IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByHashIterations(Collection<Integer> values) {
+        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.HASH_ITERATIONS.in(values));
+    }
+
+    /**
+     * Find records that have <code>hash_iterations IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByHashIterations(Collection<Integer> values, int limit) {
+        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.HASH_ITERATIONS.in(values),limit);
+    }
+
+    /**
      * Find records that have <code>salt IN (values)</code> asynchronously
      */
     public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyBySalt(Collection<byte[]> values) {
@@ -65,6 +93,20 @@ public class FedUserCredentialDao extends AbstractReactiveVertxDAO<FedUserCreden
     }
 
     /**
+     * Find records that have <code>value IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByValue(Collection<String> values) {
+        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.VALUE.in(values));
+    }
+
+    /**
+     * Find records that have <code>value IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByValue(Collection<String> values, int limit) {
+        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.VALUE.in(values),limit);
+    }
+
+    /**
      * Find records that have <code>created_date IN (values)</code> asynchronously
      */
     public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByCreatedDate(Collection<Long> values) {
@@ -76,6 +118,62 @@ public class FedUserCredentialDao extends AbstractReactiveVertxDAO<FedUserCreden
      */
     public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByCreatedDate(Collection<Long> values, int limit) {
         return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.CREATED_DATE.in(values),limit);
+    }
+
+    /**
+     * Find records that have <code>counter IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByCounter(Collection<Integer> values) {
+        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.COUNTER.in(values));
+    }
+
+    /**
+     * Find records that have <code>counter IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByCounter(Collection<Integer> values, int limit) {
+        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.COUNTER.in(values),limit);
+    }
+
+    /**
+     * Find records that have <code>digits IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByDigits(Collection<Integer> values) {
+        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.DIGITS.in(values));
+    }
+
+    /**
+     * Find records that have <code>digits IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByDigits(Collection<Integer> values, int limit) {
+        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.DIGITS.in(values),limit);
+    }
+
+    /**
+     * Find records that have <code>period IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByPeriod(Collection<Integer> values) {
+        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.PERIOD.in(values));
+    }
+
+    /**
+     * Find records that have <code>period IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByPeriod(Collection<Integer> values, int limit) {
+        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.PERIOD.in(values),limit);
+    }
+
+    /**
+     * Find records that have <code>algorithm IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByAlgorithm(Collection<String> values) {
+        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.ALGORITHM.in(values));
+    }
+
+    /**
+     * Find records that have <code>algorithm IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByAlgorithm(Collection<String> values, int limit) {
+        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.ALGORITHM.in(values),limit);
     }
 
     /**
@@ -118,62 +216,6 @@ public class FedUserCredentialDao extends AbstractReactiveVertxDAO<FedUserCreden
      */
     public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByStorageProviderId(Collection<String> values, int limit) {
         return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.STORAGE_PROVIDER_ID.in(values),limit);
-    }
-
-    /**
-     * Find records that have <code>user_label IN (values)</code> asynchronously
-     */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByUserLabel(Collection<String> values) {
-        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.USER_LABEL.in(values));
-    }
-
-    /**
-     * Find records that have <code>user_label IN (values)</code> asynchronously limited by the given limit
-     */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByUserLabel(Collection<String> values, int limit) {
-        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.USER_LABEL.in(values),limit);
-    }
-
-    /**
-     * Find records that have <code>secret_data IN (values)</code> asynchronously
-     */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyBySecretData(Collection<String> values) {
-        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.SECRET_DATA.in(values));
-    }
-
-    /**
-     * Find records that have <code>secret_data IN (values)</code> asynchronously limited by the given limit
-     */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyBySecretData(Collection<String> values, int limit) {
-        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.SECRET_DATA.in(values),limit);
-    }
-
-    /**
-     * Find records that have <code>credential_data IN (values)</code> asynchronously
-     */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByCredentialData(Collection<String> values) {
-        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.CREDENTIAL_DATA.in(values));
-    }
-
-    /**
-     * Find records that have <code>credential_data IN (values)</code> asynchronously limited by the given limit
-     */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByCredentialData(Collection<String> values, int limit) {
-        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.CREDENTIAL_DATA.in(values),limit);
-    }
-
-    /**
-     * Find records that have <code>priority IN (values)</code> asynchronously
-     */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByPriority(Collection<Integer> values) {
-        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.PRIORITY.in(values));
-    }
-
-    /**
-     * Find records that have <code>priority IN (values)</code> asynchronously limited by the given limit
-     */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential>> findManyByPriority(Collection<Integer> values, int limit) {
-        return findManyByCondition(FedUserCredential.FED_USER_CREDENTIAL.PRIORITY.in(values),limit);
     }
 
     @Override

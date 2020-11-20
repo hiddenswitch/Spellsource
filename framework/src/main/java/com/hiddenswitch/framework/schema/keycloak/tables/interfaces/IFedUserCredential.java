@@ -27,6 +27,26 @@ public interface IFedUserCredential extends VertxPojo, Serializable {
     public String getId();
 
     /**
+     * Setter for <code>keycloak.fed_user_credential.device</code>.
+     */
+    public IFedUserCredential setDevice(String value);
+
+    /**
+     * Getter for <code>keycloak.fed_user_credential.device</code>.
+     */
+    public String getDevice();
+
+    /**
+     * Setter for <code>keycloak.fed_user_credential.hash_iterations</code>.
+     */
+    public IFedUserCredential setHashIterations(Integer value);
+
+    /**
+     * Getter for <code>keycloak.fed_user_credential.hash_iterations</code>.
+     */
+    public Integer getHashIterations();
+
+    /**
      * Setter for <code>keycloak.fed_user_credential.salt</code>.
      */
     public IFedUserCredential setSalt(byte[] value);
@@ -47,6 +67,16 @@ public interface IFedUserCredential extends VertxPojo, Serializable {
     public String getType();
 
     /**
+     * Setter for <code>keycloak.fed_user_credential.value</code>.
+     */
+    public IFedUserCredential setValue(String value);
+
+    /**
+     * Getter for <code>keycloak.fed_user_credential.value</code>.
+     */
+    public String getValue();
+
+    /**
      * Setter for <code>keycloak.fed_user_credential.created_date</code>.
      */
     public IFedUserCredential setCreatedDate(Long value);
@@ -55,6 +85,46 @@ public interface IFedUserCredential extends VertxPojo, Serializable {
      * Getter for <code>keycloak.fed_user_credential.created_date</code>.
      */
     public Long getCreatedDate();
+
+    /**
+     * Setter for <code>keycloak.fed_user_credential.counter</code>.
+     */
+    public IFedUserCredential setCounter(Integer value);
+
+    /**
+     * Getter for <code>keycloak.fed_user_credential.counter</code>.
+     */
+    public Integer getCounter();
+
+    /**
+     * Setter for <code>keycloak.fed_user_credential.digits</code>.
+     */
+    public IFedUserCredential setDigits(Integer value);
+
+    /**
+     * Getter for <code>keycloak.fed_user_credential.digits</code>.
+     */
+    public Integer getDigits();
+
+    /**
+     * Setter for <code>keycloak.fed_user_credential.period</code>.
+     */
+    public IFedUserCredential setPeriod(Integer value);
+
+    /**
+     * Getter for <code>keycloak.fed_user_credential.period</code>.
+     */
+    public Integer getPeriod();
+
+    /**
+     * Setter for <code>keycloak.fed_user_credential.algorithm</code>.
+     */
+    public IFedUserCredential setAlgorithm(String value);
+
+    /**
+     * Getter for <code>keycloak.fed_user_credential.algorithm</code>.
+     */
+    public String getAlgorithm();
 
     /**
      * Setter for <code>keycloak.fed_user_credential.user_id</code>.
@@ -86,46 +156,6 @@ public interface IFedUserCredential extends VertxPojo, Serializable {
      */
     public String getStorageProviderId();
 
-    /**
-     * Setter for <code>keycloak.fed_user_credential.user_label</code>.
-     */
-    public IFedUserCredential setUserLabel(String value);
-
-    /**
-     * Getter for <code>keycloak.fed_user_credential.user_label</code>.
-     */
-    public String getUserLabel();
-
-    /**
-     * Setter for <code>keycloak.fed_user_credential.secret_data</code>.
-     */
-    public IFedUserCredential setSecretData(String value);
-
-    /**
-     * Getter for <code>keycloak.fed_user_credential.secret_data</code>.
-     */
-    public String getSecretData();
-
-    /**
-     * Setter for <code>keycloak.fed_user_credential.credential_data</code>.
-     */
-    public IFedUserCredential setCredentialData(String value);
-
-    /**
-     * Getter for <code>keycloak.fed_user_credential.credential_data</code>.
-     */
-    public String getCredentialData();
-
-    /**
-     * Setter for <code>keycloak.fed_user_credential.priority</code>.
-     */
-    public IFedUserCredential setPriority(Integer value);
-
-    /**
-     * Getter for <code>keycloak.fed_user_credential.priority</code>.
-     */
-    public Integer getPriority();
-
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -148,6 +178,16 @@ public interface IFedUserCredential extends VertxPojo, Serializable {
             throw new UnexpectedJsonValueType("id","java.lang.String",e);
         }
         try {
+            setDevice(json.getString("device"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("device","java.lang.String",e);
+        }
+        try {
+            setHashIterations(json.getInteger("hash_iterations"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("hash_iterations","java.lang.Integer",e);
+        }
+        try {
             setSalt(json.getBinary("salt"));
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("salt","byte[]",e);
@@ -158,9 +198,34 @@ public interface IFedUserCredential extends VertxPojo, Serializable {
             throw new UnexpectedJsonValueType("type","java.lang.String",e);
         }
         try {
+            setValue(json.getString("value"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("value","java.lang.String",e);
+        }
+        try {
             setCreatedDate(json.getLong("created_date"));
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("created_date","java.lang.Long",e);
+        }
+        try {
+            setCounter(json.getInteger("counter"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("counter","java.lang.Integer",e);
+        }
+        try {
+            setDigits(json.getInteger("digits"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("digits","java.lang.Integer",e);
+        }
+        try {
+            setPeriod(json.getInteger("period"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("period","java.lang.Integer",e);
+        }
+        try {
+            setAlgorithm(json.getString("algorithm"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("algorithm","java.lang.String",e);
         }
         try {
             setUserId(json.getString("user_id"));
@@ -177,26 +242,6 @@ public interface IFedUserCredential extends VertxPojo, Serializable {
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("storage_provider_id","java.lang.String",e);
         }
-        try {
-            setUserLabel(json.getString("user_label"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("user_label","java.lang.String",e);
-        }
-        try {
-            setSecretData(json.getString("secret_data"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("secret_data","java.lang.String",e);
-        }
-        try {
-            setCredentialData(json.getString("credential_data"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("credential_data","java.lang.String",e);
-        }
-        try {
-            setPriority(json.getInteger("priority"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("priority","java.lang.Integer",e);
-        }
         return this;
     }
 
@@ -205,16 +250,19 @@ public interface IFedUserCredential extends VertxPojo, Serializable {
     public default io.vertx.core.json.JsonObject toJson() {
         io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
         json.put("id",getId());
+        json.put("device",getDevice());
+        json.put("hash_iterations",getHashIterations());
         json.put("salt",getSalt());
         json.put("type",getType());
+        json.put("value",getValue());
         json.put("created_date",getCreatedDate());
+        json.put("counter",getCounter());
+        json.put("digits",getDigits());
+        json.put("period",getPeriod());
+        json.put("algorithm",getAlgorithm());
         json.put("user_id",getUserId());
         json.put("realm_id",getRealmId());
         json.put("storage_provider_id",getStorageProviderId());
-        json.put("user_label",getUserLabel());
-        json.put("secret_data",getSecretData());
-        json.put("credential_data",getCredentialData());
-        json.put("priority",getPriority());
         return json;
     }
 

@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserConsent extends TableImpl<UserConsentRecord> {
 
-    private static final long serialVersionUID = -1368504503;
+    private static final long serialVersionUID = -1419716164;
 
     /**
      * The reference instance of <code>keycloak.user_consent</code>
@@ -56,7 +56,7 @@ public class UserConsent extends TableImpl<UserConsentRecord> {
     /**
      * The column <code>keycloak.user_consent.client_id</code>.
      */
-    public final TableField<UserConsentRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserConsentRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.user_consent.user_id</code>.

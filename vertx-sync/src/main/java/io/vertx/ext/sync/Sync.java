@@ -53,6 +53,11 @@ public class Sync {
 	}
 
 	@Suspendable
+	public static <T> T await(Promise<T> promise) {
+		return await(promise.future());
+	}
+
+	@Suspendable
 	public static <T> T await(Future<T> future) {
 		try {
 			return new AsyncAdaptor<T>() {
@@ -433,13 +438,33 @@ public class Sync {
 			}
 		});
 //		fiber.setUncaughtExceptionHandler((f, e) -> Tracing.error(e));
+		fiber.inheritThreadLocals();
 		fiber.start();
 		return promise.future();
 	}
 
 	@Suspendable
+	public static Future<Void> runInFiber(SuspendableRunnable context) {
+		return fiber(() -> {
+			context.run();
+			return null;
+		});
+	}
+
+	@Suspendable
+	public static <V> Future<V> runInFiber(SuspendableCallable<V> context) {
+		return fiber(context);
+	}
+
+	@Suspendable
+	public static <V> Future<V> runInFiber(Vertx vertx, SuspendableCallable<V> context) {
+		return fiber(context);
+	}
+
+	@Suspendable
 	public static void fiber(SuspendableRunnable context) {
 		var fiber = new Fiber<Void>(getContextScheduler(), context::run);
+		fiber.inheritThreadLocals();
 //		fiber.setUncaughtExceptionHandler((f, e) -> Tracing.error(e));
 		fiber.start();
 	}
@@ -448,6 +473,7 @@ public class Sync {
 	public static <T> Handler<T> fiber(FiberScheduler scheduler, SuspendableAction1<T> handler) {
 		return v -> {
 			var fiber = new Fiber<Void>(scheduler, () -> handler.call(v));
+			fiber.inheritThreadLocals();
 //			fiber.setUncaughtExceptionHandler((f, e) -> Tracing.error(e));
 			fiber.start();
 		};

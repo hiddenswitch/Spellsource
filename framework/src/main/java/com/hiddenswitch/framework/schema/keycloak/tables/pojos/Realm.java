@@ -15,7 +15,7 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Realm implements VertxPojo, IRealm {
 
-    private static final long serialVersionUID = 517758156;
+    private static final long serialVersionUID = 1451036769;
 
     private String  id;
     private Integer accessCodeLifespan;
@@ -67,8 +67,6 @@ public class Realm implements VertxPojo, IRealm {
     private String  dockerAuthFlow;
     private Integer refreshTokenMaxReuse;
     private Boolean allowUserManagedAccess;
-    private Integer ssoMaxLifespanRememberMe;
-    private Integer ssoIdleTimeoutRememberMe;
 
     public Realm() {}
 
@@ -123,8 +121,6 @@ public class Realm implements VertxPojo, IRealm {
         this.dockerAuthFlow = value.getDockerAuthFlow();
         this.refreshTokenMaxReuse = value.getRefreshTokenMaxReuse();
         this.allowUserManagedAccess = value.getAllowUserManagedAccess();
-        this.ssoMaxLifespanRememberMe = value.getSsoMaxLifespanRememberMe();
-        this.ssoIdleTimeoutRememberMe = value.getSsoIdleTimeoutRememberMe();
     }
 
     public Realm(
@@ -177,9 +173,7 @@ public class Realm implements VertxPojo, IRealm {
         Boolean duplicateEmailsAllowed,
         String  dockerAuthFlow,
         Integer refreshTokenMaxReuse,
-        Boolean allowUserManagedAccess,
-        Integer ssoMaxLifespanRememberMe,
-        Integer ssoIdleTimeoutRememberMe
+        Boolean allowUserManagedAccess
     ) {
         this.id = id;
         this.accessCodeLifespan = accessCodeLifespan;
@@ -231,8 +225,6 @@ public class Realm implements VertxPojo, IRealm {
         this.dockerAuthFlow = dockerAuthFlow;
         this.refreshTokenMaxReuse = refreshTokenMaxReuse;
         this.allowUserManagedAccess = allowUserManagedAccess;
-        this.ssoMaxLifespanRememberMe = ssoMaxLifespanRememberMe;
-        this.ssoIdleTimeoutRememberMe = ssoIdleTimeoutRememberMe;
     }
 
     public Realm(io.vertx.core.json.JsonObject json) {
@@ -791,28 +783,6 @@ public class Realm implements VertxPojo, IRealm {
     }
 
     @Override
-    public Integer getSsoMaxLifespanRememberMe() {
-        return this.ssoMaxLifespanRememberMe;
-    }
-
-    @Override
-    public Realm setSsoMaxLifespanRememberMe(Integer ssoMaxLifespanRememberMe) {
-        this.ssoMaxLifespanRememberMe = ssoMaxLifespanRememberMe;
-        return this;
-    }
-
-    @Override
-    public Integer getSsoIdleTimeoutRememberMe() {
-        return this.ssoIdleTimeoutRememberMe;
-    }
-
-    @Override
-    public Realm setSsoIdleTimeoutRememberMe(Integer ssoIdleTimeoutRememberMe) {
-        this.ssoIdleTimeoutRememberMe = ssoIdleTimeoutRememberMe;
-        return this;
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Realm (");
 
@@ -866,8 +836,6 @@ public class Realm implements VertxPojo, IRealm {
         sb.append(", ").append(dockerAuthFlow);
         sb.append(", ").append(refreshTokenMaxReuse);
         sb.append(", ").append(allowUserManagedAccess);
-        sb.append(", ").append(ssoMaxLifespanRememberMe);
-        sb.append(", ").append(ssoIdleTimeoutRememberMe);
 
         sb.append(")");
         return sb.toString();
@@ -929,8 +897,6 @@ public class Realm implements VertxPojo, IRealm {
         setDockerAuthFlow(from.getDockerAuthFlow());
         setRefreshTokenMaxReuse(from.getRefreshTokenMaxReuse());
         setAllowUserManagedAccess(from.getAllowUserManagedAccess());
-        setSsoMaxLifespanRememberMe(from.getSsoMaxLifespanRememberMe());
-        setSsoIdleTimeoutRememberMe(from.getSsoIdleTimeoutRememberMe());
     }
 
     @Override

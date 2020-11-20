@@ -346,7 +346,7 @@ namespace Spellsource.Proto {
             "HAoUYXdhaXRpbmdMb2JieVRpbWVvdXQYCyABKAMSDAoEb25jZRgMIAEoCBIM",
             "CgRqb2luGA0gASgIEhoKEmF1dG9tYXRpY2FsbHlDbG9zZRgOIAEoCBIbChNt",
             "YXhUaWNrZXRzVG9Qcm9jZXNzGA8gASgFEhUKDXNjYW5GcmVxdWVuY3kYECAB",
-            "KAUiYgodTWF0Y2htYWtpbmdDcmVhdGVRdWV1ZVJlcXVlc3QSQQoNY29uZmln",
+            "KAMiYgodTWF0Y2htYWtpbmdDcmVhdGVRdWV1ZVJlcXVlc3QSQQoNY29uZmln",
             "dXJhdGlvbhgBIAEoCzIqLnNwZWxsc291cmNlLk1hdGNobWFraW5nUXVldWVD",
             "b25maWd1cmF0aW9uKpMCCgpBY3Rpb25UeXBlEhYKEkFDVElPTl9UWVBFX1NZ",
             "U1RFTRAAEhgKFEFDVElPTl9UWVBFX0VORF9UVVJOEAESHwobQUNUSU9OX1RZ",
@@ -30138,9 +30138,9 @@ namespace Spellsource.Proto {
 
     /// <summary>Field number for the "scanFrequency" field.</summary>
     public const int ScanFrequencyFieldNumber = 16;
-    private int scanFrequency_;
+    private long scanFrequency_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int ScanFrequency {
+    public long ScanFrequency {
       get { return scanFrequency_; }
       set {
         scanFrequency_ = value;
@@ -30197,7 +30197,7 @@ namespace Spellsource.Proto {
       if (Join != false) hash ^= Join.GetHashCode();
       if (AutomaticallyClose != false) hash ^= AutomaticallyClose.GetHashCode();
       if (MaxTicketsToProcess != 0) hash ^= MaxTicketsToProcess.GetHashCode();
-      if (ScanFrequency != 0) hash ^= ScanFrequency.GetHashCode();
+      if (ScanFrequency != 0L) hash ^= ScanFrequency.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -30271,9 +30271,9 @@ namespace Spellsource.Proto {
         output.WriteRawTag(120);
         output.WriteInt32(MaxTicketsToProcess);
       }
-      if (ScanFrequency != 0) {
+      if (ScanFrequency != 0L) {
         output.WriteRawTag(128, 1);
-        output.WriteInt32(ScanFrequency);
+        output.WriteInt64(ScanFrequency);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -30341,9 +30341,9 @@ namespace Spellsource.Proto {
         output.WriteRawTag(120);
         output.WriteInt32(MaxTicketsToProcess);
       }
-      if (ScanFrequency != 0) {
+      if (ScanFrequency != 0L) {
         output.WriteRawTag(128, 1);
-        output.WriteInt32(ScanFrequency);
+        output.WriteInt64(ScanFrequency);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -30397,8 +30397,8 @@ namespace Spellsource.Proto {
       if (MaxTicketsToProcess != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaxTicketsToProcess);
       }
-      if (ScanFrequency != 0) {
-        size += 2 + pb::CodedOutputStream.ComputeInt32Size(ScanFrequency);
+      if (ScanFrequency != 0L) {
+        size += 2 + pb::CodedOutputStream.ComputeInt64Size(ScanFrequency);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -30454,7 +30454,7 @@ namespace Spellsource.Proto {
       if (other.MaxTicketsToProcess != 0) {
         MaxTicketsToProcess = other.MaxTicketsToProcess;
       }
-      if (other.ScanFrequency != 0) {
+      if (other.ScanFrequency != 0L) {
         ScanFrequency = other.ScanFrequency;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -30532,7 +30532,7 @@ namespace Spellsource.Proto {
             break;
           }
           case 128: {
-            ScanFrequency = input.ReadInt32();
+            ScanFrequency = input.ReadInt64();
             break;
           }
         }
@@ -30610,7 +30610,7 @@ namespace Spellsource.Proto {
             break;
           }
           case 128: {
-            ScanFrequency = input.ReadInt32();
+            ScanFrequency = input.ReadInt64();
             break;
           }
         }

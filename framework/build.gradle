@@ -230,11 +230,22 @@ task startKeycloakContainer(type: DockerStartContainer) {
     targetContainerId createKeycloakContainer.getContainerId()
 }
 
-task startAndWaitOnHealthyKeycloakContainer(type: DockerLivenessContainer) {
-    dependsOn startKeycloakContainer
-    livenessProbe = new LivenessProbe(40000, 1000, 'Admin console')
-    targetContainerId createKeycloakContainer.getContainerId()
+// investigate why windows can simply not use a liveness probe here
+if (isWindows) {
+    task startAndWaitOnHealthyKeycloakContainer {
+        dependsOn startKeycloakContainer
+        doLast {
+            sleep(14000)
+        }
+    }
+} else {
+    task startAndWaitOnHealthyKeycloakContainer(type: DockerLivenessContainer) {
+        dependsOn startKeycloakContainer
+        livenessProbe = new LivenessProbe(40000, 1000, 'Admin console')
+        targetContainerId createKeycloakContainer.getContainerId()
+    }
 }
+
 
 task stopKeycloakContainer(type: DockerStopContainer) {
     targetContainerId createKeycloakContainer.getContainerId()

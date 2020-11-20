@@ -19,7 +19,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ClientRecord extends UpdatableRecordImpl<ClientRecord> implements VertxPojo, IClient {
 
-    private static final long serialVersionUID = -1439977070;
+    private static final long serialVersionUID = -315708742;
 
     /**
      * Setter for <code>keycloak.client.id</code>.
@@ -447,20 +447,71 @@ public class ClientRecord extends UpdatableRecordImpl<ClientRecord> implements V
     }
 
     /**
-     * Setter for <code>keycloak.client.always_display_in_console</code>.
+     * Setter for <code>keycloak.client.client_template_id</code>.
      */
     @Override
-    public ClientRecord setAlwaysDisplayInConsole(Boolean value) {
+    public ClientRecord setClientTemplateId(String value) {
         set(25, value);
         return this;
     }
 
     /**
-     * Getter for <code>keycloak.client.always_display_in_console</code>.
+     * Getter for <code>keycloak.client.client_template_id</code>.
      */
     @Override
-    public Boolean getAlwaysDisplayInConsole() {
-        return (Boolean) get(25);
+    public String getClientTemplateId() {
+        return (String) get(25);
+    }
+
+    /**
+     * Setter for <code>keycloak.client.use_template_config</code>.
+     */
+    @Override
+    public ClientRecord setUseTemplateConfig(Boolean value) {
+        set(26, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.client.use_template_config</code>.
+     */
+    @Override
+    public Boolean getUseTemplateConfig() {
+        return (Boolean) get(26);
+    }
+
+    /**
+     * Setter for <code>keycloak.client.use_template_scope</code>.
+     */
+    @Override
+    public ClientRecord setUseTemplateScope(Boolean value) {
+        set(27, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.client.use_template_scope</code>.
+     */
+    @Override
+    public Boolean getUseTemplateScope() {
+        return (Boolean) get(27);
+    }
+
+    /**
+     * Setter for <code>keycloak.client.use_template_mappers</code>.
+     */
+    @Override
+    public ClientRecord setUseTemplateMappers(Boolean value) {
+        set(28, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.client.use_template_mappers</code>.
+     */
+    @Override
+    public Boolean getUseTemplateMappers() {
+        return (Boolean) get(28);
     }
 
     // -------------------------------------------------------------------------
@@ -503,7 +554,10 @@ public class ClientRecord extends UpdatableRecordImpl<ClientRecord> implements V
         setStandardFlowEnabled(from.getStandardFlowEnabled());
         setImplicitFlowEnabled(from.getImplicitFlowEnabled());
         setDirectAccessGrantsEnabled(from.getDirectAccessGrantsEnabled());
-        setAlwaysDisplayInConsole(from.getAlwaysDisplayInConsole());
+        setClientTemplateId(from.getClientTemplateId());
+        setUseTemplateConfig(from.getUseTemplateConfig());
+        setUseTemplateScope(from.getUseTemplateScope());
+        setUseTemplateMappers(from.getUseTemplateMappers());
     }
 
     @Override
@@ -526,7 +580,7 @@ public class ClientRecord extends UpdatableRecordImpl<ClientRecord> implements V
     /**
      * Create a detached, initialised ClientRecord
      */
-    public ClientRecord(String id, Boolean enabled, Boolean fullScopeAllowed, String clientId, Integer notBefore, Boolean publicClient, String secret, String baseUrl, Boolean bearerOnly, String managementUrl, Boolean surrogateAuthRequired, String realmId, String protocol, Integer nodeReregTimeout, Boolean frontchannelLogout, Boolean consentRequired, String name, Boolean serviceAccountsEnabled, String clientAuthenticatorType, String rootUrl, String description, String registrationToken, Boolean standardFlowEnabled, Boolean implicitFlowEnabled, Boolean directAccessGrantsEnabled, Boolean alwaysDisplayInConsole) {
+    public ClientRecord(String id, Boolean enabled, Boolean fullScopeAllowed, String clientId, Integer notBefore, Boolean publicClient, String secret, String baseUrl, Boolean bearerOnly, String managementUrl, Boolean surrogateAuthRequired, String realmId, String protocol, Integer nodeReregTimeout, Boolean frontchannelLogout, Boolean consentRequired, String name, Boolean serviceAccountsEnabled, String clientAuthenticatorType, String rootUrl, String description, String registrationToken, Boolean standardFlowEnabled, Boolean implicitFlowEnabled, Boolean directAccessGrantsEnabled, String clientTemplateId, Boolean useTemplateConfig, Boolean useTemplateScope, Boolean useTemplateMappers) {
         super(Client.CLIENT);
 
         set(0, id);
@@ -554,7 +608,10 @@ public class ClientRecord extends UpdatableRecordImpl<ClientRecord> implements V
         set(22, standardFlowEnabled);
         set(23, implicitFlowEnabled);
         set(24, directAccessGrantsEnabled);
-        set(25, alwaysDisplayInConsole);
+        set(25, clientTemplateId);
+        set(26, useTemplateConfig);
+        set(27, useTemplateScope);
+        set(28, useTemplateMappers);
     }
 
     public ClientRecord(io.vertx.core.json.JsonObject json) {

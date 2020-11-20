@@ -136,6 +136,16 @@ public interface IMatchmakingQueues extends VertxPojo, Serializable {
      */
     public Long getScanFrequency();
 
+    /**
+     * Setter for <code>spellsource.matchmaking_queues.lobby_size</code>.
+     */
+    public IMatchmakingQueues setLobbySize(Integer value);
+
+    /**
+     * Getter for <code>spellsource.matchmaking_queues.lobby_size</code>.
+     */
+    public Integer getLobbySize();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -212,6 +222,11 @@ public interface IMatchmakingQueues extends VertxPojo, Serializable {
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("scan_frequency","java.lang.Long",e);
         }
+        try {
+            setLobbySize(json.getInteger("lobby_size"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("lobby_size","java.lang.Integer",e);
+        }
         return this;
     }
 
@@ -231,6 +246,7 @@ public interface IMatchmakingQueues extends VertxPojo, Serializable {
         json.put("automatically_close",getAutomaticallyClose());
         json.put("max_tickets_to_process",getMaxTicketsToProcess());
         json.put("scan_frequency",getScanFrequency());
+        json.put("lobby_size",getLobbySize());
         return json;
     }
 
