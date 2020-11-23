@@ -210,7 +210,11 @@ public class Accounts {
 	public static Future<ServerServiceDefinition> requiresAuthorization(BindableService service) {
 		return Accounts.authorizationInterceptor()
 				.compose(interceptor -> Future.succeededFuture(ServerInterceptors.intercept(service, interceptor)));
+	}
 
+	public static Future<ServerServiceDefinition> requiresAuthorization(ServerServiceDefinition service) {
+		return Accounts.authorizationInterceptor()
+				.compose(interceptor -> Future.succeededFuture(ServerInterceptors.intercept(service, interceptor)));
 	}
 
 	public static Future<RealmResource> get() {

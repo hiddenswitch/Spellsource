@@ -4,8 +4,10 @@ import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Matchmaking;
+import com.hiddenswitch.framework.schema.spellsource.tables.daos.MatchmakingTicketsDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
+import com.hiddenswitch.framework.tests.impl.ToxiClient;
 import com.hiddenswitch.spellsource.rpc.MatchmakingQueueConfiguration;
 import com.hiddenswitch.spellsource.rpc.MatchmakingQueuePutRequest;
 import io.vertx.core.CompositeFuture;
@@ -18,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -147,7 +150,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 	@Test
 	public void testWaitsInMultiplayerQueue(Vertx vertx, VertxTestContext testContext) {
 		var client1 = new Client(vertx);
-
+		var cancelled = testContext.checkpoint();
 		var queueId = UUID.randomUUID().toString();
 		var matchmakingQueue = new Matchmaking(createMultiplayerQueue(queueId)) {
 			@Override
@@ -159,10 +162,34 @@ public class MatchmakingTests extends FrameworkTestBase {
 
 		vertx.deployVerticle(matchmakingQueue)
 				.compose(v -> client1.createAndLogin())
-				.compose(v -> CompositeFuture.any(client1.matchmake(queueId), Environment.sleep(vertx, 5000)))
+				.compose(v -> {
+					client1.matchmake(queueId).onSuccess(res -> {
+						cancelled.flag();
+						testContext.verify(() -> {
+							assertNull(res);
+						});
+					});
+					return Environment.sleep(vertx, 5000);
+				})
 				.onSuccess(v -> testContext.verify(() -> {
 					assertFalse(client1.matchmakingResponse().succeeded());
 					assertFalse(client1.matchmakingResponse().failed());
+				}))
+				.compose(v -> {
+					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate());
+					return ticketsDao.findManyByUserId(Collections.singletonList(client1.getUserEntity().getId()));
+				})
+				.onSuccess(tickets -> testContext.verify(() -> {
+					assertEquals(1, tickets.size());
+					assertNull(tickets.get(0).getGameId());
+				}))
+				.compose(v -> client1.cancelMatchmaking())
+				.compose(v -> {
+					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate());
+					return ticketsDao.findManyByUserId(Collections.singletonList(client1.getUserEntity().getId()));
+				})
+				.onSuccess(tickets -> testContext.verify(() -> {
+					assertEquals(0, tickets.size());
 				}))
 				.onComplete(testContext.succeedingThenComplete())
 				.onComplete(client1::close);
@@ -202,6 +229,42 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.onComplete(testContext.succeedingThenComplete())
 				.onComplete(client1::close)
 				.onComplete(client2::close);
+	}
+
+	@Test
+	public void testClientFailureMultiplayerQueueCancel(Vertx vertx, VertxTestContext testContext) {
+		var client = new ToxiClient(vertx);
+		var queueId = UUID.randomUUID().toString();
+		var matchmakingQueue = new Matchmaking(createMultiplayerQueue(queueId));
+		vertx.deployVerticle(matchmakingQueue)
+				.compose(v -> client.createAndLogin())
+				.compose(decks -> {
+					client.matchmake(queueId);
+					return Environment.sleep(vertx, 200);
+				})
+				.onSuccess(v -> toxicGrpcProxy().setConnectionCut(true))
+				.compose(v -> {
+					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate());
+					return ticketsDao.findManyByUserId(Collections.singletonList(client.getUserEntity().getId()));
+				})
+				.onSuccess(tickets -> {
+					testContext.verify(() -> {
+						assertEquals(1, tickets.size(), "still connected and should have ticket");
+					});
+				})
+				.compose(v -> Environment.sleep(vertx, 10001))
+				.compose(v -> {
+					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate());
+					return ticketsDao.findManyByUserId(Collections.singletonList(client.getUserEntity().getId()));
+				})
+				.onSuccess(tickets -> {
+					testContext.verify(() -> {
+						assertEquals(0, tickets.size(), "disconnected and should have timed out");
+					});
+				})
+				.onComplete(client::close)
+				.onComplete(v -> toxicGrpcProxy().setConnectionCut(false))
+				.onComplete(testContext.succeedingThenComplete());
 	}
 
 	@NotNull

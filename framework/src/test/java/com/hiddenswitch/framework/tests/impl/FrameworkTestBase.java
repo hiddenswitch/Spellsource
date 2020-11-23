@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework.tests.impl;
 
 import com.hiddenswitch.containers.*;
+import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Gateway;
 import com.hiddenswitch.framework.rpc.ServerConfiguration;
@@ -13,11 +14,14 @@ import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.Network;
+import org.testcontainers.containers.ToxiproxyContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.lifecycle.Startables;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
+
+import static org.testcontainers.Testcontainers.exposeHostPorts;
 
 @ExtendWith({VertxExtension.class})
 @Testcontainers
@@ -58,29 +62,24 @@ public class FrameworkTestBase {
 			.withEnv("DB_PORT", Integer.toString(PGPORT))
 			.withReuse(false);
 
-	/*
-	protected static OpenMatchContainer openMatch = new OpenMatchContainer()
-			.dependsOn(redis)
-			.withNetwork(Network.SHARED)
-			.withReuse(false);*/
+	protected static ToxiproxyContainer toxiproxy = new ToxiproxyContainer("shopify/toxiproxy:2.1.4");
+
+	private static ToxiproxyContainer.ContainerProxy toxicGrpcProxy;
+
+	public static ToxiproxyContainer.ContainerProxy toxicGrpcProxy() {
+		return toxicGrpcProxy;
+	}
 
 	@BeforeAll
 	protected static void startContainers(Vertx vertx, VertxTestContext testContext) throws InterruptedException {
 		var startup = Future.<Void>succeededFuture();
 
 		if (started.compareAndSet(false, true)) {
+			// Expose the default grpc port
+			exposeHostPorts(Gateway.grpcPort());
+
 			startup = Environment
-					.executeBlocking(() -> Startables.deepStart(Stream.of(redis, postgres, keycloak /*, openMatch*/)).join())
-					/*.compose(ignored -> Environment.executeBlocking(() -> {
-						// Connect OpenMatch to redis
-						var config = openMatch.getConfig();
-						config.setRedis(new OpenMatchContainer.OpenMatchOverrideConfig.Redis()
-								.setHostname(redis.getHost())
-								.setPort(redis.getPortInsideNetwork())
-								.setUser("default"));
-						openMatch.setConfig(config);
-						return null;
-					}))*/
+					.executeBlocking(() -> Startables.deepStart(Stream.of(toxiproxy, redis, postgres, keycloak)).join())
 					.compose(ignored -> {
 						// Set the configuration (typed)
 						var serverConfiguration = ServerConfiguration.newBuilder()
@@ -100,11 +99,13 @@ public class FrameworkTestBase {
 										.setRealmDisplayName("Spellsource")
 										.setRealmId("hiddenswitch")
 										.build())
-								/*
-								.setOpenmatch(ServerConfiguration.OpenmatchConfiguration.newBuilder()
-										.setHost(openMatch.getHost())
-										.setPort(openMatch.getPort())
-										.build())*/
+								.setGrpcConfiguration(ServerConfiguration.GrpcConfiguration.newBuilder()
+										.setServerKeepAliveTimeMillis(400)
+										.setServerKeepAliveTimeoutMillis(8000)
+										.setServerPermitKeepAliveWithoutCalls(true)
+										.build())
+								.setMatchmaking(ServerConfiguration.MatchmakignConfiguration.newBuilder()
+										.setEnqueueLockTimeoutMillis(400).build())
 								.build();
 
 						Environment.setConfiguration(serverConfiguration);
@@ -124,7 +125,11 @@ public class FrameworkTestBase {
 								.setRealtime(ServerConfiguration.RealtimeConfiguration.newBuilder()
 										.setUri(realtime.getRealtimeUrl()).build()).build());
 						return Future.succeededFuture();
-					});
+					}).compose(ignored -> Environment.executeBlocking(vertx, () -> toxiproxy.getProxy("host.testcontainers.internal", Gateway.grpcPort())))
+					.onSuccess(containerProxy -> {
+						toxicGrpcProxy = containerProxy;
+					})
+					.map((Void) null);
 		}
 
 		startup
@@ -134,6 +139,6 @@ public class FrameworkTestBase {
 					vertx.deployVerticle(Gateway::new, new DeploymentOptions().setInstances(Runtime.getRuntime().availableProcessors() * 2), promise);
 					return promise.future();
 				})
-				.onComplete(testContext.completing());
+				.onComplete(testContext.succeedingThenComplete());
 	}
 }
