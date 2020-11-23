@@ -34,20 +34,26 @@ message ServerConfiguration {
         string user = 3;
     }
 
-    /*
-    message OpenmatchConfiguration {
-        string host = 1;
-        int32 port = 2;
-    }*/
-
     message RealtimeConfiguration {
         string uri = 1;
     }
 
+    message GrpcConfiguration {
+        int64 serverKeepAliveTimeMillis = 1;
+        int64 serverKeepAliveTimeoutMillis = 2;
+        bool serverPermitKeepAliveWithoutCalls = 3;
+    }
+
+    message MatchmakignConfiguration {
+        int64 enqueueLockTimeoutMillis = 1;
+    }
+
     PostgresConfiguration pg = 1;
     KeycloakConfiguration keycloak = 2;
-//    OpenmatchConfiguration openmatch = 3;
+    reserved 3;
     RealtimeConfiguration realtime = 4;
+    GrpcConfiguration grpcConfiguration = 5;
+    MatchmakignConfiguration matchmaking = 6;
 }
 
 service Unauthenticated {

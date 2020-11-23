@@ -34,7 +34,7 @@ public class Client implements AutoCloseable {
 	private String email;
 	private String password;
 	private Promise<MatchmakingQueuePutResponse> matchmakingResponseFut;
-	private Promise<Void> matchmakingCancelFut;
+	private Promise<Void> matchmakingEndedFut;
 
 	public Client(Vertx vertx, WebClient webClient, String keycloakPath) {
 		this.vertx = vertx;
@@ -62,32 +62,42 @@ public class Client implements AutoCloseable {
 	}
 
 	public Future<MatchmakingQueuePutResponse> matchmake(String queueId, String deckId) {
+		return matchmake(matchmaking(), queueId, deckId);
+	}
+
+	public Future<MatchmakingQueuePutResponse> matchmake(VertxMatchmakingGrpc.MatchmakingVertxStub matchmaking, String queueId, String deckId) {
 		if (matchmakingResponseFut != null) {
 			throw new RuntimeException("already matchmaking");
 		}
-		var matchmaking = matchmaking();
 		var matchmakingRequestsFut = Promise.<WriteStream<MatchmakingQueuePutRequest>>promise();
 		var matchmakingResponses = matchmaking.enqueue(matchmakingRequestsFut::complete);
 		var request = matchmakingRequestsFut.future().compose(matchmakingRequests -> matchmakingRequests.write(MatchmakingQueuePutRequest.newBuilder()
 				.setDeckId(deckId)
 				.setQueueId(queueId).build()));
 		matchmakingResponseFut = Promise.<MatchmakingQueuePutResponse>promise();
-		matchmakingCancelFut = Promise.<Void>promise();
+		matchmakingEndedFut = Promise.<Void>promise();
 		matchmakingResponses.handler(matchmakingResponseFut::complete);
+		matchmakingResponses.endHandler(matchmakingEndedFut::complete);
 		var response = matchmakingResponseFut.future();
 		return CompositeFuture.join(request, response
-				.onFailure(t -> {
+				.otherwise(t -> {
+					var requests = matchmakingRequestsFut.future().result();
 					if (t instanceof CancellationException) {
-						matchmakingRequestsFut.future().result().write(MatchmakingQueuePutRequest.newBuilder().setQueueId(queueId).setCancel(true).build()).onComplete(matchmakingCancelFut);
+						requests.write(MatchmakingQueuePutRequest.newBuilder().setQueueId(queueId).setCancel(true).build());
 					}
+					return null;
 				}))
 				.onComplete(ignored -> matchmakingResponseFut = null)
 				.map(f -> f.resultAt(1));
 	}
 
 	public Future<MatchmakingQueuePutResponse> matchmake(String queueId) {
+		return matchmake(matchmaking(), queueId);
+	}
+
+	public Future<MatchmakingQueuePutResponse> matchmake(VertxMatchmakingGrpc.MatchmakingVertxStub matchmaking, String queueId) {
 		return legacy().decksGetAll(Empty.getDefaultInstance())
-				.compose(decks -> matchmake(queueId, decks.getDecks(0).getCollection().getId()));
+				.compose(decks -> matchmake(matchmaking, queueId, decks.getDecks(0).getCollection().getId()));
 	}
 
 	public Future<Void> cancelMatchmaking() {
@@ -95,7 +105,7 @@ public class Client implements AutoCloseable {
 			throw new RuntimeException("not matchmaking");
 		}
 		matchmakingResponseFut.tryFail(new CancellationException("cancelling matchmaking"));
-		return matchmakingCancelFut.future();
+		return matchmakingEndedFut.future();
 	}
 
 	public Future<LoginOrCreateReply> createAndLogin(String username, String email, String password) {
@@ -174,7 +184,11 @@ public class Client implements AutoCloseable {
 		});
 	}
 
-	public static String grpcAddress() {
+	public String grpcAddress() {
+		return defaultGrpcAddress();
+	}
+
+	public static String defaultGrpcAddress() {
 		return "localhost:" + Gateway.grpcPort();
 	}
 
@@ -223,7 +237,7 @@ public class Client implements AutoCloseable {
 	}
 
 	public Future<MatchmakingQueuePutResponse> matchmakingResponse() {
-		if (matchmakingResponseFut == null){
+		if (matchmakingResponseFut == null) {
 			return Future.failedFuture("not matchmaking");
 		}
 		return matchmakingResponseFut.future();

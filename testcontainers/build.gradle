@@ -17,6 +17,7 @@ repositories {
 
 dependencies {
     api "org.testcontainers:testcontainers"
+    api "org.testcontainers:toxiproxy"
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonDatabindVersion"

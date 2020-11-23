@@ -37,10 +37,13 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 	public KeycloakContainer(String dockerImageName) {
 		super(dockerImageName);
 		withExposedPorts(KEYCLOAK_PORT_HTTP, KEYCLOAK_PORT_HTTPS);
+		withEnv("LANGUAGE", "en_US.UTF-8");
+		withEnv("LANG", "en_US.UTF-8");
+		withEnv("LC_ALL", "en_US.UTF-8");
 		setWaitStrategy(Wait
 				.forHttp(KEYCLOAK_AUTH_PATH)
 				.forPort(KEYCLOAK_PORT_HTTP)
-				.withStartupTimeout(Duration.ofMinutes(2))
+				.withStartupTimeout(Duration.ofSeconds(30))
 		);
 	}
 

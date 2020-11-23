@@ -9,13 +9,13 @@ import io.vertx.core.Promise;
 import io.vertx.grpc.VertxServer;
 import io.vertx.grpc.VertxServerBuilder;
 
+import java.util.concurrent.TimeUnit;
+
 public class Gateway extends AbstractVerticle {
 	VertxServer server;
 
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
-		var builder = VertxServerBuilder.forPort(vertx, grpcPort());
-
 		// TODO: Just add all the services here
 		CompositeFuture.join(
 				Legacy.services(),
@@ -23,6 +23,9 @@ public class Gateway extends AbstractVerticle {
 				Accounts.unauthenticatedService(),
 				Accounts.authenticatedService())
 				.compose(services -> {
+					var serverConfiguration = Environment.cachedConfigurationOrGet();
+					var builder = VertxServerBuilder.forPort(vertx, grpcPort());
+
 					var list = services.list();
 					for (var service : list) {
 						if (service instanceof BindableService) {
@@ -33,9 +36,13 @@ public class Gateway extends AbstractVerticle {
 							return Future.failedFuture("invalid service");
 						}
 					}
-					return Future.succeededFuture();
+					var nettyServerBuilder = builder.nettyBuilder();
+					nettyServerBuilder.keepAliveTime(serverConfiguration.getGrpcConfiguration().getServerKeepAliveTimeMillis(), TimeUnit.MILLISECONDS)
+							.keepAliveTimeout(serverConfiguration.getGrpcConfiguration().getServerKeepAliveTimeoutMillis(), TimeUnit.MILLISECONDS)
+							.permitKeepAliveWithoutCalls(serverConfiguration.getGrpcConfiguration().getServerPermitKeepAliveWithoutCalls());
+					return Future.succeededFuture(builder);
 				})
-				.compose(ignored -> {
+				.compose(builder -> {
 					var promise = Promise.<Void>promise();
 					server = builder.build();
 					server.start(promise);

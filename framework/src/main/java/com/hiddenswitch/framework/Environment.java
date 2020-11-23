@@ -10,6 +10,7 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGeneri
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
+import io.vertx.core.Context;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
@@ -137,7 +138,16 @@ public class Environment {
 
 	@Suspendable
 	public static <T> Future<T> executeBlocking(SuspendableCallable<T> blockingCallable) {
-		var context = Vertx.currentContext();
+		return executeBlocking(Vertx.currentContext(), blockingCallable);
+	}
+
+	@Suspendable
+	public static <T> Future<T> executeBlocking(Vertx vertx, SuspendableCallable<T> blockingCallable) {
+		return executeBlocking(vertx.getOrCreateContext(), blockingCallable);
+	}
+
+	@Suspendable
+	public static <T> Future<T> executeBlocking(Context context, SuspendableCallable<T> blockingCallable) {
 		var result = Promise.<T>promise();
 		var fiber = Fiber.currentFiber();
 		if (context != null) {

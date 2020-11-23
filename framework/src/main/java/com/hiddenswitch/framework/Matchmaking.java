@@ -1,10 +1,10 @@
 package com.hiddenswitch.framework;
 
-import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Streams;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.GamesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
@@ -12,7 +12,8 @@ import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets;
 import com.hiddenswitch.spellsource.rpc.*;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
-import io.grpc.ServerServiceDefinition;
+import io.grpc.*;
+import io.grpc.Context;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.streams.ReadStream;
@@ -21,10 +22,6 @@ import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.sync.concurrent.SuspendableLock;
 import io.vertx.pgclient.PgException;
-import io.vertx.sqlclient.SqlConnection;
-import org.jooq.Field;
-import org.jooq.Name;
-import org.jooq.impl.DSL;
 
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -35,7 +32,6 @@ import static io.vertx.core.CompositeFuture.all;
 import static io.vertx.ext.sync.Sync.await;
 import static io.vertx.ext.sync.Sync.fiber;
 import static java.util.stream.Collectors.toList;
-import static org.jooq.impl.DSL.asterisk;
 
 public class Matchmaking extends SyncVerticle {
 
@@ -69,30 +65,22 @@ public class Matchmaking extends SyncVerticle {
 
 		return
 				Environment.queryExecutor().executeAny(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS)
-				.where(MATCHMAKING_TICKETS.QUEUE_ID.eq(queueId), MATCHMAKING_TICKETS.GAME_ID.isNull())
-				.returningResult(MATCHMAKING_TICKETS.ID, MATCHMAKING_TICKETS.USER_ID))
-				.map(tickets -> Streams.stream(tickets.iterator())
-						.map(ticket-> ticket.getString(MATCHMAKING_TICKETS.USER_ID.getName()))
-						.collect(toList()))
-				.compose(forUsers -> {
-					for (var userId : forUsers) {
-						// send a message to all currently connected users awaiting this queue that the queue is closed
-						Vertx.currentContext().owner().eventBus().publish("matchmaking:enqueue:" + userId, "closed");
-					}
-					return Future.succeededFuture();
-				});
+						.where(MATCHMAKING_TICKETS.QUEUE_ID.eq(queueId), MATCHMAKING_TICKETS.GAME_ID.isNull())
+						.returningResult(MATCHMAKING_TICKETS.ID, MATCHMAKING_TICKETS.USER_ID))
+						.map(tickets -> Streams.stream(tickets.iterator())
+								.map(ticket -> ticket.getString(MATCHMAKING_TICKETS.USER_ID.getName()))
+								.collect(toList()))
+						.compose(forUsers -> {
+							for (var userId : forUsers) {
+								// send a message to all currently connected users awaiting this queue that the queue is closed
+								Vertx.currentContext().owner().eventBus().publish("matchmaking:enqueue:" + userId, "closed");
+							}
+							return Future.succeededFuture();
+						});
 	}
 
 	private static boolean isCloseMessage(Message<String> message) {
 		return message.body().equals("closed");
-	}
-
-	private static void closeAll(List<Closeable> closeables) {
-		CompositeFuture.all(closeables.stream().map(closeable -> {
-			var promise = Promise.<Void>promise();
-			closeable.close(promise);
-			return promise.future();
-		}).collect(toList()));
 	}
 
 
@@ -121,9 +109,10 @@ public class Matchmaking extends SyncVerticle {
 	}
 
 	public static void runClientEnqueue(ReadStream<MatchmakingQueuePutRequest> request, WriteStream<MatchmakingQueuePutResponse> response) throws SuspendExecution {
+		var grpcContext = Context.current();
 		var userId = Accounts.userId();
+		var serverConfiguration = Environment.cachedConfigurationOrGet();
 		Objects.requireNonNull(userId, "no user id attached to context");
-
 		// this should only really run with a fiber dedicated for its purpose
 		var context = Vertx.currentContext();
 		// everything we need to clean up at the end of this
@@ -136,7 +125,7 @@ public class Matchmaking extends SyncVerticle {
 			var thisFiber = Strand.currentStrand();
 			var executor = Environment.queryExecutor();
 			// the maximum amount of time to wait for a lock (user can only queue in one place on the cluster)
-			var lockTimeout = 400L;
+			var lockTimeout = serverConfiguration.getMatchmaking().getEnqueueLockTimeoutMillis();
 
 			var ticketId = UUID.randomUUID().toString();
 			var vertx = Vertx.currentContext().owner();
@@ -150,6 +139,10 @@ public class Matchmaking extends SyncVerticle {
 			// if the user ends the request or some other exception occurs, close everything
 			request.endHandler(fiber(v -> thisFiber.interrupt()));
 			request.exceptionHandler(fiber(v -> thisFiber.interrupt()));
+
+			if (grpcContext != null) {
+				grpcContext.addListener(x -> fiber(thisFiber::interrupt), task -> context.runOnContext(v -> task.run()));
+			}
 
 			// set up a way to be notified of responses or if the queue gets closed
 			var matchmakingChannel = eventBus.<String>consumer("matchmaking:enqueue:" + userId);
@@ -243,7 +236,14 @@ public class Matchmaking extends SyncVerticle {
 		} finally {
 			// goes here with all exceptions eventually
 			// run in a separate context in order to not require this to be uninterrupted
-			context.runOnContext(v -> closeAll(closeables));
+			// do it in reverse order so that the actual ending of the connection happens last
+			context.runOnContext(v1 -> Lists.reverse(closeables).stream()
+					.map(closeable -> {
+						var promise = Promise.<Void>promise();
+						closeable.close(promise);
+						return promise.future();
+					})
+					.reduce(Future.succeededFuture(), (f1, f2) -> f1.compose(v2 -> f2)));
 		}
 	}
 

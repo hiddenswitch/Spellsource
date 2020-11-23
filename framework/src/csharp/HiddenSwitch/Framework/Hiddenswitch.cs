@@ -25,46 +25,56 @@ namespace HiddenSwitch.Proto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChJoaWRkZW5zd2l0Y2gucHJvdG8SDGhpZGRlbnN3aXRjaBoeZ29vZ2xlL3By",
-            "b3RvYnVmL3dyYXBwZXJzLnByb3RvIukEChNTZXJ2ZXJDb25maWd1cmF0aW9u",
+            "b3RvYnVmL3dyYXBwZXJzLnByb3RvItgHChNTZXJ2ZXJDb25maWd1cmF0aW9u",
             "EkMKAnBnGAEgASgLMjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRp",
             "b24uUG9zdGdyZXNDb25maWd1cmF0aW9uEkkKCGtleWNsb2FrGAIgASgLMjcu",
             "aGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRpb24uS2V5Y2xvYWtDb25m",
             "aWd1cmF0aW9uEkkKCHJlYWx0aW1lGAQgASgLMjcuaGlkZGVuc3dpdGNoLlNl",
-            "cnZlckNvbmZpZ3VyYXRpb24uUmVhbHRpbWVDb25maWd1cmF0aW9uGmUKFVBv",
-            "c3RncmVzQ29uZmlndXJhdGlvbhIMCgRob3N0GAEgASgJEgwKBHBvcnQYAiAB",
-            "KAUSEAoIZGF0YWJhc2UYAyABKAkSDAoEdXNlchgEIAEoCRIQCghwYXNzd29y",
-            "ZBgFIAEoCRqpAQoVS2V5Y2xvYWtDb25maWd1cmF0aW9uEg8KB2F1dGhVcmwY",
-            "ASABKAkSFQoNYWRtaW5Vc2VybmFtZRgCIAEoCRIVCg1hZG1pblBhc3N3b3Jk",
-            "GAMgASgJEhAKCGNsaWVudElkGAQgASgJEhQKDGNsaWVudFNlY3JldBgFIAEo",
-            "CRIYChByZWFsbURpc3BsYXlOYW1lGAYgASgJEg8KB3JlYWxtSWQYByABKAka",
-            "PgoSUmVkaXNDb25maWd1cmF0aW9uEgwKBGhvc3QYASABKAkSDAoEcG9ydBgC",
-            "IAEoBRIMCgR1c2VyGAMgASgJGiQKFVJlYWx0aW1lQ29uZmlndXJhdGlvbhIL",
-            "CgN1cmkYASABKAkiOQoMTG9naW5SZXF1ZXN0EhcKD3VzZXJuYW1lT3JFbWFp",
-            "bBgBIAEoCRIQCghwYXNzd29yZBgCIAEoCSJJChRDcmVhdGVBY2NvdW50UmVx",
-            "dWVzdBINCgVlbWFpbBgBIAEoCRIQCgh1c2VybmFtZRgCIAEoCRIQCghwYXNz",
-            "d29yZBgDIAEoCSKCAQoSTG9naW5PckNyZWF0ZVJlcGx5Ej4KE2FjY2Vzc1Rv",
-            "a2VuUmVzcG9uc2UYASABKAsyIS5oaWRkZW5zd2l0Y2guQWNjZXNzVG9rZW5S",
-            "ZXNwb25zZRIsCgp1c2VyRW50aXR5GAIgASgLMhguaGlkZGVuc3dpdGNoLlVz",
-            "ZXJFbnRpdHkiJAoTQWNjZXNzVG9rZW5SZXNwb25zZRINCgV0b2tlbhgBIAEo",
-            "CSI5CgpVc2VyRW50aXR5EgoKAmlkGAEgASgJEg0KBWVtYWlsGAIgASgJEhAK",
-            "CHVzZXJuYW1lGAogASgJIiEKEkdldEFjY291bnRzUmVxdWVzdBILCgNpZHMY",
-            "ASADKAkiQgoQR2V0QWNjb3VudHNSZXBseRIuCgx1c2VyRW50aXRpZXMYASAD",
-            "KAsyGC5oaWRkZW5zd2l0Y2guVXNlckVudGl0eTKzAQoPVW5hdXRoZW50aWNh",
-            "dGVkElcKDUNyZWF0ZUFjY291bnQSIi5oaWRkZW5zd2l0Y2guQ3JlYXRlQWNj",
-            "b3VudFJlcXVlc3QaIC5oaWRkZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJlcGx5",
-            "IgASRwoFTG9naW4SGi5oaWRkZW5zd2l0Y2guTG9naW5SZXF1ZXN0GiAuaGlk",
-            "ZGVuc3dpdGNoLkxvZ2luT3JDcmVhdGVSZXBseSIAMl0KCEFjY291bnRzElEK",
-            "C0dldEFjY291bnRzEiAuaGlkZGVuc3dpdGNoLkdldEFjY291bnRzUmVxdWVz",
-            "dBoeLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50c1JlcGx5IgBCPgoeY29tLmhp",
-            "ZGRlbnN3aXRjaC5mcmFtZXdvcmsucnBjQgVQcm90b1ABqgISSGlkZGVuU3dp",
-            "dGNoLlByb3RvYgZwcm90bzM="));
+            "cnZlckNvbmZpZ3VyYXRpb24uUmVhbHRpbWVDb25maWd1cmF0aW9uEk4KEWdy",
+            "cGNDb25maWd1cmF0aW9uGAUgASgLMjMuaGlkZGVuc3dpdGNoLlNlcnZlckNv",
+            "bmZpZ3VyYXRpb24uR3JwY0NvbmZpZ3VyYXRpb24STwoLbWF0Y2htYWtpbmcY",
+            "BiABKAsyOi5oaWRkZW5zd2l0Y2guU2VydmVyQ29uZmlndXJhdGlvbi5NYXRj",
+            "aG1ha2lnbkNvbmZpZ3VyYXRpb24aZQoVUG9zdGdyZXNDb25maWd1cmF0aW9u",
+            "EgwKBGhvc3QYASABKAkSDAoEcG9ydBgCIAEoBRIQCghkYXRhYmFzZRgDIAEo",
+            "CRIMCgR1c2VyGAQgASgJEhAKCHBhc3N3b3JkGAUgASgJGqkBChVLZXljbG9h",
+            "a0NvbmZpZ3VyYXRpb24SDwoHYXV0aFVybBgBIAEoCRIVCg1hZG1pblVzZXJu",
+            "YW1lGAIgASgJEhUKDWFkbWluUGFzc3dvcmQYAyABKAkSEAoIY2xpZW50SWQY",
+            "BCABKAkSFAoMY2xpZW50U2VjcmV0GAUgASgJEhgKEHJlYWxtRGlzcGxheU5h",
+            "bWUYBiABKAkSDwoHcmVhbG1JZBgHIAEoCRo+ChJSZWRpc0NvbmZpZ3VyYXRp",
+            "b24SDAoEaG9zdBgBIAEoCRIMCgRwb3J0GAIgASgFEgwKBHVzZXIYAyABKAka",
+            "JAoVUmVhbHRpbWVDb25maWd1cmF0aW9uEgsKA3VyaRgBIAEoCRqHAQoRR3Jw",
+            "Y0NvbmZpZ3VyYXRpb24SIQoZc2VydmVyS2VlcEFsaXZlVGltZU1pbGxpcxgB",
+            "IAEoAxIkChxzZXJ2ZXJLZWVwQWxpdmVUaW1lb3V0TWlsbGlzGAIgASgDEikK",
+            "IXNlcnZlclBlcm1pdEtlZXBBbGl2ZVdpdGhvdXRDYWxscxgDIAEoCBo8ChhN",
+            "YXRjaG1ha2lnbkNvbmZpZ3VyYXRpb24SIAoYZW5xdWV1ZUxvY2tUaW1lb3V0",
+            "TWlsbGlzGAEgASgDSgQIAxAEIjkKDExvZ2luUmVxdWVzdBIXCg91c2VybmFt",
+            "ZU9yRW1haWwYASABKAkSEAoIcGFzc3dvcmQYAiABKAkiSQoUQ3JlYXRlQWNj",
+            "b3VudFJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIdXNlcm5hbWUYAiABKAkS",
+            "EAoIcGFzc3dvcmQYAyABKAkiggEKEkxvZ2luT3JDcmVhdGVSZXBseRI+ChNh",
+            "Y2Nlc3NUb2tlblJlc3BvbnNlGAEgASgLMiEuaGlkZGVuc3dpdGNoLkFjY2Vz",
+            "c1Rva2VuUmVzcG9uc2USLAoKdXNlckVudGl0eRgCIAEoCzIYLmhpZGRlbnN3",
+            "aXRjaC5Vc2VyRW50aXR5IiQKE0FjY2Vzc1Rva2VuUmVzcG9uc2USDQoFdG9r",
+            "ZW4YASABKAkiOQoKVXNlckVudGl0eRIKCgJpZBgBIAEoCRINCgVlbWFpbBgC",
+            "IAEoCRIQCgh1c2VybmFtZRgKIAEoCSIhChJHZXRBY2NvdW50c1JlcXVlc3QS",
+            "CwoDaWRzGAEgAygJIkIKEEdldEFjY291bnRzUmVwbHkSLgoMdXNlckVudGl0",
+            "aWVzGAEgAygLMhguaGlkZGVuc3dpdGNoLlVzZXJFbnRpdHkyswEKD1VuYXV0",
+            "aGVudGljYXRlZBJXCg1DcmVhdGVBY2NvdW50EiIuaGlkZGVuc3dpdGNoLkNy",
+            "ZWF0ZUFjY291bnRSZXF1ZXN0GiAuaGlkZGVuc3dpdGNoLkxvZ2luT3JDcmVh",
+            "dGVSZXBseSIAEkcKBUxvZ2luEhouaGlkZGVuc3dpdGNoLkxvZ2luUmVxdWVz",
+            "dBogLmhpZGRlbnN3aXRjaC5Mb2dpbk9yQ3JlYXRlUmVwbHkiADJdCghBY2Nv",
+            "dW50cxJRCgtHZXRBY2NvdW50cxIgLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50",
+            "c1JlcXVlc3QaHi5oaWRkZW5zd2l0Y2guR2V0QWNjb3VudHNSZXBseSIAQj4K",
+            "HmNvbS5oaWRkZW5zd2l0Y2guZnJhbWV3b3JrLnJwY0IFUHJvdG9QAaoCEkhp",
+            "ZGRlblN3aXRjaC5Qcm90b2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Parser, new[]{ "Pg", "Keycloak", "Realtime" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration.Parser, new[]{ "Host", "Port", "Database", "User", "Password" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Parser, new[]{ "Pg", "Keycloak", "Realtime", "GrpcConfiguration", "Matchmaking" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration.Parser, new[]{ "Host", "Port", "Database", "User", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration.Parser, new[]{ "AuthUrl", "AdminUsername", "AdminPassword", "ClientId", "ClientSecret", "RealmDisplayName", "RealmId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Parser, new[]{ "Host", "Port", "User" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration.Parser, new[]{ "Uri" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration.Parser, new[]{ "Uri" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration.Parser, new[]{ "ServerKeepAliveTimeMillis", "ServerKeepAliveTimeoutMillis", "ServerPermitKeepAliveWithoutCalls" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakignConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakignConfiguration.Parser, new[]{ "EnqueueLockTimeoutMillis" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.LoginRequest), global::HiddenSwitch.Proto.LoginRequest.Parser, new[]{ "UsernameOrEmail", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.CreateAccountRequest), global::HiddenSwitch.Proto.CreateAccountRequest.Parser, new[]{ "Email", "Username", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.LoginOrCreateReply), global::HiddenSwitch.Proto.LoginOrCreateReply.Parser, new[]{ "AccessTokenResponse", "UserEntity" }, null, null, null, null),
@@ -113,6 +123,8 @@ namespace HiddenSwitch.Proto {
       pg_ = other.pg_ != null ? other.pg_.Clone() : null;
       keycloak_ = other.keycloak_ != null ? other.keycloak_.Clone() : null;
       realtime_ = other.realtime_ != null ? other.realtime_.Clone() : null;
+      grpcConfiguration_ = other.grpcConfiguration_ != null ? other.grpcConfiguration_.Clone() : null;
+      matchmaking_ = other.matchmaking_ != null ? other.matchmaking_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -146,14 +158,33 @@ namespace HiddenSwitch.Proto {
     /// <summary>Field number for the "realtime" field.</summary>
     public const int RealtimeFieldNumber = 4;
     private global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration realtime_;
-    /// <summary>
-    ///    OpenmatchConfiguration openmatch = 3;
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration Realtime {
       get { return realtime_; }
       set {
         realtime_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "grpcConfiguration" field.</summary>
+    public const int GrpcConfigurationFieldNumber = 5;
+    private global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration grpcConfiguration_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration GrpcConfiguration {
+      get { return grpcConfiguration_; }
+      set {
+        grpcConfiguration_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "matchmaking" field.</summary>
+    public const int MatchmakingFieldNumber = 6;
+    private global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakignConfiguration matchmaking_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakignConfiguration Matchmaking {
+      get { return matchmaking_; }
+      set {
+        matchmaking_ = value;
       }
     }
 
@@ -173,6 +204,8 @@ namespace HiddenSwitch.Proto {
       if (!object.Equals(Pg, other.Pg)) return false;
       if (!object.Equals(Keycloak, other.Keycloak)) return false;
       if (!object.Equals(Realtime, other.Realtime)) return false;
+      if (!object.Equals(GrpcConfiguration, other.GrpcConfiguration)) return false;
+      if (!object.Equals(Matchmaking, other.Matchmaking)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -182,6 +215,8 @@ namespace HiddenSwitch.Proto {
       if (pg_ != null) hash ^= Pg.GetHashCode();
       if (keycloak_ != null) hash ^= Keycloak.GetHashCode();
       if (realtime_ != null) hash ^= Realtime.GetHashCode();
+      if (grpcConfiguration_ != null) hash ^= GrpcConfiguration.GetHashCode();
+      if (matchmaking_ != null) hash ^= Matchmaking.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -210,6 +245,14 @@ namespace HiddenSwitch.Proto {
         output.WriteRawTag(34);
         output.WriteMessage(Realtime);
       }
+      if (grpcConfiguration_ != null) {
+        output.WriteRawTag(42);
+        output.WriteMessage(GrpcConfiguration);
+      }
+      if (matchmaking_ != null) {
+        output.WriteRawTag(50);
+        output.WriteMessage(Matchmaking);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -231,6 +274,14 @@ namespace HiddenSwitch.Proto {
         output.WriteRawTag(34);
         output.WriteMessage(Realtime);
       }
+      if (grpcConfiguration_ != null) {
+        output.WriteRawTag(42);
+        output.WriteMessage(GrpcConfiguration);
+      }
+      if (matchmaking_ != null) {
+        output.WriteRawTag(50);
+        output.WriteMessage(Matchmaking);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -248,6 +299,12 @@ namespace HiddenSwitch.Proto {
       }
       if (realtime_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Realtime);
+      }
+      if (grpcConfiguration_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GrpcConfiguration);
+      }
+      if (matchmaking_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Matchmaking);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -277,6 +334,18 @@ namespace HiddenSwitch.Proto {
           Realtime = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration();
         }
         Realtime.MergeFrom(other.Realtime);
+      }
+      if (other.grpcConfiguration_ != null) {
+        if (grpcConfiguration_ == null) {
+          GrpcConfiguration = new global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration();
+        }
+        GrpcConfiguration.MergeFrom(other.GrpcConfiguration);
+      }
+      if (other.matchmaking_ != null) {
+        if (matchmaking_ == null) {
+          Matchmaking = new global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakignConfiguration();
+        }
+        Matchmaking.MergeFrom(other.Matchmaking);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -313,6 +382,20 @@ namespace HiddenSwitch.Proto {
             input.ReadMessage(Realtime);
             break;
           }
+          case 42: {
+            if (grpcConfiguration_ == null) {
+              GrpcConfiguration = new global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration();
+            }
+            input.ReadMessage(GrpcConfiguration);
+            break;
+          }
+          case 50: {
+            if (matchmaking_ == null) {
+              Matchmaking = new global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakignConfiguration();
+            }
+            input.ReadMessage(Matchmaking);
+            break;
+          }
         }
       }
     #endif
@@ -346,6 +429,20 @@ namespace HiddenSwitch.Proto {
               Realtime = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration();
             }
             input.ReadMessage(Realtime);
+            break;
+          }
+          case 42: {
+            if (grpcConfiguration_ == null) {
+              GrpcConfiguration = new global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration();
+            }
+            input.ReadMessage(GrpcConfiguration);
+            break;
+          }
+          case 50: {
+            if (matchmaking_ == null) {
+              Matchmaking = new global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakignConfiguration();
+            }
+            input.ReadMessage(Matchmaking);
             break;
           }
         }
@@ -1468,6 +1565,422 @@ namespace HiddenSwitch.Proto {
                 break;
               case 10: {
                 Uri = input.ReadString();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      public sealed partial class GrpcConfiguration : pb::IMessage<GrpcConfiguration>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<GrpcConfiguration> _parser = new pb::MessageParser<GrpcConfiguration>(() => new GrpcConfiguration());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<GrpcConfiguration> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[4]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public GrpcConfiguration() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public GrpcConfiguration(GrpcConfiguration other) : this() {
+          serverKeepAliveTimeMillis_ = other.serverKeepAliveTimeMillis_;
+          serverKeepAliveTimeoutMillis_ = other.serverKeepAliveTimeoutMillis_;
+          serverPermitKeepAliveWithoutCalls_ = other.serverPermitKeepAliveWithoutCalls_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public GrpcConfiguration Clone() {
+          return new GrpcConfiguration(this);
+        }
+
+        /// <summary>Field number for the "serverKeepAliveTimeMillis" field.</summary>
+        public const int ServerKeepAliveTimeMillisFieldNumber = 1;
+        private long serverKeepAliveTimeMillis_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public long ServerKeepAliveTimeMillis {
+          get { return serverKeepAliveTimeMillis_; }
+          set {
+            serverKeepAliveTimeMillis_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "serverKeepAliveTimeoutMillis" field.</summary>
+        public const int ServerKeepAliveTimeoutMillisFieldNumber = 2;
+        private long serverKeepAliveTimeoutMillis_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public long ServerKeepAliveTimeoutMillis {
+          get { return serverKeepAliveTimeoutMillis_; }
+          set {
+            serverKeepAliveTimeoutMillis_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "serverPermitKeepAliveWithoutCalls" field.</summary>
+        public const int ServerPermitKeepAliveWithoutCallsFieldNumber = 3;
+        private bool serverPermitKeepAliveWithoutCalls_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool ServerPermitKeepAliveWithoutCalls {
+          get { return serverPermitKeepAliveWithoutCalls_; }
+          set {
+            serverPermitKeepAliveWithoutCalls_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as GrpcConfiguration);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(GrpcConfiguration other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (ServerKeepAliveTimeMillis != other.ServerKeepAliveTimeMillis) return false;
+          if (ServerKeepAliveTimeoutMillis != other.ServerKeepAliveTimeoutMillis) return false;
+          if (ServerPermitKeepAliveWithoutCalls != other.ServerPermitKeepAliveWithoutCalls) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (ServerKeepAliveTimeMillis != 0L) hash ^= ServerKeepAliveTimeMillis.GetHashCode();
+          if (ServerKeepAliveTimeoutMillis != 0L) hash ^= ServerKeepAliveTimeoutMillis.GetHashCode();
+          if (ServerPermitKeepAliveWithoutCalls != false) hash ^= ServerPermitKeepAliveWithoutCalls.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (ServerKeepAliveTimeMillis != 0L) {
+            output.WriteRawTag(8);
+            output.WriteInt64(ServerKeepAliveTimeMillis);
+          }
+          if (ServerKeepAliveTimeoutMillis != 0L) {
+            output.WriteRawTag(16);
+            output.WriteInt64(ServerKeepAliveTimeoutMillis);
+          }
+          if (ServerPermitKeepAliveWithoutCalls != false) {
+            output.WriteRawTag(24);
+            output.WriteBool(ServerPermitKeepAliveWithoutCalls);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (ServerKeepAliveTimeMillis != 0L) {
+            output.WriteRawTag(8);
+            output.WriteInt64(ServerKeepAliveTimeMillis);
+          }
+          if (ServerKeepAliveTimeoutMillis != 0L) {
+            output.WriteRawTag(16);
+            output.WriteInt64(ServerKeepAliveTimeoutMillis);
+          }
+          if (ServerPermitKeepAliveWithoutCalls != false) {
+            output.WriteRawTag(24);
+            output.WriteBool(ServerPermitKeepAliveWithoutCalls);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (ServerKeepAliveTimeMillis != 0L) {
+            size += 1 + pb::CodedOutputStream.ComputeInt64Size(ServerKeepAliveTimeMillis);
+          }
+          if (ServerKeepAliveTimeoutMillis != 0L) {
+            size += 1 + pb::CodedOutputStream.ComputeInt64Size(ServerKeepAliveTimeoutMillis);
+          }
+          if (ServerPermitKeepAliveWithoutCalls != false) {
+            size += 1 + 1;
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(GrpcConfiguration other) {
+          if (other == null) {
+            return;
+          }
+          if (other.ServerKeepAliveTimeMillis != 0L) {
+            ServerKeepAliveTimeMillis = other.ServerKeepAliveTimeMillis;
+          }
+          if (other.ServerKeepAliveTimeoutMillis != 0L) {
+            ServerKeepAliveTimeoutMillis = other.ServerKeepAliveTimeoutMillis;
+          }
+          if (other.ServerPermitKeepAliveWithoutCalls != false) {
+            ServerPermitKeepAliveWithoutCalls = other.ServerPermitKeepAliveWithoutCalls;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 8: {
+                ServerKeepAliveTimeMillis = input.ReadInt64();
+                break;
+              }
+              case 16: {
+                ServerKeepAliveTimeoutMillis = input.ReadInt64();
+                break;
+              }
+              case 24: {
+                ServerPermitKeepAliveWithoutCalls = input.ReadBool();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 8: {
+                ServerKeepAliveTimeMillis = input.ReadInt64();
+                break;
+              }
+              case 16: {
+                ServerKeepAliveTimeoutMillis = input.ReadInt64();
+                break;
+              }
+              case 24: {
+                ServerPermitKeepAliveWithoutCalls = input.ReadBool();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      public sealed partial class MatchmakignConfiguration : pb::IMessage<MatchmakignConfiguration>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<MatchmakignConfiguration> _parser = new pb::MessageParser<MatchmakignConfiguration>(() => new MatchmakignConfiguration());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<MatchmakignConfiguration> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[5]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public MatchmakignConfiguration() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public MatchmakignConfiguration(MatchmakignConfiguration other) : this() {
+          enqueueLockTimeoutMillis_ = other.enqueueLockTimeoutMillis_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public MatchmakignConfiguration Clone() {
+          return new MatchmakignConfiguration(this);
+        }
+
+        /// <summary>Field number for the "enqueueLockTimeoutMillis" field.</summary>
+        public const int EnqueueLockTimeoutMillisFieldNumber = 1;
+        private long enqueueLockTimeoutMillis_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public long EnqueueLockTimeoutMillis {
+          get { return enqueueLockTimeoutMillis_; }
+          set {
+            enqueueLockTimeoutMillis_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as MatchmakignConfiguration);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(MatchmakignConfiguration other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (EnqueueLockTimeoutMillis != other.EnqueueLockTimeoutMillis) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (EnqueueLockTimeoutMillis != 0L) hash ^= EnqueueLockTimeoutMillis.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (EnqueueLockTimeoutMillis != 0L) {
+            output.WriteRawTag(8);
+            output.WriteInt64(EnqueueLockTimeoutMillis);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (EnqueueLockTimeoutMillis != 0L) {
+            output.WriteRawTag(8);
+            output.WriteInt64(EnqueueLockTimeoutMillis);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (EnqueueLockTimeoutMillis != 0L) {
+            size += 1 + pb::CodedOutputStream.ComputeInt64Size(EnqueueLockTimeoutMillis);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(MatchmakignConfiguration other) {
+          if (other == null) {
+            return;
+          }
+          if (other.EnqueueLockTimeoutMillis != 0L) {
+            EnqueueLockTimeoutMillis = other.EnqueueLockTimeoutMillis;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 8: {
+                EnqueueLockTimeoutMillis = input.ReadInt64();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 8: {
+                EnqueueLockTimeoutMillis = input.ReadInt64();
                 break;
               }
             }
