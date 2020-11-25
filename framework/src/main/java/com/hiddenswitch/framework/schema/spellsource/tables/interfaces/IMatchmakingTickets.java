@@ -20,12 +20,12 @@ public interface IMatchmakingTickets extends VertxPojo, Serializable {
     /**
      * Setter for <code>spellsource.matchmaking_tickets.id</code>.
      */
-    public IMatchmakingTickets setId(String value);
+    public IMatchmakingTickets setId(Long value);
 
     /**
      * Getter for <code>spellsource.matchmaking_tickets.id</code>.
      */
-    public String getId();
+    public Long getId();
 
     /**
      * Setter for <code>spellsource.matchmaking_tickets.queue_id</code>.
@@ -68,16 +68,6 @@ public interface IMatchmakingTickets extends VertxPojo, Serializable {
     public String getBotDeckId();
 
     /**
-     * Setter for <code>spellsource.matchmaking_tickets.last_modified</code>.
-     */
-    public IMatchmakingTickets setLastModified(OffsetDateTime value);
-
-    /**
-     * Getter for <code>spellsource.matchmaking_tickets.last_modified</code>.
-     */
-    public OffsetDateTime getLastModified();
-
-    /**
      * Setter for <code>spellsource.matchmaking_tickets.created_at</code>.
      */
     public IMatchmakingTickets setCreatedAt(OffsetDateTime value);
@@ -86,26 +76,6 @@ public interface IMatchmakingTickets extends VertxPojo, Serializable {
      * Getter for <code>spellsource.matchmaking_tickets.created_at</code>.
      */
     public OffsetDateTime getCreatedAt();
-
-    /**
-     * Setter for <code>spellsource.matchmaking_tickets.assigned_at</code>.
-     */
-    public IMatchmakingTickets setAssignedAt(OffsetDateTime value);
-
-    /**
-     * Getter for <code>spellsource.matchmaking_tickets.assigned_at</code>.
-     */
-    public OffsetDateTime getAssignedAt();
-
-    /**
-     * Setter for <code>spellsource.matchmaking_tickets.game_id</code>.
-     */
-    public IMatchmakingTickets setGameId(Long value);
-
-    /**
-     * Getter for <code>spellsource.matchmaking_tickets.game_id</code>.
-     */
-    public Long getGameId();
 
     // -------------------------------------------------------------------------
     // FROM and INTO
@@ -124,9 +94,9 @@ public interface IMatchmakingTickets extends VertxPojo, Serializable {
     @Override
     public default IMatchmakingTickets fromJson(io.vertx.core.json.JsonObject json) {
         try {
-            setId(json.getString("id"));
+            setId(json.getLong("id"));
         } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("id","java.lang.String",e);
+            throw new UnexpectedJsonValueType("id","java.lang.Long",e);
         }
         try {
             setQueueId(json.getString("queue_id"));
@@ -149,27 +119,10 @@ public interface IMatchmakingTickets extends VertxPojo, Serializable {
             throw new UnexpectedJsonValueType("bot_deck_id","java.lang.String",e);
         }
         try {
-            String last_modifiedString = json.getString("last_modified");
-            setLastModified(last_modifiedString == null?null:java.time.OffsetDateTime.parse(last_modifiedString));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("last_modified","java.time.OffsetDateTime",e);
-        }
-        try {
             String created_atString = json.getString("created_at");
             setCreatedAt(created_atString == null?null:java.time.OffsetDateTime.parse(created_atString));
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("created_at","java.time.OffsetDateTime",e);
-        }
-        try {
-            String assigned_atString = json.getString("assigned_at");
-            setAssignedAt(assigned_atString == null?null:java.time.OffsetDateTime.parse(assigned_atString));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("assigned_at","java.time.OffsetDateTime",e);
-        }
-        try {
-            setGameId(json.getLong("game_id"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("game_id","java.lang.Long",e);
         }
         return this;
     }
@@ -183,10 +136,7 @@ public interface IMatchmakingTickets extends VertxPojo, Serializable {
         json.put("user_id",getUserId());
         json.put("deck_id",getDeckId());
         json.put("bot_deck_id",getBotDeckId());
-        json.put("last_modified",getLastModified()==null?null:getLastModified().toString());
         json.put("created_at",getCreatedAt()==null?null:getCreatedAt().toString());
-        json.put("assigned_at",getAssignedAt()==null?null:getAssignedAt().toString());
-        json.put("game_id",getGameId());
         return json;
     }
 

@@ -9,6 +9,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingQ
 
 import io.github.jklingsporn.vertx.jooq.shared.reactive.AbstractReactiveVertxDAO;
 
+import java.time.OffsetDateTime;
 import java.util.Collection;
 
 import org.jooq.Configuration;
@@ -163,34 +164,6 @@ public class MatchmakingQueuesDao extends AbstractReactiveVertxDAO<MatchmakingQu
     }
 
     /**
-     * Find records that have <code>max_tickets_to_process IN (values)</code> asynchronously
-     */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues>> findManyByMaxTicketsToProcess(Collection<Integer> values) {
-        return findManyByCondition(MatchmakingQueues.MATCHMAKING_QUEUES.MAX_TICKETS_TO_PROCESS.in(values));
-    }
-
-    /**
-     * Find records that have <code>max_tickets_to_process IN (values)</code> asynchronously limited by the given limit
-     */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues>> findManyByMaxTicketsToProcess(Collection<Integer> values, int limit) {
-        return findManyByCondition(MatchmakingQueues.MATCHMAKING_QUEUES.MAX_TICKETS_TO_PROCESS.in(values),limit);
-    }
-
-    /**
-     * Find records that have <code>scan_frequency IN (values)</code> asynchronously
-     */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues>> findManyByScanFrequency(Collection<Long> values) {
-        return findManyByCondition(MatchmakingQueues.MATCHMAKING_QUEUES.SCAN_FREQUENCY.in(values));
-    }
-
-    /**
-     * Find records that have <code>scan_frequency IN (values)</code> asynchronously limited by the given limit
-     */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues>> findManyByScanFrequency(Collection<Long> values, int limit) {
-        return findManyByCondition(MatchmakingQueues.MATCHMAKING_QUEUES.SCAN_FREQUENCY.in(values),limit);
-    }
-
-    /**
      * Find records that have <code>lobby_size IN (values)</code> asynchronously
      */
     public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues>> findManyByLobbySize(Collection<Integer> values) {
@@ -202,6 +175,20 @@ public class MatchmakingQueuesDao extends AbstractReactiveVertxDAO<MatchmakingQu
      */
     public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues>> findManyByLobbySize(Collection<Integer> values, int limit) {
         return findManyByCondition(MatchmakingQueues.MATCHMAKING_QUEUES.LOBBY_SIZE.in(values),limit);
+    }
+
+    /**
+     * Find records that have <code>queue_created_at IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues>> findManyByQueueCreatedAt(Collection<OffsetDateTime> values) {
+        return findManyByCondition(MatchmakingQueues.MATCHMAKING_QUEUES.QUEUE_CREATED_AT.in(values));
+    }
+
+    /**
+     * Find records that have <code>queue_created_at IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues>> findManyByQueueCreatedAt(Collection<OffsetDateTime> values, int limit) {
+        return findManyByCondition(MatchmakingQueues.MATCHMAKING_QUEUES.QUEUE_CREATED_AT.in(values),limit);
     }
 
     @Override

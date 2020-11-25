@@ -346,7 +346,7 @@ public class Legacy {
 	}
 
 	@SafeVarargs
-	private static <T> T[] without(T[] array, T... withoutElements) {
+	public static <T> T[] without(T[] array, T... withoutElements) {
 		var returnArray = ObjectArrays.newArray(array, array.length);
 		var k = 0;
 		for (var i = 0; i < array.length; i++) {

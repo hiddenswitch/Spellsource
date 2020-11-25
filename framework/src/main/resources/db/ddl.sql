@@ -43,6 +43,19 @@ CREATE SCHEMA spellsource;
 
 ALTER SCHEMA spellsource OWNER TO admin;
 
+--
+-- Name: game_state_enum; Type: TYPE; Schema: spellsource; Owner: admin
+--
+
+CREATE TYPE spellsource.game_state_enum AS ENUM (
+    'AWAITING_CONNECTIONS',
+    'STARTED',
+    'FINISHED'
+);
+
+
+ALTER TYPE spellsource.game_state_enum OWNER TO admin;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -1668,11 +1681,40 @@ COMMENT ON COLUMN spellsource.decks.is_premade IS 'premades always shared with a
 
 
 --
+-- Name: game_users; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.game_users (
+    id bigint NOT NULL,
+    player_index smallint DEFAULT 0,
+    game_id bigint,
+    user_id text
+);
+
+
+ALTER TABLE spellsource.game_users OWNER TO admin;
+
+--
+-- Name: game_users_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.game_users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME spellsource.game_users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: games; Type: TABLE; Schema: spellsource; Owner: admin
 --
 
 CREATE TABLE spellsource.games (
     id bigint NOT NULL,
+    status spellsource.game_state_enum DEFAULT 'AWAITING_CONNECTIONS'::spellsource.game_state_enum NOT NULL,
     git_hash text,
     trace jsonb
 );
@@ -1709,9 +1751,8 @@ CREATE TABLE spellsource.matchmaking_queues (
     awaiting_lobby_timeout bigint DEFAULT 0 NOT NULL,
     once boolean DEFAULT false NOT NULL,
     automatically_close boolean DEFAULT true NOT NULL,
-    max_tickets_to_process integer DEFAULT 10 NOT NULL,
-    scan_frequency bigint DEFAULT 3000 NOT NULL,
     lobby_size integer DEFAULT 2 NOT NULL,
+    queue_created_at timestamp with time zone DEFAULT now() NOT NULL,
     CONSTRAINT matchmaking_queues_lobby_size_check CHECK (((lobby_size <= 2) AND (lobby_size >= 0)))
 );
 
@@ -1723,19 +1764,30 @@ ALTER TABLE spellsource.matchmaking_queues OWNER TO admin;
 --
 
 CREATE TABLE spellsource.matchmaking_tickets (
-    id text NOT NULL,
+    id bigint NOT NULL,
     queue_id text,
     user_id text,
     deck_id text,
     bot_deck_id text,
-    last_modified timestamp with time zone DEFAULT now() NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    assigned_at timestamp with time zone,
-    game_id bigint
+    created_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
 
 ALTER TABLE spellsource.matchmaking_tickets OWNER TO admin;
+
+--
+-- Name: matchmaking_tickets_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.matchmaking_tickets ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME spellsource.matchmaking_tickets_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
 
 --
 -- Name: flyway_schema_history flyway_schema_history_pk; Type: CONSTRAINT; Schema: hiddenswitch; Owner: admin
@@ -2658,6 +2710,14 @@ ALTER TABLE ONLY spellsource.decks
 
 
 --
+-- Name: game_users game_users_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.game_users
+    ADD CONSTRAINT game_users_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: games games_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
@@ -3253,20 +3313,6 @@ CREATE INDEX decks_is_premade_idx ON spellsource.decks USING btree (is_premade) 
 --
 
 CREATE INDEX decks_trashed_idx ON spellsource.decks USING btree (trashed) WHERE (is_premade IS FALSE);
-
-
---
--- Name: matchmaking_tickets_queue_id_idx; Type: INDEX; Schema: spellsource; Owner: admin
---
-
-CREATE INDEX matchmaking_tickets_queue_id_idx ON spellsource.matchmaking_tickets USING btree (queue_id);
-
-
---
--- Name: matchmaking_tickets_user_id_idx; Type: INDEX; Schema: spellsource; Owner: admin
---
-
-CREATE INDEX matchmaking_tickets_user_id_idx ON spellsource.matchmaking_tickets USING btree (user_id);
 
 
 --
@@ -4038,6 +4084,22 @@ ALTER TABLE ONLY spellsource.decks
 
 
 --
+-- Name: game_users game_users_game_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.game_users
+    ADD CONSTRAINT game_users_game_id_fkey FOREIGN KEY (game_id) REFERENCES spellsource.games(id) ON DELETE CASCADE;
+
+
+--
+-- Name: game_users game_users_user_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.game_users
+    ADD CONSTRAINT game_users_user_id_fkey FOREIGN KEY (user_id) REFERENCES keycloak.user_entity(id) ON DELETE CASCADE;
+
+
+--
 -- Name: matchmaking_tickets matchmaking_tickets_bot_deck_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
@@ -4050,15 +4112,7 @@ ALTER TABLE ONLY spellsource.matchmaking_tickets
 --
 
 ALTER TABLE ONLY spellsource.matchmaking_tickets
-    ADD CONSTRAINT matchmaking_tickets_deck_id_fkey FOREIGN KEY (deck_id) REFERENCES spellsource.decks(id);
-
-
---
--- Name: matchmaking_tickets matchmaking_tickets_game_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
---
-
-ALTER TABLE ONLY spellsource.matchmaking_tickets
-    ADD CONSTRAINT matchmaking_tickets_game_id_fkey FOREIGN KEY (game_id) REFERENCES spellsource.games(id);
+    ADD CONSTRAINT matchmaking_tickets_deck_id_fkey FOREIGN KEY (deck_id) REFERENCES spellsource.decks(id) ON DELETE CASCADE;
 
 
 --
@@ -4074,7 +4128,7 @@ ALTER TABLE ONLY spellsource.matchmaking_tickets
 --
 
 ALTER TABLE ONLY spellsource.matchmaking_tickets
-    ADD CONSTRAINT matchmaking_tickets_user_id_fkey FOREIGN KEY (user_id) REFERENCES keycloak.user_entity(id);
+    ADD CONSTRAINT matchmaking_tickets_user_id_fkey FOREIGN KEY (user_id) REFERENCES keycloak.user_entity(id) ON DELETE CASCADE;
 
 
 --

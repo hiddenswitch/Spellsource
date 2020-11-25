@@ -8,6 +8,7 @@ import io.github.jklingsporn.vertx.jooq.shared.UnexpectedJsonValueType;
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 
 /**
@@ -117,26 +118,6 @@ public interface IMatchmakingQueues extends VertxPojo, Serializable {
     public Boolean getAutomaticallyClose();
 
     /**
-     * Setter for <code>spellsource.matchmaking_queues.max_tickets_to_process</code>.
-     */
-    public IMatchmakingQueues setMaxTicketsToProcess(Integer value);
-
-    /**
-     * Getter for <code>spellsource.matchmaking_queues.max_tickets_to_process</code>.
-     */
-    public Integer getMaxTicketsToProcess();
-
-    /**
-     * Setter for <code>spellsource.matchmaking_queues.scan_frequency</code>.
-     */
-    public IMatchmakingQueues setScanFrequency(Long value);
-
-    /**
-     * Getter for <code>spellsource.matchmaking_queues.scan_frequency</code>.
-     */
-    public Long getScanFrequency();
-
-    /**
      * Setter for <code>spellsource.matchmaking_queues.lobby_size</code>.
      */
     public IMatchmakingQueues setLobbySize(Integer value);
@@ -145,6 +126,16 @@ public interface IMatchmakingQueues extends VertxPojo, Serializable {
      * Getter for <code>spellsource.matchmaking_queues.lobby_size</code>.
      */
     public Integer getLobbySize();
+
+    /**
+     * Setter for <code>spellsource.matchmaking_queues.queue_created_at</code>.
+     */
+    public IMatchmakingQueues setQueueCreatedAt(OffsetDateTime value);
+
+    /**
+     * Getter for <code>spellsource.matchmaking_queues.queue_created_at</code>.
+     */
+    public OffsetDateTime getQueueCreatedAt();
 
     // -------------------------------------------------------------------------
     // FROM and INTO
@@ -213,19 +204,15 @@ public interface IMatchmakingQueues extends VertxPojo, Serializable {
             throw new UnexpectedJsonValueType("automatically_close","java.lang.Boolean",e);
         }
         try {
-            setMaxTicketsToProcess(json.getInteger("max_tickets_to_process"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("max_tickets_to_process","java.lang.Integer",e);
-        }
-        try {
-            setScanFrequency(json.getLong("scan_frequency"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("scan_frequency","java.lang.Long",e);
-        }
-        try {
             setLobbySize(json.getInteger("lobby_size"));
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("lobby_size","java.lang.Integer",e);
+        }
+        try {
+            String queue_created_atString = json.getString("queue_created_at");
+            setQueueCreatedAt(queue_created_atString == null?null:java.time.OffsetDateTime.parse(queue_created_atString));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("queue_created_at","java.time.OffsetDateTime",e);
         }
         return this;
     }
@@ -244,9 +231,8 @@ public interface IMatchmakingQueues extends VertxPojo, Serializable {
         json.put("awaiting_lobby_timeout",getAwaitingLobbyTimeout());
         json.put("once",getOnce());
         json.put("automatically_close",getAutomaticallyClose());
-        json.put("max_tickets_to_process",getMaxTicketsToProcess());
-        json.put("scan_frequency",getScanFrequency());
         json.put("lobby_size",getLobbySize());
+        json.put("queue_created_at",getQueueCreatedAt()==null?null:getQueueCreatedAt().toString());
         return json;
     }
 

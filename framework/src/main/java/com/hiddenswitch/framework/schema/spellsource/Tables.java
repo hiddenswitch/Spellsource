@@ -9,6 +9,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckShares;
 import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
+import com.hiddenswitch.framework.schema.spellsource.tables.GameUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Games;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
@@ -44,6 +45,11 @@ public class Tables {
      * The table <code>spellsource.decks</code>.
      */
     public static final Decks DECKS = Decks.DECKS;
+
+    /**
+     * The table <code>spellsource.game_users</code>.
+     */
+    public static final GameUsers GAME_USERS = GameUsers.GAME_USERS;
 
     /**
      * The table <code>spellsource.games</code>.

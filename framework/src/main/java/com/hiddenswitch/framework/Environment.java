@@ -10,10 +10,7 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGeneri
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
-import io.vertx.core.Context;
-import io.vertx.core.Future;
-import io.vertx.core.Promise;
-import io.vertx.core.Vertx;
+import io.vertx.core.*;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
 import io.vertx.ext.sync.Sync;
@@ -93,7 +90,15 @@ public class Environment {
 	}
 
 	public static ReactiveClassicGenericQueryExecutor queryExecutor() {
-		return queryExecutors.get();
+		return new ReactiveClassicGenericQueryExecutor(jooqAkaDaoConfiguration(), sqlPoolAkaDaoDelegate()); // queryExecutors.get();
+	}
+
+	public static Handler<Throwable> onFailure() {
+		var here = new Throwable();
+		return t -> {
+			t.setStackTrace(Sync.concatAndFilterStackTrace(t, here));
+			t.printStackTrace();
+		};
 	}
 
 	public static Future<Void> sleep(Vertx vertx, long milliseconds) {

@@ -31,7 +31,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class KeycloakGroup extends TableImpl<KeycloakGroupRecord> {
 
-    private static final long serialVersionUID = -1790731889;
+    private static final long serialVersionUID = -885145426;
 
     /**
      * The reference instance of <code>keycloak.keycloak_group</code>
@@ -59,7 +59,7 @@ public class KeycloakGroup extends TableImpl<KeycloakGroupRecord> {
     /**
      * The column <code>keycloak.keycloak_group.parent_group</code>.
      */
-    public final TableField<KeycloakGroupRecord, String> PARENT_GROUP = createField(DSL.name("parent_group"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<KeycloakGroupRecord, String> PARENT_GROUP = createField(DSL.name("parent_group"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.keycloak_group.realm_id</code>.

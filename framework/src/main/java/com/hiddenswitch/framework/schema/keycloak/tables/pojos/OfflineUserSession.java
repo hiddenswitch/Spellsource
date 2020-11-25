@@ -15,14 +15,15 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfflineUserSession implements VertxPojo, IOfflineUserSession {
 
-    private static final long serialVersionUID = -1777303327;
+    private static final long serialVersionUID = 2073881277;
 
     private String  userSessionId;
     private String  userId;
     private String  realmId;
-    private Integer lastSessionRefresh;
+    private Integer createdOn;
     private String  offlineFlag;
     private String  data;
+    private Integer lastSessionRefresh;
 
     public OfflineUserSession() {}
 
@@ -30,25 +31,28 @@ public class OfflineUserSession implements VertxPojo, IOfflineUserSession {
         this.userSessionId = value.getUserSessionId();
         this.userId = value.getUserId();
         this.realmId = value.getRealmId();
-        this.lastSessionRefresh = value.getLastSessionRefresh();
+        this.createdOn = value.getCreatedOn();
         this.offlineFlag = value.getOfflineFlag();
         this.data = value.getData();
+        this.lastSessionRefresh = value.getLastSessionRefresh();
     }
 
     public OfflineUserSession(
         String  userSessionId,
         String  userId,
         String  realmId,
-        Integer lastSessionRefresh,
+        Integer createdOn,
         String  offlineFlag,
-        String  data
+        String  data,
+        Integer lastSessionRefresh
     ) {
         this.userSessionId = userSessionId;
         this.userId = userId;
         this.realmId = realmId;
-        this.lastSessionRefresh = lastSessionRefresh;
+        this.createdOn = createdOn;
         this.offlineFlag = offlineFlag;
         this.data = data;
+        this.lastSessionRefresh = lastSessionRefresh;
     }
 
     public OfflineUserSession(io.vertx.core.json.JsonObject json) {
@@ -90,13 +94,13 @@ public class OfflineUserSession implements VertxPojo, IOfflineUserSession {
     }
 
     @Override
-    public Integer getLastSessionRefresh() {
-        return this.lastSessionRefresh;
+    public Integer getCreatedOn() {
+        return this.createdOn;
     }
 
     @Override
-    public OfflineUserSession setLastSessionRefresh(Integer lastSessionRefresh) {
-        this.lastSessionRefresh = lastSessionRefresh;
+    public OfflineUserSession setCreatedOn(Integer createdOn) {
+        this.createdOn = createdOn;
         return this;
     }
 
@@ -123,15 +127,27 @@ public class OfflineUserSession implements VertxPojo, IOfflineUserSession {
     }
 
     @Override
+    public Integer getLastSessionRefresh() {
+        return this.lastSessionRefresh;
+    }
+
+    @Override
+    public OfflineUserSession setLastSessionRefresh(Integer lastSessionRefresh) {
+        this.lastSessionRefresh = lastSessionRefresh;
+        return this;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("OfflineUserSession (");
 
         sb.append(userSessionId);
         sb.append(", ").append(userId);
         sb.append(", ").append(realmId);
-        sb.append(", ").append(lastSessionRefresh);
+        sb.append(", ").append(createdOn);
         sb.append(", ").append(offlineFlag);
         sb.append(", ").append(data);
+        sb.append(", ").append(lastSessionRefresh);
 
         sb.append(")");
         return sb.toString();
@@ -146,9 +162,10 @@ public class OfflineUserSession implements VertxPojo, IOfflineUserSession {
         setUserSessionId(from.getUserSessionId());
         setUserId(from.getUserId());
         setRealmId(from.getRealmId());
-        setLastSessionRefresh(from.getLastSessionRefresh());
+        setCreatedOn(from.getCreatedOn());
         setOfflineFlag(from.getOfflineFlag());
         setData(from.getData());
+        setLastSessionRefresh(from.getLastSessionRefresh());
     }
 
     @Override

@@ -235,7 +235,7 @@ if (isWindows) {
     task startAndWaitOnHealthyKeycloakContainer {
         dependsOn startKeycloakContainer
         doLast {
-            sleep(14000)
+            sleep(21000)
         }
     }
 } else {

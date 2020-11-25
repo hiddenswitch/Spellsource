@@ -17,17 +17,14 @@ import java.time.OffsetDateTime;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MatchmakingTickets implements VertxPojo, IMatchmakingTickets {
 
-    private static final long serialVersionUID = -1108190447;
+    private static final long serialVersionUID = -953691446;
 
-    private String         id;
+    private Long           id;
     private String         queueId;
     private String         userId;
     private String         deckId;
     private String         botDeckId;
-    private OffsetDateTime lastModified;
     private OffsetDateTime createdAt;
-    private OffsetDateTime assignedAt;
-    private Long           gameId;
 
     public MatchmakingTickets() {}
 
@@ -37,32 +34,23 @@ public class MatchmakingTickets implements VertxPojo, IMatchmakingTickets {
         this.userId = value.getUserId();
         this.deckId = value.getDeckId();
         this.botDeckId = value.getBotDeckId();
-        this.lastModified = value.getLastModified();
         this.createdAt = value.getCreatedAt();
-        this.assignedAt = value.getAssignedAt();
-        this.gameId = value.getGameId();
     }
 
     public MatchmakingTickets(
-        String         id,
+        Long           id,
         String         queueId,
         String         userId,
         String         deckId,
         String         botDeckId,
-        OffsetDateTime lastModified,
-        OffsetDateTime createdAt,
-        OffsetDateTime assignedAt,
-        Long           gameId
+        OffsetDateTime createdAt
     ) {
         this.id = id;
         this.queueId = queueId;
         this.userId = userId;
         this.deckId = deckId;
         this.botDeckId = botDeckId;
-        this.lastModified = lastModified;
         this.createdAt = createdAt;
-        this.assignedAt = assignedAt;
-        this.gameId = gameId;
     }
 
     public MatchmakingTickets(io.vertx.core.json.JsonObject json) {
@@ -71,12 +59,12 @@ public class MatchmakingTickets implements VertxPojo, IMatchmakingTickets {
     }
 
     @Override
-    public String getId() {
+    public Long getId() {
         return this.id;
     }
 
     @Override
-    public MatchmakingTickets setId(String id) {
+    public MatchmakingTickets setId(Long id) {
         this.id = id;
         return this;
     }
@@ -126,17 +114,6 @@ public class MatchmakingTickets implements VertxPojo, IMatchmakingTickets {
     }
 
     @Override
-    public OffsetDateTime getLastModified() {
-        return this.lastModified;
-    }
-
-    @Override
-    public MatchmakingTickets setLastModified(OffsetDateTime lastModified) {
-        this.lastModified = lastModified;
-        return this;
-    }
-
-    @Override
     public OffsetDateTime getCreatedAt() {
         return this.createdAt;
     }
@@ -144,28 +121,6 @@ public class MatchmakingTickets implements VertxPojo, IMatchmakingTickets {
     @Override
     public MatchmakingTickets setCreatedAt(OffsetDateTime createdAt) {
         this.createdAt = createdAt;
-        return this;
-    }
-
-    @Override
-    public OffsetDateTime getAssignedAt() {
-        return this.assignedAt;
-    }
-
-    @Override
-    public MatchmakingTickets setAssignedAt(OffsetDateTime assignedAt) {
-        this.assignedAt = assignedAt;
-        return this;
-    }
-
-    @Override
-    public Long getGameId() {
-        return this.gameId;
-    }
-
-    @Override
-    public MatchmakingTickets setGameId(Long gameId) {
-        this.gameId = gameId;
         return this;
     }
 
@@ -178,10 +133,7 @@ public class MatchmakingTickets implements VertxPojo, IMatchmakingTickets {
         sb.append(", ").append(userId);
         sb.append(", ").append(deckId);
         sb.append(", ").append(botDeckId);
-        sb.append(", ").append(lastModified);
         sb.append(", ").append(createdAt);
-        sb.append(", ").append(assignedAt);
-        sb.append(", ").append(gameId);
 
         sb.append(")");
         return sb.toString();
@@ -198,10 +150,7 @@ public class MatchmakingTickets implements VertxPojo, IMatchmakingTickets {
         setUserId(from.getUserId());
         setDeckId(from.getDeckId());
         setBotDeckId(from.getBotDeckId());
-        setLastModified(from.getLastModified());
         setCreatedAt(from.getCreatedAt());
-        setAssignedAt(from.getAssignedAt());
-        setGameId(from.getGameId());
     }
 
     @Override

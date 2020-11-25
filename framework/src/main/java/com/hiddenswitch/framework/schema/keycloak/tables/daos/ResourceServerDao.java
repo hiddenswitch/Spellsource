@@ -64,6 +64,20 @@ public class ResourceServerDao extends AbstractReactiveVertxDAO<ResourceServerRe
         return findManyByCondition(ResourceServer.RESOURCE_SERVER.POLICY_ENFORCE_MODE.in(values),limit);
     }
 
+    /**
+     * Find records that have <code>decision_strategy IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByDecisionStrategy(Collection<Short> values) {
+        return findManyByCondition(ResourceServer.RESOURCE_SERVER.DECISION_STRATEGY.in(values));
+    }
+
+    /**
+     * Find records that have <code>decision_strategy IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByDecisionStrategy(Collection<Short> values, int limit) {
+        return findManyByCondition(ResourceServer.RESOURCE_SERVER.DECISION_STRATEGY.in(values),limit);
+    }
+
     @Override
     public ReactiveClassicQueryExecutor<ResourceServerRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer,String> queryExecutor(){
         return (ReactiveClassicQueryExecutor<ResourceServerRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer,String>) super.queryExecutor();

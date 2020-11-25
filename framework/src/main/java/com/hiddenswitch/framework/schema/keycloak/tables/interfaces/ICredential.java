@@ -27,26 +27,6 @@ public interface ICredential extends VertxPojo, Serializable {
     public String getId();
 
     /**
-     * Setter for <code>keycloak.credential.device</code>.
-     */
-    public ICredential setDevice(String value);
-
-    /**
-     * Getter for <code>keycloak.credential.device</code>.
-     */
-    public String getDevice();
-
-    /**
-     * Setter for <code>keycloak.credential.hash_iterations</code>.
-     */
-    public ICredential setHashIterations(Integer value);
-
-    /**
-     * Getter for <code>keycloak.credential.hash_iterations</code>.
-     */
-    public Integer getHashIterations();
-
-    /**
      * Setter for <code>keycloak.credential.salt</code>.
      */
     public ICredential setSalt(byte[] value);
@@ -65,16 +45,6 @@ public interface ICredential extends VertxPojo, Serializable {
      * Getter for <code>keycloak.credential.type</code>.
      */
     public String getType();
-
-    /**
-     * Setter for <code>keycloak.credential.value</code>.
-     */
-    public ICredential setValue(String value);
-
-    /**
-     * Getter for <code>keycloak.credential.value</code>.
-     */
-    public String getValue();
 
     /**
      * Setter for <code>keycloak.credential.user_id</code>.
@@ -97,44 +67,44 @@ public interface ICredential extends VertxPojo, Serializable {
     public Long getCreatedDate();
 
     /**
-     * Setter for <code>keycloak.credential.counter</code>.
+     * Setter for <code>keycloak.credential.user_label</code>.
      */
-    public ICredential setCounter(Integer value);
+    public ICredential setUserLabel(String value);
 
     /**
-     * Getter for <code>keycloak.credential.counter</code>.
+     * Getter for <code>keycloak.credential.user_label</code>.
      */
-    public Integer getCounter();
+    public String getUserLabel();
 
     /**
-     * Setter for <code>keycloak.credential.digits</code>.
+     * Setter for <code>keycloak.credential.secret_data</code>.
      */
-    public ICredential setDigits(Integer value);
+    public ICredential setSecretData(String value);
 
     /**
-     * Getter for <code>keycloak.credential.digits</code>.
+     * Getter for <code>keycloak.credential.secret_data</code>.
      */
-    public Integer getDigits();
+    public String getSecretData();
 
     /**
-     * Setter for <code>keycloak.credential.period</code>.
+     * Setter for <code>keycloak.credential.credential_data</code>.
      */
-    public ICredential setPeriod(Integer value);
+    public ICredential setCredentialData(String value);
 
     /**
-     * Getter for <code>keycloak.credential.period</code>.
+     * Getter for <code>keycloak.credential.credential_data</code>.
      */
-    public Integer getPeriod();
+    public String getCredentialData();
 
     /**
-     * Setter for <code>keycloak.credential.algorithm</code>.
+     * Setter for <code>keycloak.credential.priority</code>.
      */
-    public ICredential setAlgorithm(String value);
+    public ICredential setPriority(Integer value);
 
     /**
-     * Getter for <code>keycloak.credential.algorithm</code>.
+     * Getter for <code>keycloak.credential.priority</code>.
      */
-    public String getAlgorithm();
+    public Integer getPriority();
 
     // -------------------------------------------------------------------------
     // FROM and INTO
@@ -158,16 +128,6 @@ public interface ICredential extends VertxPojo, Serializable {
             throw new UnexpectedJsonValueType("id","java.lang.String",e);
         }
         try {
-            setDevice(json.getString("device"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("device","java.lang.String",e);
-        }
-        try {
-            setHashIterations(json.getInteger("hash_iterations"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("hash_iterations","java.lang.Integer",e);
-        }
-        try {
             setSalt(json.getBinary("salt"));
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("salt","byte[]",e);
@@ -176,11 +136,6 @@ public interface ICredential extends VertxPojo, Serializable {
             setType(json.getString("type"));
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("type","java.lang.String",e);
-        }
-        try {
-            setValue(json.getString("value"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("value","java.lang.String",e);
         }
         try {
             setUserId(json.getString("user_id"));
@@ -193,24 +148,24 @@ public interface ICredential extends VertxPojo, Serializable {
             throw new UnexpectedJsonValueType("created_date","java.lang.Long",e);
         }
         try {
-            setCounter(json.getInteger("counter"));
+            setUserLabel(json.getString("user_label"));
         } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("counter","java.lang.Integer",e);
+            throw new UnexpectedJsonValueType("user_label","java.lang.String",e);
         }
         try {
-            setDigits(json.getInteger("digits"));
+            setSecretData(json.getString("secret_data"));
         } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("digits","java.lang.Integer",e);
+            throw new UnexpectedJsonValueType("secret_data","java.lang.String",e);
         }
         try {
-            setPeriod(json.getInteger("period"));
+            setCredentialData(json.getString("credential_data"));
         } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("period","java.lang.Integer",e);
+            throw new UnexpectedJsonValueType("credential_data","java.lang.String",e);
         }
         try {
-            setAlgorithm(json.getString("algorithm"));
+            setPriority(json.getInteger("priority"));
         } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("algorithm","java.lang.String",e);
+            throw new UnexpectedJsonValueType("priority","java.lang.Integer",e);
         }
         return this;
     }
@@ -220,17 +175,14 @@ public interface ICredential extends VertxPojo, Serializable {
     public default io.vertx.core.json.JsonObject toJson() {
         io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
         json.put("id",getId());
-        json.put("device",getDevice());
-        json.put("hash_iterations",getHashIterations());
         json.put("salt",getSalt());
         json.put("type",getType());
-        json.put("value",getValue());
         json.put("user_id",getUserId());
         json.put("created_date",getCreatedDate());
-        json.put("counter",getCounter());
-        json.put("digits",getDigits());
-        json.put("period",getPeriod());
-        json.put("algorithm",getAlgorithm());
+        json.put("user_label",getUserLabel());
+        json.put("secret_data",getSecretData());
+        json.put("credential_data",getCredentialData());
+        json.put("priority",getPriority());
         return json;
     }
 

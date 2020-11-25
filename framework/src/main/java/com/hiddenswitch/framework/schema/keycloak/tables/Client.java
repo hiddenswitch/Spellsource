@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Client extends TableImpl<ClientRecord> {
 
-    private static final long serialVersionUID = -21468379;
+    private static final long serialVersionUID = -660660894;
 
     /**
      * The reference instance of <code>keycloak.client</code>
@@ -173,24 +173,9 @@ public class Client extends TableImpl<ClientRecord> {
     public final TableField<ClientRecord, Boolean> DIRECT_ACCESS_GRANTS_ENABLED = createField(DSL.name("direct_access_grants_enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * The column <code>keycloak.client.client_template_id</code>.
+     * The column <code>keycloak.client.always_display_in_console</code>.
      */
-    public final TableField<ClientRecord, String> CLIENT_TEMPLATE_ID = createField(DSL.name("client_template_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
-
-    /**
-     * The column <code>keycloak.client.use_template_config</code>.
-     */
-    public final TableField<ClientRecord, Boolean> USE_TEMPLATE_CONFIG = createField(DSL.name("use_template_config"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
-
-    /**
-     * The column <code>keycloak.client.use_template_scope</code>.
-     */
-    public final TableField<ClientRecord, Boolean> USE_TEMPLATE_SCOPE = createField(DSL.name("use_template_scope"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
-
-    /**
-     * The column <code>keycloak.client.use_template_mappers</code>.
-     */
-    public final TableField<ClientRecord, Boolean> USE_TEMPLATE_MAPPERS = createField(DSL.name("use_template_mappers"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ClientRecord, Boolean> ALWAYS_DISPLAY_IN_CONSOLE = createField(DSL.name("always_display_in_console"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     /**
      * Create a <code>keycloak.client</code> table reference

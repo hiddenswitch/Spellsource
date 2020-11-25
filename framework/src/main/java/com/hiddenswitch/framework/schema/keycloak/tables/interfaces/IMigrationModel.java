@@ -36,6 +36,16 @@ public interface IMigrationModel extends VertxPojo, Serializable {
      */
     public String getVersion();
 
+    /**
+     * Setter for <code>keycloak.migration_model.update_time</code>.
+     */
+    public IMigrationModel setUpdateTime(Long value);
+
+    /**
+     * Getter for <code>keycloak.migration_model.update_time</code>.
+     */
+    public Long getUpdateTime();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -62,6 +72,11 @@ public interface IMigrationModel extends VertxPojo, Serializable {
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("version","java.lang.String",e);
         }
+        try {
+            setUpdateTime(json.getLong("update_time"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("update_time","java.lang.Long",e);
+        }
         return this;
     }
 
@@ -71,6 +86,7 @@ public interface IMigrationModel extends VertxPojo, Serializable {
         io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
         json.put("id",getId());
         json.put("version",getVersion());
+        json.put("update_time",getUpdateTime());
         return json;
     }
 

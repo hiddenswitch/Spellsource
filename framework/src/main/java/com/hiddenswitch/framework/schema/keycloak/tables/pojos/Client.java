@@ -15,7 +15,7 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Client implements VertxPojo, IClient {
 
-    private static final long serialVersionUID = 2053186934;
+    private static final long serialVersionUID = 1225530346;
 
     private String  id;
     private Boolean enabled;
@@ -42,10 +42,7 @@ public class Client implements VertxPojo, IClient {
     private Boolean standardFlowEnabled;
     private Boolean implicitFlowEnabled;
     private Boolean directAccessGrantsEnabled;
-    private String  clientTemplateId;
-    private Boolean useTemplateConfig;
-    private Boolean useTemplateScope;
-    private Boolean useTemplateMappers;
+    private Boolean alwaysDisplayInConsole;
 
     public Client() {}
 
@@ -75,10 +72,7 @@ public class Client implements VertxPojo, IClient {
         this.standardFlowEnabled = value.getStandardFlowEnabled();
         this.implicitFlowEnabled = value.getImplicitFlowEnabled();
         this.directAccessGrantsEnabled = value.getDirectAccessGrantsEnabled();
-        this.clientTemplateId = value.getClientTemplateId();
-        this.useTemplateConfig = value.getUseTemplateConfig();
-        this.useTemplateScope = value.getUseTemplateScope();
-        this.useTemplateMappers = value.getUseTemplateMappers();
+        this.alwaysDisplayInConsole = value.getAlwaysDisplayInConsole();
     }
 
     public Client(
@@ -107,10 +101,7 @@ public class Client implements VertxPojo, IClient {
         Boolean standardFlowEnabled,
         Boolean implicitFlowEnabled,
         Boolean directAccessGrantsEnabled,
-        String  clientTemplateId,
-        Boolean useTemplateConfig,
-        Boolean useTemplateScope,
-        Boolean useTemplateMappers
+        Boolean alwaysDisplayInConsole
     ) {
         this.id = id;
         this.enabled = enabled;
@@ -137,10 +128,7 @@ public class Client implements VertxPojo, IClient {
         this.standardFlowEnabled = standardFlowEnabled;
         this.implicitFlowEnabled = implicitFlowEnabled;
         this.directAccessGrantsEnabled = directAccessGrantsEnabled;
-        this.clientTemplateId = clientTemplateId;
-        this.useTemplateConfig = useTemplateConfig;
-        this.useTemplateScope = useTemplateScope;
-        this.useTemplateMappers = useTemplateMappers;
+        this.alwaysDisplayInConsole = alwaysDisplayInConsole;
     }
 
     public Client(io.vertx.core.json.JsonObject json) {
@@ -424,46 +412,13 @@ public class Client implements VertxPojo, IClient {
     }
 
     @Override
-    public String getClientTemplateId() {
-        return this.clientTemplateId;
+    public Boolean getAlwaysDisplayInConsole() {
+        return this.alwaysDisplayInConsole;
     }
 
     @Override
-    public Client setClientTemplateId(String clientTemplateId) {
-        this.clientTemplateId = clientTemplateId;
-        return this;
-    }
-
-    @Override
-    public Boolean getUseTemplateConfig() {
-        return this.useTemplateConfig;
-    }
-
-    @Override
-    public Client setUseTemplateConfig(Boolean useTemplateConfig) {
-        this.useTemplateConfig = useTemplateConfig;
-        return this;
-    }
-
-    @Override
-    public Boolean getUseTemplateScope() {
-        return this.useTemplateScope;
-    }
-
-    @Override
-    public Client setUseTemplateScope(Boolean useTemplateScope) {
-        this.useTemplateScope = useTemplateScope;
-        return this;
-    }
-
-    @Override
-    public Boolean getUseTemplateMappers() {
-        return this.useTemplateMappers;
-    }
-
-    @Override
-    public Client setUseTemplateMappers(Boolean useTemplateMappers) {
-        this.useTemplateMappers = useTemplateMappers;
+    public Client setAlwaysDisplayInConsole(Boolean alwaysDisplayInConsole) {
+        this.alwaysDisplayInConsole = alwaysDisplayInConsole;
         return this;
     }
 
@@ -496,10 +451,7 @@ public class Client implements VertxPojo, IClient {
         sb.append(", ").append(standardFlowEnabled);
         sb.append(", ").append(implicitFlowEnabled);
         sb.append(", ").append(directAccessGrantsEnabled);
-        sb.append(", ").append(clientTemplateId);
-        sb.append(", ").append(useTemplateConfig);
-        sb.append(", ").append(useTemplateScope);
-        sb.append(", ").append(useTemplateMappers);
+        sb.append(", ").append(alwaysDisplayInConsole);
 
         sb.append(")");
         return sb.toString();
@@ -536,10 +488,7 @@ public class Client implements VertxPojo, IClient {
         setStandardFlowEnabled(from.getStandardFlowEnabled());
         setImplicitFlowEnabled(from.getImplicitFlowEnabled());
         setDirectAccessGrantsEnabled(from.getDirectAccessGrantsEnabled());
-        setClientTemplateId(from.getClientTemplateId());
-        setUseTemplateConfig(from.getUseTemplateConfig());
-        setUseTemplateScope(from.getUseTemplateScope());
-        setUseTemplateMappers(from.getUseTemplateMappers());
+        setAlwaysDisplayInConsole(from.getAlwaysDisplayInConsole());
     }
 
     @Override

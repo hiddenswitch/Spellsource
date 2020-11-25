@@ -70,10 +70,22 @@ public class RowMappers {
         };
     }
 
+    public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers> getGameUsersMapper() {
+        return row -> {
+            com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers();
+            pojo.setId(row.getLong("id"));
+            pojo.setPlayerIndex(row.getShort("player_index"));
+            pojo.setGameId(row.getLong("game_id"));
+            pojo.setUserId(row.getString("user_id"));
+            return pojo;
+        };
+    }
+
     public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games> getGamesMapper() {
         return row -> {
             com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games();
             pojo.setId(row.getLong("id"));
+            pojo.setStatus(java.util.Arrays.stream(com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum.values()).filter(td -> td.getLiteral().equals(row.getString("status"))).findFirst().orElse(null));
             pojo.setGitHash(row.getString("git_hash"));
             // Omitting unrecognized type DataType [ t=jsonb; p=0; s=0; u="pg_catalog"."jsonb"; j=null ] (org.jooq.JSONB) for column trace!
             return pojo;
@@ -93,9 +105,8 @@ public class RowMappers {
             pojo.setAwaitingLobbyTimeout(row.getLong("awaiting_lobby_timeout"));
             pojo.setOnce(row.getBoolean("once"));
             pojo.setAutomaticallyClose(row.getBoolean("automatically_close"));
-            pojo.setMaxTicketsToProcess(row.getInteger("max_tickets_to_process"));
-            pojo.setScanFrequency(row.getLong("scan_frequency"));
             pojo.setLobbySize(row.getInteger("lobby_size"));
+            pojo.setQueueCreatedAt(row.getOffsetDateTime("queue_created_at"));
             return pojo;
         };
     }
@@ -103,15 +114,12 @@ public class RowMappers {
     public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets> getMatchmakingTicketsMapper() {
         return row -> {
             com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets();
-            pojo.setId(row.getString("id"));
+            pojo.setId(row.getLong("id"));
             pojo.setQueueId(row.getString("queue_id"));
             pojo.setUserId(row.getString("user_id"));
             pojo.setDeckId(row.getString("deck_id"));
             pojo.setBotDeckId(row.getString("bot_deck_id"));
-            pojo.setLastModified(row.getOffsetDateTime("last_modified"));
             pojo.setCreatedAt(row.getOffsetDateTime("created_at"));
-            pojo.setAssignedAt(row.getOffsetDateTime("assigned_at"));
-            pojo.setGameId(row.getLong("game_id"));
             return pojo;
         };
     }

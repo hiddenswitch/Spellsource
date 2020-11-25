@@ -8,6 +8,7 @@ import com.hiddenswitch.framework.schema.spellsource.Keys;
 import com.hiddenswitch.framework.schema.spellsource.Spellsource;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingQueuesRecord;
 
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row13;
+import org.jooq.Row12;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MatchmakingQueues extends TableImpl<MatchmakingQueuesRecord> {
 
-    private static final long serialVersionUID = 1922132371;
+    private static final long serialVersionUID = -1005482346;
 
     /**
      * The reference instance of <code>spellsource.matchmaking_queues</code>
@@ -99,19 +100,14 @@ public class MatchmakingQueues extends TableImpl<MatchmakingQueuesRecord> {
     public final TableField<MatchmakingQueuesRecord, Boolean> AUTOMATICALLY_CLOSE = createField(DSL.name("automatically_close"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("true", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * The column <code>spellsource.matchmaking_queues.max_tickets_to_process</code>.
-     */
-    public final TableField<MatchmakingQueuesRecord, Integer> MAX_TICKETS_TO_PROCESS = createField(DSL.name("max_tickets_to_process"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("10", org.jooq.impl.SQLDataType.INTEGER)), this, "");
-
-    /**
-     * The column <code>spellsource.matchmaking_queues.scan_frequency</code>.
-     */
-    public final TableField<MatchmakingQueuesRecord, Long> SCAN_FREQUENCY = createField(DSL.name("scan_frequency"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("3000", org.jooq.impl.SQLDataType.BIGINT)), this, "");
-
-    /**
      * The column <code>spellsource.matchmaking_queues.lobby_size</code>.
      */
     public final TableField<MatchmakingQueuesRecord, Integer> LOBBY_SIZE = createField(DSL.name("lobby_size"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("2", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+
+    /**
+     * The column <code>spellsource.matchmaking_queues.queue_created_at</code>.
+     */
+    public final TableField<MatchmakingQueuesRecord, OffsetDateTime> QUEUE_CREATED_AT = createField(DSL.name("queue_created_at"), org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false).defaultValue(org.jooq.impl.DSL.field("now()", org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
 
     /**
      * Create a <code>spellsource.matchmaking_queues</code> table reference
@@ -195,11 +191,11 @@ public class MatchmakingQueues extends TableImpl<MatchmakingQueuesRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row13 type methods
+    // Row12 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row13<String, String, Boolean, Boolean, Boolean, Long, Long, Long, Boolean, Boolean, Integer, Long, Integer> fieldsRow() {
-        return (Row13) super.fieldsRow();
+    public Row12<String, String, Boolean, Boolean, Boolean, Long, Long, Long, Boolean, Boolean, Integer, OffsetDateTime> fieldsRow() {
+        return (Row12) super.fieldsRow();
     }
 }

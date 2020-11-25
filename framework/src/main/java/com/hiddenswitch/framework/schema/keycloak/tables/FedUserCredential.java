@@ -17,7 +17,7 @@ import org.jooq.ForeignKey;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row14;
+import org.jooq.Row11;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class FedUserCredential extends TableImpl<FedUserCredentialRecord> {
 
-    private static final long serialVersionUID = 1105602410;
+    private static final long serialVersionUID = -1758673113;
 
     /**
      * The reference instance of <code>keycloak.fed_user_credential</code>
@@ -54,16 +54,6 @@ public class FedUserCredential extends TableImpl<FedUserCredentialRecord> {
     public final TableField<FedUserCredentialRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
-     * The column <code>keycloak.fed_user_credential.device</code>.
-     */
-    public final TableField<FedUserCredentialRecord, String> DEVICE = createField(DSL.name("device"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
-
-    /**
-     * The column <code>keycloak.fed_user_credential.hash_iterations</code>.
-     */
-    public final TableField<FedUserCredentialRecord, Integer> HASH_ITERATIONS = createField(DSL.name("hash_iterations"), org.jooq.impl.SQLDataType.INTEGER, this, "");
-
-    /**
      * The column <code>keycloak.fed_user_credential.salt</code>.
      */
     public final TableField<FedUserCredentialRecord, byte[]> SALT = createField(DSL.name("salt"), org.jooq.impl.SQLDataType.BLOB, this, "");
@@ -74,34 +64,9 @@ public class FedUserCredential extends TableImpl<FedUserCredentialRecord> {
     public final TableField<FedUserCredentialRecord, String> TYPE = createField(DSL.name("type"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
 
     /**
-     * The column <code>keycloak.fed_user_credential.value</code>.
-     */
-    public final TableField<FedUserCredentialRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
-
-    /**
      * The column <code>keycloak.fed_user_credential.created_date</code>.
      */
     public final TableField<FedUserCredentialRecord, Long> CREATED_DATE = createField(DSL.name("created_date"), org.jooq.impl.SQLDataType.BIGINT, this, "");
-
-    /**
-     * The column <code>keycloak.fed_user_credential.counter</code>.
-     */
-    public final TableField<FedUserCredentialRecord, Integer> COUNTER = createField(DSL.name("counter"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
-
-    /**
-     * The column <code>keycloak.fed_user_credential.digits</code>.
-     */
-    public final TableField<FedUserCredentialRecord, Integer> DIGITS = createField(DSL.name("digits"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("6", org.jooq.impl.SQLDataType.INTEGER)), this, "");
-
-    /**
-     * The column <code>keycloak.fed_user_credential.period</code>.
-     */
-    public final TableField<FedUserCredentialRecord, Integer> PERIOD = createField(DSL.name("period"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("30", org.jooq.impl.SQLDataType.INTEGER)), this, "");
-
-    /**
-     * The column <code>keycloak.fed_user_credential.algorithm</code>.
-     */
-    public final TableField<FedUserCredentialRecord, String> ALGORITHM = createField(DSL.name("algorithm"), org.jooq.impl.SQLDataType.VARCHAR(36).defaultValue(org.jooq.impl.DSL.field("'HmacSHA1'::character varying", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
 
     /**
      * The column <code>keycloak.fed_user_credential.user_id</code>.
@@ -117,6 +82,26 @@ public class FedUserCredential extends TableImpl<FedUserCredentialRecord> {
      * The column <code>keycloak.fed_user_credential.storage_provider_id</code>.
      */
     public final TableField<FedUserCredentialRecord, String> STORAGE_PROVIDER_ID = createField(DSL.name("storage_provider_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+
+    /**
+     * The column <code>keycloak.fed_user_credential.user_label</code>.
+     */
+    public final TableField<FedUserCredentialRecord, String> USER_LABEL = createField(DSL.name("user_label"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+
+    /**
+     * The column <code>keycloak.fed_user_credential.secret_data</code>.
+     */
+    public final TableField<FedUserCredentialRecord, String> SECRET_DATA = createField(DSL.name("secret_data"), org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>keycloak.fed_user_credential.credential_data</code>.
+     */
+    public final TableField<FedUserCredentialRecord, String> CREDENTIAL_DATA = createField(DSL.name("credential_data"), org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>keycloak.fed_user_credential.priority</code>.
+     */
+    public final TableField<FedUserCredentialRecord, Integer> PRIORITY = createField(DSL.name("priority"), org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * Create a <code>keycloak.fed_user_credential</code> table reference
@@ -198,11 +183,11 @@ public class FedUserCredential extends TableImpl<FedUserCredentialRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row14 type methods
+    // Row11 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row14<String, String, Integer, byte[], String, String, Long, Integer, Integer, Integer, String, String, String, String> fieldsRow() {
-        return (Row14) super.fieldsRow();
+    public Row11<String, byte[], String, Long, String, String, String, String, String, String, Integer> fieldsRow() {
+        return (Row11) super.fieldsRow();
     }
 }

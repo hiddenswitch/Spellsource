@@ -43,7 +43,7 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 		setWaitStrategy(Wait
 				.forHttp(KEYCLOAK_AUTH_PATH)
 				.forPort(KEYCLOAK_PORT_HTTP)
-				.withStartupTimeout(Duration.ofSeconds(30))
+				.withStartupTimeout(Duration.ofSeconds(60))
 		);
 	}
 

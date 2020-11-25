@@ -42,27 +42,11 @@ namespace Spellsource.Proto {
       return parser.ParseFrom(context.PayloadAsNewBuffer());
     }
 
-    static readonly grpc::Marshaller<global::Spellsource.Proto.MatchmakingCreateQueueRequest> __Marshaller_spellsource_MatchmakingCreateQueueRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.MatchmakingCreateQueueRequest.Parser));
-    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.Empty.Parser));
-    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.StringValue> __Marshaller_google_protobuf_StringValue = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.StringValue.Parser));
     static readonly grpc::Marshaller<global::Spellsource.Proto.MatchmakingQueuePutRequest> __Marshaller_spellsource_MatchmakingQueuePutRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.MatchmakingQueuePutRequest.Parser));
     static readonly grpc::Marshaller<global::Spellsource.Proto.MatchmakingQueuePutResponse> __Marshaller_spellsource_MatchmakingQueuePutResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.MatchmakingQueuePutResponse.Parser));
+    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.Empty.Parser));
     static readonly grpc::Marshaller<global::Spellsource.Proto.MatchCancelResponse> __Marshaller_spellsource_MatchCancelResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.MatchCancelResponse.Parser));
     static readonly grpc::Marshaller<global::Spellsource.Proto.MatchmakingQueuesResponse> __Marshaller_spellsource_MatchmakingQueuesResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.MatchmakingQueuesResponse.Parser));
-
-    static readonly grpc::Method<global::Spellsource.Proto.MatchmakingCreateQueueRequest, global::Google.Protobuf.WellKnownTypes.Empty> __Method_CreateQueue = new grpc::Method<global::Spellsource.Proto.MatchmakingCreateQueueRequest, global::Google.Protobuf.WellKnownTypes.Empty>(
-        grpc::MethodType.Unary,
-        __ServiceName,
-        "CreateQueue",
-        __Marshaller_spellsource_MatchmakingCreateQueueRequest,
-        __Marshaller_google_protobuf_Empty);
-
-    static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.StringValue, global::Google.Protobuf.WellKnownTypes.Empty> __Method_DeleteQueue = new grpc::Method<global::Google.Protobuf.WellKnownTypes.StringValue, global::Google.Protobuf.WellKnownTypes.Empty>(
-        grpc::MethodType.Unary,
-        __ServiceName,
-        "DeleteQueue",
-        __Marshaller_google_protobuf_StringValue,
-        __Marshaller_google_protobuf_Empty);
 
     static readonly grpc::Method<global::Spellsource.Proto.MatchmakingQueuePutRequest, global::Spellsource.Proto.MatchmakingQueuePutResponse> __Method_Enqueue = new grpc::Method<global::Spellsource.Proto.MatchmakingQueuePutRequest, global::Spellsource.Proto.MatchmakingQueuePutResponse>(
         grpc::MethodType.DuplexStreaming,
@@ -95,16 +79,6 @@ namespace Spellsource.Proto {
     [grpc::BindServiceMethod(typeof(Matchmaking), "BindService")]
     public abstract partial class MatchmakingBase
     {
-      public virtual global::System.Threading.Tasks.Task<global::Google.Protobuf.WellKnownTypes.Empty> CreateQueue(global::Spellsource.Proto.MatchmakingCreateQueueRequest request, grpc::ServerCallContext context)
-      {
-        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
-      }
-
-      public virtual global::System.Threading.Tasks.Task<global::Google.Protobuf.WellKnownTypes.Empty> DeleteQueue(global::Google.Protobuf.WellKnownTypes.StringValue request, grpc::ServerCallContext context)
-      {
-        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
-      }
-
       public virtual global::System.Threading.Tasks.Task Enqueue(grpc::IAsyncStreamReader<global::Spellsource.Proto.MatchmakingQueuePutRequest> requestStream, grpc::IServerStreamWriter<global::Spellsource.Proto.MatchmakingQueuePutResponse> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -157,38 +131,6 @@ namespace Spellsource.Proto {
       {
       }
 
-      public virtual global::Google.Protobuf.WellKnownTypes.Empty CreateQueue(global::Spellsource.Proto.MatchmakingCreateQueueRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return CreateQueue(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      public virtual global::Google.Protobuf.WellKnownTypes.Empty CreateQueue(global::Spellsource.Proto.MatchmakingCreateQueueRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.BlockingUnaryCall(__Method_CreateQueue, null, options, request);
-      }
-      public virtual grpc::AsyncUnaryCall<global::Google.Protobuf.WellKnownTypes.Empty> CreateQueueAsync(global::Spellsource.Proto.MatchmakingCreateQueueRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return CreateQueueAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      public virtual grpc::AsyncUnaryCall<global::Google.Protobuf.WellKnownTypes.Empty> CreateQueueAsync(global::Spellsource.Proto.MatchmakingCreateQueueRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.AsyncUnaryCall(__Method_CreateQueue, null, options, request);
-      }
-      public virtual global::Google.Protobuf.WellKnownTypes.Empty DeleteQueue(global::Google.Protobuf.WellKnownTypes.StringValue request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return DeleteQueue(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      public virtual global::Google.Protobuf.WellKnownTypes.Empty DeleteQueue(global::Google.Protobuf.WellKnownTypes.StringValue request, grpc::CallOptions options)
-      {
-        return CallInvoker.BlockingUnaryCall(__Method_DeleteQueue, null, options, request);
-      }
-      public virtual grpc::AsyncUnaryCall<global::Google.Protobuf.WellKnownTypes.Empty> DeleteQueueAsync(global::Google.Protobuf.WellKnownTypes.StringValue request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return DeleteQueueAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      public virtual grpc::AsyncUnaryCall<global::Google.Protobuf.WellKnownTypes.Empty> DeleteQueueAsync(global::Google.Protobuf.WellKnownTypes.StringValue request, grpc::CallOptions options)
-      {
-        return CallInvoker.AsyncUnaryCall(__Method_DeleteQueue, null, options, request);
-      }
       public virtual grpc::AsyncDuplexStreamingCall<global::Spellsource.Proto.MatchmakingQueuePutRequest, global::Spellsource.Proto.MatchmakingQueuePutResponse> Enqueue(grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return Enqueue(new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -297,8 +239,6 @@ namespace Spellsource.Proto {
     public static grpc::ServerServiceDefinition BindService(MatchmakingBase serviceImpl)
     {
       return grpc::ServerServiceDefinition.CreateBuilder()
-          .AddMethod(__Method_CreateQueue, serviceImpl.CreateQueue)
-          .AddMethod(__Method_DeleteQueue, serviceImpl.DeleteQueue)
           .AddMethod(__Method_Enqueue, serviceImpl.Enqueue)
           .AddMethod(__Method_MatchmakingDelete, serviceImpl.MatchmakingDelete)
           .AddMethod(__Method_MatchmakingGet, serviceImpl.MatchmakingGet).Build();
@@ -310,8 +250,6 @@ namespace Spellsource.Proto {
     /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
     public static void BindService(grpc::ServiceBinderBase serviceBinder, MatchmakingBase serviceImpl)
     {
-      serviceBinder.AddMethod(__Method_CreateQueue, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Spellsource.Proto.MatchmakingCreateQueueRequest, global::Google.Protobuf.WellKnownTypes.Empty>(serviceImpl.CreateQueue));
-      serviceBinder.AddMethod(__Method_DeleteQueue, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Google.Protobuf.WellKnownTypes.StringValue, global::Google.Protobuf.WellKnownTypes.Empty>(serviceImpl.DeleteQueue));
       serviceBinder.AddMethod(__Method_Enqueue, serviceImpl == null ? null : new grpc::DuplexStreamingServerMethod<global::Spellsource.Proto.MatchmakingQueuePutRequest, global::Spellsource.Proto.MatchmakingQueuePutResponse>(serviceImpl.Enqueue));
       serviceBinder.AddMethod(__Method_MatchmakingDelete, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.MatchCancelResponse>(serviceImpl.MatchmakingDelete));
       serviceBinder.AddMethod(__Method_MatchmakingGet, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.MatchmakingQueuesResponse>(serviceImpl.MatchmakingGet));
