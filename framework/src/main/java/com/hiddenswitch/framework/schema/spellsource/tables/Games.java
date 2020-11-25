@@ -6,6 +6,7 @@ package com.hiddenswitch.framework.schema.spellsource.tables;
 
 import com.hiddenswitch.framework.schema.spellsource.Keys;
 import com.hiddenswitch.framework.schema.spellsource.Spellsource;
+import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GamesRecord;
 
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import org.jooq.Identity;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row3;
+import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Games extends TableImpl<GamesRecord> {
 
-    private static final long serialVersionUID = -1807147400;
+    private static final long serialVersionUID = 1903684443;
 
     /**
      * The reference instance of <code>spellsource.games</code>
@@ -52,6 +53,11 @@ public class Games extends TableImpl<GamesRecord> {
      * The column <code>spellsource.games.id</code>.
      */
     public final TableField<GamesRecord, Long> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+
+    /**
+     * The column <code>spellsource.games.status</code>.
+     */
+    public final TableField<GamesRecord, GameStateEnum> STATUS = createField(DSL.name("status"), org.jooq.impl.SQLDataType.VARCHAR.nullable(false).defaultValue(org.jooq.impl.DSL.field("'AWAITING_CONNECTIONS'::spellsource.game_state_enum", org.jooq.impl.SQLDataType.VARCHAR)).asEnumDataType(com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum.class), this, "");
 
     /**
      * The column <code>spellsource.games.git_hash</code>.
@@ -143,11 +149,11 @@ public class Games extends TableImpl<GamesRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<Long, String, JSONB> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row4<Long, GameStateEnum, String, JSONB> fieldsRow() {
+        return (Row4) super.fieldsRow();
     }
 }

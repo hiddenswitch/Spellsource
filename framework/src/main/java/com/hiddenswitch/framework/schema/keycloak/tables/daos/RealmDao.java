@@ -722,6 +722,34 @@ public class RealmDao extends AbstractReactiveVertxDAO<RealmRecord, com.hiddensw
         return findManyByCondition(Realm.REALM.ALLOW_USER_MANAGED_ACCESS.in(values),limit);
     }
 
+    /**
+     * Find records that have <code>sso_max_lifespan_remember_me IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.Realm>> findManyBySsoMaxLifespanRememberMe(Collection<Integer> values) {
+        return findManyByCondition(Realm.REALM.SSO_MAX_LIFESPAN_REMEMBER_ME.in(values));
+    }
+
+    /**
+     * Find records that have <code>sso_max_lifespan_remember_me IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.Realm>> findManyBySsoMaxLifespanRememberMe(Collection<Integer> values, int limit) {
+        return findManyByCondition(Realm.REALM.SSO_MAX_LIFESPAN_REMEMBER_ME.in(values),limit);
+    }
+
+    /**
+     * Find records that have <code>sso_idle_timeout_remember_me IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.Realm>> findManyBySsoIdleTimeoutRememberMe(Collection<Integer> values) {
+        return findManyByCondition(Realm.REALM.SSO_IDLE_TIMEOUT_REMEMBER_ME.in(values));
+    }
+
+    /**
+     * Find records that have <code>sso_idle_timeout_remember_me IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.Realm>> findManyBySsoIdleTimeoutRememberMe(Collection<Integer> values, int limit) {
+        return findManyByCondition(Realm.REALM.SSO_IDLE_TIMEOUT_REMEMBER_ME.in(values),limit);
+    }
+
     @Override
     public ReactiveClassicQueryExecutor<RealmRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.Realm,String> queryExecutor(){
         return (ReactiveClassicQueryExecutor<RealmRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.Realm,String>) super.queryExecutor();

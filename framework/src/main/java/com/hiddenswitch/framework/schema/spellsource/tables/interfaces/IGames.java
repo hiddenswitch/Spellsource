@@ -4,6 +4,8 @@
 package com.hiddenswitch.framework.schema.spellsource.tables.interfaces;
 
 
+import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
+
 import io.github.jklingsporn.vertx.jooq.shared.UnexpectedJsonValueType;
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 
@@ -27,6 +29,16 @@ public interface IGames extends VertxPojo, Serializable {
      * Getter for <code>spellsource.games.id</code>.
      */
     public Long getId();
+
+    /**
+     * Setter for <code>spellsource.games.status</code>.
+     */
+    public IGames setStatus(GameStateEnum value);
+
+    /**
+     * Getter for <code>spellsource.games.status</code>.
+     */
+    public GameStateEnum getStatus();
 
     /**
      * Setter for <code>spellsource.games.git_hash</code>.
@@ -70,6 +82,11 @@ public interface IGames extends VertxPojo, Serializable {
             throw new UnexpectedJsonValueType("id","java.lang.Long",e);
         }
         try {
+            setStatus(java.util.Arrays.stream(com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum.values()).filter(td -> td.getLiteral().equals(json.getString("status"))).findFirst().orElse(null));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("status","com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum",e);
+        }
+        try {
             setGitHash(json.getString("git_hash"));
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("git_hash","java.lang.String",e);
@@ -87,6 +104,7 @@ public interface IGames extends VertxPojo, Serializable {
     public default io.vertx.core.json.JsonObject toJson() {
         io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
         json.put("id",getId());
+        json.put("status",getStatus()==null?null:getStatus().getLiteral());
         json.put("git_hash",getGitHash());
         // Omitting unrecognized type org.jooq.JSONB for column trace!
         return json;

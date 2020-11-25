@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserEntity extends TableImpl<UserEntityRecord> {
 
-    private static final long serialVersionUID = 1613205020;
+    private static final long serialVersionUID = 1832628121;
 
     /**
      * The reference instance of <code>keycloak.user_entity</code>
@@ -106,7 +106,7 @@ public class UserEntity extends TableImpl<UserEntityRecord> {
     /**
      * The column <code>keycloak.user_entity.service_account_client_link</code>.
      */
-    public final TableField<UserEntityRecord, String> SERVICE_ACCOUNT_CLIENT_LINK = createField(DSL.name("service_account_client_link"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<UserEntityRecord, String> SERVICE_ACCOUNT_CLIENT_LINK = createField(DSL.name("service_account_client_link"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_entity.not_before</code>.

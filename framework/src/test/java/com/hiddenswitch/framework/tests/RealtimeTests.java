@@ -21,7 +21,7 @@ public class RealtimeTests extends FrameworkTestBase {
 
 	@BeforeAll
 	public static void realtimeSetup(Vertx vertx, VertxTestContext testContext) {
-		Handler<AsyncResult<RowSet<Row>>> completing = testContext.completing();
+		Handler<AsyncResult<RowSet<Row>>> completing = testContext.succeedingThenComplete();
 		vertx.runOnContext(v -> {
 			pool = Environment.sqlPoolAkaDaoDelegate();
 			pool.query("CREATE SCHEMA test;\n" +
@@ -126,7 +126,7 @@ public class RealtimeTests extends FrameworkTestBase {
 					vertx.setTimer(2000, promise::complete);
 					return promise.future();
 				})
-				.onComplete(testContext.completing());
+				.onComplete(testContext.succeedingThenComplete());
 	}
 
 

@@ -5,7 +5,6 @@ package com.hiddenswitch.framework.schema.spellsource.tables;
 
 
 import com.hiddenswitch.framework.schema.keycloak.tables.UserEntity;
-import com.hiddenswitch.framework.schema.spellsource.Indexes;
 import com.hiddenswitch.framework.schema.spellsource.Keys;
 import com.hiddenswitch.framework.schema.spellsource.Spellsource;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingTicketsRecord;
@@ -16,10 +15,10 @@ import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Index;
+import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row9;
+import org.jooq.Row6;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -35,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
 
-    private static final long serialVersionUID = -782413932;
+    private static final long serialVersionUID = -498201624;
 
     /**
      * The reference instance of <code>spellsource.matchmaking_tickets</code>
@@ -53,7 +52,7 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
     /**
      * The column <code>spellsource.matchmaking_tickets.id</code>.
      */
-    public final TableField<MatchmakingTicketsRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<MatchmakingTicketsRecord, Long> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>spellsource.matchmaking_tickets.queue_id</code>.
@@ -76,24 +75,9 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
     public final TableField<MatchmakingTicketsRecord, String> BOT_DECK_ID = createField(DSL.name("bot_deck_id"), org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>spellsource.matchmaking_tickets.last_modified</code>.
-     */
-    public final TableField<MatchmakingTicketsRecord, OffsetDateTime> LAST_MODIFIED = createField(DSL.name("last_modified"), org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false).defaultValue(org.jooq.impl.DSL.field("now()", org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
-
-    /**
      * The column <code>spellsource.matchmaking_tickets.created_at</code>.
      */
     public final TableField<MatchmakingTicketsRecord, OffsetDateTime> CREATED_AT = createField(DSL.name("created_at"), org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false).defaultValue(org.jooq.impl.DSL.field("now()", org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
-
-    /**
-     * The column <code>spellsource.matchmaking_tickets.assigned_at</code>.
-     */
-    public final TableField<MatchmakingTicketsRecord, OffsetDateTime> ASSIGNED_AT = createField(DSL.name("assigned_at"), org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE, this, "");
-
-    /**
-     * The column <code>spellsource.matchmaking_tickets.game_id</code>.
-     */
-    public final TableField<MatchmakingTicketsRecord, Long> GAME_ID = createField(DSL.name("game_id"), org.jooq.impl.SQLDataType.BIGINT, this, "");
 
     /**
      * Create a <code>spellsource.matchmaking_tickets</code> table reference
@@ -134,8 +118,8 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
     }
 
     @Override
-    public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.MATCHMAKING_TICKETS_QUEUE_ID_IDX, Indexes.MATCHMAKING_TICKETS_USER_ID_IDX);
+    public Identity<MatchmakingTicketsRecord, Long> getIdentity() {
+        return Keys.IDENTITY_MATCHMAKING_TICKETS;
     }
 
     @Override
@@ -150,7 +134,7 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
 
     @Override
     public List<ForeignKey<MatchmakingTicketsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<MatchmakingTicketsRecord, ?>>asList(Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_QUEUE_ID_FKEY, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_USER_ID_FKEY, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_DECK_ID_FKEY, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_BOT_DECK_ID_FKEY, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_GAME_ID_FKEY);
+        return Arrays.<ForeignKey<MatchmakingTicketsRecord, ?>>asList(Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_QUEUE_ID_FKEY, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_USER_ID_FKEY, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_DECK_ID_FKEY, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_BOT_DECK_ID_FKEY);
     }
 
     public MatchmakingQueues matchmakingQueues() {
@@ -167,10 +151,6 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
 
     public Decks matchmakingTicketsBotDeckIdFkey() {
         return new Decks(this, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_BOT_DECK_ID_FKEY);
-    }
-
-    public Games games() {
-        return new Games(this, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_GAME_ID_FKEY);
     }
 
     @Override
@@ -200,11 +180,11 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row6 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<String, String, String, String, String, OffsetDateTime, OffsetDateTime, OffsetDateTime, Long> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row6<Long, String, String, String, String, OffsetDateTime> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 }

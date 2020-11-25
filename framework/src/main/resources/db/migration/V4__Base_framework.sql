@@ -64,11 +64,27 @@ create index on spellsource.deck_shares (trashed) where deck_shares.trashed is f
 
 comment on table spellsource.deck_shares is 'indicates a deck shared to a player';
 
+create type spellsource.game_state_enum as enum
+(
+  'AWAITING_CONNECTIONS',
+  'STARTED',
+  'FINISHED'
+);
+
 create table spellsource.games
 (
   id bigint generated always as identity primary key unique,
+  status spellsource.game_state_enum not null default 'AWAITING_CONNECTIONS'::spellsource.game_state_enum,
   git_hash text,
   trace jsonb
+);
+
+create table spellsource.game_users
+(
+  id bigint generated always as identity primary key unique,
+  player_index int2 default 0,
+  game_id bigint references spellsource.games (id) on delete cascade,
+  user_id text references keycloak.user_entity (id) on delete cascade
 );
 
 create table spellsource.matchmaking_queues
@@ -83,25 +99,16 @@ create table spellsource.matchmaking_queues
   awaiting_lobby_timeout bigint not null default 0,
   once boolean not null default false,
   automatically_close boolean not null default true,
-  max_tickets_to_process integer not null default 10,
-  scan_frequency bigint not null default 3000,
-  lobby_size int not null default 2 check (lobby_size <= 2 and lobby_size >= 0)
+  lobby_size int not null default 2 check (lobby_size <= 2 and lobby_size >= 0),
+  queue_created_at timestamptz not null default now()
 );
 
 create table spellsource.matchmaking_tickets
 (
-  id text not null primary key unique,
+  id bigint generated always as identity primary key unique,
   queue_id text references spellsource.matchmaking_queues (id) on delete cascade,
-  user_id text references keycloak.user_entity (id),
-  deck_id text references spellsource.decks (id),
+  user_id text references keycloak.user_entity (id) on delete cascade,
+  deck_id text references spellsource.decks (id) on delete cascade,
   bot_deck_id text null default null references spellsource.decks (id),
-  last_modified timestamptz not null default now(),
-  created_at timestamptz not null default now(),
-  assigned_at timestamptz,
-  game_id bigint null references spellsource.games (id)
+  created_at timestamptz not null default now()
 );
-
-create index on spellsource.matchmaking_tickets (queue_id) where spellsource.matchmaking_tickets.game_id is null;
-create index on spellsource.matchmaking_tickets (user_id);
-
-comment on index spellsource.matchmaking_tickets_queue_id_idx is 'only indexes null game ID tickets'

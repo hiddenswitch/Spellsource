@@ -10,7 +10,7 @@ import com.hiddenswitch.framework.schema.keycloak.tables.interfaces.IOfflineClie
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 
 import org.jooq.Field;
-import org.jooq.Record3;
+import org.jooq.Record5;
 import org.jooq.Record7;
 import org.jooq.Row7;
 import org.jooq.impl.UpdatableRecordImpl;
@@ -22,7 +22,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfflineClientSessionRecord extends UpdatableRecordImpl<OfflineClientSessionRecord> implements VertxPojo, Record7<String, String, String, Integer, String, String, String>, IOfflineClientSession {
 
-    private static final long serialVersionUID = -663196249;
+    private static final long serialVersionUID = -1835662481;
 
     /**
      * Setter for <code>keycloak.offline_client_session.user_session_id</code>.
@@ -148,8 +148,8 @@ public class OfflineClientSessionRecord extends UpdatableRecordImpl<OfflineClien
     // -------------------------------------------------------------------------
 
     @Override
-    public Record3<String, String, String> key() {
-        return (Record3) super.key();
+    public Record5<String, String, String, String, String> key() {
+        return (Record5) super.key();
     }
 
     // -------------------------------------------------------------------------

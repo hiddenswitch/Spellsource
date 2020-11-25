@@ -46,7 +46,7 @@ public class FrameworkTestBase {
 			.withNetworkAliases(PGHOST)
 			.withExposedPorts(PGPORT);
 
-	protected static KeycloakContainer keycloak = new KeycloakContainer("jboss/keycloak:11.0.2")
+	protected static KeycloakContainer keycloak = new KeycloakContainer("jboss/keycloak:11.0.3")
 			.dependsOn(postgres)
 			.withNetwork(Network.SHARED)
 			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD)
@@ -104,7 +104,9 @@ public class FrameworkTestBase {
 										.setServerKeepAliveTimeoutMillis(8000)
 										.setServerPermitKeepAliveWithoutCalls(true)
 										.build())
-								.setMatchmaking(ServerConfiguration.MatchmakignConfiguration.newBuilder()
+								.setMatchmaking(ServerConfiguration.MatchmakingConfiguration.newBuilder()
+										.setMaxTicketsToProcess(100)
+										.setScanFrequencyMillis(1200)
 										.setEnqueueLockTimeoutMillis(400).build())
 								.build();
 

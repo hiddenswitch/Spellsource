@@ -15,7 +15,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row3;
+import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -31,7 +31,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ResourceServer extends TableImpl<ResourceServerRecord> {
 
-    private static final long serialVersionUID = -248243121;
+    private static final long serialVersionUID = 1658010171;
 
     /**
      * The reference instance of <code>keycloak.resource_server</code>
@@ -60,6 +60,11 @@ public class ResourceServer extends TableImpl<ResourceServerRecord> {
      * The column <code>keycloak.resource_server.policy_enforce_mode</code>.
      */
     public final TableField<ResourceServerRecord, String> POLICY_ENFORCE_MODE = createField(DSL.name("policy_enforce_mode"), org.jooq.impl.SQLDataType.VARCHAR(15).nullable(false), this, "");
+
+    /**
+     * The column <code>keycloak.resource_server.decision_strategy</code>.
+     */
+    public final TableField<ResourceServerRecord, Short> DECISION_STRATEGY = createField(DSL.name("decision_strategy"), org.jooq.impl.SQLDataType.SMALLINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("1", org.jooq.impl.SQLDataType.SMALLINT)), this, "");
 
     /**
      * Create a <code>keycloak.resource_server</code> table reference
@@ -136,11 +141,11 @@ public class ResourceServer extends TableImpl<ResourceServerRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<String, Boolean, String> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row4<String, Boolean, String, Short> fieldsRow() {
+        return (Row4) super.fieldsRow();
     }
 }

@@ -25,7 +25,7 @@ namespace HiddenSwitch.Proto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChJoaWRkZW5zd2l0Y2gucHJvdG8SDGhpZGRlbnN3aXRjaBoeZ29vZ2xlL3By",
-            "b3RvYnVmL3dyYXBwZXJzLnByb3RvItgHChNTZXJ2ZXJDb25maWd1cmF0aW9u",
+            "b3RvYnVmL3dyYXBwZXJzLnByb3RvIpIIChNTZXJ2ZXJDb25maWd1cmF0aW9u",
             "EkMKAnBnGAEgASgLMjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRp",
             "b24uUG9zdGdyZXNDb25maWd1cmF0aW9uEkkKCGtleWNsb2FrGAIgASgLMjcu",
             "aGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRpb24uS2V5Y2xvYWtDb25m",
@@ -34,7 +34,7 @@ namespace HiddenSwitch.Proto {
             "cGNDb25maWd1cmF0aW9uGAUgASgLMjMuaGlkZGVuc3dpdGNoLlNlcnZlckNv",
             "bmZpZ3VyYXRpb24uR3JwY0NvbmZpZ3VyYXRpb24STwoLbWF0Y2htYWtpbmcY",
             "BiABKAsyOi5oaWRkZW5zd2l0Y2guU2VydmVyQ29uZmlndXJhdGlvbi5NYXRj",
-            "aG1ha2lnbkNvbmZpZ3VyYXRpb24aZQoVUG9zdGdyZXNDb25maWd1cmF0aW9u",
+            "aG1ha2luZ0NvbmZpZ3VyYXRpb24aZQoVUG9zdGdyZXNDb25maWd1cmF0aW9u",
             "EgwKBGhvc3QYASABKAkSDAoEcG9ydBgCIAEoBRIQCghkYXRhYmFzZRgDIAEo",
             "CRIMCgR1c2VyGAQgASgJEhAKCHBhc3N3b3JkGAUgASgJGqkBChVLZXljbG9h",
             "a0NvbmZpZ3VyYXRpb24SDwoHYXV0aFVybBgBIAEoCRIVCg1hZG1pblVzZXJu",
@@ -45,27 +45,28 @@ namespace HiddenSwitch.Proto {
             "JAoVUmVhbHRpbWVDb25maWd1cmF0aW9uEgsKA3VyaRgBIAEoCRqHAQoRR3Jw",
             "Y0NvbmZpZ3VyYXRpb24SIQoZc2VydmVyS2VlcEFsaXZlVGltZU1pbGxpcxgB",
             "IAEoAxIkChxzZXJ2ZXJLZWVwQWxpdmVUaW1lb3V0TWlsbGlzGAIgASgDEikK",
-            "IXNlcnZlclBlcm1pdEtlZXBBbGl2ZVdpdGhvdXRDYWxscxgDIAEoCBo8ChhN",
-            "YXRjaG1ha2lnbkNvbmZpZ3VyYXRpb24SIAoYZW5xdWV1ZUxvY2tUaW1lb3V0",
-            "TWlsbGlzGAEgASgDSgQIAxAEIjkKDExvZ2luUmVxdWVzdBIXCg91c2VybmFt",
-            "ZU9yRW1haWwYASABKAkSEAoIcGFzc3dvcmQYAiABKAkiSQoUQ3JlYXRlQWNj",
-            "b3VudFJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIdXNlcm5hbWUYAiABKAkS",
-            "EAoIcGFzc3dvcmQYAyABKAkiggEKEkxvZ2luT3JDcmVhdGVSZXBseRI+ChNh",
-            "Y2Nlc3NUb2tlblJlc3BvbnNlGAEgASgLMiEuaGlkZGVuc3dpdGNoLkFjY2Vz",
-            "c1Rva2VuUmVzcG9uc2USLAoKdXNlckVudGl0eRgCIAEoCzIYLmhpZGRlbnN3",
-            "aXRjaC5Vc2VyRW50aXR5IiQKE0FjY2Vzc1Rva2VuUmVzcG9uc2USDQoFdG9r",
-            "ZW4YASABKAkiOQoKVXNlckVudGl0eRIKCgJpZBgBIAEoCRINCgVlbWFpbBgC",
-            "IAEoCRIQCgh1c2VybmFtZRgKIAEoCSIhChJHZXRBY2NvdW50c1JlcXVlc3QS",
-            "CwoDaWRzGAEgAygJIkIKEEdldEFjY291bnRzUmVwbHkSLgoMdXNlckVudGl0",
-            "aWVzGAEgAygLMhguaGlkZGVuc3dpdGNoLlVzZXJFbnRpdHkyswEKD1VuYXV0",
-            "aGVudGljYXRlZBJXCg1DcmVhdGVBY2NvdW50EiIuaGlkZGVuc3dpdGNoLkNy",
-            "ZWF0ZUFjY291bnRSZXF1ZXN0GiAuaGlkZGVuc3dpdGNoLkxvZ2luT3JDcmVh",
-            "dGVSZXBseSIAEkcKBUxvZ2luEhouaGlkZGVuc3dpdGNoLkxvZ2luUmVxdWVz",
-            "dBogLmhpZGRlbnN3aXRjaC5Mb2dpbk9yQ3JlYXRlUmVwbHkiADJdCghBY2Nv",
-            "dW50cxJRCgtHZXRBY2NvdW50cxIgLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50",
-            "c1JlcXVlc3QaHi5oaWRkZW5zd2l0Y2guR2V0QWNjb3VudHNSZXBseSIAQj4K",
-            "HmNvbS5oaWRkZW5zd2l0Y2guZnJhbWV3b3JrLnJwY0IFUHJvdG9QAaoCEkhp",
-            "ZGRlblN3aXRjaC5Qcm90b2IGcHJvdG8z"));
+            "IXNlcnZlclBlcm1pdEtlZXBBbGl2ZVdpdGhvdXRDYWxscxgDIAEoCBp2ChhN",
+            "YXRjaG1ha2luZ0NvbmZpZ3VyYXRpb24SIAoYZW5xdWV1ZUxvY2tUaW1lb3V0",
+            "TWlsbGlzGAEgASgDEhsKE3NjYW5GcmVxdWVuY3lNaWxsaXMYAiABKAMSGwoT",
+            "bWF4VGlja2V0c1RvUHJvY2VzcxgDIAEoBUoECAMQBCI5CgxMb2dpblJlcXVl",
+            "c3QSFwoPdXNlcm5hbWVPckVtYWlsGAEgASgJEhAKCHBhc3N3b3JkGAIgASgJ",
+            "IkkKFENyZWF0ZUFjY291bnRSZXF1ZXN0Eg0KBWVtYWlsGAEgASgJEhAKCHVz",
+            "ZXJuYW1lGAIgASgJEhAKCHBhc3N3b3JkGAMgASgJIoIBChJMb2dpbk9yQ3Jl",
+            "YXRlUmVwbHkSPgoTYWNjZXNzVG9rZW5SZXNwb25zZRgBIAEoCzIhLmhpZGRl",
+            "bnN3aXRjaC5BY2Nlc3NUb2tlblJlc3BvbnNlEiwKCnVzZXJFbnRpdHkYAiAB",
+            "KAsyGC5oaWRkZW5zd2l0Y2guVXNlckVudGl0eSIkChNBY2Nlc3NUb2tlblJl",
+            "c3BvbnNlEg0KBXRva2VuGAEgASgJIjkKClVzZXJFbnRpdHkSCgoCaWQYASAB",
+            "KAkSDQoFZW1haWwYAiABKAkSEAoIdXNlcm5hbWUYCiABKAkiIQoSR2V0QWNj",
+            "b3VudHNSZXF1ZXN0EgsKA2lkcxgBIAMoCSJCChBHZXRBY2NvdW50c1JlcGx5",
+            "Ei4KDHVzZXJFbnRpdGllcxgBIAMoCzIYLmhpZGRlbnN3aXRjaC5Vc2VyRW50",
+            "aXR5MrMBCg9VbmF1dGhlbnRpY2F0ZWQSVwoNQ3JlYXRlQWNjb3VudBIiLmhp",
+            "ZGRlbnN3aXRjaC5DcmVhdGVBY2NvdW50UmVxdWVzdBogLmhpZGRlbnN3aXRj",
+            "aC5Mb2dpbk9yQ3JlYXRlUmVwbHkiABJHCgVMb2dpbhIaLmhpZGRlbnN3aXRj",
+            "aC5Mb2dpblJlcXVlc3QaIC5oaWRkZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJl",
+            "cGx5IgAyXQoIQWNjb3VudHMSUQoLR2V0QWNjb3VudHMSIC5oaWRkZW5zd2l0",
+            "Y2guR2V0QWNjb3VudHNSZXF1ZXN0Gh4uaGlkZGVuc3dpdGNoLkdldEFjY291",
+            "bnRzUmVwbHkiAEI+Ch5jb20uaGlkZGVuc3dpdGNoLmZyYW1ld29yay5ycGNC",
+            "BVByb3RvUAGqAhJIaWRkZW5Td2l0Y2guUHJvdG9iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -74,7 +75,7 @@ namespace HiddenSwitch.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Parser, new[]{ "Host", "Port", "User" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration.Parser, new[]{ "Uri" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration.Parser, new[]{ "ServerKeepAliveTimeMillis", "ServerKeepAliveTimeoutMillis", "ServerPermitKeepAliveWithoutCalls" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakignConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakignConfiguration.Parser, new[]{ "EnqueueLockTimeoutMillis" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration.Parser, new[]{ "EnqueueLockTimeoutMillis", "ScanFrequencyMillis", "MaxTicketsToProcess" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.LoginRequest), global::HiddenSwitch.Proto.LoginRequest.Parser, new[]{ "UsernameOrEmail", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.CreateAccountRequest), global::HiddenSwitch.Proto.CreateAccountRequest.Parser, new[]{ "Email", "Username", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.LoginOrCreateReply), global::HiddenSwitch.Proto.LoginOrCreateReply.Parser, new[]{ "AccessTokenResponse", "UserEntity" }, null, null, null, null),
@@ -179,9 +180,9 @@ namespace HiddenSwitch.Proto {
 
     /// <summary>Field number for the "matchmaking" field.</summary>
     public const int MatchmakingFieldNumber = 6;
-    private global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakignConfiguration matchmaking_;
+    private global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration matchmaking_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakignConfiguration Matchmaking {
+    public global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration Matchmaking {
       get { return matchmaking_; }
       set {
         matchmaking_ = value;
@@ -343,7 +344,7 @@ namespace HiddenSwitch.Proto {
       }
       if (other.matchmaking_ != null) {
         if (matchmaking_ == null) {
-          Matchmaking = new global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakignConfiguration();
+          Matchmaking = new global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration();
         }
         Matchmaking.MergeFrom(other.Matchmaking);
       }
@@ -391,7 +392,7 @@ namespace HiddenSwitch.Proto {
           }
           case 50: {
             if (matchmaking_ == null) {
-              Matchmaking = new global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakignConfiguration();
+              Matchmaking = new global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration();
             }
             input.ReadMessage(Matchmaking);
             break;
@@ -440,7 +441,7 @@ namespace HiddenSwitch.Proto {
           }
           case 50: {
             if (matchmaking_ == null) {
-              Matchmaking = new global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakignConfiguration();
+              Matchmaking = new global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration();
             }
             input.ReadMessage(Matchmaking);
             break;
@@ -1818,15 +1819,15 @@ namespace HiddenSwitch.Proto {
 
       }
 
-      public sealed partial class MatchmakignConfiguration : pb::IMessage<MatchmakignConfiguration>
+      public sealed partial class MatchmakingConfiguration : pb::IMessage<MatchmakingConfiguration>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           , pb::IBufferMessage
       #endif
       {
-        private static readonly pb::MessageParser<MatchmakignConfiguration> _parser = new pb::MessageParser<MatchmakignConfiguration>(() => new MatchmakignConfiguration());
+        private static readonly pb::MessageParser<MatchmakingConfiguration> _parser = new pb::MessageParser<MatchmakingConfiguration>(() => new MatchmakingConfiguration());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public static pb::MessageParser<MatchmakignConfiguration> Parser { get { return _parser; } }
+        public static pb::MessageParser<MatchmakingConfiguration> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor {
@@ -1839,21 +1840,23 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public MatchmakignConfiguration() {
+        public MatchmakingConfiguration() {
           OnConstruction();
         }
 
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public MatchmakignConfiguration(MatchmakignConfiguration other) : this() {
+        public MatchmakingConfiguration(MatchmakingConfiguration other) : this() {
           enqueueLockTimeoutMillis_ = other.enqueueLockTimeoutMillis_;
+          scanFrequencyMillis_ = other.scanFrequencyMillis_;
+          maxTicketsToProcess_ = other.maxTicketsToProcess_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public MatchmakignConfiguration Clone() {
-          return new MatchmakignConfiguration(this);
+        public MatchmakingConfiguration Clone() {
+          return new MatchmakingConfiguration(this);
         }
 
         /// <summary>Field number for the "enqueueLockTimeoutMillis" field.</summary>
@@ -1867,13 +1870,35 @@ namespace HiddenSwitch.Proto {
           }
         }
 
+        /// <summary>Field number for the "scanFrequencyMillis" field.</summary>
+        public const int ScanFrequencyMillisFieldNumber = 2;
+        private long scanFrequencyMillis_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public override bool Equals(object other) {
-          return Equals(other as MatchmakignConfiguration);
+        public long ScanFrequencyMillis {
+          get { return scanFrequencyMillis_; }
+          set {
+            scanFrequencyMillis_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "maxTicketsToProcess" field.</summary>
+        public const int MaxTicketsToProcessFieldNumber = 3;
+        private int maxTicketsToProcess_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int MaxTicketsToProcess {
+          get { return maxTicketsToProcess_; }
+          set {
+            maxTicketsToProcess_ = value;
+          }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public bool Equals(MatchmakignConfiguration other) {
+        public override bool Equals(object other) {
+          return Equals(other as MatchmakingConfiguration);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(MatchmakingConfiguration other) {
           if (ReferenceEquals(other, null)) {
             return false;
           }
@@ -1881,6 +1906,8 @@ namespace HiddenSwitch.Proto {
             return true;
           }
           if (EnqueueLockTimeoutMillis != other.EnqueueLockTimeoutMillis) return false;
+          if (ScanFrequencyMillis != other.ScanFrequencyMillis) return false;
+          if (MaxTicketsToProcess != other.MaxTicketsToProcess) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -1888,6 +1915,8 @@ namespace HiddenSwitch.Proto {
         public override int GetHashCode() {
           int hash = 1;
           if (EnqueueLockTimeoutMillis != 0L) hash ^= EnqueueLockTimeoutMillis.GetHashCode();
+          if (ScanFrequencyMillis != 0L) hash ^= ScanFrequencyMillis.GetHashCode();
+          if (MaxTicketsToProcess != 0) hash ^= MaxTicketsToProcess.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -1908,6 +1937,14 @@ namespace HiddenSwitch.Proto {
             output.WriteRawTag(8);
             output.WriteInt64(EnqueueLockTimeoutMillis);
           }
+          if (ScanFrequencyMillis != 0L) {
+            output.WriteRawTag(16);
+            output.WriteInt64(ScanFrequencyMillis);
+          }
+          if (MaxTicketsToProcess != 0) {
+            output.WriteRawTag(24);
+            output.WriteInt32(MaxTicketsToProcess);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -1921,6 +1958,14 @@ namespace HiddenSwitch.Proto {
             output.WriteRawTag(8);
             output.WriteInt64(EnqueueLockTimeoutMillis);
           }
+          if (ScanFrequencyMillis != 0L) {
+            output.WriteRawTag(16);
+            output.WriteInt64(ScanFrequencyMillis);
+          }
+          if (MaxTicketsToProcess != 0) {
+            output.WriteRawTag(24);
+            output.WriteInt32(MaxTicketsToProcess);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(ref output);
           }
@@ -1933,6 +1978,12 @@ namespace HiddenSwitch.Proto {
           if (EnqueueLockTimeoutMillis != 0L) {
             size += 1 + pb::CodedOutputStream.ComputeInt64Size(EnqueueLockTimeoutMillis);
           }
+          if (ScanFrequencyMillis != 0L) {
+            size += 1 + pb::CodedOutputStream.ComputeInt64Size(ScanFrequencyMillis);
+          }
+          if (MaxTicketsToProcess != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaxTicketsToProcess);
+          }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
           }
@@ -1940,12 +1991,18 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public void MergeFrom(MatchmakignConfiguration other) {
+        public void MergeFrom(MatchmakingConfiguration other) {
           if (other == null) {
             return;
           }
           if (other.EnqueueLockTimeoutMillis != 0L) {
             EnqueueLockTimeoutMillis = other.EnqueueLockTimeoutMillis;
+          }
+          if (other.ScanFrequencyMillis != 0L) {
+            ScanFrequencyMillis = other.ScanFrequencyMillis;
+          }
+          if (other.MaxTicketsToProcess != 0) {
+            MaxTicketsToProcess = other.MaxTicketsToProcess;
           }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
@@ -1965,6 +2022,14 @@ namespace HiddenSwitch.Proto {
                 EnqueueLockTimeoutMillis = input.ReadInt64();
                 break;
               }
+              case 16: {
+                ScanFrequencyMillis = input.ReadInt64();
+                break;
+              }
+              case 24: {
+                MaxTicketsToProcess = input.ReadInt32();
+                break;
+              }
             }
           }
         #endif
@@ -1981,6 +2046,14 @@ namespace HiddenSwitch.Proto {
                 break;
               case 8: {
                 EnqueueLockTimeoutMillis = input.ReadInt64();
+                break;
+              }
+              case 16: {
+                ScanFrequencyMillis = input.ReadInt64();
+                break;
+              }
+              case 24: {
+                MaxTicketsToProcess = input.ReadInt32();
                 break;
               }
             }

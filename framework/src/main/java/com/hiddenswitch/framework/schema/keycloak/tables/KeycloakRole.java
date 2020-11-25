@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class KeycloakRole extends TableImpl<KeycloakRoleRecord> {
 
-    private static final long serialVersionUID = -1493913832;
+    private static final long serialVersionUID = 1095760586;
 
     /**
      * The reference instance of <code>keycloak.keycloak_role</code>
@@ -56,7 +56,7 @@ public class KeycloakRole extends TableImpl<KeycloakRoleRecord> {
     /**
      * The column <code>keycloak.keycloak_role.client_realm_constraint</code>.
      */
-    public final TableField<KeycloakRoleRecord, String> CLIENT_REALM_CONSTRAINT = createField(DSL.name("client_realm_constraint"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<KeycloakRoleRecord, String> CLIENT_REALM_CONSTRAINT = createField(DSL.name("client_realm_constraint"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.keycloak_role.client_role</code>.
@@ -143,11 +143,7 @@ public class KeycloakRole extends TableImpl<KeycloakRoleRecord> {
 
     @Override
     public List<ForeignKey<KeycloakRoleRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<KeycloakRoleRecord, ?>>asList(Keys.KEYCLOAK_ROLE__FK_KJHO5LE2C0RAL09FL8CM9WFW9, Keys.KEYCLOAK_ROLE__FK_6VYQFE4CN4WLQ8R6KT5VDSJ5C);
-    }
-
-    public Client client() {
-        return new Client(this, Keys.KEYCLOAK_ROLE__FK_KJHO5LE2C0RAL09FL8CM9WFW9);
+        return Arrays.<ForeignKey<KeycloakRoleRecord, ?>>asList(Keys.KEYCLOAK_ROLE__FK_6VYQFE4CN4WLQ8R6KT5VDSJ5C);
     }
 
     public Realm realm() {

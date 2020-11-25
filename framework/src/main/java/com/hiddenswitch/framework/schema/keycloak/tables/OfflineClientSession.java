@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfflineClientSession extends TableImpl<OfflineClientSessionRecord> {
 
-    private static final long serialVersionUID = 1309258612;
+    private static final long serialVersionUID = 1255836861;
 
     /**
      * The reference instance of <code>keycloak.offline_client_session</code>
@@ -56,7 +56,7 @@ public class OfflineClientSession extends TableImpl<OfflineClientSessionRecord> 
     /**
      * The column <code>keycloak.offline_client_session.client_id</code>.
      */
-    public final TableField<OfflineClientSessionRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<OfflineClientSessionRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.offline_client_session.offline_flag</code>.

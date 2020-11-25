@@ -4,6 +4,7 @@
 package com.hiddenswitch.framework.schema.spellsource.tables.daos;
 
 
+import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
 import com.hiddenswitch.framework.schema.spellsource.tables.Games;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GamesRecord;
 
@@ -35,6 +36,20 @@ public class GamesDao extends AbstractReactiveVertxDAO<GamesRecord, com.hiddensw
     @Override
     protected Long getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games object) {
         return object.getId();
+    }
+
+    /**
+     * Find records that have <code>status IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games>> findManyByStatus(Collection<GameStateEnum> values) {
+        return findManyByCondition(Games.GAMES.STATUS.in(values));
+    }
+
+    /**
+     * Find records that have <code>status IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games>> findManyByStatus(Collection<GameStateEnum> values, int limit) {
+        return findManyByCondition(Games.GAMES.STATUS.in(values),limit);
     }
 
     /**

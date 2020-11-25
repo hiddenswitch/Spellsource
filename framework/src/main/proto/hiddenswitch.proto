@@ -44,8 +44,10 @@ message ServerConfiguration {
         bool serverPermitKeepAliveWithoutCalls = 3;
     }
 
-    message MatchmakignConfiguration {
+    message MatchmakingConfiguration {
         int64 enqueueLockTimeoutMillis = 1;
+        int64 scanFrequencyMillis = 2;
+        int32 maxTicketsToProcess = 3;
     }
 
     PostgresConfiguration pg = 1;
@@ -53,7 +55,7 @@ message ServerConfiguration {
     reserved 3;
     RealtimeConfiguration realtime = 4;
     GrpcConfiguration grpcConfiguration = 5;
-    MatchmakignConfiguration matchmaking = 6;
+    MatchmakingConfiguration matchmaking = 6;
 }
 
 service Unauthenticated {

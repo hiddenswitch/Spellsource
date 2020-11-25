@@ -50,6 +50,20 @@ public class MigrationModelDao extends AbstractReactiveVertxDAO<MigrationModelRe
         return findManyByCondition(MigrationModel.MIGRATION_MODEL.VERSION.in(values),limit);
     }
 
+    /**
+     * Find records that have <code>update_time IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.MigrationModel>> findManyByUpdateTime(Collection<Long> values) {
+        return findManyByCondition(MigrationModel.MIGRATION_MODEL.UPDATE_TIME.in(values));
+    }
+
+    /**
+     * Find records that have <code>update_time IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.MigrationModel>> findManyByUpdateTime(Collection<Long> values, int limit) {
+        return findManyByCondition(MigrationModel.MIGRATION_MODEL.UPDATE_TIME.in(values),limit);
+    }
+
     @Override
     public ReactiveClassicQueryExecutor<MigrationModelRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.MigrationModel,String> queryExecutor(){
         return (ReactiveClassicQueryExecutor<MigrationModelRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.MigrationModel,String>) super.queryExecutor();

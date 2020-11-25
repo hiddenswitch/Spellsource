@@ -159,16 +159,18 @@ public class Sync {
 
 	private static RuntimeException makeSafe(Throwable exception) {
 		Throwable res = Throwables.getRootCause(exception);
+		RuntimeException thrower;
 		if (!(res instanceof RuntimeException)) {
-			return new RuntimeException(res);
+			thrower = new RuntimeException(res);
 		} else {
-			// Append the current stack so we see what called await fiber
-			res.setStackTrace(concatAndFilterStackTrace(res, new Throwable()));
-			return (RuntimeException) res;
+			thrower = (RuntimeException) res;
 		}
+		// Append the current stack so we see what called await fiber
+		thrower.setStackTrace(concatAndFilterStackTrace(res, new Throwable()));
+		return thrower;
 	}
 
-	private static StackTraceElement[] concatAndFilterStackTrace(Throwable... throwables) {
+	public static StackTraceElement[] concatAndFilterStackTrace(Throwable... throwables) {
 		var length = 0;
 		for (var i = 0; i < throwables.length; i++) {
 			length += throwables[i].getStackTrace().length;
@@ -178,11 +180,15 @@ public class Sync {
 			var stack = throwable.getStackTrace();
 			for (var i = 0; i < stack.length; i++) {
 				if (stack[i].getClassName().startsWith("co.paralleluniverse.fibers.") ||
+						stack[i].getClassName().startsWith("co.paralleluniverse.strands.") ||
 						stack[i].getClassName().startsWith("io.vertx.ext.sync.") ||
+						stack[i].getClassName().startsWith("io.vertx.core.impl.future.") ||
+						stack[i].getClassName().startsWith("io.vertx.core.Promise") ||
 						stack[i].getClassName().startsWith("io.netty.") ||
 						stack[i].getClassName().startsWith("io.vertx.core.impl.") ||
 						stack[i].getClassName().startsWith("sun.nio.") ||
 						stack[i].getClassName().startsWith("java.base/java.util.concurrent") ||
+						stack[i].getClassName().startsWith("java.base/java.lang.Thread") ||
 						stack[i].getClassName().startsWith("java.util.concurrent")) {
 					continue;
 				}

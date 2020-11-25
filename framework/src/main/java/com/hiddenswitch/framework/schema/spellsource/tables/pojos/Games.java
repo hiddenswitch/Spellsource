@@ -4,6 +4,7 @@
 package com.hiddenswitch.framework.schema.spellsource.tables.pojos;
 
 
+import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
 import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.IGames;
 
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
@@ -17,26 +18,30 @@ import org.jooq.JSONB;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Games implements VertxPojo, IGames {
 
-    private static final long serialVersionUID = -868824133;
+    private static final long serialVersionUID = -2043413978;
 
-    private Long   id;
-    private String gitHash;
-    private JSONB  trace;
+    private Long          id;
+    private GameStateEnum status;
+    private String        gitHash;
+    private JSONB         trace;
 
     public Games() {}
 
     public Games(IGames value) {
         this.id = value.getId();
+        this.status = value.getStatus();
         this.gitHash = value.getGitHash();
         this.trace = value.getTrace();
     }
 
     public Games(
-        Long   id,
-        String gitHash,
-        JSONB  trace
+        Long          id,
+        GameStateEnum status,
+        String        gitHash,
+        JSONB         trace
     ) {
         this.id = id;
+        this.status = status;
         this.gitHash = gitHash;
         this.trace = trace;
     }
@@ -54,6 +59,17 @@ public class Games implements VertxPojo, IGames {
     @Override
     public Games setId(Long id) {
         this.id = id;
+        return this;
+    }
+
+    @Override
+    public GameStateEnum getStatus() {
+        return this.status;
+    }
+
+    @Override
+    public Games setStatus(GameStateEnum status) {
+        this.status = status;
         return this;
     }
 
@@ -84,6 +100,7 @@ public class Games implements VertxPojo, IGames {
         StringBuilder sb = new StringBuilder("Games (");
 
         sb.append(id);
+        sb.append(", ").append(status);
         sb.append(", ").append(gitHash);
         sb.append(", ").append(trace);
 
@@ -98,6 +115,7 @@ public class Games implements VertxPojo, IGames {
     @Override
     public void from(IGames from) {
         setId(from.getId());
+        setStatus(from.getStatus());
         setGitHash(from.getGitHash());
         setTrace(from.getTrace());
     }
