@@ -88,6 +88,7 @@ public class RowMappers {
             pojo.setStatus(java.util.Arrays.stream(com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum.values()).filter(td -> td.getLiteral().equals(row.getString("status"))).findFirst().orElse(null));
             pojo.setGitHash(row.getString("git_hash"));
             // Omitting unrecognized type DataType [ t=jsonb; p=0; s=0; u="pg_catalog"."jsonb"; j=null ] (org.jooq.JSONB) for column trace!
+            pojo.setCreatedAt(row.getOffsetDateTime("created_at"));
             return pojo;
         };
     }

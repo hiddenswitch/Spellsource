@@ -90,7 +90,7 @@ public class Environment {
 	}
 
 	public static ReactiveClassicGenericQueryExecutor queryExecutor() {
-		return new ReactiveClassicGenericQueryExecutor(jooqAkaDaoConfiguration(), sqlPoolAkaDaoDelegate()); // queryExecutors.get();
+		return queryExecutors.get();
 	}
 
 	public static Handler<Throwable> onFailure() {

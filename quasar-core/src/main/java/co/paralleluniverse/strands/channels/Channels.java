@@ -125,7 +125,7 @@ public final class Channels {
                 throw new IllegalArgumentException("Unbounded queue with multiple consumers is unsupported");
             queue = new SingleConsumerLinkedArrayObjectQueue<>();
         } else if (bufferSize == 1 && policy != OverflowPolicy.DISPLACE) // for now we'll use CircularObjectBuffer for displace channels of size 1
-            queue = new BoxQueue<>(policy == OverflowPolicy.DISPLACE, singleConsumer);
+            queue = new BoxQueue<>(false, singleConsumer);
         else if (policy == OverflowPolicy.DISPLACE) {
             if (!singleConsumer)
                 throw new IllegalArgumentException("Channel with DISPLACE policy configuration is not supported for multiple consumers");
@@ -135,7 +135,7 @@ public final class Channels {
         else
             queue = new ArrayQueue<>(bufferSize);
 
-        return new QueueObjectChannel(queue, policy, singleProducer, singleConsumer);
+        return new QueueObjectChannel<>(queue, policy, singleProducer, singleConsumer);
     }
 
     /**

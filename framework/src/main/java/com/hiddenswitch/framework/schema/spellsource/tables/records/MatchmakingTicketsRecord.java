@@ -12,7 +12,7 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 import java.time.OffsetDateTime;
 
 import org.jooq.Field;
-import org.jooq.Record1;
+import org.jooq.Record2;
 import org.jooq.Record6;
 import org.jooq.Row6;
 import org.jooq.impl.UpdatableRecordImpl;
@@ -24,7 +24,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MatchmakingTicketsRecord extends UpdatableRecordImpl<MatchmakingTicketsRecord> implements VertxPojo, Record6<Long, String, String, String, String, OffsetDateTime>, IMatchmakingTickets {
 
-    private static final long serialVersionUID = -1715430668;
+    private static final long serialVersionUID = 40297624;
 
     /**
      * Setter for <code>spellsource.matchmaking_tickets.id</code>.
@@ -133,8 +133,8 @@ public class MatchmakingTicketsRecord extends UpdatableRecordImpl<MatchmakingTic
     // -------------------------------------------------------------------------
 
     @Override
-    public Record1<Long> key() {
-        return (Record1) super.key();
+    public Record2<Long, String> key() {
+        return (Record2) super.key();
     }
 
     // -------------------------------------------------------------------------

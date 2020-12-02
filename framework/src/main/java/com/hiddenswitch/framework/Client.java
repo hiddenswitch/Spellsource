@@ -23,6 +23,9 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static io.vertx.core.CompositeFuture.all;
+import static io.vertx.core.CompositeFuture.any;
+
 public class Client implements AutoCloseable {
 	protected final AtomicReference<ManagedChannel> managedChannel = new AtomicReference<>();
 	protected final Vertx vertx;
@@ -40,10 +43,6 @@ public class Client implements AutoCloseable {
 		this.vertx = vertx;
 		this.webClient = webClient;
 		this.keycloakPath = keycloakPath;
-		((ContextInternal) vertx.getOrCreateContext()).addCloseHook(handler -> {
-			close();
-			handler.handle(Future.succeededFuture());
-		});
 	}
 
 	public Client(Vertx vertx, WebClient webClient, String username, String email, String password) {
@@ -79,14 +78,19 @@ public class Client implements AutoCloseable {
 		matchmakingResponses.handler(matchmakingResponseFut::complete);
 		matchmakingResponses.endHandler(matchmakingEndedFut::complete);
 		var response = matchmakingResponseFut.future();
-		return CompositeFuture.join(request, response
-				.otherwise(t -> {
-					var requests = matchmakingRequestsFut.future().result();
-					if (t instanceof CancellationException) {
-						requests.write(MatchmakingQueuePutRequest.newBuilder().setQueueId(queueId).setCancel(true).build());
-					}
-					return null;
-				}))
+		// deals with cancellation
+		response.onFailure(t -> {
+			var requests = matchmakingRequestsFut.future().result();
+			if (t instanceof CancellationException) {
+				requests.write(MatchmakingQueuePutRequest.newBuilder().setQueueId(queueId).setCancel(true).build());
+			}
+		});
+		return all(request, any(response, matchmakingEndedFut.future()).map(cf -> {
+			if (cf.isComplete(0)) {
+				return cf.<MatchmakingQueuePutResponse>resultAt(0);
+			}
+			return null;
+		}))
 				.onComplete(ignored -> matchmakingResponseFut = null)
 				.map(f -> f.resultAt(1));
 	}
@@ -196,10 +200,10 @@ public class Client implements AutoCloseable {
 	public void close() {
 		var managedChannel = this.managedChannel.get();
 		if (managedChannel != null && !managedChannel.isShutdown()) {
-			managedChannel.shutdownNow();
 			try {
-				managedChannel.awaitTermination(1900L, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException e) {
+				managedChannel.shutdownNow();
+			} catch (Throwable t) {
+				t.printStackTrace();
 			}
 		}
 	}

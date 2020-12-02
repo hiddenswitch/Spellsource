@@ -5,6 +5,7 @@ package com.hiddenswitch.framework.schema.spellsource.tables;
 
 
 import com.hiddenswitch.framework.schema.keycloak.tables.UserEntity;
+import com.hiddenswitch.framework.schema.spellsource.Indexes;
 import com.hiddenswitch.framework.schema.spellsource.Keys;
 import com.hiddenswitch.framework.schema.spellsource.Spellsource;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingTicketsRecord;
@@ -16,6 +17,7 @@ import java.util.List;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row6;
@@ -34,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
 
-    private static final long serialVersionUID = -498201624;
+    private static final long serialVersionUID = 937279073;
 
     /**
      * The reference instance of <code>spellsource.matchmaking_tickets</code>
@@ -57,7 +59,7 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
     /**
      * The column <code>spellsource.matchmaking_tickets.queue_id</code>.
      */
-    public final TableField<MatchmakingTicketsRecord, String> QUEUE_ID = createField(DSL.name("queue_id"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<MatchmakingTicketsRecord, String> QUEUE_ID = createField(DSL.name("queue_id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.matchmaking_tickets.user_id</code>.
@@ -115,6 +117,11 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
     @Override
     public Schema getSchema() {
         return Spellsource.SPELLSOURCE;
+    }
+
+    @Override
+    public List<Index> getIndexes() {
+        return Arrays.<Index>asList(Indexes.MATCHMAKING_TICKETS_QUEUE_ID_IDX);
     }
 
     @Override

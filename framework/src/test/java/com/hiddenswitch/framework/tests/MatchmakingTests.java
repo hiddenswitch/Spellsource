@@ -1,5 +1,7 @@
 package com.hiddenswitch.framework.tests;
 
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.strands.Strand;
 import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.Environment;
@@ -16,8 +18,8 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGeneri
 import io.vertx.core.*;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.streams.WriteStream;
+import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxTestContext;
-import io.vertx.sqlclient.SqlConnection;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -25,10 +27,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
-import static com.hiddenswitch.framework.schema.spellsource.Tables.MATCHMAKING_TICKETS;
+import static com.hiddenswitch.framework.tests.impl.FrameworkTestBase.Checkpoint.awaitCheckpoints;
+import static com.hiddenswitch.framework.tests.impl.FrameworkTestBase.Checkpoint.checkpoint;
 import static io.vertx.core.CompositeFuture.all;
+import static io.vertx.core.CompositeFuture.join;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,8 +42,8 @@ public class MatchmakingTests extends FrameworkTestBase {
 	@Test
 	public void testNoSuchQueueExists(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
-
-		client.createAndLogin()
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin())
 				.compose(ignored -> client.legacy().decksGetAll(Empty.getDefaultInstance()))
 				.compose(decks -> {
 					var matchmaking = client.matchmaking();
@@ -62,7 +67,8 @@ public class MatchmakingTests extends FrameworkTestBase {
 	public void testNoDeckIdSpecified(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
 		var queueId = UUID.randomUUID().toString();
-		client.createAndLogin()
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin())
 				.compose(v -> Matchmaking.createQueue(createSinglePlayerQueue(queueId)))
 				.compose(ignored -> vertx.deployVerticle(new Matchmaking()))
 				.compose(ignored -> {
@@ -88,7 +94,8 @@ public class MatchmakingTests extends FrameworkTestBase {
 		var client = new Client(vertx);
 		var queueId = UUID.randomUUID().toString();
 
-		client.createAndLogin()
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin())
 				.compose(v -> Matchmaking.createQueue(createSinglePlayerQueue(queueId)))
 				.compose(ignored -> {
 					var verticle = new Matchmaking();
@@ -100,8 +107,9 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
-	public void testSinglePlayerQueueCreatesMatch(Vertx vertx, VertxTestContext testContext) {
-		var gameCreated = testContext.checkpoint();
+	public void testSinglePlayerQueueCreatesMatch(VertxTestContext testContext) throws InterruptedException, SuspendExecution {
+		var vertx = Vertx.vertx();
+		var gameCreated = checkpoint(1);
 		var client = new Client(vertx);
 
 		var queueId = UUID.randomUUID().toString();
@@ -117,7 +125,8 @@ public class MatchmakingTests extends FrameworkTestBase {
 			}
 		};
 
-		vertx.deployVerticle(matchmakingQueue)
+		var fut = vertx.deployVerticle(matchmakingQueue)
+				.compose(v -> startGateway(vertx))
 				.compose(v -> Matchmaking.createQueue(createSinglePlayerQueue(queueId)))
 				.compose(v -> client.createAndLogin())
 				.compose(v -> client.matchmake(queueId))
@@ -127,16 +136,22 @@ public class MatchmakingTests extends FrameworkTestBase {
 						assertTrue(shouldFindGame.hasUnityConnection());
 					});
 				})
-				.onComplete(client::close)
+				.onComplete(v -> client.close())
+				.compose(v -> awaitCheckpoints(gameCreated))
 				.compose(v -> Matchmaking.deleteQueue(queueId))
-				.onComplete(testContext.succeedingThenComplete());
+				.compose(v -> vertx.close());
+		// workround for RejectedExecutionException
+		while (!fut.isComplete()) {
+			Strand.sleep(2000L);
+		}
+		testContext.completeNow();
 	}
 
 	@Test
 	public void testMultiplayerQueueCreatesMatch(Vertx vertx, VertxTestContext testContext) {
 		var client1 = new Client(vertx);
 		var client2 = new Client(vertx);
-		var gameCreated = testContext.checkpoint();
+		var gameCreated = checkpoint(1);
 
 		var queueId = UUID.randomUUID().toString();
 		var matchmakingQueue = new Matchmaking() {
@@ -151,22 +166,26 @@ public class MatchmakingTests extends FrameworkTestBase {
 			}
 		};
 
-		vertx.deployVerticle(matchmakingQueue)
+		startGateway(vertx)
+				.compose(v -> vertx.deployVerticle(matchmakingQueue))
 				.compose(v -> Matchmaking.createQueue(createMultiplayerQueue(queueId)))
 				.compose(v -> client1.createAndLogin())
 				.compose(v -> client2.createAndLogin())
-				.compose(v -> CompositeFuture.join(client1.matchmake(queueId), client2.matchmake(queueId)))
+				.compose(v -> all(client1.matchmake(queueId), client2.matchmake(queueId)))
 				.compose(v -> Matchmaking.deleteQueue(queueId))
 				.onComplete(client1::close)
 				.onComplete(client2::close)
+				.compose(v -> awaitCheckpoints(gameCreated))
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
 	@Test
 	public void testWaitsInMultiplayerQueue(Vertx vertx, VertxTestContext testContext) {
-		var client1 = new Client(vertx);
-		var cancelled = testContext.checkpoint();
+		var client = new Client(vertx);
+		var cancelled = checkpoint(1);
 		var queueId = UUID.randomUUID().toString();
+		var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate());
+
 		var matchmakingQueue = new Matchmaking() {
 			@Override
 			public Future<Long> createGame(ReactiveClassicGenericQueryExecutor connection, MatchmakingQueues configuration, MatchmakingTickets... tickets) {
@@ -175,40 +194,37 @@ public class MatchmakingTests extends FrameworkTestBase {
 			}
 		};
 
-		vertx.deployVerticle(matchmakingQueue)
+		startGateway(vertx)
+				.compose(v -> vertx.deployVerticle(matchmakingQueue))
 				.compose(v -> Matchmaking.createQueue(createMultiplayerQueue(queueId)))
-				.compose(v -> client1.createAndLogin())
+				.compose(v -> client.createAndLogin())
 				.compose(v -> {
-					client1.matchmake(queueId).onSuccess(res -> {
-						cancelled.flag();
+					client.matchmake(queueId).onSuccess(res -> {
 						testContext.verify(() -> {
 							assertNull(res);
+							cancelled.flag();
 						});
 					});
 					return Environment.sleep(vertx, 5000);
 				})
 				.onSuccess(v -> testContext.verify(() -> {
-					assertFalse(client1.matchmakingResponse().succeeded());
-					assertFalse(client1.matchmakingResponse().failed());
+					assertFalse(client.matchmakingResponse().succeeded());
+					assertFalse(client.matchmakingResponse().failed());
 				}))
-				.compose(v -> {
-					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate());
-					return ticketsDao.findManyByUserId(Collections.singletonList(client1.getUserEntity().getId()));
-				})
+				.compose(v -> ticketsDao.findManyByUserId(Collections.singletonList(client.getUserEntity().getId())))
 				.onSuccess(tickets -> testContext.verify(() -> {
 					assertEquals(1, tickets.size());
-//					assertNull(tickets.get(0).getGameId());
 				}))
-				.compose(v -> client1.cancelMatchmaking())
-				.compose(v -> {
-					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate());
-					return ticketsDao.findManyByUserId(Collections.singletonList(client1.getUserEntity().getId()));
-				})
+				.compose(v -> client.cancelMatchmaking())
+				// TODO: figure out why we still need to sleep a tiny bit
+				.compose(v -> Environment.sleep(vertx, 200L))
+				.compose(v -> ticketsDao.findManyByUserId(Collections.singletonList(client.getUserEntity().getId())))
 				.onSuccess(tickets -> testContext.verify(() -> {
 					assertEquals(0, tickets.size());
 				}))
 				.compose(v -> Matchmaking.deleteQueue(queueId))
-				.onComplete(client1::close)
+				.onComplete(client::close)
+				.compose(v -> awaitCheckpoints(cancelled))
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
@@ -217,7 +233,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 		var client1 = new Client(vertx);
 		var client2 = new Client(vertx);
 		var client3 = new Client(vertx);
-		var gameCreated = testContext.checkpoint();
+		var gameCreated = checkpoint(1);
 
 		var queueId = UUID.randomUUID().toString();
 		var matchmakingQueue = new Matchmaking() {
@@ -237,16 +253,19 @@ public class MatchmakingTests extends FrameworkTestBase {
 		};
 
 		vertx.deployVerticle(matchmakingQueue)
+				.compose(v -> startGateway(vertx))
 				.compose(v -> Matchmaking.createQueue(createMultiplayerQueue(queueId)))
-				.compose(v -> CompositeFuture.join(client1.createAndLogin(), client2.createAndLogin(), client3.createAndLogin()))
+				.compose(v -> join(client1.createAndLogin(), client2.createAndLogin(), client3.createAndLogin()))
 				.compose(v1 -> {
 					client1.matchmake(queueId);
 					return Environment.sleep(vertx, 5000).compose(v2 -> client1.cancelMatchmaking());
 				})
-				.compose(v -> CompositeFuture.join(client2.matchmake(queueId), client3.matchmake(queueId)))
-				.onComplete(client1::close)
+				.compose(v -> all(client2.matchmake(queueId), client3.matchmake(queueId)))
 				.compose(v -> Matchmaking.deleteQueue(queueId))
+				.compose(v -> awaitCheckpoints(gameCreated))
+				.onComplete(client1::close)
 				.onComplete(client2::close)
+				.onComplete(client3::close)
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
@@ -255,7 +274,8 @@ public class MatchmakingTests extends FrameworkTestBase {
 		var client = new ToxiClient(vertx);
 		var queueId = UUID.randomUUID().toString();
 		var matchmakingQueue = new Matchmaking();
-		vertx.deployVerticle(matchmakingQueue)
+		startGateway(vertx)
+				.compose(v -> vertx.deployVerticle(matchmakingQueue))
 				.compose(v -> Matchmaking.createQueue(createMultiplayerQueue(queueId)))
 				.compose(v -> client.createAndLogin())
 				.compose(v -> {
@@ -314,7 +334,8 @@ public class MatchmakingTests extends FrameworkTestBase {
 	public void testUserCanOnlyMatchmakeIntoOneActiveGame(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
 		var queueId = UUID.randomUUID().toString();
-		vertx.deployVerticle(new Matchmaking())
+		startGateway(vertx)
+				.compose(v -> vertx.deployVerticle(new Matchmaking()))
 				.compose(v -> Matchmaking.createQueue(createSinglePlayerQueue(queueId)))
 				.compose(v -> client.createAndLogin())
 				.compose(v -> client.matchmake(queueId).onFailure(Throwable::printStackTrace))
@@ -323,8 +344,8 @@ public class MatchmakingTests extends FrameworkTestBase {
 					testContext.verify(() -> {
 						assertNotNull(gameId);
 					});
+
 					return client.matchmake(queueId)
-							.onFailure(Throwable::printStackTrace)
 							.onSuccess(res2 -> {
 								testContext.verify(() -> {
 									assertEquals(gameId, res2.getUnityConnection().getGameId(), "game IDs should match because matchmaking repeatedly when a game is still active should return the same game.");
@@ -337,7 +358,9 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
-	public void testManyClientsMatchmakeAcrossInstances(Vertx vertx, VertxTestContext testContext) {
+	@Timeout(value = 95, timeUnit = TimeUnit.SECONDS)
+	public void testManyClientsMatchmakeAcrossInstances(VertxTestContext testContext) {
+		var vertx = Vertx.vertx();
 		// dedicated clients vertx
 		var clientVertx = Vertx.vertx();
 		var queueIds = IntStream
@@ -348,23 +371,24 @@ public class MatchmakingTests extends FrameworkTestBase {
 		var random = new Random();
 		var serverConfiguration = Environment.cachedConfigurationOrGet();
 		// deploy queue runners
-		all(queueIds
-				.stream()
-				.map(queueId -> Matchmaking.createQueue(createMultiplayerQueue(queueId)))
-				.collect(toList()))
+		startGateway(vertx)
+				.compose(v -> all(queueIds
+						.stream()
+						.map(queueId -> Matchmaking.createQueue(createMultiplayerQueue(queueId)))
+						.collect(toList())))
 				// deploy verticles
 				.compose(v -> vertx.deployVerticle(Matchmaking.class, new DeploymentOptions()
-						.setInstances(4)))
+						.setInstances(2)))
 				// create clients
-				.compose(v1 -> CompositeFuture.join(IntStream
-						.range(0, 400)
+				.compose(v1 -> all(IntStream
+						.range(0, 600)
 						.mapToObj(i -> {
 							var client = new Client(clientVertx);
 							var queueId = queueIds.get(i % queueIds.size());
 							return client.createAndLogin()
 									.compose(v -> {
 										var scanFrequencyMillis = serverConfiguration.getMatchmaking().getScanFrequencyMillis();
-										return Environment.sleep(clientVertx, scanFrequencyMillis / 2 + random.nextInt((int) scanFrequencyMillis * 2));
+										return Environment.sleep(clientVertx, scanFrequencyMillis / 2 + random.nextInt((int) scanFrequencyMillis));
 									})
 									.compose(v -> client.matchmake(queueId))
 									.map(res -> client);
@@ -377,8 +401,8 @@ public class MatchmakingTests extends FrameworkTestBase {
 					return gameUsersDao.findManyByUserId(Arrays.asList(userIds))
 							.onSuccess(gameUsers -> {
 								testContext.verify(() -> {
-									for (var ticket : gameUsers) {
-										assertNotNull(ticket.getGameId(), "should have assigned game");
+									for (var gameUser : gameUsers) {
+										assertNotNull(gameUser.getGameId(), "should have assigned game");
 									}
 									assertArrayEquals(gameUsers.stream().map(GameUsers::getUserId).sorted().toArray(String[]::new), userIds, "every user ID should appear");
 								});
@@ -386,12 +410,16 @@ public class MatchmakingTests extends FrameworkTestBase {
 							.map(clientsFut);
 				})
 				// close all clients
-				.compose(clientsFut -> all(clientsFut.<Client>list().stream().map(client -> client.close((Object) null)).collect(toList())))
+				.onSuccess(clientsFut -> {
+					for (var client : clientsFut.<Client>list()) {
+						client.close();
+					}
+				})
 				// delete all queues
 				.compose(v -> all(queueIds.stream().map(Matchmaking::deleteQueue).collect(toList())))
 				.onComplete(v -> clientVertx.close())
+				.onComplete(v -> vertx.close())
 				.onComplete(testContext.succeedingThenComplete());
-
 	}
 
 	@NotNull

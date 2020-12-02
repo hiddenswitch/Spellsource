@@ -65,18 +65,19 @@ create index on spellsource.deck_shares (trashed) where deck_shares.trashed is f
 comment on table spellsource.deck_shares is 'indicates a deck shared to a player';
 
 create type spellsource.game_state_enum as enum
-(
-  'AWAITING_CONNECTIONS',
-  'STARTED',
-  'FINISHED'
-);
+  (
+    'AWAITING_CONNECTIONS',
+    'STARTED',
+    'FINISHED'
+    );
 
 create table spellsource.games
 (
   id bigint generated always as identity primary key unique,
   status spellsource.game_state_enum not null default 'AWAITING_CONNECTIONS'::spellsource.game_state_enum,
   git_hash text,
-  trace jsonb
+  trace jsonb,
+  created_at timestamptz not null default now()
 );
 
 create table spellsource.game_users
@@ -105,10 +106,13 @@ create table spellsource.matchmaking_queues
 
 create table spellsource.matchmaking_tickets
 (
-  id bigint generated always as identity primary key unique,
+  id bigint generated always as identity,
   queue_id text references spellsource.matchmaking_queues (id) on delete cascade,
   user_id text references keycloak.user_entity (id) on delete cascade,
   deck_id text references spellsource.decks (id) on delete cascade,
   bot_deck_id text null default null references spellsource.decks (id),
-  created_at timestamptz not null default now()
-);
+  created_at timestamptz not null default now(),
+  primary key (id, queue_id)
+); /* partition by range (queue_id);*/
+
+create index on spellsource.matchmaking_tickets (queue_id);

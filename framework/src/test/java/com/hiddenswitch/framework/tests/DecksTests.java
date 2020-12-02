@@ -26,9 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class DecksTests extends FrameworkTestBase {
 
 	@Test
-	public void testCreateDeck( Vertx vertx, VertxTestContext testContext) {
+	public void testCreateDeck(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
-		client.createAndLogin()
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin())
 				.compose(ignored -> createRandomDeck(client))
 				.onSuccess(decksPutResponse -> {
 					testContext.verify(() -> {
@@ -40,19 +41,21 @@ public class DecksTests extends FrameworkTestBase {
 	}
 
 	@Test
-	public void testCreateManyDecks( Vertx vertx, VertxTestContext testContext) {
+	public void testCreateManyDecks(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
-		client.createAndLogin()
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin())
 				.compose(ignored -> CompositeFuture.all(IntStream.range(0, 100).mapToObj(i -> createRandomDeck(client)).collect(Collectors.toList())))
 				.onComplete(client::close)
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
 	@Test
-	public void testUpdateDecks( Vertx vertx, VertxTestContext testContext) {
+	public void testUpdateDecks(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
 
-		client.createAndLogin()
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin())
 				.compose(ignored -> createRandomDeck(client))
 				.compose(decksPutResponse -> {
 					var replacement = "spell_lunstone";
@@ -79,10 +82,11 @@ public class DecksTests extends FrameworkTestBase {
 
 
 	@Test
-	public void testUpdateDecksWithCardIds( Vertx vertx, VertxTestContext testContext) {
+	public void testUpdateDecksWithCardIds(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
-		client.createAndLogin()
-				.compose(ignored1 -> {
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin())
+				.compose(v -> {
 					var service = client.legacy();
 
 					return service.decksPut(DecksPutRequest.newBuilder()
@@ -125,9 +129,10 @@ public class DecksTests extends FrameworkTestBase {
 	}
 
 	@Test
-	public void testDeleteDecks( Vertx vertx, VertxTestContext testContext) {
+	public void testDeleteDecks(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
-		client.createAndLogin()
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin())
 				.compose(ignored -> createRandomDeck(client))
 				.compose(decksPutResponse -> {
 					var service = client.legacy();
@@ -151,17 +156,11 @@ public class DecksTests extends FrameworkTestBase {
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
-	/*
 	@Test
-	public void testDeletePremadeDecks( Vertx vertx, VertxTestContext testContext) {
-		var client1 = new Client(vertx, webClient);
-		var client2 = new Client(vertx, webClient);
-	}*/
-
-	@Test
-	public void testGetPremadeDecks( Vertx vertx, VertxTestContext testContext) {
+	public void testGetPremadeDecks(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
-		client.createAndLogin()
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin())
 				.compose(ignored -> {
 					var service = client.legacy();
 					return service.decksGetAll(Empty.getDefaultInstance());
