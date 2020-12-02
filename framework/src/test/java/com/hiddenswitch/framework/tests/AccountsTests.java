@@ -26,8 +26,8 @@ public class AccountsTests extends FrameworkTestBase {
 
 	@Test
 	public void testCreateUser(Vertx vertx, VertxTestContext testContext) {
-		Accounts
-				.createUser("test2@hiddenswitch.com", "username", "password")
+		startGateway(vertx)
+				.compose(v -> Accounts.createUser("test2@hiddenswitch.com", "username", "password"))
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
@@ -35,7 +35,8 @@ public class AccountsTests extends FrameworkTestBase {
 	public void testCreateAndLoginUserWithGrpc(Vertx vertx, VertxTestContext testContext) {
 		var webClient = WebClient.create(vertx);
 		var client = new Client(vertx, webClient);
-		client.createAndLogin("testusername2", "email@hiddenswitch.com", "password")
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin("testusername2", "email@hiddenswitch.com", "password"))
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
@@ -43,7 +44,8 @@ public class AccountsTests extends FrameworkTestBase {
 	public void testCreateAndLoginUserWithGrpcAuth1(Vertx vertx, VertxTestContext testContext) {
 		var webClient = WebClient.create(vertx);
 		var client = new Client(vertx, webClient);
-		Accounts.createUser("other@hiddenswitch.com", "username4", "password")
+		startGateway(vertx)
+				.compose(v -> Accounts.createUser("other@hiddenswitch.com", "username4", "password"))
 				.compose(otherUser -> client.createAndLogin("testusername3", "email1@hiddenswitch.com", "password")
 						.compose(myAccountReply -> {
 							var stub = VertxAccountsGrpc.newVertxStub(client.channel()).withCallCredentials(client.credentials());
@@ -68,7 +70,8 @@ public class AccountsTests extends FrameworkTestBase {
 	public void testLoginWithRestClient(Vertx vertx, VertxTestContext testContext) {
 		var webClient = WebClient.create(vertx);
 		var client = new Client(vertx, webClient);
-		client.privilegedCreateAndLogin("testusername1", "testemail@hiddenswitch.com", "password")
+		startGateway(vertx)
+				.compose(v -> client.privilegedCreateAndLogin("testusername1", "testemail@hiddenswitch.com", "password"))
 				.onComplete(ignored -> {
 					testContext.verify(() -> {
 						assertNotNull(client.getAccessToken());
@@ -94,7 +97,8 @@ public class AccountsTests extends FrameworkTestBase {
 		credential.setTemporary(false);
 
 		// Create an account programmatically
-		Accounts.get()
+		startGateway(vertx)
+				.compose(v -> Accounts.get())
 				.compose(hiddenswitch -> Environment.executeBlocking(() -> hiddenswitch.users().create(testUser)))
 				.compose(ignored -> {
 					var url = FrameworkTestBase.keycloak.getAuthServerUrl() + "/realms/hiddenswitch/protocol/openid-connect/token";

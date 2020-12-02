@@ -4,35 +4,32 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.google.common.base.Throwables;
-import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Streams;
+import com.google.common.collect.ObjectArrays;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
-import com.hiddenswitch.framework.schema.spellsource.tables.daos.GameUsersDao;
-import com.hiddenswitch.framework.schema.spellsource.tables.daos.GamesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.MatchmakingQueuesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
-import com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers;
-import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets;
-import com.hiddenswitch.framework.schema.spellsource.tables.records.GameUsersRecord;
 import com.hiddenswitch.spellsource.rpc.*;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
 import io.grpc.*;
 import io.vertx.core.*;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
+import io.vertx.ext.sync.HandlerReceiverAdaptor;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.sync.concurrent.SuspendableLock;
 import io.vertx.pgclient.PgException;
-import io.vertx.sqlclient.SqlConnection;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 import static com.hiddenswitch.framework.schema.spellsource.Tables.*;
@@ -94,13 +91,18 @@ public class Matchmaking extends SyncVerticle {
 
 			@Override
 			public void enqueue(ReadStream<MatchmakingQueuePutRequest> request, WriteStream<MatchmakingQueuePutResponse> response) {
-				fiber(() -> runClientEnqueue(request, response));
+				var userId = Accounts.userId();
+				// do this as early as possible
+				var commandsFromUser = Sync.<MatchmakingQueuePutRequest>streamAdaptor();
+				// listen for events from the client
+				request.handler(commandsFromUser);
+
+				fiber(() -> runClientEnqueue(request, response, commandsFromUser, userId));
 			}
 		}).compose(Accounts::requiresAuthorization);
 	}
 
-	public static void runClientEnqueue(ReadStream<MatchmakingQueuePutRequest> request, WriteStream<MatchmakingQueuePutResponse> response) throws SuspendExecution {
-		var userId = Accounts.userId();
+	public static void runClientEnqueue(ReadStream<MatchmakingQueuePutRequest> request, WriteStream<MatchmakingQueuePutResponse> response, HandlerReceiverAdaptor<MatchmakingQueuePutRequest> commandsFromUser, String userId) throws SuspendExecution, InterruptedException {
 		var serverConfiguration = Environment.cachedConfigurationOrGet();
 		Objects.requireNonNull(userId, "no user id attached to context");
 		// this should only really run with a fiber dedicated for its purpose
@@ -109,19 +111,38 @@ public class Matchmaking extends SyncVerticle {
 		var closeables = new ArrayList<Closeable>();
 		// we can close the response no matter what at the end here.
 		// closing will throw a StatusRuntimeException if it was already closed
-		closeables.add(fut -> response.end().otherwiseEmpty().onComplete(fut));
+		closeables.add(fut -> {
+			try {
+				response.end();
+			} catch (Throwable t) {
+			} finally {
+				fut.complete();
+			}
+		});
 
 		try {
 			var enqueueStrand = Strand.currentStrand();
 			var executor = Environment.queryExecutor();
+
+			// check if the player is already in an unfinished game. if so, reply with its game ID.
+			var gameUser = await(executor.findOneRow(dsl ->
+					dsl.select(GAME_USERS.USER_ID, GAME_USERS.GAME_ID, GAMES.STATUS)
+							.from(GAME_USERS)
+							.join(GAMES)
+							.on(GAME_USERS.GAME_ID.eq(GAMES.ID))
+							.where(GAME_USERS.USER_ID.eq(userId).and(GAMES.STATUS.ne(GameStateEnum.FINISHED)))
+							.limit(1)));
+
+			if (gameUser != null) {
+				var gameId = gameUser.getLong(GAME_USERS.GAME_ID.getName());
+				writeGameId(response, gameId.toString());
+				return;
+			}
+
 			// the maximum amount of time to wait for a lock (user can only queue in one place on the cluster)
 			var lockTimeout = serverConfiguration.getMatchmaking().getEnqueueLockTimeoutMillis();
-
 			var vertx = Vertx.currentContext().owner();
 			var eventBus = vertx.eventBus();
-			var commandsFromUser = Sync.<MatchmakingQueuePutRequest>streamAdaptor();
-
-			// TODO: check if the player is already in an unfinished game. if so, reply with its game ID.
 
 			// only allow a user to be queued in one place on the cluster at a time
 			// throws VertxException-wrapped TimeoutException if the user is in multiple queues
@@ -138,35 +159,29 @@ public class Matchmaking extends SyncVerticle {
 			// we only expect game IDs to be communicated on this channel. reply once the response has been written
 			// and the client has acknowledged it
 			// run in a fiber so it's safe to interrupt another fiber
-			matchmakingChannel.handler(fiber(message -> {
+			matchmakingChannel.handler(message -> {
+				// we have a game ID
+				var gameId = message.body();
+				writeGameId(response, gameId)
+						.map(gameId)
+						.onFailure(Environment.onFailure())
+						// acknowledge receipt
+						.onComplete(replyOrFail(message));
+
 				// at this moment, the transaction has committed and the user's ticket should already be deleted or the queue
 				// was closed, so no matter what we're interrupting.
 				enqueueStrand.interrupt();
-
-				// the queue was closed
-				if (isCloseMessage(message)) {
-					return;
-				}
-
-				// we have a game ID
-				var gameId = message.body();
-				replyGameId(response, gameId)
-						.map(gameId)
-						// acknowledge receipt
-						.onComplete(replyOrFail(message));
-			}));
+			});
 
 			// register onto the cluster
 			await(matchmakingChannel::completionHandler, lockTimeout);
 			closeables.add(matchmakingChannel::unregister);
 
-			// listen for events from the client
-			request.handler(commandsFromUser);
-
 			// the ticket is refreshed whenever the request is refreshed
 			// many things can interrupt this, like a message from the queue that it is closed, the user closing their
 			// request, exceptions on the channels, or database exceptions
 			Long lastTicketId = null;
+			MessageConsumer<String> lastClosedListener = null;
 			while (!Strand.currentStrand().isInterrupted()) {
 				// interrupted exception throws a VertxException here!
 				var fromClient = commandsFromUser.receive();
@@ -175,11 +190,26 @@ public class Matchmaking extends SyncVerticle {
 					return;
 				}
 
+
 				if (lastTicketId != null) {
 					// delete the old ticket
 					Long finalLastTicketId1 = lastTicketId;
 					await(executor.execute(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS).where(MATCHMAKING_TICKETS.ID.eq(finalLastTicketId1))));
 				}
+				if (lastClosedListener != null) {
+					closeables.remove((Closeable) lastClosedListener::unregister);
+					lastClosedListener.unregister();
+				}
+
+				var queueId = fromClient.getQueueId();
+				// register if the queue is closed
+				var queueClosedChannel = eventBus.<String>consumer("matchmaking:queue-closed:" + queueId);
+				closeables.add(queueClosedChannel::unregister);
+				queueClosedChannel.handler(ignored -> {
+					enqueueStrand.interrupt();
+				});
+
+				lastClosedListener = queueClosedChannel;
 
 				// insert the new ticket
 				var record = MATCHMAKING_TICKETS.newRecord()
@@ -187,21 +217,22 @@ public class Matchmaking extends SyncVerticle {
 						.setDeckId(fromClient.getDeckId())
 						// protobufs always give non-null empty strings but sql expects null, "" is a valid identifier
 						.setBotDeckId(fromClient.getBotDeckId().isEmpty() ? null : fromClient.getBotDeckId())
-						.setQueueId(fromClient.getQueueId());
+						.setQueueId(queueId);
 				if (!fromClient.getDeckId().isEmpty()) {
 					record.set(MATCHMAKING_TICKETS.DECK_ID, fromClient.getDeckId());
 				}
 				if (!fromClient.getBotDeckId().isEmpty()) {
 					record.set(MATCHMAKING_TICKETS.BOT_DECK_ID, fromClient.getBotDeckId());
 				}
-				if (!fromClient.getQueueId().isEmpty()) {
-					record.set(MATCHMAKING_TICKETS.QUEUE_ID, fromClient.getQueueId());
+				if (!queueId.isEmpty()) {
+					record.set(MATCHMAKING_TICKETS.QUEUE_ID, queueId);
 				}
 
 				var tickets = await(executor.executeAny(dsl -> dsl
 						.insertInto(MATCHMAKING_TICKETS)
 						.set(record)
-						.returning(MATCHMAKING_TICKETS.ID)).map(rowSet -> Lists.newArrayList(rowSet.iterator())));
+						.returning(MATCHMAKING_TICKETS.ID))
+						.map(rowSet -> Lists.newArrayList(rowSet.iterator())));
 
 				if (tickets.isEmpty()) {
 					throw new RuntimeException("failed to insert matchmaking ticket");
@@ -220,7 +251,6 @@ public class Matchmaking extends SyncVerticle {
 				// do nothing
 				return;
 			}
-			throwable.printStackTrace();
 			throw throwable;
 		} finally {
 			// goes here with all exceptions eventually
@@ -236,19 +266,24 @@ public class Matchmaking extends SyncVerticle {
 		}
 	}
 
-	private static Condition gameStatusIsRunning() {
-		return GAMES.TRACE.isNull();
+	@Suspendable
+	private static Future<Void> writeGameId(WriteStream<MatchmakingQueuePutResponse> response, String gameId) {
+		var message = MatchmakingQueuePutResponse.newBuilder()
+				.setUnityConnection(MatchmakingQueuePutResponseUnityConnection.newBuilder()
+						.setGameId(gameId).build()).build();
+		try {
+			response.write(message);
+		} catch (Throwable t) {
+			return Future.failedFuture(t);
+		}
+		return Future.succeededFuture();
 	}
 
 	@Suspendable
-	private static Future<Void> replyGameId(WriteStream<MatchmakingQueuePutResponse> response, String gameId) {
-		return response.write(MatchmakingQueuePutResponse.newBuilder()
-				.setUnityConnection(MatchmakingQueuePutResponseUnityConnection.newBuilder()
-						.setGameId(gameId).build()).build());
-	}
-
 	public void runServerQueue(Vertx vertx) throws SuspendExecution {
 		var serverConfiguration = await(Environment.configuration());
+		var smallTimeout = serverConfiguration.getMatchmaking().getEnqueueLockTimeoutMillis();
+		var random = new Random();
 
 		// dequeueing loop
 		while (!Strand.currentStrand().isInterrupted()) {
@@ -257,6 +292,7 @@ public class Matchmaking extends SyncVerticle {
 			var connection = await(Environment.sqlPoolAkaDaoDelegate().getConnection());
 			var transactionObj = await(connection.begin());
 			var transaction = new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), connection);
+			var committed = false;
 			try {
 				started.tryComplete(Strand.currentStrand());
 
@@ -268,24 +304,29 @@ public class Matchmaking extends SyncVerticle {
 				// gather tickets
 				// this will lock the rows that this matchmaker might match using the transaction, allowing other matchmakers
 				// to skip these easily naturally.
-				var records = await(transaction.executeAny(dsl ->
-						dsl.deleteFrom(MATCHMAKING_TICKETS)
-								.where(MATCHMAKING_TICKETS.ID.in(DSL.using(SQLDialect.POSTGRES)
-										.select(MATCHMAKING_TICKETS.ID)
-										.from(MATCHMAKING_TICKETS)
-										// only retrieve maxTickets at a time
-										.limit(maxTickets)
-										// lock, prevent others from grabbing these tickets during iteration
-										.forUpdate()
-										.skipLocked()))
-								.returning(asterisk()))
-						.map(rowSet -> Lists.newArrayList(rowSet.iterator()))
+				var records = await(transaction.findManyRow(dsl -> dsl.select(asterisk())
+						.from(MATCHMAKING_TICKETS)
+						// order by the queue ID to reduce the odds of a deadlock where two matchmakers are each pulling one of
+						// two players
+						.orderBy(MATCHMAKING_TICKETS.QUEUE_ID)
+						// only retrieve maxTickets at a time
+						.limit(maxTickets)
+						// lock, prevent others from grabbing these tickets during iteration
+						.forUpdate()
+						.skipLocked())
 						.onFailure(Environment.onFailure()))
-						.stream().collect(groupingBy(r -> r.getString(MATCHMAKING_TICKETS.QUEUE_ID.getName())));
+						.stream()
+						.collect(groupingBy(r -> r.getString(MATCHMAKING_TICKETS.QUEUE_ID.getName())));
 
+				var ticketsTaken = new ArrayList<Long>();
 				// retrieve queues
-				var queues = await(transaction.findManyRow(dsl -> dsl.selectFrom(MATCHMAKING_QUEUES)
-						.where(MATCHMAKING_QUEUES.ID.in(records.keySet())))).stream().map(RowMappers.getMatchmakingQueuesMapper()).collect(toMap(MatchmakingQueues::getId, Function.identity()));
+				// we could do a join but usually this will be more stuff than just doing it here, because there are many more
+				// tickets than queues
+				var queues = await(transaction
+						.findManyRow(dsl -> dsl.selectFrom(MATCHMAKING_QUEUES).where(MATCHMAKING_QUEUES.ID.in(records.keySet()))))
+						.stream()
+						.map(RowMappers.getMatchmakingQueuesMapper())
+						.collect(toMap(MatchmakingQueues::getId, Function.identity()));
 				for (var group : records.entrySet()) {
 					var tickets = group.getValue().stream().map(RowMappers.getMatchmakingTicketsMapper()).collect(toList());
 					var configuration = queues.get(group.getKey());
@@ -297,11 +338,12 @@ public class Matchmaking extends SyncVerticle {
 						continue;
 					}
 
+					var i = 0;
 					// iterate through each ticket
 					// e.g          i < 10             - (2                            - 1); i += 2
 					//              i < 9 ; i += 2
 					// i will iterate an expected 5 times on 0,1 2,3 4,5 6,7 8,9
-					for (var i = 0; i < tickets.size() - (configuration.getLobbySize() - 1); i += configuration.getLobbySize()) {
+					for (; i < tickets.size() - (configuration.getLobbySize() - 1); i += configuration.getLobbySize()) {
 						// actual body of matchmaking function, this is responsible for determining which players will play against
 						// each other
 						var thisGameTickets = tickets.subList(i, i + configuration.getLobbySize()).toArray(MatchmakingTickets[]::new);
@@ -321,33 +363,41 @@ public class Matchmaking extends SyncVerticle {
 									// players close the client after a match has been made but before they have been notified
 									// the protocol is to send over the event bus the game ID to the queued player, wherever they are, and
 									// once the client has actually received the notification, reply to this event bus request
-									return vertx.eventBus().<String>request(address, gameId.toString());
+									return vertx.eventBus().<String>request(address, gameId.toString(), new DeliveryOptions().setSendTimeout(smallTimeout));
 								}).collect(toList()))));
+						for (var ticket : thisGameTickets) {
+							ticketsTaken.add(ticket.getId());
+						}
 					}
 				}
 
-				// notify everyone at the same time
+				// create the games
 				if (!createGames.isEmpty()) {
 					await(all(createGames));
 				}
+
+				// delete the tickets that were actually processed
+				await(transaction.execute(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS).where(MATCHMAKING_TICKETS.ID.in(ticketsTaken))));
 				await(transactionObj.commit());
+				committed = true;
 				// notify all users of assignments now that it has committed
 				// TODO: we don't actually want to throw here
 				await(all(notifications));
 			} catch (PgException t) {
-				t.printStackTrace();
 				// rolls back automatically
 			} catch (Throwable t) {
-				t.printStackTrace();
 				// we don't need to wait for these cleanup actions, because it will be possibly interrupted
-				transactionObj.rollback();
+				if (!committed) {
+					transactionObj.rollback();
+				}
 			} finally {
 				connection.close();
 			}
 
 			// Keep looping otherwise
+			// offset the amount of delay by a small random amount to reduce the odds of a deadlock
 			try {
-				Strand.sleep(scanFrequency);
+				Strand.sleep(100 + random.nextInt(Math.max(1, (int) scanFrequency - 100)));
 			} catch (Throwable t) {
 				// interrupted
 				break;
@@ -361,38 +411,28 @@ public class Matchmaking extends SyncVerticle {
 	public Future<Long> createGame(ReactiveClassicGenericQueryExecutor executor, MatchmakingQueues configuration, MatchmakingTickets... tickets) {
 		// TODO: set player index
 		return executor.executeAny(dsl -> dsl.insertInto(GAMES).defaultValues().returning(GAMES.ID))
-				.onFailure(Environment.onFailure())
 				.map(rowSet -> Lists.newArrayList(rowSet.iterator()).get(0).getLong(GAMES.ID.getName()))
-				.onFailure(Environment.onFailure())
 				.compose(gameId -> {
 					var rows = Arrays.stream(tickets).map(ticket -> GAME_USERS.newRecord().setGameId(gameId).setUserId(ticket.getUserId()));
-					return CompositeFuture.join(rows.map(row -> executor.execute(dsl -> dsl.insertInto(GAME_USERS).set(row)).onFailure(Environment.onFailure())).collect(toList())).map(gameId);
+					return CompositeFuture.all(rows.map(row -> executor.execute(dsl -> dsl.insertInto(GAME_USERS).set(row))).collect(toList())).map(gameId);
 				});
 	}
 
 	public static Future<Void> deleteQueue(String queueId) {
 		// setup transaction
-		return Environment.sqlPoolAkaDaoDelegate().getConnection().compose(connection -> connection.begin().compose(transactionObj -> {
-			var transaction = new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), connection);
-			return transaction
-					.executeAny(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS)
-							.where(MATCHMAKING_TICKETS.QUEUE_ID.eq(queueId))
-							.returningResult(MATCHMAKING_TICKETS.ID, MATCHMAKING_TICKETS.USER_ID))
-					.map(tickets -> Streams.stream(tickets.iterator())
-							.map(ticket -> ticket.getString(MATCHMAKING_TICKETS.USER_ID.getName()))
-							.collect(toList()))
-					.compose(forUsers -> {
-						for (var userId : forUsers) {
-							// send a message to all currently connected users awaiting this queue that the queue is closed
-							Vertx.currentContext().owner().eventBus().publish("matchmaking:enqueue:" + userId, "closed");
-						}
-						return Future.succeededFuture();
-					})
-					.compose(v -> transaction.execute(dsl -> dsl.deleteFrom(MATCHMAKING_QUEUES).where(MATCHMAKING_QUEUES.ID.eq(queueId))).map((Void) null))
-					.compose(v -> transactionObj.commit())
-					.recover(t -> transactionObj.rollback())
-					.compose(v -> connection.close());
-		}));
+		return Environment.queryExecutor()
+				.execute(dsl -> dsl.deleteFrom(MATCHMAKING_QUEUES)
+						.where(MATCHMAKING_QUEUES.ID.eq(queueId)))
+				.compose(deleted -> {
+					if (deleted == 0) {
+						return Future.failedFuture("no queue found to delete with ID " + queueId);
+					}
+
+					// send a message to all currently connected users awaiting this queue that the queue is closed
+					Vertx.currentContext().owner().eventBus().publish("matchmaking:queue-closed:" + queueId, "closed");
+
+					return Future.succeededFuture();
+				});
 	}
 
 	public Future<Strand> strand() {

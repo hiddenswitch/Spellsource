@@ -106,7 +106,7 @@ public class Keys {
         public static final UniqueKey<GameUsersRecord> GAME_USERS_PKEY = Internal.createUniqueKey(GameUsers.GAME_USERS, "game_users_pkey", new TableField[] { GameUsers.GAME_USERS.ID }, true);
         public static final UniqueKey<GamesRecord> GAMES_PKEY = Internal.createUniqueKey(Games.GAMES, "games_pkey", new TableField[] { Games.GAMES.ID }, true);
         public static final UniqueKey<MatchmakingQueuesRecord> MATCHMAKING_QUEUES_PKEY = Internal.createUniqueKey(MatchmakingQueues.MATCHMAKING_QUEUES, "matchmaking_queues_pkey", new TableField[] { MatchmakingQueues.MATCHMAKING_QUEUES.ID }, true);
-        public static final UniqueKey<MatchmakingTicketsRecord> MATCHMAKING_TICKETS_PKEY = Internal.createUniqueKey(MatchmakingTickets.MATCHMAKING_TICKETS, "matchmaking_tickets_pkey", new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.ID }, true);
+        public static final UniqueKey<MatchmakingTicketsRecord> MATCHMAKING_TICKETS_PKEY = Internal.createUniqueKey(MatchmakingTickets.MATCHMAKING_TICKETS, "matchmaking_tickets_pkey", new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.ID, MatchmakingTickets.MATCHMAKING_TICKETS.QUEUE_ID }, true);
     }
 
     private static class ForeignKeys0 {

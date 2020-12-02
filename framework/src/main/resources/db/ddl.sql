@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 12.3 (Debian 12.3-1.pgdg100+1)
--- Dumped by pg_dump version 13.1
+-- Dumped by pg_dump version 12.3 (Debian 12.3-1.pgdg100+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1716,7 +1716,8 @@ CREATE TABLE spellsource.games (
     id bigint NOT NULL,
     status spellsource.game_state_enum DEFAULT 'AWAITING_CONNECTIONS'::spellsource.game_state_enum NOT NULL,
     git_hash text,
-    trace jsonb
+    trace jsonb,
+    created_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
 
@@ -1765,7 +1766,7 @@ ALTER TABLE spellsource.matchmaking_queues OWNER TO admin;
 
 CREATE TABLE spellsource.matchmaking_tickets (
     id bigint NOT NULL,
-    queue_id text,
+    queue_id text NOT NULL,
     user_id text,
     deck_id text,
     bot_deck_id text,
@@ -2738,7 +2739,7 @@ ALTER TABLE ONLY spellsource.matchmaking_queues
 --
 
 ALTER TABLE ONLY spellsource.matchmaking_tickets
-    ADD CONSTRAINT matchmaking_tickets_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT matchmaking_tickets_pkey PRIMARY KEY (id, queue_id);
 
 
 --
@@ -3313,6 +3314,13 @@ CREATE INDEX decks_is_premade_idx ON spellsource.decks USING btree (is_premade) 
 --
 
 CREATE INDEX decks_trashed_idx ON spellsource.decks USING btree (trashed) WHERE (is_premade IS FALSE);
+
+
+--
+-- Name: matchmaking_tickets_queue_id_idx; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX matchmaking_tickets_queue_id_idx ON spellsource.matchmaking_tickets USING btree (queue_id);
 
 
 --

@@ -1,6 +1,7 @@
 package io.vertx.ext.sync;
 
 import co.paralleluniverse.fibers.*;
+import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.SuspendableAction1;
 import co.paralleluniverse.strands.SuspendableCallable;
 import co.paralleluniverse.strands.channels.Channel;
@@ -440,10 +441,10 @@ public class Sync {
 			try {
 				promise.complete(context.run());
 			} catch (Throwable t) {
-				promise.fail(t);
+				promise.tryFail(t);
 			}
 		});
-//		fiber.setUncaughtExceptionHandler((f, e) -> Tracing.error(e));
+		fiber.setUncaughtExceptionHandler((f, e) -> promise.tryFail(e));
 		fiber.inheritThreadLocals();
 		fiber.start();
 		return promise.future();
@@ -467,20 +468,34 @@ public class Sync {
 		return fiber(context);
 	}
 
+	private static void uncaughtException(Strand f, Throwable e) {
+		var currentContext = Vertx.currentContext();
+		if (currentContext==null) {
+			return;
+		}
+		var throwableHandler = currentContext.owner().exceptionHandler();
+		if (throwableHandler == null) {
+			return;
+		}
+		throwableHandler.handle(e);
+	}
+
 	@Suspendable
 	public static void fiber(SuspendableRunnable context) {
+		var currentContext = Vertx.currentContext();
 		var fiber = new Fiber<Void>(getContextScheduler(), context::run);
 		fiber.inheritThreadLocals();
-//		fiber.setUncaughtExceptionHandler((f, e) -> Tracing.error(e));
+		fiber.setUncaughtExceptionHandler(Sync::uncaughtException);
 		fiber.start();
 	}
 
 	@Suspendable
 	public static <T> Handler<T> fiber(FiberScheduler scheduler, SuspendableAction1<T> handler) {
 		return v -> {
+			var currentContext = Vertx.currentContext();
 			var fiber = new Fiber<Void>(scheduler, () -> handler.call(v));
 			fiber.inheritThreadLocals();
-//			fiber.setUncaughtExceptionHandler((f, e) -> Tracing.error(e));
+			fiber.setUncaughtExceptionHandler(Sync::uncaughtException);
 			fiber.start();
 		};
 	}

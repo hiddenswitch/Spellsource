@@ -10,6 +10,7 @@ import io.github.jklingsporn.vertx.jooq.shared.UnexpectedJsonValueType;
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 import org.jooq.JSONB;
 
@@ -60,6 +61,16 @@ public interface IGames extends VertxPojo, Serializable {
      */
     public JSONB getTrace();
 
+    /**
+     * Setter for <code>spellsource.games.created_at</code>.
+     */
+    public IGames setCreatedAt(OffsetDateTime value);
+
+    /**
+     * Getter for <code>spellsource.games.created_at</code>.
+     */
+    public OffsetDateTime getCreatedAt();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -96,6 +107,12 @@ public interface IGames extends VertxPojo, Serializable {
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("trace","org.jooq.JSONB",e);
         }
+        try {
+            String created_atString = json.getString("created_at");
+            setCreatedAt(created_atString == null?null:java.time.OffsetDateTime.parse(created_atString));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("created_at","java.time.OffsetDateTime",e);
+        }
         return this;
     }
 
@@ -107,6 +124,7 @@ public interface IGames extends VertxPojo, Serializable {
         json.put("status",getStatus()==null?null:getStatus().getLiteral());
         json.put("git_hash",getGitHash());
         // Omitting unrecognized type org.jooq.JSONB for column trace!
+        json.put("created_at",getCreatedAt()==null?null:getCreatedAt().toString());
         return json;
     }
 

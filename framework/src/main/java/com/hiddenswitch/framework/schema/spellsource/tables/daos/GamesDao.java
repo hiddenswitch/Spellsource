@@ -10,6 +10,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.GamesRecord;
 
 import io.github.jklingsporn.vertx.jooq.shared.reactive.AbstractReactiveVertxDAO;
 
+import java.time.OffsetDateTime;
 import java.util.Collection;
 
 import org.jooq.Configuration;
@@ -78,6 +79,20 @@ public class GamesDao extends AbstractReactiveVertxDAO<GamesRecord, com.hiddensw
      */
     public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games>> findManyByTrace(Collection<JSONB> values, int limit) {
         return findManyByCondition(Games.GAMES.TRACE.in(values),limit);
+    }
+
+    /**
+     * Find records that have <code>created_at IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games>> findManyByCreatedAt(Collection<OffsetDateTime> values) {
+        return findManyByCondition(Games.GAMES.CREATED_AT.in(values));
+    }
+
+    /**
+     * Find records that have <code>created_at IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games>> findManyByCreatedAt(Collection<OffsetDateTime> values, int limit) {
+        return findManyByCondition(Games.GAMES.CREATED_AT.in(values),limit);
     }
 
     @Override

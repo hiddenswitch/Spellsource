@@ -100,8 +100,8 @@ dependencies {
     implementation group: 'io.vertx', name: 'vertx-web', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-auth-common', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-config', version: vertxVersion
-    implementation platform('org.keycloak.bom:keycloak-bom-parent:11.0.2')
-    implementation(group: 'org.keycloak', name: 'keycloak-admin-client', version: '11.0.2') {
+    implementation platform("org.keycloak.bom:keycloak-bom-parent:$keycloakVersion")
+    implementation(group: 'org.keycloak', name: 'keycloak-admin-client', version: "$keycloakVersion") {
         exclude group: 'org.jboss.resteasy', module: 'resteasy-client'
     }
 
@@ -109,20 +109,31 @@ dependencies {
     implementation group: 'org.graalvm.js', name: 'js', version: '20.2.0'
     implementation "org.flywaydb:flyway-core:$flywayVersion"
 
-    testImplementation project(':testcontainers')
+    testImplementation (project(':testcontainers')) {
+        exclude group: 'junit', module: 'junit'
+    }
     testImplementation project(':testutils')
-    testImplementation "org.testcontainers:testcontainers"
-    testImplementation "org.testcontainers:junit-jupiter"
+    testImplementation ("org.testcontainers:testcontainers") {
+        exclude group: 'junit', module: 'junit'
+    }
+    testImplementation ("org.testcontainers:junit-jupiter") {
+        exclude group: 'junit', module: 'junit'
+    }
     testImplementation group: 'io.vertx', name: 'vertx-junit5', version: vertxVersion
     testImplementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
     testImplementation group: 'io.vertx', name: 'vertx-web-common', version: vertxVersion
-
     testImplementation 'com.google.guava:guava:26.0-jre'
     testImplementation "io.github.classgraph:classgraph:$classgraphVersion"
     testImplementation 'org.jetbrains:annotations:16.0.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.6.2'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
+    testCompileOnly ("junit:junit:4.12") {
+        because("only for testcontainers")
+    }
+    testRuntimeOnly ("junit:junit:4.12") {
+        because("only for testcontainers")
+    }
     runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
     runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
 }
@@ -177,7 +188,7 @@ task installDll(type: Copy) {
 }
 
 task pullKeycloakImage(type: DockerPullImage) {
-    image.set('jboss/keycloak:11.0.2')
+    image.set("jboss/keycloak:$keycloakVersion")
     onError({})
 }
 
@@ -212,7 +223,7 @@ task stopPostgresContainer(type: DockerStopContainer) {
 
 task createKeycloakContainer(type: DockerCreateContainer) {
     dependsOn += [createPostgresContainer, pullKeycloakImage]
-    targetImageId 'jboss/keycloak:11.0.2'
+    targetImageId "jboss/keycloak:$keycloakVersion"
     envVars.putAll([
             'DB_VENDOR'  : 'postgres',
             'DB_ADDR'    : 'database:5432',
@@ -345,7 +356,7 @@ protobuf {
             artifact = 'io.grpc:protoc-gen-grpc-java:1.33.1'
         }
         grpc_java_vertx {
-            path = javaGrpcPath
+            artifact = "io.vertx:vertx-grpc-protoc-plugin:$vertxVersion"
         }
         grpc_csharp {
             path = csharpGrpcPath

@@ -16,8 +16,7 @@ public class Gateway extends AbstractVerticle {
 
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
-		// TODO: Just add all the services here
-		CompositeFuture.join(
+		CompositeFuture.all(
 				Legacy.services(),
 				Matchmaking.services(),
 				Accounts.unauthenticatedService(),
@@ -48,6 +47,7 @@ public class Gateway extends AbstractVerticle {
 					server.start(promise);
 					return promise.future();
 				})
+				.onFailure(Environment.onFailure())
 				.onComplete(startPromise);
 	}
 
@@ -55,12 +55,13 @@ public class Gateway extends AbstractVerticle {
 		return 8081;
 	}
 
-	@Override
-	public void stop(Promise<Void> stopPromise) throws Exception {
-		if (server != null && !server.isTerminated()) {
-			server.shutdown(stopPromise);
-		} else {
-			stopPromise.complete();
-		}
-	}
+//
+//	@Override
+//	public void stop(Promise<Void> stopPromise) throws Exception {
+//		if (server != null && !server.isTerminated()) {
+//			server.shutdown(stopPromise);
+//		} else {
+//			stopPromise.complete();
+//		}
+//	}
 }

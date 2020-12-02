@@ -2,18 +2,18 @@ package com.hiddenswitch.containers;
 
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.containers.wait.strategy.WaitStrategy;
 import org.testcontainers.utility.MountableFile;
 
 import java.time.Duration;
 
 public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 	private static final String KEYCLOAK_IMAGE = "quay.io/keycloak/keycloak";
-	private static final String KEYCLOAK_VERSION = "11.0.2";
+	private static final String KEYCLOAK_VERSION = "11.0.3";
 
 	private static final int KEYCLOAK_PORT_HTTP = 8080;
-	private static final int KEYCLOAK_PORT_HTTPS = 8443;
 
-	private static final String KEYCLOAK_ADMIN_USER = "admin";
+	private static final String KEYCLOAK_ADMIN_USER = "spellsource";
 	private static final String KEYCLOAK_ADMIN_PASSWORD = "admin";
 	private static final String KEYCLOAK_AUTH_PATH = "/auth";
 
@@ -25,10 +25,6 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 	private String tlsKeyFilename;
 	private boolean useTls = false;
 
-	public KeycloakContainer() {
-		this(KEYCLOAK_IMAGE + ":" + KEYCLOAK_VERSION);
-	}
-
 	/**
 	 * Create a KeycloakContainer by passing the full docker image name
 	 *
@@ -36,7 +32,7 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 	 */
 	public KeycloakContainer(String dockerImageName) {
 		super(dockerImageName);
-		withExposedPorts(KEYCLOAK_PORT_HTTP, KEYCLOAK_PORT_HTTPS);
+		withExposedPorts(KEYCLOAK_PORT_HTTP);
 		withEnv("LANGUAGE", "en_US.UTF-8");
 		withEnv("LANG", "en_US.UTF-8");
 		withEnv("LC_ALL", "en_US.UTF-8");
@@ -93,8 +89,7 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 	}
 
 	public String getAuthServerUrl() {
-		return String.format("http%s://%s:%s%s", useTls ? "s" : "", getContainerIpAddress(),
-				useTls ? getMappedPort(KEYCLOAK_PORT_HTTPS) : getMappedPort(KEYCLOAK_PORT_HTTP), KEYCLOAK_AUTH_PATH);
+		return String.format("http%s://%s:%s%s", "", getContainerIpAddress(), getMappedPort(KEYCLOAK_PORT_HTTP), KEYCLOAK_AUTH_PATH);
 	}
 
 	public KeycloakContainer withPostgres(String postgresHostPort, String databaseName, String username, String password) {
@@ -116,10 +111,6 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 
 	public int getHttpPort() {
 		return getMappedPort(KEYCLOAK_PORT_HTTP);
-	}
-
-	public int getHttpsPort() {
-		return getMappedPort(KEYCLOAK_PORT_HTTPS);
 	}
 
 	protected String getKeycloakVersion() {

@@ -32,6 +32,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -224,6 +225,7 @@ public class Accounts {
 		});
 	}
 
+	private static AtomicInteger v = new AtomicInteger();
 	public static Future<UserEntity> createUser(String email, String username, String password) {
 		return get()
 				.compose(realm -> {

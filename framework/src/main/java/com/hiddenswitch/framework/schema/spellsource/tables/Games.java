@@ -9,6 +9,7 @@ import com.hiddenswitch.framework.schema.spellsource.Spellsource;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GamesRecord;
 
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import org.jooq.Identity;
 import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -34,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Games extends TableImpl<GamesRecord> {
 
-    private static final long serialVersionUID = 1903684443;
+    private static final long serialVersionUID = -1264995925;
 
     /**
      * The reference instance of <code>spellsource.games</code>
@@ -68,6 +69,11 @@ public class Games extends TableImpl<GamesRecord> {
      * The column <code>spellsource.games.trace</code>.
      */
     public final TableField<GamesRecord, JSONB> TRACE = createField(DSL.name("trace"), org.jooq.impl.SQLDataType.JSONB, this, "");
+
+    /**
+     * The column <code>spellsource.games.created_at</code>.
+     */
+    public final TableField<GamesRecord, OffsetDateTime> CREATED_AT = createField(DSL.name("created_at"), org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false).defaultValue(org.jooq.impl.DSL.field("now()", org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
 
     /**
      * Create a <code>spellsource.games</code> table reference
@@ -149,11 +155,11 @@ public class Games extends TableImpl<GamesRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Long, GameStateEnum, String, JSONB> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row5<Long, GameStateEnum, String, JSONB, OffsetDateTime> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }

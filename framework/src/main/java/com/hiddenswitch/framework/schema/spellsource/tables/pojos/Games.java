@@ -9,6 +9,8 @@ import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.IGames;
 
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 
+import java.time.OffsetDateTime;
+
 import org.jooq.JSONB;
 
 
@@ -18,12 +20,13 @@ import org.jooq.JSONB;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Games implements VertxPojo, IGames {
 
-    private static final long serialVersionUID = -2043413978;
+    private static final long serialVersionUID = -2090954256;
 
-    private Long          id;
-    private GameStateEnum status;
-    private String        gitHash;
-    private JSONB         trace;
+    private Long           id;
+    private GameStateEnum  status;
+    private String         gitHash;
+    private JSONB          trace;
+    private OffsetDateTime createdAt;
 
     public Games() {}
 
@@ -32,18 +35,21 @@ public class Games implements VertxPojo, IGames {
         this.status = value.getStatus();
         this.gitHash = value.getGitHash();
         this.trace = value.getTrace();
+        this.createdAt = value.getCreatedAt();
     }
 
     public Games(
-        Long          id,
-        GameStateEnum status,
-        String        gitHash,
-        JSONB         trace
+        Long           id,
+        GameStateEnum  status,
+        String         gitHash,
+        JSONB          trace,
+        OffsetDateTime createdAt
     ) {
         this.id = id;
         this.status = status;
         this.gitHash = gitHash;
         this.trace = trace;
+        this.createdAt = createdAt;
     }
 
     public Games(io.vertx.core.json.JsonObject json) {
@@ -96,6 +102,17 @@ public class Games implements VertxPojo, IGames {
     }
 
     @Override
+    public OffsetDateTime getCreatedAt() {
+        return this.createdAt;
+    }
+
+    @Override
+    public Games setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Games (");
 
@@ -103,6 +120,7 @@ public class Games implements VertxPojo, IGames {
         sb.append(", ").append(status);
         sb.append(", ").append(gitHash);
         sb.append(", ").append(trace);
+        sb.append(", ").append(createdAt);
 
         sb.append(")");
         return sb.toString();
@@ -118,6 +136,7 @@ public class Games implements VertxPojo, IGames {
         setStatus(from.getStatus());
         setGitHash(from.getGitHash());
         setTrace(from.getTrace());
+        setCreatedAt(from.getCreatedAt());
     }
 
     @Override
