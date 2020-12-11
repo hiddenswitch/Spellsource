@@ -95,7 +95,9 @@ public interface Games extends Verticle {
 		LOGGER.debug("createMatch: Creating match for request {}", request);
 		CodecRegistration.register(CreateGameSessionResponse.class).andRegister(MatchCreateResponse.class).andRegister(ConfigurationRequest.class);
 		var eb = Vertx.currentContext().owner().eventBus();
-		return eb.<CreateGameSessionResponse>request("Games.createGameSession", request, new DeliveryOptions().setSendTimeout(6000L))
+
+		return eb.<CreateGameSessionResponse>request("Games.createGameSession", request, new DeliveryOptions()
+				.setSendTimeout(8000L))
 				.map(response -> new MatchCreateResponse(response.body()));
 	}
 
