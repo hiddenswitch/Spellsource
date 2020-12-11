@@ -9,6 +9,9 @@ import com.hiddenswitch.framework.schema.spellsource.Spellsource;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GamesRecord;
 
+import io.github.jklingsporn.vertx.jooq.shared.postgres.JSONBToJsonObjectConverter;
+import io.vertx.core.json.JsonObject;
+
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +19,6 @@ import java.util.List;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
-import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row5;
@@ -35,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Games extends TableImpl<GamesRecord> {
 
-    private static final long serialVersionUID = -1264995925;
+    private static final long serialVersionUID = 2072036610;
 
     /**
      * The reference instance of <code>spellsource.games</code>
@@ -68,7 +70,7 @@ public class Games extends TableImpl<GamesRecord> {
     /**
      * The column <code>spellsource.games.trace</code>.
      */
-    public final TableField<GamesRecord, JSONB> TRACE = createField(DSL.name("trace"), org.jooq.impl.SQLDataType.JSONB, this, "");
+    public final TableField<GamesRecord, JsonObject> TRACE = createField(DSL.name("trace"), org.jooq.impl.SQLDataType.JSONB, this, "", new JSONBToJsonObjectConverter());
 
     /**
      * The column <code>spellsource.games.created_at</code>.
@@ -159,7 +161,7 @@ public class Games extends TableImpl<GamesRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Long, GameStateEnum, String, JSONB, OffsetDateTime> fieldsRow() {
+    public Row5<Long, GameStateEnum, String, JsonObject, OffsetDateTime> fieldsRow() {
         return (Row5) super.fieldsRow();
     }
 }

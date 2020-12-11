@@ -7,10 +7,11 @@ package com.hiddenswitch.framework.schema.spellsource.tables.pojos;
 import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.ICards;
 
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
+import io.vertx.core.json.JsonObject;
 
 import java.time.OffsetDateTime;
 
-import org.jooq.JSONB;
+import org.w3c.dom.Element;
 
 
 /**
@@ -19,13 +20,13 @@ import org.jooq.JSONB;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Cards implements VertxPojo, ICards {
 
-    private static final long serialVersionUID = 63602530;
+    private static final long serialVersionUID = 324451773;
 
     private String         id;
     private String         createdBy;
     private String         uri;
-    private Object         blocklyWorkspace;
-    private JSONB          cardScript;
+    private Element        blocklyWorkspace;
+    private JsonObject     cardScript;
     private OffsetDateTime createdAt;
     private OffsetDateTime lastModified;
 
@@ -45,8 +46,8 @@ public class Cards implements VertxPojo, ICards {
         String         id,
         String         createdBy,
         String         uri,
-        Object         blocklyWorkspace,
-        JSONB          cardScript,
+        Element        blocklyWorkspace,
+        JsonObject     cardScript,
         OffsetDateTime createdAt,
         OffsetDateTime lastModified
     ) {
@@ -97,34 +98,24 @@ public class Cards implements VertxPojo, ICards {
         return this;
     }
 
-
-    /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
-     */
-    @java.lang.Deprecated
     @Override
-    public Object getBlocklyWorkspace() {
+    public Element getBlocklyWorkspace() {
         return this.blocklyWorkspace;
     }
 
-
-    /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
-     */
-    @java.lang.Deprecated
     @Override
-    public Cards setBlocklyWorkspace(Object blocklyWorkspace) {
+    public Cards setBlocklyWorkspace(Element blocklyWorkspace) {
         this.blocklyWorkspace = blocklyWorkspace;
         return this;
     }
 
     @Override
-    public JSONB getCardScript() {
+    public JsonObject getCardScript() {
         return this.cardScript;
     }
 
     @Override
-    public Cards setCardScript(JSONB cardScript) {
+    public Cards setCardScript(JsonObject cardScript) {
         this.cardScript = cardScript;
         return this;
     }

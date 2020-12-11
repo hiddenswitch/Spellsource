@@ -10,21 +10,22 @@ import io.grpc.CallCredentials;
 import io.grpc.ManagedChannel;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
-import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.grpc.VertxChannelBuilder;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 import org.keycloak.representations.AccessTokenResponse;
 
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.vertx.core.CompositeFuture.all;
 import static io.vertx.core.CompositeFuture.any;
+import static io.vertx.reactivex.ObservableHelper.toObservable;
+import static io.vertx.reactivex.SingleHelper.toFuture;
 
 public class Client implements AutoCloseable {
 	protected final AtomicReference<ManagedChannel> managedChannel = new AtomicReference<>();
@@ -38,6 +39,7 @@ public class Client implements AutoCloseable {
 	private String password;
 	private Promise<MatchmakingQueuePutResponse> matchmakingResponseFut;
 	private Promise<Void> matchmakingEndedFut;
+	private XORShiftRandom random = new XORShiftRandom(System.nanoTime());
 
 	public Client(Vertx vertx, WebClient webClient, String keycloakPath) {
 		this.vertx = vertx;
@@ -58,6 +60,57 @@ public class Client implements AutoCloseable {
 
 	public Client(Vertx vertx) {
 		this(vertx, WebClient.create(vertx));
+	}
+
+	public Future<ServerToClientMessage> connectToGame() {
+		var writerFut = Promise.<WriteStream<ClientToServerMessage>>promise();
+		var reader = legacy().subscribeGame(writerFut::tryComplete);
+
+		return writerFut.future().compose(writer -> {
+			writer.write(ClientToServerMessage.newBuilder()
+					.setMessageType(MessageType.MESSAGE_TYPE_FIRST_MESSAGE)
+					.build());
+			return toFuture(toObservable(reader).take(1).singleOrError());
+		});
+	}
+
+	public Future<ServerToClientMessage> playUntilGameOver() {
+		var writerPromise = Promise.<WriteStream<ClientToServerMessage>>promise();
+		var reader = legacy().subscribeGame(writerPromise::tryComplete);
+		var writerFut = writerPromise.future();
+		var gameOverPromise = Promise.<ServerToClientMessage>promise();
+
+		reader.handler(message -> {
+			var writer = writerFut.result();
+			switch (message.getMessageType()) {
+				case MESSAGE_TYPE_ON_MULLIGAN:
+					writer.write(ClientToServerMessage.newBuilder()
+							.setMessageType(MessageType.MESSAGE_TYPE_UPDATE_MULLIGAN)
+							.setRepliesTo(message.getId())
+							.addDiscardedCardIndices(0)
+							.build());
+					break;
+				case MESSAGE_TYPE_ON_REQUEST_ACTION:
+					writer.write(ClientToServerMessage.newBuilder()
+							.setMessageType(MessageType.MESSAGE_TYPE_UPDATE_ACTION)
+							.setRepliesTo(message.getId())
+							.setActionIndex(message.getActions().getCompatibility(random.nextInt(message.getActions().getCompatibilityCount())))
+							.build());
+					break;
+				case MESSAGE_TYPE_ON_GAME_END:
+					gameOverPromise.complete(message);
+					break;
+			}
+		});
+		reader.exceptionHandler(gameOverPromise::tryFail);
+
+		return writerFut.compose(writer -> {
+			writer.exceptionHandler(gameOverPromise::tryFail);
+			writer.write(ClientToServerMessage.newBuilder()
+					.setMessageType(MessageType.MESSAGE_TYPE_FIRST_MESSAGE)
+					.build());
+			return gameOverPromise.future();
+		});
 	}
 
 	public Future<MatchmakingQueuePutResponse> matchmake(String queueId, String deckId) {

@@ -8,12 +8,13 @@ import com.hiddenswitch.framework.schema.spellsource.tables.Cards;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsRecord;
 
 import io.github.jklingsporn.vertx.jooq.shared.reactive.AbstractReactiveVertxDAO;
+import io.vertx.core.json.JsonObject;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
 
 import org.jooq.Configuration;
-import org.jooq.JSONB;
+import org.w3c.dom.Element;
 
 
 import java.util.List;
@@ -69,28 +70,28 @@ public class CardsDao extends AbstractReactiveVertxDAO<CardsRecord, com.hiddensw
     /**
      * Find records that have <code>blockly_workspace IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByBlocklyWorkspace(Collection<Object> values) {
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByBlocklyWorkspace(Collection<Element> values) {
         return findManyByCondition(Cards.CARDS.BLOCKLY_WORKSPACE.in(values));
     }
 
     /**
      * Find records that have <code>blockly_workspace IN (values)</code> asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByBlocklyWorkspace(Collection<Object> values, int limit) {
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByBlocklyWorkspace(Collection<Element> values, int limit) {
         return findManyByCondition(Cards.CARDS.BLOCKLY_WORKSPACE.in(values),limit);
     }
 
     /**
      * Find records that have <code>card_script IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByCardScript(Collection<JSONB> values) {
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByCardScript(Collection<JsonObject> values) {
         return findManyByCondition(Cards.CARDS.CARD_SCRIPT.in(values));
     }
 
     /**
      * Find records that have <code>card_script IN (values)</code> asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByCardScript(Collection<JSONB> values, int limit) {
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByCardScript(Collection<JsonObject> values, int limit) {
         return findManyByCondition(Cards.CARDS.CARD_SCRIPT.in(values),limit);
     }
 

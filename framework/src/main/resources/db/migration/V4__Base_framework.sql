@@ -71,6 +71,15 @@ create type spellsource.game_state_enum as enum
     'FINISHED'
     );
 
+create type spellsource.game_user_victory_enum as enum
+  (
+    'UNKNOWN',
+    'WON',
+    'LOST',
+    'DISCONNECTED',
+    'CONCEDED'
+    );
+
 create table spellsource.games
 (
   id bigint generated always as identity primary key unique,
@@ -82,10 +91,12 @@ create table spellsource.games
 
 create table spellsource.game_users
 (
-  id bigint generated always as identity primary key unique,
   player_index int2 default 0,
   game_id bigint references spellsource.games (id) on delete cascade,
-  user_id text references keycloak.user_entity (id) on delete cascade
+  user_id text references keycloak.user_entity (id) on delete cascade,
+  deck_id text references spellsource.decks (id) on delete set null,
+  victory_status spellsource.game_user_victory_enum not null default 'UNKNOWN'::spellsource.game_user_victory_enum,
+  primary key (game_id, user_id)
 );
 
 create table spellsource.matchmaking_queues
@@ -116,3 +127,8 @@ create table spellsource.matchmaking_tickets
 ); /* partition by range (queue_id);*/
 
 create index on spellsource.matchmaking_tickets (queue_id);
+
+create table spellsource.bot_users
+(
+  id text references keycloak.user_entity (id) on delete cascade primary key
+)

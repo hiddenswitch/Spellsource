@@ -4,10 +4,14 @@
 package com.hiddenswitch.framework.schema.spellsource.tables;
 
 
+import com.databasesandlife.util.jooq.PostgresXmlDomElementBinding;
 import com.hiddenswitch.framework.schema.keycloak.tables.UserEntity;
 import com.hiddenswitch.framework.schema.spellsource.Keys;
 import com.hiddenswitch.framework.schema.spellsource.Spellsource;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsRecord;
+
+import io.github.jklingsporn.vertx.jooq.shared.postgres.JSONBToJsonObjectConverter;
+import io.vertx.core.json.JsonObject;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
@@ -15,7 +19,6 @@ import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.JSONB;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row7;
@@ -26,6 +29,7 @@ import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
+import org.w3c.dom.Element;
 
 
 /**
@@ -34,7 +38,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Cards extends TableImpl<CardsRecord> {
 
-    private static final long serialVersionUID = -814297314;
+    private static final long serialVersionUID = -1998521076;
 
     /**
      * The reference instance of <code>spellsource.cards</code>
@@ -65,15 +69,14 @@ public class Cards extends TableImpl<CardsRecord> {
     public final TableField<CardsRecord, String> URI = createField(DSL.name("uri"), org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * The column <code>spellsource.cards.blockly_workspace</code>.
      */
-    @java.lang.Deprecated
-    public final TableField<CardsRecord, Object> BLOCKLY_WORKSPACE = createField(DSL.name("blockly_workspace"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"xml\""), this, "");
+    public final TableField<CardsRecord, Element> BLOCKLY_WORKSPACE = createField(DSL.name("blockly_workspace"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"xml\""), this, "", new PostgresXmlDomElementBinding());
 
     /**
      * The column <code>spellsource.cards.card_script</code>.
      */
-    public final TableField<CardsRecord, JSONB> CARD_SCRIPT = createField(DSL.name("card_script"), org.jooq.impl.SQLDataType.JSONB, this, "");
+    public final TableField<CardsRecord, JsonObject> CARD_SCRIPT = createField(DSL.name("card_script"), org.jooq.impl.SQLDataType.JSONB, this, "", new JSONBToJsonObjectConverter());
 
     /**
      * The column <code>spellsource.cards.created_at</code>.
@@ -173,7 +176,7 @@ public class Cards extends TableImpl<CardsRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<String, String, String, Object, JSONB, OffsetDateTime, OffsetDateTime> fieldsRow() {
+    public Row7<String, String, String, Element, JsonObject, OffsetDateTime, OffsetDateTime> fieldsRow() {
         return (Row7) super.fieldsRow();
     }
 }

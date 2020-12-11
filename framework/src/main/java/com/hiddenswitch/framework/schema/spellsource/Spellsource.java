@@ -5,6 +5,7 @@ package com.hiddenswitch.framework.schema.spellsource;
 
 
 import com.hiddenswitch.framework.schema.DefaultCatalog;
+import com.hiddenswitch.framework.schema.spellsource.tables.BotUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Cards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples;
@@ -29,12 +30,17 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Spellsource extends SchemaImpl {
 
-    private static final long serialVersionUID = 1425307107;
+    private static final long serialVersionUID = 1926688773;
 
     /**
      * The reference instance of <code>spellsource</code>
      */
     public static final Spellsource SPELLSOURCE = new Spellsource();
+
+    /**
+     * The table <code>spellsource.bot_users</code>.
+     */
+    public final BotUsers BOT_USERS = BotUsers.BOT_USERS;
 
     /**
      * The table <code>spellsource.cards</code>.
@@ -97,6 +103,7 @@ public class Spellsource extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
+            BotUsers.BOT_USERS,
             Cards.CARDS,
             CardsInDeck.CARDS_IN_DECK,
             DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES,

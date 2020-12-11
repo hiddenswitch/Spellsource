@@ -55,6 +55,10 @@ public interface Deck extends Cloneable {
 		return new RandomDeck(random.getState(), heroClass, DeckFormat.spellsource());
 	}
 
+	static CollectionDeck forId(String id) {
+		return new CollectionDeck().setDeckId(id);
+	}
+
 	String getDeckId();
 
 	Deck clone();

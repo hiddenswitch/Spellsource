@@ -4,6 +4,8 @@
 package com.hiddenswitch.framework.schema.spellsource.tables.interfaces;
 
 
+import com.hiddenswitch.framework.schema.spellsource.enums.GameUserVictoryEnum;
+
 import io.github.jklingsporn.vertx.jooq.shared.UnexpectedJsonValueType;
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 
@@ -15,16 +17,6 @@ import java.io.Serializable;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public interface IGameUsers extends VertxPojo, Serializable {
-
-    /**
-     * Setter for <code>spellsource.game_users.id</code>.
-     */
-    public IGameUsers setId(Long value);
-
-    /**
-     * Getter for <code>spellsource.game_users.id</code>.
-     */
-    public Long getId();
 
     /**
      * Setter for <code>spellsource.game_users.player_index</code>.
@@ -56,6 +48,26 @@ public interface IGameUsers extends VertxPojo, Serializable {
      */
     public String getUserId();
 
+    /**
+     * Setter for <code>spellsource.game_users.deck_id</code>.
+     */
+    public IGameUsers setDeckId(String value);
+
+    /**
+     * Getter for <code>spellsource.game_users.deck_id</code>.
+     */
+    public String getDeckId();
+
+    /**
+     * Setter for <code>spellsource.game_users.victory_status</code>.
+     */
+    public IGameUsers setVictoryStatus(GameUserVictoryEnum value);
+
+    /**
+     * Getter for <code>spellsource.game_users.victory_status</code>.
+     */
+    public GameUserVictoryEnum getVictoryStatus();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -73,11 +85,6 @@ public interface IGameUsers extends VertxPojo, Serializable {
     @Override
     public default IGameUsers fromJson(io.vertx.core.json.JsonObject json) {
         try {
-            setId(json.getLong("id"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("id","java.lang.Long",e);
-        }
-        try {
             setPlayerIndex(json.getInteger("player_index")==null?null:json.getInteger("player_index").shortValue());
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("player_index","java.lang.Short",e);
@@ -92,6 +99,16 @@ public interface IGameUsers extends VertxPojo, Serializable {
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("user_id","java.lang.String",e);
         }
+        try {
+            setDeckId(json.getString("deck_id"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("deck_id","java.lang.String",e);
+        }
+        try {
+            setVictoryStatus(java.util.Arrays.stream(com.hiddenswitch.framework.schema.spellsource.enums.GameUserVictoryEnum.values()).filter(td -> td.getLiteral().equals(json.getString("victory_status"))).findFirst().orElse(null));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("victory_status","com.hiddenswitch.framework.schema.spellsource.enums.GameUserVictoryEnum",e);
+        }
         return this;
     }
 
@@ -99,10 +116,11 @@ public interface IGameUsers extends VertxPojo, Serializable {
     @Override
     public default io.vertx.core.json.JsonObject toJson() {
         io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
-        json.put("id",getId());
         json.put("player_index",getPlayerIndex());
         json.put("game_id",getGameId());
         json.put("user_id",getUserId());
+        json.put("deck_id",getDeckId());
+        json.put("victory_status",getVictoryStatus()==null?null:getVictoryStatus().getLiteral());
         return json;
     }
 

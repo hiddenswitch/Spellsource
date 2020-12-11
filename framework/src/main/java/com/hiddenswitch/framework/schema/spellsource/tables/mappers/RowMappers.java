@@ -7,14 +7,32 @@ public class RowMappers {
 
     private RowMappers(){}
 
+    public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers> getBotUsersMapper() {
+        return row -> {
+            com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers();
+            pojo.setId(row.getString("id"));
+            return pojo;
+        };
+    }
+
     public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards> getCardsMapper() {
         return row -> {
             com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards();
             pojo.setId(row.getString("id"));
             pojo.setCreatedBy(row.getString("created_by"));
             pojo.setUri(row.getString("uri"));
-            // Omitting unrecognized type DataType [ t=xml; p=0; s=0; u="pg_catalog"."xml"; j=null ] (java.lang.Object) for column blockly_workspace!
-            // Omitting unrecognized type DataType [ t=jsonb; p=0; s=0; u="pg_catalog"."jsonb"; j=null ] (org.jooq.JSONB) for column card_script!
+            // Omitting unrecognized type DataType [ t=xml; p=0; s=0; u="pg_catalog"."xml"; j=org.w3c.dom.Element ] (org.w3c.dom.Element) for column blockly_workspace!
+            try {
+                if (row.get(Object.class, "card_script") instanceof io.vertx.core.json.JsonObject) {
+                    pojo.setCardScript(row.get(io.vertx.core.json.JsonObject.class,row.getColumnIndex("card_script")));
+                } else {
+                    String card_scriptString = row.getString("card_script");
+                    pojo.setCardScript(card_scriptString == null ? null : new io.vertx.core.json.JsonObject(card_scriptString));
+                }
+            } catch (UnsupportedOperationException t) {
+                String card_scriptString = row.getString("card_script");
+                pojo.setCardScript(card_scriptString == null ? null : new io.vertx.core.json.JsonObject(card_scriptString));
+            }
             pojo.setCreatedAt(row.getOffsetDateTime("created_at"));
             pojo.setLastModified(row.getOffsetDateTime("last_modified"));
             return pojo;
@@ -73,10 +91,11 @@ public class RowMappers {
     public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers> getGameUsersMapper() {
         return row -> {
             com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers();
-            pojo.setId(row.getLong("id"));
             pojo.setPlayerIndex(row.getShort("player_index"));
             pojo.setGameId(row.getLong("game_id"));
             pojo.setUserId(row.getString("user_id"));
+            pojo.setDeckId(row.getString("deck_id"));
+            pojo.setVictoryStatus(java.util.Arrays.stream(com.hiddenswitch.framework.schema.spellsource.enums.GameUserVictoryEnum.values()).filter(td -> td.getLiteral().equals(row.getString("victory_status"))).findFirst().orElse(null));
             return pojo;
         };
     }
@@ -87,7 +106,17 @@ public class RowMappers {
             pojo.setId(row.getLong("id"));
             pojo.setStatus(java.util.Arrays.stream(com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum.values()).filter(td -> td.getLiteral().equals(row.getString("status"))).findFirst().orElse(null));
             pojo.setGitHash(row.getString("git_hash"));
-            // Omitting unrecognized type DataType [ t=jsonb; p=0; s=0; u="pg_catalog"."jsonb"; j=null ] (org.jooq.JSONB) for column trace!
+            try {
+                if (row.get(Object.class, "trace") instanceof io.vertx.core.json.JsonObject) {
+                    pojo.setTrace(row.get(io.vertx.core.json.JsonObject.class,row.getColumnIndex("trace")));
+                } else {
+                    String traceString = row.getString("trace");
+                    pojo.setTrace(traceString == null ? null : new io.vertx.core.json.JsonObject(traceString));
+                }
+            } catch (UnsupportedOperationException t) {
+                String traceString = row.getString("trace");
+                pojo.setTrace(traceString == null ? null : new io.vertx.core.json.JsonObject(traceString));
+            }
             pojo.setCreatedAt(row.getOffsetDateTime("created_at"));
             return pojo;
         };

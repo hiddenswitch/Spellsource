@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.logic;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
@@ -313,5 +314,9 @@ public class Trace implements Serializable, Cloneable {
 		return new ToStringBuilder(this)
 				.append("id", getId())
 				.toString();
+	}
+
+	public JsonObject toJson() {
+		return JsonObject.mapFrom(this);
 	}
 }

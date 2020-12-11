@@ -8,10 +8,9 @@ import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
 import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.IGames;
 
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
+import io.vertx.core.json.JsonObject;
 
 import java.time.OffsetDateTime;
-
-import org.jooq.JSONB;
 
 
 /**
@@ -20,12 +19,12 @@ import org.jooq.JSONB;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Games implements VertxPojo, IGames {
 
-    private static final long serialVersionUID = -2090954256;
+    private static final long serialVersionUID = 541959188;
 
     private Long           id;
     private GameStateEnum  status;
     private String         gitHash;
-    private JSONB          trace;
+    private JsonObject     trace;
     private OffsetDateTime createdAt;
 
     public Games() {}
@@ -42,7 +41,7 @@ public class Games implements VertxPojo, IGames {
         Long           id,
         GameStateEnum  status,
         String         gitHash,
-        JSONB          trace,
+        JsonObject     trace,
         OffsetDateTime createdAt
     ) {
         this.id = id;
@@ -91,12 +90,12 @@ public class Games implements VertxPojo, IGames {
     }
 
     @Override
-    public JSONB getTrace() {
+    public JsonObject getTrace() {
         return this.trace;
     }
 
     @Override
-    public Games setTrace(JSONB trace) {
+    public Games setTrace(JsonObject trace) {
         this.trace = trace;
         return this;
     }

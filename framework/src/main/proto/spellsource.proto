@@ -80,7 +80,7 @@ enum MessageType {
 }
 
 enum PlayerEntityAttributes {
-    PLAYER_ENTITY_ATTRIBUTES_SIGNATURE = 0;
+    SIGNATURE = 0;
 }
 
 enum PresenceEnum {
@@ -309,10 +309,10 @@ message ClientToServerMessage {
     Emote emote = 3;
 
     // When specified with an entity ID, indicates the client is "touching" this entity.
-    int32 entityTouch = 4;
+    google.protobuf.Int32Value entityTouch = 4;
 
     // When specified with an entity ID, indicates the client is no longer touching the specified entity.
-    int32 entityUntouch = 5;
+    google.protobuf.Int32Value entityUntouch = 5;
     FirstMessageMessage firstMessage = 6;
     MessageType messageType = 7;
 
@@ -708,10 +708,10 @@ message Entity {
     bool lifesteal = 45;
 
     // The amount of mana that was locked due to overload.
-    google.protobuf.Int32Value lockedMana = 46;
+    int32 lockedMana = 46;
 
     // The player's current mana.
-    google.protobuf.Int32Value mana = 47;
+    int32 mana = 47;
 
     // The entity's current mana cost. Conventionally, this value should be rendered on the mana token.
     google.protobuf.Int32Value manaCost = 48;
@@ -720,7 +720,7 @@ message Entity {
     google.protobuf.Int32Value maxHp = 49;
 
     // The player's maximum amount of mana.
-    google.protobuf.Int32Value maxMana = 50;
+    int32 maxMana = 50;
 
     // The text that would go into the entity's name field.
     string name = 51;
@@ -783,6 +783,8 @@ message Entity {
 
     // Indicates the entity can attack twice a turn.
     bool windfury = 71;
+
+    google.protobuf.Int32Value extraAttack = 72;
 }
 
 // An array that corresponds to the visible entities in this game state notification. The client is responsible for
@@ -1002,7 +1004,7 @@ message GameEvent {
 
     // When not null, indicates this game event comes with a value. This is typically the damage dealt, the amount of
     // healing, etc.
-    int32 value = 18;
+    google.protobuf.Int32Value value = 18;
 }
 
 // An object that describes the winner and loser of a game
@@ -1011,7 +1013,7 @@ message GameOver {
     bool localPlayerWon = 1;
 
     // The ID of the player who has won. Null if no player has won.
-    int32 winningPlayerId = 2;
+    google.protobuf.Int32Value winningPlayerId = 2;
 }
 
 message GameState {

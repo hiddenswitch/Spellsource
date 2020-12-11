@@ -9,12 +9,12 @@ import com.hiddenswitch.framework.schema.spellsource.tables.Games;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GamesRecord;
 
 import io.github.jklingsporn.vertx.jooq.shared.reactive.AbstractReactiveVertxDAO;
+import io.vertx.core.json.JsonObject;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
 
 import org.jooq.Configuration;
-import org.jooq.JSONB;
 
 
 import java.util.List;
@@ -70,14 +70,14 @@ public class GamesDao extends AbstractReactiveVertxDAO<GamesRecord, com.hiddensw
     /**
      * Find records that have <code>trace IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games>> findManyByTrace(Collection<JSONB> values) {
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games>> findManyByTrace(Collection<JsonObject> values) {
         return findManyByCondition(Games.GAMES.TRACE.in(values));
     }
 
     /**
      * Find records that have <code>trace IN (values)</code> asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games>> findManyByTrace(Collection<JSONB> values, int limit) {
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games>> findManyByTrace(Collection<JsonObject> values, int limit) {
         return findManyByCondition(Games.GAMES.TRACE.in(values),limit);
     }
 

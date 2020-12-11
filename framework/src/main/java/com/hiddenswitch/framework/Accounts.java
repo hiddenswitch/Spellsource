@@ -18,6 +18,7 @@ import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.common.VerificationException;
 import org.keycloak.common.enums.SslRequired;
 import org.keycloak.crypto.Algorithm;
@@ -226,6 +227,7 @@ public class Accounts {
 	}
 
 	private static AtomicInteger v = new AtomicInteger();
+
 	public static Future<UserEntity> createUser(String email, String username, String password) {
 		return get()
 				.compose(realm -> {
@@ -243,7 +245,7 @@ public class Accounts {
 					return Environment.executeBlocking(() -> {
 						var response = realm.users().create(user);
 						if (response.getStatus() >= 400) {
-							throw new RuntimeException("was Accounts.createRealmIfAbsent called?");
+							throw new RuntimeException("A user with the specified e-mail or username already exists.");
 						}
 						return response;
 					}).map(response -> {
@@ -282,6 +284,18 @@ public class Accounts {
 				.grantType("password")
 				.resteasyClient(client.build())
 				.build();
+	}
+
+	public static Future<UserResource> disableUser(String userId) {
+		return Accounts.get()
+				.compose(realm -> Environment.executeBlocking(() -> {
+					var userRepresentation = new UserRepresentation();
+					userRepresentation.setEnabled(false);
+					realm.users().get(userId).disableCredentialType(Collections.singletonList(CredentialRepresentation.PASSWORD));
+					var userResource = realm.users().get(userId);
+					userResource.update(userRepresentation);
+					return userResource;
+				}));
 	}
 
 	public static Future<RealmResource> createRealmIfAbsent() {

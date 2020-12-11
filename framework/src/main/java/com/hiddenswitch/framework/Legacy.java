@@ -4,6 +4,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.ObjectArrays;
 import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
+import com.hiddenswitch.framework.impl.ServerGameContext;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.CardsInDeckDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.DeckPlayerAttributeTuplesDao;
@@ -21,6 +22,8 @@ import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.core.streams.ReadStream;
+import io.vertx.core.streams.WriteStream;
 import io.vertx.sqlclient.Row;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -54,6 +57,11 @@ public class Legacy {
 
 	public static Future<ServerServiceDefinition> services() {
 		return Future.succeededFuture(new VertxHiddenSwitchSpellsourceAPIServiceGrpc.HiddenSwitchSpellsourceAPIServiceVertxImplBase() {
+
+			@Override
+			public void subscribeGame(ReadStream<ClientToServerMessage> request, WriteStream<ServerToClientMessage> response) {
+				ServerGameContext.subscribeGame(request, response);
+			}
 
 			@Override
 			public Future<Empty> decksDelete(DecksDeleteRequest request) {
@@ -104,45 +112,7 @@ public class Legacy {
 			@Override
 			public Future<DecksGetAllResponse> decksGetAll(Empty request) {
 				var userId = Accounts.userId();
-				return Environment.queryExecutor()
-						.findManyRow(dsl ->
-								// retrieves all decks that are premade and which the user has not explicitly deleted (the share of)
-								// and all the user's decks they've created and not deleted
-								// and all other decks shared with the user that they have not deleted (the share of)
-								dsl.select(DECKS.ID)
-										.from(DECKS)
-										// check the share settings on the decks
-										.join(DECK_SHARES, JoinType.LEFT_OUTER_JOIN)
-										// if it has a deck share record...
-										.on(DECKS.ID.eq(DECK_SHARES.DECK_ID)
-												// the record must match this user
-												.and(DECK_SHARES.SHARE_RECIPIENT_ID.eq(userId)))
-										.where(
-												// the deck is not trashed and, if there is a deck share record, the deck share's trashed
-												// value is null or false
-												DECKS.TRASHED.eq(false),
-												// the user can edit the deck
-												canEditDeck(userId)
-														.or(
-																// this is a premade deck
-																DECKS.IS_PREMADE.eq(true).and(DECK_SHARES.ID.isNull().or(DECK_SHARES.TRASHED.eq(false))))
-														.or(
-																// this deck is shared with the user
-																DECKS.IS_PREMADE.eq(false).and(DECK_SHARES.ID.isNotNull().and(DECK_SHARES.TRASHED.eq(false)))
-														)))
-						.compose(rows -> CompositeFuture.all(rows.stream()
-								.map(row -> {
-									var deckId = row.getString(0);
-									return getDeck(deckId, userId);
-								}).collect(toList())))
-						.compose(getDeckResponses -> {
-							var reply = DecksGetAllResponse.newBuilder();
-							for (var i = 0; i < getDeckResponses.size(); i++) {
-								var getDeckResponse = getDeckResponses.<DecksGetResponse>resultAt(i);
-								reply.addDecks(getDeckResponse);
-							}
-							return Future.succeededFuture(reply.build());
-						});
+				return getAllDecks(userId);
 			}
 
 			@Override
@@ -198,12 +168,12 @@ public class Legacy {
 					if (updateCommand.hasSetPlayerEntityAttribute()) {
 						var setAttributeCommand = updateCommand.getSetPlayerEntityAttribute();
 						switch (setAttributeCommand.getAttribute()) {
-							case PLAYER_ENTITY_ATTRIBUTES_SIGNATURE:
+							case SIGNATURE:
 								futs.add(queryExecutor.execute(dsl -> dsl.insertInto(DECK_PLAYER_ATTRIBUTE_TUPLES,
 										DECK_PLAYER_ATTRIBUTE_TUPLES.ATTRIBUTE,
 										DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID,
 										DECK_PLAYER_ATTRIBUTE_TUPLES.STRING_VALUE).values(
-										PlayerEntityAttributes.PLAYER_ENTITY_ATTRIBUTES_SIGNATURE_VALUE,
+										PlayerEntityAttributes.SIGNATURE_VALUE,
 										deckId,
 										setAttributeCommand.getStringValue())));
 								break;
@@ -314,6 +284,48 @@ public class Legacy {
 				.compose(Accounts::requiresAuthorization);
 	}
 
+	public static Future<DecksGetAllResponse> getAllDecks(String userId) {
+		return Environment.queryExecutor()
+				.findManyRow(dsl ->
+						// retrieves all decks that are premade and which the user has not explicitly deleted (the share of)
+						// and all the user's decks they've created and not deleted
+						// and all other decks shared with the user that they have not deleted (the share of)
+						dsl.select(DECKS.ID)
+								.from(DECKS)
+								// check the share settings on the decks
+								.join(DECK_SHARES, JoinType.LEFT_OUTER_JOIN)
+								// if it has a deck share record...
+								.on(DECKS.ID.eq(DECK_SHARES.DECK_ID)
+										// the record must match this user
+										.and(DECK_SHARES.SHARE_RECIPIENT_ID.eq(userId)))
+								.where(
+										// the deck is not trashed and, if there is a deck share record, the deck share's trashed
+										// value is null or false
+										DECKS.TRASHED.eq(false),
+										// the user can edit the deck
+										canEditDeck(userId)
+												.or(
+														// this is a premade deck
+														DECKS.IS_PREMADE.eq(true).and(DECK_SHARES.ID.isNull().or(DECK_SHARES.TRASHED.eq(false))))
+												.or(
+														// this deck is shared with the user
+														DECKS.IS_PREMADE.eq(false).and(DECK_SHARES.ID.isNotNull().and(DECK_SHARES.TRASHED.eq(false)))
+												)))
+				.compose(rows -> CompositeFuture.all(rows.stream()
+						.map(row -> {
+							var deckId = row.getString(0);
+							return getDeck(deckId, userId);
+						}).collect(toList())))
+				.compose(getDeckResponses -> {
+					var reply = DecksGetAllResponse.newBuilder();
+					for (var i = 0; i < getDeckResponses.size(); i++) {
+						var getDeckResponse = getDeckResponses.<DecksGetResponse>resultAt(i);
+						reply.addDecks(getDeckResponse);
+					}
+					return Future.succeededFuture(reply.build());
+				});
+	}
+
 	private static org.jooq.Condition canEditDeck(String userId) {
 		return DECKS.CREATED_BY.eq(userId);
 	}
@@ -373,7 +385,7 @@ public class Legacy {
 		return returnArray;
 	}
 
-	private static Future<DecksGetResponse> getDeck(String deckId, String userId) {
+	public static Future<DecksGetResponse> getDeck(String deckId, String userId) {
 		var configuration = Environment.jooqAkaDaoConfiguration();
 		var delegate = Environment.sqlPoolAkaDaoDelegate();
 		var decks = new DecksDao(configuration, delegate);

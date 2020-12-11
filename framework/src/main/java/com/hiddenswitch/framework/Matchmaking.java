@@ -5,15 +5,19 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.ObjectArrays;
-import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
+import com.hiddenswitch.framework.impl.ConfigurationRequest;
+import com.hiddenswitch.framework.impl.Games;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.MatchmakingQueuesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets;
-import com.hiddenswitch.spellsource.rpc.*;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.GameUsersRecord;
+import com.hiddenswitch.spellsource.rpc.MatchmakingQueuePutRequest;
+import com.hiddenswitch.spellsource.rpc.MatchmakingQueuePutResponse;
+import com.hiddenswitch.spellsource.rpc.MatchmakingQueuePutResponseUnityConnection;
+import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpc;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
-import io.grpc.*;
+import io.grpc.ServerServiceDefinition;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.Message;
@@ -25,16 +29,16 @@ import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.sync.concurrent.SuspendableLock;
 import io.vertx.pgclient.PgException;
-import org.jooq.*;
-import org.jooq.impl.DSL;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
 import static com.hiddenswitch.framework.schema.spellsource.Tables.*;
 import static io.vertx.core.CompositeFuture.all;
-import static io.vertx.core.CompositeFuture.any;
 import static io.vertx.ext.sync.Sync.await;
 import static io.vertx.ext.sync.Sync.fiber;
 import static java.util.stream.Collectors.*;
@@ -124,20 +128,13 @@ public class Matchmaking extends SyncVerticle {
 			var enqueueStrand = Strand.currentStrand();
 			var executor = Environment.queryExecutor();
 
-			// check if the player is already in an unfinished game. if so, reply with its game ID.
-			var gameUser = await(executor.findOneRow(dsl ->
-					dsl.select(GAME_USERS.USER_ID, GAME_USERS.GAME_ID, GAMES.STATUS)
-							.from(GAME_USERS)
-							.join(GAMES)
-							.on(GAME_USERS.GAME_ID.eq(GAMES.ID))
-							.where(GAME_USERS.USER_ID.eq(userId).and(GAMES.STATUS.ne(GameStateEnum.FINISHED)))
-							.limit(1)));
-
-			if (gameUser != null) {
-				var gameId = gameUser.getLong(GAME_USERS.GAME_ID.getName());
-				writeGameId(response, gameId.toString());
+			// check if the player is already in a running game by pinging a handler. if so, reply with its game ID.
+			var existingGameId = Games.getGameId(userId);
+			if (existingGameId != null) {
+				writeGameId(response, existingGameId);
 				return;
 			}
+
 
 			// the maximum amount of time to wait for a lock (user can only queue in one place on the cluster)
 			var lockTimeout = serverConfiguration.getMatchmaking().getEnqueueLockTimeoutMillis();
@@ -190,7 +187,8 @@ public class Matchmaking extends SyncVerticle {
 					return;
 				}
 
-
+				// insert a new ticket always, delete the old ticket
+				// this is because the ticket might currently be taken by a queue in its lock
 				if (lastTicketId != null) {
 					// delete the old ticket
 					Long finalLastTicketId1 = lastTicketId;
@@ -247,10 +245,12 @@ public class Matchmaking extends SyncVerticle {
 						.onComplete(v));
 			}
 		} catch (Throwable throwable) {
+
 			if (Throwables.getRootCause(throwable) instanceof InterruptedException) {
 				// do nothing
 				return;
 			}
+			throwable.printStackTrace();
 			throw throwable;
 		} finally {
 			// goes here with all exceptions eventually
@@ -289,17 +289,13 @@ public class Matchmaking extends SyncVerticle {
 		while (!Strand.currentStrand().isInterrupted()) {
 			var scanFrequency = serverConfiguration.getMatchmaking().getScanFrequencyMillis();
 			var maxTickets = serverConfiguration.getMatchmaking().getMaxTicketsToProcess();
-			var connection = await(Environment.sqlPoolAkaDaoDelegate().getConnection());
-			var transactionObj = await(connection.begin());
-			var transaction = new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), connection);
-			var committed = false;
+			var transaction = await(Environment.queryExecutor().beginTransaction());
 			try {
 				started.tryComplete(Strand.currentStrand());
 
 				// create assignments
 				// TODO: Do real matchmaking based on player ELO
-				var createGames = new ArrayList<Future>();
-				var notifications = new ArrayList<Future>();
+				var gameCreatedNotifications = new ArrayList<Future>();
 
 				// gather tickets
 				// this will lock the rows that this matchmaker might match using the transaction, allowing other matchmakers
@@ -322,7 +318,7 @@ public class Matchmaking extends SyncVerticle {
 				// retrieve queues
 				// we could do a join but usually this will be more stuff than just doing it here, because there are many more
 				// tickets than queues
-				var queues = await(transaction
+				var queues = await(Environment.queryExecutor()
 						.findManyRow(dsl -> dsl.selectFrom(MATCHMAKING_QUEUES).where(MATCHMAKING_QUEUES.ID.in(records.keySet()))))
 						.stream()
 						.map(RowMappers.getMatchmakingQueuesMapper())
@@ -347,11 +343,9 @@ public class Matchmaking extends SyncVerticle {
 						// actual body of matchmaking function, this is responsible for determining which players will play against
 						// each other
 						var thisGameTickets = tickets.subList(i, i + configuration.getLobbySize()).toArray(MatchmakingTickets[]::new);
-						// we will await creating the game separately since it has DB side effects
-						var game = createGame(transaction, configuration, thisGameTickets);
-						createGames.add(game);
-						// later we will later notify the players of their assignments
-						notifications.add(game
+						// we will not await creating the game separately since it has DB side effects and it cause too many locks
+						// to process everything in a transaction
+						gameCreatedNotifications.add(createGame(transaction, configuration, thisGameTickets)
 								// notify the players who were queued that they have been matchmade and the game is ready for them
 								// as a side effect this closes the matchmaking stream the clients have opened
 								.compose(gameId -> all(Arrays.stream(thisGameTickets).map(ticket -> {
@@ -365,39 +359,33 @@ public class Matchmaking extends SyncVerticle {
 									// once the client has actually received the notification, reply to this event bus request
 									return vertx.eventBus().<String>request(address, gameId.toString(), new DeliveryOptions().setSendTimeout(smallTimeout));
 								}).collect(toList()))));
+						// later we will later notify the players of their assignments
 						for (var ticket : thisGameTickets) {
 							ticketsTaken.add(ticket.getId());
 						}
 					}
 				}
 
-				// create the games
-				if (!createGames.isEmpty()) {
-					await(all(createGames));
-				}
+				// if a game fails to be created for some reason, log it. maybe we reinsert the ticket??
+				// we do not await it though
+				all(gameCreatedNotifications).onFailure(Environment.onFailure());
 
 				// delete the tickets that were actually processed
 				await(transaction.execute(dsl -> dsl.deleteFrom(MATCHMAKING_TICKETS).where(MATCHMAKING_TICKETS.ID.in(ticketsTaken))));
-				await(transactionObj.commit());
-				committed = true;
-				// notify all users of assignments now that it has committed
-				// TODO: we don't actually want to throw here
-				await(all(notifications));
+				// it's possible that some player's games never get started, we will not await them before committing though,
+				// we want this to happen as fast as possible
+				await(transaction.commit());
 			} catch (PgException t) {
 				// rolls back automatically
 			} catch (Throwable t) {
 				// we don't need to wait for these cleanup actions, because it will be possibly interrupted
-				if (!committed) {
-					transactionObj.rollback();
-				}
-			} finally {
-				connection.close();
+				transaction.rollback();
 			}
 
 			// Keep looping otherwise
 			// offset the amount of delay by a small random amount to reduce the odds of a deadlock
 			try {
-				Strand.sleep(100 + random.nextInt(Math.max(1, (int) scanFrequency - 100)));
+				Strand.sleep(scanFrequency + 100 + random.nextInt(Math.max(1, (int) scanFrequency - 100)));
 			} catch (Throwable t) {
 				// interrupted
 				break;
@@ -408,13 +396,58 @@ public class Matchmaking extends SyncVerticle {
 		vertx.undeploy(deploymentID());
 	}
 
-	public Future<Long> createGame(ReactiveClassicGenericQueryExecutor executor, MatchmakingQueues configuration, MatchmakingTickets... tickets) {
+	public Future<Long> createGame(ReactiveClassicGenericQueryExecutor transaction, MatchmakingQueues configuration, MatchmakingTickets... tickets) {
+		// we do not have to run these transactionally, do we?
+		var executor = Environment.queryExecutor();
+		var gameIdRef = new AtomicLong(Long.MIN_VALUE);
 		// TODO: set player index
 		return executor.executeAny(dsl -> dsl.insertInto(GAMES).defaultValues().returning(GAMES.ID))
 				.map(rowSet -> Lists.newArrayList(rowSet.iterator()).get(0).getLong(GAMES.ID.getName()))
 				.compose(gameId -> {
-					var rows = Arrays.stream(tickets).map(ticket -> GAME_USERS.newRecord().setGameId(gameId).setUserId(ticket.getUserId()));
-					return CompositeFuture.all(rows.map(row -> executor.execute(dsl -> dsl.insertInto(GAME_USERS).set(row))).collect(toList())).map(gameId);
+					gameIdRef.set(gameId);
+					var rows = new ArrayList<GameUsersRecord>();
+					for (var i = 0; i < tickets.length; i++) {
+						rows.add(GAME_USERS.newRecord().setGameId(gameId)
+								.setUserId(tickets[i].getUserId())
+								.setDeckId(tickets[i].getDeckId())
+								.setPlayerIndex((short) i));
+					}
+					return CompositeFuture.all(rows.stream().map(row -> executor.execute(dsl -> dsl.insertInto(GAME_USERS).set(row))).collect(toList()))
+							.map(gameId);
+				})
+				.compose(gameId -> {
+					if (configuration.getBotOpponent()) {
+						// retrieve a bot and choose a random deck for it if one is not specified by the opponent
+						return Bots.bot()
+								.compose(bot -> {
+									var botDeckId = tickets[0].getBotDeckId();
+									Future<String> botFut;
+									if (botDeckId == null) {
+										var random = new Random();
+										botFut = Legacy.getAllDecks(bot.getId()).map(res -> res.getDecksList().get(random.nextInt(res.getDecksCount())).getCollection().getId());
+									} else {
+										botFut = Future.succeededFuture(botDeckId);
+									}
+									return botFut.compose(botDeckIdRes -> Future.succeededFuture(ConfigurationRequest.botMatch(gameId.toString(), tickets[0].getUserId(), bot.getId(), tickets[0].getDeckId(), botDeckIdRes)));
+								});
+					} else {
+						return Future.succeededFuture(ConfigurationRequest.versusMatch(gameId.toString(), tickets[0].getUserId(), tickets[0].getDeckId(), tickets[1].getUserId(), tickets[1].getDeckId()));
+					}
+				})
+				.compose(request -> {
+					var gameId = Long.parseLong(request.getGameId());
+					return Games.createGame(request).map(gameId);
+				})
+				.recover(t -> {
+					// game id wsa not created
+					if (gameIdRef.get() == Long.MIN_VALUE) {
+						// continue
+						return Future.failedFuture(t);
+					}
+					// delete the records if they were created
+					// it's not that bad if they hang around due to a machine failure
+					return executor.execute(dsl -> dsl.deleteFrom(GAMES).where(GAMES.ID.eq(gameIdRef.get())))
+							.compose(v -> Future.failedFuture(t));
 				});
 	}
 

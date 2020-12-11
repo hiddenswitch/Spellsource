@@ -1,16 +1,20 @@
 buildscript {
     ext {
-        vertxJooqVersion = '5.2.1'
+        vertxJooqVersion = '14efcb1ff3'
         postgresqlVersion = '42.2.16'
         flywayVersion = '6.5.5'
     }
     repositories {
         mavenLocal()
+        // for jooq from github
+        maven { url 'https://jitpack.io' }
         mavenCentral()
     }
     dependencies {
-        classpath "io.github.jklingsporn:vertx-jooq-generate:$vertxJooqVersion"
+        classpath "com.github.hiddenswitch.vertx-jooq:vertx-jooq-generate:$vertxJooqVersion"
         classpath "org.postgresql:postgresql:$postgresqlVersion"
+        classpath "io.vertx:vertx-core:$vertxVersion"
+        classpath "com.databasesandlife:java-common:$databasesandlifeVersion"
     }
 }
 
@@ -33,9 +37,13 @@ import com.bmuschko.gradle.docker.domain.LivenessProbe
 import com.bmuschko.gradle.docker.tasks.container.*
 import com.bmuschko.gradle.docker.tasks.image.*
 import com.bmuschko.gradle.docker.tasks.container.extras.DockerLivenessContainer
+import io.github.jklingsporn.vertx.jooq.shared.postgres.JSONBToJsonObjectConverter
+import io.vertx.core.json.JsonObject;
 import org.jooq.codegen.GenerationTool
 import org.jooq.meta.jaxb.*
 import org.apache.tools.ant.taskdefs.condition.Os
+import org.w3c.dom.Element
+import com.databasesandlife.util.jooq.PostgresXmlDomElementBinding
 
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def csharpRootDir = 'src/csharp/HiddenSwitch'
@@ -52,6 +60,13 @@ dependencies {
     api project(':cards')
     api project(':vertx-sync')
     api "io.vertx:vertx-rx-java2:$vertxVersion"
+
+    implementation("com.databasesandlife:java-common:$databasesandlifeVersion") {
+        exclude group: 'com.google.gdata', module: '*'
+        exclude group: 'log4j', module: '*'
+        exclude group: 'dnsjava', module: '*'
+        exclude group: 'commons-io', module: '*'
+    }
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$jacksonVersion") {
         exclude group: 'jakarta.xml.bind', module: '*'
@@ -85,7 +100,7 @@ dependencies {
 
     implementation 'org.jooq:jooq:3.13.5'
     implementation "io.vertx:vertx-pg-client:$vertxVersion"
-    implementation ("io.github.jklingsporn:vertx-jooq-classic-reactive:$vertxJooqVersion") {
+    implementation("com.github.hiddenswitch.vertx-jooq:vertx-jooq-classic-reactive:$vertxJooqVersion") {
         exclude group: "io.vertx", module: '*'
     }
     implementation('com.google.protobuf:protobuf-java:3.13.0') {
@@ -107,16 +122,17 @@ dependencies {
 
     implementation group: 'org.graalvm.truffle', name: 'truffle-api', version: '20.2.0'
     implementation group: 'org.graalvm.js', name: 'js', version: '20.2.0'
+    implementation 'io.jaegertracing:jaeger-client:1.5.0'
     implementation "org.flywaydb:flyway-core:$flywayVersion"
 
-    testImplementation (project(':testcontainers')) {
+    testImplementation(project(':testcontainers')) {
         exclude group: 'junit', module: 'junit'
     }
     testImplementation project(':testutils')
-    testImplementation ("org.testcontainers:testcontainers") {
+    testImplementation("org.testcontainers:testcontainers") {
         exclude group: 'junit', module: 'junit'
     }
-    testImplementation ("org.testcontainers:junit-jupiter") {
+    testImplementation("org.testcontainers:junit-jupiter") {
         exclude group: 'junit', module: 'junit'
     }
     testImplementation group: 'io.vertx', name: 'vertx-junit5', version: vertxVersion
@@ -128,10 +144,10 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
-    testCompileOnly ("junit:junit:4.12") {
+    testCompileOnly("junit:junit:4.12") {
         because("only for testcontainers")
     }
-    testRuntimeOnly ("junit:junit:4.12") {
+    testRuntimeOnly("junit:junit:4.12") {
         because("only for testcontainers")
     }
     runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
@@ -284,6 +300,15 @@ task jooqGenerate() {
                             .withName('org.jooq.meta.postgres.PostgresDatabase')
                             .withSchemata(new SchemaMappingType().withInputSchema("keycloak").withOutputSchema('keycloak'),
                                     new SchemaMappingType().withInputSchema("spellsource").withOutputSchema('spellsource'))
+                            .withForcedTypes(
+                                    new ForcedType()
+                                            .withUserType(JsonObject.class.getName())
+                                            .withConverter(JSONBToJsonObjectConverter.class.getName())
+                                            .withIncludeTypes("jsonb"),
+                                    new ForcedType()
+                                            .withUserType(Element.class.getName())
+                                            .withConverter(PostgresXmlDomElementBinding.class.getName())
+                                            .withIncludeTypes("xml"))
                             .withIncludeTables(true)
                             .withIncludeRoutines(true)
                             .withIncludePackages(false)

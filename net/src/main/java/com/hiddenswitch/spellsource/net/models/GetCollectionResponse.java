@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource.net.models;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.net.Logic;
 import com.hiddenswitch.spellsource.common.Tracing;
@@ -48,21 +47,33 @@ public final class GetCollectionResponse implements Serializable {
 	 * @return
 	 */
 	public GameDeck asDeck(String userId) {
+		return asDeck(this, userId);
+	}
+
+	/**
+	 * Turns this response into a {@link net.demilich.metastone.game.decks.Deck} that can actually be used in a
+	 * {@link GameContext}.
+	 *
+	 * @param response
+	 * @param userId
+	 * @return
+	 */
+	public static GameDeck asDeck(GetCollectionResponse response, String userId) {
 		GameDeck deck = new GameDeck();
-		deck.setDeckId(getCollectionRecord().getId());
-		deck.setHeroClass(getCollectionRecord().getHeroClass());
-		deck.setName(getCollectionRecord().getName());
-		String heroCardId = getCollectionRecord().getHeroCardId();
+		deck.setDeckId(response.getCollectionRecord().getId());
+		deck.setHeroClass(response.getCollectionRecord().getHeroClass());
+		deck.setName(response.getCollectionRecord().getName());
+		String heroCardId = response.getCollectionRecord().getHeroCardId();
 		if (heroCardId != null) {
 			deck.setHeroCard(CardCatalogue.getCardById(heroCardId));
 		}
 
-		getInventoryRecords().stream().map(cardRecord -> Logic.getDescriptionFromRecord(cardRecord, userId, getCollectionRecord().getId()))
+		response.getInventoryRecords().stream().map(cardRecord -> Logic.getDescriptionFromRecord(cardRecord, userId, response.getCollectionRecord().getId()))
 				.filter(Objects::nonNull)
 				.map(CardDesc::create)
 				.forEach(deck.getCards()::addCard);
 
-		deck.setPlayerAttributes(getCollectionRecord().getPlayerEntityAttributes());
+		deck.setPlayerAttributes(response.getCollectionRecord().getPlayerEntityAttributes());
 
 		return deck;
 	}
