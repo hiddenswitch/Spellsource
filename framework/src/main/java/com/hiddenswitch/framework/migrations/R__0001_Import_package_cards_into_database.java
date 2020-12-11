@@ -4,6 +4,7 @@ import com.google.common.hash.Hashing;
 import com.hiddenswitch.framework.Accounts;
 import com.hiddenswitch.framework.impl.MigrationUtils;
 import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
@@ -42,7 +43,7 @@ public class R__0001_Import_package_cards_into_database extends BaseJavaMigratio
 		var ownerUserId = MigrationUtils.getSpellsourceUserId();
 		var insertAndUpdate = CardCatalogue.getRecords().values().stream().map(record -> {
 			var now = OffsetDateTime.now();
-			var encoded = JSONB.valueOf(Json.encode(record.getDesc()));
+			var encoded = JsonObject.mapFrom(record.getDesc());
 			return dsl.insertInto(CARDS, CARDS.ID, CARDS.CREATED_BY, CARDS.CREATED_AT, CARDS.LAST_MODIFIED, CARDS.CARD_SCRIPT)
 					.values(record.getId(), ownerUserId, now, now, encoded)
 					.onDuplicateKeyUpdate()

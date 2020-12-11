@@ -193,6 +193,11 @@ public class FrameworkTestBase {
 		}
 
 		@Override
+		public <U> Future<U> eventually(Function<Void, Future<U>> mapper) {
+			return future.eventually(mapper);
+		}
+
+		@Override
 		public <U> Future<U> map(Function<Void, U> mapper) {
 			return future.map(mapper);
 		}

@@ -6,11 +6,12 @@ package com.hiddenswitch.framework.schema.spellsource.tables.interfaces;
 
 import io.github.jklingsporn.vertx.jooq.shared.UnexpectedJsonValueType;
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
+import io.vertx.core.json.JsonObject;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
-import org.jooq.JSONB;
+import org.w3c.dom.Element;
 
 
 /**
@@ -50,26 +51,24 @@ public interface ICards extends VertxPojo, Serializable {
     public String getUri();
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * Setter for <code>spellsource.cards.blockly_workspace</code>.
      */
-    @java.lang.Deprecated
-    public ICards setBlocklyWorkspace(Object value);
+    public ICards setBlocklyWorkspace(Element value);
 
     /**
-     * @deprecated Unknown data type. Please define an explicit {@link org.jooq.Binding} to specify how this type should be handled. Deprecation can be turned off using {@literal <deprecationOnUnknownTypes/>} in your code generator configuration.
+     * Getter for <code>spellsource.cards.blockly_workspace</code>.
      */
-    @java.lang.Deprecated
-    public Object getBlocklyWorkspace();
+    public Element getBlocklyWorkspace();
 
     /**
      * Setter for <code>spellsource.cards.card_script</code>.
      */
-    public ICards setCardScript(JSONB value);
+    public ICards setCardScript(JsonObject value);
 
     /**
      * Getter for <code>spellsource.cards.card_script</code>.
      */
-    public JSONB getCardScript();
+    public JsonObject getCardScript();
 
     /**
      * Setter for <code>spellsource.cards.created_at</code>.
@@ -123,14 +122,14 @@ public interface ICards extends VertxPojo, Serializable {
             throw new UnexpectedJsonValueType("uri","java.lang.String",e);
         }
         try {
-            // Omitting unrecognized type java.lang.Object for column blockly_workspace!
+            // Omitting unrecognized type org.w3c.dom.Element for column blockly_workspace!
         } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("blockly_workspace","java.lang.Object",e);
+            throw new UnexpectedJsonValueType("blockly_workspace","org.w3c.dom.Element",e);
         }
         try {
-            // Omitting unrecognized type org.jooq.JSONB for column card_script!
+            setCardScript(com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().from(json.getJsonObject("card_script")));
         } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("card_script","org.jooq.JSONB",e);
+            throw new UnexpectedJsonValueType("card_script","io.vertx.core.json.JsonObject",e);
         }
         try {
             String created_atString = json.getString("created_at");
@@ -154,8 +153,8 @@ public interface ICards extends VertxPojo, Serializable {
         json.put("id",getId());
         json.put("created_by",getCreatedBy());
         json.put("uri",getUri());
-        // Omitting unrecognized type java.lang.Object for column blockly_workspace!
-        // Omitting unrecognized type org.jooq.JSONB for column card_script!
+        // Omitting unrecognized type org.w3c.dom.Element for column blockly_workspace!
+        json.put("card_script",com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().to(getCardScript()));
         json.put("created_at",getCreatedAt()==null?null:getCreatedAt().toString());
         json.put("last_modified",getLastModified()==null?null:getLastModified().toString());
         return json;

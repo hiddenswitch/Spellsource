@@ -36,6 +36,7 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 		withEnv("LANGUAGE", "en_US.UTF-8");
 		withEnv("LANG", "en_US.UTF-8");
 		withEnv("LC_ALL", "en_US.UTF-8");
+		withReuse(false);
 		setWaitStrategy(Wait
 				.forHttp(KEYCLOAK_AUTH_PATH)
 				.forPort(KEYCLOAK_PORT_HTTP)

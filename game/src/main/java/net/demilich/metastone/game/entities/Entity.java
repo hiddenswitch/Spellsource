@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.hiddenswitch.spellsource.client.models.EntityType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -45,6 +47,7 @@ import java.util.regex.Pattern;
  * net.demilich.metastone.game.spells.trigger.secrets.Secret} entities should have their description or card IDs visible
  * to their opponents.
  */
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class)
 public abstract class Entity extends CustomCloneable implements Serializable, HasCard, Comparable<Entity> {
 	private static Pattern BONUS_DAMAGE_IN_DESCRIPTION = Pattern.compile("\\$(\\d+)");
 	private static Pattern BONUS_HEALING_IN_DESCRIPTION = Pattern.compile("#(\\d+)");

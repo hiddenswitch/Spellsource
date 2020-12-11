@@ -4,6 +4,7 @@
 package com.hiddenswitch.framework.schema.spellsource;
 
 
+import com.hiddenswitch.framework.schema.spellsource.tables.BotUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Cards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples;
@@ -20,6 +21,11 @@ import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
+
+    /**
+     * The table <code>spellsource.bot_users</code>.
+     */
+    public static final BotUsers BOT_USERS = BotUsers.BOT_USERS;
 
     /**
      * The table <code>spellsource.cards</code>.

@@ -7,6 +7,7 @@ package com.hiddenswitch.framework.schema.spellsource.tables;
 import com.hiddenswitch.framework.schema.keycloak.tables.UserEntity;
 import com.hiddenswitch.framework.schema.spellsource.Keys;
 import com.hiddenswitch.framework.schema.spellsource.Spellsource;
+import com.hiddenswitch.framework.schema.spellsource.enums.GameUserVictoryEnum;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GameUsersRecord;
 
 import java.util.Arrays;
@@ -14,10 +15,9 @@ import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class GameUsers extends TableImpl<GameUsersRecord> {
 
-    private static final long serialVersionUID = -1752349665;
+    private static final long serialVersionUID = 844559495;
 
     /**
      * The reference instance of <code>spellsource.game_users</code>
@@ -49,11 +49,6 @@ public class GameUsers extends TableImpl<GameUsersRecord> {
     }
 
     /**
-     * The column <code>spellsource.game_users.id</code>.
-     */
-    public final TableField<GameUsersRecord, Long> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).identity(true), this, "");
-
-    /**
      * The column <code>spellsource.game_users.player_index</code>.
      */
     public final TableField<GameUsersRecord, Short> PLAYER_INDEX = createField(DSL.name("player_index"), org.jooq.impl.SQLDataType.SMALLINT.defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.SMALLINT)), this, "");
@@ -61,12 +56,22 @@ public class GameUsers extends TableImpl<GameUsersRecord> {
     /**
      * The column <code>spellsource.game_users.game_id</code>.
      */
-    public final TableField<GameUsersRecord, Long> GAME_ID = createField(DSL.name("game_id"), org.jooq.impl.SQLDataType.BIGINT, this, "");
+    public final TableField<GameUsersRecord, Long> GAME_ID = createField(DSL.name("game_id"), org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.game_users.user_id</code>.
      */
-    public final TableField<GameUsersRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<GameUsersRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+
+    /**
+     * The column <code>spellsource.game_users.deck_id</code>.
+     */
+    public final TableField<GameUsersRecord, String> DECK_ID = createField(DSL.name("deck_id"), org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>spellsource.game_users.victory_status</code>.
+     */
+    public final TableField<GameUsersRecord, GameUserVictoryEnum> VICTORY_STATUS = createField(DSL.name("victory_status"), org.jooq.impl.SQLDataType.VARCHAR.nullable(false).defaultValue(org.jooq.impl.DSL.field("'UNKNOWN'::spellsource.game_user_victory_enum", org.jooq.impl.SQLDataType.VARCHAR)).asEnumDataType(com.hiddenswitch.framework.schema.spellsource.enums.GameUserVictoryEnum.class), this, "");
 
     /**
      * Create a <code>spellsource.game_users</code> table reference
@@ -107,11 +112,6 @@ public class GameUsers extends TableImpl<GameUsersRecord> {
     }
 
     @Override
-    public Identity<GameUsersRecord, Long> getIdentity() {
-        return Keys.IDENTITY_GAME_USERS;
-    }
-
-    @Override
     public UniqueKey<GameUsersRecord> getPrimaryKey() {
         return Keys.GAME_USERS_PKEY;
     }
@@ -123,7 +123,7 @@ public class GameUsers extends TableImpl<GameUsersRecord> {
 
     @Override
     public List<ForeignKey<GameUsersRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<GameUsersRecord, ?>>asList(Keys.GAME_USERS__GAME_USERS_GAME_ID_FKEY, Keys.GAME_USERS__GAME_USERS_USER_ID_FKEY);
+        return Arrays.<ForeignKey<GameUsersRecord, ?>>asList(Keys.GAME_USERS__GAME_USERS_GAME_ID_FKEY, Keys.GAME_USERS__GAME_USERS_USER_ID_FKEY, Keys.GAME_USERS__GAME_USERS_DECK_ID_FKEY);
     }
 
     public Games games() {
@@ -132,6 +132,10 @@ public class GameUsers extends TableImpl<GameUsersRecord> {
 
     public UserEntity userEntity() {
         return new UserEntity(this, Keys.GAME_USERS__GAME_USERS_USER_ID_FKEY);
+    }
+
+    public Decks decks() {
+        return new Decks(this, Keys.GAME_USERS__GAME_USERS_DECK_ID_FKEY);
     }
 
     @Override
@@ -161,11 +165,11 @@ public class GameUsers extends TableImpl<GameUsersRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Long, Short, Long, String> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row5<Short, Long, String, String, GameUserVictoryEnum> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }

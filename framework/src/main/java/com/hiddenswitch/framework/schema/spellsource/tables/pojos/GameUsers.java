@@ -4,6 +4,7 @@
 package com.hiddenswitch.framework.schema.spellsource.tables.pojos;
 
 
+import com.hiddenswitch.framework.schema.spellsource.enums.GameUserVictoryEnum;
 import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.IGameUsers;
 
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
@@ -15,48 +16,41 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class GameUsers implements VertxPojo, IGameUsers {
 
-    private static final long serialVersionUID = 1895011262;
+    private static final long serialVersionUID = 1090340847;
 
-    private Long   id;
-    private Short  playerIndex;
-    private Long   gameId;
-    private String userId;
+    private Short               playerIndex;
+    private Long                gameId;
+    private String              userId;
+    private String              deckId;
+    private GameUserVictoryEnum victoryStatus;
 
     public GameUsers() {}
 
     public GameUsers(IGameUsers value) {
-        this.id = value.getId();
         this.playerIndex = value.getPlayerIndex();
         this.gameId = value.getGameId();
         this.userId = value.getUserId();
+        this.deckId = value.getDeckId();
+        this.victoryStatus = value.getVictoryStatus();
     }
 
     public GameUsers(
-        Long   id,
-        Short  playerIndex,
-        Long   gameId,
-        String userId
+        Short               playerIndex,
+        Long                gameId,
+        String              userId,
+        String              deckId,
+        GameUserVictoryEnum victoryStatus
     ) {
-        this.id = id;
         this.playerIndex = playerIndex;
         this.gameId = gameId;
         this.userId = userId;
+        this.deckId = deckId;
+        this.victoryStatus = victoryStatus;
     }
 
     public GameUsers(io.vertx.core.json.JsonObject json) {
         this();
         fromJson(json);
-    }
-
-    @Override
-    public Long getId() {
-        return this.id;
-    }
-
-    @Override
-    public GameUsers setId(Long id) {
-        this.id = id;
-        return this;
     }
 
     @Override
@@ -93,13 +87,36 @@ public class GameUsers implements VertxPojo, IGameUsers {
     }
 
     @Override
+    public String getDeckId() {
+        return this.deckId;
+    }
+
+    @Override
+    public GameUsers setDeckId(String deckId) {
+        this.deckId = deckId;
+        return this;
+    }
+
+    @Override
+    public GameUserVictoryEnum getVictoryStatus() {
+        return this.victoryStatus;
+    }
+
+    @Override
+    public GameUsers setVictoryStatus(GameUserVictoryEnum victoryStatus) {
+        this.victoryStatus = victoryStatus;
+        return this;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("GameUsers (");
 
-        sb.append(id);
-        sb.append(", ").append(playerIndex);
+        sb.append(playerIndex);
         sb.append(", ").append(gameId);
         sb.append(", ").append(userId);
+        sb.append(", ").append(deckId);
+        sb.append(", ").append(victoryStatus);
 
         sb.append(")");
         return sb.toString();
@@ -111,10 +128,11 @@ public class GameUsers implements VertxPojo, IGameUsers {
 
     @Override
     public void from(IGameUsers from) {
-        setId(from.getId());
         setPlayerIndex(from.getPlayerIndex());
         setGameId(from.getGameId());
         setUserId(from.getUserId());
+        setDeckId(from.getDeckId());
+        setVictoryStatus(from.getVictoryStatus());
     }
 
     @Override

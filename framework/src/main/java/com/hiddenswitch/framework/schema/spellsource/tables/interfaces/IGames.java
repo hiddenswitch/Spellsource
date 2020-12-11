@@ -8,11 +8,10 @@ import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
 
 import io.github.jklingsporn.vertx.jooq.shared.UnexpectedJsonValueType;
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
+import io.vertx.core.json.JsonObject;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-
-import org.jooq.JSONB;
 
 
 /**
@@ -54,12 +53,12 @@ public interface IGames extends VertxPojo, Serializable {
     /**
      * Setter for <code>spellsource.games.trace</code>.
      */
-    public IGames setTrace(JSONB value);
+    public IGames setTrace(JsonObject value);
 
     /**
      * Getter for <code>spellsource.games.trace</code>.
      */
-    public JSONB getTrace();
+    public JsonObject getTrace();
 
     /**
      * Setter for <code>spellsource.games.created_at</code>.
@@ -103,9 +102,9 @@ public interface IGames extends VertxPojo, Serializable {
             throw new UnexpectedJsonValueType("git_hash","java.lang.String",e);
         }
         try {
-            // Omitting unrecognized type org.jooq.JSONB for column trace!
+            setTrace(com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().from(json.getJsonObject("trace")));
         } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("trace","org.jooq.JSONB",e);
+            throw new UnexpectedJsonValueType("trace","io.vertx.core.json.JsonObject",e);
         }
         try {
             String created_atString = json.getString("created_at");
@@ -123,7 +122,7 @@ public interface IGames extends VertxPojo, Serializable {
         json.put("id",getId());
         json.put("status",getStatus()==null?null:getStatus().getLiteral());
         json.put("git_hash",getGitHash());
-        // Omitting unrecognized type org.jooq.JSONB for column trace!
+        json.put("trace",com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().to(getTrace()));
         json.put("created_at",getCreatedAt()==null?null:getCreatedAt().toString());
         return json;
     }

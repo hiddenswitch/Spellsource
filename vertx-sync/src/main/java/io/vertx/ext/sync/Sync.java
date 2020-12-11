@@ -482,7 +482,6 @@ public class Sync {
 
 	@Suspendable
 	public static void fiber(SuspendableRunnable context) {
-		var currentContext = Vertx.currentContext();
 		var fiber = new Fiber<Void>(getContextScheduler(), context::run);
 		fiber.inheritThreadLocals();
 		fiber.setUncaughtExceptionHandler(Sync::uncaughtException);
@@ -492,7 +491,6 @@ public class Sync {
 	@Suspendable
 	public static <T> Handler<T> fiber(FiberScheduler scheduler, SuspendableAction1<T> handler) {
 		return v -> {
-			var currentContext = Vertx.currentContext();
 			var fiber = new Fiber<Void>(scheduler, () -> handler.call(v));
 			fiber.inheritThreadLocals();
 			fiber.setUncaughtExceptionHandler(Sync::uncaughtException);

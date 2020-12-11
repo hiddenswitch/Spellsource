@@ -3,6 +3,8 @@ package com.hiddenswitch.framework;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableCallable;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.google.protobuf.GeneratedMessageV3;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.rpc.ServerConfiguration;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
@@ -31,7 +33,8 @@ public class Environment {
 
 	static {
 		// An opportunity to configure Vertx's JSON
-		DatabindCodec.mapper().registerModule(new ProtobufModule());
+		DatabindCodec.mapper().registerModule(new ProtobufModule())
+				.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
 	}
 
 	private static AtomicReference<Configuration> jooqConfiguration = new AtomicReference<>();
@@ -90,7 +93,7 @@ public class Environment {
 	}
 
 	public static ReactiveClassicGenericQueryExecutor queryExecutor() {
-		return queryExecutors.get();
+		return queryExecutorConstructor(null);
 	}
 
 	public static Handler<Throwable> onFailure() {
@@ -229,5 +232,9 @@ public class Environment {
 						.setType("json")
 						.setConfig(configurationOverride))
 		);
+	}
+
+	public static <T extends GeneratedMessageV3> T toProto(Object obj, Class<T> targetClass) {
+		return DatabindCodec.mapper().convertValue(obj, targetClass);
 	}
 }

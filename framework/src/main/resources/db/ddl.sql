@@ -56,6 +56,21 @@ CREATE TYPE spellsource.game_state_enum AS ENUM (
 
 ALTER TYPE spellsource.game_state_enum OWNER TO admin;
 
+--
+-- Name: game_user_victory_enum; Type: TYPE; Schema: spellsource; Owner: admin
+--
+
+CREATE TYPE spellsource.game_user_victory_enum AS ENUM (
+    'UNKNOWN',
+    'WON',
+    'LOST',
+    'DISCONNECTED',
+    'CONCEDED'
+);
+
+
+ALTER TYPE spellsource.game_user_victory_enum OWNER TO admin;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -1519,6 +1534,17 @@ CREATE TABLE keycloak.web_origins (
 ALTER TABLE keycloak.web_origins OWNER TO admin;
 
 --
+-- Name: bot_users; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.bot_users (
+    id text NOT NULL
+);
+
+
+ALTER TABLE spellsource.bot_users OWNER TO admin;
+
+--
 -- Name: cards; Type: TABLE; Schema: spellsource; Owner: admin
 --
 
@@ -1685,28 +1711,15 @@ COMMENT ON COLUMN spellsource.decks.is_premade IS 'premades always shared with a
 --
 
 CREATE TABLE spellsource.game_users (
-    id bigint NOT NULL,
     player_index smallint DEFAULT 0,
-    game_id bigint,
-    user_id text
+    game_id bigint NOT NULL,
+    user_id text NOT NULL,
+    deck_id text,
+    victory_status spellsource.game_user_victory_enum DEFAULT 'UNKNOWN'::spellsource.game_user_victory_enum NOT NULL
 );
 
 
 ALTER TABLE spellsource.game_users OWNER TO admin;
-
---
--- Name: game_users_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
---
-
-ALTER TABLE spellsource.game_users ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME spellsource.game_users_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
 
 --
 -- Name: games; Type: TABLE; Schema: spellsource; Owner: admin
@@ -2663,6 +2676,14 @@ ALTER TABLE ONLY keycloak.user_entity
 
 
 --
+-- Name: bot_users bot_users_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.bot_users
+    ADD CONSTRAINT bot_users_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: cards_in_deck cards_in_deck_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
@@ -2715,7 +2736,7 @@ ALTER TABLE ONLY spellsource.decks
 --
 
 ALTER TABLE ONLY spellsource.game_users
-    ADD CONSTRAINT game_users_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT game_users_pkey PRIMARY KEY (game_id, user_id);
 
 
 --
@@ -4028,6 +4049,14 @@ ALTER TABLE ONLY keycloak.identity_provider_config
 
 
 --
+-- Name: bot_users bot_users_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.bot_users
+    ADD CONSTRAINT bot_users_id_fkey FOREIGN KEY (id) REFERENCES keycloak.user_entity(id) ON DELETE CASCADE;
+
+
+--
 -- Name: cards cards_created_by_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
@@ -4089,6 +4118,14 @@ ALTER TABLE ONLY spellsource.decks
 
 ALTER TABLE ONLY spellsource.decks
     ADD CONSTRAINT decks_last_edited_by_fkey FOREIGN KEY (last_edited_by) REFERENCES keycloak.user_entity(id);
+
+
+--
+-- Name: game_users game_users_deck_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.game_users
+    ADD CONSTRAINT game_users_deck_id_fkey FOREIGN KEY (deck_id) REFERENCES spellsource.decks(id) ON DELETE SET NULL;
 
 
 --
