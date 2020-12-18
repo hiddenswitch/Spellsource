@@ -39,9 +39,9 @@ public final class JsonMessageCodec<T> implements MessageCodec<T, T> {
 
 	@Override
 	public T decodeFromWire(int pos, Buffer buffer) {
-		int length = buffer.getInt(pos);
-		int start = pos + 4;
-		byte[] bytes = buffer.getBytes(start, start + length);
+		var length = buffer.getInt(pos);
+		var start = pos + 4;
+		var bytes = buffer.getBytes(start, start + length);
 		try {
 			return mapper.readValue(bytes, target);
 		} catch (IOException e) {

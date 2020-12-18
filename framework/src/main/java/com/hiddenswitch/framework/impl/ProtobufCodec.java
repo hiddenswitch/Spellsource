@@ -30,7 +30,7 @@ public class ProtobufCodec<T extends Message> implements MessageCodec<T, T> {
 	public T decodeFromWire(int pos, Buffer buffer) {
 		try {
 			@SuppressWarnings("unchecked")
-			Parser<T> parserForType = (Parser<T>) target.getParserForType();
+			var parserForType = (Parser<T>) target.getParserForType();
 			return parserForType.parseDelimitedFrom(new VertxBufferInputStream(buffer.getBuffer(pos, buffer.length())));
 		} catch (InvalidProtocolBufferException e) {
 			throw new RuntimeException(e);

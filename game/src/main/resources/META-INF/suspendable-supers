@@ -1,4 +1,3 @@
-java.util.function.Consumer.accept(Ljava/lang/Object;)V
 net.demilich.metastone.game.actions.GameAction.getTargets(Lnet/demilich/metastone/game/GameContext;I)Ljava/util/List;
 net.demilich.metastone.game.actions.PlayCardAction.canBeExecutedOn(Lnet/demilich/metastone/game/GameContext;Lnet/demilich/metastone/game/Player;Lnet/demilich/metastone/game/entities/Entity;)Z
 net.demilich.metastone.game.behaviour.heuristic.Heuristic.getScore(Lnet/demilich/metastone/game/GameContext;I)D

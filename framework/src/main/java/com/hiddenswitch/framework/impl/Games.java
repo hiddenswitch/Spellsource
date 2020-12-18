@@ -1,29 +1,21 @@
 package com.hiddenswitch.framework.impl;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.base.CaseFormat;
 import com.google.protobuf.Int32Value;
 import com.google.protobuf.ProtocolMessageEnum;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.ICardsInDeck;
-import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.IDeckPlayerAttributeTuples;
-import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.IDecks;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck;
-import com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckPlayerAttributeTuples;
-import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.rpc.*;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Future;
 import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -149,14 +141,14 @@ public interface Games extends Verticle {
 				.start();
 		try (var s1 = tracer.activateSpan(span)) {
 			// Set up the attributes
-			String cardId = cardRecord.getCardId();
+			var cardId = cardRecord.getCardId();
 			if (!CardCatalogue.getCards().containsKey(cardId.toLowerCase())) {
 				Tracing.error(new NullPointerException(cardId), span, true);
 				return null;
 			}
 
-			Card cardById = CardCatalogue.getCardById(cardId);
-			CardDesc desc = cardById.getDesc().clone();
+			var cardById = CardCatalogue.getCardById(cardId);
+			var desc = cardById.getDesc().clone();
 
 			if (desc.getAttributes() == null) {
 				desc.setAttributes(new AttributeMap());
@@ -575,7 +567,8 @@ public interface Games extends Verticle {
 	 */
 	static Entity.Builder getEntity(GameContext workingContext, net.demilich.metastone.game.entities.Entity entity, int localPlayerId) {
 		if (entity == null) {
-			return Entity.newBuilder();
+			return Entity.newBuilder()
+					.setId(-1);
 		}
 
 		// TODO: Shouldn't this use isAssignableFrom?
@@ -604,7 +597,8 @@ public interface Games extends Verticle {
 	 */
 	static Entity.Builder getEntity(GameContext workingContext, Actor actor, int localPlayerId) {
 		if (actor == null) {
-			return Entity.newBuilder();
+			return Entity.newBuilder()
+					.setId(-1);
 		}
 
 		// For the purposes of determining whether or not the game is over, we will calculate the match result once
@@ -697,7 +691,8 @@ public interface Games extends Verticle {
 	 */
 	static Entity.Builder getEntity(GameContext workingContext, Enchantment enchantment, int localPlayerId) {
 		if (enchantment == null) {
-			return Entity.newBuilder();
+			return Entity.newBuilder()
+					.setId(-1);
 		}
 
 		var entity = getEntity(workingContext, enchantment.getSourceCard(), localPlayerId);
@@ -742,7 +737,8 @@ public interface Games extends Verticle {
 	@Suspendable
 	static Entity.Builder getEntity(GameContext workingContext, Card card, int localPlayerId) {
 		if (card == null) {
-			return Entity.newBuilder();
+			return Entity.newBuilder()
+					.setId(-1);
 		}
 
 		var entity = Entity.newBuilder()
@@ -876,7 +872,7 @@ public interface Games extends Verticle {
 	@Suspendable
 	static String getGameId(@NotNull String userId) {
 		var eb = Vertx.currentContext().owner().eventBus();
-		Message<String> res = await(eb.<String>request(userId + ".isInGame", "", new DeliveryOptions().setSendTimeout(100L)).otherwiseEmpty());
+		var res = await(eb.<String>request(userId + ".isInGame", "", new DeliveryOptions().setSendTimeout(100L)).otherwiseEmpty());
 		return res != null ? res.body() : null;
 	}
 
@@ -1073,7 +1069,7 @@ public interface Games extends Verticle {
 
 	@NotNull
 	static GameDeck getGameDeck(String userId, DecksGetResponse deckCollection) {
-		String deckId = deckCollection.getCollection().getId();
+		var deckId = deckCollection.getCollection().getId();
 		var deck = new GameDeck();
 		deck.setDeckId(deckCollection.getCollection().getId());
 		// TODO: Deal with how we retrieve cards here

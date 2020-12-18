@@ -104,7 +104,7 @@ public final class CreateGameSessionResponse implements Serializable, DefaultClu
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (!(o instanceof CreateGameSessionResponse)) return false;
-		CreateGameSessionResponse that = (CreateGameSessionResponse) o;
+		var that = (CreateGameSessionResponse) o;
 		return isPending() == that.isPending() &&
 				Objects.equals(getUserId1(), that.getUserId1()) &&
 				Objects.equals(getUserId2(), that.getUserId2()) &&

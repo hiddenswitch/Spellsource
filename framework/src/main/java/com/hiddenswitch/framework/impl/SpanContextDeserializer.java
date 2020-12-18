@@ -19,7 +19,7 @@ public class SpanContextDeserializer extends StdDeserializer<SpanContext> {
 
 	@Override
 	public SpanContext deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-		JsonNode node = ctxt.readValue(p, JsonNode.class);
+		var node = ctxt.readValue(p, JsonNode.class);
 		return GlobalTracer.get().extract(Format.Builtin.TEXT_MAP, new JsonCarrier(node));
 	}
 }

@@ -1,5 +1,3 @@
-io.vertx.core.Closeable.close(Lio/vertx/core/Promise;)V
-io.vertx.core.Handler.handle(Ljava/lang/Object;)V
 io.vertx.ext.auth.User.isAuthorized(Lio/vertx/ext/auth/authorization/Authorization;Lio/vertx/core/Handler;)Lio/vertx/ext/auth/User;
 io.vertx.ext.auth.authentication.AuthenticationProvider.authenticate(Lio/vertx/core/json/JsonObject;Lio/vertx/core/Handler;)V
 io.vertx.ext.web.handler.AuthenticationHandler.parseCredentials(Lio/vertx/ext/web/RoutingContext;Lio/vertx/core/Handler;)V

@@ -4,12 +4,15 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.ObjectArrays;
 import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
+import com.hiddenswitch.framework.impl.Games;
 import com.hiddenswitch.framework.impl.ServerGameContext;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
-import com.hiddenswitch.framework.schema.spellsource.tables.daos.CardsInDeckDao;
-import com.hiddenswitch.framework.schema.spellsource.tables.daos.DeckPlayerAttributeTuplesDao;
-import com.hiddenswitch.framework.schema.spellsource.tables.daos.DeckSharesDao;
-import com.hiddenswitch.framework.schema.spellsource.tables.daos.DecksDao;
+import com.hiddenswitch.framework.migrations.R__0001_Import_package_cards_into_database;
+import com.hiddenswitch.framework.rpc.GetCardsRequest;
+import com.hiddenswitch.framework.rpc.GetCardsResponse;
+import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpc;
+import com.hiddenswitch.framework.schema.hiddenswitch.tables.daos.FlywaySchemaHistoryDao;
+import com.hiddenswitch.framework.schema.spellsource.tables.daos.*;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckPlayerAttributeTuples;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks;
@@ -17,6 +20,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
 import com.hiddenswitch.spellsource.rpc.*;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
+import io.grpc.BindableService;
 import io.grpc.ServerServiceDefinition;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
@@ -28,18 +32,22 @@ import io.vertx.sqlclient.Row;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
-import org.jooq.Record;
+import org.flywaydb.core.api.MigrationVersion;
+import org.flywaydb.core.internal.resolver.MigrationInfoHelper;
+import org.flywaydb.core.internal.util.Pair;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 import static com.hiddenswitch.framework.schema.spellsource.Tables.DECK_SHARES;
@@ -53,7 +61,59 @@ import static java.util.stream.Collectors.*;
  * The legacy services for Spellsource, to rapidly transition the game into a new backend.
  */
 public class Legacy {
-	private static final WeakVertxMap<List<DeckCreateRequest>> premadeDecks = new WeakVertxMap<>(Legacy::getPremadeDecksPrivate);
+	private static final String STATIC_CARDS_DATABASE_DESCRIPTION;
+	private static final WeakVertxMap<List<DeckCreateRequest>> PREMADE_DECKS = new WeakVertxMap<>(Legacy::getPremadeDecksPrivate);
+	private static final Promise<GetCardsResponse> GET_CARDS_RESPONSE_PROMISE = Promise.promise();
+	private static final AtomicBoolean CARDS_BUILT = new AtomicBoolean();
+
+	static {
+		String shortName = R__0001_Import_package_cards_into_database.class.getSimpleName();
+		var prefix = shortName.substring(0, 1);
+		Pair<MigrationVersion, String> info =
+				MigrationInfoHelper.extractVersionAndDescription(shortName, prefix, "__", new String[]{""}, true);
+		STATIC_CARDS_DATABASE_DESCRIPTION = info.getRight();
+	}
+
+	public static Future<BindableService> unauthenticatedCards() {
+		return Future.succeededFuture(new VertxUnauthenticatedCardsGrpc.UnauthenticatedCardsVertxImplBase() {
+			@Override
+			public Future<GetCardsResponse> getCards(GetCardsRequest request) {
+				// retrieve the hashcode from the migration schema for the cards
+				var configuration = Environment.jooqAkaDaoConfiguration();
+				var delegate = Environment.sqlPoolAkaDaoDelegate();
+				return (new FlywaySchemaHistoryDao(configuration, delegate)).findManyByDescription(Collections.singletonList(STATIC_CARDS_DATABASE_DESCRIPTION))
+						.map(list -> list.get(0))
+						.compose(flywaySchemaHistory -> {
+							var checksum = flywaySchemaHistory.getChecksum().toString();
+							if (Objects.equals(request.getIfNoneMatch(), checksum)) {
+								return Future.succeededFuture(GetCardsResponse.newBuilder().setCachedOk(true).build());
+							}
+
+							if (CARDS_BUILT.compareAndSet(false, true)) {
+								var workingContext = new GameContext();
+								(new CardsDao(configuration, delegate))
+										.findAll()
+										.map(cards -> cards.stream().map(card -> card.getCardScript().mapTo(CardDesc.class))
+												.map(CardDesc::create)
+												.map(card -> Games.getEntity(workingContext, card, 0))
+												.map(card -> CardRecord.newBuilder().setEntity(card).setId(card.getCardId()))
+												.collect(toList()))
+										.map(cards -> {
+											var builder = GetCardsResponse.newBuilder()
+													.setVersion(checksum);
+											for (var i = 0; i < cards.size(); i++) {
+												cards.get(i).getEntityBuilder().setId(i);
+												builder.addCards(cards.get(i).build());
+											}
+
+											return builder.build();
+										}).onComplete(GET_CARDS_RESPONSE_PROMISE);
+							}
+							return GET_CARDS_RESPONSE_PROMISE.future();
+						});
+			}
+		});
+	}
 
 	public static Future<ServerServiceDefinition> services() {
 		return Future.succeededFuture(new VertxHiddenSwitchSpellsourceAPIServiceGrpc.HiddenSwitchSpellsourceAPIServiceVertxImplBase() {
@@ -120,7 +180,7 @@ public class Legacy {
 				var userId = Accounts.userId();
 
 				DeckCreateRequest createRequest;
-				if (request.getDeckList() != null && !request.getDeckList().isEmpty()) {
+				if (!request.getDeckList().isEmpty()) {
 					createRequest = DeckCreateRequest.fromDeckList(request.getDeckList());
 				} else {
 					createRequest = new DeckCreateRequest()
@@ -544,7 +604,7 @@ public class Legacy {
 	}
 
 	public static List<DeckCreateRequest> getPremadeDecks() {
-		return premadeDecks.get();
+		return PREMADE_DECKS.get();
 	}
 
 	private static List<DeckCreateRequest> getPremadeDecksPrivate(Vertx ignored) {

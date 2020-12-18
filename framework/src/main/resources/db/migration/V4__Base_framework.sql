@@ -131,4 +131,10 @@ create index on spellsource.matchmaking_tickets (queue_id);
 create table spellsource.bot_users
 (
   id text references keycloak.user_entity (id) on delete cascade primary key
+);
+
+create table spellsource.user_entity_addons
+(
+  id text references keycloak.user_entity (id) on delete cascade primary key,
+  privacy_token text default floor(1000 + random() * 8999)
 )

@@ -18,6 +18,7 @@ public class Gateway extends AbstractVerticle {
 	public void start(Promise<Void> startPromise) throws Exception {
 		CompositeFuture.all(
 				Legacy.services(),
+				Legacy.unauthenticatedCards(),
 				Matchmaking.services(),
 				Accounts.unauthenticatedService(),
 				Accounts.authenticatedService())
@@ -54,14 +55,4 @@ public class Gateway extends AbstractVerticle {
 	public static int grpcPort() {
 		return 8081;
 	}
-
-//
-//	@Override
-//	public void stop(Promise<Void> stopPromise) throws Exception {
-//		if (server != null && !server.isTerminated()) {
-//			server.shutdown(stopPromise);
-//		} else {
-//			stopPromise.complete();
-//		}
-//	}
 }

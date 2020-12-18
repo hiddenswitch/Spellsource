@@ -7,6 +7,7 @@ package spellsource;
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
+import "reactive.proto";
 
 option java_multiple_files = true;
 option java_package = "com.hiddenswitch.spellsource.rpc";
@@ -184,9 +185,10 @@ enum GameEventType {
 
 // Accepts an invite to a match or a friend invite.
 message AcceptInviteRequest {
+    string inviteId = 1;
     // When true, specifies that the method call should only return when the game is actually ready to join
-    bool awaitGameStart = 1;
-    MatchmakingQueuePutRequest match = 2;
+    bool awaitGameStart = 2;
+    MatchmakingQueuePutRequest match = 3;
 }
 
 message AcceptInviteResponse {
@@ -257,6 +259,7 @@ message CardRecord {
     string donorUserId = 5;
     Entity entity = 6;
     string userId = 7;
+    int32 count = 8;
 }
 
 message ChangePasswordRequest {
@@ -290,6 +293,8 @@ message ChatMessage {
 
     // The timestamp of the message.
     int64 timestamp = 7;
+
+    AddedChangedRemoved notification = 8;
 }
 
 message ClientToServerMessage {
@@ -563,6 +568,8 @@ message EditableCard {
 
     // The CardScript source code of the card.
     string source = 3;
+
+    AddedChangedRemoved notification = 4;
 }
 
 // An emote that should play from the specified entity.
@@ -906,6 +913,7 @@ message Friend {
     string friendName = 2;
     PresenceEnum presence = 3;
     int64 since = 4;
+    AddedChangedRemoved notification = 5;
 }
 
 message FriendDeleteRequest {
@@ -1042,21 +1050,6 @@ message GetAccountsResponse {
     repeated Account accounts = 1;
 }
 
-message GetCardsRequest {
-    // The value returned in the ETag header from the server when this was last called, or empty if this is the
-    // first call to this resource.
-    string If_None_Match = 1;
-}
-
-// A cacheable copy of the entire card catalogue.
-message GetCardsResponse {
-    // The actual array of cards representing the complete Spellsource catalogue.
-    repeated CardRecord cards = 1;
-
-    // A token used in the If-None-Match argument when checking for new card catalogue content.
-    string version = 2;
-}
-
 // Retrieves an array of game IDs played by this player. Eventually will require paging.
 message GetGameRecordIdsResponse {
     // All the game IDs ever played by this player
@@ -1184,6 +1177,8 @@ message Invite {
 
     // The user ID to whom the invite is addressed
     string toUserId = 10;
+
+    AddedChangedRemoved notification = 11;
 }
 
 // The invites where this user is either the sender or recipient.
@@ -1213,9 +1208,13 @@ message InvitePostRequest {
     string toUserNameWithToken = 6;
 }
 
-// The invitation that was sent, or the updated invite
+// The invitation that was sent, or the updated invite. If it is the kind of invite that results in matchmaking, returns
+// the match if the other player accepted the challenge.
 message InviteResponse {
-    Invite invite = 1;
+    oneof results {
+        Invite invite = 1;
+        MatchmakingQueuePutResponse match = 2;
+    }
 }
 
 message LoginRequest {
@@ -1421,6 +1420,9 @@ message SpellAction {
     // A SpellAction with actionType SUMMON will have a targetKeyToActions entry with a target of -1 corresponding to
     // the *last* (rightmost) minion position to summon, while all other targets correspond to minions on the board.
     repeated TargetActionPair targetKeyToActions = 7;
+
+    // Allows the client to set a request field on the SpellAction
+    string request = 8;
 }
 
 // A server-side exception with content renderable to the client.
@@ -1661,13 +1663,6 @@ service HiddenSwitchSpellsourceAPIService {
         };
     }
 
-    // Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
-    rpc GetCards(GetCardsRequest) returns (GetCardsResponse) {
-        option (google.api.http) = {
-            get: "/api/v3/cards"
-        };
-    }
-
     // Retrieves a record of a game this player played. Games against bots retrieve a complete game record, while games
     // against other players only receive this player's point of view.
     rpc GetGameRecord(GetGameRecordRequest) returns (GetGameRecordResponse) {
@@ -1706,7 +1701,7 @@ service HiddenSwitchSpellsourceAPIService {
     }
 
     // Send an invite.
-    rpc PostInvite(PostInviteRequest) returns (InviteResponse) {
+    rpc PostInvite(PostInviteRequest) returns (stream InviteResponse) {
         option (google.api.http) = {
             post: "/api/v3/invites"
             body: "request"

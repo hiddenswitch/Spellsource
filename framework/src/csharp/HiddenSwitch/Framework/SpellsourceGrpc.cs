@@ -270,8 +270,6 @@ namespace Spellsource.Proto {
     static readonly grpc::Marshaller<global::Spellsource.Proto.GetAccountRequest> __Marshaller_spellsource_GetAccountRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetAccountRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::Spellsource.Proto.GetAccountsResponse> __Marshaller_spellsource_GetAccountsResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetAccountsResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::Spellsource.Proto.GetAccountsRequest> __Marshaller_spellsource_GetAccountsRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetAccountsRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.GetCardsRequest> __Marshaller_spellsource_GetCardsRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetCardsRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.GetCardsResponse> __Marshaller_spellsource_GetCardsResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetCardsResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::Spellsource.Proto.GetGameRecordRequest> __Marshaller_spellsource_GetGameRecordRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetGameRecordRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::Spellsource.Proto.GetGameRecordResponse> __Marshaller_spellsource_GetGameRecordResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetGameRecordResponse.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::Spellsource.Proto.GetGameRecordIdsResponse> __Marshaller_spellsource_GetGameRecordIdsResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetGameRecordIdsResponse.Parser.ParseFrom);
@@ -464,13 +462,6 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_GetAccountsRequest,
         __Marshaller_spellsource_GetAccountsResponse);
 
-    static readonly grpc::Method<global::Spellsource.Proto.GetCardsRequest, global::Spellsource.Proto.GetCardsResponse> __Method_GetCards = new grpc::Method<global::Spellsource.Proto.GetCardsRequest, global::Spellsource.Proto.GetCardsResponse>(
-        grpc::MethodType.Unary,
-        __ServiceName,
-        "GetCards",
-        __Marshaller_spellsource_GetCardsRequest,
-        __Marshaller_spellsource_GetCardsResponse);
-
     static readonly grpc::Method<global::Spellsource.Proto.GetGameRecordRequest, global::Spellsource.Proto.GetGameRecordResponse> __Method_GetGameRecord = new grpc::Method<global::Spellsource.Proto.GetGameRecordRequest, global::Spellsource.Proto.GetGameRecordResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -507,7 +498,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_LoginResponse);
 
     static readonly grpc::Method<global::Spellsource.Proto.PostInviteRequest, global::Spellsource.Proto.InviteResponse> __Method_PostInvite = new grpc::Method<global::Spellsource.Proto.PostInviteRequest, global::Spellsource.Proto.InviteResponse>(
-        grpc::MethodType.Unary,
+        grpc::MethodType.ServerStreaming,
         __ServiceName,
         "PostInvite",
         __Marshaller_spellsource_PostInviteRequest,
@@ -773,17 +764,6 @@ namespace Spellsource.Proto {
       }
 
       /// <summary>
-      /// Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
-      /// </summary>
-      /// <param name="request">The request received from the client.</param>
-      /// <param name="context">The context of the server-side call handler being invoked.</param>
-      /// <returns>The response to send back to the client (wrapped by a task).</returns>
-      public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.GetCardsResponse> GetCards(global::Spellsource.Proto.GetCardsRequest request, grpc::ServerCallContext context)
-      {
-        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
-      }
-
-      /// <summary>
       /// Retrieves a record of a game this player played. Games against bots retrieve a complete game record, while games
       /// against other players only receive this player's point of view.
       /// </summary>
@@ -843,9 +823,10 @@ namespace Spellsource.Proto {
       /// Send an invite.
       /// </summary>
       /// <param name="request">The request received from the client.</param>
+      /// <param name="responseStream">Used for sending responses back to the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
-      /// <returns>The response to send back to the client (wrapped by a task).</returns>
-      public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.InviteResponse> PostInvite(global::Spellsource.Proto.PostInviteRequest request, grpc::ServerCallContext context)
+      /// <returns>A task indicating completion of the handler.</returns>
+      public virtual global::System.Threading.Tasks.Task PostInvite(global::Spellsource.Proto.PostInviteRequest request, grpc::IServerStreamWriter<global::Spellsource.Proto.InviteResponse> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -1783,50 +1764,6 @@ namespace Spellsource.Proto {
         return CallInvoker.AsyncUnaryCall(__Method_GetAccounts, null, options, request);
       }
       /// <summary>
-      /// Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
-      /// </summary>
-      /// <param name="request">The request to send to the server.</param>
-      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
-      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
-      /// <param name="cancellationToken">An optional token for canceling the call.</param>
-      /// <returns>The response received from the server.</returns>
-      public virtual global::Spellsource.Proto.GetCardsResponse GetCards(global::Spellsource.Proto.GetCardsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return GetCards(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      /// <summary>
-      /// Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
-      /// </summary>
-      /// <param name="request">The request to send to the server.</param>
-      /// <param name="options">The options for the call.</param>
-      /// <returns>The response received from the server.</returns>
-      public virtual global::Spellsource.Proto.GetCardsResponse GetCards(global::Spellsource.Proto.GetCardsRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.BlockingUnaryCall(__Method_GetCards, null, options, request);
-      }
-      /// <summary>
-      /// Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
-      /// </summary>
-      /// <param name="request">The request to send to the server.</param>
-      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
-      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
-      /// <param name="cancellationToken">An optional token for canceling the call.</param>
-      /// <returns>The call object.</returns>
-      public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.GetCardsResponse> GetCardsAsync(global::Spellsource.Proto.GetCardsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return GetCardsAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      /// <summary>
-      /// Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
-      /// </summary>
-      /// <param name="request">The request to send to the server.</param>
-      /// <param name="options">The options for the call.</param>
-      /// <returns>The call object.</returns>
-      public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.GetCardsResponse> GetCardsAsync(global::Spellsource.Proto.GetCardsRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.AsyncUnaryCall(__Method_GetCards, null, options, request);
-      }
-      /// <summary>
       /// Retrieves a record of a game this player played. Games against bots retrieve a complete game record, while games
       /// against other players only receive this player's point of view.
       /// </summary>
@@ -2057,8 +1994,8 @@ namespace Spellsource.Proto {
       /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
-      /// <returns>The response received from the server.</returns>
-      public virtual global::Spellsource.Proto.InviteResponse PostInvite(global::Spellsource.Proto.PostInviteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      /// <returns>The call object.</returns>
+      public virtual grpc::AsyncServerStreamingCall<global::Spellsource.Proto.InviteResponse> PostInvite(global::Spellsource.Proto.PostInviteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return PostInvite(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
@@ -2067,32 +2004,10 @@ namespace Spellsource.Proto {
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
-      /// <returns>The response received from the server.</returns>
-      public virtual global::Spellsource.Proto.InviteResponse PostInvite(global::Spellsource.Proto.PostInviteRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.BlockingUnaryCall(__Method_PostInvite, null, options, request);
-      }
-      /// <summary>
-      /// Send an invite.
-      /// </summary>
-      /// <param name="request">The request to send to the server.</param>
-      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
-      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
-      /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
-      public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.InviteResponse> PostInviteAsync(global::Spellsource.Proto.PostInviteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncServerStreamingCall<global::Spellsource.Proto.InviteResponse> PostInvite(global::Spellsource.Proto.PostInviteRequest request, grpc::CallOptions options)
       {
-        return PostInviteAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      /// <summary>
-      /// Send an invite.
-      /// </summary>
-      /// <param name="request">The request to send to the server.</param>
-      /// <param name="options">The options for the call.</param>
-      /// <returns>The call object.</returns>
-      public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.InviteResponse> PostInviteAsync(global::Spellsource.Proto.PostInviteRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.AsyncUnaryCall(__Method_PostInvite, null, options, request);
+        return CallInvoker.AsyncServerStreamingCall(__Method_PostInvite, null, options, request);
       }
       /// <summary>
       /// Provided a valid reset token, resets a user's password.
@@ -2176,7 +2091,6 @@ namespace Spellsource.Proto {
           .AddMethod(__Method_FriendPut, serviceImpl.FriendPut)
           .AddMethod(__Method_GetAccount, serviceImpl.GetAccount)
           .AddMethod(__Method_GetAccounts, serviceImpl.GetAccounts)
-          .AddMethod(__Method_GetCards, serviceImpl.GetCards)
           .AddMethod(__Method_GetGameRecord, serviceImpl.GetGameRecord)
           .AddMethod(__Method_GetGameRecordIds, serviceImpl.GetGameRecordIds)
           .AddMethod(__Method_GetInvite, serviceImpl.GetInvite)
@@ -2218,13 +2132,12 @@ namespace Spellsource.Proto {
       serviceBinder.AddMethod(__Method_FriendPut, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Spellsource.Proto.FriendPutRequest, global::Spellsource.Proto.FriendPutResponse>(serviceImpl.FriendPut));
       serviceBinder.AddMethod(__Method_GetAccount, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Spellsource.Proto.GetAccountRequest, global::Spellsource.Proto.GetAccountsResponse>(serviceImpl.GetAccount));
       serviceBinder.AddMethod(__Method_GetAccounts, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Spellsource.Proto.GetAccountsRequest, global::Spellsource.Proto.GetAccountsResponse>(serviceImpl.GetAccounts));
-      serviceBinder.AddMethod(__Method_GetCards, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Spellsource.Proto.GetCardsRequest, global::Spellsource.Proto.GetCardsResponse>(serviceImpl.GetCards));
       serviceBinder.AddMethod(__Method_GetGameRecord, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Spellsource.Proto.GetGameRecordRequest, global::Spellsource.Proto.GetGameRecordResponse>(serviceImpl.GetGameRecord));
       serviceBinder.AddMethod(__Method_GetGameRecordIds, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.GetGameRecordIdsResponse>(serviceImpl.GetGameRecordIds));
       serviceBinder.AddMethod(__Method_GetInvite, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Spellsource.Proto.GetInviteRequest, global::Spellsource.Proto.InviteResponse>(serviceImpl.GetInvite));
       serviceBinder.AddMethod(__Method_GetInvites, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.InviteGetResponse>(serviceImpl.GetInvites));
       serviceBinder.AddMethod(__Method_Login, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Spellsource.Proto.LoginRequest, global::Spellsource.Proto.LoginResponse>(serviceImpl.Login));
-      serviceBinder.AddMethod(__Method_PostInvite, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Spellsource.Proto.PostInviteRequest, global::Spellsource.Proto.InviteResponse>(serviceImpl.PostInvite));
+      serviceBinder.AddMethod(__Method_PostInvite, serviceImpl == null ? null : new grpc::ServerStreamingServerMethod<global::Spellsource.Proto.PostInviteRequest, global::Spellsource.Proto.InviteResponse>(serviceImpl.PostInvite));
       serviceBinder.AddMethod(__Method_PostPasswordReset, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Spellsource.Proto.PostPasswordResetRequest, global::Google.Protobuf.WellKnownTypes.Empty>(serviceImpl.PostPasswordReset));
     }
 

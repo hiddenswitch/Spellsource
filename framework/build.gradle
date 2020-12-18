@@ -125,11 +125,11 @@ dependencies {
     implementation 'io.jaegertracing:jaeger-client:1.5.0'
     implementation "org.flywaydb:flyway-core:$flywayVersion"
 
-    testImplementation(project(':testcontainers')) {
+    implementation(project(':testcontainers')) {
         exclude group: 'junit', module: 'junit'
     }
     testImplementation project(':testutils')
-    testImplementation("org.testcontainers:testcontainers") {
+    implementation("org.testcontainers:testcontainers") {
         exclude group: 'junit', module: 'junit'
     }
     testImplementation("org.testcontainers:junit-jupiter") {
@@ -144,7 +144,13 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
+    compileOnly("junit:junit:4.12") {
+        because("only for testcontainers")
+    }
     testCompileOnly("junit:junit:4.12") {
+        because("only for testcontainers")
+    }
+    runtimeOnly("junit:junit:4.12") {
         because("only for testcontainers")
     }
     testRuntimeOnly("junit:junit:4.12") {
@@ -176,8 +182,6 @@ def dotnetCmd = isWindows ? "C:\\Program Files\\dotnet\\dotnet.exe" : "$project.
 
 task dll(type: Exec, group: 'build') {
     dependsOn copyCsharpGrpc
-    inputs.files(csharpRootDir + '/Framework/**/*.cs', csharpRootDir + '/Framework/**/*.csproj')
-    outputs.dir("$project.buildDir/dlls")
     workingDir csharpRootDir
     // this is using docker-wrapped dotnet
     commandLine dotnetCmd, 'publish', '--output', isWindows ? "$project.buildDir/dlls" : "/git/framework/build/dlls"
@@ -195,7 +199,6 @@ task testDll(type: Exec, group: 'verification') {
 task installDll(type: Copy) {
     dependsOn dll
     from("$project.buildDir/dlls") {
-        exclude '**/*.*'
         include 'Framework.dll'
         include 'Framework.pdb'
     }
@@ -299,7 +302,8 @@ task jooqGenerate() {
                     .withDatabase(new Database()
                             .withName('org.jooq.meta.postgres.PostgresDatabase')
                             .withSchemata(new SchemaMappingType().withInputSchema("keycloak").withOutputSchema('keycloak'),
-                                    new SchemaMappingType().withInputSchema("spellsource").withOutputSchema('spellsource'))
+                                    new SchemaMappingType().withInputSchema("spellsource").withOutputSchema('spellsource'),
+                                    new SchemaMappingType().withInputSchema("hiddenswitch").withOutputSchema("hiddenswitch"))
                             .withForcedTypes(
                                     new ForcedType()
                                             .withUserType(JsonObject.class.getName())
@@ -369,7 +373,6 @@ flyway {
 // Make sure keycloak has done its migration first
 flywayMigrate.dependsOn += [startAndWaitOnHealthyKeycloakContainer]
 
-def javaGrpcPath = project.projectDir.absolutePath + "/bin/grpc_java_plugin" + (isWindows ? ".exe" : "")
 def csharpGrpcPath = project.projectDir.absolutePath + "/bin/grpc_csharp_plugin" + (isWindows ? ".exe" : "")
 
 protobuf {
@@ -390,7 +393,9 @@ protobuf {
     generateProtoTasks {
         all()*.builtins {
             java {}
-            csharp {}
+            csharp {
+                option 'serializable'
+            }
         }
         all()*.plugins {
             grpc_java {

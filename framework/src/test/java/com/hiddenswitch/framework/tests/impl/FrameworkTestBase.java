@@ -1,27 +1,19 @@
 package com.hiddenswitch.framework.tests.impl;
 
-import com.hiddenswitch.containers.*;
-import com.hiddenswitch.framework.Client;
-import com.hiddenswitch.framework.Environment;
+import com.hiddenswitch.framework.Application;
 import com.hiddenswitch.framework.Gateway;
-import com.hiddenswitch.framework.rpc.ServerConfiguration;
 import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.core.*;
 import io.vertx.junit5.VertxExtension;
-import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.testcontainers.containers.Network;
 import org.testcontainers.containers.ToxiproxyContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.lifecycle.Startables;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -32,38 +24,7 @@ import static org.testcontainers.Testcontainers.exposeHostPorts;
 @Testcontainers
 public class FrameworkTestBase {
 
-	protected static final String PGDATABASE = "spellsource";
-	protected static final String CLIENT_SECRET = "clientsecret";
-	protected static final String CLIENT_ID = "spellsource";
-	protected static final String PGUSER = "admin";
-	protected static final String PGPASSWORD = "password";
-	protected static final String PGHOST = "postgres";
-	protected static final int PGPORT = 5432;
-
-	protected static AtomicBoolean started = new AtomicBoolean(false);
-
-	protected static PostgresSupabaseContainer postgres = new PostgresSupabaseContainer(PGUSER, PGPASSWORD, PGDATABASE)
-			.withReuse(false)
-			.withNetwork(Network.SHARED)
-			.withNetworkAliases(PGHOST)
-			.withExposedPorts(PGPORT);
-
-	protected static KeycloakContainer keycloak = new KeycloakContainer("jboss/keycloak:11.0.3")
-			.dependsOn(postgres)
-			.withNetwork(Network.SHARED)
-			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD);
-
-	protected static RealtimeContainer realtime = new RealtimeContainer("realtimesecret", 4000)
-			.dependsOn(postgres)
-			.withNetwork(Network.SHARED)
-			.withEnv("DB_HOST", PGHOST)
-			.withEnv("DB_NAME", PGDATABASE)
-			.withEnv("DB_USER", PGUSER)
-			.withEnv("DB_PASSWORD", PGPASSWORD)
-			.withEnv("DB_PORT", Integer.toString(PGPORT))
-			.withReuse(false);
-
-	protected static ToxiproxyContainer toxiproxy = new ToxiproxyContainer("shopify/toxiproxy:2.1.4");
+	protected static ToxiproxyContainer TOXIPROXY = new ToxiproxyContainer("shopify/toxiproxy:2.1.4");
 
 	private static ToxiproxyContainer.ContainerProxy toxicGrpcProxy;
 
@@ -73,50 +34,14 @@ public class FrameworkTestBase {
 
 	@BeforeAll
 	protected static void startContainers() throws InterruptedException {
-		var shouldStart = started.compareAndSet(false, true);
-		if (!shouldStart) {
+		if (!Application.defaultConfigurationAndServices()) {
 			return;
 		}
 
 		exposeHostPorts(Gateway.grpcPort());
-		Startables.deepStart(Stream.of(postgres, keycloak, toxiproxy)).join();
-		// Set the configuration (typed)
-		var serverConfiguration = ServerConfiguration.newBuilder()
-				.setPg(ServerConfiguration.PostgresConfiguration.newBuilder()
-						.setPort(postgres.getMappedPort(PGPORT))
-						.setHost(postgres.getHost())
-						.setDatabase(PGDATABASE)
-						.setUser(PGUSER)
-						.setPassword(PGPASSWORD)
-						.build())
-				.setKeycloak(ServerConfiguration.KeycloakConfiguration.newBuilder()
-						.setAuthUrl(keycloak.getAuthServerUrl())
-						.setAdminUsername(keycloak.getAdminUsername())
-						.setAdminPassword(keycloak.getAdminPassword())
-						.setClientId(CLIENT_ID)
-						.setClientSecret(CLIENT_SECRET)
-						.setRealmDisplayName("Spellsource")
-						.setRealmId("hiddenswitch")
-						.build())
-				.setGrpcConfiguration(ServerConfiguration.GrpcConfiguration.newBuilder()
-						.setServerKeepAliveTimeMillis(400)
-						.setServerKeepAliveTimeoutMillis(8000)
-						.setServerPermitKeepAliveWithoutCalls(true)
-						.build())
-				.setMatchmaking(ServerConfiguration.MatchmakingConfiguration.newBuilder()
-						.setMaxTicketsToProcess(100)
-						.setScanFrequencyMillis(1200)
-						.setEnqueueLockTimeoutMillis(400).build())
-				.build();
 
-		Environment.setConfiguration(serverConfiguration);
-		Environment.migrate().toCompletionStage().toCompletableFuture().join();
-		Startables.deepStart(Stream.of(realtime)).join();
-
-		Environment.setConfiguration(ServerConfiguration.newBuilder()
-				.setRealtime(ServerConfiguration.RealtimeConfiguration.newBuilder()
-						.setUri(realtime.getRealtimeUrl()).build()).build());
-		toxicGrpcProxy = toxiproxy.getProxy("host.testcontainers.internal", Gateway.grpcPort());
+		Startables.deepStart(Stream.of(TOXIPROXY)).join();
+		toxicGrpcProxy = TOXIPROXY.getProxy("host.testcontainers.internal", Gateway.grpcPort());
 	}
 
 

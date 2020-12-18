@@ -261,6 +261,10 @@ public class Client implements AutoCloseable {
 		}
 	}
 
+	public Future<Void> closeFut() {
+		return close((Object) null);
+	}
+
 	private void handleCreateAccountReply(LoginOrCreateReplyOrBuilder reply) {
 		handleLogin(new AccessTokenResponse());
 		handleAccountsCreateUser(new UserEntity()
@@ -302,5 +306,9 @@ public class Client implements AutoCloseable {
 
 	public void close(AsyncResult<?> ignored) {
 		close();
+	}
+
+	public VertxUnauthenticatedCardsGrpc.UnauthenticatedCardsVertxStub unauthenticatedCards() {
+		return VertxUnauthenticatedCardsGrpc.newVertxStub(channel());
 	}
 }

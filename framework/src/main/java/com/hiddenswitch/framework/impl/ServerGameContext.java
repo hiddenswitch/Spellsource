@@ -77,7 +77,7 @@ import static java.util.stream.Collectors.toList;
 public class ServerGameContext extends GameContext implements Server {
 	private static final long CLOSE_TIMEOUT_MILLIS = 4000L;
 	private static final long REGISTRATION_TIMEOUT = 4000L;
-	private static Logger LOGGER = LoggerFactory.getLogger(ServerGameContext.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServerGameContext.class);
 	public static final String WRITER_ADDRESS_PREFIX = "Games.writer.";
 	public static final String READER_ADDRESS_PREFIX = "Games.reader.";
 
@@ -112,7 +112,7 @@ public class ServerGameContext extends GameContext implements Server {
 		var spanBuilder = tracer.buildSpan("ServerGameContext/init")
 				.withTag("gameId", gameId);
 		for (var i = 0; i < playerConfigurations.size(); i++) {
-			spanBuilder.withTag("playerConfigurations." + i + ".userId", playerConfigurations.get(i).getUserId().toString());
+			spanBuilder.withTag("playerConfigurations." + i + ".userId", playerConfigurations.get(i).getUserId());
 			spanBuilder.withTag("playerConfigurations." + i + ".deckId", playerConfigurations.get(i).getDeck().getDeckId());
 			spanBuilder.withTag("playerConfigurations." + i + ".isBot", playerConfigurations.get(i).isBot());
 		}
@@ -256,11 +256,11 @@ public class ServerGameContext extends GameContext implements Server {
 	}
 
 	public static MessageProducer<ServerToClientMessage> toServer(String userId, EventBus bus) {
-		return bus.publisher(getMessagesFromServerAddress(userId.toString()));
+		return bus.publisher(getMessagesFromServerAddress(userId));
 	}
 
 	public static MessageConsumer<ClientToServerMessage> toClient(String userId, EventBus bus) {
-		return bus.consumer(getMessagesFromClientAddress(userId.toString()));
+		return bus.consumer(getMessagesFromClientAddress(userId));
 	}
 
 	public static void subscribeGame(ReadStream<ClientToServerMessage> request, WriteStream<ServerToClientMessage> response) {
@@ -555,15 +555,6 @@ public class ServerGameContext extends GameContext implements Server {
 				return null;
 			}));
 
-			// Closing the context should interrupt the fiber
-			// Not sure if this should be done at construction time.
-			((ContextInternal) Vertx.currentContext()).addCloseHook(v -> {
-				if (getFiber() != null && !getFiber().isInterrupted()) {
-					getFiber().interrupt();
-				}
-				v.handle(Future.succeededFuture());
-			});
-
 			getFiber().setUncaughtExceptionHandler((t, e) -> e.printStackTrace());
 			getFiber().start();
 			LOGGER.debug("play {}: Fiber started", gameId);
@@ -807,7 +798,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	public String getGameId() {
-		return gameId.toString();
+		return gameId;
 	}
 
 	@Override
