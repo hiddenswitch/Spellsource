@@ -14,6 +14,7 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.web.client.WebClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.engines.vertx.VertxClientHttpEngine;
+import org.jetbrains.annotations.NotNull;
 import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -141,7 +142,7 @@ public class Accounts {
 				var accessTokenResponse = (org.keycloak.representations.AccessTokenResponse) tuple[0];
 				var userEntity = (UserEntity) tuple[1];
 				return LoginOrCreateReply.newBuilder()
-						.setUserEntity(com.hiddenswitch.framework.rpc.UserEntity.newBuilder().setId(userEntity.getId()).setEmail(userEntity.getEmail()).setUsername(userEntity.getUsername()).build())
+						.setUserEntity(toProto(userEntity))
 						.setAccessTokenResponse(AccessTokenResponse.newBuilder().setToken(accessTokenResponse.getToken()).build()).build();
 			}
 
@@ -160,6 +161,7 @@ public class Accounts {
 			public Future<LoginOrCreateReply> login(LoginRequest request) {
 				var client = new Client(context.owner(), webClient);
 				return client.login(request.getUsernameOrEmail(), request.getPassword())
+						.onComplete(v -> client.closeFut())
 						.compose(accessTokenResponse -> {
 							var token = TokenVerifier.create(accessTokenResponse.getToken(), AccessToken.class);
 							try {
@@ -179,6 +181,27 @@ public class Accounts {
 	public static Future<ServerServiceDefinition> authenticatedService() {
 		// Does not require vertx blocking service because it makes no blocking calls
 		return Future.succeededFuture(new VertxAccountsGrpc.AccountsVertxImplBase() {
+
+			@Override
+			public Future<LoginOrCreateReply> changePassword(ChangePasswordRequest request) {
+				var userId = Accounts.userId();
+				// for now we don't invalidate and refresh the old token
+				var token = Accounts.token();
+				if (token == null) {
+					return Future.failedFuture("must log in with old password first");
+				}
+				return get()
+						.compose(realm -> Environment.executeBlocking(() -> {
+							realm.users().get(userId).resetPassword(getPasswordCredential(request.getNewPassword()));
+							return Future.succeededFuture();
+						}))
+						.compose(v -> (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate()).findOneById(userId)))
+						.map(userEntity -> LoginOrCreateReply.newBuilder()
+								.setUserEntity(toProto(userEntity))
+								.setAccessTokenResponse(AccessTokenResponse.newBuilder()
+										.setToken(token)
+										.build()).build());
+			}
 
 			@Override
 			public Future<GetAccountsReply> getAccounts(GetAccountsRequest request) {
@@ -209,6 +232,18 @@ public class Accounts {
 				.compose(Accounts::requiresAuthorization);
 	}
 
+	private static com.hiddenswitch.framework.rpc.UserEntity.Builder toProto(UserEntity userEntity) {
+		return com.hiddenswitch.framework.rpc.UserEntity.newBuilder()
+				.setEmail(userEntity.getEmail())
+				.setUsername(userEntity.getUsername())
+				.setId(userEntity.getId());
+	}
+
+	private static String token() {
+		// from JwtServerInterceptor
+		return (String) Context.key("AccessToken").get();
+	}
+
 	public static Future<ServerServiceDefinition> requiresAuthorization(BindableService service) {
 		return Accounts.authorizationInterceptor()
 				.compose(interceptor -> Future.succeededFuture(ServerInterceptors.intercept(service, interceptor)));
@@ -235,11 +270,8 @@ public class Accounts {
 					user.setEmail(email);
 					user.setUsername(username);
 					user.setEnabled(true);
-					var credential = new CredentialRepresentation();
+					var credential = getPasswordCredential(password);
 					user.setCredentials(Collections.singletonList(credential));
-					credential.setType(CredentialRepresentation.PASSWORD);
-					credential.setValue(password);
-					credential.setTemporary(false);
 
 					// TODO: Not sure yet how to get the ID of the user you just created
 					return Environment.executeBlocking(() -> {
@@ -265,6 +297,15 @@ public class Accounts {
 					}
 					return Future.succeededFuture(userEntity);
 				});
+	}
+
+	@NotNull
+	private static CredentialRepresentation getPasswordCredential(String password) {
+		var credential = new CredentialRepresentation();
+		credential.setType(CredentialRepresentation.PASSWORD);
+		credential.setValue(password);
+		credential.setTemporary(false);
+		return credential;
 	}
 
 	private static Keycloak keycloakConstructor(Vertx vertx) {

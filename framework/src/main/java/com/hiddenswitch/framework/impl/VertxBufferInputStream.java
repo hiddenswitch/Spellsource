@@ -23,8 +23,8 @@ public class VertxBufferInputStream extends InputStream {
 
 	@Override
 	public int read(byte b[], int off, int len) {
-		long start = this.position;
-		long end = Math.min(start + len, input.length());
+		var start = this.position;
+		var end = Math.min(start + len, input.length());
 		input.getBytes((int) start, (int) end, b, off);
 		this.position = end;
 		return (int) (end - start);
@@ -37,8 +37,8 @@ public class VertxBufferInputStream extends InputStream {
 
 	@Override
 	public long skip(long n) {
-		long destination = Math.min(position + n, input.length() - 1);
-		long difference = destination - position;
+		var destination = Math.min(position + n, input.length() - 1);
+		var difference = destination - position;
 		position = destination;
 		return difference;
 	}

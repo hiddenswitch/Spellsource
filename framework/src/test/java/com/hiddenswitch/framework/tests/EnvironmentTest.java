@@ -17,6 +17,8 @@ import static com.hiddenswitch.framework.schema.spellsource.Tables.GAMES;
 
 public class EnvironmentTest extends FrameworkTestBase {
 
+
+
 	@Test
 	public void testPgPool(VertxTestContext vertxTestContext) {
 		var vertx = Vertx.vertx();

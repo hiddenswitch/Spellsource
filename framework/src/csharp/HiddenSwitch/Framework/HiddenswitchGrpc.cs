@@ -134,12 +134,144 @@ namespace HiddenSwitch.Proto {
     }
 
   }
+  public static partial class UnauthenticatedCards
+  {
+    static readonly string __ServiceName = "hiddenswitch.UnauthenticatedCards";
+
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.GetCardsRequest> __Marshaller_hiddenswitch_GetCardsRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.GetCardsRequest.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.GetCardsResponse> __Marshaller_hiddenswitch_GetCardsResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.GetCardsResponse.Parser.ParseFrom);
+
+    static readonly grpc::Method<global::HiddenSwitch.Proto.GetCardsRequest, global::HiddenSwitch.Proto.GetCardsResponse> __Method_GetCards = new grpc::Method<global::HiddenSwitch.Proto.GetCardsRequest, global::HiddenSwitch.Proto.GetCardsResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetCards",
+        __Marshaller_hiddenswitch_GetCardsRequest,
+        __Marshaller_hiddenswitch_GetCardsResponse);
+
+    /// <summary>Service descriptor</summary>
+    public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
+    {
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.Services[1]; }
+    }
+
+    /// <summary>Base class for server-side implementations of UnauthenticatedCards</summary>
+    [grpc::BindServiceMethod(typeof(UnauthenticatedCards), "BindService")]
+    public abstract partial class UnauthenticatedCardsBase
+    {
+      /// <summary>
+      /// Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      public virtual global::System.Threading.Tasks.Task<global::HiddenSwitch.Proto.GetCardsResponse> GetCards(global::HiddenSwitch.Proto.GetCardsRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+    }
+
+    /// <summary>Client for UnauthenticatedCards</summary>
+    public partial class UnauthenticatedCardsClient : grpc::ClientBase<UnauthenticatedCardsClient>
+    {
+      /// <summary>Creates a new client for UnauthenticatedCards</summary>
+      /// <param name="channel">The channel to use to make remote calls.</param>
+      public UnauthenticatedCardsClient(grpc::ChannelBase channel) : base(channel)
+      {
+      }
+      /// <summary>Creates a new client for UnauthenticatedCards that uses a custom <c>CallInvoker</c>.</summary>
+      /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+      public UnauthenticatedCardsClient(grpc::CallInvoker callInvoker) : base(callInvoker)
+      {
+      }
+      /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      protected UnauthenticatedCardsClient() : base()
+      {
+      }
+      /// <summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <param name="configuration">The client configuration.</param>
+      protected UnauthenticatedCardsClient(ClientBaseConfiguration configuration) : base(configuration)
+      {
+      }
+
+      /// <summary>
+      /// Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      public virtual global::HiddenSwitch.Proto.GetCardsResponse GetCards(global::HiddenSwitch.Proto.GetCardsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetCards(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      public virtual global::HiddenSwitch.Proto.GetCardsResponse GetCards(global::HiddenSwitch.Proto.GetCardsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetCards, null, options, request);
+      }
+      /// <summary>
+      /// Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      public virtual grpc::AsyncUnaryCall<global::HiddenSwitch.Proto.GetCardsResponse> GetCardsAsync(global::HiddenSwitch.Proto.GetCardsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetCardsAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      public virtual grpc::AsyncUnaryCall<global::HiddenSwitch.Proto.GetCardsResponse> GetCardsAsync(global::HiddenSwitch.Proto.GetCardsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetCards, null, options, request);
+      }
+      /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+      protected override UnauthenticatedCardsClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new UnauthenticatedCardsClient(configuration);
+      }
+    }
+
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    public static grpc::ServerServiceDefinition BindService(UnauthenticatedCardsBase serviceImpl)
+    {
+      return grpc::ServerServiceDefinition.CreateBuilder()
+          .AddMethod(__Method_GetCards, serviceImpl.GetCards).Build();
+    }
+
+    /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
+    /// Note: this method is part of an experimental API that can change or be removed without any prior notice.</summary>
+    /// <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    public static void BindService(grpc::ServiceBinderBase serviceBinder, UnauthenticatedCardsBase serviceImpl)
+    {
+      serviceBinder.AddMethod(__Method_GetCards, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::HiddenSwitch.Proto.GetCardsRequest, global::HiddenSwitch.Proto.GetCardsResponse>(serviceImpl.GetCards));
+    }
+
+  }
   public static partial class Accounts
   {
     static readonly string __ServiceName = "hiddenswitch.Accounts";
 
     static readonly grpc::Marshaller<global::HiddenSwitch.Proto.GetAccountsRequest> __Marshaller_hiddenswitch_GetAccountsRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.GetAccountsRequest.Parser.ParseFrom);
     static readonly grpc::Marshaller<global::HiddenSwitch.Proto.GetAccountsReply> __Marshaller_hiddenswitch_GetAccountsReply = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.GetAccountsReply.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.ChangePasswordRequest> __Marshaller_hiddenswitch_ChangePasswordRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.ChangePasswordRequest.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.LoginOrCreateReply> __Marshaller_hiddenswitch_LoginOrCreateReply = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.LoginOrCreateReply.Parser.ParseFrom);
+    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Google.Protobuf.WellKnownTypes.Empty.Parser.ParseFrom);
 
     static readonly grpc::Method<global::HiddenSwitch.Proto.GetAccountsRequest, global::HiddenSwitch.Proto.GetAccountsReply> __Method_GetAccounts = new grpc::Method<global::HiddenSwitch.Proto.GetAccountsRequest, global::HiddenSwitch.Proto.GetAccountsReply>(
         grpc::MethodType.Unary,
@@ -148,10 +280,24 @@ namespace HiddenSwitch.Proto {
         __Marshaller_hiddenswitch_GetAccountsRequest,
         __Marshaller_hiddenswitch_GetAccountsReply);
 
+    static readonly grpc::Method<global::HiddenSwitch.Proto.ChangePasswordRequest, global::HiddenSwitch.Proto.LoginOrCreateReply> __Method_ChangePassword = new grpc::Method<global::HiddenSwitch.Proto.ChangePasswordRequest, global::HiddenSwitch.Proto.LoginOrCreateReply>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "ChangePassword",
+        __Marshaller_hiddenswitch_ChangePasswordRequest,
+        __Marshaller_hiddenswitch_LoginOrCreateReply);
+
+    static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Google.Protobuf.WellKnownTypes.Empty> __Method_RequestPasswordResetEmail = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Google.Protobuf.WellKnownTypes.Empty>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "RequestPasswordResetEmail",
+        __Marshaller_google_protobuf_Empty,
+        __Marshaller_google_protobuf_Empty);
+
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.Services[1]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.Services[2]; }
     }
 
     /// <summary>Base class for server-side implementations of Accounts</summary>
@@ -159,6 +305,22 @@ namespace HiddenSwitch.Proto {
     public abstract partial class AccountsBase
     {
       public virtual global::System.Threading.Tasks.Task<global::HiddenSwitch.Proto.GetAccountsReply> GetAccounts(global::HiddenSwitch.Proto.GetAccountsRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      /// Doesn't invalidate the token right now
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      public virtual global::System.Threading.Tasks.Task<global::HiddenSwitch.Proto.LoginOrCreateReply> ChangePassword(global::HiddenSwitch.Proto.ChangePasswordRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      public virtual global::System.Threading.Tasks.Task<global::Google.Protobuf.WellKnownTypes.Empty> RequestPasswordResetEmail(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -204,6 +366,66 @@ namespace HiddenSwitch.Proto {
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetAccounts, null, options, request);
       }
+      /// <summary>
+      /// Doesn't invalidate the token right now
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      public virtual global::HiddenSwitch.Proto.LoginOrCreateReply ChangePassword(global::HiddenSwitch.Proto.ChangePasswordRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return ChangePassword(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Doesn't invalidate the token right now
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      public virtual global::HiddenSwitch.Proto.LoginOrCreateReply ChangePassword(global::HiddenSwitch.Proto.ChangePasswordRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_ChangePassword, null, options, request);
+      }
+      /// <summary>
+      /// Doesn't invalidate the token right now
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      public virtual grpc::AsyncUnaryCall<global::HiddenSwitch.Proto.LoginOrCreateReply> ChangePasswordAsync(global::HiddenSwitch.Proto.ChangePasswordRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return ChangePasswordAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Doesn't invalidate the token right now
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      public virtual grpc::AsyncUnaryCall<global::HiddenSwitch.Proto.LoginOrCreateReply> ChangePasswordAsync(global::HiddenSwitch.Proto.ChangePasswordRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_ChangePassword, null, options, request);
+      }
+      public virtual global::Google.Protobuf.WellKnownTypes.Empty RequestPasswordResetEmail(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return RequestPasswordResetEmail(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual global::Google.Protobuf.WellKnownTypes.Empty RequestPasswordResetEmail(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_RequestPasswordResetEmail, null, options, request);
+      }
+      public virtual grpc::AsyncUnaryCall<global::Google.Protobuf.WellKnownTypes.Empty> RequestPasswordResetEmailAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return RequestPasswordResetEmailAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      public virtual grpc::AsyncUnaryCall<global::Google.Protobuf.WellKnownTypes.Empty> RequestPasswordResetEmailAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_RequestPasswordResetEmail, null, options, request);
+      }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       protected override AccountsClient NewInstance(ClientBaseConfiguration configuration)
       {
@@ -216,7 +438,9 @@ namespace HiddenSwitch.Proto {
     public static grpc::ServerServiceDefinition BindService(AccountsBase serviceImpl)
     {
       return grpc::ServerServiceDefinition.CreateBuilder()
-          .AddMethod(__Method_GetAccounts, serviceImpl.GetAccounts).Build();
+          .AddMethod(__Method_GetAccounts, serviceImpl.GetAccounts)
+          .AddMethod(__Method_ChangePassword, serviceImpl.ChangePassword)
+          .AddMethod(__Method_RequestPasswordResetEmail, serviceImpl.RequestPasswordResetEmail).Build();
     }
 
     /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
@@ -226,6 +450,8 @@ namespace HiddenSwitch.Proto {
     public static void BindService(grpc::ServiceBinderBase serviceBinder, AccountsBase serviceImpl)
     {
       serviceBinder.AddMethod(__Method_GetAccounts, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::HiddenSwitch.Proto.GetAccountsRequest, global::HiddenSwitch.Proto.GetAccountsReply>(serviceImpl.GetAccounts));
+      serviceBinder.AddMethod(__Method_ChangePassword, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::HiddenSwitch.Proto.ChangePasswordRequest, global::HiddenSwitch.Proto.LoginOrCreateReply>(serviceImpl.ChangePassword));
+      serviceBinder.AddMethod(__Method_RequestPasswordResetEmail, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Google.Protobuf.WellKnownTypes.Empty, global::Google.Protobuf.WellKnownTypes.Empty>(serviceImpl.RequestPasswordResetEmail));
     }
 
   }

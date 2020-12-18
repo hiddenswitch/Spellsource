@@ -7,6 +7,8 @@ option csharp_namespace = "HiddenSwitch.Proto";
 package hiddenswitch;
 
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "spellsource.proto";
 
 // Specifies a complete server configuration
 message ServerConfiguration {
@@ -50,21 +52,55 @@ message ServerConfiguration {
         int32 maxTicketsToProcess = 3;
     }
 
+    message ApplicationConfiguration {
+        bool useBroadcaster = 1;
+    }
+
     PostgresConfiguration pg = 1;
     KeycloakConfiguration keycloak = 2;
     reserved 3;
     RealtimeConfiguration realtime = 4;
     GrpcConfiguration grpcConfiguration = 5;
     MatchmakingConfiguration matchmaking = 6;
+    ApplicationConfiguration application = 7;
 }
+
+
+message GetCardsRequest {
+    // The value returned in the ETag header from the server when this was last called, or empty if this is the
+    // first call to this resource.
+    string If_None_Match = 1;
+}
+
+// A cacheable copy of the entire card catalogue.
+message GetCardsResponse {
+    // The actual array of cards representing the complete Spellsource catalogue.
+    repeated spellsource.CardRecord cards = 1;
+
+    // A token used in the If-None-Match argument when checking for new card catalogue content.
+    string version = 2;
+    bool cachedOk = 3;
+}
+
+
 
 service Unauthenticated {
     rpc CreateAccount (CreateAccountRequest) returns (LoginOrCreateReply) {}
     rpc Login (LoginRequest) returns (LoginOrCreateReply) {}
 }
 
+service UnauthenticatedCards {
+    // Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
+    rpc GetCards(GetCardsRequest) returns (GetCardsResponse) {}
+}
+
 service Accounts {
     rpc GetAccounts(GetAccountsRequest) returns (GetAccountsReply) {}
+
+    // Doesn't invalidate the token right now
+    rpc ChangePassword(ChangePasswordRequest) returns (LoginOrCreateReply) {}
+
+    rpc RequestPasswordResetEmail(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }
 
 message LoginRequest {
@@ -77,6 +113,10 @@ message CreateAccountRequest {
     string email = 1;
     string username = 2;
     string password = 3;
+}
+
+message ChangePasswordRequest {
+    string newPassword = 1;
 }
 
 message LoginOrCreateReply {
@@ -92,6 +132,7 @@ message UserEntity {
     string id = 1;
     string email = 2;
     string username = 10;
+    string privacyToken = 11;
 }
 
 message GetAccountsRequest {

@@ -1,7 +1,6 @@
 package com.hiddenswitch.framework.migrations;
 
 import com.google.common.hash.Hashing;
-import com.hiddenswitch.framework.Accounts;
 import com.hiddenswitch.framework.impl.MigrationUtils;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -9,7 +8,6 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
-import org.jooq.JSONB;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 

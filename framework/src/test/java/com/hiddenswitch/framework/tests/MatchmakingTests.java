@@ -27,6 +27,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.testcontainers.containers.ToxiproxyContainer;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -169,7 +170,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 		testContext.completeNow();
 	}
 
-	@RepeatedTest(10)
+	@Test
 	public void testMultiplayerQueueCreatesMatch(Vertx vertx, VertxTestContext testContext) {
 		var client1 = new Client(vertx);
 		var client2 = new Client(vertx);
@@ -294,11 +295,12 @@ public class MatchmakingTests extends FrameworkTestBase {
 	public void testClientFailureMultiplayerQueueCancel(Vertx vertx, VertxTestContext testContext) {
 		var client = new ToxiClient(vertx);
 		var queueId = UUID.randomUUID().toString();
+		var fails = checkpoint(1);
 		startServices(vertx)
 				.compose(v -> Matchmaking.createQueue(createMultiplayerQueue(queueId)))
 				.compose(v -> client.createAndLogin())
 				.compose(v -> {
-					client.matchmake(queueId);
+					client.matchmake(queueId); //.onFailure(t -> fails.flag()).onSuccess(v1 -> testContext.failNow("should not successfully matchmake"));
 					return Environment.sleep(vertx, 4000);
 				})
 				.onSuccess(v -> toxicGrpcProxy().setConnectionCut(true))
@@ -321,8 +323,14 @@ public class MatchmakingTests extends FrameworkTestBase {
 						assertEquals(0, tickets.size(), "disconnected and should have timed out");
 					});
 				})
-				.onComplete(client::close)
-				.onComplete(v -> toxicGrpcProxy().setConnectionCut(false))
+				.compose(v -> client.closeFut().otherwiseEmpty())
+				.onComplete(v -> {
+					var containerProxy = toxicGrpcProxy();
+					if (containerProxy == null) {
+						return;
+					}
+					containerProxy.setConnectionCut(false);
+				})
 				.compose(v -> Matchmaking.deleteQueue(queueId))
 				.onComplete(testContext.succeedingThenComplete());
 	}

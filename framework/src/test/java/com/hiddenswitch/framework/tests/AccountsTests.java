@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework.tests;
 
 import com.hiddenswitch.framework.Accounts;
+import com.hiddenswitch.framework.Application;
 import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.rpc.GetAccountsRequest;
@@ -101,15 +102,15 @@ public class AccountsTests extends FrameworkTestBase {
 				.compose(v -> Accounts.get())
 				.compose(hiddenswitch -> Environment.executeBlocking(() -> hiddenswitch.users().create(testUser)))
 				.compose(ignored -> {
-					var url = FrameworkTestBase.keycloak.getAuthServerUrl() + "/realms/hiddenswitch/protocol/openid-connect/token";
+					var url = Application.KEYCLOAK.getAuthServerUrl() + "/realms/hiddenswitch/protocol/openid-connect/token";
 
 					// Login
 					return webClient.postAbs(url)
 							.followRedirects(true)
 							.sendForm(MultiMap.caseInsensitiveMultiMap()
-									.add("client_id", CLIENT_ID)
+									.add("client_id", Application.CLIENT_ID)
 									.add("grant_type", "password")
-									.add("client_secret", CLIENT_SECRET)
+									.add("client_secret", Application.CLIENT_SECRET)
 									.add("scope", "openid")
 									// username or password can be used here
 									.add("username", testUser.getEmail())

@@ -89,7 +89,7 @@ public class Configuration implements Serializable, Cloneable {
 	@Override
 	public Configuration clone() {
 		try {
-			Configuration clone = (Configuration) super.clone();
+			var clone = (Configuration) super.clone();
 			clone.playerAttributes = playerAttributes.clone();
 			clone.deck = deck.clone();
 			return clone;

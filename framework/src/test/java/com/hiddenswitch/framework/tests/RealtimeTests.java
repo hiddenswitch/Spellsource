@@ -1,5 +1,6 @@
 package com.hiddenswitch.framework.tests;
 
+import com.hiddenswitch.framework.Application;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.impl.RealtimeClient;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
@@ -62,7 +63,7 @@ public class RealtimeTests extends FrameworkTestBase {
 
 	@Test
 	public void testRealtimeShouldFailToConnect(Vertx vertx, VertxTestContext testContext) {
-		(new RealtimeClient(realtime.getRealtimeUrl() + "/invalid").connect())
+		(new RealtimeClient(Application.REALTIME.getRealtimeUrl() + "/invalid").connect())
 				.onComplete(testContext.failing(ignored -> testContext.completeNow()));
 	}
 
@@ -70,7 +71,7 @@ public class RealtimeTests extends FrameworkTestBase {
 	public void testRealtimeJs(Vertx vertx, VertxTestContext testContext) {
 		var insertReceived = Promise.<RealtimeClient.RealtimeChanges>promise();
 		var insertReceivedTwice = new AtomicInteger();
-		(new RealtimeClient(realtime.getRealtimeUrl())).connect()
+		(new RealtimeClient(Application.REALTIME.getRealtimeUrl())).connect()
 				.compose(socket -> {
 					var channel = socket.channel("realtime:test:countries");
 
@@ -128,26 +129,4 @@ public class RealtimeTests extends FrameworkTestBase {
 				})
 				.onComplete(testContext.succeedingThenComplete());
 	}
-
-
-	/*
-	@Test
-	public void testPublishSubscribe(Vertx vertx, VertxTestContext testContext) {
-		var users = new UserEntityDao(Environment.jooq(), Environment.pool());
-		Accounts.createUser("test@test.com", "username", "password")
-				.compose(user -> Realtime.publish(
-						"user",
-						session -> users.findOneById(session.userId())
-								.map(entity -> {
-									var record = new UserEntityRecord();
-									record.from(entity);
-									return record;
-								})
-								.map(Collections::singletonList),
-						USER_ENTITY,
-						USER_ENTITY.ID,
-						Realtime.Session::userId))
-				.compose(publication -> Realtime.subscribe(Realtime.Session.forUserId("a"), "user", UserEntityRecord.class, String.class))
-				.onComplete(testContext.completing());
-	}*/
 }

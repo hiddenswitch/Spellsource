@@ -29,7 +29,7 @@ public class ActivityMonitor {
 	}
 
 	public void activity() {
-		Scheduler scheduler = this.scheduler.get();
+		var scheduler = this.scheduler.get();
 		if (scheduler == null) {
 			return;
 		}
