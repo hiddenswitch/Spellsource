@@ -3,6 +3,8 @@ package com.hiddenswitch.framework;
 import com.avast.grpc.jwt.server.JwtServerInterceptor;
 import com.avast.grpc.jwt.server.JwtTokenParser;
 import com.google.common.collect.ImmutableMap;
+import com.google.protobuf.BoolValue;
+import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.rpc.*;
 import com.hiddenswitch.framework.schema.keycloak.tables.daos.UserEntityDao;
@@ -11,6 +13,7 @@ import io.grpc.*;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.core.shareddata.Shareable;
 import io.vertx.ext.web.client.WebClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.engines.vertx.VertxClientHttpEngine;
@@ -46,53 +49,129 @@ public class Accounts {
 	private static final WeakVertxMap<Keycloak> keycloakReference = new WeakVertxMap<>(Accounts::keycloakConstructor);
 	private static final WeakVertxMap<PublicKeyJwtServerInterceptor> interceptor = new WeakVertxMap<>(Accounts::authorizationInterceptorConstructor);
 
-	private static PublicKeyJwtServerInterceptor authorizationInterceptorConstructor(Vertx vertx) {
-		var publicKey = new AtomicReference<PublicKey>();
-		return new PublicKeyJwtServerInterceptor(publicKey, jwtToken -> {
-			Objects.requireNonNull(publicKey.get(), "public key is null");
-			var verified = TokenVerifier.create(jwtToken, AccessToken.class);
-			verified.publicKey(publicKey.get());
-			try {
-				verified.verify();
-				return CompletableFuture.completedFuture(verified.getToken());
-			} catch (VerificationException e) {
-				return CompletableFuture.failedFuture(e);
+	private interface PublicKeyStorage {
+		PublicKey get();
+
+		void set(PublicKey publicKey);
+	}
+
+	private static class VertxPublicKeyStorage implements PublicKeyStorage {
+
+		private static class ShareablePublicKey implements Shareable {
+			private final PublicKey value;
+
+			public ShareablePublicKey(PublicKey value) {
+				this.value = value;
 			}
+
+			public PublicKey getValue() {
+				return value;
+			}
+		}
+
+		private final Vertx vertx;
+
+		public VertxPublicKeyStorage(Vertx vertx) {
+			this.vertx = vertx;
+		}
+
+		@Override
+		public PublicKey get() {
+			var res = ((ShareablePublicKey) vertx.sharedData().getLocalMap("Accounts:VertxPublicKeyStorage").get("publicKey"));
+			return res == null ? null : res.getValue();
+		}
+
+		@Override
+		public void set(PublicKey publicKey) {
+			vertx.sharedData().getLocalMap("Accounts:VertxPublicKeyStorage").put("publicKey", new ShareablePublicKey(publicKey));
+		}
+	}
+
+	private static class AtomicReferencePublicKeyStorage implements PublicKeyStorage {
+
+		private static final AtomicReference<PublicKey> publicKey = new AtomicReference<>();
+
+		@Override
+		public PublicKey get() {
+			return publicKey.get();
+		}
+
+		@Override
+		public void set(PublicKey publicKey) {
+			AtomicReferencePublicKeyStorage.publicKey.set(publicKey);
+		}
+	}
+
+	private static PublicKeyJwtServerInterceptor authorizationInterceptorConstructor(Vertx vertx) {
+		var publicKey = vertx == null ? new AtomicReferencePublicKeyStorage() : new VertxPublicKeyStorage(vertx);
+		return new PublicKeyJwtServerInterceptor(publicKey, jwtToken -> {
+			var pk = publicKey.get();
+			return verify(jwtToken, pk);
 		});
 	}
 
-	private static class PublicKeyJwtServerInterceptor extends JwtServerInterceptor<AccessToken> {
-		private AtomicReference<PublicKey> publicKey;
+	@NotNull
+	public static CompletableFuture<AccessToken> verify(String jwtToken, PublicKey pk) {
+		Objects.requireNonNull(pk, "public key is null");
+		var verified = TokenVerifier.create(jwtToken, AccessToken.class);
+		verified.publicKey(pk);
+		try {
+			verified.verify();
+			return CompletableFuture.completedFuture(verified.getToken());
+		} catch (VerificationException e) {
+			return CompletableFuture.failedFuture(e);
+		}
+	}
 
-		public PublicKeyJwtServerInterceptor(AtomicReference<PublicKey> publicKey, JwtTokenParser<AccessToken> tokenParser) {
+	private static class PublicKeyJwtServerInterceptor extends JwtServerInterceptor<AccessToken> {
+		private PublicKeyStorage publicKey;
+
+		public PublicKeyJwtServerInterceptor(PublicKeyStorage publicKey, JwtTokenParser<AccessToken> tokenParser) {
 			super(tokenParser);
 			this.publicKey = publicKey;
 		}
 
-		public AtomicReference<PublicKey> getPublicKey() {
+		public PublicKeyStorage getPublicKey() {
 			return publicKey;
 		}
 	}
 
 	public static Future<ServerInterceptor> authorizationInterceptor() {
 		// retrieve public key
-		return get().compose(realm -> Environment.executeBlocking(() -> {
-			var keys = realm.keys().getKeyMetadata().getKeys();
-			var keyBase64 = keys.stream().filter(key -> key.getPublicKey() != null
-					&& key.getType().equals(RSA)).findFirst().orElseThrow().getPublicKey();
-			var keyBytes = Base64.getDecoder().decode(keyBase64);
-			var encodedKeySpec = new X509EncodedKeySpec(keyBytes);
-			try {
-				var factory = KeyFactory.getInstance(RSA);
-				return factory.generatePublic(encodedKeySpec);
-			} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-				throw new RuntimeException(e);
-			}
-		})).compose(publicKey -> {
+		Future<PublicKey> publicKeyFut = getPublicKey();
+
+		return publicKeyFut.compose(publicKey -> {
 			var thisInterceptor = interceptor.get();
-			thisInterceptor.getPublicKey().set(publicKey);
 			return Future.succeededFuture(thisInterceptor);
 		});
+	}
+
+	private static Future<PublicKey> getPublicKey() {
+		var publicKeyStorage = new VertxPublicKeyStorage(Vertx.currentContext().owner());
+		Future<PublicKey> publicKeyFut;
+		if (publicKeyStorage.get() == null) {
+			publicKeyFut = get()
+					.compose(realm -> Environment.executeBlocking(() -> {
+						var keys = realm.keys().getKeyMetadata().getKeys();
+						var keyBase64 = keys.stream().filter(key -> key.getPublicKey() != null
+								&& key.getType().equals(RSA)).findFirst().orElseThrow().getPublicKey();
+						var keyBytes = Base64.getDecoder().decode(keyBase64);
+						var encodedKeySpec = new X509EncodedKeySpec(keyBytes);
+						try {
+							var factory = KeyFactory.getInstance(RSA);
+							return factory.generatePublic(encodedKeySpec);
+						} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+							throw new RuntimeException(e);
+						}
+					}).compose(publicKey -> {
+						var thisInterceptor = interceptor.get();
+						thisInterceptor.getPublicKey().set(publicKey);
+						return Future.succeededFuture(publicKey);
+					}));
+		} else {
+			publicKeyFut = Future.succeededFuture(publicKeyStorage.get());
+		}
+		return publicKeyFut;
 	}
 
 	public static Future<UserEntity> user() {
@@ -175,6 +254,15 @@ public class Accounts {
 						})
 						.map(this::handleAccessTokenUserEntityTuple);
 			}
+
+			@Override
+			public Future<BoolValue> verifyToken(AccessTokenResponse request) {
+				var context = Vertx.currentContext();
+				return Accounts.getPublicKey()
+						.compose(pk -> Future.fromCompletionStage(verify(request.getToken(), pk).minimalCompletionStage(), context))
+						.map(BoolValue.of(true))
+						.otherwise(BoolValue.of(false));
+			}
 		});
 	}
 
@@ -201,6 +289,24 @@ public class Accounts {
 								.setAccessTokenResponse(AccessTokenResponse.newBuilder()
 										.setToken(token)
 										.build()).build());
+			}
+
+			@Override
+			public Future<GetAccountsReply> getAccount(Empty request) {
+				return user()
+						.compose(thisUser -> {
+							if (thisUser == null) {
+								return Future.failedFuture("must log in");
+							}
+
+							return Future.succeededFuture(GetAccountsReply.newBuilder().addUserEntities(
+									com.hiddenswitch.framework.rpc.UserEntity.newBuilder()
+											.setUsername(thisUser.getUsername())
+											.setEmail(thisUser.getEmail())
+											.setId(thisUser.getId())
+											.build()
+							).build());
+						});
 			}
 
 			@Override

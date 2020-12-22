@@ -1,5 +1,5 @@
 syntax = "proto3";
-
+package spellsource;
 enum NotificationKind {
     NOTIFICATION_KIND_ADDED = 0;
     NOTIFICATION_KIND_CHANGED = 1;

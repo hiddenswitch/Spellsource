@@ -1804,6 +1804,18 @@ ALTER TABLE spellsource.matchmaking_tickets ALTER COLUMN id ADD GENERATED ALWAYS
 
 
 --
+-- Name: user_entity_addons; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.user_entity_addons (
+    id text NOT NULL,
+    privacy_token text DEFAULT floor(((1000)::double precision + (random() * (8999)::double precision)))
+);
+
+
+ALTER TABLE spellsource.user_entity_addons OWNER TO admin;
+
+--
 -- Name: flyway_schema_history flyway_schema_history_pk; Type: CONSTRAINT; Schema: hiddenswitch; Owner: admin
 --
 
@@ -2761,6 +2773,14 @@ ALTER TABLE ONLY spellsource.matchmaking_queues
 
 ALTER TABLE ONLY spellsource.matchmaking_tickets
     ADD CONSTRAINT matchmaking_tickets_pkey PRIMARY KEY (id, queue_id);
+
+
+--
+-- Name: user_entity_addons user_entity_addons_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.user_entity_addons
+    ADD CONSTRAINT user_entity_addons_pkey PRIMARY KEY (id);
 
 
 --
@@ -4174,6 +4194,14 @@ ALTER TABLE ONLY spellsource.matchmaking_tickets
 
 ALTER TABLE ONLY spellsource.matchmaking_tickets
     ADD CONSTRAINT matchmaking_tickets_user_id_fkey FOREIGN KEY (user_id) REFERENCES keycloak.user_entity(id) ON DELETE CASCADE;
+
+
+--
+-- Name: user_entity_addons user_entity_addons_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.user_entity_addons
+    ADD CONSTRAINT user_entity_addons_id_fkey FOREIGN KEY (id) REFERENCES keycloak.user_entity(id) ON DELETE CASCADE;
 
 
 --

@@ -5,17 +5,12 @@ import com.google.common.base.CaseFormat;
 import com.google.protobuf.Int32Value;
 import com.google.protobuf.ProtocolMessageEnum;
 import com.hiddenswitch.framework.Environment;
+import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.ICardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.rpc.*;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.Future;
-import io.vertx.core.Verticle;
-import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.DeliveryOptions;
-import io.vertx.core.eventbus.Message;
-import io.vertx.core.eventbus.MessageConsumer;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -48,8 +43,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -60,48 +53,9 @@ import java.util.stream.Stream;
 
 import static com.hiddenswitch.spellsource.client.models.DamageTypeEnum.MAGICAL;
 import static com.hiddenswitch.spellsource.client.models.EntityType.HERO;
-import static io.vertx.ext.sync.Sync.await;
 import static java.util.stream.Collectors.toList;
 
-
-/**
- * A service that starts a game session, accepts connections from players and manages the state of the game.
- * <p>
- * Various static methods convert game data into a format the Unity3D client can understand.
- */
-public interface Games extends Verticle {
-	Logger LOGGER = LoggerFactory.getLogger(Games.class);
-	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
-	String GAMES = "games";
-	Comparator<net.demilich.metastone.game.entities.Entity> ENTITY_NATURAL_ORDER = Comparator
-			.comparing(net.demilich.metastone.game.entities.Entity::getZone)
-			.thenComparingInt(net.demilich.metastone.game.entities.Entity::getIndex);
-
-	/**
-	 * Creates a match without entering a queue entry between two users.
-	 *
-	 * @param request All the required information to create a game.
-	 * @return Connection information for both users.
-	 */
-	static Future<MatchCreateResponse> createGame(ConfigurationRequest request) {
-		LOGGER.debug("createMatch: Creating match for request {}", request);
-		CodecRegistration.register(CreateGameSessionResponse.class).andRegister(MatchCreateResponse.class).andRegister(ConfigurationRequest.class);
-		var eb = Vertx.currentContext().owner().eventBus();
-
-		return eb.<CreateGameSessionResponse>request("Games.createGameSession", request, new DeliveryOptions()
-				.setSendTimeout(8000L))
-				.map(response -> new MatchCreateResponse(response.body()));
-	}
-
-	/**
-	 * Creates a new instance of the service that maintains a list of running games.
-	 *
-	 * @return A games instance.
-	 */
-	static ClusteredGames create() {
-		return new ClusteredGames();
-	}
-
+public class ModelConversions {
 	/**
 	 * Get an entity representing a censored secret card.
 	 *
@@ -133,7 +87,7 @@ public interface Games extends Verticle {
 	 * @param deckId     The deck that the caller is requesting this description record for.
 	 * @return A completed card description.
 	 */
-	static CardDesc getDescriptionFromRecord(ICardsInDeck cardRecord, String userId, String deckId) {
+	public static CardDesc getDescriptionFromRecord(ICardsInDeck cardRecord, String userId, String deckId) {
 		var tracer = GlobalTracer.get();
 		var span = tracer.buildSpan("Logic/getDescriptionFromRecord")
 				.withTag("userId", userId)
@@ -174,7 +128,6 @@ public interface Games extends Verticle {
 			span.finish();
 		}
 	}
-
 
 	/**
 	 * Get a client's view of the current game actions.
@@ -273,7 +226,6 @@ public interface Games extends Verticle {
 		return Enum.valueOf(target, CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, target.getSimpleName()) + "_" + javaEnum.name());
 	}
 
-
 	/**
 	 * Gets a client view of a game event.
 	 * <p>
@@ -370,18 +322,6 @@ public interface Games extends Verticle {
 		return clientEvent;
 	}
 
-
-	/**
-	 * Specifies the number of milliseconds to wait for players to connect to a {@link ServerGameContext} that was just
-	 * created.
-	 *
-	 * @return
-	 */
-	static long getDefaultConnectionTime() {
-		return 12000L;
-	}
-
-
 	/**
 	 * Given a context and a specification of who the local and opposing players are, generate a client game state view.
 	 * This view does not leak secure information.
@@ -391,7 +331,7 @@ public interface Games extends Verticle {
 	 * @param opponent       The opposing player.
 	 * @return A client view game state.
 	 */
-	static GameState.Builder getGameState(GameContext workingContext, Player local, Player opponent) {
+	public static GameState.Builder getGameState(GameContext workingContext, Player local, Player opponent) {
 		List<Entity> entities = new ArrayList<>();
 		// Censor the opponent hand and deck entities
 		// All minions are visible
@@ -435,7 +375,7 @@ public interface Games extends Verticle {
 					.setEntityType(EntityType.ENTITY_TYPE_SECRET)
 					.setOwner(secret.getOwner())
 					.setHeroClass(secret.getSourceCard().getHeroClass())
-					.setLocation(Games.toClientLocation(secret.getEntityLocation()))
+					.setLocation(toClientLocation(secret.getEntityLocation()))
 					.build();
 			opposingSecrets.add(entity);
 		}
@@ -460,7 +400,7 @@ public interface Games extends Verticle {
 					.setLockedMana(player.getLockedMana())
 					.setMaxMana(player.getMaxMana())
 					.setMana(player.getMana())
-					.setLocation(Games.toClientLocation(player.getEntityLocation()))
+					.setLocation(toClientLocation(player.getEntityLocation()))
 					.setIsStartingTurn(player.hasAttribute(Attribute.STARTING_TURN))
 					.setGameStarted(player.hasAttribute(Attribute.GAME_STARTED));
 			playerEntities.add(playerEntity.build());
@@ -629,7 +569,7 @@ public interface Games extends Verticle {
 
 		entity.setOwner(actor.getOwner());
 		entity.setExtraAttack(Int32Value.of(extraAttack));
-		entity.setLocation(Games.toClientLocation(actor.getEntityLocation()));
+		entity.setLocation(toClientLocation(actor.getEntityLocation()));
 		entity.setManaCost(Int32Value.of(card.getBaseManaCost()));
 		entity.setHeroClass(card.getHeroClass());
 		entity.setCardSet(Objects.toString(card.getCardSet()));
@@ -717,7 +657,7 @@ public interface Games extends Verticle {
 				.setId(enchantment.getId())
 				.setFires(Int32Value.of(enchantment.getFires()))
 				.setEntityType(entityType)
-				.setLocation(Games.toClientLocation(enchantment.getEntityLocation()))
+				.setLocation(toClientLocation(enchantment.getEntityLocation()))
 				.setOwner(enchantment.getOwner())
 				.setHost(enchantment.getHostReference() != null ? enchantment.getHostReference().getId() : -1)
 				.setEnchantmentType(enchantment.getClass().getSimpleName())
@@ -735,7 +675,7 @@ public interface Games extends Verticle {
 	 * @return A client entity view.
 	 */
 	@Suspendable
-	static Entity.Builder getEntity(GameContext workingContext, Card card, int localPlayerId) {
+	public static Entity.Builder getEntity(GameContext workingContext, Card card, int localPlayerId) {
 		if (card == null) {
 			return Entity.newBuilder()
 					.setId(-1);
@@ -750,9 +690,9 @@ public interface Games extends Verticle {
 		Player owningPlayer;
 		var description = card.getDescription();
 		if (owner != -1) {
-			if (card.getZone() == Zones.HAND
-					|| card.getZone() == Zones.SET_ASIDE_ZONE
-					|| card.getZone() == Zones.HERO_POWER
+			if (card.getZone() == net.demilich.metastone.game.targeting.Zones.HAND
+					|| card.getZone() == net.demilich.metastone.game.targeting.Zones.SET_ASIDE_ZONE
+					|| card.getZone() == net.demilich.metastone.game.targeting.Zones.HERO_POWER
 					&& owner == localPlayerId) {
 				var playable = workingContext.getLogic().canPlayCard(owner, card.getReference())
 						&& card.getOwner() == workingContext.getActivePlayerId()
@@ -778,7 +718,7 @@ public interface Games extends Verticle {
 
 		entity.setCardSet(Objects.toString(card.getCardSet()));
 		entity.setRarity(toProto(card.getRarity(), Rarity.class));
-		entity.setLocation(Games.toClientLocation(card.getEntityLocation()));
+		entity.setLocation(toClientLocation(card.getEntityLocation()));
 		entity.setBaseManaCost(Int32Value.of(card.getBaseManaCost()));
 		entity.setUncensored(card.hasAttribute(Attribute.UNCENSORED));
 		entity.setBattlecry(card.hasAttribute(Attribute.BATTLECRY));
@@ -857,26 +797,6 @@ public interface Games extends Verticle {
 	}
 
 	/**
-	 * Register that the specified user is now in a game
-	 *
-	 * @param thisGameId
-	 * @param userId
-	 * @return
-	 */
-	static @NotNull MessageConsumer<String> registerInGame(@NotNull String thisGameId, @NotNull String userId) {
-		var eb = Vertx.currentContext().owner().eventBus();
-		var consumer = eb.consumer(userId + ".isInGame", (Message<String> req) -> req.reply(thisGameId));
-		return consumer;
-	}
-
-	@Suspendable
-	static String getGameId(@NotNull String userId) {
-		var eb = Vertx.currentContext().owner().eventBus();
-		var res = await(eb.<String>request(userId + ".isInGame", "", new DeliveryOptions().setSendTimeout(100L)).otherwiseEmpty());
-		return res != null ? res.body() : null;
-	}
-
-	/**
 	 * Converts an in-game entity location to a client view location.
 	 *
 	 * @param location A game engine entity location.
@@ -936,80 +856,6 @@ public interface Games extends Verticle {
 		return builder
 				.setZone(zone)
 				.setIndex(location.getIndex()).build();
-	}
-
-	/**
-	 * Gets the default no activity timeout as configured across the cluster. This timeout is used to determine when to
-	 * end games that have received no actions from either client connected to them.
-	 *
-	 * @return A value in milliseconds of how long to wait for an action from a client before marking a game as over due
-	 * to disconnection.
-	 */
-	static long getDefaultNoActivityTimeout() {
-		return Long.parseLong(System.getProperties().getProperty("games.defaultNoActivityTimeout", Long.toString(Games.DEFAULT_NO_ACTIVITY_TIMEOUT)));
-	}
-
-	/**
-	 * Compute the {@link EntityChangeSet} between two {@link GameState}s.
-	 *
-	 * @param gameStateNew
-	 * @return
-	 */
-	static EntityChangeSet computeChangeSet(
-			com.hiddenswitch.spellsource.common.GameState gameStateNew) {
-		// TODO: Return array of indices
-		return EntityChangeSet.newBuilder().addAllIds(Stream.concat(gameStateNew.getPlayer1().getLookup().values().stream(), gameStateNew.getPlayer2().getLookup().values().stream())
-				.sorted(ENTITY_NATURAL_ORDER)
-				.map(net.demilich.metastone.game.entities.Entity::getId)
-				.collect(Collectors.toList())).build();
-	}
-
-	/**
-	 * Generates a client-readable {@link Replay} object (for use with the client replay functionality).
-	 *
-	 * @param originalCtx The context for which to generate a replay.
-	 * @return
-	 */
-	static Replay replayFromGameContext(GameContext originalCtx) {
-		var replay = Replay.newBuilder();
-		var gameStateOld = new AtomicReference<com.hiddenswitch.spellsource.common.GameState>();
-		Consumer<GameContext> augmentReplayWithCtx = (GameContext ctx) -> {
-			// We record each game state by dumping the {@link GameState} objects from each player's point of
-			// view and any state transitions into the replay.
-			var gameStates = ReplayGameStates.newBuilder();
-			var gameStateFirst = getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2());
-			var gameStateSecond = getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1());
-			gameStates.setFirst(gameStateFirst);
-			gameStates.setSecond(gameStateSecond);
-			replay.addGameStates(gameStates);
-
-			var gameStateNew = ctx.getGameState();
-			var delta = ReplayDeltas.newBuilder();
-			delta.setForward(computeChangeSet(gameStateNew));
-			if (gameStateOld.get() != null) {
-				// NOTE: It is illegal to rewind past the beginning of the game, so the very first delta need not have
-				// backward populated.
-				delta.setBackward(computeChangeSet(gameStateOld.get()));
-			}
-			replay.addDeltas(delta);
-
-			gameStateOld.set(ctx.getGameStateCopy());
-		};
-
-		try {
-			// Replay the game from a trace while capturing the {@link Replay} object.
-			var replayCtx = originalCtx.getTrace().replayContext(
-					false,
-					augmentReplayWithCtx
-			);
-
-			// Append the final game states / deltas.
-			augmentReplayWithCtx.accept(replayCtx);
-		} catch (Throwable any) {
-			Tracing.error(any);
-		}
-
-		return replay.build();
 	}
 
 	/**
@@ -1074,7 +920,7 @@ public interface Games extends Verticle {
 		deck.setDeckId(deckCollection.getCollection().getId());
 		// TODO: Deal with how we retrieve cards here
 		deck.setCards(deckCollection.getCollection().getInventoryList().stream()
-				.map(cr -> Objects.requireNonNull(Games.getDescriptionFromRecord(new CardsInDeck()
+				.map(cr -> Objects.requireNonNull(getDescriptionFromRecord(new CardsInDeck()
 						.setCardId(cr.getEntity().getCardId())
 						.setId(Long.parseLong(cr.getId()))
 						.setDeckId(deckId), userId, deckId)).create())
@@ -1083,5 +929,68 @@ public interface Games extends Verticle {
 		deck.setHeroClass(deckCollection.getCollection().getHeroClass());
 		deck.setName(deckCollection.getCollection().getName());
 		return deck;
+	}
+
+	/**
+	 * Compute the {@link EntityChangeSet} between two {@link GameState}s.
+	 *
+	 * @param gameStateNew
+	 * @return
+	 */
+	static EntityChangeSet computeChangeSet(
+			com.hiddenswitch.spellsource.common.GameState gameStateNew) {
+		// TODO: Return array of indices
+		return EntityChangeSet.newBuilder().addAllIds(Stream.concat(gameStateNew.getPlayer1().getLookup().values().stream(), gameStateNew.getPlayer2().getLookup().values().stream())
+				.sorted(Games.ENTITY_NATURAL_ORDER)
+				.map(net.demilich.metastone.game.entities.Entity::getId)
+				.collect(toList())).build();
+	}
+
+	/**
+	 * Generates a client-readable {@link Replay} object (for use with the client replay functionality).
+	 *
+	 * @param originalCtx The context for which to generate a replay.
+	 * @return
+	 */
+	static Replay replayFromGameContext(GameContext originalCtx) {
+		var replay = Replay.newBuilder();
+		var gameStateOld = new AtomicReference<com.hiddenswitch.spellsource.common.GameState>();
+		Consumer<GameContext> augmentReplayWithCtx = (GameContext ctx) -> {
+			// We record each game state by dumping the {@link GameState} objects from each player's point of
+			// view and any state transitions into the replay.
+			var gameStates = ReplayGameStates.newBuilder();
+			var gameStateFirst = getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2());
+			var gameStateSecond = getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1());
+			gameStates.setFirst(gameStateFirst);
+			gameStates.setSecond(gameStateSecond);
+			replay.addGameStates(gameStates);
+
+			var gameStateNew = ctx.getGameState();
+			var delta = ReplayDeltas.newBuilder();
+			delta.setForward(computeChangeSet(gameStateNew));
+			if (gameStateOld.get() != null) {
+				// NOTE: It is illegal to rewind past the beginning of the game, so the very first delta need not have
+				// backward populated.
+				delta.setBackward(computeChangeSet(gameStateOld.get()));
+			}
+			replay.addDeltas(delta);
+
+			gameStateOld.set(ctx.getGameStateCopy());
+		};
+
+		try {
+			// Replay the game from a trace while capturing the {@link Replay} object.
+			var replayCtx = originalCtx.getTrace().replayContext(
+					false,
+					augmentReplayWithCtx
+			);
+
+			// Append the final game states / deltas.
+			augmentReplayWithCtx.accept(replayCtx);
+		} catch (Throwable any) {
+			Tracing.error(any);
+		}
+
+		return replay.build();
 	}
 }

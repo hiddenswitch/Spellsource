@@ -1,7 +1,9 @@
 package com.hiddenswitch.framework.tests;
 
 import com.google.protobuf.Empty;
+import com.google.protobuf.StringValue;
 import com.hiddenswitch.framework.Client;
+import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Legacy;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import com.hiddenswitch.spellsource.rpc.*;
@@ -20,8 +22,7 @@ import org.junit.jupiter.api.Test;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DecksTests extends FrameworkTestBase {
 
@@ -170,6 +171,40 @@ public class DecksTests extends FrameworkTestBase {
 						assertEquals(Legacy.getPremadeDecks().size(), decksGetAll.getDecksCount(), "should have only premade decks");
 					});
 				})
+				.onComplete(client::close)
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	@Test
+	public void testDuplicateDeck(Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
+
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin())
+				.compose(v -> client.legacy().decksGetAll(Empty.getDefaultInstance()))
+				.map(decks -> decks.getDecksList().stream().filter(d -> d.getCollection().getIsStandardDeck()).findFirst().orElseThrow())
+				.compose(deck -> client.legacy().duplicateDeck(StringValue.of(deck.getCollection().getId()))
+						.onSuccess(copiedDeck -> {
+							testContext.verify(() -> {
+								// the cards should be identical
+								assertArrayEquals(deck.getCollection().getInventoryList().stream().map(CardRecord::getEntity).map(Entity::getCardId).sorted().toArray(String[]::new),
+										copiedDeck.getCollection().getInventoryList().stream().map(CardRecord::getEntity).map(Entity::getCardId).sorted().toArray(String[]::new), "same cards");
+								assertEquals(deck.getCollection().getHeroClass(), copiedDeck.getCollection().getHeroClass(), "same champion");
+								assertEquals(deck.getCollection().getFormat(), copiedDeck.getCollection().getFormat(), "same format");
+							});
+						}))
+				// try editing the deck, observe it is successful
+				.compose(copiedDeck -> client.legacy().decksUpdate(DecksUpdateRequest.newBuilder()
+						.setDeckId(copiedDeck.getCollection().getId())
+						.setUpdateCommand(DecksUpdateCommand.newBuilder()
+								.setSetName("testname")
+								.build())
+						.build())
+						.onSuccess(res -> {
+							testContext.verify(() -> {
+								assertEquals("testname", res.getCollection().getName());
+							});
+						}))
 				.onComplete(client::close)
 				.onComplete(testContext.succeedingThenComplete());
 	}

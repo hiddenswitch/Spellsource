@@ -10,10 +10,10 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.framework.Accounts;
 import com.hiddenswitch.framework.Editor;
+import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Legacy;
 import com.hiddenswitch.framework.schema.spellsource.Tables;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
-import com.hiddenswitch.framework.schema.spellsource.tables.daos.GamesDao;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.rpc.ClientToServerMessage;
@@ -23,6 +23,7 @@ import io.opentracing.propagation.Format;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.impl.ContextInternal;
@@ -160,7 +161,7 @@ public class ServerGameContext extends GameContext implements Server {
 				}
 
 				// Register that the user is in this game
-				var inGameConsumer = Games.registerInGame(gameId, userId);
+				var inGameConsumer = registerInGame(gameId, userId);
 				closeables.add(inGameConsumer::unregister);
 				Promise<Void> inGameRegistration = Promise.promise();
 				inGameConsumer.completionHandler(inGameRegistration);
@@ -310,6 +311,19 @@ public class ServerGameContext extends GameContext implements Server {
 	@NotNull
 	public static String getMessagesFromServerAddress(String userId) {
 		return WRITER_ADDRESS_PREFIX + userId;
+	}
+
+	/**
+	 * Register that the specified user is now in a game
+	 *
+	 * @param thisGameId
+	 * @param userId
+	 * @return
+	 */
+	static @NotNull MessageConsumer<String> registerInGame(@NotNull String thisGameId, @NotNull String userId) {
+		var eb = Vertx.currentContext().owner().eventBus();
+		var consumer = eb.consumer(userId + ".isInGame", (Message<String> req) -> req.reply(thisGameId));
+		return consumer;
 	}
 
 
@@ -995,7 +1009,7 @@ public class ServerGameContext extends GameContext implements Server {
 	public GameDeck getDeck(Player player, String name) {
 		var allDecks = await(Legacy.getAllDecks(player.getUserId()));
 		var deck = allDecks.getDecksList().stream().filter(get -> get.getCollection().getName().equalsIgnoreCase(name)).findAny();
-		return deck.map(decksGetResponse -> Games.getGameDeck(player.getUserId(), decksGetResponse)).orElse(null);
+		return deck.map(decksGetResponse -> ModelConversions.getGameDeck(player.getUserId(), decksGetResponse)).orElse(null);
 	}
 
 	@Override

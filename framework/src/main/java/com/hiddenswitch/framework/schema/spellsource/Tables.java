@@ -14,6 +14,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.GameUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Games;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
+import com.hiddenswitch.framework.schema.spellsource.tables.UserEntityAddons;
 
 
 /**
@@ -71,4 +72,9 @@ public class Tables {
      * The table <code>spellsource.matchmaking_tickets</code>.
      */
     public static final MatchmakingTickets MATCHMAKING_TICKETS = MatchmakingTickets.MATCHMAKING_TICKETS;
+
+    /**
+     * The table <code>spellsource.user_entity_addons</code>.
+     */
+    public static final UserEntityAddons USER_ENTITY_ADDONS = UserEntityAddons.USER_ENTITY_ADDONS;
 }

@@ -15,6 +15,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.GameUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Games;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
+import com.hiddenswitch.framework.schema.spellsource.tables.UserEntityAddons;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Spellsource extends SchemaImpl {
 
-    private static final long serialVersionUID = 1926688773;
+    private static final long serialVersionUID = -53556609;
 
     /**
      * The reference instance of <code>spellsource</code>
@@ -88,6 +89,11 @@ public class Spellsource extends SchemaImpl {
     public final MatchmakingTickets MATCHMAKING_TICKETS = MatchmakingTickets.MATCHMAKING_TICKETS;
 
     /**
+     * The table <code>spellsource.user_entity_addons</code>.
+     */
+    public final UserEntityAddons USER_ENTITY_ADDONS = UserEntityAddons.USER_ENTITY_ADDONS;
+
+    /**
      * No further instances allowed
      */
     private Spellsource() {
@@ -112,6 +118,7 @@ public class Spellsource extends SchemaImpl {
             GameUsers.GAME_USERS,
             Games.GAMES,
             MatchmakingQueues.MATCHMAKING_QUEUES,
-            MatchmakingTickets.MATCHMAKING_TICKETS);
+            MatchmakingTickets.MATCHMAKING_TICKETS,
+            UserEntityAddons.USER_ENTITY_ADDONS);
     }
 }
