@@ -3,8 +3,8 @@ package com.hiddenswitch.framework.impl;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.MoreObjects;
+import com.hiddenswitch.framework.Games;
 import io.opentracing.SpanContext;
-import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.decks.CollectionDeck;
 
 import java.io.Serializable;

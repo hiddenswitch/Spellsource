@@ -4,6 +4,7 @@ import com.hiddenswitch.framework.Accounts;
 import com.hiddenswitch.framework.Application;
 import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.Environment;
+import com.hiddenswitch.framework.rpc.AccessTokenResponse;
 import com.hiddenswitch.framework.rpc.GetAccountsRequest;
 import com.hiddenswitch.framework.rpc.UserEntity;
 import com.hiddenswitch.framework.rpc.VertxAccountsGrpc;
@@ -20,8 +21,7 @@ import java.util.Collections;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toMap;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AccountsTests extends FrameworkTestBase {
 
@@ -64,6 +64,7 @@ public class AccountsTests extends FrameworkTestBase {
 										});
 									});
 						}))
+				.compose(v -> client.closeFut())
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
@@ -79,6 +80,22 @@ public class AccountsTests extends FrameworkTestBase {
 						assertNotNull(client.getUserEntity());
 					});
 				})
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	@Test
+	public void testVerifiesToken(Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
+		startGateway(vertx)
+				.compose(v -> client.unauthenticated().verifyToken(AccessTokenResponse.newBuilder()
+						.setToken("blah").build()).onSuccess(b -> testContext.verify(() -> {
+					assertFalse(b.getValue(), "should not verify");
+				})))
+				.compose(v -> client.createAndLogin())
+				.compose(res -> client.unauthenticated().verifyToken(res.getAccessTokenResponse()).onSuccess(b -> testContext.verify(() -> {
+					assertTrue(b.getValue(), "should verify");
+				})))
+				.compose(v -> client.closeFut())
 				.onComplete(testContext.succeedingThenComplete());
 	}
 

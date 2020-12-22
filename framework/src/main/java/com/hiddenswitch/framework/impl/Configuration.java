@@ -2,6 +2,7 @@ package com.hiddenswitch.framework.impl;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.MoreObjects;
+import com.hiddenswitch.framework.Games;
 import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.decks.CollectionDeck;
 import net.demilich.metastone.game.decks.Deck;

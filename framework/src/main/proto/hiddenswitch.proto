@@ -87,6 +87,9 @@ message GetCardsResponse {
 service Unauthenticated {
     rpc CreateAccount (CreateAccountRequest) returns (LoginOrCreateReply) {}
     rpc Login (LoginRequest) returns (LoginOrCreateReply) {}
+
+    // Verify that the token is valid
+    rpc VerifyToken(AccessTokenResponse) returns (google.protobuf.BoolValue) {}
 }
 
 service UnauthenticatedCards {
@@ -95,12 +98,21 @@ service UnauthenticatedCards {
 }
 
 service Accounts {
+    // Returns the account for the token passed
+    rpc GetAccount(google.protobuf.Empty) returns (GetAccountsReply) {}
+
+    // Gets an account by ID.
     rpc GetAccounts(GetAccountsRequest) returns (GetAccountsReply) {}
 
     // Doesn't invalidate the token right now
     rpc ChangePassword(ChangePasswordRequest) returns (LoginOrCreateReply) {}
 
+    // Sends a password reset e-mail to the token passed
     rpc RequestPasswordResetEmail(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+}
+
+service Games {
+    rpc IsInMatch(google.protobuf.Empty) returns (google.protobuf.StringValue) {}
 }
 
 message LoginRequest {

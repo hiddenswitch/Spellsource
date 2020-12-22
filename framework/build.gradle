@@ -22,11 +22,14 @@ plugins {
     id 'com.bmuschko.docker-remote-api' version '6.6.1'
     id "org.flywaydb.flyway" version "$flywayVersion"
     id 'com.google.protobuf' version '0.8.13'
+    id 'com.github.johnrengelman.shadow' version "$shadowPluginVersion"
 }
 
 
 apply plugin: 'base'
 apply plugin: 'java-library'
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'maven'
 apply plugin: 'com.bmuschko.docker-remote-api'
 apply plugin: 'idea'
@@ -37,6 +40,7 @@ import com.bmuschko.gradle.docker.domain.LivenessProbe
 import com.bmuschko.gradle.docker.tasks.container.*
 import com.bmuschko.gradle.docker.tasks.image.*
 import com.bmuschko.gradle.docker.tasks.container.extras.DockerLivenessContainer
+import groovy.transform.Field
 import io.github.jklingsporn.vertx.jooq.shared.postgres.JSONBToJsonObjectConverter
 import io.vertx.core.json.JsonObject;
 import org.jooq.codegen.GenerationTool
@@ -50,8 +54,8 @@ def csharpRootDir = 'src/csharp/HiddenSwitch'
 def localUsername = 'admin'
 def localPassword = 'password'
 def localDatabaseName = 'spellsource'
+def mainClassName = 'com.hiddenswitch.framework.Application'
 def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
-
 def createPostgresImage = tasks.getByPath(':testcontainers:createPostgresImage')
 
 dependencies {
@@ -165,6 +169,22 @@ clean {
     delete csharpRootDir + '/Framework/obj'
     delete csharpRootDir + '/Framework.Tests/bin'
     delete csharpRootDir + '/Framework.Tests/obj'
+}
+
+shadowJar {
+    mergeServiceFiles()
+    zip64 true
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
+
+artifacts {
+    archives shadowJar
+}
+
+application {
+    mainClass = mainClassName
 }
 
 task copyCsharpGrpc(type: Copy, group: 'build') {

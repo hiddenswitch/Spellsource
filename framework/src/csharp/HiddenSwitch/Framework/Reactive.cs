@@ -9,244 +9,248 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-/// <summary>Holder for reflection information generated from reactive.proto</summary>
-public static partial class ReactiveReflection {
+namespace Spellsource {
 
-  #region Descriptor
-  /// <summary>File descriptor for reactive.proto</summary>
-  public static pbr::FileDescriptor Descriptor {
-    get { return descriptor; }
-  }
-  private static pbr::FileDescriptor descriptor;
+  /// <summary>Holder for reflection information generated from reactive.proto</summary>
+  public static partial class ReactiveReflection {
 
-  static ReactiveReflection() {
-    byte[] descriptorData = global::System.Convert.FromBase64String(
-        string.Concat(
-          "Cg5yZWFjdGl2ZS5wcm90byJGChNBZGRlZENoYW5nZWRSZW1vdmVkEh8KBGtp",
-          "bmQYASABKA4yES5Ob3RpZmljYXRpb25LaW5kEg4KBmZpZWxkcxgCIAMoBSpt",
-          "ChBOb3RpZmljYXRpb25LaW5kEhsKF05PVElGSUNBVElPTl9LSU5EX0FEREVE",
-          "EAASHQoZTk9USUZJQ0FUSU9OX0tJTkRfQ0hBTkdFRBABEh0KGU5PVElGSUNB",
-          "VElPTl9LSU5EX1JFTU9WRUQQAmIGcHJvdG8z"));
-    descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-        new pbr::FileDescriptor[] { },
-        new pbr::GeneratedClrTypeInfo(new[] {typeof(global::NotificationKind), }, null, new pbr::GeneratedClrTypeInfo[] {
-          new pbr::GeneratedClrTypeInfo(typeof(global::AddedChangedRemoved), global::AddedChangedRemoved.Parser, new[]{ "Kind", "Fields" }, null, null, null, null)
-        }));
+    #region Descriptor
+    /// <summary>File descriptor for reactive.proto</summary>
+    public static pbr::FileDescriptor Descriptor {
+      get { return descriptor; }
+    }
+    private static pbr::FileDescriptor descriptor;
+
+    static ReactiveReflection() {
+      byte[] descriptorData = global::System.Convert.FromBase64String(
+          string.Concat(
+            "Cg5yZWFjdGl2ZS5wcm90bxILc3BlbGxzb3VyY2UiUgoTQWRkZWRDaGFuZ2Vk",
+            "UmVtb3ZlZBIrCgRraW5kGAEgASgOMh0uc3BlbGxzb3VyY2UuTm90aWZpY2F0",
+            "aW9uS2luZBIOCgZmaWVsZHMYAiADKAUqbQoQTm90aWZpY2F0aW9uS2luZBIb",
+            "ChdOT1RJRklDQVRJT05fS0lORF9BRERFRBAAEh0KGU5PVElGSUNBVElPTl9L",
+            "SU5EX0NIQU5HRUQQARIdChlOT1RJRklDQVRJT05fS0lORF9SRU1PVkVEEAJi",
+            "BnByb3RvMw=="));
+      descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
+          new pbr::FileDescriptor[] { },
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Spellsource.NotificationKind), }, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Spellsource.AddedChangedRemoved), global::Spellsource.AddedChangedRemoved.Parser, new[]{ "Kind", "Fields" }, null, null, null, null)
+          }));
+    }
+    #endregion
+
   }
+  #region Enums
+  public enum NotificationKind {
+    [pbr::OriginalName("NOTIFICATION_KIND_ADDED")] Added = 0,
+    [pbr::OriginalName("NOTIFICATION_KIND_CHANGED")] Changed = 1,
+    [pbr::OriginalName("NOTIFICATION_KIND_REMOVED")] Removed = 2,
+  }
+
+  #endregion
+
+  #region Messages
+  [global::System.SerializableAttribute]
+  public sealed partial class AddedChangedRemoved : pb::IMessage<AddedChangedRemoved>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<AddedChangedRemoved> _parser = new pb::MessageParser<AddedChangedRemoved>(() => new AddedChangedRemoved());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<AddedChangedRemoved> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Spellsource.ReactiveReflection.Descriptor.MessageTypes[0]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public AddedChangedRemoved() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public AddedChangedRemoved(AddedChangedRemoved other) : this() {
+      kind_ = other.kind_;
+      fields_ = other.fields_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public AddedChangedRemoved Clone() {
+      return new AddedChangedRemoved(this);
+    }
+
+    /// <summary>Field number for the "kind" field.</summary>
+    public const int KindFieldNumber = 1;
+    private global::Spellsource.NotificationKind kind_ = global::Spellsource.NotificationKind.Added;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Spellsource.NotificationKind Kind {
+      get { return kind_; }
+      set {
+        kind_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "fields" field.</summary>
+    public const int FieldsFieldNumber = 2;
+    private static readonly pb::FieldCodec<int> _repeated_fields_codec
+        = pb::FieldCodec.ForInt32(18);
+    private readonly pbc::RepeatedField<int> fields_ = new pbc::RepeatedField<int>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<int> Fields {
+      get { return fields_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as AddedChangedRemoved);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(AddedChangedRemoved other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Kind != other.Kind) return false;
+      if(!fields_.Equals(other.fields_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Kind != global::Spellsource.NotificationKind.Added) hash ^= Kind.GetHashCode();
+      hash ^= fields_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Kind != global::Spellsource.NotificationKind.Added) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) Kind);
+      }
+      fields_.WriteTo(output, _repeated_fields_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Kind != global::Spellsource.NotificationKind.Added) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) Kind);
+      }
+      fields_.WriteTo(ref output, _repeated_fields_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Kind != global::Spellsource.NotificationKind.Added) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Kind);
+      }
+      size += fields_.CalculateSize(_repeated_fields_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(AddedChangedRemoved other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Kind != global::Spellsource.NotificationKind.Added) {
+        Kind = other.Kind;
+      }
+      fields_.Add(other.fields_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Kind = (global::Spellsource.NotificationKind) input.ReadEnum();
+            break;
+          }
+          case 18:
+          case 16: {
+            fields_.AddEntriesFrom(input, _repeated_fields_codec);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            Kind = (global::Spellsource.NotificationKind) input.ReadEnum();
+            break;
+          }
+          case 18:
+          case 16: {
+            fields_.AddEntriesFrom(ref input, _repeated_fields_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
   #endregion
 
 }
-#region Enums
-public enum NotificationKind {
-  [pbr::OriginalName("NOTIFICATION_KIND_ADDED")] Added = 0,
-  [pbr::OriginalName("NOTIFICATION_KIND_CHANGED")] Changed = 1,
-  [pbr::OriginalName("NOTIFICATION_KIND_REMOVED")] Removed = 2,
-}
-
-#endregion
-
-#region Messages
-[global::System.SerializableAttribute]
-public sealed partial class AddedChangedRemoved : pb::IMessage<AddedChangedRemoved>
-#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    , pb::IBufferMessage
-#endif
-{
-  private static readonly pb::MessageParser<AddedChangedRemoved> _parser = new pb::MessageParser<AddedChangedRemoved>(() => new AddedChangedRemoved());
-  private pb::UnknownFieldSet _unknownFields;
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public static pb::MessageParser<AddedChangedRemoved> Parser { get { return _parser; } }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public static pbr::MessageDescriptor Descriptor {
-    get { return global::ReactiveReflection.Descriptor.MessageTypes[0]; }
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  pbr::MessageDescriptor pb::IMessage.Descriptor {
-    get { return Descriptor; }
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public AddedChangedRemoved() {
-    OnConstruction();
-  }
-
-  partial void OnConstruction();
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public AddedChangedRemoved(AddedChangedRemoved other) : this() {
-    kind_ = other.kind_;
-    fields_ = other.fields_.Clone();
-    _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public AddedChangedRemoved Clone() {
-    return new AddedChangedRemoved(this);
-  }
-
-  /// <summary>Field number for the "kind" field.</summary>
-  public const int KindFieldNumber = 1;
-  private global::NotificationKind kind_ = global::NotificationKind.Added;
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public global::NotificationKind Kind {
-    get { return kind_; }
-    set {
-      kind_ = value;
-    }
-  }
-
-  /// <summary>Field number for the "fields" field.</summary>
-  public const int FieldsFieldNumber = 2;
-  private static readonly pb::FieldCodec<int> _repeated_fields_codec
-      = pb::FieldCodec.ForInt32(18);
-  private readonly pbc::RepeatedField<int> fields_ = new pbc::RepeatedField<int>();
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public pbc::RepeatedField<int> Fields {
-    get { return fields_; }
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public override bool Equals(object other) {
-    return Equals(other as AddedChangedRemoved);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public bool Equals(AddedChangedRemoved other) {
-    if (ReferenceEquals(other, null)) {
-      return false;
-    }
-    if (ReferenceEquals(other, this)) {
-      return true;
-    }
-    if (Kind != other.Kind) return false;
-    if(!fields_.Equals(other.fields_)) return false;
-    return Equals(_unknownFields, other._unknownFields);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public override int GetHashCode() {
-    int hash = 1;
-    if (Kind != global::NotificationKind.Added) hash ^= Kind.GetHashCode();
-    hash ^= fields_.GetHashCode();
-    if (_unknownFields != null) {
-      hash ^= _unknownFields.GetHashCode();
-    }
-    return hash;
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public override string ToString() {
-    return pb::JsonFormatter.ToDiagnosticString(this);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public void WriteTo(pb::CodedOutputStream output) {
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    output.WriteRawMessage(this);
-  #else
-    if (Kind != global::NotificationKind.Added) {
-      output.WriteRawTag(8);
-      output.WriteEnum((int) Kind);
-    }
-    fields_.WriteTo(output, _repeated_fields_codec);
-    if (_unknownFields != null) {
-      _unknownFields.WriteTo(output);
-    }
-  #endif
-  }
-
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-    if (Kind != global::NotificationKind.Added) {
-      output.WriteRawTag(8);
-      output.WriteEnum((int) Kind);
-    }
-    fields_.WriteTo(ref output, _repeated_fields_codec);
-    if (_unknownFields != null) {
-      _unknownFields.WriteTo(ref output);
-    }
-  }
-  #endif
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public int CalculateSize() {
-    int size = 0;
-    if (Kind != global::NotificationKind.Added) {
-      size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Kind);
-    }
-    size += fields_.CalculateSize(_repeated_fields_codec);
-    if (_unknownFields != null) {
-      size += _unknownFields.CalculateSize();
-    }
-    return size;
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public void MergeFrom(AddedChangedRemoved other) {
-    if (other == null) {
-      return;
-    }
-    if (other.Kind != global::NotificationKind.Added) {
-      Kind = other.Kind;
-    }
-    fields_.Add(other.fields_);
-    _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-  }
-
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public void MergeFrom(pb::CodedInputStream input) {
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    input.ReadRawMessage(this);
-  #else
-    uint tag;
-    while ((tag = input.ReadTag()) != 0) {
-      switch(tag) {
-        default:
-          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-          break;
-        case 8: {
-          Kind = (global::NotificationKind) input.ReadEnum();
-          break;
-        }
-        case 18:
-        case 16: {
-          fields_.AddEntriesFrom(input, _repeated_fields_codec);
-          break;
-        }
-      }
-    }
-  #endif
-  }
-
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-    uint tag;
-    while ((tag = input.ReadTag()) != 0) {
-      switch(tag) {
-        default:
-          _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-          break;
-        case 8: {
-          Kind = (global::NotificationKind) input.ReadEnum();
-          break;
-        }
-        case 18:
-        case 16: {
-          fields_.AddEntriesFrom(ref input, _repeated_fields_codec);
-          break;
-        }
-      }
-    }
-  }
-  #endif
-
-}
-
-#endregion
-
 
 #endregion Designer generated code

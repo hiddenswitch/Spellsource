@@ -37,7 +37,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.hiddenswitch.framework.impl.Games.toProto;
 import static io.vertx.ext.sync.Sync.awaitEvent;
 import static java.util.stream.Collectors.toList;
 import static net.demilich.metastone.game.GameContext.PLAYER_1;
@@ -438,7 +437,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		// If the request contains an end turn action, execute it. Otherwise, choose an action
 		// at random.
 		final var action = actions.stream()
-				.filter(ga -> toProto(ga.getActionType(), ActionType.class) == ActionType.ACTION_TYPE_BATTLECRY)
+				.filter(ga -> ModelConversions.toProto(ga.getActionType(), ActionType.class) == ActionType.ACTION_TYPE_BATTLECRY)
 				.findFirst().orElse(getRandom(actions));
 
 		if (action == null) {
@@ -577,7 +576,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.setGameState(getClientGameState(playerId, gameState));
 		var messageEvent = GameEvent.newBuilder();
 		if (event instanceof net.demilich.metastone.game.events.GameEvent) {
-			messageEvent = Games.getClientEvent((net.demilich.metastone.game.events.GameEvent) event, playerId);
+			messageEvent = ModelConversions.getClientEvent((net.demilich.metastone.game.events.GameEvent) event, playerId);
 		} else if (event instanceof TriggerFired) {
 			var triggerEvent = (TriggerFired) event;
 			var triggerFired = GameEvent.TriggerFiredMessage.newBuilder()
@@ -591,25 +590,25 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			// the source is in play.
 			if (hasSource && (source.isInPlay() || source.getOwner() == playerId)) {
 				messageEvent
-						.setSource(Games.getEntity(workingContext, source, playerId));
+						.setSource(ModelConversions.getEntity(workingContext, source, playerId));
 				triggerFired.setTriggerSourceId(source.getId());
 			}
 		} else if (event instanceof GameAction) {
 			var action = (GameAction) event;
 			final var sourceEntity = event.getSource(workingContext);
-			var source = Games.getEntity(workingContext, sourceEntity, playerId);
+			var source = ModelConversions.getEntity(workingContext, sourceEntity, playerId);
 
 			if (sourceEntity.getEntityType() == com.hiddenswitch.spellsource.client.models.EntityType.CARD) {
 				var card = (Card) sourceEntity;
 				if (card.getCardType() == com.hiddenswitch.spellsource.client.models.CardType.SPELL
 						&& card.isSecret()
 						&& card.getOwner() != playerId) {
-					source = Games.getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
+					source = ModelConversions.getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
 				}
 			}
 
 			var targets = event.getTargets(workingContext, sourceEntity.getOwner())
-					.stream().map(e -> Games.getEntity(workingContext, e, playerId)).collect(Collectors.toList());
+					.stream().map(e -> ModelConversions.getEntity(workingContext, e, playerId)).collect(Collectors.toList());
 			var target = targets.size() > 0 ? targets.get(0) : null;
 			messageEvent
 					.setDescription(event.getDescription(workingContext, playerId))
@@ -617,7 +616,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					.setIsTargetPlayerLocal(target != null && target.getOwner() == playerId)
 					.setEventType(GameEventType.GAME_EVENT_TYPE_PERFORMED_GAME_ACTION)
 					.setPerformedGameAction(GameEvent.PerformedGameActionMessage.newBuilder()
-							.setActionType(toProto(action.getActionType(), ActionType.class)).build());
+							.setActionType(ModelConversions.toProto(action.getActionType(), ActionType.class)).build());
 			if (source != null) {
 				messageEvent.setSource(source);
 
@@ -636,9 +635,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 							.addAllObjects(destroyWillQueue.getDestroys()
 									.stream()
 									.map(destroy -> Destroy.newBuilder()
-											.setSource(Games.getEntity(workingContext, destroy.getSource(), playerId))
-											.setTarget(Games.getEntity(workingContext, destroy.getTarget(), playerId))
-											.addAllAftermaths(destroy.getAftermaths().stream().map(aftermath -> Games.getEntity(workingContext, aftermath, playerId).build()).collect(toList())).build())
+											.setSource(ModelConversions.getEntity(workingContext, destroy.getSource(), playerId))
+											.setTarget(ModelConversions.getEntity(workingContext, destroy.getTarget(), playerId))
+											.addAllAftermaths(destroy.getAftermaths().stream().map(aftermath -> ModelConversions.getEntity(workingContext, aftermath, playerId).build()).collect(toList())).build())
 									.collect(toList())));
 		} else {
 			throw new RuntimeException("Unsupported notification.");
@@ -737,7 +736,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			throw new IllegalStateException("playerId");
 		}
 		simulatedContext.setIgnoreEvents(true);
-		return Games.getGameState(simulatedContext, local, opponent);
+		return ModelConversions.getGameState(simulatedContext, local, opponent);
 	}
 
 	@Override
@@ -754,7 +753,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.setMessageType(MessageType.MESSAGE_TYPE_ON_REQUEST_ACTION)
 				.setChanges(getChangeSet(state))
 				.setGameState(getClientGameState(playerId, state))
-				.setActions(Games.getClientActions(GameContext.fromState(state), availableActions, playerId)));
+				.setActions(ModelConversions.getClientActions(GameContext.fromState(state), availableActions, playerId)));
 	}
 
 	/**
@@ -779,7 +778,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.setMessageType(MessageType.MESSAGE_TYPE_ON_MULLIGAN)
 				.setChanges(getChangeSet(state))
 				.setGameState(getClientGameState(playerId, state))
-				.addAllStartingCards(cards.stream().map(c -> Games.getEntity(simulatedContext, c, playerId).build()).collect(Collectors.toList())));
+				.addAllStartingCards(cards.stream().map(c -> ModelConversions.getEntity(simulatedContext, c, playerId).build()).collect(Collectors.toList())));
 	}
 
 	@Override
@@ -824,7 +823,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	private EntityChangeSet getChangeSet(GameState current) {
-		var changes = Games.computeChangeSet(current);
+		var changes = ModelConversions.computeChangeSet(current);
 		lastStateSent = current;
 		return changes;
 	}

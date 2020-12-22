@@ -311,4 +311,8 @@ public class Client implements AutoCloseable {
 	public VertxUnauthenticatedCardsGrpc.UnauthenticatedCardsVertxStub unauthenticatedCards() {
 		return VertxUnauthenticatedCardsGrpc.newVertxStub(channel());
 	}
+
+	public VertxUnauthenticatedGrpc.UnauthenticatedVertxStub unauthenticated() {
+		return VertxUnauthenticatedGrpc.newVertxStub(channel());
+	}
 }

@@ -15,6 +15,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.GameUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Games;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
+import com.hiddenswitch.framework.schema.spellsource.tables.UserEntityAddons;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.BotUsersRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsInDeckRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsRecord;
@@ -25,6 +26,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.GameUsersRec
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GamesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingQueuesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingTicketsRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.UserEntityAddonsRecord;
 
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
@@ -65,6 +67,7 @@ public class Keys {
     public static final UniqueKey<GamesRecord> GAMES_PKEY = UniqueKeys0.GAMES_PKEY;
     public static final UniqueKey<MatchmakingQueuesRecord> MATCHMAKING_QUEUES_PKEY = UniqueKeys0.MATCHMAKING_QUEUES_PKEY;
     public static final UniqueKey<MatchmakingTicketsRecord> MATCHMAKING_TICKETS_PKEY = UniqueKeys0.MATCHMAKING_TICKETS_PKEY;
+    public static final UniqueKey<UserEntityAddonsRecord> USER_ENTITY_ADDONS_PKEY = UniqueKeys0.USER_ENTITY_ADDONS_PKEY;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -86,6 +89,7 @@ public class Keys {
     public static final ForeignKey<MatchmakingTicketsRecord, UserEntityRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_USER_ID_FKEY = ForeignKeys0.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_USER_ID_FKEY;
     public static final ForeignKey<MatchmakingTicketsRecord, DecksRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_DECK_ID_FKEY = ForeignKeys0.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_DECK_ID_FKEY;
     public static final ForeignKey<MatchmakingTicketsRecord, DecksRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_BOT_DECK_ID_FKEY = ForeignKeys0.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_BOT_DECK_ID_FKEY;
+    public static final ForeignKey<UserEntityAddonsRecord, UserEntityRecord> USER_ENTITY_ADDONS__USER_ENTITY_ADDONS_ID_FKEY = ForeignKeys0.USER_ENTITY_ADDONS__USER_ENTITY_ADDONS_ID_FKEY;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -111,6 +115,7 @@ public class Keys {
         public static final UniqueKey<GamesRecord> GAMES_PKEY = Internal.createUniqueKey(Games.GAMES, "games_pkey", new TableField[] { Games.GAMES.ID }, true);
         public static final UniqueKey<MatchmakingQueuesRecord> MATCHMAKING_QUEUES_PKEY = Internal.createUniqueKey(MatchmakingQueues.MATCHMAKING_QUEUES, "matchmaking_queues_pkey", new TableField[] { MatchmakingQueues.MATCHMAKING_QUEUES.ID }, true);
         public static final UniqueKey<MatchmakingTicketsRecord> MATCHMAKING_TICKETS_PKEY = Internal.createUniqueKey(MatchmakingTickets.MATCHMAKING_TICKETS, "matchmaking_tickets_pkey", new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.ID, MatchmakingTickets.MATCHMAKING_TICKETS.QUEUE_ID }, true);
+        public static final UniqueKey<UserEntityAddonsRecord> USER_ENTITY_ADDONS_PKEY = Internal.createUniqueKey(UserEntityAddons.USER_ENTITY_ADDONS, "user_entity_addons_pkey", new TableField[] { UserEntityAddons.USER_ENTITY_ADDONS.ID }, true);
     }
 
     private static class ForeignKeys0 {
@@ -130,5 +135,6 @@ public class Keys {
         public static final ForeignKey<MatchmakingTicketsRecord, UserEntityRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_USER_ID_FKEY = Internal.createForeignKey(com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, MatchmakingTickets.MATCHMAKING_TICKETS, "matchmaking_tickets_user_id_fkey", new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.USER_ID }, true);
         public static final ForeignKey<MatchmakingTicketsRecord, DecksRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_DECK_ID_FKEY = Internal.createForeignKey(Keys.DECKS_PKEY, MatchmakingTickets.MATCHMAKING_TICKETS, "matchmaking_tickets_deck_id_fkey", new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.DECK_ID }, true);
         public static final ForeignKey<MatchmakingTicketsRecord, DecksRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_BOT_DECK_ID_FKEY = Internal.createForeignKey(Keys.DECKS_PKEY, MatchmakingTickets.MATCHMAKING_TICKETS, "matchmaking_tickets_bot_deck_id_fkey", new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.BOT_DECK_ID }, true);
+        public static final ForeignKey<UserEntityAddonsRecord, UserEntityRecord> USER_ENTITY_ADDONS__USER_ENTITY_ADDONS_ID_FKEY = Internal.createForeignKey(com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, UserEntityAddons.USER_ENTITY_ADDONS, "user_entity_addons_id_fkey", new TableField[] { UserEntityAddons.USER_ENTITY_ADDONS.ID }, true);
     }
 }

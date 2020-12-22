@@ -4,7 +4,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.ObjectArrays;
 import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
-import com.hiddenswitch.framework.impl.Games;
+import com.hiddenswitch.framework.impl.ModelConversions;
 import com.hiddenswitch.framework.impl.ServerGameContext;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.migrations.R__0001_Import_package_cards_into_database;
@@ -13,6 +13,7 @@ import com.hiddenswitch.framework.rpc.GetCardsResponse;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpc;
 import com.hiddenswitch.framework.schema.hiddenswitch.tables.daos.FlywaySchemaHistoryDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.*;
+import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.IDecks;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckPlayerAttributeTuples;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks;
@@ -22,6 +23,7 @@ import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 import io.grpc.BindableService;
 import io.grpc.ServerServiceDefinition;
+import io.grpc.Status;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -47,6 +49,7 @@ import org.jooq.impl.DSL;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
@@ -55,6 +58,8 @@ import static com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS;
 import static com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck.CARDS_IN_DECK;
 import static com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES;
 import static com.hiddenswitch.framework.schema.spellsource.tables.Decks.DECKS;
+import static io.vertx.ext.sync.Sync.await;
+import static io.vertx.ext.sync.Sync.fiber;
 import static java.util.stream.Collectors.*;
 
 /**
@@ -95,7 +100,7 @@ public class Legacy {
 										.findAll()
 										.map(cards -> cards.stream().map(card -> card.getCardScript().mapTo(CardDesc.class))
 												.map(CardDesc::create)
-												.map(card -> Games.getEntity(workingContext, card, 0))
+												.map(card -> ModelConversions.getEntity(workingContext, card, 0))
 												.map(card -> CardRecord.newBuilder().setEntity(card).setId(card.getCardId()))
 												.collect(toList()))
 										.map(cards -> {
@@ -110,7 +115,7 @@ public class Legacy {
 										}).onComplete(GET_CARDS_RESPONSE_PROMISE);
 							}
 							return GET_CARDS_RESPONSE_PROMISE.future();
-						});
+						}).recover(Environment.toGrpcFailure());
 			}
 		});
 	}
@@ -152,13 +157,14 @@ public class Legacy {
 											// insert a stop sharing premade deck row
 											return queryExecutor.execute(dsl -> dsl.insertInto(DECK_SHARES).set(DECK_SHARES.newRecord().setDeckId(deckId).setShareRecipientId(userId).setTrashed(true)));
 										} else if (isOwner) {
-											return queryExecutor.execute(dsl -> dsl.update(DECKS).set(DECKS.TRASHED, true).where(DECKS.ID.eq(deckId), canEditDeck(userId)));
+											return queryExecutor.execute(dsl -> dsl.update(DECKS).set(DECKS.TRASHED, true).where(DECKS.ID.eq(deckId), canEditDeckSql(userId)));
 										} else {
 											return Future.failedFuture("deck not owned by user or shared with user");
 										}
 									});
 						})
-						.map(Empty.getDefaultInstance());
+						.map(Empty.getDefaultInstance())
+						.recover(Environment.toGrpcFailure());
 			}
 
 			@Override
@@ -166,13 +172,13 @@ public class Legacy {
 				var deckId = request.getDeckId();
 				var userId = Accounts.userId();
 
-				return getDeck(deckId, userId);
+				return getDeck(deckId, userId).recover(Environment.toGrpcFailure());
 			}
 
 			@Override
 			public Future<DecksGetAllResponse> decksGetAll(Empty request) {
 				var userId = Accounts.userId();
-				return getAllDecks(userId);
+				return getAllDecks(userId).recover(Environment.toGrpcFailure());
 			}
 
 			@Override
@@ -190,7 +196,7 @@ public class Legacy {
 							.withHeroClass(request.getHeroClass());
 				}
 
-				return createDeck(userId, createRequest);
+				return createDeck(userId, createRequest).recover(Environment.toGrpcFailure());
 			}
 
 			@Override
@@ -203,8 +209,11 @@ public class Legacy {
 				var updateCommand = request.getUpdateCommand();
 				var queryExecutor = Environment.queryExecutor();
 
-				if (deckId == null) {
-					return Future.failedFuture("deckId is null");
+				if (deckId.isEmpty()) {
+					return Future.failedFuture(Status.INVALID_ARGUMENT
+							.withCause(new NullPointerException("deckId"))
+							.augmentDescription("You must specify a deckId")
+							.asRuntimeException());
 				}
 
 				if (!request.hasUpdateCommand()) {
@@ -217,11 +226,13 @@ public class Legacy {
 				return decks.queryExecutor().execute(dsl -> dsl
 						.select(DECKS.ID)
 						.from(DECKS)
-						.where(DECKS.ID.eq(deckId).and(canEditDeck(userId)))
+						.where(DECKS.ID.eq(deckId).and(canEditDeckSql(userId)))
 						.limit(1)
 				).compose(authedCount -> {
 					if (authedCount < 1) {
-						return Future.failedFuture(new RuntimeException("not authorized to edit this deck"));
+						return Future.failedFuture(Status.PERMISSION_DENIED
+								.augmentDescription("You are not authorized to edit this deck because you are not its owner")
+								.asRuntimeException());
 					}
 
 					// Player entity attribute update
@@ -258,11 +269,15 @@ public class Legacy {
 					}
 
 					if (updateCommand.hasPushInventoryIds()) {
-						futs.add(Future.failedFuture("push inventory IDs deprecated"));
+						futs.add(Future.failedFuture(Status.UNIMPLEMENTED
+								.augmentDescription("Inventory IDs are now unique to each deck and cannot be shared among decks.")
+								.asRuntimeException()));
 					}
 
 					if (updateCommand.getSetInventoryIdsCount() > 0) {
-						futs.add(Future.failedFuture("cannot set inventory IDs"));
+						futs.add(Future.failedFuture(Status.UNIMPLEMENTED
+								.augmentDescription("Inventory IDs are now unique to each deck and cannot be shared among decks.")
+								.asRuntimeException()));
 					}
 
 					if (updateCommand.getPullAllCardIdsCount() > 0) {
@@ -282,10 +297,10 @@ public class Legacy {
 						futs.add(cardsInDeckDao.deleteByIds(updateCommand.getPullAllInventoryIdsList().stream().map(Long::parseLong).collect(toList())));
 					}
 
-					var setsHeroClass = updateCommand.getSetHeroClass() != null && !updateCommand.getSetHeroClass().isEmpty();
-					var setName = updateCommand.getSetName() != null && !updateCommand.getSetName().isEmpty();
+					var setsHeroClass = !updateCommand.getSetHeroClass().isEmpty();
+					var setsName = !updateCommand.getSetName().isEmpty();
 
-					if (setsHeroClass || setName) {
+					if (setsHeroClass || setsName) {
 						// Deck record update
 						futs.add(decks.queryExecutor()
 								.execute(dsl -> {
@@ -294,7 +309,7 @@ public class Legacy {
 										update = update.set(DECKS.HERO_CLASS, updateCommand.getSetHeroClass());
 									}
 
-									if (setName) {
+									if (setsName) {
 										update = update.set(DECKS.NAME, updateCommand.getSetName());
 									}
 
@@ -311,7 +326,8 @@ public class Legacy {
 
 					return CompositeFuture.all(futs);
 				})
-						.compose(ignored -> getDeck(deckId, userId));
+						.compose(ignored -> getDeck(deckId, userId))
+						.recover(Environment.toGrpcFailure());
 			}
 
 			@Override
@@ -321,24 +337,37 @@ public class Legacy {
 				var newDeckId = UUID.randomUUID().toString();
 
 				var queryExecutor = Environment.queryExecutor();
-				return queryExecutor
-						.execute(dsl -> {
-							// new deckId, deck fields...
-							var newDeckIdAndOtherFields = ObjectArrays.concat(DSL.val(newDeckId), without(DECKS.fields(), DECKS.ID));
-							// replace owner ID
-							var ownerIdPos = Iterators.indexOf(Iterators.forArray(newDeckIdAndOtherFields), t -> Objects.equals(t, DECKS.CREATED_BY));
-							newDeckIdAndOtherFields[ownerIdPos] = DSL.val(userId);
-							return dsl.insertInto(DECKS, DECKS.fields())
-									// retrieve fields from existing deck EXCEPT the ID, which we replaced
-									.select(dsl.select(newDeckIdAndOtherFields)
-											.from(DECKS)
-											// We can duplicate our own decks, decks that are permitted to duplicate by anyone or premade decks
-											.where(DECKS.ID.eq(deckId).and(canEditDeck(userId).or(DECKS.PERMITTED_TO_DUPLICATE.eq(true)).or(DECKS.IS_PREMADE.eq(true)))));
-						})
-						.compose(Legacy::insertOrFail)
-						.compose(ignored -> queryExecutor.execute(dsl -> duplicateAllForeign(dsl, deckId, newDeckId, CARDS_IN_DECK.ID, CARDS_IN_DECK.DECK_ID)))
-						.compose(ignored -> queryExecutor.execute(dsl -> duplicateAllForeign(dsl, deckId, newDeckId, DECK_PLAYER_ATTRIBUTE_TUPLES.ID, DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID)))
-						.compose(ignored -> getDeck(newDeckId, userId));
+
+				return fiber(() -> {
+					var decksInserted = await(queryExecutor
+							.execute(dsl -> {
+								// new deckId, deck fields...
+								var newDeckIdAndOtherFields = ObjectArrays.concat(DSL.val(newDeckId), withoutFields(DECKS.fields(), DECKS.ID));
+								// replace owner ID
+								var ownerIdPos = Iterators.indexOf(Iterators.forArray(newDeckIdAndOtherFields), t -> t != null && Objects.equals(t.getName(), DECKS.CREATED_BY.getName()));
+								newDeckIdAndOtherFields[ownerIdPos] = DSL.val(userId);
+								// replace premade
+								var premadePos = Iterators.indexOf(Iterators.forArray(newDeckIdAndOtherFields), f -> Objects.equals(f, DECKS.IS_PREMADE));
+								newDeckIdAndOtherFields[premadePos] = DSL.val(false);
+								return dsl.insertInto(DECKS, DECKS.fields())
+										// retrieve fields from existing deck EXCEPT the ID, which we replaced
+										.select(DSL.using(SQLDialect.POSTGRES).select(newDeckIdAndOtherFields)
+												.from(DECKS)
+												// We can duplicate our own decks, decks that are permitted to duplicate by anyone or premade decks
+												.where(DECKS.ID.eq(deckId).and(canEditDeckSql(userId)
+														.or(DECKS.PERMITTED_TO_DUPLICATE.eq(true))
+														.or(DECKS.IS_PREMADE.eq(true)))));
+							}));
+
+					if (decksInserted != 1) {
+						throw Status.NOT_FOUND.asRuntimeException();
+					}
+
+					await(queryExecutor.execute(dsl -> duplicateAllForeign(deckId, newDeckId, CARDS_IN_DECK.ID, CARDS_IN_DECK.DECK_ID)));
+					await(queryExecutor.execute(dsl -> duplicateAllForeign(deckId, newDeckId, DECK_PLAYER_ATTRIBUTE_TUPLES.ID, DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID)));
+					return await(getDeck(newDeckId, userId));
+				})
+						.recover(Environment.toGrpcFailure());
 			}
 		})
 				.compose(Accounts::requiresAuthorization);
@@ -363,7 +392,7 @@ public class Legacy {
 										// value is null or false
 										DECKS.TRASHED.eq(false),
 										// the user can edit the deck
-										canEditDeck(userId)
+										canEditDeckSql(userId)
 												.or(
 														// this is a premade deck
 														DECKS.IS_PREMADE.eq(true).and(DECK_SHARES.ID.isNull().or(DECK_SHARES.TRASHED.eq(false))))
@@ -386,13 +415,16 @@ public class Legacy {
 				});
 	}
 
-	private static org.jooq.Condition canEditDeck(String userId) {
+	private static boolean canEditDeck(IDecks deck, String userId) {
+		return Objects.equals(deck.getCreatedBy(), userId);
+	}
+
+	private static org.jooq.Condition canEditDeckSql(String userId) {
 		return DECKS.CREATED_BY.eq(userId);
 	}
 
 	private static <R extends Record, TForeignIdField> Insert<R>
-	duplicateAllForeign(DSLContext dsl,
-	                    TForeignIdField oldForeignId,
+	duplicateAllForeign(TForeignIdField oldForeignId,
 	                    TForeignIdField newForeignId,
 	                    TableField<R, ?> generatedAlwaysIdField,
 	                    TableField<R, TForeignIdField> foreignReferenceField) {
@@ -400,10 +432,10 @@ public class Legacy {
 		var oneToManyTable = generatedAlwaysIdField.getTable();
 		// remove the always generated id field in this one-to-many table
 		// column_a, ... , column_b, column_c, ... , foreign_id_column, column_d, column_e ...
-		var fieldsWithoutId = without(oneToManyTable.fields(), generatedAlwaysIdField);
+		var fieldsWithoutId = withoutFields(oneToManyTable.fields(), generatedAlwaysIdField);
 		// find the position of the foreign id column in order to replace the foreign id column name with the literal value
 		// of the new foreign ID
-		var foreignIdPos = Iterators.indexOf(Iterators.forArray(fieldsWithoutId), t -> Objects.equals(t, foreignReferenceField));
+		var foreignIdPos = Iterators.indexOf(Iterators.forArray(fieldsWithoutId), t -> Objects.equals(t.getName(), foreignReferenceField.getName()));
 		var newForeignIdAndFieldsWithoutAutogeneratedId = Arrays.copyOf(fieldsWithoutId, fieldsWithoutId.length);
 		// replace with the new foreign ID
 		// column_a, ... , column_b, column_c, ... , "new foreign ID", column_d, column_e ...
@@ -411,20 +443,30 @@ public class Legacy {
 		// insert column_a, ... , column_b, column_c, ... , foreign_id_column, column_d, column_e ... into one_to_many_table
 		//   select (column_a, ... , column_b, column_c, ... , "new foreign ID", column_d, column_e ...) from one_to_many_table
 		//   where foreign_id_column = oldForeignId
-		return dsl.insertInto(oneToManyTable, fieldsWithoutId)
-				.select(dsl.select(newForeignIdAndFieldsWithoutAutogeneratedId)
+		return DSL.using(SQLDialect.POSTGRES).insertInto(oneToManyTable, fieldsWithoutId)
+				.select(DSL.using(SQLDialect.POSTGRES).select(newForeignIdAndFieldsWithoutAutogeneratedId)
 						.from(oneToManyTable)
 						.where(foreignReferenceField.eq(oldForeignId)));
 	}
 
 	@SafeVarargs
-	public static <T> T[] without(T[] array, T... withoutElements) {
-		var returnArray = ObjectArrays.newArray(array, array.length);
+	public static Field[] withoutFields(Field[] array, Field... withoutElements) {
+		return without(Comparator.comparing(Field::getName), array, withoutElements);
+	}
+
+	@SafeVarargs
+	public static <T extends Comparable<T>> T[] without(T[] array, T... withoutElements) {
+		return without(Comparator.naturalOrder(), array, withoutElements);
+	}
+
+	@SafeVarargs
+	public static <T> T[] without(Comparator<T> comparator, T[] array, T... withoutElements) {
+		var returnArray = Arrays.copyOf(array, array.length);
 		var k = 0;
 		for (var i = 0; i < array.length; i++) {
 			var skip = false;
 			for (var j = 0; j < withoutElements.length; j++) {
-				if (Objects.equals(array[i], withoutElements[j])) {
+				if (comparator.compare(array[i], withoutElements[j]) == 0) {
 					skip = true;
 					break;
 				}
@@ -439,7 +481,7 @@ public class Legacy {
 		}
 
 		if (k != returnArray.length) {
-			return ObjectArrays.newArray(returnArray, k);
+			return Arrays.copyOf(returnArray, k);
 		}
 
 		return returnArray;
@@ -456,12 +498,11 @@ public class Legacy {
 				CARDS_IN_DECK.ID,
 				CARDS_IN_DECK.DECK_ID,
 				CARDS_IN_DECK.CARD_ID,
-				CARDS.URI,
 				CARDS.CARD_SCRIPT)
 				.from(CARDS_IN_DECK)
 				.join(CARDS, JoinType.JOIN)
 				.on(CARDS_IN_DECK.CARD_ID.eq(CARDS.ID))
-				.where(CARDS_IN_DECK.DECK_ID.eq(deckId)));
+				.where(CARDS_IN_DECK.DECK_ID.eq(deckId))).onFailure(Environment.onFailure());
 		var sharesFut = deckSharesDao.queryExecutor()
 				.findOne(dsl -> dsl.selectFrom(DECK_SHARES)
 						.where(DECK_SHARES.SHARE_RECIPIENT_ID.eq(userId).and(DECK_SHARES.DECK_ID.eq(deckId))));
@@ -492,8 +533,9 @@ public class Legacy {
 							.setHeroClass(deck.getHeroClass())
 							.setName(deck.getName())
 							.setType(InventoryCollection.InventoryCollectionType.INVENTORY_COLLECTION_TYPE_DECK)
-							.setIsStandardDeck(false)
+							.setIsStandardDeck(deck.getIsPremade())
 							.setUserId(deck.getCreatedBy())
+							.setCanEdit(canEditDeck(deck, userId))
 							.setValidationReport((ValidationReport.Builder) validateDeck(cards.stream().map(row -> row.getString(CARDS_IN_DECK.CARD_ID.getName())).collect(toList()), deck.getHeroClass(), deck.getFormat()));
 					var i = 0;
 					for (var cardRecordRow : cards) {
@@ -503,6 +545,7 @@ public class Legacy {
 								// TODO: Do we really need to transmit the complete entity here?
 								.setEntity(Entity.newBuilder()
 										.setId(i)
+										.setName(cardRecordRow.getJsonObject(CARDS.CARD_SCRIPT.getName()).getString("name"))
 										.setCardId(cardRecordRow.getString(CARDS_IN_DECK.CARD_ID.getName())))
 								.addCollectionIds(deck.getId())
 								.build());

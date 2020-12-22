@@ -6,7 +6,6 @@ import co.paralleluniverse.strands.Strand;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.hiddenswitch.framework.impl.ConfigurationRequest;
-import com.hiddenswitch.framework.impl.Games;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.MatchmakingQueuesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues;
@@ -129,7 +128,7 @@ public class Matchmaking extends SyncVerticle {
 			var executor = Environment.queryExecutor();
 
 			// check if the player is already in a running game by pinging a handler. if so, reply with its game ID.
-			var existingGameId = Games.getGameId(userId);
+			var existingGameId = await(Games.getGameId(userId));
 			if (existingGameId != null) {
 				writeGameId(response, existingGameId);
 				return;

@@ -1126,6 +1126,9 @@ message InventoryCollection {
     // The owner of this collection.
     string userId = 10;
     ValidationReport validationReport = 11;
+
+    // Can the user who received this record edit this deck?
+    bool canEdit = 12;
 }
 
 // An object that indicates the player has a pending invitation to a game.

@@ -154,4 +154,13 @@ public class RowMappers {
         };
     }
 
+    public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons> getUserEntityAddonsMapper() {
+        return row -> {
+            com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons();
+            pojo.setId(row.getString("id"));
+            pojo.setPrivacyToken(row.getString("privacy_token"));
+            return pojo;
+        };
+    }
+
 }

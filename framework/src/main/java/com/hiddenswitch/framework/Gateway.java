@@ -21,7 +21,8 @@ public class Gateway extends AbstractVerticle {
 				Legacy.unauthenticatedCards(),
 				Matchmaking.services(),
 				Accounts.unauthenticatedService(),
-				Accounts.authenticatedService())
+				Accounts.authenticatedService(),
+				Games.services())
 				.compose(services -> {
 					var serverConfiguration = Environment.cachedConfigurationOrGet();
 					var builder = VertxServerBuilder.forPort(vertx, grpcPort());

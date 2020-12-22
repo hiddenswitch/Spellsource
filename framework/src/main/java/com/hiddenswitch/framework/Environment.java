@@ -7,8 +7,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.google.protobuf.GeneratedMessageV3;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.rpc.ServerConfiguration;
+import com.hiddenswitch.spellsource.rpc.DecksGetResponse;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
+import io.grpc.Status;
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
@@ -35,6 +37,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 import static io.vertx.ext.sync.Sync.await;
 
@@ -296,5 +299,12 @@ public class Environment {
 		} catch (Throwable ex) {
 			throw new VertxException(ex);
 		}
+	}
+
+	public static <T> Function<Throwable, Future<T>> toGrpcFailure() {
+		return t -> Future.failedFuture(Status.INTERNAL
+				.augmentDescription(t.getMessage())
+				.withCause(t)
+				.asRuntimeException());
 	}
 }

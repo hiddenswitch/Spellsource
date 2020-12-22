@@ -5,7 +5,7 @@ import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.impl.ClusteredGames;
 import com.hiddenswitch.framework.impl.Configuration;
 import com.hiddenswitch.framework.impl.ConfigurationRequest;
-import com.hiddenswitch.framework.impl.Games;
+import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import com.hiddenswitch.spellsource.rpc.MessageType;
 import com.hiddenswitch.spellsource.rpc.ServerToClientMessage;
