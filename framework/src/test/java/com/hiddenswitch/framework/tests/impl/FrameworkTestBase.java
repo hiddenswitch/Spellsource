@@ -1,7 +1,7 @@
 package com.hiddenswitch.framework.tests.impl;
 
-import com.hiddenswitch.framework.Application;
 import com.hiddenswitch.framework.Gateway;
+import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
 import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.core.*;
@@ -34,7 +34,7 @@ public class FrameworkTestBase {
 
 	@BeforeAll
 	protected static void startContainers() throws InterruptedException {
-		if (!Application.defaultConfigurationAndServices()) {
+		if (!StandaloneApplication.defaultConfigurationAndServices()) {
 			return;
 		}
 

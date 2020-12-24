@@ -53,6 +53,8 @@ public class ProtobufCodec<T extends Message> implements MessageCodec<T, T> {
 	}
 
 	public Class<T> getTargetClass() {
-		return (Class<T>)target.getClass();
+		@SuppressWarnings("unchecked")
+		var targetClass = (Class<T>) target.getClass();
+		return targetClass;
 	}
 }

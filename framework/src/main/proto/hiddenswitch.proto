@@ -74,8 +74,12 @@ message GetCardsRequest {
 
 // A cacheable copy of the entire card catalogue.
 message GetCardsResponse {
-    // The actual array of cards representing the complete Spellsource catalogue.
-    repeated spellsource.CardRecord cards = 1;
+    message Content {
+        // The actual array of cards representing the complete Spellsource catalogue.
+        repeated spellsource.CardRecord cards = 1;
+    }
+
+    Content content = 1;
 
     // A token used in the If-None-Match argument when checking for new card catalogue content.
     string version = 2;

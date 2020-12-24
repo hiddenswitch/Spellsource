@@ -16,3 +16,4 @@ appender("STDOUT", ConsoleAppender) {
 root(ERROR, ["STDOUT"])
 logger("com.hiddenswitch", ERROR)
 logger("com.hiddenswitch.containers", INFO)
+logger("com.hiddenswitch.framework.Application", INFO)

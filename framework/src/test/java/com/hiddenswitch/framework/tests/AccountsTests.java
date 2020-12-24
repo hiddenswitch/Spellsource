@@ -1,13 +1,13 @@
 package com.hiddenswitch.framework.tests;
 
 import com.hiddenswitch.framework.Accounts;
-import com.hiddenswitch.framework.Application;
 import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.rpc.AccessTokenResponse;
 import com.hiddenswitch.framework.rpc.GetAccountsRequest;
 import com.hiddenswitch.framework.rpc.UserEntity;
 import com.hiddenswitch.framework.rpc.VertxAccountsGrpc;
+import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
@@ -87,6 +87,11 @@ public class AccountsTests extends FrameworkTestBase {
 	public void testVerifiesToken(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
 		startGateway(vertx)
+				.compose(v -> client.unauthenticated().verifyToken(AccessTokenResponse.newBuilder().build())
+						.onSuccess(b -> testContext.verify(() -> {
+							assertFalse(b.getValue(), "should not verify");
+						}))
+				)
 				.compose(v -> client.unauthenticated().verifyToken(AccessTokenResponse.newBuilder()
 						.setToken("blah").build()).onSuccess(b -> testContext.verify(() -> {
 					assertFalse(b.getValue(), "should not verify");
@@ -119,15 +124,15 @@ public class AccountsTests extends FrameworkTestBase {
 				.compose(v -> Accounts.get())
 				.compose(hiddenswitch -> Environment.executeBlocking(() -> hiddenswitch.users().create(testUser)))
 				.compose(ignored -> {
-					var url = Application.KEYCLOAK.getAuthServerUrl() + "/realms/hiddenswitch/protocol/openid-connect/token";
+					var url = StandaloneApplication.KEYCLOAK.getAuthServerUrl() + "/realms/hiddenswitch/protocol/openid-connect/token";
 
 					// Login
 					return webClient.postAbs(url)
 							.followRedirects(true)
 							.sendForm(MultiMap.caseInsensitiveMultiMap()
-									.add("client_id", Application.CLIENT_ID)
+									.add("client_id", StandaloneApplication.CLIENT_ID)
 									.add("grant_type", "password")
-									.add("client_secret", Application.CLIENT_SECRET)
+									.add("client_secret", StandaloneApplication.CLIENT_SECRET)
 									.add("scope", "openid")
 									// username or password can be used here
 									.add("username", testUser.getEmail())

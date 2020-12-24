@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableCallable;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.google.common.base.Throwables;
 import com.google.protobuf.GeneratedMessageV3;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.rpc.ServerConfiguration;
@@ -301,9 +302,9 @@ public class Environment {
 		}
 	}
 
-	public static <T> Function<Throwable, Future<T>> toGrpcFailure() {
+	public static <T> Function<Throwable, Future<T>> onGrpcFailure() {
 		return t -> Future.failedFuture(Status.INTERNAL
-				.augmentDescription(t.getMessage())
+				.augmentDescription(Throwables.getRootCause(t).getMessage() + "\n" + Throwables.getStackTraceAsString(Throwables.getRootCause(t)))
 				.withCause(t)
 				.asRuntimeException());
 	}

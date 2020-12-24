@@ -20,9 +20,9 @@ public class CardTests extends FrameworkTestBase {
 				.compose(res -> {
 					vertxTestContext.verify(() -> {
 						assertNotEquals("", res.getVersion());
-						assertTrue(res.getCardsCount() > 1000);
+						assertTrue(res.getContent().getCardsCount() > 1000);
 						assertFalse(res.getCachedOk());
-						for (var cardRecord : res.getCardsList()) {
+						for (var cardRecord : res.getContent().getCardsList()) {
 							assertNotEquals("", cardRecord.getEntity().getCardId());
 						}
 					});
@@ -33,7 +33,7 @@ public class CardTests extends FrameworkTestBase {
 					vertxTestContext.verify(() -> {
 						assertTrue(res.getCachedOk());
 						assertEquals("", res.getVersion());
-						assertEquals(0, res.getCardsCount());
+						assertFalse(res.hasContent());
 					});
 				})
 				.eventually(v -> client.closeFut())
