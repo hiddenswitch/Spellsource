@@ -11,12 +11,10 @@ import com.hiddenswitch.framework.schema.keycloak.tables.daos.UserEntityDao;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
 import io.grpc.*;
 import io.vertx.core.Future;
-import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.shareddata.Shareable;
 import io.vertx.ext.web.client.WebClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.client.jaxrs.engines.vertx.VertxClientHttpEngine;
 import org.jetbrains.annotations.NotNull;
 import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
@@ -25,7 +23,6 @@ import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.common.VerificationException;
 import org.keycloak.common.enums.SslRequired;
-import org.keycloak.crypto.Algorithm;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
 
@@ -167,7 +164,8 @@ public class Accounts {
 						var thisInterceptor = interceptor.get();
 						thisInterceptor.getPublicKey().set(publicKey);
 						return Future.succeededFuture(publicKey);
-					}));
+					}))
+					.onFailure(Environment.onFailure());
 		} else {
 			publicKeyFut = Future.succeededFuture(publicKeyStorage.get());
 		}
@@ -233,7 +231,8 @@ public class Accounts {
 							var client = new Client(context.owner(), webClient);
 							return client.login(request.getEmail(), request.getPassword()).map(accessTokenResponse -> new Object[]{accessTokenResponse, userEntity});
 						})
-						.map(this::handleAccessTokenUserEntityTuple);
+						.map(this::handleAccessTokenUserEntityTuple)
+						.recover(Environment.onGrpcFailure());
 			}
 
 			@Override
@@ -252,7 +251,8 @@ public class Accounts {
 								return Future.failedFuture(e);
 							}
 						})
-						.map(this::handleAccessTokenUserEntityTuple);
+						.map(this::handleAccessTokenUserEntityTuple)
+						.recover(Environment.onGrpcFailure());
 			}
 
 			@Override
@@ -261,7 +261,8 @@ public class Accounts {
 				return Accounts.getPublicKey()
 						.compose(pk -> Future.fromCompletionStage(verify(request.getToken(), pk).minimalCompletionStage(), context))
 						.map(BoolValue.of(true))
-						.otherwise(BoolValue.of(false));
+						.otherwise(BoolValue.of(false))
+						.recover(Environment.onGrpcFailure());
 			}
 		});
 	}
@@ -288,7 +289,8 @@ public class Accounts {
 								.setUserEntity(toProto(userEntity))
 								.setAccessTokenResponse(AccessTokenResponse.newBuilder()
 										.setToken(token)
-										.build()).build());
+										.build()).build())
+						.recover(Environment.onGrpcFailure());
 			}
 
 			@Override
@@ -306,7 +308,8 @@ public class Accounts {
 											.setId(thisUser.getId())
 											.build()
 							).build());
-						});
+						})
+						.recover(Environment.onGrpcFailure());
 			}
 
 			@Override
@@ -332,7 +335,8 @@ public class Accounts {
 														}
 														return build.build();
 													}).collect(Collectors.toList())).build());
-						});
+						})
+						.recover(Environment.onGrpcFailure());
 			}
 		})
 				.compose(Accounts::requiresAuthorization);
@@ -364,7 +368,8 @@ public class Accounts {
 		return Environment.executeBlocking(() -> {
 			var realmId = Environment.cachedConfigurationOrGet().getKeycloak().getRealmId();
 			return keycloakReference.get().realm(realmId);
-		});
+		})
+				.onFailure(Environment.onFailure());
 	}
 
 	private static AtomicInteger v = new AtomicInteger();
@@ -402,7 +407,8 @@ public class Accounts {
 						return Future.failedFuture(new ArrayIndexOutOfBoundsException("invalid user creation result"));
 					}
 					return Future.succeededFuture(userEntity);
-				});
+				})
+				.onFailure(Environment.onFailure());
 	}
 
 	@NotNull
@@ -442,7 +448,8 @@ public class Accounts {
 					var userResource = realm.users().get(userId);
 					userResource.update(userRepresentation);
 					return userResource;
-				}));
+				}))
+				.onFailure(Environment.onFailure());
 	}
 
 	public static Future<RealmResource> createRealmIfAbsent() {
@@ -490,7 +497,8 @@ public class Accounts {
 			client.setWebOrigins(Collections.singletonList("+"));
 			realm.clients().create(client);
 			return realm;
-		});
+		})
+				.onFailure(Environment.onFailure());
 	}
 
 	public synchronized static String keycloakAuthUrl() {

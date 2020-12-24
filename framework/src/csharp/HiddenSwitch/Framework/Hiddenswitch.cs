@@ -53,40 +53,42 @@ namespace HiddenSwitch.Proto {
             "GAEgASgDEhsKE3NjYW5GcmVxdWVuY3lNaWxsaXMYAiABKAMSGwoTbWF4VGlj",
             "a2V0c1RvUHJvY2VzcxgDIAEoBRoyChhBcHBsaWNhdGlvbkNvbmZpZ3VyYXRp",
             "b24SFgoOdXNlQnJvYWRjYXN0ZXIYASABKAhKBAgDEAQiKAoPR2V0Q2FyZHNS",
-            "ZXF1ZXN0EhUKDUlmX05vbmVfTWF0Y2gYASABKAkiXQoQR2V0Q2FyZHNSZXNw",
-            "b25zZRImCgVjYXJkcxgBIAMoCzIXLnNwZWxsc291cmNlLkNhcmRSZWNvcmQS",
-            "DwoHdmVyc2lvbhgCIAEoCRIQCghjYWNoZWRPaxgDIAEoCCI5CgxMb2dpblJl",
-            "cXVlc3QSFwoPdXNlcm5hbWVPckVtYWlsGAEgASgJEhAKCHBhc3N3b3JkGAIg",
-            "ASgJIkkKFENyZWF0ZUFjY291bnRSZXF1ZXN0Eg0KBWVtYWlsGAEgASgJEhAK",
-            "CHVzZXJuYW1lGAIgASgJEhAKCHBhc3N3b3JkGAMgASgJIiwKFUNoYW5nZVBh",
-            "c3N3b3JkUmVxdWVzdBITCgtuZXdQYXNzd29yZBgBIAEoCSKCAQoSTG9naW5P",
-            "ckNyZWF0ZVJlcGx5Ej4KE2FjY2Vzc1Rva2VuUmVzcG9uc2UYASABKAsyIS5o",
-            "aWRkZW5zd2l0Y2guQWNjZXNzVG9rZW5SZXNwb25zZRIsCgp1c2VyRW50aXR5",
-            "GAIgASgLMhguaGlkZGVuc3dpdGNoLlVzZXJFbnRpdHkiJAoTQWNjZXNzVG9r",
-            "ZW5SZXNwb25zZRINCgV0b2tlbhgBIAEoCSJPCgpVc2VyRW50aXR5EgoKAmlk",
-            "GAEgASgJEg0KBWVtYWlsGAIgASgJEhAKCHVzZXJuYW1lGAogASgJEhQKDHBy",
-            "aXZhY3lUb2tlbhgLIAEoCSIhChJHZXRBY2NvdW50c1JlcXVlc3QSCwoDaWRz",
-            "GAEgAygJIkIKEEdldEFjY291bnRzUmVwbHkSLgoMdXNlckVudGl0aWVzGAEg",
-            "AygLMhguaGlkZGVuc3dpdGNoLlVzZXJFbnRpdHkygwIKD1VuYXV0aGVudGlj",
-            "YXRlZBJXCg1DcmVhdGVBY2NvdW50EiIuaGlkZGVuc3dpdGNoLkNyZWF0ZUFj",
-            "Y291bnRSZXF1ZXN0GiAuaGlkZGVuc3dpdGNoLkxvZ2luT3JDcmVhdGVSZXBs",
-            "eSIAEkcKBUxvZ2luEhouaGlkZGVuc3dpdGNoLkxvZ2luUmVxdWVzdBogLmhp",
-            "ZGRlbnN3aXRjaC5Mb2dpbk9yQ3JlYXRlUmVwbHkiABJOCgtWZXJpZnlUb2tl",
-            "bhIhLmhpZGRlbnN3aXRjaC5BY2Nlc3NUb2tlblJlc3BvbnNlGhouZ29vZ2xl",
-            "LnByb3RvYnVmLkJvb2xWYWx1ZSIAMmMKFFVuYXV0aGVudGljYXRlZENhcmRz",
-            "EksKCEdldENhcmRzEh0uaGlkZGVuc3dpdGNoLkdldENhcmRzUmVxdWVzdBoe",
-            "LmhpZGRlbnN3aXRjaC5HZXRDYXJkc1Jlc3BvbnNlIgAyzwIKCEFjY291bnRz",
-            "EkYKCkdldEFjY291bnQSFi5nb29nbGUucHJvdG9idWYuRW1wdHkaHi5oaWRk",
-            "ZW5zd2l0Y2guR2V0QWNjb3VudHNSZXBseSIAElEKC0dldEFjY291bnRzEiAu",
-            "aGlkZGVuc3dpdGNoLkdldEFjY291bnRzUmVxdWVzdBoeLmhpZGRlbnN3aXRj",
-            "aC5HZXRBY2NvdW50c1JlcGx5IgASWQoOQ2hhbmdlUGFzc3dvcmQSIy5oaWRk",
-            "ZW5zd2l0Y2guQ2hhbmdlUGFzc3dvcmRSZXF1ZXN0GiAuaGlkZGVuc3dpdGNo",
-            "LkxvZ2luT3JDcmVhdGVSZXBseSIAEk0KGVJlcXVlc3RQYXNzd29yZFJlc2V0",
-            "RW1haWwSFi5nb29nbGUucHJvdG9idWYuRW1wdHkaFi5nb29nbGUucHJvdG9i",
-            "dWYuRW1wdHkiADJMCgVHYW1lcxJDCglJc0luTWF0Y2gSFi5nb29nbGUucHJv",
-            "dG9idWYuRW1wdHkaHC5nb29nbGUucHJvdG9idWYuU3RyaW5nVmFsdWUiAEI+",
-            "Ch5jb20uaGlkZGVuc3dpdGNoLmZyYW1ld29yay5ycGNCBVByb3RvUAGqAhJI",
-            "aWRkZW5Td2l0Y2guUHJvdG9iBnByb3RvMw=="));
+            "ZXF1ZXN0EhUKDUlmX05vbmVfTWF0Y2gYASABKAkioQEKEEdldENhcmRzUmVz",
+            "cG9uc2USNwoHY29udGVudBgBIAEoCzImLmhpZGRlbnN3aXRjaC5HZXRDYXJk",
+            "c1Jlc3BvbnNlLkNvbnRlbnQSDwoHdmVyc2lvbhgCIAEoCRIQCghjYWNoZWRP",
+            "axgDIAEoCBoxCgdDb250ZW50EiYKBWNhcmRzGAEgAygLMhcuc3BlbGxzb3Vy",
+            "Y2UuQ2FyZFJlY29yZCI5CgxMb2dpblJlcXVlc3QSFwoPdXNlcm5hbWVPckVt",
+            "YWlsGAEgASgJEhAKCHBhc3N3b3JkGAIgASgJIkkKFENyZWF0ZUFjY291bnRS",
+            "ZXF1ZXN0Eg0KBWVtYWlsGAEgASgJEhAKCHVzZXJuYW1lGAIgASgJEhAKCHBh",
+            "c3N3b3JkGAMgASgJIiwKFUNoYW5nZVBhc3N3b3JkUmVxdWVzdBITCgtuZXdQ",
+            "YXNzd29yZBgBIAEoCSKCAQoSTG9naW5PckNyZWF0ZVJlcGx5Ej4KE2FjY2Vz",
+            "c1Rva2VuUmVzcG9uc2UYASABKAsyIS5oaWRkZW5zd2l0Y2guQWNjZXNzVG9r",
+            "ZW5SZXNwb25zZRIsCgp1c2VyRW50aXR5GAIgASgLMhguaGlkZGVuc3dpdGNo",
+            "LlVzZXJFbnRpdHkiJAoTQWNjZXNzVG9rZW5SZXNwb25zZRINCgV0b2tlbhgB",
+            "IAEoCSJPCgpVc2VyRW50aXR5EgoKAmlkGAEgASgJEg0KBWVtYWlsGAIgASgJ",
+            "EhAKCHVzZXJuYW1lGAogASgJEhQKDHByaXZhY3lUb2tlbhgLIAEoCSIhChJH",
+            "ZXRBY2NvdW50c1JlcXVlc3QSCwoDaWRzGAEgAygJIkIKEEdldEFjY291bnRz",
+            "UmVwbHkSLgoMdXNlckVudGl0aWVzGAEgAygLMhguaGlkZGVuc3dpdGNoLlVz",
+            "ZXJFbnRpdHkygwIKD1VuYXV0aGVudGljYXRlZBJXCg1DcmVhdGVBY2NvdW50",
+            "EiIuaGlkZGVuc3dpdGNoLkNyZWF0ZUFjY291bnRSZXF1ZXN0GiAuaGlkZGVu",
+            "c3dpdGNoLkxvZ2luT3JDcmVhdGVSZXBseSIAEkcKBUxvZ2luEhouaGlkZGVu",
+            "c3dpdGNoLkxvZ2luUmVxdWVzdBogLmhpZGRlbnN3aXRjaC5Mb2dpbk9yQ3Jl",
+            "YXRlUmVwbHkiABJOCgtWZXJpZnlUb2tlbhIhLmhpZGRlbnN3aXRjaC5BY2Nl",
+            "c3NUb2tlblJlc3BvbnNlGhouZ29vZ2xlLnByb3RvYnVmLkJvb2xWYWx1ZSIA",
+            "MmMKFFVuYXV0aGVudGljYXRlZENhcmRzEksKCEdldENhcmRzEh0uaGlkZGVu",
+            "c3dpdGNoLkdldENhcmRzUmVxdWVzdBoeLmhpZGRlbnN3aXRjaC5HZXRDYXJk",
+            "c1Jlc3BvbnNlIgAyzwIKCEFjY291bnRzEkYKCkdldEFjY291bnQSFi5nb29n",
+            "bGUucHJvdG9idWYuRW1wdHkaHi5oaWRkZW5zd2l0Y2guR2V0QWNjb3VudHNS",
+            "ZXBseSIAElEKC0dldEFjY291bnRzEiAuaGlkZGVuc3dpdGNoLkdldEFjY291",
+            "bnRzUmVxdWVzdBoeLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50c1JlcGx5IgAS",
+            "WQoOQ2hhbmdlUGFzc3dvcmQSIy5oaWRkZW5zd2l0Y2guQ2hhbmdlUGFzc3dv",
+            "cmRSZXF1ZXN0GiAuaGlkZGVuc3dpdGNoLkxvZ2luT3JDcmVhdGVSZXBseSIA",
+            "Ek0KGVJlcXVlc3RQYXNzd29yZFJlc2V0RW1haWwSFi5nb29nbGUucHJvdG9i",
+            "dWYuRW1wdHkaFi5nb29nbGUucHJvdG9idWYuRW1wdHkiADJMCgVHYW1lcxJD",
+            "CglJc0luTWF0Y2gSFi5nb29nbGUucHJvdG9idWYuRW1wdHkaHC5nb29nbGUu",
+            "cHJvdG9idWYuU3RyaW5nVmFsdWUiAEI+Ch5jb20uaGlkZGVuc3dpdGNoLmZy",
+            "YW1ld29yay5ycGNCBVByb3RvUAGqAhJIaWRkZW5Td2l0Y2guUHJvdG9iBnBy",
+            "b3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, global::Spellsource.Proto.SpellsourceReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -98,7 +100,7 @@ namespace HiddenSwitch.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration.Parser, new[]{ "EnqueueLockTimeoutMillis", "ScanFrequencyMillis", "MaxTicketsToProcess" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.ApplicationConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.ApplicationConfiguration.Parser, new[]{ "UseBroadcaster" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsRequest), global::HiddenSwitch.Proto.GetCardsRequest.Parser, new[]{ "IfNoneMatch" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsResponse), global::HiddenSwitch.Proto.GetCardsResponse.Parser, new[]{ "Cards", "Version", "CachedOk" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsResponse), global::HiddenSwitch.Proto.GetCardsResponse.Parser, new[]{ "Content", "Version", "CachedOk" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsResponse.Types.Content), global::HiddenSwitch.Proto.GetCardsResponse.Types.Content.Parser, new[]{ "Cards" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.LoginRequest), global::HiddenSwitch.Proto.LoginRequest.Parser, new[]{ "UsernameOrEmail", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.CreateAccountRequest), global::HiddenSwitch.Proto.CreateAccountRequest.Parser, new[]{ "Email", "Username", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ChangePasswordRequest), global::HiddenSwitch.Proto.ChangePasswordRequest.Parser, new[]{ "NewPassword" }, null, null, null, null),
@@ -2527,7 +2529,7 @@ namespace HiddenSwitch.Proto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetCardsResponse(GetCardsResponse other) : this() {
-      cards_ = other.cards_.Clone();
+      content_ = other.content_ != null ? other.content_.Clone() : null;
       version_ = other.version_;
       cachedOk_ = other.cachedOk_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -2538,17 +2540,15 @@ namespace HiddenSwitch.Proto {
       return new GetCardsResponse(this);
     }
 
-    /// <summary>Field number for the "cards" field.</summary>
-    public const int CardsFieldNumber = 1;
-    private static readonly pb::FieldCodec<global::Spellsource.Proto.CardRecord> _repeated_cards_codec
-        = pb::FieldCodec.ForMessage(10, global::Spellsource.Proto.CardRecord.Parser);
-    private readonly pbc::RepeatedField<global::Spellsource.Proto.CardRecord> cards_ = new pbc::RepeatedField<global::Spellsource.Proto.CardRecord>();
-    /// <summary>
-    /// The actual array of cards representing the complete Spellsource catalogue.
-    /// </summary>
+    /// <summary>Field number for the "content" field.</summary>
+    public const int ContentFieldNumber = 1;
+    private global::HiddenSwitch.Proto.GetCardsResponse.Types.Content content_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Spellsource.Proto.CardRecord> Cards {
-      get { return cards_; }
+    public global::HiddenSwitch.Proto.GetCardsResponse.Types.Content Content {
+      get { return content_; }
+      set {
+        content_ = value;
+      }
     }
 
     /// <summary>Field number for the "version" field.</summary>
@@ -2589,7 +2589,7 @@ namespace HiddenSwitch.Proto {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if(!cards_.Equals(other.cards_)) return false;
+      if (!object.Equals(Content, other.Content)) return false;
       if (Version != other.Version) return false;
       if (CachedOk != other.CachedOk) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -2598,7 +2598,7 @@ namespace HiddenSwitch.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      hash ^= cards_.GetHashCode();
+      if (content_ != null) hash ^= Content.GetHashCode();
       if (Version.Length != 0) hash ^= Version.GetHashCode();
       if (CachedOk != false) hash ^= CachedOk.GetHashCode();
       if (_unknownFields != null) {
@@ -2617,7 +2617,10 @@ namespace HiddenSwitch.Proto {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      cards_.WriteTo(output, _repeated_cards_codec);
+      if (content_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Content);
+      }
       if (Version.Length != 0) {
         output.WriteRawTag(18);
         output.WriteString(Version);
@@ -2635,7 +2638,10 @@ namespace HiddenSwitch.Proto {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      cards_.WriteTo(ref output, _repeated_cards_codec);
+      if (content_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Content);
+      }
       if (Version.Length != 0) {
         output.WriteRawTag(18);
         output.WriteString(Version);
@@ -2653,7 +2659,9 @@ namespace HiddenSwitch.Proto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      size += cards_.CalculateSize(_repeated_cards_codec);
+      if (content_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Content);
+      }
       if (Version.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Version);
       }
@@ -2671,7 +2679,12 @@ namespace HiddenSwitch.Proto {
       if (other == null) {
         return;
       }
-      cards_.Add(other.cards_);
+      if (other.content_ != null) {
+        if (content_ == null) {
+          Content = new global::HiddenSwitch.Proto.GetCardsResponse.Types.Content();
+        }
+        Content.MergeFrom(other.Content);
+      }
       if (other.Version.Length != 0) {
         Version = other.Version;
       }
@@ -2693,7 +2706,10 @@ namespace HiddenSwitch.Proto {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            cards_.AddEntriesFrom(input, _repeated_cards_codec);
+            if (content_ == null) {
+              Content = new global::HiddenSwitch.Proto.GetCardsResponse.Types.Content();
+            }
+            input.ReadMessage(Content);
             break;
           }
           case 18: {
@@ -2719,7 +2735,10 @@ namespace HiddenSwitch.Proto {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
-            cards_.AddEntriesFrom(ref input, _repeated_cards_codec);
+            if (content_ == null) {
+              Content = new global::HiddenSwitch.Proto.GetCardsResponse.Types.Content();
+            }
+            input.ReadMessage(Content);
             break;
           }
           case 18: {
@@ -2734,6 +2753,178 @@ namespace HiddenSwitch.Proto {
       }
     }
     #endif
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the GetCardsResponse message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static partial class Types {
+      [global::System.SerializableAttribute]
+      public sealed partial class Content : pb::IMessage<Content>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<Content> _parser = new pb::MessageParser<Content>(() => new Content());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<Content> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::HiddenSwitch.Proto.GetCardsResponse.Descriptor.NestedTypes[0]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Content() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Content(Content other) : this() {
+          cards_ = other.cards_.Clone();
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public Content Clone() {
+          return new Content(this);
+        }
+
+        /// <summary>Field number for the "cards" field.</summary>
+        public const int CardsFieldNumber = 1;
+        private static readonly pb::FieldCodec<global::Spellsource.Proto.CardRecord> _repeated_cards_codec
+            = pb::FieldCodec.ForMessage(10, global::Spellsource.Proto.CardRecord.Parser);
+        private readonly pbc::RepeatedField<global::Spellsource.Proto.CardRecord> cards_ = new pbc::RepeatedField<global::Spellsource.Proto.CardRecord>();
+        /// <summary>
+        /// The actual array of cards representing the complete Spellsource catalogue.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public pbc::RepeatedField<global::Spellsource.Proto.CardRecord> Cards {
+          get { return cards_; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as Content);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(Content other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if(!cards_.Equals(other.cards_)) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          hash ^= cards_.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          cards_.WriteTo(output, _repeated_cards_codec);
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          cards_.WriteTo(ref output, _repeated_cards_codec);
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          size += cards_.CalculateSize(_repeated_cards_codec);
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(Content other) {
+          if (other == null) {
+            return;
+          }
+          cards_.Add(other.cards_);
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 10: {
+                cards_.AddEntriesFrom(input, _repeated_cards_codec);
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 10: {
+                cards_.AddEntriesFrom(ref input, _repeated_cards_codec);
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+    }
+    #endregion
 
   }
 

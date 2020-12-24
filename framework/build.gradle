@@ -54,7 +54,7 @@ def csharpRootDir = 'src/csharp/HiddenSwitch'
 def localUsername = 'admin'
 def localPassword = 'password'
 def localDatabaseName = 'spellsource'
-def mainClassName = 'com.hiddenswitch.framework.Application'
+def mainClassName = 'com.hiddenswitch.framework.EntryPoint'
 def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
 def createPostgresImage = tasks.getByPath(':testcontainers:createPostgresImage')
 
@@ -119,6 +119,7 @@ dependencies {
     implementation group: 'io.vertx', name: 'vertx-web', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-auth-common', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-config', version: vertxVersion
+    implementation 'net.openhft:zero-allocation-hashing:0.11'
     implementation platform("org.keycloak.bom:keycloak-bom-parent:$keycloakVersion")
     implementation(group: 'org.keycloak', name: 'keycloak-admin-client', version: "$keycloakVersion") {
         exclude group: 'org.jboss.resteasy', module: 'resteasy-client'
@@ -129,11 +130,11 @@ dependencies {
     implementation 'io.jaegertracing:jaeger-client:1.5.0'
     implementation "org.flywaydb:flyway-core:$flywayVersion"
 
-    implementation(project(':testcontainers')) {
+    testImplementation(project(':testcontainers')) {
         exclude group: 'junit', module: 'junit'
     }
     testImplementation project(':testutils')
-    implementation("org.testcontainers:testcontainers") {
+    testImplementation("org.testcontainers:testcontainers") {
         exclude group: 'junit', module: 'junit'
     }
     testImplementation("org.testcontainers:junit-jupiter") {
@@ -148,13 +149,7 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
-    compileOnly("junit:junit:4.12") {
-        because("only for testcontainers")
-    }
     testCompileOnly("junit:junit:4.12") {
-        because("only for testcontainers")
-    }
-    runtimeOnly("junit:junit:4.12") {
         because("only for testcontainers")
     }
     testRuntimeOnly("junit:junit:4.12") {
@@ -177,6 +172,13 @@ shadowJar {
     manifest {
         attributes 'Main-Class': mainClassName
     }
+}
+
+run {
+    description("Starts the Spellsource server")
+    dependsOn += [classes, testClasses]
+    classpath sourceSets.test.runtimeClasspath
+    main = 'com.hiddenswitch.framework.tests.applications.EntryPoint'
 }
 
 artifacts {

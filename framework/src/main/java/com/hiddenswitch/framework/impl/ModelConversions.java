@@ -786,7 +786,6 @@ public class ModelConversions {
 				// TODO: Handle choose one cards
 				break;
 			case CLASS:
-				entity.setArt(Environment.toProto(card.getDesc().getArt(), Art.class));
 				break;
 			case FORMAT:
 				entity.addAllCardSets(Arrays.asList(card.getCardSets()));

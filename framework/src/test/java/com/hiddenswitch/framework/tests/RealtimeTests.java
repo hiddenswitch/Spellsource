@@ -1,8 +1,8 @@
 package com.hiddenswitch.framework.tests;
 
-import com.hiddenswitch.framework.Application;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.impl.RealtimeClient;
+import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import io.vertx.core.*;
 import io.vertx.junit5.VertxTestContext;
@@ -63,7 +63,7 @@ public class RealtimeTests extends FrameworkTestBase {
 
 	@Test
 	public void testRealtimeShouldFailToConnect(Vertx vertx, VertxTestContext testContext) {
-		(new RealtimeClient(Application.REALTIME.getRealtimeUrl() + "/invalid").connect())
+		(new RealtimeClient(StandaloneApplication.REALTIME.getRealtimeUrl() + "/invalid").connect())
 				.onComplete(testContext.failing(ignored -> testContext.completeNow()));
 	}
 
@@ -71,7 +71,7 @@ public class RealtimeTests extends FrameworkTestBase {
 	public void testRealtimeJs(Vertx vertx, VertxTestContext testContext) {
 		var insertReceived = Promise.<RealtimeClient.RealtimeChanges>promise();
 		var insertReceivedTwice = new AtomicInteger();
-		(new RealtimeClient(Application.REALTIME.getRealtimeUrl())).connect()
+		(new RealtimeClient(StandaloneApplication.REALTIME.getRealtimeUrl())).connect()
 				.compose(socket -> {
 					var channel = socket.channel("realtime:test:countries");
 

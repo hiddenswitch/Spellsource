@@ -11,7 +11,6 @@ import com.hiddenswitch.framework.migrations.R__0001_Import_package_cards_into_d
 import com.hiddenswitch.framework.rpc.GetCardsRequest;
 import com.hiddenswitch.framework.rpc.GetCardsResponse;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpc;
-import com.hiddenswitch.framework.schema.hiddenswitch.tables.daos.FlywaySchemaHistoryDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.*;
 import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.IDecks;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckPlayerAttributeTuples;
@@ -41,6 +40,7 @@ import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
+import net.openhft.hashing.LongHashFunction;
 import org.flywaydb.core.api.MigrationVersion;
 import org.flywaydb.core.internal.resolver.MigrationInfoHelper;
 import org.flywaydb.core.internal.util.Pair;
@@ -48,8 +48,8 @@ import org.jooq.*;
 import org.jooq.impl.DSL;
 
 import java.io.IOException;
-import java.util.*;
 import java.util.Comparator;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
@@ -86,36 +86,65 @@ public class Legacy {
 				// retrieve the hashcode from the migration schema for the cards
 				var configuration = Environment.jooqAkaDaoConfiguration();
 				var delegate = Environment.sqlPoolAkaDaoDelegate();
-				return (new FlywaySchemaHistoryDao(configuration, delegate)).findManyByDescription(Collections.singletonList(STATIC_CARDS_DATABASE_DESCRIPTION))
-						.map(list -> list.get(0))
-						.compose(flywaySchemaHistory -> {
-							var checksum = flywaySchemaHistory.getChecksum().toString();
-							if (Objects.equals(request.getIfNoneMatch(), checksum)) {
+
+				try {
+					if (CARDS_BUILT.compareAndSet(false, true)) {
+						var workingContext = new GameContext();
+						(new CardsDao(configuration, delegate))
+								.findAll()
+								.map(cards -> cards.stream().map(card -> card.getCardScript().mapTo(CardDesc.class))
+										.filter(cd -> DeckFormat.spellsource().isInFormat(cd.getSet())
+												&& cd.getType() != com.hiddenswitch.spellsource.client.models.CardType.GROUP)
+										.map(card -> {
+											var entity = ModelConversions.getEntity(workingContext, card.create(), 0);
+											if (card.getArt() != null) {
+												var value = Environment.toProto(card.getArt(), Art.class);
+												entity.setArt(value);
+											}
+											if (card.getTooltips() != null) {
+												for (var t : card.getTooltips()) {
+													entity.addTooltips(Environment.toProto(t, Tooltip.class));
+												}
+											}
+											return entity;
+										})
+										.map(card -> CardRecord.newBuilder().setEntity(card).setId(card.getCardId()))
+										.collect(toList()))
+								.map(cards -> {
+									var builder = GetCardsResponse.Content.newBuilder();
+
+									for (var i = 0; i < cards.size(); i++) {
+										cards.get(i).getEntityBuilder()
+												.setId(i);
+										builder.addCards(cards.get(i).build());
+									}
+
+									var built = builder.build();
+									var checksum = LongHashFunction.xx().hashBytes(built.toByteArray());
+
+									var response = GetCardsResponse.newBuilder()
+											.setVersion(Long.toString(checksum));
+
+									response.setContent(built);
+
+									return response.build();
+								})
+								.onComplete(GET_CARDS_RESPONSE_PROMISE);
+					}
+
+				} catch (Throwable t) {
+					return Future.failedFuture(t);
+				}
+
+				return GET_CARDS_RESPONSE_PROMISE.future()
+						.compose(res -> {
+							if (Objects.equals(request.getIfNoneMatch(), res.getVersion())) {
 								return Future.succeededFuture(GetCardsResponse.newBuilder().setCachedOk(true).build());
 							}
 
-							if (CARDS_BUILT.compareAndSet(false, true)) {
-								var workingContext = new GameContext();
-								(new CardsDao(configuration, delegate))
-										.findAll()
-										.map(cards -> cards.stream().map(card -> card.getCardScript().mapTo(CardDesc.class))
-												.map(CardDesc::create)
-												.map(card -> ModelConversions.getEntity(workingContext, card, 0))
-												.map(card -> CardRecord.newBuilder().setEntity(card).setId(card.getCardId()))
-												.collect(toList()))
-										.map(cards -> {
-											var builder = GetCardsResponse.newBuilder()
-													.setVersion(checksum);
-											for (var i = 0; i < cards.size(); i++) {
-												cards.get(i).getEntityBuilder().setId(i);
-												builder.addCards(cards.get(i).build());
-											}
-
-											return builder.build();
-										}).onComplete(GET_CARDS_RESPONSE_PROMISE);
-							}
-							return GET_CARDS_RESPONSE_PROMISE.future();
-						}).recover(Environment.toGrpcFailure());
+							return Future.succeededFuture(res);
+						})
+						.recover(Environment.onGrpcFailure());
 			}
 		});
 	}
@@ -164,7 +193,7 @@ public class Legacy {
 									});
 						})
 						.map(Empty.getDefaultInstance())
-						.recover(Environment.toGrpcFailure());
+						.recover(Environment.onGrpcFailure());
 			}
 
 			@Override
@@ -172,13 +201,13 @@ public class Legacy {
 				var deckId = request.getDeckId();
 				var userId = Accounts.userId();
 
-				return getDeck(deckId, userId).recover(Environment.toGrpcFailure());
+				return getDeck(deckId, userId).recover(Environment.onGrpcFailure());
 			}
 
 			@Override
 			public Future<DecksGetAllResponse> decksGetAll(Empty request) {
 				var userId = Accounts.userId();
-				return getAllDecks(userId).recover(Environment.toGrpcFailure());
+				return getAllDecks(userId).recover(Environment.onGrpcFailure());
 			}
 
 			@Override
@@ -196,7 +225,7 @@ public class Legacy {
 							.withHeroClass(request.getHeroClass());
 				}
 
-				return createDeck(userId, createRequest).recover(Environment.toGrpcFailure());
+				return createDeck(userId, createRequest).recover(Environment.onGrpcFailure());
 			}
 
 			@Override
@@ -327,7 +356,7 @@ public class Legacy {
 					return CompositeFuture.all(futs);
 				})
 						.compose(ignored -> getDeck(deckId, userId))
-						.recover(Environment.toGrpcFailure());
+						.recover(Environment.onGrpcFailure());
 			}
 
 			@Override
@@ -367,7 +396,7 @@ public class Legacy {
 					await(queryExecutor.execute(dsl -> duplicateAllForeign(deckId, newDeckId, DECK_PLAYER_ATTRIBUTE_TUPLES.ID, DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID)));
 					return await(getDeck(newDeckId, userId));
 				})
-						.recover(Environment.toGrpcFailure());
+						.recover(Environment.onGrpcFailure());
 			}
 		})
 				.compose(Accounts::requiresAuthorization);
