@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-read -r -d '' SCRIPT <<EOF
-mvn dependency:get -DremoteRepositories=https://repo1.maven.org/maven2/ -DgroupId=io.vertx -DartifactId=vertx-grpc-protoc-plugin -Dversion=4.0.0.CR1 -Dtransitive=true > /dev/null
-MVN_REPO=\$(mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout)
-CLASSPATH=\$(find \$MVN_REPO -type f -path '*.jar' | tr '\\n' ':')
-java -cp "\$CLASSPATH" io.vertx.grpc.protoc.plugin.VertxGrpcGenerator
-EOF
-
-docker run -v "$(pwd)":/defs -w "/defs" --rm -i maven:latest bash -c "${SCRIPT}"

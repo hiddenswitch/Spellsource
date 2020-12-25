@@ -8,9 +8,9 @@
     <Reference Include="Google.Protobuf">
       <HintPath>Plugins/Google.Protobuf/lib/net45/Google.Protobuf.dll</HintPath>
     </Reference>
-        <Reference Include="Google.Api.CommonProtos">
-          <HintPath>Plugins/Google.Api.CommonProtos/lib/netstandard2.0/Google.Api.CommonProtos.dll</HintPath>
-        </Reference>
+    <Reference Include="Google.Api.CommonProtos">
+      <HintPath>Plugins/Google.Api.CommonProtos/lib/netstandard2.0/Google.Api.CommonProtos.dll</HintPath>
+    </Reference>
     <Reference Include="Grpc.Core">
       <HintPath>Plugins/Grpc.Core/lib/net45/Grpc.Core.dll</HintPath>
     </Reference>

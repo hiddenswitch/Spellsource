@@ -121,6 +121,17 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
+	public void testQuickPlay(Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
+		startServices(vertx)
+				.compose(v -> client.createAndLogin())
+				.compose(v -> client.matchmake("quickPlay"))
+				.compose(v -> client.playUntilGameOver())
+				.compose(v -> client.closeFut())
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	@Test
 	public void testSinglePlayerQueueCreatesMatch(VertxTestContext testContext) throws InterruptedException, SuspendExecution {
 		var vertx = Vertx.vertx();
 		var gameCreated = checkpoint(1);

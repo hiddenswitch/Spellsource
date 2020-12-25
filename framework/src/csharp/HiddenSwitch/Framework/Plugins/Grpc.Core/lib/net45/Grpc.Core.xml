@@ -1331,12 +1331,19 @@
             true if running on .NET Core (CoreCLR), false otherwise.
             </summary>
         </member>
-        <member name="M:Grpc.Core.Internal.PlatformApis.GetUnityRuntimePlatform">
+        <member name="M:Grpc.Core.Internal.PlatformApis.GetUnityApplicationPlatform">
             <summary>
             Returns <c>UnityEngine.Application.platform</c> as a string.
             See https://docs.unity3d.com/ScriptReference/Application-platform.html for possible values.
             Value is obtained via reflection to avoid compile-time dependency on Unity.
             This method should only be called if <c>IsUnity</c> is <c>true</c>.
+            </summary>
+        </member>
+        <member name="M:Grpc.Core.Internal.PlatformApis.TryGetUnityApplicationPlatform">
+            <summary>
+            Returns <c>UnityEngine.Application.platform</c> as a string or <c>null</c>
+            if not running on Unity.
+            Value is obtained via reflection to avoid compile-time dependency on Unity.
             </summary>
         </member>
         <member name="T:Grpc.Core.Internal.RequestCallContextSafeHandle">
