@@ -3,6 +3,9 @@ buildscript {
         vertxJooqVersion = '14efcb1ff3'
         postgresqlVersion = '42.2.16'
         flywayVersion = '6.5.5'
+        grpcVersion = '1.34.0'
+        grpcWindowsArtifactsUrl = 'https://packages.grpc.io/archive/2020/11/adf6b33c3d0283dc4c3d70b1ad6f5fa01ca5b69a-ec34da51-aac4-4cc4-afde-1d74252db27c/protoc/grpc-protoc_windows_x64-1.35.0-dev.zip'
+        grpcUnityArtifactsUrl = 'https://packages.grpc.io/archive/2020/11/adf6b33c3d0283dc4c3d70b1ad6f5fa01ca5b69a-ec34da51-aac4-4cc4-afde-1d74252db27c/csharp/grpc_unity_package.2.35.0-dev202011301311.zip'
     }
     repositories {
         mavenLocal()
@@ -224,7 +227,9 @@ task installDll(type: Copy) {
         include 'Framework.dll'
         include 'Framework.pdb'
     }
-    from("$csharpRootDir/Framework/Plugins")
+    from("$csharpRootDir/Framework/Plugins") {
+        include '**/*.*'
+    }
     into(project(':unityclient').projectDir.absolutePath + '/src/unity/Assets/Client')
 }
 
@@ -403,7 +408,7 @@ protobuf {
     }
     plugins {
         grpc_java {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.33.1'
+            artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
         }
         grpc_java_vertx {
             artifact = "io.vertx:vertx-grpc-protoc-plugin:$vertxVersion"

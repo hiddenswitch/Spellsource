@@ -12,11 +12,41 @@ namespace HiddenSwitch.Proto {
   {
     static readonly string __ServiceName = "hiddenswitch.Unauthenticated";
 
-    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.CreateAccountRequest> __Marshaller_hiddenswitch_CreateAccountRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.CreateAccountRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.LoginOrCreateReply> __Marshaller_hiddenswitch_LoginOrCreateReply = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.LoginOrCreateReply.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.LoginRequest> __Marshaller_hiddenswitch_LoginRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.LoginRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.AccessTokenResponse> __Marshaller_hiddenswitch_AccessTokenResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.AccessTokenResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.BoolValue> __Marshaller_google_protobuf_BoolValue = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Google.Protobuf.WellKnownTypes.BoolValue.Parser.ParseFrom);
+    static void __Helper_SerializeMessage(global::Google.Protobuf.IMessage message, grpc::SerializationContext context)
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (message is global::Google.Protobuf.IBufferMessage)
+      {
+        context.SetPayloadLength(message.CalculateSize());
+        global::Google.Protobuf.MessageExtensions.WriteTo(message, context.GetBufferWriter());
+        context.Complete();
+        return;
+      }
+      #endif
+      context.Complete(global::Google.Protobuf.MessageExtensions.ToByteArray(message));
+    }
+
+    static class __Helper_MessageCache<T>
+    {
+      public static readonly bool IsBufferMessage = global::System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(global::Google.Protobuf.IBufferMessage)).IsAssignableFrom(typeof(T));
+    }
+
+    static T __Helper_DeserializeMessage<T>(grpc::DeserializationContext context, global::Google.Protobuf.MessageParser<T> parser) where T : global::Google.Protobuf.IMessage<T>
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (__Helper_MessageCache<T>.IsBufferMessage)
+      {
+        return parser.ParseFrom(context.PayloadAsReadOnlySequence());
+      }
+      #endif
+      return parser.ParseFrom(context.PayloadAsNewBuffer());
+    }
+
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.CreateAccountRequest> __Marshaller_hiddenswitch_CreateAccountRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.CreateAccountRequest.Parser));
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.LoginOrCreateReply> __Marshaller_hiddenswitch_LoginOrCreateReply = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.LoginOrCreateReply.Parser));
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.LoginRequest> __Marshaller_hiddenswitch_LoginRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.LoginRequest.Parser));
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.AccessTokenResponse> __Marshaller_hiddenswitch_AccessTokenResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.AccessTokenResponse.Parser));
+    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.BoolValue> __Marshaller_google_protobuf_BoolValue = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.BoolValue.Parser));
 
     static readonly grpc::Method<global::HiddenSwitch.Proto.CreateAccountRequest, global::HiddenSwitch.Proto.LoginOrCreateReply> __Method_CreateAccount = new grpc::Method<global::HiddenSwitch.Proto.CreateAccountRequest, global::HiddenSwitch.Proto.LoginOrCreateReply>(
         grpc::MethodType.Unary,
@@ -204,8 +234,38 @@ namespace HiddenSwitch.Proto {
   {
     static readonly string __ServiceName = "hiddenswitch.UnauthenticatedCards";
 
-    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.GetCardsRequest> __Marshaller_hiddenswitch_GetCardsRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.GetCardsRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.GetCardsResponse> __Marshaller_hiddenswitch_GetCardsResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.GetCardsResponse.Parser.ParseFrom);
+    static void __Helper_SerializeMessage(global::Google.Protobuf.IMessage message, grpc::SerializationContext context)
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (message is global::Google.Protobuf.IBufferMessage)
+      {
+        context.SetPayloadLength(message.CalculateSize());
+        global::Google.Protobuf.MessageExtensions.WriteTo(message, context.GetBufferWriter());
+        context.Complete();
+        return;
+      }
+      #endif
+      context.Complete(global::Google.Protobuf.MessageExtensions.ToByteArray(message));
+    }
+
+    static class __Helper_MessageCache<T>
+    {
+      public static readonly bool IsBufferMessage = global::System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(global::Google.Protobuf.IBufferMessage)).IsAssignableFrom(typeof(T));
+    }
+
+    static T __Helper_DeserializeMessage<T>(grpc::DeserializationContext context, global::Google.Protobuf.MessageParser<T> parser) where T : global::Google.Protobuf.IMessage<T>
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (__Helper_MessageCache<T>.IsBufferMessage)
+      {
+        return parser.ParseFrom(context.PayloadAsReadOnlySequence());
+      }
+      #endif
+      return parser.ParseFrom(context.PayloadAsNewBuffer());
+    }
+
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.GetCardsRequest> __Marshaller_hiddenswitch_GetCardsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.GetCardsRequest.Parser));
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.GetCardsResponse> __Marshaller_hiddenswitch_GetCardsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.GetCardsResponse.Parser));
 
     static readonly grpc::Method<global::HiddenSwitch.Proto.GetCardsRequest, global::HiddenSwitch.Proto.GetCardsResponse> __Method_GetCards = new grpc::Method<global::HiddenSwitch.Proto.GetCardsRequest, global::HiddenSwitch.Proto.GetCardsResponse>(
         grpc::MethodType.Unary,
@@ -333,11 +393,41 @@ namespace HiddenSwitch.Proto {
   {
     static readonly string __ServiceName = "hiddenswitch.Accounts";
 
-    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Google.Protobuf.WellKnownTypes.Empty.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.GetAccountsReply> __Marshaller_hiddenswitch_GetAccountsReply = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.GetAccountsReply.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.GetAccountsRequest> __Marshaller_hiddenswitch_GetAccountsRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.GetAccountsRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.ChangePasswordRequest> __Marshaller_hiddenswitch_ChangePasswordRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.ChangePasswordRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.LoginOrCreateReply> __Marshaller_hiddenswitch_LoginOrCreateReply = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::HiddenSwitch.Proto.LoginOrCreateReply.Parser.ParseFrom);
+    static void __Helper_SerializeMessage(global::Google.Protobuf.IMessage message, grpc::SerializationContext context)
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (message is global::Google.Protobuf.IBufferMessage)
+      {
+        context.SetPayloadLength(message.CalculateSize());
+        global::Google.Protobuf.MessageExtensions.WriteTo(message, context.GetBufferWriter());
+        context.Complete();
+        return;
+      }
+      #endif
+      context.Complete(global::Google.Protobuf.MessageExtensions.ToByteArray(message));
+    }
+
+    static class __Helper_MessageCache<T>
+    {
+      public static readonly bool IsBufferMessage = global::System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(global::Google.Protobuf.IBufferMessage)).IsAssignableFrom(typeof(T));
+    }
+
+    static T __Helper_DeserializeMessage<T>(grpc::DeserializationContext context, global::Google.Protobuf.MessageParser<T> parser) where T : global::Google.Protobuf.IMessage<T>
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (__Helper_MessageCache<T>.IsBufferMessage)
+      {
+        return parser.ParseFrom(context.PayloadAsReadOnlySequence());
+      }
+      #endif
+      return parser.ParseFrom(context.PayloadAsNewBuffer());
+    }
+
+    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.Empty.Parser));
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.GetAccountsReply> __Marshaller_hiddenswitch_GetAccountsReply = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.GetAccountsReply.Parser));
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.GetAccountsRequest> __Marshaller_hiddenswitch_GetAccountsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.GetAccountsRequest.Parser));
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.ChangePasswordRequest> __Marshaller_hiddenswitch_ChangePasswordRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.ChangePasswordRequest.Parser));
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.LoginOrCreateReply> __Marshaller_hiddenswitch_LoginOrCreateReply = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.LoginOrCreateReply.Parser));
 
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::HiddenSwitch.Proto.GetAccountsReply> __Method_GetAccount = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::HiddenSwitch.Proto.GetAccountsReply>(
         grpc::MethodType.Unary,
@@ -657,8 +747,38 @@ namespace HiddenSwitch.Proto {
   {
     static readonly string __ServiceName = "hiddenswitch.Games";
 
-    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Google.Protobuf.WellKnownTypes.Empty.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.StringValue> __Marshaller_google_protobuf_StringValue = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Google.Protobuf.WellKnownTypes.StringValue.Parser.ParseFrom);
+    static void __Helper_SerializeMessage(global::Google.Protobuf.IMessage message, grpc::SerializationContext context)
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (message is global::Google.Protobuf.IBufferMessage)
+      {
+        context.SetPayloadLength(message.CalculateSize());
+        global::Google.Protobuf.MessageExtensions.WriteTo(message, context.GetBufferWriter());
+        context.Complete();
+        return;
+      }
+      #endif
+      context.Complete(global::Google.Protobuf.MessageExtensions.ToByteArray(message));
+    }
+
+    static class __Helper_MessageCache<T>
+    {
+      public static readonly bool IsBufferMessage = global::System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(global::Google.Protobuf.IBufferMessage)).IsAssignableFrom(typeof(T));
+    }
+
+    static T __Helper_DeserializeMessage<T>(grpc::DeserializationContext context, global::Google.Protobuf.MessageParser<T> parser) where T : global::Google.Protobuf.IMessage<T>
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (__Helper_MessageCache<T>.IsBufferMessage)
+      {
+        return parser.ParseFrom(context.PayloadAsReadOnlySequence());
+      }
+      #endif
+      return parser.ParseFrom(context.PayloadAsNewBuffer());
+    }
+
+    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.Empty.Parser));
+    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.StringValue> __Marshaller_google_protobuf_StringValue = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.StringValue.Parser));
 
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Google.Protobuf.WellKnownTypes.StringValue> __Method_IsInMatch = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Google.Protobuf.WellKnownTypes.StringValue>(
         grpc::MethodType.Unary,

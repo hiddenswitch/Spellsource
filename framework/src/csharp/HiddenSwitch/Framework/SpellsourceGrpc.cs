@@ -12,11 +12,41 @@ namespace Spellsource.Proto {
   {
     static readonly string __ServiceName = "spellsource.Matchmaking";
 
-    static readonly grpc::Marshaller<global::Spellsource.Proto.MatchmakingQueuePutRequest> __Marshaller_spellsource_MatchmakingQueuePutRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.MatchmakingQueuePutRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.MatchmakingQueuePutResponse> __Marshaller_spellsource_MatchmakingQueuePutResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.MatchmakingQueuePutResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Google.Protobuf.WellKnownTypes.Empty.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.MatchCancelResponse> __Marshaller_spellsource_MatchCancelResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.MatchCancelResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.MatchmakingQueuesResponse> __Marshaller_spellsource_MatchmakingQueuesResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.MatchmakingQueuesResponse.Parser.ParseFrom);
+    static void __Helper_SerializeMessage(global::Google.Protobuf.IMessage message, grpc::SerializationContext context)
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (message is global::Google.Protobuf.IBufferMessage)
+      {
+        context.SetPayloadLength(message.CalculateSize());
+        global::Google.Protobuf.MessageExtensions.WriteTo(message, context.GetBufferWriter());
+        context.Complete();
+        return;
+      }
+      #endif
+      context.Complete(global::Google.Protobuf.MessageExtensions.ToByteArray(message));
+    }
+
+    static class __Helper_MessageCache<T>
+    {
+      public static readonly bool IsBufferMessage = global::System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(global::Google.Protobuf.IBufferMessage)).IsAssignableFrom(typeof(T));
+    }
+
+    static T __Helper_DeserializeMessage<T>(grpc::DeserializationContext context, global::Google.Protobuf.MessageParser<T> parser) where T : global::Google.Protobuf.IMessage<T>
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (__Helper_MessageCache<T>.IsBufferMessage)
+      {
+        return parser.ParseFrom(context.PayloadAsReadOnlySequence());
+      }
+      #endif
+      return parser.ParseFrom(context.PayloadAsNewBuffer());
+    }
+
+    static readonly grpc::Marshaller<global::Spellsource.Proto.MatchmakingQueuePutRequest> __Marshaller_spellsource_MatchmakingQueuePutRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.MatchmakingQueuePutRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.MatchmakingQueuePutResponse> __Marshaller_spellsource_MatchmakingQueuePutResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.MatchmakingQueuePutResponse.Parser));
+    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.Empty.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.MatchCancelResponse> __Marshaller_spellsource_MatchCancelResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.MatchCancelResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.MatchmakingQueuesResponse> __Marshaller_spellsource_MatchmakingQueuesResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.MatchmakingQueuesResponse.Parser));
 
     static readonly grpc::Method<global::Spellsource.Proto.MatchmakingQueuePutRequest, global::Spellsource.Proto.MatchmakingQueuePutResponse> __Method_Enqueue = new grpc::Method<global::Spellsource.Proto.MatchmakingQueuePutRequest, global::Spellsource.Proto.MatchmakingQueuePutResponse>(
         grpc::MethodType.DuplexStreaming,
@@ -230,55 +260,85 @@ namespace Spellsource.Proto {
   {
     static readonly string __ServiceName = "spellsource.HiddenSwitchSpellsourceAPIService";
 
-    static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage> __Marshaller_spellsource_Envelope_MethodMessage_PutCardMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage> __Marshaller_spellsource_Envelope_ResultMessage_PutCardMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.SendMessageMessage> __Marshaller_spellsource_Envelope_MethodMessage_SendMessageMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.SendMessageMessage.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.SendMessageMessage> __Marshaller_spellsource_Envelope_ResultMessage_SendMessageMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.SendMessageMessage.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.DeleteCardMessage> __Marshaller_spellsource_Envelope_MethodMessage_DeleteCardMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.DeleteCardMessage.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.RemovedMessage> __Marshaller_spellsource_Envelope_RemovedMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.Envelope.Types.RemovedMessage.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Google.Protobuf.WellKnownTypes.Empty.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.Friend> __Marshaller_spellsource_Friend = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.Friend.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.Invite> __Marshaller_spellsource_Invite = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.Invite.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.EditableCard> __Marshaller_spellsource_EditableCard = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.EditableCard.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.Match> __Marshaller_spellsource_Match = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.Match.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.ClientToServerMessage> __Marshaller_spellsource_ClientToServerMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.ClientToServerMessage.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.ServerToClientMessage> __Marshaller_spellsource_ServerToClientMessage = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.ServerToClientMessage.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.AcceptInviteRequest> __Marshaller_spellsource_AcceptInviteRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.AcceptInviteRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.AcceptInviteResponse> __Marshaller_spellsource_AcceptInviteResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.AcceptInviteResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.ChangePasswordRequest> __Marshaller_spellsource_ChangePasswordRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.ChangePasswordRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.ChangePasswordResponse> __Marshaller_spellsource_ChangePasswordResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.ChangePasswordResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.CreateAccountRequest> __Marshaller_spellsource_CreateAccountRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.CreateAccountRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.CreateAccountResponse> __Marshaller_spellsource_CreateAccountResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.CreateAccountResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.DecksDeleteRequest> __Marshaller_spellsource_DecksDeleteRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.DecksDeleteRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.DecksGetRequest> __Marshaller_spellsource_DecksGetRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.DecksGetRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.DecksGetResponse> __Marshaller_spellsource_DecksGetResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.DecksGetResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.DecksGetAllResponse> __Marshaller_spellsource_DecksGetAllResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.DecksGetAllResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.DecksPutRequest> __Marshaller_spellsource_DecksPutRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.DecksPutRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.DecksPutResponse> __Marshaller_spellsource_DecksPutResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.DecksPutResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.DecksUpdateRequest> __Marshaller_spellsource_DecksUpdateRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.DecksUpdateRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.StringValue> __Marshaller_google_protobuf_StringValue = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Google.Protobuf.WellKnownTypes.StringValue.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.DeleteInviteRequest> __Marshaller_spellsource_DeleteInviteRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.DeleteInviteRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.InviteResponse> __Marshaller_spellsource_InviteResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.InviteResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.DraftsChooseCardRequest> __Marshaller_spellsource_DraftsChooseCardRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.DraftsChooseCardRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.DraftState> __Marshaller_spellsource_DraftState = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.DraftState.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.DraftsChooseHeroRequest> __Marshaller_spellsource_DraftsChooseHeroRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.DraftsChooseHeroRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.DraftsPostRequest> __Marshaller_spellsource_DraftsPostRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.DraftsPostRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.FriendDeleteRequest> __Marshaller_spellsource_FriendDeleteRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.FriendDeleteRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.UnfriendResponse> __Marshaller_spellsource_UnfriendResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.UnfriendResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.FriendPutRequest> __Marshaller_spellsource_FriendPutRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.FriendPutRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.FriendPutResponse> __Marshaller_spellsource_FriendPutResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.FriendPutResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.GetAccountRequest> __Marshaller_spellsource_GetAccountRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetAccountRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.GetAccountsResponse> __Marshaller_spellsource_GetAccountsResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetAccountsResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.GetAccountsRequest> __Marshaller_spellsource_GetAccountsRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetAccountsRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.GetGameRecordRequest> __Marshaller_spellsource_GetGameRecordRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetGameRecordRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.GetGameRecordResponse> __Marshaller_spellsource_GetGameRecordResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetGameRecordResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.GetGameRecordIdsResponse> __Marshaller_spellsource_GetGameRecordIdsResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetGameRecordIdsResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.GetInviteRequest> __Marshaller_spellsource_GetInviteRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.GetInviteRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.InviteGetResponse> __Marshaller_spellsource_InviteGetResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.InviteGetResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.LoginRequest> __Marshaller_spellsource_LoginRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.LoginRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.LoginResponse> __Marshaller_spellsource_LoginResponse = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.LoginResponse.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.PostInviteRequest> __Marshaller_spellsource_PostInviteRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.PostInviteRequest.Parser.ParseFrom);
-    static readonly grpc::Marshaller<global::Spellsource.Proto.PostPasswordResetRequest> __Marshaller_spellsource_PostPasswordResetRequest = grpc::Marshallers.Create((arg) => global::Google.Protobuf.MessageExtensions.ToByteArray(arg), global::Spellsource.Proto.PostPasswordResetRequest.Parser.ParseFrom);
+    static void __Helper_SerializeMessage(global::Google.Protobuf.IMessage message, grpc::SerializationContext context)
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (message is global::Google.Protobuf.IBufferMessage)
+      {
+        context.SetPayloadLength(message.CalculateSize());
+        global::Google.Protobuf.MessageExtensions.WriteTo(message, context.GetBufferWriter());
+        context.Complete();
+        return;
+      }
+      #endif
+      context.Complete(global::Google.Protobuf.MessageExtensions.ToByteArray(message));
+    }
+
+    static class __Helper_MessageCache<T>
+    {
+      public static readonly bool IsBufferMessage = global::System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(global::Google.Protobuf.IBufferMessage)).IsAssignableFrom(typeof(T));
+    }
+
+    static T __Helper_DeserializeMessage<T>(grpc::DeserializationContext context, global::Google.Protobuf.MessageParser<T> parser) where T : global::Google.Protobuf.IMessage<T>
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (__Helper_MessageCache<T>.IsBufferMessage)
+      {
+        return parser.ParseFrom(context.PayloadAsReadOnlySequence());
+      }
+      #endif
+      return parser.ParseFrom(context.PayloadAsNewBuffer());
+    }
+
+    static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage> __Marshaller_spellsource_Envelope_MethodMessage_PutCardMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage> __Marshaller_spellsource_Envelope_ResultMessage_PutCardMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.SendMessageMessage> __Marshaller_spellsource_Envelope_MethodMessage_SendMessageMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.SendMessageMessage.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.SendMessageMessage> __Marshaller_spellsource_Envelope_ResultMessage_SendMessageMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.SendMessageMessage.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.DeleteCardMessage> __Marshaller_spellsource_Envelope_MethodMessage_DeleteCardMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.DeleteCardMessage.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.RemovedMessage> __Marshaller_spellsource_Envelope_RemovedMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Envelope.Types.RemovedMessage.Parser));
+    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.Empty.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.Friend> __Marshaller_spellsource_Friend = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Friend.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.Invite> __Marshaller_spellsource_Invite = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Invite.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.EditableCard> __Marshaller_spellsource_EditableCard = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.EditableCard.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.Match> __Marshaller_spellsource_Match = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Match.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.ClientToServerMessage> __Marshaller_spellsource_ClientToServerMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.ClientToServerMessage.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.ServerToClientMessage> __Marshaller_spellsource_ServerToClientMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.ServerToClientMessage.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.AcceptInviteRequest> __Marshaller_spellsource_AcceptInviteRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.AcceptInviteRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.AcceptInviteResponse> __Marshaller_spellsource_AcceptInviteResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.AcceptInviteResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.ChangePasswordRequest> __Marshaller_spellsource_ChangePasswordRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.ChangePasswordRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.ChangePasswordResponse> __Marshaller_spellsource_ChangePasswordResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.ChangePasswordResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.CreateAccountRequest> __Marshaller_spellsource_CreateAccountRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.CreateAccountRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.CreateAccountResponse> __Marshaller_spellsource_CreateAccountResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.CreateAccountResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.DecksDeleteRequest> __Marshaller_spellsource_DecksDeleteRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DecksDeleteRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.DecksGetRequest> __Marshaller_spellsource_DecksGetRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DecksGetRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.DecksGetResponse> __Marshaller_spellsource_DecksGetResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DecksGetResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.DecksGetAllResponse> __Marshaller_spellsource_DecksGetAllResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DecksGetAllResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.DecksPutRequest> __Marshaller_spellsource_DecksPutRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DecksPutRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.DecksPutResponse> __Marshaller_spellsource_DecksPutResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DecksPutResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.DecksUpdateRequest> __Marshaller_spellsource_DecksUpdateRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DecksUpdateRequest.Parser));
+    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.StringValue> __Marshaller_google_protobuf_StringValue = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.StringValue.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.DeleteInviteRequest> __Marshaller_spellsource_DeleteInviteRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DeleteInviteRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.InviteResponse> __Marshaller_spellsource_InviteResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.InviteResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.DraftsChooseCardRequest> __Marshaller_spellsource_DraftsChooseCardRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DraftsChooseCardRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.DraftState> __Marshaller_spellsource_DraftState = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DraftState.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.DraftsChooseHeroRequest> __Marshaller_spellsource_DraftsChooseHeroRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DraftsChooseHeroRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.DraftsPostRequest> __Marshaller_spellsource_DraftsPostRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DraftsPostRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.FriendDeleteRequest> __Marshaller_spellsource_FriendDeleteRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.FriendDeleteRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.UnfriendResponse> __Marshaller_spellsource_UnfriendResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.UnfriendResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.FriendPutRequest> __Marshaller_spellsource_FriendPutRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.FriendPutRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.FriendPutResponse> __Marshaller_spellsource_FriendPutResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.FriendPutResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.GetAccountRequest> __Marshaller_spellsource_GetAccountRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.GetAccountRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.GetAccountsResponse> __Marshaller_spellsource_GetAccountsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.GetAccountsResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.GetAccountsRequest> __Marshaller_spellsource_GetAccountsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.GetAccountsRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.GetGameRecordRequest> __Marshaller_spellsource_GetGameRecordRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.GetGameRecordRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.GetGameRecordResponse> __Marshaller_spellsource_GetGameRecordResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.GetGameRecordResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.GetGameRecordIdsResponse> __Marshaller_spellsource_GetGameRecordIdsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.GetGameRecordIdsResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.GetInviteRequest> __Marshaller_spellsource_GetInviteRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.GetInviteRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.InviteGetResponse> __Marshaller_spellsource_InviteGetResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.InviteGetResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.LoginRequest> __Marshaller_spellsource_LoginRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.LoginRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.LoginResponse> __Marshaller_spellsource_LoginResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.LoginResponse.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.PostInviteRequest> __Marshaller_spellsource_PostInviteRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.PostInviteRequest.Parser));
+    static readonly grpc::Marshaller<global::Spellsource.Proto.PostPasswordResetRequest> __Marshaller_spellsource_PostPasswordResetRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.PostPasswordResetRequest.Parser));
 
     static readonly grpc::Method<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage, global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage> __Method_PutCard = new grpc::Method<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage, global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage>(
         grpc::MethodType.Unary,

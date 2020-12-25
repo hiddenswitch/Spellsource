@@ -8,7 +8,6 @@ import com.google.common.base.Throwables;
 import com.google.protobuf.GeneratedMessageV3;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.rpc.ServerConfiguration;
-import com.hiddenswitch.spellsource.rpc.DecksGetResponse;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
 import io.grpc.Status;
@@ -16,6 +15,7 @@ import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.*;
+import io.vertx.core.Context;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
 import io.vertx.ext.sync.Sync;
@@ -24,8 +24,7 @@ import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
 import org.flywaydb.core.Flyway;
 import org.jetbrains.annotations.NotNull;
-import org.jooq.Configuration;
-import org.jooq.SQLDialect;
+import org.jooq.*;
 import org.jooq.impl.DefaultConfiguration;
 
 import java.io.IOException;
@@ -307,5 +306,12 @@ public class Environment {
 				.augmentDescription(Throwables.getRootCause(t).getMessage() + "\n" + Throwables.getStackTraceAsString(Throwables.getRootCause(t)))
 				.withCause(t)
 				.asRuntimeException());
+	}
+
+	public static <T extends UpdatableRecord<T>> Insert<T> upsert(final DSLContext dslContext, final UpdatableRecord<T> record) {
+		return dslContext.insertInto(record.getTable())
+				.set(record)
+				.onDuplicateKeyUpdate()
+				.set(record);
 	}
 }
