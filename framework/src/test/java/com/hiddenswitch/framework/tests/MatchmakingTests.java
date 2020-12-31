@@ -183,6 +183,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
+	@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 	public void testMultiplayerQueueCreatesMatch(Vertx vertx, VertxTestContext testContext) {
 		var client1 = new Client(vertx);
 		var client2 = new Client(vertx);
