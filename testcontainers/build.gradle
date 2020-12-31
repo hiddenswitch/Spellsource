@@ -24,14 +24,20 @@ dependencies {
 }
 
 task createPostgresImage(type: DockerBuildImage) {
-    inputDir.set(new File("$project.projectDir/src/docker/postgres"))
+    inputDir.set(new File("$project.projectDir/src/main/resources/docker/postgres"))
     quiet.set(true)
     images.set(["doctorpangloss/postgres:latest"])
 }
 
+task createKeycloakImage(type: DockerBuildImage) {
+    inputDir.set(new File("$project.projectDir/src/main/resources/docker/keycloak"))
+    quiet.set(true)
+    images.set(["doctorpangloss/keycloak:latest"])
+}
+
 compileJava {
     // you won't really be able to use the postgres image unless you build it
-    dependsOn += [createPostgresImage]
+    dependsOn += [createPostgresImage, createKeycloakImage]
     options.warnings = false
 }
 

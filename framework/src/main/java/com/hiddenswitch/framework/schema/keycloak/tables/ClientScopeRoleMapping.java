@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ClientScopeRoleMapping extends TableImpl<ClientScopeRoleMappingRecord> {
 
-    private static final long serialVersionUID = 608104452;
+    private static final long serialVersionUID = 1024046765;
 
     /**
      * The reference instance of <code>keycloak.client_scope_role_mapping</code>
@@ -113,15 +113,11 @@ public class ClientScopeRoleMapping extends TableImpl<ClientScopeRoleMappingReco
 
     @Override
     public List<ForeignKey<ClientScopeRoleMappingRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ClientScopeRoleMappingRecord, ?>>asList(Keys.CLIENT_SCOPE_ROLE_MAPPING__FK_CL_SCOPE_RM_SCOPE, Keys.CLIENT_SCOPE_ROLE_MAPPING__FK_CL_SCOPE_RM_ROLE);
+        return Arrays.<ForeignKey<ClientScopeRoleMappingRecord, ?>>asList(Keys.CLIENT_SCOPE_ROLE_MAPPING__FK_CL_SCOPE_RM_SCOPE);
     }
 
     public ClientScope clientScope() {
         return new ClientScope(this, Keys.CLIENT_SCOPE_ROLE_MAPPING__FK_CL_SCOPE_RM_SCOPE);
-    }
-
-    public KeycloakRole keycloakRole() {
-        return new KeycloakRole(this, Keys.CLIENT_SCOPE_ROLE_MAPPING__FK_CL_SCOPE_RM_ROLE);
     }
 
     @Override

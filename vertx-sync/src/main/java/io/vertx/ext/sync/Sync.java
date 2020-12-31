@@ -4,15 +4,22 @@ import co.paralleluniverse.fibers.*;
 import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.SuspendableAction1;
 import co.paralleluniverse.strands.SuspendableCallable;
+import co.paralleluniverse.strands.SuspendableIterator;
 import co.paralleluniverse.strands.channels.Channel;
+import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.google.common.base.Throwables;
 import io.vertx.core.*;
+import io.vertx.core.streams.ReadStream;
 import io.vertx.ext.sync.impl.AsyncAdaptor;
 import io.vertx.ext.sync.impl.HandlerAdaptor;
 import io.vertx.ext.sync.impl.HandlerReceiverAdaptorImpl;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.*;
@@ -59,7 +66,15 @@ public class Sync {
 	}
 
 	@Suspendable
+	@NotNull
 	public static <T> T await(Future<T> future) {
+		if (!Strand.isCurrentFiber()) {
+			try {
+				return future.toCompletionStage().toCompletableFuture().get();
+			} catch (InterruptedException | ExecutionException e) {
+				throw makeSafe(e);
+			}
+		}
 		try {
 			return new AsyncAdaptor<T>() {
 				@Override
@@ -104,7 +119,7 @@ public class Sync {
 	 * @return
 	 */
 	@Suspendable
-	public static <T> T awaitResultUninterruptibly(Consumer<Handler<AsyncResult<T>>> consumer) {
+	public static <T> T awaitUninterruptibly(Consumer<Handler<AsyncResult<T>>> consumer) {
 		try {
 			return new AsyncAdaptor<T>() {
 				@Override
@@ -435,11 +450,11 @@ public class Sync {
 	}
 
 	@Suspendable
-	public static <V> Future<V> fiber(SuspendableCallable<V> context) {
+	public static <V> Future<V> fiber(SuspendableCallable<V> callable) {
 		var promise = Promise.<V>promise();
 		var fiber = new Fiber<>(getContextScheduler(), () -> {
 			try {
-				promise.complete(context.run());
+				promise.complete(callable.run());
 			} catch (Throwable t) {
 				promise.tryFail(t);
 			}
@@ -459,18 +474,29 @@ public class Sync {
 	}
 
 	@Suspendable
-	public static <V> Future<V> runInFiber(SuspendableCallable<V> context) {
-		return fiber(context);
+	public static <V> Future<V> runInFiber(SuspendableCallable<V> callable) {
+		return fiber(callable);
 	}
 
 	@Suspendable
-	public static <V> Future<V> runInFiber(Vertx vertx, SuspendableCallable<V> context) {
-		return fiber(context);
+	public static <V> Future<V> fiber(Vertx vertx, SuspendableCallable<V> callable) {
+		var promise = Promise.<V>promise();
+		var fiber = new Fiber<V>(getContextScheduler(vertx.getOrCreateContext()), () -> {
+			try {
+				promise.complete(callable.run());
+			} catch (Throwable t) {
+				promise.fail(t);
+			}
+		});
+		fiber.inheritThreadLocals();
+		fiber.setUncaughtExceptionHandler(Sync::uncaughtException);
+		fiber.start();
+		return promise.future();
 	}
 
 	private static void uncaughtException(Strand f, Throwable e) {
 		var currentContext = Vertx.currentContext();
-		if (currentContext==null) {
+		if (currentContext == null) {
 			return;
 		}
 		var throwableHandler = currentContext.owner().exceptionHandler();
@@ -491,11 +517,21 @@ public class Sync {
 	@Suspendable
 	public static <T> Handler<T> fiber(FiberScheduler scheduler, SuspendableAction1<T> handler) {
 		return v -> {
-			var fiber = new Fiber<Void>(scheduler, () -> handler.call(v));
+			var passedScheduler = scheduler;
+			if (passedScheduler == null) {
+				passedScheduler = getContextScheduler();
+			}
+			var fiber = new Fiber<Void>(passedScheduler, () -> handler.call(v));
 			fiber.inheritThreadLocals();
 			fiber.setUncaughtExceptionHandler(Sync::uncaughtException);
 			fiber.start();
 		};
+	}
+
+
+	@Suspendable
+	public static <T> Iterable<T> await(ReadStream<T> stream) {
+		return new ReadStreamIterable<>(stream);
 	}
 
 	@Suspendable
@@ -672,5 +708,124 @@ public class Sync {
 	public static interface NoArgs {
 		@Suspendable
 		void apply();
+	}
+
+	@Suspendable
+	private static class ReadStreamIterable<T> implements Iterable<T> {
+		protected final Promise<Void> ended;
+		protected final HandlerReceiverAdaptor<T> adaptor;
+
+		public ReadStreamIterable(ReadStream<T> stream) {
+			this.ended = Promise.<Void>promise();
+			stream.endHandler(ended::tryComplete);
+			stream.exceptionHandler(ended::tryFail);
+			this.adaptor = Sync.streamAdaptor();
+			stream.handler(adaptor);
+			ended.future().onComplete(v -> adaptor.receivePort().close());
+		}
+
+		@NotNull
+		@Override
+		@Suspendable
+		public SuspendableIterator<T> iterator() {
+			return new ReadStreamIterator<T>(this);
+		}
+
+		@Override
+		@Suspendable
+		public void forEach(Consumer<? super T> action) {
+			Objects.requireNonNull(action);
+			for (T t : this) {
+				action.accept(t);
+			}
+		}
+
+	}
+
+	@Suspendable
+	private static class ReadStreamIterator<T> implements SuspendableIterator<T> {
+		private final ReadStreamIterable<T> readStreamIterable;
+		private final ReentrantLock lock = new ReentrantLock();
+		private T next;
+
+		private boolean isComplete() {
+			return future().isComplete() && readStreamIterable.adaptor.receivePort().isClosed();
+		}
+
+		private boolean isFailed() {
+			return future().failed();
+		}
+
+		private Future<Void> future() {
+			return readStreamIterable.ended.future();
+		}
+
+		public ReadStreamIterator(ReadStreamIterable<T> readStreamIterable) {
+			this.readStreamIterable = readStreamIterable;
+		}
+
+		@Override
+		@Suspendable
+		public boolean hasNext() {
+			lock.lock();
+			try {
+				if (isFailed()) {
+					throw makeSafe(future().cause());
+				}
+
+				// queued up but not yet consumed
+				if (next != null) {
+					return true;
+				}
+
+				if (isComplete()) {
+					return false;
+				}
+
+				// this will return null if the stream is ended
+				var receive = readStreamIterable.adaptor.receive();
+				if (receive == null) {
+					readStreamIterable.ended.tryComplete();
+					return false;
+				}
+
+				next = receive;
+				return true;
+			} finally {
+				lock.unlock();
+			}
+		}
+
+		@Override
+		@Suspendable
+		public T next() {
+			lock.lock();
+			try {
+				if (isFailed()) {
+					throw makeSafe(future().cause());
+				}
+
+				// already set by hasNext
+				if (next != null) {
+					var receive = next;
+					next = null;
+					return receive;
+				} else {
+					// closed peacefully
+					if (isComplete()) {
+						throw new NoSuchElementException();
+					}
+
+					var receive = readStreamIterable.adaptor.receive();
+					if (receive == null) {
+						readStreamIterable.ended.tryComplete();
+						throw new NoSuchElementException();
+					}
+					return receive;
+				}
+			} finally {
+				lock.unlock();
+			}
+		}
 	}
 }

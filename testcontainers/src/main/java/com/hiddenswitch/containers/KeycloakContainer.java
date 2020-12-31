@@ -8,12 +8,9 @@ import org.testcontainers.utility.MountableFile;
 import java.time.Duration;
 
 public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
-	private static final String KEYCLOAK_IMAGE = "quay.io/keycloak/keycloak";
-	private static final String KEYCLOAK_VERSION = "11.0.3";
-
 	private static final int KEYCLOAK_PORT_HTTP = 8080;
 
-	private static final String KEYCLOAK_ADMIN_USER = "spellsource";
+	private static final String KEYCLOAK_ADMIN_USER = "admin";
 	private static final String KEYCLOAK_ADMIN_PASSWORD = "admin";
 	private static final String KEYCLOAK_AUTH_PATH = "/auth";
 
@@ -27,11 +24,9 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 
 	/**
 	 * Create a KeycloakContainer by passing the full docker image name
-	 *
-	 * @param dockerImageName Full docker image name, e.g. quay.io/keycloak/keycloak:8.0.1
 	 */
-	public KeycloakContainer(String dockerImageName) {
-		super(dockerImageName);
+	public KeycloakContainer() {
+		super("doctorpangloss/keycloak:latest");
 		withExposedPorts(KEYCLOAK_PORT_HTTP);
 		withEnv("LANGUAGE", "en_US.UTF-8");
 		withEnv("LANG", "en_US.UTF-8");
@@ -112,10 +107,6 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 
 	public int getHttpPort() {
 		return getMappedPort(KEYCLOAK_PORT_HTTP);
-	}
-
-	protected String getKeycloakVersion() {
-		return KEYCLOAK_VERSION;
 	}
 
 	private boolean isNotBlank(String s) {

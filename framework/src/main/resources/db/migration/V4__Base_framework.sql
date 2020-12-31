@@ -137,4 +137,12 @@ create table spellsource.user_entity_addons
 (
   id text references keycloak.user_entity (id) on delete cascade primary key,
   privacy_token text default floor(1000 + random() * 8999)
+);
+
+create table spellsource.friends
+(
+  id text references keycloak.user_entity (id) on delete cascade,
+  friend text references keycloak.user_entity (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (id, friend)
 )

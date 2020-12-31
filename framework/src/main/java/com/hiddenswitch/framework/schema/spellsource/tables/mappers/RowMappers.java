@@ -88,6 +88,16 @@ public class RowMappers {
         };
     }
 
+    public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends> getFriendsMapper() {
+        return row -> {
+            com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends();
+            pojo.setId(row.getString("id"));
+            pojo.setFriend(row.getString("friend"));
+            pojo.setCreatedAt(row.getOffsetDateTime("created_at"));
+            return pojo;
+        };
+    }
+
     public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers> getGameUsersMapper() {
         return row -> {
             com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers();

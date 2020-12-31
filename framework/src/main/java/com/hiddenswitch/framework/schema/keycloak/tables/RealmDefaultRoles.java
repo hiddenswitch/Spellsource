@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RealmDefaultRoles extends TableImpl<RealmDefaultRolesRecord> {
 
-    private static final long serialVersionUID = 22007048;
+    private static final long serialVersionUID = 875362189;
 
     /**
      * The reference instance of <code>keycloak.realm_default_roles</code>
@@ -113,15 +113,11 @@ public class RealmDefaultRoles extends TableImpl<RealmDefaultRolesRecord> {
 
     @Override
     public List<ForeignKey<RealmDefaultRolesRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RealmDefaultRolesRecord, ?>>asList(Keys.REALM_DEFAULT_ROLES__FK_EVUDB1PPW84OXFAX2DRS03ICC, Keys.REALM_DEFAULT_ROLES__FK_H4WPD7W4HSOOLNI3H0SW7BTJE);
+        return Arrays.<ForeignKey<RealmDefaultRolesRecord, ?>>asList(Keys.REALM_DEFAULT_ROLES__FK_EVUDB1PPW84OXFAX2DRS03ICC);
     }
 
     public Realm realm() {
         return new Realm(this, Keys.REALM_DEFAULT_ROLES__FK_EVUDB1PPW84OXFAX2DRS03ICC);
-    }
-
-    public KeycloakRole keycloakRole() {
-        return new KeycloakRole(this, Keys.REALM_DEFAULT_ROLES__FK_H4WPD7W4HSOOLNI3H0SW7BTJE);
     }
 
     @Override

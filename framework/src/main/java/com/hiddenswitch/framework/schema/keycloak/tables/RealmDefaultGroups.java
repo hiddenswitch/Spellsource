@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RealmDefaultGroups extends TableImpl<RealmDefaultGroupsRecord> {
 
-    private static final long serialVersionUID = -1768387496;
+    private static final long serialVersionUID = -1710052068;
 
     /**
      * The reference instance of <code>keycloak.realm_default_groups</code>
@@ -113,15 +113,11 @@ public class RealmDefaultGroups extends TableImpl<RealmDefaultGroupsRecord> {
 
     @Override
     public List<ForeignKey<RealmDefaultGroupsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RealmDefaultGroupsRecord, ?>>asList(Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_REALM, Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_GROUP);
+        return Arrays.<ForeignKey<RealmDefaultGroupsRecord, ?>>asList(Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_REALM);
     }
 
     public Realm realm() {
         return new Realm(this, Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_REALM);
-    }
-
-    public KeycloakGroup keycloakGroup() {
-        return new KeycloakGroup(this, Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_GROUP);
     }
 
     @Override

@@ -171,7 +171,6 @@ public class Environment {
 	@Suspendable
 	public static <T> Future<T> executeBlocking(Context context, SuspendableCallable<T> blockingCallable) {
 		var result = Promise.<T>promise();
-		var fiber = Fiber.currentFiber();
 		if (context != null) {
 			context.executeBlocking(promise -> {
 				try {
@@ -181,14 +180,6 @@ public class Environment {
 					promise.fail(e);
 				}
 			}, false, result);
-			if (fiber != null) {
-				try {
-					T out = Sync.await(h -> result.future().onComplete(h));
-					return Future.succeededFuture(out);
-				} catch (Throwable t) {
-					return Future.failedFuture(t);
-				}
-			}
 		} else {
 			try {
 				result.complete(blockingCallable.run());

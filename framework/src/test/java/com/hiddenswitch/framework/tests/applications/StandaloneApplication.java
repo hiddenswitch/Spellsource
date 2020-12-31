@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework.tests.applications;
 
 import com.hiddenswitch.containers.KeycloakContainer;
+import com.hiddenswitch.containers.MongoDBContainer;
 import com.hiddenswitch.containers.PostgresSupabaseContainer;
 import com.hiddenswitch.containers.RealtimeContainer;
 import com.hiddenswitch.framework.Application;
@@ -28,7 +29,7 @@ public class StandaloneApplication extends Application {
 			.withNetwork(Network.SHARED)
 			.withNetworkAliases(PGHOST)
 			.withExposedPorts(PGPORT);
-	public static KeycloakContainer KEYCLOAK = new KeycloakContainer("jboss/keycloak:11.0.3")
+	public static KeycloakContainer KEYCLOAK = new KeycloakContainer()
 			.dependsOn(POSTGRES)
 			.withNetwork(Network.SHARED)
 			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD);

@@ -11,7 +11,6 @@ import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.authorization.Authorization;
 
 import java.io.Serializable;
-import java.lang.ref.WeakReference;
 import java.util.*;
 
 /**
@@ -29,6 +28,7 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 	public static final String LOGIN_TOKENS = "loginTokens";
 	public static final String SERVICES_RESUME_LOGIN_TOKENS = SERVICES + "." + RESUME + "." + LOGIN_TOKENS;
 	public static final String SERVICES_PASSWORD_SCRYPT = "services.password.scrypt";
+	public static final String BOT = "bot";
 
 	private List<EmailRecord> emails = new ArrayList<>();
 	private String username;

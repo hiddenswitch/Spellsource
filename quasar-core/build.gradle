@@ -191,7 +191,7 @@ task uninstrumentedCompileJava(type: JavaCompile) {
 task uninstrumentedJar(type: org.gradle.jvm.tasks.Jar) {
     dependsOn uninstrumentedCompileJava
     from { uninstrumentedCompileJava.destinationDir }
-    archiveClassifier = 'uninstrumented'
+    archiveClassifier.set('uninstrumented')
 }
 
 test {
@@ -266,8 +266,7 @@ assemble.dependsOn shadowJar
 build.dependsOn shadowJar
 
 shadowJar {
-    classifier = '' // overwrite jar
-    destinationDir = file("$buildDir/libs")
+    archiveClassifier.set('') // overwrite jar
     from sourceSets.main.output
     configurations = [project.configurations.runtimeClasspath]
     exclude 'META-INF/INDEX.LIST'
@@ -316,22 +315,23 @@ task artifacts {
     }
 }
 
-def scanAndInstrument(SourceSet sset, configs) {
-    def cp = '' + sset.output.classesDirs.asPath + ':' + sset.output.resourcesDir + ':' + configs*.asPath.join(':')
+def scanAndInstrument(SourceSet sourceSet, configs) {
+    def classpath = '' + sourceSet.output.classesDirs.asPath + ':' + sourceSet.output.resourcesDir + ':' + configs*.asPath.join(':')
+
     ant.taskdef(
             name: 'scanSuspendables', classname: 'co.paralleluniverse.fibers.instrument.SuspendablesScanner',
-            classpath: cp)
+            classpath: classpath)
     ant.scanSuspendables(
-            auto: false,
-            supersFile: "$sset.output.resourcesDir/META-INF/suspendable-supers",
-            append: true) {
-        fileset(dir: sset.output.classesDirs.asPath)
+            auto: true,
+            supersFile: "$sourceSets.main.resources.dirs.asPath/META-INF/suspendable-supers",
+            append: false) {
+        fileset(dir: sourceSet.output.classesDirs.asPath)
     }
 
     ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask',
-            classpath: cp)
+            classpath: classpath)
     ant.instrumentation(check: 'true') {
-        fileset(dir: sset.output.classesDirs.asPath) {
+        fileset(dir: sourceSet.output.classesDirs.asPath) {
             exclude(name: 'co/paralleluniverse/fibers/instrument/*.class')
         }
     }

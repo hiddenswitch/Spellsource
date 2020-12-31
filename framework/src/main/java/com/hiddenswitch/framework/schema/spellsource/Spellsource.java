@@ -11,6 +11,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckShares;
 import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
+import com.hiddenswitch.framework.schema.spellsource.tables.Friends;
 import com.hiddenswitch.framework.schema.spellsource.tables.GameUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Games;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
@@ -31,7 +32,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Spellsource extends SchemaImpl {
 
-    private static final long serialVersionUID = -53556609;
+    private static final long serialVersionUID = -1222667457;
 
     /**
      * The reference instance of <code>spellsource</code>
@@ -67,6 +68,11 @@ public class Spellsource extends SchemaImpl {
      * The table <code>spellsource.decks</code>.
      */
     public final Decks DECKS = Decks.DECKS;
+
+    /**
+     * The table <code>spellsource.friends</code>.
+     */
+    public final Friends FRIENDS = Friends.FRIENDS;
 
     /**
      * The table <code>spellsource.game_users</code>.
@@ -115,6 +121,7 @@ public class Spellsource extends SchemaImpl {
             DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES,
             DeckShares.DECK_SHARES,
             Decks.DECKS,
+            Friends.FRIENDS,
             GameUsers.GAME_USERS,
             Games.GAMES,
             MatchmakingQueues.MATCHMAKING_QUEUES,

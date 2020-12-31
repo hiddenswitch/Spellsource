@@ -126,5 +126,10 @@ public class SyncTest extends VertxTestBase {
     runTest(getMethodName());
   }
 
+  @Test
+	public void testIterateReadStream() throws Exception {
+  	runTest(getMethodName());
+  }
+
 
 }

@@ -18,6 +18,7 @@ import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
 import java.util.Collections;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toMap;
@@ -108,8 +109,8 @@ public class AccountsTests extends FrameworkTestBase {
 	public void testLoginWithRest(Vertx vertx, VertxTestContext testContext) {
 		var webClient = WebClient.create(vertx);
 		var testUser = new UserRepresentation();
-		testUser.setEmail("test@hiddenswitch.com");
-		testUser.setUsername("DoctorTestgloss");
+		testUser.setEmail(UUID.randomUUID().toString() + "@test.com");
+		testUser.setUsername(UUID.randomUUID().toString());
 		testUser.setFirstName("Test");
 		testUser.setLastName("McTester");
 		testUser.setEnabled(true);
@@ -140,7 +141,7 @@ public class AccountsTests extends FrameworkTestBase {
 							.onSuccess(res -> {
 								testContext.verify(() -> {
 									var tokenContainer = res.bodyAsJsonObject();
-									assertEquals("bearer", tokenContainer.getString("token_type"));
+									assertEquals("Bearer", tokenContainer.getString("token_type"));
 								});
 							});
 				})

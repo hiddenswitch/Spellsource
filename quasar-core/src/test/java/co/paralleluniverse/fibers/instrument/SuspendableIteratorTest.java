@@ -1,5 +1,6 @@
-package co.paralleluniverse.fibers;
+package co.paralleluniverse.fibers.instrument;
 
+import co.paralleluniverse.strands.SuspendableIterator;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
@@ -50,16 +51,6 @@ public class SuspendableIteratorTest {
 
 	;
 
-	interface SuspendableIteratorInterface<T> extends Iterator<T> {
-		@Override
-		@Suspendable
-		T next();
-
-		@Override
-		@Suspendable
-		boolean hasNext();
-	}
-
 	static abstract class SuspendableIteratorClass<T> implements Iterator<T> {
 		@Override
 		@Suspendable
@@ -72,8 +63,8 @@ public class SuspendableIteratorTest {
 
 	static class SuspendableListWithIteratorInterface implements Iterable<String> {
 		@Override
-		public SuspendableIteratorInterface<String> iterator() {
-			return new SuspendableIteratorInterface<String>() {
+		public SuspendableIterator<String> iterator() {
+			return new SuspendableIterator<String>() {
 				SuspendableIteratorImpl impl = new SuspendableIteratorImpl();
 
 				@Override

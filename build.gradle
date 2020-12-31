@@ -78,6 +78,10 @@ subprojects {
                     details.useVersion "3.2.2"
                 }
 
+                if (details.requested.group == 'org.apache.commons' && details.requested.module.name == 'commons-collections4') {
+                    details.useVersion "4.2"
+                }
+
                 if (details.requested.group == 'commons-io') {
                     details.useVersion "2.4"
                 }
