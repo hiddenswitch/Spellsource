@@ -42,7 +42,7 @@ public class Games {
 			.comparing(net.demilich.metastone.game.entities.Entity::getZone)
 			.thenComparingInt(net.demilich.metastone.game.entities.Entity::getIndex);
 	public static final String GAMES_CREATE_GAME_SESSION = "Games.createGameSession";
-	public static final long CREATE_GAME_TIMEOUT_MILLIS = 20000L;
+	public static final long CREATE_GAME_TIMEOUT_MILLIS = 8000L;
 
 	/**
 	 * Creates a match without entering a queue entry between two users.
