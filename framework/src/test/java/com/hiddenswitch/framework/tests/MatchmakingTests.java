@@ -395,7 +395,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
-	@Timeout(value = 95, timeUnit = TimeUnit.SECONDS)
+	@Timeout(value = 400, timeUnit = TimeUnit.SECONDS)
 	public void testManyClientsMatchmakeAcrossInstances(VertxTestContext testContext) {
 		var vertx = Vertx.vertx();
 		// dedicated clients vertx
