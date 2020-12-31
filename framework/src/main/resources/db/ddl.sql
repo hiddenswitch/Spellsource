@@ -1055,6 +1055,19 @@ CREATE TABLE keycloak.realm_events_listeners (
 ALTER TABLE keycloak.realm_events_listeners OWNER TO admin;
 
 --
+-- Name: realm_localizations; Type: TABLE; Schema: keycloak; Owner: admin
+--
+
+CREATE TABLE keycloak.realm_localizations (
+    realm_id character varying(255) NOT NULL,
+    locale character varying(255) NOT NULL,
+    texts text NOT NULL
+);
+
+
+ALTER TABLE keycloak.realm_localizations OWNER TO admin;
+
+--
 -- Name: realm_required_credential; Type: TABLE; Schema: keycloak; Owner: admin
 --
 
@@ -1705,6 +1718,19 @@ COMMENT ON COLUMN spellsource.decks.last_edited_by IS 'who last edited this deck
 
 COMMENT ON COLUMN spellsource.decks.is_premade IS 'premades always shared with all users by application logic';
 
+
+--
+-- Name: friends; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.friends (
+    id text NOT NULL,
+    friend text NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE spellsource.friends OWNER TO admin;
 
 --
 -- Name: game_users; Type: TABLE; Schema: spellsource; Owner: admin
@@ -2568,6 +2594,14 @@ ALTER TABLE ONLY keycloak.default_client_scope
 
 
 --
+-- Name: realm_localizations realm_localizations_pkey; Type: CONSTRAINT; Schema: keycloak; Owner: admin
+--
+
+ALTER TABLE ONLY keycloak.realm_localizations
+    ADD CONSTRAINT realm_localizations_pkey PRIMARY KEY (realm_id, locale);
+
+
+--
 -- Name: resource_attribute res_attr_pk; Type: CONSTRAINT; Schema: keycloak; Owner: admin
 --
 
@@ -2741,6 +2775,14 @@ ALTER TABLE ONLY spellsource.deck_shares
 
 ALTER TABLE ONLY spellsource.decks
     ADD CONSTRAINT decks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: friends friends_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.friends
+    ADD CONSTRAINT friends_pkey PRIMARY KEY (id, friend);
 
 
 --
@@ -3501,14 +3543,6 @@ ALTER TABLE ONLY keycloak.realm_smtp_config
 
 
 --
--- Name: client_default_roles fk_8aelwnibji49avxsrtuf6xjow; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
---
-
-ALTER TABLE ONLY keycloak.client_default_roles
-    ADD CONSTRAINT fk_8aelwnibji49avxsrtuf6xjow FOREIGN KEY (role_id) REFERENCES keycloak.keycloak_role(id);
-
-
---
 -- Name: realm_attribute fk_8shxd6l3e9atqukacxgpffptw; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
 --
 
@@ -3597,14 +3631,6 @@ ALTER TABLE ONLY keycloak.client_scope_attributes
 
 
 --
--- Name: client_scope_role_mapping fk_cl_scope_rm_role; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
---
-
-ALTER TABLE ONLY keycloak.client_scope_role_mapping
-    ADD CONSTRAINT fk_cl_scope_rm_role FOREIGN KEY (role_id) REFERENCES keycloak.keycloak_role(id);
-
-
---
 -- Name: client_scope_role_mapping fk_cl_scope_rm_scope; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
 --
 
@@ -3650,14 +3676,6 @@ ALTER TABLE ONLY keycloak.component_config
 
 ALTER TABLE ONLY keycloak.component
     ADD CONSTRAINT fk_component_realm FOREIGN KEY (realm_id) REFERENCES keycloak.realm(id);
-
-
---
--- Name: realm_default_groups fk_def_groups_group; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
---
-
-ALTER TABLE ONLY keycloak.realm_default_groups
-    ADD CONSTRAINT fk_def_groups_group FOREIGN KEY (group_id) REFERENCES keycloak.keycloak_group(id);
 
 
 --
@@ -3869,22 +3887,6 @@ ALTER TABLE ONLY keycloak.group_role_mapping
 
 
 --
--- Name: group_role_mapping fk_group_role_role; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
---
-
-ALTER TABLE ONLY keycloak.group_role_mapping
-    ADD CONSTRAINT fk_group_role_role FOREIGN KEY (role_id) REFERENCES keycloak.keycloak_role(id);
-
-
---
--- Name: realm_default_roles fk_h4wpd7w4hsoolni3h0sw7btje; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
---
-
-ALTER TABLE ONLY keycloak.realm_default_roles
-    ADD CONSTRAINT fk_h4wpd7w4hsoolni3h0sw7btje FOREIGN KEY (role_id) REFERENCES keycloak.keycloak_role(id);
-
-
---
 -- Name: realm_enabled_event_types fk_h846o4h0w8epx5nwedrf5y69j; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
 --
 
@@ -3938,14 +3940,6 @@ ALTER TABLE ONLY keycloak.client_default_roles
 
 ALTER TABLE ONLY keycloak.scope_mapping
     ADD CONSTRAINT fk_ouse064plmlr732lxjcn1q5f1 FOREIGN KEY (client_id) REFERENCES keycloak.client(id);
-
-
---
--- Name: scope_mapping fk_p3rh9grku11kqfrs4fltt7rnq; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
---
-
-ALTER TABLE ONLY keycloak.scope_mapping
-    ADD CONSTRAINT fk_p3rh9grku11kqfrs4fltt7rnq FOREIGN KEY (role_id) REFERENCES keycloak.keycloak_role(id);
 
 
 --
@@ -4138,6 +4132,22 @@ ALTER TABLE ONLY spellsource.decks
 
 ALTER TABLE ONLY spellsource.decks
     ADD CONSTRAINT decks_last_edited_by_fkey FOREIGN KEY (last_edited_by) REFERENCES keycloak.user_entity(id);
+
+
+--
+-- Name: friends friends_friend_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.friends
+    ADD CONSTRAINT friends_friend_fkey FOREIGN KEY (friend) REFERENCES keycloak.user_entity(id) ON DELETE CASCADE;
+
+
+--
+-- Name: friends friends_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.friends
+    ADD CONSTRAINT friends_id_fkey FOREIGN KEY (id) REFERENCES keycloak.user_entity(id) ON DELETE CASCADE;
 
 
 --

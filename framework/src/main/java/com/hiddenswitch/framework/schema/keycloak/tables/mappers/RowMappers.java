@@ -767,6 +767,16 @@ public class RowMappers {
         };
     }
 
+    public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmLocalizations> getRealmLocalizationsMapper() {
+        return row -> {
+            com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmLocalizations pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmLocalizations();
+            pojo.setRealmId(row.getString("realm_id"));
+            pojo.setLocale(row.getString("locale"));
+            pojo.setTexts(row.getString("texts"));
+            return pojo;
+        };
+    }
+
     public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential> getRealmRequiredCredentialMapper() {
         return row -> {
             com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential();

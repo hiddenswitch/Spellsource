@@ -65,6 +65,7 @@ import com.hiddenswitch.framework.schema.keycloak.tables.RealmDefaultGroups;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmDefaultRoles;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmEnabledEventTypes;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmEventsListeners;
+import com.hiddenswitch.framework.schema.keycloak.tables.RealmLocalizations;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmRequiredCredential;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmSmtpConfig;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmSupportedLocales;
@@ -113,7 +114,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Keycloak extends SchemaImpl {
 
-    private static final long serialVersionUID = -1024917166;
+    private static final long serialVersionUID = -876269034;
 
     /**
      * The reference instance of <code>keycloak</code>
@@ -421,6 +422,11 @@ public class Keycloak extends SchemaImpl {
     public final RealmEventsListeners REALM_EVENTS_LISTENERS = RealmEventsListeners.REALM_EVENTS_LISTENERS;
 
     /**
+     * The table <code>keycloak.realm_localizations</code>.
+     */
+    public final RealmLocalizations REALM_LOCALIZATIONS = RealmLocalizations.REALM_LOCALIZATIONS;
+
+    /**
      * The table <code>keycloak.realm_required_credential</code>.
      */
     public final RealmRequiredCredential REALM_REQUIRED_CREDENTIAL = RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL;
@@ -661,6 +667,7 @@ public class Keycloak extends SchemaImpl {
             RealmDefaultRoles.REALM_DEFAULT_ROLES,
             RealmEnabledEventTypes.REALM_ENABLED_EVENT_TYPES,
             RealmEventsListeners.REALM_EVENTS_LISTENERS,
+            RealmLocalizations.REALM_LOCALIZATIONS,
             RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL,
             RealmSmtpConfig.REALM_SMTP_CONFIG,
             RealmSupportedLocales.REALM_SUPPORTED_LOCALES,

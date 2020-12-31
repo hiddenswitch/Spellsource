@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class GroupRoleMapping extends TableImpl<GroupRoleMappingRecord> {
 
-    private static final long serialVersionUID = -1053187540;
+    private static final long serialVersionUID = -1282520101;
 
     /**
      * The reference instance of <code>keycloak.group_role_mapping</code>
@@ -113,11 +113,7 @@ public class GroupRoleMapping extends TableImpl<GroupRoleMappingRecord> {
 
     @Override
     public List<ForeignKey<GroupRoleMappingRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<GroupRoleMappingRecord, ?>>asList(Keys.GROUP_ROLE_MAPPING__FK_GROUP_ROLE_ROLE, Keys.GROUP_ROLE_MAPPING__FK_GROUP_ROLE_GROUP);
-    }
-
-    public KeycloakRole keycloakRole() {
-        return new KeycloakRole(this, Keys.GROUP_ROLE_MAPPING__FK_GROUP_ROLE_ROLE);
+        return Arrays.<ForeignKey<GroupRoleMappingRecord, ?>>asList(Keys.GROUP_ROLE_MAPPING__FK_GROUP_ROLE_GROUP);
     }
 
     public KeycloakGroup keycloakGroup() {

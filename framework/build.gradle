@@ -60,6 +60,20 @@ def localDatabaseName = 'spellsource'
 def mainClassName = 'com.hiddenswitch.framework.EntryPoint'
 def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
 def createPostgresImage = tasks.getByPath(':testcontainers:createPostgresImage')
+def createKeycloakImage = tasks.getByPath(':testcontainers:createKeycloakImage')
+
+// configures the migration test, which specially starts mongo
+sourceSets {
+    testMigrations {
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+configurations {
+    testMigrationsImplementation.extendsFrom(testImplementation)
+    testMigrationsRuntime.extendsFrom(testRuntime)
+}
 
 dependencies {
     api project(':core')
@@ -67,6 +81,8 @@ dependencies {
     api project(':cards')
     api project(':vertx-sync')
     api "io.vertx:vertx-rx-java2:$vertxVersion"
+    // enables migration
+    api project(':net')
 
     implementation("com.databasesandlife:java-common:$databasesandlifeVersion") {
         exclude group: 'com.google.gdata', module: '*'
@@ -74,6 +90,8 @@ dependencies {
         exclude group: 'dnsjava', module: '*'
         exclude group: 'commons-io', module: '*'
     }
+
+    implementation group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$jacksonVersion") {
         exclude group: 'jakarta.xml.bind', module: '*'
@@ -122,27 +140,24 @@ dependencies {
     implementation group: 'io.vertx', name: 'vertx-web', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-auth-common', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-config', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-mongo-client', version: vertxVersion
     implementation 'net.openhft:zero-allocation-hashing:0.11'
     implementation platform("org.keycloak.bom:keycloak-bom-parent:$keycloakVersion")
     implementation(group: 'org.keycloak', name: 'keycloak-admin-client', version: "$keycloakVersion") {
         exclude group: 'org.jboss.resteasy', module: 'resteasy-client'
     }
+    implementation "org.keycloak:keycloak-server-spi:$keycloakVersion"
+    implementation "org.keycloak:keycloak-server-spi-private:$keycloakVersion"
 
     implementation group: 'org.graalvm.truffle', name: 'truffle-api', version: '20.2.0'
     implementation group: 'org.graalvm.js', name: 'js', version: '20.2.0'
     implementation 'io.jaegertracing:jaeger-client:1.5.0'
     implementation "org.flywaydb:flyway-core:$flywayVersion"
 
-    testImplementation(project(':testcontainers')) {
-        exclude group: 'junit', module: 'junit'
-    }
+    testImplementation(project(':testcontainers'))
     testImplementation project(':testutils')
-    testImplementation("org.testcontainers:testcontainers") {
-        exclude group: 'junit', module: 'junit'
-    }
-    testImplementation("org.testcontainers:junit-jupiter") {
-        exclude group: 'junit', module: 'junit'
-    }
+    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:junit-jupiter")
     testImplementation group: 'io.vertx', name: 'vertx-junit5', version: vertxVersion
     testImplementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
     testImplementation group: 'io.vertx', name: 'vertx-web-common', version: vertxVersion
@@ -152,12 +167,6 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
-    testCompileOnly("junit:junit:4.12") {
-        because("only for testcontainers")
-    }
-    testRuntimeOnly("junit:junit:4.12") {
-        because("only for testcontainers")
-    }
     runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
     runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
 }
@@ -189,7 +198,7 @@ artifacts {
 }
 
 application {
-    mainClass = mainClassName
+    mainClass.set(mainClassName)
 }
 
 task copyCsharpGrpc(type: Copy, group: 'build') {
@@ -233,11 +242,6 @@ task installDll(type: Copy) {
     into(project(':unityclient').projectDir.absolutePath + '/src/unity/Assets/Client')
 }
 
-task pullKeycloakImage(type: DockerPullImage) {
-    image.set("jboss/keycloak:$keycloakVersion")
-    onError({})
-}
-
 task stopExistingPostgresContainer(type: DockerStopContainer) {
     containerId.set('gradleSupabasePostgres')
     onError({})
@@ -268,8 +272,8 @@ task stopPostgresContainer(type: DockerStopContainer) {
 }
 
 task createKeycloakContainer(type: DockerCreateContainer) {
-    dependsOn += [createPostgresContainer, pullKeycloakImage]
-    targetImageId "jboss/keycloak:$keycloakVersion"
+    dependsOn += [createPostgresContainer, createKeycloakImage]
+    targetImageId "doctorpangloss/keycloak:latest"
     envVars.putAll([
             'DB_VENDOR'  : 'postgres',
             'DB_ADDR'    : 'database:5432',
@@ -382,10 +386,12 @@ task jooqGenerate() {
 }
 
 task migrationsOrSqlChanged(group: 'spellsource') {
+    description('Run whenever the schema as encoded in src/main/resources/db/migration has changed - recreates the JOOQ DSL and dumps a ddl.sql file for autocompletion')
     dependsOn += [jooqGenerate]
 }
 
 task protosChanged(group: 'spellsource') {
+    description('Run whenever the files in src/main/proto have been changed - recreates the models and updates the client')
     dependsOn += [installDll, ':framework:generateProto']
 }
 
@@ -439,7 +445,18 @@ protobuf {
 }
 
 test {
+    group('spellsource')
     dependsOn += [createPostgresImage]
     useJUnitPlatform()
+    enableAssertions = false
+}
+
+task testLegacyMigration(type: Test, group: 'spellsource') {
+    description('Tests the migration from the legacy server to this current server ')
+    dependsOn += [createPostgresImage, compileTestJava]
+    systemProperty 'mongo.dbpath', "$project.rootDir/.mongo"
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.testMigrations.output.classesDirs
+    classpath = sourceSets.testMigrations.runtimeClasspath
     enableAssertions = false
 }

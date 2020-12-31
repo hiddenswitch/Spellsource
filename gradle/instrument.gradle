@@ -32,7 +32,7 @@ task uninstrumentedJar(type: org.gradle.jvm.tasks.Jar) {
     dependsOn uninstrumentedCompileJava, processResources
     from { uninstrumentedCompileJava.destinationDir }
     from { processResources.destinationDir }
-    archiveClassifier = 'uninstrumented'
+    archiveClassifier.set('uninstrumented')
 }
 
 artifacts {
@@ -46,17 +46,17 @@ compileJava {
     doLast {
         def classpath = configurations.compileClasspath.asPath + ':' + configurations.runtimeClasspath.asPath
 
-        ant.taskdef(name: 'scanSuspendables', classname: 'co.paralleluniverse.fibers.instrument.SuspendablesScanner', classpath: classpath)
-        ant.scanSuspendables(
+        ant.taskdef(name: 'scanSuspendables1', classname: 'co.paralleluniverse.fibers.instrument.SuspendablesScanner', classpath: classpath)
+        ant.scanSuspendables1(
                 auto: true,
                 supersFile: "$sourceSets.main.resources.dirs.asPath/META-INF/suspendable-supers",
                 append: false) {
             fileset(dir: sourceSets.main.output.classesDirs.asPath)
         }
 
-        ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask',
+        ant.taskdef(name: 'instrumentation1', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask',
                 classpath: classpath)
-        ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true', verbose: 'true', debug: 'true', check: 'true') {
+        ant.instrumentation1(allowMonitors: 'true', allowBlocking: 'true', verbose: 'false', debug: 'false', check: 'false') {
             fileset(dir: sourceSets.main.output.classesDirs.asPath)
         }
     }
@@ -68,9 +68,10 @@ compileTestJava {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 
     doLast {
-        ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask',
-                classpath: configurations.compileClasspath.asPath + ':' + configurations.runtimeClasspath.asPath)
-        ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true', check: 'true', debug: 'true') {
+        ant.taskdef(name: 'instrumentation2', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask',
+                classpath: configurations.compileClasspath.asPath + ':' + configurations.runtimeClasspath.asPath +
+                        ':' + configurations.testCompileClasspath.asPath + ':' + configurations.testRuntimeClasspath.asPath)
+        ant.instrumentation2(allowMonitors: 'true', allowBlocking: 'true', check: 'true', debug: 'true') {
             fileset(dir: sourceSets.main.output.classesDirs.asPath)
             fileset(dir: sourceSets.test.output.classesDirs.asPath)
         }

@@ -64,6 +64,7 @@ import com.hiddenswitch.framework.schema.keycloak.tables.RealmDefaultGroups;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmDefaultRoles;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmEnabledEventTypes;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmEventsListeners;
+import com.hiddenswitch.framework.schema.keycloak.tables.RealmLocalizations;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmRequiredCredential;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmSmtpConfig;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmSupportedLocales;
@@ -404,6 +405,11 @@ public class Tables {
      * The table <code>keycloak.realm_events_listeners</code>.
      */
     public static final RealmEventsListeners REALM_EVENTS_LISTENERS = RealmEventsListeners.REALM_EVENTS_LISTENERS;
+
+    /**
+     * The table <code>keycloak.realm_localizations</code>.
+     */
+    public static final RealmLocalizations REALM_LOCALIZATIONS = RealmLocalizations.REALM_LOCALIZATIONS;
 
     /**
      * The table <code>keycloak.realm_required_credential</code>.

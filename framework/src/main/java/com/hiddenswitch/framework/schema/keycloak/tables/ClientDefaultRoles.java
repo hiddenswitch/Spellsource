@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ClientDefaultRoles extends TableImpl<ClientDefaultRolesRecord> {
 
-    private static final long serialVersionUID = 1506901155;
+    private static final long serialVersionUID = -1758607948;
 
     /**
      * The reference instance of <code>keycloak.client_default_roles</code>
@@ -113,15 +113,11 @@ public class ClientDefaultRoles extends TableImpl<ClientDefaultRolesRecord> {
 
     @Override
     public List<ForeignKey<ClientDefaultRolesRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ClientDefaultRolesRecord, ?>>asList(Keys.CLIENT_DEFAULT_ROLES__FK_NUILTS7KLWQW2H8M2B5JOYTKY, Keys.CLIENT_DEFAULT_ROLES__FK_8AELWNIBJI49AVXSRTUF6XJOW);
+        return Arrays.<ForeignKey<ClientDefaultRolesRecord, ?>>asList(Keys.CLIENT_DEFAULT_ROLES__FK_NUILTS7KLWQW2H8M2B5JOYTKY);
     }
 
     public Client client() {
         return new Client(this, Keys.CLIENT_DEFAULT_ROLES__FK_NUILTS7KLWQW2H8M2B5JOYTKY);
-    }
-
-    public KeycloakRole keycloakRole() {
-        return new KeycloakRole(this, Keys.CLIENT_DEFAULT_ROLES__FK_8AELWNIBJI49AVXSRTUF6XJOW);
     }
 
     @Override

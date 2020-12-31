@@ -7,10 +7,7 @@ import co.paralleluniverse.strands.channels.Channel;
 import co.paralleluniverse.strands.channels.Channels;
 import co.paralleluniverse.strands.channels.ReceivePort;
 import io.netty.handler.codec.http.HttpMethod;
-import io.vertx.core.Context;
-import io.vertx.core.Future;
-import io.vertx.core.Vertx;
-import io.vertx.core.VertxException;
+import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.http.HttpClient;
@@ -18,6 +15,7 @@ import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.ext.sync.HandlerReceiverAdaptor;
+import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.sync.testmodel.AsyncInterface;
 import io.vertx.ext.sync.testmodel.AsyncInterfaceImpl;
@@ -253,6 +251,37 @@ public class TestVerticle extends SyncVerticle {
 		assertTrue(end - start >= 500);
 		assertTrue(tid >= 0);
 
+		complete();
+	}
+
+	@Suspendable
+	protected void testIterateReadStream() {
+		var eb = vertx.eventBus();
+		var consumer = eb.<String>consumer("a");
+
+		vertx.setTimer(100, t -> {
+			eb.send("a", "1");
+		});
+
+		vertx.setTimer(200, t -> {
+			eb.send("a", "2");
+		});
+
+		vertx.setTimer(300, t -> {
+			eb.send("a", "3");
+		});
+
+		vertx.setTimer(400, t -> {
+			consumer.unregister();
+		});
+
+		var l = 0;
+		for (var message : await(consumer)) {
+			l++;
+			assertEquals(Integer.toString(l), message.body());
+		}
+
+		assertEquals(3L, l);
 		complete();
 	}
 

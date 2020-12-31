@@ -9,6 +9,7 @@ import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.rpc.*;
 import com.hiddenswitch.framework.schema.keycloak.tables.daos.UserEntityDao;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
+import com.lambdaworks.crypto.SCryptUtil;
 import io.grpc.*;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
@@ -23,6 +24,8 @@ import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.common.VerificationException;
 import org.keycloak.common.enums.SslRequired;
+import org.keycloak.models.credential.PasswordCredentialModel;
+import org.keycloak.models.utils.ModelToRepresentation;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
 
@@ -411,11 +414,42 @@ public class Accounts {
 				.onFailure(Environment.onFailure());
 	}
 
+	public static Future<UserEntity> createUserWithHashed(String email, String username, String scryptHashedPassword) {
+		return get()
+				.compose(realm -> {
+					var credentialModel = PasswordCredentialModel.createFromValues("scrypt", new byte[0], 1, scryptHashedPassword);
+					var credential = ModelToRepresentation.toRepresentation(credentialModel);
+					credential.setTemporary(false);
+					var user = new UserRepresentation();
+					user.setEmail(email);
+					user.setUsername(username);
+					user.setEnabled(true);
+					user.setCredentials(Collections.singletonList(credential));
+					return Environment.executeBlocking(() -> {
+						var response = realm.users().create(user);
+						if (response.getStatus() >= 400) {
+							throw new RuntimeException("A user with the specified e-mail or username already exists.");
+						}
+						return response;
+					}).map(response -> {
+						var parts = response.getLocation().getPath().split("/");
+						var id = parts[parts.length - 1];
+						user.setId(id);
+						return user;
+					}).map(UserRepresentation::getId);
+				})
+				.compose(userId -> {
+					var users = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate());
+					return users.findOneById(userId);
+				})
+				.compose(res -> res == null ? Future.failedFuture("invalid user ID") : Future.succeededFuture(res))
+				.onFailure(Environment.onFailure());
+	}
+
 	@NotNull
 	private static CredentialRepresentation getPasswordCredential(String password) {
-		var credential = new CredentialRepresentation();
-		credential.setType(CredentialRepresentation.PASSWORD);
-		credential.setValue(password);
+		var credentialModel = PasswordCredentialModel.createFromValues("scrypt", new byte[0], 1, SCryptUtil.scrypt(password, 16384, 8, 1));
+		var credential = ModelToRepresentation.toRepresentation(credentialModel);
 		credential.setTemporary(false);
 		return credential;
 	}
@@ -473,6 +507,8 @@ public class Accounts {
 			realmRepresentation.setDisplayName(configuration.getKeycloak().getRealmDisplayName());
 			realmRepresentation.setSslRequired(SslRequired.EXTERNAL.toString());
 			realmRepresentation.setEnabled(true);
+			// use scrypt provider
+			realmRepresentation.setPasswordPolicy("hashAlgorithm(scrypt)");
 
 			keycloak.realms().create(realmRepresentation);
 

@@ -4,6 +4,7 @@ import com.github.dockerjava.api.command.InspectContainerResponse;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
@@ -108,6 +109,11 @@ public class MongoDBContainer extends GenericContainer<MongoDBContainer> {
 
 	public void setDatabaseName(String databaseName) {
 		this.databaseName = databaseName;
+	}
+
+	public MongoDBContainer withDatabaseName(String databaseName) {
+		setDatabaseName(databaseName);
+		return self();
 	}
 
 	public static class ReplicaSetInitializationException extends RuntimeException {

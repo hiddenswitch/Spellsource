@@ -7,7 +7,6 @@ import com.google.protobuf.StringValue;
 import com.hiddenswitch.framework.impl.ModelConversions;
 import com.hiddenswitch.framework.impl.ServerGameContext;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
-import com.hiddenswitch.framework.migrations.R__0001_Import_package_cards_into_database;
 import com.hiddenswitch.framework.rpc.GetCardsRequest;
 import com.hiddenswitch.framework.rpc.GetCardsResponse;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpc;
@@ -41,9 +40,6 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
 import net.openhft.hashing.LongHashFunction;
-import org.flywaydb.core.api.MigrationVersion;
-import org.flywaydb.core.internal.resolver.MigrationInfoHelper;
-import org.flywaydb.core.internal.util.Pair;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 
@@ -66,18 +62,9 @@ import static java.util.stream.Collectors.*;
  * The legacy services for Spellsource, to rapidly transition the game into a new backend.
  */
 public class Legacy {
-	private static final String STATIC_CARDS_DATABASE_DESCRIPTION;
 	private static final WeakVertxMap<List<DeckCreateRequest>> PREMADE_DECKS = new WeakVertxMap<>(Legacy::getPremadeDecksPrivate);
 	private static final Promise<GetCardsResponse> GET_CARDS_RESPONSE_PROMISE = Promise.promise();
 	private static final AtomicBoolean CARDS_BUILT = new AtomicBoolean();
-
-	static {
-		String shortName = R__0001_Import_package_cards_into_database.class.getSimpleName();
-		var prefix = shortName.substring(0, 1);
-		Pair<MigrationVersion, String> info =
-				MigrationInfoHelper.extractVersionAndDescription(shortName, prefix, "__", new String[]{""}, true);
-		STATIC_CARDS_DATABASE_DESCRIPTION = info.getRight();
-	}
 
 	public static Future<BindableService> unauthenticatedCards() {
 		return Future.succeededFuture(new VertxUnauthenticatedCardsGrpc.UnauthenticatedCardsVertxImplBase() {
@@ -635,7 +622,7 @@ public class Legacy {
 		return validationReport;
 	}
 
-	private static Future<DecksPutResponse> createDeck(String userId, DeckCreateRequest request) {
+	public static Future<DecksPutResponse> createDeck(String userId, DeckCreateRequest request) {
 		if (request.getInventoryIds() != null && !request.getInventoryIds().isEmpty()) {
 			return Future.failedFuture("cannot specify inventory ids");
 		}
@@ -683,7 +670,7 @@ public class Legacy {
 		CardCatalogue.loadCardsFromPackage();
 		List<String> deckLists;
 		try (ScanResult scanResult = new ClassGraph()
-				.acceptPaths("decklists/current").scan()) {
+				.acceptPaths("spellsource/decklists/current").scan()) {
 			deckLists = scanResult
 					.getResourcesWithExtension(".txt")
 					.stream()

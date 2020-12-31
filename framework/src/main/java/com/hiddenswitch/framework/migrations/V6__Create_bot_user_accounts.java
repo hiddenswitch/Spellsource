@@ -10,6 +10,12 @@ import org.jooq.impl.DSL;
 import java.util.UUID;
 
 public class V6__Create_bot_user_accounts extends BaseJavaMigration {
+
+	@Override
+	public Integer getChecksum() {
+		return 1;
+	}
+
 	@Override
 	public void migrate(Context context) throws Exception {
 		Accounts.createUser("botcharles@hiddenswitch.com", "Botcharles", UUID.randomUUID().toString())
