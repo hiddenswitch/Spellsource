@@ -42,6 +42,7 @@ public class Games {
 			.comparing(net.demilich.metastone.game.entities.Entity::getZone)
 			.thenComparingInt(net.demilich.metastone.game.entities.Entity::getIndex);
 	public static final String GAMES_CREATE_GAME_SESSION = "Games.createGameSession";
+	public static final long CREATE_GAME_TIMEOUT_MILLIS = 20000L;
 
 	/**
 	 * Creates a match without entering a queue entry between two users.
@@ -55,7 +56,7 @@ public class Games {
 		var eb = Vertx.currentContext().owner().eventBus();
 
 		return eb.<CreateGameSessionResponse>request(GAMES_CREATE_GAME_SESSION, request, new DeliveryOptions()
-				.setSendTimeout(8000L))
+				.setSendTimeout(CREATE_GAME_TIMEOUT_MILLIS))
 				.map(response -> new MatchCreateResponse(response.body()));
 	}
 
