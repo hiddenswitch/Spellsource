@@ -25,6 +25,7 @@ import io.vertx.junit5.VertxTestContext;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.testcontainers.containers.ToxiproxyContainer;
@@ -395,7 +396,8 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
-	@Timeout(value = 400, timeUnit = TimeUnit.SECONDS)
+	@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
+	@Timeout(value = 95, timeUnit = TimeUnit.SECONDS)
 	public void testManyClientsMatchmakeAcrossInstances(VertxTestContext testContext) {
 		var vertx = Vertx.vertx();
 		// dedicated clients vertx
