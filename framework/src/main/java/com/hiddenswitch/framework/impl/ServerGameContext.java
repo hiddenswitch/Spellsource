@@ -61,8 +61,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vertx.core.CompositeFuture.all;
 import static io.vertx.ext.sync.Sync.await;
 import static io.vertx.ext.sync.Sync.fiber;
 import static java.util.stream.Collectors.toList;
@@ -86,11 +88,11 @@ public class ServerGameContext extends GameContext implements Server {
 	private final transient Queue<SuspendableAction1<ServerGameContext>> onGameEndHandlers = new ConcurrentLinkedQueue<>();
 	private final transient Map<Integer, Promise<Client>> clientsReady = new ConcurrentHashMap<>();
 	private final transient List<Client> clients = new ArrayList<>();
-	private final transient Deque<Promise> registrationsReady = new ConcurrentLinkedDeque<>();
+	private final transient List<Promise> registrationsReady = new ArrayList<>();
 	private final transient Promise<Void> initialization = Promise.promise();
 	private transient Long turnTimerId;
-	private final Deque<Configuration> playerConfigurations = new ConcurrentLinkedDeque<>();
-	private final Deque<Closeable> closeables = new ConcurrentLinkedDeque<>();
+	private final List<Configuration> playerConfigurations = new ArrayList<>();
+	private final List<Closeable> closeables = new ArrayList<>();
 	private final String gameId;
 	private final Deque<Trigger> gameTriggers = new ConcurrentLinkedDeque<>();
 	private final Scheduler scheduler;
@@ -201,7 +203,7 @@ public class ServerGameContext extends GameContext implements Server {
 					closeableBehaviour = Promise::complete;
 					// Does not have a client representing it
 				} else {
-					// Connect to the websocket representing this user by connecting to its handler advertised on the event bus
+					// Connect to the GRPC stream representing this user by connecting to its handler advertised on the event bus
 					var bus = Vertx.currentContext().owner().eventBus();
 					var consumer = toClient(userId, bus);
 					// By using a publisher, we do not require that there be a working connection while sending
@@ -322,8 +324,7 @@ public class ServerGameContext extends GameContext implements Server {
 	 */
 	static @NotNull MessageConsumer<String> registerInGame(@NotNull String thisGameId, @NotNull String userId) {
 		var eb = Vertx.currentContext().owner().eventBus();
-		var consumer = eb.consumer(userId + ".isInGame", (Message<String> req) -> req.reply(thisGameId));
-		return consumer;
+		return eb.consumer(userId + ".isInGame", (Message<String> req) -> req.reply(thisGameId));
 	}
 
 
@@ -1104,15 +1105,11 @@ public class ServerGameContext extends GameContext implements Server {
 	 * Returns once the handlers have successfully registered on this instance
 	 */
 	@Suspendable
-	public void awaitReadyForConnections() {
+	public Future<CompositeFuture> handlersReady() {
 		if (!isRunning()) {
 			throw new IllegalStateException("must call play(true)");
 		}
-		var join = CompositeFuture.join(Stream.concat(
-				registrationsReady.stream().map(Promise::future),
-				Stream.of(initialization.future())
-		).collect(toList()));
-		var res = await(join::onComplete, REGISTRATION_TIMEOUT);
+		return all(registrationsReady.stream().map(Promise::future).collect(Collectors.toUnmodifiableList()));
 	}
 
 	/**

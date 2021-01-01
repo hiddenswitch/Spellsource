@@ -153,6 +153,7 @@ dependencies {
     implementation group: 'org.graalvm.js', name: 'js', version: '20.2.0'
     implementation 'io.jaegertracing:jaeger-client:1.5.0'
     implementation "org.flywaydb:flyway-core:$flywayVersion"
+    implementation 'org.redisson:redisson:3.14.1'
 
     testImplementation(project(':testcontainers'))
     testImplementation project(':testutils')
@@ -442,6 +443,10 @@ protobuf {
             }
         }
     }
+}
+
+compileJava {
+    dependsOn += [':framework:generateProto']
 }
 
 test {

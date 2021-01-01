@@ -1,9 +1,6 @@
 package com.hiddenswitch.framework.tests.applications;
 
-import com.hiddenswitch.containers.KeycloakContainer;
-import com.hiddenswitch.containers.MongoDBContainer;
-import com.hiddenswitch.containers.PostgresSupabaseContainer;
-import com.hiddenswitch.containers.RealtimeContainer;
+import com.hiddenswitch.containers.*;
 import com.hiddenswitch.framework.Application;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.rpc.ServerConfiguration;
@@ -41,6 +38,9 @@ public class StandaloneApplication extends Application {
 			.withEnv("DB_USER", PGUSER)
 			.withEnv("DB_PASSWORD", PGPASSWORD)
 			.withEnv("DB_PORT", Integer.toString(PGPORT))
+			.withReuse(false);
+	public static RedisContainer REDIS = new RedisContainer()
+			.withNetwork(Network.SHARED)
 			.withReuse(false);
 	protected static AtomicBoolean STARTED = new AtomicBoolean(false);
 
@@ -86,12 +86,22 @@ public class StandaloneApplication extends Application {
 			configuration.setMatchmaking(ServerConfiguration.MatchmakingConfiguration.newBuilder()
 					.setMaxTicketsToProcess(100)
 					.setScanFrequencyMillis(1200)
-					.setEnqueueLockTimeoutMillis(400).build());
+					.setEnqueueLockTimeoutMillis(800).build());
+		}
+		if (!configuration.hasRedis()) {
+			Startables.deepStart(Stream.of(REDIS)).join();
+			configuration.setRedis(ServerConfiguration.RedisConfiguration.newBuilder()
+					.setUri(REDIS.getRedisUrl())
+					.build());
 		}
 		if (!configuration.hasApplication()) {
 			configuration.setApplication(ServerConfiguration.ApplicationConfiguration.newBuilder()
 					.setUseBroadcaster(true)
 					.build());
+		}
+		if (!configuration.hasDecks()) {
+			configuration.setDecks(ServerConfiguration.DecksConfiguration.newBuilder()
+					.setCachedDeckTimeToLiveMinutes(60L).build());
 		}
 
 		// set the configuration so far so that migrations pick up on it

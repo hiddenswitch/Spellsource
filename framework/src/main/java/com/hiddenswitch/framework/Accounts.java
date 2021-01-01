@@ -448,7 +448,7 @@ public class Accounts {
 
 	@NotNull
 	private static CredentialRepresentation getPasswordCredential(String password) {
-		var credentialModel = PasswordCredentialModel.createFromValues("scrypt", new byte[0], 1, SCryptUtil.scrypt(password, 16384, 8, 1));
+		var credentialModel = PasswordCredentialModel.createFromValues("scrypt", new byte[0], 1, SCryptUtil.scrypt(password, 2048, 8, 1));
 		var credential = ModelToRepresentation.toRepresentation(credentialModel);
 		credential.setTemporary(false);
 		return credential;

@@ -15,11 +15,10 @@ import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row3;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -35,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DeckShares extends TableImpl<DeckSharesRecord> {
 
-    private static final long serialVersionUID = -1927976009;
+    private static final long serialVersionUID = -472963270;
 
     /**
      * The reference instance of <code>spellsource.deck_shares</code>
@@ -51,11 +50,6 @@ public class DeckShares extends TableImpl<DeckSharesRecord> {
     }
 
     /**
-     * The column <code>spellsource.deck_shares.id</code>.
-     */
-    public final TableField<DeckSharesRecord, Long> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).identity(true), this, "");
-
-    /**
      * The column <code>spellsource.deck_shares.deck_id</code>.
      */
     public final TableField<DeckSharesRecord, String> DECK_ID = createField(DSL.name("deck_id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
@@ -63,12 +57,12 @@ public class DeckShares extends TableImpl<DeckSharesRecord> {
     /**
      * The column <code>spellsource.deck_shares.share_recipient_id</code>.
      */
-    public final TableField<DeckSharesRecord, String> SHARE_RECIPIENT_ID = createField(DSL.name("share_recipient_id"), org.jooq.impl.SQLDataType.VARCHAR.nullable(false), this, "");
+    public final TableField<DeckSharesRecord, String> SHARE_RECIPIENT_ID = createField(DSL.name("share_recipient_id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>spellsource.deck_shares.trashed</code>.
+     * The column <code>spellsource.deck_shares.trashed_by_recipient</code>.
      */
-    public final TableField<DeckSharesRecord, Boolean> TRASHED = createField(DSL.name("trashed"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<DeckSharesRecord, Boolean> TRASHED_BY_RECIPIENT = createField(DSL.name("trashed_by_recipient"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     /**
      * Create a <code>spellsource.deck_shares</code> table reference
@@ -110,12 +104,7 @@ public class DeckShares extends TableImpl<DeckSharesRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.DECK_SHARES_TRASHED_IDX);
-    }
-
-    @Override
-    public Identity<DeckSharesRecord, Long> getIdentity() {
-        return Keys.IDENTITY_DECK_SHARES;
+        return Arrays.<Index>asList(Indexes.DECK_SHARES_TRASHED_BY_RECIPIENT_IDX);
     }
 
     @Override
@@ -125,7 +114,7 @@ public class DeckShares extends TableImpl<DeckSharesRecord> {
 
     @Override
     public List<UniqueKey<DeckSharesRecord>> getKeys() {
-        return Arrays.<UniqueKey<DeckSharesRecord>>asList(Keys.DECK_SHARES_PKEY, Keys.DECK_SHARES_DECK_ID_SHARE_RECIPIENT_ID_KEY);
+        return Arrays.<UniqueKey<DeckSharesRecord>>asList(Keys.DECK_SHARES_PKEY);
     }
 
     @Override
@@ -168,11 +157,11 @@ public class DeckShares extends TableImpl<DeckSharesRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row3 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Long, String, String, Boolean> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row3<String, String, Boolean> fieldsRow() {
+        return (Row3) super.fieldsRow();
     }
 }

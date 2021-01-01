@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework.impl;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.MoreObjects;
 import com.hiddenswitch.framework.Games;
 import net.demilich.metastone.game.cards.AttributeMap;
@@ -16,6 +17,7 @@ public class Configuration implements Serializable, Cloneable {
 	private String name;
 	private AttributeMap playerAttributes = new AttributeMap();
 	@JsonDeserialize(as = CollectionDeck.class)
+	@JsonSerialize(as = CollectionDeck.class)
 	private Deck deck;
 	private boolean isBot;
 	private long noActivityTimeout = Games.getDefaultNoActivityTimeout();

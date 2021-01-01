@@ -12,6 +12,7 @@ import io.github.jklingsporn.vertx.jooq.shared.reactive.AbstractReactiveVertxDAO
 import java.util.Collection;
 
 import org.jooq.Configuration;
+import org.jooq.Record2;
 
 
 import java.util.List;
@@ -21,33 +22,19 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
  * indicates a deck shared to a player
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class DeckSharesDao extends AbstractReactiveVertxDAO<DeckSharesRecord, com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares, Long, Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares>>, Future<com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares>, Future<Integer>, Future<Long>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<DeckSharesRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares,Long> {
+public class DeckSharesDao extends AbstractReactiveVertxDAO<DeckSharesRecord, com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares, Record2<String, String>, Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares>>, Future<com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares>, Future<Integer>, Future<Record2<String, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<DeckSharesRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares,Record2<String, String>> {
 
     /**
      * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
      * @param delegate A configured AsyncSQLClient that is used for query execution
      */
     public DeckSharesDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(DeckShares.DECK_SHARES, com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares.class, new ReactiveClassicQueryExecutor<DeckSharesRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares,Long>(configuration,delegate,com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getDeckSharesMapper()));
+        super(DeckShares.DECK_SHARES, com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares.class, new ReactiveClassicQueryExecutor<DeckSharesRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getDeckSharesMapper()));
     }
 
     @Override
-    protected Long getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares object) {
-        return object.getId();
-    }
-
-    /**
-     * Find records that have <code>deck_id IN (values)</code> asynchronously
-     */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares>> findManyByDeckId(Collection<String> values) {
-        return findManyByCondition(DeckShares.DECK_SHARES.DECK_ID.in(values));
-    }
-
-    /**
-     * Find records that have <code>deck_id IN (values)</code> asynchronously limited by the given limit
-     */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares>> findManyByDeckId(Collection<String> values, int limit) {
-        return findManyByCondition(DeckShares.DECK_SHARES.DECK_ID.in(values),limit);
+    protected Record2<String, String> getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares object) {
+        return compositeKeyRecord(object.getDeckId(), object.getShareRecipientId());
     }
 
     /**
@@ -65,21 +52,21 @@ public class DeckSharesDao extends AbstractReactiveVertxDAO<DeckSharesRecord, co
     }
 
     /**
-     * Find records that have <code>trashed IN (values)</code> asynchronously
+     * Find records that have <code>trashed_by_recipient IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares>> findManyByTrashed(Collection<Boolean> values) {
-        return findManyByCondition(DeckShares.DECK_SHARES.TRASHED.in(values));
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares>> findManyByTrashedByRecipient(Collection<Boolean> values) {
+        return findManyByCondition(DeckShares.DECK_SHARES.TRASHED_BY_RECIPIENT.in(values));
     }
 
     /**
-     * Find records that have <code>trashed IN (values)</code> asynchronously limited by the given limit
+     * Find records that have <code>trashed_by_recipient IN (values)</code> asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares>> findManyByTrashed(Collection<Boolean> values, int limit) {
-        return findManyByCondition(DeckShares.DECK_SHARES.TRASHED.in(values),limit);
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares>> findManyByTrashedByRecipient(Collection<Boolean> values, int limit) {
+        return findManyByCondition(DeckShares.DECK_SHARES.TRASHED_BY_RECIPIENT.in(values),limit);
     }
 
     @Override
-    public ReactiveClassicQueryExecutor<DeckSharesRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares,Long> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<DeckSharesRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares,Long>) super.queryExecutor();
+    public ReactiveClassicQueryExecutor<DeckSharesRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares,Record2<String, String>> queryExecutor(){
+        return (ReactiveClassicQueryExecutor<DeckSharesRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares,Record2<String, String>>) super.queryExecutor();
     }
 }

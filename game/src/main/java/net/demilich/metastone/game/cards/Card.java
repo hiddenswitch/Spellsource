@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.cards;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hiddenswitch.spellsource.client.models.CardType;
 import com.hiddenswitch.spellsource.client.models.EntityType;
 import com.hiddenswitch.spellsource.client.models.Rarity;
@@ -190,6 +191,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return The base mana cost of a card.
 	 */
+	@JsonIgnore
 	public int getBaseManaCost() {
 		return getAttributeValue(Attribute.BASE_MANA_COST);
 	}
@@ -199,6 +201,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return The card ID as set by an aura, a permanent effect or in the description.
 	 */
+	@JsonIgnore
 	public String getCardId() {
 		String cardId = getAttributes().getOverrideCardId();
 		if (cardId == null) {
@@ -213,6 +216,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return
 	 */
+	@JsonIgnore
 	public String getOriginalCardId() {
 		return desc.getId();
 	}
@@ -222,6 +226,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return
 	 */
+	@JsonIgnore
 	public String getHero() {
 		return getDesc().getHero();
 	}
@@ -231,6 +236,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return The card set
 	 */
+	@JsonIgnore
 	public String getCardSet() {
 		return getDesc().getSet();
 	}
@@ -240,6 +246,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return The card sets
 	 */
+	@JsonIgnore
 	public String[] getCardSets() {
 		return getDesc().getSets();
 	}
@@ -249,6 +256,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return The card type
 	 */
+	@JsonIgnore
 	public CardType getCardType() {
 		return getDesc().getType();
 	}
@@ -258,6 +266,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return The hero class
 	 */
+	@JsonIgnore
 	public String getHeroClass() {
 		return (String) getAttributes().getOrDefault(Attribute.HERO_CLASS, getDesc().getHeroClass());
 	}
@@ -271,6 +280,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return The hero classes (the gang)
 	 */
+	@JsonIgnore
 	public String[] getHeroClasses() {
 		return getDesc().getHeroClasses();
 	}
@@ -292,6 +302,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return A copy of the card with no ID or owner (and therefore no location).
 	 */
 	@Override
+	@JsonIgnore
 	public Card getCopy() {
 		Card copy = clone();
 		copy.setId(IdFactory.UNASSIGNED);
@@ -576,6 +587,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return The target requirements
 	 */
+	@JsonIgnore
 	public TargetSelection getTargetSelection() {
 		return (TargetSelection) getAttributes().getOrDefault(Attribute.TARGET_SELECTION, getDesc().getTargetSelection() == null ? TargetSelection.NONE : getDesc().getTargetSelection());
 	}
@@ -735,6 +747,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return The card ID
 	 */
+	@JsonIgnore
 	public String getChooseBothCardId() {
 		return getDesc().getChooseBothCardId();
 	}
@@ -789,6 +802,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return The weapon card
 	 */
+	@JsonIgnore
 	public Card getWeapon() {
 		if (getDesc().getBattlecry() == null) {
 			return null;
@@ -898,6 +912,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *
 	 * @return
 	 */
+	@JsonIgnore
 	public ConditionDesc getCondition() {
 		return getDesc().getCondition();
 	}
@@ -932,27 +947,27 @@ public class Card extends Entity implements HasChooseOneActions {
 				(String) getAttribute(Attribute.RACE) :
 				getDesc().getRace());
 	}
-
+	@JsonIgnore
 	public int getAttack() {
 		return getAttributeValue(Attribute.ATTACK);
 	}
-
+	@JsonIgnore
 	public int getBonusAttack() {
 		return getAttributeValue(Attribute.ATTACK_BONUS);
 	}
-
+	@JsonIgnore
 	public int getHp() {
 		return getAttributeValue(Attribute.HP);
 	}
-
+	@JsonIgnore
 	public int getBonusHp() {
 		return getAttributeValue(Attribute.HP_BONUS);
 	}
-
+	@JsonIgnore
 	public int getBaseAttack() {
 		return getAttributeValue(Attribute.BASE_ATTACK);
 	}
-
+	@JsonIgnore
 	public int getBaseHp() {
 		return getAttributeValue(Attribute.BASE_HP);
 	}
@@ -973,7 +988,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	public boolean hasBattlecry() {
 		return getDesc().getBattlecry() != null;
 	}
-
+	@JsonIgnore
 	public String getBattlecryDescription(int index) {
 		if (index < -1 || index >= getChooseOneBattlecries().length) {
 			return null;
@@ -986,7 +1001,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		}
 		return getChooseOneBattlecries()[index].getDescription();
 	}
-
+	@JsonIgnore
 	public String getBattlecryName(int index) {
 		if (index == -1) {
 			return getDesc().getChooseBothBattlecry().getName();
@@ -1003,35 +1018,35 @@ public class Card extends Entity implements HasChooseOneActions {
 		final String name = getChooseOneBattlecries()[index].getName();
 		return name == null ? getBattlecryDescription(index) : name;
 	}
-
+	@JsonIgnore
 	public int getDamage() {
 		return getAttack();
 	}
-
+	@JsonIgnore
 	public int getBonusDamage() {
 		return getBonusAttack();
 	}
-
+	@JsonIgnore
 	public int getDurability() {
 		return getHp();
 	}
-
+	@JsonIgnore
 	public int getBonusDurability() {
 		return getBonusHp();
 	}
-
+	@JsonIgnore
 	public int getBaseDamage() {
 		return getBaseAttack();
 	}
-
+	@JsonIgnore
 	public int getBaseDurability() {
 		return getBaseHp();
 	}
-
+	@JsonIgnore
 	public int getArmor() {
 		return getAttributeValue(Attribute.ARMOR);
 	}
-
+	@JsonIgnore
 	public SpellDesc[] getGroup() {
 		return getDesc().getGroup();
 	}
@@ -1065,6 +1080,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return The value of the {@link Attribute#NAME} attribute, or the underlying {@link CardDesc#getName()} field.
 	 */
 	@Override
+	@JsonIgnore
 	public String getName() {
 		return (String) getAttributes().getOrDefault(Attribute.NAME, getDesc().getName());
 	}
@@ -1094,11 +1110,11 @@ public class Card extends Entity implements HasChooseOneActions {
 
 		return super.compareTo(o);
 	}
-
+	@JsonIgnore
 	public ConditionDesc getTargetSelectionCondition() {
 		return getDesc().getTargetSelectionCondition();
 	}
-
+	@JsonIgnore
 	public TargetSelection getTargetSelectionOverride() {
 		return getDesc().getTargetSelectionOverride();
 	}

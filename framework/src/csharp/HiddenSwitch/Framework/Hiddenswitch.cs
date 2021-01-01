@@ -26,78 +26,86 @@ namespace HiddenSwitch.Proto {
           string.Concat(
             "ChJoaWRkZW5zd2l0Y2gucHJvdG8SDGhpZGRlbnN3aXRjaBoeZ29vZ2xlL3By",
             "b3RvYnVmL3dyYXBwZXJzLnByb3RvGhtnb29nbGUvcHJvdG9idWYvZW1wdHku",
-            "cHJvdG8aEXNwZWxsc291cmNlLnByb3RvIpcJChNTZXJ2ZXJDb25maWd1cmF0",
+            "cHJvdG8aEXNwZWxsc291cmNlLnByb3RvIt8LChNTZXJ2ZXJDb25maWd1cmF0",
             "aW9uEkMKAnBnGAEgASgLMjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3Vy",
             "YXRpb24uUG9zdGdyZXNDb25maWd1cmF0aW9uEkkKCGtleWNsb2FrGAIgASgL",
             "MjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRpb24uS2V5Y2xvYWtD",
-            "b25maWd1cmF0aW9uEkkKCHJlYWx0aW1lGAQgASgLMjcuaGlkZGVuc3dpdGNo",
-            "LlNlcnZlckNvbmZpZ3VyYXRpb24uUmVhbHRpbWVDb25maWd1cmF0aW9uEk4K",
-            "EWdycGNDb25maWd1cmF0aW9uGAUgASgLMjMuaGlkZGVuc3dpdGNoLlNlcnZl",
-            "ckNvbmZpZ3VyYXRpb24uR3JwY0NvbmZpZ3VyYXRpb24STwoLbWF0Y2htYWtp",
-            "bmcYBiABKAsyOi5oaWRkZW5zd2l0Y2guU2VydmVyQ29uZmlndXJhdGlvbi5N",
-            "YXRjaG1ha2luZ0NvbmZpZ3VyYXRpb24STwoLYXBwbGljYXRpb24YByABKAsy",
-            "Oi5oaWRkZW5zd2l0Y2guU2VydmVyQ29uZmlndXJhdGlvbi5BcHBsaWNhdGlv",
-            "bkNvbmZpZ3VyYXRpb24aZQoVUG9zdGdyZXNDb25maWd1cmF0aW9uEgwKBGhv",
-            "c3QYASABKAkSDAoEcG9ydBgCIAEoBRIQCghkYXRhYmFzZRgDIAEoCRIMCgR1",
-            "c2VyGAQgASgJEhAKCHBhc3N3b3JkGAUgASgJGqkBChVLZXljbG9ha0NvbmZp",
-            "Z3VyYXRpb24SDwoHYXV0aFVybBgBIAEoCRIVCg1hZG1pblVzZXJuYW1lGAIg",
-            "ASgJEhUKDWFkbWluUGFzc3dvcmQYAyABKAkSEAoIY2xpZW50SWQYBCABKAkS",
-            "FAoMY2xpZW50U2VjcmV0GAUgASgJEhgKEHJlYWxtRGlzcGxheU5hbWUYBiAB",
-            "KAkSDwoHcmVhbG1JZBgHIAEoCRo+ChJSZWRpc0NvbmZpZ3VyYXRpb24SDAoE",
-            "aG9zdBgBIAEoCRIMCgRwb3J0GAIgASgFEgwKBHVzZXIYAyABKAkaJAoVUmVh",
-            "bHRpbWVDb25maWd1cmF0aW9uEgsKA3VyaRgBIAEoCRqHAQoRR3JwY0NvbmZp",
-            "Z3VyYXRpb24SIQoZc2VydmVyS2VlcEFsaXZlVGltZU1pbGxpcxgBIAEoAxIk",
-            "ChxzZXJ2ZXJLZWVwQWxpdmVUaW1lb3V0TWlsbGlzGAIgASgDEikKIXNlcnZl",
-            "clBlcm1pdEtlZXBBbGl2ZVdpdGhvdXRDYWxscxgDIAEoCBp2ChhNYXRjaG1h",
-            "a2luZ0NvbmZpZ3VyYXRpb24SIAoYZW5xdWV1ZUxvY2tUaW1lb3V0TWlsbGlz",
-            "GAEgASgDEhsKE3NjYW5GcmVxdWVuY3lNaWxsaXMYAiABKAMSGwoTbWF4VGlj",
-            "a2V0c1RvUHJvY2VzcxgDIAEoBRoyChhBcHBsaWNhdGlvbkNvbmZpZ3VyYXRp",
-            "b24SFgoOdXNlQnJvYWRjYXN0ZXIYASABKAhKBAgDEAQiKAoPR2V0Q2FyZHNS",
-            "ZXF1ZXN0EhUKDUlmX05vbmVfTWF0Y2gYASABKAkioQEKEEdldENhcmRzUmVz",
-            "cG9uc2USNwoHY29udGVudBgBIAEoCzImLmhpZGRlbnN3aXRjaC5HZXRDYXJk",
-            "c1Jlc3BvbnNlLkNvbnRlbnQSDwoHdmVyc2lvbhgCIAEoCRIQCghjYWNoZWRP",
-            "axgDIAEoCBoxCgdDb250ZW50EiYKBWNhcmRzGAEgAygLMhcuc3BlbGxzb3Vy",
-            "Y2UuQ2FyZFJlY29yZCI5CgxMb2dpblJlcXVlc3QSFwoPdXNlcm5hbWVPckVt",
-            "YWlsGAEgASgJEhAKCHBhc3N3b3JkGAIgASgJIkkKFENyZWF0ZUFjY291bnRS",
-            "ZXF1ZXN0Eg0KBWVtYWlsGAEgASgJEhAKCHVzZXJuYW1lGAIgASgJEhAKCHBh",
-            "c3N3b3JkGAMgASgJIiwKFUNoYW5nZVBhc3N3b3JkUmVxdWVzdBITCgtuZXdQ",
-            "YXNzd29yZBgBIAEoCSKCAQoSTG9naW5PckNyZWF0ZVJlcGx5Ej4KE2FjY2Vz",
-            "c1Rva2VuUmVzcG9uc2UYASABKAsyIS5oaWRkZW5zd2l0Y2guQWNjZXNzVG9r",
-            "ZW5SZXNwb25zZRIsCgp1c2VyRW50aXR5GAIgASgLMhguaGlkZGVuc3dpdGNo",
-            "LlVzZXJFbnRpdHkiJAoTQWNjZXNzVG9rZW5SZXNwb25zZRINCgV0b2tlbhgB",
-            "IAEoCSJPCgpVc2VyRW50aXR5EgoKAmlkGAEgASgJEg0KBWVtYWlsGAIgASgJ",
-            "EhAKCHVzZXJuYW1lGAogASgJEhQKDHByaXZhY3lUb2tlbhgLIAEoCSIhChJH",
-            "ZXRBY2NvdW50c1JlcXVlc3QSCwoDaWRzGAEgAygJIkIKEEdldEFjY291bnRz",
-            "UmVwbHkSLgoMdXNlckVudGl0aWVzGAEgAygLMhguaGlkZGVuc3dpdGNoLlVz",
-            "ZXJFbnRpdHkygwIKD1VuYXV0aGVudGljYXRlZBJXCg1DcmVhdGVBY2NvdW50",
-            "EiIuaGlkZGVuc3dpdGNoLkNyZWF0ZUFjY291bnRSZXF1ZXN0GiAuaGlkZGVu",
-            "c3dpdGNoLkxvZ2luT3JDcmVhdGVSZXBseSIAEkcKBUxvZ2luEhouaGlkZGVu",
-            "c3dpdGNoLkxvZ2luUmVxdWVzdBogLmhpZGRlbnN3aXRjaC5Mb2dpbk9yQ3Jl",
-            "YXRlUmVwbHkiABJOCgtWZXJpZnlUb2tlbhIhLmhpZGRlbnN3aXRjaC5BY2Nl",
-            "c3NUb2tlblJlc3BvbnNlGhouZ29vZ2xlLnByb3RvYnVmLkJvb2xWYWx1ZSIA",
-            "MmMKFFVuYXV0aGVudGljYXRlZENhcmRzEksKCEdldENhcmRzEh0uaGlkZGVu",
-            "c3dpdGNoLkdldENhcmRzUmVxdWVzdBoeLmhpZGRlbnN3aXRjaC5HZXRDYXJk",
-            "c1Jlc3BvbnNlIgAyzwIKCEFjY291bnRzEkYKCkdldEFjY291bnQSFi5nb29n",
-            "bGUucHJvdG9idWYuRW1wdHkaHi5oaWRkZW5zd2l0Y2guR2V0QWNjb3VudHNS",
-            "ZXBseSIAElEKC0dldEFjY291bnRzEiAuaGlkZGVuc3dpdGNoLkdldEFjY291",
-            "bnRzUmVxdWVzdBoeLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50c1JlcGx5IgAS",
-            "WQoOQ2hhbmdlUGFzc3dvcmQSIy5oaWRkZW5zd2l0Y2guQ2hhbmdlUGFzc3dv",
-            "cmRSZXF1ZXN0GiAuaGlkZGVuc3dpdGNoLkxvZ2luT3JDcmVhdGVSZXBseSIA",
-            "Ek0KGVJlcXVlc3RQYXNzd29yZFJlc2V0RW1haWwSFi5nb29nbGUucHJvdG9i",
-            "dWYuRW1wdHkaFi5nb29nbGUucHJvdG9idWYuRW1wdHkiADJMCgVHYW1lcxJD",
-            "CglJc0luTWF0Y2gSFi5nb29nbGUucHJvdG9idWYuRW1wdHkaHC5nb29nbGUu",
-            "cHJvdG9idWYuU3RyaW5nVmFsdWUiAEI+Ch5jb20uaGlkZGVuc3dpdGNoLmZy",
-            "YW1ld29yay5ycGNCBVByb3RvUAGqAhJIaWRkZW5Td2l0Y2guUHJvdG9iBnBy",
-            "b3RvMw=="));
+            "b25maWd1cmF0aW9uEkMKBXJlZGlzGAMgASgLMjQuaGlkZGVuc3dpdGNoLlNl",
+            "cnZlckNvbmZpZ3VyYXRpb24uUmVkaXNDb25maWd1cmF0aW9uEkkKCHJlYWx0",
+            "aW1lGAQgASgLMjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRpb24u",
+            "UmVhbHRpbWVDb25maWd1cmF0aW9uEk4KEWdycGNDb25maWd1cmF0aW9uGAUg",
+            "ASgLMjMuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRpb24uR3JwY0Nv",
+            "bmZpZ3VyYXRpb24STwoLbWF0Y2htYWtpbmcYBiABKAsyOi5oaWRkZW5zd2l0",
+            "Y2guU2VydmVyQ29uZmlndXJhdGlvbi5NYXRjaG1ha2luZ0NvbmZpZ3VyYXRp",
+            "b24STwoLYXBwbGljYXRpb24YByABKAsyOi5oaWRkZW5zd2l0Y2guU2VydmVy",
+            "Q29uZmlndXJhdGlvbi5BcHBsaWNhdGlvbkNvbmZpZ3VyYXRpb24SQwoFZGVj",
+            "a3MYCCABKAsyNC5oaWRkZW5zd2l0Y2guU2VydmVyQ29uZmlndXJhdGlvbi5E",
+            "ZWNrc0NvbmZpZ3VyYXRpb24aZQoVUG9zdGdyZXNDb25maWd1cmF0aW9uEgwK",
+            "BGhvc3QYASABKAkSDAoEcG9ydBgCIAEoBRIQCghkYXRhYmFzZRgDIAEoCRIM",
+            "CgR1c2VyGAQgASgJEhAKCHBhc3N3b3JkGAUgASgJGqkBChVLZXljbG9ha0Nv",
+            "bmZpZ3VyYXRpb24SDwoHYXV0aFVybBgBIAEoCRIVCg1hZG1pblVzZXJuYW1l",
+            "GAIgASgJEhUKDWFkbWluUGFzc3dvcmQYAyABKAkSEAoIY2xpZW50SWQYBCAB",
+            "KAkSFAoMY2xpZW50U2VjcmV0GAUgASgJEhgKEHJlYWxtRGlzcGxheU5hbWUY",
+            "BiABKAkSDwoHcmVhbG1JZBgHIAEoCRrGAQoSUmVkaXNDb25maWd1cmF0aW9u",
+            "ElkKDGhvc3RQb3J0VXNlchgBIAEoCzJBLmhpZGRlbnN3aXRjaC5TZXJ2ZXJD",
+            "b25maWd1cmF0aW9uLlJlZGlzQ29uZmlndXJhdGlvbi5Ib3N0UG9ydFVzZXJI",
+            "ABINCgN1cmkYAiABKAlIABo4CgxIb3N0UG9ydFVzZXISDAoEaG9zdBgBIAEo",
+            "CRIMCgRwb3J0GAIgASgFEgwKBHVzZXIYAyABKAlCDAoKY29ubmVjdGlvbhok",
+            "ChVSZWFsdGltZUNvbmZpZ3VyYXRpb24SCwoDdXJpGAEgASgJGocBChFHcnBj",
+            "Q29uZmlndXJhdGlvbhIhChlzZXJ2ZXJLZWVwQWxpdmVUaW1lTWlsbGlzGAEg",
+            "ASgDEiQKHHNlcnZlcktlZXBBbGl2ZVRpbWVvdXRNaWxsaXMYAiABKAMSKQoh",
+            "c2VydmVyUGVybWl0S2VlcEFsaXZlV2l0aG91dENhbGxzGAMgASgIGnYKGE1h",
+            "dGNobWFraW5nQ29uZmlndXJhdGlvbhIgChhlbnF1ZXVlTG9ja1RpbWVvdXRN",
+            "aWxsaXMYASABKAMSGwoTc2NhbkZyZXF1ZW5jeU1pbGxpcxgCIAEoAxIbChNt",
+            "YXhUaWNrZXRzVG9Qcm9jZXNzGAMgASgFGjkKEkRlY2tzQ29uZmlndXJhdGlv",
+            "bhIjChtjYWNoZWREZWNrVGltZVRvTGl2ZU1pbnV0ZXMYASABKAMaMgoYQXBw",
+            "bGljYXRpb25Db25maWd1cmF0aW9uEhYKDnVzZUJyb2FkY2FzdGVyGAEgASgI",
+            "IigKD0dldENhcmRzUmVxdWVzdBIVCg1JZl9Ob25lX01hdGNoGAEgASgJIqEB",
+            "ChBHZXRDYXJkc1Jlc3BvbnNlEjcKB2NvbnRlbnQYASABKAsyJi5oaWRkZW5z",
+            "d2l0Y2guR2V0Q2FyZHNSZXNwb25zZS5Db250ZW50Eg8KB3ZlcnNpb24YAiAB",
+            "KAkSEAoIY2FjaGVkT2sYAyABKAgaMQoHQ29udGVudBImCgVjYXJkcxgBIAMo",
+            "CzIXLnNwZWxsc291cmNlLkNhcmRSZWNvcmQiOQoMTG9naW5SZXF1ZXN0EhcK",
+            "D3VzZXJuYW1lT3JFbWFpbBgBIAEoCRIQCghwYXNzd29yZBgCIAEoCSJJChRD",
+            "cmVhdGVBY2NvdW50UmVxdWVzdBINCgVlbWFpbBgBIAEoCRIQCgh1c2VybmFt",
+            "ZRgCIAEoCRIQCghwYXNzd29yZBgDIAEoCSIsChVDaGFuZ2VQYXNzd29yZFJl",
+            "cXVlc3QSEwoLbmV3UGFzc3dvcmQYASABKAkiggEKEkxvZ2luT3JDcmVhdGVS",
+            "ZXBseRI+ChNhY2Nlc3NUb2tlblJlc3BvbnNlGAEgASgLMiEuaGlkZGVuc3dp",
+            "dGNoLkFjY2Vzc1Rva2VuUmVzcG9uc2USLAoKdXNlckVudGl0eRgCIAEoCzIY",
+            "LmhpZGRlbnN3aXRjaC5Vc2VyRW50aXR5IiQKE0FjY2Vzc1Rva2VuUmVzcG9u",
+            "c2USDQoFdG9rZW4YASABKAkiTwoKVXNlckVudGl0eRIKCgJpZBgBIAEoCRIN",
+            "CgVlbWFpbBgCIAEoCRIQCgh1c2VybmFtZRgKIAEoCRIUCgxwcml2YWN5VG9r",
+            "ZW4YCyABKAkiIQoSR2V0QWNjb3VudHNSZXF1ZXN0EgsKA2lkcxgBIAMoCSJC",
+            "ChBHZXRBY2NvdW50c1JlcGx5Ei4KDHVzZXJFbnRpdGllcxgBIAMoCzIYLmhp",
+            "ZGRlbnN3aXRjaC5Vc2VyRW50aXR5MoMCCg9VbmF1dGhlbnRpY2F0ZWQSVwoN",
+            "Q3JlYXRlQWNjb3VudBIiLmhpZGRlbnN3aXRjaC5DcmVhdGVBY2NvdW50UmVx",
+            "dWVzdBogLmhpZGRlbnN3aXRjaC5Mb2dpbk9yQ3JlYXRlUmVwbHkiABJHCgVM",
+            "b2dpbhIaLmhpZGRlbnN3aXRjaC5Mb2dpblJlcXVlc3QaIC5oaWRkZW5zd2l0",
+            "Y2guTG9naW5PckNyZWF0ZVJlcGx5IgASTgoLVmVyaWZ5VG9rZW4SIS5oaWRk",
+            "ZW5zd2l0Y2guQWNjZXNzVG9rZW5SZXNwb25zZRoaLmdvb2dsZS5wcm90b2J1",
+            "Zi5Cb29sVmFsdWUiADJjChRVbmF1dGhlbnRpY2F0ZWRDYXJkcxJLCghHZXRD",
+            "YXJkcxIdLmhpZGRlbnN3aXRjaC5HZXRDYXJkc1JlcXVlc3QaHi5oaWRkZW5z",
+            "d2l0Y2guR2V0Q2FyZHNSZXNwb25zZSIAMs8CCghBY2NvdW50cxJGCgpHZXRB",
+            "Y2NvdW50EhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5Gh4uaGlkZGVuc3dpdGNo",
+            "LkdldEFjY291bnRzUmVwbHkiABJRCgtHZXRBY2NvdW50cxIgLmhpZGRlbnN3",
+            "aXRjaC5HZXRBY2NvdW50c1JlcXVlc3QaHi5oaWRkZW5zd2l0Y2guR2V0QWNj",
+            "b3VudHNSZXBseSIAElkKDkNoYW5nZVBhc3N3b3JkEiMuaGlkZGVuc3dpdGNo",
+            "LkNoYW5nZVBhc3N3b3JkUmVxdWVzdBogLmhpZGRlbnN3aXRjaC5Mb2dpbk9y",
+            "Q3JlYXRlUmVwbHkiABJNChlSZXF1ZXN0UGFzc3dvcmRSZXNldEVtYWlsEhYu",
+            "Z29vZ2xlLnByb3RvYnVmLkVtcHR5GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5",
+            "IgAyTAoFR2FtZXMSQwoJSXNJbk1hdGNoEhYuZ29vZ2xlLnByb3RvYnVmLkVt",
+            "cHR5GhwuZ29vZ2xlLnByb3RvYnVmLlN0cmluZ1ZhbHVlIgBCPgoeY29tLmhp",
+            "ZGRlbnN3aXRjaC5mcmFtZXdvcmsucnBjQgVQcm90b1ABqgISSGlkZGVuU3dp",
+            "dGNoLlByb3RvYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, global::Spellsource.Proto.SpellsourceReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Parser, new[]{ "Pg", "Keycloak", "Realtime", "GrpcConfiguration", "Matchmaking", "Application" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration.Parser, new[]{ "Host", "Port", "Database", "User", "Password" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Parser, new[]{ "Pg", "Keycloak", "Redis", "Realtime", "GrpcConfiguration", "Matchmaking", "Application", "Decks" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration.Parser, new[]{ "Host", "Port", "Database", "User", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration.Parser, new[]{ "AuthUrl", "AdminUsername", "AdminPassword", "ClientId", "ClientSecret", "RealmDisplayName", "RealmId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Parser, new[]{ "Host", "Port", "User" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Parser, new[]{ "HostPortUser", "Uri" }, new[]{ "Connection" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser), global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser.Parser, new[]{ "Host", "Port", "User" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration.Parser, new[]{ "Uri" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration.Parser, new[]{ "ServerKeepAliveTimeMillis", "ServerKeepAliveTimeoutMillis", "ServerPermitKeepAliveWithoutCalls" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration.Parser, new[]{ "EnqueueLockTimeoutMillis", "ScanFrequencyMillis", "MaxTicketsToProcess" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.DecksConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.DecksConfiguration.Parser, new[]{ "CachedDeckTimeToLiveMinutes" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.ApplicationConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.ApplicationConfiguration.Parser, new[]{ "UseBroadcaster" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsRequest), global::HiddenSwitch.Proto.GetCardsRequest.Parser, new[]{ "IfNoneMatch" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsResponse), global::HiddenSwitch.Proto.GetCardsResponse.Parser, new[]{ "Content", "Version", "CachedOk" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsResponse.Types.Content), global::HiddenSwitch.Proto.GetCardsResponse.Types.Content.Parser, new[]{ "Cards" }, null, null, null, null)}),
@@ -150,10 +158,12 @@ namespace HiddenSwitch.Proto {
     public ServerConfiguration(ServerConfiguration other) : this() {
       pg_ = other.pg_ != null ? other.pg_.Clone() : null;
       keycloak_ = other.keycloak_ != null ? other.keycloak_.Clone() : null;
+      redis_ = other.redis_ != null ? other.redis_.Clone() : null;
       realtime_ = other.realtime_ != null ? other.realtime_.Clone() : null;
       grpcConfiguration_ = other.grpcConfiguration_ != null ? other.grpcConfiguration_.Clone() : null;
       matchmaking_ = other.matchmaking_ != null ? other.matchmaking_.Clone() : null;
       application_ = other.application_ != null ? other.application_.Clone() : null;
+      decks_ = other.decks_ != null ? other.decks_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -181,6 +191,17 @@ namespace HiddenSwitch.Proto {
       get { return keycloak_; }
       set {
         keycloak_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "redis" field.</summary>
+    public const int RedisFieldNumber = 3;
+    private global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration redis_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration Redis {
+      get { return redis_; }
+      set {
+        redis_ = value;
       }
     }
 
@@ -228,6 +249,17 @@ namespace HiddenSwitch.Proto {
       }
     }
 
+    /// <summary>Field number for the "decks" field.</summary>
+    public const int DecksFieldNumber = 8;
+    private global::HiddenSwitch.Proto.ServerConfiguration.Types.DecksConfiguration decks_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::HiddenSwitch.Proto.ServerConfiguration.Types.DecksConfiguration Decks {
+      get { return decks_; }
+      set {
+        decks_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as ServerConfiguration);
@@ -243,10 +275,12 @@ namespace HiddenSwitch.Proto {
       }
       if (!object.Equals(Pg, other.Pg)) return false;
       if (!object.Equals(Keycloak, other.Keycloak)) return false;
+      if (!object.Equals(Redis, other.Redis)) return false;
       if (!object.Equals(Realtime, other.Realtime)) return false;
       if (!object.Equals(GrpcConfiguration, other.GrpcConfiguration)) return false;
       if (!object.Equals(Matchmaking, other.Matchmaking)) return false;
       if (!object.Equals(Application, other.Application)) return false;
+      if (!object.Equals(Decks, other.Decks)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -255,10 +289,12 @@ namespace HiddenSwitch.Proto {
       int hash = 1;
       if (pg_ != null) hash ^= Pg.GetHashCode();
       if (keycloak_ != null) hash ^= Keycloak.GetHashCode();
+      if (redis_ != null) hash ^= Redis.GetHashCode();
       if (realtime_ != null) hash ^= Realtime.GetHashCode();
       if (grpcConfiguration_ != null) hash ^= GrpcConfiguration.GetHashCode();
       if (matchmaking_ != null) hash ^= Matchmaking.GetHashCode();
       if (application_ != null) hash ^= Application.GetHashCode();
+      if (decks_ != null) hash ^= Decks.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -283,6 +319,10 @@ namespace HiddenSwitch.Proto {
         output.WriteRawTag(18);
         output.WriteMessage(Keycloak);
       }
+      if (redis_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Redis);
+      }
       if (realtime_ != null) {
         output.WriteRawTag(34);
         output.WriteMessage(Realtime);
@@ -298,6 +338,10 @@ namespace HiddenSwitch.Proto {
       if (application_ != null) {
         output.WriteRawTag(58);
         output.WriteMessage(Application);
+      }
+      if (decks_ != null) {
+        output.WriteRawTag(66);
+        output.WriteMessage(Decks);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -316,6 +360,10 @@ namespace HiddenSwitch.Proto {
         output.WriteRawTag(18);
         output.WriteMessage(Keycloak);
       }
+      if (redis_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Redis);
+      }
       if (realtime_ != null) {
         output.WriteRawTag(34);
         output.WriteMessage(Realtime);
@@ -332,6 +380,10 @@ namespace HiddenSwitch.Proto {
         output.WriteRawTag(58);
         output.WriteMessage(Application);
       }
+      if (decks_ != null) {
+        output.WriteRawTag(66);
+        output.WriteMessage(Decks);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -347,6 +399,9 @@ namespace HiddenSwitch.Proto {
       if (keycloak_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Keycloak);
       }
+      if (redis_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Redis);
+      }
       if (realtime_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Realtime);
       }
@@ -358,6 +413,9 @@ namespace HiddenSwitch.Proto {
       }
       if (application_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Application);
+      }
+      if (decks_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Decks);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -382,6 +440,12 @@ namespace HiddenSwitch.Proto {
         }
         Keycloak.MergeFrom(other.Keycloak);
       }
+      if (other.redis_ != null) {
+        if (redis_ == null) {
+          Redis = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration();
+        }
+        Redis.MergeFrom(other.Redis);
+      }
       if (other.realtime_ != null) {
         if (realtime_ == null) {
           Realtime = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration();
@@ -405,6 +469,12 @@ namespace HiddenSwitch.Proto {
           Application = new global::HiddenSwitch.Proto.ServerConfiguration.Types.ApplicationConfiguration();
         }
         Application.MergeFrom(other.Application);
+      }
+      if (other.decks_ != null) {
+        if (decks_ == null) {
+          Decks = new global::HiddenSwitch.Proto.ServerConfiguration.Types.DecksConfiguration();
+        }
+        Decks.MergeFrom(other.Decks);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -434,6 +504,13 @@ namespace HiddenSwitch.Proto {
             input.ReadMessage(Keycloak);
             break;
           }
+          case 26: {
+            if (redis_ == null) {
+              Redis = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration();
+            }
+            input.ReadMessage(Redis);
+            break;
+          }
           case 34: {
             if (realtime_ == null) {
               Realtime = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration();
@@ -460,6 +537,13 @@ namespace HiddenSwitch.Proto {
               Application = new global::HiddenSwitch.Proto.ServerConfiguration.Types.ApplicationConfiguration();
             }
             input.ReadMessage(Application);
+            break;
+          }
+          case 66: {
+            if (decks_ == null) {
+              Decks = new global::HiddenSwitch.Proto.ServerConfiguration.Types.DecksConfiguration();
+            }
+            input.ReadMessage(Decks);
             break;
           }
         }
@@ -490,6 +574,13 @@ namespace HiddenSwitch.Proto {
             input.ReadMessage(Keycloak);
             break;
           }
+          case 26: {
+            if (redis_ == null) {
+              Redis = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration();
+            }
+            input.ReadMessage(Redis);
+            break;
+          }
           case 34: {
             if (realtime_ == null) {
               Realtime = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration();
@@ -516,6 +607,13 @@ namespace HiddenSwitch.Proto {
               Application = new global::HiddenSwitch.Proto.ServerConfiguration.Types.ApplicationConfiguration();
             }
             input.ReadMessage(Application);
+            break;
+          }
+          case 66: {
+            if (decks_ == null) {
+              Decks = new global::HiddenSwitch.Proto.ServerConfiguration.Types.DecksConfiguration();
+            }
+            input.ReadMessage(Decks);
             break;
           }
         }
@@ -1263,9 +1361,15 @@ namespace HiddenSwitch.Proto {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public RedisConfiguration(RedisConfiguration other) : this() {
-          host_ = other.host_;
-          port_ = other.port_;
-          user_ = other.user_;
+          switch (other.ConnectionCase) {
+            case ConnectionOneofCase.HostPortUser:
+              HostPortUser = other.HostPortUser.Clone();
+              break;
+            case ConnectionOneofCase.Uri:
+              Uri = other.Uri;
+              break;
+          }
+
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -1274,37 +1378,45 @@ namespace HiddenSwitch.Proto {
           return new RedisConfiguration(this);
         }
 
-        /// <summary>Field number for the "host" field.</summary>
-        public const int HostFieldNumber = 1;
-        private string host_ = "";
+        /// <summary>Field number for the "hostPortUser" field.</summary>
+        public const int HostPortUserFieldNumber = 1;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public string Host {
-          get { return host_; }
+        public global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser HostPortUser {
+          get { return connectionCase_ == ConnectionOneofCase.HostPortUser ? (global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser) connection_ : null; }
           set {
-            host_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            connection_ = value;
+            connectionCase_ = value == null ? ConnectionOneofCase.None : ConnectionOneofCase.HostPortUser;
           }
         }
 
-        /// <summary>Field number for the "port" field.</summary>
-        public const int PortFieldNumber = 2;
-        private int port_;
+        /// <summary>Field number for the "uri" field.</summary>
+        public const int UriFieldNumber = 2;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public int Port {
-          get { return port_; }
+        public string Uri {
+          get { return connectionCase_ == ConnectionOneofCase.Uri ? (string) connection_ : ""; }
           set {
-            port_ = value;
+            connection_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+            connectionCase_ = ConnectionOneofCase.Uri;
           }
         }
 
-        /// <summary>Field number for the "user" field.</summary>
-        public const int UserFieldNumber = 3;
-        private string user_ = "";
+        private object connection_;
+        /// <summary>Enum of possible cases for the "connection" oneof.</summary>
+        public enum ConnectionOneofCase {
+          None = 0,
+          HostPortUser = 1,
+          Uri = 2,
+        }
+        private ConnectionOneofCase connectionCase_ = ConnectionOneofCase.None;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-        public string User {
-          get { return user_; }
-          set {
-            user_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-          }
+        public ConnectionOneofCase ConnectionCase {
+          get { return connectionCase_; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void ClearConnection() {
+          connectionCase_ = ConnectionOneofCase.None;
+          connection_ = null;
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1320,18 +1432,18 @@ namespace HiddenSwitch.Proto {
           if (ReferenceEquals(other, this)) {
             return true;
           }
-          if (Host != other.Host) return false;
-          if (Port != other.Port) return false;
-          if (User != other.User) return false;
+          if (!object.Equals(HostPortUser, other.HostPortUser)) return false;
+          if (Uri != other.Uri) return false;
+          if (ConnectionCase != other.ConnectionCase) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override int GetHashCode() {
           int hash = 1;
-          if (Host.Length != 0) hash ^= Host.GetHashCode();
-          if (Port != 0) hash ^= Port.GetHashCode();
-          if (User.Length != 0) hash ^= User.GetHashCode();
+          if (connectionCase_ == ConnectionOneofCase.HostPortUser) hash ^= HostPortUser.GetHashCode();
+          if (connectionCase_ == ConnectionOneofCase.Uri) hash ^= Uri.GetHashCode();
+          hash ^= (int) connectionCase_;
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -1348,17 +1460,13 @@ namespace HiddenSwitch.Proto {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
         #else
-          if (Host.Length != 0) {
+          if (connectionCase_ == ConnectionOneofCase.HostPortUser) {
             output.WriteRawTag(10);
-            output.WriteString(Host);
+            output.WriteMessage(HostPortUser);
           }
-          if (Port != 0) {
-            output.WriteRawTag(16);
-            output.WriteInt32(Port);
-          }
-          if (User.Length != 0) {
-            output.WriteRawTag(26);
-            output.WriteString(User);
+          if (connectionCase_ == ConnectionOneofCase.Uri) {
+            output.WriteRawTag(18);
+            output.WriteString(Uri);
           }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
@@ -1369,17 +1477,13 @@ namespace HiddenSwitch.Proto {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-          if (Host.Length != 0) {
+          if (connectionCase_ == ConnectionOneofCase.HostPortUser) {
             output.WriteRawTag(10);
-            output.WriteString(Host);
+            output.WriteMessage(HostPortUser);
           }
-          if (Port != 0) {
-            output.WriteRawTag(16);
-            output.WriteInt32(Port);
-          }
-          if (User.Length != 0) {
-            output.WriteRawTag(26);
-            output.WriteString(User);
+          if (connectionCase_ == ConnectionOneofCase.Uri) {
+            output.WriteRawTag(18);
+            output.WriteString(Uri);
           }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(ref output);
@@ -1390,14 +1494,11 @@ namespace HiddenSwitch.Proto {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public int CalculateSize() {
           int size = 0;
-          if (Host.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(Host);
+          if (connectionCase_ == ConnectionOneofCase.HostPortUser) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(HostPortUser);
           }
-          if (Port != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeInt32Size(Port);
-          }
-          if (User.Length != 0) {
-            size += 1 + pb::CodedOutputStream.ComputeStringSize(User);
+          if (connectionCase_ == ConnectionOneofCase.Uri) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(Uri);
           }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
@@ -1410,15 +1511,18 @@ namespace HiddenSwitch.Proto {
           if (other == null) {
             return;
           }
-          if (other.Host.Length != 0) {
-            Host = other.Host;
+          switch (other.ConnectionCase) {
+            case ConnectionOneofCase.HostPortUser:
+              if (HostPortUser == null) {
+                HostPortUser = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser();
+              }
+              HostPortUser.MergeFrom(other.HostPortUser);
+              break;
+            case ConnectionOneofCase.Uri:
+              Uri = other.Uri;
+              break;
           }
-          if (other.Port != 0) {
-            Port = other.Port;
-          }
-          if (other.User.Length != 0) {
-            User = other.User;
-          }
+
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
 
@@ -1434,15 +1538,16 @@ namespace HiddenSwitch.Proto {
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
               case 10: {
-                Host = input.ReadString();
+                global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser subBuilder = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser();
+                if (connectionCase_ == ConnectionOneofCase.HostPortUser) {
+                  subBuilder.MergeFrom(HostPortUser);
+                }
+                input.ReadMessage(subBuilder);
+                HostPortUser = subBuilder;
                 break;
               }
-              case 16: {
-                Port = input.ReadInt32();
-                break;
-              }
-              case 26: {
-                User = input.ReadString();
+              case 18: {
+                Uri = input.ReadString();
                 break;
               }
             }
@@ -1460,21 +1565,274 @@ namespace HiddenSwitch.Proto {
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
               case 10: {
-                Host = input.ReadString();
+                global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser subBuilder = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser();
+                if (connectionCase_ == ConnectionOneofCase.HostPortUser) {
+                  subBuilder.MergeFrom(HostPortUser);
+                }
+                input.ReadMessage(subBuilder);
+                HostPortUser = subBuilder;
                 break;
               }
-              case 16: {
-                Port = input.ReadInt32();
-                break;
-              }
-              case 26: {
-                User = input.ReadString();
+              case 18: {
+                Uri = input.ReadString();
                 break;
               }
             }
           }
         }
         #endif
+
+        #region Nested types
+        /// <summary>Container for nested types declared in the RedisConfiguration message type.</summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static partial class Types {
+          [global::System.SerializableAttribute]
+          public sealed partial class HostPortUser : pb::IMessage<HostPortUser>
+          #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+              , pb::IBufferMessage
+          #endif
+          {
+            private static readonly pb::MessageParser<HostPortUser> _parser = new pb::MessageParser<HostPortUser>(() => new HostPortUser());
+            private pb::UnknownFieldSet _unknownFields;
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public static pb::MessageParser<HostPortUser> Parser { get { return _parser; } }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public static pbr::MessageDescriptor Descriptor {
+              get { return global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Descriptor.NestedTypes[0]; }
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            pbr::MessageDescriptor pb::IMessage.Descriptor {
+              get { return Descriptor; }
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public HostPortUser() {
+              OnConstruction();
+            }
+
+            partial void OnConstruction();
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public HostPortUser(HostPortUser other) : this() {
+              host_ = other.host_;
+              port_ = other.port_;
+              user_ = other.user_;
+              _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public HostPortUser Clone() {
+              return new HostPortUser(this);
+            }
+
+            /// <summary>Field number for the "host" field.</summary>
+            public const int HostFieldNumber = 1;
+            private string host_ = "";
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public string Host {
+              get { return host_; }
+              set {
+                host_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+              }
+            }
+
+            /// <summary>Field number for the "port" field.</summary>
+            public const int PortFieldNumber = 2;
+            private int port_;
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public int Port {
+              get { return port_; }
+              set {
+                port_ = value;
+              }
+            }
+
+            /// <summary>Field number for the "user" field.</summary>
+            public const int UserFieldNumber = 3;
+            private string user_ = "";
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public string User {
+              get { return user_; }
+              set {
+                user_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+              }
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public override bool Equals(object other) {
+              return Equals(other as HostPortUser);
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public bool Equals(HostPortUser other) {
+              if (ReferenceEquals(other, null)) {
+                return false;
+              }
+              if (ReferenceEquals(other, this)) {
+                return true;
+              }
+              if (Host != other.Host) return false;
+              if (Port != other.Port) return false;
+              if (User != other.User) return false;
+              return Equals(_unknownFields, other._unknownFields);
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public override int GetHashCode() {
+              int hash = 1;
+              if (Host.Length != 0) hash ^= Host.GetHashCode();
+              if (Port != 0) hash ^= Port.GetHashCode();
+              if (User.Length != 0) hash ^= User.GetHashCode();
+              if (_unknownFields != null) {
+                hash ^= _unknownFields.GetHashCode();
+              }
+              return hash;
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public override string ToString() {
+              return pb::JsonFormatter.ToDiagnosticString(this);
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public void WriteTo(pb::CodedOutputStream output) {
+            #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+              output.WriteRawMessage(this);
+            #else
+              if (Host.Length != 0) {
+                output.WriteRawTag(10);
+                output.WriteString(Host);
+              }
+              if (Port != 0) {
+                output.WriteRawTag(16);
+                output.WriteInt32(Port);
+              }
+              if (User.Length != 0) {
+                output.WriteRawTag(26);
+                output.WriteString(User);
+              }
+              if (_unknownFields != null) {
+                _unknownFields.WriteTo(output);
+              }
+            #endif
+            }
+
+            #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+              if (Host.Length != 0) {
+                output.WriteRawTag(10);
+                output.WriteString(Host);
+              }
+              if (Port != 0) {
+                output.WriteRawTag(16);
+                output.WriteInt32(Port);
+              }
+              if (User.Length != 0) {
+                output.WriteRawTag(26);
+                output.WriteString(User);
+              }
+              if (_unknownFields != null) {
+                _unknownFields.WriteTo(ref output);
+              }
+            }
+            #endif
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public int CalculateSize() {
+              int size = 0;
+              if (Host.Length != 0) {
+                size += 1 + pb::CodedOutputStream.ComputeStringSize(Host);
+              }
+              if (Port != 0) {
+                size += 1 + pb::CodedOutputStream.ComputeInt32Size(Port);
+              }
+              if (User.Length != 0) {
+                size += 1 + pb::CodedOutputStream.ComputeStringSize(User);
+              }
+              if (_unknownFields != null) {
+                size += _unknownFields.CalculateSize();
+              }
+              return size;
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public void MergeFrom(HostPortUser other) {
+              if (other == null) {
+                return;
+              }
+              if (other.Host.Length != 0) {
+                Host = other.Host;
+              }
+              if (other.Port != 0) {
+                Port = other.Port;
+              }
+              if (other.User.Length != 0) {
+                User = other.User;
+              }
+              _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            public void MergeFrom(pb::CodedInputStream input) {
+            #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+              input.ReadRawMessage(this);
+            #else
+              uint tag;
+              while ((tag = input.ReadTag()) != 0) {
+                switch(tag) {
+                  default:
+                    _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                    break;
+                  case 10: {
+                    Host = input.ReadString();
+                    break;
+                  }
+                  case 16: {
+                    Port = input.ReadInt32();
+                    break;
+                  }
+                  case 26: {
+                    User = input.ReadString();
+                    break;
+                  }
+                }
+              }
+            #endif
+            }
+
+            #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+              uint tag;
+              while ((tag = input.ReadTag()) != 0) {
+                switch(tag) {
+                  default:
+                    _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                    break;
+                  case 10: {
+                    Host = input.ReadString();
+                    break;
+                  }
+                  case 16: {
+                    Port = input.ReadInt32();
+                    break;
+                  }
+                  case 26: {
+                    User = input.ReadString();
+                    break;
+                  }
+                }
+              }
+            }
+            #endif
+
+          }
+
+        }
+        #endregion
 
       }
 
@@ -2142,6 +2500,179 @@ namespace HiddenSwitch.Proto {
       }
 
       [global::System.SerializableAttribute]
+      public sealed partial class DecksConfiguration : pb::IMessage<DecksConfiguration>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<DecksConfiguration> _parser = new pb::MessageParser<DecksConfiguration>(() => new DecksConfiguration());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<DecksConfiguration> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[6]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public DecksConfiguration() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public DecksConfiguration(DecksConfiguration other) : this() {
+          cachedDeckTimeToLiveMinutes_ = other.cachedDeckTimeToLiveMinutes_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public DecksConfiguration Clone() {
+          return new DecksConfiguration(this);
+        }
+
+        /// <summary>Field number for the "cachedDeckTimeToLiveMinutes" field.</summary>
+        public const int CachedDeckTimeToLiveMinutesFieldNumber = 1;
+        private long cachedDeckTimeToLiveMinutes_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public long CachedDeckTimeToLiveMinutes {
+          get { return cachedDeckTimeToLiveMinutes_; }
+          set {
+            cachedDeckTimeToLiveMinutes_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as DecksConfiguration);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(DecksConfiguration other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (CachedDeckTimeToLiveMinutes != other.CachedDeckTimeToLiveMinutes) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (CachedDeckTimeToLiveMinutes != 0L) hash ^= CachedDeckTimeToLiveMinutes.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (CachedDeckTimeToLiveMinutes != 0L) {
+            output.WriteRawTag(8);
+            output.WriteInt64(CachedDeckTimeToLiveMinutes);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (CachedDeckTimeToLiveMinutes != 0L) {
+            output.WriteRawTag(8);
+            output.WriteInt64(CachedDeckTimeToLiveMinutes);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (CachedDeckTimeToLiveMinutes != 0L) {
+            size += 1 + pb::CodedOutputStream.ComputeInt64Size(CachedDeckTimeToLiveMinutes);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(DecksConfiguration other) {
+          if (other == null) {
+            return;
+          }
+          if (other.CachedDeckTimeToLiveMinutes != 0L) {
+            CachedDeckTimeToLiveMinutes = other.CachedDeckTimeToLiveMinutes;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 8: {
+                CachedDeckTimeToLiveMinutes = input.ReadInt64();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 8: {
+                CachedDeckTimeToLiveMinutes = input.ReadInt64();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      [global::System.SerializableAttribute]
       public sealed partial class ApplicationConfiguration : pb::IMessage<ApplicationConfiguration>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           , pb::IBufferMessage
@@ -2154,7 +2685,7 @@ namespace HiddenSwitch.Proto {
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public static pbr::MessageDescriptor Descriptor {
-          get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[6]; }
+          get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[7]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

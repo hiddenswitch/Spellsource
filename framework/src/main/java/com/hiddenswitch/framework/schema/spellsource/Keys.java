@@ -50,7 +50,6 @@ public class Keys {
 
     public static final Identity<CardsInDeckRecord, Long> IDENTITY_CARDS_IN_DECK = Identities0.IDENTITY_CARDS_IN_DECK;
     public static final Identity<DeckPlayerAttributeTuplesRecord, Long> IDENTITY_DECK_PLAYER_ATTRIBUTE_TUPLES = Identities0.IDENTITY_DECK_PLAYER_ATTRIBUTE_TUPLES;
-    public static final Identity<DeckSharesRecord, Long> IDENTITY_DECK_SHARES = Identities0.IDENTITY_DECK_SHARES;
     public static final Identity<GamesRecord, Long> IDENTITY_GAMES = Identities0.IDENTITY_GAMES;
     public static final Identity<MatchmakingTicketsRecord, Long> IDENTITY_MATCHMAKING_TICKETS = Identities0.IDENTITY_MATCHMAKING_TICKETS;
 
@@ -63,7 +62,6 @@ public class Keys {
     public static final UniqueKey<CardsInDeckRecord> CARDS_IN_DECK_PKEY = UniqueKeys0.CARDS_IN_DECK_PKEY;
     public static final UniqueKey<DeckPlayerAttributeTuplesRecord> DECK_PLAYER_ATTRIBUTE_TUPLES_PKEY = UniqueKeys0.DECK_PLAYER_ATTRIBUTE_TUPLES_PKEY;
     public static final UniqueKey<DeckSharesRecord> DECK_SHARES_PKEY = UniqueKeys0.DECK_SHARES_PKEY;
-    public static final UniqueKey<DeckSharesRecord> DECK_SHARES_DECK_ID_SHARE_RECIPIENT_ID_KEY = UniqueKeys0.DECK_SHARES_DECK_ID_SHARE_RECIPIENT_ID_KEY;
     public static final UniqueKey<DecksRecord> DECKS_PKEY = UniqueKeys0.DECKS_PKEY;
     public static final UniqueKey<FriendsRecord> FRIENDS_PKEY = UniqueKeys0.FRIENDS_PKEY;
     public static final UniqueKey<GameUsersRecord> GAME_USERS_PKEY = UniqueKeys0.GAME_USERS_PKEY;
@@ -103,7 +101,6 @@ public class Keys {
     private static class Identities0 {
         public static Identity<CardsInDeckRecord, Long> IDENTITY_CARDS_IN_DECK = Internal.createIdentity(CardsInDeck.CARDS_IN_DECK, CardsInDeck.CARDS_IN_DECK.ID);
         public static Identity<DeckPlayerAttributeTuplesRecord, Long> IDENTITY_DECK_PLAYER_ATTRIBUTE_TUPLES = Internal.createIdentity(DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES, DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES.ID);
-        public static Identity<DeckSharesRecord, Long> IDENTITY_DECK_SHARES = Internal.createIdentity(DeckShares.DECK_SHARES, DeckShares.DECK_SHARES.ID);
         public static Identity<GamesRecord, Long> IDENTITY_GAMES = Internal.createIdentity(Games.GAMES, Games.GAMES.ID);
         public static Identity<MatchmakingTicketsRecord, Long> IDENTITY_MATCHMAKING_TICKETS = Internal.createIdentity(MatchmakingTickets.MATCHMAKING_TICKETS, MatchmakingTickets.MATCHMAKING_TICKETS.ID);
     }
@@ -113,8 +110,7 @@ public class Keys {
         public static final UniqueKey<CardsRecord> CARDS_PKEY = Internal.createUniqueKey(Cards.CARDS, "cards_pkey", new TableField[] { Cards.CARDS.ID }, true);
         public static final UniqueKey<CardsInDeckRecord> CARDS_IN_DECK_PKEY = Internal.createUniqueKey(CardsInDeck.CARDS_IN_DECK, "cards_in_deck_pkey", new TableField[] { CardsInDeck.CARDS_IN_DECK.ID }, true);
         public static final UniqueKey<DeckPlayerAttributeTuplesRecord> DECK_PLAYER_ATTRIBUTE_TUPLES_PKEY = Internal.createUniqueKey(DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES, "deck_player_attribute_tuples_pkey", new TableField[] { DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES.ID }, true);
-        public static final UniqueKey<DeckSharesRecord> DECK_SHARES_PKEY = Internal.createUniqueKey(DeckShares.DECK_SHARES, "deck_shares_pkey", new TableField[] { DeckShares.DECK_SHARES.ID }, true);
-        public static final UniqueKey<DeckSharesRecord> DECK_SHARES_DECK_ID_SHARE_RECIPIENT_ID_KEY = Internal.createUniqueKey(DeckShares.DECK_SHARES, "deck_shares_deck_id_share_recipient_id_key", new TableField[] { DeckShares.DECK_SHARES.DECK_ID, DeckShares.DECK_SHARES.SHARE_RECIPIENT_ID }, true);
+        public static final UniqueKey<DeckSharesRecord> DECK_SHARES_PKEY = Internal.createUniqueKey(DeckShares.DECK_SHARES, "deck_shares_pkey", new TableField[] { DeckShares.DECK_SHARES.DECK_ID, DeckShares.DECK_SHARES.SHARE_RECIPIENT_ID }, true);
         public static final UniqueKey<DecksRecord> DECKS_PKEY = Internal.createUniqueKey(Decks.DECKS, "decks_pkey", new TableField[] { Decks.DECKS.ID }, true);
         public static final UniqueKey<FriendsRecord> FRIENDS_PKEY = Internal.createUniqueKey(Friends.FRIENDS, "friends_pkey", new TableField[] { Friends.FRIENDS.ID, Friends.FRIENDS.FRIEND }, true);
         public static final UniqueKey<GameUsersRecord> GAME_USERS_PKEY = Internal.createUniqueKey(GameUsers.GAME_USERS, "game_users_pkey", new TableField[] { GameUsers.GAME_USERS.GAME_ID, GameUsers.GAME_USERS.USER_ID }, true);

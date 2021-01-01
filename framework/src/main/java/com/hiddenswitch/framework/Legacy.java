@@ -11,9 +11,7 @@ import com.hiddenswitch.framework.rpc.GetCardsRequest;
 import com.hiddenswitch.framework.rpc.GetCardsResponse;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpc;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.*;
-import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.IDecks;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckPlayerAttributeTuples;
-import com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
 import com.hiddenswitch.spellsource.rpc.*;
@@ -42,10 +40,12 @@ import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
 import net.openhft.hashing.LongHashFunction;
 import org.jooq.*;
 import org.jooq.impl.DSL;
+import org.redisson.api.RMapCacheAsync;
 
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
@@ -63,6 +63,7 @@ import static java.util.stream.Collectors.*;
  */
 public class Legacy {
 	private static final WeakVertxMap<List<DeckCreateRequest>> PREMADE_DECKS = new WeakVertxMap<>(Legacy::getPremadeDecksPrivate);
+	private static final WeakVertxMap<RMapCacheAsync<String, DecksGetResponse>> DECKS_CACHE = new WeakVertxMap<>(Legacy::decksCacheConstructor);
 	private static final Promise<GetCardsResponse> GET_CARDS_RESPONSE_PROMISE = Promise.promise();
 	private static final AtomicBoolean CARDS_BUILT = new AtomicBoolean();
 
@@ -153,7 +154,7 @@ public class Legacy {
 				// otherwise, if we own the deck, trash the deck.
 				var queryExecutor = Environment.queryExecutor();
 				return queryExecutor.execute(dsl -> dsl.update(DECK_SHARES)
-						.set(DECK_SHARES.TRASHED, true)
+						.set(DECK_SHARES.TRASHED_BY_RECIPIENT, true)
 						.where(DECK_SHARES.DECK_ID.eq(deckId), DECK_SHARES.SHARE_RECIPIENT_ID.eq(userId)))
 						.compose(updated -> {
 							if (updated != 0) {
@@ -171,13 +172,21 @@ public class Legacy {
 										var isOwner = Objects.equals(row.getString(DECKS.CREATED_BY.getName()), userId);
 										if (isPremade) {
 											// insert a stop sharing premade deck row
-											return queryExecutor.execute(dsl -> dsl.insertInto(DECK_SHARES).set(DECK_SHARES.newRecord().setDeckId(deckId).setShareRecipientId(userId).setTrashed(true)));
+											return queryExecutor.execute(dsl -> dsl.insertInto(DECK_SHARES)
+													.set(DECK_SHARES.newRecord()
+															.setDeckId(deckId)
+															.setShareRecipientId(userId)
+															.setTrashedByRecipient(true)));
 										} else if (isOwner) {
 											return queryExecutor.execute(dsl -> dsl.update(DECKS).set(DECKS.TRASHED, true).where(DECKS.ID.eq(deckId), canEditDeckSql(userId)));
 										} else {
 											return Future.failedFuture("deck not owned by user or shared with user");
 										}
 									});
+						}).compose(v -> {
+							// invalidate cache
+							var cache = DECKS_CACHE.get();
+							return Future.fromCompletionStage(cache.fastRemoveAsync(deckId), Vertx.currentContext());
 						})
 						.map(Empty.getDefaultInstance())
 						.recover(Environment.onGrpcFailure());
@@ -342,7 +351,12 @@ public class Legacy {
 
 					return CompositeFuture.all(futs);
 				})
-						.compose(ignored -> getDeck(deckId, userId))
+						.compose(v -> {
+							// invalidate cache
+							var cache = DECKS_CACHE.get();
+							return Future.fromCompletionStage(cache.fastRemoveAsync(deckId), Vertx.currentContext());
+						})
+						.compose(v -> getDeck(deckId, userId))
 						.recover(Environment.onGrpcFailure());
 			}
 
@@ -410,11 +424,11 @@ public class Legacy {
 										// the user can edit the deck
 										canEditDeckSql(userId)
 												.or(
-														// this is a premade deck
-														DECKS.IS_PREMADE.eq(true).and(DECK_SHARES.ID.isNull().or(DECK_SHARES.TRASHED.eq(false))))
+														// this is a premade deck - there's no share record or if there was a share record, it was trashed by the recipient
+														DECKS.IS_PREMADE.eq(true).and(DECK_SHARES.SHARE_RECIPIENT_ID.isNull().or(DECK_SHARES.TRASHED_BY_RECIPIENT.eq(false))))
 												.or(
-														// this deck is shared with the user
-														DECKS.IS_PREMADE.eq(false).and(DECK_SHARES.ID.isNotNull().and(DECK_SHARES.TRASHED.eq(false)))
+														// this deck is shared with the user - it is not a premade deck, there is a recipient id, and it has not been trashed by the recipient
+														DECKS.IS_PREMADE.eq(false).and(DECK_SHARES.SHARE_RECIPIENT_ID.isNotNull().and(DECK_SHARES.TRASHED_BY_RECIPIENT.eq(false)))
 												)))
 				.compose(rows -> CompositeFuture.all(rows.stream()
 						.map(row -> {
@@ -431,8 +445,8 @@ public class Legacy {
 				});
 	}
 
-	private static boolean canEditDeck(IDecks deck, String userId) {
-		return Objects.equals(deck.getCreatedBy(), userId);
+	private static boolean canEditDeck(DecksGetResponse deck, String userId) {
+		return Objects.equals(deck.getCollection().getUserId(), userId);
 	}
 
 	private static org.jooq.Condition canEditDeckSql(String userId) {
@@ -503,12 +517,54 @@ public class Legacy {
 		return returnArray;
 	}
 
+	private static RMapCacheAsync<String, DecksGetResponse> decksCacheConstructor(Vertx vertx) {
+		return Environment.cache("Spellsource:decks", DecksGetResponse.parser());
+	}
+
 	public static Future<DecksGetResponse> getDeck(String deckId, String userId) {
+		var serverConfiguration = Environment.cachedConfigurationOrGet();
+		var cache = DECKS_CACHE.get();
+		var configuration = Environment.jooqAkaDaoConfiguration();
+		var delegate = Environment.sqlPoolAkaDaoDelegate();
+		return Future.fromCompletionStage(cache.getAsync(deckId), Vertx.currentContext())
+				.compose(existing -> {
+					if (existing != null) {
+						return Future.succeededFuture(existing);
+					}
+
+					return getDeck(deckId)
+							.compose(deck -> Future.fromCompletionStage(cache.fastPutAsync(deckId, deck, serverConfiguration.getDecks().getCachedDeckTimeToLiveMinutes(), TimeUnit.MINUTES), Vertx.currentContext()).map(deck));
+				}).compose(deck -> {
+					// we must always look up the shares record, though this should be fast
+					var deckSharesDao = new DeckSharesDao(configuration, delegate);
+					var sharesFut = deckSharesDao.queryExecutor()
+							.findOne(dsl -> dsl.selectFrom(DECK_SHARES)
+									.where(DECK_SHARES.SHARE_RECIPIENT_ID.eq(userId).and(DECK_SHARES.DECK_ID.eq(deckId))));
+
+					return sharesFut.compose(shares -> {
+						// Check the deck is premade, owned by the current user, or shared with the user
+						if (!(deck.getCollection().getIsStandardDeck()
+								|| Objects.equals(deck.getCollection().getUserId(), userId)
+								|| shares != null)) {
+							return Future.failedFuture("unauthorized");
+						}
+						return Future.succeededFuture(deck);
+					});
+				}).map(deck -> {
+					// transmit the right editability
+					var editableDeck = DecksGetResponse.newBuilder(deck);
+					var collection = InventoryCollection.newBuilder(editableDeck.getCollection());
+					collection.setCanEdit(canEditDeck(deck, userId));
+					editableDeck.setCollection(collection);
+					return editableDeck.build();
+				});
+	}
+
+	private static Future<DecksGetResponse> getDeck(String deckId) {
 		var configuration = Environment.jooqAkaDaoConfiguration();
 		var delegate = Environment.sqlPoolAkaDaoDelegate();
 		var decks = new DecksDao(configuration, delegate);
 		var playerEntityAttributesDao = new DeckPlayerAttributeTuplesDao(configuration, delegate);
-		var deckSharesDao = new DeckSharesDao(configuration, delegate);
 		var queryExecutor = Environment.queryExecutor();
 		var cardsFut = queryExecutor.findManyRow(dsl -> dsl.select(
 				CARDS_IN_DECK.ID,
@@ -518,28 +574,16 @@ public class Legacy {
 				.from(CARDS_IN_DECK)
 				.join(CARDS, JoinType.JOIN)
 				.on(CARDS_IN_DECK.CARD_ID.eq(CARDS.ID))
-				.where(CARDS_IN_DECK.DECK_ID.eq(deckId))).onFailure(Environment.onFailure());
-		var sharesFut = deckSharesDao.queryExecutor()
-				.findOne(dsl -> dsl.selectFrom(DECK_SHARES)
-						.where(DECK_SHARES.SHARE_RECIPIENT_ID.eq(userId).and(DECK_SHARES.DECK_ID.eq(deckId))));
-
+				.where(CARDS_IN_DECK.DECK_ID.eq(deckId)))
+				.onFailure(Environment.onFailure());
 		var decksFut = decks.findOneById(deckId);
 		var playerEntityAttributesFut = playerEntityAttributesDao.findManyByDeckId(Collections.singletonList(deckId));
 
-		return CompositeFuture.join(cardsFut, decksFut, playerEntityAttributesFut, sharesFut)
+		return CompositeFuture.join(cardsFut, decksFut, playerEntityAttributesFut)
 				.compose(res -> {
 					var cards = res.<List<Row>>resultAt(0);
 					var deck = res.<Decks>resultAt(1);
 					var playerEntityAttributes = res.<List<DeckPlayerAttributeTuples>>resultAt(2);
-					var shares = res.<DeckShares>resultAt(3);
-
-					// Check the deck is premade, owned by the current user, or shared with the user
-					if (!(deck.getIsPremade()
-							|| Objects.equals(deck.getCreatedBy(), userId)
-							|| shares != null)) {
-						return Future.failedFuture("unauthorized");
-					}
-
 					var reply = DecksGetResponse.newBuilder();
 					var inventoryCollection = InventoryCollection.newBuilder();
 
@@ -551,7 +595,6 @@ public class Legacy {
 							.setType(InventoryCollection.InventoryCollectionType.INVENTORY_COLLECTION_TYPE_DECK)
 							.setIsStandardDeck(deck.getIsPremade())
 							.setUserId(deck.getCreatedBy())
-							.setCanEdit(canEditDeck(deck, userId))
 							.setValidationReport((ValidationReport.Builder) validateDeck(cards.stream().map(row -> row.getString(CARDS_IN_DECK.CARD_ID.getName())).collect(toList()), deck.getHeroClass(), deck.getFormat()));
 					var i = 0;
 					for (var cardRecordRow : cards) {
@@ -579,13 +622,6 @@ public class Legacy {
 					reply.setInventoryIdsSize(inventoryCollection.getInventoryCount());
 					return Future.succeededFuture(reply.build());
 				});
-	}
-
-	private static Future<Integer> insertOrFail(Integer inserted) {
-		if (inserted < 1) {
-			return Future.failedFuture("failed insert");
-		}
-		return Future.succeededFuture(inserted);
 	}
 
 	private static ValidationReportOrBuilder validateDeck(List<String> cardIds, String heroClass, String deckFormat) {

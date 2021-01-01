@@ -11,7 +11,7 @@ public class RedisContainer extends GenericContainer<RedisContainer> {
 	private static final int REDIS_PORT = 6379;
 
 	public RedisContainer() {
-		super("redis:6.0");
+		super("redis:6");
 		withExposedPorts(REDIS_PORT);
 		waitingFor(Wait.forLogMessage(".*Ready to accept connections.*", 1));
 	}

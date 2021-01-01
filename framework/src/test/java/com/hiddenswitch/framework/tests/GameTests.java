@@ -2,16 +2,20 @@ package com.hiddenswitch.framework.tests;
 
 import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.Client;
+import com.hiddenswitch.framework.Legacy;
 import com.hiddenswitch.framework.impl.ClusteredGames;
 import com.hiddenswitch.framework.impl.Configuration;
 import com.hiddenswitch.framework.impl.ConfigurationRequest;
 import com.hiddenswitch.framework.Games;
+import com.hiddenswitch.framework.impl.ModelConversions;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import com.hiddenswitch.spellsource.rpc.MessageType;
 import com.hiddenswitch.spellsource.rpc.ServerToClientMessage;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.decks.Deck;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +25,7 @@ import static io.vertx.core.impl.future.CompositeFutureImpl.all;
 import static io.vertx.reactivex.ObservableHelper.toObservable;
 import static io.vertx.reactivex.SingleHelper.toFuture;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class GameTests extends FrameworkTestBase {
 
@@ -56,6 +61,34 @@ public class GameTests extends FrameworkTestBase {
 					});
 					return Future.succeededFuture();
 				})
+				.onComplete(vertxTestContext.succeedingThenComplete());
+	}
+
+	@Test
+	public void testAllDecksHaveValidModels(Vertx vertx, VertxTestContext vertxTestContext) {
+		var client = new Client(vertx);
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin())
+				.compose(v -> client.legacy().decksGetAll(Empty.getDefaultInstance()))
+				.onSuccess(decksGetAllResponse -> {
+					vertxTestContext.verify(() -> {
+						for (var deckCollection : decksGetAllResponse.getDecksList()) {
+							var gameDeck = ModelConversions.getGameDeck(client.getUserEntity().getId(), deckCollection);
+							assertEquals(30, gameDeck.getCards().size());
+							assertNotNull(gameDeck.getDeckId());
+							assertNotNull(gameDeck.getFormat());
+							assertNotNull(gameDeck.getHeroClass());
+							assertNotNull(gameDeck.getHeroCard());
+
+							// test creating the attributes
+							var playerAttributes = new AttributeMap();
+							for (var tuple : deckCollection.getCollection().getPlayerEntityAttributesList()) {
+								playerAttributes.put(Attribute.valueOf(tuple.getAttribute().name()), tuple.getStringValue());
+							}
+						}
+					});
+				})
+				.compose(v -> client.closeFut())
 				.onComplete(vertxTestContext.succeedingThenComplete());
 	}
 }

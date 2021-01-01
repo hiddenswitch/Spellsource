@@ -1,5 +1,6 @@
 package com.hiddenswitch.framework.impl;
 
+import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
@@ -16,7 +17,6 @@ import com.hiddenswitch.spellsource.rpc.ClientToServerMessage;
 import com.hiddenswitch.spellsource.rpc.ServerToClientMessage;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sync.SyncVerticle;
@@ -29,10 +29,13 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static com.hiddenswitch.framework.schema.spellsource.Tables.GAME_USERS;
@@ -154,7 +157,7 @@ public class ClusteredGames extends SyncVerticle {
 				// Plays the game context in its own fiber
 				context.play(true);
 				span.log("awaitingRegistration");
-				context.awaitReadyForConnections();
+				await(context.handlersReady());
 				return response;
 			} catch (RuntimeException any) {
 				if (Throwables.getRootCause(any) instanceof TimeoutException) {

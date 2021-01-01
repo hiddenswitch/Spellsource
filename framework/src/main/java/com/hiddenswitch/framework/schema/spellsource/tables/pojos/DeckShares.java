@@ -15,48 +15,33 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DeckShares implements VertxPojo, IDeckShares {
 
-    private static final long serialVersionUID = -1221837258;
+    private static final long serialVersionUID = 1338556433;
 
-    private Long    id;
     private String  deckId;
     private String  shareRecipientId;
-    private Boolean trashed;
+    private Boolean trashedByRecipient;
 
     public DeckShares() {}
 
     public DeckShares(IDeckShares value) {
-        this.id = value.getId();
         this.deckId = value.getDeckId();
         this.shareRecipientId = value.getShareRecipientId();
-        this.trashed = value.getTrashed();
+        this.trashedByRecipient = value.getTrashedByRecipient();
     }
 
     public DeckShares(
-        Long    id,
         String  deckId,
         String  shareRecipientId,
-        Boolean trashed
+        Boolean trashedByRecipient
     ) {
-        this.id = id;
         this.deckId = deckId;
         this.shareRecipientId = shareRecipientId;
-        this.trashed = trashed;
+        this.trashedByRecipient = trashedByRecipient;
     }
 
     public DeckShares(io.vertx.core.json.JsonObject json) {
         this();
         fromJson(json);
-    }
-
-    @Override
-    public Long getId() {
-        return this.id;
-    }
-
-    @Override
-    public DeckShares setId(Long id) {
-        this.id = id;
-        return this;
     }
 
     @Override
@@ -82,13 +67,13 @@ public class DeckShares implements VertxPojo, IDeckShares {
     }
 
     @Override
-    public Boolean getTrashed() {
-        return this.trashed;
+    public Boolean getTrashedByRecipient() {
+        return this.trashedByRecipient;
     }
 
     @Override
-    public DeckShares setTrashed(Boolean trashed) {
-        this.trashed = trashed;
+    public DeckShares setTrashedByRecipient(Boolean trashedByRecipient) {
+        this.trashedByRecipient = trashedByRecipient;
         return this;
     }
 
@@ -96,10 +81,9 @@ public class DeckShares implements VertxPojo, IDeckShares {
     public String toString() {
         StringBuilder sb = new StringBuilder("DeckShares (");
 
-        sb.append(id);
-        sb.append(", ").append(deckId);
+        sb.append(deckId);
         sb.append(", ").append(shareRecipientId);
-        sb.append(", ").append(trashed);
+        sb.append(", ").append(trashedByRecipient);
 
         sb.append(")");
         return sb.toString();
@@ -111,10 +95,9 @@ public class DeckShares implements VertxPojo, IDeckShares {
 
     @Override
     public void from(IDeckShares from) {
-        setId(from.getId());
         setDeckId(from.getDeckId());
         setShareRecipientId(from.getShareRecipientId());
-        setTrashed(from.getTrashed());
+        setTrashedByRecipient(from.getTrashedByRecipient());
     }
 
     @Override

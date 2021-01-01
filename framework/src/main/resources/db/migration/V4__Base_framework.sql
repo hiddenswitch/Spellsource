@@ -53,14 +53,13 @@ comment on column spellsource.cards_in_deck.card_id is 'cannot delete cards that
 
 create table spellsource.deck_shares
 (
-  id bigint generated always as identity primary key unique,
   deck_id text not null references spellsource.decks (id) on delete cascade,
-  share_recipient_id character varying references keycloak.user_entity (id) not null,
-  trashed boolean not null default false,
-  unique (deck_id, share_recipient_id)
+  share_recipient_id text references keycloak.user_entity (id) not null,
+  trashed_by_recipient boolean not null default false,
+  primary key (deck_id, share_recipient_id)
 );
 
-create index on spellsource.deck_shares (trashed) where deck_shares.trashed is false;
+create index on spellsource.deck_shares (trashed_by_recipient) where deck_shares.trashed_by_recipient is false;
 
 comment on table spellsource.deck_shares is 'indicates a deck shared to a player';
 
