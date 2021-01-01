@@ -94,7 +94,7 @@ public class Client implements AutoCloseable {
 					writer.write(ClientToServerMessage.newBuilder()
 							.setMessageType(MessageType.MESSAGE_TYPE_UPDATE_ACTION)
 							.setRepliesTo(message.getId())
-							.setActionIndex(message.getActions().getCompatibility(random.nextInt(message.getActions().getCompatibilityCount())))
+							.setActionIndex(random.nextInt(message.getActions().getAllCount()))
 							.build());
 					break;
 				case MESSAGE_TYPE_ON_GAME_END:

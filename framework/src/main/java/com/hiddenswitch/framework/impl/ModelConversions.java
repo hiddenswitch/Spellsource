@@ -913,7 +913,7 @@ public class ModelConversions {
 	}
 
 	@NotNull
-	static GameDeck getGameDeck(String userId, DecksGetResponse deckCollection) {
+	public static GameDeck getGameDeck(String userId, DecksGetResponse deckCollection) {
 		var deckId = deckCollection.getCollection().getId();
 		var deck = new GameDeck();
 		deck.setDeckId(deckCollection.getCollection().getId());

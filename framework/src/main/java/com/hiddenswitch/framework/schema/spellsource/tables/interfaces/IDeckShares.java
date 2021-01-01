@@ -17,16 +17,6 @@ import java.io.Serializable;
 public interface IDeckShares extends VertxPojo, Serializable {
 
     /**
-     * Setter for <code>spellsource.deck_shares.id</code>.
-     */
-    public IDeckShares setId(Long value);
-
-    /**
-     * Getter for <code>spellsource.deck_shares.id</code>.
-     */
-    public Long getId();
-
-    /**
      * Setter for <code>spellsource.deck_shares.deck_id</code>.
      */
     public IDeckShares setDeckId(String value);
@@ -47,14 +37,14 @@ public interface IDeckShares extends VertxPojo, Serializable {
     public String getShareRecipientId();
 
     /**
-     * Setter for <code>spellsource.deck_shares.trashed</code>.
+     * Setter for <code>spellsource.deck_shares.trashed_by_recipient</code>.
      */
-    public IDeckShares setTrashed(Boolean value);
+    public IDeckShares setTrashedByRecipient(Boolean value);
 
     /**
-     * Getter for <code>spellsource.deck_shares.trashed</code>.
+     * Getter for <code>spellsource.deck_shares.trashed_by_recipient</code>.
      */
-    public Boolean getTrashed();
+    public Boolean getTrashedByRecipient();
 
     // -------------------------------------------------------------------------
     // FROM and INTO
@@ -73,11 +63,6 @@ public interface IDeckShares extends VertxPojo, Serializable {
     @Override
     public default IDeckShares fromJson(io.vertx.core.json.JsonObject json) {
         try {
-            setId(json.getLong("id"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("id","java.lang.Long",e);
-        }
-        try {
             setDeckId(json.getString("deck_id"));
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("deck_id","java.lang.String",e);
@@ -88,9 +73,9 @@ public interface IDeckShares extends VertxPojo, Serializable {
             throw new UnexpectedJsonValueType("share_recipient_id","java.lang.String",e);
         }
         try {
-            setTrashed(json.getBoolean("trashed"));
+            setTrashedByRecipient(json.getBoolean("trashed_by_recipient"));
         } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("trashed","java.lang.Boolean",e);
+            throw new UnexpectedJsonValueType("trashed_by_recipient","java.lang.Boolean",e);
         }
         return this;
     }
@@ -99,10 +84,9 @@ public interface IDeckShares extends VertxPojo, Serializable {
     @Override
     public default io.vertx.core.json.JsonObject toJson() {
         io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
-        json.put("id",getId());
         json.put("deck_id",getDeckId());
         json.put("share_recipient_id",getShareRecipientId());
-        json.put("trashed",getTrashed());
+        json.put("trashed_by_recipient",getTrashedByRecipient());
         return json;
     }
 

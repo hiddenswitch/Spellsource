@@ -9,6 +9,7 @@ import co.paralleluniverse.strands.channels.Channel;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.google.common.base.Throwables;
 import io.vertx.core.*;
+import io.vertx.core.eventbus.Message;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.ext.sync.impl.AsyncAdaptor;
 import io.vertx.ext.sync.impl.HandlerAdaptor;

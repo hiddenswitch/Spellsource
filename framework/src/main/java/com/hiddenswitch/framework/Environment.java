@@ -6,8 +6,11 @@ import co.paralleluniverse.strands.SuspendableCallable;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.google.common.base.Throwables;
 import com.google.protobuf.GeneratedMessageV3;
+import com.google.protobuf.Parser;
+import com.hiddenswitch.framework.impl.RedissonProtobufCodec;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.rpc.ServerConfiguration;
+import com.hiddenswitch.spellsource.common.Tracing;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
 import io.grpc.Status;
@@ -26,6 +29,13 @@ import org.flywaydb.core.Flyway;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.*;
 import org.jooq.impl.DefaultConfiguration;
+import org.redisson.Redisson;
+import org.redisson.api.RMapCache;
+import org.redisson.api.RMapCacheAsync;
+import org.redisson.api.RedissonClient;
+import org.redisson.client.codec.StringCodec;
+import org.redisson.codec.CompositeCodec;
+import org.redisson.config.Config;
 
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -51,6 +61,15 @@ public class Environment {
 
 	private static AtomicReference<Configuration> jooqConfiguration = new AtomicReference<>();
 	private static final WeakVertxMap<PgPool> pools = new WeakVertxMap<>(Environment::poolConstructor);
+	private static final WeakVertxMap<RedissonClient> redissonClients = new WeakVertxMap<>(Environment::redissonClientConstructor);
+
+	private static RedissonClient redissonClientConstructor(Vertx vertx) {
+		var configuration = cachedConfigurationOrGet();
+		var config = new Config();
+		config.useSingleServer().setAddress(configuration.getRedis().getUri());
+		return Redisson.create(config);
+	}
+
 	private static final WeakVertxMap<ConfigRetriever> configRetrievers = new WeakVertxMap<>(Environment::configRetrieverConstructor);
 	private static final WeakVertxMap<ReactiveClassicGenericQueryExecutor> queryExecutors = new WeakVertxMap<>(Environment::queryExecutorConstructor);
 	private static ServerConfiguration cachedConfiguration;
@@ -63,7 +82,7 @@ public class Environment {
 	private static PgPool poolConstructor(Vertx vertx) {
 		var connectionOptions = connectOptions();
 		var poolOptions = new PoolOptions()
-				.setMaxSize(Runtime.getRuntime().availableProcessors() * 2);
+				.setMaxSize(Runtime.getRuntime().availableProcessors());
 		if (vertx == null) {
 			return PgPool.pool(connectionOptions, poolOptions);
 		}
@@ -112,7 +131,7 @@ public class Environment {
 		var here = new Throwable();
 		return t -> {
 			t.setStackTrace(Sync.concatAndFilterStackTrace(t, here));
-			t.printStackTrace();
+			Tracing.error(t);
 		};
 	}
 
@@ -135,6 +154,10 @@ public class Environment {
 			defaultConfiguration.setSQLDialect(SQLDialect.POSTGRES);
 			return defaultConfiguration;
 		});
+	}
+
+	public static RedissonClient redisson() {
+		return redissonClients.get();
 	}
 
 	public static Future<Integer> migrate(String url, String username, String password) {
@@ -304,5 +327,9 @@ public class Environment {
 				.set(record)
 				.onDuplicateKeyUpdate()
 				.set(record);
+	}
+
+	static <T> RMapCacheAsync<String, T> cache(String name, Parser<T> parser) {
+		return redisson().getMapCache(name, new CompositeCodec(new StringCodec(), new RedissonProtobufCodec(parser)));
 	}
 }

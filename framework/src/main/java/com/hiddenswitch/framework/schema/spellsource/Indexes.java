@@ -23,7 +23,7 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
-    public static final Index DECK_SHARES_TRASHED_IDX = Indexes0.DECK_SHARES_TRASHED_IDX;
+    public static final Index DECK_SHARES_TRASHED_BY_RECIPIENT_IDX = Indexes0.DECK_SHARES_TRASHED_BY_RECIPIENT_IDX;
     public static final Index DECKS_CREATED_BY_IDX = Indexes0.DECKS_CREATED_BY_IDX;
     public static final Index DECKS_IS_PREMADE_IDX = Indexes0.DECKS_IS_PREMADE_IDX;
     public static final Index DECKS_TRASHED_IDX = Indexes0.DECKS_TRASHED_IDX;
@@ -34,7 +34,7 @@ public class Indexes {
     // -------------------------------------------------------------------------
 
     private static class Indexes0 {
-        public static Index DECK_SHARES_TRASHED_IDX = Internal.createIndex("deck_shares_trashed_idx", DeckShares.DECK_SHARES, new OrderField[] { DeckShares.DECK_SHARES.TRASHED }, false);
+        public static Index DECK_SHARES_TRASHED_BY_RECIPIENT_IDX = Internal.createIndex("deck_shares_trashed_by_recipient_idx", DeckShares.DECK_SHARES, new OrderField[] { DeckShares.DECK_SHARES.TRASHED_BY_RECIPIENT }, false);
         public static Index DECKS_CREATED_BY_IDX = Internal.createIndex("decks_created_by_idx", Decks.DECKS, new OrderField[] { Decks.DECKS.CREATED_BY }, false);
         public static Index DECKS_IS_PREMADE_IDX = Internal.createIndex("decks_is_premade_idx", Decks.DECKS, new OrderField[] { Decks.DECKS.IS_PREMADE }, false);
         public static Index DECKS_TRASHED_IDX = Internal.createIndex("decks_trashed_idx", Decks.DECKS, new OrderField[] { Decks.DECKS.TRASHED }, false);

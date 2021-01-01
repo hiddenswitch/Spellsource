@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableCallable;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
@@ -15,14 +16,18 @@ import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.json.Json;
 import net.demilich.metastone.game.GameContext;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,7 +47,8 @@ public class Games {
 			.comparing(net.demilich.metastone.game.entities.Entity::getZone)
 			.thenComparingInt(net.demilich.metastone.game.entities.Entity::getIndex);
 	public static final String GAMES_CREATE_GAME_SESSION = "Games.createGameSession";
-	public static final long CREATE_GAME_TIMEOUT_MILLIS = 8000L;
+	public static final long CREATE_GAME_TIMEOUT_MILLIS = 4000L;
+	public static final int CREATE_GAME_RETRIES = 3;
 
 	/**
 	 * Creates a match without entering a queue entry between two users.
@@ -55,8 +61,8 @@ public class Games {
 		CodecRegistration.register(CreateGameSessionResponse.class).andRegister(MatchCreateResponse.class).andRegister(ConfigurationRequest.class);
 		var eb = Vertx.currentContext().owner().eventBus();
 
-		return eb.<CreateGameSessionResponse>request(GAMES_CREATE_GAME_SESSION, request, new DeliveryOptions()
-				.setSendTimeout(CREATE_GAME_TIMEOUT_MILLIS))
+		return eb.<CreateGameSessionResponse>request(GAMES_CREATE_GAME_SESSION, request)
+				.onFailure(Environment.onFailure())
 				.map(response -> new MatchCreateResponse(response.body()));
 	}
 

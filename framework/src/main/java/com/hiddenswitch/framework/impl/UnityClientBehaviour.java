@@ -486,14 +486,14 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			@SuppressWarnings("unchecked")
 			Handler<GameAction> callback = request.getCallback();
 
-			if (!Fiber.isCurrentFiber()) {
-				Sync.getContextScheduler().newFiber(() -> {
-					callback.handle(action);
-					return null;
-				}).start();
-			} else {
+//			if (!Fiber.isCurrentFiber()) {
+//				Sync.getContextScheduler().newFiber(() -> {
+//					callback.handle(action);
+//					return null;
+//				}).start();
+//			} else {
 				callback.handle(action);
-			}
+//			}
 		} finally {
 			requestsLock.unlock();
 		}

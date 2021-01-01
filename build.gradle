@@ -70,6 +70,10 @@ subprojects {
                     details.useVersion "3.7"
                 }
 
+                if (details.requested.group == 'io.reactivex.rxjava3' && details.requested.module.name == "rxjava") {
+                    details.useVersion "3.0.7"
+                }
+
                 if (details.requested.group == 'commons-lang') {
                     details.useVersion "2.5"
                 }

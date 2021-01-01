@@ -31,9 +31,16 @@ message ServerConfiguration {
     }
 
     message RedisConfiguration {
-        string host = 1;
-        int32 port = 2;
-        string user = 3;
+        message HostPortUser {
+            string host = 1;
+            int32 port = 2;
+            string user = 3;
+        }
+
+        oneof connection {
+            HostPortUser hostPortUser = 1;
+            string uri = 2;
+        }
     }
 
     message RealtimeConfiguration {
@@ -52,17 +59,22 @@ message ServerConfiguration {
         int32 maxTicketsToProcess = 3;
     }
 
+    message DecksConfiguration {
+        int64 cachedDeckTimeToLiveMinutes = 1;
+    }
+
     message ApplicationConfiguration {
         bool useBroadcaster = 1;
     }
 
     PostgresConfiguration pg = 1;
     KeycloakConfiguration keycloak = 2;
-    reserved 3;
+    RedisConfiguration redis = 3;
     RealtimeConfiguration realtime = 4;
     GrpcConfiguration grpcConfiguration = 5;
     MatchmakingConfiguration matchmaking = 6;
     ApplicationConfiguration application = 7;
+    DecksConfiguration decks = 8;
 }
 
 

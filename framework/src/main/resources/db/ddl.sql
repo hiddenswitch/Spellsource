@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 12.3 (Debian 12.3-1.pgdg100+1)
--- Dumped by pg_dump version 12.3 (Debian 12.3-1.pgdg100+1)
+-- Dumped by pg_dump version 13.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1648,10 +1648,9 @@ ALTER TABLE spellsource.deck_player_attribute_tuples ALTER COLUMN id ADD GENERAT
 --
 
 CREATE TABLE spellsource.deck_shares (
-    id bigint NOT NULL,
     deck_id text NOT NULL,
-    share_recipient_id character varying NOT NULL,
-    trashed boolean DEFAULT false NOT NULL
+    share_recipient_id text NOT NULL,
+    trashed_by_recipient boolean DEFAULT false NOT NULL
 );
 
 
@@ -1662,20 +1661,6 @@ ALTER TABLE spellsource.deck_shares OWNER TO admin;
 --
 
 COMMENT ON TABLE spellsource.deck_shares IS 'indicates a deck shared to a player';
-
-
---
--- Name: deck_shares_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
---
-
-ALTER TABLE spellsource.deck_shares ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME spellsource.deck_shares_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
 
 
 --
@@ -2754,19 +2739,11 @@ ALTER TABLE ONLY spellsource.deck_player_attribute_tuples
 
 
 --
--- Name: deck_shares deck_shares_deck_id_share_recipient_id_key; Type: CONSTRAINT; Schema: spellsource; Owner: admin
---
-
-ALTER TABLE ONLY spellsource.deck_shares
-    ADD CONSTRAINT deck_shares_deck_id_share_recipient_id_key UNIQUE (deck_id, share_recipient_id);
-
-
---
 -- Name: deck_shares deck_shares_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
 ALTER TABLE ONLY spellsource.deck_shares
-    ADD CONSTRAINT deck_shares_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT deck_shares_pkey PRIMARY KEY (deck_id, share_recipient_id);
 
 
 --
@@ -3372,10 +3349,10 @@ CREATE INDEX idx_web_orig_client ON keycloak.web_origins USING btree (client_id)
 
 
 --
--- Name: deck_shares_trashed_idx; Type: INDEX; Schema: spellsource; Owner: admin
+-- Name: deck_shares_trashed_by_recipient_idx; Type: INDEX; Schema: spellsource; Owner: admin
 --
 
-CREATE INDEX deck_shares_trashed_idx ON spellsource.deck_shares USING btree (trashed) WHERE (trashed IS FALSE);
+CREATE INDEX deck_shares_trashed_by_recipient_idx ON spellsource.deck_shares USING btree (trashed_by_recipient) WHERE (trashed_by_recipient IS FALSE);
 
 
 --

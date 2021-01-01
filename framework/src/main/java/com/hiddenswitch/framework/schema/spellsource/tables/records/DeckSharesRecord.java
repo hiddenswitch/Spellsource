@@ -10,9 +10,9 @@ import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.IDeckShar
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 
 import org.jooq.Field;
-import org.jooq.Record1;
-import org.jooq.Record4;
-import org.jooq.Row4;
+import org.jooq.Record2;
+import org.jooq.Record3;
+import org.jooq.Row3;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -20,33 +20,16 @@ import org.jooq.impl.UpdatableRecordImpl;
  * indicates a deck shared to a player
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class DeckSharesRecord extends UpdatableRecordImpl<DeckSharesRecord> implements VertxPojo, Record4<Long, String, String, Boolean>, IDeckShares {
+public class DeckSharesRecord extends UpdatableRecordImpl<DeckSharesRecord> implements VertxPojo, Record3<String, String, Boolean>, IDeckShares {
 
-    private static final long serialVersionUID = 1939367573;
-
-    /**
-     * Setter for <code>spellsource.deck_shares.id</code>.
-     */
-    @Override
-    public DeckSharesRecord setId(Long value) {
-        set(0, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>spellsource.deck_shares.id</code>.
-     */
-    @Override
-    public Long getId() {
-        return (Long) get(0);
-    }
+    private static final long serialVersionUID = 1470450929;
 
     /**
      * Setter for <code>spellsource.deck_shares.deck_id</code>.
      */
     @Override
     public DeckSharesRecord setDeckId(String value) {
-        set(1, value);
+        set(0, value);
         return this;
     }
 
@@ -55,7 +38,7 @@ public class DeckSharesRecord extends UpdatableRecordImpl<DeckSharesRecord> impl
      */
     @Override
     public String getDeckId() {
-        return (String) get(1);
+        return (String) get(0);
     }
 
     /**
@@ -63,7 +46,7 @@ public class DeckSharesRecord extends UpdatableRecordImpl<DeckSharesRecord> impl
      */
     @Override
     public DeckSharesRecord setShareRecipientId(String value) {
-        set(2, value);
+        set(1, value);
         return this;
     }
 
@@ -72,24 +55,24 @@ public class DeckSharesRecord extends UpdatableRecordImpl<DeckSharesRecord> impl
      */
     @Override
     public String getShareRecipientId() {
-        return (String) get(2);
+        return (String) get(1);
     }
 
     /**
-     * Setter for <code>spellsource.deck_shares.trashed</code>.
+     * Setter for <code>spellsource.deck_shares.trashed_by_recipient</code>.
      */
     @Override
-    public DeckSharesRecord setTrashed(Boolean value) {
-        set(3, value);
+    public DeckSharesRecord setTrashedByRecipient(Boolean value) {
+        set(2, value);
         return this;
     }
 
     /**
-     * Getter for <code>spellsource.deck_shares.trashed</code>.
+     * Getter for <code>spellsource.deck_shares.trashed_by_recipient</code>.
      */
     @Override
-    public Boolean getTrashed() {
-        return (Boolean) get(3);
+    public Boolean getTrashedByRecipient() {
+        return (Boolean) get(2);
     }
 
     // -------------------------------------------------------------------------
@@ -97,114 +80,92 @@ public class DeckSharesRecord extends UpdatableRecordImpl<DeckSharesRecord> impl
     // -------------------------------------------------------------------------
 
     @Override
-    public Record1<Long> key() {
-        return (Record1) super.key();
+    public Record2<String, String> key() {
+        return (Record2) super.key();
     }
 
     // -------------------------------------------------------------------------
-    // Record4 type implementation
+    // Record3 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Long, String, String, Boolean> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row3<String, String, Boolean> fieldsRow() {
+        return (Row3) super.fieldsRow();
     }
 
     @Override
-    public Row4<Long, String, String, Boolean> valuesRow() {
-        return (Row4) super.valuesRow();
+    public Row3<String, String, Boolean> valuesRow() {
+        return (Row3) super.valuesRow();
     }
 
     @Override
-    public Field<Long> field1() {
-        return DeckShares.DECK_SHARES.ID;
-    }
-
-    @Override
-    public Field<String> field2() {
+    public Field<String> field1() {
         return DeckShares.DECK_SHARES.DECK_ID;
     }
 
     @Override
-    public Field<String> field3() {
+    public Field<String> field2() {
         return DeckShares.DECK_SHARES.SHARE_RECIPIENT_ID;
     }
 
     @Override
-    public Field<Boolean> field4() {
-        return DeckShares.DECK_SHARES.TRASHED;
+    public Field<Boolean> field3() {
+        return DeckShares.DECK_SHARES.TRASHED_BY_RECIPIENT;
     }
 
     @Override
-    public Long component1() {
-        return getId();
+    public String component1() {
+        return getDeckId();
     }
 
     @Override
     public String component2() {
-        return getDeckId();
-    }
-
-    @Override
-    public String component3() {
         return getShareRecipientId();
     }
 
     @Override
-    public Boolean component4() {
-        return getTrashed();
+    public Boolean component3() {
+        return getTrashedByRecipient();
     }
 
     @Override
-    public Long value1() {
-        return getId();
+    public String value1() {
+        return getDeckId();
     }
 
     @Override
     public String value2() {
-        return getDeckId();
-    }
-
-    @Override
-    public String value3() {
         return getShareRecipientId();
     }
 
     @Override
-    public Boolean value4() {
-        return getTrashed();
+    public Boolean value3() {
+        return getTrashedByRecipient();
     }
 
     @Override
-    public DeckSharesRecord value1(Long value) {
-        setId(value);
-        return this;
-    }
-
-    @Override
-    public DeckSharesRecord value2(String value) {
+    public DeckSharesRecord value1(String value) {
         setDeckId(value);
         return this;
     }
 
     @Override
-    public DeckSharesRecord value3(String value) {
+    public DeckSharesRecord value2(String value) {
         setShareRecipientId(value);
         return this;
     }
 
     @Override
-    public DeckSharesRecord value4(Boolean value) {
-        setTrashed(value);
+    public DeckSharesRecord value3(Boolean value) {
+        setTrashedByRecipient(value);
         return this;
     }
 
     @Override
-    public DeckSharesRecord values(Long value1, String value2, String value3, Boolean value4) {
+    public DeckSharesRecord values(String value1, String value2, Boolean value3) {
         value1(value1);
         value2(value2);
         value3(value3);
-        value4(value4);
         return this;
     }
 
@@ -214,10 +175,9 @@ public class DeckSharesRecord extends UpdatableRecordImpl<DeckSharesRecord> impl
 
     @Override
     public void from(IDeckShares from) {
-        setId(from.getId());
         setDeckId(from.getDeckId());
         setShareRecipientId(from.getShareRecipientId());
-        setTrashed(from.getTrashed());
+        setTrashedByRecipient(from.getTrashedByRecipient());
     }
 
     @Override
@@ -240,13 +200,12 @@ public class DeckSharesRecord extends UpdatableRecordImpl<DeckSharesRecord> impl
     /**
      * Create a detached, initialised DeckSharesRecord
      */
-    public DeckSharesRecord(Long id, String deckId, String shareRecipientId, Boolean trashed) {
+    public DeckSharesRecord(String deckId, String shareRecipientId, Boolean trashedByRecipient) {
         super(DeckShares.DECK_SHARES);
 
-        set(0, id);
-        set(1, deckId);
-        set(2, shareRecipientId);
-        set(3, trashed);
+        set(0, deckId);
+        set(1, shareRecipientId);
+        set(2, trashedByRecipient);
     }
 
     public DeckSharesRecord(io.vertx.core.json.JsonObject json) {
