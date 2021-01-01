@@ -10,6 +10,7 @@ import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ public class BroadcastTest {
 
 	@Test
 	@Timeout(4500)
+	@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 	public void testBroadcastCallResponse(VertxTestContext context, Vertx vertx) throws InterruptedException {
 		// On Travis, UDP broadcast is disabled.
 		if (System.getenv().containsKey("CI")) {
