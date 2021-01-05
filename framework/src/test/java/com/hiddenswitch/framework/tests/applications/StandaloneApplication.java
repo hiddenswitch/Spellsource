@@ -4,6 +4,7 @@ import com.hiddenswitch.containers.*;
 import com.hiddenswitch.framework.Application;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.rpc.ServerConfiguration;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import org.testcontainers.containers.Network;

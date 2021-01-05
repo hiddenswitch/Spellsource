@@ -1,5 +1,6 @@
 package com.hiddenswitch.framework.impl;
 
+import co.paralleluniverse.strands.SuspendableAction1;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public class GameplayRequest {
 	private String callbackId;
-	private Handler callback;
+	private SuspendableAction1<?> callback;
 	private List<Card> starterCards;
 	private List<GameAction> actions;
 	private GameplayRequestType type;
@@ -25,11 +26,11 @@ public class GameplayRequest {
 		return this;
 	}
 
-	public Handler getCallback() {
+	public SuspendableAction1<?> getCallback() {
 		return callback;
 	}
 
-	public GameplayRequest setCallback(Handler callback) {
+	public GameplayRequest setCallback(SuspendableAction1<?> callback) {
 		this.callback = callback;
 		return this;
 	}

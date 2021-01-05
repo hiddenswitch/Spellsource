@@ -1,7 +1,8 @@
 package net.demilich.metastone.game.behaviour;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import io.vertx.core.Handler;
+import co.paralleluniverse.strands.SuspendableAction1;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -29,19 +30,25 @@ public abstract class AbstractBehaviour implements Behaviour, Serializable {
 
 	@Override
 	@Suspendable
-	public void mulliganAsync(GameContext context, Player player, List<Card> cards, Handler<List<Card>> handler) {
+	public void mulliganAsync(GameContext context, Player player, List<Card> cards, SuspendableAction1<List<Card>> handler) {
 		final List<Card> mulligan = mulligan(context, player, cards);
 		if (handler != null) {
-			handler.handle(mulligan);
+			try {
+				handler.call(mulligan);
+			} catch (SuspendExecution | InterruptedException suspendExecution) {
+			}
 		}
 	}
 
 	@Override
 	@Suspendable
-	public void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Handler<GameAction> handler) {
+	public void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, SuspendableAction1<GameAction> callback) {
 		GameAction action = requestAction(context, player, validActions);
-		if (handler != null) {
-			handler.handle(action);
+		if (callback != null) {
+			try {
+				callback.call(action);
+			} catch (SuspendExecution | InterruptedException suspendExecution) {
+			}
 		}
 	}
 

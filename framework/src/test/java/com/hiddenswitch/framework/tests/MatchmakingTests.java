@@ -400,7 +400,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 	@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 	@Timeout(value = 95, timeUnit = TimeUnit.SECONDS)
 	public void testManyClientsMatchmakeAcrossInstances(VertxTestContext testContext) {
-		var vertx = Vertx.vertx();
+		var vertx = Environment.vertx();
 		// dedicated clients vertx
 		var clientVertx = Vertx.vertx();
 		var queueIds = IntStream

@@ -17,6 +17,10 @@ import com.hiddenswitch.spellsource.rpc.MatchmakingQueuePutResponseUnityConnecti
 import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpc;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
 import io.grpc.ServerServiceDefinition;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Metrics;
+import io.micrometer.core.instrument.Timer;
+import io.micrometer.core.instrument.binder.BaseUnits;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.Message;
@@ -27,13 +31,18 @@ import io.vertx.ext.sync.HandlerReceiverAdaptor;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.sync.concurrent.SuspendableLock;
+import io.vertx.micrometer.backends.BackendRegistries;
+import io.vertx.micrometer.backends.BackendRegistry;
 import io.vertx.pgclient.PgException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.hiddenswitch.framework.schema.spellsource.Tables.*;
@@ -44,7 +53,19 @@ import static java.util.stream.Collectors.*;
 import static org.jooq.impl.DSL.asterisk;
 
 public class Matchmaking extends SyncVerticle {
-
+	private final static Counter TICKETS_TAKEN = Counter
+			.builder("matchmaking.tickets.taken")
+			.baseUnit(BaseUnits.ROWS)
+			.description("The number of tickets taken during this evaluation of the matchmaker.")
+			.register(Metrics.globalRegistry);
+	private final static Timer CLIENT_WAITED_AND_ASSIGNED = Timer
+			.builder("matchmaking.tickets.wait.assigned")
+			.description("The duration the client waited until it was assigned to a match.")
+			.register(Metrics.globalRegistry);
+	private final static Timer CLIENT_WAITED_AND_CANCELLED = Timer
+			.builder("matchmaking.tickets.wait.cancelled")
+			.description("The duration the client waited until giving up and ending matchmaking.")
+			.register(Metrics.globalRegistry);
 	private final Promise<Strand> started = Promise.promise();
 
 	public Matchmaking() {
@@ -124,6 +145,7 @@ public class Matchmaking extends SyncVerticle {
 		});
 
 		try {
+			var startTime = System.nanoTime();
 			var enqueueStrand = Strand.currentStrand();
 			var executor = Environment.queryExecutor();
 
@@ -146,8 +168,13 @@ public class Matchmaking extends SyncVerticle {
 			closeables.add(lock);
 
 			// if the user ends the request or some other exception occurs, close everything
-			request.endHandler(fiber(v -> enqueueStrand.interrupt()));
-			request.exceptionHandler(fiber(v -> enqueueStrand.interrupt()));
+			Handler<Void> endOrExceptionHandler = (Void v) -> {
+				CLIENT_WAITED_AND_CANCELLED.record(System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
+				enqueueStrand.interrupt();
+			};
+
+			request.endHandler(endOrExceptionHandler);
+			request.exceptionHandler(t -> endOrExceptionHandler.handle(null));
 
 			// set up a way to be notified of responses or if the queue gets closed
 			var matchmakingChannel = eventBus.<String>consumer("matchmaking:enqueue:" + userId);
@@ -156,6 +183,7 @@ public class Matchmaking extends SyncVerticle {
 			// and the client has acknowledged it
 			// run in a fiber so it's safe to interrupt another fiber
 			matchmakingChannel.handler(message -> {
+				CLIENT_WAITED_AND_ASSIGNED.record(System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
 				// we have a game ID
 				var gameId = message.body();
 				writeGameId(response, gameId)
@@ -182,6 +210,7 @@ public class Matchmaking extends SyncVerticle {
 				// interrupted exception throws a VertxException here!
 				var fromClient = commandsFromUser.receive();
 				if (fromClient == null || fromClient.getCancel()) {
+					CLIENT_WAITED_AND_CANCELLED.record(System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
 					// cancel
 					return;
 				}
@@ -244,13 +273,11 @@ public class Matchmaking extends SyncVerticle {
 						.onComplete(v));
 			}
 		} catch (Throwable throwable) {
-
 			if (Throwables.getRootCause(throwable) instanceof InterruptedException) {
 				// do nothing
 				return;
 			}
-			throwable.printStackTrace();
-			throw throwable;
+			Throwables.throwIfUnchecked(throwable);
 		} finally {
 			// goes here with all exceptions eventually
 			// run in a separate context in order to not require this to be uninterrupted
@@ -364,6 +391,8 @@ public class Matchmaking extends SyncVerticle {
 						}
 					}
 				}
+
+				TICKETS_TAKEN.increment(ticketsTaken.size());
 
 				// if a game fails to be created for some reason, log it. maybe we reinsert the ticket??
 				// we do not await it though

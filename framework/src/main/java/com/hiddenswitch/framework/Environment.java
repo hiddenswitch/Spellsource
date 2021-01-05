@@ -1,9 +1,9 @@
 package com.hiddenswitch.framework;
 
-import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableCallable;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.github.marschall.micrometer.jfr.JfrMeterRegistry;
 import com.google.common.base.Throwables;
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.Parser;
@@ -14,14 +14,18 @@ import com.hiddenswitch.spellsource.common.Tracing;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
 import io.grpc.Status;
+import io.micrometer.core.instrument.Metrics;
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
-import io.vertx.core.*;
 import io.vertx.core.Context;
+import io.vertx.core.*;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
 import io.vertx.ext.sync.Sync;
+import io.vertx.micrometer.MicrometerMetricsOptions;
+import io.vertx.micrometer.VertxPrometheusOptions;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
@@ -30,7 +34,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jooq.*;
 import org.jooq.impl.DefaultConfiguration;
 import org.redisson.Redisson;
-import org.redisson.api.RMapCache;
 import org.redisson.api.RMapCacheAsync;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.StringCodec;
@@ -49,19 +52,22 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
-import static io.vertx.ext.sync.Sync.await;
-
 public class Environment {
 
 	static {
 		// An opportunity to configure Vertx's JSON
 		DatabindCodec.mapper().registerModule(new ProtobufModule())
 				.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
+		// metrics
+		Metrics.addRegistry(new JfrMeterRegistry());
 	}
 
-	private static AtomicReference<Configuration> jooqConfiguration = new AtomicReference<>();
+	private static final AtomicReference<Configuration> jooqConfiguration = new AtomicReference<>();
 	private static final WeakVertxMap<PgPool> pools = new WeakVertxMap<>(Environment::poolConstructor);
 	private static final WeakVertxMap<RedissonClient> redissonClients = new WeakVertxMap<>(Environment::redissonClientConstructor);
+	private static final WeakVertxMap<ConfigRetriever> configRetrievers = new WeakVertxMap<>(Environment::configRetrieverConstructor);
+	private static ServerConfiguration cachedConfiguration;
+	private static final JsonObject configurationOverride = new JsonObject();
 
 	private static RedissonClient redissonClientConstructor(Vertx vertx) {
 		var configuration = cachedConfigurationOrGet();
@@ -69,11 +75,6 @@ public class Environment {
 		config.useSingleServer().setAddress(configuration.getRedis().getUri());
 		return Redisson.create(config);
 	}
-
-	private static final WeakVertxMap<ConfigRetriever> configRetrievers = new WeakVertxMap<>(Environment::configRetrieverConstructor);
-	private static final WeakVertxMap<ReactiveClassicGenericQueryExecutor> queryExecutors = new WeakVertxMap<>(Environment::queryExecutorConstructor);
-	private static ServerConfiguration cachedConfiguration;
-	private static final JsonObject configurationOverride = new JsonObject();
 
 	private static ReactiveClassicGenericQueryExecutor queryExecutorConstructor(Vertx vertx) {
 		return new ReactiveClassicGenericQueryExecutor(jooqAkaDaoConfiguration(), sqlPoolAkaDaoDelegate());
@@ -169,6 +170,17 @@ public class Environment {
 					.load();
 			return flyway.migrate();
 		});
+	}
+
+	public static VertxOptions vertxOptions() {
+		return new VertxOptions().setMetricsOptions(
+				new MicrometerMetricsOptions()
+						.setMicrometerRegistry(Metrics.globalRegistry)
+//						.setPrometheusOptions(new VertxPrometheusOptions().setEnabled(true)
+//								.setStartEmbeddedServer(true)
+//								.setEmbeddedServerOptions(new HttpServerOptions().setPort(8080))
+//								.setEmbeddedServerEndpoint("/metrics"))
+						.setEnabled(true));
 	}
 
 	public static Future<Integer> migrate(ServerConfiguration serverConfiguration) {
@@ -331,5 +343,9 @@ public class Environment {
 
 	static <T> RMapCacheAsync<String, T> cache(String name, Parser<T> parser) {
 		return redisson().getMapCache(name, new CompositeCodec(new StringCodec(), new RedissonProtobufCodec(parser)));
+	}
+
+	public static Vertx vertx() {
+		return Vertx.vertx(vertxOptions());
 	}
 }

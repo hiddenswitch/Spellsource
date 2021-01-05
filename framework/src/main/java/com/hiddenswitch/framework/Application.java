@@ -20,7 +20,7 @@ public class Application {
 	}
 
 	public Future<Void> deploy() {
-		return deploy(Vertx.vertx());
+		return deploy(Environment.vertx());
 	}
 
 	protected Future<Void> deploy(Vertx vertx) {
