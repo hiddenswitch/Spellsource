@@ -11,6 +11,8 @@ import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.rpc.*;
 import io.grpc.BindableService;
 import io.grpc.ServerServiceDefinition;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.binder.BaseUnits;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
@@ -31,6 +33,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.micrometer.core.instrument.Metrics.globalRegistry;
 import static io.vertx.ext.sync.Sync.await;
 
 

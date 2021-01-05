@@ -71,7 +71,7 @@ dependencies {
     implementation group: 'io.vertx', name: 'vertx-micrometer-metrics', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-mail-client', version: vertxVersion
     implementation 'org.jetbrains:annotations:16.0.2'
-    implementation 'io.jaegertracing:jaeger-client:1.2.0'
+    implementation "io.jaegertracing:jaeger-client:$jaegerVersion"
     implementation 'io.netty:netty-transport-native-epoll:4.1.43.Final:linux-x86_64'
     implementation 'io.micrometer:micrometer-registry-prometheus:1.5.1'
 

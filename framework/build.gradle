@@ -141,6 +141,14 @@ dependencies {
     implementation group: 'io.vertx', name: 'vertx-auth-common', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-config', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-mongo-client', version: vertxVersion
+    implementation "io.vertx:vertx-micrometer-metrics:$vertxVersion"
+    implementation "io.micrometer:micrometer-registry-prometheus:$micrometerVersion"
+    implementation "io.micrometer:micrometer-registry-jmx:$micrometerVersion"
+    implementation 'com.be-hase.grpc-micrometer:grpc-micrometer:0.0.2'
+    implementation 'io.opentracing.contrib:opentracing-grpc:0.2.3'
+    implementation("com.github.marschall:micrometer-jfr:0.4.0") {
+        exclude group: 'io.micrometer', module: 'micrometer-core'
+    }
     implementation 'net.openhft:zero-allocation-hashing:0.11'
     implementation platform("org.keycloak.bom:keycloak-bom-parent:$keycloakVersion")
     implementation(group: 'org.keycloak', name: 'keycloak-admin-client', version: "$keycloakVersion") {
@@ -151,7 +159,7 @@ dependencies {
 
     implementation group: 'org.graalvm.truffle', name: 'truffle-api', version: '20.2.0'
     implementation group: 'org.graalvm.js', name: 'js', version: '20.2.0'
-    implementation 'io.jaegertracing:jaeger-client:1.5.0'
+    implementation "io.jaegertracing:jaeger-client:$jaegerVersion"
     implementation "org.flywaydb:flyway-core:$flywayVersion"
     implementation 'org.redisson:redisson:3.14.1'
 

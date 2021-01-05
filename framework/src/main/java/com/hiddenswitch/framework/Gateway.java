@@ -1,7 +1,12 @@
 package com.hiddenswitch.framework;
 
+import com.be_hase.grpc.micrometer.MicrometerServerInterceptor;
 import io.grpc.BindableService;
+import io.grpc.ServerInterceptors;
 import io.grpc.ServerServiceDefinition;
+import io.micrometer.core.instrument.Metrics;
+import io.opentracing.contrib.grpc.TracingServerInterceptor;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
@@ -29,13 +34,17 @@ public class Gateway extends AbstractVerticle {
 
 					var list = services.list();
 					for (var service : list) {
-						if (service instanceof BindableService) {
-							builder.addService((BindableService) service);
-						} else if (service instanceof ServerServiceDefinition) {
-							builder.addService((ServerServiceDefinition) service);
-						} else {
-							return Future.failedFuture("invalid service");
-						}
+						var boundService = service instanceof BindableService ? ((BindableService) service).bindService() : (ServerServiceDefinition) service;
+						// basic interceptors for grpc
+						boundService = ServerInterceptors.intercept(boundService,
+								new MicrometerServerInterceptor(Metrics.globalRegistry),
+								TracingServerInterceptor
+										.newBuilder()
+										.withTracer(GlobalTracer.get())
+										.withStreaming()
+										.withVerbosity()
+										.build());
+						builder.addService(boundService);
 					}
 					var nettyServerBuilder = builder.nettyBuilder();
 					nettyServerBuilder.keepAliveTime(serverConfiguration.getGrpcConfiguration().getServerKeepAliveTimeMillis(), TimeUnit.MILLISECONDS)

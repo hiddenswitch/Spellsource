@@ -1,7 +1,9 @@
 package net.demilich.metastone.game.behaviour;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import io.vertx.core.Handler;
+import co.paralleluniverse.strands.SuspendableAction1;
+import com.google.common.base.Throwables;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -19,8 +21,7 @@ import java.util.List;
  * an action is requested. The {@link GameContext} is then responsible for getting the next action.
  *
  * @see AbstractBehaviour for default implementations of some of these requests.
- * @see GameStateValueBehaviour for an example of an artificial-intelligence
- * 		based behaviour.
+ * @see GameStateValueBehaviour for an example of an artificial-intelligence based behaviour.
  */
 public interface Behaviour extends Cloneable {
 	/***
@@ -79,10 +80,13 @@ public interface Behaviour extends Cloneable {
 	 * @see #mulligan(GameContext, Player, List) for a complete description of this method.
 	 */
 	@Suspendable
-	default void mulliganAsync(GameContext context, Player player, List<Card> cards, Handler<List<Card>> handler) {
+	default void mulliganAsync(GameContext context, Player player, List<Card> cards, SuspendableAction1<List<Card>> handler) {
 		final List<Card> mulligan = mulligan(context, player, cards);
 		if (handler != null) {
-			handler.handle(mulligan);
+			try {
+				handler.call(mulligan);
+			} catch (SuspendExecution | InterruptedException suspendExecution) {
+			}
 		}
 	}
 
@@ -92,14 +96,16 @@ public interface Behaviour extends Cloneable {
 	 * @param context      The game context where the choice is being made.
 	 * @param player       The player who is making the choice.
 	 * @param validActions The valid actions the player has to choose from.
-	 * @param handler      The callback whose argument is one of the {@code validActions} that correspond to the player's
-	 *                     choice.
+	 * @param callback     The callback whose argument is one of the {@code validActions} that correspond to the player's
 	 */
 	@Suspendable
-	default void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Handler<GameAction> handler) {
+	default void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, SuspendableAction1<GameAction> callback) {
 		GameAction action = requestAction(context, player, validActions);
-		if (handler != null) {
-			handler.handle(action);
+		if (callback != null) {
+			try {
+				callback.call(action);
+			} catch (SuspendExecution | InterruptedException suspendExecution) {
+			}
 		}
 	}
 

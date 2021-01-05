@@ -6,6 +6,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.StrandLocalRandom;
 import co.paralleluniverse.strands.SuspendableAction1;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
+import com.google.common.base.Throwables;
 import com.google.protobuf.Int32Value;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.Tracing;
@@ -37,6 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.vertx.ext.sync.Sync.await;
 import static io.vertx.ext.sync.Sync.awaitEvent;
 import static java.util.stream.Collectors.toList;
 import static net.demilich.metastone.game.GameContext.PLAYER_1;
@@ -294,13 +296,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	@Suspendable
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
-		return awaitEvent(fut -> mulliganAsync(context, player, cards, fut));
+		var promise = Promise.<List<Card>>promise();
+		mulliganAsync(context, player, cards, promise::tryComplete);
+		return await(promise);
 	}
 
 
 	@Override
 	@Suspendable
-	public void mulliganAsync(GameContext context, Player player, List<Card> cards, Handler<List<Card>> next) {
+	public void mulliganAsync(GameContext context, Player player, List<Card> cards, SuspendableAction1<List<Card>> next) {
 		var id = Integer.toString(callbackIdCounter.getAndIncrement());
 		requestsLock.lock();
 		try {
@@ -350,9 +354,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					.collect(toList());
 
 			@SuppressWarnings("unchecked")
-			Handler<List<Card>> callback = request.getCallback();
+			SuspendableAction1<List<Card>> callback = (SuspendableAction1<List<Card>>) request.getCallback();
 
-			callback.handle(discardedCards);
+			callback.call(discardedCards);
+		} catch (InterruptedException | SuspendExecution e) {
+			Throwables.throwIfUnchecked(e);
 		} finally {
 			requestsLock.unlock();
 		}
@@ -361,7 +367,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	@Suspendable
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
-		return awaitEvent(fut -> requestActionAsync(context, player, validActions, fut));
+		var promise = Promise.<GameAction>promise();
+		requestActionAsync(context, player, validActions, promise::tryComplete);
+		return await(promise);
 	}
 
 	/**
@@ -395,7 +403,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	@Suspendable
-	public void requestActionAsync(GameContext context, Player player, List<GameAction> actions, Handler<GameAction> callback) {
+	public void requestActionAsync(GameContext context, Player player, List<GameAction> actions, SuspendableAction1<GameAction> callback) {
 		requestsLock.lock();
 		try {
 			var id = Integer.toString(callbackIdCounter.getAndIncrement());
@@ -407,7 +415,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 			// The player's turn may have ended, so handle the action immediately in this case.
 			if (isElapsed()) {
-				processActionForElapsedTurn(actions, callback::handle);
+				processActionForElapsedTurn(actions, callback);
 			} else {
 				// If there is an existing action, it's almost definitely an error, because we should only be requesting actions
 				// inside a resume() loop
@@ -484,16 +492,10 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			var action = request.getActions().get(actionIndex);
 
 			@SuppressWarnings("unchecked")
-			Handler<GameAction> callback = request.getCallback();
-
-//			if (!Fiber.isCurrentFiber()) {
-//				Sync.getContextScheduler().newFiber(() -> {
-//					callback.handle(action);
-//					return null;
-//				}).start();
-//			} else {
-				callback.handle(action);
-//			}
+			SuspendableAction1<GameAction> callback = (SuspendableAction1<GameAction>) request.getCallback();
+			callback.call(action);
+		} catch (InterruptedException | SuspendExecution e) {
+			Throwables.throwIfUnchecked(e);
 		} finally {
 			requestsLock.unlock();
 		}

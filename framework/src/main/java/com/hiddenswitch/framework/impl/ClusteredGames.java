@@ -1,6 +1,5 @@
 package com.hiddenswitch.framework.impl;
 
-import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
@@ -15,6 +14,8 @@ import com.hiddenswitch.framework.schema.spellsource.enums.GameUserVictoryEnum;
 import com.hiddenswitch.spellsource.common.Tracing;
 import com.hiddenswitch.spellsource.rpc.ClientToServerMessage;
 import com.hiddenswitch.spellsource.rpc.ServerToClientMessage;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.binder.BaseUnits;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.MessageConsumer;
@@ -29,20 +30,26 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static com.hiddenswitch.framework.schema.spellsource.Tables.GAME_USERS;
+import static io.micrometer.core.instrument.Metrics.globalRegistry;
 import static io.vertx.ext.sync.Sync.await;
 import static io.vertx.ext.sync.Sync.fiber;
 
 public class ClusteredGames extends SyncVerticle {
+	private static final Counter GAMES_CREATED = Counter.builder("games.created")
+			.description("The number of games created.")
+			.baseUnit(BaseUnits.EVENTS)
+			.register(globalRegistry);
+	private static final Counter GAMES_FINISHED = Counter.builder("games.finished")
+			.description("The number of games finished.")
+			.baseUnit(BaseUnits.EVENTS)
+			.register(globalRegistry);
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClusteredGames.class);
 	private Map<String, ServerGameContext> contexts = new ConcurrentHashMap<>();
 	private MessageConsumer<?> registration;
@@ -57,22 +64,9 @@ public class ClusteredGames extends SyncVerticle {
 		registration = eb.<ConfigurationRequest>consumer(Games.GAMES_CREATE_GAME_SESSION, request -> {
 			var body = request.body();
 
-			fiber(() -> {
-						try {
-							return createGameSession(body);
-						} catch (Throwable t) {
-							t.printStackTrace();
-							throw t;
-						}
-					}
-			)
-					.onComplete(res -> {
-						if (res.succeeded()) {
-							request.reply(res.result());
-						} else {
-							request.fail(-1, res.cause().getMessage());
-						}
-					});
+			fiber(() -> createGameSession(body))
+					.onSuccess(request::reply)
+					.onFailure(t -> request.fail(-1, t.getMessage()));
 		});
 	}
 
@@ -96,7 +90,7 @@ public class ClusteredGames extends SyncVerticle {
 			// Loads persistence game triggers that implement legacy functionality. In other words, ensures that game contexts
 			// will contain the event-listening enchantments that interact with network services like the database to store
 			// stuff about cards.
-//			Logic.triggers();
+			// Logic.triggers();
 			// Get the collection data from the configurations that are not yet populated with valid cards
 			for (var configuration : request.getConfigurations()) {
 				var playerAttributes = new AttributeMap();
@@ -109,7 +103,6 @@ public class ClusteredGames extends SyncVerticle {
 					// Create the deck and assign all the appropriate IDs to the cards
 					var deck = ModelConversions.getGameDeck(userId, deckCollection);
 
-					// TODO: Add player information as attached to the hero entity
 					configuration.setDeck(deck);
 
 					// Add all the attributes that were specified in the deck collection
@@ -142,11 +135,11 @@ public class ClusteredGames extends SyncVerticle {
 			try {
 				// Deal with ending the game
 				context.addEndGameHandler(session -> {
+					GAMES_FINISHED.increment();
 					// Do not record replays if we're interrupting
 					if (Strand.currentStrand().isInterrupted()) {
 						return;
 					}
-					LOGGER.debug("onGameOver: Handling on game over for session " + session.getGameId());
 					var gameOverId = session.getGameId();
 					// The players should not accidentally wind back up in games
 					removeGameAndRecordReplay(gameOverId);
@@ -158,6 +151,7 @@ public class ClusteredGames extends SyncVerticle {
 				context.play(true);
 				span.log("awaitingRegistration");
 				await(context.handlersReady());
+				GAMES_CREATED.increment();
 				return response;
 			} catch (RuntimeException any) {
 				if (Throwables.getRootCause(any) instanceof TimeoutException) {
