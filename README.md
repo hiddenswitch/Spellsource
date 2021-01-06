@@ -119,6 +119,8 @@ Requirements: **Java 11 or later** and **Docker**. Check your current version of
     ```shell script
     git clone https://github.com/hiddenswitch/Spellsource.git
     cd Spellsource
+    # If you have access
+    git submodule update --init --recursive unityclient/src/unity
     ```
  3. See Spellsource-specific tasks using `./gradlew tasks --group spellsource`.
  4. Run tests using `./gradlew --no-parallel test`
@@ -143,7 +145,6 @@ Requirements: **Java 11 or later**, **Docker**, **bash** and **GNU binutils** li
     ```
     ##### I have private repo access
     ```shell
-    git config --system core.longpaths true
     git clone --recurse-submodules git@github.com:hiddenswitch/Spellsource.git
     cd Spellsource
     git submodule update --init --recursive unityclient/src/unity
