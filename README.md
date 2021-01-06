@@ -88,6 +88,7 @@ Make sure `longpaths` is enabled on Windows. Run a `bash` or other command promp
 git lfs install
 git clone --recurse-submodules git@github.com:hiddenswitch/Spellsource.git
 cd Spellsource
+git submodule update --init --recursive unityclient/src/unity
 ```
 
 Failures are normal if you do not have permissions to the repositories.
@@ -145,6 +146,7 @@ Requirements: **Java 11 or later**, **Docker**, **bash** and **GNU binutils** li
     git config --system core.longpaths true
     git clone --recurse-submodules git@github.com:hiddenswitch/Spellsource.git
     cd Spellsource
+    git submodule update --init --recursive unityclient/src/unity
     ```
     
     ##### I am a public user
