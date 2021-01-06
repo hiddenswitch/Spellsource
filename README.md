@@ -69,12 +69,25 @@ To see more detail about a task, run gradle help --task <task>
 
 ### Cloning this repository
 
-This repository uses **Git Submodules**. This means, if you have the proper authorization, you'll be able to access all the source code using:
+Typically you do not have access to the private submodules. Use the following commands to clone the repository:
 
-```shell script
+```shell
 git clone https://github.com/hiddenswitch/Spellsource.git
 cd Spellsource
-git submodule update --init --recursive
+```
+
+This repository uses **Git Submodules**. This means, if you have the proper authorization, you'll be able to access all the source code using:
+
+##### Prerequisites
+
+Make sure `longpaths` is enabled on Windows. Run a `bash` or other command prompt **as administrator**, and then execute `git config --system core.longpaths true`.
+
+##### All platforms
+
+```shell
+git lfs install
+git clone --recurse-submodules git@github.com:hiddenswitch/Spellsource.git
+cd Spellsource
 ```
 
 Failures are normal if you do not have permissions to the repositories.
@@ -124,8 +137,18 @@ Requirements: **Java 11 or later**, **Docker**, **bash** and **GNU binutils** li
     6. `git lfs` [2.12.2](https://github.com/git-lfs/git-lfs/releases/download/v2.12.1/git-lfs-windows-v2.12.1.exe) or later.
 ) or later.
  2. Right click in the folder where you'd like to store your Spellsource files, then choose **Git Bash Here**. Then, clone the repository:
-    ```shell script
+    ```shell
     git lfs install
+    ```
+    ##### I have private repo access
+    ```shell
+    git config --system core.longpaths true
+    git clone --recurse-submodules git@github.com:hiddenswitch/Spellsource.git
+    cd Spellsource
+    ```
+    
+    ##### I am a public user
+    ```shell
     git clone https://github.com/hiddenswitch/Spellsource.git
     cd Spellsource
     ``` 
