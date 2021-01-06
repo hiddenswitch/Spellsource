@@ -197,7 +197,7 @@ shadowJar {
 
 run {
     description("Starts the Spellsource server")
-    dependsOn += [classes, testClasses]
+    dependsOn += [classes, testClasses, createPostgresImage, createKeycloakImage]
     classpath sourceSets.test.runtimeClasspath
     main = 'com.hiddenswitch.framework.tests.applications.EntryPoint'
 }
