@@ -183,7 +183,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'org.testcontainers') {
-                    details.useVersion '1.14.3'
+                    details.useVersion testcontainersVersion
                 }
 
                 if (details.requested.group == 'org.apache.ignite') {
@@ -228,6 +228,10 @@ subprojects {
 
                 if (details.requested.group == 'com.github.ben-manes.caffeine') {
                     details.useVersion '2.8.4'
+                }
+
+                if (details.requested.group == 'net.java.dev.jna') {
+                    details.useVersion '5.5.0'
                 }
             }
         }

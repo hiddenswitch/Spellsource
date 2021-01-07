@@ -1,0 +1,23 @@
+plugins {
+    id 'java-library'
+    id "me.champeau.gradle.jmh" version "0.5.2"
+}
+
+apply plugin: 'java-library'
+apply plugin: "me.champeau.gradle.jmh"
+apply from: '../gradle/instrument.gradle'
+
+dependencies {
+    implementation project(':game')
+    implementation project(':cards')
+    implementation 'org.slf4j:slf4j-api:1.7.22'
+
+    jmh "org.openjdk.jmh:jmh-core:$jmhVersion"
+    jmh "org.openjdk.jmh:jmh-generator-annprocess:$jmhVersion"
+}
+
+jmh {
+    zip64 = true
+    duplicateClassesStrategy = DuplicatesStrategy.EXCLUDE
+    profilers = ['hs_gc']
+}

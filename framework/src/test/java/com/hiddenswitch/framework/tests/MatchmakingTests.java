@@ -349,6 +349,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
+	@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 	public void testDeploysMultipleMatchmakingInstances(Vertx vertx, VertxTestContext testContext) {
 		var vertxInternal = (VertxInternal) vertx;
 		var currentMatchmakingCount = matchmakingCount(vertxInternal);

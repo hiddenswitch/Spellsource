@@ -116,7 +116,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	protected boolean forceGarbageCollection = false;
 	protected boolean throwOnInvalidPlan = false;
 	protected boolean pruneContextStack = true;
-	protected boolean throwsExceptions = true;
+	protected boolean throwsExceptions = false;
 	protected boolean expandDepthForLethal = true;
 	protected boolean triggerStartTurns = true;
 	protected boolean pruneEarlyEndTurn = false;
@@ -663,7 +663,8 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * @return
 	 */
 	protected boolean isInterrupted() {
-		return Strand.currentStrand().isInterrupted() || (System.currentTimeMillis() - getRequestActionStartTime() > getTimeout());
+		return Strand.currentStrand().isInterrupted()
+				|| (getTimeout() != 0 && System.currentTimeMillis() - getRequestActionStartTime() > getTimeout());
 	}
 
 	/**
