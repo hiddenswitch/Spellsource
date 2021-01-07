@@ -1,10 +1,8 @@
 package com.hiddenswitch.containers;
 
 import com.github.dockerjava.api.command.InspectContainerResponse;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.containers.Container;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
@@ -24,7 +22,7 @@ public class MongoDBContainer extends GenericContainer<MongoDBContainer> {
 		this("mongo:" + MONGODB_VERSION_DEFAULT);
 	}
 
-	public MongoDBContainer(@NotNull String dockerImageName) {
+	public MongoDBContainer(String dockerImageName) {
 		super(dockerImageName);
 		this.withExposedPorts(27017);
 		waitingFor(Wait.forLogMessage(".*waiting for connections on port.*", 1));

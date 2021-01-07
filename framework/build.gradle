@@ -165,8 +165,8 @@ dependencies {
 
     testImplementation(project(':testcontainers'))
     testImplementation project(':testutils')
-    testImplementation("org.testcontainers:testcontainers")
-    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
+    testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
     testImplementation group: 'io.vertx', name: 'vertx-junit5', version: vertxVersion
     testImplementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
     testImplementation group: 'io.vertx', name: 'vertx-web-common', version: vertxVersion

@@ -38,17 +38,14 @@ public class SpellsourceAuthHandler extends AuthenticationHandlerImpl<Spellsourc
 	public void authenticate(JsonObject jsonObject, Handler<AsyncResult<User>> handler) {
 		String token = toToken(jsonObject);
 
-		fiber(() -> {
-			UserRecord record = Accounts.getWithToken(token);
-
-			if (record == null) {
-				handler.handle(Future.failedFuture(new SecurityException("invalid login")));
-				return;
-			}
-			handler.handle(Future.succeededFuture(record));
-		});
-
-		var a = "";
+		fiber(() -> Accounts.getWithToken(token))
+				.compose(record -> {
+					if (record == null) {
+						return Future.failedFuture(new SecurityException("invalid login"));
+					}
+					return Future.succeededFuture((User) record);
+				})
+				.onComplete(handler);
 	}
 
 	@NotNull
