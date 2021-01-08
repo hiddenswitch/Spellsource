@@ -1035,6 +1035,7 @@ message GameState {
     int64 timestamp = 4;
     int32 turnNumber = 5;
     string turnState = 6;
+    bool hasPowerHistory = 7;
 }
 
 message GetAccountRequest {

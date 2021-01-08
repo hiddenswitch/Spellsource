@@ -140,12 +140,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			while ((request = requests.poll()) != null) {
 				if (request.getType() == GameplayRequestType.ACTION) {
 					@SuppressWarnings("unchecked")
-					var callback = (Handler<GameAction>) request.getCallback();
-					processActionForElapsedTurn(request.getActions(), callback::handle);
+					var callback = (SuspendableAction1<GameAction>) request.getCallback();
+					processActionForElapsedTurn(request.getActions(), callback);
 				} else if (request.getType() == GameplayRequestType.MULLIGAN) {
 					@SuppressWarnings("unchecked")
-					var handler = (Handler<List<Card>>) request.getCallback();
-					handler.handle(new ArrayList<>());
+					var handler = (SuspendableAction1<List<Card>>) request.getCallback();
+					try {
+						handler.call(new ArrayList<>());
+					} catch (SuspendExecution | InterruptedException ignored) {
+					}
 				}
 			}
 		} finally {
@@ -543,7 +546,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 
 		// Quickly send touch notifications
-		if (TouchingNotification.class.isAssignableFrom(event.getClass())) {
+		if (event instanceof TouchingNotification) {
 			var touchingNotification = (TouchingNotification) event;
 			// Only send touch notifications to the opponent
 			if (touchingNotification.getPlayerId() == playerId) {
@@ -577,9 +580,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.setChanges(getChangeSet(gameState))
 				.setGameState(getClientGameState(playerId, gameState));
 		var messageEvent = GameEvent.newBuilder();
-		if (event instanceof net.demilich.metastone.game.events.GameEvent) {
-			messageEvent = ModelConversions.getClientEvent((net.demilich.metastone.game.events.GameEvent) event, playerId);
-		} else if (event instanceof TriggerFired) {
+		if (event instanceof TriggerFired) {
 			var triggerEvent = (TriggerFired) event;
 			var triggerFired = GameEvent.TriggerFiredMessage.newBuilder()
 					.setTriggerSourceId(triggerEvent.getEnchantment().getHostReference().getId());
@@ -597,32 +598,39 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			}
 		} else if (event instanceof GameAction) {
 			var action = (GameAction) event;
-			final var sourceEntity = event.getSource(workingContext);
-			var source = ModelConversions.getEntity(workingContext, sourceEntity, playerId);
+			var sourceEntity = event.getSource(workingContext);
+			Entity.Builder source;
 
-			if (sourceEntity.getEntityType() == com.hiddenswitch.spellsource.client.models.EntityType.CARD) {
+			if (sourceEntity != null && sourceEntity.getEntityType() == com.hiddenswitch.spellsource.client.models.EntityType.CARD) {
 				var card = (Card) sourceEntity;
 				if (card.getCardType() == com.hiddenswitch.spellsource.client.models.CardType.SPELL
 						&& card.isSecret()
 						&& card.getOwner() != playerId) {
 					source = ModelConversions.getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
+				} else {
+					source = ModelConversions.getEntity(workingContext, card, playerId);
 				}
+			} else if (sourceEntity != null) {
+				source = ModelConversions.getEntity(workingContext, sourceEntity, playerId);
+			} else {
+				source = null;
 			}
 
-			var targets = event.getTargets(workingContext, sourceEntity.getOwner())
+			var owner = sourceEntity != null ? sourceEntity.getOwner() : gameState.getActivePlayerId();
+			var targets = event.getTargets(workingContext, owner)
 					.stream().map(e -> ModelConversions.getEntity(workingContext, e, playerId)).collect(Collectors.toList());
 			var target = targets.size() > 0 ? targets.get(0) : null;
 			messageEvent
 					.setDescription(event.getDescription(workingContext, playerId))
-					.setIsSourcePlayerLocal(source == null ? workingContext.getActivePlayerId() == playerId : source.getOwner() == playerId)
+					.setIsSourcePlayerLocal(source == null ? gameState.getActivePlayerId() == playerId : source.getOwner() == playerId)
 					.setIsTargetPlayerLocal(target != null && target.getOwner() == playerId)
 					.setEventType(GameEventType.GAME_EVENT_TYPE_PERFORMED_GAME_ACTION)
 					.setPerformedGameAction(GameEvent.PerformedGameActionMessage.newBuilder()
 							.setActionType(ModelConversions.toProto(action.getActionType(), ActionType.class)).build());
 			if (source != null) {
 				messageEvent.setSource(source);
-
 			}
+
 			if (target != null) {
 				messageEvent.setTarget(target);
 			}
@@ -641,6 +649,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 											.setTarget(ModelConversions.getEntity(workingContext, destroy.getTarget(), playerId))
 											.addAllAftermaths(destroy.getAftermaths().stream().map(aftermath -> ModelConversions.getEntity(workingContext, aftermath, playerId).build()).collect(toList())).build())
 									.collect(toList())));
+		} else if (event instanceof net.demilich.metastone.game.events.GameEvent) {
+			messageEvent = ModelConversions.getClientEvent((net.demilich.metastone.game.events.GameEvent) event, playerId);
 		} else {
 			throw new RuntimeException("Unsupported notification.");
 		}
@@ -649,9 +659,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		messageEvent
 				.setIsPowerHistory(event.isPowerHistory());
 
-		message.setEvent(messageEvent);
 		if (event.isPowerHistory()) {
-			messageEvent.setId(eventCounter.getAndIncrement())
+			messageEvent
+					.setId(eventCounter.getAndIncrement())
 					.setDescription((event.getDescription(workingContext, playerId)));
 
 			if (powerHistory.size() > MAX_POWER_HISTORY_SIZE) {
@@ -661,6 +671,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			powerHistory.add(build);
 		}
 
+		message.setEvent(messageEvent);
 		messageBuffer.offer(message);
 	}
 
@@ -712,6 +723,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		var gameState = getClientGameState(playerId, state);
 		if (needsPowerHistory) {
 			gameState.addAllPowerHistory(powerHistory);
+			gameState.setHasPowerHistory(true);
 			needsPowerHistory = false;
 		}
 		sendMessage(ServerToClientMessage.newBuilder()

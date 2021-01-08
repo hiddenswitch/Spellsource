@@ -2,6 +2,7 @@ package net.demilich.metastone.game.events;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.List;
@@ -21,6 +22,7 @@ public interface Notification extends Serializable {
 	 */
 	Entity getSource();
 
+	@Nullable
 	default Entity getSource(GameContext context) {
 		return getSource();
 	}
