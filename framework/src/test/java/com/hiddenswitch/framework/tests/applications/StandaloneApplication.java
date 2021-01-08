@@ -23,11 +23,12 @@ public class StandaloneApplication extends Application {
 	protected static final String PGHOST = "postgres";
 	protected static final int PGPORT = 5432;
 	protected static PostgresSupabaseContainer POSTGRES = new PostgresSupabaseContainer(PGUSER, PGPASSWORD, PGDATABASE)
-			.withReuse(false)
+			.withReuse(true)
 			.withNetwork(Network.SHARED)
 			.withNetworkAliases(PGHOST)
 			.withExposedPorts(PGPORT);
 	public static KeycloakContainer KEYCLOAK = new KeycloakContainer()
+			.withReuse(true)
 			.dependsOn(POSTGRES)
 			.withNetwork(Network.SHARED)
 			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD);
@@ -39,10 +40,10 @@ public class StandaloneApplication extends Application {
 			.withEnv("DB_USER", PGUSER)
 			.withEnv("DB_PASSWORD", PGPASSWORD)
 			.withEnv("DB_PORT", Integer.toString(PGPORT))
-			.withReuse(false);
+			.withReuse(true);
 	public static RedisContainer REDIS = new RedisContainer()
 			.withNetwork(Network.SHARED)
-			.withReuse(false);
+			.withReuse(true);
 	protected static AtomicBoolean STARTED = new AtomicBoolean(false);
 
 	public static boolean defaultConfigurationAndServices() {
@@ -50,12 +51,11 @@ public class StandaloneApplication extends Application {
 		if (!shouldStart) {
 			return false;
 		}
-
+		Startables.deepStart(Stream.of(POSTGRES, KEYCLOAK, REDIS)).join();
 		var configuration = ServerConfiguration.newBuilder(Environment.cachedConfigurationOrGet());
 		var pgEnvVars = Arrays.asList("PGUSER", "PGPASSWORD", "PGHOST", "PGPORT", "PGDATABASE");
 		// no pg var
 		if (!configuration.hasPg() && pgEnvVars.stream().noneMatch(envVar -> System.getenv().containsKey(envVar))) {
-			Startables.deepStart(Stream.of(POSTGRES)).join();
 			configuration.setPg(ServerConfiguration.PostgresConfiguration.newBuilder()
 					.setPort(POSTGRES.getMappedPort(PGPORT))
 					.setHost(POSTGRES.getHost())
@@ -65,7 +65,6 @@ public class StandaloneApplication extends Application {
 					.build());
 		}
 		if (!configuration.hasKeycloak()) {
-			Startables.deepStart(Stream.of(KEYCLOAK)).join();
 			configuration.setKeycloak(ServerConfiguration.KeycloakConfiguration.newBuilder()
 					.setAuthUrl(KEYCLOAK.getAuthServerUrl())
 					.setAdminUsername(KEYCLOAK.getAdminUsername())
@@ -90,7 +89,6 @@ public class StandaloneApplication extends Application {
 					.setEnqueueLockTimeoutMillis(800).build());
 		}
 		if (!configuration.hasRedis()) {
-			Startables.deepStart(Stream.of(REDIS)).join();
 			configuration.setRedis(ServerConfiguration.RedisConfiguration.newBuilder()
 					.setUri(REDIS.getRedisUrl())
 					.build());

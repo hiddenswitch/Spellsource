@@ -15,6 +15,7 @@ import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
 import io.grpc.Status;
 import io.micrometer.core.instrument.Metrics;
+import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
@@ -23,9 +24,11 @@ import io.vertx.core.*;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
+import io.vertx.core.tracing.TracingOptions;
 import io.vertx.ext.sync.Sync;
 import io.vertx.micrometer.MicrometerMetricsOptions;
 import io.vertx.micrometer.VertxPrometheusOptions;
+import io.vertx.micrometer.backends.PrometheusBackendRegistry;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
@@ -49,25 +52,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
+import static io.vertx.core.json.jackson.DatabindCodec.mapper;
+
 public class Environment {
-
-	static {
-		// An opportunity to configure Vertx's JSON
-		DatabindCodec.mapper().registerModule(new ProtobufModule())
-				.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
-		// metrics
-		Metrics.addRegistry(new JfrMeterRegistry());
-	}
-
+	private static final PrometheusBackendRegistry prometheusRegistry = new PrometheusBackendRegistry(new VertxPrometheusOptions()
+			.setEnabled(true)
+			.setStartEmbeddedServer(true)
+			.setEmbeddedServerEndpoint("/metrics")
+			.setPublishQuantiles(true)
+			.setEmbeddedServerOptions(new HttpServerOptions().setPort(8080)));
+	private static final AtomicBoolean prometheusInited = new AtomicBoolean();
 	private static final AtomicReference<Configuration> jooqConfiguration = new AtomicReference<>();
 	private static final WeakVertxMap<PgPool> pools = new WeakVertxMap<>(Environment::poolConstructor);
 	private static final WeakVertxMap<RedissonClient> redissonClients = new WeakVertxMap<>(Environment::redissonClientConstructor);
 	private static final WeakVertxMap<ConfigRetriever> configRetrievers = new WeakVertxMap<>(Environment::configRetrieverConstructor);
 	private static ServerConfiguration cachedConfiguration;
 	private static final JsonObject configurationOverride = new JsonObject();
+
+	static {
+		// An opportunity to configure Vertx's JSON
+		mapper().registerModule(new ProtobufModule())
+				.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
+		// metrics
+		metrics();
+	}
 
 	private static RedissonClient redissonClientConstructor(Vertx vertx) {
 		var configuration = cachedConfigurationOrGet();
@@ -88,6 +100,14 @@ public class Environment {
 			return PgPool.pool(connectionOptions, poolOptions);
 		}
 		return PgPool.pool(vertx, connectionOptions, poolOptions);
+	}
+
+	public static void metrics() {
+		if (prometheusInited.compareAndSet(false, true)) {
+			Metrics.addRegistry(new JfrMeterRegistry());
+			Metrics.addRegistry(prometheusRegistry.getMeterRegistry());
+			prometheusRegistry.init();
+		}
 	}
 
 	public synchronized static PgConnectOptions connectOptions() {
@@ -173,14 +193,12 @@ public class Environment {
 	}
 
 	public static VertxOptions vertxOptions() {
-		return new VertxOptions().setMetricsOptions(
-				new MicrometerMetricsOptions()
-						.setMicrometerRegistry(Metrics.globalRegistry)
-//						.setPrometheusOptions(new VertxPrometheusOptions().setEnabled(true)
-//								.setStartEmbeddedServer(true)
-//								.setEmbeddedServerOptions(new HttpServerOptions().setPort(8080))
-//								.setEmbeddedServerEndpoint("/metrics"))
-						.setEnabled(true));
+		return new VertxOptions()
+				.setTracingOptions(new TracingOptions())
+				.setMetricsOptions(
+						new MicrometerMetricsOptions()
+								.setMicrometerRegistry(Metrics.globalRegistry)
+								.setEnabled(true));
 	}
 
 	public static Future<Integer> migrate(ServerConfiguration serverConfiguration) {
@@ -275,7 +293,7 @@ public class Environment {
 	}
 
 	public static <T extends GeneratedMessageV3> T toProto(Object obj, Class<T> targetClass) {
-		return DatabindCodec.mapper().convertValue(obj, targetClass);
+		return mapper().convertValue(obj, targetClass);
 	}
 
 	/**
@@ -284,17 +302,17 @@ public class Environment {
 	 * @return A Java {@link NetworkInterface} object that can be used by {@link io.vertx.core.Vertx}.
 	 */
 	public static NetworkInterface mainInterface() {
-		final ArrayList<NetworkInterface> interfaces;
+		ArrayList<NetworkInterface> interfaces;
 		try {
 			interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
 		} catch (SocketException e) {
 			throw new RuntimeException(e);
 		}
-		final NetworkInterface networkInterface = interfaces.stream().filter(ni -> {
-			boolean isLoopback = false;
-			boolean supportsMulticast = false;
-			boolean isVirtualbox = false;
-			boolean isSelfAssigned = false;
+		return interfaces.stream().filter(ni -> {
+			var isLoopback = false;
+			var supportsMulticast = false;
+			var isVirtualbox = false;
+			var isSelfAssigned = false;
 			try {
 				isSelfAssigned = ni.inetAddresses().anyMatch(i -> i.getHostAddress().startsWith("169"));
 				isLoopback = ni.isLoopback();
@@ -302,10 +320,9 @@ public class Environment {
 				isVirtualbox = ni.getDisplayName().contains("VirtualBox") || ni.getDisplayName().contains("Host-Only");
 			} catch (IOException failure) {
 			}
-			final boolean hasIPv4 = ni.getInterfaceAddresses().stream().anyMatch(ia -> ia.getAddress() instanceof Inet4Address);
+			var hasIPv4 = ni.getInterfaceAddresses().stream().anyMatch(ia -> ia.getAddress() instanceof Inet4Address);
 			return supportsMulticast && !isSelfAssigned && !isLoopback && !ni.isVirtual() && hasIPv4 && !isVirtualbox;
 		}).sorted(Comparator.comparing(NetworkInterface::getName)).findFirst().orElse(null);
-		return networkInterface;
 	}
 
 	/**
@@ -317,7 +334,7 @@ public class Environment {
 	@NotNull
 	public static String getHostIpAddress() {
 		try {
-			final InterfaceAddress hostAddress = mainInterface().getInterfaceAddresses().stream().filter(ia -> ia.getAddress() instanceof Inet4Address).findFirst().orElse(null);
+			var hostAddress = mainInterface().getInterfaceAddresses().stream().filter(ia -> ia.getAddress() instanceof Inet4Address).findFirst().orElse(null);
 			if (hostAddress == null) {
 				return "127.0.0.1";
 			}
