@@ -249,39 +249,40 @@ public class ModelConversions {
 		var card = event instanceof HasCard ? ((HasCard) event).getSourceCard() : null;
 		var description = event.isPowerHistory() ? event.getDescription(workingContext, playerId) : "";
 
-		clientEvent
-				.setDescription(description);
+		clientEvent.setIsPowerHistory(event.isPowerHistory());
+		clientEvent.setDescription(description);
 		if (value != null) {
 			clientEvent.setValue(Int32Value.of(value));
+		}
+
+
+		if (source != null) {
+			clientEvent.setSource(getEntity(workingContext, source, playerId));
+		}
+
+		if (target != null && (targets == null || targets.isEmpty())) {
+			clientEvent.setTarget(getEntity(workingContext, target, playerId));
 		}
 
 		// Deal with censoring the card for secrets
 		if (card != null) {
 			var cardEvent = CardEvent.newBuilder();
-			clientEvent.setCardEvent(cardEvent);
 			if (card.getCardType() == com.hiddenswitch.spellsource.client.models.CardType.SPELL
 					&& card.isSecret()
 					&& card.getOwner() != playerId
 					&& !(event instanceof SecretRevealedEvent)) {
 				var censoredCard = getCensoredCard(card.getId(), card.getOwner(), card.getEntityLocation(), card.getHeroClass());
-				cardEvent.setCard(censoredCard);
 				if (source != null) {
 					clientEvent.setSource(censoredCard);
 				}
 				if (target != null) {
 					clientEvent.setTarget(censoredCard);
 				}
+				cardEvent.setCard(censoredCard);
 			} else {
 				cardEvent.setCard(getEntity(workingContext, card, playerId));
 			}
-		}
-
-		if (source != null && clientEvent.getSource() == null) {
-			clientEvent.setSource(getEntity(workingContext, source, playerId));
-		}
-
-		if (target != null && clientEvent.getTarget() == null) {
-			clientEvent.setTarget(getEntity(workingContext, target, playerId));
+			clientEvent.setCardEvent(cardEvent);
 		}
 
 		// Support plural targets
@@ -577,6 +578,7 @@ public class ModelConversions {
 		entity.setBaseManaCost(Int32Value.of(card.getBaseManaCost()));
 		entity.setSilenced(actor.hasAttribute(Attribute.SILENCED));
 		entity.setDeathrattles(actor.hasAttribute(Attribute.DEATHRATTLES));
+		entity.setCardType(toProto(card.getCardType(), CardType.class));
 		var playable = actor.getOwner() == workingContext.getActivePlayerId()
 				&& actor.getOwner() == localPlayerId
 				&& workingContext.getStatus() == GameStatus.RUNNING
