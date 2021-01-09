@@ -1,9 +1,14 @@
 package com.hiddenswitch.framework.migrations.tests;
 
 import com.hiddenswitch.containers.MongoDBContainer;
+import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Gateway;
+import com.hiddenswitch.framework.migrations.V8__Migrate_from_previous_server;
 import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.mongo.MongoClient;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Test;
@@ -11,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import static com.hiddenswitch.framework.schema.keycloak.Tables.USER_ENTITY;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.testcontainers.Testcontainers.exposeHostPorts;
 
@@ -30,9 +37,21 @@ public class MigrationTests {
 		if (!StandaloneApplication.defaultConfigurationAndServices()) {
 			return;
 		}
-
+		var mongoUri = V8__Migrate_from_previous_server.getMongoUrl();
+		var mongoClient = MongoClient.create(vertx, new JsonObject().put("connection_string", mongoUri));
 		exposeHostPorts(Gateway.grpcPort());
 		assertTrue(MONGO.isRunning(), "mongo successfully started");
-		vertxTestContext.completeNow();
+		Environment.queryExecutor().findOneRow(dsl -> dsl.selectCount().from(USER_ENTITY))
+				.compose(row -> {
+					var sqlCount = row.getInteger(0);
+					return mongoClient.count(V8__Migrate_from_previous_server.USERS, new JsonObject())
+							.compose(mongoCount -> {
+								vertxTestContext.verify(() -> {
+									assertEquals(mongoCount, (long) sqlCount);
+								});
+								return Future.succeededFuture();
+							});
+				})
+				.onComplete(vertxTestContext.succeedingThenComplete());
 	}
 }
