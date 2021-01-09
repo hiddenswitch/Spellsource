@@ -81,8 +81,6 @@ dependencies {
     api project(':cards')
     api project(':vertx-sync')
     api "io.vertx:vertx-rx-java2:$vertxVersion"
-    // enables migration
-    api project(':net')
 
     implementation("com.databasesandlife:java-common:$databasesandlifeVersion") {
         exclude group: 'com.google.gdata', module: '*'

@@ -4,4 +4,5 @@ com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc$UnauthenticatedVertxImpl
 com.hiddenswitch.spellsource.rpc.VertxHiddenSwitchSpellsourceAPIServiceGrpc$HiddenSwitchSpellsourceAPIServiceVertxImplBase.duplicateDeck(Lcom/google/protobuf/StringValue;)Lio/vertx/core/Future;
 com.hiddenswitch.spellsource.rpc.VertxHiddenSwitchSpellsourceAPIServiceGrpc$HiddenSwitchSpellsourceAPIServiceVertxImplBase.subscribeGame(Lio/vertx/core/streams/ReadStream;Lio/vertx/core/streams/WriteStream;)V
 com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpc$MatchmakingVertxImplBase.enqueue(Lio/vertx/core/streams/ReadStream;Lio/vertx/core/streams/WriteStream;)V
+io.vertx.ext.auth.User.isAuthorized(Lio/vertx/ext/auth/authorization/Authorization;Lio/vertx/core/Handler;)Lio/vertx/ext/auth/User;
 org.flywaydb.core.api.migration.JavaMigration.migrate(Lorg/flywaydb/core/api/migration/Context;)V
