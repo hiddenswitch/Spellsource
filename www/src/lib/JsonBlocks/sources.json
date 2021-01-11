@@ -7,7 +7,8 @@
   },
   {
     "type": "Source_targetPlayer",
-    "message0": "%2 for %1",
+    "message0": "%2 for %1 instead of you",
+    "inputsInLine": false,
     "output": "Source",
     "colour": 10,
     "args0": [
@@ -27,7 +28,8 @@
           "type": "Source_SHADOW"
         }
       }
-    ]
+    ],
+    "comment": "Card Sources are only for your stuff by default, so use this to get stuff from your opponent or both players"
   },
   {
     "type": "Source_distinct",
@@ -48,20 +50,22 @@
           "type": "Source_SHADOW"
         }
       }
-    ]
+    ],
+    "comment": "Only get at most 1 of each card from a card source."
   },
   {
     "type": "Source_Collectible",
     "output": "Source",
     "colour": 10,
-    "message0": "%1Collectible Cards",
+    "message0": "%1Collectible Cards (weighted)",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
         "name": "class",
         "value": "CatalogueSource"
       }
-    ]
+    ],
+    "comment": "Any and all cards you could find in the card catalogue, but non-neutral cards are weighted higher."
   },
   {
     "type": "Source_Uncollectible",
@@ -74,59 +78,64 @@
         "name": "class",
         "value": "UncollectibleCatalogueSource"
       }
-    ]
+    ],
+    "comment": "Every single card."
   },
   {
     "type": "Source_Unweighted",
     "output": "Source",
     "colour": 10,
-    "message0": "%1Collectible Cards (unweighted)",
+    "message0": "%1Collectible Cards",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
         "name": "class",
         "value": "UnweightedCatalogueSource"
       }
-    ]
+    ],
+    "comment": "Any and all cards you could find in the card catalogue."
   },
   {
     "type": "Source_GraveyardActors",
     "output": "Source",
     "colour": 10,
-    "message0": "%1Your unit/item Graveyard",
+    "message0": "The unit/item Graveyard",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
         "name": "class",
         "value": "GraveyardActorsSource"
       }
-    ]
+    ],
+    "comment": "The actual entities of your units and items that have been destroyed."
   },
   {
     "type": "Source_GraveyardCards",
     "output": "Source",
     "colour": 10,
-    "message0": "%1Your card Graveyard",
+    "message0": "The card Graveyard",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
         "name": "class",
         "value": "GraveyardCardsSource"
       }
-    ]
+    ],
+    "comment": "The actual entities of your cards that have been played, discarded or roasted. Filter by the corresponding Attributes to distinguish."
   },
   {
     "type": "Source_GraveyardCardsAndActors",
     "output": "Source",
     "colour": 10,
-    "message0": "%1Your entire Graveyard",
+    "message0": "The entire Graveyard",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
         "name": "class",
         "value": "GraveyardCardAndActorSourceSource"
       }
-    ]
+    ],
+    "comment": "All entities owned by you that are no longer in play."
   },
   {
     "type": "Source_Deck",
@@ -139,7 +148,8 @@
         "name": "class",
         "value": "DeckSource"
       }
-    ]
+    ],
+    "comment": "The cards currently in your deck."
   },
   {
     "type": "Source_Hand",
@@ -152,13 +162,14 @@
         "name": "class",
         "value": "HandSource"
       }
-    ]
+    ],
+    "comment": "The cards currently in your hand."
   },
   {
     "type": "Source_TopCardsOfDeck",
     "output": "Source",
     "colour": 10,
-    "message0": "%1The top %2 cards in your deck",
+    "message0": "%1The top %2 cards in deck",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
@@ -203,7 +214,8 @@
           "notActuallyShadow": true
         }
       }
-    ]
+    ],
+    "comment": "The contents of multiple sources put together."
   },
   {
     "type": "Source_I",
@@ -235,27 +247,29 @@
     "inputsInline": false,
     "output": "Source",
     "colour": 10,
-    "message0": "The source cards of everything in your graveyard",
+    "message0": "The source cards of everything in the graveyard",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
         "name": "class",
         "value": "GraveyardCardAndActorSourceCardSource"
       }
-    ]
+    ],
+    "comment": "The original card for every entity owned by you that's been removed from play."
   },
   {
     "type": "Source_GraveyardDiedMinionsSource",
     "inputsInline": false,
     "output": "Source",
     "colour": 10,
-    "message0": "The source cards of all your units that have died",
+    "message0": "The source cards of dead units",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
         "name": "class",
         "value": "GraveyardDiedMinionsSource"
       }
-    ]
+    ],
+    "comment": "The original card for every unit owned by you that's been destroyed."
   }
 ]

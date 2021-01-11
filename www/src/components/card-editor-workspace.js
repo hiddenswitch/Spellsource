@@ -1,21 +1,22 @@
-import React, {useEffect, useRef, useState, forwardRef} from 'react'
+import React, { useEffect, useRef, useState, forwardRef } from 'react'
 import WorkspaceUtils from '../lib/workspace-utils'
 import styles from './card-editor-view.module.css'
 import ReactBlocklyComponent from 'react-blockly'
 import Blockly from 'blockly'
-import {isArray} from 'lodash'
+import { isArray } from 'lodash'
 import 'ace-builds/src-noconflict/mode-json'
 import 'ace-builds/src-noconflict/mode-xml'
 import 'ace-builds/src-noconflict/theme-github'
-import {useIndex} from '../hooks/use-index'
+import { useIndex } from '../hooks/use-index'
 import JsonConversionUtils from '../lib/json-conversion-utils'
 import BlocklyMiscUtils from '../lib/blockly-misc-utils'
 import useComponentWillMount from '../hooks/use-component-will-mount'
 import useBlocklyData from '../hooks/use-blockly-data'
 import SpellsourceRenderer from '../lib/spellsource-renderer'
-import SpellsourceGenerator from "../lib/spellsource-generator";
-import SimpleReactBlockly from "./simple-react-blockly";
-import BlocklyToolbox from "../lib/blockly-toolbox";
+import SpellsourceGenerator from '../lib/spellsource-generator'
+import SimpleReactBlockly from './simple-react-blockly'
+import BlocklyToolbox from '../lib/blockly-toolbox'
+
 
 const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
   const data = useBlocklyData()
@@ -32,7 +33,7 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
       BlocklyMiscUtils.initBlocks(data)
       BlocklyMiscUtils.initHeroClassColors(data)
       BlocklyMiscUtils.initCardBlocks(data)
-      Blockly.blockRendering.register('spellsource', SpellsourceRenderer);
+      Blockly.blockRendering.register('spellsource', SpellsourceRenderer)
       SpellsourceGenerator.generateJavaScript()
       Blockly.spellsourceInit = true
     }
@@ -42,10 +43,10 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
   useEffect(() => {
     if (props.defaultCard) {
       setTimeout(() => {
-        const array = ["Daring Duelist", "Ninja Aspirants", "Redhide Butcher",
-          "Sly Conquistador", "Stormcloud Assailant", "Peacock Mystic"]
+        const array = ['Daring Duelist', 'Ninja Aspirants', 'Redhide Butcher',
+          'Sly Conquistador', 'Stormcloud Assailant', 'Peacock Mystic']
         generateCard(array[Math.floor(Math.random() * array.length)])
-        mainWorkspace().getTopBlocks(true)[0].setCommentText("This card was imported automatically as an example.")
+        mainWorkspace().getTopBlocks(true)[0].setCommentText('This card was imported automatically as an example.')
       }, 100)
     }
 
@@ -83,7 +84,6 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
 
       props.setJSON(JSON.stringify(cardScript, null, 2))
     }
-
 
     props.setJS(Blockly.JavaScript.workspaceToCode(mainWorkspace()))
   }
@@ -133,13 +133,13 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
         .toLowerCase()
         .replaceAll(' ', '_')
         .replaceAll(',', '')
-        .replaceAll("'", '')
+        .replaceAll('\'', '')
 
     if (card.type === 'CLASS') {
       cardId = 'class_' + card.heroClass.toLowerCase()
         .replaceAll(' ', '_')
         .replaceAll(',', '')
-        .replaceAll("'", '')
+        .replaceAll('\'', '')
     }
 
     const cardExists = (id) => {
@@ -187,7 +187,7 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
         ]
       }
       if (!!card.art.body?.vertex) {
-        Blockly.textColor[color] = Blockly.utils.colour.rgbToHex(
+        Blockly.textColor[blockType] = Blockly.utils.colour.rgbToHex(
           card.art.body.vertex.r * 255,
           card.art.body.vertex.g * 255,
           card.art.body.vertex.b * 255
@@ -215,9 +215,9 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
         currentCards.push(blocksKey)
       }
     }
-    let i = 0 //this works because the cardScript also uses the ordered getTopBlocks
-    workspace.getTopBlocks(true).forEach(block => {
-      if (block.type.startsWith('Starter_')) {
+    workspace.getTopBlocks(true)
+      .filter(block => block.type.startsWith('Starter_'))
+      .forEach(block => {
         let blockXml = Blockly.Xml.blockToDom(block, true)
         let card = WorkspaceUtils.xmlToCardScript(blockXml)
         cardScript.push(card)
@@ -231,20 +231,19 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
           }
           let createdClass = createClass(card, type)
           Blockly.Blocks[type] = createdClass
-          Blockly.JavaScript[type] = function(block) {return "'" + createdClass.data + "'"}
+          Blockly.JavaScript[type] = function (block) {return '\'' + createdClass.data + '\''}
+        } else {
+          let blockType = 'WorkspaceCard_' + block.id
+          currentCards = currentCards.filter(value => value !== blockType)
+          if (!Blockly.Blocks[blockType]) {
+            anythingChanged = true
+          }
+          let createdCard = createCard(card, blockType, currentCards)
+          Blockly.Blocks[blockType] = createdCard
+          Blockly.JavaScript[blockType] = function (block) {return '\'' + createdCard.data + '\''}
         }
-
-        let blockType = 'WorkspaceCard_' + block.id
-        currentCards = currentCards.filter(value => value !== blockType)
-        if (!Blockly.Blocks[blockType]) {
-          anythingChanged = true
-        }
-        let createdCard = createCard(card, blockType, currentCards)
-        Blockly.Blocks[blockType] = createdCard
-        Blockly.JavaScript[blockType] = function(block) {return "'" + createdCard.data + "'"}
       }
-      i++
-    })
+    )
 
     currentCards.forEach(card => {
       anythingChanged = true
@@ -264,8 +263,6 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
       })
     })
 
-
-
     return anythingChanged
   }
 
@@ -273,12 +270,12 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
     block.data = Blockly.Blocks[block.type].data
     block.setFieldValue(Blockly.Blocks[block.type].message, 'message')
     block.setColour(Blockly.Blocks[block.type].json.colour)
-    if (!!block.render) {
+    if (block.render) {
       let textElement = block.getSvgRoot().lastElementChild.firstElementChild
-      if (!!Blockly.textColor && Blockly.textColor[block.getColour()]) {
-        textElement.style.fill = Blockly.textColor[block.getColour()]
+      if (Blockly.textColor && Blockly.textColor[block.type]) {
+        textElement.style.fill = Blockly.textColor[block.type]
       } else {
-        textElement.style.fill = "#fff"
+        textElement.style.fill = '#fff'
       }
       block.render()
     }
@@ -338,8 +335,8 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
   const search = (query) => {
     setResults(index
         // Query the index with search string to get an [] of IDs
-        .search(query, {expand: true}) // accept partial matches
-        .map(({ref}) => index.documentStore.getDoc(ref))
+        .search(query, { expand: true }) // accept partial matches
+        .map(({ ref }) => index.documentStore.getDoc(ref))
         .filter(doc => !props.showCatalogueBlocks ? doc.nodeType === 'Block' : (doc.nodeType === 'Card'
           && Blockly.heroClassColors.hasOwnProperty(doc.heroClass) && doc.hasOwnProperty('baseManaCost')))
         .map(doc => {

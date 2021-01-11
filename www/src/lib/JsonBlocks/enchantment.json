@@ -221,7 +221,7 @@
       "EnchantmentOption"
     ],
     "colour": 280,
-    "message0": "%1Stays after host transforms",
+    "message0": "%1Stays even if host transforms",
     "args0": [
       {
         "type": "field_label_serializable_hidden",

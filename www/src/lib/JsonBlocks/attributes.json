@@ -34,7 +34,8 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "An entity's current value of Attack (Power)"
   },
   {
     "type": "Attribute_HP",
@@ -50,7 +51,8 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "An entity's current value of Health (Power)"
   },
   {
     "type": "Attribute_MAX_HP",
@@ -66,7 +68,8 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "An entity's maximum value of Health (Power)"
   },
   {
     "type": "Attribute_HIDDEN",
@@ -82,7 +85,8 @@
         "width": 27,
         "height": 15
       }
-    ]
+    ],
+    "comment": "Can't be targeted by the opponent until this does damage."
   },
   {
     "type": "Attribute_GUARD",
@@ -98,7 +102,8 @@
         "width": 14,
         "height": 15
       }
-    ]
+    ],
+    "comment": "Enemies can't attack allies of this that don't have Guard"
   },
   {
     "type": "Attribute_DASH",
@@ -114,7 +119,8 @@
         "width": 14,
         "height": 15
       }
-    ]
+    ],
+    "comment": "This can attack an enemy unit the same turn it's played."
   },
   {
     "type": "Attribute_BLITZ",
@@ -130,7 +136,8 @@
         "width": 16,
         "height": 15
       }
-    ]
+    ],
+    "comment": "This can attack any enemy the same turn it's played."
   },
   {
     "type": "Attribute_LIFEDRAIN",
@@ -146,7 +153,8 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "Damage dealt by this heals your champion for the same amount."
   },
   {
     "type": "Attribute_DODGE",
@@ -154,7 +162,8 @@
     "output": "BoolAttribute",
     "colour": 190,
     "message0": "Dodge",
-    "data": "DIVINE_SHIELD"
+    "data": "DIVINE_SHIELD",
+    "comment": "This avoids the next time it would take damage."
   },
   {
     "type": "Attribute_SPELL_DAMAGE",
@@ -170,7 +179,8 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "Allied spells do a certain amount of bonus damage."
   },
   {
     "type": "Attribute_ELUSIVE",
@@ -178,7 +188,8 @@
     "output": "BoolAttribute",
     "colour": 190,
     "message0": "Elusive",
-    "data": "UNTARGETABLE_BY_SPELLS"
+    "data": "UNTARGETABLE_BY_SPELLS",
+    "comment": "Can only be targetted by enemies with physical attacks."
   },
   {
     "type": "Attribute_CANT_ATTACK",
@@ -186,7 +197,8 @@
     "output": "BoolAttribute",
     "colour": 190,
     "message0": "Can't Attack",
-    "data": "CANNOT_ATTACK"
+    "data": "CANNOT_ATTACK",
+    "comment": "Can't attack anything, at all, ever."
   },
   {
     "type": "Attribute_BASE_ATTACK",
@@ -202,7 +214,8 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "An entity's base value of Attack (Power)"
   },
   {
     "type": "Attribute_BASE_HP",
@@ -218,7 +231,8 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "An entity's base value of Health (Toughness)"
   },
   {
     "type": "Attribute_BASE_MANA_COST",
@@ -226,7 +240,8 @@
     "output": "IntAttribute",
     "colour": 210,
     "message0": "Base Cost",
-    "data": "BASE_MANA_COST"
+    "data": "BASE_MANA_COST",
+    "comment": "An entity's base cost in Lun"
   },
   {
     "type": "Attribute_STUNNED",
@@ -242,7 +257,8 @@
         "width": 13,
         "height": 15
       }
-    ]
+    ],
+    "comment": "Is unable to make its next attack."
   },
   {
     "type": "Attribute_TOXIC",
@@ -258,7 +274,8 @@
         "width": 12,
         "height": 15
       }
-    ]
+    ],
+    "comment": "Any units damaged by this will die."
   },
   {
     "type": "Attribute_DECAY",
@@ -266,7 +283,8 @@
     "output": "BoolAttribute",
     "colour": 190,
     "message0": "Decay",
-    "data": "DECAY"
+    "data": "DECAY",
+    "comment": "Loses 1 (health on a unit, durability on an item, armor on a champion) each turn."
   },
   {
     "type": "Attribute_EXTRA_STRIKE",
@@ -282,7 +300,8 @@
         "width": 19,
         "height": 15
       }
-    ]
+    ],
+    "comment": "Can make an additional attack each turn."
   },
   {
     "type": "Attribute_OPENER",
@@ -298,7 +317,8 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "Indicated that this has an Opener effect - it does something when played."
   },
   {
     "type": "Attribute_AFTERMATH",
@@ -314,15 +334,17 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "Indicated that this has an Aftermath effect - it does something when it dies."
   },
   {
     "type": "Attribute_HIDDEN_FOR_TURNS",
-    "subcategory": "Infrequent",
+    "subcategory": "Frequent",
     "output": "IntAttribute",
     "colour": 210,
     "message0": "Hidden for Turns",
-    "data": "STEALTH_FOR_TURNS"
+    "data": "STEALTH_FOR_TURNS",
+    "comment": "A timer for how many turns until this will lose Hidden, whether it's dealt damage or not."
   },
   {
     "type": "Attribute_CANNOT_REDUCE_HP_BELOW_1",
@@ -330,14 +352,16 @@
     "output": "BoolAttribute",
     "colour": 190,
     "message0": "Can't be Reduced Below 1 HP",
-    "data": "CANNOT_REDUCE_HP_BELOW_1"
+    "data": "CANNOT_REDUCE_HP_BELOW_1",
+    "comment": "Damage won't actually be able to kill this while active."
   },
   {
     "type": "Attribute_PLAYED_FROM_HAND_OR_DECK",
     "data": "PLAYED_FROM_HAND_OR_DECK",
     "colour": 210,
     "output": "IntAttribute",
-    "message0": "Turn Number When Played"
+    "message0": "Turn Number When Played",
+    "comment": "A number that marks when something came into play, staying on the entity even in the graveyard."
   },
   {
     "type": "Attribute_ATTACK_BONUS",
@@ -352,7 +376,8 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "An entity's current bonus to Attack (Power)."
   },
   {
     "type": "Attribute_HP_BONUS",
@@ -367,7 +392,8 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "An entity's current bonus to Health (Toughness)."
   },
   {
     "type": "Attribute_RESERVED_INTEGER_1",
@@ -381,14 +407,16 @@
     "data": "INDEX",
     "colour": 210,
     "output": "IntAttribute",
-    "message0": "Index"
+    "message0": "Index",
+    "comment": "The numbered location that an entity is within it's zone."
   },
   {
     "type": "Attribute_LAST_HIT",
     "data": "LAST_HIT",
     "colour": 210,
     "output": "IntAttribute",
-    "message0": "Last Hit"
+    "message0": "Last Hit",
+    "comment": "The amount of damage an entity took in its most recent damaging."
   },
   {
     "type": "Attribute_DISCOVER",
@@ -396,7 +424,8 @@
     "data": "DISCOVER",
     "output": "BoolAttribute",
     "message0": "Source",
-    "colour": 190
+    "colour": 190,
+    "comment": "Indicates a card uses a Source effect."
   },
   {
     "type": "Attribute_ARTIFACT",
@@ -404,7 +433,8 @@
     "data": "ARTIFACT",
     "colour": 190,
     "output": "BoolAttribute",
-    "message0": "Artifact"
+    "message0": "Artifact",
+    "comment": "Indicates a card is a special 'Artifact'"
   },
   {
     "type": "Attribute_SUPREMACY",
@@ -420,7 +450,8 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "Indicates a card uses a Supremacy effect."
   },
   {
     "type": "Attribute_IMMUNE",
@@ -436,7 +467,8 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "Can't be targetted by the enemy or damaged by anything."
   },
   {
     "type": "Attribute_ARMOR",
@@ -452,7 +484,8 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "The amount of Armor (Temporary Health) a Champion has."
   },
   {
     "type": "Attribute_WITHER",
@@ -460,7 +493,8 @@
     "data": "WITHER",
     "colour": 200,
     "output": "Attribute",
-    "message0": "Wither"
+    "message0": "Wither",
+    "comment": "Attack reduced by an amount until it skips an Attack."
   },
   {
     "type": "Attribute_INVOKE",
@@ -468,7 +502,8 @@
     "data": "INVOKE",
     "colour": 210,
     "output": "IntAttribute",
-    "message0": "Invoke"
+    "message0": "Invoke",
+    "comment": "Indicates a card uses an Invoke effect for the specified amount of Lun."
   },
   {
     "type": "Attribute_QUICK_DRAW",
@@ -476,7 +511,8 @@
     "data": "QUICK_DRAW",
     "colour": 190,
     "output": "BoolAttribute",
-    "message0": "Quick Draw"
+    "message0": "Quick Draw",
+    "comment": "Indicates a card uses a Quick Draw effect."
   },
   {
     "type": "Attribute_PERMANENT",
@@ -536,7 +572,8 @@
     "data": "ECHO",
     "colour": 190,
     "output": "BoolAttribute",
-    "message0": "Echoable this Turn lol idk"
+    "message0": "Reusable this Turn",
+    "comment": "This card can be used as many times as you're able this turn."
   },
   {
     "type": "Attribute_COPIED_FROM",
@@ -551,14 +588,15 @@
     "data": "CANNOT_ATTACK_HEROES",
     "colour": 190,
     "output": "BoolAttribute",
-    "message0": "Cannot Attack Heroes"
+    "message0": "Can't Attack Champions"
   },
   {
     "type": "Attribute_STARTED_IN_DECK",
     "data": "STARTED_IN_DECK",
     "colour": 190,
     "output": "BoolAttribute",
-    "message0": "Started In Deck"
+    "message0": "Started In Deck",
+    "comment": "Indicated this card was originally in the player's deck."
   },
   {
     "type": "Attribute_RESERVED_BOOLEAN_1",
@@ -571,7 +609,7 @@
     "type": "Attribute_ROASTED",
     "data": "ROASTED",
     "colour": 200,
-    "output": "Attribute",
+    "output": "IntAttribute",
     "message0": "Roasted%1",
     "args0": [
       {
@@ -580,41 +618,55 @@
         "width": 15,
         "height": 15
       }
-    ]
+    ],
+    "comment": "Indicated a card was destroyed with a Roast effect, and what turn that was."
+  },
+  {
+    "type": "Attribute_DISCARDED",
+    "data": "DISCARDED",
+    "colour": 200,
+    "output": "IntAttribute",
+    "message0": "Discarded",
+    "comment": "Indicated a card was discarded, and what turn that was."
   },
   {
     "type": "Attribute_EXTRA_TURN",
     "data": "EXTRA_TURN",
     "colour": 200,
     "output": "Attribute",
-    "message0": "Extra Turn"
+    "message0": "Extra Turn",
+    "comment": "Gives a champion an additional turns after their first."
   },
   {
     "type": "Attribute_ENRAGABLE",
     "data": "ENRAGABLE",
     "colour": 190,
     "output": "BoolAttribute",
-    "message0": "Enragable"
+    "message0": "Enragable",
+    "comment": "Has Enrage effects"
   },
   {
     "type": "Attribute_INVERT_HEALING",
     "data": "INVERT_HEALING",
     "colour": 190,
     "output": "BoolAttribute",
-    "message0": "Inverted Healing"
+    "message0": "Inverted Healing",
+    "comment": "Allied healing effects deal damage instead."
   },
   {
     "type": "Attribute_DIED_ON_TURN",
     "data": "DIED_ON_TURN",
     "colour": 210,
     "output": "IntAttribute",
-    "message0": "Died On Turn"
+    "message0": "Died On Turn",
+    "comment": "The turn number that this died on, staying on the entity even in the graveyard"
   },
   {
     "type": "Attribute_PACT",
     "data": "PACT",
     "colour": 190,
     "output": "BoolAttribute",
-    "message0": "Pact"
+    "message0": "Pact",
+    "comment": "Indicates that this card is a Pact"
   }
 ]
