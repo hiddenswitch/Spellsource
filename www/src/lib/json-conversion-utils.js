@@ -1,6 +1,6 @@
-import Blockly, {isNumber} from 'blockly'
+import Blockly, { isNumber } from 'blockly'
 import BlocklyMiscUtils from './blockly-misc-utils'
-import {isArray} from 'lodash'
+import { isArray } from 'lodash'
 
 export default class JsonConversionUtils {
   static classBlocksDictionary = {} //A dictionary mapping the 'class' argument a block uses to the block itself
@@ -13,13 +13,12 @@ export default class JsonConversionUtils {
 
   static customBlocks = {}
 
-
   /**
    * Creates a reference for the block's json that's easily accessible by
    * either its output or 'class' argument
    * @param block The block to add
    */
-  static addBlockToMap(block) {
+  static addBlockToMap (block) {
     if (block.type.endsWith('SHADOW')) {
       return
     }
@@ -59,7 +58,7 @@ export default class JsonConversionUtils {
    * @param type The block type to create
    * @returns The created block
    */
-  static newBlock(workspace, type) {
+  static newBlock (workspace, type) {
     return BlocklyMiscUtils.newBlock(workspace, type)
   }
 
@@ -70,7 +69,7 @@ export default class JsonConversionUtils {
    * @param card The card json to generate from
    * @returns The created starter block
    */
-  static generateCard(workspace, card) {
+  static generateCard (workspace, card) {
     let type = card.type
     if (!!card.quest) {
       type = 'QUEST'
@@ -107,10 +106,9 @@ export default class JsonConversionUtils {
     for (let arg of ['heroClass', 'rarity', 'spell', 'targetSelection', 'secret', 'quest', 'heroPower', 'hero']) {
       if (card.type === 'CLASS' && arg === 'heroClass') {
         block.getInput('heroClass').connection.targetBlock().setFieldValue(card.heroClass, 'text')
-        continue
-      }
-
-      if (card.hasOwnProperty(arg) && !!block.getInput(arg)) {
+      } else if (card.type === 'HERO_POWER' && arg === 'spell') {
+        this.handleArg(block.getInput('spell.spell').connection, card.spell.spell, 'spell.spell', workspace, card.spell)
+      } else if (card.hasOwnProperty(arg) && !!block.getInput(arg)) {
         this.simpleHandleArg(block, arg, card, workspace)
       }
     }
@@ -182,7 +180,7 @@ export default class JsonConversionUtils {
     triggers('trigger', 'Property_triggers')
     triggers('passiveTrigger', 'Property_triggers2')
     triggers('deckTrigger', 'Property_triggers3')
-    triggers( 'gameTrigger', 'Property_triggers4')
+    triggers('gameTrigger', 'Property_triggers4')
 
     if (!!card.auras || !!card.aura) {
       let aurasBlock = this.newBlock(workspace, 'Property_auras')
@@ -353,7 +351,7 @@ export default class JsonConversionUtils {
    * @param descriptions The json array of descriptions
    * @param inputName The name of the descriptions input argument on the block
    */
-  static dynamicDescription(workspace, connection, descriptions, inputName) {
+  static dynamicDescription (workspace, connection, descriptions, inputName) {
     for (let dynamicDescription of descriptions) {
       let block = connection.targetBlock()
       if (!block) {
@@ -418,7 +416,7 @@ export default class JsonConversionUtils {
    * @param inputName What the name has to end with
    * @returns The json for the correct input, or null
    */
-  static getInputEndsWith(block, inputName) {
+  static getInputEndsWith (block, inputName) {
     for (let name of this.allArgNames) {
       let input = block.getInput(name)
       if (!!input) {
@@ -438,7 +436,7 @@ export default class JsonConversionUtils {
    * @param props
    * @returns {boolean}
    */
-  static enchantmentNeedsOptions(trigger, props) {
+  static enchantmentNeedsOptions (trigger, props) {
     return !(props.length === 2 && !!trigger.eventTrigger && !!trigger.spell)
   }
 
@@ -452,7 +450,7 @@ export default class JsonConversionUtils {
    * present in the list of enchantment statements
    * @returns The created block
    */
-  static enchantment(trigger, workspace, triggerBlock = null) {
+  static enchantment (trigger, workspace, triggerBlock = null) {
     let props = this.relevantProperties(trigger)
     if (!this.enchantmentNeedsOptions(trigger, props)) {
       if (!triggerBlock) {
@@ -503,8 +501,10 @@ export default class JsonConversionUtils {
    * @param props
    * @returns {boolean}
    */
-  static costModifierNeedsOptions(costModifier, props) {
-    if (costModifier.class === 'OneTurnCostModifier') return true
+  static costModifierNeedsOptions (costModifier, props) {
+    if (costModifier.class === 'OneTurnCostModifier') {
+      return true
+    }
     for (let prop of props) {
       if (!!Blockly.Blocks['CostModifierOption_' + prop]) {
         return true
@@ -521,7 +521,7 @@ export default class JsonConversionUtils {
    * @param workspace The workspace
    * @returns The created block
    */
-  static costModifier(costyBlock, costModifier, workspace) {
+  static costModifier (costyBlock, costModifier, workspace) {
     costModifier = this.mutateJson(costModifier)
     if (typeof costModifier.value !== 'object' && costModifier.value < 0) {
       if (costModifier.operation === 'SUBTRACT') {
@@ -589,7 +589,7 @@ export default class JsonConversionUtils {
    * @param json The json of the aura / auras
    * @param workspace The workspace
    */
-  static auras(block, json, workspace) {
+  static auras (block, json, workspace) {
     let auras
     if (!!json.aura) {
       auras = [json.aura]
@@ -621,7 +621,7 @@ export default class JsonConversionUtils {
    * @param parentJson The level of json above json
    * @returns The Block that's the best match (its JSON definition), or null if no good matches
    */
-  static getMatch(json, inputName, parentJson) {
+  static getMatch (json, inputName, parentJson) {
     let matches = null
     let bestMatch = null
     if (typeof json !== 'object') { //just looking for the correct block with the data of the json string
@@ -726,7 +726,7 @@ export default class JsonConversionUtils {
         let bestScore = null
         for (let goodMatch of matches) {
           let argsList = this.argsList(goodMatch)
-          let hasOneNormalArg = argsList.length === 0;
+          let hasOneNormalArg = argsList.length === 0
           for (let arg of argsList) {
             if (!arg.name.includes('.') && !arg.name.includes('super')) {
               hasOneNormalArg = true
@@ -789,7 +789,7 @@ export default class JsonConversionUtils {
    * @param parentJson The level of json above json
    * @param statement Whether we're connected a statement rather than an input
    */
-  static handleArg(connection, json, inputName, workspace, parentJson, statement = false) {
+  static handleArg (connection, json, inputName, workspace, parentJson, statement = false) {
     json = this.mutateJson(json)
 
     if (!!connection.targetBlock() && connection.targetBlock().type === 'Property_text_SHADOW') {
@@ -810,7 +810,7 @@ export default class JsonConversionUtils {
 
        */
       if (this.errorOnCustom) {
-        throw Error("Couldn't generate without custom blocks")
+        throw Error('Couldn\'t generate without custom blocks')
       }
       newBlock = this.handleNoMatch(json, inputName, parentJson, workspace)
     } else if (!!connection.targetBlock() && connection.targetBlock().type === bestMatch.type) {
@@ -842,7 +842,7 @@ export default class JsonConversionUtils {
     this.handleInputs(bestMatch, json, newBlock, workspace, parentJson)
   }
 
-  static handleInputs(bestMatch, json, newBlock, workspace, parentJson) {
+  static handleInputs (bestMatch, json, newBlock, workspace, parentJson) {
     //now handle each dropdown on the new block (assumes stuff will just work)
     for (let dropdown of this.dropdownsList(bestMatch)) {
       let jsonElement = json[dropdown.name]
@@ -869,7 +869,7 @@ export default class JsonConversionUtils {
 
       if (jsonElement === null || jsonElement === undefined) {
         if (newBlock.getInput(name)?.connection.targetBlock()?.type === 'EntityReference_SHADOW'
-        || newBlock.getInput(name)?.connection.targetBlock()?.type === 'EntityReference_IT') {
+          || newBlock.getInput(name)?.connection.targetBlock()?.type === 'EntityReference_IT') {
           let it = this.newBlock(workspace, 'EntityReference_IT')
           newBlock.getInput(name).connection.connect(it.outputConnection)
           if (it.initSvg) {
@@ -898,7 +898,7 @@ export default class JsonConversionUtils {
     }
   }
 
-  static handleArrayArg(jsonElement, newBlock, workspace, name) {
+  static handleArrayArg (jsonElement, newBlock, workspace, name) {
     let thingArray = jsonElement
     let lowestBlock = newBlock.getFirstStatementConnection().targetBlock()
     this.handleArg(lowestBlock.getInput('i').connection, thingArray[0], name.slice(0, -1), workspace, thingArray)
@@ -944,7 +944,7 @@ export default class JsonConversionUtils {
    * @param bestMatch The block that was decided to be the best match
    * @returns The eventual outermost block
    */
-  static wrapperBlocks(block, json, inputName, workspace, parentJson, connection, bestMatch) {
+  static wrapperBlocks (block, json, inputName, workspace, parentJson, connection, bestMatch) {
     const wrap = (blockType, inputName = 'super') => {
       let newOuterBlock = this.newBlock(workspace, blockType)
       newOuterBlock.getInput(inputName).connection.connect(outerBlock.outputConnection)
@@ -1008,7 +1008,7 @@ export default class JsonConversionUtils {
     }
 
     if (inputName.endsWith('targetSelection') && !!parentJson.targetSelectionCondition
-    && !!parentJson.targetSelectionOverride) {
+      && !!parentJson.targetSelectionOverride) {
       wrap('TargetSelection_OVERRIDE')
       this.handleArg(outerBlock.getInput('super.targetSelectionCondition').connection, parentJson.targetSelectionCondition, 'targetSelectionCondition', workspace, parentJson)
       this.handleArg(outerBlock.getInput('super.targetSelectionOverride').connection, parentJson.targetSelectionOverride, 'targetSelectionOverride', workspace, parentJson)
@@ -1063,7 +1063,7 @@ export default class JsonConversionUtils {
    * @param workspace The workspace
    * @returns The block that handleArg returns
    */
-  static simpleHandleArg(block, inputName, json, workspace) {
+  static simpleHandleArg (block, inputName, json, workspace) {
     return this.handleArg(block.getInput(inputName).connection, json[inputName], inputName, workspace, json)
   }
 
@@ -1078,7 +1078,7 @@ export default class JsonConversionUtils {
    * @param parentJson The level above the json to search in (for super purposes)
    * @returns What's in the correct spot, or undefined if it can't find the right spot
    */
-  static traverseJsonByArgName(name, json, parentJson) {
+  static traverseJsonByArgName (name, json, parentJson) {
     if (!name || !json) {
       return undefined
     }
@@ -1116,7 +1116,7 @@ export default class JsonConversionUtils {
    * @param workspace The workspace
    * @param int The number that should actually end up in the int block
    */
-  static handleIntArg(newBlock, inputArg, workspace, int) {
+  static handleIntArg (newBlock, inputArg, workspace, int) {
     let valueBlock
     if (!!newBlock.getInput(inputArg).connection.targetBlock()
       && newBlock.getInput(inputArg).connection.targetBlock().type === 'ValueProvider_int') {
@@ -1145,7 +1145,7 @@ export default class JsonConversionUtils {
    * @param parentJson The level of json that's above json
    * @returns The block it generated
    * */
-  static generateDummyBlock(json, inputName, parentJson) {
+  static generateDummyBlock (json, inputName, parentJson) {
     inputName = inputName.split('.').slice(-1)[0]
     let type = BlocklyMiscUtils.inputNameToBlockType(inputName)
     let consoleBlock
@@ -1234,7 +1234,6 @@ export default class JsonConversionUtils {
     console.log(JSON.stringify(consoleBlock, null, 2).toString()
       .replace('"colour": "(\\d+)"', '"colour": $1'))
 
-
     let blok = JSON.stringify(consoleBlock, null, 2)
     //blok = consoleBlock.type
     if (!this.customBlocks[blok]) {
@@ -1257,7 +1256,7 @@ export default class JsonConversionUtils {
    * @param workspace The workspace
    * @returns {Blockly.Block}
    */
-  static handleNoMatch(json, inputName, parentJson, workspace) {
+  static handleNoMatch (json, inputName, parentJson, workspace) {
     inputName = inputName.split('.').slice(-1)[0]
     let type = BlocklyMiscUtils.inputNameToBlockType(inputName)
     let newBlock = this.newBlock(workspace, 'Custom' + type)
@@ -1268,7 +1267,7 @@ export default class JsonConversionUtils {
       let lowestConnection = newBlock.getFirstStatementConnection()
 
       for (let arg in json) {
-        if (arg === 'class' || (arg === 'filter' && !!parentJson.targetSelection && parentJson.targetSelection !== "NONE")) {
+        if (arg === 'class' || (arg === 'filter' && !!parentJson.targetSelection && parentJson.targetSelection !== 'NONE')) {
           continue
         }
 
@@ -1299,7 +1298,9 @@ export default class JsonConversionUtils {
           } else if (isArray(argValue)) {
             if (arg === 'aura') {
               this.auras(newArgBlock, json, workspace)
-            } else this.handleArrayArg(argValue, newArgBlock, workspace, arg)
+            } else {
+              this.handleArrayArg(argValue, newArgBlock, workspace, arg)
+            }
           } else {
             this.handleArg(newArgBlock.getInput('customValue').connection, argValue, arg,
               workspace, parentJson)
@@ -1317,7 +1318,7 @@ export default class JsonConversionUtils {
    * @param json
    * @returns array of the relevant properties (strings)
    */
-  static relevantProperties(json) {
+  static relevantProperties (json) {
     let relevantProperties = []
     for (let property in json) {
       if ((property === 'randomTarget' && !!json.target) || property === 'class'
@@ -1340,7 +1341,7 @@ export default class JsonConversionUtils {
    * @param json
    * @returns The mutated json
    */
-  static mutateJson(json) {
+  static mutateJson (json) {
     if ((json === null || json === undefined)) {
       json = 'NONE'
     }
@@ -1526,8 +1527,8 @@ export default class JsonConversionUtils {
     //in spells, the targetPlayer of 'self' is always redundant
     if ((json.targetPlayer === 'SELF' && json.class.endsWith('Spell')
       && json.class !== 'ReturnTargetToHandSpell')
-        //in triggers, it's 'both'
-    || (json.targetPlayer === 'BOTH' && json.class.endsWith('Trigger'))) {
+      //in triggers, it's 'both'
+      || (json.targetPlayer === 'BOTH' && json.class.endsWith('Trigger'))) {
       delete json.targetPlayer
     }
 
@@ -1565,7 +1566,7 @@ export default class JsonConversionUtils {
     }
 
     if (className === 'AlgebraicValueProvider' && json.operation === 'NEGATE'
-    && !json.hasOwnProperty('value2')) {
+      && !json.hasOwnProperty('value2')) {
       json.operation = 'MULTIPLY'
       json.value2 = -1
     }
@@ -1600,7 +1601,7 @@ export default class JsonConversionUtils {
    * @param block
    * @returns An array of the input args
    */
-  static inputsList(block) {
+  static inputsList (block) {
     let inputsList = []
     for (let i = 0; i < 10; i++) {
       if (!!block['args' + i.toString()]) {
@@ -1621,7 +1622,7 @@ export default class JsonConversionUtils {
    * @param block
    * @returns An array of the dropdown args
    */
-  static dropdownsList(block) {
+  static dropdownsList (block) {
     let inputsList = []
     for (let i = 0; i < 10; i++) {
       if (!!block['args' + i.toString()]) {
@@ -1641,7 +1642,7 @@ export default class JsonConversionUtils {
    * @param block
    * @returns An array of the args
    */
-  static argsList(block) {
+  static argsList (block) {
     let argsList = []
     for (let i = 0; i < 10; i++) {
       if (!!block['args' + i.toString()]) {

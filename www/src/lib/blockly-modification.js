@@ -377,8 +377,9 @@ export default class BlocklyModification {
     const createTextElement = Blockly.Field.prototype.createTextElement_
     Blockly.Field.prototype.createTextElement_ = function() {
       createTextElement.call(this)
-      if (!!Blockly.textColor && Blockly.textColor[this.getSourceBlock().colour_]) {
-        this.textElement_.style.fill = Blockly.textColor[this.getSourceBlock().colour_]
+      let block = this.getSourceBlock()
+      if (Blockly.textColor && Blockly.textColor[block.type]) {
+        this.textElement_.style.fill = Blockly.textColor[block.type]
       }
     }
   }

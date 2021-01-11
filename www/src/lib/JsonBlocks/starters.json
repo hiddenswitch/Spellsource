@@ -120,7 +120,8 @@
           "type": "Race_NONE"
         }
       }
-    ]
+    ],
+    "comment": "The starter for a Unit card."
   },
   {
     "type": "Starter_SPELL",
@@ -235,7 +236,8 @@
           "type": "Spell_SHADOW"
         }
       }
-    ]
+    ],
+    "comment": "The starter for a Spell card."
   },
   {
     "type": "Starter_SECRET",
@@ -350,7 +352,8 @@
           "type": "Spell_SHADOW"
         }
       }
-    ]
+    ],
+    "comment": "The starter for a Secret card."
   },
   {
     "type": "Starter_WEAPON",
@@ -462,7 +465,8 @@
         "value": 0,
         "int": true
       }
-    ]
+    ],
+    "comment": "The starter for an Item card."
   },
   {
     "type": "Starter_QUEST",
@@ -594,7 +598,8 @@
           "type": "Spell_SHADOW"
         }
       }
-    ]
+    ],
+    "comment": "The starter for a Quest card. Incremental vs Count by Value determines whether say, restoring 3 Health, would count as 1 quest progress or 3."
   },
   {
     "type": "Starter_HERO_POWER",
@@ -604,7 +609,7 @@
     ],
     "inputsInline": false,
     "hat": "cap",
-    "message0": "Skill Card%1%2%3%4",
+    "message0": "Skill Card",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
@@ -625,6 +630,11 @@
         "type": "field_label_serializable_hidden",
         "name": "collectible",
         "value": true
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "spell.class",
+        "value": "HeroPowerSpell"
       }
     ],
     "message1": "(%1) %2",
@@ -704,13 +714,14 @@
     "args5": [
       {
         "type": "input_value",
-        "name": "spell",
+        "name": "spell.spell",
         "check": "SpellDesc",
         "shadow": {
           "type": "Spell_SHADOW"
         }
       }
-    ]
+    ],
+    "comment": "The starter for a Skill card. The effect of the \"(do) as a Skill]\" block is baked in to this already.  Will always be uncollectible."
   },
   {
     "type": "Starter_HERO",
@@ -720,7 +731,7 @@
     ],
     "inputsInline": false,
     "hat": "cap",
-    "message0": "Champion Desc",
+    "message0": "Champion",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
@@ -816,7 +827,8 @@
           "type": "Card_SHADOW"
         }
       }
-    ]
+    ],
+    "comment": "The starter for defining a new base champion for a class. Will always be uncollectible. See below for the playable card that replaces your champion."
   },
   {
     "type": "Starter_HERO2",
@@ -930,7 +942,8 @@
         "max": 99,
         "int": true
       }
-    ]
+    ],
+    "comment": "The starter for the playable card that replaces your champion. See above for defining a new base champion for a class."
   },
   {
     "type": "Starter_ENCHANTMENT",
@@ -940,7 +953,7 @@
     ],
     "inputsInline": false,
     "hat": "cap",
-    "message0": "Enchantment Desc",
+    "message0": "Enchantment",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
@@ -1015,7 +1028,8 @@
           ]
         }
       }
-    ]
+    ],
+    "comment": "Starter for defining a new named Enchantment effect as a card. Will always be uncollectible."
   },
   {
     "type": "Starter_CLASS",
@@ -1025,7 +1039,7 @@
     ],
     "inputsInline": false,
     "hat": "cap",
-    "message0": "Class Desc",
+    "message0": "Class",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
@@ -1073,7 +1087,7 @@
           "fields": [
             {
               "name": "text",
-              "valueS": "Class ID"
+              "valueS": "COLOR"
             }
           ]
         }
@@ -1083,7 +1097,8 @@
         "name": "rarity",
         "check": "Rarity",
         "shadow": {
-          "type": "Rarity_SHADOW"
+          "type": "Rarity_FREE",
+          "notActuallyShadow": true
         }
       },
       {
@@ -1153,6 +1168,7 @@
           ]
         }
       }
-    ]
+    ],
+    "comment": "The starter for defining a new champion class. Will always be uncollectible. Will appear in the Classes toolbox category for use."
   }
 ]

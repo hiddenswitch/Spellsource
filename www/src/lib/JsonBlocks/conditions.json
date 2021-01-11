@@ -88,7 +88,7 @@
     "type": "Condition_True",
     "output": "ConditionDesc",
     "colour": 100,
-    "message0": "(always true)",
+    "message0": "True",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
@@ -101,7 +101,7 @@
     "type": "Condition_False",
     "output": "ConditionDesc",
     "colour": 100,
-    "message0": "(always false)",
+    "message0": "False",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
@@ -409,6 +409,104 @@
         "shadow": {
           "type": "EntityReference_IT"
         }
+      }
+    ]
+  },
+
+  {
+    "type": "Condition_MinionOnBoard",
+    "inputsInline": false,
+    "output": "ConditionDesc",
+    "colour": 100,
+    "message0": "there %4 at least %2 %5 controlled by %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MinionOnBoardCondition"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "name": "targetPlayer",
+        "type": "input_value",
+        "check": "TargetPlayer",
+        "shadow": {
+          "type": "TargetPlayer_SHADOW"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "is/are",
+        "value": "is"
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural2",
+        "src": "value",
+        "text": "unit/units",
+        "value": "unit"
+      }
+    ]
+  },
+  {
+    "type": "Condition_MinionOnBoard2",
+    "inputsInline": false,
+    "output": "ConditionDesc",
+    "colour": 100,
+    "message0": "there %5 at least %2 %6 that %4 controlled by %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MinionOnBoardCondition"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "name": "targetPlayer",
+        "type": "input_value",
+        "check": "TargetPlayer",
+        "shadow": {
+          "type": "TargetPlayer_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "cardFilter",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        },
+        "src": "value"
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "is/are",
+        "value": "is"
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural2",
+        "src": "value",
+        "text": "unit/units",
+        "value": "unit"
       }
     ]
   },
@@ -785,103 +883,6 @@
     ]
   },
   {
-    "type": "Condition_MinionOnBoard",
-    "inputsInline": false,
-    "output": "ConditionDesc",
-    "colour": 100,
-    "message0": "there %4 at least %2 %5 controlled by %3",
-    "args0": [
-      {
-        "type": "field_label_serializable_hidden",
-        "name": "class",
-        "value": "MinionOnBoardCondition"
-      },
-      {
-        "type": "input_value",
-        "check": "ValueProviderDesc",
-        "name": "value",
-        "shadow": {
-          "type": "ValueProvider_int"
-        }
-      },
-      {
-        "name": "targetPlayer",
-        "type": "input_value",
-        "check": "TargetPlayer",
-        "shadow": {
-          "type": "TargetPlayer_SHADOW"
-        }
-      },
-      {
-        "type": "field_label_plural",
-        "name": "plural",
-        "src": "value",
-        "text": "is/are",
-        "value": "is"
-      },
-      {
-        "type": "field_label_plural",
-        "name": "plural2",
-        "src": "value",
-        "text": "unit/units",
-        "value": "unit"
-      }
-    ]
-  },
-  {
-    "type": "Condition_MinionOnBoard2",
-    "inputsInline": false,
-    "output": "ConditionDesc",
-    "colour": 100,
-    "message0": "there %5 at least %2 %6 that %4 controlled by %3",
-    "args0": [
-      {
-        "type": "field_label_serializable_hidden",
-        "name": "class",
-        "value": "MinionOnBoardCondition"
-      },
-      {
-        "type": "input_value",
-        "check": "ValueProviderDesc",
-        "name": "value",
-        "shadow": {
-          "type": "ValueProvider_int"
-        }
-      },
-      {
-        "name": "targetPlayer",
-        "type": "input_value",
-        "check": "TargetPlayer",
-        "shadow": {
-          "type": "TargetPlayer_SHADOW"
-        }
-      },
-      {
-        "type": "input_value",
-        "name": "cardFilter",
-        "check": "FilterDesc",
-        "shadow": {
-          "type": "Filter_SHADOW"
-        },
-        "src": "value"
-      },
-      {
-        "type": "field_label_plural",
-        "name": "plural",
-        "src": "value",
-        "text": "is/are",
-        "value": "is"
-      },
-      {
-        "type": "field_label_plural",
-        "name": "plural2",
-        "src": "value",
-        "text": "unit/units",
-        "value": "unit"
-      }
-    ]
-  },
-  {
     "type": "Condition_CanPlayPact",
     "inputsInline": false,
     "output": "ConditionDesc",
@@ -900,7 +901,7 @@
     "inputsInline": false,
     "output": "ConditionDesc",
     "colour": 100,
-    "message0": "You can Invoke",
+    "message0": "you can Invoke",
     "args0": [
       {
         "type": "field_label_serializable_hidden",

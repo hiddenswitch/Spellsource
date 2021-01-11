@@ -30,7 +30,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Makes a unit or item have an effect when they're played from hand."
   },
   {
     "type": "Property_attributes",
@@ -56,7 +57,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Lets a card have additional keyword properties"
   },
   {
     "type": "Property_attributes_int",
@@ -90,7 +92,8 @@
         "int": true
       }
     ],
-    "data": "BLOCKLY_INT_ATTRIBUTE"
+    "data": "BLOCKLY_INT_ATTRIBUTE",
+    "comment": "Set the value of an Attribute on a card to a number"
   },
   {
     "type": "Property_attributes_boolean",
@@ -116,7 +119,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE"
+    "data": "BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE",
+    "comment": "Set the state of an Attribute on a card to True"
   },
   {
     "type": "Property_attributes_SHADOW",
@@ -150,7 +154,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Makes a unit or item have an effect when they are destroyed."
   },
 
   {
@@ -177,9 +182,9 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Lets a unit or item have Aura effects."
   },
-
   {
     "type": "Property_opener2",
     "colour": 160,
@@ -220,7 +225,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Makes a unit or item have an effect when they're played from hand, but only conditionally."
   },
   {
     "type": "Property_triggers",
@@ -231,7 +237,7 @@
     "nextStatement": [
       "Properties"
     ],
-    "message0": "On the battlefield",
+    "message0": "In play",
     "args0": [],
     "message1": "%1",
     "args1": [
@@ -246,7 +252,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Let's a unit or item have Enchantment effects while they're in play."
   },
   {
     "type": "Property_triggers2",
@@ -272,7 +279,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Let's a card have Enchantment effects while it's in hand."
   },
   {
     "type": "Property_triggers3",
@@ -298,7 +306,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Let's a card have Enchantment effects while it's in deck."
   },
   {
     "type": "Property_triggers4",
@@ -324,7 +333,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Let's a card have Enchantment effects always, no matter where it is."
   },
   {
     "type": "Property_condition",
@@ -346,7 +356,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Prevents a card from being played unless a condition is met."
   },
   {
     "type": "Property_manaCostModifier",
@@ -369,7 +380,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Makes a card cost less (or more if negative) based on a value provider."
   },
   {
     "type": "Property_manaCostModifierConditional",
@@ -409,7 +421,8 @@
         "value": 0
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Makes a card cost less (or more if negative) based on a value provider AND a condition. (Note: this is functionally the same as using a conditional value provider)"
   },
   {
     "type": "Property_cardCostModifier",
@@ -421,7 +434,7 @@
     ],
     "colour": 320,
     "inputsInline": false,
-    "message0": "Hosts Cost Modifier: %1",
+    "message0": "Cost Modifier: %1",
     "args0": [
       {
         "type": "input_value",
@@ -432,7 +445,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Gives a card a Cost Modification effect, that could affect itself or others."
   },
   {
     "type": "Property_uncollectible",
@@ -451,7 +465,8 @@
         "value": false
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Makes a card not appear in the card collection."
   },
   {
     "type": "Property_set",
@@ -470,7 +485,8 @@
         "text": "CUSTOM"
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Makes a card be considered a part of a particular set of cards with that id."
   },
   {
     "type": "Property_glow",
@@ -493,7 +509,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Makes a card glow a special color whenever it would glow."
   },
   {
     "type": "Property_descriptions",
@@ -520,7 +537,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Replace instances of [] in the card's description with different things based on what's happening in game."
   },
   {
     "type": "Property_description",
@@ -542,7 +560,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_ARRAY_ELEMENT"
+    "data": "BLOCKLY_ARRAY_ELEMENT",
+    "comment": "Used to add dynamic description elements."
   },
   {
     "type": "Property_MetaDescription",
@@ -569,7 +588,8 @@
           "notActuallyShadow": true
         }
       }
-    ]
+    ],
+    "comment": "Concatenate multiple description elements together as one."
   },
   {
     "type": "Property_StringDescription",
@@ -587,7 +607,8 @@
         "name": "string",
         "text": "String"
       }
-    ]
+    ],
+    "comment": "Make a static string part of your dynamic description (will probably be used with a \"Multiple Descriptions\" block)"
   },
   {
     "type": "Property_ValueDescription",
@@ -608,7 +629,8 @@
           "type": "ValueProvider_SHADOW"
         }
       }
-    ]
+    ],
+    "comment": "Make a value part of your dynamic description"
   },
   {
     "type": "Property_PluralDescription",
@@ -643,7 +665,8 @@
           "type": "Property_description_SHADOW"
         }
       }
-    ]
+    ],
+    "comment": "Makes a word or its plural form part of your dynamic description depending on a value."
   },
   {
     "type": "Property_GatekeeperShaValueDescription",
@@ -699,7 +722,8 @@
           "type": "Property_description_SHADOW"
         }
       }
-    ]
+    ],
+    "comment": "More generally make one of two string part of the description depending on a condition."
   },
   {
     "type": "Property_description_SHADOW",
@@ -749,7 +773,8 @@
         }
       }
     ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Makes a Skill card upgrade into a another Skill, when the \"Upgrade Skill\" effect happens."
   },
   {
     "type": "Property_color_SHADOW",

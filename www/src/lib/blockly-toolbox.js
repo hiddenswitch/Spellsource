@@ -68,6 +68,10 @@ export default class BlocklyToolbox {
           this.contents('Property')
         ),
 
+        {
+          "kind": "sep"
+        },
+
         this.category('Rarities', '#888888',
           "Blocks for the different Rarities that cards can have",
           this.contents('Rarity')
@@ -117,13 +121,13 @@ export default class BlocklyToolbox {
         this.category('Attributes', '200',
           "Blocks for the many properties of cards/entities",
           [
-            this.category('Frequent', '200',
-              'Attribute blocks that are commonly used on cards',
+            this.category('Primary', '200',
+              'Attribute blocks that are frequently used on cards',
               this.subContents('Attribute', 'Frequent')
             ),
 
-            this.category('Infrequent', '200',
-              'Attribute blocks that are used uncommonly, but are still often useful',
+            this.category('Secondary', '200',
+              "Attribute blocks that aren't commonly put on cards directly, but rather are used by other cards",
               this.subContents('Attribute', 'Infrequent')
             ),
 
@@ -160,6 +164,10 @@ export default class BlocklyToolbox {
           "Blocks for the different tribes that units can be a part of",
           this.contents('Race')
         ),
+
+        {
+          "kind": "sep"
+        },
 
         this.category('Spells', '260',
           "Blocks that are the actual effects cards can cause (not actually related to the 'Spell' card type)",

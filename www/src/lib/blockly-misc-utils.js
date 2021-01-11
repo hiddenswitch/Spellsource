@@ -5,6 +5,7 @@ import recursiveOmitBy from 'recursive-omit-by'
 import {FieldLabelSerializableHidden} from '../components/field-label-serializable-hidden'
 import {FieldLabelPlural} from "../components/field-label-plural";
 import BlocklyModification from "./blockly-modification";
+import blocklyAdditions from '!!raw-loader!./block-additions.css'
 
 export default class BlocklyMiscUtils {
 
@@ -276,7 +277,9 @@ export default class BlocklyMiscUtils {
 
   static initHeroClassColors(data) {
     if (!Blockly.textColor) {
-      Blockly.textColor = {}
+      Blockly.textColor = {
+        'Rarity_COMMON': '#000000'
+      }
     }
     Blockly.heroClassColors = {
       ANY: '#A6A6A6'
@@ -310,7 +313,7 @@ export default class BlocklyMiscUtils {
         }
         BlocklyMiscUtils.addBlock(block)
         if (!!card.art.body?.vertex) {
-          Blockly.textColor[color] = Blockly.utils.colour.rgbToHex(
+          Blockly.textColor[type] = Blockly.utils.colour.rgbToHex(
             card.art.body.vertex.r * 255,
             card.art.body.vertex.g * 255,
             card.art.body.vertex.b * 255
@@ -408,23 +411,12 @@ export default class BlocklyMiscUtils {
 
   static loadableInit(Blockly) {
     if (!Blockly.Css.injected_) {
-      Blockly.Css.register([
-        '.blocklyCommentTextarea {',
-        'color: black;',
-        'caret-color: black;',
-        'font-size: 12pt;',
-        'background-color: lightgray;',
-        '}',
-
-        '.blocklyTooltipDiv {',
-        'opacity: 1;',
-        'font-size: 10pt;',
-        '}',
-
-        '.blackText {',
-        'fill: #000 !important;',
-        '}'
-      ]);
+      Blockly.Css.register(blocklyAdditions
+        .replaceAll(',','')
+        .replaceAll('  ','')
+        .replaceAll('\n\n', '\n')
+        .split('\n')
+      );
     }
 
     setTimeout(() => {
