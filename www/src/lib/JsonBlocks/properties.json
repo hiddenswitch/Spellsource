@@ -1,5 +1,25 @@
 [
   {
+    "type": "Property_sprite",
+    "colour": "#A6A6A6",
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "Sprite Name: %1",
+    "args0": [
+      {
+        "name": "art.sprite.named",
+        "type": "field_input",
+        "text": "Sprite"
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Assigns a particular sprite to this card for artwork."
+  },
+  {
     "type": "Property_opener1",
     "colour": 160,
     "previousStatement": [
