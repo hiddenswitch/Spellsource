@@ -200,6 +200,13 @@ header p {
   -ms-overflow-style: none;
 }
 
+.collection-div {
+  width: 60vw;
+  margin-left: calc(-26vw + 50%);
+  display: flex;
+  flex-wrap: wrap;
+}
+
 ::-webkit-scrollbar {
   width: 0;
 }
@@ -246,7 +253,7 @@ header p {
   position: relative;
 }
 
-.menu .input-box {
+.input-box {
   border: var(--border);
   padding-left: 0.25em;
   padding-right: 0.25em;

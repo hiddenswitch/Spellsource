@@ -1,5 +1,6 @@
 const remark = require('remark')
 const visit = require('unist-util-visit')
+const { resolveArt } = require('./src/lib/resolve-art')
 const { jsonTransformFileNode, jsonType } = require('./src/lib/json-transforms')
 
 module.exports = {
@@ -119,10 +120,21 @@ module.exports = {
             rawMarkdownBody: node => node.description,
             path: node => node.path,
             collectible: node => node.collectible,
-            excerpt: node => node.description,
+            excerpt: node => node.description, // is this necessary?
             nodeType: node => 'Card',
             heroClass: node => node.heroClass,
-            baseManaCost: node => node.baseManaCost
+            baseManaCost: node => node.baseManaCost,
+            art: (node, getNode) => {
+              return resolveArt(node, {
+                nodeModel: {
+                  getNodeById: ({ id }) => getNode(id)
+                }
+              })
+            },
+            baseAttack: node => node.baseAttack,
+            baseHp: node => node.baseHp,
+            type: node => node.type,
+            id: node => node.id
           },
           Block: {
             title: node => node.searchMessage,

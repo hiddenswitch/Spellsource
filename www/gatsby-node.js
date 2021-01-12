@@ -1,4 +1,7 @@
+const lodash = require(`lodash`)
 const path = require(`path`)
+const { resolveArt } = require('./src/lib/resolve-art')
+const { createFilePath } = require("gatsby-source-filesystem")
 
 exports.onCreateWebpackConfig = ({
   stage,
@@ -94,6 +97,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   const pageTemplate = path.resolve(`src/templates/page-template.js`)
   const cardTemplate = path.resolve(`src/templates/card-template.js`)
   const wikiTemplate = path.resolve(`src/templates/wiki-template.js`)
+  const collectionTemplate = path.resolve("./src/templates/collection-template.js")
 
   const result = await graphql(`
     {
@@ -146,13 +150,37 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
       context: {}
     })
   })
+
+  // pagination for collection
+  const cardsInCollection = result.data.allCard.edges
+  const cardsPerPage = 12
+  const numPages = Math.ceil(cardsInCollection.length / cardsPerPage)
+  Array.from({ length: numPages }).forEach((_, i) => {
+    createPage({
+      path: i === 0 ? `/collection` : `/collection/${i + 1}`,
+      component: collectionTemplate,
+      context: {
+        limit: cardsPerPage,
+        skip: i * cardsPerPage,
+        numPages,
+        currentPage: i + 1,
+      },
+    })
+  })
 }
 
 exports.createResolvers = ({ createResolvers }) => {
   const resolvers = {
+    Card: {
+      art: {
+        resolve (source, args, context, info) {
+          return resolveArt(source, context)
+        }
+      }
+    },
     Block: {
       searchMessage: {
-        resolve(source, args, context, info) {
+        resolve (source, args, context, info) {
           let node = source
           const getNodeForBlockType = (type) => {
             return context.nodeModel.getNodeById({
@@ -192,7 +220,7 @@ exports.createResolvers = ({ createResolvers }) => {
             }
             return ''
           }
-          return getTextForNode(node).replace(/\s+/g,' ').trim()
+          return getTextForNode(node).replace(/\s+/g, ' ').trim()
           //removing excess whitespace just in case ^^^
         }
       }
