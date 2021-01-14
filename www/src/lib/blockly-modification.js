@@ -5,6 +5,10 @@ import JsonConversionUtils from "./json-conversion-utils";
 import BlocklyMiscUtils from "./blockly-misc-utils";
 import DefaultOverrides from "./default-overrides";
 import {isArray} from 'lodash'
+import CardDisplay from '../components/card-display'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import CardTemplate from '../templates/card-template'
 
 export default class BlocklyModification {
 
@@ -30,6 +34,7 @@ export default class BlocklyModification {
     this.jsonShadows()
     this.connections()
     this.categoryIndenting()
+    this.cardDisplay()
 
     DefaultOverrides.overrideAll()
   }
@@ -524,6 +529,38 @@ export default class BlocklyModification {
 
       return rowDiv
     }
+  }
 
+  static cardDisplay() {
+    const createEditor = Blockly.Comment.prototype.createEditor_
+
+    Blockly.Comment.prototype.createEditor_ = function() {
+      createEditor.call(this)
+
+      let block = this.block_
+      if (block.type.startsWith("Starter_")) {
+        this.textarea_.remove()
+        //this.foreignObject_.previousElementSibling.remove()
+
+        let card = JSON.parse(block.getCommentText())
+        let cardDisplay = React.createElement(CardDisplay, card)
+
+        console.log(card)
+        ReactDOM.render(
+          <CardDisplay
+            name={card.name}
+            baseManaCost={card.baseManaCost}
+            description={card.description}
+            art={card.art}
+            baseAttack={card.baseAttack}
+            baseHp={card.baseHp}
+            type={card.type}
+          />,
+          this.foreignObject_.firstElementChild
+        )
+      }
+
+      return this.foreignObject_
+    }
   }
 }
