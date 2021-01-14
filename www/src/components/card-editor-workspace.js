@@ -242,6 +242,13 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
           Blockly.Blocks[blockType] = createdCard
           Blockly.JavaScript[blockType] = function (block) {return '\'' + createdCard.data + '\''}
         }
+
+
+        if (block.rendered) {
+          block.setCommentText(JSON.stringify(card))
+          block.commentModel.size.width = 274
+          block.commentModel.size.height = 324
+        }
       }
     )
 
