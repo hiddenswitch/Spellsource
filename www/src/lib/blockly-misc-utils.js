@@ -349,6 +349,15 @@ export default class BlocklyMiscUtils {
         }
         BlocklyMiscUtils.addBlock(block)
       }
+
+
+      if (!!card.art?.sprite?.named) {
+        let name = 'Art_' + card.art.sprite.named
+        let artBlock = Blockly.Blocks[name];
+        if (!!artBlock) {
+          artBlock.used = true
+        }
+      }
     }
   }
 
@@ -560,6 +569,34 @@ export default class BlocklyMiscUtils {
           }
         }
       }
+    }
+  }
+
+
+  static initArtBlcks(data) {
+    for (let edge of data.allArt.edges) {
+      let node = edge.node
+      let type = 'Art_' + node.name
+      if (has(Blockly.Blocks, type)) {
+        return
+      }
+      let block = {
+        'type': type,
+        'message0': '%1',
+        'args0': [
+          {
+            'type': 'field_image',
+            'width': node.childImageSharp.fluid.presentationWidth * 1.5,
+            'height': node.childImageSharp.fluid.presentationHeight * 1.5,
+            'src': node.childImageSharp.fluid.src
+          }
+        ],
+        'output': 'Art',
+        'colour': '#A6A6A6',
+        'data': node.name,
+        'comment': node.name
+      }
+      BlocklyMiscUtils.addBlock(block)
     }
   }
 }

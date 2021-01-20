@@ -140,6 +140,11 @@ module.exports = {
             title: node => node.searchMessage,
             nodeType: node => 'Block',
             rawMarkdownBody: node => node.comment || ''
+          },
+          File: {
+            title: node => node.name,
+            nodeType: node => 'File',
+            rawMarkdownBody: node => ''
           }
         },
         // Optional filter to limit indexed nodes

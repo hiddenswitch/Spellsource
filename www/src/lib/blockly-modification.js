@@ -532,20 +532,21 @@ export default class BlocklyModification {
   }
 
   static cardDisplay() {
-    const createEditor = Blockly.Comment.prototype.createEditor_
+    const createBubble = Blockly.Comment.prototype.createBubble_
 
-    Blockly.Comment.prototype.createEditor_ = function() {
-      createEditor.call(this)
+    Blockly.Comment.prototype.createBubble_ = function() {
+      createBubble.call(this)
 
       let block = this.block_
       if (block.type.startsWith("Starter_")) {
         this.textarea_.remove()
-        //this.foreignObject_.previousElementSibling.remove()
-
+        this.foreignObject_.previousElementSibling.remove()
         let card = JSON.parse(block.getCommentText())
-        let cardDisplay = React.createElement(CardDisplay, card)
 
-        console.log(card)
+        if (!!card.art?.sprite?.named && !!block.artURL) {
+          card.art.sprite.named = block.artURL
+        }
+
         ReactDOM.render(
           <CardDisplay
             name={card.name}
@@ -560,7 +561,6 @@ export default class BlocklyModification {
         )
       }
 
-      return this.foreignObject_
     }
   }
 }

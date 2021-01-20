@@ -121,16 +121,6 @@ export default class JsonConversionUtils {
       block.setFieldValue('TRUE', 'countByValue')
     }
 
-    if (!!card.art.sprite && !!card.art.sprite.named) {
-      let spriteBlock = this.newBlock(workspace, 'Property_sprite')
-      spriteBlock.previousConnection.connect(lowestBlock.nextConnection)
-      spriteBlock.setFieldValue(card.art.sprite.named,'art.sprite.named')
-      if (!!spriteBlock.initSvg) {
-        spriteBlock.initSvg()
-      }
-      lowestBlock = spriteBlock
-    }
-
     if (!!card.battlecry) {
       let openerBlock
       if (!!card.battlecry.condition) {
@@ -344,6 +334,24 @@ export default class JsonConversionUtils {
         }
         lowestBlock = glowBlock
       }
+    }
+
+    if (!!card.art?.sprite?.named) {
+      let spriteBlock = this.newBlock(workspace, 'Property_sprite')
+      spriteBlock.previousConnection.connect(lowestBlock.nextConnection)
+
+      if (!!Blockly.Blocks['Art_' + card.art.sprite.named]) {
+        let artBlock = this.newBlock(workspace, 'Art_' + card.art.sprite.named)
+        spriteBlock.getInput('art.sprite.named').connection.connect(artBlock.outputConnection)
+        if (!!artBlock.initSvg) {
+          artBlock.initSvg()
+        }
+      }
+
+      if (!!spriteBlock.initSvg) {
+        spriteBlock.initSvg()
+      }
+      lowestBlock = spriteBlock
     }
 
     if (!!workspace.render) {
