@@ -102,5 +102,19 @@ export default function useBlocklyData () {
         }
       }
     }
+    allArt: allFile(filter: {extension: {eq: "png"}, relativePath: {glob: "**card-images/art/**"}}) {
+      edges {
+        node {
+          name
+          childImageSharp {
+            fluid {
+              presentationHeight
+              presentationWidth
+              src
+            }
+          }
+        }
+      }
+    }
   }`)
 }

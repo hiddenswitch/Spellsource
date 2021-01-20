@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState, forwardRef } from 'react'
 import WorkspaceUtils from '../lib/workspace-utils'
 import styles from './card-editor-view.module.css'
-import ReactBlocklyComponent from 'react-blockly'
 import Blockly from 'blockly'
 import { isArray } from 'lodash'
 import 'ace-builds/src-noconflict/mode-json'
@@ -32,6 +31,7 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
     if (!Blockly.spellsourceInit) {
       BlocklyMiscUtils.initBlocks(data)
       BlocklyMiscUtils.initHeroClassColors(data)
+      BlocklyMiscUtils.initArtBlcks(data)
       BlocklyMiscUtils.initCardBlocks(data)
       Blockly.blockRendering.register('spellsource', SpellsourceRenderer)
       SpellsourceGenerator.generateJavaScript()
@@ -245,9 +245,27 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
 
 
         if (block.rendered) {
+          let ogText = block.getCommentText()
           block.setCommentText(JSON.stringify(card))
+
           block.commentModel.size.width = 274
           block.commentModel.size.height = 324
+          block.commentModel.pinned = true
+
+          if (!!card.art?.sprite?.named) {
+            for (let edge of data.allArt.edges) {
+              let node = edge.node
+              if (node.name === card.art.sprite.named) {
+                block.artURL = node.childImageSharp.fluid.src
+                break;
+              }
+            }
+          }
+
+          if (block.getCommentIcon().isVisible() && block.getCommentText() !== ogText) {
+            block.getCommentIcon().disposeBubble_()
+            block.getCommentIcon().createBubble_()
+          }
         }
       }
     )
@@ -344,12 +362,25 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
         // Query the index with search string to get an [] of IDs
         .search(query, { expand: true }) // accept partial matches
         .map(({ ref }) => index.documentStore.getDoc(ref))
-        .filter(doc => !props.showCatalogueBlocks ? doc.nodeType === 'Block' : (doc.nodeType === 'Card'
-          && Blockly.heroClassColors.hasOwnProperty(doc.heroClass) && doc.hasOwnProperty('baseManaCost')))
+        .filter(doc => {
+          if (props.showCatalogueBlocks) {
+            return doc.nodeType === 'Card' && doc.hasOwnProperty('baseManaCost')
+              && Blockly.heroClassColors.hasOwnProperty(doc.heroClass)
+          }
+          if (doc.nodeType === 'File') {
+            return !!Blockly.Blocks['Art_' + doc.title]
+          }
+          return doc.nodeType === 'Block'
+        })
         .map(doc => {
           if (doc.nodeType === 'Card') {
             return {
               id: 'CatalogueCard_' + doc.id
+            }
+          }
+          if (doc.nodeType === 'File') {
+            return {
+              id: 'Art_' + doc.title
             }
           }
           return doc

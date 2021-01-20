@@ -8,12 +8,15 @@
     "nextStatement": [
       "Properties"
     ],
-    "message0": "Sprite Name: %1",
+    "message0": "Art: %1",
     "args0": [
       {
         "name": "art.sprite.named",
-        "type": "field_input",
-        "text": "Sprite"
+        "type": "input_value",
+        "check": "Art",
+        "shadow": {
+          "type": "Property_art_SHADOW"
+        }
       }
     ],
     "data": "BLOCKLY_EXTEND_PREVIOUS",
@@ -852,5 +855,11 @@
       }
     ],
     "data": "{text}"
+  },
+  {
+    "type": "Property_art_SHADOW",
+    "colour": "#888888",
+    "output": "Art",
+    "message0": "Art"
   }
 ]

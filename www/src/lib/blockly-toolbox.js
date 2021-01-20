@@ -68,6 +68,21 @@ export default class BlocklyToolbox {
           this.contents('Property')
         ),
 
+        this.category('Card Art', '#888888',
+          "Blocks representing the art that your card can have",
+          [
+            this.category('Unused', '#888888', "Art that hasn't yet been used by a card",
+              this.artContents(false)
+            ),
+            this.category('Used', '#888888', "Art that's been used by cards already",
+              this.artContents(true)
+            ),
+            this.category('All', '#888888', "All available art",
+              this.artContents(null)
+            )
+          ]
+        ),
+
         {
           "kind": "sep"
         },
@@ -551,6 +566,17 @@ export default class BlocklyToolbox {
     let contents = []
     for (let block in Blockly.Blocks) {
       if (this.defaultTest(block) && (block.startsWith(prefix) || inclusions.includes(block))) {
+        contents.push(this.getBlock(block))
+      }
+    }
+    return contents
+  }
+
+  static artContents(used) {
+    let contents = []
+    for (let block in Blockly.Blocks) {
+      if (this.defaultTest(block) && block.startsWith('Art_') &&
+        (used === !!Blockly.Blocks[block].used || used === null)) {
         contents.push(this.getBlock(block))
       }
     }

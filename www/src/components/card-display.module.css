@@ -127,34 +127,34 @@
 
 .baseManaCost {
     position: absolute;
-    left: 213px;
-    font-size: 20px;
+    left: 211px;
+    font-size: 40px;
     font-family: 'trenco', monospace;
     text-shadow: -1.5px 1.5px black;
-    top: 11px;
+    top: -3px;
     z-index: 7;
 }
 
 .baseAttack {
     position: absolute;
     font-family: 'trenco', monospace;
-    font-size: 20px;
+    font-size: 40px;
     z-index: 11;
     color: #CF596D;
     text-shadow: -1.5px 1.5px black;
-    left: 45.5px;
-    top: 271px;
+    left: 43px;
+    top: 257px;
 }
 
 .baseHp {
     position: absolute;
     font-family: 'trenco', monospace;
     z-index: 11;
-    font-size: 20px;
+    font-size: 40px;
     color: #A4E9C7;
     text-shadow: -1.5px 1.5px black;
-    left: 209.5px;
-    top: 271px;
+    left: 207px;
+    top: 257px;
 }
 
 .description {
