@@ -90,6 +90,7 @@ dependencies {
     }
 
     implementation group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
+    implementation group: 'commons-validator', name: 'commons-validator', version: '1.6'
 
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$jacksonVersion") {
         exclude group: 'jakarta.xml.bind', module: '*'

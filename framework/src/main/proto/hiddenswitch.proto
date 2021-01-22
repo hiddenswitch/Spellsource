@@ -77,6 +77,15 @@ message ServerConfiguration {
     DecksConfiguration decks = 8;
 }
 
+message ClientConfiguration {
+    message AccountsConfiguration {
+        string keycloakResetPasswordUrl = 1;
+        string keycloakAccountManagementUrl = 2;
+    }
+
+    AccountsConfiguration accounts = 1;
+}
+
 
 message GetCardsRequest {
     // The value returned in the ETag header from the server when this was last called, or empty if this is the
@@ -106,6 +115,9 @@ service Unauthenticated {
 
     // Verify that the token is valid
     rpc VerifyToken(AccessTokenResponse) returns (google.protobuf.BoolValue) {}
+
+    // Returns a configuration for the client from the server.
+    rpc GetConfiguration(google.protobuf.Empty) returns (ClientConfiguration) {}
 }
 
 service UnauthenticatedCards {

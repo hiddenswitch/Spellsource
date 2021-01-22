@@ -923,7 +923,7 @@ public class ModelConversions {
 		deck.setCards(deckCollection.getCollection().getInventoryList().stream()
 				.map(cr -> Objects.requireNonNull(getDescriptionFromRecord(new CardsInDeck()
 						.setCardId(cr.getEntity().getCardId())
-						.setId(Long.parseLong(cr.getId()))
+						.setId(cr.getId())
 						.setDeckId(deckId), userId, deckId)).create())
 				.collect(Collectors.toCollection(CardArrayList::new)));
 		deck.setFormat(DeckFormat.getFormat(deckCollection.getCollection().getFormat()));

@@ -535,7 +535,6 @@ public class ServerGameContext extends GameContext implements Server {
 					LOGGER.debug("play {}: Starting forked game", gameId);
 					super.play(false);
 				} catch (Throwable throwable) {
-					throwable.printStackTrace();
 					var rootCause = Throwables.getRootCause(throwable);
 					if (Strand.currentStrand().isInterrupted() || rootCause instanceof InterruptedException) {
 						// Generally only an interrupt from endGame() is allowed to gracefully interrupt this daemon.

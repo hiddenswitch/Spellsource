@@ -73,7 +73,7 @@ public class DecksTests extends FrameworkTestBase {
 							.onSuccess(decksGetResponse -> {
 								testContext.verify(() -> {
 									assertTrue(decksGetResponse.getCollection().getInventoryList().stream().anyMatch(cr -> cr.getEntity().getCardId().equals(replacement)), "should have added lunstone");
-									assertTrue(decksGetResponse.getCollection().getInventoryList().stream().noneMatch(cr -> cr.getId().equals(toReplace)), "should have removed by id");
+									assertTrue(decksGetResponse.getCollection().getInventoryList().stream().noneMatch(cr -> cr.getId() == toReplace), "should have removed by id");
 								});
 							});
 				})

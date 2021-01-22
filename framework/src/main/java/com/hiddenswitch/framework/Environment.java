@@ -14,6 +14,7 @@ import com.hiddenswitch.spellsource.common.Tracing;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
 import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.micrometer.core.instrument.Metrics;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.vertx.config.ConfigRetriever;
@@ -345,10 +346,16 @@ public class Environment {
 	}
 
 	public static <T> Function<Throwable, Future<T>> onGrpcFailure() {
-		return t -> Future.failedFuture(Status.INTERNAL
-				.augmentDescription(Throwables.getRootCause(t).getMessage() + "\n" + Throwables.getStackTraceAsString(Throwables.getRootCause(t)))
-				.withCause(t)
-				.asRuntimeException());
+		return t -> {
+			if (t instanceof StatusRuntimeException) {
+				return Future.failedFuture(t);
+			}
+
+			return Future.failedFuture(Status.INTERNAL
+					.augmentDescription(Throwables.getRootCause(t).getMessage() + "\n" + Throwables.getStackTraceAsString(Throwables.getRootCause(t)))
+					.withCause(t)
+					.asRuntimeException());
+		};
 	}
 
 	public static <T extends UpdatableRecord<T>> Insert<T> upsert(final DSLContext dslContext, final UpdatableRecord<T> record) {
