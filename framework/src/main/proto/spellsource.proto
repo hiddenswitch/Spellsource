@@ -252,7 +252,7 @@ message CardEvent {
 }
 
 message CardRecord {
-    string _id = 1;
+    int64 id = 1;
     string allianceId = 2;
     string borrowedByUserId = 3;
     repeated string collectionIds = 4;
@@ -446,7 +446,7 @@ message DecksUpdateCommand {
 
     // Removes all the specified inventory IDs from the user's deck. Does nothing if the deck does not contain any of
     // the specified inventory IDs. This method will still succeed for inventory IDs that are found.
-    repeated string pullAllInventoryIds = 2;
+    repeated int64 pullAllInventoryIds = 2;
 
     // Adds the specified card IDs to the deck with this command. If the player doesn't own the card IDs, the current
     // Spellsource inventory rules will grant the cards to the user. Duplicates are allowed. Under standard rules,
@@ -468,7 +468,7 @@ message DecksUpdateCommand {
     // be rejected. If the user does not own these inventory IDs, the deck becomes invalid. Under standard rules,
     // duplicate card IDs also make the deck invalid. Finally, adding cards whose hero class isn't neutral or the
     // same as the deck's hero class marks the deck as invalid.
-    repeated string setInventoryIds = 6;
+    repeated int64 setInventoryIds = 6;
 
     // Sets the name of the deck in this command. If the name is null, the deck becomes invalid.
     string setName = 7;

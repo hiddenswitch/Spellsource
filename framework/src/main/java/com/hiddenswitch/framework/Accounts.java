@@ -9,15 +9,13 @@ import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.rpc.*;
 import com.hiddenswitch.framework.schema.keycloak.tables.daos.UserEntityDao;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
-import com.hiddenswitch.framework.schema.spellsource.Tables;
-import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.grpc.*;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.shareddata.Shareable;
 import io.vertx.ext.web.client.WebClient;
-import io.vertx.pgclient.PgPool;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.keycloak.TokenVerifier;
@@ -38,7 +36,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.*;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -47,7 +48,10 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toMap;
 
 public class Accounts {
+	// todo: use realmId
 	protected static final String KEYCLOAK_LOGIN_PATH = "/realms/hiddenswitch/protocol/openid-connect/token";
+	protected static final String KEYCLOAK_FORGOT_PASSWORD_PATH = "/realms/hiddenswitch/login-actions/reset-credentials";
+	protected static final String KEYCLOAK_ACCOUNT_MANAGEMENT_PATH = "/realms/hiddenswitch/account";
 	private static final String RSA = "RSA";
 	private static final WeakVertxMap<Keycloak> keycloakReference = new WeakVertxMap<>(Accounts::keycloakConstructor);
 	private static final WeakVertxMap<PublicKeyJwtServerInterceptor> interceptor = new WeakVertxMap<>(Accounts::authorizationInterceptorConstructor);
@@ -231,7 +235,26 @@ public class Accounts {
 
 			@Override
 			public Future<LoginOrCreateReply> createAccount(CreateAccountRequest request) {
-				return createUser(request.getEmail(), request.getUsername(), request.getPassword())
+				if (!EmailValidator.getInstance().isValid(request.getEmail())) {
+					return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The e-mail address isn't valid.").asRuntimeException());
+				}
+				if (request.getUsername().length() <= 4) {
+					return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The username must be at least 4 characters.").asRuntimeException());
+				}
+				if (request.getPassword().length() <= 4) {
+					return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The password must be at least 4 characters.").asRuntimeException());
+				}
+
+				return get()
+						.compose(realm -> Environment.executeBlocking(() -> realm.users().search(request.getUsername(), true)))
+						.compose(existingUsers -> {
+							if (!existingUsers.isEmpty()) {
+								return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("This username already exists.").asRuntimeException());
+							}
+
+							return createUser(request.getEmail(), request.getUsername(), request.getPassword())
+									.recover(t -> Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The username, e-mail or password are invalid. Please check them and try again.").asRuntimeException()));
+						})
 						.compose(userEntity -> {
 							// Login here
 							var client = new Client(context.owner(), webClient);
@@ -258,7 +281,7 @@ public class Accounts {
 							}
 						})
 						.map(this::handleAccessTokenUserEntityTuple)
-						.recover(Environment.onGrpcFailure());
+						.recover(t -> Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The username, email or password are invalid.").asRuntimeException()));
 			}
 
 			@Override
@@ -269,6 +292,18 @@ public class Accounts {
 						.map(BoolValue.of(true))
 						.otherwise(BoolValue.of(false))
 						.recover(Environment.onGrpcFailure());
+			}
+
+			@Override
+			public Future<ClientConfiguration> getConfiguration(Empty request) {
+				var config = Environment.cachedConfigurationOrGet();
+				var authUrl = config.getKeycloak().getAuthUrl();
+				return Future.succeededFuture(ClientConfiguration.newBuilder()
+						.setAccounts(ClientConfiguration.AccountsConfiguration.newBuilder()
+								.setKeycloakResetPasswordUrl(authUrl + KEYCLOAK_FORGOT_PASSWORD_PATH)
+								.setKeycloakAccountManagementUrl(authUrl + KEYCLOAK_LOGIN_PATH)
+								.build())
+						.build());
 			}
 		});
 	}
@@ -387,14 +422,17 @@ public class Accounts {
 					user.setEmail(email);
 					user.setUsername(username);
 					user.setEnabled(true);
-					var credential = getPasswordCredential(password);
+					var credential = new CredentialRepresentation();
+					credential.setType(CredentialRepresentation.PASSWORD);
+					credential.setValue(password);
+					credential.setTemporary(false);
 					user.setCredentials(Collections.singletonList(credential));
 
 					// TODO: Not sure yet how to get the ID of the user you just created
 					return Environment.executeBlocking(() -> {
 						var response = realm.users().create(user);
 						if (response.getStatus() >= 400) {
-							throw new RuntimeException("A user with the specified e-mail or username already exists.");
+							throw new RuntimeException();
 						}
 						return response;
 					}).map(response -> {
@@ -413,8 +451,7 @@ public class Accounts {
 						return Future.failedFuture(new ArrayIndexOutOfBoundsException("invalid user creation result"));
 					}
 					return Future.succeededFuture(userEntity);
-				})
-				.onFailure(Environment.onFailure());
+				});
 	}
 
 	public static Future<UserEntity> createUserWithHashed(String email, String username, String scryptHashedPassword) {
@@ -512,6 +549,11 @@ public class Accounts {
 			realmRepresentation.setEnabled(true);
 			// use scrypt provider
 			realmRepresentation.setPasswordPolicy("hashAlgorithm(scrypt)");
+			realmRepresentation.setRegistrationAllowed(true);
+			realmRepresentation.setResetPasswordAllowed(true);
+			realmRepresentation.setResetCredentialsFlow("reset credentials");
+			realmRepresentation.setRegistrationFlow("registration");
+			realmRepresentation.setRememberMe(true);
 
 			keycloak.realms().create(realmRepresentation);
 

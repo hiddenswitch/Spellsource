@@ -47,6 +47,8 @@ namespace HiddenSwitch.Proto {
     static readonly grpc::Marshaller<global::HiddenSwitch.Proto.LoginRequest> __Marshaller_hiddenswitch_LoginRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.LoginRequest.Parser));
     static readonly grpc::Marshaller<global::HiddenSwitch.Proto.AccessTokenResponse> __Marshaller_hiddenswitch_AccessTokenResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.AccessTokenResponse.Parser));
     static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.BoolValue> __Marshaller_google_protobuf_BoolValue = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.BoolValue.Parser));
+    static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.Empty.Parser));
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.ClientConfiguration> __Marshaller_hiddenswitch_ClientConfiguration = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.ClientConfiguration.Parser));
 
     static readonly grpc::Method<global::HiddenSwitch.Proto.CreateAccountRequest, global::HiddenSwitch.Proto.LoginOrCreateReply> __Method_CreateAccount = new grpc::Method<global::HiddenSwitch.Proto.CreateAccountRequest, global::HiddenSwitch.Proto.LoginOrCreateReply>(
         grpc::MethodType.Unary,
@@ -68,6 +70,13 @@ namespace HiddenSwitch.Proto {
         "VerifyToken",
         __Marshaller_hiddenswitch_AccessTokenResponse,
         __Marshaller_google_protobuf_BoolValue);
+
+    static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::HiddenSwitch.Proto.ClientConfiguration> __Method_GetConfiguration = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::HiddenSwitch.Proto.ClientConfiguration>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetConfiguration",
+        __Marshaller_google_protobuf_Empty,
+        __Marshaller_hiddenswitch_ClientConfiguration);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -96,6 +105,17 @@ namespace HiddenSwitch.Proto {
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
       public virtual global::System.Threading.Tasks.Task<global::Google.Protobuf.WellKnownTypes.BoolValue> VerifyToken(global::HiddenSwitch.Proto.AccessTokenResponse request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      /// Returns a configuration for the client from the server.
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      public virtual global::System.Threading.Tasks.Task<global::HiddenSwitch.Proto.ClientConfiguration> GetConfiguration(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -201,6 +221,50 @@ namespace HiddenSwitch.Proto {
       {
         return CallInvoker.AsyncUnaryCall(__Method_VerifyToken, null, options, request);
       }
+      /// <summary>
+      /// Returns a configuration for the client from the server.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      public virtual global::HiddenSwitch.Proto.ClientConfiguration GetConfiguration(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetConfiguration(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Returns a configuration for the client from the server.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      public virtual global::HiddenSwitch.Proto.ClientConfiguration GetConfiguration(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetConfiguration, null, options, request);
+      }
+      /// <summary>
+      /// Returns a configuration for the client from the server.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      public virtual grpc::AsyncUnaryCall<global::HiddenSwitch.Proto.ClientConfiguration> GetConfigurationAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetConfigurationAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Returns a configuration for the client from the server.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      public virtual grpc::AsyncUnaryCall<global::HiddenSwitch.Proto.ClientConfiguration> GetConfigurationAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetConfiguration, null, options, request);
+      }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       protected override UnauthenticatedClient NewInstance(ClientBaseConfiguration configuration)
       {
@@ -215,7 +279,8 @@ namespace HiddenSwitch.Proto {
       return grpc::ServerServiceDefinition.CreateBuilder()
           .AddMethod(__Method_CreateAccount, serviceImpl.CreateAccount)
           .AddMethod(__Method_Login, serviceImpl.Login)
-          .AddMethod(__Method_VerifyToken, serviceImpl.VerifyToken).Build();
+          .AddMethod(__Method_VerifyToken, serviceImpl.VerifyToken)
+          .AddMethod(__Method_GetConfiguration, serviceImpl.GetConfiguration).Build();
     }
 
     /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
@@ -227,6 +292,7 @@ namespace HiddenSwitch.Proto {
       serviceBinder.AddMethod(__Method_CreateAccount, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::HiddenSwitch.Proto.CreateAccountRequest, global::HiddenSwitch.Proto.LoginOrCreateReply>(serviceImpl.CreateAccount));
       serviceBinder.AddMethod(__Method_Login, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::HiddenSwitch.Proto.LoginRequest, global::HiddenSwitch.Proto.LoginOrCreateReply>(serviceImpl.Login));
       serviceBinder.AddMethod(__Method_VerifyToken, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::HiddenSwitch.Proto.AccessTokenResponse, global::Google.Protobuf.WellKnownTypes.BoolValue>(serviceImpl.VerifyToken));
+      serviceBinder.AddMethod(__Method_GetConfiguration, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Google.Protobuf.WellKnownTypes.Empty, global::HiddenSwitch.Proto.ClientConfiguration>(serviceImpl.GetConfiguration));
     }
 
   }

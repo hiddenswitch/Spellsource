@@ -96,7 +96,7 @@ public class Legacy {
 											}
 											return entity;
 										})
-										.map(card -> CardRecord.newBuilder().setEntity(card).setId(card.getCardId()))
+										.map(card -> CardRecord.newBuilder().setEntity(card))
 										.collect(toList()))
 								.map(cards -> {
 									var builder = GetCardsResponse.Content.newBuilder();
@@ -319,7 +319,7 @@ public class Legacy {
 					}
 
 					if (updateCommand.getPullAllInventoryIdsCount() > 0) {
-						futs.add(cardsInDeckDao.deleteByIds(updateCommand.getPullAllInventoryIdsList().stream().map(Long::parseLong).collect(toList())));
+						futs.add(cardsInDeckDao.deleteByIds(new ArrayList<>(updateCommand.getPullAllInventoryIdsList())));
 					}
 
 					var setsHeroClass = !updateCommand.getSetHeroClass().isEmpty();
@@ -600,7 +600,7 @@ public class Legacy {
 					for (var cardRecordRow : cards) {
 						inventoryCollection.addInventory(CardRecord
 								.newBuilder()
-								.setId(cardRecordRow.getLong(CARDS_IN_DECK.ID.getName()).toString())
+								.setId(cardRecordRow.getLong(CARDS_IN_DECK.ID.getName()))
 								// TODO: Do we really need to transmit the complete entity here?
 								.setEntity(Entity.newBuilder()
 										.setId(i)
