@@ -1,0 +1,364 @@
+buildscript {
+    ext {
+        vertxJooqVersion = '14efcb1ff3'
+        postgresqlVersion = '42.2.16'
+        flywayVersion = '6.5.5'
+    }
+    repositories {
+        mavenLocal()
+        // for jooq from github
+        maven { url 'https://jitpack.io' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.github.hiddenswitch.vertx-jooq:vertx-jooq-generate:$vertxJooqVersion"
+        classpath "org.postgresql:postgresql:$postgresqlVersion"
+        classpath "io.vertx:vertx-core:$vertxVersion"
+        classpath "com.databasesandlife:java-common:$databasesandlifeVersion"
+    }
+}
+
+plugins {
+    id 'com.bmuschko.docker-remote-api' version '6.6.1'
+    id "org.flywaydb.flyway" version "$flywayVersion"
+    id 'com.github.johnrengelman.shadow' version "$shadowPluginVersion"
+}
+
+
+apply plugin: 'base'
+apply plugin: 'java-library'
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'maven'
+apply plugin: 'com.bmuschko.docker-remote-api'
+apply plugin: 'idea'
+apply from: '../gradle/instrument.gradle'
+
+import com.bmuschko.gradle.docker.domain.LivenessProbe
+import com.bmuschko.gradle.docker.tasks.container.*
+import com.bmuschko.gradle.docker.tasks.image.*
+import com.bmuschko.gradle.docker.tasks.container.extras.DockerLivenessContainer
+import groovy.transform.Field
+import io.github.jklingsporn.vertx.jooq.shared.postgres.JSONBToJsonObjectConverter
+import io.vertx.core.json.JsonObject;
+import org.jooq.codegen.GenerationTool
+import org.jooq.meta.jaxb.*
+import org.apache.tools.ant.taskdefs.condition.Os
+import org.w3c.dom.Element
+import com.databasesandlife.util.jooq.PostgresXmlDomElementBinding
+
+def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
+def localUsername = 'admin'
+def localPassword = 'password'
+def localDatabaseName = 'spellsource'
+def mainClassName = 'com.hiddenswitch.framework.EntryPoint'
+def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
+def createPostgresImage = tasks.getByPath(':spellsource-containers:createPostgresImage')
+def createKeycloakImage = tasks.getByPath(':spellsource-containers:createKeycloakImage')
+
+// configures the migration test, which specially starts mongo
+sourceSets {
+    testMigrations {
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+configurations {
+    testMigrationsImplementation.extendsFrom(testImplementation)
+    testMigrationsRuntime.extendsFrom(testRuntime)
+}
+
+dependencies {
+    api project(':spellsource-common')
+    api project(':spellsource-game')
+    api project(':spellsource-cards-git')
+    api project(':vertx-sync')
+    api "io.vertx:vertx-rx-java2:$vertxVersion"
+
+    implementation("com.databasesandlife:java-common:$databasesandlifeVersion") {
+        exclude group: 'com.google.gdata', module: '*'
+        exclude group: 'log4j', module: '*'
+        exclude group: 'dnsjava', module: '*'
+        exclude group: 'commons-io', module: '*'
+    }
+
+    implementation group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
+    implementation group: 'commons-validator', name: 'commons-validator', version: '1.6'
+
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$jacksonVersion") {
+        exclude group: 'jakarta.xml.bind', module: '*'
+        exclude group: 'jakarta.activation', module: '*'
+    }
+    implementation("com.fasterxml.jackson.module:jackson-module-afterburner:$jacksonVersion") {
+        exclude group: 'jakarta.xml.bind', module: '*'
+        exclude group: 'jakarta.activation', module: '*'
+    }
+
+    implementation "io.github.classgraph:classgraph:$classgraphVersion"
+    implementation("com.avast.grpc.jwt:grpc-java-jwt:0.4.0") {
+        exclude group: 'com.google.code.gson'
+        exclude group: 'io.grpc'
+        exclude group: 'org.keycloak'
+    }
+
+    implementation("org.postgresql:postgresql:$postgresqlVersion") {
+        exclude group: 'org.checkerframework', module: 'checker-qual'
+    }
+
+    implementation('org.jboss.resteasy:resteasy-client-vertx:4.5.6.Final') {
+        exclude group: 'io.vertx', module: 'vertx-core'
+    }
+
+    implementation 'org.jooq:jooq:3.13.5'
+    implementation "io.vertx:vertx-pg-client:$vertxVersion"
+    implementation("com.github.hiddenswitch.vertx-jooq:vertx-jooq-classic-reactive:$vertxJooqVersion") {
+        exclude group: "io.vertx", module: '*'
+    }
+
+    implementation group: 'io.vertx', name: 'vertx-infinispan', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-service-discovery', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-web', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-auth-common', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-config', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-mongo-client', version: vertxVersion
+    implementation "io.vertx:vertx-micrometer-metrics:$vertxVersion"
+    implementation "io.micrometer:micrometer-registry-prometheus:$micrometerVersion"
+    implementation "io.micrometer:micrometer-registry-jmx:$micrometerVersion"
+    implementation 'com.be-hase.grpc-micrometer:grpc-micrometer:0.0.2'
+    implementation 'io.opentracing.contrib:opentracing-grpc:0.2.3'
+    implementation("com.github.marschall:micrometer-jfr:0.4.0") {
+        exclude group: 'io.micrometer', module: 'micrometer-core'
+    }
+    implementation 'net.openhft:zero-allocation-hashing:0.11'
+    implementation platform("org.keycloak.bom:keycloak-bom-parent:$keycloakVersion")
+    implementation(group: 'org.keycloak', name: 'keycloak-admin-client', version: "$keycloakVersion") {
+        exclude group: 'org.jboss.resteasy', module: 'resteasy-client'
+    }
+    implementation "org.keycloak:keycloak-server-spi:$keycloakVersion"
+    implementation "org.keycloak:keycloak-server-spi-private:$keycloakVersion"
+
+    implementation group: 'org.graalvm.truffle', name: 'truffle-api', version: '20.2.0'
+    implementation group: 'org.graalvm.js', name: 'js', version: '20.2.0'
+    implementation "io.jaegertracing:jaeger-client:$jaegerVersion"
+    implementation "org.flywaydb:flyway-core:$flywayVersion"
+    implementation 'org.redisson:redisson:3.14.1'
+
+    testImplementation(project(':spellsource-containers'))
+    testImplementation project(':spellsource-testutils')
+    testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
+    testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
+    testImplementation group: 'io.vertx', name: 'vertx-junit5', version: vertxVersion
+    testImplementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
+    testImplementation group: 'io.vertx', name: 'vertx-web-common', version: vertxVersion
+    testImplementation 'com.google.guava:guava:26.0-jre'
+    testImplementation "io.github.classgraph:classgraph:$classgraphVersion"
+    testImplementation 'org.jetbrains:annotations:16.0.2'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
+    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+    runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
+}
+
+
+shadowJar {
+    mergeServiceFiles()
+    zip64 true
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
+
+run {
+    description("Starts the Spellsource server")
+    dependsOn += [classes, testClasses, createPostgresImage, createKeycloakImage]
+    classpath sourceSets.test.runtimeClasspath
+    main = 'com.hiddenswitch.framework.tests.applications.EntryPoint'
+}
+
+artifacts {
+    archives shadowJar
+}
+
+application {
+    mainClass.set(mainClassName)
+}
+
+
+task stopExistingPostgresContainer(type: DockerStopContainer) {
+    containerId.set('gradleSupabasePostgres')
+    onError({})
+}
+
+task removeExistingPostgresContainer(type: DockerRemoveContainer) {
+    dependsOn stopExistingPostgresContainer
+    containerId.set('gradleSupabasePostgres')
+    onError({})
+}
+
+task createPostgresContainer(type: DockerCreateContainer) {
+    dependsOn += [createPostgresImage, removeExistingPostgresContainer]
+    targetImageId createPostgresImage.imageId
+    containerName.set('gradleSupabasePostgres')
+    hostConfig.portBindings.set(['5432:5432'])
+    envVars.putAll(['POSTGRES_DB': localDatabaseName, 'POSTGRES_USER': localUsername, 'POSTGRES_PASSWORD': localPassword])
+    hostConfig.autoRemove.set(true)
+}
+
+task startPostgresContainer(type: DockerStartContainer) {
+    dependsOn createPostgresContainer
+    targetContainerId createPostgresContainer.getContainerId()
+}
+
+task stopPostgresContainer(type: DockerStopContainer) {
+    targetContainerId createPostgresContainer.getContainerId()
+}
+
+task createKeycloakContainer(type: DockerCreateContainer) {
+    dependsOn += [createPostgresContainer, createKeycloakImage]
+    targetImageId "doctorpangloss/keycloak:latest"
+    envVars.putAll([
+            'DB_VENDOR'  : 'postgres',
+            'DB_ADDR'    : 'database:5432',
+            'DB_USER'    : 'admin',
+            'DB_PASSWORD': 'password',
+            'DB_DATABASE': 'spellsource',
+            'DB_SCHEMA'  : 'keycloak'
+    ])
+    hostConfig.autoRemove.set(true)
+    hostConfig.links.set(['gradleSupabasePostgres:database'])
+}
+
+task startKeycloakContainer(type: DockerStartContainer) {
+    dependsOn += [createKeycloakContainer, startPostgresContainer]
+    targetContainerId createKeycloakContainer.getContainerId()
+}
+
+// investigate why windows can simply not use a liveness probe here
+if (isWindows) {
+    task startAndWaitOnHealthyKeycloakContainer {
+        dependsOn startKeycloakContainer
+        doLast {
+            sleep(21000)
+        }
+    }
+} else {
+    task startAndWaitOnHealthyKeycloakContainer(type: DockerLivenessContainer) {
+        dependsOn startKeycloakContainer
+        livenessProbe = new LivenessProbe(40000, 1000, 'Admin console')
+        targetContainerId createKeycloakContainer.getContainerId()
+    }
+}
+
+
+task stopKeycloakContainer(type: DockerStopContainer) {
+    targetContainerId createKeycloakContainer.getContainerId()
+}
+
+task jooqGenerate() {
+    // Do all migrations first
+    dependsOn flywayMigrate
+    finalizedBy = [stopKeycloakContainer, stopPostgresContainer]
+    def outputDir = "$project.projectDir/src/main/java"
+
+    inputs.dir("$project.projectDir/src/main/resources/db/migration")
+    outputs.dir(outputDir + '/com/hiddenswitch/framework/schema')
+
+    def configuration = new Configuration()
+    configuration
+            .withJdbc(new Jdbc()
+                    .withDriver('org.postgresql.Driver')
+                    .withUrl(jdbcUrl)
+                    .withUser(localUsername)
+                    .withPassword(localPassword))
+            .withGenerator(new Generator()
+                    .withName('io.github.jklingsporn.vertx.jooq.generate.classic.ClassicReactiveVertxGenerator')
+                    .withDatabase(new Database()
+                            .withName('org.jooq.meta.postgres.PostgresDatabase')
+                            .withSchemata(new SchemaMappingType().withInputSchema("keycloak").withOutputSchema('keycloak'),
+                                    new SchemaMappingType().withInputSchema("spellsource").withOutputSchema('spellsource'),
+                                    new SchemaMappingType().withInputSchema("hiddenswitch").withOutputSchema("hiddenswitch"))
+                            .withForcedTypes(
+                                    new ForcedType()
+                                            .withUserType(JsonObject.class.getName())
+                                            .withConverter(JSONBToJsonObjectConverter.class.getName())
+                                            .withIncludeTypes("jsonb"),
+                                    new ForcedType()
+                                            .withUserType(Element.class.getName())
+                                            .withConverter(PostgresXmlDomElementBinding.class.getName())
+                                            .withIncludeTypes("xml"))
+                            .withIncludeTables(true)
+                            .withIncludeRoutines(true)
+                            .withIncludePackages(false)
+                            .withIncludeUDTs(true)
+                            .withIncludeSequences(true)
+                            .withExcludes('schema_version')
+                            .withIncludes('.*'))
+                    .withGenerate(new Generate()
+                            .withDeprecated(false)
+                            .withRecords(true)
+                            .withInterfaces(true)
+                            .withFluentSetters(true)
+                            .withPojos(true)
+                            .withDaos(true))
+                    .withTarget(new Target()
+                            .withPackageName('com.hiddenswitch.framework.schema')
+                            .withDirectory(outputDir))
+                    .withStrategy(new Strategy()
+                            .withName('io.github.jklingsporn.vertx.jooq.generate.VertxGeneratorStrategy')))
+
+    doLast() {
+        GenerationTool.generate(configuration)
+        exec {
+            // dump the generated ddl to a file
+            workingDir project.projectDir
+            // this is using docker-wrapped pg_dump
+            environment('PGPASSWORD', localPassword)
+            environment('PGDATABASE', localDatabaseName)
+            environment('PGUSER', localUsername)
+            def containerId = startPostgresContainer.containerId.get()
+            environment('DOCKER_OPTS', "--link " + containerId + ":database")
+            if (isWindows) {
+                // postgres is bound to localhost
+                commandLine "$project.projectDir\\bin\\pg_dump.exe", '-h', 'localhost', '-s', '-f', "$project.projectDir\\src\\main\\resources\\db\\ddl.sql"
+            } else {
+                commandLine "$project.projectDir/bin/pg_dump", '-h', "database", '-s', '-f', '/git/framework/src/main/resources/db/ddl.sql'
+            }
+        }
+    }
+}
+
+task migrationsOrSqlChanged(group: 'spellsource') {
+    description('Run whenever the schema as encoded in src/main/resources/db/migration has changed - recreates the JOOQ DSL and dumps a ddl.sql file for autocompletion')
+    dependsOn += [jooqGenerate]
+}
+
+flyway {
+    url = jdbcUrl
+    user = localUsername
+    password = localPassword
+    schemas = ['hiddenswitch', 'spellsource']
+    locations = ['filesystem:src/main/resources/db/migration']
+}
+
+// Make sure keycloak has done its migration first
+flywayMigrate.dependsOn += [startAndWaitOnHealthyKeycloakContainer]
+
+test {
+    group('spellsource')
+    dependsOn += [createPostgresImage]
+    useJUnitPlatform()
+    enableAssertions = false
+}
+
+task testLegacyMigration(type: Test, group: 'spellsource') {
+    description('Tests the migration from the legacy server to this current server ')
+    dependsOn += [createPostgresImage, compileTestJava]
+    systemProperty 'mongo.dbpath', "$project.rootDir/.mongo"
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.testMigrations.output.classesDirs
+    classpath = sourceSets.testMigrations.runtimeClasspath
+    enableAssertions = false
+}

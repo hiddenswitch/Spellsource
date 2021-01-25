@@ -1,11 +1,11 @@
 [submodule "internalcontent/src"]
-	path = internalcontent/src
+	path = spellsource-cards-private/src
 	url = git@github.com:hiddenswitch/Spellsource-internalcontent.git
 [submodule "secrets"]
 	path = secrets
 	url = git@github.com:hiddenswitch/HiddenSwitch-Secrets.git
 [submodule "unityclient"]
-	path = unityclient/src/unity
+	path = spellsource-client/src/unity
 	url = git@github.com:hiddenswitch/Spellsource-Client.git
 [submodule "steamguardcli"]
 	path = steamguardcli

@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.conversiontest;
 
-import com.hiddenswitch.spellsource.client.models.CardType;
+import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;

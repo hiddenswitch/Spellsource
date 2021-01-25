@@ -271,6 +271,15 @@ You need special authorization for this. It is accessed via an audited API key.
 
 Delete the NPM modules folder: `rm -rf www/npm_modules`, then rerun `./gradlew distWWW`.
 
+> Autocomplete, code insight, intellisense or other code completion features are missing when I am trying to write code accessing the generating protobufs definitions, like `Spellsource.java` or `Hiddenswitch.java`
+
+In IntelliJ, visit the Help > Edit Custom Properties... menu, then add the following lines:
+
+```
+# custom IntelliJ IDEA properties
+idea.max.intellisense.filesize=99999
+```
+
 ### Special Thanks
 
 ![YourKit](https://www.yourkit.com/images/yklogo.png)

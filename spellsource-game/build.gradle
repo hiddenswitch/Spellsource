@@ -1,0 +1,23 @@
+plugins {
+    id 'java-library'
+}
+
+apply plugin: 'java-library'
+apply plugin: 'maven'
+apply from: '../gradle/instrument.gradle'
+
+dependencies {
+    api project(':spellsource-common')
+    api project(':spellsource-protos')
+    api "io.vertx:vertx-core:$vertxVersion"
+    implementation "io.github.classgraph:classgraph:$classgraphVersion"
+    implementation project(':vertx-sync')
+
+    implementation 'org.slf4j:slf4j-api:1.7.22'
+    api 'org.jetbrains:annotations:16.0.2'
+    implementation 'com.google.guava:guava:26.0-jre'
+    implementation "io.jaegertracing:jaeger-client:$jaegerVersion"
+    implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'org.apache.commons:commons-math3:3.7'
+    implementation 'commons-io:commons-io:2.4'
+}
