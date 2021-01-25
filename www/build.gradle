@@ -9,14 +9,15 @@ apply plugin: 'java-library'
 apply plugin: 'maven'
 
 dependencies {
-    api project(':core')
-    api project(':game')
-    api project(':cards')
-    api project(':testutils')
+    api project(':spellsource-common')
+    api project(':spellsource-game')
+    api project(':spellsource-cards-git')
+    api project(':spellsource-testutils')
     runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
 }
 
 test {
+    dependsOn += [shadowJar]
     useJUnitPlatform()
 }
 

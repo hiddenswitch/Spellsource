@@ -1,0 +1,15 @@
+syntax = "proto3";
+package spellsource;
+
+message NotificationKindMessage {
+    enum NotificationKind {
+        ADDED = 0;
+        CHANGED = 1;
+        REMOVED = 2;
+    }
+}
+
+message AddedChangedRemoved {
+    NotificationKindMessage.NotificationKind kind = 1;
+    repeated int32 fields = 2;
+}

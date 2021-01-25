@@ -1,0 +1,28 @@
+plugins {
+    id 'java-library'
+}
+
+apply plugin: 'java-library'
+apply plugin: 'maven'
+
+dependencies {
+    implementation project(':spellsource-common')
+    testImplementation project(':quasar-core')
+    testImplementation 'com.google.guava:guava:26.0-jre'
+    testImplementation "io.github.classgraph:classgraph:$classgraphVersion"
+    testImplementation 'org.jetbrains:annotations:16.0.2'
+    testImplementation project(':spellsource-testutils')
+    testRuntimeOnly "ch.qos.logback:logback-classic:1.2.3"
+    testRuntimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
+}
+
+test {
+    description('Tests all custom cards. Failed fuzzing results are put in cards/src/test/resources/traces by testRandomMassPlay.')
+    maxParallelForks = 1; //Runtime.getRuntime().availableProcessors();
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams true
+        exceptionFormat 'full'
+    }
+    enableAssertions = false
+}

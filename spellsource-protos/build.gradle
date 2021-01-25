@@ -1,0 +1,140 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
+buildscript {
+    ext {
+        grpcVersion = '1.34.0'
+        grpcWindowsArtifactsUrl = 'https://packages.grpc.io/archive/2020/11/adf6b33c3d0283dc4c3d70b1ad6f5fa01ca5b69a-ec34da51-aac4-4cc4-afde-1d74252db27c/protoc/grpc-protoc_windows_x64-1.35.0-dev.zip'
+        grpcUnityArtifactsUrl = 'https://packages.grpc.io/archive/2020/11/adf6b33c3d0283dc4c3d70b1ad6f5fa01ca5b69a-ec34da51-aac4-4cc4-afde-1d74252db27c/csharp/grpc_unity_package.2.35.0-dev202011301311.zip'
+    }
+    repositories {
+        mavenLocal()
+        // for jooq from github
+        maven { url 'https://jitpack.io' }
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'com.google.protobuf' version '0.8.13'
+}
+
+apply plugin: 'com.google.protobuf'
+apply plugin: 'java-library'
+apply plugin: 'idea'
+
+def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
+def csharpRootDir = 'src/csharp/HiddenSwitch'
+
+dependencies {
+    api group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
+    // https://mvnrepository.com/artifact/com.google.api.grpc/proto-google-common-protos
+    api group: 'com.google.api.grpc', name: 'proto-google-common-protos', version: '1.17.0'
+    api(group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.13.0') {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+    api('com.google.protobuf:protobuf-java:3.13.0') {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+    api("com.hubspot.jackson:jackson-datatype-protobuf:0.9.12") {
+        exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
+    }
+    api(group: 'io.vertx', name: 'vertx-grpc', version: vertxVersion) {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+}
+
+clean {
+    delete csharpRootDir + '/Framework/bin'
+    delete csharpRootDir + '/Framework/obj'
+    delete csharpRootDir + '/Framework.Tests/bin'
+    delete csharpRootDir + '/Framework.Tests/obj'
+}
+
+task copyCsharpGrpc(type: Copy, group: 'build') {
+    dependsOn += [":spellsource-protos:generateProto"]
+    from("$project.buildDir/generated/source/proto/main/csharp") {
+        include '**/*.cs'
+    }
+    from("$project.buildDir/generated/source/proto/main/csharp_grpc") {
+        include '**/*.cs'
+    }
+    into(csharpRootDir + '/Framework/')
+}
+
+def dotnetCmd = isWindows ? "C:\\Program Files\\dotnet\\dotnet.exe" : "$project.projectDir/bin/dotnet"
+
+task dll(type: Exec, group: 'build') {
+    dependsOn copyCsharpGrpc
+    workingDir csharpRootDir
+    // this is using docker-wrapped dotnet
+    commandLine dotnetCmd, 'publish', '--output', isWindows ? "$project.buildDir/dlls" : "/git/spellsource-protos/build/dlls"
+}
+
+task testDll(type: Exec, group: 'verification') {
+    dependsOn dll
+    inputs.files(csharpRootDir + '/Framework.Tests/**/*.cs', csharpRootDir + '/Framework.Tests/**/*.csproj')
+    outputs.dir("$project.buildDir/nunit")
+    workingDir csharpRootDir
+    // this is using docker-wrapped dotnet
+    commandLine dotnetCmd, 'test', '--results-directory', isWindows ? "$project.buildDir/nunit" : "/git/spellsource-protos/build/nunit"
+}
+
+task installDll(type: Copy) {
+    dependsOn dll
+    from("$project.buildDir/dlls") {
+        include 'Framework.dll'
+        include 'Framework.pdb'
+    }
+    from("$csharpRootDir/Framework/Plugins") {
+        include '**/*.*'
+    }
+    into(project(':spellsource-client').projectDir.absolutePath + '/src/unity/Assets/Client')
+}
+
+task protosChanged(group: 'spellsource') {
+    description('Run whenever the files in src/main/proto have been changed - recreates the models and updates the client')
+    dependsOn += [installDll, ':spellsource-protos:generateProto']
+}
+
+def csharpGrpcPath = project.projectDir.absolutePath + "/bin/grpc_csharp_plugin" + (isWindows ? ".exe" : "")
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.13.0'
+    }
+    plugins {
+        grpc_java {
+            artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
+        }
+        grpc_java_vertx {
+            artifact = "io.vertx:vertx-grpc-protoc-plugin:$vertxVersion"
+        }
+        grpc_csharp {
+            path = csharpGrpcPath
+        }
+    }
+    generateProtoTasks {
+        all()*.builtins {
+            java {}
+            csharp {
+                option 'serializable'
+            }
+        }
+        all()*.plugins {
+            grpc_java {
+                outputSubDir = "java"
+            }
+            grpc_java_vertx {
+                outputSubDir = "java"
+            }
+            grpc_csharp {
+                outputSubDir = "csharp_grpc"
+            }
+        }
+    }
+}
+
+
+compileJava {
+    dependsOn += [':spellsource-protos:generateProto']
+}

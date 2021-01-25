@@ -1,0 +1,42 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies {
+        classpath 'io.swagger:swagger-models:1.5.17'
+        classpath 'io.swagger:swagger-codegen:2.3.0'
+    }
+}
+
+apply plugin: 'base'
+
+task buildMacOS(type: UnityTask, group: 'Spellsource') {
+    description("Builds the macOS versions of the game using deploy.sh file and your local Unity version.")
+    flags = '-m'
+    outputDir = 'osx'
+}
+
+task buildWindows(type: UnityTask, group: 'Spellsource') {
+    description("Builds the Windows version of the game using deploy.sh file and your local Unity version.")
+    flags = '-w'
+    outputDir = 'win'
+}
+
+task buildIOS(type: UnityTask, group: 'Spellsource') {
+    description("Builds the Windows version of the game using deploy.sh file and your local Unity version.")
+    flags = '-i'
+    outputDir = 'ios'
+}
+
+task buildAndroid(type: UnityTask, group: 'Spellsource') {
+    description("Builds the Android version of the game using deploy.sh file and your local Unity version.")
+    flags = '-a'
+    outputDir = 'android'
+}
+
+task buildWebGL(type: UnityTask, group: 'Spellsource') {
+    description("Builds the WebGL version of the game using deploy.sh file and your local Unity version.")
+    flags = '-W'
+    outputDir = 'webgl'
+}

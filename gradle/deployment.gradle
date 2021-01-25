@@ -3,13 +3,13 @@ def unityClientPath = './unityclient/src/unity'
 task distSteam(type: Exec, group: 'Spellsource') {
     description("Uploads the macOS and Windows builds to Steam")
     inputs.files('secrets/spellsource/steam')
-    dependsOn += [':unityclient:buildWindows', ':unityclient:buildMacOS']
+    dependsOn += [':spellsource-client:buildWindows', ':spellsource-client:buildMacOS']
     commandLine './deploy.sh', '-S'
 }
 
 task buildSwarm(type: Exec) {
     description("Builds all the images in the docker-compose.yml file")
-    dependsOn += [':net:classes']
+    dependsOn += [':spellsource-server:classes']
     inputs.dir('docker/')
     commandLine './deploy.sh', '-C'
 }
@@ -25,7 +25,7 @@ task distSwarm(type: Exec, group: 'Spellsource') { t ->
 
 task distIOS(type: Exec, group: 'Spellsource') { t ->
     description("Builds and uploads to Testflight the iOS project")
-    dependsOn += [':unityclient:buildIOS']
+    dependsOn += [':spellsource-client:buildIOS']
     inputs.file('secrets/spellsource/unityclient-build.env')
     workingDir "${unityClientPath}"
     Utilities.dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
@@ -34,7 +34,7 @@ task distIOS(type: Exec, group: 'Spellsource') { t ->
 
 task distAndroid(type: Exec, group: 'Spellsource') { t ->
     description("Builds and uploads the Android project to Google Play")
-    dependsOn += [':unityclient:buildAndroid']
+    dependsOn += [':spellsource-client:buildAndroid']
     inputs.file('secrets/spellsource/unityclient-build.env')
     Utilities.dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
     environment('KEYSTORE_PATH', '../../../secrets/spellsource/android-keystore.keystore')
@@ -45,7 +45,7 @@ task distAndroid(type: Exec, group: 'Spellsource') { t ->
 
 task distWebGL(type: Exec, group: 'Spellsource') { t ->
     description("Uploads the WebGL build to playspellsource.com")
-    dependsOn ':unityclient:buildWebGL'
+    dependsOn ':spellsource-client:buildWebGL'
     inputs.file('secrets/spellsource/unityclient-build.env')
     inputs.file('secrets/common-deployment.env')
     Utilities.dotEnv(t, file('secrets/spellsource/unityclient-build.env', PathValidation.NONE))
@@ -56,15 +56,15 @@ task distWebGL(type: Exec, group: 'Spellsource') { t ->
 
 task copyGameJavadoc(type: Copy) {
     description("Copies the game module's javadoc into the public directory of the website")
-    dependsOn ':game:javadoc'
-    from tasks.getByPath(':game:javadoc').outputs
+    dependsOn ':spellsource-game:javadoc'
+    from tasks.getByPath(':spellsource-game:javadoc').outputs
     into './www/public/javadoc'
 }
 
 task copyNetJavadoc(type: Copy) {
     description("Copies the net module's javadoc into the public directory of the website")
-    dependsOn ':net:javadoc'
-    from tasks.getByPath(':net:javadoc').outputs
+    dependsOn ':spellsource-server:javadoc'
+    from tasks.getByPath(':spellsource-server:javadoc').outputs
     into './www/public/netjavadoc'
 }
 
