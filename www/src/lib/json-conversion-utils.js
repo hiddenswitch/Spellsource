@@ -107,7 +107,11 @@ export default class JsonConversionUtils {
       if (card.type === 'CLASS' && arg === 'heroClass') {
         block.getInput('heroClass').connection.targetBlock().setFieldValue(card.heroClass, 'text')
       } else if (card.type === 'HERO_POWER' && arg === 'spell') {
-        this.handleArg(block.getInput('spell.spell').connection, card.spell.spell, 'spell.spell', workspace, card.spell)
+        if (card.spell.class == 'HeroPowerSpell') {
+          this.handleArg(block.getInput('spell.spell').connection, card.spell.spell, 'spell.spell', workspace, card.spell)
+        } else {
+          this.handleArg(block.getInput('spell.spell').connection, card.spell, 'spell.spell', workspace, card.spell)
+        }
       } else if (card.hasOwnProperty(arg) && !!block.getInput(arg)) {
         this.simpleHandleArg(block, arg, card, workspace)
       }

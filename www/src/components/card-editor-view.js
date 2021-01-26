@@ -10,17 +10,21 @@ const CardEditorView = (props) => {
 
   const [code, setCode] = useState(``)
   const [query, setQuery] = useState(``)
-  const [showCatalogueBlocks, setShowCatalogueBlocks] = useState(false)
+  const [searchCatalogueBlocks, setSearchCatalogueBlocks] = useState(false)
+  const [searchArtBlocks, setSearchArtBlocks] = useState(false)
   const [compactBlocks, setCompactBlocks] = useState(true)
   const [showJSON, setShowJSON] = useState(false)
   const [showJS, setShowJS] = useState(false)
-  const catalogueBlocksTooltip = 'Toggles whether the blocks for real cards from the catalogue show up in search'
+  const catalogueBlocksTooltip = 'Toggles whether to search the blocks for real cards from the catalogue'
+  const artBlocksTooltip = 'Toggles whether to search the blocks for card art'
   const compactBlocksTooltip = 'Render the blocks compactly rather than as always full rectangles'
   const showJSONTooltip = 'Show the JSON representation of the blocks in the workspace'
   const showJSTooltip = 'Show the JS representation of the code in the workspace'
 
   const catalogueBlocksCheck = useRef(null)
   const catalogueBlocksLabel = useRef(null)
+  const artBlocksCheck = useRef(null)
+  const artBlocksLabel = useRef(null)
   const compactBlocksCheck = useRef(null)
   const compactBlocksLabel = useRef(null)
   const showJSONCheck = useRef(null)
@@ -42,7 +46,17 @@ const CardEditorView = (props) => {
   }
 
   const toggleCatalogueBlocks = evt => {
-    setShowCatalogueBlocks(!showCatalogueBlocks)
+    setSearchCatalogueBlocks(!searchCatalogueBlocks)
+    //setSearchArtBlocks(false)
+    workspace().getToolbox().clearSelection()
+    if (query.length > 0) {
+      search({target: {value: query}})
+    }
+  }
+
+  const toggleArtBlocks = evt => {
+    setSearchArtBlocks(!searchArtBlocks)
+    //setSearchCatalogueBlocks(false)
     workspace().getToolbox().clearSelection()
     if (query.length > 0) {
       search({target: {value: query}})
@@ -61,6 +75,8 @@ const CardEditorView = (props) => {
   useComponentWillMount(() => {
     addTooltip(catalogueBlocksCheck, catalogueBlocksTooltip)
     addTooltip(catalogueBlocksLabel, catalogueBlocksTooltip)
+    addTooltip(artBlocksCheck, artBlocksTooltip)
+    addTooltip(artBlocksLabel, artBlocksTooltip)
     addTooltip(compactBlocksCheck, compactBlocksTooltip)
     addTooltip(compactBlocksLabel, compactBlocksTooltip)
     addTooltip(showJSONCheck, showJSONTooltip)
@@ -77,17 +93,27 @@ const CardEditorView = (props) => {
                   className={styles.editorSearch}
     />
     <Form.Check className={styles.editorOption}>
-      <Form.Check.Input defaultChecked={showCatalogueBlocks}
+      <Form.Check.Input defaultChecked={searchCatalogueBlocks}
                         onChange={e => toggleCatalogueBlocks(e)}
-                        value={showCatalogueBlocks}
+                        value={searchCatalogueBlocks}
                         className={styles.editorCheck}
                         ref={catalogueBlocksCheck}
       />
-      <Form.Check.Label ref={showJSONLabel}> Search Card Catalogue</Form.Check.Label>
+      <Form.Check.Label ref={catalogueBlocksLabel}> Search Card Catalogue</Form.Check.Label>
+    </Form.Check>
+    <Form.Check className={styles.editorOption}>
+      <Form.Check.Input defaultChecked={searchArtBlocks}
+                        onChange={e => toggleArtBlocks(e)}
+                        value={searchArtBlocks}
+                        className={styles.editorCheck}
+                        ref={artBlocksCheck}
+      />
+      <Form.Check.Label ref={artBlocksLabel}> Search Card Art</Form.Check.Label>
     </Form.Check>
     <CardEditorWorkspace setJSON={setCode}
                          setJS={setRealCode}
-                         showCatalogueBlocks={showCatalogueBlocks}
+                         searchCatalogueBlocks={searchCatalogueBlocks}
+                         searchArtBlocks={searchArtBlocks}
                          query={query}
                          defaultCard={props.defaultCard}
                          renderer={compactBlocks ? 'spellsource' : 'geras'}
