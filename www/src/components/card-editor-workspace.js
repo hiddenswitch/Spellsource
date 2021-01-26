@@ -363,12 +363,12 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
         .search(query, { expand: true }) // accept partial matches
         .map(({ ref }) => index.documentStore.getDoc(ref))
         .filter(doc => {
-          if (props.showCatalogueBlocks) {
+          if (props.searchCatalogueBlocks) {
             return doc.nodeType === 'Card' && doc.hasOwnProperty('baseManaCost')
               && Blockly.heroClassColors.hasOwnProperty(doc.heroClass)
           }
-          if (doc.nodeType === 'File') {
-            return !!Blockly.Blocks['Art_' + doc.title]
+          if (props.searchArtBlocks) {
+            return doc.nodeType === 'File' && !!Blockly.Blocks['Art_' + doc.title]
           }
           return doc.nodeType === 'Block'
         })

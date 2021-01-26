@@ -39,13 +39,13 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/../cards/src/main/resources/cards`,
+        path: `${__dirname}/../spellsource-cards-git/src/main/resources/cards`,
       },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/../game/src/main/resources/basecards/standard`,
+        path: `${__dirname}/../spellsource-game/src/main/resources/basecards/standard`,
       },
     },
     `gatsby-plugin-sass`,

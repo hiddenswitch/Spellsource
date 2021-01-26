@@ -19,6 +19,7 @@
 .editorSearch {
     width: 40% !important;
     border-style: ridge;
+    display: inline;
 }
 
 body {
