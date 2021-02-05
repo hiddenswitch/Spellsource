@@ -599,4 +599,16 @@ export default class BlocklyMiscUtils {
       BlocklyMiscUtils.addBlock(block)
     }
   }
+
+  static getArtURL(card, data) {
+    if (!!card.art?.sprite?.named) {
+      for (let edge of data.allArt.edges) {
+        let node = edge.node
+        if (node.name === card.art.sprite.named) {
+          return node.childImageSharp.fluid.src
+        }
+      }
+    }
+    return null
+  }
 }

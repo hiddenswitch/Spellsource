@@ -8,7 +8,7 @@ import {isArray} from 'lodash'
 import CardDisplay from '../components/card-display'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import CardTemplate from '../templates/card-template'
+import { getMainWorkspace } from 'blockly/blockly'
 
 export default class BlocklyModification {
 
@@ -284,6 +284,7 @@ export default class BlocklyModification {
     Blockly.BlockSvg.prototype.generateContextMenu = function () {
       let menuOptions = generateContextMenu.call(this)
       let block = this
+      let workspace = block.workspace
       if (block.type.startsWith('CatalogueCard')) {
         menuOptions.push({
           text: 'Import CardScript',
@@ -301,7 +302,6 @@ export default class BlocklyModification {
               xml.setAttribute('x', xy.x);
               xml.setAttribute('y', xy.y);
 
-              let workspace = block.workspace
               if (!!workspace.targetWorkspace) {
                 workspace = workspace.targetWorkspace
               }
@@ -320,6 +320,17 @@ export default class BlocklyModification {
           enabled: true,
           callback: function () {
             BlocklyMiscUtils.searchToolbox(block.type, block.workspace.targetWorkspace || block.workspace)
+          }
+        })
+      }
+
+      if (block.type.startsWith('Starter_')) {
+        menuOptions.push({
+          text: 'Save Card',
+          enabled: true,
+          callback: function() {
+            let xml = Blockly.Xml.blockToDom(block, true)
+            console.log(xml)
           }
         })
       }

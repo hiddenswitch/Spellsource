@@ -47,7 +47,7 @@ const CardEditorView = (props) => {
 
   const toggleCatalogueBlocks = evt => {
     setSearchCatalogueBlocks(!searchCatalogueBlocks)
-    //setSearchArtBlocks(false)
+    setSearchArtBlocks(false)
     workspace().getToolbox().clearSelection()
     if (query.length > 0) {
       search({target: {value: query}})
@@ -56,7 +56,7 @@ const CardEditorView = (props) => {
 
   const toggleArtBlocks = evt => {
     setSearchArtBlocks(!searchArtBlocks)
-    //setSearchCatalogueBlocks(false)
+    setSearchCatalogueBlocks(false)
     workspace().getToolbox().clearSelection()
     if (query.length > 0) {
       search({target: {value: query}})
@@ -93,18 +93,16 @@ const CardEditorView = (props) => {
                   className={styles.editorSearch}
     />
     <Form.Check className={styles.editorOption}>
-      <Form.Check.Input defaultChecked={searchCatalogueBlocks}
-                        onChange={e => toggleCatalogueBlocks(e)}
-                        value={searchCatalogueBlocks}
+      <Form.Check.Input onChange={e => toggleCatalogueBlocks(e)}
+                        checked={searchCatalogueBlocks}
                         className={styles.editorCheck}
                         ref={catalogueBlocksCheck}
       />
       <Form.Check.Label ref={catalogueBlocksLabel}> Search Card Catalogue</Form.Check.Label>
     </Form.Check>
     <Form.Check className={styles.editorOption}>
-      <Form.Check.Input defaultChecked={searchArtBlocks}
-                        onChange={e => toggleArtBlocks(e)}
-                        value={searchArtBlocks}
+      <Form.Check.Input onChange={e => toggleArtBlocks(e)}
+                        checked={searchArtBlocks}
                         className={styles.editorCheck}
                         ref={artBlocksCheck}
       />
