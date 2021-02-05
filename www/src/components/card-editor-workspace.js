@@ -46,13 +46,19 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
         const array = ['Daring Duelist', 'Ninja Aspirants', 'Redhide Butcher',
           'Sly Conquistador', 'Stormcloud Assailant', 'Peacock Mystic']
         generateCard(array[Math.floor(Math.random() * array.length)])
-        mainWorkspace().getTopBlocks(true)[0].setCommentText('This card was imported automatically as an example.')
+        //mainWorkspace().getTopBlocks(true)[0].setCommentText('This card was imported automatically as an example.')
       }, 100)
     }
 
     mainWorkspace().getTheme().setStartHats(true)
 
     BlocklyToolbox.initCallbacks(mainWorkspace())
+
+    let params = new URLSearchParams(window.location.search)
+    let card = params.get('card')
+    if (!!card) {
+      generateCard(card)
+    }
 
   }, [])
 
@@ -252,15 +258,7 @@ const CardEditorWorkspace = forwardRef((props, blocklyEditor) => {
           block.commentModel.size.height = 324
           block.commentModel.pinned = true
 
-          if (!!card.art?.sprite?.named) {
-            for (let edge of data.allArt.edges) {
-              let node = edge.node
-              if (node.name === card.art.sprite.named) {
-                block.artURL = node.childImageSharp.fluid.src
-                break;
-              }
-            }
-          }
+          block.artURL = BlocklyMiscUtils.getArtURL(card, data)
 
           if (block.getCommentIcon().isVisible() && block.getCommentText() !== ogText) {
             block.getCommentIcon().disposeBubble_()

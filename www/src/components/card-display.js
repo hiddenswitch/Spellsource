@@ -16,8 +16,6 @@ import windowBackground from '../card-images/large-card-window-background.png'
 import selkie from '../card-images/selkie.png'
 import selkieShadow from '../card-images/selkie-shadow.png'
 import { defaultsDeep } from 'lodash'
-import { graphql } from 'gatsby'
-import useBlocklyData from '../hooks/use-blockly-data'
 
 const defaultArt = {
   'primary': {
