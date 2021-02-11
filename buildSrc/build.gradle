@@ -5,5 +5,4 @@ repositories {
 
 dependencies {
     localGroovy()
-    implementation 'io.swagger:swagger-codegen:2.3.0'
 }

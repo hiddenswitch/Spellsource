@@ -36,6 +36,16 @@ public interface IUserEntityAddons extends VertxPojo, Serializable {
      */
     public String getPrivacyToken();
 
+    /**
+     * Setter for <code>spellsource.user_entity_addons.migrated</code>.
+     */
+    public IUserEntityAddons setMigrated(Boolean value);
+
+    /**
+     * Getter for <code>spellsource.user_entity_addons.migrated</code>.
+     */
+    public Boolean getMigrated();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -62,6 +72,11 @@ public interface IUserEntityAddons extends VertxPojo, Serializable {
         } catch (java.lang.ClassCastException e) {
             throw new UnexpectedJsonValueType("privacy_token","java.lang.String",e);
         }
+        try {
+            setMigrated(json.getBoolean("migrated"));
+        } catch (java.lang.ClassCastException e) {
+            throw new UnexpectedJsonValueType("migrated","java.lang.Boolean",e);
+        }
         return this;
     }
 
@@ -71,6 +86,7 @@ public interface IUserEntityAddons extends VertxPojo, Serializable {
         io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
         json.put("id",getId());
         json.put("privacy_token",getPrivacyToken());
+        json.put("migrated",getMigrated());
         return json;
     }
 

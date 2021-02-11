@@ -60,20 +60,6 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 	public static String COLLECTIONS = "inventory.collections";
 	public static String USERS = "accounts.users";
 
-	private static class FriendRecordWithId extends FriendRecord {
-		private final String id;
-
-		public FriendRecordWithId(String id, FriendRecord other) {
-			this.id = id;
-			setFriendId(other.getFriendId());
-			setSince(other.getSince());
-		}
-
-		public String getId() {
-			return id;
-		}
-	}
-
 	@Override
 	public Integer getChecksum() {
 		return getMongoUrl().hashCode();
@@ -97,7 +83,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 			var executor = Environment.queryExecutor();
 			var mongoClient = MongoClient.create(vertx, new JsonObject().put("connection_string", mongoUri));
 			// retrieve all non bot accounts
-			var accountJsonStream = mongoClient.findBatch(USERS, new JsonObject()
+			var accountJsons = mongoClient.findBatch(USERS, new JsonObject()
 					.put(UserRecord.BOT, new JsonObject().put("$ne", true)));
 
 			// later we will migrate all the friend records
@@ -111,7 +97,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 					.stream().map(row -> row.getString(USER_ENTITY.USERNAME.getName()).toLowerCase()).collect(Collectors.toList()));
 
 			// iterate through all the accounts
-			for (var accountJson : await(accountJsonStream)) {
+			for (var accountJson : await(accountJsons)) {
 				var userRecord = accountJson.mapTo(UserRecord.class);
 				var emails = userRecord.getEmails();
 				if (emails == null || emails.isEmpty()) {
@@ -146,14 +132,18 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 				userIdMapping.put(userRecord.getId(), userEntity.getId());
 
+				var record = USER_ENTITY_ADDONS.newRecord()
+						.setId(userEntity.getId())
+						.setMigrated(true);
+
 				// migrate the privacy token
 				var privacyToken = userRecord.getPrivacyToken();
 				if (privacyToken != null && !privacyToken.isEmpty()) {
-					await(executor.execute(dsl ->
-							dsl.insertInto(USER_ENTITY_ADDONS).set(USER_ENTITY_ADDONS.newRecord()
-									.setId(userEntity.getId())
-									.setPrivacyToken(privacyToken))));
+					record.setPrivacyToken(privacyToken);
+
 				}
+
+				await(executor.execute(dsl -> dsl.insertInto(USER_ENTITY_ADDONS).set(record)));
 
 				// migrate the decks
 				if (userRecord.getDecks() != null && !userRecord.getDecks().isEmpty()) {
@@ -186,10 +176,9 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 					}
 				}
 			}
-
 			if (!friends.isEmpty()) {
 				// now that we've created all the accounts, the friend constraints should be okay
-				executor.execute(dsl -> {
+				await(executor.execute(dsl -> {
 					var insert = dsl.insertInto(FRIENDS);
 					InsertValuesStepN<FriendsRecord> values = null;
 					for (var friend : friends) {
@@ -202,7 +191,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 						values = insert.values(friendRecord.intoArray());
 					}
 					return values.onDuplicateKeyIgnore();
-				});
+				}));
 			}
 
 			return (Void) null;
@@ -289,7 +278,8 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 	/**
 	 * A mongodb record of the user's collection metadata. Does not contain the inventory IDs themselves.
 	 */
-	public static class CollectionRecord extends MongoRecord {
+	@JsonIgnoreProperties(ignoreUnknown = true)
+	public final static class CollectionRecord extends MongoRecord {
 		public static final String FORMAT = "format";
 		public static final String HERO_CLASS = "heroClass";
 		public static final String TYPE = "type";
@@ -523,8 +513,8 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 		DRAFT
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
-	public static class EmailRecord implements Serializable {
+	//	//
+	public final static class EmailRecord implements Serializable {
 		private String address;
 		private boolean verified;
 
@@ -548,6 +538,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 	/**
 	 * Information about a friend relationship. Stored on both friends.
 	 */
+//	// 
 	public static class FriendRecord implements Serializable {
 		private String friendId;
 		private long since;
@@ -770,7 +761,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 			List<CardRecord> records = new ArrayList<>();
 
 			for (InventoryRecord cr : inventoryRecords) {
-				CardDesc record = CardCatalogue.getCardById(getCollectionRecord().getId()).getDesc();
+				CardDesc record = CardCatalogue.getCardById(cr.getCardId()).getDesc();
 
 				if (record == null) {
 					continue;
@@ -834,6 +825,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 	/**
 	 * Represents the hashed secret portion of the token string.
 	 */
+//	// 
 	public static class HashedLoginTokenRecord implements Serializable {
 
 		private String hashedToken;
@@ -873,7 +865,8 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 	/**
 	 * A record in the inventory collection. Describes the history of a card and its ID.
 	 */
-	public static class InventoryRecord extends MongoRecord {
+//	// 
+	public final static class InventoryRecord extends MongoRecord {
 		public static final String CARDDESC_ID = "cardDesc.id";
 		private static Logger logger = LoggerFactory.getLogger(InventoryRecord.class);
 
@@ -1029,7 +1022,8 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 	/**
 	 * A LoginToken contains the expiration date and token string to be passed to API calls by clients.
 	 */
-	public static class LoginToken implements Serializable {
+//	// 
+	public final static class LoginToken implements Serializable {
 		private Date expiresAt;
 		private String token;
 
@@ -1107,7 +1101,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 	/**
 	 * A base class for data that should be stored as a top-level document in mongo.
 	 */
-	public static class MongoRecord implements Serializable {
+	public abstract static class MongoRecord implements Serializable {
 		public static final String ID = "_id";
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		@JsonProperty(value = ID)
@@ -1145,8 +1139,8 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 		}
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
-	public static class PasswordRecord implements Serializable {
+	//	//
+	public final static class PasswordRecord implements Serializable {
 		private String bcrypt;
 		private String scrypt;
 
@@ -1167,8 +1161,8 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 		}
 	}
 
-	@JsonIgnoreProperties(ignoreUnknown = true)
-	public static class ResumeRecord implements Serializable {
+	// 
+	public final static class ResumeRecord implements Serializable {
 		private List<HashedLoginTokenRecord> loginTokens;
 
 		public List<HashedLoginTokenRecord> getLoginTokens() {
@@ -1195,8 +1189,8 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 	 * No secrets are ever leaked by this object. The stored data cannot be used by the public API to authenticate the
 	 * user, since the original secrets pre-hash (either user password or randomly generated token) were never stored.
 	 */
-	@JsonIgnoreProperties(ignoreUnknown = true)
-	public static class ServicesRecord implements Serializable {
+//	// 
+	public final static class ServicesRecord implements Serializable {
 		private PasswordRecord password;
 		private ResumeRecord resume;
 
@@ -1223,8 +1217,8 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 	 * The fields in this object correspond to the ones stored in Mongo. This also implements the Vertx User interface,
 	 * which allows queries to see if a user is authorized to do a particular task (very lightly implemented).
 	 */
-	@JsonIgnoreProperties(ignoreUnknown = true)
-	public static class UserRecord extends MongoRecord implements User, Serializable {
+//	// 
+	public final static class UserRecord extends MongoRecord implements User, Serializable {
 
 		public static final String EMAILS_ADDRESS = "emails.address";
 		public static final String SERVICES = "services";
@@ -1442,8 +1436,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 	/**
 	 * CardRecord
 	 */
-	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
-
+	// 
 	public static class CardRecord implements Serializable {
 
 		@JsonProperty("_id")
@@ -1710,7 +1703,8 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 		}
 	}
 
-	public static class Entity {
+	//
+	public final static class Entity {
 
 		public Entity() {
 		}
@@ -1732,9 +1726,8 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 		}
 	}
 
-	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
-
-	public static class InventoryCollection implements Serializable {
+	// 
+	public final static class InventoryCollection implements Serializable {
 
 		@JsonProperty("_id")
 		private String id = null;
@@ -1845,6 +1838,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 		/**
 		 * The identifier of this collection. Corresponds to a deckId when this is a deck collection.
+		 *
 		 * @return id
 		 **/
 
@@ -1863,6 +1857,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 		/**
 		 * The owner of this collection.
+		 *
 		 * @return userId
 		 **/
 
@@ -1881,6 +1876,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 		/**
 		 * The name of this collection. Corresponds to the deck name when this is a deck collection.
+		 *
 		 * @return name
 		 **/
 
@@ -1899,6 +1895,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 		/**
 		 * The hero class when this is a deck collection.
+		 *
 		 * @return heroClass
 		 **/
 
@@ -1917,6 +1914,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 		/**
 		 * The format when this is a deck collection.
+		 *
 		 * @return format
 		 **/
 
@@ -1935,6 +1933,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 		/**
 		 * The type of collection this object is. A user&#39;s personal collection is of type USER. A deck is of type DECK.
+		 *
 		 * @return type
 		 **/
 
@@ -1953,6 +1952,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 		/**
 		 * Indicates whether this is a deck meant for draft or constructed play.
+		 *
 		 * @return deckType
 		 **/
 
@@ -1971,6 +1971,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 		/**
 		 * When true, indicates this is a standard deck provided by the server.
+		 *
 		 * @return isStandardDeck
 		 **/
 
@@ -1997,6 +1998,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 		/**
 		 * Get inventory
+		 *
 		 * @return inventory
 		 **/
 
@@ -2010,9 +2012,9 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 		/**
 		 * Get validationReport
+		 *
 		 * @return validationReport
 		 **/
-
 
 
 		public InventoryCollection playerEntityAttributes(List<Spellsource.AttributeValueTuple> playerEntityAttributes) {
@@ -2029,7 +2031,9 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 		}
 
 		/**
-		 * A list of player entity attributes associated with this deck.  A player entity attribute is an attribute that comes into play before the game starts. It is used to implement the Signature spell of the Ringmaster class.
+		 * A list of player entity attributes associated with this deck.  A player entity attribute is an attribute that
+		 * comes into play before the game starts. It is used to implement the Signature spell of the Ringmaster class.
+		 *
 		 * @return playerEntityAttributes
 		 **/
 
@@ -2089,8 +2093,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 		}
 
 		/**
-		 * Convert the given object to string with each line indented by 4 spaces
-		 * (except the first line).
+		 * Convert the given object to string with each line indented by 4 spaces (except the first line).
 		 */
 		private String toIndentedString(java.lang.Object o) {
 			if (o == null) {
@@ -2101,9 +2104,8 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 	}
 
-	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
-
-	public static class Friend implements Serializable {
+	// 
+	public final static class Friend implements Serializable {
 
 		@JsonProperty("presence")
 		private Spellsource.PresenceMessage.Presence presence = null;
@@ -2121,6 +2123,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 			this.presence = presence;
 			return this;
 		}
+
 		public Spellsource.PresenceMessage.Presence getPresence() {
 			return presence;
 		}
@@ -2226,6 +2229,20 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 				return "null";
 			}
 			return o.toString().replace("\n", "\n    ");
+		}
+	}
+
+	private static class FriendRecordWithId extends FriendRecord {
+		private final String id;
+
+		public FriendRecordWithId(String id, FriendRecord other) {
+			this.id = id;
+			setFriendId(other.getFriendId());
+			setSince(other.getSince());
+		}
+
+		public String getId() {
+			return id;
 		}
 	}
 }

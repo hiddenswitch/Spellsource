@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 12.3 (Debian 12.3-1.pgdg100+1)
--- Dumped by pg_dump version 13.1
+-- Dumped by pg_dump version 12.5 (Debian 12.5-1.pgdg100+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1820,7 +1820,8 @@ ALTER TABLE spellsource.matchmaking_tickets ALTER COLUMN id ADD GENERATED ALWAYS
 
 CREATE TABLE spellsource.user_entity_addons (
     id text NOT NULL,
-    privacy_token text DEFAULT floor(((1000)::double precision + (random() * (8999)::double precision)))
+    privacy_token text DEFAULT floor(((1000)::double precision + (random() * (8999)::double precision))),
+    migrated boolean DEFAULT false
 );
 
 

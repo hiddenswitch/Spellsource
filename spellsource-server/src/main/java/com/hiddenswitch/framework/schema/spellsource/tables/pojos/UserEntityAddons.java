@@ -15,24 +15,28 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserEntityAddons implements VertxPojo, IUserEntityAddons {
 
-    private static final long serialVersionUID = 1207545698;
+    private static final long serialVersionUID = 877301895;
 
-    private String id;
-    private String privacyToken;
+    private String  id;
+    private String  privacyToken;
+    private Boolean migrated;
 
     public UserEntityAddons() {}
 
     public UserEntityAddons(IUserEntityAddons value) {
         this.id = value.getId();
         this.privacyToken = value.getPrivacyToken();
+        this.migrated = value.getMigrated();
     }
 
     public UserEntityAddons(
-        String id,
-        String privacyToken
+        String  id,
+        String  privacyToken,
+        Boolean migrated
     ) {
         this.id = id;
         this.privacyToken = privacyToken;
+        this.migrated = migrated;
     }
 
     public UserEntityAddons(io.vertx.core.json.JsonObject json) {
@@ -63,11 +67,23 @@ public class UserEntityAddons implements VertxPojo, IUserEntityAddons {
     }
 
     @Override
+    public Boolean getMigrated() {
+        return this.migrated;
+    }
+
+    @Override
+    public UserEntityAddons setMigrated(Boolean migrated) {
+        this.migrated = migrated;
+        return this;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("UserEntityAddons (");
 
         sb.append(id);
         sb.append(", ").append(privacyToken);
+        sb.append(", ").append(migrated);
 
         sb.append(")");
         return sb.toString();
@@ -81,6 +97,7 @@ public class UserEntityAddons implements VertxPojo, IUserEntityAddons {
     public void from(IUserEntityAddons from) {
         setId(from.getId());
         setPrivacyToken(from.getPrivacyToken());
+        setMigrated(from.getMigrated());
     }
 
     @Override
