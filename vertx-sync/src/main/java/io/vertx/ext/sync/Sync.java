@@ -748,10 +748,7 @@ public class Sync {
 		private final ReadStreamIterable<T> readStreamIterable;
 		private final ReentrantLock lock = new ReentrantLock();
 		private T next;
-
-		private boolean isComplete() {
-			return future().isComplete() && readStreamIterable.adaptor.receivePort().isClosed();
-		}
+		private boolean completed;
 
 		private boolean isFailed() {
 			return future().failed();
@@ -779,7 +776,7 @@ public class Sync {
 					return true;
 				}
 
-				if (isComplete()) {
+				if (completed) {
 					return false;
 				}
 
@@ -787,6 +784,7 @@ public class Sync {
 				var receive = readStreamIterable.adaptor.receive();
 				if (receive == null) {
 					readStreamIterable.ended.tryComplete();
+					completed = readStreamIterable.adaptor.receivePort().isClosed();
 					return false;
 				}
 
@@ -813,13 +811,14 @@ public class Sync {
 					return receive;
 				} else {
 					// closed peacefully
-					if (isComplete()) {
+					if (completed) {
 						throw new NoSuchElementException();
 					}
 
 					var receive = readStreamIterable.adaptor.receive();
 					if (receive == null) {
 						readStreamIterable.ended.tryComplete();
+						completed = readStreamIterable.adaptor.receivePort().isClosed();
 						throw new NoSuchElementException();
 					}
 					return receive;

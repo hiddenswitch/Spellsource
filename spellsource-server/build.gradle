@@ -18,8 +18,10 @@ buildscript {
     }
 }
 
+
 plugins {
     id 'com.bmuschko.docker-remote-api' version '6.6.1'
+    id 'com.google.cloud.tools.jib' version '2.7.1'
     id "org.flywaydb.flyway" version "$flywayVersion"
     id 'com.github.johnrengelman.shadow' version "$shadowPluginVersion"
 }
@@ -34,18 +36,20 @@ apply plugin: 'com.bmuschko.docker-remote-api'
 apply plugin: 'idea'
 apply from: '../gradle/instrument.gradle'
 
+
 import com.bmuschko.gradle.docker.domain.LivenessProbe
-import com.bmuschko.gradle.docker.tasks.container.*
-import com.bmuschko.gradle.docker.tasks.image.*
+import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer
+import com.bmuschko.gradle.docker.tasks.container.DockerRemoveContainer
+import com.bmuschko.gradle.docker.tasks.container.DockerStartContainer
+import com.bmuschko.gradle.docker.tasks.container.DockerStopContainer
 import com.bmuschko.gradle.docker.tasks.container.extras.DockerLivenessContainer
-import groovy.transform.Field
+import com.databasesandlife.util.jooq.PostgresXmlDomElementBinding
 import io.github.jklingsporn.vertx.jooq.shared.postgres.JSONBToJsonObjectConverter
-import io.vertx.core.json.JsonObject;
+import io.vertx.core.json.JsonObject
+import org.apache.tools.ant.taskdefs.condition.Os
 import org.jooq.codegen.GenerationTool
 import org.jooq.meta.jaxb.*
-import org.apache.tools.ant.taskdefs.condition.Os
 import org.w3c.dom.Element
-import com.databasesandlife.util.jooq.PostgresXmlDomElementBinding
 
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def localUsername = 'admin'
@@ -75,6 +79,9 @@ dependencies {
     api project(':spellsource-cards-git')
     api project(':vertx-sync')
     api "io.vertx:vertx-rx-java2:$vertxVersion"
+
+    implementation "ch.qos.logback:logback-classic:1.2.3"
+    implementation group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
 
     implementation("com.databasesandlife:java-common:$databasesandlifeVersion") {
         exclude group: 'com.google.gdata', module: '*'
@@ -158,10 +165,13 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
-    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
-    runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
 
 shadowJar {
     mergeServiceFiles()
@@ -324,14 +334,14 @@ task jooqGenerate() {
                 // postgres is bound to localhost
                 commandLine "$project.projectDir\\bin\\pg_dump.exe", '-h', 'localhost', '-s', '-f', "$project.projectDir\\src\\main\\resources\\db\\ddl.sql"
             } else {
-                commandLine "$project.projectDir/bin/pg_dump", '-h', "database", '-s', '-f', '/git/framework/src/main/resources/db/ddl.sql'
+                commandLine "$project.projectDir/bin/pg_dump", '-h', "database", '-s', '-f', "/git/$project.projectDir.name/src/main/resources/db/ddl.sql"
             }
         }
     }
 }
 
 task migrationsOrSqlChanged(group: 'spellsource') {
-    description('Run whenever the schema as encoded in src/main/resources/db/migration has changed - recreates the JOOQ DSL and dumps a ddl.sql file for autocompletion')
+    description("Run whenever the schema as encoded in $project.projectDir.name/src/main/resources/db/migration has changed - recreates the JOOQ DSL and dumps a ddl.sql file for autocompletion")
     dependsOn += [jooqGenerate]
 }
 
@@ -356,9 +366,18 @@ test {
 task testLegacyMigration(type: Test, group: 'spellsource') {
     description('Tests the migration from the legacy server to this current server ')
     dependsOn += [createPostgresImage, compileTestJava]
-    systemProperty 'mongo.dbpath', "$project.rootDir/.mongo"
+    systemProperty 'mongo.dbpath', "$project.rootProject.rootDir/.mongo"
     useJUnitPlatform()
     testClassesDirs = sourceSets.testMigrations.output.classesDirs
     classpath = sourceSets.testMigrations.runtimeClasspath
     enableAssertions = false
+}
+
+jib {
+    to {
+        image = 'docker.io/doctorpangloss/spellsource-server'
+    }
+    container {
+        ports = ['8080']
+    }
 }

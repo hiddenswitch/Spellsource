@@ -50,6 +50,20 @@ public class UserEntityAddonsDao extends AbstractReactiveVertxDAO<UserEntityAddo
         return findManyByCondition(UserEntityAddons.USER_ENTITY_ADDONS.PRIVACY_TOKEN.in(values),limit);
     }
 
+    /**
+     * Find records that have <code>migrated IN (values)</code> asynchronously
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons>> findManyByMigrated(Collection<Boolean> values) {
+        return findManyByCondition(UserEntityAddons.USER_ENTITY_ADDONS.MIGRATED.in(values));
+    }
+
+    /**
+     * Find records that have <code>migrated IN (values)</code> asynchronously limited by the given limit
+     */
+    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons>> findManyByMigrated(Collection<Boolean> values, int limit) {
+        return findManyByCondition(UserEntityAddons.USER_ENTITY_ADDONS.MIGRATED.in(values),limit);
+    }
+
     @Override
     public ReactiveClassicQueryExecutor<UserEntityAddonsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons,String> queryExecutor(){
         return (ReactiveClassicQueryExecutor<UserEntityAddonsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons,String>) super.queryExecutor();

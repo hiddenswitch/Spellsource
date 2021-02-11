@@ -168,6 +168,7 @@ public class RowMappers {
             com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons();
             pojo.setId(row.getString("id"));
             pojo.setPrivacyToken(row.getString("privacy_token"));
+            pojo.setMigrated(row.getBoolean("migrated"));
             return pojo;
         };
     }

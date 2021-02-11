@@ -16,7 +16,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row2;
+import org.jooq.Row3;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -32,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserEntityAddons extends TableImpl<UserEntityAddonsRecord> {
 
-    private static final long serialVersionUID = -128300276;
+    private static final long serialVersionUID = -100778619;
 
     /**
      * The reference instance of <code>spellsource.user_entity_addons</code>
@@ -56,6 +56,11 @@ public class UserEntityAddons extends TableImpl<UserEntityAddonsRecord> {
      * The column <code>spellsource.user_entity_addons.privacy_token</code>.
      */
     public final TableField<UserEntityAddonsRecord, String> PRIVACY_TOKEN = createField(DSL.name("privacy_token"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.field("floor(((1000)::double precision + (random() * (8999)::double precision)))", org.jooq.impl.SQLDataType.CLOB)), this, "");
+
+    /**
+     * The column <code>spellsource.user_entity_addons.migrated</code>.
+     */
+    public final TableField<UserEntityAddonsRecord, Boolean> MIGRATED = createField(DSL.name("migrated"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
 
     /**
      * Create a <code>spellsource.user_entity_addons</code> table reference
@@ -141,11 +146,11 @@ public class UserEntityAddons extends TableImpl<UserEntityAddonsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row2 type methods
+    // Row3 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row2<String, String> fieldsRow() {
-        return (Row2) super.fieldsRow();
+    public Row3<String, String, Boolean> fieldsRow() {
+        return (Row3) super.fieldsRow();
     }
 }
