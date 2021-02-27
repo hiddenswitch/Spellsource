@@ -1,0 +1,14 @@
+configmap: |-
+  notify-keyspace-events Exg
+usePassword: false
+metrics:
+  prometheusRule:
+    enabled: true
+master:
+  persistence:
+    enabled: false
+  disableCommands: []
+slave:
+  persistence:
+    enabled: false
+  disableCommands: []

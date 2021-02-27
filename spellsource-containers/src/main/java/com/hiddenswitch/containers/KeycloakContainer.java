@@ -26,7 +26,7 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 	 * Create a KeycloakContainer by passing the full docker image name
 	 */
 	public KeycloakContainer() {
-		super("doctorpangloss/keycloak:latest");
+		super("doctorpangloss/keycloak-standalone:latest");
 		withExposedPorts(KEYCLOAK_PORT_HTTP);
 		withEnv("LANGUAGE", "en_US.UTF-8");
 		withEnv("LANG", "en_US.UTF-8");

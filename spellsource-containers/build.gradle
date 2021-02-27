@@ -24,20 +24,36 @@ dependencies {
 }
 
 task createPostgresImage(type: DockerBuildImage) {
+    dependsOn += [tasks.processResources]
     inputDir.set(new File("$project.projectDir/src/main/resources/docker/postgres"))
     quiet.set(true)
     images.set(["doctorpangloss/postgres:latest"])
 }
 
-task createKeycloakImage(type: DockerBuildImage) {
+task createKeycloakStandaloneImage(type: DockerBuildImage) {
+    dependsOn += [tasks.processResources]
     inputDir.set(new File("$project.projectDir/src/main/resources/docker/keycloak"))
+    dockerFile.set(new File("$project.projectDir/src/main/resources/docker/keycloak/Dockerfile.standalone"))
     quiet.set(true)
-    images.set(["doctorpangloss/keycloak:latest"])
+    images.set(["doctorpangloss/keycloak-standalone:latest"])
+}
+
+task createKeycloakClusteredImage(type: DockerBuildImage) {
+    dependsOn += [tasks.processResources]
+    inputDir.set(new File("$project.projectDir/src/main/resources/docker/keycloak"))
+    dockerFile.set(new File("$project.projectDir/src/main/resources/docker/keycloak/Dockerfile"))
+    quiet.set(true)
+    images.set(["doctorpangloss/keycloak-clustered:latest"])
+}
+
+task pushKeycloakClusteredImage(type: DockerPushImage) {
+    dependsOn += [createKeycloakClusteredImage]
+    images.set(createKeycloakClusteredImage.images.get())
 }
 
 compileJava {
     // you won't really be able to use the postgres image unless you build it
-    dependsOn += [createPostgresImage, createKeycloakImage]
+    dependsOn += [tasks.createPostgresImage, tasks.createKeycloakStandaloneImage, tasks.createKeycloakClusteredImage]
     options.warnings = false
 }
 

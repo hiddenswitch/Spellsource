@@ -3,10 +3,7 @@ package com.hiddenswitch.framework.tests;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.GamesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games;
-import com.hiddenswitch.framework.schema.spellsource.tables.records.GamesRecord;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
-import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryExecutor;
-import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
@@ -15,9 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.hiddenswitch.framework.schema.spellsource.Tables.GAMES;
 
-public class EnvironmentTest extends FrameworkTestBase {
-
-
+public class EnvironmentTests extends FrameworkTestBase {
 
 	@Test
 	public void testPgPool(VertxTestContext vertxTestContext) {

@@ -15,7 +15,7 @@ import com.hiddenswitch.framework.Legacy;
 import com.hiddenswitch.framework.schema.spellsource.Tables;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
 import com.hiddenswitch.spellsource.common.GameState;
-import com.hiddenswitch.spellsource.common.Tracing;
+import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import io.opentracing.log.Fields;
 import io.opentracing.propagation.Format;

@@ -35,11 +35,26 @@ dependencies {
     api('com.google.protobuf:protobuf-java:3.13.0') {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
+    api('com.google.protobuf:protobuf-java-util:3.13.0') {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
     api("com.hubspot.jackson:jackson-datatype-protobuf:0.9.12") {
         exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
     }
     api(group: 'io.vertx', name: 'vertx-grpc', version: vertxVersion) {
         exclude group: 'com.google.code.gson', module: 'gson'
+    }
+    api("io.grpc:grpc-services:${grpcVersion}") {
+        exclude group: 'com.google.code.gson', module: 'gson'
+        exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
+    }
+    api('com.netflix.concurrency-limits:concurrency-limits-grpc:0.3.6') {
+        exclude group: 'com.google.protobuf', module: 'protobuf-java'
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+    api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion") {
+        exclude group: 'jakarta.xml.bind', module: '*'
+        exclude group: 'jakarta.activation', module: '*'
     }
 }
 

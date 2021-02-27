@@ -1,0 +1,13 @@
+# helm repo add bitnami https://charts.bitnami.com/bitnami
+# helm install my-release bitnami/postgresql-ha
+postgresql:
+  username: postgres
+  password: password
+  database: spellsource
+  initdbScripts:
+    99-hiddenswitch-extensions.sql: |
+      create schema if not exists keycloak;
+      update pg_database set encoding = 6, datcollate = 'en_US.UTF8', datctype = 'en_US.UTF8' where datname = 'template0';
+      update pg_database set encoding = 6, datcollate = 'en_US.UTF8', datctype = 'en_US.UTF8' where datname = 'template1';
+service:
+  type: ClusterIP

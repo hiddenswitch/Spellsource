@@ -4,7 +4,6 @@ import com.hiddenswitch.containers.*;
 import com.hiddenswitch.framework.Application;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
-import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import org.testcontainers.containers.Network;
@@ -46,72 +45,52 @@ public class StandaloneApplication extends Application {
 			.withReuse(true);
 	protected static AtomicBoolean STARTED = new AtomicBoolean(false);
 
+	@Override
+	protected Future<Vertx> getVertx() {
+		return Future.succeededFuture(Vertx.vertx(Environment.vertxOptions()));
+	}
+
 	public static boolean defaultConfigurationAndServices() {
 		var shouldStart = STARTED.compareAndSet(false, true);
 		if (!shouldStart) {
 			return false;
 		}
 		Startables.deepStart(Stream.of(POSTGRES, KEYCLOAK, REDIS)).join();
-		var configuration = ServerConfiguration.newBuilder(Environment.cachedConfigurationOrGet());
+		var configuration = ServerConfiguration.newBuilder(Environment.getConfiguration());
 		var pgEnvVars = Arrays.asList("PGUSER", "PGPASSWORD", "PGHOST", "PGPORT", "PGDATABASE");
-		// no pg var
-		if (!configuration.hasPg() && pgEnvVars.stream().noneMatch(envVar -> System.getenv().containsKey(envVar))) {
-			configuration.setPg(ServerConfiguration.PostgresConfiguration.newBuilder()
-					.setPort(POSTGRES.getMappedPort(PGPORT))
-					.setHost(POSTGRES.getHost())
-					.setDatabase(PGDATABASE)
-					.setUser(PGUSER)
-					.setPassword(PGPASSWORD)
-					.build());
-		}
-		if (!configuration.hasKeycloak()) {
-			configuration.setKeycloak(ServerConfiguration.KeycloakConfiguration.newBuilder()
-					.setAuthUrl(KEYCLOAK.getAuthServerUrl())
-					.setAdminUsername(KEYCLOAK.getAdminUsername())
-					.setAdminPassword(KEYCLOAK.getAdminPassword())
-					.setClientId(CLIENT_ID)
-					.setClientSecret(CLIENT_SECRET)
-					.setRealmDisplayName("Spellsource")
-					.setRealmId("hiddenswitch")
-					.build());
-		}
-		if (!configuration.hasGrpcConfiguration()) {
-			configuration.setGrpcConfiguration(ServerConfiguration.GrpcConfiguration.newBuilder()
-					.setServerKeepAliveTimeMillis(400)
-					.setServerKeepAliveTimeoutMillis(8000)
-					.setServerPermitKeepAliveWithoutCalls(true)
-					.build());
-		}
-		if (!configuration.hasMatchmaking()) {
-			configuration.setMatchmaking(ServerConfiguration.MatchmakingConfiguration.newBuilder()
-					.setMaxTicketsToProcess(100)
-					.setScanFrequencyMillis(1200)
-					.setEnqueueLockTimeoutMillis(800).build());
-		}
-		if (!configuration.hasRedis()) {
-			configuration.setRedis(ServerConfiguration.RedisConfiguration.newBuilder()
-					.setUri(REDIS.getRedisUrl())
-					.build());
-		}
-		if (!configuration.hasApplication()) {
-			configuration.setApplication(ServerConfiguration.ApplicationConfiguration.newBuilder()
-					.setUseBroadcaster(true)
-					.build());
-		}
-		if (!configuration.hasDecks()) {
-			configuration.setDecks(ServerConfiguration.DecksConfiguration.newBuilder()
-					.setCachedDeckTimeToLiveMinutes(60L).build());
-		}
+		configuration.setPg(ServerConfiguration.PostgresConfiguration.newBuilder()
+				.setPort(POSTGRES.getMappedPort(PGPORT))
+				.setHost(POSTGRES.getHost())
+				.setDatabase(PGDATABASE)
+				.setUser(PGUSER)
+				.setPassword(PGPASSWORD)
+				.build());
+		configuration.setKeycloak(ServerConfiguration.KeycloakConfiguration.newBuilder()
+				.setAuthUrl(KEYCLOAK.getAuthServerUrl())
+				.setAdminUsername(KEYCLOAK.getAdminUsername())
+				.setAdminPassword(KEYCLOAK.getAdminPassword())
+				.setClientId(CLIENT_ID)
+				.setClientSecret(CLIENT_SECRET)
+				.setRealmDisplayName("Spellsource")
+				.setRealmId("hiddenswitch")
+				.build());
+		configuration.setRedis(ServerConfiguration.RedisConfiguration.newBuilder()
+				.setUri(REDIS.getRedisUrl())
+				.build());
+		configuration.setApplication(ServerConfiguration.ApplicationConfiguration.newBuilder()
+				.setUseBroadcaster(true)
+				.build());
+		configuration.setMigration(ServerConfiguration.MigrationConfiguration.newBuilder()
+				.setShouldMigrate(true)
+				.build());
 
 		// set the configuration so far so that migrations pick up on it
 		Environment.setConfiguration(configuration.buildPartial());
 		Environment.migrate().toCompletionStage().toCompletableFuture().join();
 
-		if (!configuration.hasRealtime()) {
-			Startables.deepStart(Stream.of(REALTIME)).join();
-			configuration.setRealtime(ServerConfiguration.RealtimeConfiguration.newBuilder()
-					.setUri(REALTIME.getRealtimeUrl()).build());
-		}
+		Startables.deepStart(Stream.of(REALTIME)).join();
+		configuration.setRealtime(ServerConfiguration.RealtimeConfiguration.newBuilder()
+				.setUri(REALTIME.getRealtimeUrl()).build());
 
 		Environment.setConfiguration(configuration.build());
 		return true;

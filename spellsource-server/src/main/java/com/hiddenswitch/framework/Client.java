@@ -208,20 +208,18 @@ public class Client implements AutoCloseable {
 
 	public Future<AccessTokenResponse> login(String usernameOrEmail, String password) {
 		Objects.requireNonNull(webClient);
-		return Environment.configuration()
-				.compose(serverConfiguration -> {
-					var promise = Promise.<HttpResponse<Buffer>>promise();
-					webClient.postAbs(keycloakPath + Accounts.KEYCLOAK_LOGIN_PATH)
-							.sendForm(MultiMap.caseInsensitiveMultiMap()
-									.add("client_id", serverConfiguration.getKeycloak().getClientId())
-									.add("grant_type", "password")
-									.add("client_secret", serverConfiguration.getKeycloak().getClientSecret())
-									.add("scope", "openid")
-									// username or password can be used here
-									.add("username", usernameOrEmail)
-									.add("password", password), promise);
-					return promise.future();
-				})
+		var serverConfiguration = Environment.getConfiguration();
+		var promise = Promise.<HttpResponse<Buffer>>promise();
+		webClient.postAbs(keycloakPath + Accounts.KEYCLOAK_LOGIN_PATH)
+				.sendForm(MultiMap.caseInsensitiveMultiMap()
+						.add("client_id", serverConfiguration.getKeycloak().getClientId())
+						.add("grant_type", "password")
+						.add("client_secret", serverConfiguration.getKeycloak().getClientSecret())
+						.add("scope", "openid")
+						// username or password can be used here
+						.add("username", usernameOrEmail)
+						.add("password", password), promise);
+		return promise.future()
 				.map(res -> res.bodyAsJson(AccessTokenResponse.class))
 				.onSuccess(this::handleLogin);
 	}

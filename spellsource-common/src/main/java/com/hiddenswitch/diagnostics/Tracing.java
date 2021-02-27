@@ -1,4 +1,4 @@
-package com.hiddenswitch.spellsource.common;
+package com.hiddenswitch.diagnostics;
 
 import co.paralleluniverse.fibers.Fiber;
 import com.google.common.base.Throwables;
@@ -19,21 +19,30 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface Tracing {
-	Logger LOGGER = LoggerFactory.getLogger(Tracing.class);
+public class Tracing {
+	private static Logger LOGGER = LoggerFactory.getLogger(Tracing.class);
 
-	static void initializeGlobal(Vertx vertx) {
-		GlobalTracer.registerIfAbsent(initialize("spellsource"));
+	public static synchronized Tracer tracing(Vertx vertx) {
+		if (!GlobalTracer.isRegistered()) {
+			var tracer = initialize("spellsource");
+			GlobalTracer.registerIfAbsent(tracer);
+		}
+
 		vertx.exceptionHandler(Tracing::error);
-		Fiber.setDefaultUncaughtExceptionHandler((a, b) -> error(b));
+		try {
+			Fiber.setDefaultUncaughtExceptionHandler((a, b) -> error(b));
+		} catch (NoClassDefFoundError compileOnlyDependency) {
+		}
+		return GlobalTracer.get();
 	}
 
 	static void error(Throwable throwable, Span span) {
 		error(throwable, span, true);
 	}
 
-	static void error(Throwable throwable, Span span, boolean finish) {
+	public static void error(Throwable throwable, Span span, boolean finish) {
 		if (span instanceof NoopSpan || span == null) {
+			LOGGER.error("An exception was reported to the tracer");
 			LOGGER.error(throwable.getMessage(), throwable);
 			return;
 		}
@@ -50,7 +59,7 @@ public interface Tracing {
 		}
 	}
 
-	static void error(Throwable throwable) {
+	public static void error(Throwable throwable) {
 		error(throwable, GlobalTracer.get().activeSpan(), true);
 	}
 

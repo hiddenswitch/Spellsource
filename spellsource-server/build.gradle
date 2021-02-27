@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        vertxJooqVersion = '14efcb1ff3'
+        vertxJooqVersion = '3e12c80af5'
         postgresqlVersion = '42.2.16'
         flywayVersion = '6.5.5'
     }
@@ -58,7 +58,7 @@ def localDatabaseName = 'spellsource'
 def mainClassName = 'com.hiddenswitch.framework.EntryPoint'
 def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
 def createPostgresImage = tasks.getByPath(':spellsource-containers:createPostgresImage')
-def createKeycloakImage = tasks.getByPath(':spellsource-containers:createKeycloakImage')
+def createKeycloakImage = tasks.getByPath(':spellsource-containers:createKeycloakStandaloneImage')
 
 // configures the migration test, which specially starts mongo
 sourceSets {
@@ -92,7 +92,6 @@ dependencies {
 
     implementation group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
     implementation group: 'commons-validator', name: 'commons-validator', version: '1.6'
-
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$jacksonVersion") {
         exclude group: 'jakarta.xml.bind', module: '*'
         exclude group: 'jakarta.activation', module: '*'
@@ -128,8 +127,10 @@ dependencies {
     implementation group: 'io.vertx', name: 'vertx-service-discovery', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-web', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-auth-common', version: vertxVersion
-    implementation group: 'io.vertx', name: 'vertx-config', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-mongo-client', version: vertxVersion
+    implementation(group: 'io.vertx', name: 'vertx-opentracing', version: vertxVersion) {
+        exclude group: 'io.jaegertracing', module: '*'
+    }
     implementation "io.vertx:vertx-micrometer-metrics:$vertxVersion"
     implementation "io.micrometer:micrometer-registry-prometheus:$micrometerVersion"
     implementation "io.micrometer:micrometer-registry-jmx:$micrometerVersion"
@@ -151,6 +152,10 @@ dependencies {
     implementation "io.jaegertracing:jaeger-client:$jaegerVersion"
     implementation "org.flywaydb:flyway-core:$flywayVersion"
     implementation 'org.redisson:redisson:3.14.1'
+    implementation(group: 'com.github.pcj', name: 'google-options', version: '1.0.0') {
+        exclude group: 'com.google.guava', module: 'guava'
+    }
+
 
     testImplementation(project(':spellsource-containers'))
     testImplementation project(':spellsource-testutils')
@@ -164,6 +169,7 @@ dependencies {
     testImplementation 'org.jetbrains:annotations:16.0.2'
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
+    testImplementation 'uk.org.webcompere:system-stubs-jupiter:1.1.0'
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
 }
 
@@ -228,7 +234,7 @@ task stopPostgresContainer(type: DockerStopContainer) {
 
 task createKeycloakContainer(type: DockerCreateContainer) {
     dependsOn += [createPostgresContainer, createKeycloakImage]
-    targetImageId "doctorpangloss/keycloak:latest"
+    targetImageId "doctorpangloss/spellsource-keycloak:latest"
     envVars.putAll([
             'DB_VENDOR'  : 'postgres',
             'DB_ADDR'    : 'database:5432',

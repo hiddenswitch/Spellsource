@@ -50,6 +50,7 @@ message ServerConfiguration {
         int64 serverKeepAliveTimeMillis = 1;
         int64 serverKeepAliveTimeoutMillis = 2;
         bool serverPermitKeepAliveWithoutCalls = 3;
+        int32 port = 4;
     }
 
     message MatchmakingConfiguration {
@@ -66,6 +67,17 @@ message ServerConfiguration {
         bool useBroadcaster = 1;
     }
 
+    message MigrationConfiguration {
+        bool shouldMigrate = 1;
+    }
+
+    message MetricsConfiguration {
+        int32 port = 1;
+        string livenessRoute = 2;
+        string readinessRoute = 3;
+        string metricsRoute = 4;
+    }
+
     PostgresConfiguration pg = 1;
     KeycloakConfiguration keycloak = 2;
     RedisConfiguration redis = 3;
@@ -74,6 +86,8 @@ message ServerConfiguration {
     MatchmakingConfiguration matchmaking = 6;
     ApplicationConfiguration application = 7;
     DecksConfiguration decks = 8;
+    MigrationConfiguration migration = 9;
+    MetricsConfiguration metrics = 10;
 }
 
 message ClientConfiguration {

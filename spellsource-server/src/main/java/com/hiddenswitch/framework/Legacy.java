@@ -524,7 +524,7 @@ public class Legacy {
 	}
 
 	public static Future<DecksGetResponse> getDeck(String deckId, String userId) {
-		var serverConfiguration = Environment.cachedConfigurationOrGet();
+		var serverConfiguration = Environment.getConfiguration();
 		var cache = DECKS_CACHE.get();
 		var configuration = Environment.jooqAkaDaoConfiguration();
 		var delegate = Environment.sqlPoolAkaDaoDelegate();

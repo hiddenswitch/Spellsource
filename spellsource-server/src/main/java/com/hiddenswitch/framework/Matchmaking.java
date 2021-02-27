@@ -121,7 +121,7 @@ public class Matchmaking extends SyncVerticle {
 	}
 
 	public static void runClientEnqueue(ReadStream<MatchmakingQueuePutRequest> request, WriteStream<MatchmakingQueuePutResponse> response, HandlerReceiverAdaptor<MatchmakingQueuePutRequest> commandsFromUser, String userId) throws SuspendExecution, InterruptedException {
-		var serverConfiguration = Environment.cachedConfigurationOrGet();
+		var serverConfiguration = Environment.getConfiguration();
 		Objects.requireNonNull(userId, "no user id attached to context");
 		// this should only really run with a fiber dedicated for its purpose
 		var context = Vertx.currentContext();
@@ -301,7 +301,7 @@ public class Matchmaking extends SyncVerticle {
 
 	@Suspendable
 	public void runServerQueue(Vertx vertx) throws SuspendExecution {
-		var serverConfiguration = await(Environment.configuration());
+		var serverConfiguration = Environment.getConfiguration();
 		var smallTimeout = serverConfiguration.getMatchmaking().getEnqueueLockTimeoutMillis();
 		var random = new Random();
 

@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# current directory to work in, handle paths passed to windows docker client in windows mixed mode
+WORK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)"
+[ -x /bin/cygpath ] && WORK_DIR=$(/bin/cygpath -m "$WORK_DIR")
+
+# msys path conversion not working due to mixed use of windows and linux-style paths for volume mappings
+case "`uname`" in
+  MINGW* )
+  export MSYS_NO_PATHCONV=1
+  ;;
+esac
+
+# current user to work as, create directories mapped as volumes to prevent permission problems
+USER_PARAM="-u `id -u`"
+mkdir -m 0775 -p build/home build/src
+
+# current tty if any (to interactively run attached to current user)
+TTY_PARAM=
+[ -t 1 ] && TTY_PARAM="-t"
+
+# outbound enterprise proxy if any
+HTTP_PROXY_PARAM=()
+HTTPS_PROXY_PARAM=()
+NO_PROXY_PARAM=()
+[ -n "$HTTP_PROXY" ] && HTTP_PROXY_PARAM=(-e "HTTP_PROXY=$HTTP_PROXY")
+[ -n "$HTTPS_PROXY" ] && HTTPS_PROXY_PARAM=(-e "HTTPS_PROXY=$HTTPS_PROXY")
+[ -n "$NO_PROXY" ] && NO_PROXY_PARAM=(-e "NO_PROXY=$NO_PROXY")
+
+# run CLI within docker container
+exec docker run -i $TTY_PARAM $USER_PARAM --rm \
+    "${HTTP_PROXY_PARAM[@]}" \
+    "${HTTPS_PROXY_PARAM[@]}" \
+    "${NO_PROXY_PARAM[@]}" \
+    -e HOME=/workdir/build/home \
+    --workdir /workdir/build/home \
+    -v $WORK_DIR:/workdir \
+    gcr.io/google.com/cloudsdktool/cloud-sdk:266.0.0 kubectl "$@"

@@ -1,0 +1,12 @@
+plugins {
+    id "com.github.rmee.kubectl" version "$rmeePluginsVersion"
+    id "com.github.rmee.helm" version "$rmeePluginsVersion"
+}
+
+apply plugin: 'base'
+apply plugin: 'kubectl'
+apply plugin: 'helm'
+
+task run(type: Exec) {
+    dependsOn ':spellsource-server:jib'
+}

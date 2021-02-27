@@ -1,8 +1,8 @@
 package com.hiddenswitch.spellsource.discordbot.applications;
 
 import com.google.common.collect.Streams;
+import com.hiddenswitch.protos.Serialization;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
-import com.hiddenswitch.protos.JsonConfiguration;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -32,7 +32,7 @@ import static net.dv8tion.jda.api.MessageBuilder.Formatting.*;
 
 public class DiscordBot extends ListenerAdapter {
 	static {
-		JsonConfiguration.configureJson();
+		Serialization.configureSerialization();
 		CardCatalogue.loadCardsFromFilesystemDirectories("../cards/src/main/resources/cards", "cards/src/main/resources/cards", "../game/src/main/resources/cards", "game/src/main/resources/cards");
 	}
 

@@ -54,7 +54,6 @@ public class Accounts {
 	// todo: use realmId
 	protected static final String KEYCLOAK_LOGIN_PATH = "/realms/hiddenswitch/protocol/openid-connect/token";
 	protected static final String KEYCLOAK_FORGOT_PASSWORD_PATH = "/realms/hiddenswitch/login-actions/reset-credentials";
-	protected static final String KEYCLOAK_ACCOUNT_MANAGEMENT_PATH = "/realms/hiddenswitch/account";
 	private static final String RSA = "RSA";
 	private static final WeakVertxMap<Keycloak> keycloakReference = new WeakVertxMap<>(Accounts::keycloakConstructor);
 	private static final WeakVertxMap<PublicKeyJwtServerInterceptor> interceptor = new WeakVertxMap<>(Accounts::authorizationInterceptorConstructor);
@@ -299,7 +298,7 @@ public class Accounts {
 
 			@Override
 			public Future<ClientConfiguration> getConfiguration(Empty request) {
-				var config = Environment.cachedConfigurationOrGet();
+				var config = Environment.getConfiguration();
 				var authUrl = config.getKeycloak().getAuthUrl();
 				return Future.succeededFuture(ClientConfiguration.newBuilder()
 						.setAccounts(ClientConfiguration.AccountsConfiguration.newBuilder()
@@ -408,9 +407,13 @@ public class Accounts {
 				.compose(interceptor -> Future.succeededFuture(ServerInterceptors.intercept(service, interceptor)));
 	}
 
+	public static Future<Keycloak> admin() {
+		return Future.succeededFuture(keycloakReference.get());
+	}
+
 	public static Future<RealmResource> get() {
 		return Environment.executeBlocking(() -> {
-			var realmId = Environment.cachedConfigurationOrGet().getKeycloak().getRealmId();
+			var realmId = Environment.getConfiguration().getKeycloak().getRealmId();
 			return keycloakReference.get().realm(realmId);
 		})
 				.onFailure(Environment.onFailure());
@@ -504,7 +507,7 @@ public class Accounts {
 			var engine = new VertxClientHttpEngine(vertx);
 			client.httpEngine(engine);
 		}*/
-		var config = Environment.cachedConfigurationOrGet();
+		var config = Environment.getConfiguration();
 		return KeycloakBuilder.builder()
 				.serverUrl(config.getKeycloak().getAuthUrl())
 				.realm("master")
@@ -531,7 +534,7 @@ public class Accounts {
 
 	public static Future<RealmResource> createRealmIfAbsent() {
 		return Environment.executeBlocking(() -> {
-			var configuration = Environment.cachedConfigurationOrGet();
+			var configuration = Environment.getConfiguration();
 			var keycloak = keycloakReference.get();
 			var existing = Optional.<RealmRepresentation>empty();
 			var realmId = configuration.getKeycloak().getRealmId();
@@ -586,6 +589,6 @@ public class Accounts {
 	}
 
 	public synchronized static String keycloakAuthUrl() {
-		return Environment.cachedConfigurationOrGet().getKeycloak().getAuthUrl();
+		return Environment.getConfiguration().getKeycloak().getAuthUrl();
 	}
 }

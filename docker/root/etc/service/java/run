@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-# This file executes the shadow / fat jar of the server on its docker image, using PORT=80 by default.
-# Executes the fat jar of the network server using the Embedded application by default
-java -cp /data/net.jar com.hiddenswitch.spellsource.net.applications.Clustered
