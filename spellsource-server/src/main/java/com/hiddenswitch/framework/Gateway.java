@@ -1,9 +1,12 @@
 package com.hiddenswitch.framework;
 
 import com.be_hase.grpc.micrometer.MicrometerServerInterceptor;
-import io.grpc.BindableService;
-import io.grpc.ServerInterceptors;
-import io.grpc.ServerServiceDefinition;
+import com.netflix.concurrency.limits.grpc.server.ConcurrencyLimitServerInterceptor;
+import com.netflix.concurrency.limits.grpc.server.GrpcServerLimiterBuilder;
+import com.netflix.concurrency.limits.limit.Gradient2Limit;
+import com.netflix.concurrency.limits.limit.WindowedLimit;
+import io.grpc.*;
+import io.grpc.protobuf.services.ProtoReflectionService;
 import io.micrometer.core.instrument.Metrics;
 import io.opentracing.contrib.grpc.TracingServerInterceptor;
 import io.opentracing.util.GlobalTracer;
@@ -13,10 +16,14 @@ import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.grpc.VertxServer;
 import io.vertx.grpc.VertxServerBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
 public class Gateway extends AbstractVerticle {
+	private static Logger LOGGER = LoggerFactory.getLogger(Gateway.class);
 	VertxServer server;
 
 	@Override
@@ -29,7 +36,7 @@ public class Gateway extends AbstractVerticle {
 				Accounts.authenticatedService(),
 				Games.services())
 				.compose(services -> {
-					var serverConfiguration = Environment.cachedConfigurationOrGet();
+					var serverConfiguration = Environment.getConfiguration();
 					var builder = VertxServerBuilder.forPort(vertx, grpcPort());
 
 					var list = services.list();
@@ -43,9 +50,32 @@ public class Gateway extends AbstractVerticle {
 										.withTracer(GlobalTracer.get())
 										.withStreaming()
 										.withVerbosity()
-										.build());
+										.build()/*,
+								ConcurrencyLimitServerInterceptor.newBuilder(
+										new GrpcServerLimiterBuilder()
+												.partitionResolver(context -> {
+													var address = context.getCall().getAttributes().get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR);
+													if (address instanceof InetSocketAddress) {
+														var inetSocketAddress = (InetSocketAddress) address;
+														var hostAddress = inetSocketAddress.getAddress().getHostAddress();
+														if (hostAddress.equals("127.0.0.1")) {
+															hostAddress += ":" + inetSocketAddress.getPort();
+														}
+														return hostAddress;
+													}
+
+													return address.toString();
+												})
+												.limit(WindowedLimit.newBuilder()
+														.build(Gradient2Limit.newBuilder()
+																.build()))
+												.build()).build()*/);
 						builder.addService(boundService);
 					}
+
+					// include reflection
+					builder.addService(ProtoReflectionService.newInstance());
+
 					var nettyServerBuilder = builder.nettyBuilder();
 					nettyServerBuilder.keepAliveTime(serverConfiguration.getGrpcConfiguration().getServerKeepAliveTimeMillis(), TimeUnit.MILLISECONDS)
 							.keepAliveTimeout(serverConfiguration.getGrpcConfiguration().getServerKeepAliveTimeoutMillis(), TimeUnit.MILLISECONDS)
@@ -63,6 +93,6 @@ public class Gateway extends AbstractVerticle {
 	}
 
 	public static int grpcPort() {
-		return 8081;
+		return Environment.getConfiguration().getGrpcConfiguration().getPort();
 	}
 }

@@ -2,29 +2,23 @@ package com.hiddenswitch.framework;
 
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableCallable;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.github.marschall.micrometer.jfr.JfrMeterRegistry;
 import com.google.common.base.Throwables;
-import com.google.protobuf.GeneratedMessageV3;
+import com.google.common.collect.Streams;
 import com.google.protobuf.Parser;
+import com.hiddenswitch.diagnostics.Tracing;
+import com.hiddenswitch.framework.impl.ModelConversions;
 import com.hiddenswitch.framework.impl.RedissonProtobufCodec;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
-import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
-import com.hiddenswitch.protos.JsonConfiguration;
-import com.hiddenswitch.spellsource.common.Tracing;
-import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
+import com.hiddenswitch.framework.rpc.Hiddenswitch.ServerConfiguration;
+import com.hiddenswitch.protos.Serialization;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.micrometer.core.instrument.Metrics;
-import io.vertx.config.ConfigRetriever;
-import io.vertx.config.ConfigRetrieverOptions;
-import io.vertx.config.ConfigStoreOptions;
+import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Context;
 import io.vertx.core.*;
-import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.tracing.TracingOptions;
 import io.vertx.ext.sync.Sync;
 import io.vertx.micrometer.MicrometerMetricsOptions;
 import io.vertx.micrometer.VertxPrometheusOptions;
@@ -32,6 +26,7 @@ import io.vertx.micrometer.backends.PrometheusBackendRegistry;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
+import io.vertx.tracing.opentracing.OpenTracingOptions;
 import org.flywaydb.core.Flyway;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.*;
@@ -47,41 +42,43 @@ import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.concurrent.TimeUnit;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
-import static com.hiddenswitch.protos.JsonConfiguration.configureJson;
-import static io.vertx.core.json.jackson.DatabindCodec.mapper;
+import static com.hiddenswitch.protos.Serialization.configureSerialization;
 
 public class Environment {
 	private static final PrometheusBackendRegistry prometheusRegistry = new PrometheusBackendRegistry(new VertxPrometheusOptions()
 			.setEnabled(true)
-			.setStartEmbeddedServer(true)
-			.setEmbeddedServerEndpoint("/metrics")
-			.setPublishQuantiles(true)
-			.setEmbeddedServerOptions(new HttpServerOptions().setPort(8080)));
+			.setPublishQuantiles(true));
 	private static final AtomicBoolean prometheusInited = new AtomicBoolean();
 	private static final AtomicReference<Configuration> jooqConfiguration = new AtomicReference<>();
 	private static final WeakVertxMap<PgPool> pools = new WeakVertxMap<>(Environment::poolConstructor);
 	private static final WeakVertxMap<RedissonClient> redissonClients = new WeakVertxMap<>(Environment::redissonClientConstructor);
-	private static final WeakVertxMap<ConfigRetriever> configRetrievers = new WeakVertxMap<>(Environment::configRetrieverConstructor);
-	private static ServerConfiguration cachedConfiguration;
-	private static final JsonObject configurationOverride = new JsonObject();
+	private static final String CONFIGURATION_NAME_TOKEN = "spellsource";
+	private static ServerConfiguration programmaticConfiguration = ServerConfiguration.newBuilder().build();
+	private static final AtomicReference<ServerConfiguration> cachedConfiguration = new AtomicReference<>();
 
 	static {
 		// An opportunity to configure Vertx's JSON
-		configureJson();
+		configureSerialization();
 		// metrics
 		metrics();
 	}
 
 	private static RedissonClient redissonClientConstructor(Vertx vertx) {
-		var configuration = cachedConfigurationOrGet();
+		var configuration = getConfiguration();
 		var config = new Config();
 		config.useSingleServer().setAddress(configuration.getRedis().getUri());
 		return Redisson.create(config);
@@ -110,8 +107,8 @@ public class Environment {
 	}
 
 	public synchronized static PgConnectOptions connectOptions() {
-		var options = new PgConnectOptions();
-		var cachedConfiguration = cachedConfigurationOrGet();
+		var options = PgConnectOptions.fromEnv();
+		var cachedConfiguration = getConfiguration();
 		if (!cachedConfiguration.hasPg()) {
 			return options;
 		}
@@ -149,9 +146,10 @@ public class Environment {
 
 	public static Handler<Throwable> onFailure() {
 		var here = new Throwable();
+		var span = GlobalTracer.get().activeSpan();
 		return t -> {
 			t.setStackTrace(Sync.concatAndFilterStackTrace(t, here));
-			Tracing.error(t);
+			Tracing.error(t, span, true);
 		};
 	}
 
@@ -193,7 +191,7 @@ public class Environment {
 
 	public static VertxOptions vertxOptions() {
 		return new VertxOptions()
-				.setTracingOptions(new TracingOptions())
+				.setTracingOptions(new OpenTracingOptions(GlobalTracer.get()))
 				.setMetricsOptions(
 						new MicrometerMetricsOptions()
 								.setMicrometerRegistry(Metrics.globalRegistry)
@@ -206,8 +204,7 @@ public class Environment {
 	}
 
 	public static Future<Integer> migrate() {
-		return configuration()
-				.compose(Environment::migrate);
+		return Environment.migrate(getConfiguration());
 	}
 
 	@Suspendable
@@ -242,57 +239,93 @@ public class Environment {
 		return result.future();
 	}
 
-	private static ConfigRetriever configRetriever() {
-		return configRetrievers.get();
-	}
-
 	public static void setConfiguration(ServerConfiguration configuration) {
-		configurationOverride.mergeIn(JsonObject.mapFrom(configuration), true);
-		if (cachedConfiguration != null) {
-			cachedConfiguration = ServerConfiguration.newBuilder(cachedConfiguration).mergeFrom(configuration).build();
-		} else {
-			cachedConfiguration = ServerConfiguration.newBuilder(configuration).build();
-		}
+		cachedConfiguration.set(null);
+		programmaticConfiguration = configuration;
 	}
 
-	public static Future<ServerConfiguration> configuration() {
-		var promise = Promise.<JsonObject>promise();
-		configRetriever().getConfig(promise);
-		return promise.future()
-				.compose(jsonObject -> Future.succeededFuture(jsonObject.mapTo(ServerConfiguration.class)))
-				.onSuccess(s -> cachedConfiguration = s);
+	public static ServerConfiguration getConfiguration() {
+		return cachedConfiguration.updateAndGet(existing -> {
+			if (existing != null) {
+				return existing;
+			}
+
+			var currentWorkingDirectoryPath = FileSystems.getDefault().getPath("conf");
+			var defaultConfiguration = defaultConfiguration();
+			Stream<Path> filesystemConfigurationIterable = null;
+			try {
+				filesystemConfigurationIterable = Files.walk(currentWorkingDirectoryPath, 1, FileVisitOption.FOLLOW_LINKS);
+			} catch (IOException e) {
+				filesystemConfigurationIterable = Stream.empty();
+			}
+			var pattern = Pattern.compile("^.*" + CONFIGURATION_NAME_TOKEN + ".*\\.ya?ml$");
+			var filesConfiguration = filesystemConfigurationIterable
+					.map(Path::toFile)
+					.filter(f -> pattern.asPredicate().test(f.getName().toLowerCase(Locale.ROOT)))
+					.map(f -> {
+						try {
+							return Serialization.yamlMapper().readValue(f, ServerConfiguration.class);
+						} catch (IOException e) {
+							throw new RuntimeException(e);
+						}
+					});
+			var environmentConfiguration = ModelConversions.fromStringMap(ServerConfiguration.getDefaultInstance(), CONFIGURATION_NAME_TOKEN.toLowerCase(Locale.ROOT), "_", System.getenv());
+			var configuration = Streams.concat(
+					Stream.of(defaultConfiguration),
+					filesConfiguration,
+					Stream.of(environmentConfiguration),
+					Stream.of(programmaticConfiguration)
+			).reduce((s1, s2) -> s1.toBuilder().mergeFrom(s2).build());
+			return configuration.orElseThrow();
+		});
 	}
 
-	public synchronized static ServerConfiguration cachedConfigurationOrGet() {
-		if (cachedConfiguration == null) {
-			configuration()
-					.toCompletionStage()
-					.toCompletableFuture()
-					.orTimeout(1900L, TimeUnit.MILLISECONDS)
-					.join();
-		}
-		return cachedConfiguration;
-	}
-
-	private static <T> ConfigRetriever configRetrieverConstructor(Vertx vertx) {
-		if (vertx == null) {
-			vertx = Vertx.vertx();
-		}
-		return ConfigRetriever.create(vertx, new ConfigRetrieverOptions()
-				// TODO: Add more stores)
-				/*.addStore(new ConfigStoreOptions()
-						.setType("sys")
-						.setConfig(new JsonObject().put("cache", false)))
-				.addStore(new ConfigStoreOptions()
-						.setType("env"))*/
-				.addStore(new ConfigStoreOptions()
-						.setType("json")
-						.setConfig(configurationOverride))
-		);
-	}
-
-	public static <T extends GeneratedMessageV3> T toProto(Object obj, Class<T> targetClass) {
-		return mapper().convertValue(obj, targetClass);
+	public static ServerConfiguration defaultConfiguration() {
+		return ServerConfiguration.newBuilder()
+				.setPg(ServerConfiguration.PostgresConfiguration.newBuilder()
+						.setHost("localhost")
+						.setDatabase("spellsource")
+						.setUser("postgres")
+						.setPassword("password")
+						.build())
+				.setKeycloak(ServerConfiguration.KeycloakConfiguration.newBuilder()
+						.setAuthUrl("http://localhost:9090/auth/admin")
+						.setAdminUsername("admin")
+						.setAdminPassword("password")
+						.setRealmId("hiddenswitch")
+						.setClientSecret("secret")
+						.setClientId("clientid")
+						.build())
+				.setRedis(ServerConfiguration.RedisConfiguration.newBuilder()
+						.setUri("redis://localhost:6379")
+						.build())
+				.setGrpcConfiguration(ServerConfiguration.GrpcConfiguration.newBuilder()
+						.setPort(8081)
+						.setServerKeepAliveTimeMillis(400)
+						.setServerKeepAliveTimeoutMillis(8000)
+						.setServerPermitKeepAliveWithoutCalls(true)
+						.build())
+				.setMatchmaking(ServerConfiguration.MatchmakingConfiguration.newBuilder()
+						.setEnqueueLockTimeoutMillis(200)
+						.setScanFrequencyMillis(2000)
+						.setMaxTicketsToProcess(100)
+						.build())
+				.setDecks(ServerConfiguration.DecksConfiguration.newBuilder()
+						.setCachedDeckTimeToLiveMinutes(60)
+						.build())
+				.setApplication(ServerConfiguration.ApplicationConfiguration.newBuilder()
+						.setUseBroadcaster(false)
+						.build())
+				.setMigration(ServerConfiguration.MigrationConfiguration.newBuilder()
+						.setShouldMigrate(false)
+						.build())
+				.setMetrics(ServerConfiguration.MetricsConfiguration.newBuilder()
+						.setPort(8080)
+						.setLivenessRoute("/liveness")
+						.setReadinessRoute("/readiness")
+						.setMetricsRoute("/metrics")
+						.build())
+				.build();
 	}
 
 	/**
@@ -367,7 +400,7 @@ public class Environment {
 		return redisson().getMapCache(name, new CompositeCodec(new StringCodec(), new RedissonProtobufCodec(parser)));
 	}
 
-	public static Vertx vertx() {
-		return Vertx.vertx(vertxOptions());
+	public static PrometheusBackendRegistry registry() {
+		return prometheusRegistry;
 	}
 }

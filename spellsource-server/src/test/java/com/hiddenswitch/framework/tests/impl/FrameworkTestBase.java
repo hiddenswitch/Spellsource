@@ -118,7 +118,12 @@ public class FrameworkTestBase {
 		}
 
 		@Override
-		public <U> Future<U> eventually(Function<Void, Future<U>> mapper) {
+		public <U> Future<U> transform(Function<AsyncResult<Void>, Future<U>> mapper) {
+			return future.transform(mapper);
+		}
+
+		@Override
+		public <U> Future<Void> eventually(Function<Void, Future<U>> mapper) {
 			return future.eventually(mapper);
 		}
 

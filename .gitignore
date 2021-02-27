@@ -32,7 +32,7 @@ cards/out
 
 *.egg-info
 __pycache__/
-dist/
+python/dist/
 
 .ipynb_checkpoints/
 dump/

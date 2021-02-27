@@ -22,7 +22,7 @@ class UnityTask extends AbstractExecTask<UnityTask> {
 
     @Override
     Task configure(Closure closure) {
-        dependsOn += ':unityclient:generateSwaggerCsharp'
+        dependsOn += ':spellsource-protos:generateProto'
         unity3d = project.gradle.sharedServices.registerIfAbsent("unity3d", BuildService) {
             maxParallelUsages = 1
         }

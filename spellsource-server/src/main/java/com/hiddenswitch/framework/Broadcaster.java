@@ -64,7 +64,7 @@ public class Broadcaster extends AbstractVerticle implements Verticle {
 							socket.send(getResponsePrefix() + "http://" + host + ":" + Gateway.grpcPort() + "/", packet.sender().port(), packet.sender().host(), Promise.promise());
 						});
 						isListening.complete();
-						LOGGER.info("createDatagramSocket: isListening");
+						LOGGER.info("Broadcaster listening on port " + multicastAddress + ":" + getMulticastPort());
 					});
 				});
 	}
@@ -79,37 +79,37 @@ public class Broadcaster extends AbstractVerticle implements Verticle {
 	}
 
 	/**
-		 * Retrieves the configured address used for UDP multicasting.
-		 *
-		 * @return
-		 */
+	 * Retrieves the configured address used for UDP multicasting.
+	 *
+	 * @return
+	 */
 	public String getMulticastAddress() {
 		return multicastAddress;
 	}
 
 	/**
-		 * Retrieves the message expected from clients to respond to.
-		 *
-		 * @return
-		 */
+	 * Retrieves the message expected from clients to respond to.
+	 *
+	 * @return
+	 */
 	public String getClientCall() {
 		return clientCall;
 	}
 
 	/**
-		 * Retrieves the standard (otherwise unused) port for broadcasting.
-		 *
-		 * @return
-		 */
+	 * Retrieves the standard (otherwise unused) port for broadcasting.
+	 *
+	 * @return
+	 */
 	public int getMulticastPort() {
 		return 6112;
 	}
 
 	/**
-		 * Returns the prefix for the datagram containing the server URL.
-		 *
-		 * @return
-		 */
+	 * Returns the prefix for the datagram containing the server URL.
+	 *
+	 * @return
+	 */
 	public String getResponsePrefix() {
 		return responsePrefix;
 	}

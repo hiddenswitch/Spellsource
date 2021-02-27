@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "spellsource.fullname" . }}
+  labels:
+    {{- include "spellsource.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+    - name: infinispan
+      port: 7800
+      protocol: TCP
+  publishNotReadyAddresses: true
+  selector:
+    {{- include "spellsource.selectorLabels" . | nindent 4 }}

@@ -1,0 +1,57 @@
+replicaCount: 1
+image:
+  repository: docker.io/doctorpangloss/spellsource-server
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+imagePullSecrets: [ ]
+nameOverride: ""
+fullnameOverride: ""
+extraEnvVariables: [ ]
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: { }
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations:
+  # enable scraping with prometheus
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8081"
+  prometheus.io/path: "/metrics"
+
+podSecurityContext: { }
+securityContext: { }
+service:
+  type: LoadBalancer
+  port: 8081
+resources: { }
+migration:
+  resources: { }
+  nodeSelector: { }
+  tolerations: [ ]
+  affinity: { }
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: { }
+tolerations: [ ]
+affinity: { }
+
+ingress:
+  enabled: false
+  annotations: { }
+  hosts:
+    - host: spellsource.local
+      paths: [ ]
+  tls: [ ]
+
+configmap: {}

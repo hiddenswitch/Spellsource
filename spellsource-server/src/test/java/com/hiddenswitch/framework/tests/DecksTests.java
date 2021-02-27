@@ -48,16 +48,6 @@ public class DecksTests extends FrameworkTestBase {
 	}
 
 	@Test
-	public void testCreateManyDecks(Vertx vertx, VertxTestContext testContext) {
-		var client = new Client(vertx);
-		startGateway(vertx)
-				.compose(v -> client.createAndLogin())
-				.compose(ignored -> CompositeFuture.all(IntStream.range(0, 100).mapToObj(i -> createRandomDeck(client)).collect(Collectors.toList())))
-				.onComplete(client::close)
-				.onComplete(testContext.succeedingThenComplete());
-	}
-
-	@Test
 	public void testUpdateDecks(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
 
@@ -216,7 +206,7 @@ public class DecksTests extends FrameworkTestBase {
 	}
 
 	@NotNull
-	private Future<DecksPutResponse> createRandomDeck(Client client) {
+	public static Future<DecksPutResponse> createRandomDeck(Client client) {
 		var service = client.legacy();
 		var randomDeck = Deck.randomDeck();
 		return service.decksPut(DecksPutRequest.newBuilder()

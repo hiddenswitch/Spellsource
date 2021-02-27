@@ -1,20 +1,16 @@
 package com.hiddenswitch.spellsource.conversiontest.tests;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.hiddenswitch.protos.JsonConfiguration;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.conversiontest.ConversionHarness;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.jackson.DatabindCodec;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.logic.GameLogic;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Set;
 import java.util.stream.Stream;

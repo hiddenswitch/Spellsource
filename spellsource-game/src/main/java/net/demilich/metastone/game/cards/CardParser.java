@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.cards;
 
-import com.hiddenswitch.protos.JsonConfiguration;
+import com.hiddenswitch.protos.Serialization;
 import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.cards.desc.CardDesc;
@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class CardParser {
 	static {
-		JsonConfiguration.configureJson();
+		Serialization.configureSerialization();
 	}
 
 	@SuppressWarnings("unchecked")

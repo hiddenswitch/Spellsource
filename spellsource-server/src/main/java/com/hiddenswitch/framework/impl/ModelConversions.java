@@ -1,19 +1,25 @@
 package com.hiddenswitch.framework.impl;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.google.protobuf.Int32Value;
+import com.google.protobuf.Message;
 import com.hiddenswitch.framework.Games;
+import com.hiddenswitch.framework.rpc.Hiddenswitch;
 import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.ICardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck;
-import com.hiddenswitch.spellsource.common.Tracing;
+import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.spellsource.rpc.Spellsource.*;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.DamageTypeMessage.DamageType;
-import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
-import com.hiddenswitch.spellsource.rpc.Spellsource.GameEventTypeMessage.GameEventType;
+import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 import io.opentracing.util.GlobalTracer;
+import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -57,6 +63,12 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 
 public class ModelConversions {
+	private static ObjectMapper caseInsensitiveMapper = new ObjectMapper().registerModule(new ProtobufModule())
+			.setAnnotationIntrospector(new JacksonAnnotationIntrospector())
+			.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+			.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
+			.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
+
 	/**
 	 * Get an entity representing a censored secret card.
 	 *
@@ -939,5 +951,91 @@ public class ModelConversions {
 		}
 
 		return replay.build();
+	}
+
+	@NotNull
+	public static <T extends Message> T fromStringMap(T existing, String prefix, String separator, Map<String, String> map) {
+		// process environment variables into jackson object
+		prefix = prefix.toLowerCase(Locale.ROOT);
+		// first decode into a map
+		var target = new LinkedHashMap<String, Object>();
+		for (var kv : map.entrySet()) {
+			var path = kv.getKey().toLowerCase(Locale.ROOT);
+			if (!path.startsWith(prefix + separator)) {
+				continue;
+			}
+
+			var parts = path.split(separator);
+			// only contains spellsource_
+			if (parts.length == 1) {
+				continue;
+			}
+
+			var current = target;
+			for (var i = 1; i < parts.length; i++) {
+				var key = parts[i];
+
+				// set the value if this is the last path item
+				if (i == parts.length - 1) {
+					var value = kv.getValue();
+					var parsedValue = new Object();
+					if (value.length() > 0) {
+						var c = value.charAt(0);
+						if (Character.isDigit(c)) {
+							if (value.contains(",") || value.contains(".")) {
+								parsedValue = Double.parseDouble(value);
+							} else {
+								var longValue = Long.parseLong(value);
+								if (longValue < Integer.MAX_VALUE) {
+									parsedValue = (int) longValue;
+								} else {
+									parsedValue = longValue;
+								}
+							}
+						} else {
+							if (value.toLowerCase(Locale.ROOT).equals("false")) {
+								parsedValue = false;
+							} else if (value.toLowerCase(Locale.ROOT).equals("true")) {
+								parsedValue = true;
+							} else {
+								parsedValue = value;
+							}
+						}
+					}
+					current.put(key, parsedValue);
+					continue;
+				}
+
+				// descending into sub object
+				// arrays not currently supported
+				if (!current.containsKey(key)) {
+					var descended = new LinkedHashMap<String, Object>();
+					current.put(key, descended);
+					current = descended;
+					continue;
+				}
+
+				if (current.get(key) instanceof LinkedHashMap) {
+					@SuppressWarnings("unchecked")
+					var x = (LinkedHashMap<String, Object>) current.get(key);
+					current = x;
+					continue;
+				}
+
+				// this is a configuration error and the application should probably exit
+				throw new RuntimeException("invalid configuration state");
+			}
+		}
+
+		try {
+			// decode into the protobuf to get the benefit of field insensitivity
+			var toMerge = caseInsensitiveMapper.convertValue(target, Hiddenswitch.ServerConfiguration.class);
+			// merge
+			@SuppressWarnings("unchecked")
+			var merged = (T) existing.toBuilder().mergeFrom(toMerge).build();
+			return merged;
+		} catch (IllegalArgumentException ex) {
+			throw new IllegalArgumentException("make sure to call Serialization.configureSerialization()", ex);
+		}
 	}
 }

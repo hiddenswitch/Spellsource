@@ -11,7 +11,7 @@ import com.hiddenswitch.framework.schema.keycloak.tables.daos.UserEntityDao;
 import com.hiddenswitch.framework.schema.spellsource.Tables;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameUserVictoryEnum;
-import com.hiddenswitch.spellsource.common.Tracing;
+import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ClientToServerMessage;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ServerToClientMessage;
 import io.micrometer.core.instrument.Counter;

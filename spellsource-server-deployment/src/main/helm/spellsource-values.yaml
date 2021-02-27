@@ -1,0 +1,13 @@
+configmap:
+  pg:
+    host: "postgres-postgresql-ha-pgpool.default.svc.cluster.local"
+    user: "postgres"
+    password: "password"
+    port: 5432
+  keycloak:
+    # keycloak port is 8080 by default on bitnami images, and we override it to 9090
+    authUrl: "http://keycloak.default.svc.cluster.local:9090/auth/"
+    adminUsername: "admin"
+    adminPassword: "password"
+  redis:
+    uri: "redis://redis-master.default.svc.cluster.local:6379"

@@ -1,0 +1,30 @@
+# helm repo add bitnami https://charts.bitnami.com/bitnami
+# helm install my-release bitnami/keycloak
+replicaCount: 1
+serviceDiscovery:
+  enabled: false
+metrics:
+  # port 9990 by default for prometheus
+  enabled: true
+auth:
+  adminPassword: password
+  adminUser: admin
+postgresql:
+  enabled: false
+externalDatabase:
+  host: postgres-postgresql-ha-pgpool.default.svc.cluster.local
+  port: 5432
+  user: postgres
+  password: password
+  database: spellsource
+extraEnvVars:
+  - name: KEYCLOAK_DATABASE_SCHEMA
+    value: "keycloak"
+image:
+  repository: doctorpangloss/keycloak-clustered
+  tag: latest
+  registry: docker.io
+  pullPolicy: Always
+service:
+  port: 9090
+  httpsPort: 9091

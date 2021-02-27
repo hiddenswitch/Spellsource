@@ -22,12 +22,10 @@ import io.vertx.core.streams.WriteStream;
 import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxTestContext;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
-import org.testcontainers.containers.ToxiproxyContainer;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -113,8 +111,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 
 		startServices(vertx)
 				.compose(v -> Matchmaking.createQueue(createSinglePlayerQueue(queueId)))
-				.compose(v -> Environment.configuration())
-				.compose(config -> Environment.sleep(vertx, 2 * config.getMatchmaking().getScanFrequencyMillis()))
+				.compose(v -> Environment.sleep(vertx, 2 * Environment.getConfiguration().getMatchmaking().getScanFrequencyMillis()))
 				.compose(v -> Matchmaking.deleteQueue(queueId))
 				.onComplete(testContext.succeedingThenComplete());
 	}
@@ -399,7 +396,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 	@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 	@Timeout(value = 95, timeUnit = TimeUnit.SECONDS)
 	public void testManyClientsMatchmakeAcrossInstances(VertxTestContext testContext) {
-		var vertx = Environment.vertx();
+		var vertx = Vertx.vertx(Environment.vertxOptions());
 		// dedicated clients vertx
 		var clientVertx = Vertx.vertx();
 		var queueIds = IntStream
@@ -408,12 +405,16 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.collect(toList());
 
 		var random = new Random();
-		var serverConfiguration = Environment.cachedConfigurationOrGet();
+		var serverConfiguration = Environment.getConfiguration();
 		// deploy queue runners
 		startGateway(vertx)
 				.compose(v -> all(queueIds
 						.stream()
-						.map(queueId -> Matchmaking.createQueue(createMultiplayerQueue(queueId)))
+						.map(queueId -> {
+							var createQueue = Promise.<Closeable>promise();
+							vertx.runOnContext(v1 -> Matchmaking.createQueue(createMultiplayerQueue(queueId)).onComplete(createQueue));
+							return createQueue.future();
+						})
 						.collect(toList())))
 				// deploy verticles
 				.compose(v -> vertx.deployVerticle(Matchmaking.class, new DeploymentOptions()

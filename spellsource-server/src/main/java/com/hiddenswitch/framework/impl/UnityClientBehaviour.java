@@ -9,7 +9,7 @@ import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.google.common.base.Throwables;
 import com.google.protobuf.Int32Value;
 import com.hiddenswitch.spellsource.common.GameState;
-import com.hiddenswitch.spellsource.common.Tracing;
+import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import com.hiddenswitch.spellsource.rpc.Spellsource.*;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;

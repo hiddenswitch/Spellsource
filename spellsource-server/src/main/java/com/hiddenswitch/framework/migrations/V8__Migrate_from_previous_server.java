@@ -8,7 +8,7 @@ import com.hiddenswitch.framework.Accounts;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Legacy;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.FriendsRecord;
-import com.hiddenswitch.spellsource.common.Tracing;
+import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.AsyncResult;
