@@ -1,12 +1,14 @@
 package com.hiddenswitch.framework.tests;
 
 import com.hiddenswitch.framework.Accounts;
+import com.hiddenswitch.framework.Application;
 import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
 import com.hiddenswitch.framework.rpc.VertxAccountsGrpc;
 import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
+import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.client.WebClient;
@@ -32,11 +34,57 @@ public class AccountsTests extends FrameworkTestBase {
 	}
 
 	@Test
+	public void testCreateUser2(VertxTestContext testContext) {
+		var application = new Application();
+		var deploy = application.deploy();
+		deploy
+				.compose(v -> Accounts.createUser(UUID.randomUUID().toString() + "@hiddenswitch.com", UUID.randomUUID().toString(), "password"))
+				.compose(ue -> {
+					testContext.verify(() -> {
+						assertNotNull(ue.getId());
+					});
+					return Future.succeededFuture(ue);
+				})
+				.eventually(v -> {
+					if (deploy.succeeded()) {
+						return deploy.result().close();
+					}
+					return Future.failedFuture(deploy.cause());
+				})
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	@Test
 	public void testCreateAndLoginUserWithGrpc(Vertx vertx, VertxTestContext testContext) {
 		var webClient = WebClient.create(vertx);
 		var client = new Client(vertx, webClient);
 		startGateway(vertx)
 				.compose(v -> client.createAndLogin("testusername2", "email@hiddenswitch.com", "password"))
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	@Test
+	public void testCreateAndLoginUserWithGrpc2(VertxTestContext testContext) {
+		var vertx = Vertx.vertx();
+		var application = new Application();
+		var deploy = application.deploy();
+		var webClient = WebClient.create(vertx);
+		var client = new Client(vertx, webClient);
+		deploy
+				.compose(v -> client.createAndLogin(UUID.randomUUID().toString(), UUID.randomUUID().toString() + "@hiddenswitch.com", "password"))
+				.compose(res -> {
+					testContext.verify(() -> {
+						assertNotEquals("", res.getUserEntity().getId());
+					});
+					return Future.succeededFuture(res);
+				})
+				.eventually(v -> vertx.close())
+				.eventually(v -> {
+					if (deploy.succeeded()) {
+						return deploy.result().close();
+					}
+					return Future.failedFuture(deploy.cause());
+				})
 				.onComplete(testContext.succeedingThenComplete());
 	}
 

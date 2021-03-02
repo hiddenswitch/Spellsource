@@ -1,5 +1,5 @@
 # helm repo add bitnami https://charts.bitnami.com/bitnami
-# helm install my-release bitnami/keycloak
+# helm install -f keycloak-values.yaml keycloak bitnami/keycloak
 replicaCount: 1
 serviceDiscovery:
   enabled: false

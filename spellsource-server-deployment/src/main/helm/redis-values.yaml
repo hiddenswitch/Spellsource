@@ -1,3 +1,4 @@
+# helm install -f redis-values.yaml redis bitnami/redis
 configmap: |-
   notify-keyspace-events Exg
 usePassword: false

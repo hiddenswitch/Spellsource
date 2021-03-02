@@ -57,7 +57,6 @@ public class StandaloneApplication extends Application {
 		}
 		Startables.deepStart(Stream.of(POSTGRES, KEYCLOAK, REDIS)).join();
 		var configuration = ServerConfiguration.newBuilder(Environment.getConfiguration());
-		var pgEnvVars = Arrays.asList("PGUSER", "PGPASSWORD", "PGHOST", "PGPORT", "PGDATABASE");
 		configuration.setPg(ServerConfiguration.PostgresConfiguration.newBuilder()
 				.setPort(POSTGRES.getMappedPort(PGPORT))
 				.setHost(POSTGRES.getHost())
@@ -83,6 +82,8 @@ public class StandaloneApplication extends Application {
 		configuration.setMigration(ServerConfiguration.MigrationConfiguration.newBuilder()
 				.setShouldMigrate(true)
 				.build());
+		// todo: allow environment variables *only* to override this configuration, but something weird about kube env
+		// configuration.mergeFrom(Environment.environmentConfiguration());
 
 		// set the configuration so far so that migrations pick up on it
 		Environment.setConfiguration(configuration.buildPartial());
@@ -97,7 +98,7 @@ public class StandaloneApplication extends Application {
 	}
 
 	@Override
-	protected Future<Void> deploy(Vertx vertx) {
+	protected Future<Vertx> deploy(Vertx vertx) {
 		defaultConfigurationAndServices();
 		return super.deploy(vertx);
 	}

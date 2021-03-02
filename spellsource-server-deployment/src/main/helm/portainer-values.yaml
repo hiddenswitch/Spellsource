@@ -1,0 +1,5 @@
+# helm repo add portainer https://portainer.github.io/k8s/
+# helm repo update
+# helm install -f portainer-values.yaml portainer portainer/portainer
+service:
+  type: LoadBalancer

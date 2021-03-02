@@ -11,6 +11,8 @@ appender("STDOUT", ConsoleAppender) {
 }
 
 
+scan("10 seconds")
+
 root(ERROR, ["STDOUT"])
 logger("io.grpc.netty", OFF)
 logger("com.hiddenswitch", ERROR)

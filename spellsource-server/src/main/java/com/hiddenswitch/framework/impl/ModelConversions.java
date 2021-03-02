@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework.impl;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -52,6 +53,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -63,9 +66,11 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 
 public class ModelConversions {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ModelConversions.class);
 	private static ObjectMapper caseInsensitiveMapper = new ObjectMapper().registerModule(new ProtobufModule())
 			.setAnnotationIntrospector(new JacksonAnnotationIntrospector())
 			.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+			.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
 			.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 			.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
 
@@ -1023,7 +1028,7 @@ public class ModelConversions {
 				}
 
 				// this is a configuration error and the application should probably exit
-				throw new RuntimeException("invalid configuration state");
+				LOGGER.error("fromStringMap: Invalid key " + key + ", skipping");
 			}
 		}
 

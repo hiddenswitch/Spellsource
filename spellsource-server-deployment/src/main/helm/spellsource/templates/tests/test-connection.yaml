@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "spellsource.fullname" . }}:{{ .Values.service.port }}/liveness']
+      args: ['{{ include "spellsource.fullname" . }}:{{ .Values.configmap.metrics.port }}{{ .Values.configmap.metrics.livenessRoute }}']
   restartPolicy: Never

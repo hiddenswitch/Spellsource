@@ -78,6 +78,10 @@ message ServerConfiguration {
         string metricsRoute = 4;
     }
 
+    message RateLimiterConfiguration {
+        bool enabled = 1;
+    }
+
     PostgresConfiguration pg = 1;
     KeycloakConfiguration keycloak = 2;
     RedisConfiguration redis = 3;
@@ -88,6 +92,7 @@ message ServerConfiguration {
     DecksConfiguration decks = 8;
     MigrationConfiguration migration = 9;
     MetricsConfiguration metrics = 10;
+    RateLimiterConfiguration rateLimiter = 11;
 }
 
 message ClientConfiguration {
