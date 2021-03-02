@@ -1,11 +1,15 @@
 package com.hiddenswitch.framework.tests;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.impl.ModelConversions;
 import com.hiddenswitch.framework.rpc.Hiddenswitch;
 import com.hiddenswitch.protos.Serialization;
+import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
 import io.vertx.core.json.jackson.DatabindCodec;
+import io.vertx.tracing.opentracing.OpenTracingOptions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +25,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ConfigurationTests {
 
 	@Test
+	public void testCreatesTracer() {
+		var vertxOptions = new VertxOptions(Environment.vertxOptions()).setTracingOptions(new OpenTracingOptions(Tracing.tracing()));
+		assertNotNull(vertxOptions.getTracingOptions());
+		var vertx = Vertx.vertx(vertxOptions);
+	}
+
+	@Test
 	public void testConfigurationLoadsFromEnvironment(EnvironmentVariables variables) {
 		configureSerialization();
 		variables.set("FAILS_XXX_YYY", "fails");
@@ -28,9 +39,8 @@ public class ConfigurationTests {
 				.setRealtime(Hiddenswitch.ServerConfiguration.RealtimeConfiguration.newBuilder().setUri("realtime://other").build())
 				.setApplication(Hiddenswitch.ServerConfiguration.ApplicationConfiguration.newBuilder().setUseBroadcaster(false).build())
 				.build();
-		assertThrows(IllegalArgumentException.class, () -> {
-			ModelConversions.fromStringMap(configuration, "fails", "_", System.getenv());
-		}, "fail with invalid environment variable (misconfiguration)");
+		var map = ModelConversions.fromStringMap(configuration, "fails", "_", System.getenv());
+		// nothing should happen, should just not be red
 		variables.set("SPELLSOURCE_APPLICATION_USEBROADCASTER", "true");
 		variables.set("SPELLSOURCE_REDIS_HOSTPORTUSER_PORT", "10000");
 		variables.set("SPELLSOURCE_REALTIME_URI", "http://123.com");
@@ -61,7 +71,7 @@ public class ConfigurationTests {
 		var config1 = Serialization.yamlMapper().readValue(yaml, Hiddenswitch.ServerConfiguration.class);
 		var config2 = DatabindCodec.mapper().convertValue(configMap, Hiddenswitch.ServerConfiguration.class);
 		Assertions.assertEquals("http://keycloak.default.svc.cluster.local:9090/auth/admin", ((Map) configMap.get("keycloak")).get("authUrl"));
-		for (var config : new Hiddenswitch.ServerConfiguration[] {config1, config2}) {
+		for (var config : new Hiddenswitch.ServerConfiguration[]{config1, config2}) {
 			Assertions.assertEquals("http://keycloak.default.svc.cluster.local:9090/auth/admin", config.getKeycloak().getAuthUrl());
 		}
 	}

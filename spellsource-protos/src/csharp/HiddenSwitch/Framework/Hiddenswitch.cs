@@ -26,7 +26,7 @@ namespace HiddenSwitch.Proto {
           string.Concat(
             "ChJoaWRkZW5zd2l0Y2gucHJvdG8SDGhpZGRlbnN3aXRjaBoeZ29vZ2xlL3By",
             "b3RvYnVmL3dyYXBwZXJzLnByb3RvGhtnb29nbGUvcHJvdG9idWYvZW1wdHku",
-            "cHJvdG8aEXNwZWxsc291cmNlLnByb3RvIp8OChNTZXJ2ZXJDb25maWd1cmF0",
+            "cHJvdG8aEXNwZWxsc291cmNlLnByb3RvIp0PChNTZXJ2ZXJDb25maWd1cmF0",
             "aW9uEkMKAnBnGAEgASgLMjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3Vy",
             "YXRpb24uUG9zdGdyZXNDb25maWd1cmF0aW9uEkkKCGtleWNsb2FrGAIgASgL",
             "MjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRpb24uS2V5Y2xvYWtD",
@@ -43,76 +43,79 @@ namespace HiddenSwitch.Proto {
             "ZWNrc0NvbmZpZ3VyYXRpb24SSwoJbWlncmF0aW9uGAkgASgLMjguaGlkZGVu",
             "c3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRpb24uTWlncmF0aW9uQ29uZmlndXJh",
             "dGlvbhJHCgdtZXRyaWNzGAogASgLMjYuaGlkZGVuc3dpdGNoLlNlcnZlckNv",
-            "bmZpZ3VyYXRpb24uTWV0cmljc0NvbmZpZ3VyYXRpb24aZQoVUG9zdGdyZXND",
-            "b25maWd1cmF0aW9uEgwKBGhvc3QYASABKAkSDAoEcG9ydBgCIAEoBRIQCghk",
-            "YXRhYmFzZRgDIAEoCRIMCgR1c2VyGAQgASgJEhAKCHBhc3N3b3JkGAUgASgJ",
-            "GqkBChVLZXljbG9ha0NvbmZpZ3VyYXRpb24SDwoHYXV0aFVybBgBIAEoCRIV",
-            "Cg1hZG1pblVzZXJuYW1lGAIgASgJEhUKDWFkbWluUGFzc3dvcmQYAyABKAkS",
-            "EAoIY2xpZW50SWQYBCABKAkSFAoMY2xpZW50U2VjcmV0GAUgASgJEhgKEHJl",
-            "YWxtRGlzcGxheU5hbWUYBiABKAkSDwoHcmVhbG1JZBgHIAEoCRrGAQoSUmVk",
-            "aXNDb25maWd1cmF0aW9uElkKDGhvc3RQb3J0VXNlchgBIAEoCzJBLmhpZGRl",
-            "bnN3aXRjaC5TZXJ2ZXJDb25maWd1cmF0aW9uLlJlZGlzQ29uZmlndXJhdGlv",
-            "bi5Ib3N0UG9ydFVzZXJIABINCgN1cmkYAiABKAlIABo4CgxIb3N0UG9ydFVz",
-            "ZXISDAoEaG9zdBgBIAEoCRIMCgRwb3J0GAIgASgFEgwKBHVzZXIYAyABKAlC",
-            "DAoKY29ubmVjdGlvbhokChVSZWFsdGltZUNvbmZpZ3VyYXRpb24SCwoDdXJp",
-            "GAEgASgJGpUBChFHcnBjQ29uZmlndXJhdGlvbhIhChlzZXJ2ZXJLZWVwQWxp",
-            "dmVUaW1lTWlsbGlzGAEgASgDEiQKHHNlcnZlcktlZXBBbGl2ZVRpbWVvdXRN",
-            "aWxsaXMYAiABKAMSKQohc2VydmVyUGVybWl0S2VlcEFsaXZlV2l0aG91dENh",
-            "bGxzGAMgASgIEgwKBHBvcnQYBCABKAUadgoYTWF0Y2htYWtpbmdDb25maWd1",
-            "cmF0aW9uEiAKGGVucXVldWVMb2NrVGltZW91dE1pbGxpcxgBIAEoAxIbChNz",
-            "Y2FuRnJlcXVlbmN5TWlsbGlzGAIgASgDEhsKE21heFRpY2tldHNUb1Byb2Nl",
-            "c3MYAyABKAUaOQoSRGVja3NDb25maWd1cmF0aW9uEiMKG2NhY2hlZERlY2tU",
-            "aW1lVG9MaXZlTWludXRlcxgBIAEoAxoyChhBcHBsaWNhdGlvbkNvbmZpZ3Vy",
-            "YXRpb24SFgoOdXNlQnJvYWRjYXN0ZXIYASABKAgaLwoWTWlncmF0aW9uQ29u",
-            "ZmlndXJhdGlvbhIVCg1zaG91bGRNaWdyYXRlGAEgASgIGmkKFE1ldHJpY3ND",
-            "b25maWd1cmF0aW9uEgwKBHBvcnQYASABKAUSFQoNbGl2ZW5lc3NSb3V0ZRgC",
-            "IAEoCRIWCg5yZWFkaW5lc3NSb3V0ZRgDIAEoCRIUCgxtZXRyaWNzUm91dGUY",
-            "BCABKAkiwQEKE0NsaWVudENvbmZpZ3VyYXRpb24SSQoIYWNjb3VudHMYASAB",
-            "KAsyNy5oaWRkZW5zd2l0Y2guQ2xpZW50Q29uZmlndXJhdGlvbi5BY2NvdW50",
-            "c0NvbmZpZ3VyYXRpb24aXwoVQWNjb3VudHNDb25maWd1cmF0aW9uEiAKGGtl",
-            "eWNsb2FrUmVzZXRQYXNzd29yZFVybBgBIAEoCRIkChxrZXljbG9ha0FjY291",
-            "bnRNYW5hZ2VtZW50VXJsGAIgASgJIigKD0dldENhcmRzUmVxdWVzdBIVCg1J",
-            "Zl9Ob25lX01hdGNoGAEgASgJIqEBChBHZXRDYXJkc1Jlc3BvbnNlEjcKB2Nv",
-            "bnRlbnQYASABKAsyJi5oaWRkZW5zd2l0Y2guR2V0Q2FyZHNSZXNwb25zZS5D",
-            "b250ZW50Eg8KB3ZlcnNpb24YAiABKAkSEAoIY2FjaGVkT2sYAyABKAgaMQoH",
-            "Q29udGVudBImCgVjYXJkcxgBIAMoCzIXLnNwZWxsc291cmNlLkNhcmRSZWNv",
-            "cmQiOQoMTG9naW5SZXF1ZXN0EhcKD3VzZXJuYW1lT3JFbWFpbBgBIAEoCRIQ",
-            "CghwYXNzd29yZBgCIAEoCSJJChRDcmVhdGVBY2NvdW50UmVxdWVzdBINCgVl",
-            "bWFpbBgBIAEoCRIQCgh1c2VybmFtZRgCIAEoCRIQCghwYXNzd29yZBgDIAEo",
-            "CSIsChVDaGFuZ2VQYXNzd29yZFJlcXVlc3QSEwoLbmV3UGFzc3dvcmQYASAB",
-            "KAkiggEKEkxvZ2luT3JDcmVhdGVSZXBseRI+ChNhY2Nlc3NUb2tlblJlc3Bv",
-            "bnNlGAEgASgLMiEuaGlkZGVuc3dpdGNoLkFjY2Vzc1Rva2VuUmVzcG9uc2US",
-            "LAoKdXNlckVudGl0eRgCIAEoCzIYLmhpZGRlbnN3aXRjaC5Vc2VyRW50aXR5",
-            "IiQKE0FjY2Vzc1Rva2VuUmVzcG9uc2USDQoFdG9rZW4YASABKAkiTwoKVXNl",
-            "ckVudGl0eRIKCgJpZBgBIAEoCRINCgVlbWFpbBgCIAEoCRIQCgh1c2VybmFt",
-            "ZRgKIAEoCRIUCgxwcml2YWN5VG9rZW4YCyABKAkiIQoSR2V0QWNjb3VudHNS",
-            "ZXF1ZXN0EgsKA2lkcxgBIAMoCSJCChBHZXRBY2NvdW50c1JlcGx5Ei4KDHVz",
-            "ZXJFbnRpdGllcxgBIAMoCzIYLmhpZGRlbnN3aXRjaC5Vc2VyRW50aXR5MtQC",
-            "Cg9VbmF1dGhlbnRpY2F0ZWQSVwoNQ3JlYXRlQWNjb3VudBIiLmhpZGRlbnN3",
-            "aXRjaC5DcmVhdGVBY2NvdW50UmVxdWVzdBogLmhpZGRlbnN3aXRjaC5Mb2dp",
-            "bk9yQ3JlYXRlUmVwbHkiABJHCgVMb2dpbhIaLmhpZGRlbnN3aXRjaC5Mb2dp",
-            "blJlcXVlc3QaIC5oaWRkZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJlcGx5IgAS",
-            "TgoLVmVyaWZ5VG9rZW4SIS5oaWRkZW5zd2l0Y2guQWNjZXNzVG9rZW5SZXNw",
-            "b25zZRoaLmdvb2dsZS5wcm90b2J1Zi5Cb29sVmFsdWUiABJPChBHZXRDb25m",
-            "aWd1cmF0aW9uEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GiEuaGlkZGVuc3dp",
-            "dGNoLkNsaWVudENvbmZpZ3VyYXRpb24iADJjChRVbmF1dGhlbnRpY2F0ZWRD",
-            "YXJkcxJLCghHZXRDYXJkcxIdLmhpZGRlbnN3aXRjaC5HZXRDYXJkc1JlcXVl",
-            "c3QaHi5oaWRkZW5zd2l0Y2guR2V0Q2FyZHNSZXNwb25zZSIAMs8CCghBY2Nv",
-            "dW50cxJGCgpHZXRBY2NvdW50EhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5Gh4u",
-            "aGlkZGVuc3dpdGNoLkdldEFjY291bnRzUmVwbHkiABJRCgtHZXRBY2NvdW50",
-            "cxIgLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50c1JlcXVlc3QaHi5oaWRkZW5z",
-            "d2l0Y2guR2V0QWNjb3VudHNSZXBseSIAElkKDkNoYW5nZVBhc3N3b3JkEiMu",
-            "aGlkZGVuc3dpdGNoLkNoYW5nZVBhc3N3b3JkUmVxdWVzdBogLmhpZGRlbnN3",
-            "aXRjaC5Mb2dpbk9yQ3JlYXRlUmVwbHkiABJNChlSZXF1ZXN0UGFzc3dvcmRS",
-            "ZXNldEVtYWlsEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhYuZ29vZ2xlLnBy",
-            "b3RvYnVmLkVtcHR5IgAyTAoFR2FtZXMSQwoJSXNJbk1hdGNoEhYuZ29vZ2xl",
-            "LnByb3RvYnVmLkVtcHR5GhwuZ29vZ2xlLnByb3RvYnVmLlN0cmluZ1ZhbHVl",
-            "IgBCNwoeY29tLmhpZGRlbnN3aXRjaC5mcmFtZXdvcmsucnBjUACqAhJIaWRk",
-            "ZW5Td2l0Y2guUHJvdG9iBnByb3RvMw=="));
+            "bmZpZ3VyYXRpb24uTWV0cmljc0NvbmZpZ3VyYXRpb24STwoLcmF0ZUxpbWl0",
+            "ZXIYCyABKAsyOi5oaWRkZW5zd2l0Y2guU2VydmVyQ29uZmlndXJhdGlvbi5S",
+            "YXRlTGltaXRlckNvbmZpZ3VyYXRpb24aZQoVUG9zdGdyZXNDb25maWd1cmF0",
+            "aW9uEgwKBGhvc3QYASABKAkSDAoEcG9ydBgCIAEoBRIQCghkYXRhYmFzZRgD",
+            "IAEoCRIMCgR1c2VyGAQgASgJEhAKCHBhc3N3b3JkGAUgASgJGqkBChVLZXlj",
+            "bG9ha0NvbmZpZ3VyYXRpb24SDwoHYXV0aFVybBgBIAEoCRIVCg1hZG1pblVz",
+            "ZXJuYW1lGAIgASgJEhUKDWFkbWluUGFzc3dvcmQYAyABKAkSEAoIY2xpZW50",
+            "SWQYBCABKAkSFAoMY2xpZW50U2VjcmV0GAUgASgJEhgKEHJlYWxtRGlzcGxh",
+            "eU5hbWUYBiABKAkSDwoHcmVhbG1JZBgHIAEoCRrGAQoSUmVkaXNDb25maWd1",
+            "cmF0aW9uElkKDGhvc3RQb3J0VXNlchgBIAEoCzJBLmhpZGRlbnN3aXRjaC5T",
+            "ZXJ2ZXJDb25maWd1cmF0aW9uLlJlZGlzQ29uZmlndXJhdGlvbi5Ib3N0UG9y",
+            "dFVzZXJIABINCgN1cmkYAiABKAlIABo4CgxIb3N0UG9ydFVzZXISDAoEaG9z",
+            "dBgBIAEoCRIMCgRwb3J0GAIgASgFEgwKBHVzZXIYAyABKAlCDAoKY29ubmVj",
+            "dGlvbhokChVSZWFsdGltZUNvbmZpZ3VyYXRpb24SCwoDdXJpGAEgASgJGpUB",
+            "ChFHcnBjQ29uZmlndXJhdGlvbhIhChlzZXJ2ZXJLZWVwQWxpdmVUaW1lTWls",
+            "bGlzGAEgASgDEiQKHHNlcnZlcktlZXBBbGl2ZVRpbWVvdXRNaWxsaXMYAiAB",
+            "KAMSKQohc2VydmVyUGVybWl0S2VlcEFsaXZlV2l0aG91dENhbGxzGAMgASgI",
+            "EgwKBHBvcnQYBCABKAUadgoYTWF0Y2htYWtpbmdDb25maWd1cmF0aW9uEiAK",
+            "GGVucXVldWVMb2NrVGltZW91dE1pbGxpcxgBIAEoAxIbChNzY2FuRnJlcXVl",
+            "bmN5TWlsbGlzGAIgASgDEhsKE21heFRpY2tldHNUb1Byb2Nlc3MYAyABKAUa",
+            "OQoSRGVja3NDb25maWd1cmF0aW9uEiMKG2NhY2hlZERlY2tUaW1lVG9MaXZl",
+            "TWludXRlcxgBIAEoAxoyChhBcHBsaWNhdGlvbkNvbmZpZ3VyYXRpb24SFgoO",
+            "dXNlQnJvYWRjYXN0ZXIYASABKAgaLwoWTWlncmF0aW9uQ29uZmlndXJhdGlv",
+            "bhIVCg1zaG91bGRNaWdyYXRlGAEgASgIGmkKFE1ldHJpY3NDb25maWd1cmF0",
+            "aW9uEgwKBHBvcnQYASABKAUSFQoNbGl2ZW5lc3NSb3V0ZRgCIAEoCRIWCg5y",
+            "ZWFkaW5lc3NSb3V0ZRgDIAEoCRIUCgxtZXRyaWNzUm91dGUYBCABKAkaKwoY",
+            "UmF0ZUxpbWl0ZXJDb25maWd1cmF0aW9uEg8KB2VuYWJsZWQYASABKAgiwQEK",
+            "E0NsaWVudENvbmZpZ3VyYXRpb24SSQoIYWNjb3VudHMYASABKAsyNy5oaWRk",
+            "ZW5zd2l0Y2guQ2xpZW50Q29uZmlndXJhdGlvbi5BY2NvdW50c0NvbmZpZ3Vy",
+            "YXRpb24aXwoVQWNjb3VudHNDb25maWd1cmF0aW9uEiAKGGtleWNsb2FrUmVz",
+            "ZXRQYXNzd29yZFVybBgBIAEoCRIkChxrZXljbG9ha0FjY291bnRNYW5hZ2Vt",
+            "ZW50VXJsGAIgASgJIigKD0dldENhcmRzUmVxdWVzdBIVCg1JZl9Ob25lX01h",
+            "dGNoGAEgASgJIqEBChBHZXRDYXJkc1Jlc3BvbnNlEjcKB2NvbnRlbnQYASAB",
+            "KAsyJi5oaWRkZW5zd2l0Y2guR2V0Q2FyZHNSZXNwb25zZS5Db250ZW50Eg8K",
+            "B3ZlcnNpb24YAiABKAkSEAoIY2FjaGVkT2sYAyABKAgaMQoHQ29udGVudBIm",
+            "CgVjYXJkcxgBIAMoCzIXLnNwZWxsc291cmNlLkNhcmRSZWNvcmQiOQoMTG9n",
+            "aW5SZXF1ZXN0EhcKD3VzZXJuYW1lT3JFbWFpbBgBIAEoCRIQCghwYXNzd29y",
+            "ZBgCIAEoCSJJChRDcmVhdGVBY2NvdW50UmVxdWVzdBINCgVlbWFpbBgBIAEo",
+            "CRIQCgh1c2VybmFtZRgCIAEoCRIQCghwYXNzd29yZBgDIAEoCSIsChVDaGFu",
+            "Z2VQYXNzd29yZFJlcXVlc3QSEwoLbmV3UGFzc3dvcmQYASABKAkiggEKEkxv",
+            "Z2luT3JDcmVhdGVSZXBseRI+ChNhY2Nlc3NUb2tlblJlc3BvbnNlGAEgASgL",
+            "MiEuaGlkZGVuc3dpdGNoLkFjY2Vzc1Rva2VuUmVzcG9uc2USLAoKdXNlckVu",
+            "dGl0eRgCIAEoCzIYLmhpZGRlbnN3aXRjaC5Vc2VyRW50aXR5IiQKE0FjY2Vz",
+            "c1Rva2VuUmVzcG9uc2USDQoFdG9rZW4YASABKAkiTwoKVXNlckVudGl0eRIK",
+            "CgJpZBgBIAEoCRINCgVlbWFpbBgCIAEoCRIQCgh1c2VybmFtZRgKIAEoCRIU",
+            "Cgxwcml2YWN5VG9rZW4YCyABKAkiIQoSR2V0QWNjb3VudHNSZXF1ZXN0EgsK",
+            "A2lkcxgBIAMoCSJCChBHZXRBY2NvdW50c1JlcGx5Ei4KDHVzZXJFbnRpdGll",
+            "cxgBIAMoCzIYLmhpZGRlbnN3aXRjaC5Vc2VyRW50aXR5MtQCCg9VbmF1dGhl",
+            "bnRpY2F0ZWQSVwoNQ3JlYXRlQWNjb3VudBIiLmhpZGRlbnN3aXRjaC5DcmVh",
+            "dGVBY2NvdW50UmVxdWVzdBogLmhpZGRlbnN3aXRjaC5Mb2dpbk9yQ3JlYXRl",
+            "UmVwbHkiABJHCgVMb2dpbhIaLmhpZGRlbnN3aXRjaC5Mb2dpblJlcXVlc3Qa",
+            "IC5oaWRkZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJlcGx5IgASTgoLVmVyaWZ5",
+            "VG9rZW4SIS5oaWRkZW5zd2l0Y2guQWNjZXNzVG9rZW5SZXNwb25zZRoaLmdv",
+            "b2dsZS5wcm90b2J1Zi5Cb29sVmFsdWUiABJPChBHZXRDb25maWd1cmF0aW9u",
+            "EhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GiEuaGlkZGVuc3dpdGNoLkNsaWVu",
+            "dENvbmZpZ3VyYXRpb24iADJjChRVbmF1dGhlbnRpY2F0ZWRDYXJkcxJLCghH",
+            "ZXRDYXJkcxIdLmhpZGRlbnN3aXRjaC5HZXRDYXJkc1JlcXVlc3QaHi5oaWRk",
+            "ZW5zd2l0Y2guR2V0Q2FyZHNSZXNwb25zZSIAMs8CCghBY2NvdW50cxJGCgpH",
+            "ZXRBY2NvdW50EhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5Gh4uaGlkZGVuc3dp",
+            "dGNoLkdldEFjY291bnRzUmVwbHkiABJRCgtHZXRBY2NvdW50cxIgLmhpZGRl",
+            "bnN3aXRjaC5HZXRBY2NvdW50c1JlcXVlc3QaHi5oaWRkZW5zd2l0Y2guR2V0",
+            "QWNjb3VudHNSZXBseSIAElkKDkNoYW5nZVBhc3N3b3JkEiMuaGlkZGVuc3dp",
+            "dGNoLkNoYW5nZVBhc3N3b3JkUmVxdWVzdBogLmhpZGRlbnN3aXRjaC5Mb2dp",
+            "bk9yQ3JlYXRlUmVwbHkiABJNChlSZXF1ZXN0UGFzc3dvcmRSZXNldEVtYWls",
+            "EhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhYuZ29vZ2xlLnByb3RvYnVmLkVt",
+            "cHR5IgAyTAoFR2FtZXMSQwoJSXNJbk1hdGNoEhYuZ29vZ2xlLnByb3RvYnVm",
+            "LkVtcHR5GhwuZ29vZ2xlLnByb3RvYnVmLlN0cmluZ1ZhbHVlIgBCNwoeY29t",
+            "LmhpZGRlbnN3aXRjaC5mcmFtZXdvcmsucnBjUACqAhJIaWRkZW5Td2l0Y2gu",
+            "UHJvdG9iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, global::Spellsource.Proto.SpellsourceReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Parser, new[]{ "Pg", "Keycloak", "Redis", "Realtime", "GrpcConfiguration", "Matchmaking", "Application", "Decks", "Migration", "Metrics" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration.Parser, new[]{ "Host", "Port", "Database", "User", "Password" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Parser, new[]{ "Pg", "Keycloak", "Redis", "Realtime", "GrpcConfiguration", "Matchmaking", "Application", "Decks", "Migration", "Metrics", "RateLimiter" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration.Parser, new[]{ "Host", "Port", "Database", "User", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration.Parser, new[]{ "AuthUrl", "AdminUsername", "AdminPassword", "ClientId", "ClientSecret", "RealmDisplayName", "RealmId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Parser, new[]{ "HostPortUser", "Uri" }, new[]{ "Connection" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser), global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser.Parser, new[]{ "Host", "Port", "User" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration.Parser, new[]{ "Uri" }, null, null, null, null),
@@ -121,7 +124,8 @@ namespace HiddenSwitch.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.DecksConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.DecksConfiguration.Parser, new[]{ "CachedDeckTimeToLiveMinutes" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.ApplicationConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.ApplicationConfiguration.Parser, new[]{ "UseBroadcaster" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.MigrationConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.MigrationConfiguration.Parser, new[]{ "ShouldMigrate" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.MetricsConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.MetricsConfiguration.Parser, new[]{ "Port", "LivenessRoute", "ReadinessRoute", "MetricsRoute" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.MetricsConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.MetricsConfiguration.Parser, new[]{ "Port", "LivenessRoute", "ReadinessRoute", "MetricsRoute" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RateLimiterConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RateLimiterConfiguration.Parser, new[]{ "Enabled" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ClientConfiguration), global::HiddenSwitch.Proto.ClientConfiguration.Parser, new[]{ "Accounts" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ClientConfiguration.Types.AccountsConfiguration), global::HiddenSwitch.Proto.ClientConfiguration.Types.AccountsConfiguration.Parser, new[]{ "KeycloakResetPasswordUrl", "KeycloakAccountManagementUrl" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsRequest), global::HiddenSwitch.Proto.GetCardsRequest.Parser, new[]{ "IfNoneMatch" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsResponse), global::HiddenSwitch.Proto.GetCardsResponse.Parser, new[]{ "Content", "Version", "CachedOk" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsResponse.Types.Content), global::HiddenSwitch.Proto.GetCardsResponse.Types.Content.Parser, new[]{ "Cards" }, null, null, null, null)}),
@@ -182,6 +186,7 @@ namespace HiddenSwitch.Proto {
       decks_ = other.decks_ != null ? other.decks_.Clone() : null;
       migration_ = other.migration_ != null ? other.migration_.Clone() : null;
       metrics_ = other.metrics_ != null ? other.metrics_.Clone() : null;
+      rateLimiter_ = other.rateLimiter_ != null ? other.rateLimiter_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -300,6 +305,17 @@ namespace HiddenSwitch.Proto {
       }
     }
 
+    /// <summary>Field number for the "rateLimiter" field.</summary>
+    public const int RateLimiterFieldNumber = 11;
+    private global::HiddenSwitch.Proto.ServerConfiguration.Types.RateLimiterConfiguration rateLimiter_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::HiddenSwitch.Proto.ServerConfiguration.Types.RateLimiterConfiguration RateLimiter {
+      get { return rateLimiter_; }
+      set {
+        rateLimiter_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as ServerConfiguration);
@@ -323,6 +339,7 @@ namespace HiddenSwitch.Proto {
       if (!object.Equals(Decks, other.Decks)) return false;
       if (!object.Equals(Migration, other.Migration)) return false;
       if (!object.Equals(Metrics, other.Metrics)) return false;
+      if (!object.Equals(RateLimiter, other.RateLimiter)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -339,6 +356,7 @@ namespace HiddenSwitch.Proto {
       if (decks_ != null) hash ^= Decks.GetHashCode();
       if (migration_ != null) hash ^= Migration.GetHashCode();
       if (metrics_ != null) hash ^= Metrics.GetHashCode();
+      if (rateLimiter_ != null) hash ^= RateLimiter.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -395,6 +413,10 @@ namespace HiddenSwitch.Proto {
         output.WriteRawTag(82);
         output.WriteMessage(Metrics);
       }
+      if (rateLimiter_ != null) {
+        output.WriteRawTag(90);
+        output.WriteMessage(RateLimiter);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -444,6 +466,10 @@ namespace HiddenSwitch.Proto {
         output.WriteRawTag(82);
         output.WriteMessage(Metrics);
       }
+      if (rateLimiter_ != null) {
+        output.WriteRawTag(90);
+        output.WriteMessage(RateLimiter);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -482,6 +508,9 @@ namespace HiddenSwitch.Proto {
       }
       if (metrics_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Metrics);
+      }
+      if (rateLimiter_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(RateLimiter);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -553,6 +582,12 @@ namespace HiddenSwitch.Proto {
           Metrics = new global::HiddenSwitch.Proto.ServerConfiguration.Types.MetricsConfiguration();
         }
         Metrics.MergeFrom(other.Metrics);
+      }
+      if (other.rateLimiter_ != null) {
+        if (rateLimiter_ == null) {
+          RateLimiter = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RateLimiterConfiguration();
+        }
+        RateLimiter.MergeFrom(other.RateLimiter);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -638,6 +673,13 @@ namespace HiddenSwitch.Proto {
             input.ReadMessage(Metrics);
             break;
           }
+          case 90: {
+            if (rateLimiter_ == null) {
+              RateLimiter = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RateLimiterConfiguration();
+            }
+            input.ReadMessage(RateLimiter);
+            break;
+          }
         }
       }
     #endif
@@ -720,6 +762,13 @@ namespace HiddenSwitch.Proto {
               Metrics = new global::HiddenSwitch.Proto.ServerConfiguration.Types.MetricsConfiguration();
             }
             input.ReadMessage(Metrics);
+            break;
+          }
+          case 90: {
+            if (rateLimiter_ == null) {
+              RateLimiter = new global::HiddenSwitch.Proto.ServerConfiguration.Types.RateLimiterConfiguration();
+            }
+            input.ReadMessage(RateLimiter);
             break;
           }
         }
@@ -3432,6 +3481,179 @@ namespace HiddenSwitch.Proto {
               }
               case 34: {
                 MetricsRoute = input.ReadString();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      [global::System.SerializableAttribute]
+      public sealed partial class RateLimiterConfiguration : pb::IMessage<RateLimiterConfiguration>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<RateLimiterConfiguration> _parser = new pb::MessageParser<RateLimiterConfiguration>(() => new RateLimiterConfiguration());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pb::MessageParser<RateLimiterConfiguration> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[10]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public RateLimiterConfiguration() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public RateLimiterConfiguration(RateLimiterConfiguration other) : this() {
+          enabled_ = other.enabled_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public RateLimiterConfiguration Clone() {
+          return new RateLimiterConfiguration(this);
+        }
+
+        /// <summary>Field number for the "enabled" field.</summary>
+        public const int EnabledFieldNumber = 1;
+        private bool enabled_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Enabled {
+          get { return enabled_; }
+          set {
+            enabled_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override bool Equals(object other) {
+          return Equals(other as RateLimiterConfiguration);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public bool Equals(RateLimiterConfiguration other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (Enabled != other.Enabled) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Enabled != false) hash ^= Enabled.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (Enabled != false) {
+            output.WriteRawTag(8);
+            output.WriteBool(Enabled);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (Enabled != false) {
+            output.WriteRawTag(8);
+            output.WriteBool(Enabled);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public int CalculateSize() {
+          int size = 0;
+          if (Enabled != false) {
+            size += 1 + 1;
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(RateLimiterConfiguration other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Enabled != false) {
+            Enabled = other.Enabled;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 8: {
+                Enabled = input.ReadBool();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 8: {
+                Enabled = input.ReadBool();
                 break;
               }
             }

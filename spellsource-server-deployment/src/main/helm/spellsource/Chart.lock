@@ -1,0 +1,12 @@
+dependencies:
+- name: postgresql-ha
+  repository: https://charts.bitnami.com/bitnami
+  version: 6.6.0
+- name: keycloak
+  repository: https://charts.bitnami.com/bitnami
+  version: 2.2.2
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 12.8.0
+digest: sha256:e66fbb68909e5b27a9cd6b1cc8ccf14ccf07511d870a15033a79a6c243c83661
+generated: "2021-03-01T13:27:32.165672-08:00"

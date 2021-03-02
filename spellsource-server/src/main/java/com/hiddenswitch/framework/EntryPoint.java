@@ -12,7 +12,14 @@ public class EntryPoint {
 		optionsParser.parseAndExitUponError(args);
 		var options = optionsParser.getOptions(Options.class);
 		if (options.migrate) {
-			Environment.migrate().toCompletionStage().toCompletableFuture().join();
+			try {
+				Environment.migrate().toCompletionStage().toCompletableFuture().join();
+			} catch (Throwable t) {
+				System.exit(1);
+				return;
+			}
+
+			System.exit(0);
 			return;
 		}
 
@@ -29,7 +36,10 @@ public class EntryPoint {
 		}
 
 		var application = new Application();
-		application.deploy();
+		application.deploy()
+				.onFailure(t -> {
+					System.exit(1);
+				});
 	}
 
 	private static void write(Hiddenswitch.ServerConfiguration configuration, String path) {

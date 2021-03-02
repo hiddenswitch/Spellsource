@@ -13,3 +13,15 @@ helm install --dry-run --debug --generate-name ./src/main/helm/spellsource
     brew install docker minikube helm
     ```
  2. Create an ingress tunnel.
+    ```shell
+    minikube start --vm=true # or minikube start --vm=true --driver=hyperkit
+    minikube addons enable ingress
+    ```
+ 3. Create a tunnel.
+    ```shell
+    minikube tunnel
+    ```
+ 4. Retrieve the service IPs.
+    ```shell
+    kubectl get svc
+    ```

@@ -8,13 +8,18 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       {{- include "spellsource.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -35,32 +40,33 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: "JAVA_TOOL_OPTIONS"
-              value: "-Djgroups.dns.query={{ include "spellsource.fullname" . }}.default.svc.cluster.local"
+              value: "-Djgroups.dns.query={{ include "spellsource.fullname" . }}internal.{{ .Release.Namespace }}.svc.cluster.local -Dlogback.configurationFile=/app/logback.groovy"
           ports:
             - name: grpc
-              containerPort: 8081
+              containerPort: {{ .Values.configmap.grpcConfiguration.port }}
               protocol: TCP
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.configmap.metrics.port }}
               protocol: TCP
             - name: infinispan
               containerPort: 7800
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /liveness
+              path: {{ .Values.configmap.metrics.livenessRoute }}
               port: http
+            initialDelaySeconds: 16
             failureThreshold: 1
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /readiness
+              path: {{ .Values.configmap.metrics.readinessRoute }}
               port: http
             initialDelaySeconds: 5
             periodSeconds: 5
           startupProbe:
             httpGet:
-              path: /readiness
+              path: {{ .Values.configmap.metrics.readinessRoute }}
               port: http
             failureThreshold: 30
             periodSeconds: 10
@@ -69,6 +75,9 @@ spec:
           volumeMounts:
           - name: config-volume
             mountPath: /conf
+          - name: config-volume
+            mountPath: /app/logback.groovy
+            subPath: logback.groovy
       volumes:
       - name: config-volume
         configMap:

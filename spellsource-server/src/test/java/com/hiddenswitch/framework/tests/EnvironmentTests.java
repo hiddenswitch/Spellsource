@@ -1,11 +1,17 @@
 package com.hiddenswitch.framework.tests;
 
+import com.hiddenswitch.framework.Application;
 import com.hiddenswitch.framework.Environment;
+import com.hiddenswitch.framework.Gateway;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.GamesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Games;
+import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
+import io.vertx.core.CompositeFuture;
+import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.ext.web.client.WebClient;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.sqlclient.SqlClient;
 import org.junit.jupiter.api.Test;
@@ -83,5 +89,27 @@ public class EnvironmentTests extends FrameworkTestBase {
 					.onComplete(promise);
 		});
 		promise.future().compose(v -> vertx.close()).onComplete(vertxTestContext.succeedingThenComplete());
+	}
+
+	@Test
+	public void testReadinessProbes(Vertx vertx, VertxTestContext vertxTestContext) {
+		var application = new Application() {
+			@Override
+			protected Future<Vertx> getVertx() {
+				return Future.succeededFuture(vertx);
+			}
+		};
+		application.deploy()
+				.compose(v -> {
+					var webClient = WebClient.create(vertx);
+					return CompositeFuture.all(webClient.get(8080, Environment.getHostIpAddress(), "/liveness")
+									.timeout(900)
+									.send(),
+							webClient.get(8080, Environment.getHostIpAddress(), "/readiness")
+									.timeout(900)
+									.send()).map(v);
+				})
+				.onComplete(v -> v.result().close())
+				.onComplete(vertxTestContext.succeedingThenComplete());
 	}
 }

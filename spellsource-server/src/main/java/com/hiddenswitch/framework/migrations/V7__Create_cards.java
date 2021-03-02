@@ -24,5 +24,4 @@ public class V7__Create_cards extends BaseJavaMigration {
 	public void migrate(Context context) throws Exception {
 		MigrationUtils.cardsMigration(context);
 	}
-
 }

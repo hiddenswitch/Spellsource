@@ -22,12 +22,18 @@ import java.util.Map;
 public class Tracing {
 	private static Logger LOGGER = LoggerFactory.getLogger(Tracing.class);
 
-	public static synchronized Tracer tracing(Vertx vertx) {
-		if (!GlobalTracer.isRegistered()) {
-			var tracer = initialize("spellsource");
-			GlobalTracer.registerIfAbsent(tracer);
-		}
+	static {
+		tracing();
+	}
 
+	public synchronized static Tracer tracing() {
+		// calls static constructor as a side effect
+		GlobalTracer.registerIfAbsent(() -> initialize("spellsource"));
+		return GlobalTracer.get();
+	}
+
+	public static synchronized Tracer tracing(Vertx vertx) {
+		tracing();
 		vertx.exceptionHandler(Tracing::error);
 		try {
 			Fiber.setDefaultUncaughtExceptionHandler((a, b) -> error(b));

@@ -1,3 +1,9 @@
+redis:
+  enabled: false
+postgresql:
+  enabled: false
+keycloak:
+  enabled: false
 replicaCount: 1
 image:
   repository: docker.io/doctorpangloss/spellsource-server
@@ -16,14 +22,9 @@ serviceAccount:
   annotations: { }
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  name: "spellsource-service-account"
 
-podAnnotations:
-  # enable scraping with prometheus
-  prometheus.io/scrape: "true"
-  prometheus.io/port: "8081"
-  prometheus.io/path: "/metrics"
-
+podAnnotations: { }
 podSecurityContext: { }
 securityContext: { }
 service:
@@ -48,10 +49,40 @@ affinity: { }
 
 ingress:
   enabled: false
-  annotations: { }
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "1h"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "1h"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "1h"
   hosts:
     - host: spellsource.local
-      paths: [ ]
+      paths: [ "/" ]
   tls: [ ]
 
-configmap: {}
+configmap:
+  grpcConfiguration:
+    port: 8081
+  metrics:
+    port: 8080
+    livenessRoute: "/liveness"
+    readinessRoute: "/readiness"
+    metricsRoute: "/metrics"
+logback: |
+  import ch.qos.logback.classic.filter.ThresholdFilter
+
+  appender("STDOUT", ConsoleAppender) {
+      encoder(PatternLayoutEncoder) {
+          pattern = "%level %logger{24} %msg%n"
+      }
+
+      filter(ThresholdFilter) {
+          level = TRACE
+      }
+  }
+
+  scan("2 seconds")
+
+  root(WARN, ["STDOUT"])

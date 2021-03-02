@@ -19,6 +19,7 @@ import io.micrometer.core.instrument.Metrics;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Context;
 import io.vertx.core.*;
+import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.ext.sync.Sync;
 import io.vertx.micrometer.MicrometerMetricsOptions;
 import io.vertx.micrometer.VertxPrometheusOptions;
@@ -91,7 +92,7 @@ public class Environment {
 	private static PgPool poolConstructor(Vertx vertx) {
 		var connectionOptions = connectOptions();
 		var poolOptions = new PoolOptions()
-				.setMaxSize(Runtime.getRuntime().availableProcessors());
+				.setMaxSize(Math.max(Runtime.getRuntime().availableProcessors() * 2, 16));
 		if (vertx == null) {
 			return PgPool.pool(connectionOptions, poolOptions);
 		}
@@ -181,6 +182,8 @@ public class Environment {
 	public static Future<Integer> migrate(String url, String username, String password) {
 		return executeBlocking(() -> {
 			var flyway = Flyway.configure()
+					.group(true)
+					.mixed(true)
 					.schemas("hiddenswitch")
 					.locations("classpath:db/migration", "classpath:com/hiddenswitch/framework/migrations")
 					.dataSource(url, username, password)
@@ -191,7 +194,9 @@ public class Environment {
 
 	public static VertxOptions vertxOptions() {
 		return new VertxOptions()
-				.setTracingOptions(new OpenTracingOptions(GlobalTracer.get()))
+				.setEventLoopPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))
+				.setInternalBlockingPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 4, 16))
+				.setTracingOptions(new OpenTracingOptions(Tracing.tracing()))
 				.setMetricsOptions(
 						new MicrometerMetricsOptions()
 								.setMicrometerRegistry(Metrics.globalRegistry)
@@ -250,34 +255,45 @@ public class Environment {
 				return existing;
 			}
 
-			var currentWorkingDirectoryPath = FileSystems.getDefault().getPath("conf");
 			var defaultConfiguration = defaultConfiguration();
-			Stream<Path> filesystemConfigurationIterable = null;
-			try {
-				filesystemConfigurationIterable = Files.walk(currentWorkingDirectoryPath, 1, FileVisitOption.FOLLOW_LINKS);
-			} catch (IOException e) {
-				filesystemConfigurationIterable = Stream.empty();
-			}
-			var pattern = Pattern.compile("^.*" + CONFIGURATION_NAME_TOKEN + ".*\\.ya?ml$");
-			var filesConfiguration = filesystemConfigurationIterable
-					.map(Path::toFile)
-					.filter(f -> pattern.asPredicate().test(f.getName().toLowerCase(Locale.ROOT)))
-					.map(f -> {
-						try {
-							return Serialization.yamlMapper().readValue(f, ServerConfiguration.class);
-						} catch (IOException e) {
-							throw new RuntimeException(e);
-						}
-					});
-			var environmentConfiguration = ModelConversions.fromStringMap(ServerConfiguration.getDefaultInstance(), CONFIGURATION_NAME_TOKEN.toLowerCase(Locale.ROOT), "_", System.getenv());
+			Stream<ServerConfiguration> filesConfiguration = fileConfigurations();
+			// todo: pods have weird environment variables, must test this more
+			// var environmentConfiguration = environmentConfiguration();
 			var configuration = Streams.concat(
 					Stream.of(defaultConfiguration),
 					filesConfiguration,
-					Stream.of(environmentConfiguration),
+					// Stream.of(environmentConfiguration),
 					Stream.of(programmaticConfiguration)
 			).reduce((s1, s2) -> s1.toBuilder().mergeFrom(s2).build());
 			return configuration.orElseThrow();
 		});
+	}
+
+	@NotNull
+	public static ServerConfiguration environmentConfiguration() {
+		return ModelConversions.fromStringMap(ServerConfiguration.getDefaultInstance(), CONFIGURATION_NAME_TOKEN.toLowerCase(), "_", System.getenv());
+	}
+
+	public static Stream<ServerConfiguration> fileConfigurations() {
+		var currentWorkingDirectoryPath = FileSystems.getDefault().getPath("conf");
+		Stream<Path> filesystemConfigurationIterable = null;
+		try {
+			filesystemConfigurationIterable = Files.walk(currentWorkingDirectoryPath, 1, FileVisitOption.FOLLOW_LINKS);
+		} catch (IOException e) {
+			filesystemConfigurationIterable = Stream.empty();
+		}
+		var pattern = Pattern.compile("^.*" + CONFIGURATION_NAME_TOKEN + ".*\\.ya?ml$");
+		var filesConfiguration = filesystemConfigurationIterable
+				.map(Path::toFile)
+				.filter(f -> pattern.asPredicate().test(f.getName().toLowerCase(Locale.ROOT)))
+				.map(f -> {
+					try {
+						return Serialization.yamlMapper().readValue(f, ServerConfiguration.class);
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+				});
+		return filesConfiguration;
 	}
 
 	public static ServerConfiguration defaultConfiguration() {
@@ -289,7 +305,7 @@ public class Environment {
 						.setPassword("password")
 						.build())
 				.setKeycloak(ServerConfiguration.KeycloakConfiguration.newBuilder()
-						.setAuthUrl("http://localhost:9090/auth/admin")
+						.setAuthUrl("http://localhost:9090/auth/")
 						.setAdminUsername("admin")
 						.setAdminPassword("password")
 						.setRealmId("hiddenswitch")
@@ -324,6 +340,9 @@ public class Environment {
 						.setLivenessRoute("/liveness")
 						.setReadinessRoute("/readiness")
 						.setMetricsRoute("/metrics")
+						.build())
+				.setRateLimiter(ServerConfiguration.RateLimiterConfiguration.newBuilder()
+						.setEnabled(false)
 						.build())
 				.build();
 	}

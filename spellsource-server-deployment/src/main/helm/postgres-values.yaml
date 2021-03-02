@@ -1,5 +1,5 @@
 # helm repo add bitnami https://charts.bitnami.com/bitnami
-# helm install my-release bitnami/postgresql-ha
+# helm install -f postgres-values.yaml postgres bitnami/postgresql-ha
 postgresql:
   username: postgres
   password: password

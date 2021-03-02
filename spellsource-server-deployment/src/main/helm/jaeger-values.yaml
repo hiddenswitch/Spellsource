@@ -1,0 +1,5 @@
+# helm install jaeger jaegertracing/jaeger
+provisionDataStore:
+  cassandra: true
+  elasticsearch: false
+  kafka: false
