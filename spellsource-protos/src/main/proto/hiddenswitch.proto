@@ -82,6 +82,12 @@ message ServerConfiguration {
         bool enabled = 1;
     }
 
+    message JaegerConfiguration {
+        bool enabled = 1;
+        string agentHost = 2;
+        int32 agentPort = 3;
+    }
+
     PostgresConfiguration pg = 1;
     KeycloakConfiguration keycloak = 2;
     RedisConfiguration redis = 3;
@@ -93,6 +99,7 @@ message ServerConfiguration {
     MigrationConfiguration migration = 9;
     MetricsConfiguration metrics = 10;
     RateLimiterConfiguration rateLimiter = 11;
+    JaegerConfiguration jaeger = 12;
 }
 
 message ClientConfiguration {

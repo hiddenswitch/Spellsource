@@ -3,10 +3,35 @@ plugins {
     id "com.github.rmee.helm" version "$rmeePluginsVersion"
 }
 
+import com.github.rmee.helm.*;
+
 apply plugin: 'base'
 apply plugin: 'kubectl'
 apply plugin: 'helm'
 
-task run(type: Exec) {
-    dependsOn ':spellsource-server:jib'
+version = '0.9.0'
+
+helm {}
+
+class HelmInstallOrUpgrade extends HelmExec {
+    @Input
+    final Property<String> action = project.objects.property(String)
+
+    @Override
+    Task configure(Closure closure) {
+        super.configure(closure)
+        def packageTask = this.project.tasks.findByPath('helmPackageSpellsource')
+        dependsOn this.project.rootProject.project(':spellsource-server').tasks.jib, packageTask
+        inputs.dir("src/main/helm")
+        commandLine "helm ${action.get()} --debug -f $project.projectDir.absolutePath/src/main/helm/spellsource-values.yaml spellsource ${packageTask.outputs.files.singleFile}"
+        return this;
+    }
+}
+
+task helmInstall(type: HelmInstallOrUpgrade) {
+    action.set('install')
+}
+
+task helmUpgrade(type: HelmInstallOrUpgrade) {
+    action.set('upgrade --recreate-pods')
 }

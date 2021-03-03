@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Chart.Name }}-migration-job-{{ randAlphaNum 5 | lower }}
+  name: {{ .Chart.Name }}-migration-job
   labels:
   {{- include "spellsource.labels" . | nindent 4 }}
   annotations:

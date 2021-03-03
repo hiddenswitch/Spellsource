@@ -13,7 +13,6 @@ image:
 imagePullSecrets: [ ]
 nameOverride: ""
 fullnameOverride: ""
-extraEnvVariables: [ ]
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -70,6 +69,13 @@ configmap:
     livenessRoute: "/liveness"
     readinessRoute: "/readiness"
     metricsRoute: "/metrics"
+  jaeger:
+    enabled: false
+    agentHost: "localhost"
+    agentPort: 6831
+extraJavaOptions: ""
+extraEnv: []
+extraPorts: []
 logback: |
   import ch.qos.logback.classic.filter.ThresholdFilter
 

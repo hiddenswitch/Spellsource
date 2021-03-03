@@ -22,6 +22,7 @@ import io.vertx.grpc.VertxChannelBuilder;
 import net.demilich.metastone.game.logic.XORShiftRandom;
 import org.keycloak.representations.AccessTokenResponse;
 
+import java.net.URI;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CancellationException;
@@ -37,6 +38,7 @@ public class Client implements AutoCloseable {
 	protected final Vertx vertx;
 	protected final WebClient webClient;
 	protected final String keycloakPath;
+	private String loginUri;
 	private AccessTokenResponse accessToken;
 	private UserEntity userEntity;
 	private String username;
@@ -50,6 +52,7 @@ public class Client implements AutoCloseable {
 		this.vertx = vertx;
 		this.webClient = webClient;
 		this.keycloakPath = keycloakPath;
+		loginUri = URI.create(keycloakPath + Accounts.KEYCLOAK_LOGIN_PATH).normalize().toString();
 	}
 
 	public Client(Vertx vertx, WebClient webClient, String username, String email, String password) {
@@ -200,27 +203,35 @@ public class Client implements AutoCloseable {
 	}
 
 
-	public Future<AccessTokenResponse> privilegedCreateAndLogin(String username, String email, String password) {
-		return Accounts.createUser(username, email, password)
+	public Future<AccessTokenResponse> privilegedCreateAndLogin(String email, String username, String password) {
+		return Accounts.createUser(email, username, password)
 				.onSuccess(this::handleAccountsCreateUser)
 				.compose(ignored -> login(username, password));
 	}
 
-	public Future<AccessTokenResponse> login(String usernameOrEmail, String password) {
+	public Future<AccessTokenResponse> login(String emailOrUsername, String password) {
 		Objects.requireNonNull(webClient);
 		var serverConfiguration = Environment.getConfiguration();
 		var promise = Promise.<HttpResponse<Buffer>>promise();
-		webClient.postAbs(keycloakPath + Accounts.KEYCLOAK_LOGIN_PATH)
+		webClient.postAbs(loginUri)
 				.sendForm(MultiMap.caseInsensitiveMultiMap()
 						.add("client_id", serverConfiguration.getKeycloak().getClientId())
 						.add("grant_type", "password")
 						.add("client_secret", serverConfiguration.getKeycloak().getClientSecret())
 						.add("scope", "openid")
 						// username or password can be used here
-						.add("username", usernameOrEmail)
+						.add("username", emailOrUsername)
 						.add("password", password), promise);
 		return promise.future()
-				.map(res -> res.bodyAsJson(AccessTokenResponse.class))
+				.compose(res -> {
+					var object = res.bodyAsJsonObject();
+					if (object.containsKey("error")) {
+						return Future.failedFuture(new RuntimeException(object.getString("error")));
+					}
+
+					var valid = object.mapTo(AccessTokenResponse.class);
+					return Future.succeededFuture(valid);
+				})
 				.onSuccess(this::handleLogin);
 	}
 

@@ -1,3 +1,4 @@
+# this is a values yaml designed for local debugging and not a production deployment
 redis:
   enabled: false
 postgresql:
@@ -18,6 +19,29 @@ configmap:
     adminPassword: "password"
   redis:
     uri: "redis://redis-master.default.svc.cluster.local:6379"
+  jaeger:
+    enabled: true
+    agentHost: "jaeger-agent.default.svc.cluster.local"
+    agentPort: 6831
+extraJavaOptions: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+extraPorts:
+  - name: javadebug
+    containerPort: 5005
+    protocol: TCP
 # Turn off logs
 logback: |
-  scan("10 seconds")
+  import ch.qos.logback.classic.filter.ThresholdFilter
+
+  appender("STDOUT", ConsoleAppender) {
+      encoder(PatternLayoutEncoder) {
+          pattern = "%level %logger{24} %msg%n"
+      }
+
+      filter(ThresholdFilter) {
+          level = TRACE
+      }
+  }
+
+  scan("1 seconds")
+
+  root(ERROR, ["STDOUT"])

@@ -25,6 +25,7 @@ spec:
       labels:
         {{- include "spellsource.selectorLabels" . | nindent 8 }}
     spec:
+      enableServiceLinks: false
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -40,7 +41,17 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: "JAVA_TOOL_OPTIONS"
-              value: "-Djgroups.dns.query={{ include "spellsource.fullname" . }}internal.{{ .Release.Namespace }}.svc.cluster.local -Dlogback.configurationFile=/app/logback.groovy"
+              value: "-Djgroups.dns.query={{ include "spellsource.fullname" . }}internal.{{ .Release.Namespace }}.svc.cluster.local -Dlogback.configurationFile=/app/logback.groovy {{ .Values.extraJavaOptions }}"
+          {{- if .Values.configmap.jaeger.enabled}}
+            - name: "JAEGER_AGENT_HOST"
+              value: {{ .Values.configmap.jaeger.agentHost | quote }}
+            - name: "JAEGER_AGENT_PORT"
+              value: {{ .Values.configmap.jaeger.agentPort | quote }}
+          {{- end}}
+          {{- if .Values.extraEnv }}
+            # Extra environment variables
+            {{- toYaml .Values.extraEnv | nindent 12 }}
+          {{- end }}
           ports:
             - name: grpc
               containerPort: {{ .Values.configmap.grpcConfiguration.port }}
@@ -51,6 +62,9 @@ spec:
             - name: infinispan
               containerPort: 7800
               protocol: TCP
+          {{- if .Values.extraPorts }}
+            {{- toYaml .Values.extraPorts | nindent 12 }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: {{ .Values.configmap.metrics.livenessRoute }}

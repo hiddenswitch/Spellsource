@@ -344,6 +344,9 @@ public class Environment {
 				.setRateLimiter(ServerConfiguration.RateLimiterConfiguration.newBuilder()
 						.setEnabled(false)
 						.build())
+				.setJaeger(ServerConfiguration.JaegerConfiguration.newBuilder()
+						.setEnabled(false)
+						.build())
 				.build();
 	}
 

@@ -560,6 +560,7 @@ public class Accounts {
 			realmRepresentation.setResetCredentialsFlow("reset credentials");
 			realmRepresentation.setRegistrationFlow("registration");
 			realmRepresentation.setRememberMe(true);
+			realmRepresentation.setLoginWithEmailAllowed(true);
 
 			keycloak.realms().create(realmRepresentation);
 
