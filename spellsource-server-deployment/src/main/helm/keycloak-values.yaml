@@ -1,8 +1,10 @@
 # helm repo add bitnami https://charts.bitnami.com/bitnami
 # helm install -f keycloak-values.yaml keycloak bitnami/keycloak
-replicaCount: 1
+rbac:
+  create: true
+replicaCount: 2
 serviceDiscovery:
-  enabled: false
+  enabled: true
 metrics:
   # port 9990 by default for prometheus
   enabled: true

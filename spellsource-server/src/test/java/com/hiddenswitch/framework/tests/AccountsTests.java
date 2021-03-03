@@ -120,7 +120,8 @@ public class AccountsTests extends FrameworkTestBase {
 		var webClient = WebClient.create(vertx);
 		var client = new Client(vertx, webClient);
 		startGateway(vertx)
-				.compose(v -> client.privilegedCreateAndLogin("testusername1", "testemail@hiddenswitch.com", "password"))
+				.compose(v -> client.privilegedCreateAndLogin("testemail@hiddenswitch.com", "testusername1", "password"))
+				.onFailure(testContext::failNow)
 				.onComplete(ignored -> {
 					testContext.verify(() -> {
 						assertNotNull(client.getAccessToken());
