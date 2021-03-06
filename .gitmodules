@@ -2,7 +2,7 @@
 	path = spellsource-cards-private/src
 	url = git@github.com:hiddenswitch/Spellsource-internalcontent.git
 [submodule "secrets"]
-	path = secrets
+	path = spellsource-private/src/secrets
 	url = git@github.com:hiddenswitch/HiddenSwitch-Secrets.git
 [submodule "unityclient"]
 	path = spellsource-client/src/unity
