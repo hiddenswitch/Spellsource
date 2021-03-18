@@ -21,6 +21,7 @@ message ServerConfiguration {
 
     message KeycloakConfiguration {
         string authUrl = 1;
+        string publicAuthUrl = 8;
         string adminUsername = 2;
         string adminPassword = 3;
         string clientId = 4;

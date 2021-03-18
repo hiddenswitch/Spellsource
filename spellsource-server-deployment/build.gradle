@@ -10,18 +10,27 @@ def helmBinary = isWindows ? "$project.projectDir.absolutePath/bin/helm.exe" : "
 def privateProject = project(':spellsource-private')
 def databaseName = "metastone"
 
-task helmInstall(type: Exec) {
+task deploy(type: Exec) {
     dependsOn project(':spellsource-server').tasks.jib
     inputs.dir(sourceDir)
-    def command = [helmBinary, "install", "--atomic", "--recreate-pods", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"]
+    def command = [helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"]
     commandLine command
 }
 
-task helmUpgrade(type: Exec) {
-    dependsOn project(':spellsource-server').tasks.jib
+task deployProd {
+    dependsOn project(':spellsource-server').tasks.jib, project(':spellsource-private').tasks.build
+    def taskPath = "${privateProject.projectDir}/src/secrets/eksctl/spellsource"
     inputs.dir(sourceDir)
-    def command = [helmBinary, "upgrade", "--atomic", "--recreate-pods", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"]
-    commandLine command
+    doLast {
+        exec {
+            def command = [helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "-f", "$taskPath/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"]
+            commandLine command
+        }
+        exec {
+            commandLine "kubectl", "apply", "-f", "$taskPath/spellsource-ingress.yaml"
+        }
+    }
+
 }
 
 task dumpDockerSwarmMongoDb {
