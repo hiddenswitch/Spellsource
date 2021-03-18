@@ -307,6 +307,7 @@ public class Environment {
 						.build())
 				.setKeycloak(ServerConfiguration.KeycloakConfiguration.newBuilder()
 						.setAuthUrl("http://localhost:9090/auth/")
+						.setPublicAuthUrl("http://localhost:9090/auth/")
 						.setAdminUsername("admin")
 						.setAdminPassword("password")
 						.setRealmId("hiddenswitch")

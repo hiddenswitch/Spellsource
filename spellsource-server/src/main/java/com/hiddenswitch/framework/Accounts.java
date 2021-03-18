@@ -34,6 +34,7 @@ import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
 
 import javax.ws.rs.NotFoundException;
+import java.net.URI;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -299,11 +300,11 @@ public class Accounts {
 			@Override
 			public Future<ClientConfiguration> getConfiguration(Empty request) {
 				var config = Environment.getConfiguration();
-				var authUrl = config.getKeycloak().getAuthUrl();
+				var authUrl = config.getKeycloak().getPublicAuthUrl();
 				return Future.succeededFuture(ClientConfiguration.newBuilder()
 						.setAccounts(ClientConfiguration.AccountsConfiguration.newBuilder()
-								.setKeycloakResetPasswordUrl(authUrl + KEYCLOAK_FORGOT_PASSWORD_PATH)
-								.setKeycloakAccountManagementUrl(authUrl + KEYCLOAK_LOGIN_PATH)
+								.setKeycloakResetPasswordUrl(URI.create(authUrl + KEYCLOAK_FORGOT_PASSWORD_PATH).normalize().toString())
+								.setKeycloakAccountManagementUrl(URI.create(authUrl + KEYCLOAK_LOGIN_PATH).normalize().toString())
 								.build())
 						.build());
 			}
