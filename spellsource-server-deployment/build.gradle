@@ -1,37 +1,108 @@
-plugins {
-    id "com.github.rmee.kubectl" version "$rmeePluginsVersion"
-    id "com.github.rmee.helm" version "$rmeePluginsVersion"
-}
-
-import com.github.rmee.helm.*;
+import org.apache.tools.ant.taskdefs.condition.Os
+import org.gradle.api.services.BuildServiceRegistry
 
 apply plugin: 'base'
-apply plugin: 'kubectl'
-apply plugin: 'helm'
-
 version = '0.9.0'
 
-helm {}
+def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
+def sourceDir = "$project.projectDir.absolutePath/src/main/helm"
+def helmBinary = isWindows ? "$project.projectDir.absolutePath/bin/helm.exe" : "helm"
+def privateProject = project(':spellsource-private')
+def databaseName = "metastone"
 
-class HelmInstallOrUpgrade extends HelmExec {
-    @Input
-    final Property<String> action = project.objects.property(String)
+task helmInstall(type: Exec) {
+    dependsOn project(':spellsource-server').tasks.jib
+    inputs.dir(sourceDir)
+    def command = [helmBinary, "install", "--atomic", "--recreate-pods", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"]
+    commandLine command
+}
 
-    @Override
-    Task configure(Closure closure) {
-        super.configure(closure)
-        def packageTask = this.project.tasks.findByPath('helmPackageSpellsource')
-        dependsOn this.project.rootProject.project(':spellsource-server').tasks.jib, packageTask
-        inputs.dir("src/main/helm")
-        commandLine "helm ${action.get()} --debug -f $project.projectDir.absolutePath/src/main/helm/spellsource-values.yaml spellsource ${packageTask.outputs.files.singleFile}"
-        return this;
+task helmUpgrade(type: Exec) {
+    dependsOn project(':spellsource-server').tasks.jib
+    inputs.dir(sourceDir)
+    def command = [helmBinary, "upgrade", "--atomic", "--recreate-pods", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"]
+    commandLine command
+}
+
+task dumpDockerSwarmMongoDb {
+    dependsOn project(':spellsource-private').tasks.build
+    def taskPath = "${privateProject.projectDir}/src/secrets/task-dump-docker-swarm-mongo-db"
+    def props = Utilities.propertiesOrEmpty("$taskPath/task.properties")
+    def contextPath = "$taskPath/${props.getProperty("context.path", "swarm.context")}"
+    def destinationDir = "${buildDir}/mongo-db"
+    def archivePath = "$destinationDir/archive.tgz"
+    def contextName = props.getProperty("context.name", "contextname")
+    def mongoHost = props.getProperty("mongo.host", "mongo")
+    def mongoUri = "mongodb://$mongoHost:27017/$databaseName"
+    outputs.file(archivePath)
+    doLast {
+        file(destinationDir).mkdirs()
+        exec {
+            commandLine "docker", "context", "import", contextName, contextPath
+            ignoreExitValue(true)
+        }
+        exec {
+            commandLine "docker", "context", "use", contextName
+        }
+        exec {
+            def excludeCollectionsCmd = "--excludeCollection=games"
+            def inDockerCmd = """
+mkdir -pv ./out >/dev/null
+mongodump $excludeCollectionsCmd --uri=$mongoUri >/dev/null
+cd ./dump
+tar -czvf ../archive.tar.gz . >/dev/null
+cat ../archive.tar.gz
+"""
+            commandLine "docker", "run", "--network=backend", "-i", "--rm", "mongo:3.6", "bash", "-c", inDockerCmd
+            standardOutput(new FileOutputStream(archivePath))
+        }
     }
 }
 
-task helmInstall(type: HelmInstallOrUpgrade) {
-    action.set('install')
+task restoreMongoDbFromArchive {
+    dependsOn dumpDockerSwarmMongoDb, project(':spellsource-private').tasks.build
+    def taskConfigDir = "${privateProject.projectDir}/src/secrets/task-mongo"
+    def props = Utilities.propertiesOrEmpty("$taskConfigDir/task.properties")
+    def targetLocalPort = 27018
+    def mongoDbOptions = props.getProperty("mongdb.remote.options", "")
+    def remoteConnection = gradle.sharedServices.registerIfAbsent("mongoSshTunnel", SshTunnelService.class) { spec ->
+        def params = spec.parameters
+        params.sshPort.set(22)
+        params.host.set(props.getProperty("bastion.host", "localhost"))
+        params.username.set(props.getProperty("bastion.username", "user"))
+        if (props.containsKey("identityfile")) {
+            params.identity.set(new File("$taskConfigDir/${props.getProperty("identityfile")}"))
+        } else {
+            params.identity.set(new File("$project.projectDir.absolutePath/src/main/resources/emptyidentity.pem"))
+        }
+        params.localPort.set(targetLocalPort)
+        params.remoteHost.set(props.getProperty("mongodb.remote.host", "remote-host.local"))
+        params.remotePort.set(Integer.parseInt(props.getProperty("mongodb.remote.port", "27017")))
+        params.hostKey.set(props.getProperty("bastion.host.key", ""))
+    }
+
+    doLast {
+        def connection = remoteConnection.get();
+        def dbPath = "${buildDir}/mongo-db"
+        file(dbPath).mkdirs()
+        copy {
+            from(tarTree("$dbPath/archive.tgz"))
+            into "$dbPath/extracted"
+        }
+        exec {
+            def uri = "mongodb://${props.getProperty("mongodb.remote.username")}:${props.getProperty("mongodb.remote.password")}@localhost:${targetLocalPort}/$databaseName?$mongoDbOptions"
+            commandLine "mongorestore", "-vvvvv", "--drop", "--uri", uri, "$dbPath/extracted"
+        }
+    }
 }
 
-task helmUpgrade(type: HelmInstallOrUpgrade) {
-    action.set('upgrade --recreate-pods')
+task installKeycloak {
+    dependsOn project(':spellsource-private').tasks.build
+    def taskConfigDir = "${privateProject.projectDir}/src/secrets/task-keycloak"
+    def props = Utilities.propertiesOrEmpty("$taskConfigDir/task.properties")
+}
+
+task deploySpellsource {
+    dependsOn project(':spellsource-server').tasks.jib
+    inputs.dir(sourceDir)
 }

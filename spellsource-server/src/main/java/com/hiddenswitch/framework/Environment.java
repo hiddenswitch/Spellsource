@@ -188,6 +188,7 @@ public class Environment {
 					.locations("classpath:db/migration", "classpath:com/hiddenswitch/framework/migrations")
 					.dataSource(url, username, password)
 					.load();
+			flyway.repair();
 			return flyway.migrate();
 		});
 	}

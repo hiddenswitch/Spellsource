@@ -81,6 +81,55 @@ keycloak_validate() {
 }
 
 ########################
+# Increase timeouts for Wildfly to do its work, improving the chance starting the server completes
+# without error on cloud Kubernetes platforms.
+# Globals:
+#   KEYCLOAK_*
+# Arguments:
+#   None
+# Returns:
+#   None
+#########################
+keycloak_increase_timeout() {
+    info "Increasing timeout for Wildfly configuration steps to 9999999s"
+    debug_execute jboss-cli.sh <<EOF
+embed-server --server-config=${KEYCLOAK_CONF_FILE} --std-out=echo
+batch
+/system-property=jboss.as.management.blocking.timeout:add(value=9999999)
+/subsystem=deployment-scanner/scanner=default:write-attribute(name=deployment-timeout,value=9999999)
+/subsystem=transactions:write-attribute(name=default-timeout,value=9999999)
+run-batch
+stop-embedded-server
+EOF
+}
+
+########################
+# Enable Jaeger. From https://gist.github.com/thomasdarimont/43df478331d21ef4cc0a72241c257070
+# Globals:
+#   KEYCLOAK_*
+# Arguments:
+#   None
+# Returns:
+#   None
+#########################
+keycloak_configure_jaeger() {
+    info "Configuring Jaeger agent"
+    debug_execute jboss-cli.sh <<EOF
+embed-server --server-config=${KEYCLOAK_CONF_FILE} --std-out=echo
+batch
+/extension=org.wildfly.extension.microprofile.opentracing-smallrye:add
+# Currently assumes
+/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=jaeger:add(host=localhost, port=6831)
+/subsystem=microprofile-opentracing-smallrye/jaeger-tracer=jaeger-demo:add(sampler-type=const, sampler-param=1, #reporter-log-spans=false, sender-binding=jaeger)
+# Setting the default tracer
+/subsystem=microprofile-opentracing-smallrye:write-attribute(name=default-tracer, value=jaeger-demo)
+
+run-batch
+stop-embedded-server
+EOF
+}
+
+########################
 # Configure database settings using JBoss CLI
 # Globals:
 #   KEYCLOAK_*
@@ -376,9 +425,13 @@ keycloak_initialize() {
         cp "${KEYCLOAK_CONF_DIR}/${KEYCLOAK_DEFAULT_CONF_FILE}" "${KEYCLOAK_CONF_DIR}/${KEYCLOAK_CONF_FILE}"
 
         # Configure settings using jboss-cli.sh
+        keycloak_increase_timeout
         keycloak_configure_database
         if is_boolean_yes "$KEYCLOAK_CREATE_ADMIN_USER"; then
             debug_execute add-user-keycloak.sh -u "$KEYCLOAK_ADMIN_USER" -p "$KEYCLOAK_ADMIN_PASSWORD"
+        fi
+        if is_boolean_yes "$KEYCLOAK_ENABLE_JAEGER"; then
+            keycloak_configure_jaeger
         fi
         ! is_empty_value "$KEYCLOAK_JGROUPS_DISCOVERY_PROTOCOL" && keycloak_configure_jgroups
         keycloak_configure_cache

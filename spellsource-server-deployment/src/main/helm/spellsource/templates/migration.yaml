@@ -1,3 +1,4 @@
+{{- if .Values.migration.enabled -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -8,8 +9,12 @@ metadata:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "-1"
     "helm.sh/hook-delete-policy": before-hook-creation
+    {{- if .Values.migration.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.migration.annotations "context" $) | nindent 4 }}
+    {{- end }}
 spec:
   backoffLimit: 0
+  ttlSecondsAfterFinished: 180
   template:
     metadata:
       name: {{ .Chart.Name }}-migration-job-pod
@@ -17,20 +22,20 @@ spec:
       restartPolicy: Never
       {{- with .Values.migration.nodeSelector }}
       nodeSelector:
-      {{- toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.migration.affinity }}
       affinity:
-      {{- toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.migration.tolerations }}
       tolerations:
-      {{- toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
         - name: db-migrations
           securityContext:
-          {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
@@ -39,7 +44,19 @@ spec:
             - name: config-volume
               mountPath: /conf
               readOnly: true
+          {{- with .Values.migration.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end}}
+          env:
+            - name: "JAVA_TOOL_OPTIONS"
+              value: "-Djgroups.dns.query={{ include "spellsource.fullname" . }}internal.{{ .Release.Namespace }}.svc.cluster.local -Dlogback.configurationFile=/app/logback.groovy {{ .Values.extraJavaOptions }}"
+          {{- if .Values.extraEnv }}
+            # Extra environment variables
+            {{- toYaml .Values.extraEnv | nindent 12 }}
+          {{- end }}
       volumes:
         - name: config-volume
           configMap:
             name: {{ template "spellsource.fullname" . }}
+{{- end }}

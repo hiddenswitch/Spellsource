@@ -1,7 +1,6 @@
 buildscript {
     ext {
         vertxJooqVersion = '3e12c80af5'
-        postgresqlVersion = '42.2.16'
         flywayVersion = '6.5.5'
     }
     repositories {

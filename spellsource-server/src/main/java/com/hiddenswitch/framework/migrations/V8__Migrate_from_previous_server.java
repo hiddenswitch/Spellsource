@@ -44,6 +44,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -56,6 +57,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 public class V8__Migrate_from_previous_server extends BaseJavaMigration {
+	private static final Logger LOGGER = LoggerFactory.getLogger(V8__Migrate_from_previous_server.class);
 	public static String INVENTORY = "inventory.cards";
 	public static String COLLECTIONS = "inventory.collections";
 	public static String USERS = "accounts.users";
@@ -76,12 +78,22 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 		var vertx = Vertx.vertx();
 		// only run the migration if there's a mongo url set
 		var mongoUri = getMongoUrl();
+
 		if (mongoUri.isEmpty()) {
 			return;
 		}
+
+		LOGGER.debug("mongoUri: {}", mongoUri);
+
+		// try to connect to mongo and see if it actually works
+		var mongoClient = MongoClient.create(vertx, new JsonObject().put("connection_string", mongoUri));
+		var canRead = mongoClient.findOne("migrations", new JsonObject(), new JsonObject().put("_id", 1)).toCompletionStage().toCompletableFuture().get(8000, TimeUnit.MILLISECONDS);
+		if (canRead == null) {
+			throw new IllegalStateException("unexpectedly could not read migrations");
+		}
+
 		await(fiber(vertx, () -> {
 			var executor = Environment.queryExecutor();
-			var mongoClient = MongoClient.create(vertx, new JsonObject().put("connection_string", mongoUri));
 			// retrieve all non bot accounts
 			var accountJsons = mongoClient.findBatch(USERS, new JsonObject()
 					.put(UserRecord.BOT, new JsonObject().put("$ne", true)));
@@ -175,6 +187,8 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 						friends.add(new FriendRecordWithId(userRecord.getId(), friend));
 					}
 				}
+
+				LOGGER.debug("migrated user {}", userEntity.getUsername());
 			}
 			if (!friends.isEmpty()) {
 				// now that we've created all the accounts, the friend constraints should be okay

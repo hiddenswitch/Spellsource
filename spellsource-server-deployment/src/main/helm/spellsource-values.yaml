@@ -28,7 +28,11 @@ extraPorts:
   - name: javadebug
     containerPort: 5005
     protocol: TCP
-# Turn off logs
+migration:
+  resources:
+    requests:
+      cpu: 200m
+      memory: 8Gi
 logback: |
   import ch.qos.logback.classic.filter.ThresholdFilter
 

@@ -25,3 +25,8 @@ helm install --dry-run --debug --generate-name ./src/main/helm/spellsource
     ```shell
     kubectl get svc
     ```
+    
+Creating an EKS cluster:
+```shell
+eksctl create cluster --name hiddenswitch-cluster-1 --version 1.19 --fargate
+```

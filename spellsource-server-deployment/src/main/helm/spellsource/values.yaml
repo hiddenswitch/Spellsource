@@ -24,15 +24,20 @@ serviceAccount:
   name: "spellsource-service-account"
 
 podAnnotations: { }
+deployment:
+  annotations: { }
 podSecurityContext: { }
 securityContext: { }
 service:
+  annotations: { }
   type: LoadBalancer
   port: 8081
 resources: { }
 migration:
+  enabled: true
   resources: { }
   nodeSelector: { }
+  annotations: { }
   tolerations: [ ]
   affinity: { }
 autoscaling:
@@ -74,8 +79,8 @@ configmap:
     agentHost: "localhost"
     agentPort: 6831
 extraJavaOptions: ""
-extraEnv: []
-extraPorts: []
+extraEnv: [ ]
+extraPorts: [ ]
 logback: |
   import ch.qos.logback.classic.filter.ThresholdFilter
 
