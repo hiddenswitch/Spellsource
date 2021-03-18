@@ -1,1 +1,1 @@
-CREATE PUBLICATION supabase_realtime FOR ALL TABLES;
+create publication supabase_realtime for all tables;

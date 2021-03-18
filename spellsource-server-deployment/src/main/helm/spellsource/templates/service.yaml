@@ -4,6 +4,10 @@ metadata:
   name: {{ include "spellsource.fullname" . }}
   labels:
     {{- include "spellsource.labels" . | nindent 4 }}
+  annotations:
+  {{- if .Values.service.annotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:

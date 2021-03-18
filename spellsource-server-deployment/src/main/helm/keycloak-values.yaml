@@ -2,7 +2,19 @@
 # helm install -f keycloak-values.yaml keycloak bitnami/keycloak
 rbac:
   create: true
+  rules:
+    - apiGroups:
+        - ""
+      resources:
+        - pods
+      verbs:
+        - get
+        - list
 replicaCount: 2
+resources:
+  requests:
+    memory: 2G
+    cpu: 200m
 serviceDiscovery:
   enabled: true
 metrics:

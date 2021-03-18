@@ -30,7 +30,7 @@ dependencies:
     tags:
       - postgres
   - name: keycloak
-    version: "~2.2.1"
+    version: "~2.2.2"
     repository: "https://charts.bitnami.com/bitnami"
     condition: keycloak.enabled
     tags:

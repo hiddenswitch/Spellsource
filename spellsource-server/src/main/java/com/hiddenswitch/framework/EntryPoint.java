@@ -15,6 +15,7 @@ public class EntryPoint {
 			try {
 				Environment.migrate().toCompletionStage().toCompletableFuture().join();
 			} catch (Throwable t) {
+				t.printStackTrace();
 				System.exit(1);
 				return;
 			}
