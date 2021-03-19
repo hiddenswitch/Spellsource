@@ -1,15 +1,8 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven { url 'https://plugins.gradle.org/m2/' }
-    }
-    dependencies {
-        classpath 'io.swagger:swagger-models:1.5.17'
-        classpath 'io.swagger:swagger-codegen:2.3.0'
-    }
-}
+import java.io.ByteArrayOutputStream;
 
 apply plugin: 'base'
+
+def secretsPath = "${project(':spellsource-private').projectDir}/src/secrets"
 
 task buildMacOS(type: UnityTask, group: 'Spellsource') {
     description("Builds the macOS versions of the game using deploy.sh file and your local Unity version.")
@@ -39,4 +32,50 @@ task buildWebGL(type: UnityTask, group: 'Spellsource') {
     description("Builds the WebGL version of the game using deploy.sh file and your local Unity version.")
     flags = '-W'
     outputDir = 'webgl'
+}
+
+task distIOS(type: Exec, group: 'Spellsource') { t ->
+    description("Builds and uploads to Testflight the iOS project")
+    dependsOn buildIOS
+    workingDir "${project.projectDir}/src/unity"
+    Utilities.dotEnv(t, file("$secretsPath/spellsource/unityclient-build.env", PathValidation.NONE))
+    commandLine './deploy.sh', '-t'
+}
+
+task distAndroid(type: Exec, group: 'Spellsource') { t ->
+    description("Builds and uploads the Android project to Google Play")
+    dependsOn buildAndroid
+    workingDir "${project.projectDir}/src/unity"
+
+    Utilities.dotEnv(t, file("$secretsPath/spellsource/unityclient-build.env", PathValidation.NONE))
+    environment('KEYSTORE_PATH', "$secretsPath/spellsource/android-keystore.keystore")
+    environment('GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_PATH_TEMP', "$secretsPath/spellsource/google-play-service-account.json")
+    commandLine './deploy.sh', '-d'
+}
+
+task distSteam(group: 'Spellsource') {
+    description("Uploads the macOS and Windows builds to Steam")
+    dependsOn += [buildWindows, buildMacOS]
+    def props = Utilities.propertiesOrEmpty("$secretsPath/task-dist-steam/task.properties")
+    def steamAccount = props.getProperty("steamcmd.account")
+    def steamCmdPassword = props.getProperty("steamcmd.password")
+    doLast {
+        def steamGuardCode = new ByteArrayOutputStream();
+        exec {
+            workingDir("${rootProject.projectDir}/steamguardcli")
+            commandLine "docker", "build", "-t", "steamguardcli", "."
+        }
+        exec {
+            commandLine "docker", "run", "--rm", "-v=$secretsPath/spellsource/maFiles:/data", "steamguardcli", "mono", "/build/steamguard", "--mafiles-path", "/data", "generate-code"
+            standardOutput(steamGuardCode)
+        }
+        exec {
+            commandLine([
+                    "docker", "run", "-v=${rootProject.projectDir}:/home/steam/workdir", "-w=/home/steam/workdir", "cm2network/steamcmd", "/home/steam/steamcmd/steamcmd.sh",
+                    "+login", steamAccount, steamCmdPassword, steamGuardCode.toString(),
+                    "+run_app_build_http", "/home/steam/workdir/spellsource-private/src/secrets/spellsource/steam-app-build.vdf",
+                    "+quit"
+            ])
+        }
+    }
 }

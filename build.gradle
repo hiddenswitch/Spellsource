@@ -1,5 +1,4 @@
 apply plugin: 'maven'
-apply from: 'gradle/deployment.gradle'
 
 dependencies {
     gradleApi()
@@ -7,7 +6,7 @@ dependencies {
 }
 
 allprojects {
-    project.version = '0.8.89'
+    project.version = '0.9.0'
 }
 
 subprojects {

@@ -22,9 +22,9 @@ class UnityTask extends AbstractExecTask<UnityTask> {
 
     @Override
     Task configure(Closure closure) {
-        dependsOn += ':spellsource-protos:generateProto'
+        dependsOn += ':spellsource-protos:protosChanged'
         unity3d = project.gradle.sharedServices.registerIfAbsent("unity3d", BuildService) {
-            maxParallelUsages = 1
+            maxParallelUsages.set(1)
         }
         usesService(unity3d)
         inputs.dir("src/unity/Assets/")
