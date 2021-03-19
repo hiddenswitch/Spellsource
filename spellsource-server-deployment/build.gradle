@@ -8,110 +8,42 @@ def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def sourceDir = "$project.projectDir.absolutePath/src/main/helm"
 def helmBinary = isWindows ? "$project.projectDir.absolutePath/bin/helm.exe" : "helm"
 def privateProject = project(':spellsource-private')
-def databaseName = "metastone"
 
-task deploy(type: Exec) {
-    dependsOn project(':spellsource-server').tasks.jib
-    inputs.dir(sourceDir)
-    def command = [helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"]
-    commandLine command
+task deployPostgresLocal(type: Exec) {
+    inputs.file("$sourceDir/postgres-values.yaml")
+    commandLine helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/postgres-values.yaml", "postgres", "bitnami/postgresql-ha"
 }
 
-task deployProd {
+task deployKeycloakLocal(type: Exec) {
+    dependsOn deployPostgresLocal, project(':spellsource-containers').tasks.pushKeycloakClusteredImage
+    inputs.file("$sourceDir/keycloak-values.yaml")
+    commandLine helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/keycloak-values.yaml", "postgres", "bitnami/keycloak"
+}
+
+task deployRedisLocal(type: Exec) {
+    inputs.file("$sourceDir/redis-values.yaml")
+    commandLine helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/redis-values.yaml", "redis", "bitnami/redis"
+}
+
+task deploySpellsourceLocal(type: Exec) {
+    dependsOn project(':spellsource-server').tasks.jib, deployKeycloakLocal, deployRedisLocal
+    inputs.dir(sourceDir)
+    commandLine helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"
+}
+
+task deploySpellsourceProd {
     dependsOn project(':spellsource-server').tasks.jib, project(':spellsource-private').tasks.build
     def taskPath = "${privateProject.projectDir}/src/secrets/eksctl/spellsource"
     inputs.dir(sourceDir)
     doLast {
-        exec {
-            def command = [helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "-f", "$taskPath/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"]
-            commandLine command
-        }
-        exec {
+        exec { t ->
+//            Utilities.dotEnv(t, new File("${privateProject.projectDir}/src/secrets/common-deployment.env"))
+//            environment "KUBECONFIG", "$taskPath/../kubeconfig.yaml"
             commandLine "kubectl", "apply", "-f", "$taskPath/spellsource-ingress.yaml"
         }
-    }
-
-}
-
-task dumpDockerSwarmMongoDb {
-    dependsOn project(':spellsource-private').tasks.build
-    def taskPath = "${privateProject.projectDir}/src/secrets/task-dump-docker-swarm-mongo-db"
-    def props = Utilities.propertiesOrEmpty("$taskPath/task.properties")
-    def contextPath = "$taskPath/${props.getProperty("context.path", "swarm.context")}"
-    def destinationDir = "${buildDir}/mongo-db"
-    def archivePath = "$destinationDir/archive.tgz"
-    def contextName = props.getProperty("context.name", "contextname")
-    def mongoHost = props.getProperty("mongo.host", "mongo")
-    def mongoUri = "mongodb://$mongoHost:27017/$databaseName"
-    outputs.file(archivePath)
-    doLast {
-        file(destinationDir).mkdirs()
-        exec {
-            commandLine "docker", "context", "import", contextName, contextPath
-            ignoreExitValue(true)
-        }
-        exec {
-            commandLine "docker", "context", "use", contextName
-        }
-        exec {
-            def excludeCollectionsCmd = "--excludeCollection=games"
-            def inDockerCmd = """
-mkdir -pv ./out >/dev/null
-mongodump $excludeCollectionsCmd --uri=$mongoUri >/dev/null
-cd ./dump
-tar -czvf ../archive.tar.gz . >/dev/null
-cat ../archive.tar.gz
-"""
-            commandLine "docker", "run", "--network=backend", "-i", "--rm", "mongo:3.6", "bash", "-c", inDockerCmd
-            standardOutput(new FileOutputStream(archivePath))
+        exec { t ->
+//            Utilities.dotEnv(t, new File("${privateProject.projectDir}/src/secrets/common-deployment.env"))
+            commandLine helmBinary, "upgrade", /* "--kubeconfig", "$taskPath/../kubeconfig.yaml",*/ "-i", "--atomic", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "-f", "$taskPath/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"
         }
     }
-}
-
-task restoreMongoDbFromArchive {
-    dependsOn dumpDockerSwarmMongoDb, project(':spellsource-private').tasks.build
-    def taskConfigDir = "${privateProject.projectDir}/src/secrets/task-mongo"
-    def props = Utilities.propertiesOrEmpty("$taskConfigDir/task.properties")
-    def targetLocalPort = 27018
-    def mongoDbOptions = props.getProperty("mongdb.remote.options", "")
-    def remoteConnection = gradle.sharedServices.registerIfAbsent("mongoSshTunnel", SshTunnelService.class) { spec ->
-        def params = spec.parameters
-        params.sshPort.set(22)
-        params.host.set(props.getProperty("bastion.host", "localhost"))
-        params.username.set(props.getProperty("bastion.username", "user"))
-        if (props.containsKey("identityfile")) {
-            params.identity.set(new File("$taskConfigDir/${props.getProperty("identityfile")}"))
-        } else {
-            params.identity.set(new File("$project.projectDir.absolutePath/src/main/resources/emptyidentity.pem"))
-        }
-        params.localPort.set(targetLocalPort)
-        params.remoteHost.set(props.getProperty("mongodb.remote.host", "remote-host.local"))
-        params.remotePort.set(Integer.parseInt(props.getProperty("mongodb.remote.port", "27017")))
-        params.hostKey.set(props.getProperty("bastion.host.key", ""))
-    }
-
-    doLast {
-        def connection = remoteConnection.get();
-        def dbPath = "${buildDir}/mongo-db"
-        file(dbPath).mkdirs()
-        copy {
-            from(tarTree("$dbPath/archive.tgz"))
-            into "$dbPath/extracted"
-        }
-        exec {
-            def uri = "mongodb://${props.getProperty("mongodb.remote.username")}:${props.getProperty("mongodb.remote.password")}@localhost:${targetLocalPort}/$databaseName?$mongoDbOptions"
-            commandLine "mongorestore", "-vvvvv", "--drop", "--uri", uri, "$dbPath/extracted"
-        }
-    }
-}
-
-task installKeycloak {
-    dependsOn project(':spellsource-private').tasks.build
-    def taskConfigDir = "${privateProject.projectDir}/src/secrets/task-keycloak"
-    def props = Utilities.propertiesOrEmpty("$taskConfigDir/task.properties")
-}
-
-task deploySpellsource {
-    dependsOn project(':spellsource-server').tasks.jib
-    inputs.dir(sourceDir)
 }

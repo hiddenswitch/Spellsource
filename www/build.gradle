@@ -35,3 +35,32 @@ task run(type: NpxTask) {
     command = 'gatsby'
     args = ['develop', '-o']
 }
+
+task copyGameJavadoc(type: Copy) {
+    description("Copies the game module's javadoc into the public directory of the website")
+    dependsOn ':spellsource-game:javadoc'
+    from tasks.getByPath(':spellsource-game:javadoc').outputs
+    into './www/public/javadoc'
+}
+
+task copyNetJavadoc(type: Copy) {
+    description("Copies the net module's javadoc into the public directory of the website")
+    dependsOn ':spellsource-server:javadoc'
+    from tasks.getByPath(':spellsource-server:javadoc').outputs
+    into './www/public/netjavadoc'
+}
+
+// todo: depends on .venv
+task buildWWW(type: ExecSourceTask) {
+    description("Builds the website")
+    source 'src'
+    exclude Utilities.gitIgnore(file("www/.gitignore"))
+    outputs.dir('./src/public')
+    commandLine './build.sh'
+}
+
+task distWWW(type: Exec, group: 'Spellsource') {
+    description("Builds and deploys the website (requires npm, python, the .venv virtualenv installed)")
+    dependsOn += [buildWWW, copyGameJavadoc, copyNetJavadoc]
+    commandLine './deploy.sh'
+}

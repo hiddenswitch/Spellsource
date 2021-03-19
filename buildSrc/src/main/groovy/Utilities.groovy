@@ -1,4 +1,5 @@
 import org.gradle.api.tasks.Exec
+import org.gradle.process.ExecSpec
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -27,7 +28,7 @@ class Utilities {
         return map;
     }
 
-    static def dotEnv(Exec task, File f) {
+    static def dotEnv(ExecSpec task, File f) {
         if (!f.exists()) {
             return
         }
