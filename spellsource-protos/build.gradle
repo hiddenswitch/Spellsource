@@ -106,8 +106,8 @@ task installDll(type: Copy) {
     into(project(':spellsource-client').projectDir.absolutePath + '/src/unity/Assets/Client')
 }
 
-task protosChanged(group: 'spellsource') {
-    description('Run whenever the files in src/main/proto have been changed - recreates the models and updates the client')
+task protosChanged(group: 'Spellsource') {
+    description('Run whenever the files in src/main/proto have been changed. Recreates the models and updates the client.')
     dependsOn += [installDll, ':spellsource-protos:generateProto']
 }
 

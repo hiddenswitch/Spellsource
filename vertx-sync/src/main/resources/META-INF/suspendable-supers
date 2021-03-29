@@ -1,3 +1,4 @@
+co.paralleluniverse.fibers.FiberAsync.requestAsync()V
 io.vertx.core.AbstractVerticle.start(Lio/vertx/core/Promise;)V
 io.vertx.core.AbstractVerticle.stop()V
 io.vertx.core.Closeable.close(Lio/vertx/core/Promise;)V

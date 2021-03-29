@@ -85,8 +85,11 @@ public class Gateway extends AbstractVerticle {
 
 					var nettyServerBuilder = builder.nettyBuilder();
 					nettyServerBuilder
+							.maxConnectionIdle(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
+							.maxConnectionAge(29, TimeUnit.DAYS)
 							.keepAliveTime(serverConfiguration.getGrpcConfiguration().getServerKeepAliveTimeMillis(), TimeUnit.MILLISECONDS)
 							.keepAliveTimeout(serverConfiguration.getGrpcConfiguration().getServerKeepAliveTimeoutMillis(), TimeUnit.MILLISECONDS)
+							.permitKeepAliveTime(Math.max(serverConfiguration.getGrpcConfiguration().getServerKeepAliveTimeMillis() - 400, 100), TimeUnit.MILLISECONDS)
 							.permitKeepAliveWithoutCalls(serverConfiguration.getGrpcConfiguration().getServerPermitKeepAliveWithoutCalls());
 					return Future.succeededFuture(builder);
 				})
