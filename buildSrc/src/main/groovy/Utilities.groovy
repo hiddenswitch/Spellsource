@@ -22,6 +22,9 @@ class Utilities {
         def f = new File(path);
         def map = new HashMap<String, String>();
         f.readLines().each() {
+            if (it.stripLeading().startsWith('#')) {
+                return
+            }
             def (key, value) = it.tokenize('=')
             map.put(key, value)
         }
@@ -33,6 +36,9 @@ class Utilities {
             return
         }
         f.readLines().each() {
+            if (it.stripLeading().startsWith('#')) {
+                return
+            }
             def (key, value) = it.tokenize('=')
             task.environment(key, value)
         }

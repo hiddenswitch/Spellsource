@@ -69,6 +69,9 @@ ingress:
 configmap:
   grpcConfiguration:
     port: 8081
+    serverKeepAliveTimeMillis: 400
+    serverKeepAliveTimeoutMillis: 8000
+    serverPermitKeepAliveWithoutCalls: true
   metrics:
     port: 8080
     livenessRoute: "/liveness"

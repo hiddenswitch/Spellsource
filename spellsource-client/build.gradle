@@ -28,7 +28,7 @@ task buildAndroid(type: UnityTask, group: 'Spellsource') {
     outputDir = 'android'
 }
 
-task buildWebGL(type: UnityTask, group: 'Spellsource') {
+task buildWebGL(type: UnityTask, group: 'Spellsource Internal') {
     description("Builds the WebGL version of the game using deploy.sh file and your local Unity version.")
     flags = '-W'
     outputDir = 'webgl'

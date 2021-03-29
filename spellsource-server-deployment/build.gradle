@@ -1,5 +1,4 @@
 import org.apache.tools.ant.taskdefs.condition.Os
-import org.gradle.api.services.BuildServiceRegistry
 
 apply plugin: 'base'
 version = '0.9.0'
@@ -9,41 +8,46 @@ def sourceDir = "$project.projectDir.absolutePath/src/main/helm"
 def helmBinary = isWindows ? "$project.projectDir.absolutePath/bin/helm.exe" : "helm"
 def privateProject = project(':spellsource-private')
 
-task deployPostgresLocal(type: Exec) {
+task deployPostgresLocal(type: Exec, group: 'Spellsource Internal') {
+    description('Deploys Postgres HA to your configured Kubernetes endpoint.')
     inputs.file("$sourceDir/postgres-values.yaml")
     commandLine helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/postgres-values.yaml", "postgres", "bitnami/postgresql-ha"
 }
 
-task deployKeycloakLocal(type: Exec) {
+task deployKeycloakLocal(type: Exec, group: 'Spellsource Internal') {
+    description('Deploys Keycloak to your configured Kubernetes endpoint.')
     dependsOn deployPostgresLocal, project(':spellsource-containers').tasks.pushKeycloakClusteredImage
     inputs.file("$sourceDir/keycloak-values.yaml")
     commandLine helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/keycloak-values.yaml", "postgres", "bitnami/keycloak"
 }
 
-task deployRedisLocal(type: Exec) {
+task deployRedisLocal(type: Exec, group: 'Spellsource Internal') {
+    description('Deploys Redis to your configured Kubernetes endpoint.')
     inputs.file("$sourceDir/redis-values.yaml")
     commandLine helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/redis-values.yaml", "redis", "bitnami/redis"
 }
 
 task deploySpellsourceLocal(type: Exec) {
+    description('Deploys Spellsource to your configured Kubernetes endpoint.')
     dependsOn project(':spellsource-server').tasks.jib, deployKeycloakLocal, deployRedisLocal
     inputs.dir(sourceDir)
     commandLine helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"
 }
 
-task deploySpellsourceProd {
+task deploySpellsourceProd(group: 'Spellsource') {
+    description('Deploys Spellsource to production. Requires access to Spellsource secrets.')
     dependsOn project(':spellsource-server').tasks.jib, project(':spellsource-private').tasks.build
     def taskPath = "${privateProject.projectDir}/src/secrets/eksctl/spellsource"
     inputs.dir(sourceDir)
     doLast {
         exec { t ->
-//            Utilities.dotEnv(t, new File("${privateProject.projectDir}/src/secrets/common-deployment.env"))
-//            environment "KUBECONFIG", "$taskPath/../kubeconfig.yaml"
+            Utilities.dotEnv(t, new File("${privateProject.projectDir}/src/secrets/common-deployment.env"))
+            environment "KUBECONFIG", "$taskPath/../kubeconfig.yaml"
             commandLine "kubectl", "apply", "-f", "$taskPath/spellsource-ingress.yaml"
         }
         exec { t ->
-//            Utilities.dotEnv(t, new File("${privateProject.projectDir}/src/secrets/common-deployment.env"))
-            commandLine helmBinary, "upgrade", /* "--kubeconfig", "$taskPath/../kubeconfig.yaml",*/ "-i", "--atomic", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "-f", "$taskPath/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"
+            Utilities.dotEnv(t, new File("${privateProject.projectDir}/src/secrets/common-deployment.env"))
+            commandLine helmBinary, "upgrade", "--kubeconfig", "$taskPath/../kubeconfig.yaml", "-i", "--atomic", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "-f", "$taskPath/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"
         }
     }
 }

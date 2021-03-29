@@ -911,6 +911,12 @@
             gpr_clock_type from grpc/support/time.h
             </summary>
         </member>
+        <member name="T:Grpc.Core.Internal.CommonPlatformDetection">
+            <summary>
+            This source file is shared by both Grpc.Core and Grpc.Tools to avoid duplication
+            of platform detection code.
+            </summary>
+        </member>
         <member name="T:Grpc.Core.Internal.CompletionQueueEvent">
             <summary>
             grpc_event from grpc/grpc.h
@@ -1232,9 +1238,18 @@
             Provides access to the exported native methods.
             </summary>
         </member>
-        <member name="M:Grpc.Core.Internal.NativeExtension.LoadUnmanagedLibrary">
+        <member name="M:Grpc.Core.Internal.NativeExtension.LoadNativeMethodsUsingExplicitLoad">
             <summary>
-            Detects which configuration of native extension to load and load it.
+            Detects which configuration of native extension to load and explicitly loads the dynamic library.
+            The explicit load makes sure that we can detect any loading problems early on.
+            </summary>
+        </member>
+        <member name="M:Grpc.Core.Internal.NativeExtension.LoadNativeMethodsUsingDllImports">
+            <summary>
+            Loads native methods using the <c>[DllImport(LIBRARY_NAME)]</c> attributes.
+            Note that this way of loading the native extension is "lazy" and doesn't
+            detect any "missing library" problems until we actually try to invoke the native methods
+            (which could be too late and could cause weird hangs at startup)
             </summary>
         </member>
         <member name="M:Grpc.Core.Internal.NativeExtension.LoadNativeMethods">
@@ -1254,6 +1269,10 @@
         <member name="M:Grpc.Core.Internal.NativeExtension.LoadNativeMethodsXamarin">
             <summary>
             Return native method delegates when running on the Xamarin platform.
+            On Xamarin, the standard <c>[DllImport]</c> loading logic just works
+            as the native library metadata is provided by the <c>AndroidNativeLibrary</c> or
+            <c>NativeReference</c> items in the Xamarin projects (injected automatically
+            by the Grpc.Core.Xamarin nuget).
             WARNING: Xamarin support is experimental and work-in-progress. Don't expect it to work.
             </summary>
         </member>
@@ -1292,7 +1311,32 @@
         </member>
         <member name="T:Grpc.Core.Internal.NativeMethods.DllImportsFromSharedLib">
             <summary>
-            grpc_csharp_ext used a shared library (e.g on Unity Standalone and Android).
+            grpc_csharp_ext used as a shared library (e.g on Unity Standalone and Android).
+            </summary>
+        </member>
+        <member name="T:Grpc.Core.Internal.NativeMethods.DllImportsFromSharedLib_x86">
+            <summary>
+            grpc_csharp_ext used as a shared library (with x86 suffix)
+            </summary>
+        </member>
+        <member name="T:Grpc.Core.Internal.NativeMethods.DllImportsFromSharedLib_x64">
+            <summary>
+            grpc_csharp_ext used as a shared library (with x64 suffix)
+            </summary>
+        </member>
+        <member name="T:Grpc.Core.Internal.NativeMethods.DllImportsFromSharedLib_arm64">
+            <summary>
+            grpc_csharp_ext used as a shared library (with arm64 suffix)
+            </summary>
+        </member>
+        <member name="T:Grpc.Core.Internal.NativeMethods.DllImportsFromSharedLib_x86_dll">
+            <summary>
+            grpc_csharp_ext used as a shared library (with x86.dll suffix)
+            </summary>
+        </member>
+        <member name="T:Grpc.Core.Internal.NativeMethods.DllImportsFromSharedLib_x64_dll">
+            <summary>
+            grpc_csharp_ext used as a shared library (with x64.dll suffix)
             </summary>
         </member>
         <member name="T:Grpc.Core.Internal.PlatformApis">
@@ -1326,9 +1370,14 @@
             true if running on Xamarin.Android, false otherwise.
             </summary>
         </member>
+        <member name="P:Grpc.Core.Internal.PlatformApis.IsNet5OrHigher">
+            <summary>
+            true if running on .NET 5+, false otherwise.
+            </summary>
+        </member>
         <member name="P:Grpc.Core.Internal.PlatformApis.IsNetCore">
             <summary>
-            true if running on .NET Core (CoreCLR), false otherwise.
+            true if running on .NET Core (CoreCLR) or NET 5+, false otherwise.
             </summary>
         </member>
         <member name="M:Grpc.Core.Internal.PlatformApis.GetUnityApplicationPlatform">

@@ -187,7 +187,8 @@ shadowJar {
 }
 
 run {
-    description("Starts the Spellsource server")
+    group('spellsource')
+    description("Starts the Spellsource server locally. Starts all dependencies using Docker (must be installed).")
     dependsOn += [classes, testClasses, createPostgresImage, createKeycloakImage]
     classpath sourceSets.test.runtimeClasspath
     main = 'com.hiddenswitch.framework.tests.applications.EntryPoint'
@@ -202,18 +203,18 @@ application {
 }
 
 
-task stopExistingPostgresContainer(type: DockerStopContainer) {
+task stopExistingPostgresContainer(type: DockerStopContainer, group: 'Spellsource Internal') {
     containerId.set('gradleSupabasePostgres')
     onError({})
 }
 
-task removeExistingPostgresContainer(type: DockerRemoveContainer) {
+task removeExistingPostgresContainer(type: DockerRemoveContainer, group: 'Spellsource Internal') {
     dependsOn stopExistingPostgresContainer
     containerId.set('gradleSupabasePostgres')
     onError({})
 }
 
-task createPostgresContainer(type: DockerCreateContainer) {
+task createPostgresContainer(type: DockerCreateContainer, group: 'Spellsource Internal') {
     dependsOn += [createPostgresImage, removeExistingPostgresContainer]
     targetImageId createPostgresImage.imageId
     containerName.set('gradleSupabasePostgres')
@@ -222,16 +223,16 @@ task createPostgresContainer(type: DockerCreateContainer) {
     hostConfig.autoRemove.set(true)
 }
 
-task startPostgresContainer(type: DockerStartContainer) {
+task startPostgresContainer(type: DockerStartContainer, group: 'Spellsource Internal') {
     dependsOn createPostgresContainer
     targetContainerId createPostgresContainer.getContainerId()
 }
 
-task stopPostgresContainer(type: DockerStopContainer) {
+task stopPostgresContainer(type: DockerStopContainer, group: 'Spellsource Internal') {
     targetContainerId createPostgresContainer.getContainerId()
 }
 
-task createKeycloakContainer(type: DockerCreateContainer) {
+task createKeycloakContainer(type: DockerCreateContainer, group: 'Spellsource Internal') {
     dependsOn += [createPostgresContainer, createKeycloakImage]
     targetImageId "doctorpangloss/spellsource-keycloak:latest"
     envVars.putAll([
@@ -246,21 +247,21 @@ task createKeycloakContainer(type: DockerCreateContainer) {
     hostConfig.links.set(['gradleSupabasePostgres:database'])
 }
 
-task startKeycloakContainer(type: DockerStartContainer) {
+task startKeycloakContainer(type: DockerStartContainer, group: 'Spellsource Internal') {
     dependsOn += [createKeycloakContainer, startPostgresContainer]
     targetContainerId createKeycloakContainer.getContainerId()
 }
 
 // investigate why windows can simply not use a liveness probe here
 if (isWindows) {
-    task startAndWaitOnHealthyKeycloakContainer {
+    task startAndWaitOnHealthyKeycloakContainer(group: 'Spellsource Internal') {
         dependsOn startKeycloakContainer
         doLast {
             sleep(21000)
         }
     }
 } else {
-    task startAndWaitOnHealthyKeycloakContainer(type: DockerLivenessContainer) {
+    task startAndWaitOnHealthyKeycloakContainer(group: 'Spellsource Internal', type: DockerLivenessContainer) {
         dependsOn startKeycloakContainer
         livenessProbe = new LivenessProbe(40000, 1000, 'Admin console')
         targetContainerId createKeycloakContainer.getContainerId()
@@ -268,11 +269,11 @@ if (isWindows) {
 }
 
 
-task stopKeycloakContainer(type: DockerStopContainer) {
+task stopKeycloakContainer(type: DockerStopContainer, group: 'Spellsource Internal') {
     targetContainerId createKeycloakContainer.getContainerId()
 }
 
-task jooqGenerate() {
+task jooqGenerate(group: 'Spellsource Internal') {
     // Do all migrations first
     dependsOn flywayMigrate
     finalizedBy = [stopKeycloakContainer, stopPostgresContainer]
@@ -345,7 +346,7 @@ task jooqGenerate() {
     }
 }
 
-task migrationsOrSqlChanged(group: 'spellsource') {
+task migrationsOrSqlChanged(group: 'Spellsource') {
     description("Run whenever the schema as encoded in $project.projectDir.name/src/main/resources/db/migration has changed - recreates the JOOQ DSL and dumps a ddl.sql file for autocompletion")
     dependsOn += [jooqGenerate]
 }
@@ -368,7 +369,7 @@ test {
     enableAssertions = false
 }
 
-task testLegacyMigration(type: Test, group: 'spellsource') {
+task testLegacyMigration(type: Test, group: 'Spellsource') {
     description('Tests the migration from the legacy server to this current server ')
     dependsOn += [createPostgresImage, compileTestJava]
     systemProperty 'mongo.dbpath', "$project.rootProject.rootDir/.mongo"
