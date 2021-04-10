@@ -8,9 +8,15 @@ import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.rpc.Hiddenswitch;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
+import com.hiddenswitch.framework.rpc.Hiddenswitch.ClientConfiguration.AccountsConfiguration;
+import com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity.Builder;
 import com.hiddenswitch.framework.rpc.VertxAccountsGrpc;
+import com.hiddenswitch.framework.rpc.VertxAccountsGrpc.AccountsVertxImplBase;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc;
+import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc.UnauthenticatedVertxImplBase;
+import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc.UnauthenticatedVertxStub;
 import com.hiddenswitch.framework.schema.keycloak.tables.daos.UserEntityDao;
+import com.hiddenswitch.framework.schema.keycloak.tables.interfaces.IUserEntity;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.grpc.*;
@@ -51,14 +57,30 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toMap;
 
+/**
+ * Implements the account services from {@link AccountsVertxImplBase} against Keycloak, the open source Java identity
+ * management application.
+ * <p>
+ * In the server, a {@link Keycloak} instance is used to create and manage user accounts.
+ * <p>
+ * The client creates an account with {@link UnauthenticatedVertxStub#createAccount(CreateAccountRequest)}. The access
+ * token returned by the reply, {@link LoginOrCreateReply#getAccessTokenResponse()}'s {@link AccessTokenResponse#getToken()}
+ * <p>
+ * Keycloak manages the migration of the {@link com.hiddenswitch.framework.schema.keycloak.Keycloak} SQL schema. The
+ * {@link com.hiddenswitch.framework.schema.keycloak.tables.UserEntity} table's {@link
+ * com.hiddenswitch.framework.schema.keycloak.tables.UserEntity#ID} field is the user ID used throughout the
+ * application.
+ */
 public class Accounts {
-	// todo: use realmId
 	protected static final String KEYCLOAK_LOGIN_PATH = "/realms/hiddenswitch/protocol/openid-connect/token";
 	protected static final String KEYCLOAK_FORGOT_PASSWORD_PATH = "/realms/hiddenswitch/login-actions/reset-credentials";
 	private static final String RSA = "RSA";
 	private static final WeakVertxMap<Keycloak> keycloakReference = new WeakVertxMap<>(Accounts::keycloakConstructor);
 	private static final WeakVertxMap<PublicKeyJwtServerInterceptor> interceptor = new WeakVertxMap<>(Accounts::authorizationInterceptorConstructor);
 
+	/**
+	 * Helps cache the JWT public key.
+	 */
 	private interface PublicKeyStorage {
 		PublicKey get();
 
@@ -120,10 +142,19 @@ public class Accounts {
 		});
 	}
 
+	/**
+	 * Verifies that a Java Web Token was signed by the supplied public key.
+	 * <p>
+	 * Uses Keycloak's model of an access token, {@link AccessToken}.
+	 *
+	 * @param jwt The token
+	 * @param pk  the public key
+	 * @return The decoded {@link AccessToken}
+	 */
 	@NotNull
-	public static CompletableFuture<AccessToken> verify(String jwtToken, PublicKey pk) {
+	public static CompletableFuture<AccessToken> verify(String jwt, PublicKey pk) {
 		Objects.requireNonNull(pk, "public key is null");
-		var verified = TokenVerifier.create(jwtToken, AccessToken.class);
+		var verified = TokenVerifier.create(jwt, AccessToken.class);
 		verified.publicKey(pk);
 		try {
 			verified.verify();
@@ -146,6 +177,11 @@ public class Accounts {
 		}
 	}
 
+	/**
+	 * A GRPC {@link ServerInterceptor} that authorizes requests.
+	 *
+	 * @return an interceptor
+	 */
 	public static Future<ServerInterceptor> authorizationInterceptor() {
 		// retrieve public key
 		Future<PublicKey> publicKeyFut = getPublicKey();
@@ -156,6 +192,11 @@ public class Accounts {
 		});
 	}
 
+	/**
+	 * Retrieves the public key used for JWT signing from Keycloak and caches it.
+	 *
+	 * @return the key
+	 */
 	private static Future<PublicKey> getPublicKey() {
 		var publicKeyStorage = new VertxPublicKeyStorage(Vertx.currentContext().owner());
 		Future<PublicKey> publicKeyFut;
@@ -185,6 +226,27 @@ public class Accounts {
 		return publicKeyFut;
 	}
 
+	/**
+	 * Gets the user associated with the GRPC context currently being executed.
+	 * <p>
+	 * This must be called first in the GRPC method implementation body:
+	 * <pre>
+	 *   {@code
+	 *    Future<Empty> grpcMethodOverride(Empty request) {
+	 *      var userRequest = Accounts.user();
+	 *      userRequest
+	 *        .compose(user -> ...)
+	 *        .onComplete(request);
+	 *    }
+	 *   }
+	 * </pre>
+	 * <p>
+	 * Since vertx code is typically async, the GRPC context's data is only valid in the first scope of the GRPC server
+	 * implementation.
+	 *
+	 * @return A {@link UserEntity} SQL model of a user record
+	 * @see #userId() when the user ID will suffice
+	 */
 	public static Future<UserEntity> user() {
 		// are we in a grpc context?
 		var interceptor = Accounts.interceptor.get();
@@ -204,6 +266,26 @@ public class Accounts {
 		return Future.failedFuture("no context");
 	}
 
+	/**
+	 * Retrieves the user ID in a GRPC context.
+	 * <p>
+	 * This must be called first in the GRPC method implementation body:
+	 * <pre>
+	 *   {@code
+	 *    Future<Empty> grpcMethodOverride(Empty request) {
+	 *      var userRequest = Accounts.user();
+	 *      userRequest
+	 *        .compose(user -> ...)
+	 *        .onComplete(request);
+	 *    }
+	 *   }
+	 * </pre>
+	 * <p>
+	 * Since vertx code is typically async, the GRPC context's data is only valid in the first scope of the GRPC server
+	 * implementation.
+	 *
+	 * @return a user ID, or {@code null} if no token was retrieved
+	 */
 	public static String userId() {
 		var interceptor = Accounts.interceptor.get();
 		if (interceptor != null) {
@@ -220,13 +302,20 @@ public class Accounts {
 		return null;
 	}
 
+	/**
+	 * Creates a {@link UnauthenticatedVertxImplBase} implementation that handles account creation and logins over GRPC.
+	 * <p>
+	 * Eventually, the client will be ported to use native OAuth2 account creation provided by Keycloak.
+	 *
+	 * @return a {@link BindableService} for a {@link io.vertx.grpc.VertxServerBuilder#addService(BindableService)} call.
+	 */
 	public static Future<BindableService> unauthenticatedService() {
 		var context = Vertx.currentContext();
 		Objects.requireNonNull(context, "context");
 
 		var webClient = WebClient.create(context.owner());
 
-		return Future.succeededFuture(new VertxUnauthenticatedGrpc.UnauthenticatedVertxImplBase() {
+		return Future.succeededFuture(new UnauthenticatedVertxImplBase() {
 
 			private LoginOrCreateReply handleAccessTokenUserEntityTuple(Object[] tuple) {
 				var accessTokenResponse = (org.keycloak.representations.AccessTokenResponse) tuple[0];
@@ -237,7 +326,7 @@ public class Accounts {
 			}
 
 			@Override
-			public Future<LoginOrCreateReply> createAccount(Hiddenswitch.CreateAccountRequest request) {
+			public Future<LoginOrCreateReply> createAccount(CreateAccountRequest request) {
 				if (!EmailValidator.getInstance().isValid(request.getEmail())) {
 					return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The e-mail address isn't valid.").asRuntimeException());
 				}
@@ -268,7 +357,7 @@ public class Accounts {
 			}
 
 			@Override
-			public Future<LoginOrCreateReply> login(Hiddenswitch.LoginRequest request) {
+			public Future<LoginOrCreateReply> login(LoginRequest request) {
 				var client = new Client(context.owner(), webClient);
 				return client.login(request.getUsernameOrEmail(), request.getPassword())
 						.onComplete(v -> client.closeFut())
@@ -302,7 +391,7 @@ public class Accounts {
 				var config = Environment.getConfiguration();
 				var authUrl = config.getKeycloak().getPublicAuthUrl();
 				return Future.succeededFuture(ClientConfiguration.newBuilder()
-						.setAccounts(ClientConfiguration.AccountsConfiguration.newBuilder()
+						.setAccounts(AccountsConfiguration.newBuilder()
 								.setKeycloakResetPasswordUrl(URI.create(authUrl + KEYCLOAK_FORGOT_PASSWORD_PATH).normalize().toString())
 								.setKeycloakAccountManagementUrl(URI.create(authUrl + KEYCLOAK_LOGIN_PATH).normalize().toString())
 								.build())
@@ -311,12 +400,17 @@ public class Accounts {
 		});
 	}
 
+	/**
+	 * Creates a {@link AccountsVertxImplBase} instance that handles account services for users that have logged in.
+	 *
+	 * @return a service for {@link io.vertx.grpc.VertxServerBuilder#addService(ServerServiceDefinition)}
+	 */
 	public static Future<ServerServiceDefinition> authenticatedService() {
 		// Does not require vertx blocking service because it makes no blocking calls
-		return Future.succeededFuture(new VertxAccountsGrpc.AccountsVertxImplBase() {
+		return Future.succeededFuture(new AccountsVertxImplBase() {
 
 			@Override
-			public Future<LoginOrCreateReply> changePassword(Hiddenswitch.ChangePasswordRequest request) {
+			public Future<LoginOrCreateReply> changePassword(ChangePasswordRequest request) {
 				var userId = Accounts.userId();
 				// for now we don't invalidate and refresh the old token
 				var token = Accounts.token();
@@ -357,7 +451,7 @@ public class Accounts {
 			}
 
 			@Override
-			public Future<GetAccountsReply> getAccounts(Hiddenswitch.GetAccountsRequest request) {
+			public Future<GetAccountsReply> getAccounts(GetAccountsRequest request) {
 				return user()
 						.compose(thisUser -> {
 							if (thisUser == null) {
@@ -386,7 +480,7 @@ public class Accounts {
 				.compose(Accounts::requiresAuthorization);
 	}
 
-	private static com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity.Builder toProto(UserEntity userEntity) {
+	private static Builder toProto(UserEntity userEntity) {
 		return com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity.newBuilder()
 				.setEmail(userEntity.getEmail())
 				.setUsername(userEntity.getUsername())
