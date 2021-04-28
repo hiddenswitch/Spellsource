@@ -1,3 +1,6 @@
+// polyfill for graal
+global.WebAssembly = global.WebAssembly || require('./src/lib/graal-compatibility/wasm-polyfill')
+
 const remark = require('remark')
 const visit = require('unist-util-visit')
 const { resolveArt } = require('./src/lib/resolve-art')

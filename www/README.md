@@ -2,7 +2,6 @@
 
 This website is authored using Gatsby.js. You can add new pages by duplicating an existing one [here](src/pages-markdown/).
 
-
 ## Installing
 
 **On macOS:**
@@ -10,36 +9,37 @@ This website is authored using Gatsby.js. You can add new pages by duplicating a
 ```shell script
 npm install -g gatsby-cli
 # Ensure test dependencies get built correctly
-CXX="clang++ -I${JAVA_HOME:-`/usr/libexec/java_home`}/include/darwin/" npm install
+npm install
 ```
 
 After gatsby-cli is installed, run the website with `gatsby develop`.
 
 ```shell script
 gatsby clean
+gatsby develop
 ```
 
-## Running Tests
 
+## Testing
 
-First, execute the `shadowJar` task to build the JAR from the root project directory.
+Running the tests requires the polyglot environment.
 
-```
-gradle www:shadowJar
-```
+#### Enable polyglot Java development
 
-On modern JDKs to run the test, `node` should be invoked with the following environment variable:
-
-```
-DYLD_INSERT_LIBRARIES=${JAVA_HOME:-`/usr/libexec/java_home`}/lib/server/libjvm.dylib
-```
-
-This means `jest` should be executed with the environment variable first. You can modify your run configuration in IntelliJ to add the environment varialbe. Note IntelliJ does not do environment variable expansion.
-
-Command line:
-
-```
-DYLD_INSERT_LIBRARIES="${JAVA_HOME:-`/usr/libexec/java_home`}/lib/server/libjvm.dylib" ./node_modules/.bin/jest
+```bash
+# command line utilities for compilation
+xcode-select --install
+# prevents brew from complaining in 2021, this will constantly change
+brew install python@3.9
+brew unlink python@3.9
+# dependencies for node canvas package
+brew install pkg-config cairo pango libpng jpeg giflib librsvg
+# sdkman for graal
+curl -s "https://get.sdkman.io" | bash
+sdk install java 21.0.0.2.r11-grl
+sdk use java 21.0.0.2.r11-grl
+gu install nodejs
+npm install --legacy-peer-deps --save --nodedir="${JAVA_HOME}/languages/js" --build-from-source
 ```
 
 ## Generating Images from PSD/PSBs

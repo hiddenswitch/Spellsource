@@ -490,7 +490,7 @@ export default class JsonConversionUtils {
         let match = null
         for (let blockType in Blockly.Blocks) {
           let block = Blockly.Blocks[blockType].json
-          if (block.type.startsWith('EnchantmentOption')) {
+          if (block?.type?.startsWith('EnchantmentOption')) {
             for (let arg of this.argsList(block)) {
               if (arg.name === prop) {
                 match = block

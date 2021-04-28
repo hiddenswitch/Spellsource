@@ -5,8 +5,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardCatalogueRecord;
-import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
@@ -16,7 +14,6 @@ import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.tests.util.TestBase;
-import org.junit.platform.commons.util.StringUtils;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;

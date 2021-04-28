@@ -1,39 +1,27 @@
-plugins {
-    id "com.github.node-gradle.node" version "2.2.4"
-    id 'com.github.johnrengelman.shadow' version "$shadowPluginVersion"
-    id 'java-library'
+apply plugin: 'base'
+
+def spellsourceDepTask = project(':spellsource-web-cardeditor-support').tasks.shadowJar
+
+task npmInstallGraal {
+    inputs.file('package.json')
+    inputs.file('package-lock.json')
+    outputs.dir('./node_modules')
+
+    def javaHome = System.properties['java.home']
+    doLast {
+        exec {
+            commandLine 'npm', 'install', '--legacy-peer-deps', "--nodedir=$javaHome/languages/js", '--build-from-source'
+        }
+    }
 }
 
-apply plugin: "com.github.node-gradle.node"
-apply plugin: 'java-library'
-apply plugin: 'maven'
-
-dependencies {
-    api project(':spellsource-common')
-    api project(':spellsource-game')
-    api project(':spellsource-cards-git')
-    api project(':spellsource-testutils')
-    runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
-}
-
-test {
-    dependsOn += [shadowJar]
-    useJUnitPlatform()
-}
-
-shadowJar {
-    mergeServiceFiles()
-    zip64 true
-}
-
-node {
-    download = false
-}
-
-task run(type: NpxTask) {
-    dependsOn += [npmInstall]
-    command = 'gatsby'
-    args = ['develop', '-o']
+task test {
+    dependsOn += [spellsourceDepTask, npmInstallGraal]
+    doLast {
+        exec {
+            commandLine 'node', '--polyglot', '--jvm', './node_modules/jest/bin/jest.js', '--colors', '--verbose'
+        }
+    }
 }
 
 task copyGameJavadoc(type: Copy) {
