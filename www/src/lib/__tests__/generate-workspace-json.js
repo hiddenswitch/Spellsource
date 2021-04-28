@@ -2,7 +2,6 @@ import WorkspaceUtils from '../workspace-utils'
 import JsonConversionUtils from '../json-conversion-utils'
 import fs from 'fs'
 import path from 'path'
-import java from 'java'
 import { Workspace } from 'blockly'
 import { beforeAll, describe, expect, test, afterAll } from '@jest/globals'
 import { jsonTransformFileNode } from '../json-transforms'
@@ -10,8 +9,8 @@ import BlocklyMiscUtils from '../blockly-misc-utils'
 import { walk, walkSync } from '../walk'
 import SpellsourceTesting from '../spellsource-testing'
 
-const cardsPath = `${__dirname}/../../../../cards/src/main/resources/cards/collectible`
-const cardsPath2 = `${__dirname}/../../../../game/src/main/resources/basecards/standard`
+const cardsPath = `${__dirname}/../../../../spellsource-cards-git/src/main/resources/cards/collectible`
+const cardsPath2 = `${__dirname}/../../../../spellsource-game/src/main/resources/basecards/standard`
 const blocksPath = `${__dirname}/../JsonBlocks/`
 
 const cards = []
@@ -25,7 +24,8 @@ const usedBlocks = {}
 
 const weirdos = []
 
-java.classpath.push(`${__dirname}/../../../../www/build/libs/www-0.8.89-all.jar`)
+// requires graal
+Java.addToClasspath(`${__dirname}/../../../../spellsource-web-cardeditor-support/build/libs/spellsource-web-cardeditor-support-0.9.0-all.jar`);
 
 describe('WorkspaceUtils', () => {
   beforeAll(async () => {
@@ -78,6 +78,8 @@ describe('WorkspaceUtils', () => {
     const srcCard = JSON.parse(await fs.promises.readFile(cardPath))
     JsonConversionUtils.generateCard(workspace, srcCard)
     WorkspaceUtils.workspaceToCardScript(workspace)
+    // emit something so that the test registers as in progress
+    expect(true).toEqual(true)
   })
 
   test.each(cards)('no custom generates card %s', async (id, cardPath) => {
@@ -86,6 +88,8 @@ describe('WorkspaceUtils', () => {
     JsonConversionUtils.errorOnCustom = true
     JsonConversionUtils.generateCard(workspace, srcCard)
     WorkspaceUtils.workspaceToCardScript(workspace)
+    // emit something so that the test registers as in progress
+    expect(true).toEqual(true)
   })
 
   test.each(cards)('deep equals card %s ', async (id, cardPath) => {
@@ -97,12 +101,12 @@ describe('WorkspaceUtils', () => {
   })
 
   test.each(cards)('replays the same %s', async (id, cardPath) => {
-    const ConversionHarness = java.import('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
+    const ConversionHarness = Java.type('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
     const workspace = new Workspace()
     const srcCard = JSON.parse(await fs.promises.readFile(cardPath))
     JsonConversionUtils.generateCard(workspace, srcCard)
     const json = WorkspaceUtils.workspaceToCardScript(workspace)
-    const result = ConversionHarness.assertCardReplaysTheSameSync(1, 2, id, JSON.stringify(json))
+    const result = ConversionHarness.assertCardReplaysTheSame(1, 2, id, JSON.stringify(json))
     if (!result || result == 'false') {
       expect(json).toEqual(srcCard)
       weirdos.push(id)
@@ -112,13 +116,13 @@ describe('WorkspaceUtils', () => {
   })
 
   test.each(cards)('no custom and replays the same %s', async (id, cardPath) => {
-    const ConversionHarness = java.import('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
+    const ConversionHarness = Java.type('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
     const workspace = new Workspace()
     const srcCard = JSON.parse(await fs.promises.readFile(cardPath))
     JsonConversionUtils.errorOnCustom = true
     JsonConversionUtils.generateCard(workspace, srcCard)
     const json = WorkspaceUtils.workspaceToCardScript(workspace)
-    expect(ConversionHarness.assertCardReplaysTheSameSync(1, 2, id, JSON.stringify(json))).toEqual(true)
+    expect(ConversionHarness.assertCardReplaysTheSame(1, 2, id, JSON.stringify(json))).toEqual(true)
   })
 
   test('java test', async () => {
@@ -127,11 +131,11 @@ describe('WorkspaceUtils', () => {
     var card1 = SpellsourceTesting.receiveCard(context, 'PLAYER_1', 'minion_tiny_persecutor')
     var minion2 = SpellsourceTesting.playMinion(context, 'PLAYER_1', card1, minion1)
 
-    console.log(context.getPlayer1Sync().getMinionsSync().getSync(0).getHpSync())
+    console.log(context.getPlayer1().getMinions().get(0).getHp())
   })
 
   test('just dreams of strength', async () => {
-    const ConversionHarness = java.import('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
+    const ConversionHarness = Java.type('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
     const json = `
     {
       "name": "Dreams of Strength",
@@ -163,18 +167,18 @@ describe('WorkspaceUtils', () => {
       "fileFormatVersion": 1
     }
     `
-    expect(ConversionHarness.assertCardReplaysTheSameSync(1, 2, 'spell_dreams_of_strength', json)).toEqual(true)
+    expect(ConversionHarness.assertCardReplaysTheSame(1, 2, 'spell_dreams_of_strength', json)).toEqual(true)
   })
 
   test.each(cards)('bug test time %s', async (id, cardPath) => {
-    const ConversionHarness = java.import('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
+    const ConversionHarness = Java.type('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
     const workspace = new Workspace()
     const srcCard = JSON.parse(await fs.promises.readFile(cardPath))
     JsonConversionUtils.generateCard(workspace, srcCard)
     const json = WorkspaceUtils.workspaceToCardScript(workspace)
-    ConversionHarness.assertCardReplaysTheSameSync(1, 2, id, JSON.stringify(json))
+    ConversionHarness.assertCardReplaysTheSame(1, 2, id, JSON.stringify(json))
 
-    const ConversionHarness2 = java.import('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
+    const ConversionHarness2 = Java.type('com.hiddenswitch.spellsource.conversiontest.ConversionHarness')
     const workspace2 = new Workspace()
     const srcCard2 = JSON.parse(`
       {
@@ -209,7 +213,7 @@ describe('WorkspaceUtils', () => {
     `)
     JsonConversionUtils.generateCard(workspace2, srcCard2)
     const json2 = WorkspaceUtils.workspaceToCardScript(workspace)
-    expect(ConversionHarness.assertCardReplaysTheSameSync(1, 2, id, JSON.stringify(json))).toEqual(true)
+    expect(ConversionHarness.assertCardReplaysTheSame(1, 2, id, JSON.stringify(json))).toEqual(true)
 
   })
 
