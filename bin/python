@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+docker run -v "$(pwd)":/workdir -v "$(git rev-parse --show-toplevel)":/git -w "/workdir" --entrypoint "/usr/bin/python3" doctorpangloss/spellsource-pythonjava "$@"

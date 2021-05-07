@@ -54,10 +54,14 @@ def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def localUsername = 'admin'
 def localPassword = 'password'
 def localDatabaseName = 'spellsource'
-def mainClassName = 'com.hiddenswitch.framework.EntryPoint'
+def mainClassNameConst = 'com.hiddenswitch.framework.EntryPoint'
 def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
 def createPostgresImage = tasks.getByPath(':spellsource-containers:createPostgresImage')
 def createKeycloakImage = tasks.getByPath(':spellsource-containers:createKeycloakStandaloneImage')
+
+application {
+    mainClassName mainClassNameConst
+}
 
 // configures the migration test, which specially starts mongo
 sourceSets {
@@ -174,7 +178,7 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Main-Class': mainClassName
+        attributes 'Main-Class': mainClassNameConst
     }
 }
 
@@ -182,7 +186,7 @@ shadowJar {
     mergeServiceFiles()
     zip64 true
     manifest {
-        attributes 'Main-Class': mainClassName
+        attributes 'Main-Class': mainClassNameConst
     }
 }
 
@@ -199,7 +203,7 @@ artifacts {
 }
 
 application {
-    mainClass.set(mainClassName)
+    mainClass.set(mainClassNameConst)
 }
 
 
@@ -234,7 +238,7 @@ task stopPostgresContainer(type: DockerStopContainer, group: 'Spellsource Intern
 
 task createKeycloakContainer(type: DockerCreateContainer, group: 'Spellsource Internal') {
     dependsOn += [createPostgresContainer, createKeycloakImage]
-    targetImageId "doctorpangloss/spellsource-keycloak:latest"
+    targetImageId createKeycloakImage.imageId
     envVars.putAll([
             'DB_VENDOR'  : 'postgres',
             'DB_ADDR'    : 'database:5432',
@@ -338,9 +342,9 @@ task jooqGenerate(group: 'Spellsource Internal') {
             environment('DOCKER_OPTS', "--link " + containerId + ":database")
             if (isWindows) {
                 // postgres is bound to localhost
-                commandLine "$project.projectDir\\bin\\pg_dump.exe", '-h', 'localhost', '-s', '-f', "$project.projectDir\\src\\main\\resources\\db\\ddl.sql"
+                commandLine "$project.rootProject.projectDir\\bin\\pg_dump.exe", '-h', 'localhost', '-s', '-f', "$project.projectDir\\src\\main\\resources\\db\\ddl.sql"
             } else {
-                commandLine "$project.projectDir/bin/pg_dump", '-h', "database", '-s', '-f', "/git/$project.projectDir.name/src/main/resources/db/ddl.sql"
+                commandLine "$project.rootProject.projectDir/bin/pg_dump", '-h', "database", '-s', '-f', "/git/$project.projectDir.name/src/main/resources/db/ddl.sql"
             }
         }
     }

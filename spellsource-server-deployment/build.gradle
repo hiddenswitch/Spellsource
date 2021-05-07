@@ -5,7 +5,8 @@ version = '0.9.0'
 
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def sourceDir = "$project.projectDir.absolutePath/src/main/helm"
-def helmBinary = isWindows ? "$project.projectDir.absolutePath/bin/helm.exe" : "helm"
+def helmBinary = isWindows ? "$project.rootProject.projectDir.absolutePath/bin/helm.exe" : "helm"
+def kubectlBinary = isWindows ? "$project.rootProject.projectDir.absolutePath/bin/kubectl.exe" : "kubectl"
 def privateProject = project(':spellsource-private')
 
 task deployPostgresLocal(type: Exec, group: 'Spellsource Internal') {
@@ -43,7 +44,7 @@ task deploySpellsourceProd(group: 'Spellsource') {
         exec { t ->
             Utilities.dotEnv(t, new File("${privateProject.projectDir}/src/secrets/common-deployment.env"))
             environment "KUBECONFIG", "$taskPath/../kubeconfig.yaml"
-            commandLine "kubectl", "apply", "-f", "$taskPath/spellsource-ingress.yaml"
+            commandLine kubectlBinary, "apply", "-f", "$taskPath/spellsource-ingress.yaml"
         }
         exec { t ->
             Utilities.dotEnv(t, new File("${privateProject.projectDir}/src/secrets/common-deployment.env"))

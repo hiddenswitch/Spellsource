@@ -1,3 +1,4 @@
+import org.apache.tools.ant.taskdefs.condition.Os
 import org.gradle.api.Task
 import org.gradle.api.provider.Provider
 import org.gradle.api.services.BuildService
@@ -37,7 +38,12 @@ class UnityTask extends AbstractExecTask<UnityTask> {
     @TaskAction
     protected void exec() {
         workingDir "${project.projectDir}/src/unity/"
-        commandLine './deploy.sh', flags
+        def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
+        def commandLineArgs = ['./deploy.sh', flags]
+        if (isWindows) {
+            commandLineArgs = ["${project.rootProject.projectDir}/bin/bash.exe"] + commandLineArgs
+        }
+        commandLine commandLineArgs
         super.exec()
     }
 }

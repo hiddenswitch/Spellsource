@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-docker run -i --rm --entrypoint /usr/local/bin/grpc_csharp_plugin namely/protoc-all:1.34_0 "$@"

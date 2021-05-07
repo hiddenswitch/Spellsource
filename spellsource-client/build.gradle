@@ -1,8 +1,11 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 import java.io.ByteArrayOutputStream;
 
 apply plugin: 'base'
 
 def secretsPath = "${project(':spellsource-private').projectDir}/src/secrets"
+def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 
 task buildMacOS(type: UnityTask, group: 'Spellsource') {
     description("Builds the macOS versions of the game using deploy.sh file and your local Unity version.")
@@ -39,7 +42,11 @@ task distIOS(type: Exec, group: 'Spellsource') { t ->
     dependsOn buildIOS
     workingDir "${project.projectDir}/src/unity"
     Utilities.dotEnv(t, file("$secretsPath/spellsource/unityclient-build.env", PathValidation.NONE))
-    commandLine './deploy.sh', '-t'
+    def commands = ['./deploy.sh', '-t']
+    if (isWindows) {
+        commands = ["$project.rootProject.projectDir/bin/bash.exe"] + commands
+    }
+    commandLine commands
 }
 
 task distAndroid(type: Exec, group: 'Spellsource') { t ->
@@ -50,7 +57,11 @@ task distAndroid(type: Exec, group: 'Spellsource') { t ->
     Utilities.dotEnv(t, file("$secretsPath/spellsource/unityclient-build.env", PathValidation.NONE))
     environment('KEYSTORE_PATH', "$secretsPath/spellsource/android-keystore.keystore")
     environment('GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_PATH_TEMP', "$secretsPath/spellsource/google-play-service-account.json")
-    commandLine './deploy.sh', '-d'
+    def commands = ['./deploy.sh', '-d']
+    if (isWindows) {
+        commands = ["$project.rootProject.projectDir/bin/bash.exe"] + commands
+    }
+    commandLine commands
 }
 
 task distSteam(group: 'Spellsource') {

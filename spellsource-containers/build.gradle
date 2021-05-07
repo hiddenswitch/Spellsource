@@ -11,10 +11,6 @@ apply plugin: 'com.bmuschko.docker-remote-api'
 
 import com.bmuschko.gradle.docker.tasks.image.*
 
-repositories {
-    jcenter()
-}
-
 dependencies {
     api "org.testcontainers:testcontainers:$testcontainersVersion"
     api "org.testcontainers:toxiproxy:$testcontainersVersion"
@@ -28,6 +24,13 @@ task createPostgresImage(type: DockerBuildImage) {
     inputDir.set(new File("$project.projectDir/src/main/resources/docker/postgres"))
     quiet.set(true)
     images.set(["doctorpangloss/postgres:latest"])
+}
+
+task createPythonImage(type: DockerBuildImage) {
+    dependsOn += [tasks.processResources]
+    inputDir.set(new File("$project.projectDir/src/main/resources/docker/pythonjava/"))
+    quiet.set(true)
+    images.set(["doctorpangloss/spellsource-pythonjava:latest"])
 }
 
 task createKeycloakStandaloneImage(type: DockerBuildImage) {

@@ -1,9 +1,13 @@
 import os
 import subprocess
 import sys
+import pathlib
+from os.path import relpath, join
 
 from setuptools import setup
 from setuptools.command.install import install
+
+DIR = pathlib.Path(__file__).parent.absolute()
 
 if sys.version_info < (3, 6):
     sys.exit('Spellsource requires at least Python 3.6\n  Visit https://www.python.org/downloads/ to download it.')
@@ -17,8 +21,8 @@ try:
 except:
     sys.exit('Spellsource requires Java 11 or later.\n  Visit https://adoptopenjdk.net to download it.')
 
-SRC_PATH = '../'
-with open(os.path.join(SRC_PATH, 'README.md'), 'r') as readme_file:
+SRC_PATH = join(DIR, '../')
+with open(join(SRC_PATH, 'README.md'), 'r') as readme_file:
     README = readme_file.read()
 
 
@@ -26,7 +30,7 @@ def _cards_in_directory(directory):
     for (path, directories, filenames) in os.walk(directory):
         for filename in filenames:
             if '.json' in filename:
-                yield os.path.join(path, filename)
+                yield join(path, filename)
 
 
 class CompileSpellsource(install):
@@ -34,16 +38,16 @@ class CompileSpellsource(install):
         # Compile Spellsource
         # This will throw an exception if compilation fails, which is exactly what we want
         if os.name == "nt":
-            gradle_cmd = './gradlew.bat'
+            gradle_cmd = 'gradlew.bat'
         else:
             gradle_cmd = './gradlew'
-        subprocess.check_call([f"{gradle_cmd} net:shadowJar"], cwd=SRC_PATH, shell=True)
-        subprocess.check_call([f"{gradle_cmd} internalcontent:jar"], cwd=SRC_PATH, shell=True)
+        subprocess.check_call([f"{gradle_cmd}", '--no-daemon', "spellsource-server:shadowJar"], cwd=SRC_PATH, shell=True)
+        subprocess.check_call([f"{gradle_cmd}", '--no-daemon', "spellsource-cards-private:jar"], cwd=SRC_PATH, shell=True)
         install.run(self)
 
 
 setup(name='spellsource',
-      version='0.8.89',
+      version='0.9.0',
       description='The Spellsource card game engine for card game AI and simulation',
       long_description=README,
       long_description_content_type="text/markdown",
@@ -52,10 +56,14 @@ setup(name='spellsource',
       author='Benjamin Berman',
       data_files=[
           ("share/spellsource/cards",
-           list(_cards_in_directory(os.path.join(SRC_PATH, 'cards', 'src', 'main', 'resources', 'cards')))),
-          ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-0.8.89-all.jar'),
-                                 os.path.join(SRC_PATH, 'internalcontent', 'build', 'libs',
-                                              'internalcontent-0.8.89.jar')]),
+           # paths to the cards relative to the setup.py file
+           [relpath(card_path, DIR) for card_path in
+            _cards_in_directory(join(SRC_PATH, 'spellsource-cards-git', 'src', 'main', 'resources', 'cards'))]),
+          ("share/spellsource",
+           [relpath(card_path, DIR) for card_path in
+            [join(SRC_PATH, 'spellsource-server', 'build', 'libs', 'spellsource-server-0.9.0-all.jar'),
+             join(SRC_PATH, 'spellsource-cards-private', 'build', 'libs',
+                  'spellsource-cards-private-0.9.0.jar')]]),
       ],
       include_package_data=True,
       author_email='ben@hiddenswitch.com',
