@@ -73,14 +73,14 @@ task copyGameJavadoc(type: Copy, group: 'Spellsource Internal') {
     description("Copies the game module's javadoc into the public directory of the website")
     dependsOn ':spellsource-game:javadoc'
     from tasks.getByPath(':spellsource-game:javadoc').outputs
-    into './www/public/javadoc'
+    into './public/javadoc'
 }
 
 task copyNetJavadoc(type: Copy, group: 'Spellsource Internal') {
     description("Copies the net module's javadoc into the public directory of the website")
     dependsOn ':spellsource-server:javadoc'
     from tasks.getByPath(':spellsource-server:javadoc').outputs
-    into './www/public/netjavadoc'
+    into './public/netjavadoc'
 }
 
 task distWWW(type: Exec, group: 'Spellsource') {
