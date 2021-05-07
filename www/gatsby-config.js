@@ -28,6 +28,9 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-markdown-textmesh-renderer`
+    },
+    {
       resolve: `gatsby-transformer-json-hooks`,
       options: {
         onTransformObject: ({ fileNode, object }) => {

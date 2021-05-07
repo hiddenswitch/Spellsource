@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+docker run --rm -v "$(pwd)":/workdir -v "$(git rev-parse --show-toplevel)":/git -w "/workdir" --entrypoint /usr/local/bin/npm node:16-buster "$@"

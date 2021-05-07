@@ -10,6 +10,10 @@ header: true
 Thanks for playing this beta of Spellsource! Read more at [our website](https://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)!
 
+### Current Version 0.9.0-4.0.0 (May 1, 2020)
+
+Spellsource is under development and underwent a major refactor.
+
 ### Current Version 0.8.89-3.3.7 (September 2, 2020)
 
  - The new large card art now appears on hovers / inspections.

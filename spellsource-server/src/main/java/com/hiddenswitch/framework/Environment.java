@@ -369,15 +369,17 @@ public class Environment {
 			var supportsMulticast = false;
 			var isVirtualbox = false;
 			var isSelfAssigned = false;
+			var isHyperV = false;
 			try {
 				isSelfAssigned = ni.inetAddresses().anyMatch(i -> i.getHostAddress().startsWith("169"));
 				isLoopback = ni.isLoopback();
 				supportsMulticast = ni.supportsMulticast();
 				isVirtualbox = ni.getDisplayName().contains("VirtualBox") || ni.getDisplayName().contains("Host-Only");
+				isHyperV = ni.getDisplayName().contains("Hyper-V");
 			} catch (IOException failure) {
 			}
 			var hasIPv4 = ni.getInterfaceAddresses().stream().anyMatch(ia -> ia.getAddress() instanceof Inet4Address);
-			return supportsMulticast && !isSelfAssigned && !isLoopback && !ni.isVirtual() && hasIPv4 && !isVirtualbox;
+			return supportsMulticast && !isSelfAssigned && !isLoopback && !ni.isVirtual() && hasIPv4 && !isVirtualbox && !isHyperV;
 		}).sorted(Comparator.comparing(NetworkInterface::getName)).findFirst().orElse(null);
 	}
 

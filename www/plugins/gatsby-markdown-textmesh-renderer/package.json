@@ -1,0 +1,27 @@
+{
+  "name": "gatsby-markdown-textmesh-renderer",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "babel src --out-dir . ",
+    "watch": "babel -w src --out-dir . "
+  },
+  "author": "",
+  "license": "MIT",
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin"
+  ],
+  "dependencies": {
+    "node-fs-extra": "^0.8.2",
+    "pify": "^3.0.0",
+    "marked": "^2.0.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.0"
+  }
+}

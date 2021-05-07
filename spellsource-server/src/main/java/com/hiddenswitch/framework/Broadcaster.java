@@ -38,7 +38,7 @@ public class Broadcaster extends AbstractVerticle implements Verticle {
 			startFuture.fail("No valid network interface found.");
 			return;
 		}
-		LOGGER.info("start: Broadcasting {}", networkInterface.toString());
+		LOGGER.info("start: Broadcasting {}", networkInterface);
 		hostSockets.put(networkInterface, createDatagramSocket(networkInterface, startFuture));
 	}
 

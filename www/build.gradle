@@ -1,54 +1,100 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 apply plugin: 'base'
 
+def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def spellsourceDepTask = project(':spellsource-web-cardeditor-support').tasks.shadowJar
+def gatsbyBinary = "$project.projectDir/node_modules/.bin/gatsby${isWindows ? '.cmd' : ''}"
+def nodeBinary = isWindows ? "C:\\Program Files\\nodejs\\node.cmd" : "/usr/local/bin/node"
+def npmBinary = isWindows ? "C:\\Program Files\\nodejs\\npm.cmd" : "/usr/local/bin/npm"
+def graalNpmPrefix = 'node_modules_graal'
 
-task npmInstallGraal {
+clean {
+    delete 'public'
+    delete '.cache'
+}
+
+static void configureGatsbyTaskSources(Task task) {
+    task.inputs.dir('src')
+    task.inputs.files('*.js')
+    task.inputs.files('package*.json')
+    task.inputs.dir('plugins')
+    task.outputs.dir('.cache')
+}
+
+task npmInstall(group: 'Spellsource Internal') {
     inputs.file('package.json')
     inputs.file('package-lock.json')
     outputs.dir('./node_modules')
 
+    doLast {
+        exec {
+            commandLine npmBinary, 'install', '--legacy-peer-deps'
+        }
+    }
+}
+
+task gatsbyBuild(group: 'Spellsource Internal', { t ->
+    dependsOn += [npmInstall]
+    configureGatsbyTaskSources(t)
+    outputs.dir('public')
+    doLast {
+        exec {
+            workingDir "$project.projectDir"
+            commandLine gatsbyBinary, 'build'
+        }
+    }
+})
+
+task npmInstallGraal(group: 'Spellsource Internal') {
+    // todo: check that we are executing as graal
+    inputs.file('package.json')
+    inputs.file('package-lock.json')
+    outputs.dir(graalNpmPrefix)
+
     def javaHome = System.properties['java.home']
     doLast {
         exec {
-            commandLine 'npm', 'install', '--legacy-peer-deps', "--nodedir=$javaHome/languages/js", '--build-from-source'
+            commandLine npmBinary, '--prefix', graalNpmPrefix, 'install', '--legacy-peer-deps', "--nodedir=$javaHome/languages/js", '--build-from-source'
         }
     }
 }
 
-task test {
+task testWithJava(group: 'Spellsource Internal') {
     dependsOn += [spellsourceDepTask, npmInstallGraal]
     doLast {
         exec {
-            commandLine 'node', '--polyglot', '--jvm', './node_modules/jest/bin/jest.js', '--colors', '--verbose'
+            commandLine nodeBinary, '--prefix', graalNpmPrefix, '--polyglot', '--jvm', './node_modules/jest/bin/jest.js', '--colors', '--verbose'
         }
     }
 }
 
-task copyGameJavadoc(type: Copy) {
+task copyGameJavadoc(type: Copy, group: 'Spellsource Internal') {
     description("Copies the game module's javadoc into the public directory of the website")
     dependsOn ':spellsource-game:javadoc'
     from tasks.getByPath(':spellsource-game:javadoc').outputs
     into './www/public/javadoc'
 }
 
-task copyNetJavadoc(type: Copy) {
+task copyNetJavadoc(type: Copy, group: 'Spellsource Internal') {
     description("Copies the net module's javadoc into the public directory of the website")
     dependsOn ':spellsource-server:javadoc'
     from tasks.getByPath(':spellsource-server:javadoc').outputs
     into './www/public/netjavadoc'
 }
 
-// todo: depends on .venv
-task buildWWW(type: ExecSourceTask) {
-    description("Builds the website")
-    source 'src'
-    exclude Utilities.gitIgnore(file("www/.gitignore"))
-    outputs.dir('./src/public')
-    commandLine './build.sh'
-}
-
 task distWWW(type: Exec, group: 'Spellsource') {
-    description("Builds and deploys the website (requires npm, python, the .venv virtualenv installed)")
-    dependsOn += [buildWWW, copyGameJavadoc, copyNetJavadoc]
-    commandLine './deploy.sh'
+    description("Builds and deploys the website")
+    dependsOn += [gatsbyBuild, copyGameJavadoc, copyNetJavadoc]
+    def commands = ['./bin/deploy.sh']
+    if (isWindows) {
+        commands = ["$project.rootProject.projectDir/bin/bash.exe"] + commands
+    }
+
+    commandLine commands
+    doFirst {
+        if (isWindows && !file('C:\\Program Files\\Amazon\\AWSCLIV2\\aws.exe').exists()) {
+            logger.error("Install the AWS CLI from https://awscli.amazonaws.com/AWSCLIV2.msi")
+        }
+    }
 }

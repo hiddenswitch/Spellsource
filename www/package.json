@@ -11,6 +11,7 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@gatsby-contrib/gatsby-plugin-elasticlunr-search": "^2.3.0",
+    "acorn": "^6.4.2",
     "blockly": "^3.20200924.2",
     "canvas": "^2.6.1",
     "enumify": "^2.0.0",
@@ -29,6 +30,7 @@
     "gatsby-transformer-remark": "^2.6.53",
     "gatsby-transformer-sharp": "^2.3.16",
     "lodash": "^4.17.15",
+    "marked": "^2.0.3",
     "node-sass": "^4.14.1",
     "react": "^16.14.0",
     "react-ace": "^9.4.0",
