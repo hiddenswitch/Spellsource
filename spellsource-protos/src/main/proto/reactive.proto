@@ -1,5 +1,6 @@
 syntax = "proto3";
 package spellsource;
+option java_package = "com.hiddenswitch.spellsource.rpc";
 
 message NotificationKindMessage {
     enum NotificationKind {

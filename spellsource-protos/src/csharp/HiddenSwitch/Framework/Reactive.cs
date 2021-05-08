@@ -28,8 +28,8 @@ namespace Spellsource {
             "S2luZE1lc3NhZ2UiNwoQTm90aWZpY2F0aW9uS2luZBIJCgVBRERFRBAAEgsK",
             "B0NIQU5HRUQQARILCgdSRU1PVkVEEAIiagoTQWRkZWRDaGFuZ2VkUmVtb3Zl",
             "ZBJDCgRraW5kGAEgASgOMjUuc3BlbGxzb3VyY2UuTm90aWZpY2F0aW9uS2lu",
-            "ZE1lc3NhZ2UuTm90aWZpY2F0aW9uS2luZBIOCgZmaWVsZHMYAiADKAViBnBy",
-            "b3RvMw=="));
+            "ZE1lc3NhZ2UuTm90aWZpY2F0aW9uS2luZBIOCgZmaWVsZHMYAiADKAVCIgog",
+            "Y29tLmhpZGRlbnN3aXRjaC5zcGVsbHNvdXJjZS5ycGNiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {

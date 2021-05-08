@@ -309,8 +309,10 @@ public class Matchmaking extends SyncVerticle {
 		while (!Strand.currentStrand().isInterrupted()) {
 			var scanFrequency = serverConfiguration.getMatchmaking().getScanFrequencyMillis();
 			var maxTickets = serverConfiguration.getMatchmaking().getMaxTicketsToProcess();
-			var transaction = await(Environment.queryExecutor().beginTransaction());
+			ReactiveClassicGenericQueryExecutor transaction = null;
 			try {
+				transaction = await(Environment.queryExecutor().beginTransaction());
+
 				started.tryComplete(Strand.currentStrand());
 
 				// create assignments
@@ -343,7 +345,7 @@ public class Matchmaking extends SyncVerticle {
 						.stream()
 						.map(RowMappers.getMatchmakingQueuesMapper())
 						.collect(toMap(MatchmakingQueues::getId, Function.identity()));
-				for (var group : records.entrySet()) {
+				for (var group : records.entrySet ()) {
 					var tickets = group.getValue().stream().map(RowMappers.getMatchmakingTicketsMapper()).collect(toList());
 					var configuration = queues.get(group.getKey());
 					// did we collect enough tickets to actually make a match?
@@ -397,20 +399,16 @@ public class Matchmaking extends SyncVerticle {
 				// it's possible that some player's games never get started, we will not await them before committing though,
 				// we want this to happen as fast as possible
 				await(transaction.commit());
+				// Keep looping otherwise
+				// offset the amount of delay by a small random amount to reduce the odds of a deadlock
+				Strand.sleep(scanFrequency + 100 + random.nextInt(Math.max(1, (int) scanFrequency - 100)));
 			} catch (PgException t) {
 				// rolls back automatically
 			} catch (Throwable t) {
 				// we don't need to wait for these cleanup actions, because it will be possibly interrupted
-				transaction.rollback();
-			}
-
-			// Keep looping otherwise
-			// offset the amount of delay by a small random amount to reduce the odds of a deadlock
-			try {
-				Strand.sleep(scanFrequency + 100 + random.nextInt(Math.max(1, (int) scanFrequency - 100)));
-			} catch (Throwable t) {
-				// interrupted
-				break;
+				if (transaction != null) {
+					transaction.rollback();
+				}
 			}
 		}
 

@@ -15,6 +15,7 @@ co.paralleluniverse.concurrent.util.SingleConsumerNonblockingProducerDelayQueue.
 co.paralleluniverse.concurrent.util.SingleConsumerNonblockingProducerDelayQueue.poll(JLjava/util/concurrent/TimeUnit;)Ljava/util/concurrent/Delayed;
 co.paralleluniverse.concurrent.util.SingleConsumerNonblockingProducerQueue.poll()Ljava/lang/Object;
 co.paralleluniverse.concurrent.util.SingleConsumerNonblockingProducerQueue.poll(JLjava/util/concurrent/TimeUnit;)Ljava/lang/Object;
+co.paralleluniverse.concurrent.util.SingleConsumerNonblockingProducerQueue.take()Ljava/lang/Object;
 co.paralleluniverse.fibers.DropwizardFibersMonitor$1.getValue()Ljava/util/Map;
 co.paralleluniverse.fibers.io.AsyncChannelGroup$1.initialValue(Lco/paralleluniverse/fibers/FiberScheduler;)Lco/paralleluniverse/fibers/io/AsyncChannelGroup;
 co.paralleluniverse.io.serialization.Serialization$1.initialValue()Lco/paralleluniverse/io/serialization/Serialization;

@@ -3,7 +3,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'base'
 
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
-def spellsourceDepTask = project(':spellsource-web-cardeditor-support').tasks.shadowJar
+def spellsourceDepTask = ':spellsource-web-cardeditor-support:shadowJar'
 def gatsbyBinary = "$project.projectDir/node_modules/.bin/gatsby${isWindows ? '.cmd' : ''}"
 def nodeBinary = isWindows ? "C:\\Program Files\\nodejs\\node.cmd" : "/usr/local/bin/node"
 def npmBinary = isWindows ? "C:\\Program Files\\nodejs\\npm.cmd" : "/usr/local/bin/npm"
