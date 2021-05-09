@@ -1,5 +1,5 @@
 import {Button, Form} from "react-bootstrap";
-import styles from './card-editor-view.module.css'
+import * as styles from './card-editor-view.module.css'
 import Blockly from "blockly";
 import AceEditor from "react-ace";
 import React, {useRef, useState} from "react";

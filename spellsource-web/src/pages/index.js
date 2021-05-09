@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import Layout from '../components/creative-layout'
-import { Parallax, ParallaxLayer } from 'react-spring/renderprops-addons'
-import styles from '../components/creative-layout.module.scss'
+import { Parallax, ParallaxLayer } from '@react-spring/parallax'
+import * as styles from '../components/creative-layout.module.scss'
 
 import spellsource from '../assets/spellsource-resized.png'
 import gameEnvironment from '../assets/sector-5.png'

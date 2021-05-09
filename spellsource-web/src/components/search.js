@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 
 import { Link, navigate } from 'gatsby'
 import { Form, FormControl, ListGroup } from 'react-bootstrap'
-import styles from './creative-layout.module.scss'
+import * as styles from './creative-layout.module.scss'
 
 import { useIndex } from '../hooks/use-index'
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, forwardRef } from 'react'
 import WorkspaceUtils from '../lib/workspace-utils'
-import styles from './card-editor-view.module.css'
+import * as styles from './card-editor-view.module.css'
 import Blockly from 'blockly'
 import { isArray } from 'lodash'
 import 'ace-builds/src-noconflict/mode-json'

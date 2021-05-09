@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './card-display.module.css'
+import * as styles from './card-display.module.css'
 
 import backgroundLayer from '../card-images/layer-1.png'
 import whiteBanner from '../card-images/layer-3.png'

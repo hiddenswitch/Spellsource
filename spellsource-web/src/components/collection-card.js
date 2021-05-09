@@ -1,7 +1,7 @@
 import React, { cloneElement } from 'react'
 import CardDisplay from './card-display'
 import { Button } from 'react-bootstrap'
-import styles from './collection-card.module.css'
+import * as styles from './collection-card.module.css'
 import useArtData from '../hooks/use-art-data'
 import BlocklyMiscUtils from '../lib/blockly-misc-utils'
 import { Link } from 'gatsby'

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import styles from '../components/creative-layout.module.scss'
+import * as styles from '../components/creative-layout.module.scss'
 import queryString from 'query-string'
 import Layout from '../components/creative-layout'
 import { ListGroup } from 'react-bootstrap'

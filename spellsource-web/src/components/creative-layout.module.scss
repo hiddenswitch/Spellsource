@@ -228,12 +228,13 @@ header p {
  * Lists
  */
 :not(.menu) > ul {
+  list-style-type: none;
+
   list-style: none;
   padding-left: 0;
 }
 
 :not(.menu) > ul {
-  list-style-type: none;
 }
 
 :not(.menu) > ul > li:before {
@@ -251,6 +252,46 @@ header p {
   white-space: nowrap;
   overflow-x: auto;
   position: relative;
+
+  .search-results {
+    background-color: var(--background-color);
+    z-index: 10;
+    margin-left: -0.25em;
+    margin-top: 0.25em;
+    padding-right: 2.5em;
+    position: fixed;
+    top: auto;
+  }
+
+  .search-list-group-item {
+    text-align: left;
+    padding-left: 0.2em;
+    padding-right: 0.25em;
+  }
+
+  ul {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    padding-left: 0px;
+    list-style-type: none;
+    text-align: center;
+
+    li {
+      display: inline-block;
+      margin-left: 10px;
+      user-select: none;
+      a {
+        text-decoration: none;
+        color: var(--text-color);
+
+        &:hover {
+          text-decoration: none;
+          color: var(--background-color);
+          background-color: var(--base-color);
+        }
+      }
+    }
+  }
 }
 
 .input-box {
@@ -259,46 +300,6 @@ header p {
   padding-right: 0.25em;
 }
 
-.menu .search-results {
-  background-color: var(--background-color);
-  z-index: 10;
-  margin-left: -0.25em;
-  margin-top: 0.25em;
-  padding-right: 2.5em;
-  position: fixed;
-  top: auto;
-}
-
-.menu .search-list-group-item {
-  text-align: left;
-  padding-left: 0.2em;
-  padding-right: 0.25em;
-}
-
-.menu ul {
-  margin-top: 12px;
-  margin-bottom: 12px;
-  padding-left: 0px;
-  list-style-type: none;
-  text-align: center;
-}
-
-.menu ul li {
-  display: inline-block;
-  margin-left: 10px;
-  user-select: none;
-}
-
-.menu ul li a {
-  text-decoration: none;
-  color: var(--text-color);
-}
-
-.menu ul li a:hover {
-  text-decoration: none;
-  color: var(--background-color);
-  background-color: var(--base-color);
-}
 
 /**
  * Form

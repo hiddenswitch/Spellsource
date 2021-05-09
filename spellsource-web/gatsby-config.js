@@ -56,7 +56,7 @@ module.exports = {
     },
     `gatsby-plugin-sass`,
     `gatsby-plugin-sharp`,
-    `gatsby-image`,
+    `gatsby-plugin-image`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-anchor-links`,
     {

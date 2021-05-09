@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { graphql, Link } from 'gatsby'
 import Layout from '../components/creative-layout'
 import CardDisplay from '../components/card-display'
-import styles from '../components/creative-layout.module.scss'
+import * as styles from '../components/creative-layout.module.scss'
 import { useIndex } from '../hooks/use-index'
 import { Form, FormControl, ListGroup } from 'react-bootstrap'
 
