@@ -23,9 +23,6 @@
     "json"
   ],
   "license": "MIT",
-  "peerDependencies": {
-    "gatsby": "^2.0.15"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/gatsbyjs/gatsby.git",

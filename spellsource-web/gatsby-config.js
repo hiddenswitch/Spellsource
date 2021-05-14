@@ -23,10 +23,25 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `src`,
-        path: `${__dirname}/src/lib/JsonBlocks/`,
+        name: `art`,
+        path: `${__dirname}/../spellsource-client/src/unity/Assets/Textures/`,
+        ignore: ['**/Land Fae\.ase']
       },
     },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/../spellsource-cards-git/src/main/resources/cards`,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/../spellsource-game/src/main/resources/basecards/standard`,
+      },
+    },
+    `gatsby-transformer-photoshop`,
+    `gatsby-transformer-aseprite`,
     {
       resolve: `gatsby-markdown-textmesh-renderer`
     },
@@ -42,22 +57,10 @@ module.exports = {
         }
       }
     },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        path: `${__dirname}/../spellsource-cards-git/src/main/resources/cards`,
-      },
-    },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        path: `${__dirname}/../spellsource-game/src/main/resources/basecards/standard`,
-      },
-    },
-    `gatsby-plugin-sass`,
-    `gatsby-plugin-sharp`,
     `gatsby-plugin-image`,
+    `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
+    `gatsby-plugin-sass`,
     `gatsby-plugin-anchor-links`,
     {
       resolve: `gatsby-transformer-remark`,
@@ -87,14 +90,6 @@ module.exports = {
             },
           },
         ],
-      },
-    },
-    {
-      resolve: `gatsby-plugin-s3`,
-      options: {
-        bucketName: 'www.playspellsource.com',
-        protocol: 'https',
-        hostname: 'www.playspellsource.com',
       },
     },
     {
@@ -146,15 +141,18 @@ module.exports = {
             title: node => node.searchMessage,
             nodeType: node => 'Block',
             rawMarkdownBody: node => node.comment || ''
-          },
-          File: {
-            title: node => node.name,
-            nodeType: node => 'File',
-            rawMarkdownBody: node => ''
           }
         },
         // Optional filter to limit indexed nodes
         filter: (node, getNode) => true
+      },
+    },
+    {
+      resolve: `gatsby-plugin-s3`,
+      options: {
+        bucketName: 'www.playspellsource.com',
+        protocol: 'https',
+        hostname: 'www.playspellsource.com',
       },
     },
   ],
