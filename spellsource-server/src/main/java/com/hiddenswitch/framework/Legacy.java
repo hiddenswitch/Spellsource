@@ -41,6 +41,7 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
 import net.openhft.hashing.LongHashFunction;
 import org.jooq.*;
+import org.jooq.Record;
 import org.jooq.impl.DSL;
 import org.redisson.api.RMapCacheAsync;
 

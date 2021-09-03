@@ -105,7 +105,7 @@ class ExtendedStackTraceHotSpot extends ExtendedStackTrace {
                 depth++;
             }
         }
-        assert depth == getStackTraceDepth0();
+//        assert depth == getStackTraceDepth0();
         return depth;
     }
 
@@ -144,6 +144,7 @@ class ExtendedStackTraceHotSpot extends ExtendedStackTrace {
         }
     }
 
+    /*
     private int getStackTraceDepth0() {
         try {
             return (Integer) getStackTraceDepth.invoke(t);
@@ -153,10 +154,17 @@ class ExtendedStackTraceHotSpot extends ExtendedStackTrace {
             throw rethrow(e);
         }
     }
+    */
 
     private StackTraceElement getStackTraceElement0(int i) {
         try {
-            return (StackTraceElement) getStackTraceElement.invoke(t, i);
+        	if (getStackTraceElement!=null){
+		        return (StackTraceElement) getStackTraceElement.invoke(t, i);
+	        } else if (stackTrace!=null){
+		        return ((StackTraceElement[])stackTrace.get(t))[i];
+	        } else {
+        		throw new AssertionError("unsupported");
+	        }
         } catch (IllegalAccessException e) {
             throw new AssertionError(e);
         } catch (InvocationTargetException e) {
@@ -215,8 +223,9 @@ class ExtendedStackTraceHotSpot extends ExtendedStackTrace {
     private static final int TRACE_CHUNK_SIZE = 32; // maximum num of elements in each array
 
     // private static final Field backtrace; // the JVM blocks access to Throwable.backtrace via reflection
-    private static final Method getStackTraceDepth;
-    private static final Method getStackTraceElement;
+//    private static final Method getStackTraceDepth;
+    private static Method getStackTraceElement;
+    private static Field stackTrace;
     private static final Field methodSlot;
     private static final Field ctorSlot;
     private static final Field fieldSlot;
@@ -232,8 +241,12 @@ class ExtendedStackTraceHotSpot extends ExtendedStackTrace {
                 throw new IllegalStateException("Not HotSpot");
             // the JVM blocks access to Throwable.backtrace via reflection
             // backtrace = ReflectionUtil.accessible(Throwable.class.getDeclaredField("backtrace"));
-            getStackTraceDepth = accessible(Throwable.class.getDeclaredMethod("getStackTraceDepth"));
-            getStackTraceElement = accessible(Throwable.class.getDeclaredMethod("getStackTraceElement", int.class));
+//            getStackTraceDepth = accessible(Throwable.class.getDeclaredMethod("getStackTraceDepth"));
+	          try {
+		          getStackTraceElement = accessible(Throwable.class.getDeclaredMethod("getStackTraceElement", int.class));
+	          } catch (NoSuchMethodException ignored) {
+	          	stackTrace = accessible(Throwable.class.getDeclaredField("stackTrace"));
+	          }
             methodSlot = accessible(Method.class.getDeclaredField("slot"));
             ctorSlot = accessible(Constructor.class.getDeclaredField("slot"));
             fieldSlot = accessible(Field.class.getDeclaredField("slot"));

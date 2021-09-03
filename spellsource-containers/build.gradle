@@ -5,7 +5,6 @@ plugins {
 }
 
 apply plugin: 'idea'
-apply plugin: 'maven'
 apply plugin: 'java-library'
 apply plugin: 'com.bmuschko.docker-remote-api'
 

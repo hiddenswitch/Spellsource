@@ -30,7 +30,6 @@ apply plugin: 'base'
 apply plugin: 'java-library'
 apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'maven'
 apply plugin: 'com.bmuschko.docker-remote-api'
 apply plugin: 'idea'
 apply from: '../gradle/instrument.gradle'
@@ -82,10 +81,27 @@ dependencies {
     api project(':spellsource-cards-git')
     api project(':vertx-sync')
     api "io.vertx:vertx-rx-java2:$vertxVersion"
+    implementation "io.github.classgraph:classgraph:$classgraphVersion"
+    implementation group: 'io.vertx', name: 'vertx-infinispan', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-service-discovery', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-web', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-mongo-client', version: vertxVersion
+    implementation group: 'org.graalvm.truffle', name: 'truffle-api', version: '20.2.0'
+    implementation group: 'org.graalvm.js', name: 'js', version: '20.2.0'
 
+    // keycloak
+    implementation 'net.openhft:zero-allocation-hashing:0.11'
+    implementation platform("org.keycloak.bom:keycloak-bom-parent:$keycloakVersion")
+    implementation(group: 'org.keycloak', name: 'keycloak-admin-client', version: "$keycloakVersion") {
+        exclude group: 'org.jboss.resteasy', module: 'resteasy-client'
+    }
+    implementation "org.keycloak:keycloak-server-spi:$keycloakVersion"
+    implementation "org.keycloak:keycloak-server-spi-private:$keycloakVersion"
+
+    // environment
     implementation "ch.qos.logback:logback-classic:1.2.3"
     implementation group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
-
     implementation("com.databasesandlife:java-common:$databasesandlifeVersion") {
         exclude group: 'com.google.gdata', module: '*'
         exclude group: 'log4j', module: '*'
@@ -104,8 +120,7 @@ dependencies {
         exclude group: 'jakarta.activation', module: '*'
     }
 
-    implementation "io.github.classgraph:classgraph:$classgraphVersion"
-    implementation("com.avast.grpc.jwt:grpc-java-jwt:0.4.0") {
+    implementation("com.avast.grpc.jwt:grpc-java-jwt:0.4.11") {
         exclude group: 'com.google.code.gson'
         exclude group: 'io.grpc'
         exclude group: 'org.keycloak'
@@ -115,7 +130,7 @@ dependencies {
         exclude group: 'org.checkerframework', module: 'checker-qual'
     }
 
-    implementation('org.jboss.resteasy:resteasy-client-vertx:4.5.6.Final') {
+    implementation('org.jboss.resteasy:resteasy-client-vertx:4.6.0.Final') {
         exclude group: 'io.vertx', module: 'vertx-core'
     }
 
@@ -125,12 +140,7 @@ dependencies {
         exclude group: "io.vertx", module: '*'
     }
 
-    implementation group: 'io.vertx', name: 'vertx-infinispan', version: vertxVersion
-    implementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
-    implementation group: 'io.vertx', name: 'vertx-service-discovery', version: vertxVersion
-    implementation group: 'io.vertx', name: 'vertx-web', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-auth-common', version: vertxVersion
-    implementation group: 'io.vertx', name: 'vertx-mongo-client', version: vertxVersion
     implementation(group: 'io.vertx', name: 'vertx-opentracing', version: vertxVersion) {
         exclude group: 'io.jaegertracing', module: '*'
     }
@@ -139,25 +149,16 @@ dependencies {
     implementation "io.micrometer:micrometer-registry-jmx:$micrometerVersion"
     implementation 'com.be-hase.grpc-micrometer:grpc-micrometer:0.0.2'
     implementation 'io.opentracing.contrib:opentracing-grpc:0.2.3'
-    implementation("com.github.marschall:micrometer-jfr:0.4.0") {
+    implementation "io.jaegertracing:jaeger-client:$jaegerVersion"
+    implementation("com.github.marschall:micrometer-jfr:0.5.0") {
         exclude group: 'io.micrometer', module: 'micrometer-core'
     }
-    implementation 'net.openhft:zero-allocation-hashing:0.11'
-    implementation platform("org.keycloak.bom:keycloak-bom-parent:$keycloakVersion")
-    implementation(group: 'org.keycloak', name: 'keycloak-admin-client', version: "$keycloakVersion") {
-        exclude group: 'org.jboss.resteasy', module: 'resteasy-client'
-    }
-    implementation "org.keycloak:keycloak-server-spi:$keycloakVersion"
-    implementation "org.keycloak:keycloak-server-spi-private:$keycloakVersion"
-
-    implementation group: 'org.graalvm.truffle', name: 'truffle-api', version: '20.2.0'
-    implementation group: 'org.graalvm.js', name: 'js', version: '20.2.0'
-    implementation "io.jaegertracing:jaeger-client:$jaegerVersion"
     implementation "org.flywaydb:flyway-core:$flywayVersion"
-    implementation 'org.redisson:redisson:3.14.1'
+    implementation 'org.redisson:redisson:3.15.5'
     implementation(group: 'com.github.pcj', name: 'google-options', version: '1.0.0') {
         exclude group: 'com.google.guava', module: 'guava'
     }
+
 
 
     testImplementation(project(':spellsource-containers'))

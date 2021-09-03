@@ -4,7 +4,6 @@ plugins {
 
 apply plugin: 'java-library'
 apply from: '../gradle/instrument.gradle'
-apply plugin: 'maven'
 
 dependencies {
     api "io.vertx:vertx-core:$vertxVersion"

@@ -1,5 +1,3 @@
-apply plugin: 'maven'
-
 dependencies {
     gradleApi()
     localGroovy()
@@ -22,7 +20,7 @@ subprojects {
             failOnVersionConflict()
             eachDependency { DependencyResolveDetails details ->
                 if (details.requested.module.name == 'slf4j-api') {
-                    details.useVersion '1.7.22'
+                    details.useVersion '1.7.30'
                 }
                 if ([
                         'com.fasterxml.jackson.core',
@@ -93,7 +91,11 @@ subprojects {
                 }
 
                 if (details.requested.group == 'ch.qos.logback') {
-                    details.useVersion "1.1.7"
+                    details.useVersion "1.3.0-alpha5"
+                }
+
+                if (details.requested.group == 'com.sun.mail' && details.requested.module.name == 'javax.mail') {
+                    details.useVersion "1.6.2"
                 }
 
                 if (details.requested.group == 'log4j') {

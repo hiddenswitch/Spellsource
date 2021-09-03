@@ -21,9 +21,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Objects;
@@ -87,7 +90,7 @@ public class SimpleSuspendableClassifier implements SuspendableClassifier {
 
     private void readSuspendablesFile(String fileName, Set<String> set, Set<String> classSet) {
         try {
-            parse(new File(fileName).toURI().toURL(), set, classSet);
+            parse(new URL("file:"+fileName), set, classSet);
         } catch (MalformedURLException ex) {
             throw new AssertionError(ex);
         }

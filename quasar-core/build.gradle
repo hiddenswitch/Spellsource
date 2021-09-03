@@ -4,14 +4,13 @@ plugins {
 }
 
 apply plugin: 'java-library'
-apply plugin: 'maven'
 apply plugin: "com.github.johnrengelman.shadow"
 
 group 'com.hiddenswitch'
 
 def vendor = "Parallel Universe Software Co."
 def quasarJar = "${rootProject.projectDir}/quasar-core/build/libs/quasar-core-${version}.jar"
-def asmVer = '9.0'
+def asmVer = '9.1'
 def moduleName = 'co.paralleluniverse.quasar.core'
 
 repositories {
@@ -31,7 +30,6 @@ configurations.all {
 }
 
 configurations {
-    compileOnly
     provided
     timewarp
     shadowedJar.extendsFrom runtime
@@ -53,7 +51,7 @@ sourceSets {
             srcDir 'src/main/java'
         }
 
-        compileClasspath += configurations.compileOnly + configurations.provided
+        compileClasspath += configurations.provided
         runtimeClasspath += compileClasspath
     }
 
@@ -61,7 +59,7 @@ sourceSets {
         java {
             srcDir 'src/test/java'
         }
-        compileClasspath += configurations.compileOnly + configurations.provided
+        compileClasspath += configurations.provided
         runtimeClasspath += configurations.provided
     }
 
@@ -118,11 +116,11 @@ dependencies {
         exclude group: "org.ow2.asm", module: '*'
         exclude group: "net.bytebuddy", module: '*'
     }
-    testRuntime "net.bytebuddy:byte-buddy:1.9.2" // for Mockito
+    testRuntimeOnly "net.bytebuddy:byte-buddy:1.9.2" // for Mockito
     testImplementation "org.ow2.asm:asm:$asmVer"
 
-    jmhCompile 'org.openjdk.jmh:jmh-core:1.21'
-    jmhCompile 'org.openjdk.jmh:jmh-generator-annprocess:1.21'
+    jmhImplementation 'org.openjdk.jmh:jmh-core:1.21'
+    jmhImplementation 'org.openjdk.jmh:jmh-generator-annprocess:1.21'
 
     annotationProcessor 'org.kohsuke.metainf-services:metainf-services:1.8'
 
@@ -134,13 +132,13 @@ dependencies {
     }
 
     // Will be shadowed
-    compile "org.ow2.asm:asm:$asmVer"
-    compile "org.ow2.asm:asm-analysis:$asmVer"
-    compile "org.ow2.asm:asm-commons:$asmVer"
-    compile "org.ow2.asm:asm-util:$asmVer"
+    implementation "org.ow2.asm:asm:$asmVer"
+    implementation "org.ow2.asm:asm-analysis:$asmVer"
+    implementation "org.ow2.asm:asm-commons:$asmVer"
+    implementation "org.ow2.asm:asm-util:$asmVer"
 
     // The exclusions are needed to get asm 5.0.4 whilst Kryo still depends on 5.0.3
-    compile "org.objenesis:objenesis:2.6"
+    implementation "org.objenesis:objenesis:2.6"
 
     provided('junit:junit:4.12') {
         exclude group: 'org.hamcrest', module: '*'

@@ -14,6 +14,7 @@
 package co.paralleluniverse.fibers.io;
 
 import co.paralleluniverse.common.test.TestUtil;
+import co.paralleluniverse.common.util.SystemProperties;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.FiberForkJoinScheduler;
 import co.paralleluniverse.fibers.FiberScheduler;
@@ -75,7 +76,7 @@ public class FiberAsyncIOTest {
         final Fiber server = new Fiber(scheduler, new SuspendableRunnable() {
             @Override
             public void run() throws SuspendExecution, InterruptedException {
-                try (FiberServerSocketChannel socket = FiberServerSocketChannel.open().bind(new InetSocketAddress(PORT))) {
+                try (FiberServerSocketChannel socket = FiberServerSocketChannel.open().bind(new InetSocketAddress("127.0.0.1", PORT))) {
                     sync.send(0); // Start client
 
                     try (FiberSocketChannel ch = socket.accept()) {
@@ -129,7 +130,7 @@ public class FiberAsyncIOTest {
                     throw new AssertionError(ex);
                 }
 
-                try (FiberSocketChannel ch = FiberSocketChannel.open(new InetSocketAddress(PORT))) {
+                try (FiberSocketChannel ch = FiberSocketChannel.open(new InetSocketAddress("127.0.0.1", PORT))) {
                     ByteBuffer buf = ByteBuffer.allocateDirect(1024);
 
                     // long-typed reqeust/response

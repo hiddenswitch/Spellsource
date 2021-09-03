@@ -3,7 +3,6 @@ plugins {
 }
 
 apply plugin: 'java-library'
-apply plugin: 'maven'
 
 dependencies {
     implementation project(':spellsource-common')

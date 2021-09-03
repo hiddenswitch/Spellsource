@@ -101,7 +101,7 @@ public class TestVerticle extends SyncVerticle {
 
 	@Suspendable
 	protected void testFiberHandler() {
-		HttpServer server = vertx.createHttpServer(new HttpServerOptions().setPort(8080));
+		HttpServer server = vertx.createHttpServer(new HttpServerOptions().setPort(0));
 		server.requestHandler(fiberHandler(req -> {
 			String res = await(h -> ai.methodWithParamsAndHandlerNoReturn("oranges", 23, h));
 			assertEquals("oranges23", res);
@@ -109,7 +109,7 @@ public class TestVerticle extends SyncVerticle {
 		}));
 		server.listen(res -> {
 			assertTrue(res.succeeded());
-			HttpClient client = vertx.createHttpClient(new HttpClientOptions().setDefaultPort(8080));
+			HttpClient client = vertx.createHttpClient(new HttpClientOptions().setDefaultPort(res.result().actualPort()));
 			client.request(io.vertx.core.http.HttpMethod.fromNetty(HttpMethod.GET), "/somepath", resp1 -> {
 				resp1.result().send().onSuccess(resp -> {
 					assertEquals(200, resp.statusCode());

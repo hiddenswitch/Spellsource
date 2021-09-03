@@ -193,6 +193,16 @@ public class Environment {
 		});
 	}
 
+	public static Future<Integer> migrate(ServerConfiguration serverConfiguration) {
+		var pg = serverConfiguration.getPg();
+		return migrate("jdbc:postgresql://" + pg.getHost() + ":" + pg.getPort() + "/" + pg.getDatabase(), pg.getUser(), pg.getPassword());
+	}
+
+	public static Future<Integer> migrate() {
+		return Environment.migrate(getConfiguration());
+	}
+
+
 	public static VertxOptions vertxOptions() {
 		return new VertxOptions()
 				.setEventLoopPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))
@@ -202,15 +212,6 @@ public class Environment {
 						new MicrometerMetricsOptions()
 								.setMicrometerRegistry(Metrics.globalRegistry)
 								.setEnabled(true));
-	}
-
-	public static Future<Integer> migrate(ServerConfiguration serverConfiguration) {
-		var pg = serverConfiguration.getPg();
-		return migrate("jdbc:postgresql://" + pg.getHost() + ":" + pg.getPort() + "/" + pg.getDatabase(), pg.getUser(), pg.getPassword());
-	}
-
-	public static Future<Integer> migrate() {
-		return Environment.migrate(getConfiguration());
 	}
 
 	@Suspendable

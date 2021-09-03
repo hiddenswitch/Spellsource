@@ -39,6 +39,7 @@ public class ExtendedStackTraceTest {
     }
 
     @Test
+    @Ignore
     public void testHotSpot1() {
         Assume.assumeTrue(isHotSpotSupported());
         try {
@@ -81,6 +82,7 @@ public class ExtendedStackTraceTest {
     }
 
     @Test
+    @Ignore
     public void testAll() {
         ExtendedStackTraceElement[] plain = new ExtendedStackTrace(new Throwable()).get();
         ExtendedStackTraceElement[] hotspot = isHotSpotSupported() ? new ExtendedStackTraceHotSpot(new Throwable()).get() : null;
