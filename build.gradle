@@ -106,12 +106,16 @@ subprojects {
                     details.useVersion '0.42'
                 }
 
+                if (details.requested.group == 'com.google.j2objc') {
+                    details.useVersion '1.3'
+                }
+
                 if (details.requested.module.name == 'mockito-core') {
                     details.useVersion '2.24.5'
                 }
 
-                if (details.requested.group == 'com.google.guava') {
-                    details.useVersion '26.0-jre'
+                if (details.requested.group == 'com.google.guava' && details.requested.module.name == 'guava') {
+                    details.useVersion guavaVersion
                 }
 
                 if (details.requested.group == 'com.google.protobuf' && details.requested.module.name == 'protobuf-java') {
@@ -179,7 +183,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'io.grpc') {
-                    details.useVersion '1.28.1'
+                    details.useVersion '1.46.0'
                 }
 
                 if (details.requested.group == 'org.testcontainers') {

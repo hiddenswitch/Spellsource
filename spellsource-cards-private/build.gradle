@@ -10,7 +10,7 @@ dependencies {
     implementation project(':spellsource-common')
     implementation project(':spellsource-protos')
     testImplementation 'org.jetbrains:annotations:16.0.2'
-    testImplementation 'com.google.guava:guava:26.0-jre'
+    testImplementation "com.google.guava:guava:$guavaVersion"
     testImplementation project(':quasar-core')
     testImplementation project(':spellsource-testutils')
     testImplementation project(':spellsource-cards-git')

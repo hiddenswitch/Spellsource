@@ -10,7 +10,7 @@ dependencies {
     compileOnly project(":quasar-core")
     api "io.vertx:vertx-core:$vertxVersion"
     api 'org.slf4j:slf4j-api:1.7.22'
-    api 'com.google.guava:guava:26.0-jre'
+    api "com.google.guava:guava:$guavaVersion"
     api 'org.jetbrains:annotations:16.0.2'
     api 'com.fasterxml.jackson.core:jackson-databind:2.10.2'
     api "io.jaegertracing:jaeger-client:$jaegerVersion"

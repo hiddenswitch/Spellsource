@@ -7,7 +7,7 @@ apply plugin: 'java-library'
 dependencies {
     implementation project(':spellsource-common')
     testImplementation project(':quasar-core')
-    testImplementation 'com.google.guava:guava:26.0-jre'
+    testImplementation "com.google.guava:guava:$guavaVersion"
     testImplementation "io.github.classgraph:classgraph:$classgraphVersion"
     testImplementation 'org.jetbrains:annotations:16.0.2'
     testImplementation project(':spellsource-testutils')
