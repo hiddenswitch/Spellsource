@@ -17,13 +17,14 @@ import org.jooq.ForeignKey;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ResourceServerScope extends TableImpl<ResourceServerScopeRecord> {
 
-    private static final long serialVersionUID = 1193070958;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.resource_server_scope</code>
@@ -51,48 +52,23 @@ public class ResourceServerScope extends TableImpl<ResourceServerScopeRecord> {
     /**
      * The column <code>keycloak.resource_server_scope.id</code>.
      */
-    public final TableField<ResourceServerScopeRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ResourceServerScopeRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.resource_server_scope.name</code>.
      */
-    public final TableField<ResourceServerScopeRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<ResourceServerScopeRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.resource_server_scope.icon_uri</code>.
      */
-    public final TableField<ResourceServerScopeRecord, String> ICON_URI = createField(DSL.name("icon_uri"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ResourceServerScopeRecord, String> ICON_URI = createField(DSL.name("icon_uri"), SQLDataType.VARCHAR(255), this, "");
 
     /**
-     * The column <code>keycloak.resource_server_scope.resource_server_id</code>.
+     * The column
+     * <code>keycloak.resource_server_scope.resource_server_id</code>.
      */
-    public final TableField<ResourceServerScopeRecord, String> RESOURCE_SERVER_ID = createField(DSL.name("resource_server_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
-     * The column <code>keycloak.resource_server_scope.display_name</code>.
-     */
-    public final TableField<ResourceServerScopeRecord, String> DISPLAY_NAME = createField(DSL.name("display_name"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
-
-    /**
-     * Create a <code>keycloak.resource_server_scope</code> table reference
-     */
-    public ResourceServerScope() {
-        this(DSL.name("resource_server_scope"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.resource_server_scope</code> table reference
-     */
-    public ResourceServerScope(String alias) {
-        this(DSL.name(alias), RESOURCE_SERVER_SCOPE);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.resource_server_scope</code> table reference
-     */
-    public ResourceServerScope(Name alias) {
-        this(alias, RESOURCE_SERVER_SCOPE);
-    }
+    public final TableField<ResourceServerScopeRecord, String> RESOURCE_SERVER_ID = createField(DSL.name("resource_server_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     private ResourceServerScope(Name alias, Table<ResourceServerScopeRecord> aliased) {
         this(alias, aliased, null);
@@ -102,18 +78,41 @@ public class ResourceServerScope extends TableImpl<ResourceServerScopeRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.resource_server_scope</code> table
+     * reference
+     */
+    public ResourceServerScope(String alias) {
+        this(DSL.name(alias), RESOURCE_SERVER_SCOPE);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.resource_server_scope</code> table
+     * reference
+     */
+    public ResourceServerScope(Name alias) {
+        this(alias, RESOURCE_SERVER_SCOPE);
+    }
+
+    /**
+     * Create a <code>keycloak.resource_server_scope</code> table reference
+     */
+    public ResourceServerScope() {
+        this(DSL.name("resource_server_scope"), null);
+    }
+
     public <O extends Record> ResourceServerScope(Table<O> child, ForeignKey<O, ResourceServerScopeRecord> key) {
         super(child, key, RESOURCE_SERVER_SCOPE);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_RES_SRV_SCOPE_RES_SRV);
+        return Arrays.asList(Indexes.IDX_RES_SRV_SCOPE_RES_SRV);
     }
 
     @Override
@@ -122,17 +121,8 @@ public class ResourceServerScope extends TableImpl<ResourceServerScopeRecord> {
     }
 
     @Override
-    public List<UniqueKey<ResourceServerScopeRecord>> getKeys() {
-        return Arrays.<UniqueKey<ResourceServerScopeRecord>>asList(Keys.CONSTRAINT_FARSRS, Keys.UK_FRSRST700S9V50BU18WS5HA6);
-    }
-
-    @Override
-    public List<ForeignKey<ResourceServerScopeRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ResourceServerScopeRecord, ?>>asList(Keys.RESOURCE_SERVER_SCOPE__FK_FRSRSO213XCX4WNKOG82SSRFY);
-    }
-
-    public ResourceServer resourceServer() {
-        return new ResourceServer(this, Keys.RESOURCE_SERVER_SCOPE__FK_FRSRSO213XCX4WNKOG82SSRFY);
+    public List<UniqueKey<ResourceServerScopeRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.UK_FRSRST700S9V50BU18WS5HA6);
     }
 
     @Override
@@ -162,11 +152,11 @@ public class ResourceServerScope extends TableImpl<ResourceServerScopeRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<String, String, String, String, String> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row4<String, String, String, String> fieldsRow() {
+        return (Row4) super.fieldsRow();
     }
 }

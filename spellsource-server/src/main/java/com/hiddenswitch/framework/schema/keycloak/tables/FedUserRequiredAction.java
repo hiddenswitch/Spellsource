@@ -4,17 +4,12 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
-import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.FedUserRequiredActionRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row4;
@@ -24,6 +19,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class FedUserRequiredAction extends TableImpl<FedUserRequiredActionRecord> {
 
-    private static final long serialVersionUID = 497396227;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.fed_user_required_action</code>
@@ -49,45 +45,26 @@ public class FedUserRequiredAction extends TableImpl<FedUserRequiredActionRecord
     }
 
     /**
-     * The column <code>keycloak.fed_user_required_action.required_action</code>.
+     * The column
+     * <code>keycloak.fed_user_required_action.required_action</code>.
      */
-    public final TableField<FedUserRequiredActionRecord, String> REQUIRED_ACTION = createField(DSL.name("required_action"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false).defaultValue(org.jooq.impl.DSL.field("' '::character varying", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+    public final TableField<FedUserRequiredActionRecord, String> REQUIRED_ACTION = createField(DSL.name("required_action"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field("' '::character varying", SQLDataType.VARCHAR)), this, "");
 
     /**
      * The column <code>keycloak.fed_user_required_action.user_id</code>.
      */
-    public final TableField<FedUserRequiredActionRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<FedUserRequiredActionRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.fed_user_required_action.realm_id</code>.
      */
-    public final TableField<FedUserRequiredActionRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<FedUserRequiredActionRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
-     * The column <code>keycloak.fed_user_required_action.storage_provider_id</code>.
+     * The column
+     * <code>keycloak.fed_user_required_action.storage_provider_id</code>.
      */
-    public final TableField<FedUserRequiredActionRecord, String> STORAGE_PROVIDER_ID = createField(DSL.name("storage_provider_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
-
-    /**
-     * Create a <code>keycloak.fed_user_required_action</code> table reference
-     */
-    public FedUserRequiredAction() {
-        this(DSL.name("fed_user_required_action"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.fed_user_required_action</code> table reference
-     */
-    public FedUserRequiredAction(String alias) {
-        this(DSL.name(alias), FED_USER_REQUIRED_ACTION);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.fed_user_required_action</code> table reference
-     */
-    public FedUserRequiredAction(Name alias) {
-        this(alias, FED_USER_REQUIRED_ACTION);
-    }
+    public final TableField<FedUserRequiredActionRecord, String> STORAGE_PROVIDER_ID = createField(DSL.name("storage_provider_id"), SQLDataType.VARCHAR(36), this, "");
 
     private FedUserRequiredAction(Name alias, Table<FedUserRequiredActionRecord> aliased) {
         this(alias, aliased, null);
@@ -97,28 +74,41 @@ public class FedUserRequiredAction extends TableImpl<FedUserRequiredActionRecord
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.fed_user_required_action</code> table
+     * reference
+     */
+    public FedUserRequiredAction(String alias) {
+        this(DSL.name(alias), FED_USER_REQUIRED_ACTION);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.fed_user_required_action</code> table
+     * reference
+     */
+    public FedUserRequiredAction(Name alias) {
+        this(alias, FED_USER_REQUIRED_ACTION);
+    }
+
+    /**
+     * Create a <code>keycloak.fed_user_required_action</code> table reference
+     */
+    public FedUserRequiredAction() {
+        this(DSL.name("fed_user_required_action"), null);
+    }
+
     public <O extends Record> FedUserRequiredAction(Table<O> child, ForeignKey<O, FedUserRequiredActionRecord> key) {
         super(child, key, FED_USER_REQUIRED_ACTION);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
-    }
-
-    @Override
-    public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_FU_REQUIRED_ACTION, Indexes.IDX_FU_REQUIRED_ACTION_RU);
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public UniqueKey<FedUserRequiredActionRecord> getPrimaryKey() {
         return Keys.CONSTR_FED_REQUIRED_ACTION;
-    }
-
-    @Override
-    public List<UniqueKey<FedUserRequiredActionRecord>> getKeys() {
-        return Arrays.<UniqueKey<FedUserRequiredActionRecord>>asList(Keys.CONSTR_FED_REQUIRED_ACTION);
     }
 
     @Override

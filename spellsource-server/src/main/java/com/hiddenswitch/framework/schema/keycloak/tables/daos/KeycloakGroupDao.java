@@ -23,63 +23,69 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class KeycloakGroupDao extends AbstractReactiveVertxDAO<KeycloakGroupRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup, String, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup>, Future<Integer>, Future<String>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<KeycloakGroupRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup,String> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public KeycloakGroupDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(KeycloakGroup.KEYCLOAK_GROUP, com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup.class, new ReactiveClassicQueryExecutor<KeycloakGroupRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getKeycloakGroupMapper()));
-    }
+        public KeycloakGroupDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(KeycloakGroup.KEYCLOAK_GROUP, com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup.class, new ReactiveClassicQueryExecutor<KeycloakGroupRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getKeycloakGroupMapper()));
+        }
 
-    @Override
-    protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup object) {
-        return object.getId();
-    }
+        @Override
+        protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup object) {
+                return object.getId();
+        }
 
-    /**
+        /**
      * Find records that have <code>name IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup>> findManyByName(Collection<String> values) {
-        return findManyByCondition(KeycloakGroup.KEYCLOAK_GROUP.NAME.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup>> findManyByName(Collection<String> values) {
+                return findManyByCondition(KeycloakGroup.KEYCLOAK_GROUP.NAME.in(values));
+        }
 
-    /**
-     * Find records that have <code>name IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>name IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup>> findManyByName(Collection<String> values, int limit) {
-        return findManyByCondition(KeycloakGroup.KEYCLOAK_GROUP.NAME.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup>> findManyByName(Collection<String> values, int limit) {
+                return findManyByCondition(KeycloakGroup.KEYCLOAK_GROUP.NAME.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>parent_group IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>parent_group IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup>> findManyByParentGroup(Collection<String> values) {
-        return findManyByCondition(KeycloakGroup.KEYCLOAK_GROUP.PARENT_GROUP.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup>> findManyByParentGroup(Collection<String> values) {
+                return findManyByCondition(KeycloakGroup.KEYCLOAK_GROUP.PARENT_GROUP.in(values));
+        }
 
-    /**
-     * Find records that have <code>parent_group IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>parent_group IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup>> findManyByParentGroup(Collection<String> values, int limit) {
-        return findManyByCondition(KeycloakGroup.KEYCLOAK_GROUP.PARENT_GROUP.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup>> findManyByParentGroup(Collection<String> values, int limit) {
+                return findManyByCondition(KeycloakGroup.KEYCLOAK_GROUP.PARENT_GROUP.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>realm_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup>> findManyByRealmId(Collection<String> values) {
-        return findManyByCondition(KeycloakGroup.KEYCLOAK_GROUP.REALM_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup>> findManyByRealmId(Collection<String> values) {
+                return findManyByCondition(KeycloakGroup.KEYCLOAK_GROUP.REALM_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>realm_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>realm_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup>> findManyByRealmId(Collection<String> values, int limit) {
-        return findManyByCondition(KeycloakGroup.KEYCLOAK_GROUP.REALM_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup>> findManyByRealmId(Collection<String> values, int limit) {
+                return findManyByCondition(KeycloakGroup.KEYCLOAK_GROUP.REALM_ID.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<KeycloakGroupRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup,String> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<KeycloakGroupRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup,String>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<KeycloakGroupRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup,String> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<KeycloakGroupRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakGroup,String>) super.queryExecutor();
+        }
 }

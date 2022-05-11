@@ -12,7 +12,7 @@ dependencies {
     implementation "io.github.classgraph:classgraph:$classgraphVersion"
     implementation project(':vertx-sync')
 
-    implementation 'org.slf4j:slf4j-api:1.7.22'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
     api 'org.jetbrains:annotations:16.0.2'
     implementation "com.google.guava:guava:$guavaVersion"
     implementation 'org.apache.commons:commons-lang3:3.7'

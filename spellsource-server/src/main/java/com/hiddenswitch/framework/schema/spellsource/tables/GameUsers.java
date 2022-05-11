@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class GameUsers extends TableImpl<GameUsersRecord> {
 
-    private static final long serialVersionUID = 844559495;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>spellsource.game_users</code>
@@ -51,33 +52,34 @@ public class GameUsers extends TableImpl<GameUsersRecord> {
     /**
      * The column <code>spellsource.game_users.player_index</code>.
      */
-    public final TableField<GameUsersRecord, Short> PLAYER_INDEX = createField(DSL.name("player_index"), org.jooq.impl.SQLDataType.SMALLINT.defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.SMALLINT)), this, "");
+    public final TableField<GameUsersRecord, Short> PLAYER_INDEX = createField(DSL.name("player_index"), SQLDataType.SMALLINT.defaultValue(DSL.field("0", SQLDataType.SMALLINT)), this, "");
 
     /**
      * The column <code>spellsource.game_users.game_id</code>.
      */
-    public final TableField<GameUsersRecord, Long> GAME_ID = createField(DSL.name("game_id"), org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<GameUsersRecord, Long> GAME_ID = createField(DSL.name("game_id"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.game_users.user_id</code>.
      */
-    public final TableField<GameUsersRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<GameUsersRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.game_users.deck_id</code>.
      */
-    public final TableField<GameUsersRecord, String> DECK_ID = createField(DSL.name("deck_id"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<GameUsersRecord, String> DECK_ID = createField(DSL.name("deck_id"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>spellsource.game_users.victory_status</code>.
      */
-    public final TableField<GameUsersRecord, GameUserVictoryEnum> VICTORY_STATUS = createField(DSL.name("victory_status"), org.jooq.impl.SQLDataType.VARCHAR.nullable(false).defaultValue(org.jooq.impl.DSL.field("'UNKNOWN'::spellsource.game_user_victory_enum", org.jooq.impl.SQLDataType.VARCHAR)).asEnumDataType(com.hiddenswitch.framework.schema.spellsource.enums.GameUserVictoryEnum.class), this, "");
+    public final TableField<GameUsersRecord, GameUserVictoryEnum> VICTORY_STATUS = createField(DSL.name("victory_status"), SQLDataType.VARCHAR.nullable(false).defaultValue(DSL.field("'UNKNOWN'::spellsource.game_user_victory_enum", SQLDataType.VARCHAR)).asEnumDataType(com.hiddenswitch.framework.schema.spellsource.enums.GameUserVictoryEnum.class), this, "");
 
-    /**
-     * Create a <code>spellsource.game_users</code> table reference
-     */
-    public GameUsers() {
-        this(DSL.name("game_users"), null);
+    private GameUsers(Name alias, Table<GameUsersRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private GameUsers(Name alias, Table<GameUsersRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -94,12 +96,11 @@ public class GameUsers extends TableImpl<GameUsersRecord> {
         this(alias, GAME_USERS);
     }
 
-    private GameUsers(Name alias, Table<GameUsersRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private GameUsers(Name alias, Table<GameUsersRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>spellsource.game_users</code> table reference
+     */
+    public GameUsers() {
+        this(DSL.name("game_users"), null);
     }
 
     public <O extends Record> GameUsers(Table<O> child, ForeignKey<O, GameUsersRecord> key) {
@@ -108,7 +109,7 @@ public class GameUsers extends TableImpl<GameUsersRecord> {
 
     @Override
     public Schema getSchema() {
-        return Spellsource.SPELLSOURCE;
+        return aliased() ? null : Spellsource.SPELLSOURCE;
     }
 
     @Override
@@ -117,25 +118,43 @@ public class GameUsers extends TableImpl<GameUsersRecord> {
     }
 
     @Override
-    public List<UniqueKey<GameUsersRecord>> getKeys() {
-        return Arrays.<UniqueKey<GameUsersRecord>>asList(Keys.GAME_USERS_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<GameUsersRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<GameUsersRecord, ?>>asList(Keys.GAME_USERS__GAME_USERS_GAME_ID_FKEY, Keys.GAME_USERS__GAME_USERS_USER_ID_FKEY, Keys.GAME_USERS__GAME_USERS_DECK_ID_FKEY);
+        return Arrays.asList(Keys.GAME_USERS__GAME_USERS_GAME_ID_FKEY, Keys.GAME_USERS__GAME_USERS_USER_ID_FKEY, Keys.GAME_USERS__GAME_USERS_DECK_ID_FKEY);
     }
 
+    private transient Games _games;
+    private transient UserEntity _userEntity;
+    private transient Decks _decks;
+
+    /**
+     * Get the implicit join path to the <code>spellsource.games</code> table.
+     */
     public Games games() {
-        return new Games(this, Keys.GAME_USERS__GAME_USERS_GAME_ID_FKEY);
+        if (_games == null)
+            _games = new Games(this, Keys.GAME_USERS__GAME_USERS_GAME_ID_FKEY);
+
+        return _games;
     }
 
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table.
+     */
     public UserEntity userEntity() {
-        return new UserEntity(this, Keys.GAME_USERS__GAME_USERS_USER_ID_FKEY);
+        if (_userEntity == null)
+            _userEntity = new UserEntity(this, Keys.GAME_USERS__GAME_USERS_USER_ID_FKEY);
+
+        return _userEntity;
     }
 
+    /**
+     * Get the implicit join path to the <code>spellsource.decks</code> table.
+     */
     public Decks decks() {
-        return new Decks(this, Keys.GAME_USERS__GAME_USERS_DECK_ID_FKEY);
+        if (_decks == null)
+            _decks = new Decks(this, Keys.GAME_USERS__GAME_USERS_DECK_ID_FKEY);
+
+        return _decks;
     }
 
     @Override

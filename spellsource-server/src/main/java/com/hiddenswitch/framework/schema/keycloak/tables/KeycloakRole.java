@@ -17,13 +17,14 @@ import org.jooq.ForeignKey;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row9;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class KeycloakRole extends TableImpl<KeycloakRoleRecord> {
 
-    private static final long serialVersionUID = 1095760586;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.keycloak_role</code>
@@ -51,48 +52,54 @@ public class KeycloakRole extends TableImpl<KeycloakRoleRecord> {
     /**
      * The column <code>keycloak.keycloak_role.id</code>.
      */
-    public final TableField<KeycloakRoleRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<KeycloakRoleRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.keycloak_role.client_realm_constraint</code>.
      */
-    public final TableField<KeycloakRoleRecord, String> CLIENT_REALM_CONSTRAINT = createField(DSL.name("client_realm_constraint"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<KeycloakRoleRecord, String> CLIENT_REALM_CONSTRAINT = createField(DSL.name("client_realm_constraint"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.keycloak_role.client_role</code>.
      */
-    public final TableField<KeycloakRoleRecord, Boolean> CLIENT_ROLE = createField(DSL.name("client_role"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<KeycloakRoleRecord, Boolean> CLIENT_ROLE = createField(DSL.name("client_role"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.keycloak_role.description</code>.
      */
-    public final TableField<KeycloakRoleRecord, String> DESCRIPTION = createField(DSL.name("description"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<KeycloakRoleRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.keycloak_role.name</code>.
      */
-    public final TableField<KeycloakRoleRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<KeycloakRoleRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.keycloak_role.realm_id</code>.
      */
-    public final TableField<KeycloakRoleRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<KeycloakRoleRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.keycloak_role.client</code>.
      */
-    public final TableField<KeycloakRoleRecord, String> CLIENT = createField(DSL.name("client"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<KeycloakRoleRecord, String> CLIENT = createField(DSL.name("client"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.keycloak_role.realm</code>.
      */
-    public final TableField<KeycloakRoleRecord, String> REALM = createField(DSL.name("realm"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<KeycloakRoleRecord, String> REALM = createField(DSL.name("realm"), SQLDataType.VARCHAR(36), this, "");
 
     /**
-     * Create a <code>keycloak.keycloak_role</code> table reference
+     * The column <code>keycloak.keycloak_role.scope_param_required</code>.
      */
-    public KeycloakRole() {
-        this(DSL.name("keycloak_role"), null);
+    public final TableField<KeycloakRoleRecord, Boolean> SCOPE_PARAM_REQUIRED = createField(DSL.name("scope_param_required"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    private KeycloakRole(Name alias, Table<KeycloakRoleRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private KeycloakRole(Name alias, Table<KeycloakRoleRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -109,12 +116,11 @@ public class KeycloakRole extends TableImpl<KeycloakRoleRecord> {
         this(alias, KEYCLOAK_ROLE);
     }
 
-    private KeycloakRole(Name alias, Table<KeycloakRoleRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private KeycloakRole(Name alias, Table<KeycloakRoleRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.keycloak_role</code> table reference
+     */
+    public KeycloakRole() {
+        this(DSL.name("keycloak_role"), null);
     }
 
     public <O extends Record> KeycloakRole(Table<O> child, ForeignKey<O, KeycloakRoleRecord> key) {
@@ -123,12 +129,12 @@ public class KeycloakRole extends TableImpl<KeycloakRoleRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_KEYCLOAK_ROLE_CLIENT, Indexes.IDX_KEYCLOAK_ROLE_REALM);
+        return Arrays.asList(Indexes.IDX_KEYCLOAK_ROLE_CLIENT, Indexes.IDX_KEYCLOAK_ROLE_REALM);
     }
 
     @Override
@@ -137,17 +143,36 @@ public class KeycloakRole extends TableImpl<KeycloakRoleRecord> {
     }
 
     @Override
-    public List<UniqueKey<KeycloakRoleRecord>> getKeys() {
-        return Arrays.<UniqueKey<KeycloakRoleRecord>>asList(Keys.CONSTRAINT_A, Keys.UK_J3RWUVD56ONTGSUHOGM184WW2_2);
+    public List<UniqueKey<KeycloakRoleRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.UK_J3RWUVD56ONTGSUHOGM184WW2_2);
     }
 
     @Override
     public List<ForeignKey<KeycloakRoleRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<KeycloakRoleRecord, ?>>asList(Keys.KEYCLOAK_ROLE__FK_6VYQFE4CN4WLQ8R6KT5VDSJ5C);
+        return Arrays.asList(Keys.KEYCLOAK_ROLE__FK_KJHO5LE2C0RAL09FL8CM9WFW9, Keys.KEYCLOAK_ROLE__FK_6VYQFE4CN4WLQ8R6KT5VDSJ5C);
     }
 
+    private transient Client _client;
+    private transient Realm _realm;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.client</code> table.
+     */
+    public Client client() {
+        if (_client == null)
+            _client = new Client(this, Keys.KEYCLOAK_ROLE__FK_KJHO5LE2C0RAL09FL8CM9WFW9);
+
+        return _client;
+    }
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.KEYCLOAK_ROLE__FK_6VYQFE4CN4WLQ8R6KT5VDSJ5C);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.KEYCLOAK_ROLE__FK_6VYQFE4CN4WLQ8R6KT5VDSJ5C);
+
+        return _realm;
     }
 
     @Override
@@ -177,11 +202,11 @@ public class KeycloakRole extends TableImpl<KeycloakRoleRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row9 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<String, String, Boolean, String, String, String, String, String> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row9<String, String, Boolean, String, String, String, String, String, Boolean> fieldsRow() {
+        return (Row9) super.fieldsRow();
     }
 }

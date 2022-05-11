@@ -2,12 +2,10 @@ plugins {
     id 'java-library'
 }
 
-apply plugin: 'java-library'
-
 group 'com.hiddenswitch'
 
 dependencies {
-    compileOnly project(":quasar-core")
+    api "com.hiddenswitch:quasar-core:10.0.6"
     api "io.vertx:vertx-core:$vertxVersion"
     api 'org.slf4j:slf4j-api:1.7.22'
     api "com.google.guava:guava:$guavaVersion"

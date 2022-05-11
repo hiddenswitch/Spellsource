@@ -22,8 +22,8 @@ import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CompositeRole extends TableImpl<CompositeRoleRecord> {
 
-    private static final long serialVersionUID = -2098702714;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.composite_role</code>
@@ -51,18 +51,19 @@ public class CompositeRole extends TableImpl<CompositeRoleRecord> {
     /**
      * The column <code>keycloak.composite_role.composite</code>.
      */
-    public final TableField<CompositeRoleRecord, String> COMPOSITE = createField(DSL.name("composite"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<CompositeRoleRecord, String> COMPOSITE = createField(DSL.name("composite"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.composite_role.child_role</code>.
      */
-    public final TableField<CompositeRoleRecord, String> CHILD_ROLE = createField(DSL.name("child_role"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<CompositeRoleRecord, String> CHILD_ROLE = createField(DSL.name("child_role"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
-    /**
-     * Create a <code>keycloak.composite_role</code> table reference
-     */
-    public CompositeRole() {
-        this(DSL.name("composite_role"), null);
+    private CompositeRole(Name alias, Table<CompositeRoleRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private CompositeRole(Name alias, Table<CompositeRoleRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -79,12 +80,11 @@ public class CompositeRole extends TableImpl<CompositeRoleRecord> {
         this(alias, COMPOSITE_ROLE);
     }
 
-    private CompositeRole(Name alias, Table<CompositeRoleRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private CompositeRole(Name alias, Table<CompositeRoleRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.composite_role</code> table reference
+     */
+    public CompositeRole() {
+        this(DSL.name("composite_role"), null);
     }
 
     public <O extends Record> CompositeRole(Table<O> child, ForeignKey<O, CompositeRoleRecord> key) {
@@ -93,35 +93,42 @@ public class CompositeRole extends TableImpl<CompositeRoleRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_COMPOSITE, Indexes.IDX_COMPOSITE_CHILD);
-    }
-
-    @Override
-    public UniqueKey<CompositeRoleRecord> getPrimaryKey() {
-        return Keys.CONSTRAINT_COMPOSITE_ROLE;
-    }
-
-    @Override
-    public List<UniqueKey<CompositeRoleRecord>> getKeys() {
-        return Arrays.<UniqueKey<CompositeRoleRecord>>asList(Keys.CONSTRAINT_COMPOSITE_ROLE);
+        return Arrays.asList(Indexes.IDX_COMPOSITE, Indexes.IDX_COMPOSITE_CHILD);
     }
 
     @Override
     public List<ForeignKey<CompositeRoleRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<CompositeRoleRecord, ?>>asList(Keys.COMPOSITE_ROLE__FK_A63WVEKFTU8JO1PNJ81E7MCE2, Keys.COMPOSITE_ROLE__FK_GR7THLLB9LU8Q4VQA4524JJY8);
+        return Arrays.asList(Keys.COMPOSITE_ROLE__FK_A63WVEKFTU8JO1PNJ81E7MCE2, Keys.COMPOSITE_ROLE__FK_GR7THLLB9LU8Q4VQA4524JJY8);
     }
 
+    private transient KeycloakRole _fkA63wvekftu8jo1pnj81e7mce2;
+    private transient KeycloakRole _fkGr7thllb9lu8q4vqa4524jjy8;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.keycloak_role</code>
+     * table, via the <code>fk_a63wvekftu8jo1pnj81e7mce2</code> key.
+     */
     public KeycloakRole fkA63wvekftu8jo1pnj81e7mce2() {
-        return new KeycloakRole(this, Keys.COMPOSITE_ROLE__FK_A63WVEKFTU8JO1PNJ81E7MCE2);
+        if (_fkA63wvekftu8jo1pnj81e7mce2 == null)
+            _fkA63wvekftu8jo1pnj81e7mce2 = new KeycloakRole(this, Keys.COMPOSITE_ROLE__FK_A63WVEKFTU8JO1PNJ81E7MCE2);
+
+        return _fkA63wvekftu8jo1pnj81e7mce2;
     }
 
+    /**
+     * Get the implicit join path to the <code>keycloak.keycloak_role</code>
+     * table, via the <code>fk_gr7thllb9lu8q4vqa4524jjy8</code> key.
+     */
     public KeycloakRole fkGr7thllb9lu8q4vqa4524jjy8() {
-        return new KeycloakRole(this, Keys.COMPOSITE_ROLE__FK_GR7THLLB9LU8Q4VQA4524JJY8);
+        if (_fkGr7thllb9lu8q4vqa4524jjy8 == null)
+            _fkGr7thllb9lu8q4vqa4524jjy8 = new KeycloakRole(this, Keys.COMPOSITE_ROLE__FK_GR7THLLB9LU8Q4VQA4524JJY8);
+
+        return _fkGr7thllb9lu8q4vqa4524jjy8;
     }
 
     @Override

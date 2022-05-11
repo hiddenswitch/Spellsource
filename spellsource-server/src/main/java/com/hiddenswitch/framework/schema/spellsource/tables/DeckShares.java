@@ -25,6 +25,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -34,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DeckShares extends TableImpl<DeckSharesRecord> {
 
-    private static final long serialVersionUID = -472963270;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>spellsource.deck_shares</code>
@@ -52,23 +53,24 @@ public class DeckShares extends TableImpl<DeckSharesRecord> {
     /**
      * The column <code>spellsource.deck_shares.deck_id</code>.
      */
-    public final TableField<DeckSharesRecord, String> DECK_ID = createField(DSL.name("deck_id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<DeckSharesRecord, String> DECK_ID = createField(DSL.name("deck_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.deck_shares.share_recipient_id</code>.
      */
-    public final TableField<DeckSharesRecord, String> SHARE_RECIPIENT_ID = createField(DSL.name("share_recipient_id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<DeckSharesRecord, String> SHARE_RECIPIENT_ID = createField(DSL.name("share_recipient_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.deck_shares.trashed_by_recipient</code>.
      */
-    public final TableField<DeckSharesRecord, Boolean> TRASHED_BY_RECIPIENT = createField(DSL.name("trashed_by_recipient"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<DeckSharesRecord, Boolean> TRASHED_BY_RECIPIENT = createField(DSL.name("trashed_by_recipient"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
-    /**
-     * Create a <code>spellsource.deck_shares</code> table reference
-     */
-    public DeckShares() {
-        this(DSL.name("deck_shares"), null);
+    private DeckShares(Name alias, Table<DeckSharesRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private DeckShares(Name alias, Table<DeckSharesRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment("indicates a deck shared to a player"), TableOptions.table());
     }
 
     /**
@@ -85,12 +87,11 @@ public class DeckShares extends TableImpl<DeckSharesRecord> {
         this(alias, DECK_SHARES);
     }
 
-    private DeckShares(Name alias, Table<DeckSharesRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private DeckShares(Name alias, Table<DeckSharesRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment("indicates a deck shared to a player"), TableOptions.table());
+    /**
+     * Create a <code>spellsource.deck_shares</code> table reference
+     */
+    public DeckShares() {
+        this(DSL.name("deck_shares"), null);
     }
 
     public <O extends Record> DeckShares(Table<O> child, ForeignKey<O, DeckSharesRecord> key) {
@@ -99,12 +100,12 @@ public class DeckShares extends TableImpl<DeckSharesRecord> {
 
     @Override
     public Schema getSchema() {
-        return Spellsource.SPELLSOURCE;
+        return aliased() ? null : Spellsource.SPELLSOURCE;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.DECK_SHARES_TRASHED_BY_RECIPIENT_IDX);
+        return Arrays.asList(Indexes.DECK_SHARES_TRASHED_BY_RECIPIENT_IDX);
     }
 
     @Override
@@ -113,21 +114,32 @@ public class DeckShares extends TableImpl<DeckSharesRecord> {
     }
 
     @Override
-    public List<UniqueKey<DeckSharesRecord>> getKeys() {
-        return Arrays.<UniqueKey<DeckSharesRecord>>asList(Keys.DECK_SHARES_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<DeckSharesRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<DeckSharesRecord, ?>>asList(Keys.DECK_SHARES__DECK_SHARES_DECK_ID_FKEY, Keys.DECK_SHARES__DECK_SHARES_SHARE_RECIPIENT_ID_FKEY);
+        return Arrays.asList(Keys.DECK_SHARES__DECK_SHARES_DECK_ID_FKEY, Keys.DECK_SHARES__DECK_SHARES_SHARE_RECIPIENT_ID_FKEY);
     }
 
+    private transient Decks _decks;
+    private transient UserEntity _userEntity;
+
+    /**
+     * Get the implicit join path to the <code>spellsource.decks</code> table.
+     */
     public Decks decks() {
-        return new Decks(this, Keys.DECK_SHARES__DECK_SHARES_DECK_ID_FKEY);
+        if (_decks == null)
+            _decks = new Decks(this, Keys.DECK_SHARES__DECK_SHARES_DECK_ID_FKEY);
+
+        return _decks;
     }
 
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table.
+     */
     public UserEntity userEntity() {
-        return new UserEntity(this, Keys.DECK_SHARES__DECK_SHARES_SHARE_RECIPIENT_ID_FKEY);
+        if (_userEntity == null)
+            _userEntity = new UserEntity(this, Keys.DECK_SHARES__DECK_SHARES_SHARE_RECIPIENT_ID_FKEY);
+
+        return _userEntity;
     }
 
     @Override

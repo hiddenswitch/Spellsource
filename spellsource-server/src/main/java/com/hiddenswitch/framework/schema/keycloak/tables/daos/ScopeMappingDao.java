@@ -24,35 +24,38 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ScopeMappingDao extends AbstractReactiveVertxDAO<ScopeMappingRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping, Record2<String, String>, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping>, Future<Integer>, Future<Record2<String, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<ScopeMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping,Record2<String, String>> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public ScopeMappingDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(ScopeMapping.SCOPE_MAPPING, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping.class, new ReactiveClassicQueryExecutor<ScopeMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getScopeMappingMapper()));
-    }
+        public ScopeMappingDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(ScopeMapping.SCOPE_MAPPING, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping.class, new ReactiveClassicQueryExecutor<ScopeMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getScopeMappingMapper()));
+        }
 
-    @Override
-    protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping object) {
-        return compositeKeyRecord(object.getClientId(), object.getRoleId());
-    }
+        @Override
+        protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping object) {
+                return compositeKeyRecord(object.getClientId(), object.getRoleId());
+        }
 
-    /**
+        /**
      * Find records that have <code>role_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping>> findManyByRoleId(Collection<String> values) {
-        return findManyByCondition(ScopeMapping.SCOPE_MAPPING.ROLE_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping>> findManyByRoleId(Collection<String> values) {
+                return findManyByCondition(ScopeMapping.SCOPE_MAPPING.ROLE_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>role_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>role_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping>> findManyByRoleId(Collection<String> values, int limit) {
-        return findManyByCondition(ScopeMapping.SCOPE_MAPPING.ROLE_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping>> findManyByRoleId(Collection<String> values, int limit) {
+                return findManyByCondition(ScopeMapping.SCOPE_MAPPING.ROLE_ID.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<ScopeMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping,Record2<String, String>> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<ScopeMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping,Record2<String, String>>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<ScopeMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping,Record2<String, String>> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<ScopeMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopeMapping,Record2<String, String>>) super.queryExecutor();
+        }
 }

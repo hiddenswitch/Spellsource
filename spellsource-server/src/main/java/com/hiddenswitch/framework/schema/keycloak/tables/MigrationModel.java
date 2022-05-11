@@ -4,26 +4,22 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
-import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.MigrationModelRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row3;
+import org.jooq.Row2;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MigrationModel extends TableImpl<MigrationModelRecord> {
 
-    private static final long serialVersionUID = -1142791495;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.migration_model</code>
@@ -51,23 +47,19 @@ public class MigrationModel extends TableImpl<MigrationModelRecord> {
     /**
      * The column <code>keycloak.migration_model.id</code>.
      */
-    public final TableField<MigrationModelRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<MigrationModelRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.migration_model.version</code>.
      */
-    public final TableField<MigrationModelRecord, String> VERSION = createField(DSL.name("version"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<MigrationModelRecord, String> VERSION = createField(DSL.name("version"), SQLDataType.VARCHAR(36), this, "");
 
-    /**
-     * The column <code>keycloak.migration_model.update_time</code>.
-     */
-    public final TableField<MigrationModelRecord, Long> UPDATE_TIME = createField(DSL.name("update_time"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.BIGINT)), this, "");
+    private MigrationModel(Name alias, Table<MigrationModelRecord> aliased) {
+        this(alias, aliased, null);
+    }
 
-    /**
-     * Create a <code>keycloak.migration_model</code> table reference
-     */
-    public MigrationModel() {
-        this(DSL.name("migration_model"), null);
+    private MigrationModel(Name alias, Table<MigrationModelRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -84,12 +76,11 @@ public class MigrationModel extends TableImpl<MigrationModelRecord> {
         this(alias, MIGRATION_MODEL);
     }
 
-    private MigrationModel(Name alias, Table<MigrationModelRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private MigrationModel(Name alias, Table<MigrationModelRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.migration_model</code> table reference
+     */
+    public MigrationModel() {
+        this(DSL.name("migration_model"), null);
     }
 
     public <O extends Record> MigrationModel(Table<O> child, ForeignKey<O, MigrationModelRecord> key) {
@@ -98,22 +89,12 @@ public class MigrationModel extends TableImpl<MigrationModelRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
-    }
-
-    @Override
-    public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_UPDATE_TIME);
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public UniqueKey<MigrationModelRecord> getPrimaryKey() {
         return Keys.CONSTRAINT_MIGMOD;
-    }
-
-    @Override
-    public List<UniqueKey<MigrationModelRecord>> getKeys() {
-        return Arrays.<UniqueKey<MigrationModelRecord>>asList(Keys.CONSTRAINT_MIGMOD);
     }
 
     @Override
@@ -143,11 +124,11 @@ public class MigrationModel extends TableImpl<MigrationModelRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row2 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<String, String, Long> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row2<String, String> fieldsRow() {
+        return (Row2) super.fieldsRow();
     }
 }

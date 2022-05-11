@@ -8,9 +8,6 @@ import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.ResourceServerRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
@@ -22,6 +19,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ResourceServer extends TableImpl<ResourceServerRecord> {
 
-    private static final long serialVersionUID = 1658010171;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.resource_server</code>
@@ -49,28 +47,29 @@ public class ResourceServer extends TableImpl<ResourceServerRecord> {
     /**
      * The column <code>keycloak.resource_server.id</code>.
      */
-    public final TableField<ResourceServerRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ResourceServerRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
+
+    /**
+     * The column <code>keycloak.resource_server.client_id</code>.
+     */
+    public final TableField<ResourceServerRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.resource_server.allow_rs_remote_mgmt</code>.
      */
-    public final TableField<ResourceServerRecord, Boolean> ALLOW_RS_REMOTE_MGMT = createField(DSL.name("allow_rs_remote_mgmt"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ResourceServerRecord, Boolean> ALLOW_RS_REMOTE_MGMT = createField(DSL.name("allow_rs_remote_mgmt"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.resource_server.policy_enforce_mode</code>.
      */
-    public final TableField<ResourceServerRecord, String> POLICY_ENFORCE_MODE = createField(DSL.name("policy_enforce_mode"), org.jooq.impl.SQLDataType.VARCHAR(15).nullable(false), this, "");
+    public final TableField<ResourceServerRecord, String> POLICY_ENFORCE_MODE = createField(DSL.name("policy_enforce_mode"), SQLDataType.VARCHAR(15).nullable(false), this, "");
 
-    /**
-     * The column <code>keycloak.resource_server.decision_strategy</code>.
-     */
-    public final TableField<ResourceServerRecord, Short> DECISION_STRATEGY = createField(DSL.name("decision_strategy"), org.jooq.impl.SQLDataType.SMALLINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("1", org.jooq.impl.SQLDataType.SMALLINT)), this, "");
+    private ResourceServer(Name alias, Table<ResourceServerRecord> aliased) {
+        this(alias, aliased, null);
+    }
 
-    /**
-     * Create a <code>keycloak.resource_server</code> table reference
-     */
-    public ResourceServer() {
-        this(DSL.name("resource_server"), null);
+    private ResourceServer(Name alias, Table<ResourceServerRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -87,12 +86,11 @@ public class ResourceServer extends TableImpl<ResourceServerRecord> {
         this(alias, RESOURCE_SERVER);
     }
 
-    private ResourceServer(Name alias, Table<ResourceServerRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private ResourceServer(Name alias, Table<ResourceServerRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.resource_server</code> table reference
+     */
+    public ResourceServer() {
+        this(DSL.name("resource_server"), null);
     }
 
     public <O extends Record> ResourceServer(Table<O> child, ForeignKey<O, ResourceServerRecord> key) {
@@ -101,17 +99,12 @@ public class ResourceServer extends TableImpl<ResourceServerRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public UniqueKey<ResourceServerRecord> getPrimaryKey() {
-        return Keys.PK_RESOURCE_SERVER;
-    }
-
-    @Override
-    public List<UniqueKey<ResourceServerRecord>> getKeys() {
-        return Arrays.<UniqueKey<ResourceServerRecord>>asList(Keys.PK_RESOURCE_SERVER);
+        return Keys.CONSTRAINT_FARS;
     }
 
     @Override
@@ -145,7 +138,7 @@ public class ResourceServer extends TableImpl<ResourceServerRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<String, Boolean, String, Short> fieldsRow() {
+    public Row4<String, String, Boolean, String> fieldsRow() {
         return (Row4) super.fieldsRow();
     }
 }

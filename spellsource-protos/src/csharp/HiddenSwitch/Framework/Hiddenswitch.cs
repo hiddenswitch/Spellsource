@@ -160,19 +160,23 @@ namespace HiddenSwitch.Proto {
     private static readonly pb::MessageParser<ServerConfiguration> _parser = new pb::MessageParser<ServerConfiguration>(() => new ServerConfiguration());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<ServerConfiguration> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ServerConfiguration() {
       OnConstruction();
     }
@@ -180,6 +184,7 @@ namespace HiddenSwitch.Proto {
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ServerConfiguration(ServerConfiguration other) : this() {
       pg_ = other.pg_ != null ? other.pg_.Clone() : null;
       keycloak_ = other.keycloak_ != null ? other.keycloak_.Clone() : null;
@@ -197,6 +202,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ServerConfiguration Clone() {
       return new ServerConfiguration(this);
     }
@@ -205,6 +211,7 @@ namespace HiddenSwitch.Proto {
     public const int PgFieldNumber = 1;
     private global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration pg_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.ServerConfiguration.Types.PostgresConfiguration Pg {
       get { return pg_; }
       set {
@@ -216,6 +223,7 @@ namespace HiddenSwitch.Proto {
     public const int KeycloakFieldNumber = 2;
     private global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration keycloak_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.ServerConfiguration.Types.KeycloakConfiguration Keycloak {
       get { return keycloak_; }
       set {
@@ -227,6 +235,7 @@ namespace HiddenSwitch.Proto {
     public const int RedisFieldNumber = 3;
     private global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration redis_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration Redis {
       get { return redis_; }
       set {
@@ -238,6 +247,7 @@ namespace HiddenSwitch.Proto {
     public const int RealtimeFieldNumber = 4;
     private global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration realtime_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.ServerConfiguration.Types.RealtimeConfiguration Realtime {
       get { return realtime_; }
       set {
@@ -249,6 +259,7 @@ namespace HiddenSwitch.Proto {
     public const int GrpcConfigurationFieldNumber = 5;
     private global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration grpcConfiguration_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.ServerConfiguration.Types.GrpcConfiguration GrpcConfiguration {
       get { return grpcConfiguration_; }
       set {
@@ -260,6 +271,7 @@ namespace HiddenSwitch.Proto {
     public const int MatchmakingFieldNumber = 6;
     private global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration matchmaking_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.ServerConfiguration.Types.MatchmakingConfiguration Matchmaking {
       get { return matchmaking_; }
       set {
@@ -271,6 +283,7 @@ namespace HiddenSwitch.Proto {
     public const int ApplicationFieldNumber = 7;
     private global::HiddenSwitch.Proto.ServerConfiguration.Types.ApplicationConfiguration application_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.ServerConfiguration.Types.ApplicationConfiguration Application {
       get { return application_; }
       set {
@@ -282,6 +295,7 @@ namespace HiddenSwitch.Proto {
     public const int DecksFieldNumber = 8;
     private global::HiddenSwitch.Proto.ServerConfiguration.Types.DecksConfiguration decks_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.ServerConfiguration.Types.DecksConfiguration Decks {
       get { return decks_; }
       set {
@@ -293,6 +307,7 @@ namespace HiddenSwitch.Proto {
     public const int MigrationFieldNumber = 9;
     private global::HiddenSwitch.Proto.ServerConfiguration.Types.MigrationConfiguration migration_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.ServerConfiguration.Types.MigrationConfiguration Migration {
       get { return migration_; }
       set {
@@ -304,6 +319,7 @@ namespace HiddenSwitch.Proto {
     public const int MetricsFieldNumber = 10;
     private global::HiddenSwitch.Proto.ServerConfiguration.Types.MetricsConfiguration metrics_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.ServerConfiguration.Types.MetricsConfiguration Metrics {
       get { return metrics_; }
       set {
@@ -315,6 +331,7 @@ namespace HiddenSwitch.Proto {
     public const int RateLimiterFieldNumber = 11;
     private global::HiddenSwitch.Proto.ServerConfiguration.Types.RateLimiterConfiguration rateLimiter_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.ServerConfiguration.Types.RateLimiterConfiguration RateLimiter {
       get { return rateLimiter_; }
       set {
@@ -326,6 +343,7 @@ namespace HiddenSwitch.Proto {
     public const int JaegerFieldNumber = 12;
     private global::HiddenSwitch.Proto.ServerConfiguration.Types.JaegerConfiguration jaeger_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.ServerConfiguration.Types.JaegerConfiguration Jaeger {
       get { return jaeger_; }
       set {
@@ -334,11 +352,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
       return Equals(other as ServerConfiguration);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool Equals(ServerConfiguration other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -362,6 +382,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
       if (pg_ != null) hash ^= Pg.GetHashCode();
@@ -383,11 +404,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void WriteTo(pb::CodedOutputStream output) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
@@ -448,6 +471,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       if (pg_ != null) {
         output.WriteRawTag(10);
@@ -504,6 +528,7 @@ namespace HiddenSwitch.Proto {
     #endif
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
       if (pg_ != null) {
@@ -549,6 +574,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(ServerConfiguration other) {
       if (other == null) {
         return;
@@ -629,6 +655,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(pb::CodedInputStream input) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       input.ReadRawMessage(this);
@@ -730,6 +757,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -829,6 +857,7 @@ namespace HiddenSwitch.Proto {
     #region Nested types
     /// <summary>Container for nested types declared in the ServerConfiguration message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static partial class Types {
       [global::System.SerializableAttribute]
       public sealed partial class PostgresConfiguration : pb::IMessage<PostgresConfiguration>
@@ -839,19 +868,23 @@ namespace HiddenSwitch.Proto {
         private static readonly pb::MessageParser<PostgresConfiguration> _parser = new pb::MessageParser<PostgresConfiguration>(() => new PostgresConfiguration());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<PostgresConfiguration> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
           get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[0]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         pbr::MessageDescriptor pb::IMessage.Descriptor {
           get { return Descriptor; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public PostgresConfiguration() {
           OnConstruction();
         }
@@ -859,6 +892,7 @@ namespace HiddenSwitch.Proto {
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public PostgresConfiguration(PostgresConfiguration other) : this() {
           host_ = other.host_;
           port_ = other.port_;
@@ -869,6 +903,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public PostgresConfiguration Clone() {
           return new PostgresConfiguration(this);
         }
@@ -877,6 +912,7 @@ namespace HiddenSwitch.Proto {
         public const int HostFieldNumber = 1;
         private string host_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string Host {
           get { return host_; }
           set {
@@ -888,6 +924,7 @@ namespace HiddenSwitch.Proto {
         public const int PortFieldNumber = 2;
         private int port_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int Port {
           get { return port_; }
           set {
@@ -899,6 +936,7 @@ namespace HiddenSwitch.Proto {
         public const int DatabaseFieldNumber = 3;
         private string database_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string Database {
           get { return database_; }
           set {
@@ -910,6 +948,7 @@ namespace HiddenSwitch.Proto {
         public const int UserFieldNumber = 4;
         private string user_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string User {
           get { return user_; }
           set {
@@ -921,6 +960,7 @@ namespace HiddenSwitch.Proto {
         public const int PasswordFieldNumber = 5;
         private string password_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string Password {
           get { return password_; }
           set {
@@ -929,11 +969,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
           return Equals(other as PostgresConfiguration);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Equals(PostgresConfiguration other) {
           if (ReferenceEquals(other, null)) {
             return false;
@@ -950,6 +992,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
           if (Host.Length != 0) hash ^= Host.GetHashCode();
@@ -964,11 +1007,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override string ToString() {
           return pb::JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void WriteTo(pb::CodedOutputStream output) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
@@ -1001,6 +1046,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
           if (Host.Length != 0) {
             output.WriteRawTag(10);
@@ -1029,6 +1075,7 @@ namespace HiddenSwitch.Proto {
         #endif
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
           if (Host.Length != 0) {
@@ -1053,6 +1100,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(PostgresConfiguration other) {
           if (other == null) {
             return;
@@ -1076,6 +1124,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(pb::CodedInputStream input) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           input.ReadRawMessage(this);
@@ -1113,6 +1162,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
@@ -1156,19 +1206,23 @@ namespace HiddenSwitch.Proto {
         private static readonly pb::MessageParser<KeycloakConfiguration> _parser = new pb::MessageParser<KeycloakConfiguration>(() => new KeycloakConfiguration());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<KeycloakConfiguration> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
           get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[1]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         pbr::MessageDescriptor pb::IMessage.Descriptor {
           get { return Descriptor; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public KeycloakConfiguration() {
           OnConstruction();
         }
@@ -1176,6 +1230,7 @@ namespace HiddenSwitch.Proto {
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public KeycloakConfiguration(KeycloakConfiguration other) : this() {
           authUrl_ = other.authUrl_;
           publicAuthUrl_ = other.publicAuthUrl_;
@@ -1189,6 +1244,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public KeycloakConfiguration Clone() {
           return new KeycloakConfiguration(this);
         }
@@ -1197,6 +1253,7 @@ namespace HiddenSwitch.Proto {
         public const int AuthUrlFieldNumber = 1;
         private string authUrl_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string AuthUrl {
           get { return authUrl_; }
           set {
@@ -1208,6 +1265,7 @@ namespace HiddenSwitch.Proto {
         public const int PublicAuthUrlFieldNumber = 8;
         private string publicAuthUrl_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string PublicAuthUrl {
           get { return publicAuthUrl_; }
           set {
@@ -1219,6 +1277,7 @@ namespace HiddenSwitch.Proto {
         public const int AdminUsernameFieldNumber = 2;
         private string adminUsername_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string AdminUsername {
           get { return adminUsername_; }
           set {
@@ -1230,6 +1289,7 @@ namespace HiddenSwitch.Proto {
         public const int AdminPasswordFieldNumber = 3;
         private string adminPassword_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string AdminPassword {
           get { return adminPassword_; }
           set {
@@ -1241,6 +1301,7 @@ namespace HiddenSwitch.Proto {
         public const int ClientIdFieldNumber = 4;
         private string clientId_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string ClientId {
           get { return clientId_; }
           set {
@@ -1252,6 +1313,7 @@ namespace HiddenSwitch.Proto {
         public const int ClientSecretFieldNumber = 5;
         private string clientSecret_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string ClientSecret {
           get { return clientSecret_; }
           set {
@@ -1263,6 +1325,7 @@ namespace HiddenSwitch.Proto {
         public const int RealmDisplayNameFieldNumber = 6;
         private string realmDisplayName_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string RealmDisplayName {
           get { return realmDisplayName_; }
           set {
@@ -1274,6 +1337,7 @@ namespace HiddenSwitch.Proto {
         public const int RealmIdFieldNumber = 7;
         private string realmId_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string RealmId {
           get { return realmId_; }
           set {
@@ -1282,11 +1346,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
           return Equals(other as KeycloakConfiguration);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Equals(KeycloakConfiguration other) {
           if (ReferenceEquals(other, null)) {
             return false;
@@ -1306,6 +1372,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
           if (AuthUrl.Length != 0) hash ^= AuthUrl.GetHashCode();
@@ -1323,11 +1390,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override string ToString() {
           return pb::JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void WriteTo(pb::CodedOutputStream output) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
@@ -1372,6 +1441,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
           if (AuthUrl.Length != 0) {
             output.WriteRawTag(10);
@@ -1412,6 +1482,7 @@ namespace HiddenSwitch.Proto {
         #endif
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
           if (AuthUrl.Length != 0) {
@@ -1445,6 +1516,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(KeycloakConfiguration other) {
           if (other == null) {
             return;
@@ -1477,6 +1549,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(pb::CodedInputStream input) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           input.ReadRawMessage(this);
@@ -1526,6 +1599,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
@@ -1581,19 +1655,23 @@ namespace HiddenSwitch.Proto {
         private static readonly pb::MessageParser<RedisConfiguration> _parser = new pb::MessageParser<RedisConfiguration>(() => new RedisConfiguration());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<RedisConfiguration> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
           get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[2]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         pbr::MessageDescriptor pb::IMessage.Descriptor {
           get { return Descriptor; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public RedisConfiguration() {
           OnConstruction();
         }
@@ -1601,6 +1679,7 @@ namespace HiddenSwitch.Proto {
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public RedisConfiguration(RedisConfiguration other) : this() {
           switch (other.ConnectionCase) {
             case ConnectionOneofCase.HostPortUser:
@@ -1615,6 +1694,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public RedisConfiguration Clone() {
           return new RedisConfiguration(this);
         }
@@ -1622,6 +1702,7 @@ namespace HiddenSwitch.Proto {
         /// <summary>Field number for the "hostPortUser" field.</summary>
         public const int HostPortUserFieldNumber = 1;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser HostPortUser {
           get { return connectionCase_ == ConnectionOneofCase.HostPortUser ? (global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Types.HostPortUser) connection_ : null; }
           set {
@@ -1633,6 +1714,7 @@ namespace HiddenSwitch.Proto {
         /// <summary>Field number for the "uri" field.</summary>
         public const int UriFieldNumber = 2;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string Uri {
           get { return connectionCase_ == ConnectionOneofCase.Uri ? (string) connection_ : ""; }
           set {
@@ -1650,22 +1732,26 @@ namespace HiddenSwitch.Proto {
         }
         private ConnectionOneofCase connectionCase_ = ConnectionOneofCase.None;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public ConnectionOneofCase ConnectionCase {
           get { return connectionCase_; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void ClearConnection() {
           connectionCase_ = ConnectionOneofCase.None;
           connection_ = null;
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
           return Equals(other as RedisConfiguration);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Equals(RedisConfiguration other) {
           if (ReferenceEquals(other, null)) {
             return false;
@@ -1680,6 +1766,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
           if (connectionCase_ == ConnectionOneofCase.HostPortUser) hash ^= HostPortUser.GetHashCode();
@@ -1692,11 +1779,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override string ToString() {
           return pb::JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void WriteTo(pb::CodedOutputStream output) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
@@ -1717,6 +1806,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
           if (connectionCase_ == ConnectionOneofCase.HostPortUser) {
             output.WriteRawTag(10);
@@ -1733,6 +1823,7 @@ namespace HiddenSwitch.Proto {
         #endif
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
           if (connectionCase_ == ConnectionOneofCase.HostPortUser) {
@@ -1748,6 +1839,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(RedisConfiguration other) {
           if (other == null) {
             return;
@@ -1768,6 +1860,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(pb::CodedInputStream input) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           input.ReadRawMessage(this);
@@ -1798,6 +1891,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
@@ -1826,6 +1920,7 @@ namespace HiddenSwitch.Proto {
         #region Nested types
         /// <summary>Container for nested types declared in the RedisConfiguration message type.</summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static partial class Types {
           [global::System.SerializableAttribute]
           public sealed partial class HostPortUser : pb::IMessage<HostPortUser>
@@ -1836,19 +1931,23 @@ namespace HiddenSwitch.Proto {
             private static readonly pb::MessageParser<HostPortUser> _parser = new pb::MessageParser<HostPortUser>(() => new HostPortUser());
             private pb::UnknownFieldSet _unknownFields;
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public static pb::MessageParser<HostPortUser> Parser { get { return _parser; } }
 
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public static pbr::MessageDescriptor Descriptor {
               get { return global::HiddenSwitch.Proto.ServerConfiguration.Types.RedisConfiguration.Descriptor.NestedTypes[0]; }
             }
 
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             pbr::MessageDescriptor pb::IMessage.Descriptor {
               get { return Descriptor; }
             }
 
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public HostPortUser() {
               OnConstruction();
             }
@@ -1856,6 +1955,7 @@ namespace HiddenSwitch.Proto {
             partial void OnConstruction();
 
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public HostPortUser(HostPortUser other) : this() {
               host_ = other.host_;
               port_ = other.port_;
@@ -1864,6 +1964,7 @@ namespace HiddenSwitch.Proto {
             }
 
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public HostPortUser Clone() {
               return new HostPortUser(this);
             }
@@ -1872,6 +1973,7 @@ namespace HiddenSwitch.Proto {
             public const int HostFieldNumber = 1;
             private string host_ = "";
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public string Host {
               get { return host_; }
               set {
@@ -1883,6 +1985,7 @@ namespace HiddenSwitch.Proto {
             public const int PortFieldNumber = 2;
             private int port_;
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public int Port {
               get { return port_; }
               set {
@@ -1894,6 +1997,7 @@ namespace HiddenSwitch.Proto {
             public const int UserFieldNumber = 3;
             private string user_ = "";
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public string User {
               get { return user_; }
               set {
@@ -1902,11 +2006,13 @@ namespace HiddenSwitch.Proto {
             }
 
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public override bool Equals(object other) {
               return Equals(other as HostPortUser);
             }
 
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public bool Equals(HostPortUser other) {
               if (ReferenceEquals(other, null)) {
                 return false;
@@ -1921,6 +2027,7 @@ namespace HiddenSwitch.Proto {
             }
 
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public override int GetHashCode() {
               int hash = 1;
               if (Host.Length != 0) hash ^= Host.GetHashCode();
@@ -1933,11 +2040,13 @@ namespace HiddenSwitch.Proto {
             }
 
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public override string ToString() {
               return pb::JsonFormatter.ToDiagnosticString(this);
             }
 
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public void WriteTo(pb::CodedOutputStream output) {
             #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
               output.WriteRawMessage(this);
@@ -1962,6 +2071,7 @@ namespace HiddenSwitch.Proto {
 
             #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
               if (Host.Length != 0) {
                 output.WriteRawTag(10);
@@ -1982,6 +2092,7 @@ namespace HiddenSwitch.Proto {
             #endif
 
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public int CalculateSize() {
               int size = 0;
               if (Host.Length != 0) {
@@ -2000,6 +2111,7 @@ namespace HiddenSwitch.Proto {
             }
 
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public void MergeFrom(HostPortUser other) {
               if (other == null) {
                 return;
@@ -2017,6 +2129,7 @@ namespace HiddenSwitch.Proto {
             }
 
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             public void MergeFrom(pb::CodedInputStream input) {
             #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
               input.ReadRawMessage(this);
@@ -2046,6 +2159,7 @@ namespace HiddenSwitch.Proto {
 
             #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+            [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
             void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
               uint tag;
               while ((tag = input.ReadTag()) != 0) {
@@ -2086,19 +2200,23 @@ namespace HiddenSwitch.Proto {
         private static readonly pb::MessageParser<RealtimeConfiguration> _parser = new pb::MessageParser<RealtimeConfiguration>(() => new RealtimeConfiguration());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<RealtimeConfiguration> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
           get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[3]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         pbr::MessageDescriptor pb::IMessage.Descriptor {
           get { return Descriptor; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public RealtimeConfiguration() {
           OnConstruction();
         }
@@ -2106,12 +2224,14 @@ namespace HiddenSwitch.Proto {
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public RealtimeConfiguration(RealtimeConfiguration other) : this() {
           uri_ = other.uri_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public RealtimeConfiguration Clone() {
           return new RealtimeConfiguration(this);
         }
@@ -2120,6 +2240,7 @@ namespace HiddenSwitch.Proto {
         public const int UriFieldNumber = 1;
         private string uri_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string Uri {
           get { return uri_; }
           set {
@@ -2128,11 +2249,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
           return Equals(other as RealtimeConfiguration);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Equals(RealtimeConfiguration other) {
           if (ReferenceEquals(other, null)) {
             return false;
@@ -2145,6 +2268,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
           if (Uri.Length != 0) hash ^= Uri.GetHashCode();
@@ -2155,11 +2279,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override string ToString() {
           return pb::JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void WriteTo(pb::CodedOutputStream output) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
@@ -2176,6 +2302,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
           if (Uri.Length != 0) {
             output.WriteRawTag(10);
@@ -2188,6 +2315,7 @@ namespace HiddenSwitch.Proto {
         #endif
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
           if (Uri.Length != 0) {
@@ -2200,6 +2328,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(RealtimeConfiguration other) {
           if (other == null) {
             return;
@@ -2211,6 +2340,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(pb::CodedInputStream input) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           input.ReadRawMessage(this);
@@ -2232,6 +2362,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
@@ -2259,19 +2390,23 @@ namespace HiddenSwitch.Proto {
         private static readonly pb::MessageParser<GrpcConfiguration> _parser = new pb::MessageParser<GrpcConfiguration>(() => new GrpcConfiguration());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<GrpcConfiguration> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
           get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[4]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         pbr::MessageDescriptor pb::IMessage.Descriptor {
           get { return Descriptor; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public GrpcConfiguration() {
           OnConstruction();
         }
@@ -2279,6 +2414,7 @@ namespace HiddenSwitch.Proto {
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public GrpcConfiguration(GrpcConfiguration other) : this() {
           serverKeepAliveTimeMillis_ = other.serverKeepAliveTimeMillis_;
           serverKeepAliveTimeoutMillis_ = other.serverKeepAliveTimeoutMillis_;
@@ -2288,6 +2424,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public GrpcConfiguration Clone() {
           return new GrpcConfiguration(this);
         }
@@ -2296,6 +2433,7 @@ namespace HiddenSwitch.Proto {
         public const int ServerKeepAliveTimeMillisFieldNumber = 1;
         private long serverKeepAliveTimeMillis_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public long ServerKeepAliveTimeMillis {
           get { return serverKeepAliveTimeMillis_; }
           set {
@@ -2307,6 +2445,7 @@ namespace HiddenSwitch.Proto {
         public const int ServerKeepAliveTimeoutMillisFieldNumber = 2;
         private long serverKeepAliveTimeoutMillis_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public long ServerKeepAliveTimeoutMillis {
           get { return serverKeepAliveTimeoutMillis_; }
           set {
@@ -2318,6 +2457,7 @@ namespace HiddenSwitch.Proto {
         public const int ServerPermitKeepAliveWithoutCallsFieldNumber = 3;
         private bool serverPermitKeepAliveWithoutCalls_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool ServerPermitKeepAliveWithoutCalls {
           get { return serverPermitKeepAliveWithoutCalls_; }
           set {
@@ -2329,6 +2469,7 @@ namespace HiddenSwitch.Proto {
         public const int PortFieldNumber = 4;
         private int port_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int Port {
           get { return port_; }
           set {
@@ -2337,11 +2478,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
           return Equals(other as GrpcConfiguration);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Equals(GrpcConfiguration other) {
           if (ReferenceEquals(other, null)) {
             return false;
@@ -2357,6 +2500,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
           if (ServerKeepAliveTimeMillis != 0L) hash ^= ServerKeepAliveTimeMillis.GetHashCode();
@@ -2370,11 +2514,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override string ToString() {
           return pb::JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void WriteTo(pb::CodedOutputStream output) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
@@ -2403,6 +2549,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
           if (ServerKeepAliveTimeMillis != 0L) {
             output.WriteRawTag(8);
@@ -2427,6 +2574,7 @@ namespace HiddenSwitch.Proto {
         #endif
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
           if (ServerKeepAliveTimeMillis != 0L) {
@@ -2448,6 +2596,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(GrpcConfiguration other) {
           if (other == null) {
             return;
@@ -2468,6 +2617,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(pb::CodedInputStream input) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           input.ReadRawMessage(this);
@@ -2501,6 +2651,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
@@ -2540,19 +2691,23 @@ namespace HiddenSwitch.Proto {
         private static readonly pb::MessageParser<MatchmakingConfiguration> _parser = new pb::MessageParser<MatchmakingConfiguration>(() => new MatchmakingConfiguration());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<MatchmakingConfiguration> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
           get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[5]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         pbr::MessageDescriptor pb::IMessage.Descriptor {
           get { return Descriptor; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public MatchmakingConfiguration() {
           OnConstruction();
         }
@@ -2560,6 +2715,7 @@ namespace HiddenSwitch.Proto {
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public MatchmakingConfiguration(MatchmakingConfiguration other) : this() {
           enqueueLockTimeoutMillis_ = other.enqueueLockTimeoutMillis_;
           scanFrequencyMillis_ = other.scanFrequencyMillis_;
@@ -2568,6 +2724,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public MatchmakingConfiguration Clone() {
           return new MatchmakingConfiguration(this);
         }
@@ -2576,6 +2733,7 @@ namespace HiddenSwitch.Proto {
         public const int EnqueueLockTimeoutMillisFieldNumber = 1;
         private long enqueueLockTimeoutMillis_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public long EnqueueLockTimeoutMillis {
           get { return enqueueLockTimeoutMillis_; }
           set {
@@ -2587,6 +2745,7 @@ namespace HiddenSwitch.Proto {
         public const int ScanFrequencyMillisFieldNumber = 2;
         private long scanFrequencyMillis_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public long ScanFrequencyMillis {
           get { return scanFrequencyMillis_; }
           set {
@@ -2598,6 +2757,7 @@ namespace HiddenSwitch.Proto {
         public const int MaxTicketsToProcessFieldNumber = 3;
         private int maxTicketsToProcess_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int MaxTicketsToProcess {
           get { return maxTicketsToProcess_; }
           set {
@@ -2606,11 +2766,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
           return Equals(other as MatchmakingConfiguration);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Equals(MatchmakingConfiguration other) {
           if (ReferenceEquals(other, null)) {
             return false;
@@ -2625,6 +2787,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
           if (EnqueueLockTimeoutMillis != 0L) hash ^= EnqueueLockTimeoutMillis.GetHashCode();
@@ -2637,11 +2800,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override string ToString() {
           return pb::JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void WriteTo(pb::CodedOutputStream output) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
@@ -2666,6 +2831,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
           if (EnqueueLockTimeoutMillis != 0L) {
             output.WriteRawTag(8);
@@ -2686,6 +2852,7 @@ namespace HiddenSwitch.Proto {
         #endif
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
           if (EnqueueLockTimeoutMillis != 0L) {
@@ -2704,6 +2871,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(MatchmakingConfiguration other) {
           if (other == null) {
             return;
@@ -2721,6 +2889,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(pb::CodedInputStream input) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           input.ReadRawMessage(this);
@@ -2750,6 +2919,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
@@ -2785,19 +2955,23 @@ namespace HiddenSwitch.Proto {
         private static readonly pb::MessageParser<DecksConfiguration> _parser = new pb::MessageParser<DecksConfiguration>(() => new DecksConfiguration());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<DecksConfiguration> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
           get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[6]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         pbr::MessageDescriptor pb::IMessage.Descriptor {
           get { return Descriptor; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public DecksConfiguration() {
           OnConstruction();
         }
@@ -2805,12 +2979,14 @@ namespace HiddenSwitch.Proto {
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public DecksConfiguration(DecksConfiguration other) : this() {
           cachedDeckTimeToLiveMinutes_ = other.cachedDeckTimeToLiveMinutes_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public DecksConfiguration Clone() {
           return new DecksConfiguration(this);
         }
@@ -2819,6 +2995,7 @@ namespace HiddenSwitch.Proto {
         public const int CachedDeckTimeToLiveMinutesFieldNumber = 1;
         private long cachedDeckTimeToLiveMinutes_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public long CachedDeckTimeToLiveMinutes {
           get { return cachedDeckTimeToLiveMinutes_; }
           set {
@@ -2827,11 +3004,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
           return Equals(other as DecksConfiguration);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Equals(DecksConfiguration other) {
           if (ReferenceEquals(other, null)) {
             return false;
@@ -2844,6 +3023,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
           if (CachedDeckTimeToLiveMinutes != 0L) hash ^= CachedDeckTimeToLiveMinutes.GetHashCode();
@@ -2854,11 +3034,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override string ToString() {
           return pb::JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void WriteTo(pb::CodedOutputStream output) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
@@ -2875,6 +3057,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
           if (CachedDeckTimeToLiveMinutes != 0L) {
             output.WriteRawTag(8);
@@ -2887,6 +3070,7 @@ namespace HiddenSwitch.Proto {
         #endif
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
           if (CachedDeckTimeToLiveMinutes != 0L) {
@@ -2899,6 +3083,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(DecksConfiguration other) {
           if (other == null) {
             return;
@@ -2910,6 +3095,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(pb::CodedInputStream input) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           input.ReadRawMessage(this);
@@ -2931,6 +3117,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
@@ -2958,19 +3145,23 @@ namespace HiddenSwitch.Proto {
         private static readonly pb::MessageParser<ApplicationConfiguration> _parser = new pb::MessageParser<ApplicationConfiguration>(() => new ApplicationConfiguration());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<ApplicationConfiguration> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
           get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[7]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         pbr::MessageDescriptor pb::IMessage.Descriptor {
           get { return Descriptor; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public ApplicationConfiguration() {
           OnConstruction();
         }
@@ -2978,12 +3169,14 @@ namespace HiddenSwitch.Proto {
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public ApplicationConfiguration(ApplicationConfiguration other) : this() {
           useBroadcaster_ = other.useBroadcaster_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public ApplicationConfiguration Clone() {
           return new ApplicationConfiguration(this);
         }
@@ -2992,6 +3185,7 @@ namespace HiddenSwitch.Proto {
         public const int UseBroadcasterFieldNumber = 1;
         private bool useBroadcaster_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool UseBroadcaster {
           get { return useBroadcaster_; }
           set {
@@ -3000,11 +3194,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
           return Equals(other as ApplicationConfiguration);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Equals(ApplicationConfiguration other) {
           if (ReferenceEquals(other, null)) {
             return false;
@@ -3017,6 +3213,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
           if (UseBroadcaster != false) hash ^= UseBroadcaster.GetHashCode();
@@ -3027,11 +3224,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override string ToString() {
           return pb::JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void WriteTo(pb::CodedOutputStream output) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
@@ -3048,6 +3247,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
           if (UseBroadcaster != false) {
             output.WriteRawTag(8);
@@ -3060,6 +3260,7 @@ namespace HiddenSwitch.Proto {
         #endif
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
           if (UseBroadcaster != false) {
@@ -3072,6 +3273,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(ApplicationConfiguration other) {
           if (other == null) {
             return;
@@ -3083,6 +3285,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(pb::CodedInputStream input) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           input.ReadRawMessage(this);
@@ -3104,6 +3307,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
@@ -3131,19 +3335,23 @@ namespace HiddenSwitch.Proto {
         private static readonly pb::MessageParser<MigrationConfiguration> _parser = new pb::MessageParser<MigrationConfiguration>(() => new MigrationConfiguration());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<MigrationConfiguration> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
           get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[8]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         pbr::MessageDescriptor pb::IMessage.Descriptor {
           get { return Descriptor; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public MigrationConfiguration() {
           OnConstruction();
         }
@@ -3151,12 +3359,14 @@ namespace HiddenSwitch.Proto {
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public MigrationConfiguration(MigrationConfiguration other) : this() {
           shouldMigrate_ = other.shouldMigrate_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public MigrationConfiguration Clone() {
           return new MigrationConfiguration(this);
         }
@@ -3165,6 +3375,7 @@ namespace HiddenSwitch.Proto {
         public const int ShouldMigrateFieldNumber = 1;
         private bool shouldMigrate_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool ShouldMigrate {
           get { return shouldMigrate_; }
           set {
@@ -3173,11 +3384,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
           return Equals(other as MigrationConfiguration);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Equals(MigrationConfiguration other) {
           if (ReferenceEquals(other, null)) {
             return false;
@@ -3190,6 +3403,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
           if (ShouldMigrate != false) hash ^= ShouldMigrate.GetHashCode();
@@ -3200,11 +3414,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override string ToString() {
           return pb::JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void WriteTo(pb::CodedOutputStream output) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
@@ -3221,6 +3437,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
           if (ShouldMigrate != false) {
             output.WriteRawTag(8);
@@ -3233,6 +3450,7 @@ namespace HiddenSwitch.Proto {
         #endif
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
           if (ShouldMigrate != false) {
@@ -3245,6 +3463,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(MigrationConfiguration other) {
           if (other == null) {
             return;
@@ -3256,6 +3475,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(pb::CodedInputStream input) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           input.ReadRawMessage(this);
@@ -3277,6 +3497,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
@@ -3304,19 +3525,23 @@ namespace HiddenSwitch.Proto {
         private static readonly pb::MessageParser<MetricsConfiguration> _parser = new pb::MessageParser<MetricsConfiguration>(() => new MetricsConfiguration());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<MetricsConfiguration> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
           get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[9]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         pbr::MessageDescriptor pb::IMessage.Descriptor {
           get { return Descriptor; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public MetricsConfiguration() {
           OnConstruction();
         }
@@ -3324,6 +3549,7 @@ namespace HiddenSwitch.Proto {
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public MetricsConfiguration(MetricsConfiguration other) : this() {
           port_ = other.port_;
           livenessRoute_ = other.livenessRoute_;
@@ -3333,6 +3559,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public MetricsConfiguration Clone() {
           return new MetricsConfiguration(this);
         }
@@ -3341,6 +3568,7 @@ namespace HiddenSwitch.Proto {
         public const int PortFieldNumber = 1;
         private int port_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int Port {
           get { return port_; }
           set {
@@ -3352,6 +3580,7 @@ namespace HiddenSwitch.Proto {
         public const int LivenessRouteFieldNumber = 2;
         private string livenessRoute_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string LivenessRoute {
           get { return livenessRoute_; }
           set {
@@ -3363,6 +3592,7 @@ namespace HiddenSwitch.Proto {
         public const int ReadinessRouteFieldNumber = 3;
         private string readinessRoute_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string ReadinessRoute {
           get { return readinessRoute_; }
           set {
@@ -3374,6 +3604,7 @@ namespace HiddenSwitch.Proto {
         public const int MetricsRouteFieldNumber = 4;
         private string metricsRoute_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string MetricsRoute {
           get { return metricsRoute_; }
           set {
@@ -3382,11 +3613,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
           return Equals(other as MetricsConfiguration);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Equals(MetricsConfiguration other) {
           if (ReferenceEquals(other, null)) {
             return false;
@@ -3402,6 +3635,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
           if (Port != 0) hash ^= Port.GetHashCode();
@@ -3415,11 +3649,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override string ToString() {
           return pb::JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void WriteTo(pb::CodedOutputStream output) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
@@ -3448,6 +3684,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
           if (Port != 0) {
             output.WriteRawTag(8);
@@ -3472,6 +3709,7 @@ namespace HiddenSwitch.Proto {
         #endif
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
           if (Port != 0) {
@@ -3493,6 +3731,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(MetricsConfiguration other) {
           if (other == null) {
             return;
@@ -3513,6 +3752,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(pb::CodedInputStream input) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           input.ReadRawMessage(this);
@@ -3546,6 +3786,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
@@ -3585,19 +3826,23 @@ namespace HiddenSwitch.Proto {
         private static readonly pb::MessageParser<RateLimiterConfiguration> _parser = new pb::MessageParser<RateLimiterConfiguration>(() => new RateLimiterConfiguration());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<RateLimiterConfiguration> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
           get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[10]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         pbr::MessageDescriptor pb::IMessage.Descriptor {
           get { return Descriptor; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public RateLimiterConfiguration() {
           OnConstruction();
         }
@@ -3605,12 +3850,14 @@ namespace HiddenSwitch.Proto {
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public RateLimiterConfiguration(RateLimiterConfiguration other) : this() {
           enabled_ = other.enabled_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public RateLimiterConfiguration Clone() {
           return new RateLimiterConfiguration(this);
         }
@@ -3619,6 +3866,7 @@ namespace HiddenSwitch.Proto {
         public const int EnabledFieldNumber = 1;
         private bool enabled_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Enabled {
           get { return enabled_; }
           set {
@@ -3627,11 +3875,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
           return Equals(other as RateLimiterConfiguration);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Equals(RateLimiterConfiguration other) {
           if (ReferenceEquals(other, null)) {
             return false;
@@ -3644,6 +3894,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
           if (Enabled != false) hash ^= Enabled.GetHashCode();
@@ -3654,11 +3905,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override string ToString() {
           return pb::JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void WriteTo(pb::CodedOutputStream output) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
@@ -3675,6 +3928,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
           if (Enabled != false) {
             output.WriteRawTag(8);
@@ -3687,6 +3941,7 @@ namespace HiddenSwitch.Proto {
         #endif
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
           if (Enabled != false) {
@@ -3699,6 +3954,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(RateLimiterConfiguration other) {
           if (other == null) {
             return;
@@ -3710,6 +3966,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(pb::CodedInputStream input) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           input.ReadRawMessage(this);
@@ -3731,6 +3988,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
@@ -3758,19 +4016,23 @@ namespace HiddenSwitch.Proto {
         private static readonly pb::MessageParser<JaegerConfiguration> _parser = new pb::MessageParser<JaegerConfiguration>(() => new JaegerConfiguration());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<JaegerConfiguration> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
           get { return global::HiddenSwitch.Proto.ServerConfiguration.Descriptor.NestedTypes[11]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         pbr::MessageDescriptor pb::IMessage.Descriptor {
           get { return Descriptor; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public JaegerConfiguration() {
           OnConstruction();
         }
@@ -3778,6 +4040,7 @@ namespace HiddenSwitch.Proto {
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public JaegerConfiguration(JaegerConfiguration other) : this() {
           enabled_ = other.enabled_;
           agentHost_ = other.agentHost_;
@@ -3786,6 +4049,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public JaegerConfiguration Clone() {
           return new JaegerConfiguration(this);
         }
@@ -3794,6 +4058,7 @@ namespace HiddenSwitch.Proto {
         public const int EnabledFieldNumber = 1;
         private bool enabled_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Enabled {
           get { return enabled_; }
           set {
@@ -3805,6 +4070,7 @@ namespace HiddenSwitch.Proto {
         public const int AgentHostFieldNumber = 2;
         private string agentHost_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string AgentHost {
           get { return agentHost_; }
           set {
@@ -3816,6 +4082,7 @@ namespace HiddenSwitch.Proto {
         public const int AgentPortFieldNumber = 3;
         private int agentPort_;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int AgentPort {
           get { return agentPort_; }
           set {
@@ -3824,11 +4091,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
           return Equals(other as JaegerConfiguration);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Equals(JaegerConfiguration other) {
           if (ReferenceEquals(other, null)) {
             return false;
@@ -3843,6 +4112,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
           if (Enabled != false) hash ^= Enabled.GetHashCode();
@@ -3855,11 +4125,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override string ToString() {
           return pb::JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void WriteTo(pb::CodedOutputStream output) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
@@ -3884,6 +4156,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
           if (Enabled != false) {
             output.WriteRawTag(8);
@@ -3904,6 +4177,7 @@ namespace HiddenSwitch.Proto {
         #endif
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
           if (Enabled != false) {
@@ -3922,6 +4196,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(JaegerConfiguration other) {
           if (other == null) {
             return;
@@ -3939,6 +4214,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(pb::CodedInputStream input) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           input.ReadRawMessage(this);
@@ -3968,6 +4244,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
@@ -4008,19 +4285,23 @@ namespace HiddenSwitch.Proto {
     private static readonly pb::MessageParser<ClientConfiguration> _parser = new pb::MessageParser<ClientConfiguration>(() => new ClientConfiguration());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<ClientConfiguration> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ClientConfiguration() {
       OnConstruction();
     }
@@ -4028,12 +4309,14 @@ namespace HiddenSwitch.Proto {
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ClientConfiguration(ClientConfiguration other) : this() {
       accounts_ = other.accounts_ != null ? other.accounts_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ClientConfiguration Clone() {
       return new ClientConfiguration(this);
     }
@@ -4042,6 +4325,7 @@ namespace HiddenSwitch.Proto {
     public const int AccountsFieldNumber = 1;
     private global::HiddenSwitch.Proto.ClientConfiguration.Types.AccountsConfiguration accounts_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.ClientConfiguration.Types.AccountsConfiguration Accounts {
       get { return accounts_; }
       set {
@@ -4050,11 +4334,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
       return Equals(other as ClientConfiguration);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool Equals(ClientConfiguration other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -4067,6 +4353,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
       if (accounts_ != null) hash ^= Accounts.GetHashCode();
@@ -4077,11 +4364,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void WriteTo(pb::CodedOutputStream output) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
@@ -4098,6 +4387,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       if (accounts_ != null) {
         output.WriteRawTag(10);
@@ -4110,6 +4400,7 @@ namespace HiddenSwitch.Proto {
     #endif
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
       if (accounts_ != null) {
@@ -4122,6 +4413,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(ClientConfiguration other) {
       if (other == null) {
         return;
@@ -4136,6 +4428,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(pb::CodedInputStream input) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       input.ReadRawMessage(this);
@@ -4160,6 +4453,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -4182,6 +4476,7 @@ namespace HiddenSwitch.Proto {
     #region Nested types
     /// <summary>Container for nested types declared in the ClientConfiguration message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static partial class Types {
       [global::System.SerializableAttribute]
       public sealed partial class AccountsConfiguration : pb::IMessage<AccountsConfiguration>
@@ -4192,19 +4487,23 @@ namespace HiddenSwitch.Proto {
         private static readonly pb::MessageParser<AccountsConfiguration> _parser = new pb::MessageParser<AccountsConfiguration>(() => new AccountsConfiguration());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<AccountsConfiguration> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
           get { return global::HiddenSwitch.Proto.ClientConfiguration.Descriptor.NestedTypes[0]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         pbr::MessageDescriptor pb::IMessage.Descriptor {
           get { return Descriptor; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public AccountsConfiguration() {
           OnConstruction();
         }
@@ -4212,6 +4511,7 @@ namespace HiddenSwitch.Proto {
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public AccountsConfiguration(AccountsConfiguration other) : this() {
           keycloakResetPasswordUrl_ = other.keycloakResetPasswordUrl_;
           keycloakAccountManagementUrl_ = other.keycloakAccountManagementUrl_;
@@ -4219,6 +4519,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public AccountsConfiguration Clone() {
           return new AccountsConfiguration(this);
         }
@@ -4227,6 +4528,7 @@ namespace HiddenSwitch.Proto {
         public const int KeycloakResetPasswordUrlFieldNumber = 1;
         private string keycloakResetPasswordUrl_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string KeycloakResetPasswordUrl {
           get { return keycloakResetPasswordUrl_; }
           set {
@@ -4238,6 +4540,7 @@ namespace HiddenSwitch.Proto {
         public const int KeycloakAccountManagementUrlFieldNumber = 2;
         private string keycloakAccountManagementUrl_ = "";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string KeycloakAccountManagementUrl {
           get { return keycloakAccountManagementUrl_; }
           set {
@@ -4246,11 +4549,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
           return Equals(other as AccountsConfiguration);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Equals(AccountsConfiguration other) {
           if (ReferenceEquals(other, null)) {
             return false;
@@ -4264,6 +4569,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
           if (KeycloakResetPasswordUrl.Length != 0) hash ^= KeycloakResetPasswordUrl.GetHashCode();
@@ -4275,11 +4581,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override string ToString() {
           return pb::JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void WriteTo(pb::CodedOutputStream output) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
@@ -4300,6 +4608,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
           if (KeycloakResetPasswordUrl.Length != 0) {
             output.WriteRawTag(10);
@@ -4316,6 +4625,7 @@ namespace HiddenSwitch.Proto {
         #endif
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
           if (KeycloakResetPasswordUrl.Length != 0) {
@@ -4331,6 +4641,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(AccountsConfiguration other) {
           if (other == null) {
             return;
@@ -4345,6 +4656,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(pb::CodedInputStream input) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           input.ReadRawMessage(this);
@@ -4370,6 +4682,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
@@ -4406,19 +4719,23 @@ namespace HiddenSwitch.Proto {
     private static readonly pb::MessageParser<GetCardsRequest> _parser = new pb::MessageParser<GetCardsRequest>(() => new GetCardsRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<GetCardsRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GetCardsRequest() {
       OnConstruction();
     }
@@ -4426,12 +4743,14 @@ namespace HiddenSwitch.Proto {
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GetCardsRequest(GetCardsRequest other) : this() {
       ifNoneMatch_ = other.ifNoneMatch_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GetCardsRequest Clone() {
       return new GetCardsRequest(this);
     }
@@ -4444,6 +4763,7 @@ namespace HiddenSwitch.Proto {
     /// first call to this resource.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string IfNoneMatch {
       get { return ifNoneMatch_; }
       set {
@@ -4452,11 +4772,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
       return Equals(other as GetCardsRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool Equals(GetCardsRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -4469,6 +4791,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
       if (IfNoneMatch.Length != 0) hash ^= IfNoneMatch.GetHashCode();
@@ -4479,11 +4802,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void WriteTo(pb::CodedOutputStream output) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
@@ -4500,6 +4825,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       if (IfNoneMatch.Length != 0) {
         output.WriteRawTag(10);
@@ -4512,6 +4838,7 @@ namespace HiddenSwitch.Proto {
     #endif
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
       if (IfNoneMatch.Length != 0) {
@@ -4524,6 +4851,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(GetCardsRequest other) {
       if (other == null) {
         return;
@@ -4535,6 +4863,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(pb::CodedInputStream input) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       input.ReadRawMessage(this);
@@ -4556,6 +4885,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -4586,19 +4916,23 @@ namespace HiddenSwitch.Proto {
     private static readonly pb::MessageParser<GetCardsResponse> _parser = new pb::MessageParser<GetCardsResponse>(() => new GetCardsResponse());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<GetCardsResponse> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GetCardsResponse() {
       OnConstruction();
     }
@@ -4606,6 +4940,7 @@ namespace HiddenSwitch.Proto {
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GetCardsResponse(GetCardsResponse other) : this() {
       content_ = other.content_ != null ? other.content_.Clone() : null;
       version_ = other.version_;
@@ -4614,6 +4949,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GetCardsResponse Clone() {
       return new GetCardsResponse(this);
     }
@@ -4622,6 +4958,7 @@ namespace HiddenSwitch.Proto {
     public const int ContentFieldNumber = 1;
     private global::HiddenSwitch.Proto.GetCardsResponse.Types.Content content_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.GetCardsResponse.Types.Content Content {
       get { return content_; }
       set {
@@ -4636,6 +4973,7 @@ namespace HiddenSwitch.Proto {
     /// A token used in the If-None-Match argument when checking for new card catalogue content.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Version {
       get { return version_; }
       set {
@@ -4647,6 +4985,7 @@ namespace HiddenSwitch.Proto {
     public const int CachedOkFieldNumber = 3;
     private bool cachedOk_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool CachedOk {
       get { return cachedOk_; }
       set {
@@ -4655,11 +4994,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
       return Equals(other as GetCardsResponse);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool Equals(GetCardsResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -4674,6 +5015,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
       if (content_ != null) hash ^= Content.GetHashCode();
@@ -4686,11 +5028,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void WriteTo(pb::CodedOutputStream output) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
@@ -4715,6 +5059,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       if (content_ != null) {
         output.WriteRawTag(10);
@@ -4735,6 +5080,7 @@ namespace HiddenSwitch.Proto {
     #endif
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
       if (content_ != null) {
@@ -4753,6 +5099,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(GetCardsResponse other) {
       if (other == null) {
         return;
@@ -4773,6 +5120,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(pb::CodedInputStream input) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       input.ReadRawMessage(this);
@@ -4805,6 +5153,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -4835,6 +5184,7 @@ namespace HiddenSwitch.Proto {
     #region Nested types
     /// <summary>Container for nested types declared in the GetCardsResponse message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static partial class Types {
       [global::System.SerializableAttribute]
       public sealed partial class Content : pb::IMessage<Content>
@@ -4845,19 +5195,23 @@ namespace HiddenSwitch.Proto {
         private static readonly pb::MessageParser<Content> _parser = new pb::MessageParser<Content>(() => new Content());
         private pb::UnknownFieldSet _unknownFields;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<Content> Parser { get { return _parser; } }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pbr::MessageDescriptor Descriptor {
           get { return global::HiddenSwitch.Proto.GetCardsResponse.Descriptor.NestedTypes[0]; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         pbr::MessageDescriptor pb::IMessage.Descriptor {
           get { return Descriptor; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public Content() {
           OnConstruction();
         }
@@ -4865,12 +5219,14 @@ namespace HiddenSwitch.Proto {
         partial void OnConstruction();
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public Content(Content other) : this() {
           cards_ = other.cards_.Clone();
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public Content Clone() {
           return new Content(this);
         }
@@ -4884,16 +5240,19 @@ namespace HiddenSwitch.Proto {
         /// The actual array of cards representing the complete Spellsource catalogue.
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public pbc::RepeatedField<global::Spellsource.Proto.CardRecord> Cards {
           get { return cards_; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
           return Equals(other as Content);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public bool Equals(Content other) {
           if (ReferenceEquals(other, null)) {
             return false;
@@ -4906,6 +5265,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
           hash ^= cards_.GetHashCode();
@@ -4916,11 +5276,13 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override string ToString() {
           return pb::JsonFormatter.ToDiagnosticString(this);
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void WriteTo(pb::CodedOutputStream output) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
@@ -4934,6 +5296,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
           cards_.WriteTo(ref output, _repeated_cards_codec);
           if (_unknownFields != null) {
@@ -4943,6 +5306,7 @@ namespace HiddenSwitch.Proto {
         #endif
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
           size += cards_.CalculateSize(_repeated_cards_codec);
@@ -4953,6 +5317,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(Content other) {
           if (other == null) {
             return;
@@ -4962,6 +5327,7 @@ namespace HiddenSwitch.Proto {
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public void MergeFrom(pb::CodedInputStream input) {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           input.ReadRawMessage(this);
@@ -4983,6 +5349,7 @@ namespace HiddenSwitch.Proto {
 
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
@@ -5015,19 +5382,23 @@ namespace HiddenSwitch.Proto {
     private static readonly pb::MessageParser<LoginRequest> _parser = new pb::MessageParser<LoginRequest>(() => new LoginRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<LoginRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public LoginRequest() {
       OnConstruction();
     }
@@ -5035,6 +5406,7 @@ namespace HiddenSwitch.Proto {
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public LoginRequest(LoginRequest other) : this() {
       usernameOrEmail_ = other.usernameOrEmail_;
       password_ = other.password_;
@@ -5042,6 +5414,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public LoginRequest Clone() {
       return new LoginRequest(this);
     }
@@ -5050,6 +5423,7 @@ namespace HiddenSwitch.Proto {
     public const int UsernameOrEmailFieldNumber = 1;
     private string usernameOrEmail_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string UsernameOrEmail {
       get { return usernameOrEmail_; }
       set {
@@ -5061,6 +5435,7 @@ namespace HiddenSwitch.Proto {
     public const int PasswordFieldNumber = 2;
     private string password_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Password {
       get { return password_; }
       set {
@@ -5069,11 +5444,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
       return Equals(other as LoginRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool Equals(LoginRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -5087,6 +5464,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
       if (UsernameOrEmail.Length != 0) hash ^= UsernameOrEmail.GetHashCode();
@@ -5098,11 +5476,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void WriteTo(pb::CodedOutputStream output) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
@@ -5123,6 +5503,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       if (UsernameOrEmail.Length != 0) {
         output.WriteRawTag(10);
@@ -5139,6 +5520,7 @@ namespace HiddenSwitch.Proto {
     #endif
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
       if (UsernameOrEmail.Length != 0) {
@@ -5154,6 +5536,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(LoginRequest other) {
       if (other == null) {
         return;
@@ -5168,6 +5551,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(pb::CodedInputStream input) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       input.ReadRawMessage(this);
@@ -5193,6 +5577,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -5227,19 +5612,23 @@ namespace HiddenSwitch.Proto {
     private static readonly pb::MessageParser<CreateAccountRequest> _parser = new pb::MessageParser<CreateAccountRequest>(() => new CreateAccountRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<CreateAccountRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public CreateAccountRequest() {
       OnConstruction();
     }
@@ -5247,6 +5636,7 @@ namespace HiddenSwitch.Proto {
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public CreateAccountRequest(CreateAccountRequest other) : this() {
       email_ = other.email_;
       username_ = other.username_;
@@ -5255,6 +5645,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public CreateAccountRequest Clone() {
       return new CreateAccountRequest(this);
     }
@@ -5263,6 +5654,7 @@ namespace HiddenSwitch.Proto {
     public const int EmailFieldNumber = 1;
     private string email_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Email {
       get { return email_; }
       set {
@@ -5274,6 +5666,7 @@ namespace HiddenSwitch.Proto {
     public const int UsernameFieldNumber = 2;
     private string username_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Username {
       get { return username_; }
       set {
@@ -5285,6 +5678,7 @@ namespace HiddenSwitch.Proto {
     public const int PasswordFieldNumber = 3;
     private string password_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Password {
       get { return password_; }
       set {
@@ -5293,11 +5687,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
       return Equals(other as CreateAccountRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool Equals(CreateAccountRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -5312,6 +5708,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
       if (Email.Length != 0) hash ^= Email.GetHashCode();
@@ -5324,11 +5721,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void WriteTo(pb::CodedOutputStream output) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
@@ -5353,6 +5752,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       if (Email.Length != 0) {
         output.WriteRawTag(10);
@@ -5373,6 +5773,7 @@ namespace HiddenSwitch.Proto {
     #endif
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
       if (Email.Length != 0) {
@@ -5391,6 +5792,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(CreateAccountRequest other) {
       if (other == null) {
         return;
@@ -5408,6 +5810,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(pb::CodedInputStream input) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       input.ReadRawMessage(this);
@@ -5437,6 +5840,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -5472,19 +5876,23 @@ namespace HiddenSwitch.Proto {
     private static readonly pb::MessageParser<ChangePasswordRequest> _parser = new pb::MessageParser<ChangePasswordRequest>(() => new ChangePasswordRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<ChangePasswordRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ChangePasswordRequest() {
       OnConstruction();
     }
@@ -5492,12 +5900,14 @@ namespace HiddenSwitch.Proto {
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ChangePasswordRequest(ChangePasswordRequest other) : this() {
       newPassword_ = other.newPassword_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ChangePasswordRequest Clone() {
       return new ChangePasswordRequest(this);
     }
@@ -5506,6 +5916,7 @@ namespace HiddenSwitch.Proto {
     public const int NewPasswordFieldNumber = 1;
     private string newPassword_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string NewPassword {
       get { return newPassword_; }
       set {
@@ -5514,11 +5925,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
       return Equals(other as ChangePasswordRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool Equals(ChangePasswordRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -5531,6 +5944,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
       if (NewPassword.Length != 0) hash ^= NewPassword.GetHashCode();
@@ -5541,11 +5955,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void WriteTo(pb::CodedOutputStream output) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
@@ -5562,6 +5978,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       if (NewPassword.Length != 0) {
         output.WriteRawTag(10);
@@ -5574,6 +5991,7 @@ namespace HiddenSwitch.Proto {
     #endif
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
       if (NewPassword.Length != 0) {
@@ -5586,6 +6004,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(ChangePasswordRequest other) {
       if (other == null) {
         return;
@@ -5597,6 +6016,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(pb::CodedInputStream input) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       input.ReadRawMessage(this);
@@ -5618,6 +6038,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -5645,19 +6066,23 @@ namespace HiddenSwitch.Proto {
     private static readonly pb::MessageParser<LoginOrCreateReply> _parser = new pb::MessageParser<LoginOrCreateReply>(() => new LoginOrCreateReply());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<LoginOrCreateReply> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public LoginOrCreateReply() {
       OnConstruction();
     }
@@ -5665,6 +6090,7 @@ namespace HiddenSwitch.Proto {
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public LoginOrCreateReply(LoginOrCreateReply other) : this() {
       accessTokenResponse_ = other.accessTokenResponse_ != null ? other.accessTokenResponse_.Clone() : null;
       userEntity_ = other.userEntity_ != null ? other.userEntity_.Clone() : null;
@@ -5672,6 +6098,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public LoginOrCreateReply Clone() {
       return new LoginOrCreateReply(this);
     }
@@ -5680,6 +6107,7 @@ namespace HiddenSwitch.Proto {
     public const int AccessTokenResponseFieldNumber = 1;
     private global::HiddenSwitch.Proto.AccessTokenResponse accessTokenResponse_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.AccessTokenResponse AccessTokenResponse {
       get { return accessTokenResponse_; }
       set {
@@ -5691,6 +6119,7 @@ namespace HiddenSwitch.Proto {
     public const int UserEntityFieldNumber = 2;
     private global::HiddenSwitch.Proto.UserEntity userEntity_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::HiddenSwitch.Proto.UserEntity UserEntity {
       get { return userEntity_; }
       set {
@@ -5699,11 +6128,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
       return Equals(other as LoginOrCreateReply);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool Equals(LoginOrCreateReply other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -5717,6 +6148,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
       if (accessTokenResponse_ != null) hash ^= AccessTokenResponse.GetHashCode();
@@ -5728,11 +6160,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void WriteTo(pb::CodedOutputStream output) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
@@ -5753,6 +6187,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       if (accessTokenResponse_ != null) {
         output.WriteRawTag(10);
@@ -5769,6 +6204,7 @@ namespace HiddenSwitch.Proto {
     #endif
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
       if (accessTokenResponse_ != null) {
@@ -5784,6 +6220,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(LoginOrCreateReply other) {
       if (other == null) {
         return;
@@ -5804,6 +6241,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(pb::CodedInputStream input) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       input.ReadRawMessage(this);
@@ -5835,6 +6273,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -5872,19 +6311,23 @@ namespace HiddenSwitch.Proto {
     private static readonly pb::MessageParser<AccessTokenResponse> _parser = new pb::MessageParser<AccessTokenResponse>(() => new AccessTokenResponse());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<AccessTokenResponse> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public AccessTokenResponse() {
       OnConstruction();
     }
@@ -5892,12 +6335,14 @@ namespace HiddenSwitch.Proto {
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public AccessTokenResponse(AccessTokenResponse other) : this() {
       token_ = other.token_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public AccessTokenResponse Clone() {
       return new AccessTokenResponse(this);
     }
@@ -5906,6 +6351,7 @@ namespace HiddenSwitch.Proto {
     public const int TokenFieldNumber = 1;
     private string token_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Token {
       get { return token_; }
       set {
@@ -5914,11 +6360,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
       return Equals(other as AccessTokenResponse);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool Equals(AccessTokenResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -5931,6 +6379,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
       if (Token.Length != 0) hash ^= Token.GetHashCode();
@@ -5941,11 +6390,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void WriteTo(pb::CodedOutputStream output) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
@@ -5962,6 +6413,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       if (Token.Length != 0) {
         output.WriteRawTag(10);
@@ -5974,6 +6426,7 @@ namespace HiddenSwitch.Proto {
     #endif
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
       if (Token.Length != 0) {
@@ -5986,6 +6439,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(AccessTokenResponse other) {
       if (other == null) {
         return;
@@ -5997,6 +6451,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(pb::CodedInputStream input) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       input.ReadRawMessage(this);
@@ -6018,6 +6473,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -6045,19 +6501,23 @@ namespace HiddenSwitch.Proto {
     private static readonly pb::MessageParser<UserEntity> _parser = new pb::MessageParser<UserEntity>(() => new UserEntity());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<UserEntity> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public UserEntity() {
       OnConstruction();
     }
@@ -6065,6 +6525,7 @@ namespace HiddenSwitch.Proto {
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public UserEntity(UserEntity other) : this() {
       id_ = other.id_;
       email_ = other.email_;
@@ -6074,6 +6535,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public UserEntity Clone() {
       return new UserEntity(this);
     }
@@ -6082,6 +6544,7 @@ namespace HiddenSwitch.Proto {
     public const int IdFieldNumber = 1;
     private string id_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Id {
       get { return id_; }
       set {
@@ -6093,6 +6556,7 @@ namespace HiddenSwitch.Proto {
     public const int EmailFieldNumber = 2;
     private string email_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Email {
       get { return email_; }
       set {
@@ -6104,6 +6568,7 @@ namespace HiddenSwitch.Proto {
     public const int UsernameFieldNumber = 10;
     private string username_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Username {
       get { return username_; }
       set {
@@ -6115,6 +6580,7 @@ namespace HiddenSwitch.Proto {
     public const int PrivacyTokenFieldNumber = 11;
     private string privacyToken_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string PrivacyToken {
       get { return privacyToken_; }
       set {
@@ -6123,11 +6589,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
       return Equals(other as UserEntity);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool Equals(UserEntity other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -6143,6 +6611,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
       if (Id.Length != 0) hash ^= Id.GetHashCode();
@@ -6156,11 +6625,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void WriteTo(pb::CodedOutputStream output) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
@@ -6189,6 +6660,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       if (Id.Length != 0) {
         output.WriteRawTag(10);
@@ -6213,6 +6685,7 @@ namespace HiddenSwitch.Proto {
     #endif
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
       if (Id.Length != 0) {
@@ -6234,6 +6707,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(UserEntity other) {
       if (other == null) {
         return;
@@ -6254,6 +6728,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(pb::CodedInputStream input) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       input.ReadRawMessage(this);
@@ -6287,6 +6762,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -6326,19 +6802,23 @@ namespace HiddenSwitch.Proto {
     private static readonly pb::MessageParser<GetAccountsRequest> _parser = new pb::MessageParser<GetAccountsRequest>(() => new GetAccountsRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<GetAccountsRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GetAccountsRequest() {
       OnConstruction();
     }
@@ -6346,12 +6826,14 @@ namespace HiddenSwitch.Proto {
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GetAccountsRequest(GetAccountsRequest other) : this() {
       ids_ = other.ids_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GetAccountsRequest Clone() {
       return new GetAccountsRequest(this);
     }
@@ -6362,16 +6844,19 @@ namespace HiddenSwitch.Proto {
         = pb::FieldCodec.ForString(10);
     private readonly pbc::RepeatedField<string> ids_ = new pbc::RepeatedField<string>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public pbc::RepeatedField<string> Ids {
       get { return ids_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
       return Equals(other as GetAccountsRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool Equals(GetAccountsRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -6384,6 +6869,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
       hash ^= ids_.GetHashCode();
@@ -6394,11 +6880,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void WriteTo(pb::CodedOutputStream output) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
@@ -6412,6 +6900,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       ids_.WriteTo(ref output, _repeated_ids_codec);
       if (_unknownFields != null) {
@@ -6421,6 +6910,7 @@ namespace HiddenSwitch.Proto {
     #endif
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
       size += ids_.CalculateSize(_repeated_ids_codec);
@@ -6431,6 +6921,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(GetAccountsRequest other) {
       if (other == null) {
         return;
@@ -6440,6 +6931,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(pb::CodedInputStream input) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       input.ReadRawMessage(this);
@@ -6461,6 +6953,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -6488,19 +6981,23 @@ namespace HiddenSwitch.Proto {
     private static readonly pb::MessageParser<GetAccountsReply> _parser = new pb::MessageParser<GetAccountsReply>(() => new GetAccountsReply());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<GetAccountsReply> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
       get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     pbr::MessageDescriptor pb::IMessage.Descriptor {
       get { return Descriptor; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GetAccountsReply() {
       OnConstruction();
     }
@@ -6508,12 +7005,14 @@ namespace HiddenSwitch.Proto {
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GetAccountsReply(GetAccountsReply other) : this() {
       userEntities_ = other.userEntities_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GetAccountsReply Clone() {
       return new GetAccountsReply(this);
     }
@@ -6524,16 +7023,19 @@ namespace HiddenSwitch.Proto {
         = pb::FieldCodec.ForMessage(10, global::HiddenSwitch.Proto.UserEntity.Parser);
     private readonly pbc::RepeatedField<global::HiddenSwitch.Proto.UserEntity> userEntities_ = new pbc::RepeatedField<global::HiddenSwitch.Proto.UserEntity>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public pbc::RepeatedField<global::HiddenSwitch.Proto.UserEntity> UserEntities {
       get { return userEntities_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
       return Equals(other as GetAccountsReply);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool Equals(GetAccountsReply other) {
       if (ReferenceEquals(other, null)) {
         return false;
@@ -6546,6 +7048,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
       hash ^= userEntities_.GetHashCode();
@@ -6556,11 +7059,13 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override string ToString() {
       return pb::JsonFormatter.ToDiagnosticString(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void WriteTo(pb::CodedOutputStream output) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
@@ -6574,6 +7079,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       userEntities_.WriteTo(ref output, _repeated_userEntities_codec);
       if (_unknownFields != null) {
@@ -6583,6 +7089,7 @@ namespace HiddenSwitch.Proto {
     #endif
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
       size += userEntities_.CalculateSize(_repeated_userEntities_codec);
@@ -6593,6 +7100,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(GetAccountsReply other) {
       if (other == null) {
         return;
@@ -6602,6 +7110,7 @@ namespace HiddenSwitch.Proto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void MergeFrom(pb::CodedInputStream input) {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       input.ReadRawMessage(this);
@@ -6623,6 +7132,7 @@ namespace HiddenSwitch.Proto {
 
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {

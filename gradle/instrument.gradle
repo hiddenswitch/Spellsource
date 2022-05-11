@@ -1,79 +1,26 @@
 // See ../quasar-core/README.md for an explanation of this file
 apply plugin: 'java-library'
-
-configurations {
-    uninstrumentedClasspath {
-        canBeConsumed = false
-        canBeResolved = true
-        extendsFrom implementation
-    }
-
-    uninstrumentedJars {
-        canBeConsumed = true
-        canBeResolved = false
-    }
-}
+apply plugin: 'com.hiddenswitch.fibers.instrument'
 
 dependencies {
-    implementation(project(path: ':quasar-core', configuration: 'shadowedJar')) {
-        exclude group: 'org.ow2.asm', module: '*'
-        because "it has been relocated in the quasar shadow jar"
-    }
+    api "com.hiddenswitch:quasar-core:10.0.6"
 }
 
-task uninstrumentedCompileJava(type: JavaCompile) {
-    exclude '**/module-info.java'
-    source(sourceSets.main.java)
-    classpath = configurations.uninstrumentedClasspath.asFileTree
-    destinationDir = file(project.buildDir.path + '/uninstrumentedClasses/java/main')
-}
-
-task uninstrumentedJar(type: org.gradle.jvm.tasks.Jar) {
-    dependsOn uninstrumentedCompileJava, processResources
-    from { uninstrumentedCompileJava.destinationDir }
-    from { processResources.destinationDir }
-    archiveClassifier.set('uninstrumented')
-}
-
-artifacts {
-    uninstrumentedJars(uninstrumentedJar.archiveFile) {
-        builtBy(uninstrumentedJar)
-    }
-}
-
-compileJava.dependsOn processResources
-compileJava {
-    doLast {
-        def classpath = configurations.compileClasspath.asPath + ':' + configurations.runtimeClasspath.asPath
-
-        ant.taskdef(name: 'scanSuspendables1', classname: 'co.paralleluniverse.fibers.instrument.SuspendablesScanner', classpath: classpath)
-        ant.scanSuspendables1(
-                auto: true,
-                supersFile: "$sourceSets.main.resources.dirs.asPath/META-INF/suspendable-supers",
-                append: false) {
-            fileset(dir: sourceSets.main.output.classesDirs.asPath)
-        }
-
-        ant.taskdef(name: 'instrumentation1', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask',
-                classpath: classpath)
-        ant.instrumentation1(allowMonitors: 'true', allowBlocking: 'true', verbose: 'false', debug: 'false', check: 'false') {
-            fileset(dir: sourceSets.main.output.classesDirs.asPath)
-        }
-    }
-}
-
-compileTestJava.dependsOn processTestResources
-compileTestJava {
-    options.encoding = 'UTF-8'
-    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-
-    doLast {
-        ant.taskdef(name: 'instrumentation2', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask',
-                classpath: configurations.compileClasspath.asPath + ':' + configurations.runtimeClasspath.asPath +
-                        ':' + configurations.testCompileClasspath.asPath + ':' + configurations.testRuntimeClasspath.asPath)
-        ant.instrumentation2(allowMonitors: 'true', allowBlocking: 'true', check: 'true', debug: 'true') {
-            fileset(dir: sourceSets.main.output.classesDirs.asPath)
-            fileset(dir: sourceSets.test.output.classesDirs.asPath)
-        }
-    }
+fibers {
+    // The Quasar instrumentation includes checks to see if the methods it is entering are instrumented.
+    check = false
+    // Prints instrumentation messages.
+    verbose = false
+    // Allows Java synchronized blocks to be instrumented.
+    allowMonitors = true
+    // Allows suspendable methods to call Java blocking methods.
+    allowBlocking = true
+    // Prints debug messaging.
+    debug = false
+    // Writes the instrumented classes
+    writeClasses = true
+    // Automatically determine which methods should be instrumented based on static analysis.
+    scanSuspendables = true
+    // Instrument the interfaces that suspendable methods override.
+    scanSuspendableSupers = true
 }

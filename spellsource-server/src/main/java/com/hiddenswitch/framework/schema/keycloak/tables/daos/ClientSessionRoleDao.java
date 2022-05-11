@@ -24,35 +24,38 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ClientSessionRoleDao extends AbstractReactiveVertxDAO<ClientSessionRoleRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole, Record2<String, String>, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole>, Future<Integer>, Future<Record2<String, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<ClientSessionRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole,Record2<String, String>> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public ClientSessionRoleDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(ClientSessionRole.CLIENT_SESSION_ROLE, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole.class, new ReactiveClassicQueryExecutor<ClientSessionRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getClientSessionRoleMapper()));
-    }
+        public ClientSessionRoleDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(ClientSessionRole.CLIENT_SESSION_ROLE, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole.class, new ReactiveClassicQueryExecutor<ClientSessionRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getClientSessionRoleMapper()));
+        }
 
-    @Override
-    protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole object) {
-        return compositeKeyRecord(object.getClientSession(), object.getRoleId());
-    }
+        @Override
+        protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole object) {
+                return compositeKeyRecord(object.getClientSession(), object.getRoleId());
+        }
 
-    /**
+        /**
      * Find records that have <code>role_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole>> findManyByRoleId(Collection<String> values) {
-        return findManyByCondition(ClientSessionRole.CLIENT_SESSION_ROLE.ROLE_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole>> findManyByRoleId(Collection<String> values) {
+                return findManyByCondition(ClientSessionRole.CLIENT_SESSION_ROLE.ROLE_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>role_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>role_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole>> findManyByRoleId(Collection<String> values, int limit) {
-        return findManyByCondition(ClientSessionRole.CLIENT_SESSION_ROLE.ROLE_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole>> findManyByRoleId(Collection<String> values, int limit) {
+                return findManyByCondition(ClientSessionRole.CLIENT_SESSION_ROLE.ROLE_ID.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<ClientSessionRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole,Record2<String, String>> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<ClientSessionRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole,Record2<String, String>>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<ClientSessionRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole,Record2<String, String>> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<ClientSessionRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientSessionRole,Record2<String, String>>) super.queryExecutor();
+        }
 }

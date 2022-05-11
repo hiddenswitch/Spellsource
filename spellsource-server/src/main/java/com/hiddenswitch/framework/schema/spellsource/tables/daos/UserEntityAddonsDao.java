@@ -23,49 +23,54 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserEntityAddonsDao extends AbstractReactiveVertxDAO<UserEntityAddonsRecord, com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons, String, Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons>>, Future<com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons>, Future<Integer>, Future<String>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<UserEntityAddonsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons,String> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public UserEntityAddonsDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(UserEntityAddons.USER_ENTITY_ADDONS, com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons.class, new ReactiveClassicQueryExecutor<UserEntityAddonsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons,String>(configuration,delegate,com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getUserEntityAddonsMapper()));
-    }
+        public UserEntityAddonsDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(UserEntityAddons.USER_ENTITY_ADDONS, com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons.class, new ReactiveClassicQueryExecutor<UserEntityAddonsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons,String>(configuration,delegate,com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getUserEntityAddonsMapper()));
+        }
 
-    @Override
-    protected String getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons object) {
-        return object.getId();
-    }
+        @Override
+        protected String getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons object) {
+                return object.getId();
+        }
 
-    /**
-     * Find records that have <code>privacy_token IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>privacy_token IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons>> findManyByPrivacyToken(Collection<String> values) {
-        return findManyByCondition(UserEntityAddons.USER_ENTITY_ADDONS.PRIVACY_TOKEN.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons>> findManyByPrivacyToken(Collection<String> values) {
+                return findManyByCondition(UserEntityAddons.USER_ENTITY_ADDONS.PRIVACY_TOKEN.in(values));
+        }
 
-    /**
-     * Find records that have <code>privacy_token IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>privacy_token IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons>> findManyByPrivacyToken(Collection<String> values, int limit) {
-        return findManyByCondition(UserEntityAddons.USER_ENTITY_ADDONS.PRIVACY_TOKEN.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons>> findManyByPrivacyToken(Collection<String> values, int limit) {
+                return findManyByCondition(UserEntityAddons.USER_ENTITY_ADDONS.PRIVACY_TOKEN.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>migrated IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons>> findManyByMigrated(Collection<Boolean> values) {
-        return findManyByCondition(UserEntityAddons.USER_ENTITY_ADDONS.MIGRATED.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons>> findManyByMigrated(Collection<Boolean> values) {
+                return findManyByCondition(UserEntityAddons.USER_ENTITY_ADDONS.MIGRATED.in(values));
+        }
 
-    /**
-     * Find records that have <code>migrated IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>migrated IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons>> findManyByMigrated(Collection<Boolean> values, int limit) {
-        return findManyByCondition(UserEntityAddons.USER_ENTITY_ADDONS.MIGRATED.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons>> findManyByMigrated(Collection<Boolean> values, int limit) {
+                return findManyByCondition(UserEntityAddons.USER_ENTITY_ADDONS.MIGRATED.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<UserEntityAddonsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons,String> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<UserEntityAddonsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons,String>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<UserEntityAddonsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons,String> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<UserEntityAddonsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.UserEntityAddons,String>) super.queryExecutor();
+        }
 }

@@ -26,7 +26,7 @@
   "allDeclaredConstructors":true
 },
 {
-  "name":"com.hiddenswitch.spellsource.client.models.CardType",
+  "name":"com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
 },
@@ -1570,12 +1570,12 @@
   "allDeclaredMethods":true
 },
 {
-  "name":"net.demilich.metastone.game.targeting.Zones",
+  "name":"com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones",
   "allDeclaredFields":true,
   "allDeclaredMethods":true
 },
 {
-  "name":"net.demilich.metastone.game.targeting.Zones[]"
+  "name":"com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones[]"
 },
 {
   "name":"net.dv8tion.jda.api.entities.Category[]"

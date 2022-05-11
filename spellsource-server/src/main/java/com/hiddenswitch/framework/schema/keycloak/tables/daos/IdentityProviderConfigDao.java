@@ -24,49 +24,53 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class IdentityProviderConfigDao extends AbstractReactiveVertxDAO<IdentityProviderConfigRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig, Record2<String, String>, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig>, Future<Integer>, Future<Record2<String, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<IdentityProviderConfigRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig,Record2<String, String>> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public IdentityProviderConfigDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(IdentityProviderConfig.IDENTITY_PROVIDER_CONFIG, com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig.class, new ReactiveClassicQueryExecutor<IdentityProviderConfigRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getIdentityProviderConfigMapper()));
-    }
+        public IdentityProviderConfigDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(IdentityProviderConfig.IDENTITY_PROVIDER_CONFIG, com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig.class, new ReactiveClassicQueryExecutor<IdentityProviderConfigRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getIdentityProviderConfigMapper()));
+        }
 
-    @Override
-    protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig object) {
-        return compositeKeyRecord(object.getIdentityProviderId(), object.getName());
-    }
+        @Override
+        protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig object) {
+                return compositeKeyRecord(object.getIdentityProviderId(), object.getName());
+        }
 
-    /**
+        /**
      * Find records that have <code>value IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig>> findManyByValue(Collection<String> values) {
-        return findManyByCondition(IdentityProviderConfig.IDENTITY_PROVIDER_CONFIG.VALUE.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig>> findManyByValue(Collection<String> values) {
+                return findManyByCondition(IdentityProviderConfig.IDENTITY_PROVIDER_CONFIG.VALUE.in(values));
+        }
 
-    /**
-     * Find records that have <code>value IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>value IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig>> findManyByValue(Collection<String> values, int limit) {
-        return findManyByCondition(IdentityProviderConfig.IDENTITY_PROVIDER_CONFIG.VALUE.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig>> findManyByValue(Collection<String> values, int limit) {
+                return findManyByCondition(IdentityProviderConfig.IDENTITY_PROVIDER_CONFIG.VALUE.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>name IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig>> findManyByName(Collection<String> values) {
-        return findManyByCondition(IdentityProviderConfig.IDENTITY_PROVIDER_CONFIG.NAME.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig>> findManyByName(Collection<String> values) {
+                return findManyByCondition(IdentityProviderConfig.IDENTITY_PROVIDER_CONFIG.NAME.in(values));
+        }
 
-    /**
-     * Find records that have <code>name IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>name IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig>> findManyByName(Collection<String> values, int limit) {
-        return findManyByCondition(IdentityProviderConfig.IDENTITY_PROVIDER_CONFIG.NAME.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig>> findManyByName(Collection<String> values, int limit) {
+                return findManyByCondition(IdentityProviderConfig.IDENTITY_PROVIDER_CONFIG.NAME.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<IdentityProviderConfigRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig,Record2<String, String>> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<IdentityProviderConfigRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig,Record2<String, String>>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<IdentityProviderConfigRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig,Record2<String, String>> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<IdentityProviderConfigRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderConfig,Record2<String, String>>) super.queryExecutor();
+        }
 }

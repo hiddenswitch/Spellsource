@@ -24,35 +24,38 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ResourceScopeDao extends AbstractReactiveVertxDAO<ResourceScopeRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope, Record2<String, String>, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope>, Future<Integer>, Future<Record2<String, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<ResourceScopeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope,Record2<String, String>> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public ResourceScopeDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(ResourceScope.RESOURCE_SCOPE, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope.class, new ReactiveClassicQueryExecutor<ResourceScopeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getResourceScopeMapper()));
-    }
+        public ResourceScopeDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(ResourceScope.RESOURCE_SCOPE, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope.class, new ReactiveClassicQueryExecutor<ResourceScopeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getResourceScopeMapper()));
+        }
 
-    @Override
-    protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope object) {
-        return compositeKeyRecord(object.getResourceId(), object.getScopeId());
-    }
+        @Override
+        protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope object) {
+                return compositeKeyRecord(object.getResourceId(), object.getScopeId());
+        }
 
-    /**
+        /**
      * Find records that have <code>scope_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope>> findManyByScopeId(Collection<String> values) {
-        return findManyByCondition(ResourceScope.RESOURCE_SCOPE.SCOPE_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope>> findManyByScopeId(Collection<String> values) {
+                return findManyByCondition(ResourceScope.RESOURCE_SCOPE.SCOPE_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>scope_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>scope_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope>> findManyByScopeId(Collection<String> values, int limit) {
-        return findManyByCondition(ResourceScope.RESOURCE_SCOPE.SCOPE_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope>> findManyByScopeId(Collection<String> values, int limit) {
+                return findManyByCondition(ResourceScope.RESOURCE_SCOPE.SCOPE_ID.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<ResourceScopeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope,Record2<String, String>> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<ResourceScopeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope,Record2<String, String>>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<ResourceScopeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope,Record2<String, String>> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<ResourceScopeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceScope,Record2<String, String>>) super.queryExecutor();
+        }
 }

@@ -17,13 +17,14 @@ import org.jooq.ForeignKey;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserConsent extends TableImpl<UserConsentRecord> {
 
-    private static final long serialVersionUID = -1368504503;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.user_consent</code>
@@ -51,43 +52,34 @@ public class UserConsent extends TableImpl<UserConsentRecord> {
     /**
      * The column <code>keycloak.user_consent.id</code>.
      */
-    public final TableField<UserConsentRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<UserConsentRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.user_consent.client_id</code>.
      */
-    public final TableField<UserConsentRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserConsentRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.user_consent.user_id</code>.
      */
-    public final TableField<UserConsentRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<UserConsentRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.user_consent.created_date</code>.
      */
-    public final TableField<UserConsentRecord, Long> CREATED_DATE = createField(DSL.name("created_date"), org.jooq.impl.SQLDataType.BIGINT, this, "");
+    public final TableField<UserConsentRecord, Long> CREATED_DATE = createField(DSL.name("created_date"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>keycloak.user_consent.last_updated_date</code>.
      */
-    public final TableField<UserConsentRecord, Long> LAST_UPDATED_DATE = createField(DSL.name("last_updated_date"), org.jooq.impl.SQLDataType.BIGINT, this, "");
+    public final TableField<UserConsentRecord, Long> LAST_UPDATED_DATE = createField(DSL.name("last_updated_date"), SQLDataType.BIGINT, this, "");
 
-    /**
-     * The column <code>keycloak.user_consent.client_storage_provider</code>.
-     */
-    public final TableField<UserConsentRecord, String> CLIENT_STORAGE_PROVIDER = createField(DSL.name("client_storage_provider"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    private UserConsent(Name alias, Table<UserConsentRecord> aliased) {
+        this(alias, aliased, null);
+    }
 
-    /**
-     * The column <code>keycloak.user_consent.external_client_id</code>.
-     */
-    public final TableField<UserConsentRecord, String> EXTERNAL_CLIENT_ID = createField(DSL.name("external_client_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
-
-    /**
-     * Create a <code>keycloak.user_consent</code> table reference
-     */
-    public UserConsent() {
-        this(DSL.name("user_consent"), null);
+    private UserConsent(Name alias, Table<UserConsentRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -104,12 +96,11 @@ public class UserConsent extends TableImpl<UserConsentRecord> {
         this(alias, USER_CONSENT);
     }
 
-    private UserConsent(Name alias, Table<UserConsentRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private UserConsent(Name alias, Table<UserConsentRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.user_consent</code> table reference
+     */
+    public UserConsent() {
+        this(DSL.name("user_consent"), null);
     }
 
     public <O extends Record> UserConsent(Table<O> child, ForeignKey<O, UserConsentRecord> key) {
@@ -118,12 +109,12 @@ public class UserConsent extends TableImpl<UserConsentRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_USER_CONSENT);
+        return Arrays.asList(Indexes.IDX_USER_CONSENT);
     }
 
     @Override
@@ -132,17 +123,26 @@ public class UserConsent extends TableImpl<UserConsentRecord> {
     }
 
     @Override
-    public List<UniqueKey<UserConsentRecord>> getKeys() {
-        return Arrays.<UniqueKey<UserConsentRecord>>asList(Keys.CONSTRAINT_GRNTCSNT_PM, Keys.UK_JKUWUVD56ONTGSUHOGM8UEWRT);
+    public List<UniqueKey<UserConsentRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.UK_JKUWUVD56ONTGSUHOGM8UEWRT);
     }
 
     @Override
     public List<ForeignKey<UserConsentRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<UserConsentRecord, ?>>asList(Keys.USER_CONSENT__FK_GRNTCSNT_USER);
+        return Arrays.asList(Keys.USER_CONSENT__FK_GRNTCSNT_USER);
     }
 
+    private transient UserEntity _userEntity;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table.
+     */
     public UserEntity userEntity() {
-        return new UserEntity(this, Keys.USER_CONSENT__FK_GRNTCSNT_USER);
+        if (_userEntity == null)
+            _userEntity = new UserEntity(this, Keys.USER_CONSENT__FK_GRNTCSNT_USER);
+
+        return _userEntity;
     }
 
     @Override
@@ -172,11 +172,11 @@ public class UserConsent extends TableImpl<UserConsentRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<String, String, String, Long, Long, String, String> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row5<String, String, String, Long, Long> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }

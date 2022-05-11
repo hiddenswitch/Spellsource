@@ -28,9 +28,6 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 	public KeycloakContainer() {
 		super("doctorpangloss/keycloak-standalone:latest");
 		withExposedPorts(KEYCLOAK_PORT_HTTP);
-		withEnv("LANGUAGE", "en_US.UTF-8");
-		withEnv("LANG", "en_US.UTF-8");
-		withEnv("LC_ALL", "en_US.UTF-8");
 		withReuse(false);
 		setWaitStrategy(Wait
 				.forHttp(KEYCLOAK_AUTH_PATH)
@@ -41,14 +38,10 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 
 	@Override
 	protected void configure() {
-		withCommand(
-				"-c standalone.xml", // don't start infinispan cluster
-				"-Dkeycloak.profile.feature.upload_scripts=enabled" // enable script uploads
-		);
 
-		withEnv("KEYCLOAK_USER", adminUsername);
-		withEnv("KEYCLOAK_PASSWORD", adminPassword);
-		withEnv("DB_SCHEMA", "keycloak");
+		withEnv("KEYCLOAK_ADMIN_USER", adminUsername);
+		withEnv("KEYCLOAK_ADMIN_PASSWORD", adminPassword);
+		withEnv("KEYCLOAK_DATABASE_SCHEMA", "keycloak");
 
 		if (importFile != null) {
 			String importFileInContainer = "/tmp/" + importFile;
@@ -89,11 +82,10 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 	}
 
 	public KeycloakContainer withPostgres(String postgresHostPort, String databaseName, String username, String password) {
-		withEnv("DB_VENDOR", "postgres");
-		withEnv("DB_ADDR", postgresHostPort);
-		withEnv("DB_USER", username);
-		withEnv("DB_PASSWORD", password);
-		withEnv("DB_DATABASE", databaseName);
+		withEnv("KEYCLOAK_DATABASE_HOST", postgresHostPort);
+		withEnv("KEYCLOAK_DATABASE_USER", username);
+		withEnv("KEYCLOAK_DATABASE_PASSWORD", password);
+		withEnv("KEYCLOAK_DATABASE_NAME", databaseName);
 		return self();
 	}
 

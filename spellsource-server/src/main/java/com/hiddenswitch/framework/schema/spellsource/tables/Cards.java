@@ -4,7 +4,6 @@
 package com.hiddenswitch.framework.schema.spellsource.tables;
 
 
-import com.databasesandlife.util.jooq.PostgresXmlDomElementBinding;
 import com.hiddenswitch.framework.schema.keycloak.tables.UserEntity;
 import com.hiddenswitch.framework.schema.spellsource.Keys;
 import com.hiddenswitch.framework.schema.spellsource.Spellsource;
@@ -27,9 +26,10 @@ import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
+import org.jooq.XML;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
-import org.w3c.dom.Element;
 
 
 /**
@@ -38,7 +38,7 @@ import org.w3c.dom.Element;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Cards extends TableImpl<CardsRecord> {
 
-    private static final long serialVersionUID = -1998521076;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>spellsource.cards</code>
@@ -56,43 +56,44 @@ public class Cards extends TableImpl<CardsRecord> {
     /**
      * The column <code>spellsource.cards.id</code>.
      */
-    public final TableField<CardsRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<CardsRecord, String> ID = createField(DSL.name("id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.cards.created_by</code>.
      */
-    public final TableField<CardsRecord, String> CREATED_BY = createField(DSL.name("created_by"), org.jooq.impl.SQLDataType.VARCHAR.nullable(false), this, "");
+    public final TableField<CardsRecord, String> CREATED_BY = createField(DSL.name("created_by"), SQLDataType.VARCHAR.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.cards.uri</code>.
      */
-    public final TableField<CardsRecord, String> URI = createField(DSL.name("uri"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<CardsRecord, String> URI = createField(DSL.name("uri"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>spellsource.cards.blockly_workspace</code>.
      */
-    public final TableField<CardsRecord, Element> BLOCKLY_WORKSPACE = createField(DSL.name("blockly_workspace"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"xml\""), this, "", new PostgresXmlDomElementBinding());
+    public final TableField<CardsRecord, XML> BLOCKLY_WORKSPACE = createField(DSL.name("blockly_workspace"), SQLDataType.XML, this, "");
 
     /**
      * The column <code>spellsource.cards.card_script</code>.
      */
-    public final TableField<CardsRecord, JsonObject> CARD_SCRIPT = createField(DSL.name("card_script"), org.jooq.impl.SQLDataType.JSONB, this, "", new JSONBToJsonObjectConverter());
+    public final TableField<CardsRecord, JsonObject> CARD_SCRIPT = createField(DSL.name("card_script"), SQLDataType.JSONB, this, "", new JSONBToJsonObjectConverter());
 
     /**
      * The column <code>spellsource.cards.created_at</code>.
      */
-    public final TableField<CardsRecord, OffsetDateTime> CREATED_AT = createField(DSL.name("created_at"), org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false).defaultValue(org.jooq.impl.DSL.field("now()", org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
+    public final TableField<CardsRecord, OffsetDateTime> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
 
     /**
      * The column <code>spellsource.cards.last_modified</code>.
      */
-    public final TableField<CardsRecord, OffsetDateTime> LAST_MODIFIED = createField(DSL.name("last_modified"), org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false).defaultValue(org.jooq.impl.DSL.field("now()", org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
+    public final TableField<CardsRecord, OffsetDateTime> LAST_MODIFIED = createField(DSL.name("last_modified"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
 
-    /**
-     * Create a <code>spellsource.cards</code> table reference
-     */
-    public Cards() {
-        this(DSL.name("cards"), null);
+    private Cards(Name alias, Table<CardsRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private Cards(Name alias, Table<CardsRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -109,12 +110,11 @@ public class Cards extends TableImpl<CardsRecord> {
         this(alias, CARDS);
     }
 
-    private Cards(Name alias, Table<CardsRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private Cards(Name alias, Table<CardsRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>spellsource.cards</code> table reference
+     */
+    public Cards() {
+        this(DSL.name("cards"), null);
     }
 
     public <O extends Record> Cards(Table<O> child, ForeignKey<O, CardsRecord> key) {
@@ -123,7 +123,7 @@ public class Cards extends TableImpl<CardsRecord> {
 
     @Override
     public Schema getSchema() {
-        return Spellsource.SPELLSOURCE;
+        return aliased() ? null : Spellsource.SPELLSOURCE;
     }
 
     @Override
@@ -132,17 +132,21 @@ public class Cards extends TableImpl<CardsRecord> {
     }
 
     @Override
-    public List<UniqueKey<CardsRecord>> getKeys() {
-        return Arrays.<UniqueKey<CardsRecord>>asList(Keys.CARDS_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<CardsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<CardsRecord, ?>>asList(Keys.CARDS__CARDS_CREATED_BY_FKEY);
+        return Arrays.asList(Keys.CARDS__CARDS_CREATED_BY_FKEY);
     }
 
+    private transient UserEntity _userEntity;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table.
+     */
     public UserEntity userEntity() {
-        return new UserEntity(this, Keys.CARDS__CARDS_CREATED_BY_FKEY);
+        if (_userEntity == null)
+            _userEntity = new UserEntity(this, Keys.CARDS__CARDS_CREATED_BY_FKEY);
+
+        return _userEntity;
     }
 
     @Override
@@ -176,7 +180,7 @@ public class Cards extends TableImpl<CardsRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<String, String, String, Element, JsonObject, OffsetDateTime, OffsetDateTime> fieldsRow() {
+    public Row7<String, String, String, XML, JsonObject, OffsetDateTime, OffsetDateTime> fieldsRow() {
         return (Row7) super.fieldsRow();
     }
 }

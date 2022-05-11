@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RealmAttribute extends TableImpl<RealmAttributeRecord> {
 
-    private static final long serialVersionUID = -263218697;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.realm_attribute</code>
@@ -51,23 +52,24 @@ public class RealmAttribute extends TableImpl<RealmAttributeRecord> {
     /**
      * The column <code>keycloak.realm_attribute.name</code>.
      */
-    public final TableField<RealmAttributeRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<RealmAttributeRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.realm_attribute.value</code>.
      */
-    public final TableField<RealmAttributeRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RealmAttributeRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.realm_attribute.realm_id</code>.
      */
-    public final TableField<RealmAttributeRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<RealmAttributeRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
-    /**
-     * Create a <code>keycloak.realm_attribute</code> table reference
-     */
-    public RealmAttribute() {
-        this(DSL.name("realm_attribute"), null);
+    private RealmAttribute(Name alias, Table<RealmAttributeRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private RealmAttribute(Name alias, Table<RealmAttributeRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -84,12 +86,11 @@ public class RealmAttribute extends TableImpl<RealmAttributeRecord> {
         this(alias, REALM_ATTRIBUTE);
     }
 
-    private RealmAttribute(Name alias, Table<RealmAttributeRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private RealmAttribute(Name alias, Table<RealmAttributeRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.realm_attribute</code> table reference
+     */
+    public RealmAttribute() {
+        this(DSL.name("realm_attribute"), null);
     }
 
     public <O extends Record> RealmAttribute(Table<O> child, ForeignKey<O, RealmAttributeRecord> key) {
@@ -98,12 +99,12 @@ public class RealmAttribute extends TableImpl<RealmAttributeRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_REALM_ATTR_REALM);
+        return Arrays.asList(Indexes.IDX_REALM_ATTR_REALM);
     }
 
     @Override
@@ -112,17 +113,20 @@ public class RealmAttribute extends TableImpl<RealmAttributeRecord> {
     }
 
     @Override
-    public List<UniqueKey<RealmAttributeRecord>> getKeys() {
-        return Arrays.<UniqueKey<RealmAttributeRecord>>asList(Keys.CONSTRAINT_9);
-    }
-
-    @Override
     public List<ForeignKey<RealmAttributeRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RealmAttributeRecord, ?>>asList(Keys.REALM_ATTRIBUTE__FK_8SHXD6L3E9ATQUKACXGPFFPTW);
+        return Arrays.asList(Keys.REALM_ATTRIBUTE__FK_8SHXD6L3E9ATQUKACXGPFFPTW);
     }
 
+    private transient Realm _realm;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.REALM_ATTRIBUTE__FK_8SHXD6L3E9ATQUKACXGPFFPTW);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.REALM_ATTRIBUTE__FK_8SHXD6L3E9ATQUKACXGPFFPTW);
+
+        return _realm;
     }
 
     @Override

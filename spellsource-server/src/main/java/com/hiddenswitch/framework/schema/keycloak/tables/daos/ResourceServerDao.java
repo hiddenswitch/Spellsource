@@ -23,63 +23,70 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ResourceServerDao extends AbstractReactiveVertxDAO<ResourceServerRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer, String, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>, Future<Integer>, Future<String>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<ResourceServerRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer,String> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public ResourceServerDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(ResourceServer.RESOURCE_SERVER, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer.class, new ReactiveClassicQueryExecutor<ResourceServerRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getResourceServerMapper()));
-    }
+        public ResourceServerDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(ResourceServer.RESOURCE_SERVER, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer.class, new ReactiveClassicQueryExecutor<ResourceServerRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getResourceServerMapper()));
+        }
 
-    @Override
-    protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer object) {
-        return object.getId();
-    }
+        @Override
+        protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer object) {
+                return object.getId();
+        }
 
-    /**
-     * Find records that have <code>allow_rs_remote_mgmt IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>client_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByAllowRsRemoteMgmt(Collection<Boolean> values) {
-        return findManyByCondition(ResourceServer.RESOURCE_SERVER.ALLOW_RS_REMOTE_MGMT.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByClientId(Collection<String> values) {
+                return findManyByCondition(ResourceServer.RESOURCE_SERVER.CLIENT_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>allow_rs_remote_mgmt IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>client_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByAllowRsRemoteMgmt(Collection<Boolean> values, int limit) {
-        return findManyByCondition(ResourceServer.RESOURCE_SERVER.ALLOW_RS_REMOTE_MGMT.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByClientId(Collection<String> values, int limit) {
+                return findManyByCondition(ResourceServer.RESOURCE_SERVER.CLIENT_ID.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>policy_enforce_mode IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>allow_rs_remote_mgmt IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByPolicyEnforceMode(Collection<String> values) {
-        return findManyByCondition(ResourceServer.RESOURCE_SERVER.POLICY_ENFORCE_MODE.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByAllowRsRemoteMgmt(Collection<Boolean> values) {
+                return findManyByCondition(ResourceServer.RESOURCE_SERVER.ALLOW_RS_REMOTE_MGMT.in(values));
+        }
 
-    /**
-     * Find records that have <code>policy_enforce_mode IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>allow_rs_remote_mgmt IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByPolicyEnforceMode(Collection<String> values, int limit) {
-        return findManyByCondition(ResourceServer.RESOURCE_SERVER.POLICY_ENFORCE_MODE.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByAllowRsRemoteMgmt(Collection<Boolean> values, int limit) {
+                return findManyByCondition(ResourceServer.RESOURCE_SERVER.ALLOW_RS_REMOTE_MGMT.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>decision_strategy IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>policy_enforce_mode IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByDecisionStrategy(Collection<Short> values) {
-        return findManyByCondition(ResourceServer.RESOURCE_SERVER.DECISION_STRATEGY.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByPolicyEnforceMode(Collection<String> values) {
+                return findManyByCondition(ResourceServer.RESOURCE_SERVER.POLICY_ENFORCE_MODE.in(values));
+        }
 
-    /**
-     * Find records that have <code>decision_strategy IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>policy_enforce_mode IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByDecisionStrategy(Collection<Short> values, int limit) {
-        return findManyByCondition(ResourceServer.RESOURCE_SERVER.DECISION_STRATEGY.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByPolicyEnforceMode(Collection<String> values, int limit) {
+                return findManyByCondition(ResourceServer.RESOURCE_SERVER.POLICY_ENFORCE_MODE.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<ResourceServerRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer,String> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<ResourceServerRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer,String>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<ResourceServerRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer,String> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<ResourceServerRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer,String>) super.queryExecutor();
+        }
 }

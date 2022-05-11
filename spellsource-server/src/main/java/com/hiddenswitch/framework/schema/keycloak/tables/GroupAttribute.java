@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class GroupAttribute extends TableImpl<GroupAttributeRecord> {
 
-    private static final long serialVersionUID = 590000110;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.group_attribute</code>
@@ -51,28 +52,29 @@ public class GroupAttribute extends TableImpl<GroupAttributeRecord> {
     /**
      * The column <code>keycloak.group_attribute.id</code>.
      */
-    public final TableField<GroupAttributeRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false).defaultValue(org.jooq.impl.DSL.field("'sybase-needs-something-here'::character varying", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+    public final TableField<GroupAttributeRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false).defaultValue(DSL.field("'sybase-needs-something-here'::character varying", SQLDataType.VARCHAR)), this, "");
 
     /**
      * The column <code>keycloak.group_attribute.name</code>.
      */
-    public final TableField<GroupAttributeRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<GroupAttributeRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.group_attribute.value</code>.
      */
-    public final TableField<GroupAttributeRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<GroupAttributeRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.group_attribute.group_id</code>.
      */
-    public final TableField<GroupAttributeRecord, String> GROUP_ID = createField(DSL.name("group_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<GroupAttributeRecord, String> GROUP_ID = createField(DSL.name("group_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
-    /**
-     * Create a <code>keycloak.group_attribute</code> table reference
-     */
-    public GroupAttribute() {
-        this(DSL.name("group_attribute"), null);
+    private GroupAttribute(Name alias, Table<GroupAttributeRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private GroupAttribute(Name alias, Table<GroupAttributeRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -89,12 +91,11 @@ public class GroupAttribute extends TableImpl<GroupAttributeRecord> {
         this(alias, GROUP_ATTRIBUTE);
     }
 
-    private GroupAttribute(Name alias, Table<GroupAttributeRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private GroupAttribute(Name alias, Table<GroupAttributeRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.group_attribute</code> table reference
+     */
+    public GroupAttribute() {
+        this(DSL.name("group_attribute"), null);
     }
 
     public <O extends Record> GroupAttribute(Table<O> child, ForeignKey<O, GroupAttributeRecord> key) {
@@ -103,12 +104,12 @@ public class GroupAttribute extends TableImpl<GroupAttributeRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_GROUP_ATTR_GROUP);
+        return Arrays.asList(Indexes.IDX_GROUP_ATTR_GROUP);
     }
 
     @Override
@@ -117,17 +118,21 @@ public class GroupAttribute extends TableImpl<GroupAttributeRecord> {
     }
 
     @Override
-    public List<UniqueKey<GroupAttributeRecord>> getKeys() {
-        return Arrays.<UniqueKey<GroupAttributeRecord>>asList(Keys.CONSTRAINT_GROUP_ATTRIBUTE_PK);
-    }
-
-    @Override
     public List<ForeignKey<GroupAttributeRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<GroupAttributeRecord, ?>>asList(Keys.GROUP_ATTRIBUTE__FK_GROUP_ATTRIBUTE_GROUP);
+        return Arrays.asList(Keys.GROUP_ATTRIBUTE__FK_GROUP_ATTRIBUTE_GROUP);
     }
 
+    private transient KeycloakGroup _keycloakGroup;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.keycloak_group</code>
+     * table.
+     */
     public KeycloakGroup keycloakGroup() {
-        return new KeycloakGroup(this, Keys.GROUP_ATTRIBUTE__FK_GROUP_ATTRIBUTE_GROUP);
+        if (_keycloakGroup == null)
+            _keycloakGroup = new KeycloakGroup(this, Keys.GROUP_ATTRIBUTE__FK_GROUP_ATTRIBUTE_GROUP);
+
+        return _keycloakGroup;
     }
 
     @Override

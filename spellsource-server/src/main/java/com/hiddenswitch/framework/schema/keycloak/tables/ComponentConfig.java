@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ComponentConfig extends TableImpl<ComponentConfigRecord> {
 
-    private static final long serialVersionUID = -379393956;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.component_config</code>
@@ -51,28 +52,29 @@ public class ComponentConfig extends TableImpl<ComponentConfigRecord> {
     /**
      * The column <code>keycloak.component_config.id</code>.
      */
-    public final TableField<ComponentConfigRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ComponentConfigRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.component_config.component_id</code>.
      */
-    public final TableField<ComponentConfigRecord, String> COMPONENT_ID = createField(DSL.name("component_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ComponentConfigRecord, String> COMPONENT_ID = createField(DSL.name("component_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.component_config.name</code>.
      */
-    public final TableField<ComponentConfigRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<ComponentConfigRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.component_config.value</code>.
      */
-    public final TableField<ComponentConfigRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(4000), this, "");
+    public final TableField<ComponentConfigRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(4000), this, "");
 
-    /**
-     * Create a <code>keycloak.component_config</code> table reference
-     */
-    public ComponentConfig() {
-        this(DSL.name("component_config"), null);
+    private ComponentConfig(Name alias, Table<ComponentConfigRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private ComponentConfig(Name alias, Table<ComponentConfigRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -89,12 +91,11 @@ public class ComponentConfig extends TableImpl<ComponentConfigRecord> {
         this(alias, COMPONENT_CONFIG);
     }
 
-    private ComponentConfig(Name alias, Table<ComponentConfigRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private ComponentConfig(Name alias, Table<ComponentConfigRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.component_config</code> table reference
+     */
+    public ComponentConfig() {
+        this(DSL.name("component_config"), null);
     }
 
     public <O extends Record> ComponentConfig(Table<O> child, ForeignKey<O, ComponentConfigRecord> key) {
@@ -103,12 +104,12 @@ public class ComponentConfig extends TableImpl<ComponentConfigRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_COMPO_CONFIG_COMPO);
+        return Arrays.asList(Indexes.IDX_COMPO_CONFIG_COMPO);
     }
 
     @Override
@@ -117,17 +118,20 @@ public class ComponentConfig extends TableImpl<ComponentConfigRecord> {
     }
 
     @Override
-    public List<UniqueKey<ComponentConfigRecord>> getKeys() {
-        return Arrays.<UniqueKey<ComponentConfigRecord>>asList(Keys.CONSTR_COMPONENT_CONFIG_PK);
-    }
-
-    @Override
     public List<ForeignKey<ComponentConfigRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ComponentConfigRecord, ?>>asList(Keys.COMPONENT_CONFIG__FK_COMPONENT_CONFIG);
+        return Arrays.asList(Keys.COMPONENT_CONFIG__FK_COMPONENT_CONFIG);
     }
 
+    private transient Component _component;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.component</code> table.
+     */
     public Component component() {
-        return new Component(this, Keys.COMPONENT_CONFIG__FK_COMPONENT_CONFIG);
+        if (_component == null)
+            _component = new Component(this, Keys.COMPONENT_CONFIG__FK_COMPONENT_CONFIG);
+
+        return _component;
     }
 
     @Override

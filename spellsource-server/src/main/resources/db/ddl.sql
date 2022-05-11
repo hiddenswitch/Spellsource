@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.3 (Debian 12.3-1.pgdg100+1)
--- Dumped by pg_dump version 13.1
+-- Dumped from database version 13.6 (Debian 13.6-1.pgdg110+1)
+-- Dumped by pg_dump version 14.2 (Debian 14.2-1.pgdg110+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -238,8 +238,7 @@ CREATE TABLE keycloak.client (
     registration_token character varying(255),
     standard_flow_enabled boolean DEFAULT true NOT NULL,
     implicit_flow_enabled boolean DEFAULT false NOT NULL,
-    direct_access_grants_enabled boolean DEFAULT false NOT NULL,
-    always_display_in_console boolean DEFAULT false NOT NULL
+    direct_access_grants_enabled boolean DEFAULT false NOT NULL
 );
 
 
@@ -497,18 +496,35 @@ ALTER TABLE keycloak.composite_role OWNER TO admin;
 
 CREATE TABLE keycloak.credential (
     id character varying(36) NOT NULL,
+    device character varying(255),
+    hash_iterations integer,
     salt bytea,
     type character varying(255),
+    value character varying(4000),
     user_id character varying(36),
     created_date bigint,
-    user_label character varying(255),
-    secret_data text,
-    credential_data text,
-    priority integer
+    counter integer DEFAULT 0,
+    digits integer DEFAULT 6,
+    period integer DEFAULT 30,
+    algorithm character varying(36) DEFAULT NULL::character varying
 );
 
 
 ALTER TABLE keycloak.credential OWNER TO admin;
+
+--
+-- Name: credential_attribute; Type: TABLE; Schema: keycloak; Owner: admin
+--
+
+CREATE TABLE keycloak.credential_attribute (
+    id character varying(36) NOT NULL,
+    credential_id character varying(36) NOT NULL,
+    name character varying(255) NOT NULL,
+    value character varying(4000)
+);
+
+
+ALTER TABLE keycloak.credential_attribute OWNER TO admin;
 
 --
 -- Name: databasechangelog; Type: TABLE; Schema: keycloak; Owner: admin
@@ -582,6 +598,20 @@ CREATE TABLE keycloak.event_entity (
 ALTER TABLE keycloak.event_entity OWNER TO admin;
 
 --
+-- Name: fed_credential_attribute; Type: TABLE; Schema: keycloak; Owner: admin
+--
+
+CREATE TABLE keycloak.fed_credential_attribute (
+    id character varying(36) NOT NULL,
+    credential_id character varying(36) NOT NULL,
+    name character varying(255) NOT NULL,
+    value character varying(4000)
+);
+
+
+ALTER TABLE keycloak.fed_credential_attribute OWNER TO admin;
+
+--
 -- Name: fed_user_attribute; Type: TABLE; Schema: keycloak; Owner: admin
 --
 
@@ -603,7 +633,7 @@ ALTER TABLE keycloak.fed_user_attribute OWNER TO admin;
 
 CREATE TABLE keycloak.fed_user_consent (
     id character varying(36) NOT NULL,
-    client_id character varying(255),
+    client_id character varying(36),
     user_id character varying(255) NOT NULL,
     realm_id character varying(36) NOT NULL,
     storage_provider_id character varying(36),
@@ -634,16 +664,19 @@ ALTER TABLE keycloak.fed_user_consent_cl_scope OWNER TO admin;
 
 CREATE TABLE keycloak.fed_user_credential (
     id character varying(36) NOT NULL,
+    device character varying(255),
+    hash_iterations integer,
     salt bytea,
     type character varying(255),
+    value character varying(255),
     created_date bigint,
+    counter integer DEFAULT 0,
+    digits integer DEFAULT 6,
+    period integer DEFAULT 30,
+    algorithm character varying(36) DEFAULT 'HmacSHA1'::character varying,
     user_id character varying(255) NOT NULL,
     realm_id character varying(36) NOT NULL,
-    storage_provider_id character varying(36),
-    user_label character varying(255),
-    secret_data text,
-    credential_data text,
-    priority integer
+    storage_provider_id character varying(36)
 );
 
 
@@ -817,7 +850,7 @@ ALTER TABLE keycloak.idp_mapper_config OWNER TO admin;
 CREATE TABLE keycloak.keycloak_group (
     id character varying(36) NOT NULL,
     name character varying(255),
-    parent_group character varying(36) NOT NULL,
+    parent_group character varying(36),
     realm_id character varying(36)
 );
 
@@ -830,7 +863,7 @@ ALTER TABLE keycloak.keycloak_group OWNER TO admin;
 
 CREATE TABLE keycloak.keycloak_role (
     id character varying(36) NOT NULL,
-    client_realm_constraint character varying(255),
+    client_realm_constraint character varying(36),
     client_role boolean DEFAULT false NOT NULL,
     description character varying(255),
     name character varying(255),
@@ -848,8 +881,7 @@ ALTER TABLE keycloak.keycloak_role OWNER TO admin;
 
 CREATE TABLE keycloak.migration_model (
     id character varying(36) NOT NULL,
-    version character varying(36),
-    update_time bigint DEFAULT 0 NOT NULL
+    version character varying(36)
 );
 
 
@@ -861,7 +893,7 @@ ALTER TABLE keycloak.migration_model OWNER TO admin;
 
 CREATE TABLE keycloak.offline_client_session (
     user_session_id character varying(36) NOT NULL,
-    client_id character varying(255) NOT NULL,
+    client_id character varying(36) NOT NULL,
     offline_flag character varying(4) NOT NULL,
     "timestamp" integer,
     data text,
@@ -880,10 +912,9 @@ CREATE TABLE keycloak.offline_user_session (
     user_session_id character varying(36) NOT NULL,
     user_id character varying(255) NOT NULL,
     realm_id character varying(36) NOT NULL,
-    created_on integer NOT NULL,
+    last_session_refresh integer,
     offline_flag character varying(4) NOT NULL,
-    data text,
-    last_session_refresh integer DEFAULT 0 NOT NULL
+    data text
 );
 
 
@@ -985,9 +1016,7 @@ CREATE TABLE keycloak.realm (
     duplicate_emails_allowed boolean DEFAULT false NOT NULL,
     docker_auth_flow character varying(36),
     refresh_token_max_reuse integer DEFAULT 0,
-    allow_user_managed_access boolean DEFAULT false NOT NULL,
-    sso_max_lifespan_remember_me integer DEFAULT 0 NOT NULL,
-    sso_idle_timeout_remember_me integer DEFAULT 0 NOT NULL
+    allow_user_managed_access boolean DEFAULT false NOT NULL
 );
 
 
@@ -1053,19 +1082,6 @@ CREATE TABLE keycloak.realm_events_listeners (
 
 
 ALTER TABLE keycloak.realm_events_listeners OWNER TO admin;
-
---
--- Name: realm_localizations; Type: TABLE; Schema: keycloak; Owner: admin
---
-
-CREATE TABLE keycloak.realm_localizations (
-    realm_id character varying(255) NOT NULL,
-    locale character varying(255) NOT NULL,
-    texts text NOT NULL
-);
-
-
-ALTER TABLE keycloak.realm_localizations OWNER TO admin;
 
 --
 -- Name: realm_required_credential; Type: TABLE; Schema: keycloak; Owner: admin
@@ -1143,8 +1159,7 @@ CREATE TABLE keycloak.required_action_provider (
     realm_id character varying(36),
     enabled boolean DEFAULT false NOT NULL,
     default_action boolean DEFAULT false NOT NULL,
-    provider_id character varying(255),
-    priority integer
+    provider_id character varying(255)
 );
 
 
@@ -1195,8 +1210,7 @@ ALTER TABLE keycloak.resource_scope OWNER TO admin;
 CREATE TABLE keycloak.resource_server (
     id character varying(36) NOT NULL,
     allow_rs_remote_mgmt boolean DEFAULT false NOT NULL,
-    policy_enforce_mode character varying(15) NOT NULL,
-    decision_strategy smallint DEFAULT 1 NOT NULL
+    policy_enforce_mode character varying(15) NOT NULL
 );
 
 
@@ -1208,14 +1222,13 @@ ALTER TABLE keycloak.resource_server OWNER TO admin;
 
 CREATE TABLE keycloak.resource_server_perm_ticket (
     id character varying(36) NOT NULL,
-    owner character varying(255) NOT NULL,
-    requester character varying(255) NOT NULL,
+    owner character varying(36) NOT NULL,
+    requester character varying(36) NOT NULL,
     created_timestamp bigint NOT NULL,
     granted_timestamp bigint,
     resource_id character varying(36) NOT NULL,
     scope_id character varying(36),
-    resource_server_id character varying(36) NOT NULL,
-    policy_id character varying(36)
+    resource_server_id character varying(36) NOT NULL
 );
 
 
@@ -1232,8 +1245,7 @@ CREATE TABLE keycloak.resource_server_policy (
     type character varying(255) NOT NULL,
     decision_strategy character varying(20),
     logic character varying(20),
-    resource_server_id character varying(36) NOT NULL,
-    owner character varying(255)
+    resource_server_id character varying(36) NOT NULL
 );
 
 
@@ -1246,9 +1258,10 @@ ALTER TABLE keycloak.resource_server_policy OWNER TO admin;
 CREATE TABLE keycloak.resource_server_resource (
     id character varying(36) NOT NULL,
     name character varying(255) NOT NULL,
+    uri character varying(255),
     type character varying(255),
     icon_uri character varying(255),
-    owner character varying(255) NOT NULL,
+    owner character varying(36) NOT NULL,
     resource_server_id character varying(36) NOT NULL,
     owner_managed_access boolean DEFAULT false NOT NULL,
     display_name character varying(255)
@@ -1271,32 +1284,6 @@ CREATE TABLE keycloak.resource_server_scope (
 
 
 ALTER TABLE keycloak.resource_server_scope OWNER TO admin;
-
---
--- Name: resource_uris; Type: TABLE; Schema: keycloak; Owner: admin
---
-
-CREATE TABLE keycloak.resource_uris (
-    resource_id character varying(36) NOT NULL,
-    value character varying(255) NOT NULL
-);
-
-
-ALTER TABLE keycloak.resource_uris OWNER TO admin;
-
---
--- Name: role_attribute; Type: TABLE; Schema: keycloak; Owner: admin
---
-
-CREATE TABLE keycloak.role_attribute (
-    id character varying(36) NOT NULL,
-    role_id character varying(36) NOT NULL,
-    name character varying(255) NOT NULL,
-    value character varying(255)
-);
-
-
-ALTER TABLE keycloak.role_attribute OWNER TO admin;
 
 --
 -- Name: scope_mapping; Type: TABLE; Schema: keycloak; Owner: admin
@@ -1342,7 +1329,7 @@ ALTER TABLE keycloak.user_attribute OWNER TO admin;
 
 CREATE TABLE keycloak.user_consent (
     id character varying(36) NOT NULL,
-    client_id character varying(255),
+    client_id character varying(36),
     user_id character varying(36) NOT NULL,
     created_date bigint,
     last_updated_date bigint,
@@ -1381,7 +1368,7 @@ CREATE TABLE keycloak.user_entity (
     realm_id character varying(255),
     username character varying(255),
     created_timestamp bigint,
-    service_account_client_link character varying(255),
+    service_account_client_link character varying(36),
     not_before integer DEFAULT 0 NOT NULL
 );
 
@@ -2204,6 +2191,14 @@ ALTER TABLE ONLY keycloak.composite_role
 
 
 --
+-- Name: credential_attribute constraint_credential_attr; Type: CONSTRAINT; Schema: keycloak; Owner: admin
+--
+
+ALTER TABLE ONLY keycloak.credential_attribute
+    ADD CONSTRAINT constraint_credential_attr PRIMARY KEY (id);
+
+
+--
 -- Name: client_session_prot_mapper constraint_cs_pmp_pk; Type: CONSTRAINT; Schema: keycloak; Owner: admin
 --
 
@@ -2321,6 +2316,14 @@ ALTER TABLE ONLY keycloak.scope_policy
 
 ALTER TABLE ONLY keycloak.user_entity
     ADD CONSTRAINT constraint_fb PRIMARY KEY (id);
+
+
+--
+-- Name: fed_credential_attribute constraint_fed_credential_attr; Type: CONSTRAINT; Schema: keycloak; Owner: admin
+--
+
+ALTER TABLE ONLY keycloak.fed_credential_attribute
+    ADD CONSTRAINT constraint_fed_credential_attr PRIMARY KEY (id);
 
 
 --
@@ -2484,22 +2487,6 @@ ALTER TABLE ONLY keycloak.user_required_action
 
 
 --
--- Name: resource_uris constraint_resour_uris_pk; Type: CONSTRAINT; Schema: keycloak; Owner: admin
---
-
-ALTER TABLE ONLY keycloak.resource_uris
-    ADD CONSTRAINT constraint_resour_uris_pk PRIMARY KEY (resource_id, value);
-
-
---
--- Name: role_attribute constraint_role_attribute_pk; Type: CONSTRAINT; Schema: keycloak; Owner: admin
---
-
-ALTER TABLE ONLY keycloak.role_attribute
-    ADD CONSTRAINT constraint_role_attribute_pk PRIMARY KEY (id);
-
-
---
 -- Name: user_attribute constraint_user_attribute_pk; Type: CONSTRAINT; Schema: keycloak; Owner: admin
 --
 
@@ -2577,14 +2564,6 @@ ALTER TABLE ONLY keycloak.client_scope_role_mapping
 
 ALTER TABLE ONLY keycloak.default_client_scope
     ADD CONSTRAINT r_def_cli_scope_bind PRIMARY KEY (realm_id, scope_id);
-
-
---
--- Name: realm_localizations realm_localizations_pkey; Type: CONSTRAINT; Schema: keycloak; Owner: admin
---
-
-ALTER TABLE ONLY keycloak.realm_localizations
-    ADD CONSTRAINT realm_localizations_pkey PRIMARY KEY (realm_id, locale);
 
 
 --
@@ -2860,13 +2839,6 @@ CREATE INDEX idx_client_def_roles_client ON keycloak.client_default_roles USING 
 
 
 --
--- Name: idx_client_id; Type: INDEX; Schema: keycloak; Owner: admin
---
-
-CREATE INDEX idx_client_id ON keycloak.client USING btree (client_id);
-
-
---
 -- Name: idx_client_init_acc_realm; Type: INDEX; Schema: keycloak; Owner: admin
 --
 
@@ -2916,13 +2888,6 @@ CREATE INDEX idx_compo_config_compo ON keycloak.component_config USING btree (co
 
 
 --
--- Name: idx_component_provider_type; Type: INDEX; Schema: keycloak; Owner: admin
---
-
-CREATE INDEX idx_component_provider_type ON keycloak.component USING btree (provider_type);
-
-
---
 -- Name: idx_component_realm; Type: INDEX; Schema: keycloak; Owner: admin
 --
 
@@ -2944,6 +2909,13 @@ CREATE INDEX idx_composite_child ON keycloak.composite_role USING btree (child_r
 
 
 --
+-- Name: idx_credential_attr_cred; Type: INDEX; Schema: keycloak; Owner: admin
+--
+
+CREATE INDEX idx_credential_attr_cred ON keycloak.credential_attribute USING btree (credential_id);
+
+
+--
 -- Name: idx_defcls_realm; Type: INDEX; Schema: keycloak; Owner: admin
 --
 
@@ -2958,10 +2930,10 @@ CREATE INDEX idx_defcls_scope ON keycloak.default_client_scope USING btree (scop
 
 
 --
--- Name: idx_event_time; Type: INDEX; Schema: keycloak; Owner: admin
+-- Name: idx_fed_cred_attr_cred; Type: INDEX; Schema: keycloak; Owner: admin
 --
 
-CREATE INDEX idx_event_time ON keycloak.event_entity USING btree (realm_id, event_time);
+CREATE INDEX idx_fed_cred_attr_cred ON keycloak.fed_credential_attribute USING btree (credential_id);
 
 
 --
@@ -3105,13 +3077,6 @@ CREATE INDEX idx_keycloak_role_realm ON keycloak.keycloak_role USING btree (real
 
 
 --
--- Name: idx_offline_uss_createdon; Type: INDEX; Schema: keycloak; Owner: admin
---
-
-CREATE INDEX idx_offline_uss_createdon ON keycloak.offline_user_session USING btree (created_on);
-
-
---
 -- Name: idx_protocol_mapper_client; Type: INDEX; Schema: keycloak; Owner: admin
 --
 
@@ -3224,13 +3189,6 @@ CREATE INDEX idx_res_srv_scope_res_srv ON keycloak.resource_server_scope USING b
 
 
 --
--- Name: idx_role_attribute; Type: INDEX; Schema: keycloak; Owner: admin
---
-
-CREATE INDEX idx_role_attribute ON keycloak.role_attribute USING btree (role_id);
-
-
---
 -- Name: idx_role_clscope; Type: INDEX; Schema: keycloak; Owner: admin
 --
 
@@ -3249,13 +3207,6 @@ CREATE INDEX idx_scope_mapping_role ON keycloak.scope_mapping USING btree (role_
 --
 
 CREATE INDEX idx_scope_policy_policy ON keycloak.scope_policy USING btree (policy_id);
-
-
---
--- Name: idx_update_time; Type: INDEX; Schema: keycloak; Owner: admin
---
-
-CREATE INDEX idx_update_time ON keycloak.migration_model USING btree (update_time);
 
 
 --
@@ -3521,6 +3472,14 @@ ALTER TABLE ONLY keycloak.realm_smtp_config
 
 
 --
+-- Name: client_default_roles fk_8aelwnibji49avxsrtuf6xjow; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
+--
+
+ALTER TABLE ONLY keycloak.client_default_roles
+    ADD CONSTRAINT fk_8aelwnibji49avxsrtuf6xjow FOREIGN KEY (role_id) REFERENCES keycloak.keycloak_role(id);
+
+
+--
 -- Name: realm_attribute fk_8shxd6l3e9atqukacxgpffptw; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
 --
 
@@ -3609,6 +3568,14 @@ ALTER TABLE ONLY keycloak.client_scope_attributes
 
 
 --
+-- Name: client_scope_role_mapping fk_cl_scope_rm_role; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
+--
+
+ALTER TABLE ONLY keycloak.client_scope_role_mapping
+    ADD CONSTRAINT fk_cl_scope_rm_role FOREIGN KEY (role_id) REFERENCES keycloak.keycloak_role(id);
+
+
+--
 -- Name: client_scope_role_mapping fk_cl_scope_rm_scope; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
 --
 
@@ -3657,6 +3624,22 @@ ALTER TABLE ONLY keycloak.component
 
 
 --
+-- Name: credential_attribute fk_cred_attr; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
+--
+
+ALTER TABLE ONLY keycloak.credential_attribute
+    ADD CONSTRAINT fk_cred_attr FOREIGN KEY (credential_id) REFERENCES keycloak.credential(id);
+
+
+--
+-- Name: realm_default_groups fk_def_groups_group; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
+--
+
+ALTER TABLE ONLY keycloak.realm_default_groups
+    ADD CONSTRAINT fk_def_groups_group FOREIGN KEY (group_id) REFERENCES keycloak.keycloak_group(id);
+
+
+--
 -- Name: realm_default_groups fk_def_groups_realm; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
 --
 
@@ -3670,6 +3653,14 @@ ALTER TABLE ONLY keycloak.realm_default_groups
 
 ALTER TABLE ONLY keycloak.realm_default_roles
     ADD CONSTRAINT fk_evudb1ppw84oxfax2drs03icc FOREIGN KEY (realm_id) REFERENCES keycloak.realm(id);
+
+
+--
+-- Name: fed_credential_attribute fk_fed_cred_attr; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
+--
+
+ALTER TABLE ONLY keycloak.fed_credential_attribute
+    ADD CONSTRAINT fk_fed_cred_attr FOREIGN KEY (credential_id) REFERENCES keycloak.fed_user_credential(id);
 
 
 --
@@ -3758,14 +3749,6 @@ ALTER TABLE ONLY keycloak.associated_policy
 
 ALTER TABLE ONLY keycloak.scope_policy
     ADD CONSTRAINT fk_frsrpass3xcx4wnkog82ssrfy FOREIGN KEY (scope_id) REFERENCES keycloak.resource_server_scope(id);
-
-
---
--- Name: resource_server_perm_ticket fk_frsrpo2128cx4wnkog82ssrfy; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
---
-
-ALTER TABLE ONLY keycloak.resource_server_perm_ticket
-    ADD CONSTRAINT fk_frsrpo2128cx4wnkog82ssrfy FOREIGN KEY (policy_id) REFERENCES keycloak.resource_server_policy(id);
 
 
 --
@@ -3865,6 +3848,22 @@ ALTER TABLE ONLY keycloak.group_role_mapping
 
 
 --
+-- Name: group_role_mapping fk_group_role_role; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
+--
+
+ALTER TABLE ONLY keycloak.group_role_mapping
+    ADD CONSTRAINT fk_group_role_role FOREIGN KEY (role_id) REFERENCES keycloak.keycloak_role(id);
+
+
+--
+-- Name: realm_default_roles fk_h4wpd7w4hsoolni3h0sw7btje; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
+--
+
+ALTER TABLE ONLY keycloak.realm_default_roles
+    ADD CONSTRAINT fk_h4wpd7w4hsoolni3h0sw7btje FOREIGN KEY (role_id) REFERENCES keycloak.keycloak_role(id);
+
+
+--
 -- Name: realm_enabled_event_types fk_h846o4h0w8epx5nwedrf5y69j; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
 --
 
@@ -3897,6 +3896,14 @@ ALTER TABLE ONLY keycloak.idp_mapper_config
 
 
 --
+-- Name: keycloak_role fk_kjho5le2c0ral09fl8cm9wfw9; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
+--
+
+ALTER TABLE ONLY keycloak.keycloak_role
+    ADD CONSTRAINT fk_kjho5le2c0ral09fl8cm9wfw9 FOREIGN KEY (client) REFERENCES keycloak.client(id);
+
+
+--
 -- Name: web_origins fk_lojpho213xcx4wnkog82ssrfy; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
 --
 
@@ -3918,6 +3925,14 @@ ALTER TABLE ONLY keycloak.client_default_roles
 
 ALTER TABLE ONLY keycloak.scope_mapping
     ADD CONSTRAINT fk_ouse064plmlr732lxjcn1q5f1 FOREIGN KEY (client_id) REFERENCES keycloak.client(id);
+
+
+--
+-- Name: scope_mapping fk_p3rh9grku11kqfrs4fltt7rnq; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
+--
+
+ALTER TABLE ONLY keycloak.scope_mapping
+    ADD CONSTRAINT fk_p3rh9grku11kqfrs4fltt7rnq FOREIGN KEY (role_id) REFERENCES keycloak.keycloak_role(id);
 
 
 --
@@ -3985,22 +4000,6 @@ ALTER TABLE ONLY keycloak.required_action_provider
 
 
 --
--- Name: resource_uris fk_resource_server_uris; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
---
-
-ALTER TABLE ONLY keycloak.resource_uris
-    ADD CONSTRAINT fk_resource_server_uris FOREIGN KEY (resource_id) REFERENCES keycloak.resource_server_resource(id);
-
-
---
--- Name: role_attribute fk_role_attribute_id; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
---
-
-ALTER TABLE ONLY keycloak.role_attribute
-    ADD CONSTRAINT fk_role_attribute_id FOREIGN KEY (role_id) REFERENCES keycloak.keycloak_role(id);
-
-
---
 -- Name: realm_supported_locales fk_supported_locales_realm; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
 --
 
@@ -4014,6 +4013,14 @@ ALTER TABLE ONLY keycloak.realm_supported_locales
 
 ALTER TABLE ONLY keycloak.user_federation_config
     ADD CONSTRAINT fk_t13hpu1j94r2ebpekr39x5eu5 FOREIGN KEY (user_federation_provider_id) REFERENCES keycloak.user_federation_provider(id);
+
+
+--
+-- Name: realm fk_traf444kk6qrkms7n56aiwq5y; Type: FK CONSTRAINT; Schema: keycloak; Owner: admin
+--
+
+ALTER TABLE ONLY keycloak.realm
+    ADD CONSTRAINT fk_traf444kk6qrkms7n56aiwq5y FOREIGN KEY (master_admin_client) REFERENCES keycloak.client(id);
 
 
 --

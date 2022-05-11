@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,10 +32,11 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ClientSessionProtMapper extends TableImpl<ClientSessionProtMapperRecord> {
 
-    private static final long serialVersionUID = 165061147;
+    private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>keycloak.client_session_prot_mapper</code>
+     * The reference instance of
+     * <code>keycloak.client_session_prot_mapper</code>
      */
     public static final ClientSessionProtMapper CLIENT_SESSION_PROT_MAPPER = new ClientSessionProtMapper();
 
@@ -47,35 +49,16 @@ public class ClientSessionProtMapper extends TableImpl<ClientSessionProtMapperRe
     }
 
     /**
-     * The column <code>keycloak.client_session_prot_mapper.protocol_mapper_id</code>.
+     * The column
+     * <code>keycloak.client_session_prot_mapper.protocol_mapper_id</code>.
      */
-    public final TableField<ClientSessionProtMapperRecord, String> PROTOCOL_MAPPER_ID = createField(DSL.name("protocol_mapper_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ClientSessionProtMapperRecord, String> PROTOCOL_MAPPER_ID = createField(DSL.name("protocol_mapper_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
-     * The column <code>keycloak.client_session_prot_mapper.client_session</code>.
+     * The column
+     * <code>keycloak.client_session_prot_mapper.client_session</code>.
      */
-    public final TableField<ClientSessionProtMapperRecord, String> CLIENT_SESSION = createField(DSL.name("client_session"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.client_session_prot_mapper</code> table reference
-     */
-    public ClientSessionProtMapper() {
-        this(DSL.name("client_session_prot_mapper"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.client_session_prot_mapper</code> table reference
-     */
-    public ClientSessionProtMapper(String alias) {
-        this(DSL.name(alias), CLIENT_SESSION_PROT_MAPPER);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.client_session_prot_mapper</code> table reference
-     */
-    public ClientSessionProtMapper(Name alias) {
-        this(alias, CLIENT_SESSION_PROT_MAPPER);
-    }
+    public final TableField<ClientSessionProtMapperRecord, String> CLIENT_SESSION = createField(DSL.name("client_session"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     private ClientSessionProtMapper(Name alias, Table<ClientSessionProtMapperRecord> aliased) {
         this(alias, aliased, null);
@@ -85,13 +68,36 @@ public class ClientSessionProtMapper extends TableImpl<ClientSessionProtMapperRe
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.client_session_prot_mapper</code> table
+     * reference
+     */
+    public ClientSessionProtMapper(String alias) {
+        this(DSL.name(alias), CLIENT_SESSION_PROT_MAPPER);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.client_session_prot_mapper</code> table
+     * reference
+     */
+    public ClientSessionProtMapper(Name alias) {
+        this(alias, CLIENT_SESSION_PROT_MAPPER);
+    }
+
+    /**
+     * Create a <code>keycloak.client_session_prot_mapper</code> table reference
+     */
+    public ClientSessionProtMapper() {
+        this(DSL.name("client_session_prot_mapper"), null);
+    }
+
     public <O extends Record> ClientSessionProtMapper(Table<O> child, ForeignKey<O, ClientSessionProtMapperRecord> key) {
         super(child, key, CLIENT_SESSION_PROT_MAPPER);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -100,17 +106,21 @@ public class ClientSessionProtMapper extends TableImpl<ClientSessionProtMapperRe
     }
 
     @Override
-    public List<UniqueKey<ClientSessionProtMapperRecord>> getKeys() {
-        return Arrays.<UniqueKey<ClientSessionProtMapperRecord>>asList(Keys.CONSTRAINT_CS_PMP_PK);
-    }
-
-    @Override
     public List<ForeignKey<ClientSessionProtMapperRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ClientSessionProtMapperRecord, ?>>asList(Keys.CLIENT_SESSION_PROT_MAPPER__FK_33A8SGQW18I532811V7O2DK89);
+        return Arrays.asList(Keys.CLIENT_SESSION_PROT_MAPPER__FK_33A8SGQW18I532811V7O2DK89);
     }
 
+    private transient ClientSession _clientSession;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.client_session</code>
+     * table.
+     */
     public ClientSession clientSession() {
-        return new ClientSession(this, Keys.CLIENT_SESSION_PROT_MAPPER__FK_33A8SGQW18I532811V7O2DK89);
+        if (_clientSession == null)
+            _clientSession = new ClientSession(this, Keys.CLIENT_SESSION_PROT_MAPPER__FK_33A8SGQW18I532811V7O2DK89);
+
+        return _clientSession;
     }
 
     @Override

@@ -23,91 +23,132 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ProtocolMapperDao extends AbstractReactiveVertxDAO<ProtocolMapperRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper, String, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>, Future<Integer>, Future<String>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<ProtocolMapperRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper,String> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public ProtocolMapperDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(ProtocolMapper.PROTOCOL_MAPPER, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper.class, new ReactiveClassicQueryExecutor<ProtocolMapperRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getProtocolMapperMapper()));
-    }
+        public ProtocolMapperDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(ProtocolMapper.PROTOCOL_MAPPER, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper.class, new ReactiveClassicQueryExecutor<ProtocolMapperRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getProtocolMapperMapper()));
+        }
 
-    @Override
-    protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper object) {
-        return object.getId();
-    }
+        @Override
+        protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper object) {
+                return object.getId();
+        }
 
-    /**
+        /**
      * Find records that have <code>name IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByName(Collection<String> values) {
-        return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.NAME.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByName(Collection<String> values) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.NAME.in(values));
+        }
 
-    /**
-     * Find records that have <code>name IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>name IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByName(Collection<String> values, int limit) {
-        return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.NAME.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByName(Collection<String> values, int limit) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.NAME.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>protocol IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByProtocol(Collection<String> values) {
-        return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.PROTOCOL.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByProtocol(Collection<String> values) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.PROTOCOL.in(values));
+        }
 
-    /**
-     * Find records that have <code>protocol IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>protocol IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByProtocol(Collection<String> values, int limit) {
-        return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.PROTOCOL.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByProtocol(Collection<String> values, int limit) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.PROTOCOL.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>protocol_mapper_name IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>protocol_mapper_name IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByProtocolMapperName(Collection<String> values) {
-        return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.PROTOCOL_MAPPER_NAME.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByProtocolMapperName(Collection<String> values) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.PROTOCOL_MAPPER_NAME.in(values));
+        }
 
-    /**
-     * Find records that have <code>protocol_mapper_name IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>protocol_mapper_name IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByProtocolMapperName(Collection<String> values, int limit) {
-        return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.PROTOCOL_MAPPER_NAME.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByProtocolMapperName(Collection<String> values, int limit) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.PROTOCOL_MAPPER_NAME.in(values),limit);
+        }
 
-    /**
+        /**
+     * Find records that have <code>consent_required IN (values)</code>
+     * asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByConsentRequired(Collection<Boolean> values) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CONSENT_REQUIRED.in(values));
+        }
+
+        /**
+     * Find records that have <code>consent_required IN (values)</code>
+     * asynchronously limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByConsentRequired(Collection<Boolean> values, int limit) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CONSENT_REQUIRED.in(values),limit);
+        }
+
+        /**
+     * Find records that have <code>consent_text IN (values)</code>
+     * asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByConsentText(Collection<String> values) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CONSENT_TEXT.in(values));
+        }
+
+        /**
+     * Find records that have <code>consent_text IN (values)</code>
+     * asynchronously limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByConsentText(Collection<String> values, int limit) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CONSENT_TEXT.in(values),limit);
+        }
+
+        /**
      * Find records that have <code>client_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByClientId(Collection<String> values) {
-        return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CLIENT_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByClientId(Collection<String> values) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CLIENT_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>client_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>client_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByClientId(Collection<String> values, int limit) {
-        return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CLIENT_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByClientId(Collection<String> values, int limit) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CLIENT_ID.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>client_scope_id IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>client_template_id IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByClientScopeId(Collection<String> values) {
-        return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CLIENT_SCOPE_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByClientTemplateId(Collection<String> values) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CLIENT_TEMPLATE_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>client_scope_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>client_template_id IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByClientScopeId(Collection<String> values, int limit) {
-        return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CLIENT_SCOPE_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByClientTemplateId(Collection<String> values, int limit) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CLIENT_TEMPLATE_ID.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<ProtocolMapperRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper,String> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<ProtocolMapperRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper,String>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<ProtocolMapperRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper,String> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<ProtocolMapperRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper,String>) super.queryExecutor();
+        }
 }

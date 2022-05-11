@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,10 +32,11 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserFederationMapperConfig extends TableImpl<UserFederationMapperConfigRecord> {
 
-    private static final long serialVersionUID = -37772796;
+    private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>keycloak.user_federation_mapper_config</code>
+     * The reference instance of
+     * <code>keycloak.user_federation_mapper_config</code>
      */
     public static final UserFederationMapperConfig USER_FEDERATION_MAPPER_CONFIG = new UserFederationMapperConfig();
 
@@ -47,40 +49,20 @@ public class UserFederationMapperConfig extends TableImpl<UserFederationMapperCo
     }
 
     /**
-     * The column <code>keycloak.user_federation_mapper_config.user_federation_mapper_id</code>.
+     * The column
+     * <code>keycloak.user_federation_mapper_config.user_federation_mapper_id</code>.
      */
-    public final TableField<UserFederationMapperConfigRecord, String> USER_FEDERATION_MAPPER_ID = createField(DSL.name("user_federation_mapper_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<UserFederationMapperConfigRecord, String> USER_FEDERATION_MAPPER_ID = createField(DSL.name("user_federation_mapper_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.user_federation_mapper_config.value</code>.
      */
-    public final TableField<UserFederationMapperConfigRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserFederationMapperConfigRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_federation_mapper_config.name</code>.
      */
-    public final TableField<UserFederationMapperConfigRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.user_federation_mapper_config</code> table reference
-     */
-    public UserFederationMapperConfig() {
-        this(DSL.name("user_federation_mapper_config"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.user_federation_mapper_config</code> table reference
-     */
-    public UserFederationMapperConfig(String alias) {
-        this(DSL.name(alias), USER_FEDERATION_MAPPER_CONFIG);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.user_federation_mapper_config</code> table reference
-     */
-    public UserFederationMapperConfig(Name alias) {
-        this(alias, USER_FEDERATION_MAPPER_CONFIG);
-    }
+    public final TableField<UserFederationMapperConfigRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     private UserFederationMapperConfig(Name alias, Table<UserFederationMapperConfigRecord> aliased) {
         this(alias, aliased, null);
@@ -90,13 +72,37 @@ public class UserFederationMapperConfig extends TableImpl<UserFederationMapperCo
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.user_federation_mapper_config</code>
+     * table reference
+     */
+    public UserFederationMapperConfig(String alias) {
+        this(DSL.name(alias), USER_FEDERATION_MAPPER_CONFIG);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.user_federation_mapper_config</code>
+     * table reference
+     */
+    public UserFederationMapperConfig(Name alias) {
+        this(alias, USER_FEDERATION_MAPPER_CONFIG);
+    }
+
+    /**
+     * Create a <code>keycloak.user_federation_mapper_config</code> table
+     * reference
+     */
+    public UserFederationMapperConfig() {
+        this(DSL.name("user_federation_mapper_config"), null);
+    }
+
     public <O extends Record> UserFederationMapperConfig(Table<O> child, ForeignKey<O, UserFederationMapperConfigRecord> key) {
         super(child, key, USER_FEDERATION_MAPPER_CONFIG);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -105,17 +111,21 @@ public class UserFederationMapperConfig extends TableImpl<UserFederationMapperCo
     }
 
     @Override
-    public List<UniqueKey<UserFederationMapperConfigRecord>> getKeys() {
-        return Arrays.<UniqueKey<UserFederationMapperConfigRecord>>asList(Keys.CONSTRAINT_FEDMAPPER_CFG_PM);
-    }
-
-    @Override
     public List<ForeignKey<UserFederationMapperConfigRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<UserFederationMapperConfigRecord, ?>>asList(Keys.USER_FEDERATION_MAPPER_CONFIG__FK_FEDMAPPER_CFG);
+        return Arrays.asList(Keys.USER_FEDERATION_MAPPER_CONFIG__FK_FEDMAPPER_CFG);
     }
 
+    private transient UserFederationMapper _userFederationMapper;
+
+    /**
+     * Get the implicit join path to the
+     * <code>keycloak.user_federation_mapper</code> table.
+     */
     public UserFederationMapper userFederationMapper() {
-        return new UserFederationMapper(this, Keys.USER_FEDERATION_MAPPER_CONFIG__FK_FEDMAPPER_CFG);
+        if (_userFederationMapper == null)
+            _userFederationMapper = new UserFederationMapper(this, Keys.USER_FEDERATION_MAPPER_CONFIG__FK_FEDMAPPER_CFG);
+
+        return _userFederationMapper;
     }
 
     @Override

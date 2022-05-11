@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ClientSession extends TableImpl<ClientSessionRecord> {
 
-    private static final long serialVersionUID = 1563676545;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.client_session</code>
@@ -51,58 +52,59 @@ public class ClientSession extends TableImpl<ClientSessionRecord> {
     /**
      * The column <code>keycloak.client_session.id</code>.
      */
-    public final TableField<ClientSessionRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ClientSessionRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.client_session.client_id</code>.
      */
-    public final TableField<ClientSessionRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<ClientSessionRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.client_session.redirect_uri</code>.
      */
-    public final TableField<ClientSessionRecord, String> REDIRECT_URI = createField(DSL.name("redirect_uri"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ClientSessionRecord, String> REDIRECT_URI = createField(DSL.name("redirect_uri"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.client_session.state</code>.
      */
-    public final TableField<ClientSessionRecord, String> STATE = createField(DSL.name("state"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ClientSessionRecord, String> STATE = createField(DSL.name("state"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.client_session.timestamp</code>.
      */
-    public final TableField<ClientSessionRecord, Integer> TIMESTAMP = createField(DSL.name("timestamp"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<ClientSessionRecord, Integer> TIMESTAMP = createField(DSL.name("timestamp"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.client_session.session_id</code>.
      */
-    public final TableField<ClientSessionRecord, String> SESSION_ID = createField(DSL.name("session_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<ClientSessionRecord, String> SESSION_ID = createField(DSL.name("session_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.client_session.auth_method</code>.
      */
-    public final TableField<ClientSessionRecord, String> AUTH_METHOD = createField(DSL.name("auth_method"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ClientSessionRecord, String> AUTH_METHOD = createField(DSL.name("auth_method"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.client_session.realm_id</code>.
      */
-    public final TableField<ClientSessionRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ClientSessionRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.client_session.auth_user_id</code>.
      */
-    public final TableField<ClientSessionRecord, String> AUTH_USER_ID = createField(DSL.name("auth_user_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<ClientSessionRecord, String> AUTH_USER_ID = createField(DSL.name("auth_user_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.client_session.current_action</code>.
      */
-    public final TableField<ClientSessionRecord, String> CURRENT_ACTION = createField(DSL.name("current_action"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<ClientSessionRecord, String> CURRENT_ACTION = createField(DSL.name("current_action"), SQLDataType.VARCHAR(36), this, "");
 
-    /**
-     * Create a <code>keycloak.client_session</code> table reference
-     */
-    public ClientSession() {
-        this(DSL.name("client_session"), null);
+    private ClientSession(Name alias, Table<ClientSessionRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private ClientSession(Name alias, Table<ClientSessionRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -119,12 +121,11 @@ public class ClientSession extends TableImpl<ClientSessionRecord> {
         this(alias, CLIENT_SESSION);
     }
 
-    private ClientSession(Name alias, Table<ClientSessionRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private ClientSession(Name alias, Table<ClientSessionRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.client_session</code> table reference
+     */
+    public ClientSession() {
+        this(DSL.name("client_session"), null);
     }
 
     public <O extends Record> ClientSession(Table<O> child, ForeignKey<O, ClientSessionRecord> key) {
@@ -133,12 +134,12 @@ public class ClientSession extends TableImpl<ClientSessionRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_CLIENT_SESSION_SESSION);
+        return Arrays.asList(Indexes.IDX_CLIENT_SESSION_SESSION);
     }
 
     @Override
@@ -147,17 +148,21 @@ public class ClientSession extends TableImpl<ClientSessionRecord> {
     }
 
     @Override
-    public List<UniqueKey<ClientSessionRecord>> getKeys() {
-        return Arrays.<UniqueKey<ClientSessionRecord>>asList(Keys.CONSTRAINT_8);
-    }
-
-    @Override
     public List<ForeignKey<ClientSessionRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ClientSessionRecord, ?>>asList(Keys.CLIENT_SESSION__FK_B4AO2VCVAT6UKAU74WBWTFQO1);
+        return Arrays.asList(Keys.CLIENT_SESSION__FK_B4AO2VCVAT6UKAU74WBWTFQO1);
     }
 
+    private transient UserSession _userSession;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.user_session</code>
+     * table.
+     */
     public UserSession userSession() {
-        return new UserSession(this, Keys.CLIENT_SESSION__FK_B4AO2VCVAT6UKAU74WBWTFQO1);
+        if (_userSession == null)
+            _userSession = new UserSession(this, Keys.CLIENT_SESSION__FK_B4AO2VCVAT6UKAU74WBWTFQO1);
+
+        return _userSession;
     }
 
     @Override

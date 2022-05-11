@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ScopeMapping extends TableImpl<ScopeMappingRecord> {
 
-    private static final long serialVersionUID = 994232050;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.scope_mapping</code>
@@ -51,18 +52,19 @@ public class ScopeMapping extends TableImpl<ScopeMappingRecord> {
     /**
      * The column <code>keycloak.scope_mapping.client_id</code>.
      */
-    public final TableField<ScopeMappingRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ScopeMappingRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.scope_mapping.role_id</code>.
      */
-    public final TableField<ScopeMappingRecord, String> ROLE_ID = createField(DSL.name("role_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ScopeMappingRecord, String> ROLE_ID = createField(DSL.name("role_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
-    /**
-     * Create a <code>keycloak.scope_mapping</code> table reference
-     */
-    public ScopeMapping() {
-        this(DSL.name("scope_mapping"), null);
+    private ScopeMapping(Name alias, Table<ScopeMappingRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private ScopeMapping(Name alias, Table<ScopeMappingRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -79,12 +81,11 @@ public class ScopeMapping extends TableImpl<ScopeMappingRecord> {
         this(alias, SCOPE_MAPPING);
     }
 
-    private ScopeMapping(Name alias, Table<ScopeMappingRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private ScopeMapping(Name alias, Table<ScopeMappingRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.scope_mapping</code> table reference
+     */
+    public ScopeMapping() {
+        this(DSL.name("scope_mapping"), null);
     }
 
     public <O extends Record> ScopeMapping(Table<O> child, ForeignKey<O, ScopeMappingRecord> key) {
@@ -93,12 +94,12 @@ public class ScopeMapping extends TableImpl<ScopeMappingRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_SCOPE_MAPPING_ROLE);
+        return Arrays.asList(Indexes.IDX_SCOPE_MAPPING_ROLE);
     }
 
     @Override
@@ -107,17 +108,32 @@ public class ScopeMapping extends TableImpl<ScopeMappingRecord> {
     }
 
     @Override
-    public List<UniqueKey<ScopeMappingRecord>> getKeys() {
-        return Arrays.<UniqueKey<ScopeMappingRecord>>asList(Keys.CONSTRAINT_81);
-    }
-
-    @Override
     public List<ForeignKey<ScopeMappingRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ScopeMappingRecord, ?>>asList(Keys.SCOPE_MAPPING__FK_OUSE064PLMLR732LXJCN1Q5F1);
+        return Arrays.asList(Keys.SCOPE_MAPPING__FK_OUSE064PLMLR732LXJCN1Q5F1, Keys.SCOPE_MAPPING__FK_P3RH9GRKU11KQFRS4FLTT7RNQ);
     }
 
+    private transient Client _client;
+    private transient KeycloakRole _keycloakRole;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.client</code> table.
+     */
     public Client client() {
-        return new Client(this, Keys.SCOPE_MAPPING__FK_OUSE064PLMLR732LXJCN1Q5F1);
+        if (_client == null)
+            _client = new Client(this, Keys.SCOPE_MAPPING__FK_OUSE064PLMLR732LXJCN1Q5F1);
+
+        return _client;
+    }
+
+    /**
+     * Get the implicit join path to the <code>keycloak.keycloak_role</code>
+     * table.
+     */
+    public KeycloakRole keycloakRole() {
+        if (_keycloakRole == null)
+            _keycloakRole = new KeycloakRole(this, Keys.SCOPE_MAPPING__FK_P3RH9GRKU11KQFRS4FLTT7RNQ);
+
+        return _keycloakRole;
     }
 
     @Override

@@ -23,91 +23,99 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class FedUserAttributeDao extends AbstractReactiveVertxDAO<FedUserAttributeRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute, String, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>, Future<Integer>, Future<String>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<FedUserAttributeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute,String> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public FedUserAttributeDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(FedUserAttribute.FED_USER_ATTRIBUTE, com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute.class, new ReactiveClassicQueryExecutor<FedUserAttributeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getFedUserAttributeMapper()));
-    }
+        public FedUserAttributeDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(FedUserAttribute.FED_USER_ATTRIBUTE, com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute.class, new ReactiveClassicQueryExecutor<FedUserAttributeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getFedUserAttributeMapper()));
+        }
 
-    @Override
-    protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute object) {
-        return object.getId();
-    }
+        @Override
+        protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute object) {
+                return object.getId();
+        }
 
-    /**
+        /**
      * Find records that have <code>name IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByName(Collection<String> values) {
-        return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.NAME.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByName(Collection<String> values) {
+                return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.NAME.in(values));
+        }
 
-    /**
-     * Find records that have <code>name IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>name IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByName(Collection<String> values, int limit) {
-        return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.NAME.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByName(Collection<String> values, int limit) {
+                return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.NAME.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>user_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByUserId(Collection<String> values) {
-        return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.USER_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByUserId(Collection<String> values) {
+                return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.USER_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>user_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>user_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByUserId(Collection<String> values, int limit) {
-        return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.USER_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByUserId(Collection<String> values, int limit) {
+                return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.USER_ID.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>realm_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByRealmId(Collection<String> values) {
-        return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.REALM_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByRealmId(Collection<String> values) {
+                return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.REALM_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>realm_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>realm_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByRealmId(Collection<String> values, int limit) {
-        return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.REALM_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByRealmId(Collection<String> values, int limit) {
+                return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.REALM_ID.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>storage_provider_id IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>storage_provider_id IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByStorageProviderId(Collection<String> values) {
-        return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.STORAGE_PROVIDER_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByStorageProviderId(Collection<String> values) {
+                return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.STORAGE_PROVIDER_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>storage_provider_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>storage_provider_id IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByStorageProviderId(Collection<String> values, int limit) {
-        return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.STORAGE_PROVIDER_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByStorageProviderId(Collection<String> values, int limit) {
+                return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.STORAGE_PROVIDER_ID.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>value IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByValue(Collection<String> values) {
-        return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.VALUE.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByValue(Collection<String> values) {
+                return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.VALUE.in(values));
+        }
 
-    /**
-     * Find records that have <code>value IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>value IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByValue(Collection<String> values, int limit) {
-        return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.VALUE.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute>> findManyByValue(Collection<String> values, int limit) {
+                return findManyByCondition(FedUserAttribute.FED_USER_ATTRIBUTE.VALUE.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<FedUserAttributeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute,String> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<FedUserAttributeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute,String>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<FedUserAttributeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute,String> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<FedUserAttributeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserAttribute,String>) super.queryExecutor();
+        }
 }

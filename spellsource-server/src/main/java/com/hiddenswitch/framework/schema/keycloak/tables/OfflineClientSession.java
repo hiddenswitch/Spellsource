@@ -17,13 +17,14 @@ import org.jooq.ForeignKey;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfflineClientSession extends TableImpl<OfflineClientSessionRecord> {
 
-    private static final long serialVersionUID = 1255836861;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.offline_client_session</code>
@@ -51,58 +52,27 @@ public class OfflineClientSession extends TableImpl<OfflineClientSessionRecord> 
     /**
      * The column <code>keycloak.offline_client_session.user_session_id</code>.
      */
-    public final TableField<OfflineClientSessionRecord, String> USER_SESSION_ID = createField(DSL.name("user_session_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<OfflineClientSessionRecord, String> USER_SESSION_ID = createField(DSL.name("user_session_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.offline_client_session.client_id</code>.
      */
-    public final TableField<OfflineClientSessionRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<OfflineClientSessionRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.offline_client_session.offline_flag</code>.
      */
-    public final TableField<OfflineClientSessionRecord, String> OFFLINE_FLAG = createField(DSL.name("offline_flag"), org.jooq.impl.SQLDataType.VARCHAR(4).nullable(false), this, "");
+    public final TableField<OfflineClientSessionRecord, String> OFFLINE_FLAG = createField(DSL.name("offline_flag"), SQLDataType.VARCHAR(4).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.offline_client_session.timestamp</code>.
      */
-    public final TableField<OfflineClientSessionRecord, Integer> TIMESTAMP = createField(DSL.name("timestamp"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<OfflineClientSessionRecord, Integer> TIMESTAMP = createField(DSL.name("timestamp"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.offline_client_session.data</code>.
      */
-    public final TableField<OfflineClientSessionRecord, String> DATA = createField(DSL.name("data"), org.jooq.impl.SQLDataType.CLOB, this, "");
-
-    /**
-     * The column <code>keycloak.offline_client_session.client_storage_provider</code>.
-     */
-    public final TableField<OfflineClientSessionRecord, String> CLIENT_STORAGE_PROVIDER = createField(DSL.name("client_storage_provider"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false).defaultValue(org.jooq.impl.DSL.field("'local'::character varying", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
-
-    /**
-     * The column <code>keycloak.offline_client_session.external_client_id</code>.
-     */
-    public final TableField<OfflineClientSessionRecord, String> EXTERNAL_CLIENT_ID = createField(DSL.name("external_client_id"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false).defaultValue(org.jooq.impl.DSL.field("'local'::character varying", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
-
-    /**
-     * Create a <code>keycloak.offline_client_session</code> table reference
-     */
-    public OfflineClientSession() {
-        this(DSL.name("offline_client_session"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.offline_client_session</code> table reference
-     */
-    public OfflineClientSession(String alias) {
-        this(DSL.name(alias), OFFLINE_CLIENT_SESSION);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.offline_client_session</code> table reference
-     */
-    public OfflineClientSession(Name alias) {
-        this(alias, OFFLINE_CLIENT_SESSION);
-    }
+    public final TableField<OfflineClientSessionRecord, String> DATA = createField(DSL.name("data"), SQLDataType.CLOB, this, "");
 
     private OfflineClientSession(Name alias, Table<OfflineClientSessionRecord> aliased) {
         this(alias, aliased, null);
@@ -112,28 +82,46 @@ public class OfflineClientSession extends TableImpl<OfflineClientSessionRecord> 
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.offline_client_session</code> table
+     * reference
+     */
+    public OfflineClientSession(String alias) {
+        this(DSL.name(alias), OFFLINE_CLIENT_SESSION);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.offline_client_session</code> table
+     * reference
+     */
+    public OfflineClientSession(Name alias) {
+        this(alias, OFFLINE_CLIENT_SESSION);
+    }
+
+    /**
+     * Create a <code>keycloak.offline_client_session</code> table reference
+     */
+    public OfflineClientSession() {
+        this(DSL.name("offline_client_session"), null);
+    }
+
     public <O extends Record> OfflineClientSession(Table<O> child, ForeignKey<O, OfflineClientSessionRecord> key) {
         super(child, key, OFFLINE_CLIENT_SESSION);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_US_SESS_ID_ON_CL_SESS);
+        return Arrays.asList(Indexes.IDX_US_SESS_ID_ON_CL_SESS);
     }
 
     @Override
     public UniqueKey<OfflineClientSessionRecord> getPrimaryKey() {
         return Keys.CONSTRAINT_OFFL_CL_SES_PK3;
-    }
-
-    @Override
-    public List<UniqueKey<OfflineClientSessionRecord>> getKeys() {
-        return Arrays.<UniqueKey<OfflineClientSessionRecord>>asList(Keys.CONSTRAINT_OFFL_CL_SES_PK3);
     }
 
     @Override
@@ -163,11 +151,11 @@ public class OfflineClientSession extends TableImpl<OfflineClientSessionRecord> 
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<String, String, String, Integer, String, String, String> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row5<String, String, String, Integer, String> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }

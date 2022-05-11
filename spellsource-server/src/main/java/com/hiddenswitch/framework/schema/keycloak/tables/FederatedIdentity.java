@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class FederatedIdentity extends TableImpl<FederatedIdentityRecord> {
 
-    private static final long serialVersionUID = 82356485;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.federated_identity</code>
@@ -51,53 +52,32 @@ public class FederatedIdentity extends TableImpl<FederatedIdentityRecord> {
     /**
      * The column <code>keycloak.federated_identity.identity_provider</code>.
      */
-    public final TableField<FederatedIdentityRecord, String> IDENTITY_PROVIDER = createField(DSL.name("identity_provider"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<FederatedIdentityRecord, String> IDENTITY_PROVIDER = createField(DSL.name("identity_provider"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.federated_identity.realm_id</code>.
      */
-    public final TableField<FederatedIdentityRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<FederatedIdentityRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.federated_identity.federated_user_id</code>.
      */
-    public final TableField<FederatedIdentityRecord, String> FEDERATED_USER_ID = createField(DSL.name("federated_user_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<FederatedIdentityRecord, String> FEDERATED_USER_ID = createField(DSL.name("federated_user_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.federated_identity.federated_username</code>.
      */
-    public final TableField<FederatedIdentityRecord, String> FEDERATED_USERNAME = createField(DSL.name("federated_username"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<FederatedIdentityRecord, String> FEDERATED_USERNAME = createField(DSL.name("federated_username"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.federated_identity.token</code>.
      */
-    public final TableField<FederatedIdentityRecord, String> TOKEN = createField(DSL.name("token"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<FederatedIdentityRecord, String> TOKEN = createField(DSL.name("token"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>keycloak.federated_identity.user_id</code>.
      */
-    public final TableField<FederatedIdentityRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.federated_identity</code> table reference
-     */
-    public FederatedIdentity() {
-        this(DSL.name("federated_identity"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.federated_identity</code> table reference
-     */
-    public FederatedIdentity(String alias) {
-        this(DSL.name(alias), FEDERATED_IDENTITY);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.federated_identity</code> table reference
-     */
-    public FederatedIdentity(Name alias) {
-        this(alias, FEDERATED_IDENTITY);
-    }
+    public final TableField<FederatedIdentityRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     private FederatedIdentity(Name alias, Table<FederatedIdentityRecord> aliased) {
         this(alias, aliased, null);
@@ -107,18 +87,41 @@ public class FederatedIdentity extends TableImpl<FederatedIdentityRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.federated_identity</code> table
+     * reference
+     */
+    public FederatedIdentity(String alias) {
+        this(DSL.name(alias), FEDERATED_IDENTITY);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.federated_identity</code> table
+     * reference
+     */
+    public FederatedIdentity(Name alias) {
+        this(alias, FEDERATED_IDENTITY);
+    }
+
+    /**
+     * Create a <code>keycloak.federated_identity</code> table reference
+     */
+    public FederatedIdentity() {
+        this(DSL.name("federated_identity"), null);
+    }
+
     public <O extends Record> FederatedIdentity(Table<O> child, ForeignKey<O, FederatedIdentityRecord> key) {
         super(child, key, FEDERATED_IDENTITY);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_FEDIDENTITY_FEDUSER, Indexes.IDX_FEDIDENTITY_USER);
+        return Arrays.asList(Indexes.IDX_FEDIDENTITY_FEDUSER, Indexes.IDX_FEDIDENTITY_USER);
     }
 
     @Override
@@ -127,17 +130,21 @@ public class FederatedIdentity extends TableImpl<FederatedIdentityRecord> {
     }
 
     @Override
-    public List<UniqueKey<FederatedIdentityRecord>> getKeys() {
-        return Arrays.<UniqueKey<FederatedIdentityRecord>>asList(Keys.CONSTRAINT_40);
-    }
-
-    @Override
     public List<ForeignKey<FederatedIdentityRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<FederatedIdentityRecord, ?>>asList(Keys.FEDERATED_IDENTITY__FK404288B92EF007A6);
+        return Arrays.asList(Keys.FEDERATED_IDENTITY__FK404288B92EF007A6);
     }
 
+    private transient UserEntity _userEntity;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table.
+     */
     public UserEntity userEntity() {
-        return new UserEntity(this, Keys.FEDERATED_IDENTITY__FK404288B92EF007A6);
+        if (_userEntity == null)
+            _userEntity = new UserEntity(this, Keys.FEDERATED_IDENTITY__FK404288B92EF007A6);
+
+        return _userEntity;
     }
 
     @Override

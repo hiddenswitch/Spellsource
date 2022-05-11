@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserRoleMapping extends TableImpl<UserRoleMappingRecord> {
 
-    private static final long serialVersionUID = -181627960;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.user_role_mapping</code>
@@ -51,18 +52,19 @@ public class UserRoleMapping extends TableImpl<UserRoleMappingRecord> {
     /**
      * The column <code>keycloak.user_role_mapping.role_id</code>.
      */
-    public final TableField<UserRoleMappingRecord, String> ROLE_ID = createField(DSL.name("role_id"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<UserRoleMappingRecord, String> ROLE_ID = createField(DSL.name("role_id"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.user_role_mapping.user_id</code>.
      */
-    public final TableField<UserRoleMappingRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<UserRoleMappingRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
-    /**
-     * Create a <code>keycloak.user_role_mapping</code> table reference
-     */
-    public UserRoleMapping() {
-        this(DSL.name("user_role_mapping"), null);
+    private UserRoleMapping(Name alias, Table<UserRoleMappingRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private UserRoleMapping(Name alias, Table<UserRoleMappingRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -79,12 +81,11 @@ public class UserRoleMapping extends TableImpl<UserRoleMappingRecord> {
         this(alias, USER_ROLE_MAPPING);
     }
 
-    private UserRoleMapping(Name alias, Table<UserRoleMappingRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private UserRoleMapping(Name alias, Table<UserRoleMappingRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.user_role_mapping</code> table reference
+     */
+    public UserRoleMapping() {
+        this(DSL.name("user_role_mapping"), null);
     }
 
     public <O extends Record> UserRoleMapping(Table<O> child, ForeignKey<O, UserRoleMappingRecord> key) {
@@ -93,12 +94,12 @@ public class UserRoleMapping extends TableImpl<UserRoleMappingRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_USER_ROLE_MAPPING);
+        return Arrays.asList(Indexes.IDX_USER_ROLE_MAPPING);
     }
 
     @Override
@@ -107,17 +108,21 @@ public class UserRoleMapping extends TableImpl<UserRoleMappingRecord> {
     }
 
     @Override
-    public List<UniqueKey<UserRoleMappingRecord>> getKeys() {
-        return Arrays.<UniqueKey<UserRoleMappingRecord>>asList(Keys.CONSTRAINT_C);
-    }
-
-    @Override
     public List<ForeignKey<UserRoleMappingRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<UserRoleMappingRecord, ?>>asList(Keys.USER_ROLE_MAPPING__FK_C4FQV34P1MBYLLOXANG7B1Q3L);
+        return Arrays.asList(Keys.USER_ROLE_MAPPING__FK_C4FQV34P1MBYLLOXANG7B1Q3L);
     }
 
+    private transient UserEntity _userEntity;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table.
+     */
     public UserEntity userEntity() {
-        return new UserEntity(this, Keys.USER_ROLE_MAPPING__FK_C4FQV34P1MBYLLOXANG7B1Q3L);
+        if (_userEntity == null)
+            _userEntity = new UserEntity(this, Keys.USER_ROLE_MAPPING__FK_C4FQV34P1MBYLLOXANG7B1Q3L);
+
+        return _userEntity;
     }
 
     @Override

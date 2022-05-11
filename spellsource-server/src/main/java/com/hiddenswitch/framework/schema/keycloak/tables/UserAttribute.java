@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserAttribute extends TableImpl<UserAttributeRecord> {
 
-    private static final long serialVersionUID = 619195525;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.user_attribute</code>
@@ -51,28 +52,29 @@ public class UserAttribute extends TableImpl<UserAttributeRecord> {
     /**
      * The column <code>keycloak.user_attribute.name</code>.
      */
-    public final TableField<UserAttributeRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<UserAttributeRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.user_attribute.value</code>.
      */
-    public final TableField<UserAttributeRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserAttributeRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_attribute.user_id</code>.
      */
-    public final TableField<UserAttributeRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<UserAttributeRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.user_attribute.id</code>.
      */
-    public final TableField<UserAttributeRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false).defaultValue(org.jooq.impl.DSL.field("'sybase-needs-something-here'::character varying", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+    public final TableField<UserAttributeRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false).defaultValue(DSL.field("'sybase-needs-something-here'::character varying", SQLDataType.VARCHAR)), this, "");
 
-    /**
-     * Create a <code>keycloak.user_attribute</code> table reference
-     */
-    public UserAttribute() {
-        this(DSL.name("user_attribute"), null);
+    private UserAttribute(Name alias, Table<UserAttributeRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private UserAttribute(Name alias, Table<UserAttributeRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -89,12 +91,11 @@ public class UserAttribute extends TableImpl<UserAttributeRecord> {
         this(alias, USER_ATTRIBUTE);
     }
 
-    private UserAttribute(Name alias, Table<UserAttributeRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private UserAttribute(Name alias, Table<UserAttributeRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.user_attribute</code> table reference
+     */
+    public UserAttribute() {
+        this(DSL.name("user_attribute"), null);
     }
 
     public <O extends Record> UserAttribute(Table<O> child, ForeignKey<O, UserAttributeRecord> key) {
@@ -103,12 +104,12 @@ public class UserAttribute extends TableImpl<UserAttributeRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_USER_ATTRIBUTE);
+        return Arrays.asList(Indexes.IDX_USER_ATTRIBUTE);
     }
 
     @Override
@@ -117,17 +118,21 @@ public class UserAttribute extends TableImpl<UserAttributeRecord> {
     }
 
     @Override
-    public List<UniqueKey<UserAttributeRecord>> getKeys() {
-        return Arrays.<UniqueKey<UserAttributeRecord>>asList(Keys.CONSTRAINT_USER_ATTRIBUTE_PK);
-    }
-
-    @Override
     public List<ForeignKey<UserAttributeRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<UserAttributeRecord, ?>>asList(Keys.USER_ATTRIBUTE__FK_5HRM2VLF9QL5FU043KQEPOVBR);
+        return Arrays.asList(Keys.USER_ATTRIBUTE__FK_5HRM2VLF9QL5FU043KQEPOVBR);
     }
 
+    private transient UserEntity _userEntity;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table.
+     */
     public UserEntity userEntity() {
-        return new UserEntity(this, Keys.USER_ATTRIBUTE__FK_5HRM2VLF9QL5FU043KQEPOVBR);
+        if (_userEntity == null)
+            _userEntity = new UserEntity(this, Keys.USER_ATTRIBUTE__FK_5HRM2VLF9QL5FU043KQEPOVBR);
+
+        return _userEntity;
     }
 
     @Override

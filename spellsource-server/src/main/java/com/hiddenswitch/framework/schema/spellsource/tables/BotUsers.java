@@ -23,6 +23,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -32,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class BotUsers extends TableImpl<BotUsersRecord> {
 
-    private static final long serialVersionUID = -306192853;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>spellsource.bot_users</code>
@@ -50,13 +51,14 @@ public class BotUsers extends TableImpl<BotUsersRecord> {
     /**
      * The column <code>spellsource.bot_users.id</code>.
      */
-    public final TableField<BotUsersRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<BotUsersRecord, String> ID = createField(DSL.name("id"), SQLDataType.CLOB.nullable(false), this, "");
 
-    /**
-     * Create a <code>spellsource.bot_users</code> table reference
-     */
-    public BotUsers() {
-        this(DSL.name("bot_users"), null);
+    private BotUsers(Name alias, Table<BotUsersRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private BotUsers(Name alias, Table<BotUsersRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -73,12 +75,11 @@ public class BotUsers extends TableImpl<BotUsersRecord> {
         this(alias, BOT_USERS);
     }
 
-    private BotUsers(Name alias, Table<BotUsersRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private BotUsers(Name alias, Table<BotUsersRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>spellsource.bot_users</code> table reference
+     */
+    public BotUsers() {
+        this(DSL.name("bot_users"), null);
     }
 
     public <O extends Record> BotUsers(Table<O> child, ForeignKey<O, BotUsersRecord> key) {
@@ -87,7 +88,7 @@ public class BotUsers extends TableImpl<BotUsersRecord> {
 
     @Override
     public Schema getSchema() {
-        return Spellsource.SPELLSOURCE;
+        return aliased() ? null : Spellsource.SPELLSOURCE;
     }
 
     @Override
@@ -96,17 +97,21 @@ public class BotUsers extends TableImpl<BotUsersRecord> {
     }
 
     @Override
-    public List<UniqueKey<BotUsersRecord>> getKeys() {
-        return Arrays.<UniqueKey<BotUsersRecord>>asList(Keys.BOT_USERS_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<BotUsersRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<BotUsersRecord, ?>>asList(Keys.BOT_USERS__BOT_USERS_ID_FKEY);
+        return Arrays.asList(Keys.BOT_USERS__BOT_USERS_ID_FKEY);
     }
 
+    private transient UserEntity _userEntity;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table.
+     */
     public UserEntity userEntity() {
-        return new UserEntity(this, Keys.BOT_USERS__BOT_USERS_ID_FKEY);
+        if (_userEntity == null)
+            _userEntity = new UserEntity(this, Keys.BOT_USERS__BOT_USERS_ID_FKEY);
+
+        return _userEntity;
     }
 
     @Override

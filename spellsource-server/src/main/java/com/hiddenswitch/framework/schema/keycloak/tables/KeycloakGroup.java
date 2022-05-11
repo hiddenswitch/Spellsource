@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class KeycloakGroup extends TableImpl<KeycloakGroupRecord> {
 
-    private static final long serialVersionUID = -885145426;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.keycloak_group</code>
@@ -49,28 +50,29 @@ public class KeycloakGroup extends TableImpl<KeycloakGroupRecord> {
     /**
      * The column <code>keycloak.keycloak_group.id</code>.
      */
-    public final TableField<KeycloakGroupRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<KeycloakGroupRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.keycloak_group.name</code>.
      */
-    public final TableField<KeycloakGroupRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<KeycloakGroupRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.keycloak_group.parent_group</code>.
      */
-    public final TableField<KeycloakGroupRecord, String> PARENT_GROUP = createField(DSL.name("parent_group"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<KeycloakGroupRecord, String> PARENT_GROUP = createField(DSL.name("parent_group"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.keycloak_group.realm_id</code>.
      */
-    public final TableField<KeycloakGroupRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<KeycloakGroupRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36), this, "");
 
-    /**
-     * Create a <code>keycloak.keycloak_group</code> table reference
-     */
-    public KeycloakGroup() {
-        this(DSL.name("keycloak_group"), null);
+    private KeycloakGroup(Name alias, Table<KeycloakGroupRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private KeycloakGroup(Name alias, Table<KeycloakGroupRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -87,12 +89,11 @@ public class KeycloakGroup extends TableImpl<KeycloakGroupRecord> {
         this(alias, KEYCLOAK_GROUP);
     }
 
-    private KeycloakGroup(Name alias, Table<KeycloakGroupRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private KeycloakGroup(Name alias, Table<KeycloakGroupRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.keycloak_group</code> table reference
+     */
+    public KeycloakGroup() {
+        this(DSL.name("keycloak_group"), null);
     }
 
     public <O extends Record> KeycloakGroup(Table<O> child, ForeignKey<O, KeycloakGroupRecord> key) {
@@ -101,7 +102,7 @@ public class KeycloakGroup extends TableImpl<KeycloakGroupRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -110,17 +111,25 @@ public class KeycloakGroup extends TableImpl<KeycloakGroupRecord> {
     }
 
     @Override
-    public List<UniqueKey<KeycloakGroupRecord>> getKeys() {
-        return Arrays.<UniqueKey<KeycloakGroupRecord>>asList(Keys.CONSTRAINT_GROUP, Keys.SIBLING_NAMES);
+    public List<UniqueKey<KeycloakGroupRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.SIBLING_NAMES);
     }
 
     @Override
     public List<ForeignKey<KeycloakGroupRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<KeycloakGroupRecord, ?>>asList(Keys.KEYCLOAK_GROUP__FK_GROUP_REALM);
+        return Arrays.asList(Keys.KEYCLOAK_GROUP__FK_GROUP_REALM);
     }
 
+    private transient Realm _realm;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.KEYCLOAK_GROUP__FK_GROUP_REALM);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.KEYCLOAK_GROUP__FK_GROUP_REALM);
+
+        return _realm;
     }
 
     @Override

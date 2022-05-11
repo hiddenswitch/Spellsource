@@ -19,7 +19,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.UserEntityAddons;
 
 
 /**
- * Convenience access to all tables in spellsource
+ * Convenience access to all tables in spellsource.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {

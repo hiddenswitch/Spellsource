@@ -2,7 +2,6 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 buildscript {
     ext {
-        grpcVersion = '1.34.0'
         grpcWindowsArtifactsUrl = 'https://packages.grpc.io/archive/2020/11/adf6b33c3d0283dc4c3d70b1ad6f5fa01ca5b69a-ec34da51-aac4-4cc4-afde-1d74252db27c/protoc/grpc-protoc_windows_x64-1.35.0-dev.zip'
         grpcUnityArtifactsUrl = 'https://packages.grpc.io/archive/2020/11/adf6b33c3d0283dc4c3d70b1ad6f5fa01ca5b69a-ec34da51-aac4-4cc4-afde-1d74252db27c/csharp/grpc_unity_package.2.35.0-dev202011301311.zip'
     }
@@ -16,41 +15,33 @@ buildscript {
 
 plugins {
     id 'com.google.protobuf' version '0.8.18'
+    id 'java-library'
+    id 'idea'
 }
-
-apply plugin: 'com.google.protobuf'
-apply plugin: 'java-library'
-apply plugin: 'idea'
 
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def csharpRootDir = 'src/csharp/HiddenSwitch'
-def dotnetCmd = ["$project.rootProject.projectDir/bin/dotnet"]
-if (isWindows) {
-    dotnetCmd = ["$project.rootProject.projectDir/bin/bash.exe"] + dotnetCmd
-}
+def dotnetCmd = ["dotnet"]
 def csharpGrpcPath = "$project.rootProject.projectDir/bin/grpc_csharp_plugin" + (isWindows ? ".exe" : "")
 
 dependencies {
     api group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
     // https://mvnrepository.com/artifact/com.google.api.grpc/proto-google-common-protos
     api group: 'com.google.api.grpc', name: 'proto-google-common-protos', version: '2.0.1'
-    api(group: 'com.google.protobuf', name: 'protobuf-java-util', version: "$googleProtobufJavaVersion") {
+    api(group: 'com.google.protobuf', name: 'protobuf-java-util', version: protocVersion) {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
-    api("com.google.protobuf:protobuf-javalite:$googleProtobufJavaVersion") {
+    api("com.google.protobuf:protobuf-java:$protocVersion") {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
-    api("com.google.protobuf:protobuf-java-util:$googleProtobufJavaVersion") {
+    api("com.google.protobuf:protobuf-java-util:$protocVersion") {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
-    api("com.hubspot.jackson:jackson-datatype-protobuf:0.9.12") {
+    api("io.grpc:grpc-services:$grpcVersion") {
+        exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
     }
-    api(group: 'io.vertx', name: 'vertx-grpc', version: vertxVersion) {
-        exclude group: 'com.google.code.gson', module: 'gson'
-    }
-    api("io.grpc:grpc-services:${grpcVersion}") {
-        exclude group: 'com.google.code.gson', module: 'gson'
+    api("com.hubspot.jackson:jackson-datatype-protobuf:0.9.12") {
         exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
     }
     api('com.netflix.concurrency-limits:concurrency-limits-grpc:0.3.6') {
@@ -60,6 +51,9 @@ dependencies {
     api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion") {
         exclude group: 'jakarta.xml.bind', module: '*'
         exclude group: 'jakarta.activation', module: '*'
+    }
+    api(group: 'io.vertx', name: 'vertx-grpc', version: vertxVersion) {
+        exclude group: 'com.google.code.gson', module: 'gson'
     }
 }
 
@@ -90,7 +84,7 @@ task dll(type: Exec, group: 'build') {
     inputs.file("$csharpRootDir/Framework/Framework.csproj")
     inputs.files("$csharpRootDir/Framework/*.cs")
     // this is using docker-wrapped dotnet
-    commandLine dotnetCmd + ['publish', '--output', "/git/spellsource-protos/build/dlls"]
+    commandLine dotnetCmd + ['publish', '--output', "$project.buildDir/dlls"]
 }
 
 task testDll(type: Exec, group: 'verification') {
@@ -99,7 +93,7 @@ task testDll(type: Exec, group: 'verification') {
     outputs.dir("$project.buildDir/nunit")
     workingDir csharpRootDir
     // this is using docker-wrapped dotnet
-    commandLine dotnetCmd + ['test', '--results-directory', "/git/spellsource-protos/build/nunit"]
+    commandLine dotnetCmd + ['test', '--results-directory', "$project.buildDir/nunit"]
 }
 
 task installDll(type: Copy) {
@@ -121,7 +115,7 @@ task protosChanged(group: 'Spellsource') {
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:$googleProtobufJavaVersion"
+        artifact = "com.google.protobuf:protoc:$protocVersion"
     }
     plugins {
         grpc_java {

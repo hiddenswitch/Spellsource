@@ -8,9 +8,6 @@ import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.UserSessionRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
@@ -22,6 +19,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserSession extends TableImpl<UserSessionRecord> {
 
-    private static final long serialVersionUID = 1370338827;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.user_session</code>
@@ -49,68 +47,69 @@ public class UserSession extends TableImpl<UserSessionRecord> {
     /**
      * The column <code>keycloak.user_session.id</code>.
      */
-    public final TableField<UserSessionRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<UserSessionRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.user_session.auth_method</code>.
      */
-    public final TableField<UserSessionRecord, String> AUTH_METHOD = createField(DSL.name("auth_method"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserSessionRecord, String> AUTH_METHOD = createField(DSL.name("auth_method"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_session.ip_address</code>.
      */
-    public final TableField<UserSessionRecord, String> IP_ADDRESS = createField(DSL.name("ip_address"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserSessionRecord, String> IP_ADDRESS = createField(DSL.name("ip_address"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_session.last_session_refresh</code>.
      */
-    public final TableField<UserSessionRecord, Integer> LAST_SESSION_REFRESH = createField(DSL.name("last_session_refresh"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<UserSessionRecord, Integer> LAST_SESSION_REFRESH = createField(DSL.name("last_session_refresh"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.user_session.login_username</code>.
      */
-    public final TableField<UserSessionRecord, String> LOGIN_USERNAME = createField(DSL.name("login_username"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserSessionRecord, String> LOGIN_USERNAME = createField(DSL.name("login_username"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_session.realm_id</code>.
      */
-    public final TableField<UserSessionRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserSessionRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_session.remember_me</code>.
      */
-    public final TableField<UserSessionRecord, Boolean> REMEMBER_ME = createField(DSL.name("remember_me"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<UserSessionRecord, Boolean> REMEMBER_ME = createField(DSL.name("remember_me"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.user_session.started</code>.
      */
-    public final TableField<UserSessionRecord, Integer> STARTED = createField(DSL.name("started"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<UserSessionRecord, Integer> STARTED = createField(DSL.name("started"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.user_session.user_id</code>.
      */
-    public final TableField<UserSessionRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserSessionRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_session.user_session_state</code>.
      */
-    public final TableField<UserSessionRecord, Integer> USER_SESSION_STATE = createField(DSL.name("user_session_state"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<UserSessionRecord, Integer> USER_SESSION_STATE = createField(DSL.name("user_session_state"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.user_session.broker_session_id</code>.
      */
-    public final TableField<UserSessionRecord, String> BROKER_SESSION_ID = createField(DSL.name("broker_session_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserSessionRecord, String> BROKER_SESSION_ID = createField(DSL.name("broker_session_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_session.broker_user_id</code>.
      */
-    public final TableField<UserSessionRecord, String> BROKER_USER_ID = createField(DSL.name("broker_user_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserSessionRecord, String> BROKER_USER_ID = createField(DSL.name("broker_user_id"), SQLDataType.VARCHAR(255), this, "");
 
-    /**
-     * Create a <code>keycloak.user_session</code> table reference
-     */
-    public UserSession() {
-        this(DSL.name("user_session"), null);
+    private UserSession(Name alias, Table<UserSessionRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private UserSession(Name alias, Table<UserSessionRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -127,12 +126,11 @@ public class UserSession extends TableImpl<UserSessionRecord> {
         this(alias, USER_SESSION);
     }
 
-    private UserSession(Name alias, Table<UserSessionRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private UserSession(Name alias, Table<UserSessionRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.user_session</code> table reference
+     */
+    public UserSession() {
+        this(DSL.name("user_session"), null);
     }
 
     public <O extends Record> UserSession(Table<O> child, ForeignKey<O, UserSessionRecord> key) {
@@ -141,17 +139,12 @@ public class UserSession extends TableImpl<UserSessionRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public UniqueKey<UserSessionRecord> getPrimaryKey() {
         return Keys.CONSTRAINT_57;
-    }
-
-    @Override
-    public List<UniqueKey<UserSessionRecord>> getKeys() {
-        return Arrays.<UniqueKey<UserSessionRecord>>asList(Keys.CONSTRAINT_57);
     }
 
     @Override

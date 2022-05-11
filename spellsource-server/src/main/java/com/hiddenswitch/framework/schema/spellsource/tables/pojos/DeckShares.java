@@ -9,13 +9,14 @@ import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.IDeckShar
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 
 
+import static io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo.*;
 /**
  * indicates a deck shared to a player
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DeckShares implements VertxPojo, IDeckShares {
 
-    private static final long serialVersionUID = 1338556433;
+    private static final long serialVersionUID = 1L;
 
     private String  deckId;
     private String  shareRecipientId;
@@ -39,38 +40,56 @@ public class DeckShares implements VertxPojo, IDeckShares {
         this.trashedByRecipient = trashedByRecipient;
     }
 
-    public DeckShares(io.vertx.core.json.JsonObject json) {
-        this();
-        fromJson(json);
-    }
+        public DeckShares(io.vertx.core.json.JsonObject json) {
+                this();
+                fromJson(json);
+        }
 
+    /**
+     * Getter for <code>spellsource.deck_shares.deck_id</code>.
+     */
     @Override
     public String getDeckId() {
         return this.deckId;
     }
 
+    /**
+     * Setter for <code>spellsource.deck_shares.deck_id</code>.
+     */
     @Override
     public DeckShares setDeckId(String deckId) {
         this.deckId = deckId;
         return this;
     }
 
+    /**
+     * Getter for <code>spellsource.deck_shares.share_recipient_id</code>.
+     */
     @Override
     public String getShareRecipientId() {
         return this.shareRecipientId;
     }
 
+    /**
+     * Setter for <code>spellsource.deck_shares.share_recipient_id</code>.
+     */
     @Override
     public DeckShares setShareRecipientId(String shareRecipientId) {
         this.shareRecipientId = shareRecipientId;
         return this;
     }
 
+    /**
+     * Getter for <code>spellsource.deck_shares.trashed_by_recipient</code>.
+     */
     @Override
     public Boolean getTrashedByRecipient() {
         return this.trashedByRecipient;
     }
 
+    /**
+     * Setter for <code>spellsource.deck_shares.trashed_by_recipient</code>.
+     */
     @Override
     public DeckShares setTrashedByRecipient(Boolean trashedByRecipient) {
         this.trashedByRecipient = trashedByRecipient;

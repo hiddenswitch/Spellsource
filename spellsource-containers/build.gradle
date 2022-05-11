@@ -1,12 +1,8 @@
 plugins {
     id 'java-library'
     id 'idea'
-    id 'com.bmuschko.docker-remote-api' version '6.6.1'
+    id 'com.bmuschko.docker-remote-api' version '7.3.0'
 }
-
-apply plugin: 'idea'
-apply plugin: 'java-library'
-apply plugin: 'com.bmuschko.docker-remote-api'
 
 import com.bmuschko.gradle.docker.tasks.image.*
 
@@ -32,15 +28,7 @@ task createPythonImage(type: DockerBuildImage) {
     images.set(["doctorpangloss/spellsource-pythonjava:latest"])
 }
 
-task createKeycloakStandaloneImage(type: DockerBuildImage) {
-    dependsOn += [tasks.processResources]
-    inputDir.set(new File("$project.projectDir/src/main/resources/docker/keycloak"))
-    dockerFile.set(new File("$project.projectDir/src/main/resources/docker/keycloak/Dockerfile.standalone"))
-    quiet.set(true)
-    images.set(["doctorpangloss/keycloak-standalone:latest"])
-}
-
-task createKeycloakClusteredImage(type: DockerBuildImage) {
+task createKeycloakImage(type: DockerBuildImage) {
     dependsOn += [tasks.processResources]
     inputDir.set(new File("$project.projectDir/src/main/resources/docker/keycloak"))
     dockerFile.set(new File("$project.projectDir/src/main/resources/docker/keycloak/Dockerfile"))
@@ -49,13 +37,13 @@ task createKeycloakClusteredImage(type: DockerBuildImage) {
 }
 
 task pushKeycloakClusteredImage(type: DockerPushImage) {
-    dependsOn += [createKeycloakClusteredImage]
-    images.set(createKeycloakClusteredImage.images.get())
+    dependsOn += [createKeycloakImage]
+    images.set(createKeycloakImage.images.get())
 }
 
 compileJava {
     // you won't really be able to use the postgres image unless you build it
-    dependsOn += [tasks.createPostgresImage, tasks.createKeycloakStandaloneImage, tasks.createKeycloakClusteredImage]
+    dependsOn += [tasks.createPostgresImage, tasks.createKeycloakImage, tasks.createKeycloakImage]
     options.warnings = false
 }
 

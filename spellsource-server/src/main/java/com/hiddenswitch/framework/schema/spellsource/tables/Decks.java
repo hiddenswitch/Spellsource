@@ -25,6 +25,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -34,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Decks extends TableImpl<DecksRecord> {
 
-    private static final long serialVersionUID = 1094927608;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>spellsource.decks</code>
@@ -52,58 +53,62 @@ public class Decks extends TableImpl<DecksRecord> {
     /**
      * The column <code>spellsource.decks.id</code>.
      */
-    public final TableField<DecksRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<DecksRecord, String> ID = createField(DSL.name("id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>spellsource.decks.created_by</code>. who created this deck originally
+     * The column <code>spellsource.decks.created_by</code>. who created this
+     * deck originally
      */
-    public final TableField<DecksRecord, String> CREATED_BY = createField(DSL.name("created_by"), org.jooq.impl.SQLDataType.VARCHAR.nullable(false), this, "who created this deck originally");
+    public final TableField<DecksRecord, String> CREATED_BY = createField(DSL.name("created_by"), SQLDataType.VARCHAR.nullable(false), this, "who created this deck originally");
 
     /**
-     * The column <code>spellsource.decks.last_edited_by</code>. who last edited this deck
+     * The column <code>spellsource.decks.last_edited_by</code>. who last edited
+     * this deck
      */
-    public final TableField<DecksRecord, String> LAST_EDITED_BY = createField(DSL.name("last_edited_by"), org.jooq.impl.SQLDataType.VARCHAR.nullable(false), this, "who last edited this deck");
+    public final TableField<DecksRecord, String> LAST_EDITED_BY = createField(DSL.name("last_edited_by"), SQLDataType.VARCHAR.nullable(false), this, "who last edited this deck");
 
     /**
      * The column <code>spellsource.decks.name</code>.
      */
-    public final TableField<DecksRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR, this, "");
+    public final TableField<DecksRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>spellsource.decks.hero_class</code>.
      */
-    public final TableField<DecksRecord, String> HERO_CLASS = createField(DSL.name("hero_class"), org.jooq.impl.SQLDataType.VARCHAR, this, "");
+    public final TableField<DecksRecord, String> HERO_CLASS = createField(DSL.name("hero_class"), SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>spellsource.decks.trashed</code>.
      */
-    public final TableField<DecksRecord, Boolean> TRASHED = createField(DSL.name("trashed"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<DecksRecord, Boolean> TRASHED = createField(DSL.name("trashed"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>spellsource.decks.format</code>.
      */
-    public final TableField<DecksRecord, String> FORMAT = createField(DSL.name("format"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<DecksRecord, String> FORMAT = createField(DSL.name("format"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>spellsource.decks.deck_type</code>.
      */
-    public final TableField<DecksRecord, Integer> DECK_TYPE = createField(DSL.name("deck_type"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<DecksRecord, Integer> DECK_TYPE = createField(DSL.name("deck_type"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>spellsource.decks.is_premade</code>. premades always shared with all users by application logic
+     * The column <code>spellsource.decks.is_premade</code>. premades always
+     * shared with all users by application logic
      */
-    public final TableField<DecksRecord, Boolean> IS_PREMADE = createField(DSL.name("is_premade"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "premades always shared with all users by application logic");
+    public final TableField<DecksRecord, Boolean> IS_PREMADE = createField(DSL.name("is_premade"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "premades always shared with all users by application logic");
 
     /**
      * The column <code>spellsource.decks.permitted_to_duplicate</code>.
      */
-    public final TableField<DecksRecord, Boolean> PERMITTED_TO_DUPLICATE = createField(DSL.name("permitted_to_duplicate"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<DecksRecord, Boolean> PERMITTED_TO_DUPLICATE = createField(DSL.name("permitted_to_duplicate"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
-    /**
-     * Create a <code>spellsource.decks</code> table reference
-     */
-    public Decks() {
-        this(DSL.name("decks"), null);
+    private Decks(Name alias, Table<DecksRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private Decks(Name alias, Table<DecksRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -120,12 +125,11 @@ public class Decks extends TableImpl<DecksRecord> {
         this(alias, DECKS);
     }
 
-    private Decks(Name alias, Table<DecksRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private Decks(Name alias, Table<DecksRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>spellsource.decks</code> table reference
+     */
+    public Decks() {
+        this(DSL.name("decks"), null);
     }
 
     public <O extends Record> Decks(Table<O> child, ForeignKey<O, DecksRecord> key) {
@@ -134,12 +138,12 @@ public class Decks extends TableImpl<DecksRecord> {
 
     @Override
     public Schema getSchema() {
-        return Spellsource.SPELLSOURCE;
+        return aliased() ? null : Spellsource.SPELLSOURCE;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.DECKS_CREATED_BY_IDX, Indexes.DECKS_IS_PREMADE_IDX, Indexes.DECKS_TRASHED_IDX);
+        return Arrays.asList(Indexes.DECKS_CREATED_BY_IDX, Indexes.DECKS_IS_PREMADE_IDX, Indexes.DECKS_TRASHED_IDX);
     }
 
     @Override
@@ -148,21 +152,33 @@ public class Decks extends TableImpl<DecksRecord> {
     }
 
     @Override
-    public List<UniqueKey<DecksRecord>> getKeys() {
-        return Arrays.<UniqueKey<DecksRecord>>asList(Keys.DECKS_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<DecksRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<DecksRecord, ?>>asList(Keys.DECKS__DECKS_CREATED_BY_FKEY, Keys.DECKS__DECKS_LAST_EDITED_BY_FKEY);
+        return Arrays.asList(Keys.DECKS__DECKS_CREATED_BY_FKEY, Keys.DECKS__DECKS_LAST_EDITED_BY_FKEY);
     }
 
+    private transient UserEntity _decksCreatedByFkey;
+    private transient UserEntity _decksLastEditedByFkey;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table, via the <code>decks_created_by_fkey</code> key.
+     */
     public UserEntity decksCreatedByFkey() {
-        return new UserEntity(this, Keys.DECKS__DECKS_CREATED_BY_FKEY);
+        if (_decksCreatedByFkey == null)
+            _decksCreatedByFkey = new UserEntity(this, Keys.DECKS__DECKS_CREATED_BY_FKEY);
+
+        return _decksCreatedByFkey;
     }
 
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table, via the <code>decks_last_edited_by_fkey</code> key.
+     */
     public UserEntity decksLastEditedByFkey() {
-        return new UserEntity(this, Keys.DECKS__DECKS_LAST_EDITED_BY_FKEY);
+        if (_decksLastEditedByFkey == null)
+            _decksLastEditedByFkey = new UserEntity(this, Keys.DECKS__DECKS_LAST_EDITED_BY_FKEY);
+
+        return _decksLastEditedByFkey;
     }
 
     @Override

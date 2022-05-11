@@ -4,12 +4,12 @@
 package com.hiddenswitch.framework.schema.spellsource.tables.interfaces;
 
 
-import io.github.jklingsporn.vertx.jooq.shared.UnexpectedJsonValueType;
 import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 
 import java.io.Serializable;
 
 
+import static io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo.*;
 /**
  * indicates a deck shared to a player
  */
@@ -51,43 +51,33 @@ public interface IDeckShares extends VertxPojo, Serializable {
     // -------------------------------------------------------------------------
 
     /**
-     * Load data from another generated Record/POJO implementing the common interface IDeckShares
+     * Load data from another generated Record/POJO implementing the common
+     * interface IDeckShares
      */
     public void from(IDeckShares from);
 
     /**
-     * Copy data into another generated Record/POJO implementing the common interface IDeckShares
+     * Copy data into another generated Record/POJO implementing the common
+     * interface IDeckShares
      */
     public <E extends IDeckShares> E into(E into);
 
-    @Override
-    public default IDeckShares fromJson(io.vertx.core.json.JsonObject json) {
-        try {
-            setDeckId(json.getString("deck_id"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("deck_id","java.lang.String",e);
+        @Override
+        public default IDeckShares fromJson(io.vertx.core.json.JsonObject json) {
+                setOrThrow(this::setDeckId,json::getString,"deck_id","java.lang.String");
+                setOrThrow(this::setShareRecipientId,json::getString,"share_recipient_id","java.lang.String");
+                setOrThrow(this::setTrashedByRecipient,json::getBoolean,"trashed_by_recipient","java.lang.Boolean");
+                return this;
         }
-        try {
-            setShareRecipientId(json.getString("share_recipient_id"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("share_recipient_id","java.lang.String",e);
-        }
-        try {
-            setTrashedByRecipient(json.getBoolean("trashed_by_recipient"));
-        } catch (java.lang.ClassCastException e) {
-            throw new UnexpectedJsonValueType("trashed_by_recipient","java.lang.Boolean",e);
-        }
-        return this;
-    }
 
 
-    @Override
-    public default io.vertx.core.json.JsonObject toJson() {
-        io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
-        json.put("deck_id",getDeckId());
-        json.put("share_recipient_id",getShareRecipientId());
-        json.put("trashed_by_recipient",getTrashedByRecipient());
-        return json;
-    }
+        @Override
+        public default io.vertx.core.json.JsonObject toJson() {
+                io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
+                json.put("deck_id",getDeckId());
+                json.put("share_recipient_id",getShareRecipientId());
+                json.put("trashed_by_recipient",getTrashedByRecipient());
+                return json;
+        }
 
 }

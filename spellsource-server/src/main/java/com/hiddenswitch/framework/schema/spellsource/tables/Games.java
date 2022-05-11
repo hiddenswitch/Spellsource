@@ -13,8 +13,6 @@ import io.github.jklingsporn.vertx.jooq.shared.postgres.JSONBToJsonObjectConvert
 import io.vertx.core.json.JsonObject;
 
 import java.time.OffsetDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
@@ -28,6 +26,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -37,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Games extends TableImpl<GamesRecord> {
 
-    private static final long serialVersionUID = 2072036610;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>spellsource.games</code>
@@ -55,33 +54,34 @@ public class Games extends TableImpl<GamesRecord> {
     /**
      * The column <code>spellsource.games.id</code>.
      */
-    public final TableField<GamesRecord, Long> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<GamesRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>spellsource.games.status</code>.
      */
-    public final TableField<GamesRecord, GameStateEnum> STATUS = createField(DSL.name("status"), org.jooq.impl.SQLDataType.VARCHAR.nullable(false).defaultValue(org.jooq.impl.DSL.field("'AWAITING_CONNECTIONS'::spellsource.game_state_enum", org.jooq.impl.SQLDataType.VARCHAR)).asEnumDataType(com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum.class), this, "");
+    public final TableField<GamesRecord, GameStateEnum> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR.nullable(false).defaultValue(DSL.field("'AWAITING_CONNECTIONS'::spellsource.game_state_enum", SQLDataType.VARCHAR)).asEnumDataType(com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum.class), this, "");
 
     /**
      * The column <code>spellsource.games.git_hash</code>.
      */
-    public final TableField<GamesRecord, String> GIT_HASH = createField(DSL.name("git_hash"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<GamesRecord, String> GIT_HASH = createField(DSL.name("git_hash"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>spellsource.games.trace</code>.
      */
-    public final TableField<GamesRecord, JsonObject> TRACE = createField(DSL.name("trace"), org.jooq.impl.SQLDataType.JSONB, this, "", new JSONBToJsonObjectConverter());
+    public final TableField<GamesRecord, JsonObject> TRACE = createField(DSL.name("trace"), SQLDataType.JSONB, this, "", new JSONBToJsonObjectConverter());
 
     /**
      * The column <code>spellsource.games.created_at</code>.
      */
-    public final TableField<GamesRecord, OffsetDateTime> CREATED_AT = createField(DSL.name("created_at"), org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false).defaultValue(org.jooq.impl.DSL.field("now()", org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
+    public final TableField<GamesRecord, OffsetDateTime> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
 
-    /**
-     * Create a <code>spellsource.games</code> table reference
-     */
-    public Games() {
-        this(DSL.name("games"), null);
+    private Games(Name alias, Table<GamesRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private Games(Name alias, Table<GamesRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -98,12 +98,11 @@ public class Games extends TableImpl<GamesRecord> {
         this(alias, GAMES);
     }
 
-    private Games(Name alias, Table<GamesRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private Games(Name alias, Table<GamesRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>spellsource.games</code> table reference
+     */
+    public Games() {
+        this(DSL.name("games"), null);
     }
 
     public <O extends Record> Games(Table<O> child, ForeignKey<O, GamesRecord> key) {
@@ -112,22 +111,17 @@ public class Games extends TableImpl<GamesRecord> {
 
     @Override
     public Schema getSchema() {
-        return Spellsource.SPELLSOURCE;
+        return aliased() ? null : Spellsource.SPELLSOURCE;
     }
 
     @Override
     public Identity<GamesRecord, Long> getIdentity() {
-        return Keys.IDENTITY_GAMES;
+        return (Identity<GamesRecord, Long>) super.getIdentity();
     }
 
     @Override
     public UniqueKey<GamesRecord> getPrimaryKey() {
         return Keys.GAMES_PKEY;
-    }
-
-    @Override
-    public List<UniqueKey<GamesRecord>> getKeys() {
-        return Arrays.<UniqueKey<GamesRecord>>asList(Keys.GAMES_PKEY);
     }
 
     @Override

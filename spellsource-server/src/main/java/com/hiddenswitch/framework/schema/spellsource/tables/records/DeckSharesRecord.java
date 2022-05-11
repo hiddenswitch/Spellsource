@@ -16,13 +16,14 @@ import org.jooq.Row3;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
+import static io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo.*;
 /**
  * indicates a deck shared to a player
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DeckSharesRecord extends UpdatableRecordImpl<DeckSharesRecord> implements VertxPojo, Record3<String, String, Boolean>, IDeckShares {
 
-    private static final long serialVersionUID = 1470450929;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Setter for <code>spellsource.deck_shares.deck_id</code>.
@@ -203,13 +204,26 @@ public class DeckSharesRecord extends UpdatableRecordImpl<DeckSharesRecord> impl
     public DeckSharesRecord(String deckId, String shareRecipientId, Boolean trashedByRecipient) {
         super(DeckShares.DECK_SHARES);
 
-        set(0, deckId);
-        set(1, shareRecipientId);
-        set(2, trashedByRecipient);
+        setDeckId(deckId);
+        setShareRecipientId(shareRecipientId);
+        setTrashedByRecipient(trashedByRecipient);
     }
 
-    public DeckSharesRecord(io.vertx.core.json.JsonObject json) {
-        this();
-        fromJson(json);
+    /**
+     * Create a detached, initialised DeckSharesRecord
+     */
+    public DeckSharesRecord(com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckShares value) {
+        super(DeckShares.DECK_SHARES);
+
+        if (value != null) {
+            setDeckId(value.getDeckId());
+            setShareRecipientId(value.getShareRecipientId());
+            setTrashedByRecipient(value.getTrashedByRecipient());
+        }
     }
+
+        public DeckSharesRecord(io.vertx.core.json.JsonObject json) {
+                this();
+                fromJson(json);
+        }
 }

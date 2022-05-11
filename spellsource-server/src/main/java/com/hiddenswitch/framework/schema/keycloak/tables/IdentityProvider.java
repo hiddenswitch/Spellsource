@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class IdentityProvider extends TableImpl<IdentityProviderRecord> {
 
-    private static final long serialVersionUID = 946869824;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.identity_provider</code>
@@ -51,73 +52,77 @@ public class IdentityProvider extends TableImpl<IdentityProviderRecord> {
     /**
      * The column <code>keycloak.identity_provider.internal_id</code>.
      */
-    public final TableField<IdentityProviderRecord, String> INTERNAL_ID = createField(DSL.name("internal_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<IdentityProviderRecord, String> INTERNAL_ID = createField(DSL.name("internal_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.identity_provider.enabled</code>.
      */
-    public final TableField<IdentityProviderRecord, Boolean> ENABLED = createField(DSL.name("enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<IdentityProviderRecord, Boolean> ENABLED = createField(DSL.name("enabled"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.identity_provider.provider_alias</code>.
      */
-    public final TableField<IdentityProviderRecord, String> PROVIDER_ALIAS = createField(DSL.name("provider_alias"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<IdentityProviderRecord, String> PROVIDER_ALIAS = createField(DSL.name("provider_alias"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.identity_provider.provider_id</code>.
      */
-    public final TableField<IdentityProviderRecord, String> PROVIDER_ID = createField(DSL.name("provider_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<IdentityProviderRecord, String> PROVIDER_ID = createField(DSL.name("provider_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.identity_provider.store_token</code>.
      */
-    public final TableField<IdentityProviderRecord, Boolean> STORE_TOKEN = createField(DSL.name("store_token"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<IdentityProviderRecord, Boolean> STORE_TOKEN = createField(DSL.name("store_token"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * The column <code>keycloak.identity_provider.authenticate_by_default</code>.
+     * The column
+     * <code>keycloak.identity_provider.authenticate_by_default</code>.
      */
-    public final TableField<IdentityProviderRecord, Boolean> AUTHENTICATE_BY_DEFAULT = createField(DSL.name("authenticate_by_default"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<IdentityProviderRecord, Boolean> AUTHENTICATE_BY_DEFAULT = createField(DSL.name("authenticate_by_default"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.identity_provider.realm_id</code>.
      */
-    public final TableField<IdentityProviderRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<IdentityProviderRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.identity_provider.add_token_role</code>.
      */
-    public final TableField<IdentityProviderRecord, Boolean> ADD_TOKEN_ROLE = createField(DSL.name("add_token_role"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("true", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<IdentityProviderRecord, Boolean> ADD_TOKEN_ROLE = createField(DSL.name("add_token_role"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("true", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.identity_provider.trust_email</code>.
      */
-    public final TableField<IdentityProviderRecord, Boolean> TRUST_EMAIL = createField(DSL.name("trust_email"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<IdentityProviderRecord, Boolean> TRUST_EMAIL = createField(DSL.name("trust_email"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * The column <code>keycloak.identity_provider.first_broker_login_flow_id</code>.
+     * The column
+     * <code>keycloak.identity_provider.first_broker_login_flow_id</code>.
      */
-    public final TableField<IdentityProviderRecord, String> FIRST_BROKER_LOGIN_FLOW_ID = createField(DSL.name("first_broker_login_flow_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<IdentityProviderRecord, String> FIRST_BROKER_LOGIN_FLOW_ID = createField(DSL.name("first_broker_login_flow_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
-     * The column <code>keycloak.identity_provider.post_broker_login_flow_id</code>.
+     * The column
+     * <code>keycloak.identity_provider.post_broker_login_flow_id</code>.
      */
-    public final TableField<IdentityProviderRecord, String> POST_BROKER_LOGIN_FLOW_ID = createField(DSL.name("post_broker_login_flow_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<IdentityProviderRecord, String> POST_BROKER_LOGIN_FLOW_ID = createField(DSL.name("post_broker_login_flow_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.identity_provider.provider_display_name</code>.
      */
-    public final TableField<IdentityProviderRecord, String> PROVIDER_DISPLAY_NAME = createField(DSL.name("provider_display_name"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<IdentityProviderRecord, String> PROVIDER_DISPLAY_NAME = createField(DSL.name("provider_display_name"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.identity_provider.link_only</code>.
      */
-    public final TableField<IdentityProviderRecord, Boolean> LINK_ONLY = createField(DSL.name("link_only"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<IdentityProviderRecord, Boolean> LINK_ONLY = createField(DSL.name("link_only"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
-    /**
-     * Create a <code>keycloak.identity_provider</code> table reference
-     */
-    public IdentityProvider() {
-        this(DSL.name("identity_provider"), null);
+    private IdentityProvider(Name alias, Table<IdentityProviderRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private IdentityProvider(Name alias, Table<IdentityProviderRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -134,12 +139,11 @@ public class IdentityProvider extends TableImpl<IdentityProviderRecord> {
         this(alias, IDENTITY_PROVIDER);
     }
 
-    private IdentityProvider(Name alias, Table<IdentityProviderRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private IdentityProvider(Name alias, Table<IdentityProviderRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.identity_provider</code> table reference
+     */
+    public IdentityProvider() {
+        this(DSL.name("identity_provider"), null);
     }
 
     public <O extends Record> IdentityProvider(Table<O> child, ForeignKey<O, IdentityProviderRecord> key) {
@@ -148,12 +152,12 @@ public class IdentityProvider extends TableImpl<IdentityProviderRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_IDENT_PROV_REALM);
+        return Arrays.asList(Indexes.IDX_IDENT_PROV_REALM);
     }
 
     @Override
@@ -162,17 +166,25 @@ public class IdentityProvider extends TableImpl<IdentityProviderRecord> {
     }
 
     @Override
-    public List<UniqueKey<IdentityProviderRecord>> getKeys() {
-        return Arrays.<UniqueKey<IdentityProviderRecord>>asList(Keys.CONSTRAINT_2B, Keys.UK_2DAELWNIBJI49AVXSRTUF6XJ33);
+    public List<UniqueKey<IdentityProviderRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.UK_2DAELWNIBJI49AVXSRTUF6XJ33);
     }
 
     @Override
     public List<ForeignKey<IdentityProviderRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<IdentityProviderRecord, ?>>asList(Keys.IDENTITY_PROVIDER__FK2B4EBC52AE5C3B34);
+        return Arrays.asList(Keys.IDENTITY_PROVIDER__FK2B4EBC52AE5C3B34);
     }
 
+    private transient Realm _realm;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.IDENTITY_PROVIDER__FK2B4EBC52AE5C3B34);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.IDENTITY_PROVIDER__FK2B4EBC52AE5C3B34);
+
+        return _realm;
     }
 
     @Override

@@ -2,6 +2,7 @@ package net.demilich.metastone.game.cards;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.io.CharSource;
+import com.hiddenswitch.protos.Serialization;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
 import com.hiddenswitch.spellsource.core.CardResource;
@@ -621,5 +622,9 @@ public class CardCatalogue {
 
 	public static void setVersion(int version) {
 		CardCatalogue.version = version;
+	}
+
+	static {
+		Serialization.configureSerialization();
 	}
 }

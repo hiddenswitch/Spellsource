@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ProtocolMapperConfig extends TableImpl<ProtocolMapperConfigRecord> {
 
-    private static final long serialVersionUID = 873500795;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.protocol_mapper_config</code>
@@ -47,40 +48,20 @@ public class ProtocolMapperConfig extends TableImpl<ProtocolMapperConfigRecord> 
     }
 
     /**
-     * The column <code>keycloak.protocol_mapper_config.protocol_mapper_id</code>.
+     * The column
+     * <code>keycloak.protocol_mapper_config.protocol_mapper_id</code>.
      */
-    public final TableField<ProtocolMapperConfigRecord, String> PROTOCOL_MAPPER_ID = createField(DSL.name("protocol_mapper_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ProtocolMapperConfigRecord, String> PROTOCOL_MAPPER_ID = createField(DSL.name("protocol_mapper_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.protocol_mapper_config.value</code>.
      */
-    public final TableField<ProtocolMapperConfigRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<ProtocolMapperConfigRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>keycloak.protocol_mapper_config.name</code>.
      */
-    public final TableField<ProtocolMapperConfigRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.protocol_mapper_config</code> table reference
-     */
-    public ProtocolMapperConfig() {
-        this(DSL.name("protocol_mapper_config"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.protocol_mapper_config</code> table reference
-     */
-    public ProtocolMapperConfig(String alias) {
-        this(DSL.name(alias), PROTOCOL_MAPPER_CONFIG);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.protocol_mapper_config</code> table reference
-     */
-    public ProtocolMapperConfig(Name alias) {
-        this(alias, PROTOCOL_MAPPER_CONFIG);
-    }
+    public final TableField<ProtocolMapperConfigRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     private ProtocolMapperConfig(Name alias, Table<ProtocolMapperConfigRecord> aliased) {
         this(alias, aliased, null);
@@ -90,13 +71,36 @@ public class ProtocolMapperConfig extends TableImpl<ProtocolMapperConfigRecord> 
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.protocol_mapper_config</code> table
+     * reference
+     */
+    public ProtocolMapperConfig(String alias) {
+        this(DSL.name(alias), PROTOCOL_MAPPER_CONFIG);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.protocol_mapper_config</code> table
+     * reference
+     */
+    public ProtocolMapperConfig(Name alias) {
+        this(alias, PROTOCOL_MAPPER_CONFIG);
+    }
+
+    /**
+     * Create a <code>keycloak.protocol_mapper_config</code> table reference
+     */
+    public ProtocolMapperConfig() {
+        this(DSL.name("protocol_mapper_config"), null);
+    }
+
     public <O extends Record> ProtocolMapperConfig(Table<O> child, ForeignKey<O, ProtocolMapperConfigRecord> key) {
         super(child, key, PROTOCOL_MAPPER_CONFIG);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -105,17 +109,21 @@ public class ProtocolMapperConfig extends TableImpl<ProtocolMapperConfigRecord> 
     }
 
     @Override
-    public List<UniqueKey<ProtocolMapperConfigRecord>> getKeys() {
-        return Arrays.<UniqueKey<ProtocolMapperConfigRecord>>asList(Keys.CONSTRAINT_PMCONFIG);
-    }
-
-    @Override
     public List<ForeignKey<ProtocolMapperConfigRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ProtocolMapperConfigRecord, ?>>asList(Keys.PROTOCOL_MAPPER_CONFIG__FK_PMCONFIG);
+        return Arrays.asList(Keys.PROTOCOL_MAPPER_CONFIG__FK_PMCONFIG);
     }
 
+    private transient ProtocolMapper _protocolMapper;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.protocol_mapper</code>
+     * table.
+     */
     public ProtocolMapper protocolMapper() {
-        return new ProtocolMapper(this, Keys.PROTOCOL_MAPPER_CONFIG__FK_PMCONFIG);
+        if (_protocolMapper == null)
+            _protocolMapper = new ProtocolMapper(this, Keys.PROTOCOL_MAPPER_CONFIG__FK_PMCONFIG);
+
+        return _protocolMapper;
     }
 
     @Override

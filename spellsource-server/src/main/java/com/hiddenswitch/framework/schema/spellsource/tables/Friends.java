@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Friends extends TableImpl<FriendsRecord> {
 
-    private static final long serialVersionUID = 280614245;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>spellsource.friends</code>
@@ -51,23 +52,24 @@ public class Friends extends TableImpl<FriendsRecord> {
     /**
      * The column <code>spellsource.friends.id</code>.
      */
-    public final TableField<FriendsRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<FriendsRecord, String> ID = createField(DSL.name("id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.friends.friend</code>.
      */
-    public final TableField<FriendsRecord, String> FRIEND = createField(DSL.name("friend"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<FriendsRecord, String> FRIEND = createField(DSL.name("friend"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.friends.created_at</code>.
      */
-    public final TableField<FriendsRecord, OffsetDateTime> CREATED_AT = createField(DSL.name("created_at"), org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false).defaultValue(org.jooq.impl.DSL.field("now()", org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
+    public final TableField<FriendsRecord, OffsetDateTime> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
 
-    /**
-     * Create a <code>spellsource.friends</code> table reference
-     */
-    public Friends() {
-        this(DSL.name("friends"), null);
+    private Friends(Name alias, Table<FriendsRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private Friends(Name alias, Table<FriendsRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -84,12 +86,11 @@ public class Friends extends TableImpl<FriendsRecord> {
         this(alias, FRIENDS);
     }
 
-    private Friends(Name alias, Table<FriendsRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private Friends(Name alias, Table<FriendsRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>spellsource.friends</code> table reference
+     */
+    public Friends() {
+        this(DSL.name("friends"), null);
     }
 
     public <O extends Record> Friends(Table<O> child, ForeignKey<O, FriendsRecord> key) {
@@ -98,7 +99,7 @@ public class Friends extends TableImpl<FriendsRecord> {
 
     @Override
     public Schema getSchema() {
-        return Spellsource.SPELLSOURCE;
+        return aliased() ? null : Spellsource.SPELLSOURCE;
     }
 
     @Override
@@ -107,21 +108,33 @@ public class Friends extends TableImpl<FriendsRecord> {
     }
 
     @Override
-    public List<UniqueKey<FriendsRecord>> getKeys() {
-        return Arrays.<UniqueKey<FriendsRecord>>asList(Keys.FRIENDS_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<FriendsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<FriendsRecord, ?>>asList(Keys.FRIENDS__FRIENDS_ID_FKEY, Keys.FRIENDS__FRIENDS_FRIEND_FKEY);
+        return Arrays.asList(Keys.FRIENDS__FRIENDS_ID_FKEY, Keys.FRIENDS__FRIENDS_FRIEND_FKEY);
     }
 
+    private transient UserEntity _friendsIdFkey;
+    private transient UserEntity _friendsFriendFkey;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table, via the <code>friends_id_fkey</code> key.
+     */
     public UserEntity friendsIdFkey() {
-        return new UserEntity(this, Keys.FRIENDS__FRIENDS_ID_FKEY);
+        if (_friendsIdFkey == null)
+            _friendsIdFkey = new UserEntity(this, Keys.FRIENDS__FRIENDS_ID_FKEY);
+
+        return _friendsIdFkey;
     }
 
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table, via the <code>friends_friend_fkey</code> key.
+     */
     public UserEntity friendsFriendFkey() {
-        return new UserEntity(this, Keys.FRIENDS__FRIENDS_FRIEND_FKEY);
+        if (_friendsFriendFkey == null)
+            _friendsFriendFkey = new UserEntity(this, Keys.FRIENDS__FRIENDS_FRIEND_FKEY);
+
+        return _friendsFriendFkey;
     }
 
     @Override

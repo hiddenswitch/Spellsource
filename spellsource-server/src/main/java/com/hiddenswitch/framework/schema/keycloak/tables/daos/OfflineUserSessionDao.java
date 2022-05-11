@@ -24,105 +24,100 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfflineUserSessionDao extends AbstractReactiveVertxDAO<OfflineUserSessionRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession, Record2<String, String>, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>, Future<Integer>, Future<Record2<String, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<OfflineUserSessionRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession,Record2<String, String>> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public OfflineUserSessionDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(OfflineUserSession.OFFLINE_USER_SESSION, com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession.class, new ReactiveClassicQueryExecutor<OfflineUserSessionRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getOfflineUserSessionMapper()));
-    }
+        public OfflineUserSessionDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(OfflineUserSession.OFFLINE_USER_SESSION, com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession.class, new ReactiveClassicQueryExecutor<OfflineUserSessionRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getOfflineUserSessionMapper()));
+        }
 
-    @Override
-    protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession object) {
-        return compositeKeyRecord(object.getUserSessionId(), object.getOfflineFlag());
-    }
+        @Override
+        protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession object) {
+                return compositeKeyRecord(object.getUserSessionId(), object.getOfflineFlag());
+        }
 
-    /**
+        /**
      * Find records that have <code>user_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByUserId(Collection<String> values) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.USER_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByUserId(Collection<String> values) {
+                return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.USER_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>user_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>user_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByUserId(Collection<String> values, int limit) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.USER_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByUserId(Collection<String> values, int limit) {
+                return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.USER_ID.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>realm_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByRealmId(Collection<String> values) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.REALM_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByRealmId(Collection<String> values) {
+                return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.REALM_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>realm_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>realm_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByRealmId(Collection<String> values, int limit) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.REALM_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByRealmId(Collection<String> values, int limit) {
+                return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.REALM_ID.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>created_on IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>last_session_refresh IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByCreatedOn(Collection<Integer> values) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.CREATED_ON.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByLastSessionRefresh(Collection<Integer> values) {
+                return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.LAST_SESSION_REFRESH.in(values));
+        }
 
-    /**
-     * Find records that have <code>created_on IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>last_session_refresh IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByCreatedOn(Collection<Integer> values, int limit) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.CREATED_ON.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByLastSessionRefresh(Collection<Integer> values, int limit) {
+                return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.LAST_SESSION_REFRESH.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>offline_flag IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>offline_flag IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByOfflineFlag(Collection<String> values) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.OFFLINE_FLAG.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByOfflineFlag(Collection<String> values) {
+                return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.OFFLINE_FLAG.in(values));
+        }
 
-    /**
-     * Find records that have <code>offline_flag IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>offline_flag IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByOfflineFlag(Collection<String> values, int limit) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.OFFLINE_FLAG.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByOfflineFlag(Collection<String> values, int limit) {
+                return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.OFFLINE_FLAG.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>data IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByData(Collection<String> values) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.DATA.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByData(Collection<String> values) {
+                return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.DATA.in(values));
+        }
 
-    /**
-     * Find records that have <code>data IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>data IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByData(Collection<String> values, int limit) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.DATA.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByData(Collection<String> values, int limit) {
+                return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.DATA.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>last_session_refresh IN (values)</code> asynchronously
-     */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByLastSessionRefresh(Collection<Integer> values) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.LAST_SESSION_REFRESH.in(values));
-    }
-
-    /**
-     * Find records that have <code>last_session_refresh IN (values)</code> asynchronously limited by the given limit
-     */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession>> findManyByLastSessionRefresh(Collection<Integer> values, int limit) {
-        return findManyByCondition(OfflineUserSession.OFFLINE_USER_SESSION.LAST_SESSION_REFRESH.in(values),limit);
-    }
-
-    @Override
-    public ReactiveClassicQueryExecutor<OfflineUserSessionRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession,Record2<String, String>> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<OfflineUserSessionRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession,Record2<String, String>>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<OfflineUserSessionRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession,Record2<String, String>> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<OfflineUserSessionRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.OfflineUserSession,Record2<String, String>>) super.queryExecutor();
+        }
 }

@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ClientUserSessionNote extends TableImpl<ClientUserSessionNoteRecord> {
 
-    private static final long serialVersionUID = 679272511;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.client_user_session_note</code>
@@ -49,38 +50,17 @@ public class ClientUserSessionNote extends TableImpl<ClientUserSessionNoteRecord
     /**
      * The column <code>keycloak.client_user_session_note.name</code>.
      */
-    public final TableField<ClientUserSessionNoteRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<ClientUserSessionNoteRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.client_user_session_note.value</code>.
      */
-    public final TableField<ClientUserSessionNoteRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(2048), this, "");
+    public final TableField<ClientUserSessionNoteRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(2048), this, "");
 
     /**
      * The column <code>keycloak.client_user_session_note.client_session</code>.
      */
-    public final TableField<ClientUserSessionNoteRecord, String> CLIENT_SESSION = createField(DSL.name("client_session"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.client_user_session_note</code> table reference
-     */
-    public ClientUserSessionNote() {
-        this(DSL.name("client_user_session_note"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.client_user_session_note</code> table reference
-     */
-    public ClientUserSessionNote(String alias) {
-        this(DSL.name(alias), CLIENT_USER_SESSION_NOTE);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.client_user_session_note</code> table reference
-     */
-    public ClientUserSessionNote(Name alias) {
-        this(alias, CLIENT_USER_SESSION_NOTE);
-    }
+    public final TableField<ClientUserSessionNoteRecord, String> CLIENT_SESSION = createField(DSL.name("client_session"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     private ClientUserSessionNote(Name alias, Table<ClientUserSessionNoteRecord> aliased) {
         this(alias, aliased, null);
@@ -90,13 +70,36 @@ public class ClientUserSessionNote extends TableImpl<ClientUserSessionNoteRecord
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.client_user_session_note</code> table
+     * reference
+     */
+    public ClientUserSessionNote(String alias) {
+        this(DSL.name(alias), CLIENT_USER_SESSION_NOTE);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.client_user_session_note</code> table
+     * reference
+     */
+    public ClientUserSessionNote(Name alias) {
+        this(alias, CLIENT_USER_SESSION_NOTE);
+    }
+
+    /**
+     * Create a <code>keycloak.client_user_session_note</code> table reference
+     */
+    public ClientUserSessionNote() {
+        this(DSL.name("client_user_session_note"), null);
+    }
+
     public <O extends Record> ClientUserSessionNote(Table<O> child, ForeignKey<O, ClientUserSessionNoteRecord> key) {
         super(child, key, CLIENT_USER_SESSION_NOTE);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -105,17 +108,21 @@ public class ClientUserSessionNote extends TableImpl<ClientUserSessionNoteRecord
     }
 
     @Override
-    public List<UniqueKey<ClientUserSessionNoteRecord>> getKeys() {
-        return Arrays.<UniqueKey<ClientUserSessionNoteRecord>>asList(Keys.CONSTR_CL_USR_SES_NOTE);
-    }
-
-    @Override
     public List<ForeignKey<ClientUserSessionNoteRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ClientUserSessionNoteRecord, ?>>asList(Keys.CLIENT_USER_SESSION_NOTE__FK_CL_USR_SES_NOTE);
+        return Arrays.asList(Keys.CLIENT_USER_SESSION_NOTE__FK_CL_USR_SES_NOTE);
     }
 
+    private transient ClientSession _clientSession;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.client_session</code>
+     * table.
+     */
     public ClientSession clientSession() {
-        return new ClientSession(this, Keys.CLIENT_USER_SESSION_NOTE__FK_CL_USR_SES_NOTE);
+        if (_clientSession == null)
+            _clientSession = new ClientSession(this, Keys.CLIENT_USER_SESSION_NOTE__FK_CL_USR_SES_NOTE);
+
+        return _clientSession;
     }
 
     @Override

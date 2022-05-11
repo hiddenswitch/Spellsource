@@ -25,49 +25,53 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class FriendsDao extends AbstractReactiveVertxDAO<FriendsRecord, com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends, Record2<String, String>, Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends>>, Future<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends>, Future<Integer>, Future<Record2<String, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<FriendsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends,Record2<String, String>> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public FriendsDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(Friends.FRIENDS, com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends.class, new ReactiveClassicQueryExecutor<FriendsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getFriendsMapper()));
-    }
+        public FriendsDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(Friends.FRIENDS, com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends.class, new ReactiveClassicQueryExecutor<FriendsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getFriendsMapper()));
+        }
 
-    @Override
-    protected Record2<String, String> getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends object) {
-        return compositeKeyRecord(object.getId(), object.getFriend());
-    }
+        @Override
+        protected Record2<String, String> getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends object) {
+                return compositeKeyRecord(object.getId(), object.getFriend());
+        }
 
-    /**
+        /**
      * Find records that have <code>friend IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends>> findManyByFriend(Collection<String> values) {
-        return findManyByCondition(Friends.FRIENDS.FRIEND.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends>> findManyByFriend(Collection<String> values) {
+                return findManyByCondition(Friends.FRIENDS.FRIEND.in(values));
+        }
 
-    /**
-     * Find records that have <code>friend IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>friend IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends>> findManyByFriend(Collection<String> values, int limit) {
-        return findManyByCondition(Friends.FRIENDS.FRIEND.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends>> findManyByFriend(Collection<String> values, int limit) {
+                return findManyByCondition(Friends.FRIENDS.FRIEND.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>created_at IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends>> findManyByCreatedAt(Collection<OffsetDateTime> values) {
-        return findManyByCondition(Friends.FRIENDS.CREATED_AT.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends>> findManyByCreatedAt(Collection<OffsetDateTime> values) {
+                return findManyByCondition(Friends.FRIENDS.CREATED_AT.in(values));
+        }
 
-    /**
-     * Find records that have <code>created_at IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>created_at IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends>> findManyByCreatedAt(Collection<OffsetDateTime> values, int limit) {
-        return findManyByCondition(Friends.FRIENDS.CREATED_AT.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends>> findManyByCreatedAt(Collection<OffsetDateTime> values, int limit) {
+                return findManyByCondition(Friends.FRIENDS.CREATED_AT.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<FriendsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends,Record2<String, String>> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<FriendsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends,Record2<String, String>>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<FriendsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends,Record2<String, String>> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<FriendsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Friends,Record2<String, String>>) super.queryExecutor();
+        }
 }

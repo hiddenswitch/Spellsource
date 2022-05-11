@@ -11,6 +11,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.FriendsRecor
 import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import io.opentracing.util.GlobalTracer;
+import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -20,6 +21,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.AuthProvider;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.authorization.Authorization;
+import io.vertx.ext.auth.authorization.Authorizations;
 import io.vertx.ext.mongo.MongoClient;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
@@ -1275,6 +1277,31 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 		}
 
 		@Override
+		public boolean expired() {
+			return User.super.expired();
+		}
+
+		@Override
+		public boolean expired(int leeway) {
+			return User.super.expired(leeway);
+		}
+
+		@Override
+		public <T> @Nullable T get(String key) {
+			return User.super.get(key);
+		}
+
+		@Override
+		public boolean containsKey(String key) {
+			return User.super.containsKey(key);
+		}
+
+		@Override
+		public Authorizations authorizations() {
+			return User.super.authorizations();
+		}
+
+		@Override
 		public User isAuthorized(Authorization authorization, Handler<AsyncResult<Boolean>> handler) {
 			handler.handle(Future.succeededFuture(true));
 			return this;
@@ -1308,6 +1335,11 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 		@Override
 		@JsonIgnore
 		public void setAuthProvider(AuthProvider authProvider) {
+		}
+
+		@Override
+		public User merge(User other) {
+			return null;
 		}
 
 		/**

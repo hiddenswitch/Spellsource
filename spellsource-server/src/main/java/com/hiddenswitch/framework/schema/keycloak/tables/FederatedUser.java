@@ -8,9 +8,6 @@ import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.FederatedUserRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
@@ -22,6 +19,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class FederatedUser extends TableImpl<FederatedUserRecord> {
 
-    private static final long serialVersionUID = 397598345;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.federated_user</code>
@@ -49,23 +47,24 @@ public class FederatedUser extends TableImpl<FederatedUserRecord> {
     /**
      * The column <code>keycloak.federated_user.id</code>.
      */
-    public final TableField<FederatedUserRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<FederatedUserRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.federated_user.storage_provider_id</code>.
      */
-    public final TableField<FederatedUserRecord, String> STORAGE_PROVIDER_ID = createField(DSL.name("storage_provider_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<FederatedUserRecord, String> STORAGE_PROVIDER_ID = createField(DSL.name("storage_provider_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.federated_user.realm_id</code>.
      */
-    public final TableField<FederatedUserRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<FederatedUserRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
-    /**
-     * Create a <code>keycloak.federated_user</code> table reference
-     */
-    public FederatedUser() {
-        this(DSL.name("federated_user"), null);
+    private FederatedUser(Name alias, Table<FederatedUserRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private FederatedUser(Name alias, Table<FederatedUserRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -82,12 +81,11 @@ public class FederatedUser extends TableImpl<FederatedUserRecord> {
         this(alias, FEDERATED_USER);
     }
 
-    private FederatedUser(Name alias, Table<FederatedUserRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private FederatedUser(Name alias, Table<FederatedUserRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.federated_user</code> table reference
+     */
+    public FederatedUser() {
+        this(DSL.name("federated_user"), null);
     }
 
     public <O extends Record> FederatedUser(Table<O> child, ForeignKey<O, FederatedUserRecord> key) {
@@ -96,17 +94,12 @@ public class FederatedUser extends TableImpl<FederatedUserRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public UniqueKey<FederatedUserRecord> getPrimaryKey() {
         return Keys.CONSTR_FEDERATED_USER;
-    }
-
-    @Override
-    public List<UniqueKey<FederatedUserRecord>> getKeys() {
-        return Arrays.<UniqueKey<FederatedUserRecord>>asList(Keys.CONSTR_FEDERATED_USER);
     }
 
     @Override

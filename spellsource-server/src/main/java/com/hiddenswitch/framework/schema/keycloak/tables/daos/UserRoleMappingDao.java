@@ -24,35 +24,38 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserRoleMappingDao extends AbstractReactiveVertxDAO<UserRoleMappingRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping, Record2<String, String>, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping>, Future<Integer>, Future<Record2<String, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<UserRoleMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping,Record2<String, String>> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public UserRoleMappingDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(UserRoleMapping.USER_ROLE_MAPPING, com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping.class, new ReactiveClassicQueryExecutor<UserRoleMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getUserRoleMappingMapper()));
-    }
+        public UserRoleMappingDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(UserRoleMapping.USER_ROLE_MAPPING, com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping.class, new ReactiveClassicQueryExecutor<UserRoleMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getUserRoleMappingMapper()));
+        }
 
-    @Override
-    protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping object) {
-        return compositeKeyRecord(object.getRoleId(), object.getUserId());
-    }
+        @Override
+        protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping object) {
+                return compositeKeyRecord(object.getRoleId(), object.getUserId());
+        }
 
-    /**
+        /**
      * Find records that have <code>user_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping>> findManyByUserId(Collection<String> values) {
-        return findManyByCondition(UserRoleMapping.USER_ROLE_MAPPING.USER_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping>> findManyByUserId(Collection<String> values) {
+                return findManyByCondition(UserRoleMapping.USER_ROLE_MAPPING.USER_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>user_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>user_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping>> findManyByUserId(Collection<String> values, int limit) {
-        return findManyByCondition(UserRoleMapping.USER_ROLE_MAPPING.USER_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping>> findManyByUserId(Collection<String> values, int limit) {
+                return findManyByCondition(UserRoleMapping.USER_ROLE_MAPPING.USER_ID.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<UserRoleMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping,Record2<String, String>> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<UserRoleMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping,Record2<String, String>>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<UserRoleMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping,Record2<String, String>> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<UserRoleMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserRoleMapping,Record2<String, String>>) super.queryExecutor();
+        }
 }

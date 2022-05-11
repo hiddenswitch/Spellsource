@@ -4,17 +4,12 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
-import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.EventEntityRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row10;
@@ -24,6 +19,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class EventEntity extends TableImpl<EventEntityRecord> {
 
-    private static final long serialVersionUID = 1127965574;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.event_entity</code>
@@ -51,58 +47,59 @@ public class EventEntity extends TableImpl<EventEntityRecord> {
     /**
      * The column <code>keycloak.event_entity.id</code>.
      */
-    public final TableField<EventEntityRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<EventEntityRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.event_entity.client_id</code>.
      */
-    public final TableField<EventEntityRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<EventEntityRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.event_entity.details_json</code>.
      */
-    public final TableField<EventEntityRecord, String> DETAILS_JSON = createField(DSL.name("details_json"), org.jooq.impl.SQLDataType.VARCHAR(2550), this, "");
+    public final TableField<EventEntityRecord, String> DETAILS_JSON = createField(DSL.name("details_json"), SQLDataType.VARCHAR(2550), this, "");
 
     /**
      * The column <code>keycloak.event_entity.error</code>.
      */
-    public final TableField<EventEntityRecord, String> ERROR = createField(DSL.name("error"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<EventEntityRecord, String> ERROR = createField(DSL.name("error"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.event_entity.ip_address</code>.
      */
-    public final TableField<EventEntityRecord, String> IP_ADDRESS = createField(DSL.name("ip_address"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<EventEntityRecord, String> IP_ADDRESS = createField(DSL.name("ip_address"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.event_entity.realm_id</code>.
      */
-    public final TableField<EventEntityRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<EventEntityRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.event_entity.session_id</code>.
      */
-    public final TableField<EventEntityRecord, String> SESSION_ID = createField(DSL.name("session_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<EventEntityRecord, String> SESSION_ID = createField(DSL.name("session_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.event_entity.event_time</code>.
      */
-    public final TableField<EventEntityRecord, Long> EVENT_TIME = createField(DSL.name("event_time"), org.jooq.impl.SQLDataType.BIGINT, this, "");
+    public final TableField<EventEntityRecord, Long> EVENT_TIME = createField(DSL.name("event_time"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>keycloak.event_entity.type</code>.
      */
-    public final TableField<EventEntityRecord, String> TYPE = createField(DSL.name("type"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<EventEntityRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.event_entity.user_id</code>.
      */
-    public final TableField<EventEntityRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<EventEntityRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.VARCHAR(255), this, "");
 
-    /**
-     * Create a <code>keycloak.event_entity</code> table reference
-     */
-    public EventEntity() {
-        this(DSL.name("event_entity"), null);
+    private EventEntity(Name alias, Table<EventEntityRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private EventEntity(Name alias, Table<EventEntityRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -119,12 +116,11 @@ public class EventEntity extends TableImpl<EventEntityRecord> {
         this(alias, EVENT_ENTITY);
     }
 
-    private EventEntity(Name alias, Table<EventEntityRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private EventEntity(Name alias, Table<EventEntityRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.event_entity</code> table reference
+     */
+    public EventEntity() {
+        this(DSL.name("event_entity"), null);
     }
 
     public <O extends Record> EventEntity(Table<O> child, ForeignKey<O, EventEntityRecord> key) {
@@ -133,22 +129,12 @@ public class EventEntity extends TableImpl<EventEntityRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
-    }
-
-    @Override
-    public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_EVENT_TIME);
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public UniqueKey<EventEntityRecord> getPrimaryKey() {
         return Keys.CONSTRAINT_4;
-    }
-
-    @Override
-    public List<UniqueKey<EventEntityRecord>> getKeys() {
-        return Arrays.<UniqueKey<EventEntityRecord>>asList(Keys.CONSTRAINT_4);
     }
 
     @Override

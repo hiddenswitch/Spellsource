@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RealmDefaultGroups extends TableImpl<RealmDefaultGroupsRecord> {
 
-    private static final long serialVersionUID = -1710052068;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.realm_default_groups</code>
@@ -51,33 +52,12 @@ public class RealmDefaultGroups extends TableImpl<RealmDefaultGroupsRecord> {
     /**
      * The column <code>keycloak.realm_default_groups.realm_id</code>.
      */
-    public final TableField<RealmDefaultGroupsRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<RealmDefaultGroupsRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.realm_default_groups.group_id</code>.
      */
-    public final TableField<RealmDefaultGroupsRecord, String> GROUP_ID = createField(DSL.name("group_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.realm_default_groups</code> table reference
-     */
-    public RealmDefaultGroups() {
-        this(DSL.name("realm_default_groups"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.realm_default_groups</code> table reference
-     */
-    public RealmDefaultGroups(String alias) {
-        this(DSL.name(alias), REALM_DEFAULT_GROUPS);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.realm_default_groups</code> table reference
-     */
-    public RealmDefaultGroups(Name alias) {
-        this(alias, REALM_DEFAULT_GROUPS);
-    }
+    public final TableField<RealmDefaultGroupsRecord, String> GROUP_ID = createField(DSL.name("group_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     private RealmDefaultGroups(Name alias, Table<RealmDefaultGroupsRecord> aliased) {
         this(alias, aliased, null);
@@ -87,37 +67,75 @@ public class RealmDefaultGroups extends TableImpl<RealmDefaultGroupsRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.realm_default_groups</code> table
+     * reference
+     */
+    public RealmDefaultGroups(String alias) {
+        this(DSL.name(alias), REALM_DEFAULT_GROUPS);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.realm_default_groups</code> table
+     * reference
+     */
+    public RealmDefaultGroups(Name alias) {
+        this(alias, REALM_DEFAULT_GROUPS);
+    }
+
+    /**
+     * Create a <code>keycloak.realm_default_groups</code> table reference
+     */
+    public RealmDefaultGroups() {
+        this(DSL.name("realm_default_groups"), null);
+    }
+
     public <O extends Record> RealmDefaultGroups(Table<O> child, ForeignKey<O, RealmDefaultGroupsRecord> key) {
         super(child, key, REALM_DEFAULT_GROUPS);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_REALM_DEF_GRP_REALM);
+        return Arrays.asList(Indexes.IDX_REALM_DEF_GRP_REALM);
     }
 
     @Override
-    public UniqueKey<RealmDefaultGroupsRecord> getPrimaryKey() {
-        return Keys.CONSTR_REALM_DEFAULT_GROUPS;
-    }
-
-    @Override
-    public List<UniqueKey<RealmDefaultGroupsRecord>> getKeys() {
-        return Arrays.<UniqueKey<RealmDefaultGroupsRecord>>asList(Keys.CONSTR_REALM_DEFAULT_GROUPS, Keys.CON_GROUP_ID_DEF_GROUPS);
+    public List<UniqueKey<RealmDefaultGroupsRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.CON_GROUP_ID_DEF_GROUPS);
     }
 
     @Override
     public List<ForeignKey<RealmDefaultGroupsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RealmDefaultGroupsRecord, ?>>asList(Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_REALM);
+        return Arrays.asList(Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_REALM, Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_GROUP);
     }
 
+    private transient Realm _realm;
+    private transient KeycloakGroup _keycloakGroup;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_REALM);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_REALM);
+
+        return _realm;
+    }
+
+    /**
+     * Get the implicit join path to the <code>keycloak.keycloak_group</code>
+     * table.
+     */
+    public KeycloakGroup keycloakGroup() {
+        if (_keycloakGroup == null)
+            _keycloakGroup = new KeycloakGroup(this, Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_GROUP);
+
+        return _keycloakGroup;
     }
 
     @Override

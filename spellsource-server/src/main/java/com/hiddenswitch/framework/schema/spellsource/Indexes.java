@@ -10,11 +10,12 @@ import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
 
 import org.jooq.Index;
 import org.jooq.OrderField;
+import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
 
 
 /**
- * A class modelling indexes of tables of the <code>spellsource</code> schema.
+ * A class modelling indexes of tables in spellsource.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Indexes {
@@ -23,21 +24,9 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
-    public static final Index DECK_SHARES_TRASHED_BY_RECIPIENT_IDX = Indexes0.DECK_SHARES_TRASHED_BY_RECIPIENT_IDX;
-    public static final Index DECKS_CREATED_BY_IDX = Indexes0.DECKS_CREATED_BY_IDX;
-    public static final Index DECKS_IS_PREMADE_IDX = Indexes0.DECKS_IS_PREMADE_IDX;
-    public static final Index DECKS_TRASHED_IDX = Indexes0.DECKS_TRASHED_IDX;
-    public static final Index MATCHMAKING_TICKETS_QUEUE_ID_IDX = Indexes0.MATCHMAKING_TICKETS_QUEUE_ID_IDX;
-
-    // -------------------------------------------------------------------------
-    // [#1459] distribute members to avoid static initialisers > 64kb
-    // -------------------------------------------------------------------------
-
-    private static class Indexes0 {
-        public static Index DECK_SHARES_TRASHED_BY_RECIPIENT_IDX = Internal.createIndex("deck_shares_trashed_by_recipient_idx", DeckShares.DECK_SHARES, new OrderField[] { DeckShares.DECK_SHARES.TRASHED_BY_RECIPIENT }, false);
-        public static Index DECKS_CREATED_BY_IDX = Internal.createIndex("decks_created_by_idx", Decks.DECKS, new OrderField[] { Decks.DECKS.CREATED_BY }, false);
-        public static Index DECKS_IS_PREMADE_IDX = Internal.createIndex("decks_is_premade_idx", Decks.DECKS, new OrderField[] { Decks.DECKS.IS_PREMADE }, false);
-        public static Index DECKS_TRASHED_IDX = Internal.createIndex("decks_trashed_idx", Decks.DECKS, new OrderField[] { Decks.DECKS.TRASHED }, false);
-        public static Index MATCHMAKING_TICKETS_QUEUE_ID_IDX = Internal.createIndex("matchmaking_tickets_queue_id_idx", MatchmakingTickets.MATCHMAKING_TICKETS, new OrderField[] { MatchmakingTickets.MATCHMAKING_TICKETS.QUEUE_ID }, false);
-    }
+    public static final Index DECK_SHARES_TRASHED_BY_RECIPIENT_IDX = Internal.createIndex(DSL.name("deck_shares_trashed_by_recipient_idx"), DeckShares.DECK_SHARES, new OrderField[] { DeckShares.DECK_SHARES.TRASHED_BY_RECIPIENT }, false);
+    public static final Index DECKS_CREATED_BY_IDX = Internal.createIndex(DSL.name("decks_created_by_idx"), Decks.DECKS, new OrderField[] { Decks.DECKS.CREATED_BY }, false);
+    public static final Index DECKS_IS_PREMADE_IDX = Internal.createIndex(DSL.name("decks_is_premade_idx"), Decks.DECKS, new OrderField[] { Decks.DECKS.IS_PREMADE }, false);
+    public static final Index DECKS_TRASHED_IDX = Internal.createIndex(DSL.name("decks_trashed_idx"), Decks.DECKS, new OrderField[] { Decks.DECKS.TRASHED }, false);
+    public static final Index MATCHMAKING_TICKETS_QUEUE_ID_IDX = Internal.createIndex(DSL.name("matchmaking_tickets_queue_id_idx"), MatchmakingTickets.MATCHMAKING_TICKETS, new OrderField[] { MatchmakingTickets.MATCHMAKING_TICKETS.QUEUE_ID }, false);
 }

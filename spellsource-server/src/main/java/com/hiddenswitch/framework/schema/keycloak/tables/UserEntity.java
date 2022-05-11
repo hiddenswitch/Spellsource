@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserEntity extends TableImpl<UserEntityRecord> {
 
-    private static final long serialVersionUID = 1832628121;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.user_entity</code>
@@ -51,73 +52,74 @@ public class UserEntity extends TableImpl<UserEntityRecord> {
     /**
      * The column <code>keycloak.user_entity.id</code>.
      */
-    public final TableField<UserEntityRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<UserEntityRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.user_entity.email</code>.
      */
-    public final TableField<UserEntityRecord, String> EMAIL = createField(DSL.name("email"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserEntityRecord, String> EMAIL = createField(DSL.name("email"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_entity.email_constraint</code>.
      */
-    public final TableField<UserEntityRecord, String> EMAIL_CONSTRAINT = createField(DSL.name("email_constraint"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserEntityRecord, String> EMAIL_CONSTRAINT = createField(DSL.name("email_constraint"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_entity.email_verified</code>.
      */
-    public final TableField<UserEntityRecord, Boolean> EMAIL_VERIFIED = createField(DSL.name("email_verified"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<UserEntityRecord, Boolean> EMAIL_VERIFIED = createField(DSL.name("email_verified"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.user_entity.enabled</code>.
      */
-    public final TableField<UserEntityRecord, Boolean> ENABLED = createField(DSL.name("enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<UserEntityRecord, Boolean> ENABLED = createField(DSL.name("enabled"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.user_entity.federation_link</code>.
      */
-    public final TableField<UserEntityRecord, String> FEDERATION_LINK = createField(DSL.name("federation_link"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserEntityRecord, String> FEDERATION_LINK = createField(DSL.name("federation_link"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_entity.first_name</code>.
      */
-    public final TableField<UserEntityRecord, String> FIRST_NAME = createField(DSL.name("first_name"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserEntityRecord, String> FIRST_NAME = createField(DSL.name("first_name"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_entity.last_name</code>.
      */
-    public final TableField<UserEntityRecord, String> LAST_NAME = createField(DSL.name("last_name"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserEntityRecord, String> LAST_NAME = createField(DSL.name("last_name"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_entity.realm_id</code>.
      */
-    public final TableField<UserEntityRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserEntityRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_entity.username</code>.
      */
-    public final TableField<UserEntityRecord, String> USERNAME = createField(DSL.name("username"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserEntityRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_entity.created_timestamp</code>.
      */
-    public final TableField<UserEntityRecord, Long> CREATED_TIMESTAMP = createField(DSL.name("created_timestamp"), org.jooq.impl.SQLDataType.BIGINT, this, "");
+    public final TableField<UserEntityRecord, Long> CREATED_TIMESTAMP = createField(DSL.name("created_timestamp"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>keycloak.user_entity.service_account_client_link</code>.
      */
-    public final TableField<UserEntityRecord, String> SERVICE_ACCOUNT_CLIENT_LINK = createField(DSL.name("service_account_client_link"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserEntityRecord, String> SERVICE_ACCOUNT_CLIENT_LINK = createField(DSL.name("service_account_client_link"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.user_entity.not_before</code>.
      */
-    public final TableField<UserEntityRecord, Integer> NOT_BEFORE = createField(DSL.name("not_before"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<UserEntityRecord, Integer> NOT_BEFORE = createField(DSL.name("not_before"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
 
-    /**
-     * Create a <code>keycloak.user_entity</code> table reference
-     */
-    public UserEntity() {
-        this(DSL.name("user_entity"), null);
+    private UserEntity(Name alias, Table<UserEntityRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private UserEntity(Name alias, Table<UserEntityRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -134,12 +136,11 @@ public class UserEntity extends TableImpl<UserEntityRecord> {
         this(alias, USER_ENTITY);
     }
 
-    private UserEntity(Name alias, Table<UserEntityRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private UserEntity(Name alias, Table<UserEntityRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.user_entity</code> table reference
+     */
+    public UserEntity() {
+        this(DSL.name("user_entity"), null);
     }
 
     public <O extends Record> UserEntity(Table<O> child, ForeignKey<O, UserEntityRecord> key) {
@@ -148,12 +149,12 @@ public class UserEntity extends TableImpl<UserEntityRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_USER_EMAIL);
+        return Arrays.asList(Indexes.IDX_USER_EMAIL);
     }
 
     @Override
@@ -162,8 +163,8 @@ public class UserEntity extends TableImpl<UserEntityRecord> {
     }
 
     @Override
-    public List<UniqueKey<UserEntityRecord>> getKeys() {
-        return Arrays.<UniqueKey<UserEntityRecord>>asList(Keys.CONSTRAINT_FB, Keys.UK_DYKN684SL8UP1CRFEI6ECKHD7, Keys.UK_RU8TT6T700S9V50BU18WS5HA6);
+    public List<UniqueKey<UserEntityRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.UK_DYKN684SL8UP1CRFEI6ECKHD7, Keys.UK_RU8TT6T700S9V50BU18WS5HA6);
     }
 
     @Override

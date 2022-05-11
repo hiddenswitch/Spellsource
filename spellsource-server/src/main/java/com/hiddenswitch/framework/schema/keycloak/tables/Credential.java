@@ -17,13 +17,14 @@ import org.jooq.ForeignKey;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row9;
+import org.jooq.Row12;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Credential extends TableImpl<CredentialRecord> {
 
-    private static final long serialVersionUID = -608100101;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.credential</code>
@@ -51,53 +52,69 @@ public class Credential extends TableImpl<CredentialRecord> {
     /**
      * The column <code>keycloak.credential.id</code>.
      */
-    public final TableField<CredentialRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<CredentialRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
+
+    /**
+     * The column <code>keycloak.credential.device</code>.
+     */
+    public final TableField<CredentialRecord, String> DEVICE = createField(DSL.name("device"), SQLDataType.VARCHAR(255), this, "");
+
+    /**
+     * The column <code>keycloak.credential.hash_iterations</code>.
+     */
+    public final TableField<CredentialRecord, Integer> HASH_ITERATIONS = createField(DSL.name("hash_iterations"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.credential.salt</code>.
      */
-    public final TableField<CredentialRecord, byte[]> SALT = createField(DSL.name("salt"), org.jooq.impl.SQLDataType.BLOB, this, "");
+    public final TableField<CredentialRecord, byte[]> SALT = createField(DSL.name("salt"), SQLDataType.BLOB, this, "");
 
     /**
      * The column <code>keycloak.credential.type</code>.
      */
-    public final TableField<CredentialRecord, String> TYPE = createField(DSL.name("type"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<CredentialRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR(255), this, "");
+
+    /**
+     * The column <code>keycloak.credential.value</code>.
+     */
+    public final TableField<CredentialRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(4000), this, "");
 
     /**
      * The column <code>keycloak.credential.user_id</code>.
      */
-    public final TableField<CredentialRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<CredentialRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.credential.created_date</code>.
      */
-    public final TableField<CredentialRecord, Long> CREATED_DATE = createField(DSL.name("created_date"), org.jooq.impl.SQLDataType.BIGINT, this, "");
+    public final TableField<CredentialRecord, Long> CREATED_DATE = createField(DSL.name("created_date"), SQLDataType.BIGINT, this, "");
 
     /**
-     * The column <code>keycloak.credential.user_label</code>.
+     * The column <code>keycloak.credential.counter</code>.
      */
-    public final TableField<CredentialRecord, String> USER_LABEL = createField(DSL.name("user_label"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<CredentialRecord, Integer> COUNTER = createField(DSL.name("counter"), SQLDataType.INTEGER.defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
 
     /**
-     * The column <code>keycloak.credential.secret_data</code>.
+     * The column <code>keycloak.credential.digits</code>.
      */
-    public final TableField<CredentialRecord, String> SECRET_DATA = createField(DSL.name("secret_data"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<CredentialRecord, Integer> DIGITS = createField(DSL.name("digits"), SQLDataType.INTEGER.defaultValue(DSL.field("6", SQLDataType.INTEGER)), this, "");
 
     /**
-     * The column <code>keycloak.credential.credential_data</code>.
+     * The column <code>keycloak.credential.period</code>.
      */
-    public final TableField<CredentialRecord, String> CREDENTIAL_DATA = createField(DSL.name("credential_data"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<CredentialRecord, Integer> PERIOD = createField(DSL.name("period"), SQLDataType.INTEGER.defaultValue(DSL.field("30", SQLDataType.INTEGER)), this, "");
 
     /**
-     * The column <code>keycloak.credential.priority</code>.
+     * The column <code>keycloak.credential.algorithm</code>.
      */
-    public final TableField<CredentialRecord, Integer> PRIORITY = createField(DSL.name("priority"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<CredentialRecord, String> ALGORITHM = createField(DSL.name("algorithm"), SQLDataType.VARCHAR(36).defaultValue(DSL.field("NULL::character varying", SQLDataType.VARCHAR)), this, "");
 
-    /**
-     * Create a <code>keycloak.credential</code> table reference
-     */
-    public Credential() {
-        this(DSL.name("credential"), null);
+    private Credential(Name alias, Table<CredentialRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private Credential(Name alias, Table<CredentialRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -114,12 +131,11 @@ public class Credential extends TableImpl<CredentialRecord> {
         this(alias, CREDENTIAL);
     }
 
-    private Credential(Name alias, Table<CredentialRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private Credential(Name alias, Table<CredentialRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.credential</code> table reference
+     */
+    public Credential() {
+        this(DSL.name("credential"), null);
     }
 
     public <O extends Record> Credential(Table<O> child, ForeignKey<O, CredentialRecord> key) {
@@ -128,12 +144,12 @@ public class Credential extends TableImpl<CredentialRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_USER_CREDENTIAL);
+        return Arrays.asList(Indexes.IDX_USER_CREDENTIAL);
     }
 
     @Override
@@ -142,17 +158,21 @@ public class Credential extends TableImpl<CredentialRecord> {
     }
 
     @Override
-    public List<UniqueKey<CredentialRecord>> getKeys() {
-        return Arrays.<UniqueKey<CredentialRecord>>asList(Keys.CONSTRAINT_F);
-    }
-
-    @Override
     public List<ForeignKey<CredentialRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<CredentialRecord, ?>>asList(Keys.CREDENTIAL__FK_PFYR0GLASQYL0DEI3KL69R6V0);
+        return Arrays.asList(Keys.CREDENTIAL__FK_PFYR0GLASQYL0DEI3KL69R6V0);
     }
 
+    private transient UserEntity _userEntity;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table.
+     */
     public UserEntity userEntity() {
-        return new UserEntity(this, Keys.CREDENTIAL__FK_PFYR0GLASQYL0DEI3KL69R6V0);
+        if (_userEntity == null)
+            _userEntity = new UserEntity(this, Keys.CREDENTIAL__FK_PFYR0GLASQYL0DEI3KL69R6V0);
+
+        return _userEntity;
     }
 
     @Override
@@ -182,11 +202,11 @@ public class Credential extends TableImpl<CredentialRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row12 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<String, byte[], String, String, Long, String, String, String, Integer> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row12<String, String, Integer, byte[], String, String, String, Long, Integer, Integer, Integer, String> fieldsRow() {
+        return (Row12) super.fieldsRow();
     }
 }

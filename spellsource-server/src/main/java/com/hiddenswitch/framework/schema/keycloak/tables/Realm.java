@@ -23,6 +23,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -32,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Realm extends TableImpl<RealmRecord> {
 
-    private static final long serialVersionUID = -1422998292;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.realm</code>
@@ -50,268 +51,249 @@ public class Realm extends TableImpl<RealmRecord> {
     /**
      * The column <code>keycloak.realm.id</code>.
      */
-    public final TableField<RealmRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<RealmRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.realm.access_code_lifespan</code>.
      */
-    public final TableField<RealmRecord, Integer> ACCESS_CODE_LIFESPAN = createField(DSL.name("access_code_lifespan"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<RealmRecord, Integer> ACCESS_CODE_LIFESPAN = createField(DSL.name("access_code_lifespan"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.realm.user_action_lifespan</code>.
      */
-    public final TableField<RealmRecord, Integer> USER_ACTION_LIFESPAN = createField(DSL.name("user_action_lifespan"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<RealmRecord, Integer> USER_ACTION_LIFESPAN = createField(DSL.name("user_action_lifespan"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.realm.access_token_lifespan</code>.
      */
-    public final TableField<RealmRecord, Integer> ACCESS_TOKEN_LIFESPAN = createField(DSL.name("access_token_lifespan"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<RealmRecord, Integer> ACCESS_TOKEN_LIFESPAN = createField(DSL.name("access_token_lifespan"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.realm.account_theme</code>.
      */
-    public final TableField<RealmRecord, String> ACCOUNT_THEME = createField(DSL.name("account_theme"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RealmRecord, String> ACCOUNT_THEME = createField(DSL.name("account_theme"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.realm.admin_theme</code>.
      */
-    public final TableField<RealmRecord, String> ADMIN_THEME = createField(DSL.name("admin_theme"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RealmRecord, String> ADMIN_THEME = createField(DSL.name("admin_theme"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.realm.email_theme</code>.
      */
-    public final TableField<RealmRecord, String> EMAIL_THEME = createField(DSL.name("email_theme"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RealmRecord, String> EMAIL_THEME = createField(DSL.name("email_theme"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.realm.enabled</code>.
      */
-    public final TableField<RealmRecord, Boolean> ENABLED = createField(DSL.name("enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> ENABLED = createField(DSL.name("enabled"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.events_enabled</code>.
      */
-    public final TableField<RealmRecord, Boolean> EVENTS_ENABLED = createField(DSL.name("events_enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> EVENTS_ENABLED = createField(DSL.name("events_enabled"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.events_expiration</code>.
      */
-    public final TableField<RealmRecord, Long> EVENTS_EXPIRATION = createField(DSL.name("events_expiration"), org.jooq.impl.SQLDataType.BIGINT, this, "");
+    public final TableField<RealmRecord, Long> EVENTS_EXPIRATION = createField(DSL.name("events_expiration"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>keycloak.realm.login_theme</code>.
      */
-    public final TableField<RealmRecord, String> LOGIN_THEME = createField(DSL.name("login_theme"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RealmRecord, String> LOGIN_THEME = createField(DSL.name("login_theme"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.realm.name</code>.
      */
-    public final TableField<RealmRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RealmRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.realm.not_before</code>.
      */
-    public final TableField<RealmRecord, Integer> NOT_BEFORE = createField(DSL.name("not_before"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<RealmRecord, Integer> NOT_BEFORE = createField(DSL.name("not_before"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.realm.password_policy</code>.
      */
-    public final TableField<RealmRecord, String> PASSWORD_POLICY = createField(DSL.name("password_policy"), org.jooq.impl.SQLDataType.VARCHAR(2550), this, "");
+    public final TableField<RealmRecord, String> PASSWORD_POLICY = createField(DSL.name("password_policy"), SQLDataType.VARCHAR(2550), this, "");
 
     /**
      * The column <code>keycloak.realm.registration_allowed</code>.
      */
-    public final TableField<RealmRecord, Boolean> REGISTRATION_ALLOWED = createField(DSL.name("registration_allowed"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> REGISTRATION_ALLOWED = createField(DSL.name("registration_allowed"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.remember_me</code>.
      */
-    public final TableField<RealmRecord, Boolean> REMEMBER_ME = createField(DSL.name("remember_me"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> REMEMBER_ME = createField(DSL.name("remember_me"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.reset_password_allowed</code>.
      */
-    public final TableField<RealmRecord, Boolean> RESET_PASSWORD_ALLOWED = createField(DSL.name("reset_password_allowed"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> RESET_PASSWORD_ALLOWED = createField(DSL.name("reset_password_allowed"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.social</code>.
      */
-    public final TableField<RealmRecord, Boolean> SOCIAL = createField(DSL.name("social"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> SOCIAL = createField(DSL.name("social"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.ssl_required</code>.
      */
-    public final TableField<RealmRecord, String> SSL_REQUIRED = createField(DSL.name("ssl_required"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RealmRecord, String> SSL_REQUIRED = createField(DSL.name("ssl_required"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.realm.sso_idle_timeout</code>.
      */
-    public final TableField<RealmRecord, Integer> SSO_IDLE_TIMEOUT = createField(DSL.name("sso_idle_timeout"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<RealmRecord, Integer> SSO_IDLE_TIMEOUT = createField(DSL.name("sso_idle_timeout"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.realm.sso_max_lifespan</code>.
      */
-    public final TableField<RealmRecord, Integer> SSO_MAX_LIFESPAN = createField(DSL.name("sso_max_lifespan"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<RealmRecord, Integer> SSO_MAX_LIFESPAN = createField(DSL.name("sso_max_lifespan"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.realm.update_profile_on_soc_login</code>.
      */
-    public final TableField<RealmRecord, Boolean> UPDATE_PROFILE_ON_SOC_LOGIN = createField(DSL.name("update_profile_on_soc_login"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> UPDATE_PROFILE_ON_SOC_LOGIN = createField(DSL.name("update_profile_on_soc_login"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.verify_email</code>.
      */
-    public final TableField<RealmRecord, Boolean> VERIFY_EMAIL = createField(DSL.name("verify_email"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> VERIFY_EMAIL = createField(DSL.name("verify_email"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.master_admin_client</code>.
      */
-    public final TableField<RealmRecord, String> MASTER_ADMIN_CLIENT = createField(DSL.name("master_admin_client"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<RealmRecord, String> MASTER_ADMIN_CLIENT = createField(DSL.name("master_admin_client"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.realm.login_lifespan</code>.
      */
-    public final TableField<RealmRecord, Integer> LOGIN_LIFESPAN = createField(DSL.name("login_lifespan"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<RealmRecord, Integer> LOGIN_LIFESPAN = createField(DSL.name("login_lifespan"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.realm.internationalization_enabled</code>.
      */
-    public final TableField<RealmRecord, Boolean> INTERNATIONALIZATION_ENABLED = createField(DSL.name("internationalization_enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> INTERNATIONALIZATION_ENABLED = createField(DSL.name("internationalization_enabled"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.default_locale</code>.
      */
-    public final TableField<RealmRecord, String> DEFAULT_LOCALE = createField(DSL.name("default_locale"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RealmRecord, String> DEFAULT_LOCALE = createField(DSL.name("default_locale"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.realm.reg_email_as_username</code>.
      */
-    public final TableField<RealmRecord, Boolean> REG_EMAIL_AS_USERNAME = createField(DSL.name("reg_email_as_username"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> REG_EMAIL_AS_USERNAME = createField(DSL.name("reg_email_as_username"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.admin_events_enabled</code>.
      */
-    public final TableField<RealmRecord, Boolean> ADMIN_EVENTS_ENABLED = createField(DSL.name("admin_events_enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> ADMIN_EVENTS_ENABLED = createField(DSL.name("admin_events_enabled"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.admin_events_details_enabled</code>.
      */
-    public final TableField<RealmRecord, Boolean> ADMIN_EVENTS_DETAILS_ENABLED = createField(DSL.name("admin_events_details_enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> ADMIN_EVENTS_DETAILS_ENABLED = createField(DSL.name("admin_events_details_enabled"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.edit_username_allowed</code>.
      */
-    public final TableField<RealmRecord, Boolean> EDIT_USERNAME_ALLOWED = createField(DSL.name("edit_username_allowed"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> EDIT_USERNAME_ALLOWED = createField(DSL.name("edit_username_allowed"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.otp_policy_counter</code>.
      */
-    public final TableField<RealmRecord, Integer> OTP_POLICY_COUNTER = createField(DSL.name("otp_policy_counter"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<RealmRecord, Integer> OTP_POLICY_COUNTER = createField(DSL.name("otp_policy_counter"), SQLDataType.INTEGER.defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>keycloak.realm.otp_policy_window</code>.
      */
-    public final TableField<RealmRecord, Integer> OTP_POLICY_WINDOW = createField(DSL.name("otp_policy_window"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("1", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<RealmRecord, Integer> OTP_POLICY_WINDOW = createField(DSL.name("otp_policy_window"), SQLDataType.INTEGER.defaultValue(DSL.field("1", SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>keycloak.realm.otp_policy_period</code>.
      */
-    public final TableField<RealmRecord, Integer> OTP_POLICY_PERIOD = createField(DSL.name("otp_policy_period"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("30", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<RealmRecord, Integer> OTP_POLICY_PERIOD = createField(DSL.name("otp_policy_period"), SQLDataType.INTEGER.defaultValue(DSL.field("30", SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>keycloak.realm.otp_policy_digits</code>.
      */
-    public final TableField<RealmRecord, Integer> OTP_POLICY_DIGITS = createField(DSL.name("otp_policy_digits"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("6", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<RealmRecord, Integer> OTP_POLICY_DIGITS = createField(DSL.name("otp_policy_digits"), SQLDataType.INTEGER.defaultValue(DSL.field("6", SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>keycloak.realm.otp_policy_alg</code>.
      */
-    public final TableField<RealmRecord, String> OTP_POLICY_ALG = createField(DSL.name("otp_policy_alg"), org.jooq.impl.SQLDataType.VARCHAR(36).defaultValue(org.jooq.impl.DSL.field("'HmacSHA1'::character varying", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+    public final TableField<RealmRecord, String> OTP_POLICY_ALG = createField(DSL.name("otp_policy_alg"), SQLDataType.VARCHAR(36).defaultValue(DSL.field("'HmacSHA1'::character varying", SQLDataType.VARCHAR)), this, "");
 
     /**
      * The column <code>keycloak.realm.otp_policy_type</code>.
      */
-    public final TableField<RealmRecord, String> OTP_POLICY_TYPE = createField(DSL.name("otp_policy_type"), org.jooq.impl.SQLDataType.VARCHAR(36).defaultValue(org.jooq.impl.DSL.field("'totp'::character varying", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+    public final TableField<RealmRecord, String> OTP_POLICY_TYPE = createField(DSL.name("otp_policy_type"), SQLDataType.VARCHAR(36).defaultValue(DSL.field("'totp'::character varying", SQLDataType.VARCHAR)), this, "");
 
     /**
      * The column <code>keycloak.realm.browser_flow</code>.
      */
-    public final TableField<RealmRecord, String> BROWSER_FLOW = createField(DSL.name("browser_flow"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<RealmRecord, String> BROWSER_FLOW = createField(DSL.name("browser_flow"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.realm.registration_flow</code>.
      */
-    public final TableField<RealmRecord, String> REGISTRATION_FLOW = createField(DSL.name("registration_flow"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<RealmRecord, String> REGISTRATION_FLOW = createField(DSL.name("registration_flow"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.realm.direct_grant_flow</code>.
      */
-    public final TableField<RealmRecord, String> DIRECT_GRANT_FLOW = createField(DSL.name("direct_grant_flow"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<RealmRecord, String> DIRECT_GRANT_FLOW = createField(DSL.name("direct_grant_flow"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.realm.reset_credentials_flow</code>.
      */
-    public final TableField<RealmRecord, String> RESET_CREDENTIALS_FLOW = createField(DSL.name("reset_credentials_flow"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<RealmRecord, String> RESET_CREDENTIALS_FLOW = createField(DSL.name("reset_credentials_flow"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.realm.client_auth_flow</code>.
      */
-    public final TableField<RealmRecord, String> CLIENT_AUTH_FLOW = createField(DSL.name("client_auth_flow"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<RealmRecord, String> CLIENT_AUTH_FLOW = createField(DSL.name("client_auth_flow"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.realm.offline_session_idle_timeout</code>.
      */
-    public final TableField<RealmRecord, Integer> OFFLINE_SESSION_IDLE_TIMEOUT = createField(DSL.name("offline_session_idle_timeout"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<RealmRecord, Integer> OFFLINE_SESSION_IDLE_TIMEOUT = createField(DSL.name("offline_session_idle_timeout"), SQLDataType.INTEGER.defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>keycloak.realm.revoke_refresh_token</code>.
      */
-    public final TableField<RealmRecord, Boolean> REVOKE_REFRESH_TOKEN = createField(DSL.name("revoke_refresh_token"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> REVOKE_REFRESH_TOKEN = createField(DSL.name("revoke_refresh_token"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.access_token_life_implicit</code>.
      */
-    public final TableField<RealmRecord, Integer> ACCESS_TOKEN_LIFE_IMPLICIT = createField(DSL.name("access_token_life_implicit"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<RealmRecord, Integer> ACCESS_TOKEN_LIFE_IMPLICIT = createField(DSL.name("access_token_life_implicit"), SQLDataType.INTEGER.defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>keycloak.realm.login_with_email_allowed</code>.
      */
-    public final TableField<RealmRecord, Boolean> LOGIN_WITH_EMAIL_ALLOWED = createField(DSL.name("login_with_email_allowed"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("true", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> LOGIN_WITH_EMAIL_ALLOWED = createField(DSL.name("login_with_email_allowed"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("true", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.duplicate_emails_allowed</code>.
      */
-    public final TableField<RealmRecord, Boolean> DUPLICATE_EMAILS_ALLOWED = createField(DSL.name("duplicate_emails_allowed"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRecord, Boolean> DUPLICATE_EMAILS_ALLOWED = createField(DSL.name("duplicate_emails_allowed"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm.docker_auth_flow</code>.
      */
-    public final TableField<RealmRecord, String> DOCKER_AUTH_FLOW = createField(DSL.name("docker_auth_flow"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<RealmRecord, String> DOCKER_AUTH_FLOW = createField(DSL.name("docker_auth_flow"), SQLDataType.VARCHAR(36), this, "");
 
-    /**
-     * The column <code>keycloak.realm.refresh_token_max_reuse</code>.
-     */
-    public final TableField<RealmRecord, Integer> REFRESH_TOKEN_MAX_REUSE = createField(DSL.name("refresh_token_max_reuse"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    private Realm(Name alias, Table<RealmRecord> aliased) {
+        this(alias, aliased, null);
+    }
 
-    /**
-     * The column <code>keycloak.realm.allow_user_managed_access</code>.
-     */
-    public final TableField<RealmRecord, Boolean> ALLOW_USER_MANAGED_ACCESS = createField(DSL.name("allow_user_managed_access"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
-
-    /**
-     * The column <code>keycloak.realm.sso_max_lifespan_remember_me</code>.
-     */
-    public final TableField<RealmRecord, Integer> SSO_MAX_LIFESPAN_REMEMBER_ME = createField(DSL.name("sso_max_lifespan_remember_me"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
-
-    /**
-     * The column <code>keycloak.realm.sso_idle_timeout_remember_me</code>.
-     */
-    public final TableField<RealmRecord, Integer> SSO_IDLE_TIMEOUT_REMEMBER_ME = createField(DSL.name("sso_idle_timeout_remember_me"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
-
-    /**
-     * Create a <code>keycloak.realm</code> table reference
-     */
-    public Realm() {
-        this(DSL.name("realm"), null);
+    private Realm(Name alias, Table<RealmRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -328,12 +310,11 @@ public class Realm extends TableImpl<RealmRecord> {
         this(alias, REALM);
     }
 
-    private Realm(Name alias, Table<RealmRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private Realm(Name alias, Table<RealmRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.realm</code> table reference
+     */
+    public Realm() {
+        this(DSL.name("realm"), null);
     }
 
     public <O extends Record> Realm(Table<O> child, ForeignKey<O, RealmRecord> key) {
@@ -342,12 +323,12 @@ public class Realm extends TableImpl<RealmRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_REALM_MASTER_ADM_CLI);
+        return Arrays.asList(Indexes.IDX_REALM_MASTER_ADM_CLI);
     }
 
     @Override
@@ -356,8 +337,25 @@ public class Realm extends TableImpl<RealmRecord> {
     }
 
     @Override
-    public List<UniqueKey<RealmRecord>> getKeys() {
-        return Arrays.<UniqueKey<RealmRecord>>asList(Keys.CONSTRAINT_4A, Keys.UK_ORVSDMLA56612EAEFIQ6WL5OI);
+    public List<UniqueKey<RealmRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.UK_ORVSDMLA56612EAEFIQ6WL5OI);
+    }
+
+    @Override
+    public List<ForeignKey<RealmRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.REALM__FK_TRAF444KK6QRKMS7N56AIWQ5Y);
+    }
+
+    private transient Client _client;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.client</code> table.
+     */
+    public Client client() {
+        if (_client == null)
+            _client = new Client(this, Keys.REALM__FK_TRAF444KK6QRKMS7N56AIWQ5Y);
+
+        return _client;
     }
 
     @Override

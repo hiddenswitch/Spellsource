@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Component extends TableImpl<ComponentRecord> {
 
-    private static final long serialVersionUID = -216137083;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.component</code>
@@ -51,43 +52,44 @@ public class Component extends TableImpl<ComponentRecord> {
     /**
      * The column <code>keycloak.component.id</code>.
      */
-    public final TableField<ComponentRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ComponentRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.component.name</code>.
      */
-    public final TableField<ComponentRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ComponentRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.component.parent_id</code>.
      */
-    public final TableField<ComponentRecord, String> PARENT_ID = createField(DSL.name("parent_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<ComponentRecord, String> PARENT_ID = createField(DSL.name("parent_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.component.provider_id</code>.
      */
-    public final TableField<ComponentRecord, String> PROVIDER_ID = createField(DSL.name("provider_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<ComponentRecord, String> PROVIDER_ID = createField(DSL.name("provider_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.component.provider_type</code>.
      */
-    public final TableField<ComponentRecord, String> PROVIDER_TYPE = createField(DSL.name("provider_type"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ComponentRecord, String> PROVIDER_TYPE = createField(DSL.name("provider_type"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.component.realm_id</code>.
      */
-    public final TableField<ComponentRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<ComponentRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.component.sub_type</code>.
      */
-    public final TableField<ComponentRecord, String> SUB_TYPE = createField(DSL.name("sub_type"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ComponentRecord, String> SUB_TYPE = createField(DSL.name("sub_type"), SQLDataType.VARCHAR(255), this, "");
 
-    /**
-     * Create a <code>keycloak.component</code> table reference
-     */
-    public Component() {
-        this(DSL.name("component"), null);
+    private Component(Name alias, Table<ComponentRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private Component(Name alias, Table<ComponentRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -104,12 +106,11 @@ public class Component extends TableImpl<ComponentRecord> {
         this(alias, COMPONENT);
     }
 
-    private Component(Name alias, Table<ComponentRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private Component(Name alias, Table<ComponentRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.component</code> table reference
+     */
+    public Component() {
+        this(DSL.name("component"), null);
     }
 
     public <O extends Record> Component(Table<O> child, ForeignKey<O, ComponentRecord> key) {
@@ -118,12 +119,12 @@ public class Component extends TableImpl<ComponentRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_COMPONENT_PROVIDER_TYPE, Indexes.IDX_COMPONENT_REALM);
+        return Arrays.asList(Indexes.IDX_COMPONENT_REALM);
     }
 
     @Override
@@ -132,17 +133,20 @@ public class Component extends TableImpl<ComponentRecord> {
     }
 
     @Override
-    public List<UniqueKey<ComponentRecord>> getKeys() {
-        return Arrays.<UniqueKey<ComponentRecord>>asList(Keys.CONSTR_COMPONENT_PK);
-    }
-
-    @Override
     public List<ForeignKey<ComponentRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ComponentRecord, ?>>asList(Keys.COMPONENT__FK_COMPONENT_REALM);
+        return Arrays.asList(Keys.COMPONENT__FK_COMPONENT_REALM);
     }
 
+    private transient Realm _realm;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.COMPONENT__FK_COMPONENT_REALM);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.COMPONENT__FK_COMPONENT_REALM);
+
+        return _realm;
     }
 
     @Override

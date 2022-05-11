@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserGroupMembership extends TableImpl<UserGroupMembershipRecord> {
 
-    private static final long serialVersionUID = -152601889;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.user_group_membership</code>
@@ -51,33 +52,12 @@ public class UserGroupMembership extends TableImpl<UserGroupMembershipRecord> {
     /**
      * The column <code>keycloak.user_group_membership.group_id</code>.
      */
-    public final TableField<UserGroupMembershipRecord, String> GROUP_ID = createField(DSL.name("group_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<UserGroupMembershipRecord, String> GROUP_ID = createField(DSL.name("group_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.user_group_membership.user_id</code>.
      */
-    public final TableField<UserGroupMembershipRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.user_group_membership</code> table reference
-     */
-    public UserGroupMembership() {
-        this(DSL.name("user_group_membership"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.user_group_membership</code> table reference
-     */
-    public UserGroupMembership(String alias) {
-        this(DSL.name(alias), USER_GROUP_MEMBERSHIP);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.user_group_membership</code> table reference
-     */
-    public UserGroupMembership(Name alias) {
-        this(alias, USER_GROUP_MEMBERSHIP);
-    }
+    public final TableField<UserGroupMembershipRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     private UserGroupMembership(Name alias, Table<UserGroupMembershipRecord> aliased) {
         this(alias, aliased, null);
@@ -87,18 +67,41 @@ public class UserGroupMembership extends TableImpl<UserGroupMembershipRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.user_group_membership</code> table
+     * reference
+     */
+    public UserGroupMembership(String alias) {
+        this(DSL.name(alias), USER_GROUP_MEMBERSHIP);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.user_group_membership</code> table
+     * reference
+     */
+    public UserGroupMembership(Name alias) {
+        this(alias, USER_GROUP_MEMBERSHIP);
+    }
+
+    /**
+     * Create a <code>keycloak.user_group_membership</code> table reference
+     */
+    public UserGroupMembership() {
+        this(DSL.name("user_group_membership"), null);
+    }
+
     public <O extends Record> UserGroupMembership(Table<O> child, ForeignKey<O, UserGroupMembershipRecord> key) {
         super(child, key, USER_GROUP_MEMBERSHIP);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_USER_GROUP_MAPPING);
+        return Arrays.asList(Indexes.IDX_USER_GROUP_MAPPING);
     }
 
     @Override
@@ -107,17 +110,21 @@ public class UserGroupMembership extends TableImpl<UserGroupMembershipRecord> {
     }
 
     @Override
-    public List<UniqueKey<UserGroupMembershipRecord>> getKeys() {
-        return Arrays.<UniqueKey<UserGroupMembershipRecord>>asList(Keys.CONSTRAINT_USER_GROUP);
-    }
-
-    @Override
     public List<ForeignKey<UserGroupMembershipRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<UserGroupMembershipRecord, ?>>asList(Keys.USER_GROUP_MEMBERSHIP__FK_USER_GROUP_USER);
+        return Arrays.asList(Keys.USER_GROUP_MEMBERSHIP__FK_USER_GROUP_USER);
     }
 
+    private transient UserEntity _userEntity;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table.
+     */
     public UserEntity userEntity() {
-        return new UserEntity(this, Keys.USER_GROUP_MEMBERSHIP__FK_USER_GROUP_USER);
+        if (_userEntity == null)
+            _userEntity = new UserEntity(this, Keys.USER_GROUP_MEMBERSHIP__FK_USER_GROUP_USER);
+
+        return _userEntity;
     }
 
     @Override

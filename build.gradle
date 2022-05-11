@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'com.hiddenswitch.fibers.instrument' version '10.0.6' apply false
+    id 'org.javamodularity.moduleplugin' version '1.8.10' apply false
+}
+
 dependencies {
     gradleApi()
     localGroovy()
@@ -42,8 +53,9 @@ subprojects {
 
                 if (details.requested.group == 'io.netty'
                         && details.requested.version.contains('Final')
-                        && details.requested.name != 'netty-tcnative-boringssl-static') {
-                    details.useVersion "4.1.49.Final"
+                        && details.requested.name != 'netty-tcnative-boringssl-static'
+                        && details.requested.name != 'netty-tcnative-classes') {
+                    details.useVersion "4.1.74.Final"
                 }
 
                 if (details.requested.group == 'org.checkerframework' && details.requested.module.name == 'checker-qual') {
@@ -119,7 +131,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'com.google.protobuf' && details.requested.module.name == 'protobuf-java') {
-                    details.useVersion '3.13.0'
+                    details.useVersion protocVersion
                 }
 
                 if (details.requested.name == 'micronaut-inject' || details.requested.name == 'micronaut-runtime') {
@@ -183,7 +195,11 @@ subprojects {
                 }
 
                 if (details.requested.group == 'io.grpc') {
-                    details.useVersion '1.46.0'
+                    details.useVersion grpcVersion
+                }
+
+                if (details.requested.group == 'com.github.docker-java') {
+                    details.useVersion '3.2.13'
                 }
 
                 if (details.requested.group == 'org.testcontainers') {
@@ -208,6 +224,10 @@ subprojects {
 
                 if (details.requested.group == 'org.glassfish.jaxb' && details.requested.name == 'jaxb-runtime') {
                     details.useVersion '2.3.1'
+                }
+
+                if (details.requested.group == 'com.sun.activation' && details.requested.name == 'jakarta.activation') {
+                    details.useVersion '2.0.0'
                 }
 
                 if (details.requested.group == 'org.jboss.resteasy') {
@@ -235,7 +255,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'net.java.dev.jna') {
-                    details.useVersion '5.5.0'
+                    details.useVersion '5.10.0'
                 }
             }
         }

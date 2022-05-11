@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class IdpMapperConfig extends TableImpl<IdpMapperConfigRecord> {
 
-    private static final long serialVersionUID = 2014539901;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.idp_mapper_config</code>
@@ -49,23 +50,24 @@ public class IdpMapperConfig extends TableImpl<IdpMapperConfigRecord> {
     /**
      * The column <code>keycloak.idp_mapper_config.idp_mapper_id</code>.
      */
-    public final TableField<IdpMapperConfigRecord, String> IDP_MAPPER_ID = createField(DSL.name("idp_mapper_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<IdpMapperConfigRecord, String> IDP_MAPPER_ID = createField(DSL.name("idp_mapper_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.idp_mapper_config.value</code>.
      */
-    public final TableField<IdpMapperConfigRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<IdpMapperConfigRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>keycloak.idp_mapper_config.name</code>.
      */
-    public final TableField<IdpMapperConfigRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<IdpMapperConfigRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
-    /**
-     * Create a <code>keycloak.idp_mapper_config</code> table reference
-     */
-    public IdpMapperConfig() {
-        this(DSL.name("idp_mapper_config"), null);
+    private IdpMapperConfig(Name alias, Table<IdpMapperConfigRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private IdpMapperConfig(Name alias, Table<IdpMapperConfigRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -82,12 +84,11 @@ public class IdpMapperConfig extends TableImpl<IdpMapperConfigRecord> {
         this(alias, IDP_MAPPER_CONFIG);
     }
 
-    private IdpMapperConfig(Name alias, Table<IdpMapperConfigRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private IdpMapperConfig(Name alias, Table<IdpMapperConfigRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.idp_mapper_config</code> table reference
+     */
+    public IdpMapperConfig() {
+        this(DSL.name("idp_mapper_config"), null);
     }
 
     public <O extends Record> IdpMapperConfig(Table<O> child, ForeignKey<O, IdpMapperConfigRecord> key) {
@@ -96,7 +97,7 @@ public class IdpMapperConfig extends TableImpl<IdpMapperConfigRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -105,17 +106,21 @@ public class IdpMapperConfig extends TableImpl<IdpMapperConfigRecord> {
     }
 
     @Override
-    public List<UniqueKey<IdpMapperConfigRecord>> getKeys() {
-        return Arrays.<UniqueKey<IdpMapperConfigRecord>>asList(Keys.CONSTRAINT_IDPMCONFIG);
-    }
-
-    @Override
     public List<ForeignKey<IdpMapperConfigRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<IdpMapperConfigRecord, ?>>asList(Keys.IDP_MAPPER_CONFIG__FK_IDPMCONFIG);
+        return Arrays.asList(Keys.IDP_MAPPER_CONFIG__FK_IDPMCONFIG);
     }
 
+    private transient IdentityProviderMapper _identityProviderMapper;
+
+    /**
+     * Get the implicit join path to the
+     * <code>keycloak.identity_provider_mapper</code> table.
+     */
     public IdentityProviderMapper identityProviderMapper() {
-        return new IdentityProviderMapper(this, Keys.IDP_MAPPER_CONFIG__FK_IDPMCONFIG);
+        if (_identityProviderMapper == null)
+            _identityProviderMapper = new IdentityProviderMapper(this, Keys.IDP_MAPPER_CONFIG__FK_IDPMCONFIG);
+
+        return _identityProviderMapper;
     }
 
     @Override

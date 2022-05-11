@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ClientSessionRole extends TableImpl<ClientSessionRoleRecord> {
 
-    private static final long serialVersionUID = 1062594221;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.client_session_role</code>
@@ -49,33 +50,12 @@ public class ClientSessionRole extends TableImpl<ClientSessionRoleRecord> {
     /**
      * The column <code>keycloak.client_session_role.role_id</code>.
      */
-    public final TableField<ClientSessionRoleRecord, String> ROLE_ID = createField(DSL.name("role_id"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<ClientSessionRoleRecord, String> ROLE_ID = createField(DSL.name("role_id"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.client_session_role.client_session</code>.
      */
-    public final TableField<ClientSessionRoleRecord, String> CLIENT_SESSION = createField(DSL.name("client_session"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.client_session_role</code> table reference
-     */
-    public ClientSessionRole() {
-        this(DSL.name("client_session_role"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.client_session_role</code> table reference
-     */
-    public ClientSessionRole(String alias) {
-        this(DSL.name(alias), CLIENT_SESSION_ROLE);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.client_session_role</code> table reference
-     */
-    public ClientSessionRole(Name alias) {
-        this(alias, CLIENT_SESSION_ROLE);
-    }
+    public final TableField<ClientSessionRoleRecord, String> CLIENT_SESSION = createField(DSL.name("client_session"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     private ClientSessionRole(Name alias, Table<ClientSessionRoleRecord> aliased) {
         this(alias, aliased, null);
@@ -85,13 +65,36 @@ public class ClientSessionRole extends TableImpl<ClientSessionRoleRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.client_session_role</code> table
+     * reference
+     */
+    public ClientSessionRole(String alias) {
+        this(DSL.name(alias), CLIENT_SESSION_ROLE);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.client_session_role</code> table
+     * reference
+     */
+    public ClientSessionRole(Name alias) {
+        this(alias, CLIENT_SESSION_ROLE);
+    }
+
+    /**
+     * Create a <code>keycloak.client_session_role</code> table reference
+     */
+    public ClientSessionRole() {
+        this(DSL.name("client_session_role"), null);
+    }
+
     public <O extends Record> ClientSessionRole(Table<O> child, ForeignKey<O, ClientSessionRoleRecord> key) {
         super(child, key, CLIENT_SESSION_ROLE);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -100,17 +103,21 @@ public class ClientSessionRole extends TableImpl<ClientSessionRoleRecord> {
     }
 
     @Override
-    public List<UniqueKey<ClientSessionRoleRecord>> getKeys() {
-        return Arrays.<UniqueKey<ClientSessionRoleRecord>>asList(Keys.CONSTRAINT_5);
-    }
-
-    @Override
     public List<ForeignKey<ClientSessionRoleRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ClientSessionRoleRecord, ?>>asList(Keys.CLIENT_SESSION_ROLE__FK_11B7SGQW18I532811V7O2DV76);
+        return Arrays.asList(Keys.CLIENT_SESSION_ROLE__FK_11B7SGQW18I532811V7O2DV76);
     }
 
+    private transient ClientSession _clientSession;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.client_session</code>
+     * table.
+     */
     public ClientSession clientSession() {
-        return new ClientSession(this, Keys.CLIENT_SESSION_ROLE__FK_11B7SGQW18I532811V7O2DV76);
+        if (_clientSession == null)
+            _clientSession = new ClientSession(this, Keys.CLIENT_SESSION_ROLE__FK_11B7SGQW18I532811V7O2DV76);
+
+        return _clientSession;
     }
 
     @Override

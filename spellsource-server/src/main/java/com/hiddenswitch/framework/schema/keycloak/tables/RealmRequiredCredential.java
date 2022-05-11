@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RealmRequiredCredential extends TableImpl<RealmRequiredCredentialRecord> {
 
-    private static final long serialVersionUID = 1651297625;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.realm_required_credential</code>
@@ -49,48 +50,27 @@ public class RealmRequiredCredential extends TableImpl<RealmRequiredCredentialRe
     /**
      * The column <code>keycloak.realm_required_credential.type</code>.
      */
-    public final TableField<RealmRequiredCredentialRecord, String> TYPE = createField(DSL.name("type"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<RealmRequiredCredentialRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.realm_required_credential.form_label</code>.
      */
-    public final TableField<RealmRequiredCredentialRecord, String> FORM_LABEL = createField(DSL.name("form_label"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RealmRequiredCredentialRecord, String> FORM_LABEL = createField(DSL.name("form_label"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.realm_required_credential.input</code>.
      */
-    public final TableField<RealmRequiredCredentialRecord, Boolean> INPUT = createField(DSL.name("input"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRequiredCredentialRecord, Boolean> INPUT = createField(DSL.name("input"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm_required_credential.secret</code>.
      */
-    public final TableField<RealmRequiredCredentialRecord, Boolean> SECRET = createField(DSL.name("secret"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RealmRequiredCredentialRecord, Boolean> SECRET = createField(DSL.name("secret"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.realm_required_credential.realm_id</code>.
      */
-    public final TableField<RealmRequiredCredentialRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.realm_required_credential</code> table reference
-     */
-    public RealmRequiredCredential() {
-        this(DSL.name("realm_required_credential"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.realm_required_credential</code> table reference
-     */
-    public RealmRequiredCredential(String alias) {
-        this(DSL.name(alias), REALM_REQUIRED_CREDENTIAL);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.realm_required_credential</code> table reference
-     */
-    public RealmRequiredCredential(Name alias) {
-        this(alias, REALM_REQUIRED_CREDENTIAL);
-    }
+    public final TableField<RealmRequiredCredentialRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     private RealmRequiredCredential(Name alias, Table<RealmRequiredCredentialRecord> aliased) {
         this(alias, aliased, null);
@@ -100,13 +80,36 @@ public class RealmRequiredCredential extends TableImpl<RealmRequiredCredentialRe
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.realm_required_credential</code> table
+     * reference
+     */
+    public RealmRequiredCredential(String alias) {
+        this(DSL.name(alias), REALM_REQUIRED_CREDENTIAL);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.realm_required_credential</code> table
+     * reference
+     */
+    public RealmRequiredCredential(Name alias) {
+        this(alias, REALM_REQUIRED_CREDENTIAL);
+    }
+
+    /**
+     * Create a <code>keycloak.realm_required_credential</code> table reference
+     */
+    public RealmRequiredCredential() {
+        this(DSL.name("realm_required_credential"), null);
+    }
+
     public <O extends Record> RealmRequiredCredential(Table<O> child, ForeignKey<O, RealmRequiredCredentialRecord> key) {
         super(child, key, REALM_REQUIRED_CREDENTIAL);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -115,17 +118,20 @@ public class RealmRequiredCredential extends TableImpl<RealmRequiredCredentialRe
     }
 
     @Override
-    public List<UniqueKey<RealmRequiredCredentialRecord>> getKeys() {
-        return Arrays.<UniqueKey<RealmRequiredCredentialRecord>>asList(Keys.CONSTRAINT_92);
-    }
-
-    @Override
     public List<ForeignKey<RealmRequiredCredentialRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RealmRequiredCredentialRecord, ?>>asList(Keys.REALM_REQUIRED_CREDENTIAL__FK_5HG65LYBEVAVKQFKI3KPONH9V);
+        return Arrays.asList(Keys.REALM_REQUIRED_CREDENTIAL__FK_5HG65LYBEVAVKQFKI3KPONH9V);
     }
 
+    private transient Realm _realm;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.REALM_REQUIRED_CREDENTIAL__FK_5HG65LYBEVAVKQFKI3KPONH9V);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.REALM_REQUIRED_CREDENTIAL__FK_5HG65LYBEVAVKQFKI3KPONH9V);
+
+        return _realm;
     }
 
     @Override

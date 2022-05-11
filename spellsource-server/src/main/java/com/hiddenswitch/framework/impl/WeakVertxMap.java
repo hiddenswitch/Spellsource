@@ -18,6 +18,11 @@ public class WeakVertxMap<T> {
 		this.constructor = constructor;
 	}
 
+	public synchronized void clear() {
+		map.clear();
+		reference.set(null);
+	}
+
 	public synchronized T get() {
 		if (Vertx.currentContext() == null) {
 			return reference.updateAndGet(existing -> {

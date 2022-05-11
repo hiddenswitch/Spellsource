@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2046
-docker run $(echo $DOCKER_OPTS) -v "$(pwd)":/workdir -e "PGUSER=${PGUSER}" -e "PGPASSWORD=${PGPASSWORD}" -e "PGDATABASE=${PGDATABASE}" -v "$(git rev-parse --show-toplevel)":/git -w "/workdir" --entrypoint /usr/bin/pg_dump --rm supabase/postgres "$@"
+docker run $(echo $DOCKER_OPTS) -v "$(pwd)":/workdir -e "PGUSER=${PGUSER}" -e "PGPASSWORD=${PGPASSWORD}" -e "PGDATABASE=${PGDATABASE}" -v "$(git rev-parse --show-toplevel)":/git -w "/workdir" --entrypoint /usr/bin/pg_dump --rm postgres "$@"

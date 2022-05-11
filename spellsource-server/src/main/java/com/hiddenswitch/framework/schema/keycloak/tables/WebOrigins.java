@@ -22,8 +22,8 @@ import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class WebOrigins extends TableImpl<WebOriginsRecord> {
 
-    private static final long serialVersionUID = -1354466396;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.web_origins</code>
@@ -51,18 +51,19 @@ public class WebOrigins extends TableImpl<WebOriginsRecord> {
     /**
      * The column <code>keycloak.web_origins.client_id</code>.
      */
-    public final TableField<WebOriginsRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<WebOriginsRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.web_origins.value</code>.
      */
-    public final TableField<WebOriginsRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<WebOriginsRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
 
-    /**
-     * Create a <code>keycloak.web_origins</code> table reference
-     */
-    public WebOrigins() {
-        this(DSL.name("web_origins"), null);
+    private WebOrigins(Name alias, Table<WebOriginsRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private WebOrigins(Name alias, Table<WebOriginsRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -79,12 +80,11 @@ public class WebOrigins extends TableImpl<WebOriginsRecord> {
         this(alias, WEB_ORIGINS);
     }
 
-    private WebOrigins(Name alias, Table<WebOriginsRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private WebOrigins(Name alias, Table<WebOriginsRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.web_origins</code> table reference
+     */
+    public WebOrigins() {
+        this(DSL.name("web_origins"), null);
     }
 
     public <O extends Record> WebOrigins(Table<O> child, ForeignKey<O, WebOriginsRecord> key) {
@@ -93,31 +93,29 @@ public class WebOrigins extends TableImpl<WebOriginsRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_WEB_ORIG_CLIENT);
-    }
-
-    @Override
-    public UniqueKey<WebOriginsRecord> getPrimaryKey() {
-        return Keys.CONSTRAINT_WEB_ORIGINS;
-    }
-
-    @Override
-    public List<UniqueKey<WebOriginsRecord>> getKeys() {
-        return Arrays.<UniqueKey<WebOriginsRecord>>asList(Keys.CONSTRAINT_WEB_ORIGINS);
+        return Arrays.asList(Indexes.IDX_WEB_ORIG_CLIENT);
     }
 
     @Override
     public List<ForeignKey<WebOriginsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<WebOriginsRecord, ?>>asList(Keys.WEB_ORIGINS__FK_LOJPHO213XCX4WNKOG82SSRFY);
+        return Arrays.asList(Keys.WEB_ORIGINS__FK_LOJPHO213XCX4WNKOG82SSRFY);
     }
 
+    private transient Client _client;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.client</code> table.
+     */
     public Client client() {
-        return new Client(this, Keys.WEB_ORIGINS__FK_LOJPHO213XCX4WNKOG82SSRFY);
+        if (_client == null)
+            _client = new Client(this, Keys.WEB_ORIGINS__FK_LOJPHO213XCX4WNKOG82SSRFY);
+
+        return _client;
     }
 
     @Override

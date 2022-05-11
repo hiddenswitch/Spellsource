@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserSessionNote extends TableImpl<UserSessionNoteRecord> {
 
-    private static final long serialVersionUID = -516583519;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.user_session_note</code>
@@ -49,23 +50,24 @@ public class UserSessionNote extends TableImpl<UserSessionNoteRecord> {
     /**
      * The column <code>keycloak.user_session_note.user_session</code>.
      */
-    public final TableField<UserSessionNoteRecord, String> USER_SESSION = createField(DSL.name("user_session"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<UserSessionNoteRecord, String> USER_SESSION = createField(DSL.name("user_session"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.user_session_note.name</code>.
      */
-    public final TableField<UserSessionNoteRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<UserSessionNoteRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.user_session_note.value</code>.
      */
-    public final TableField<UserSessionNoteRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(2048), this, "");
+    public final TableField<UserSessionNoteRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(2048), this, "");
 
-    /**
-     * Create a <code>keycloak.user_session_note</code> table reference
-     */
-    public UserSessionNote() {
-        this(DSL.name("user_session_note"), null);
+    private UserSessionNote(Name alias, Table<UserSessionNoteRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private UserSessionNote(Name alias, Table<UserSessionNoteRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -82,12 +84,11 @@ public class UserSessionNote extends TableImpl<UserSessionNoteRecord> {
         this(alias, USER_SESSION_NOTE);
     }
 
-    private UserSessionNote(Name alias, Table<UserSessionNoteRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private UserSessionNote(Name alias, Table<UserSessionNoteRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.user_session_note</code> table reference
+     */
+    public UserSessionNote() {
+        this(DSL.name("user_session_note"), null);
     }
 
     public <O extends Record> UserSessionNote(Table<O> child, ForeignKey<O, UserSessionNoteRecord> key) {
@@ -96,7 +97,7 @@ public class UserSessionNote extends TableImpl<UserSessionNoteRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -105,17 +106,21 @@ public class UserSessionNote extends TableImpl<UserSessionNoteRecord> {
     }
 
     @Override
-    public List<UniqueKey<UserSessionNoteRecord>> getKeys() {
-        return Arrays.<UniqueKey<UserSessionNoteRecord>>asList(Keys.CONSTRAINT_USN_PK);
-    }
-
-    @Override
     public List<ForeignKey<UserSessionNoteRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<UserSessionNoteRecord, ?>>asList(Keys.USER_SESSION_NOTE__FK5EDFB00FF51D3472);
+        return Arrays.asList(Keys.USER_SESSION_NOTE__FK5EDFB00FF51D3472);
     }
 
+    private transient UserSession _userSession;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.user_session</code>
+     * table.
+     */
     public UserSession userSession() {
-        return new UserSession(this, Keys.USER_SESSION_NOTE__FK5EDFB00FF51D3472);
+        if (_userSession == null)
+            _userSession = new UserSession(this, Keys.USER_SESSION_NOTE__FK5EDFB00FF51D3472);
+
+        return _userSession;
     }
 
     @Override

@@ -23,105 +23,115 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class AuthenticationFlowDao extends AbstractReactiveVertxDAO<AuthenticationFlowRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow, String, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>, Future<Integer>, Future<String>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<AuthenticationFlowRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow,String> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public AuthenticationFlowDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(AuthenticationFlow.AUTHENTICATION_FLOW, com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow.class, new ReactiveClassicQueryExecutor<AuthenticationFlowRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getAuthenticationFlowMapper()));
-    }
+        public AuthenticationFlowDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(AuthenticationFlow.AUTHENTICATION_FLOW, com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow.class, new ReactiveClassicQueryExecutor<AuthenticationFlowRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getAuthenticationFlowMapper()));
+        }
 
-    @Override
-    protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow object) {
-        return object.getId();
-    }
+        @Override
+        protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow object) {
+                return object.getId();
+        }
 
-    /**
+        /**
      * Find records that have <code>alias IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByAlias(Collection<String> values) {
-        return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.ALIAS.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByAlias(Collection<String> values) {
+                return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.ALIAS.in(values));
+        }
 
-    /**
-     * Find records that have <code>alias IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>alias IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByAlias(Collection<String> values, int limit) {
-        return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.ALIAS.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByAlias(Collection<String> values, int limit) {
+                return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.ALIAS.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>description IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>description IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByDescription(Collection<String> values) {
-        return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.DESCRIPTION.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByDescription(Collection<String> values) {
+                return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.DESCRIPTION.in(values));
+        }
 
-    /**
-     * Find records that have <code>description IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>description IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByDescription(Collection<String> values, int limit) {
-        return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.DESCRIPTION.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByDescription(Collection<String> values, int limit) {
+                return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.DESCRIPTION.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>realm_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByRealmId(Collection<String> values) {
-        return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.REALM_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByRealmId(Collection<String> values) {
+                return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.REALM_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>realm_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>realm_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByRealmId(Collection<String> values, int limit) {
-        return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.REALM_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByRealmId(Collection<String> values, int limit) {
+                return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.REALM_ID.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>provider_id IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>provider_id IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByProviderId(Collection<String> values) {
-        return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.PROVIDER_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByProviderId(Collection<String> values) {
+                return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.PROVIDER_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>provider_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>provider_id IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByProviderId(Collection<String> values, int limit) {
-        return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.PROVIDER_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByProviderId(Collection<String> values, int limit) {
+                return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.PROVIDER_ID.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>top_level IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByTopLevel(Collection<Boolean> values) {
-        return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.TOP_LEVEL.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByTopLevel(Collection<Boolean> values) {
+                return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.TOP_LEVEL.in(values));
+        }
 
-    /**
-     * Find records that have <code>top_level IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>top_level IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByTopLevel(Collection<Boolean> values, int limit) {
-        return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.TOP_LEVEL.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByTopLevel(Collection<Boolean> values, int limit) {
+                return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.TOP_LEVEL.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>built_in IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByBuiltIn(Collection<Boolean> values) {
-        return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.BUILT_IN.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByBuiltIn(Collection<Boolean> values) {
+                return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.BUILT_IN.in(values));
+        }
 
-    /**
-     * Find records that have <code>built_in IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>built_in IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByBuiltIn(Collection<Boolean> values, int limit) {
-        return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.BUILT_IN.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow>> findManyByBuiltIn(Collection<Boolean> values, int limit) {
+                return findManyByCondition(AuthenticationFlow.AUTHENTICATION_FLOW.BUILT_IN.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<AuthenticationFlowRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow,String> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<AuthenticationFlowRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow,String>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<AuthenticationFlowRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow,String> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<AuthenticationFlowRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticationFlow,String>) super.queryExecutor();
+        }
 }

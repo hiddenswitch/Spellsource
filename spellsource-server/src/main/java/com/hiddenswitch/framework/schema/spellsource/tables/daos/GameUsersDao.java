@@ -25,77 +25,85 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class GameUsersDao extends AbstractReactiveVertxDAO<GameUsersRecord, com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers, Record2<Long, String>, Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>>, Future<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>, Future<Integer>, Future<Record2<Long, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<GameUsersRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers,Record2<Long, String>> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public GameUsersDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(GameUsers.GAME_USERS, com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers.class, new ReactiveClassicQueryExecutor<GameUsersRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers,Record2<Long, String>>(configuration,delegate,com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getGameUsersMapper()));
-    }
+        public GameUsersDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(GameUsers.GAME_USERS, com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers.class, new ReactiveClassicQueryExecutor<GameUsersRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers,Record2<Long, String>>(configuration,delegate,com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getGameUsersMapper()));
+        }
 
-    @Override
-    protected Record2<Long, String> getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers object) {
-        return compositeKeyRecord(object.getGameId(), object.getUserId());
-    }
+        @Override
+        protected Record2<Long, String> getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers object) {
+                return compositeKeyRecord(object.getGameId(), object.getUserId());
+        }
 
-    /**
-     * Find records that have <code>player_index IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>player_index IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByPlayerIndex(Collection<Short> values) {
-        return findManyByCondition(GameUsers.GAME_USERS.PLAYER_INDEX.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByPlayerIndex(Collection<Short> values) {
+                return findManyByCondition(GameUsers.GAME_USERS.PLAYER_INDEX.in(values));
+        }
 
-    /**
-     * Find records that have <code>player_index IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>player_index IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByPlayerIndex(Collection<Short> values, int limit) {
-        return findManyByCondition(GameUsers.GAME_USERS.PLAYER_INDEX.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByPlayerIndex(Collection<Short> values, int limit) {
+                return findManyByCondition(GameUsers.GAME_USERS.PLAYER_INDEX.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>user_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByUserId(Collection<String> values) {
-        return findManyByCondition(GameUsers.GAME_USERS.USER_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByUserId(Collection<String> values) {
+                return findManyByCondition(GameUsers.GAME_USERS.USER_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>user_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>user_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByUserId(Collection<String> values, int limit) {
-        return findManyByCondition(GameUsers.GAME_USERS.USER_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByUserId(Collection<String> values, int limit) {
+                return findManyByCondition(GameUsers.GAME_USERS.USER_ID.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>deck_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByDeckId(Collection<String> values) {
-        return findManyByCondition(GameUsers.GAME_USERS.DECK_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByDeckId(Collection<String> values) {
+                return findManyByCondition(GameUsers.GAME_USERS.DECK_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>deck_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>deck_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByDeckId(Collection<String> values, int limit) {
-        return findManyByCondition(GameUsers.GAME_USERS.DECK_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByDeckId(Collection<String> values, int limit) {
+                return findManyByCondition(GameUsers.GAME_USERS.DECK_ID.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>victory_status IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>victory_status IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByVictoryStatus(Collection<GameUserVictoryEnum> values) {
-        return findManyByCondition(GameUsers.GAME_USERS.VICTORY_STATUS.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByVictoryStatus(Collection<GameUserVictoryEnum> values) {
+                return findManyByCondition(GameUsers.GAME_USERS.VICTORY_STATUS.in(values));
+        }
 
-    /**
-     * Find records that have <code>victory_status IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>victory_status IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByVictoryStatus(Collection<GameUserVictoryEnum> values, int limit) {
-        return findManyByCondition(GameUsers.GAME_USERS.VICTORY_STATUS.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers>> findManyByVictoryStatus(Collection<GameUserVictoryEnum> values, int limit) {
+                return findManyByCondition(GameUsers.GAME_USERS.VICTORY_STATUS.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<GameUsersRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers,Record2<Long, String>> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<GameUsersRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers,Record2<Long, String>>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<GameUsersRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers,Record2<Long, String>> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<GameUsersRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers,Record2<Long, String>>) super.queryExecutor();
+        }
 }

@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RealmSmtpConfig extends TableImpl<RealmSmtpConfigRecord> {
 
-    private static final long serialVersionUID = -1946289982;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.realm_smtp_config</code>
@@ -49,23 +50,24 @@ public class RealmSmtpConfig extends TableImpl<RealmSmtpConfigRecord> {
     /**
      * The column <code>keycloak.realm_smtp_config.realm_id</code>.
      */
-    public final TableField<RealmSmtpConfigRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<RealmSmtpConfigRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.realm_smtp_config.value</code>.
      */
-    public final TableField<RealmSmtpConfigRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RealmSmtpConfigRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.realm_smtp_config.name</code>.
      */
-    public final TableField<RealmSmtpConfigRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<RealmSmtpConfigRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
-    /**
-     * Create a <code>keycloak.realm_smtp_config</code> table reference
-     */
-    public RealmSmtpConfig() {
-        this(DSL.name("realm_smtp_config"), null);
+    private RealmSmtpConfig(Name alias, Table<RealmSmtpConfigRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private RealmSmtpConfig(Name alias, Table<RealmSmtpConfigRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -82,12 +84,11 @@ public class RealmSmtpConfig extends TableImpl<RealmSmtpConfigRecord> {
         this(alias, REALM_SMTP_CONFIG);
     }
 
-    private RealmSmtpConfig(Name alias, Table<RealmSmtpConfigRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private RealmSmtpConfig(Name alias, Table<RealmSmtpConfigRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.realm_smtp_config</code> table reference
+     */
+    public RealmSmtpConfig() {
+        this(DSL.name("realm_smtp_config"), null);
     }
 
     public <O extends Record> RealmSmtpConfig(Table<O> child, ForeignKey<O, RealmSmtpConfigRecord> key) {
@@ -96,7 +97,7 @@ public class RealmSmtpConfig extends TableImpl<RealmSmtpConfigRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -105,17 +106,20 @@ public class RealmSmtpConfig extends TableImpl<RealmSmtpConfigRecord> {
     }
 
     @Override
-    public List<UniqueKey<RealmSmtpConfigRecord>> getKeys() {
-        return Arrays.<UniqueKey<RealmSmtpConfigRecord>>asList(Keys.CONSTRAINT_E);
-    }
-
-    @Override
     public List<ForeignKey<RealmSmtpConfigRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RealmSmtpConfigRecord, ?>>asList(Keys.REALM_SMTP_CONFIG__FK_70EJ8XDXGXD0B9HH6180IRR0O);
+        return Arrays.asList(Keys.REALM_SMTP_CONFIG__FK_70EJ8XDXGXD0B9HH6180IRR0O);
     }
 
+    private transient Realm _realm;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.REALM_SMTP_CONFIG__FK_70EJ8XDXGXD0B9HH6180IRR0O);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.REALM_SMTP_CONFIG__FK_70EJ8XDXGXD0B9HH6180IRR0O);
+
+        return _realm;
     }
 
     @Override

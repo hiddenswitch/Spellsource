@@ -24,49 +24,53 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ClientNodeRegistrationsDao extends AbstractReactiveVertxDAO<ClientNodeRegistrationsRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations, Record2<String, String>, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations>, Future<Integer>, Future<Record2<String, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<ClientNodeRegistrationsRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations,Record2<String, String>> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public ClientNodeRegistrationsDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(ClientNodeRegistrations.CLIENT_NODE_REGISTRATIONS, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations.class, new ReactiveClassicQueryExecutor<ClientNodeRegistrationsRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getClientNodeRegistrationsMapper()));
-    }
+        public ClientNodeRegistrationsDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(ClientNodeRegistrations.CLIENT_NODE_REGISTRATIONS, com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations.class, new ReactiveClassicQueryExecutor<ClientNodeRegistrationsRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getClientNodeRegistrationsMapper()));
+        }
 
-    @Override
-    protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations object) {
-        return compositeKeyRecord(object.getClientId(), object.getName());
-    }
+        @Override
+        protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations object) {
+                return compositeKeyRecord(object.getClientId(), object.getName());
+        }
 
-    /**
+        /**
      * Find records that have <code>value IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations>> findManyByValue(Collection<Integer> values) {
-        return findManyByCondition(ClientNodeRegistrations.CLIENT_NODE_REGISTRATIONS.VALUE.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations>> findManyByValue(Collection<Integer> values) {
+                return findManyByCondition(ClientNodeRegistrations.CLIENT_NODE_REGISTRATIONS.VALUE.in(values));
+        }
 
-    /**
-     * Find records that have <code>value IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>value IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations>> findManyByValue(Collection<Integer> values, int limit) {
-        return findManyByCondition(ClientNodeRegistrations.CLIENT_NODE_REGISTRATIONS.VALUE.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations>> findManyByValue(Collection<Integer> values, int limit) {
+                return findManyByCondition(ClientNodeRegistrations.CLIENT_NODE_REGISTRATIONS.VALUE.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>name IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations>> findManyByName(Collection<String> values) {
-        return findManyByCondition(ClientNodeRegistrations.CLIENT_NODE_REGISTRATIONS.NAME.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations>> findManyByName(Collection<String> values) {
+                return findManyByCondition(ClientNodeRegistrations.CLIENT_NODE_REGISTRATIONS.NAME.in(values));
+        }
 
-    /**
-     * Find records that have <code>name IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>name IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations>> findManyByName(Collection<String> values, int limit) {
-        return findManyByCondition(ClientNodeRegistrations.CLIENT_NODE_REGISTRATIONS.NAME.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations>> findManyByName(Collection<String> values, int limit) {
+                return findManyByCondition(ClientNodeRegistrations.CLIENT_NODE_REGISTRATIONS.NAME.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<ClientNodeRegistrationsRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations,Record2<String, String>> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<ClientNodeRegistrationsRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations,Record2<String, String>>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<ClientNodeRegistrationsRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations,Record2<String, String>> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<ClientNodeRegistrationsRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientNodeRegistrations,Record2<String, String>>) super.queryExecutor();
+        }
 }

@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class AssociatedPolicy extends TableImpl<AssociatedPolicyRecord> {
 
-    private static final long serialVersionUID = 1074389265;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.associated_policy</code>
@@ -51,18 +52,19 @@ public class AssociatedPolicy extends TableImpl<AssociatedPolicyRecord> {
     /**
      * The column <code>keycloak.associated_policy.policy_id</code>.
      */
-    public final TableField<AssociatedPolicyRecord, String> POLICY_ID = createField(DSL.name("policy_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<AssociatedPolicyRecord, String> POLICY_ID = createField(DSL.name("policy_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.associated_policy.associated_policy_id</code>.
      */
-    public final TableField<AssociatedPolicyRecord, String> ASSOCIATED_POLICY_ID = createField(DSL.name("associated_policy_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<AssociatedPolicyRecord, String> ASSOCIATED_POLICY_ID = createField(DSL.name("associated_policy_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
-    /**
-     * Create a <code>keycloak.associated_policy</code> table reference
-     */
-    public AssociatedPolicy() {
-        this(DSL.name("associated_policy"), null);
+    private AssociatedPolicy(Name alias, Table<AssociatedPolicyRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private AssociatedPolicy(Name alias, Table<AssociatedPolicyRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -79,12 +81,11 @@ public class AssociatedPolicy extends TableImpl<AssociatedPolicyRecord> {
         this(alias, ASSOCIATED_POLICY);
     }
 
-    private AssociatedPolicy(Name alias, Table<AssociatedPolicyRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private AssociatedPolicy(Name alias, Table<AssociatedPolicyRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.associated_policy</code> table reference
+     */
+    public AssociatedPolicy() {
+        this(DSL.name("associated_policy"), null);
     }
 
     public <O extends Record> AssociatedPolicy(Table<O> child, ForeignKey<O, AssociatedPolicyRecord> key) {
@@ -93,12 +94,12 @@ public class AssociatedPolicy extends TableImpl<AssociatedPolicyRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_ASSOC_POL_ASSOC_POL_ID);
+        return Arrays.asList(Indexes.IDX_ASSOC_POL_ASSOC_POL_ID);
     }
 
     @Override
@@ -107,21 +108,35 @@ public class AssociatedPolicy extends TableImpl<AssociatedPolicyRecord> {
     }
 
     @Override
-    public List<UniqueKey<AssociatedPolicyRecord>> getKeys() {
-        return Arrays.<UniqueKey<AssociatedPolicyRecord>>asList(Keys.CONSTRAINT_FARSRPAP);
-    }
-
-    @Override
     public List<ForeignKey<AssociatedPolicyRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<AssociatedPolicyRecord, ?>>asList(Keys.ASSOCIATED_POLICY__FK_FRSRPAS14XCX4WNKOG82SSRFY, Keys.ASSOCIATED_POLICY__FK_FRSR5S213XCX4WNKOG82SSRFY);
+        return Arrays.asList(Keys.ASSOCIATED_POLICY__FK_FRSRPAS14XCX4WNKOG82SSRFY, Keys.ASSOCIATED_POLICY__FK_FRSR5S213XCX4WNKOG82SSRFY);
     }
 
+    private transient ResourceServerPolicy _fkFrsrpas14xcx4wnkog82ssrfy;
+    private transient ResourceServerPolicy _fkFrsr5s213xcx4wnkog82ssrfy;
+
+    /**
+     * Get the implicit join path to the
+     * <code>keycloak.resource_server_policy</code> table, via the
+     * <code>fk_frsrpas14xcx4wnkog82ssrfy</code> key.
+     */
     public ResourceServerPolicy fkFrsrpas14xcx4wnkog82ssrfy() {
-        return new ResourceServerPolicy(this, Keys.ASSOCIATED_POLICY__FK_FRSRPAS14XCX4WNKOG82SSRFY);
+        if (_fkFrsrpas14xcx4wnkog82ssrfy == null)
+            _fkFrsrpas14xcx4wnkog82ssrfy = new ResourceServerPolicy(this, Keys.ASSOCIATED_POLICY__FK_FRSRPAS14XCX4WNKOG82SSRFY);
+
+        return _fkFrsrpas14xcx4wnkog82ssrfy;
     }
 
+    /**
+     * Get the implicit join path to the
+     * <code>keycloak.resource_server_policy</code> table, via the
+     * <code>fk_frsr5s213xcx4wnkog82ssrfy</code> key.
+     */
     public ResourceServerPolicy fkFrsr5s213xcx4wnkog82ssrfy() {
-        return new ResourceServerPolicy(this, Keys.ASSOCIATED_POLICY__FK_FRSR5S213XCX4WNKOG82SSRFY);
+        if (_fkFrsr5s213xcx4wnkog82ssrfy == null)
+            _fkFrsr5s213xcx4wnkog82ssrfy = new ResourceServerPolicy(this, Keys.ASSOCIATED_POLICY__FK_FRSR5S213XCX4WNKOG82SSRFY);
+
+        return _fkFrsr5s213xcx4wnkog82ssrfy;
     }
 
     @Override

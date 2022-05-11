@@ -8,9 +8,6 @@ import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.UsernameLoginFailureRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
@@ -22,6 +19,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UsernameLoginFailure extends TableImpl<UsernameLoginFailureRecord> {
 
-    private static final long serialVersionUID = -1542033621;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.username_login_failure</code>
@@ -49,53 +47,33 @@ public class UsernameLoginFailure extends TableImpl<UsernameLoginFailureRecord> 
     /**
      * The column <code>keycloak.username_login_failure.realm_id</code>.
      */
-    public final TableField<UsernameLoginFailureRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<UsernameLoginFailureRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.username_login_failure.username</code>.
      */
-    public final TableField<UsernameLoginFailureRecord, String> USERNAME = createField(DSL.name("username"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<UsernameLoginFailureRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
-     * The column <code>keycloak.username_login_failure.failed_login_not_before</code>.
+     * The column
+     * <code>keycloak.username_login_failure.failed_login_not_before</code>.
      */
-    public final TableField<UsernameLoginFailureRecord, Integer> FAILED_LOGIN_NOT_BEFORE = createField(DSL.name("failed_login_not_before"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<UsernameLoginFailureRecord, Integer> FAILED_LOGIN_NOT_BEFORE = createField(DSL.name("failed_login_not_before"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.username_login_failure.last_failure</code>.
      */
-    public final TableField<UsernameLoginFailureRecord, Long> LAST_FAILURE = createField(DSL.name("last_failure"), org.jooq.impl.SQLDataType.BIGINT, this, "");
+    public final TableField<UsernameLoginFailureRecord, Long> LAST_FAILURE = createField(DSL.name("last_failure"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>keycloak.username_login_failure.last_ip_failure</code>.
      */
-    public final TableField<UsernameLoginFailureRecord, String> LAST_IP_FAILURE = createField(DSL.name("last_ip_failure"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UsernameLoginFailureRecord, String> LAST_IP_FAILURE = createField(DSL.name("last_ip_failure"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.username_login_failure.num_failures</code>.
      */
-    public final TableField<UsernameLoginFailureRecord, Integer> NUM_FAILURES = createField(DSL.name("num_failures"), org.jooq.impl.SQLDataType.INTEGER, this, "");
-
-    /**
-     * Create a <code>keycloak.username_login_failure</code> table reference
-     */
-    public UsernameLoginFailure() {
-        this(DSL.name("username_login_failure"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.username_login_failure</code> table reference
-     */
-    public UsernameLoginFailure(String alias) {
-        this(DSL.name(alias), USERNAME_LOGIN_FAILURE);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.username_login_failure</code> table reference
-     */
-    public UsernameLoginFailure(Name alias) {
-        this(alias, USERNAME_LOGIN_FAILURE);
-    }
+    public final TableField<UsernameLoginFailureRecord, Integer> NUM_FAILURES = createField(DSL.name("num_failures"), SQLDataType.INTEGER, this, "");
 
     private UsernameLoginFailure(Name alias, Table<UsernameLoginFailureRecord> aliased) {
         this(alias, aliased, null);
@@ -105,23 +83,41 @@ public class UsernameLoginFailure extends TableImpl<UsernameLoginFailureRecord> 
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.username_login_failure</code> table
+     * reference
+     */
+    public UsernameLoginFailure(String alias) {
+        this(DSL.name(alias), USERNAME_LOGIN_FAILURE);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.username_login_failure</code> table
+     * reference
+     */
+    public UsernameLoginFailure(Name alias) {
+        this(alias, USERNAME_LOGIN_FAILURE);
+    }
+
+    /**
+     * Create a <code>keycloak.username_login_failure</code> table reference
+     */
+    public UsernameLoginFailure() {
+        this(DSL.name("username_login_failure"), null);
+    }
+
     public <O extends Record> UsernameLoginFailure(Table<O> child, ForeignKey<O, UsernameLoginFailureRecord> key) {
         super(child, key, USERNAME_LOGIN_FAILURE);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public UniqueKey<UsernameLoginFailureRecord> getPrimaryKey() {
         return Keys.CONSTRAINT_17_2;
-    }
-
-    @Override
-    public List<UniqueKey<UsernameLoginFailureRecord>> getKeys() {
-        return Arrays.<UniqueKey<UsernameLoginFailureRecord>>asList(Keys.CONSTRAINT_17_2);
     }
 
     @Override

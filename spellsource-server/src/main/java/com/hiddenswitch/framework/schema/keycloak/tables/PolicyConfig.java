@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class PolicyConfig extends TableImpl<PolicyConfigRecord> {
 
-    private static final long serialVersionUID = -1119967827;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.policy_config</code>
@@ -49,23 +50,24 @@ public class PolicyConfig extends TableImpl<PolicyConfigRecord> {
     /**
      * The column <code>keycloak.policy_config.policy_id</code>.
      */
-    public final TableField<PolicyConfigRecord, String> POLICY_ID = createField(DSL.name("policy_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<PolicyConfigRecord, String> POLICY_ID = createField(DSL.name("policy_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.policy_config.name</code>.
      */
-    public final TableField<PolicyConfigRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<PolicyConfigRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.policy_config.value</code>.
      */
-    public final TableField<PolicyConfigRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<PolicyConfigRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.CLOB, this, "");
 
-    /**
-     * Create a <code>keycloak.policy_config</code> table reference
-     */
-    public PolicyConfig() {
-        this(DSL.name("policy_config"), null);
+    private PolicyConfig(Name alias, Table<PolicyConfigRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private PolicyConfig(Name alias, Table<PolicyConfigRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -82,12 +84,11 @@ public class PolicyConfig extends TableImpl<PolicyConfigRecord> {
         this(alias, POLICY_CONFIG);
     }
 
-    private PolicyConfig(Name alias, Table<PolicyConfigRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private PolicyConfig(Name alias, Table<PolicyConfigRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.policy_config</code> table reference
+     */
+    public PolicyConfig() {
+        this(DSL.name("policy_config"), null);
     }
 
     public <O extends Record> PolicyConfig(Table<O> child, ForeignKey<O, PolicyConfigRecord> key) {
@@ -96,7 +97,7 @@ public class PolicyConfig extends TableImpl<PolicyConfigRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -105,17 +106,21 @@ public class PolicyConfig extends TableImpl<PolicyConfigRecord> {
     }
 
     @Override
-    public List<UniqueKey<PolicyConfigRecord>> getKeys() {
-        return Arrays.<UniqueKey<PolicyConfigRecord>>asList(Keys.CONSTRAINT_DPC);
-    }
-
-    @Override
     public List<ForeignKey<PolicyConfigRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<PolicyConfigRecord, ?>>asList(Keys.POLICY_CONFIG__FKDC34197CF864C4E43);
+        return Arrays.asList(Keys.POLICY_CONFIG__FKDC34197CF864C4E43);
     }
 
+    private transient ResourceServerPolicy _resourceServerPolicy;
+
+    /**
+     * Get the implicit join path to the
+     * <code>keycloak.resource_server_policy</code> table.
+     */
     public ResourceServerPolicy resourceServerPolicy() {
-        return new ResourceServerPolicy(this, Keys.POLICY_CONFIG__FKDC34197CF864C4E43);
+        if (_resourceServerPolicy == null)
+            _resourceServerPolicy = new ResourceServerPolicy(this, Keys.POLICY_CONFIG__FKDC34197CF864C4E43);
+
+        return _resourceServerPolicy;
     }
 
     @Override

@@ -8,7 +8,7 @@ import com.hiddenswitch.framework.schema.hiddenswitch.tables.FlywaySchemaHistory
 
 
 /**
- * Convenience access to all tables in hiddenswitch
+ * Convenience access to all tables in hiddenswitch.
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {

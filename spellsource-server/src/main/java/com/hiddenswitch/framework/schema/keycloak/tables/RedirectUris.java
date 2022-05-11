@@ -22,8 +22,8 @@ import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RedirectUris extends TableImpl<RedirectUrisRecord> {
 
-    private static final long serialVersionUID = -1747709533;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.redirect_uris</code>
@@ -51,18 +51,19 @@ public class RedirectUris extends TableImpl<RedirectUrisRecord> {
     /**
      * The column <code>keycloak.redirect_uris.client_id</code>.
      */
-    public final TableField<RedirectUrisRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<RedirectUrisRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.redirect_uris.value</code>.
      */
-    public final TableField<RedirectUrisRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<RedirectUrisRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
 
-    /**
-     * Create a <code>keycloak.redirect_uris</code> table reference
-     */
-    public RedirectUris() {
-        this(DSL.name("redirect_uris"), null);
+    private RedirectUris(Name alias, Table<RedirectUrisRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private RedirectUris(Name alias, Table<RedirectUrisRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -79,12 +80,11 @@ public class RedirectUris extends TableImpl<RedirectUrisRecord> {
         this(alias, REDIRECT_URIS);
     }
 
-    private RedirectUris(Name alias, Table<RedirectUrisRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private RedirectUris(Name alias, Table<RedirectUrisRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.redirect_uris</code> table reference
+     */
+    public RedirectUris() {
+        this(DSL.name("redirect_uris"), null);
     }
 
     public <O extends Record> RedirectUris(Table<O> child, ForeignKey<O, RedirectUrisRecord> key) {
@@ -93,31 +93,29 @@ public class RedirectUris extends TableImpl<RedirectUrisRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_REDIR_URI_CLIENT);
-    }
-
-    @Override
-    public UniqueKey<RedirectUrisRecord> getPrimaryKey() {
-        return Keys.CONSTRAINT_REDIRECT_URIS;
-    }
-
-    @Override
-    public List<UniqueKey<RedirectUrisRecord>> getKeys() {
-        return Arrays.<UniqueKey<RedirectUrisRecord>>asList(Keys.CONSTRAINT_REDIRECT_URIS);
+        return Arrays.asList(Indexes.IDX_REDIR_URI_CLIENT);
     }
 
     @Override
     public List<ForeignKey<RedirectUrisRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RedirectUrisRecord, ?>>asList(Keys.REDIRECT_URIS__FK_1BURS8PB4OUJ97H5WUPPAHV9F);
+        return Arrays.asList(Keys.REDIRECT_URIS__FK_1BURS8PB4OUJ97H5WUPPAHV9F);
     }
 
+    private transient Client _client;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.client</code> table.
+     */
     public Client client() {
-        return new Client(this, Keys.REDIRECT_URIS__FK_1BURS8PB4OUJ97H5WUPPAHV9F);
+        if (_client == null)
+            _client = new Client(this, Keys.REDIRECT_URIS__FK_1BURS8PB4OUJ97H5WUPPAHV9F);
+
+        return _client;
     }
 
     @Override

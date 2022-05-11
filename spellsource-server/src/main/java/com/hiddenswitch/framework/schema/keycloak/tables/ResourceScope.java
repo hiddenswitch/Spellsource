@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ResourceScope extends TableImpl<ResourceScopeRecord> {
 
-    private static final long serialVersionUID = -1779358042;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.resource_scope</code>
@@ -51,18 +52,19 @@ public class ResourceScope extends TableImpl<ResourceScopeRecord> {
     /**
      * The column <code>keycloak.resource_scope.resource_id</code>.
      */
-    public final TableField<ResourceScopeRecord, String> RESOURCE_ID = createField(DSL.name("resource_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ResourceScopeRecord, String> RESOURCE_ID = createField(DSL.name("resource_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.resource_scope.scope_id</code>.
      */
-    public final TableField<ResourceScopeRecord, String> SCOPE_ID = createField(DSL.name("scope_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ResourceScopeRecord, String> SCOPE_ID = createField(DSL.name("scope_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
-    /**
-     * Create a <code>keycloak.resource_scope</code> table reference
-     */
-    public ResourceScope() {
-        this(DSL.name("resource_scope"), null);
+    private ResourceScope(Name alias, Table<ResourceScopeRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private ResourceScope(Name alias, Table<ResourceScopeRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -79,12 +81,11 @@ public class ResourceScope extends TableImpl<ResourceScopeRecord> {
         this(alias, RESOURCE_SCOPE);
     }
 
-    private ResourceScope(Name alias, Table<ResourceScopeRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private ResourceScope(Name alias, Table<ResourceScopeRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.resource_scope</code> table reference
+     */
+    public ResourceScope() {
+        this(DSL.name("resource_scope"), null);
     }
 
     public <O extends Record> ResourceScope(Table<O> child, ForeignKey<O, ResourceScopeRecord> key) {
@@ -93,12 +94,12 @@ public class ResourceScope extends TableImpl<ResourceScopeRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_RES_SCOPE_SCOPE);
+        return Arrays.asList(Indexes.IDX_RES_SCOPE_SCOPE);
     }
 
     @Override
@@ -107,21 +108,33 @@ public class ResourceScope extends TableImpl<ResourceScopeRecord> {
     }
 
     @Override
-    public List<UniqueKey<ResourceScopeRecord>> getKeys() {
-        return Arrays.<UniqueKey<ResourceScopeRecord>>asList(Keys.CONSTRAINT_FARSRSP);
-    }
-
-    @Override
     public List<ForeignKey<ResourceScopeRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ResourceScopeRecord, ?>>asList(Keys.RESOURCE_SCOPE__FK_FRSRPOS13XCX4WNKOG82SSRFY, Keys.RESOURCE_SCOPE__FK_FRSRPS213XCX4WNKOG82SSRFY);
+        return Arrays.asList(Keys.RESOURCE_SCOPE__FK_FRSRPOS13XCX4WNKOG82SSRFY, Keys.RESOURCE_SCOPE__FK_FRSRPS213XCX4WNKOG82SSRFY);
     }
 
+    private transient ResourceServerResource _resourceServerResource;
+    private transient ResourceServerScope _resourceServerScope;
+
+    /**
+     * Get the implicit join path to the
+     * <code>keycloak.resource_server_resource</code> table.
+     */
     public ResourceServerResource resourceServerResource() {
-        return new ResourceServerResource(this, Keys.RESOURCE_SCOPE__FK_FRSRPOS13XCX4WNKOG82SSRFY);
+        if (_resourceServerResource == null)
+            _resourceServerResource = new ResourceServerResource(this, Keys.RESOURCE_SCOPE__FK_FRSRPOS13XCX4WNKOG82SSRFY);
+
+        return _resourceServerResource;
     }
 
+    /**
+     * Get the implicit join path to the
+     * <code>keycloak.resource_server_scope</code> table.
+     */
     public ResourceServerScope resourceServerScope() {
-        return new ResourceServerScope(this, Keys.RESOURCE_SCOPE__FK_FRSRPS213XCX4WNKOG82SSRFY);
+        if (_resourceServerScope == null)
+            _resourceServerScope = new ResourceServerScope(this, Keys.RESOURCE_SCOPE__FK_FRSRPS213XCX4WNKOG82SSRFY);
+
+        return _resourceServerScope;
     }
 
     @Override

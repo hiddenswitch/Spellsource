@@ -21,7 +21,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Hiddenswitch extends SchemaImpl {
 
-    private static final long serialVersionUID = 1338930450;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>hiddenswitch</code>
@@ -48,7 +48,8 @@ public class Hiddenswitch extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.<Table<?>>asList(
-            FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY);
+        return Arrays.asList(
+            FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY
+        );
     }
 }

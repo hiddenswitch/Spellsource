@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class IdentityProviderMapper extends TableImpl<IdentityProviderMapperRecord> {
 
-    private static final long serialVersionUID = -87885489;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.identity_provider_mapper</code>
@@ -51,48 +52,28 @@ public class IdentityProviderMapper extends TableImpl<IdentityProviderMapperReco
     /**
      * The column <code>keycloak.identity_provider_mapper.id</code>.
      */
-    public final TableField<IdentityProviderMapperRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<IdentityProviderMapperRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.identity_provider_mapper.name</code>.
      */
-    public final TableField<IdentityProviderMapperRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<IdentityProviderMapperRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.identity_provider_mapper.idp_alias</code>.
      */
-    public final TableField<IdentityProviderMapperRecord, String> IDP_ALIAS = createField(DSL.name("idp_alias"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<IdentityProviderMapperRecord, String> IDP_ALIAS = createField(DSL.name("idp_alias"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
-     * The column <code>keycloak.identity_provider_mapper.idp_mapper_name</code>.
+     * The column
+     * <code>keycloak.identity_provider_mapper.idp_mapper_name</code>.
      */
-    public final TableField<IdentityProviderMapperRecord, String> IDP_MAPPER_NAME = createField(DSL.name("idp_mapper_name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<IdentityProviderMapperRecord, String> IDP_MAPPER_NAME = createField(DSL.name("idp_mapper_name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.identity_provider_mapper.realm_id</code>.
      */
-    public final TableField<IdentityProviderMapperRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.identity_provider_mapper</code> table reference
-     */
-    public IdentityProviderMapper() {
-        this(DSL.name("identity_provider_mapper"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.identity_provider_mapper</code> table reference
-     */
-    public IdentityProviderMapper(String alias) {
-        this(DSL.name(alias), IDENTITY_PROVIDER_MAPPER);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.identity_provider_mapper</code> table reference
-     */
-    public IdentityProviderMapper(Name alias) {
-        this(alias, IDENTITY_PROVIDER_MAPPER);
-    }
+    public final TableField<IdentityProviderMapperRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     private IdentityProviderMapper(Name alias, Table<IdentityProviderMapperRecord> aliased) {
         this(alias, aliased, null);
@@ -102,18 +83,41 @@ public class IdentityProviderMapper extends TableImpl<IdentityProviderMapperReco
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.identity_provider_mapper</code> table
+     * reference
+     */
+    public IdentityProviderMapper(String alias) {
+        this(DSL.name(alias), IDENTITY_PROVIDER_MAPPER);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.identity_provider_mapper</code> table
+     * reference
+     */
+    public IdentityProviderMapper(Name alias) {
+        this(alias, IDENTITY_PROVIDER_MAPPER);
+    }
+
+    /**
+     * Create a <code>keycloak.identity_provider_mapper</code> table reference
+     */
+    public IdentityProviderMapper() {
+        this(DSL.name("identity_provider_mapper"), null);
+    }
+
     public <O extends Record> IdentityProviderMapper(Table<O> child, ForeignKey<O, IdentityProviderMapperRecord> key) {
         super(child, key, IDENTITY_PROVIDER_MAPPER);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_ID_PROV_MAPP_REALM);
+        return Arrays.asList(Indexes.IDX_ID_PROV_MAPP_REALM);
     }
 
     @Override
@@ -122,17 +126,20 @@ public class IdentityProviderMapper extends TableImpl<IdentityProviderMapperReco
     }
 
     @Override
-    public List<UniqueKey<IdentityProviderMapperRecord>> getKeys() {
-        return Arrays.<UniqueKey<IdentityProviderMapperRecord>>asList(Keys.CONSTRAINT_IDPM);
-    }
-
-    @Override
     public List<ForeignKey<IdentityProviderMapperRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<IdentityProviderMapperRecord, ?>>asList(Keys.IDENTITY_PROVIDER_MAPPER__FK_IDPM_REALM);
+        return Arrays.asList(Keys.IDENTITY_PROVIDER_MAPPER__FK_IDPM_REALM);
     }
 
+    private transient Realm _realm;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.IDENTITY_PROVIDER_MAPPER__FK_IDPM_REALM);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.IDENTITY_PROVIDER_MAPPER__FK_IDPM_REALM);
+
+        return _realm;
     }
 
     @Override

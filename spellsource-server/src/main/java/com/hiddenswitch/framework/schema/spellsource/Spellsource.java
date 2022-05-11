@@ -32,7 +32,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Spellsource extends SchemaImpl {
 
-    private static final long serialVersionUID = -1222667457;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>spellsource</code>
@@ -114,7 +114,7 @@ public class Spellsource extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.<Table<?>>asList(
+        return Arrays.asList(
             BotUsers.BOT_USERS,
             Cards.CARDS,
             CardsInDeck.CARDS_IN_DECK,
@@ -126,6 +126,7 @@ public class Spellsource extends SchemaImpl {
             Games.GAMES,
             MatchmakingQueues.MATCHMAKING_QUEUES,
             MatchmakingTickets.MATCHMAKING_TICKETS,
-            UserEntityAddons.USER_ENTITY_ADDONS);
+            UserEntityAddons.USER_ENTITY_ADDONS
+        );
     }
 }

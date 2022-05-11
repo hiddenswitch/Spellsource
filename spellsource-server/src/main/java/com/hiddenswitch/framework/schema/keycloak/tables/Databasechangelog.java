@@ -19,6 +19,7 @@ import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -28,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Databasechangelog extends TableImpl<DatabasechangelogRecord> {
 
-    private static final long serialVersionUID = 794838032;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.databasechangelog</code>
@@ -46,78 +47,79 @@ public class Databasechangelog extends TableImpl<DatabasechangelogRecord> {
     /**
      * The column <code>keycloak.databasechangelog.id</code>.
      */
-    public final TableField<DatabasechangelogRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<DatabasechangelogRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.databasechangelog.author</code>.
      */
-    public final TableField<DatabasechangelogRecord, String> AUTHOR = createField(DSL.name("author"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<DatabasechangelogRecord, String> AUTHOR = createField(DSL.name("author"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.databasechangelog.filename</code>.
      */
-    public final TableField<DatabasechangelogRecord, String> FILENAME = createField(DSL.name("filename"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<DatabasechangelogRecord, String> FILENAME = createField(DSL.name("filename"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.databasechangelog.dateexecuted</code>.
      */
-    public final TableField<DatabasechangelogRecord, LocalDateTime> DATEEXECUTED = createField(DSL.name("dateexecuted"), org.jooq.impl.SQLDataType.LOCALDATETIME.nullable(false), this, "");
+    public final TableField<DatabasechangelogRecord, LocalDateTime> DATEEXECUTED = createField(DSL.name("dateexecuted"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.databasechangelog.orderexecuted</code>.
      */
-    public final TableField<DatabasechangelogRecord, Integer> ORDEREXECUTED = createField(DSL.name("orderexecuted"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<DatabasechangelogRecord, Integer> ORDEREXECUTED = createField(DSL.name("orderexecuted"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>keycloak.databasechangelog.exectype</code>.
      */
-    public final TableField<DatabasechangelogRecord, String> EXECTYPE = createField(DSL.name("exectype"), org.jooq.impl.SQLDataType.VARCHAR(10).nullable(false), this, "");
+    public final TableField<DatabasechangelogRecord, String> EXECTYPE = createField(DSL.name("exectype"), SQLDataType.VARCHAR(10).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.databasechangelog.md5sum</code>.
      */
-    public final TableField<DatabasechangelogRecord, String> MD5SUM = createField(DSL.name("md5sum"), org.jooq.impl.SQLDataType.VARCHAR(35), this, "");
+    public final TableField<DatabasechangelogRecord, String> MD5SUM = createField(DSL.name("md5sum"), SQLDataType.VARCHAR(35), this, "");
 
     /**
      * The column <code>keycloak.databasechangelog.description</code>.
      */
-    public final TableField<DatabasechangelogRecord, String> DESCRIPTION = createField(DSL.name("description"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<DatabasechangelogRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.databasechangelog.comments</code>.
      */
-    public final TableField<DatabasechangelogRecord, String> COMMENTS = createField(DSL.name("comments"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<DatabasechangelogRecord, String> COMMENTS = createField(DSL.name("comments"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.databasechangelog.tag</code>.
      */
-    public final TableField<DatabasechangelogRecord, String> TAG = createField(DSL.name("tag"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<DatabasechangelogRecord, String> TAG = createField(DSL.name("tag"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.databasechangelog.liquibase</code>.
      */
-    public final TableField<DatabasechangelogRecord, String> LIQUIBASE = createField(DSL.name("liquibase"), org.jooq.impl.SQLDataType.VARCHAR(20), this, "");
+    public final TableField<DatabasechangelogRecord, String> LIQUIBASE = createField(DSL.name("liquibase"), SQLDataType.VARCHAR(20), this, "");
 
     /**
      * The column <code>keycloak.databasechangelog.contexts</code>.
      */
-    public final TableField<DatabasechangelogRecord, String> CONTEXTS = createField(DSL.name("contexts"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<DatabasechangelogRecord, String> CONTEXTS = createField(DSL.name("contexts"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.databasechangelog.labels</code>.
      */
-    public final TableField<DatabasechangelogRecord, String> LABELS = createField(DSL.name("labels"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<DatabasechangelogRecord, String> LABELS = createField(DSL.name("labels"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.databasechangelog.deployment_id</code>.
      */
-    public final TableField<DatabasechangelogRecord, String> DEPLOYMENT_ID = createField(DSL.name("deployment_id"), org.jooq.impl.SQLDataType.VARCHAR(10), this, "");
+    public final TableField<DatabasechangelogRecord, String> DEPLOYMENT_ID = createField(DSL.name("deployment_id"), SQLDataType.VARCHAR(10), this, "");
 
-    /**
-     * Create a <code>keycloak.databasechangelog</code> table reference
-     */
-    public Databasechangelog() {
-        this(DSL.name("databasechangelog"), null);
+    private Databasechangelog(Name alias, Table<DatabasechangelogRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private Databasechangelog(Name alias, Table<DatabasechangelogRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -134,12 +136,11 @@ public class Databasechangelog extends TableImpl<DatabasechangelogRecord> {
         this(alias, DATABASECHANGELOG);
     }
 
-    private Databasechangelog(Name alias, Table<DatabasechangelogRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private Databasechangelog(Name alias, Table<DatabasechangelogRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.databasechangelog</code> table reference
+     */
+    public Databasechangelog() {
+        this(DSL.name("databasechangelog"), null);
     }
 
     public <O extends Record> Databasechangelog(Table<O> child, ForeignKey<O, DatabasechangelogRecord> key) {
@@ -148,7 +149,7 @@ public class Databasechangelog extends TableImpl<DatabasechangelogRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override

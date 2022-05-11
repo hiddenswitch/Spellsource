@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class GroupRoleMapping extends TableImpl<GroupRoleMappingRecord> {
 
-    private static final long serialVersionUID = -1282520101;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.group_role_mapping</code>
@@ -51,33 +52,12 @@ public class GroupRoleMapping extends TableImpl<GroupRoleMappingRecord> {
     /**
      * The column <code>keycloak.group_role_mapping.role_id</code>.
      */
-    public final TableField<GroupRoleMappingRecord, String> ROLE_ID = createField(DSL.name("role_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<GroupRoleMappingRecord, String> ROLE_ID = createField(DSL.name("role_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.group_role_mapping.group_id</code>.
      */
-    public final TableField<GroupRoleMappingRecord, String> GROUP_ID = createField(DSL.name("group_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.group_role_mapping</code> table reference
-     */
-    public GroupRoleMapping() {
-        this(DSL.name("group_role_mapping"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.group_role_mapping</code> table reference
-     */
-    public GroupRoleMapping(String alias) {
-        this(DSL.name(alias), GROUP_ROLE_MAPPING);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.group_role_mapping</code> table reference
-     */
-    public GroupRoleMapping(Name alias) {
-        this(alias, GROUP_ROLE_MAPPING);
-    }
+    public final TableField<GroupRoleMappingRecord, String> GROUP_ID = createField(DSL.name("group_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     private GroupRoleMapping(Name alias, Table<GroupRoleMappingRecord> aliased) {
         this(alias, aliased, null);
@@ -87,18 +67,41 @@ public class GroupRoleMapping extends TableImpl<GroupRoleMappingRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.group_role_mapping</code> table
+     * reference
+     */
+    public GroupRoleMapping(String alias) {
+        this(DSL.name(alias), GROUP_ROLE_MAPPING);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.group_role_mapping</code> table
+     * reference
+     */
+    public GroupRoleMapping(Name alias) {
+        this(alias, GROUP_ROLE_MAPPING);
+    }
+
+    /**
+     * Create a <code>keycloak.group_role_mapping</code> table reference
+     */
+    public GroupRoleMapping() {
+        this(DSL.name("group_role_mapping"), null);
+    }
+
     public <O extends Record> GroupRoleMapping(Table<O> child, ForeignKey<O, GroupRoleMappingRecord> key) {
         super(child, key, GROUP_ROLE_MAPPING);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_GROUP_ROLE_MAPP_GROUP);
+        return Arrays.asList(Indexes.IDX_GROUP_ROLE_MAPP_GROUP);
     }
 
     @Override
@@ -107,17 +110,33 @@ public class GroupRoleMapping extends TableImpl<GroupRoleMappingRecord> {
     }
 
     @Override
-    public List<UniqueKey<GroupRoleMappingRecord>> getKeys() {
-        return Arrays.<UniqueKey<GroupRoleMappingRecord>>asList(Keys.CONSTRAINT_GROUP_ROLE);
-    }
-
-    @Override
     public List<ForeignKey<GroupRoleMappingRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<GroupRoleMappingRecord, ?>>asList(Keys.GROUP_ROLE_MAPPING__FK_GROUP_ROLE_GROUP);
+        return Arrays.asList(Keys.GROUP_ROLE_MAPPING__FK_GROUP_ROLE_ROLE, Keys.GROUP_ROLE_MAPPING__FK_GROUP_ROLE_GROUP);
     }
 
+    private transient KeycloakRole _keycloakRole;
+    private transient KeycloakGroup _keycloakGroup;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.keycloak_role</code>
+     * table.
+     */
+    public KeycloakRole keycloakRole() {
+        if (_keycloakRole == null)
+            _keycloakRole = new KeycloakRole(this, Keys.GROUP_ROLE_MAPPING__FK_GROUP_ROLE_ROLE);
+
+        return _keycloakRole;
+    }
+
+    /**
+     * Get the implicit join path to the <code>keycloak.keycloak_group</code>
+     * table.
+     */
     public KeycloakGroup keycloakGroup() {
-        return new KeycloakGroup(this, Keys.GROUP_ROLE_MAPPING__FK_GROUP_ROLE_GROUP);
+        if (_keycloakGroup == null)
+            _keycloakGroup = new KeycloakGroup(this, Keys.GROUP_ROLE_MAPPING__FK_GROUP_ROLE_GROUP);
+
+        return _keycloakGroup;
     }
 
     @Override

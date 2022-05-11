@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ClientNodeRegistrations extends TableImpl<ClientNodeRegistrationsRecord> {
 
-    private static final long serialVersionUID = 1658863004;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.client_node_registrations</code>
@@ -49,38 +50,17 @@ public class ClientNodeRegistrations extends TableImpl<ClientNodeRegistrationsRe
     /**
      * The column <code>keycloak.client_node_registrations.client_id</code>.
      */
-    public final TableField<ClientNodeRegistrationsRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ClientNodeRegistrationsRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.client_node_registrations.value</code>.
      */
-    public final TableField<ClientNodeRegistrationsRecord, Integer> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<ClientNodeRegistrationsRecord, Integer> VALUE = createField(DSL.name("value"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.client_node_registrations.name</code>.
      */
-    public final TableField<ClientNodeRegistrationsRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.client_node_registrations</code> table reference
-     */
-    public ClientNodeRegistrations() {
-        this(DSL.name("client_node_registrations"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.client_node_registrations</code> table reference
-     */
-    public ClientNodeRegistrations(String alias) {
-        this(DSL.name(alias), CLIENT_NODE_REGISTRATIONS);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.client_node_registrations</code> table reference
-     */
-    public ClientNodeRegistrations(Name alias) {
-        this(alias, CLIENT_NODE_REGISTRATIONS);
-    }
+    public final TableField<ClientNodeRegistrationsRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     private ClientNodeRegistrations(Name alias, Table<ClientNodeRegistrationsRecord> aliased) {
         this(alias, aliased, null);
@@ -90,13 +70,36 @@ public class ClientNodeRegistrations extends TableImpl<ClientNodeRegistrationsRe
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.client_node_registrations</code> table
+     * reference
+     */
+    public ClientNodeRegistrations(String alias) {
+        this(DSL.name(alias), CLIENT_NODE_REGISTRATIONS);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.client_node_registrations</code> table
+     * reference
+     */
+    public ClientNodeRegistrations(Name alias) {
+        this(alias, CLIENT_NODE_REGISTRATIONS);
+    }
+
+    /**
+     * Create a <code>keycloak.client_node_registrations</code> table reference
+     */
+    public ClientNodeRegistrations() {
+        this(DSL.name("client_node_registrations"), null);
+    }
+
     public <O extends Record> ClientNodeRegistrations(Table<O> child, ForeignKey<O, ClientNodeRegistrationsRecord> key) {
         super(child, key, CLIENT_NODE_REGISTRATIONS);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -105,17 +108,20 @@ public class ClientNodeRegistrations extends TableImpl<ClientNodeRegistrationsRe
     }
 
     @Override
-    public List<UniqueKey<ClientNodeRegistrationsRecord>> getKeys() {
-        return Arrays.<UniqueKey<ClientNodeRegistrationsRecord>>asList(Keys.CONSTRAINT_84);
-    }
-
-    @Override
     public List<ForeignKey<ClientNodeRegistrationsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ClientNodeRegistrationsRecord, ?>>asList(Keys.CLIENT_NODE_REGISTRATIONS__FK4129723BA992F594);
+        return Arrays.asList(Keys.CLIENT_NODE_REGISTRATIONS__FK4129723BA992F594);
     }
 
+    private transient Client _client;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.client</code> table.
+     */
     public Client client() {
-        return new Client(this, Keys.CLIENT_NODE_REGISTRATIONS__FK4129723BA992F594);
+        if (_client == null)
+            _client = new Client(this, Keys.CLIENT_NODE_REGISTRATIONS__FK4129723BA992F594);
+
+        return _client;
     }
 
     @Override

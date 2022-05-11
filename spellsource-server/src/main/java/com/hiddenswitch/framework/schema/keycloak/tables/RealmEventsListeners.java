@@ -22,8 +22,8 @@ import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RealmEventsListeners extends TableImpl<RealmEventsListenersRecord> {
 
-    private static final long serialVersionUID = 1757112525;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.realm_events_listeners</code>
@@ -51,33 +51,12 @@ public class RealmEventsListeners extends TableImpl<RealmEventsListenersRecord> 
     /**
      * The column <code>keycloak.realm_events_listeners.realm_id</code>.
      */
-    public final TableField<RealmEventsListenersRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<RealmEventsListenersRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.realm_events_listeners.value</code>.
      */
-    public final TableField<RealmEventsListenersRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.realm_events_listeners</code> table reference
-     */
-    public RealmEventsListeners() {
-        this(DSL.name("realm_events_listeners"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.realm_events_listeners</code> table reference
-     */
-    public RealmEventsListeners(String alias) {
-        this(DSL.name(alias), REALM_EVENTS_LISTENERS);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.realm_events_listeners</code> table reference
-     */
-    public RealmEventsListeners(Name alias) {
-        this(alias, REALM_EVENTS_LISTENERS);
-    }
+    public final TableField<RealmEventsListenersRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
 
     private RealmEventsListeners(Name alias, Table<RealmEventsListenersRecord> aliased) {
         this(alias, aliased, null);
@@ -87,37 +66,58 @@ public class RealmEventsListeners extends TableImpl<RealmEventsListenersRecord> 
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.realm_events_listeners</code> table
+     * reference
+     */
+    public RealmEventsListeners(String alias) {
+        this(DSL.name(alias), REALM_EVENTS_LISTENERS);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.realm_events_listeners</code> table
+     * reference
+     */
+    public RealmEventsListeners(Name alias) {
+        this(alias, REALM_EVENTS_LISTENERS);
+    }
+
+    /**
+     * Create a <code>keycloak.realm_events_listeners</code> table reference
+     */
+    public RealmEventsListeners() {
+        this(DSL.name("realm_events_listeners"), null);
+    }
+
     public <O extends Record> RealmEventsListeners(Table<O> child, ForeignKey<O, RealmEventsListenersRecord> key) {
         super(child, key, REALM_EVENTS_LISTENERS);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_REALM_EVT_LIST_REALM);
-    }
-
-    @Override
-    public UniqueKey<RealmEventsListenersRecord> getPrimaryKey() {
-        return Keys.CONSTR_REALM_EVENTS_LISTENERS;
-    }
-
-    @Override
-    public List<UniqueKey<RealmEventsListenersRecord>> getKeys() {
-        return Arrays.<UniqueKey<RealmEventsListenersRecord>>asList(Keys.CONSTR_REALM_EVENTS_LISTENERS);
+        return Arrays.asList(Indexes.IDX_REALM_EVT_LIST_REALM);
     }
 
     @Override
     public List<ForeignKey<RealmEventsListenersRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RealmEventsListenersRecord, ?>>asList(Keys.REALM_EVENTS_LISTENERS__FK_H846O4H0W8EPX5NXEV9F5Y69J);
+        return Arrays.asList(Keys.REALM_EVENTS_LISTENERS__FK_H846O4H0W8EPX5NXEV9F5Y69J);
     }
 
+    private transient Realm _realm;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.REALM_EVENTS_LISTENERS__FK_H846O4H0W8EPX5NXEV9F5Y69J);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.REALM_EVENTS_LISTENERS__FK_H846O4H0W8EPX5NXEV9F5Y69J);
+
+        return _realm;
     }
 
     @Override

@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ScopePolicy extends TableImpl<ScopePolicyRecord> {
 
-    private static final long serialVersionUID = -545700098;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.scope_policy</code>
@@ -51,18 +52,19 @@ public class ScopePolicy extends TableImpl<ScopePolicyRecord> {
     /**
      * The column <code>keycloak.scope_policy.scope_id</code>.
      */
-    public final TableField<ScopePolicyRecord, String> SCOPE_ID = createField(DSL.name("scope_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ScopePolicyRecord, String> SCOPE_ID = createField(DSL.name("scope_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.scope_policy.policy_id</code>.
      */
-    public final TableField<ScopePolicyRecord, String> POLICY_ID = createField(DSL.name("policy_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ScopePolicyRecord, String> POLICY_ID = createField(DSL.name("policy_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
-    /**
-     * Create a <code>keycloak.scope_policy</code> table reference
-     */
-    public ScopePolicy() {
-        this(DSL.name("scope_policy"), null);
+    private ScopePolicy(Name alias, Table<ScopePolicyRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private ScopePolicy(Name alias, Table<ScopePolicyRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -79,12 +81,11 @@ public class ScopePolicy extends TableImpl<ScopePolicyRecord> {
         this(alias, SCOPE_POLICY);
     }
 
-    private ScopePolicy(Name alias, Table<ScopePolicyRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private ScopePolicy(Name alias, Table<ScopePolicyRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.scope_policy</code> table reference
+     */
+    public ScopePolicy() {
+        this(DSL.name("scope_policy"), null);
     }
 
     public <O extends Record> ScopePolicy(Table<O> child, ForeignKey<O, ScopePolicyRecord> key) {
@@ -93,12 +94,12 @@ public class ScopePolicy extends TableImpl<ScopePolicyRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_SCOPE_POLICY_POLICY);
+        return Arrays.asList(Indexes.IDX_SCOPE_POLICY_POLICY);
     }
 
     @Override
@@ -107,21 +108,33 @@ public class ScopePolicy extends TableImpl<ScopePolicyRecord> {
     }
 
     @Override
-    public List<UniqueKey<ScopePolicyRecord>> getKeys() {
-        return Arrays.<UniqueKey<ScopePolicyRecord>>asList(Keys.CONSTRAINT_FARSRSPS);
-    }
-
-    @Override
     public List<ForeignKey<ScopePolicyRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ScopePolicyRecord, ?>>asList(Keys.SCOPE_POLICY__FK_FRSRPASS3XCX4WNKOG82SSRFY, Keys.SCOPE_POLICY__FK_FRSRASP13XCX4WNKOG82SSRFY);
+        return Arrays.asList(Keys.SCOPE_POLICY__FK_FRSRPASS3XCX4WNKOG82SSRFY, Keys.SCOPE_POLICY__FK_FRSRASP13XCX4WNKOG82SSRFY);
     }
 
+    private transient ResourceServerScope _resourceServerScope;
+    private transient ResourceServerPolicy _resourceServerPolicy;
+
+    /**
+     * Get the implicit join path to the
+     * <code>keycloak.resource_server_scope</code> table.
+     */
     public ResourceServerScope resourceServerScope() {
-        return new ResourceServerScope(this, Keys.SCOPE_POLICY__FK_FRSRPASS3XCX4WNKOG82SSRFY);
+        if (_resourceServerScope == null)
+            _resourceServerScope = new ResourceServerScope(this, Keys.SCOPE_POLICY__FK_FRSRPASS3XCX4WNKOG82SSRFY);
+
+        return _resourceServerScope;
     }
 
+    /**
+     * Get the implicit join path to the
+     * <code>keycloak.resource_server_policy</code> table.
+     */
     public ResourceServerPolicy resourceServerPolicy() {
-        return new ResourceServerPolicy(this, Keys.SCOPE_POLICY__FK_FRSRASP13XCX4WNKOG82SSRFY);
+        if (_resourceServerPolicy == null)
+            _resourceServerPolicy = new ResourceServerPolicy(this, Keys.SCOPE_POLICY__FK_FRSRASP13XCX4WNKOG82SSRFY);
+
+        return _resourceServerPolicy;
     }
 
     @Override

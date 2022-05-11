@@ -25,91 +25,99 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MatchmakingTicketsDao extends AbstractReactiveVertxDAO<MatchmakingTicketsRecord, com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets, Record2<Long, String>, Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>>, Future<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>, Future<Integer>, Future<Record2<Long, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<MatchmakingTicketsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets,Record2<Long, String>> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public MatchmakingTicketsDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(MatchmakingTickets.MATCHMAKING_TICKETS, com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets.class, new ReactiveClassicQueryExecutor<MatchmakingTicketsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets,Record2<Long, String>>(configuration,delegate,com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getMatchmakingTicketsMapper()));
-    }
+        public MatchmakingTicketsDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(MatchmakingTickets.MATCHMAKING_TICKETS, com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets.class, new ReactiveClassicQueryExecutor<MatchmakingTicketsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets,Record2<Long, String>>(configuration,delegate,com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getMatchmakingTicketsMapper()));
+        }
 
-    @Override
-    protected Record2<Long, String> getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets object) {
-        return compositeKeyRecord(object.getId(), object.getQueueId());
-    }
+        @Override
+        protected Record2<Long, String> getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets object) {
+                return compositeKeyRecord(object.getId(), object.getQueueId());
+        }
 
-    /**
+        /**
      * Find records that have <code>queue_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByQueueId(Collection<String> values) {
-        return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.QUEUE_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByQueueId(Collection<String> values) {
+                return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.QUEUE_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>queue_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>queue_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByQueueId(Collection<String> values, int limit) {
-        return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.QUEUE_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByQueueId(Collection<String> values, int limit) {
+                return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.QUEUE_ID.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>user_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByUserId(Collection<String> values) {
-        return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.USER_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByUserId(Collection<String> values) {
+                return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.USER_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>user_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>user_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByUserId(Collection<String> values, int limit) {
-        return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.USER_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByUserId(Collection<String> values, int limit) {
+                return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.USER_ID.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>deck_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByDeckId(Collection<String> values) {
-        return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.DECK_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByDeckId(Collection<String> values) {
+                return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.DECK_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>deck_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>deck_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByDeckId(Collection<String> values, int limit) {
-        return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.DECK_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByDeckId(Collection<String> values, int limit) {
+                return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.DECK_ID.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>bot_deck_id IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>bot_deck_id IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByBotDeckId(Collection<String> values) {
-        return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.BOT_DECK_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByBotDeckId(Collection<String> values) {
+                return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.BOT_DECK_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>bot_deck_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>bot_deck_id IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByBotDeckId(Collection<String> values, int limit) {
-        return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.BOT_DECK_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByBotDeckId(Collection<String> values, int limit) {
+                return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.BOT_DECK_ID.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>created_at IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByCreatedAt(Collection<OffsetDateTime> values) {
-        return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.CREATED_AT.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByCreatedAt(Collection<OffsetDateTime> values) {
+                return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.CREATED_AT.in(values));
+        }
 
-    /**
-     * Find records that have <code>created_at IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>created_at IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByCreatedAt(Collection<OffsetDateTime> values, int limit) {
-        return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.CREATED_AT.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets>> findManyByCreatedAt(Collection<OffsetDateTime> values, int limit) {
+                return findManyByCondition(MatchmakingTickets.MATCHMAKING_TICKETS.CREATED_AT.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<MatchmakingTicketsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets,Record2<Long, String>> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<MatchmakingTicketsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets,Record2<Long, String>>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<MatchmakingTicketsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets,Record2<Long, String>> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<MatchmakingTicketsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets,Record2<Long, String>>) super.queryExecutor();
+        }
 }

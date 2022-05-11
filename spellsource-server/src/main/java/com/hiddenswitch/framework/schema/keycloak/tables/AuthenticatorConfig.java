@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class AuthenticatorConfig extends TableImpl<AuthenticatorConfigRecord> {
 
-    private static final long serialVersionUID = 1590701998;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.authenticator_config</code>
@@ -51,38 +52,17 @@ public class AuthenticatorConfig extends TableImpl<AuthenticatorConfigRecord> {
     /**
      * The column <code>keycloak.authenticator_config.id</code>.
      */
-    public final TableField<AuthenticatorConfigRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<AuthenticatorConfigRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.authenticator_config.alias</code>.
      */
-    public final TableField<AuthenticatorConfigRecord, String> ALIAS = createField(DSL.name("alias"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<AuthenticatorConfigRecord, String> ALIAS = createField(DSL.name("alias"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.authenticator_config.realm_id</code>.
      */
-    public final TableField<AuthenticatorConfigRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
-
-    /**
-     * Create a <code>keycloak.authenticator_config</code> table reference
-     */
-    public AuthenticatorConfig() {
-        this(DSL.name("authenticator_config"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.authenticator_config</code> table reference
-     */
-    public AuthenticatorConfig(String alias) {
-        this(DSL.name(alias), AUTHENTICATOR_CONFIG);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.authenticator_config</code> table reference
-     */
-    public AuthenticatorConfig(Name alias) {
-        this(alias, AUTHENTICATOR_CONFIG);
-    }
+    public final TableField<AuthenticatorConfigRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36), this, "");
 
     private AuthenticatorConfig(Name alias, Table<AuthenticatorConfigRecord> aliased) {
         this(alias, aliased, null);
@@ -92,18 +72,41 @@ public class AuthenticatorConfig extends TableImpl<AuthenticatorConfigRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.authenticator_config</code> table
+     * reference
+     */
+    public AuthenticatorConfig(String alias) {
+        this(DSL.name(alias), AUTHENTICATOR_CONFIG);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.authenticator_config</code> table
+     * reference
+     */
+    public AuthenticatorConfig(Name alias) {
+        this(alias, AUTHENTICATOR_CONFIG);
+    }
+
+    /**
+     * Create a <code>keycloak.authenticator_config</code> table reference
+     */
+    public AuthenticatorConfig() {
+        this(DSL.name("authenticator_config"), null);
+    }
+
     public <O extends Record> AuthenticatorConfig(Table<O> child, ForeignKey<O, AuthenticatorConfigRecord> key) {
         super(child, key, AUTHENTICATOR_CONFIG);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_AUTH_CONFIG_REALM);
+        return Arrays.asList(Indexes.IDX_AUTH_CONFIG_REALM);
     }
 
     @Override
@@ -112,17 +115,20 @@ public class AuthenticatorConfig extends TableImpl<AuthenticatorConfigRecord> {
     }
 
     @Override
-    public List<UniqueKey<AuthenticatorConfigRecord>> getKeys() {
-        return Arrays.<UniqueKey<AuthenticatorConfigRecord>>asList(Keys.CONSTRAINT_AUTH_PK);
-    }
-
-    @Override
     public List<ForeignKey<AuthenticatorConfigRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<AuthenticatorConfigRecord, ?>>asList(Keys.AUTHENTICATOR_CONFIG__FK_AUTH_REALM);
+        return Arrays.asList(Keys.AUTHENTICATOR_CONFIG__FK_AUTH_REALM);
     }
 
+    private transient Realm _realm;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.AUTHENTICATOR_CONFIG__FK_AUTH_REALM);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.AUTHENTICATOR_CONFIG__FK_AUTH_REALM);
+
+        return _realm;
     }
 
     @Override

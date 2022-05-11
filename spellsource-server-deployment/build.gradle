@@ -37,18 +37,18 @@ task deploySpellsourceLocal(type: Exec) {
 
 task deploySpellsourceProd(group: 'Spellsource') {
     description('Deploys Spellsource to production. Requires access to Spellsource secrets.')
-    dependsOn project(':spellsource-server').tasks.jib, project(':spellsource-private').tasks.build
+    dependsOn ':spellsource-server:jib', ':spellsource-private:build', ':spellsource-containers:pushKeycloakClusteredImage'
     def taskPath = "${privateProject.projectDir}/src/secrets/eksctl/spellsource"
     inputs.dir(sourceDir)
     doLast {
-        exec { t ->
-            Utilities.dotEnv(t, new File("${privateProject.projectDir}/src/secrets/common-deployment.env"))
-            environment "KUBECONFIG", "$taskPath/../kubeconfig.yaml"
-            commandLine kubectlBinary, "apply", "-f", "$taskPath/spellsource-ingress.yaml"
-        }
-        exec { t ->
-            Utilities.dotEnv(t, new File("${privateProject.projectDir}/src/secrets/common-deployment.env"))
-            commandLine helmBinary, "upgrade", "--kubeconfig", "$taskPath/../kubeconfig.yaml", "-i", "--atomic", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "-f", "$taskPath/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"
-        }
+        [[kubectlBinary, "rollout", "restart", "deployments/spellsource", "--namespace", "spellsource"],
+         [kubectlBinary, "rollout", "restart", "deployments/keycloak", "--namespace", "spellsource"]]
+                .forEach({ cmd ->
+                    exec { t ->
+                        Utilities.dotEnv(t, new File("${privateProject.projectDir}/src/secrets/common-deployment.env"))
+                        environment "KUBECONFIG", "$taskPath/../kubeconfig.yaml"
+                        commandLine(cmd)
+                    }
+                })
     }
 }

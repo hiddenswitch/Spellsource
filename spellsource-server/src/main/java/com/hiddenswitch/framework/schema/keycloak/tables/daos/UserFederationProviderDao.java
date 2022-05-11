@@ -23,119 +23,132 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserFederationProviderDao extends AbstractReactiveVertxDAO<UserFederationProviderRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider, String, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>, Future<Integer>, Future<String>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<UserFederationProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider,String> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public UserFederationProviderDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(UserFederationProvider.USER_FEDERATION_PROVIDER, com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider.class, new ReactiveClassicQueryExecutor<UserFederationProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getUserFederationProviderMapper()));
-    }
+        public UserFederationProviderDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(UserFederationProvider.USER_FEDERATION_PROVIDER, com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider.class, new ReactiveClassicQueryExecutor<UserFederationProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getUserFederationProviderMapper()));
+        }
 
-    @Override
-    protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider object) {
-        return object.getId();
-    }
+        @Override
+        protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider object) {
+                return object.getId();
+        }
 
-    /**
-     * Find records that have <code>changed_sync_period IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>changed_sync_period IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByChangedSyncPeriod(Collection<Integer> values) {
-        return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.CHANGED_SYNC_PERIOD.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByChangedSyncPeriod(Collection<Integer> values) {
+                return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.CHANGED_SYNC_PERIOD.in(values));
+        }
 
-    /**
-     * Find records that have <code>changed_sync_period IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>changed_sync_period IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByChangedSyncPeriod(Collection<Integer> values, int limit) {
-        return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.CHANGED_SYNC_PERIOD.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByChangedSyncPeriod(Collection<Integer> values, int limit) {
+                return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.CHANGED_SYNC_PERIOD.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>display_name IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>display_name IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByDisplayName(Collection<String> values) {
-        return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.DISPLAY_NAME.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByDisplayName(Collection<String> values) {
+                return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.DISPLAY_NAME.in(values));
+        }
 
-    /**
-     * Find records that have <code>display_name IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>display_name IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByDisplayName(Collection<String> values, int limit) {
-        return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.DISPLAY_NAME.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByDisplayName(Collection<String> values, int limit) {
+                return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.DISPLAY_NAME.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>full_sync_period IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>full_sync_period IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByFullSyncPeriod(Collection<Integer> values) {
-        return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.FULL_SYNC_PERIOD.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByFullSyncPeriod(Collection<Integer> values) {
+                return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.FULL_SYNC_PERIOD.in(values));
+        }
 
-    /**
-     * Find records that have <code>full_sync_period IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>full_sync_period IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByFullSyncPeriod(Collection<Integer> values, int limit) {
-        return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.FULL_SYNC_PERIOD.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByFullSyncPeriod(Collection<Integer> values, int limit) {
+                return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.FULL_SYNC_PERIOD.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>last_sync IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByLastSync(Collection<Integer> values) {
-        return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.LAST_SYNC.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByLastSync(Collection<Integer> values) {
+                return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.LAST_SYNC.in(values));
+        }
 
-    /**
-     * Find records that have <code>last_sync IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>last_sync IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByLastSync(Collection<Integer> values, int limit) {
-        return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.LAST_SYNC.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByLastSync(Collection<Integer> values, int limit) {
+                return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.LAST_SYNC.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>priority IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByPriority(Collection<Integer> values) {
-        return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.PRIORITY.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByPriority(Collection<Integer> values) {
+                return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.PRIORITY.in(values));
+        }
 
-    /**
-     * Find records that have <code>priority IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>priority IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByPriority(Collection<Integer> values, int limit) {
-        return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.PRIORITY.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByPriority(Collection<Integer> values, int limit) {
+                return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.PRIORITY.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>provider_name IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>provider_name IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByProviderName(Collection<String> values) {
-        return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.PROVIDER_NAME.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByProviderName(Collection<String> values) {
+                return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.PROVIDER_NAME.in(values));
+        }
 
-    /**
-     * Find records that have <code>provider_name IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>provider_name IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByProviderName(Collection<String> values, int limit) {
-        return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.PROVIDER_NAME.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByProviderName(Collection<String> values, int limit) {
+                return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.PROVIDER_NAME.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>realm_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByRealmId(Collection<String> values) {
-        return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.REALM_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByRealmId(Collection<String> values) {
+                return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.REALM_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>realm_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>realm_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByRealmId(Collection<String> values, int limit) {
-        return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.REALM_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider>> findManyByRealmId(Collection<String> values, int limit) {
+                return findManyByCondition(UserFederationProvider.USER_FEDERATION_PROVIDER.REALM_ID.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<UserFederationProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider,String> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<UserFederationProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider,String>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<UserFederationProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider,String> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<UserFederationProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserFederationProvider,String>) super.queryExecutor();
+        }
 }

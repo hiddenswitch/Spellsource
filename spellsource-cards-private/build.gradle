@@ -8,10 +8,10 @@ group 'com.hiddenswitch'
 
 dependencies {
     implementation project(':spellsource-common')
-    implementation project(':spellsource-protos')
+    api project(':spellsource-protos')
     testImplementation 'org.jetbrains:annotations:16.0.2'
     testImplementation "com.google.guava:guava:$guavaVersion"
-    testImplementation project(':quasar-core')
+    testImplementation 'com.hiddenswitch:quasar-core:10.0.6'
     testImplementation project(':spellsource-testutils')
     testImplementation project(':spellsource-cards-git')
     testRuntimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'

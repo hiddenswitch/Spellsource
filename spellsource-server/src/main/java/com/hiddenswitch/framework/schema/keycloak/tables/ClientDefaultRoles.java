@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ClientDefaultRoles extends TableImpl<ClientDefaultRolesRecord> {
 
-    private static final long serialVersionUID = -1758607948;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.client_default_roles</code>
@@ -51,33 +52,12 @@ public class ClientDefaultRoles extends TableImpl<ClientDefaultRolesRecord> {
     /**
      * The column <code>keycloak.client_default_roles.client_id</code>.
      */
-    public final TableField<ClientDefaultRolesRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ClientDefaultRolesRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.client_default_roles.role_id</code>.
      */
-    public final TableField<ClientDefaultRolesRecord, String> ROLE_ID = createField(DSL.name("role_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.client_default_roles</code> table reference
-     */
-    public ClientDefaultRoles() {
-        this(DSL.name("client_default_roles"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.client_default_roles</code> table reference
-     */
-    public ClientDefaultRoles(String alias) {
-        this(DSL.name(alias), CLIENT_DEFAULT_ROLES);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.client_default_roles</code> table reference
-     */
-    public ClientDefaultRoles(Name alias) {
-        this(alias, CLIENT_DEFAULT_ROLES);
-    }
+    public final TableField<ClientDefaultRolesRecord, String> ROLE_ID = createField(DSL.name("role_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     private ClientDefaultRoles(Name alias, Table<ClientDefaultRolesRecord> aliased) {
         this(alias, aliased, null);
@@ -87,37 +67,75 @@ public class ClientDefaultRoles extends TableImpl<ClientDefaultRolesRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.client_default_roles</code> table
+     * reference
+     */
+    public ClientDefaultRoles(String alias) {
+        this(DSL.name(alias), CLIENT_DEFAULT_ROLES);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.client_default_roles</code> table
+     * reference
+     */
+    public ClientDefaultRoles(Name alias) {
+        this(alias, CLIENT_DEFAULT_ROLES);
+    }
+
+    /**
+     * Create a <code>keycloak.client_default_roles</code> table reference
+     */
+    public ClientDefaultRoles() {
+        this(DSL.name("client_default_roles"), null);
+    }
+
     public <O extends Record> ClientDefaultRoles(Table<O> child, ForeignKey<O, ClientDefaultRolesRecord> key) {
         super(child, key, CLIENT_DEFAULT_ROLES);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_CLIENT_DEF_ROLES_CLIENT);
+        return Arrays.asList(Indexes.IDX_CLIENT_DEF_ROLES_CLIENT);
     }
 
     @Override
-    public UniqueKey<ClientDefaultRolesRecord> getPrimaryKey() {
-        return Keys.CONSTR_CLIENT_DEFAULT_ROLES;
-    }
-
-    @Override
-    public List<UniqueKey<ClientDefaultRolesRecord>> getKeys() {
-        return Arrays.<UniqueKey<ClientDefaultRolesRecord>>asList(Keys.CONSTR_CLIENT_DEFAULT_ROLES, Keys.UK_8AELWNIBJI49AVXSRTUF6XJOW);
+    public List<UniqueKey<ClientDefaultRolesRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.UK_8AELWNIBJI49AVXSRTUF6XJOW);
     }
 
     @Override
     public List<ForeignKey<ClientDefaultRolesRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ClientDefaultRolesRecord, ?>>asList(Keys.CLIENT_DEFAULT_ROLES__FK_NUILTS7KLWQW2H8M2B5JOYTKY);
+        return Arrays.asList(Keys.CLIENT_DEFAULT_ROLES__FK_NUILTS7KLWQW2H8M2B5JOYTKY, Keys.CLIENT_DEFAULT_ROLES__FK_8AELWNIBJI49AVXSRTUF6XJOW);
     }
 
+    private transient Client _client;
+    private transient KeycloakRole _keycloakRole;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.client</code> table.
+     */
     public Client client() {
-        return new Client(this, Keys.CLIENT_DEFAULT_ROLES__FK_NUILTS7KLWQW2H8M2B5JOYTKY);
+        if (_client == null)
+            _client = new Client(this, Keys.CLIENT_DEFAULT_ROLES__FK_NUILTS7KLWQW2H8M2B5JOYTKY);
+
+        return _client;
+    }
+
+    /**
+     * Get the implicit join path to the <code>keycloak.keycloak_role</code>
+     * table.
+     */
+    public KeycloakRole keycloakRole() {
+        if (_keycloakRole == null)
+            _keycloakRole = new KeycloakRole(this, Keys.CLIENT_DEFAULT_ROLES__FK_8AELWNIBJI49AVXSRTUF6XJOW);
+
+        return _keycloakRole;
     }
 
     @Override

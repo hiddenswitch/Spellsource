@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class AuthenticationFlow extends TableImpl<AuthenticationFlowRecord> {
 
-    private static final long serialVersionUID = -724461605;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.authentication_flow</code>
@@ -51,58 +52,37 @@ public class AuthenticationFlow extends TableImpl<AuthenticationFlowRecord> {
     /**
      * The column <code>keycloak.authentication_flow.id</code>.
      */
-    public final TableField<AuthenticationFlowRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<AuthenticationFlowRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.authentication_flow.alias</code>.
      */
-    public final TableField<AuthenticationFlowRecord, String> ALIAS = createField(DSL.name("alias"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<AuthenticationFlowRecord, String> ALIAS = createField(DSL.name("alias"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.authentication_flow.description</code>.
      */
-    public final TableField<AuthenticationFlowRecord, String> DESCRIPTION = createField(DSL.name("description"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<AuthenticationFlowRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.authentication_flow.realm_id</code>.
      */
-    public final TableField<AuthenticationFlowRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<AuthenticationFlowRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.authentication_flow.provider_id</code>.
      */
-    public final TableField<AuthenticationFlowRecord, String> PROVIDER_ID = createField(DSL.name("provider_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false).defaultValue(org.jooq.impl.DSL.field("'basic-flow'::character varying", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+    public final TableField<AuthenticationFlowRecord, String> PROVIDER_ID = createField(DSL.name("provider_id"), SQLDataType.VARCHAR(36).nullable(false).defaultValue(DSL.field("'basic-flow'::character varying", SQLDataType.VARCHAR)), this, "");
 
     /**
      * The column <code>keycloak.authentication_flow.top_level</code>.
      */
-    public final TableField<AuthenticationFlowRecord, Boolean> TOP_LEVEL = createField(DSL.name("top_level"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<AuthenticationFlowRecord, Boolean> TOP_LEVEL = createField(DSL.name("top_level"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.authentication_flow.built_in</code>.
      */
-    public final TableField<AuthenticationFlowRecord, Boolean> BUILT_IN = createField(DSL.name("built_in"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
-
-    /**
-     * Create a <code>keycloak.authentication_flow</code> table reference
-     */
-    public AuthenticationFlow() {
-        this(DSL.name("authentication_flow"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.authentication_flow</code> table reference
-     */
-    public AuthenticationFlow(String alias) {
-        this(DSL.name(alias), AUTHENTICATION_FLOW);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.authentication_flow</code> table reference
-     */
-    public AuthenticationFlow(Name alias) {
-        this(alias, AUTHENTICATION_FLOW);
-    }
+    public final TableField<AuthenticationFlowRecord, Boolean> BUILT_IN = createField(DSL.name("built_in"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     private AuthenticationFlow(Name alias, Table<AuthenticationFlowRecord> aliased) {
         this(alias, aliased, null);
@@ -112,18 +92,41 @@ public class AuthenticationFlow extends TableImpl<AuthenticationFlowRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.authentication_flow</code> table
+     * reference
+     */
+    public AuthenticationFlow(String alias) {
+        this(DSL.name(alias), AUTHENTICATION_FLOW);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.authentication_flow</code> table
+     * reference
+     */
+    public AuthenticationFlow(Name alias) {
+        this(alias, AUTHENTICATION_FLOW);
+    }
+
+    /**
+     * Create a <code>keycloak.authentication_flow</code> table reference
+     */
+    public AuthenticationFlow() {
+        this(DSL.name("authentication_flow"), null);
+    }
+
     public <O extends Record> AuthenticationFlow(Table<O> child, ForeignKey<O, AuthenticationFlowRecord> key) {
         super(child, key, AUTHENTICATION_FLOW);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_AUTH_FLOW_REALM);
+        return Arrays.asList(Indexes.IDX_AUTH_FLOW_REALM);
     }
 
     @Override
@@ -132,17 +135,20 @@ public class AuthenticationFlow extends TableImpl<AuthenticationFlowRecord> {
     }
 
     @Override
-    public List<UniqueKey<AuthenticationFlowRecord>> getKeys() {
-        return Arrays.<UniqueKey<AuthenticationFlowRecord>>asList(Keys.CONSTRAINT_AUTH_FLOW_PK);
-    }
-
-    @Override
     public List<ForeignKey<AuthenticationFlowRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<AuthenticationFlowRecord, ?>>asList(Keys.AUTHENTICATION_FLOW__FK_AUTH_FLOW_REALM);
+        return Arrays.asList(Keys.AUTHENTICATION_FLOW__FK_AUTH_FLOW_REALM);
     }
 
+    private transient Realm _realm;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.AUTHENTICATION_FLOW__FK_AUTH_FLOW_REALM);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.AUTHENTICATION_FLOW__FK_AUTH_FLOW_REALM);
+
+        return _realm;
     }
 
     @Override

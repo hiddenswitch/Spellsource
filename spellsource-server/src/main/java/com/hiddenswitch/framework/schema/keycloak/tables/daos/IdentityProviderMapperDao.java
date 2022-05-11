@@ -23,77 +23,84 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class IdentityProviderMapperDao extends AbstractReactiveVertxDAO<IdentityProviderMapperRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper, String, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>, Future<Integer>, Future<String>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<IdentityProviderMapperRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper,String> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public IdentityProviderMapperDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER, com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper.class, new ReactiveClassicQueryExecutor<IdentityProviderMapperRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getIdentityProviderMapperMapper()));
-    }
+        public IdentityProviderMapperDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER, com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper.class, new ReactiveClassicQueryExecutor<IdentityProviderMapperRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getIdentityProviderMapperMapper()));
+        }
 
-    @Override
-    protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper object) {
-        return object.getId();
-    }
+        @Override
+        protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper object) {
+                return object.getId();
+        }
 
-    /**
+        /**
      * Find records that have <code>name IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByName(Collection<String> values) {
-        return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.NAME.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByName(Collection<String> values) {
+                return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.NAME.in(values));
+        }
 
-    /**
-     * Find records that have <code>name IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>name IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByName(Collection<String> values, int limit) {
-        return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.NAME.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByName(Collection<String> values, int limit) {
+                return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.NAME.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>idp_alias IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByIdpAlias(Collection<String> values) {
-        return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.IDP_ALIAS.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByIdpAlias(Collection<String> values) {
+                return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.IDP_ALIAS.in(values));
+        }
 
-    /**
-     * Find records that have <code>idp_alias IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>idp_alias IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByIdpAlias(Collection<String> values, int limit) {
-        return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.IDP_ALIAS.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByIdpAlias(Collection<String> values, int limit) {
+                return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.IDP_ALIAS.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>idp_mapper_name IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>idp_mapper_name IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByIdpMapperName(Collection<String> values) {
-        return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.IDP_MAPPER_NAME.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByIdpMapperName(Collection<String> values) {
+                return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.IDP_MAPPER_NAME.in(values));
+        }
 
-    /**
-     * Find records that have <code>idp_mapper_name IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>idp_mapper_name IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByIdpMapperName(Collection<String> values, int limit) {
-        return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.IDP_MAPPER_NAME.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByIdpMapperName(Collection<String> values, int limit) {
+                return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.IDP_MAPPER_NAME.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>realm_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByRealmId(Collection<String> values) {
-        return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.REALM_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByRealmId(Collection<String> values) {
+                return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.REALM_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>realm_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>realm_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByRealmId(Collection<String> values, int limit) {
-        return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.REALM_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper>> findManyByRealmId(Collection<String> values, int limit) {
+                return findManyByCondition(IdentityProviderMapper.IDENTITY_PROVIDER_MAPPER.REALM_ID.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<IdentityProviderMapperRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper,String> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<IdentityProviderMapperRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper,String>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<IdentityProviderMapperRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper,String> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<IdentityProviderMapperRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.IdentityProviderMapper,String>) super.queryExecutor();
+        }
 }

@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RealmDefaultRoles extends TableImpl<RealmDefaultRolesRecord> {
 
-    private static final long serialVersionUID = 875362189;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.realm_default_roles</code>
@@ -51,33 +52,12 @@ public class RealmDefaultRoles extends TableImpl<RealmDefaultRolesRecord> {
     /**
      * The column <code>keycloak.realm_default_roles.realm_id</code>.
      */
-    public final TableField<RealmDefaultRolesRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<RealmDefaultRolesRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.realm_default_roles.role_id</code>.
      */
-    public final TableField<RealmDefaultRolesRecord, String> ROLE_ID = createField(DSL.name("role_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.realm_default_roles</code> table reference
-     */
-    public RealmDefaultRoles() {
-        this(DSL.name("realm_default_roles"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.realm_default_roles</code> table reference
-     */
-    public RealmDefaultRoles(String alias) {
-        this(DSL.name(alias), REALM_DEFAULT_ROLES);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.realm_default_roles</code> table reference
-     */
-    public RealmDefaultRoles(Name alias) {
-        this(alias, REALM_DEFAULT_ROLES);
-    }
+    public final TableField<RealmDefaultRolesRecord, String> ROLE_ID = createField(DSL.name("role_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     private RealmDefaultRoles(Name alias, Table<RealmDefaultRolesRecord> aliased) {
         this(alias, aliased, null);
@@ -87,37 +67,75 @@ public class RealmDefaultRoles extends TableImpl<RealmDefaultRolesRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.realm_default_roles</code> table
+     * reference
+     */
+    public RealmDefaultRoles(String alias) {
+        this(DSL.name(alias), REALM_DEFAULT_ROLES);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.realm_default_roles</code> table
+     * reference
+     */
+    public RealmDefaultRoles(Name alias) {
+        this(alias, REALM_DEFAULT_ROLES);
+    }
+
+    /**
+     * Create a <code>keycloak.realm_default_roles</code> table reference
+     */
+    public RealmDefaultRoles() {
+        this(DSL.name("realm_default_roles"), null);
+    }
+
     public <O extends Record> RealmDefaultRoles(Table<O> child, ForeignKey<O, RealmDefaultRolesRecord> key) {
         super(child, key, REALM_DEFAULT_ROLES);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_REALM_DEF_ROLES_REALM);
+        return Arrays.asList(Indexes.IDX_REALM_DEF_ROLES_REALM);
     }
 
     @Override
-    public UniqueKey<RealmDefaultRolesRecord> getPrimaryKey() {
-        return Keys.CONSTRAINT_REALM_DEFAULT_ROLES;
-    }
-
-    @Override
-    public List<UniqueKey<RealmDefaultRolesRecord>> getKeys() {
-        return Arrays.<UniqueKey<RealmDefaultRolesRecord>>asList(Keys.CONSTRAINT_REALM_DEFAULT_ROLES, Keys.UK_H4WPD7W4HSOOLNI3H0SW7BTJE);
+    public List<UniqueKey<RealmDefaultRolesRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.UK_H4WPD7W4HSOOLNI3H0SW7BTJE);
     }
 
     @Override
     public List<ForeignKey<RealmDefaultRolesRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RealmDefaultRolesRecord, ?>>asList(Keys.REALM_DEFAULT_ROLES__FK_EVUDB1PPW84OXFAX2DRS03ICC);
+        return Arrays.asList(Keys.REALM_DEFAULT_ROLES__FK_EVUDB1PPW84OXFAX2DRS03ICC, Keys.REALM_DEFAULT_ROLES__FK_H4WPD7W4HSOOLNI3H0SW7BTJE);
     }
 
+    private transient Realm _realm;
+    private transient KeycloakRole _keycloakRole;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.REALM_DEFAULT_ROLES__FK_EVUDB1PPW84OXFAX2DRS03ICC);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.REALM_DEFAULT_ROLES__FK_EVUDB1PPW84OXFAX2DRS03ICC);
+
+        return _realm;
+    }
+
+    /**
+     * Get the implicit join path to the <code>keycloak.keycloak_role</code>
+     * table.
+     */
+    public KeycloakRole keycloakRole() {
+        if (_keycloakRole == null)
+            _keycloakRole = new KeycloakRole(this, Keys.REALM_DEFAULT_ROLES__FK_H4WPD7W4HSOOLNI3H0SW7BTJE);
+
+        return _keycloakRole;
     }
 
     @Override

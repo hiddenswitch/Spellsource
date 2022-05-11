@@ -17,13 +17,14 @@ import org.jooq.ForeignKey;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RequiredActionProvider extends TableImpl<RequiredActionProviderRecord> {
 
-    private static final long serialVersionUID = -594239875;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.required_action_provider</code>
@@ -51,63 +52,37 @@ public class RequiredActionProvider extends TableImpl<RequiredActionProviderReco
     /**
      * The column <code>keycloak.required_action_provider.id</code>.
      */
-    public final TableField<RequiredActionProviderRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<RequiredActionProviderRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.required_action_provider.alias</code>.
      */
-    public final TableField<RequiredActionProviderRecord, String> ALIAS = createField(DSL.name("alias"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RequiredActionProviderRecord, String> ALIAS = createField(DSL.name("alias"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.required_action_provider.name</code>.
      */
-    public final TableField<RequiredActionProviderRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RequiredActionProviderRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.required_action_provider.realm_id</code>.
      */
-    public final TableField<RequiredActionProviderRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<RequiredActionProviderRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.required_action_provider.enabled</code>.
      */
-    public final TableField<RequiredActionProviderRecord, Boolean> ENABLED = createField(DSL.name("enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RequiredActionProviderRecord, Boolean> ENABLED = createField(DSL.name("enabled"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.required_action_provider.default_action</code>.
      */
-    public final TableField<RequiredActionProviderRecord, Boolean> DEFAULT_ACTION = createField(DSL.name("default_action"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<RequiredActionProviderRecord, Boolean> DEFAULT_ACTION = createField(DSL.name("default_action"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.required_action_provider.provider_id</code>.
      */
-    public final TableField<RequiredActionProviderRecord, String> PROVIDER_ID = createField(DSL.name("provider_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
-
-    /**
-     * The column <code>keycloak.required_action_provider.priority</code>.
-     */
-    public final TableField<RequiredActionProviderRecord, Integer> PRIORITY = createField(DSL.name("priority"), org.jooq.impl.SQLDataType.INTEGER, this, "");
-
-    /**
-     * Create a <code>keycloak.required_action_provider</code> table reference
-     */
-    public RequiredActionProvider() {
-        this(DSL.name("required_action_provider"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.required_action_provider</code> table reference
-     */
-    public RequiredActionProvider(String alias) {
-        this(DSL.name(alias), REQUIRED_ACTION_PROVIDER);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.required_action_provider</code> table reference
-     */
-    public RequiredActionProvider(Name alias) {
-        this(alias, REQUIRED_ACTION_PROVIDER);
-    }
+    public final TableField<RequiredActionProviderRecord, String> PROVIDER_ID = createField(DSL.name("provider_id"), SQLDataType.VARCHAR(255), this, "");
 
     private RequiredActionProvider(Name alias, Table<RequiredActionProviderRecord> aliased) {
         this(alias, aliased, null);
@@ -117,18 +92,41 @@ public class RequiredActionProvider extends TableImpl<RequiredActionProviderReco
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.required_action_provider</code> table
+     * reference
+     */
+    public RequiredActionProvider(String alias) {
+        this(DSL.name(alias), REQUIRED_ACTION_PROVIDER);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.required_action_provider</code> table
+     * reference
+     */
+    public RequiredActionProvider(Name alias) {
+        this(alias, REQUIRED_ACTION_PROVIDER);
+    }
+
+    /**
+     * Create a <code>keycloak.required_action_provider</code> table reference
+     */
+    public RequiredActionProvider() {
+        this(DSL.name("required_action_provider"), null);
+    }
+
     public <O extends Record> RequiredActionProvider(Table<O> child, ForeignKey<O, RequiredActionProviderRecord> key) {
         super(child, key, REQUIRED_ACTION_PROVIDER);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_REQ_ACT_PROV_REALM);
+        return Arrays.asList(Indexes.IDX_REQ_ACT_PROV_REALM);
     }
 
     @Override
@@ -137,17 +135,20 @@ public class RequiredActionProvider extends TableImpl<RequiredActionProviderReco
     }
 
     @Override
-    public List<UniqueKey<RequiredActionProviderRecord>> getKeys() {
-        return Arrays.<UniqueKey<RequiredActionProviderRecord>>asList(Keys.CONSTRAINT_REQ_ACT_PRV_PK);
-    }
-
-    @Override
     public List<ForeignKey<RequiredActionProviderRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RequiredActionProviderRecord, ?>>asList(Keys.REQUIRED_ACTION_PROVIDER__FK_REQ_ACT_REALM);
+        return Arrays.asList(Keys.REQUIRED_ACTION_PROVIDER__FK_REQ_ACT_REALM);
     }
 
+    private transient Realm _realm;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.REQUIRED_ACTION_PROVIDER__FK_REQ_ACT_REALM);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.REQUIRED_ACTION_PROVIDER__FK_REQ_ACT_REALM);
+
+        return _realm;
     }
 
     @Override
@@ -177,11 +178,11 @@ public class RequiredActionProvider extends TableImpl<RequiredActionProviderReco
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<String, String, String, String, Boolean, Boolean, String, Integer> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row7<String, String, String, String, Boolean, Boolean, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

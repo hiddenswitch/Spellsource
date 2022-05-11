@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class IdentityProviderConfig extends TableImpl<IdentityProviderConfigRecord> {
 
-    private static final long serialVersionUID = -1655344641;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.identity_provider_config</code>
@@ -47,40 +48,20 @@ public class IdentityProviderConfig extends TableImpl<IdentityProviderConfigReco
     }
 
     /**
-     * The column <code>keycloak.identity_provider_config.identity_provider_id</code>.
+     * The column
+     * <code>keycloak.identity_provider_config.identity_provider_id</code>.
      */
-    public final TableField<IdentityProviderConfigRecord, String> IDENTITY_PROVIDER_ID = createField(DSL.name("identity_provider_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<IdentityProviderConfigRecord, String> IDENTITY_PROVIDER_ID = createField(DSL.name("identity_provider_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.identity_provider_config.value</code>.
      */
-    public final TableField<IdentityProviderConfigRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<IdentityProviderConfigRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>keycloak.identity_provider_config.name</code>.
      */
-    public final TableField<IdentityProviderConfigRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.identity_provider_config</code> table reference
-     */
-    public IdentityProviderConfig() {
-        this(DSL.name("identity_provider_config"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.identity_provider_config</code> table reference
-     */
-    public IdentityProviderConfig(String alias) {
-        this(DSL.name(alias), IDENTITY_PROVIDER_CONFIG);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.identity_provider_config</code> table reference
-     */
-    public IdentityProviderConfig(Name alias) {
-        this(alias, IDENTITY_PROVIDER_CONFIG);
-    }
+    public final TableField<IdentityProviderConfigRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     private IdentityProviderConfig(Name alias, Table<IdentityProviderConfigRecord> aliased) {
         this(alias, aliased, null);
@@ -90,13 +71,36 @@ public class IdentityProviderConfig extends TableImpl<IdentityProviderConfigReco
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.identity_provider_config</code> table
+     * reference
+     */
+    public IdentityProviderConfig(String alias) {
+        this(DSL.name(alias), IDENTITY_PROVIDER_CONFIG);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.identity_provider_config</code> table
+     * reference
+     */
+    public IdentityProviderConfig(Name alias) {
+        this(alias, IDENTITY_PROVIDER_CONFIG);
+    }
+
+    /**
+     * Create a <code>keycloak.identity_provider_config</code> table reference
+     */
+    public IdentityProviderConfig() {
+        this(DSL.name("identity_provider_config"), null);
+    }
+
     public <O extends Record> IdentityProviderConfig(Table<O> child, ForeignKey<O, IdentityProviderConfigRecord> key) {
         super(child, key, IDENTITY_PROVIDER_CONFIG);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -105,17 +109,21 @@ public class IdentityProviderConfig extends TableImpl<IdentityProviderConfigReco
     }
 
     @Override
-    public List<UniqueKey<IdentityProviderConfigRecord>> getKeys() {
-        return Arrays.<UniqueKey<IdentityProviderConfigRecord>>asList(Keys.CONSTRAINT_D);
-    }
-
-    @Override
     public List<ForeignKey<IdentityProviderConfigRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<IdentityProviderConfigRecord, ?>>asList(Keys.IDENTITY_PROVIDER_CONFIG__FKDC4897CF864C4E43);
+        return Arrays.asList(Keys.IDENTITY_PROVIDER_CONFIG__FKDC4897CF864C4E43);
     }
 
+    private transient IdentityProvider _identityProvider;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.identity_provider</code>
+     * table.
+     */
     public IdentityProvider identityProvider() {
-        return new IdentityProvider(this, Keys.IDENTITY_PROVIDER_CONFIG__FKDC4897CF864C4E43);
+        if (_identityProvider == null)
+            _identityProvider = new IdentityProvider(this, Keys.IDENTITY_PROVIDER_CONFIG__FKDC4897CF864C4E43);
+
+        return _identityProvider;
     }
 
     @Override

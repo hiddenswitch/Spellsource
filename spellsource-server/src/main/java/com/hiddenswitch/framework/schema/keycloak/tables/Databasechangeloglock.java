@@ -9,8 +9,6 @@ import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.DatabasechangeloglockRecord;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
@@ -23,6 +21,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -32,7 +31,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Databasechangeloglock extends TableImpl<DatabasechangeloglockRecord> {
 
-    private static final long serialVersionUID = -1232399154;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.databasechangeloglock</code>
@@ -50,43 +49,22 @@ public class Databasechangeloglock extends TableImpl<DatabasechangeloglockRecord
     /**
      * The column <code>keycloak.databasechangeloglock.id</code>.
      */
-    public final TableField<DatabasechangeloglockRecord, Integer> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<DatabasechangeloglockRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>keycloak.databasechangeloglock.locked</code>.
      */
-    public final TableField<DatabasechangeloglockRecord, Boolean> LOCKED = createField(DSL.name("locked"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
+    public final TableField<DatabasechangeloglockRecord, Boolean> LOCKED = createField(DSL.name("locked"), SQLDataType.BOOLEAN.nullable(false), this, "");
 
     /**
      * The column <code>keycloak.databasechangeloglock.lockgranted</code>.
      */
-    public final TableField<DatabasechangeloglockRecord, LocalDateTime> LOCKGRANTED = createField(DSL.name("lockgranted"), org.jooq.impl.SQLDataType.LOCALDATETIME, this, "");
+    public final TableField<DatabasechangeloglockRecord, LocalDateTime> LOCKGRANTED = createField(DSL.name("lockgranted"), SQLDataType.LOCALDATETIME(6), this, "");
 
     /**
      * The column <code>keycloak.databasechangeloglock.lockedby</code>.
      */
-    public final TableField<DatabasechangeloglockRecord, String> LOCKEDBY = createField(DSL.name("lockedby"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
-
-    /**
-     * Create a <code>keycloak.databasechangeloglock</code> table reference
-     */
-    public Databasechangeloglock() {
-        this(DSL.name("databasechangeloglock"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.databasechangeloglock</code> table reference
-     */
-    public Databasechangeloglock(String alias) {
-        this(DSL.name(alias), DATABASECHANGELOGLOCK);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.databasechangeloglock</code> table reference
-     */
-    public Databasechangeloglock(Name alias) {
-        this(alias, DATABASECHANGELOGLOCK);
-    }
+    public final TableField<DatabasechangeloglockRecord, String> LOCKEDBY = createField(DSL.name("lockedby"), SQLDataType.VARCHAR(255), this, "");
 
     private Databasechangeloglock(Name alias, Table<DatabasechangeloglockRecord> aliased) {
         this(alias, aliased, null);
@@ -96,23 +74,41 @@ public class Databasechangeloglock extends TableImpl<DatabasechangeloglockRecord
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.databasechangeloglock</code> table
+     * reference
+     */
+    public Databasechangeloglock(String alias) {
+        this(DSL.name(alias), DATABASECHANGELOGLOCK);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.databasechangeloglock</code> table
+     * reference
+     */
+    public Databasechangeloglock(Name alias) {
+        this(alias, DATABASECHANGELOGLOCK);
+    }
+
+    /**
+     * Create a <code>keycloak.databasechangeloglock</code> table reference
+     */
+    public Databasechangeloglock() {
+        this(DSL.name("databasechangeloglock"), null);
+    }
+
     public <O extends Record> Databasechangeloglock(Table<O> child, ForeignKey<O, DatabasechangeloglockRecord> key) {
         super(child, key, DATABASECHANGELOGLOCK);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public UniqueKey<DatabasechangeloglockRecord> getPrimaryKey() {
         return Keys.PK_DATABASECHANGELOGLOCK;
-    }
-
-    @Override
-    public List<UniqueKey<DatabasechangeloglockRecord>> getKeys() {
-        return Arrays.<UniqueKey<DatabasechangeloglockRecord>>asList(Keys.PK_DATABASECHANGELOGLOCK);
     }
 
     @Override

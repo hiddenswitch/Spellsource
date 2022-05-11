@@ -1,5 +1,6 @@
 package com.hiddenswitch.framework.tests.impl;
 
+import com.hiddenswitch.framework.Accounts;
 import com.hiddenswitch.framework.Gateway;
 import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
 import io.vertx.codegen.annotations.Fluent;
@@ -7,10 +8,12 @@ import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.core.*;
 import io.vertx.junit5.VertxExtension;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.ToxiproxyContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.lifecycle.Startables;
+import org.testcontainers.utility.DockerImageName;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletionStage;
@@ -24,7 +27,7 @@ import static org.testcontainers.Testcontainers.exposeHostPorts;
 @Testcontainers
 public class FrameworkTestBase {
 
-	protected static ToxiproxyContainer TOXIPROXY = new ToxiproxyContainer("shopify/toxiproxy:2.1.4");
+	protected static ToxiproxyContainer TOXIPROXY = new ToxiproxyContainer(DockerImageName.parse("ghcr.io/shopify/toxiproxy:latest").asCompatibleSubstituteFor("shopify/toxiproxy"));
 
 	private static ToxiproxyContainer.ContainerProxy toxicGrpcProxy;
 

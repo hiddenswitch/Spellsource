@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserFederationProvider extends TableImpl<UserFederationProviderRecord> {
 
-    private static final long serialVersionUID = 1960363358;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.user_federation_provider</code>
@@ -51,63 +52,44 @@ public class UserFederationProvider extends TableImpl<UserFederationProviderReco
     /**
      * The column <code>keycloak.user_federation_provider.id</code>.
      */
-    public final TableField<UserFederationProviderRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<UserFederationProviderRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
-     * The column <code>keycloak.user_federation_provider.changed_sync_period</code>.
+     * The column
+     * <code>keycloak.user_federation_provider.changed_sync_period</code>.
      */
-    public final TableField<UserFederationProviderRecord, Integer> CHANGED_SYNC_PERIOD = createField(DSL.name("changed_sync_period"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<UserFederationProviderRecord, Integer> CHANGED_SYNC_PERIOD = createField(DSL.name("changed_sync_period"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.user_federation_provider.display_name</code>.
      */
-    public final TableField<UserFederationProviderRecord, String> DISPLAY_NAME = createField(DSL.name("display_name"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserFederationProviderRecord, String> DISPLAY_NAME = createField(DSL.name("display_name"), SQLDataType.VARCHAR(255), this, "");
 
     /**
-     * The column <code>keycloak.user_federation_provider.full_sync_period</code>.
+     * The column
+     * <code>keycloak.user_federation_provider.full_sync_period</code>.
      */
-    public final TableField<UserFederationProviderRecord, Integer> FULL_SYNC_PERIOD = createField(DSL.name("full_sync_period"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<UserFederationProviderRecord, Integer> FULL_SYNC_PERIOD = createField(DSL.name("full_sync_period"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.user_federation_provider.last_sync</code>.
      */
-    public final TableField<UserFederationProviderRecord, Integer> LAST_SYNC = createField(DSL.name("last_sync"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<UserFederationProviderRecord, Integer> LAST_SYNC = createField(DSL.name("last_sync"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.user_federation_provider.priority</code>.
      */
-    public final TableField<UserFederationProviderRecord, Integer> PRIORITY = createField(DSL.name("priority"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<UserFederationProviderRecord, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.user_federation_provider.provider_name</code>.
      */
-    public final TableField<UserFederationProviderRecord, String> PROVIDER_NAME = createField(DSL.name("provider_name"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<UserFederationProviderRecord, String> PROVIDER_NAME = createField(DSL.name("provider_name"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_federation_provider.realm_id</code>.
      */
-    public final TableField<UserFederationProviderRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
-
-    /**
-     * Create a <code>keycloak.user_federation_provider</code> table reference
-     */
-    public UserFederationProvider() {
-        this(DSL.name("user_federation_provider"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.user_federation_provider</code> table reference
-     */
-    public UserFederationProvider(String alias) {
-        this(DSL.name(alias), USER_FEDERATION_PROVIDER);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.user_federation_provider</code> table reference
-     */
-    public UserFederationProvider(Name alias) {
-        this(alias, USER_FEDERATION_PROVIDER);
-    }
+    public final TableField<UserFederationProviderRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36), this, "");
 
     private UserFederationProvider(Name alias, Table<UserFederationProviderRecord> aliased) {
         this(alias, aliased, null);
@@ -117,18 +99,41 @@ public class UserFederationProvider extends TableImpl<UserFederationProviderReco
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.user_federation_provider</code> table
+     * reference
+     */
+    public UserFederationProvider(String alias) {
+        this(DSL.name(alias), USER_FEDERATION_PROVIDER);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.user_federation_provider</code> table
+     * reference
+     */
+    public UserFederationProvider(Name alias) {
+        this(alias, USER_FEDERATION_PROVIDER);
+    }
+
+    /**
+     * Create a <code>keycloak.user_federation_provider</code> table reference
+     */
+    public UserFederationProvider() {
+        this(DSL.name("user_federation_provider"), null);
+    }
+
     public <O extends Record> UserFederationProvider(Table<O> child, ForeignKey<O, UserFederationProviderRecord> key) {
         super(child, key, USER_FEDERATION_PROVIDER);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_USR_FED_PRV_REALM);
+        return Arrays.asList(Indexes.IDX_USR_FED_PRV_REALM);
     }
 
     @Override
@@ -137,17 +142,20 @@ public class UserFederationProvider extends TableImpl<UserFederationProviderReco
     }
 
     @Override
-    public List<UniqueKey<UserFederationProviderRecord>> getKeys() {
-        return Arrays.<UniqueKey<UserFederationProviderRecord>>asList(Keys.CONSTRAINT_5C);
-    }
-
-    @Override
     public List<ForeignKey<UserFederationProviderRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<UserFederationProviderRecord, ?>>asList(Keys.USER_FEDERATION_PROVIDER__FK_1FJ32F6PTOLW2QY60CD8N01E8);
+        return Arrays.asList(Keys.USER_FEDERATION_PROVIDER__FK_1FJ32F6PTOLW2QY60CD8N01E8);
     }
 
+    private transient Realm _realm;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.USER_FEDERATION_PROVIDER__FK_1FJ32F6PTOLW2QY60CD8N01E8);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.USER_FEDERATION_PROVIDER__FK_1FJ32F6PTOLW2QY60CD8N01E8);
+
+        return _realm;
     }
 
     @Override

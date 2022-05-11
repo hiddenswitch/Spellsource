@@ -24,49 +24,53 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RealmAttributeDao extends AbstractReactiveVertxDAO<RealmAttributeRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute, Record2<String, String>, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>, Future<Integer>, Future<Record2<String, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<RealmAttributeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute,Record2<String, String>> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public RealmAttributeDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(RealmAttribute.REALM_ATTRIBUTE, com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute.class, new ReactiveClassicQueryExecutor<RealmAttributeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getRealmAttributeMapper()));
-    }
+        public RealmAttributeDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(RealmAttribute.REALM_ATTRIBUTE, com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute.class, new ReactiveClassicQueryExecutor<RealmAttributeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getRealmAttributeMapper()));
+        }
 
-    @Override
-    protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute object) {
-        return compositeKeyRecord(object.getName(), object.getRealmId());
-    }
+        @Override
+        protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute object) {
+                return compositeKeyRecord(object.getName(), object.getRealmId());
+        }
 
-    /**
+        /**
      * Find records that have <code>value IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>> findManyByValue(Collection<String> values) {
-        return findManyByCondition(RealmAttribute.REALM_ATTRIBUTE.VALUE.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>> findManyByValue(Collection<String> values) {
+                return findManyByCondition(RealmAttribute.REALM_ATTRIBUTE.VALUE.in(values));
+        }
 
-    /**
-     * Find records that have <code>value IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>value IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>> findManyByValue(Collection<String> values, int limit) {
-        return findManyByCondition(RealmAttribute.REALM_ATTRIBUTE.VALUE.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>> findManyByValue(Collection<String> values, int limit) {
+                return findManyByCondition(RealmAttribute.REALM_ATTRIBUTE.VALUE.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>realm_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>> findManyByRealmId(Collection<String> values) {
-        return findManyByCondition(RealmAttribute.REALM_ATTRIBUTE.REALM_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>> findManyByRealmId(Collection<String> values) {
+                return findManyByCondition(RealmAttribute.REALM_ATTRIBUTE.REALM_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>realm_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>realm_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>> findManyByRealmId(Collection<String> values, int limit) {
-        return findManyByCondition(RealmAttribute.REALM_ATTRIBUTE.REALM_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>> findManyByRealmId(Collection<String> values, int limit) {
+                return findManyByCondition(RealmAttribute.REALM_ATTRIBUTE.REALM_ID.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<RealmAttributeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute,Record2<String, String>> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<RealmAttributeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute,Record2<String, String>>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<RealmAttributeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute,Record2<String, String>> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<RealmAttributeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute,Record2<String, String>>) super.queryExecutor();
+        }
 }

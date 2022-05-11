@@ -25,6 +25,7 @@ import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -34,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MatchmakingQueues extends TableImpl<MatchmakingQueuesRecord> {
 
-    private static final long serialVersionUID = -1005482346;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>spellsource.matchmaking_queues</code>
@@ -52,83 +53,67 @@ public class MatchmakingQueues extends TableImpl<MatchmakingQueuesRecord> {
     /**
      * The column <code>spellsource.matchmaking_queues.id</code>.
      */
-    public final TableField<MatchmakingQueuesRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<MatchmakingQueuesRecord, String> ID = createField(DSL.name("id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.matchmaking_queues.name</code>.
      */
-    public final TableField<MatchmakingQueuesRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<MatchmakingQueuesRecord, String> NAME = createField(DSL.name("name"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.matchmaking_queues.bot_opponent</code>.
      */
-    public final TableField<MatchmakingQueuesRecord, Boolean> BOT_OPPONENT = createField(DSL.name("bot_opponent"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<MatchmakingQueuesRecord, Boolean> BOT_OPPONENT = createField(DSL.name("bot_opponent"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>spellsource.matchmaking_queues.private_lobby</code>.
      */
-    public final TableField<MatchmakingQueuesRecord, Boolean> PRIVATE_LOBBY = createField(DSL.name("private_lobby"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<MatchmakingQueuesRecord, Boolean> PRIVATE_LOBBY = createField(DSL.name("private_lobby"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * The column <code>spellsource.matchmaking_queues.starts_automatically</code>.
+     * The column
+     * <code>spellsource.matchmaking_queues.starts_automatically</code>.
      */
-    public final TableField<MatchmakingQueuesRecord, Boolean> STARTS_AUTOMATICALLY = createField(DSL.name("starts_automatically"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("true", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<MatchmakingQueuesRecord, Boolean> STARTS_AUTOMATICALLY = createField(DSL.name("starts_automatically"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("true", SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * The column <code>spellsource.matchmaking_queues.still_connected_timeout</code>.
+     * The column
+     * <code>spellsource.matchmaking_queues.still_connected_timeout</code>.
      */
-    public final TableField<MatchmakingQueuesRecord, Long> STILL_CONNECTED_TIMEOUT = createField(DSL.name("still_connected_timeout"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("2000", org.jooq.impl.SQLDataType.BIGINT)), this, "");
+    public final TableField<MatchmakingQueuesRecord, Long> STILL_CONNECTED_TIMEOUT = createField(DSL.name("still_connected_timeout"), SQLDataType.BIGINT.nullable(false).defaultValue(DSL.field("2000", SQLDataType.BIGINT)), this, "");
 
     /**
-     * The column <code>spellsource.matchmaking_queues.empty_lobby_timeout</code>.
+     * The column
+     * <code>spellsource.matchmaking_queues.empty_lobby_timeout</code>.
      */
-    public final TableField<MatchmakingQueuesRecord, Long> EMPTY_LOBBY_TIMEOUT = createField(DSL.name("empty_lobby_timeout"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.BIGINT)), this, "");
+    public final TableField<MatchmakingQueuesRecord, Long> EMPTY_LOBBY_TIMEOUT = createField(DSL.name("empty_lobby_timeout"), SQLDataType.BIGINT.nullable(false).defaultValue(DSL.field("0", SQLDataType.BIGINT)), this, "");
 
     /**
-     * The column <code>spellsource.matchmaking_queues.awaiting_lobby_timeout</code>.
+     * The column
+     * <code>spellsource.matchmaking_queues.awaiting_lobby_timeout</code>.
      */
-    public final TableField<MatchmakingQueuesRecord, Long> AWAITING_LOBBY_TIMEOUT = createField(DSL.name("awaiting_lobby_timeout"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.BIGINT)), this, "");
+    public final TableField<MatchmakingQueuesRecord, Long> AWAITING_LOBBY_TIMEOUT = createField(DSL.name("awaiting_lobby_timeout"), SQLDataType.BIGINT.nullable(false).defaultValue(DSL.field("0", SQLDataType.BIGINT)), this, "");
 
     /**
      * The column <code>spellsource.matchmaking_queues.once</code>.
      */
-    public final TableField<MatchmakingQueuesRecord, Boolean> ONCE = createField(DSL.name("once"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<MatchmakingQueuesRecord, Boolean> ONCE = createField(DSL.name("once"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * The column <code>spellsource.matchmaking_queues.automatically_close</code>.
+     * The column
+     * <code>spellsource.matchmaking_queues.automatically_close</code>.
      */
-    public final TableField<MatchmakingQueuesRecord, Boolean> AUTOMATICALLY_CLOSE = createField(DSL.name("automatically_close"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("true", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<MatchmakingQueuesRecord, Boolean> AUTOMATICALLY_CLOSE = createField(DSL.name("automatically_close"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("true", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>spellsource.matchmaking_queues.lobby_size</code>.
      */
-    public final TableField<MatchmakingQueuesRecord, Integer> LOBBY_SIZE = createField(DSL.name("lobby_size"), org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("2", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<MatchmakingQueuesRecord, Integer> LOBBY_SIZE = createField(DSL.name("lobby_size"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("2", SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>spellsource.matchmaking_queues.queue_created_at</code>.
      */
-    public final TableField<MatchmakingQueuesRecord, OffsetDateTime> QUEUE_CREATED_AT = createField(DSL.name("queue_created_at"), org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false).defaultValue(org.jooq.impl.DSL.field("now()", org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
-
-    /**
-     * Create a <code>spellsource.matchmaking_queues</code> table reference
-     */
-    public MatchmakingQueues() {
-        this(DSL.name("matchmaking_queues"), null);
-    }
-
-    /**
-     * Create an aliased <code>spellsource.matchmaking_queues</code> table reference
-     */
-    public MatchmakingQueues(String alias) {
-        this(DSL.name(alias), MATCHMAKING_QUEUES);
-    }
-
-    /**
-     * Create an aliased <code>spellsource.matchmaking_queues</code> table reference
-     */
-    public MatchmakingQueues(Name alias) {
-        this(alias, MATCHMAKING_QUEUES);
-    }
+    public final TableField<MatchmakingQueuesRecord, OffsetDateTime> QUEUE_CREATED_AT = createField(DSL.name("queue_created_at"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
 
     private MatchmakingQueues(Name alias, Table<MatchmakingQueuesRecord> aliased) {
         this(alias, aliased, null);
@@ -138,13 +123,36 @@ public class MatchmakingQueues extends TableImpl<MatchmakingQueuesRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>spellsource.matchmaking_queues</code> table
+     * reference
+     */
+    public MatchmakingQueues(String alias) {
+        this(DSL.name(alias), MATCHMAKING_QUEUES);
+    }
+
+    /**
+     * Create an aliased <code>spellsource.matchmaking_queues</code> table
+     * reference
+     */
+    public MatchmakingQueues(Name alias) {
+        this(alias, MATCHMAKING_QUEUES);
+    }
+
+    /**
+     * Create a <code>spellsource.matchmaking_queues</code> table reference
+     */
+    public MatchmakingQueues() {
+        this(DSL.name("matchmaking_queues"), null);
+    }
+
     public <O extends Record> MatchmakingQueues(Table<O> child, ForeignKey<O, MatchmakingQueuesRecord> key) {
         super(child, key, MATCHMAKING_QUEUES);
     }
 
     @Override
     public Schema getSchema() {
-        return Spellsource.SPELLSOURCE;
+        return aliased() ? null : Spellsource.SPELLSOURCE;
     }
 
     @Override
@@ -153,14 +161,9 @@ public class MatchmakingQueues extends TableImpl<MatchmakingQueuesRecord> {
     }
 
     @Override
-    public List<UniqueKey<MatchmakingQueuesRecord>> getKeys() {
-        return Arrays.<UniqueKey<MatchmakingQueuesRecord>>asList(Keys.MATCHMAKING_QUEUES_PKEY);
-    }
-
-    @Override
     public List<Check<MatchmakingQueuesRecord>> getChecks() {
-        return Arrays.<Check<MatchmakingQueuesRecord>>asList(
-              Internal.createCheck(this, DSL.name("matchmaking_queues_lobby_size_check"), "(((lobby_size <= 2) AND (lobby_size >= 0)))", true)
+        return Arrays.asList(
+            Internal.createCheck(this, DSL.name("matchmaking_queues_lobby_size_check"), "(((lobby_size <= 2) AND (lobby_size >= 0)))", true)
         );
     }
 

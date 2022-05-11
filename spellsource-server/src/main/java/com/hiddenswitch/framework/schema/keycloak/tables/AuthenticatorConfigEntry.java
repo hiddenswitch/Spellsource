@@ -8,9 +8,6 @@ import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.AuthenticatorConfigEntryRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
@@ -22,6 +19,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,10 +29,11 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class AuthenticatorConfigEntry extends TableImpl<AuthenticatorConfigEntryRecord> {
 
-    private static final long serialVersionUID = -71675343;
+    private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>keycloak.authenticator_config_entry</code>
+     * The reference instance of
+     * <code>keycloak.authenticator_config_entry</code>
      */
     public static final AuthenticatorConfigEntry AUTHENTICATOR_CONFIG_ENTRY = new AuthenticatorConfigEntry();
 
@@ -47,40 +46,20 @@ public class AuthenticatorConfigEntry extends TableImpl<AuthenticatorConfigEntry
     }
 
     /**
-     * The column <code>keycloak.authenticator_config_entry.authenticator_id</code>.
+     * The column
+     * <code>keycloak.authenticator_config_entry.authenticator_id</code>.
      */
-    public final TableField<AuthenticatorConfigEntryRecord, String> AUTHENTICATOR_ID = createField(DSL.name("authenticator_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<AuthenticatorConfigEntryRecord, String> AUTHENTICATOR_ID = createField(DSL.name("authenticator_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.authenticator_config_entry.value</code>.
      */
-    public final TableField<AuthenticatorConfigEntryRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<AuthenticatorConfigEntryRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>keycloak.authenticator_config_entry.name</code>.
      */
-    public final TableField<AuthenticatorConfigEntryRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.authenticator_config_entry</code> table reference
-     */
-    public AuthenticatorConfigEntry() {
-        this(DSL.name("authenticator_config_entry"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.authenticator_config_entry</code> table reference
-     */
-    public AuthenticatorConfigEntry(String alias) {
-        this(DSL.name(alias), AUTHENTICATOR_CONFIG_ENTRY);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.authenticator_config_entry</code> table reference
-     */
-    public AuthenticatorConfigEntry(Name alias) {
-        this(alias, AUTHENTICATOR_CONFIG_ENTRY);
-    }
+    public final TableField<AuthenticatorConfigEntryRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     private AuthenticatorConfigEntry(Name alias, Table<AuthenticatorConfigEntryRecord> aliased) {
         this(alias, aliased, null);
@@ -90,23 +69,41 @@ public class AuthenticatorConfigEntry extends TableImpl<AuthenticatorConfigEntry
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.authenticator_config_entry</code> table
+     * reference
+     */
+    public AuthenticatorConfigEntry(String alias) {
+        this(DSL.name(alias), AUTHENTICATOR_CONFIG_ENTRY);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.authenticator_config_entry</code> table
+     * reference
+     */
+    public AuthenticatorConfigEntry(Name alias) {
+        this(alias, AUTHENTICATOR_CONFIG_ENTRY);
+    }
+
+    /**
+     * Create a <code>keycloak.authenticator_config_entry</code> table reference
+     */
+    public AuthenticatorConfigEntry() {
+        this(DSL.name("authenticator_config_entry"), null);
+    }
+
     public <O extends Record> AuthenticatorConfigEntry(Table<O> child, ForeignKey<O, AuthenticatorConfigEntryRecord> key) {
         super(child, key, AUTHENTICATOR_CONFIG_ENTRY);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public UniqueKey<AuthenticatorConfigEntryRecord> getPrimaryKey() {
         return Keys.CONSTRAINT_AUTH_CFG_PK;
-    }
-
-    @Override
-    public List<UniqueKey<AuthenticatorConfigEntryRecord>> getKeys() {
-        return Arrays.<UniqueKey<AuthenticatorConfigEntryRecord>>asList(Keys.CONSTRAINT_AUTH_CFG_PK);
     }
 
     @Override

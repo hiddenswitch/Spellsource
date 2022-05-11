@@ -24,35 +24,39 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class AssociatedPolicyDao extends AbstractReactiveVertxDAO<AssociatedPolicyRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy, Record2<String, String>, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy>, Future<Integer>, Future<Record2<String, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<AssociatedPolicyRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy,Record2<String, String>> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public AssociatedPolicyDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(AssociatedPolicy.ASSOCIATED_POLICY, com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy.class, new ReactiveClassicQueryExecutor<AssociatedPolicyRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getAssociatedPolicyMapper()));
-    }
+        public AssociatedPolicyDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(AssociatedPolicy.ASSOCIATED_POLICY, com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy.class, new ReactiveClassicQueryExecutor<AssociatedPolicyRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getAssociatedPolicyMapper()));
+        }
 
-    @Override
-    protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy object) {
-        return compositeKeyRecord(object.getPolicyId(), object.getAssociatedPolicyId());
-    }
+        @Override
+        protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy object) {
+                return compositeKeyRecord(object.getPolicyId(), object.getAssociatedPolicyId());
+        }
 
-    /**
-     * Find records that have <code>associated_policy_id IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>associated_policy_id IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy>> findManyByAssociatedPolicyId(Collection<String> values) {
-        return findManyByCondition(AssociatedPolicy.ASSOCIATED_POLICY.ASSOCIATED_POLICY_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy>> findManyByAssociatedPolicyId(Collection<String> values) {
+                return findManyByCondition(AssociatedPolicy.ASSOCIATED_POLICY.ASSOCIATED_POLICY_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>associated_policy_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>associated_policy_id IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy>> findManyByAssociatedPolicyId(Collection<String> values, int limit) {
-        return findManyByCondition(AssociatedPolicy.ASSOCIATED_POLICY.ASSOCIATED_POLICY_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy>> findManyByAssociatedPolicyId(Collection<String> values, int limit) {
+                return findManyByCondition(AssociatedPolicy.ASSOCIATED_POLICY.ASSOCIATED_POLICY_ID.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<AssociatedPolicyRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy,Record2<String, String>> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<AssociatedPolicyRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy,Record2<String, String>>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<AssociatedPolicyRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy,Record2<String, String>> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<AssociatedPolicyRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy,Record2<String, String>>) super.queryExecutor();
+        }
 }

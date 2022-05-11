@@ -23,119 +23,115 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RequiredActionProviderDao extends AbstractReactiveVertxDAO<RequiredActionProviderRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider, String, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>, Future<Integer>, Future<String>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<RequiredActionProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider,String> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public RequiredActionProviderDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(RequiredActionProvider.REQUIRED_ACTION_PROVIDER, com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider.class, new ReactiveClassicQueryExecutor<RequiredActionProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getRequiredActionProviderMapper()));
-    }
+        public RequiredActionProviderDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(RequiredActionProvider.REQUIRED_ACTION_PROVIDER, com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider.class, new ReactiveClassicQueryExecutor<RequiredActionProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getRequiredActionProviderMapper()));
+        }
 
-    @Override
-    protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider object) {
-        return object.getId();
-    }
+        @Override
+        protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider object) {
+                return object.getId();
+        }
 
-    /**
+        /**
      * Find records that have <code>alias IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByAlias(Collection<String> values) {
-        return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.ALIAS.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByAlias(Collection<String> values) {
+                return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.ALIAS.in(values));
+        }
 
-    /**
-     * Find records that have <code>alias IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>alias IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByAlias(Collection<String> values, int limit) {
-        return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.ALIAS.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByAlias(Collection<String> values, int limit) {
+                return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.ALIAS.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>name IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByName(Collection<String> values) {
-        return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.NAME.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByName(Collection<String> values) {
+                return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.NAME.in(values));
+        }
 
-    /**
-     * Find records that have <code>name IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>name IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByName(Collection<String> values, int limit) {
-        return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.NAME.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByName(Collection<String> values, int limit) {
+                return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.NAME.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>realm_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByRealmId(Collection<String> values) {
-        return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.REALM_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByRealmId(Collection<String> values) {
+                return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.REALM_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>realm_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>realm_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByRealmId(Collection<String> values, int limit) {
-        return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.REALM_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByRealmId(Collection<String> values, int limit) {
+                return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.REALM_ID.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>enabled IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByEnabled(Collection<Boolean> values) {
-        return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.ENABLED.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByEnabled(Collection<Boolean> values) {
+                return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.ENABLED.in(values));
+        }
 
-    /**
-     * Find records that have <code>enabled IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>enabled IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByEnabled(Collection<Boolean> values, int limit) {
-        return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.ENABLED.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByEnabled(Collection<Boolean> values, int limit) {
+                return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.ENABLED.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>default_action IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>default_action IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByDefaultAction(Collection<Boolean> values) {
-        return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.DEFAULT_ACTION.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByDefaultAction(Collection<Boolean> values) {
+                return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.DEFAULT_ACTION.in(values));
+        }
 
-    /**
-     * Find records that have <code>default_action IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>default_action IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByDefaultAction(Collection<Boolean> values, int limit) {
-        return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.DEFAULT_ACTION.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByDefaultAction(Collection<Boolean> values, int limit) {
+                return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.DEFAULT_ACTION.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>provider_id IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>provider_id IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByProviderId(Collection<String> values) {
-        return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.PROVIDER_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByProviderId(Collection<String> values) {
+                return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.PROVIDER_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>provider_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>provider_id IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByProviderId(Collection<String> values, int limit) {
-        return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.PROVIDER_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByProviderId(Collection<String> values, int limit) {
+                return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.PROVIDER_ID.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>priority IN (values)</code> asynchronously
-     */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByPriority(Collection<Integer> values) {
-        return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.PRIORITY.in(values));
-    }
-
-    /**
-     * Find records that have <code>priority IN (values)</code> asynchronously limited by the given limit
-     */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByPriority(Collection<Integer> values, int limit) {
-        return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.PRIORITY.in(values),limit);
-    }
-
-    @Override
-    public ReactiveClassicQueryExecutor<RequiredActionProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider,String> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<RequiredActionProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider,String>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<RequiredActionProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider,String> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<RequiredActionProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider,String>) super.queryExecutor();
+        }
 }

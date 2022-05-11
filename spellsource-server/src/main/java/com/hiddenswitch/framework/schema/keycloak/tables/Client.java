@@ -23,6 +23,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -32,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Client extends TableImpl<ClientRecord> {
 
-    private static final long serialVersionUID = -660660894;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.client</code>
@@ -50,138 +51,154 @@ public class Client extends TableImpl<ClientRecord> {
     /**
      * The column <code>keycloak.client.id</code>.
      */
-    public final TableField<ClientRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ClientRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.client.enabled</code>.
      */
-    public final TableField<ClientRecord, Boolean> ENABLED = createField(DSL.name("enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ClientRecord, Boolean> ENABLED = createField(DSL.name("enabled"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.client.full_scope_allowed</code>.
      */
-    public final TableField<ClientRecord, Boolean> FULL_SCOPE_ALLOWED = createField(DSL.name("full_scope_allowed"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ClientRecord, Boolean> FULL_SCOPE_ALLOWED = createField(DSL.name("full_scope_allowed"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.client.client_id</code>.
      */
-    public final TableField<ClientRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ClientRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.client.not_before</code>.
      */
-    public final TableField<ClientRecord, Integer> NOT_BEFORE = createField(DSL.name("not_before"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<ClientRecord, Integer> NOT_BEFORE = createField(DSL.name("not_before"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>keycloak.client.public_client</code>.
      */
-    public final TableField<ClientRecord, Boolean> PUBLIC_CLIENT = createField(DSL.name("public_client"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ClientRecord, Boolean> PUBLIC_CLIENT = createField(DSL.name("public_client"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.client.secret</code>.
      */
-    public final TableField<ClientRecord, String> SECRET = createField(DSL.name("secret"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ClientRecord, String> SECRET = createField(DSL.name("secret"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.client.base_url</code>.
      */
-    public final TableField<ClientRecord, String> BASE_URL = createField(DSL.name("base_url"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ClientRecord, String> BASE_URL = createField(DSL.name("base_url"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.client.bearer_only</code>.
      */
-    public final TableField<ClientRecord, Boolean> BEARER_ONLY = createField(DSL.name("bearer_only"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ClientRecord, Boolean> BEARER_ONLY = createField(DSL.name("bearer_only"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.client.management_url</code>.
      */
-    public final TableField<ClientRecord, String> MANAGEMENT_URL = createField(DSL.name("management_url"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ClientRecord, String> MANAGEMENT_URL = createField(DSL.name("management_url"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.client.surrogate_auth_required</code>.
      */
-    public final TableField<ClientRecord, Boolean> SURROGATE_AUTH_REQUIRED = createField(DSL.name("surrogate_auth_required"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ClientRecord, Boolean> SURROGATE_AUTH_REQUIRED = createField(DSL.name("surrogate_auth_required"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.client.realm_id</code>.
      */
-    public final TableField<ClientRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<ClientRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.client.protocol</code>.
      */
-    public final TableField<ClientRecord, String> PROTOCOL = createField(DSL.name("protocol"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ClientRecord, String> PROTOCOL = createField(DSL.name("protocol"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.client.node_rereg_timeout</code>.
      */
-    public final TableField<ClientRecord, Integer> NODE_REREG_TIMEOUT = createField(DSL.name("node_rereg_timeout"), org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.field("0", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+    public final TableField<ClientRecord, Integer> NODE_REREG_TIMEOUT = createField(DSL.name("node_rereg_timeout"), SQLDataType.INTEGER.defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
 
     /**
      * The column <code>keycloak.client.frontchannel_logout</code>.
      */
-    public final TableField<ClientRecord, Boolean> FRONTCHANNEL_LOGOUT = createField(DSL.name("frontchannel_logout"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ClientRecord, Boolean> FRONTCHANNEL_LOGOUT = createField(DSL.name("frontchannel_logout"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.client.consent_required</code>.
      */
-    public final TableField<ClientRecord, Boolean> CONSENT_REQUIRED = createField(DSL.name("consent_required"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ClientRecord, Boolean> CONSENT_REQUIRED = createField(DSL.name("consent_required"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.client.name</code>.
      */
-    public final TableField<ClientRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ClientRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.client.service_accounts_enabled</code>.
      */
-    public final TableField<ClientRecord, Boolean> SERVICE_ACCOUNTS_ENABLED = createField(DSL.name("service_accounts_enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ClientRecord, Boolean> SERVICE_ACCOUNTS_ENABLED = createField(DSL.name("service_accounts_enabled"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.client.client_authenticator_type</code>.
      */
-    public final TableField<ClientRecord, String> CLIENT_AUTHENTICATOR_TYPE = createField(DSL.name("client_authenticator_type"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ClientRecord, String> CLIENT_AUTHENTICATOR_TYPE = createField(DSL.name("client_authenticator_type"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.client.root_url</code>.
      */
-    public final TableField<ClientRecord, String> ROOT_URL = createField(DSL.name("root_url"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ClientRecord, String> ROOT_URL = createField(DSL.name("root_url"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.client.description</code>.
      */
-    public final TableField<ClientRecord, String> DESCRIPTION = createField(DSL.name("description"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ClientRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.client.registration_token</code>.
      */
-    public final TableField<ClientRecord, String> REGISTRATION_TOKEN = createField(DSL.name("registration_token"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ClientRecord, String> REGISTRATION_TOKEN = createField(DSL.name("registration_token"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.client.standard_flow_enabled</code>.
      */
-    public final TableField<ClientRecord, Boolean> STANDARD_FLOW_ENABLED = createField(DSL.name("standard_flow_enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("true", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ClientRecord, Boolean> STANDARD_FLOW_ENABLED = createField(DSL.name("standard_flow_enabled"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("true", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.client.implicit_flow_enabled</code>.
      */
-    public final TableField<ClientRecord, Boolean> IMPLICIT_FLOW_ENABLED = createField(DSL.name("implicit_flow_enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ClientRecord, Boolean> IMPLICIT_FLOW_ENABLED = createField(DSL.name("implicit_flow_enabled"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>keycloak.client.direct_access_grants_enabled</code>.
      */
-    public final TableField<ClientRecord, Boolean> DIRECT_ACCESS_GRANTS_ENABLED = createField(DSL.name("direct_access_grants_enabled"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ClientRecord, Boolean> DIRECT_ACCESS_GRANTS_ENABLED = createField(DSL.name("direct_access_grants_enabled"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * The column <code>keycloak.client.always_display_in_console</code>.
+     * The column <code>keycloak.client.client_template_id</code>.
      */
-    public final TableField<ClientRecord, Boolean> ALWAYS_DISPLAY_IN_CONSOLE = createField(DSL.name("always_display_in_console"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ClientRecord, String> CLIENT_TEMPLATE_ID = createField(DSL.name("client_template_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
-     * Create a <code>keycloak.client</code> table reference
+     * The column <code>keycloak.client.use_template_config</code>.
      */
-    public Client() {
-        this(DSL.name("client"), null);
+    public final TableField<ClientRecord, Boolean> USE_TEMPLATE_CONFIG = createField(DSL.name("use_template_config"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>keycloak.client.use_template_scope</code>.
+     */
+    public final TableField<ClientRecord, Boolean> USE_TEMPLATE_SCOPE = createField(DSL.name("use_template_scope"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>keycloak.client.use_template_mappers</code>.
+     */
+    public final TableField<ClientRecord, Boolean> USE_TEMPLATE_MAPPERS = createField(DSL.name("use_template_mappers"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    private Client(Name alias, Table<ClientRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private Client(Name alias, Table<ClientRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -198,12 +215,11 @@ public class Client extends TableImpl<ClientRecord> {
         this(alias, CLIENT);
     }
 
-    private Client(Name alias, Table<ClientRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private Client(Name alias, Table<ClientRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.client</code> table reference
+     */
+    public Client() {
+        this(DSL.name("client"), null);
     }
 
     public <O extends Record> Client(Table<O> child, ForeignKey<O, ClientRecord> key) {
@@ -212,12 +228,12 @@ public class Client extends TableImpl<ClientRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_CLIENT_ID);
+        return Arrays.asList(Indexes.IDX_CLIENT_CLIENT_TEMPL_ID);
     }
 
     @Override
@@ -226,17 +242,37 @@ public class Client extends TableImpl<ClientRecord> {
     }
 
     @Override
-    public List<UniqueKey<ClientRecord>> getKeys() {
-        return Arrays.<UniqueKey<ClientRecord>>asList(Keys.CONSTRAINT_7, Keys.UK_B71CJLBENV945RB6GCON438AT);
+    public List<UniqueKey<ClientRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.UK_B71CJLBENV945RB6GCON438AT);
     }
 
     @Override
     public List<ForeignKey<ClientRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ClientRecord, ?>>asList(Keys.CLIENT__FK_P56CTINXXB9GSK57FO49F9TAC);
+        return Arrays.asList(Keys.CLIENT__FK_P56CTINXXB9GSK57FO49F9TAC, Keys.CLIENT__FK_CLI_TMPLT_CLIENT);
     }
 
+    private transient Realm _realm;
+    private transient ClientTemplate _clientTemplate;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.CLIENT__FK_P56CTINXXB9GSK57FO49F9TAC);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.CLIENT__FK_P56CTINXXB9GSK57FO49F9TAC);
+
+        return _realm;
+    }
+
+    /**
+     * Get the implicit join path to the <code>keycloak.client_template</code>
+     * table.
+     */
+    public ClientTemplate clientTemplate() {
+        if (_clientTemplate == null)
+            _clientTemplate = new ClientTemplate(this, Keys.CLIENT__FK_CLI_TMPLT_CLIENT);
+
+        return _clientTemplate;
     }
 
     @Override

@@ -17,13 +17,14 @@ import org.jooq.ForeignKey;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ProtocolMapper extends TableImpl<ProtocolMapperRecord> {
 
-    private static final long serialVersionUID = 1927240987;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.protocol_mapper</code>
@@ -51,38 +52,49 @@ public class ProtocolMapper extends TableImpl<ProtocolMapperRecord> {
     /**
      * The column <code>keycloak.protocol_mapper.id</code>.
      */
-    public final TableField<ProtocolMapperRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ProtocolMapperRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.protocol_mapper.name</code>.
      */
-    public final TableField<ProtocolMapperRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<ProtocolMapperRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.protocol_mapper.protocol</code>.
      */
-    public final TableField<ProtocolMapperRecord, String> PROTOCOL = createField(DSL.name("protocol"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<ProtocolMapperRecord, String> PROTOCOL = createField(DSL.name("protocol"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.protocol_mapper.protocol_mapper_name</code>.
      */
-    public final TableField<ProtocolMapperRecord, String> PROTOCOL_MAPPER_NAME = createField(DSL.name("protocol_mapper_name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<ProtocolMapperRecord, String> PROTOCOL_MAPPER_NAME = createField(DSL.name("protocol_mapper_name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+
+    /**
+     * The column <code>keycloak.protocol_mapper.consent_required</code>.
+     */
+    public final TableField<ProtocolMapperRecord, Boolean> CONSENT_REQUIRED = createField(DSL.name("consent_required"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>keycloak.protocol_mapper.consent_text</code>.
+     */
+    public final TableField<ProtocolMapperRecord, String> CONSENT_TEXT = createField(DSL.name("consent_text"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.protocol_mapper.client_id</code>.
      */
-    public final TableField<ProtocolMapperRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<ProtocolMapperRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
-     * The column <code>keycloak.protocol_mapper.client_scope_id</code>.
+     * The column <code>keycloak.protocol_mapper.client_template_id</code>.
      */
-    public final TableField<ProtocolMapperRecord, String> CLIENT_SCOPE_ID = createField(DSL.name("client_scope_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<ProtocolMapperRecord, String> CLIENT_TEMPLATE_ID = createField(DSL.name("client_template_id"), SQLDataType.VARCHAR(36), this, "");
 
-    /**
-     * Create a <code>keycloak.protocol_mapper</code> table reference
-     */
-    public ProtocolMapper() {
-        this(DSL.name("protocol_mapper"), null);
+    private ProtocolMapper(Name alias, Table<ProtocolMapperRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private ProtocolMapper(Name alias, Table<ProtocolMapperRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -99,12 +111,11 @@ public class ProtocolMapper extends TableImpl<ProtocolMapperRecord> {
         this(alias, PROTOCOL_MAPPER);
     }
 
-    private ProtocolMapper(Name alias, Table<ProtocolMapperRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private ProtocolMapper(Name alias, Table<ProtocolMapperRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.protocol_mapper</code> table reference
+     */
+    public ProtocolMapper() {
+        this(DSL.name("protocol_mapper"), null);
     }
 
     public <O extends Record> ProtocolMapper(Table<O> child, ForeignKey<O, ProtocolMapperRecord> key) {
@@ -113,12 +124,12 @@ public class ProtocolMapper extends TableImpl<ProtocolMapperRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_CLSCOPE_PROTMAP, Indexes.IDX_PROTOCOL_MAPPER_CLIENT);
+        return Arrays.asList(Indexes.IDX_PROTO_MAPP_CLIENT_TEMPL, Indexes.IDX_PROTOCOL_MAPPER_CLIENT);
     }
 
     @Override
@@ -127,21 +138,32 @@ public class ProtocolMapper extends TableImpl<ProtocolMapperRecord> {
     }
 
     @Override
-    public List<UniqueKey<ProtocolMapperRecord>> getKeys() {
-        return Arrays.<UniqueKey<ProtocolMapperRecord>>asList(Keys.CONSTRAINT_PCM);
-    }
-
-    @Override
     public List<ForeignKey<ProtocolMapperRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ProtocolMapperRecord, ?>>asList(Keys.PROTOCOL_MAPPER__FK_PCM_REALM, Keys.PROTOCOL_MAPPER__FK_CLI_SCOPE_MAPPER);
+        return Arrays.asList(Keys.PROTOCOL_MAPPER__FK_PCM_REALM, Keys.PROTOCOL_MAPPER__FK_CLI_TMPLT_MAPPER);
     }
 
+    private transient Client _client;
+    private transient ClientTemplate _clientTemplate;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.client</code> table.
+     */
     public Client client() {
-        return new Client(this, Keys.PROTOCOL_MAPPER__FK_PCM_REALM);
+        if (_client == null)
+            _client = new Client(this, Keys.PROTOCOL_MAPPER__FK_PCM_REALM);
+
+        return _client;
     }
 
-    public ClientScope clientScope() {
-        return new ClientScope(this, Keys.PROTOCOL_MAPPER__FK_CLI_SCOPE_MAPPER);
+    /**
+     * Get the implicit join path to the <code>keycloak.client_template</code>
+     * table.
+     */
+    public ClientTemplate clientTemplate() {
+        if (_clientTemplate == null)
+            _clientTemplate = new ClientTemplate(this, Keys.PROTOCOL_MAPPER__FK_CLI_TMPLT_MAPPER);
+
+        return _clientTemplate;
     }
 
     @Override
@@ -171,11 +193,11 @@ public class ProtocolMapper extends TableImpl<ProtocolMapperRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<String, String, String, String, String, String> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row8<String, String, String, String, Boolean, String, String, String> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 }

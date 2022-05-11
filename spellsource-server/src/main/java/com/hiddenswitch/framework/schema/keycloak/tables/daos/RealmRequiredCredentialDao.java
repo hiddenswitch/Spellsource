@@ -24,77 +24,83 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RealmRequiredCredentialDao extends AbstractReactiveVertxDAO<RealmRequiredCredentialRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential, Record2<String, String>, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>, Future<Integer>, Future<Record2<String, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<RealmRequiredCredentialRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential,Record2<String, String>> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public RealmRequiredCredentialDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL, com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential.class, new ReactiveClassicQueryExecutor<RealmRequiredCredentialRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getRealmRequiredCredentialMapper()));
-    }
+        public RealmRequiredCredentialDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL, com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential.class, new ReactiveClassicQueryExecutor<RealmRequiredCredentialRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getRealmRequiredCredentialMapper()));
+        }
 
-    @Override
-    protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential object) {
-        return compositeKeyRecord(object.getRealmId(), object.getType());
-    }
+        @Override
+        protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential object) {
+                return compositeKeyRecord(object.getRealmId(), object.getType());
+        }
 
-    /**
+        /**
      * Find records that have <code>type IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyByType(Collection<String> values) {
-        return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.TYPE.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyByType(Collection<String> values) {
+                return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.TYPE.in(values));
+        }
 
-    /**
-     * Find records that have <code>type IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>type IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyByType(Collection<String> values, int limit) {
-        return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.TYPE.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyByType(Collection<String> values, int limit) {
+                return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.TYPE.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>form_label IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyByFormLabel(Collection<String> values) {
-        return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.FORM_LABEL.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyByFormLabel(Collection<String> values) {
+                return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.FORM_LABEL.in(values));
+        }
 
-    /**
-     * Find records that have <code>form_label IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>form_label IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyByFormLabel(Collection<String> values, int limit) {
-        return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.FORM_LABEL.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyByFormLabel(Collection<String> values, int limit) {
+                return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.FORM_LABEL.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>input IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyByInput(Collection<Boolean> values) {
-        return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.INPUT.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyByInput(Collection<Boolean> values) {
+                return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.INPUT.in(values));
+        }
 
-    /**
-     * Find records that have <code>input IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>input IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyByInput(Collection<Boolean> values, int limit) {
-        return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.INPUT.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyByInput(Collection<Boolean> values, int limit) {
+                return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.INPUT.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>secret IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyBySecret(Collection<Boolean> values) {
-        return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.SECRET.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyBySecret(Collection<Boolean> values) {
+                return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.SECRET.in(values));
+        }
 
-    /**
-     * Find records that have <code>secret IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>secret IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyBySecret(Collection<Boolean> values, int limit) {
-        return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.SECRET.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential>> findManyBySecret(Collection<Boolean> values, int limit) {
+                return findManyByCondition(RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL.SECRET.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<RealmRequiredCredentialRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential,Record2<String, String>> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<RealmRequiredCredentialRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential,Record2<String, String>>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<RealmRequiredCredentialRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential,Record2<String, String>> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<RealmRequiredCredentialRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmRequiredCredential,Record2<String, String>>) super.queryExecutor();
+        }
 }

@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ResourcePolicy extends TableImpl<ResourcePolicyRecord> {
 
-    private static final long serialVersionUID = 344338118;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.resource_policy</code>
@@ -51,18 +52,19 @@ public class ResourcePolicy extends TableImpl<ResourcePolicyRecord> {
     /**
      * The column <code>keycloak.resource_policy.resource_id</code>.
      */
-    public final TableField<ResourcePolicyRecord, String> RESOURCE_ID = createField(DSL.name("resource_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ResourcePolicyRecord, String> RESOURCE_ID = createField(DSL.name("resource_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.resource_policy.policy_id</code>.
      */
-    public final TableField<ResourcePolicyRecord, String> POLICY_ID = createField(DSL.name("policy_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ResourcePolicyRecord, String> POLICY_ID = createField(DSL.name("policy_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
-    /**
-     * Create a <code>keycloak.resource_policy</code> table reference
-     */
-    public ResourcePolicy() {
-        this(DSL.name("resource_policy"), null);
+    private ResourcePolicy(Name alias, Table<ResourcePolicyRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private ResourcePolicy(Name alias, Table<ResourcePolicyRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -79,12 +81,11 @@ public class ResourcePolicy extends TableImpl<ResourcePolicyRecord> {
         this(alias, RESOURCE_POLICY);
     }
 
-    private ResourcePolicy(Name alias, Table<ResourcePolicyRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private ResourcePolicy(Name alias, Table<ResourcePolicyRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.resource_policy</code> table reference
+     */
+    public ResourcePolicy() {
+        this(DSL.name("resource_policy"), null);
     }
 
     public <O extends Record> ResourcePolicy(Table<O> child, ForeignKey<O, ResourcePolicyRecord> key) {
@@ -93,12 +94,12 @@ public class ResourcePolicy extends TableImpl<ResourcePolicyRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_RES_POLICY_POLICY);
+        return Arrays.asList(Indexes.IDX_RES_POLICY_POLICY);
     }
 
     @Override
@@ -107,21 +108,33 @@ public class ResourcePolicy extends TableImpl<ResourcePolicyRecord> {
     }
 
     @Override
-    public List<UniqueKey<ResourcePolicyRecord>> getKeys() {
-        return Arrays.<UniqueKey<ResourcePolicyRecord>>asList(Keys.CONSTRAINT_FARSRPP);
-    }
-
-    @Override
     public List<ForeignKey<ResourcePolicyRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ResourcePolicyRecord, ?>>asList(Keys.RESOURCE_POLICY__FK_FRSRPOS53XCX4WNKOG82SSRFY, Keys.RESOURCE_POLICY__FK_FRSRPP213XCX4WNKOG82SSRFY);
+        return Arrays.asList(Keys.RESOURCE_POLICY__FK_FRSRPOS53XCX4WNKOG82SSRFY, Keys.RESOURCE_POLICY__FK_FRSRPP213XCX4WNKOG82SSRFY);
     }
 
+    private transient ResourceServerResource _resourceServerResource;
+    private transient ResourceServerPolicy _resourceServerPolicy;
+
+    /**
+     * Get the implicit join path to the
+     * <code>keycloak.resource_server_resource</code> table.
+     */
     public ResourceServerResource resourceServerResource() {
-        return new ResourceServerResource(this, Keys.RESOURCE_POLICY__FK_FRSRPOS53XCX4WNKOG82SSRFY);
+        if (_resourceServerResource == null)
+            _resourceServerResource = new ResourceServerResource(this, Keys.RESOURCE_POLICY__FK_FRSRPOS53XCX4WNKOG82SSRFY);
+
+        return _resourceServerResource;
     }
 
+    /**
+     * Get the implicit join path to the
+     * <code>keycloak.resource_server_policy</code> table.
+     */
     public ResourceServerPolicy resourceServerPolicy() {
-        return new ResourceServerPolicy(this, Keys.RESOURCE_POLICY__FK_FRSRPP213XCX4WNKOG82SSRFY);
+        if (_resourceServerPolicy == null)
+            _resourceServerPolicy = new ResourceServerPolicy(this, Keys.RESOURCE_POLICY__FK_FRSRPP213XCX4WNKOG82SSRFY);
+
+        return _resourceServerPolicy;
     }
 
     @Override

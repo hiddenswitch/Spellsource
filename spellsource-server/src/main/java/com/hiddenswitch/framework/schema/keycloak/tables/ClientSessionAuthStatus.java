@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,10 +32,11 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ClientSessionAuthStatus extends TableImpl<ClientSessionAuthStatusRecord> {
 
-    private static final long serialVersionUID = 1092604907;
+    private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>keycloak.client_session_auth_status</code>
+     * The reference instance of
+     * <code>keycloak.client_session_auth_status</code>
      */
     public static final ClientSessionAuthStatus CLIENT_SESSION_AUTH_STATUS = new ClientSessionAuthStatus();
 
@@ -47,40 +49,21 @@ public class ClientSessionAuthStatus extends TableImpl<ClientSessionAuthStatusRe
     }
 
     /**
-     * The column <code>keycloak.client_session_auth_status.authenticator</code>.
+     * The column
+     * <code>keycloak.client_session_auth_status.authenticator</code>.
      */
-    public final TableField<ClientSessionAuthStatusRecord, String> AUTHENTICATOR = createField(DSL.name("authenticator"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ClientSessionAuthStatusRecord, String> AUTHENTICATOR = createField(DSL.name("authenticator"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.client_session_auth_status.status</code>.
      */
-    public final TableField<ClientSessionAuthStatusRecord, Integer> STATUS = createField(DSL.name("status"), org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<ClientSessionAuthStatusRecord, Integer> STATUS = createField(DSL.name("status"), SQLDataType.INTEGER, this, "");
 
     /**
-     * The column <code>keycloak.client_session_auth_status.client_session</code>.
+     * The column
+     * <code>keycloak.client_session_auth_status.client_session</code>.
      */
-    public final TableField<ClientSessionAuthStatusRecord, String> CLIENT_SESSION = createField(DSL.name("client_session"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.client_session_auth_status</code> table reference
-     */
-    public ClientSessionAuthStatus() {
-        this(DSL.name("client_session_auth_status"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.client_session_auth_status</code> table reference
-     */
-    public ClientSessionAuthStatus(String alias) {
-        this(DSL.name(alias), CLIENT_SESSION_AUTH_STATUS);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.client_session_auth_status</code> table reference
-     */
-    public ClientSessionAuthStatus(Name alias) {
-        this(alias, CLIENT_SESSION_AUTH_STATUS);
-    }
+    public final TableField<ClientSessionAuthStatusRecord, String> CLIENT_SESSION = createField(DSL.name("client_session"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     private ClientSessionAuthStatus(Name alias, Table<ClientSessionAuthStatusRecord> aliased) {
         this(alias, aliased, null);
@@ -90,13 +73,36 @@ public class ClientSessionAuthStatus extends TableImpl<ClientSessionAuthStatusRe
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.client_session_auth_status</code> table
+     * reference
+     */
+    public ClientSessionAuthStatus(String alias) {
+        this(DSL.name(alias), CLIENT_SESSION_AUTH_STATUS);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.client_session_auth_status</code> table
+     * reference
+     */
+    public ClientSessionAuthStatus(Name alias) {
+        this(alias, CLIENT_SESSION_AUTH_STATUS);
+    }
+
+    /**
+     * Create a <code>keycloak.client_session_auth_status</code> table reference
+     */
+    public ClientSessionAuthStatus() {
+        this(DSL.name("client_session_auth_status"), null);
+    }
+
     public <O extends Record> ClientSessionAuthStatus(Table<O> child, ForeignKey<O, ClientSessionAuthStatusRecord> key) {
         super(child, key, CLIENT_SESSION_AUTH_STATUS);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -105,17 +111,21 @@ public class ClientSessionAuthStatus extends TableImpl<ClientSessionAuthStatusRe
     }
 
     @Override
-    public List<UniqueKey<ClientSessionAuthStatusRecord>> getKeys() {
-        return Arrays.<UniqueKey<ClientSessionAuthStatusRecord>>asList(Keys.CONSTRAINT_AUTH_STATUS_PK);
-    }
-
-    @Override
     public List<ForeignKey<ClientSessionAuthStatusRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ClientSessionAuthStatusRecord, ?>>asList(Keys.CLIENT_SESSION_AUTH_STATUS__AUTH_STATUS_CONSTRAINT);
+        return Arrays.asList(Keys.CLIENT_SESSION_AUTH_STATUS__AUTH_STATUS_CONSTRAINT);
     }
 
+    private transient ClientSession _clientSession;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.client_session</code>
+     * table.
+     */
     public ClientSession clientSession() {
-        return new ClientSession(this, Keys.CLIENT_SESSION_AUTH_STATUS__AUTH_STATUS_CONSTRAINT);
+        if (_clientSession == null)
+            _clientSession = new ClientSession(this, Keys.CLIENT_SESSION_AUTH_STATUS__AUTH_STATUS_CONSTRAINT);
+
+        return _clientSession;
     }
 
     @Override

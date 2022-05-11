@@ -23,49 +23,53 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CardsInDeckDao extends AbstractReactiveVertxDAO<CardsInDeckRecord, com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck, Long, Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>>, Future<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>, Future<Integer>, Future<Long>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<CardsInDeckRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck,Long> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public CardsInDeckDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(CardsInDeck.CARDS_IN_DECK, com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck.class, new ReactiveClassicQueryExecutor<CardsInDeckRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck,Long>(configuration,delegate,com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getCardsInDeckMapper()));
-    }
+        public CardsInDeckDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(CardsInDeck.CARDS_IN_DECK, com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck.class, new ReactiveClassicQueryExecutor<CardsInDeckRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck,Long>(configuration,delegate,com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getCardsInDeckMapper()));
+        }
 
-    @Override
-    protected Long getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck object) {
-        return object.getId();
-    }
+        @Override
+        protected Long getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck object) {
+                return object.getId();
+        }
 
-    /**
+        /**
      * Find records that have <code>deck_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByDeckId(Collection<String> values) {
-        return findManyByCondition(CardsInDeck.CARDS_IN_DECK.DECK_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByDeckId(Collection<String> values) {
+                return findManyByCondition(CardsInDeck.CARDS_IN_DECK.DECK_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>deck_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>deck_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByDeckId(Collection<String> values, int limit) {
-        return findManyByCondition(CardsInDeck.CARDS_IN_DECK.DECK_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByDeckId(Collection<String> values, int limit) {
+                return findManyByCondition(CardsInDeck.CARDS_IN_DECK.DECK_ID.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>card_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByCardId(Collection<String> values) {
-        return findManyByCondition(CardsInDeck.CARDS_IN_DECK.CARD_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByCardId(Collection<String> values) {
+                return findManyByCondition(CardsInDeck.CARDS_IN_DECK.CARD_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>card_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>card_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByCardId(Collection<String> values, int limit) {
-        return findManyByCondition(CardsInDeck.CARDS_IN_DECK.CARD_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck>> findManyByCardId(Collection<String> values, int limit) {
+                return findManyByCondition(CardsInDeck.CARDS_IN_DECK.CARD_ID.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<CardsInDeckRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck,Long> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<CardsInDeckRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck,Long>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<CardsInDeckRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck,Long> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<CardsInDeckRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck,Long>) super.queryExecutor();
+        }
 }

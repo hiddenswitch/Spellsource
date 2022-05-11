@@ -24,35 +24,38 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class GroupRoleMappingDao extends AbstractReactiveVertxDAO<GroupRoleMappingRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping, Record2<String, String>, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping>, Future<Integer>, Future<Record2<String, String>>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<GroupRoleMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping,Record2<String, String>> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public GroupRoleMappingDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(GroupRoleMapping.GROUP_ROLE_MAPPING, com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping.class, new ReactiveClassicQueryExecutor<GroupRoleMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getGroupRoleMappingMapper()));
-    }
+        public GroupRoleMappingDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(GroupRoleMapping.GROUP_ROLE_MAPPING, com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping.class, new ReactiveClassicQueryExecutor<GroupRoleMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping,Record2<String, String>>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getGroupRoleMappingMapper()));
+        }
 
-    @Override
-    protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping object) {
-        return compositeKeyRecord(object.getRoleId(), object.getGroupId());
-    }
+        @Override
+        protected Record2<String, String> getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping object) {
+                return compositeKeyRecord(object.getRoleId(), object.getGroupId());
+        }
 
-    /**
+        /**
      * Find records that have <code>group_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping>> findManyByGroupId(Collection<String> values) {
-        return findManyByCondition(GroupRoleMapping.GROUP_ROLE_MAPPING.GROUP_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping>> findManyByGroupId(Collection<String> values) {
+                return findManyByCondition(GroupRoleMapping.GROUP_ROLE_MAPPING.GROUP_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>group_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>group_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping>> findManyByGroupId(Collection<String> values, int limit) {
-        return findManyByCondition(GroupRoleMapping.GROUP_ROLE_MAPPING.GROUP_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping>> findManyByGroupId(Collection<String> values, int limit) {
+                return findManyByCondition(GroupRoleMapping.GROUP_ROLE_MAPPING.GROUP_ID.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<GroupRoleMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping,Record2<String, String>> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<GroupRoleMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping,Record2<String, String>>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<GroupRoleMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping,Record2<String, String>> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<GroupRoleMappingRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.GroupRoleMapping,Record2<String, String>>) super.queryExecutor();
+        }
 }

@@ -8,9 +8,6 @@ import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.RequiredActionConfigRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
@@ -22,6 +19,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RequiredActionConfig extends TableImpl<RequiredActionConfigRecord> {
 
-    private static final long serialVersionUID = 1953890682;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.required_action_config</code>
@@ -47,40 +45,20 @@ public class RequiredActionConfig extends TableImpl<RequiredActionConfigRecord> 
     }
 
     /**
-     * The column <code>keycloak.required_action_config.required_action_id</code>.
+     * The column
+     * <code>keycloak.required_action_config.required_action_id</code>.
      */
-    public final TableField<RequiredActionConfigRecord, String> REQUIRED_ACTION_ID = createField(DSL.name("required_action_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<RequiredActionConfigRecord, String> REQUIRED_ACTION_ID = createField(DSL.name("required_action_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.required_action_config.value</code>.
      */
-    public final TableField<RequiredActionConfigRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<RequiredActionConfigRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>keycloak.required_action_config.name</code>.
      */
-    public final TableField<RequiredActionConfigRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.required_action_config</code> table reference
-     */
-    public RequiredActionConfig() {
-        this(DSL.name("required_action_config"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.required_action_config</code> table reference
-     */
-    public RequiredActionConfig(String alias) {
-        this(DSL.name(alias), REQUIRED_ACTION_CONFIG);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.required_action_config</code> table reference
-     */
-    public RequiredActionConfig(Name alias) {
-        this(alias, REQUIRED_ACTION_CONFIG);
-    }
+    public final TableField<RequiredActionConfigRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     private RequiredActionConfig(Name alias, Table<RequiredActionConfigRecord> aliased) {
         this(alias, aliased, null);
@@ -90,23 +68,41 @@ public class RequiredActionConfig extends TableImpl<RequiredActionConfigRecord> 
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.required_action_config</code> table
+     * reference
+     */
+    public RequiredActionConfig(String alias) {
+        this(DSL.name(alias), REQUIRED_ACTION_CONFIG);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.required_action_config</code> table
+     * reference
+     */
+    public RequiredActionConfig(Name alias) {
+        this(alias, REQUIRED_ACTION_CONFIG);
+    }
+
+    /**
+     * Create a <code>keycloak.required_action_config</code> table reference
+     */
+    public RequiredActionConfig() {
+        this(DSL.name("required_action_config"), null);
+    }
+
     public <O extends Record> RequiredActionConfig(Table<O> child, ForeignKey<O, RequiredActionConfigRecord> key) {
         super(child, key, REQUIRED_ACTION_CONFIG);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public UniqueKey<RequiredActionConfigRecord> getPrimaryKey() {
         return Keys.CONSTRAINT_REQ_ACT_CFG_PK;
-    }
-
-    @Override
-    public List<UniqueKey<RequiredActionConfigRecord>> getKeys() {
-        return Arrays.<UniqueKey<RequiredActionConfigRecord>>asList(Keys.CONSTRAINT_REQ_ACT_CFG_PK);
     }
 
     @Override

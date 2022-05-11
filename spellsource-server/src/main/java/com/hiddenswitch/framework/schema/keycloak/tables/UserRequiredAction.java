@@ -24,6 +24,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserRequiredAction extends TableImpl<UserRequiredActionRecord> {
 
-    private static final long serialVersionUID = -436069553;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.user_required_action</code>
@@ -51,33 +52,12 @@ public class UserRequiredAction extends TableImpl<UserRequiredActionRecord> {
     /**
      * The column <code>keycloak.user_required_action.user_id</code>.
      */
-    public final TableField<UserRequiredActionRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<UserRequiredActionRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.user_required_action.required_action</code>.
      */
-    public final TableField<UserRequiredActionRecord, String> REQUIRED_ACTION = createField(DSL.name("required_action"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false).defaultValue(org.jooq.impl.DSL.field("' '::character varying", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
-
-    /**
-     * Create a <code>keycloak.user_required_action</code> table reference
-     */
-    public UserRequiredAction() {
-        this(DSL.name("user_required_action"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.user_required_action</code> table reference
-     */
-    public UserRequiredAction(String alias) {
-        this(DSL.name(alias), USER_REQUIRED_ACTION);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.user_required_action</code> table reference
-     */
-    public UserRequiredAction(Name alias) {
-        this(alias, USER_REQUIRED_ACTION);
-    }
+    public final TableField<UserRequiredActionRecord, String> REQUIRED_ACTION = createField(DSL.name("required_action"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field("' '::character varying", SQLDataType.VARCHAR)), this, "");
 
     private UserRequiredAction(Name alias, Table<UserRequiredActionRecord> aliased) {
         this(alias, aliased, null);
@@ -87,18 +67,41 @@ public class UserRequiredAction extends TableImpl<UserRequiredActionRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.user_required_action</code> table
+     * reference
+     */
+    public UserRequiredAction(String alias) {
+        this(DSL.name(alias), USER_REQUIRED_ACTION);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.user_required_action</code> table
+     * reference
+     */
+    public UserRequiredAction(Name alias) {
+        this(alias, USER_REQUIRED_ACTION);
+    }
+
+    /**
+     * Create a <code>keycloak.user_required_action</code> table reference
+     */
+    public UserRequiredAction() {
+        this(DSL.name("user_required_action"), null);
+    }
+
     public <O extends Record> UserRequiredAction(Table<O> child, ForeignKey<O, UserRequiredActionRecord> key) {
         super(child, key, USER_REQUIRED_ACTION);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_USER_REQACTIONS);
+        return Arrays.asList(Indexes.IDX_USER_REQACTIONS);
     }
 
     @Override
@@ -107,17 +110,21 @@ public class UserRequiredAction extends TableImpl<UserRequiredActionRecord> {
     }
 
     @Override
-    public List<UniqueKey<UserRequiredActionRecord>> getKeys() {
-        return Arrays.<UniqueKey<UserRequiredActionRecord>>asList(Keys.CONSTRAINT_REQUIRED_ACTION);
-    }
-
-    @Override
     public List<ForeignKey<UserRequiredActionRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<UserRequiredActionRecord, ?>>asList(Keys.USER_REQUIRED_ACTION__FK_6QJ3W1JW9CVAFHE19BWSIUVMD);
+        return Arrays.asList(Keys.USER_REQUIRED_ACTION__FK_6QJ3W1JW9CVAFHE19BWSIUVMD);
     }
 
+    private transient UserEntity _userEntity;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table.
+     */
     public UserEntity userEntity() {
-        return new UserEntity(this, Keys.USER_REQUIRED_ACTION__FK_6QJ3W1JW9CVAFHE19BWSIUVMD);
+        if (_userEntity == null)
+            _userEntity = new UserEntity(this, Keys.USER_REQUIRED_ACTION__FK_6QJ3W1JW9CVAFHE19BWSIUVMD);
+
+        return _userEntity;
     }
 
     @Override

@@ -4,17 +4,12 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
-import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.FedUserGroupMembershipRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row4;
@@ -24,6 +19,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class FedUserGroupMembership extends TableImpl<FedUserGroupMembershipRecord> {
 
-    private static final long serialVersionUID = -256624394;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.fed_user_group_membership</code>
@@ -51,43 +47,23 @@ public class FedUserGroupMembership extends TableImpl<FedUserGroupMembershipReco
     /**
      * The column <code>keycloak.fed_user_group_membership.group_id</code>.
      */
-    public final TableField<FedUserGroupMembershipRecord, String> GROUP_ID = createField(DSL.name("group_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<FedUserGroupMembershipRecord, String> GROUP_ID = createField(DSL.name("group_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.fed_user_group_membership.user_id</code>.
      */
-    public final TableField<FedUserGroupMembershipRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<FedUserGroupMembershipRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.fed_user_group_membership.realm_id</code>.
      */
-    public final TableField<FedUserGroupMembershipRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<FedUserGroupMembershipRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
-     * The column <code>keycloak.fed_user_group_membership.storage_provider_id</code>.
+     * The column
+     * <code>keycloak.fed_user_group_membership.storage_provider_id</code>.
      */
-    public final TableField<FedUserGroupMembershipRecord, String> STORAGE_PROVIDER_ID = createField(DSL.name("storage_provider_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
-
-    /**
-     * Create a <code>keycloak.fed_user_group_membership</code> table reference
-     */
-    public FedUserGroupMembership() {
-        this(DSL.name("fed_user_group_membership"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.fed_user_group_membership</code> table reference
-     */
-    public FedUserGroupMembership(String alias) {
-        this(DSL.name(alias), FED_USER_GROUP_MEMBERSHIP);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.fed_user_group_membership</code> table reference
-     */
-    public FedUserGroupMembership(Name alias) {
-        this(alias, FED_USER_GROUP_MEMBERSHIP);
-    }
+    public final TableField<FedUserGroupMembershipRecord, String> STORAGE_PROVIDER_ID = createField(DSL.name("storage_provider_id"), SQLDataType.VARCHAR(36), this, "");
 
     private FedUserGroupMembership(Name alias, Table<FedUserGroupMembershipRecord> aliased) {
         this(alias, aliased, null);
@@ -97,28 +73,41 @@ public class FedUserGroupMembership extends TableImpl<FedUserGroupMembershipReco
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.fed_user_group_membership</code> table
+     * reference
+     */
+    public FedUserGroupMembership(String alias) {
+        this(DSL.name(alias), FED_USER_GROUP_MEMBERSHIP);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.fed_user_group_membership</code> table
+     * reference
+     */
+    public FedUserGroupMembership(Name alias) {
+        this(alias, FED_USER_GROUP_MEMBERSHIP);
+    }
+
+    /**
+     * Create a <code>keycloak.fed_user_group_membership</code> table reference
+     */
+    public FedUserGroupMembership() {
+        this(DSL.name("fed_user_group_membership"), null);
+    }
+
     public <O extends Record> FedUserGroupMembership(Table<O> child, ForeignKey<O, FedUserGroupMembershipRecord> key) {
         super(child, key, FED_USER_GROUP_MEMBERSHIP);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
-    }
-
-    @Override
-    public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_FU_GROUP_MEMBERSHIP, Indexes.IDX_FU_GROUP_MEMBERSHIP_RU);
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public UniqueKey<FedUserGroupMembershipRecord> getPrimaryKey() {
         return Keys.CONSTR_FED_USER_GROUP;
-    }
-
-    @Override
-    public List<UniqueKey<FedUserGroupMembershipRecord>> getKeys() {
-        return Arrays.<UniqueKey<FedUserGroupMembershipRecord>>asList(Keys.CONSTR_FED_USER_GROUP);
     }
 
     @Override

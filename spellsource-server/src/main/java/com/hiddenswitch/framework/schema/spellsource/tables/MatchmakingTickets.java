@@ -27,6 +27,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -36,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
 
-    private static final long serialVersionUID = 937279073;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>spellsource.matchmaking_tickets</code>
@@ -54,53 +55,32 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
     /**
      * The column <code>spellsource.matchmaking_tickets.id</code>.
      */
-    public final TableField<MatchmakingTicketsRecord, Long> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<MatchmakingTicketsRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>spellsource.matchmaking_tickets.queue_id</code>.
      */
-    public final TableField<MatchmakingTicketsRecord, String> QUEUE_ID = createField(DSL.name("queue_id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<MatchmakingTicketsRecord, String> QUEUE_ID = createField(DSL.name("queue_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.matchmaking_tickets.user_id</code>.
      */
-    public final TableField<MatchmakingTicketsRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<MatchmakingTicketsRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>spellsource.matchmaking_tickets.deck_id</code>.
      */
-    public final TableField<MatchmakingTicketsRecord, String> DECK_ID = createField(DSL.name("deck_id"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<MatchmakingTicketsRecord, String> DECK_ID = createField(DSL.name("deck_id"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>spellsource.matchmaking_tickets.bot_deck_id</code>.
      */
-    public final TableField<MatchmakingTicketsRecord, String> BOT_DECK_ID = createField(DSL.name("bot_deck_id"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<MatchmakingTicketsRecord, String> BOT_DECK_ID = createField(DSL.name("bot_deck_id"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>spellsource.matchmaking_tickets.created_at</code>.
      */
-    public final TableField<MatchmakingTicketsRecord, OffsetDateTime> CREATED_AT = createField(DSL.name("created_at"), org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false).defaultValue(org.jooq.impl.DSL.field("now()", org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
-
-    /**
-     * Create a <code>spellsource.matchmaking_tickets</code> table reference
-     */
-    public MatchmakingTickets() {
-        this(DSL.name("matchmaking_tickets"), null);
-    }
-
-    /**
-     * Create an aliased <code>spellsource.matchmaking_tickets</code> table reference
-     */
-    public MatchmakingTickets(String alias) {
-        this(DSL.name(alias), MATCHMAKING_TICKETS);
-    }
-
-    /**
-     * Create an aliased <code>spellsource.matchmaking_tickets</code> table reference
-     */
-    public MatchmakingTickets(Name alias) {
-        this(alias, MATCHMAKING_TICKETS);
-    }
+    public final TableField<MatchmakingTicketsRecord, OffsetDateTime> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
 
     private MatchmakingTickets(Name alias, Table<MatchmakingTicketsRecord> aliased) {
         this(alias, aliased, null);
@@ -110,23 +90,46 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>spellsource.matchmaking_tickets</code> table
+     * reference
+     */
+    public MatchmakingTickets(String alias) {
+        this(DSL.name(alias), MATCHMAKING_TICKETS);
+    }
+
+    /**
+     * Create an aliased <code>spellsource.matchmaking_tickets</code> table
+     * reference
+     */
+    public MatchmakingTickets(Name alias) {
+        this(alias, MATCHMAKING_TICKETS);
+    }
+
+    /**
+     * Create a <code>spellsource.matchmaking_tickets</code> table reference
+     */
+    public MatchmakingTickets() {
+        this(DSL.name("matchmaking_tickets"), null);
+    }
+
     public <O extends Record> MatchmakingTickets(Table<O> child, ForeignKey<O, MatchmakingTicketsRecord> key) {
         super(child, key, MATCHMAKING_TICKETS);
     }
 
     @Override
     public Schema getSchema() {
-        return Spellsource.SPELLSOURCE;
+        return aliased() ? null : Spellsource.SPELLSOURCE;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.MATCHMAKING_TICKETS_QUEUE_ID_IDX);
+        return Arrays.asList(Indexes.MATCHMAKING_TICKETS_QUEUE_ID_IDX);
     }
 
     @Override
     public Identity<MatchmakingTicketsRecord, Long> getIdentity() {
-        return Keys.IDENTITY_MATCHMAKING_TICKETS;
+        return (Identity<MatchmakingTicketsRecord, Long>) super.getIdentity();
     }
 
     @Override
@@ -135,29 +138,57 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
     }
 
     @Override
-    public List<UniqueKey<MatchmakingTicketsRecord>> getKeys() {
-        return Arrays.<UniqueKey<MatchmakingTicketsRecord>>asList(Keys.MATCHMAKING_TICKETS_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<MatchmakingTicketsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<MatchmakingTicketsRecord, ?>>asList(Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_QUEUE_ID_FKEY, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_USER_ID_FKEY, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_DECK_ID_FKEY, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_BOT_DECK_ID_FKEY);
+        return Arrays.asList(Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_QUEUE_ID_FKEY, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_USER_ID_FKEY, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_DECK_ID_FKEY, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_BOT_DECK_ID_FKEY);
     }
 
+    private transient MatchmakingQueues _matchmakingQueues;
+    private transient UserEntity _userEntity;
+    private transient Decks _matchmakingTicketsDeckIdFkey;
+    private transient Decks _matchmakingTicketsBotDeckIdFkey;
+
+    /**
+     * Get the implicit join path to the
+     * <code>spellsource.matchmaking_queues</code> table.
+     */
     public MatchmakingQueues matchmakingQueues() {
-        return new MatchmakingQueues(this, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_QUEUE_ID_FKEY);
+        if (_matchmakingQueues == null)
+            _matchmakingQueues = new MatchmakingQueues(this, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_QUEUE_ID_FKEY);
+
+        return _matchmakingQueues;
     }
 
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table.
+     */
     public UserEntity userEntity() {
-        return new UserEntity(this, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_USER_ID_FKEY);
+        if (_userEntity == null)
+            _userEntity = new UserEntity(this, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_USER_ID_FKEY);
+
+        return _userEntity;
     }
 
+    /**
+     * Get the implicit join path to the <code>spellsource.decks</code> table,
+     * via the <code>matchmaking_tickets_deck_id_fkey</code> key.
+     */
     public Decks matchmakingTicketsDeckIdFkey() {
-        return new Decks(this, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_DECK_ID_FKEY);
+        if (_matchmakingTicketsDeckIdFkey == null)
+            _matchmakingTicketsDeckIdFkey = new Decks(this, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_DECK_ID_FKEY);
+
+        return _matchmakingTicketsDeckIdFkey;
     }
 
+    /**
+     * Get the implicit join path to the <code>spellsource.decks</code> table,
+     * via the <code>matchmaking_tickets_bot_deck_id_fkey</code> key.
+     */
     public Decks matchmakingTicketsBotDeckIdFkey() {
-        return new Decks(this, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_BOT_DECK_ID_FKEY);
+        if (_matchmakingTicketsBotDeckIdFkey == null)
+            _matchmakingTicketsBotDeckIdFkey = new Decks(this, Keys.MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_BOT_DECK_ID_FKEY);
+
+        return _matchmakingTicketsBotDeckIdFkey;
     }
 
     @Override

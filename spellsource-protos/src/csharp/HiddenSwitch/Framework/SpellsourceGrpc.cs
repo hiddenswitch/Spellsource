@@ -12,6 +12,7 @@ namespace Spellsource.Proto {
   {
     static readonly string __ServiceName = "spellsource.Matchmaking";
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static void __Helper_SerializeMessage(global::Google.Protobuf.IMessage message, grpc::SerializationContext context)
     {
       #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
@@ -26,11 +27,13 @@ namespace Spellsource.Proto {
       context.Complete(global::Google.Protobuf.MessageExtensions.ToByteArray(message));
     }
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static class __Helper_MessageCache<T>
     {
       public static readonly bool IsBufferMessage = global::System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(global::Google.Protobuf.IBufferMessage)).IsAssignableFrom(typeof(T));
     }
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static T __Helper_DeserializeMessage<T>(grpc::DeserializationContext context, global::Google.Protobuf.MessageParser<T> parser) where T : global::Google.Protobuf.IMessage<T>
     {
       #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
@@ -42,12 +45,18 @@ namespace Spellsource.Proto {
       return parser.ParseFrom(context.PayloadAsNewBuffer());
     }
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.MatchmakingQueuePutRequest> __Marshaller_spellsource_MatchmakingQueuePutRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.MatchmakingQueuePutRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.MatchmakingQueuePutResponse> __Marshaller_spellsource_MatchmakingQueuePutResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.MatchmakingQueuePutResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.Empty.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.MatchCancelResponse> __Marshaller_spellsource_MatchCancelResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.MatchCancelResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.MatchmakingQueuesResponse> __Marshaller_spellsource_MatchmakingQueuesResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.MatchmakingQueuesResponse.Parser));
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.MatchmakingQueuePutRequest, global::Spellsource.Proto.MatchmakingQueuePutResponse> __Method_Enqueue = new grpc::Method<global::Spellsource.Proto.MatchmakingQueuePutRequest, global::Spellsource.Proto.MatchmakingQueuePutResponse>(
         grpc::MethodType.DuplexStreaming,
         __ServiceName,
@@ -55,6 +64,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_MatchmakingQueuePutRequest,
         __Marshaller_spellsource_MatchmakingQueuePutResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.MatchCancelResponse> __Method_MatchmakingDelete = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.MatchCancelResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -62,6 +72,7 @@ namespace Spellsource.Proto {
         __Marshaller_google_protobuf_Empty,
         __Marshaller_spellsource_MatchCancelResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.MatchmakingQueuesResponse> __Method_MatchmakingGet = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.MatchmakingQueuesResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -79,6 +90,7 @@ namespace Spellsource.Proto {
     [grpc::BindServiceMethod(typeof(Matchmaking), "BindService")]
     public abstract partial class MatchmakingBase
     {
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task Enqueue(grpc::IAsyncStreamReader<global::Spellsource.Proto.MatchmakingQueuePutRequest> requestStream, grpc::IServerStreamWriter<global::Spellsource.Proto.MatchmakingQueuePutResponse> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -90,6 +102,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.MatchCancelResponse> MatchmakingDelete(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -101,6 +114,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.MatchmakingQueuesResponse> MatchmakingGet(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -113,28 +127,34 @@ namespace Spellsource.Proto {
     {
       /// <summary>Creates a new client for Matchmaking</summary>
       /// <param name="channel">The channel to use to make remote calls.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public MatchmakingClient(grpc::ChannelBase channel) : base(channel)
       {
       }
       /// <summary>Creates a new client for Matchmaking that uses a custom <c>CallInvoker</c>.</summary>
       /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public MatchmakingClient(grpc::CallInvoker callInvoker) : base(callInvoker)
       {
       }
       /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       protected MatchmakingClient() : base()
       {
       }
       /// <summary>Protected constructor to allow creation of configured clients.</summary>
       /// <param name="configuration">The client configuration.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       protected MatchmakingClient(ClientBaseConfiguration configuration) : base(configuration)
       {
       }
 
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncDuplexStreamingCall<global::Spellsource.Proto.MatchmakingQueuePutRequest, global::Spellsource.Proto.MatchmakingQueuePutResponse> Enqueue(grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return Enqueue(new grpc::CallOptions(headers, deadline, cancellationToken));
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncDuplexStreamingCall<global::Spellsource.Proto.MatchmakingQueuePutRequest, global::Spellsource.Proto.MatchmakingQueuePutResponse> Enqueue(grpc::CallOptions options)
       {
         return CallInvoker.AsyncDuplexStreamingCall(__Method_Enqueue, null, options);
@@ -147,6 +167,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.MatchCancelResponse MatchmakingDelete(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return MatchmakingDelete(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -157,6 +178,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.MatchCancelResponse MatchmakingDelete(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_MatchmakingDelete, null, options, request);
@@ -169,6 +191,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.MatchCancelResponse> MatchmakingDeleteAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return MatchmakingDeleteAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -179,6 +202,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.MatchCancelResponse> MatchmakingDeleteAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_MatchmakingDelete, null, options, request);
@@ -191,6 +215,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.MatchmakingQueuesResponse MatchmakingGet(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return MatchmakingGet(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -201,6 +226,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.MatchmakingQueuesResponse MatchmakingGet(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_MatchmakingGet, null, options, request);
@@ -213,6 +239,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.MatchmakingQueuesResponse> MatchmakingGetAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return MatchmakingGetAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -223,11 +250,13 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.MatchmakingQueuesResponse> MatchmakingGetAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_MatchmakingGet, null, options, request);
       }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       protected override MatchmakingClient NewInstance(ClientBaseConfiguration configuration)
       {
         return new MatchmakingClient(configuration);
@@ -236,6 +265,7 @@ namespace Spellsource.Proto {
 
     /// <summary>Creates service definition that can be registered with a server</summary>
     /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     public static grpc::ServerServiceDefinition BindService(MatchmakingBase serviceImpl)
     {
       return grpc::ServerServiceDefinition.CreateBuilder()
@@ -248,6 +278,7 @@ namespace Spellsource.Proto {
     /// Note: this method is part of an experimental API that can change or be removed without any prior notice.</summary>
     /// <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
     /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     public static void BindService(grpc::ServiceBinderBase serviceBinder, MatchmakingBase serviceImpl)
     {
       serviceBinder.AddMethod(__Method_Enqueue, serviceImpl == null ? null : new grpc::DuplexStreamingServerMethod<global::Spellsource.Proto.MatchmakingQueuePutRequest, global::Spellsource.Proto.MatchmakingQueuePutResponse>(serviceImpl.Enqueue));
@@ -260,6 +291,7 @@ namespace Spellsource.Proto {
   {
     static readonly string __ServiceName = "spellsource.HiddenSwitchSpellsourceAPIService";
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static void __Helper_SerializeMessage(global::Google.Protobuf.IMessage message, grpc::SerializationContext context)
     {
       #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
@@ -274,11 +306,13 @@ namespace Spellsource.Proto {
       context.Complete(global::Google.Protobuf.MessageExtensions.ToByteArray(message));
     }
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static class __Helper_MessageCache<T>
     {
       public static readonly bool IsBufferMessage = global::System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(global::Google.Protobuf.IBufferMessage)).IsAssignableFrom(typeof(T));
     }
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static T __Helper_DeserializeMessage<T>(grpc::DeserializationContext context, global::Google.Protobuf.MessageParser<T> parser) where T : global::Google.Protobuf.IMessage<T>
     {
       #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
@@ -290,56 +324,106 @@ namespace Spellsource.Proto {
       return parser.ParseFrom(context.PayloadAsNewBuffer());
     }
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage> __Marshaller_spellsource_Envelope_MethodMessage_PutCardMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage> __Marshaller_spellsource_Envelope_ResultMessage_PutCardMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.SendMessageMessage> __Marshaller_spellsource_Envelope_MethodMessage_SendMessageMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.SendMessageMessage.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.SendMessageMessage> __Marshaller_spellsource_Envelope_ResultMessage_SendMessageMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.SendMessageMessage.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.DeleteCardMessage> __Marshaller_spellsource_Envelope_MethodMessage_DeleteCardMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.DeleteCardMessage.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.Envelope.Types.RemovedMessage> __Marshaller_spellsource_Envelope_RemovedMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Envelope.Types.RemovedMessage.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.Empty> __Marshaller_google_protobuf_Empty = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.Empty.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.Friend> __Marshaller_spellsource_Friend = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Friend.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.Invite> __Marshaller_spellsource_Invite = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Invite.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.EditableCard> __Marshaller_spellsource_EditableCard = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.EditableCard.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.Match> __Marshaller_spellsource_Match = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.Match.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.ClientToServerMessage> __Marshaller_spellsource_ClientToServerMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.ClientToServerMessage.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.ServerToClientMessage> __Marshaller_spellsource_ServerToClientMessage = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.ServerToClientMessage.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.AcceptInviteRequest> __Marshaller_spellsource_AcceptInviteRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.AcceptInviteRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.AcceptInviteResponse> __Marshaller_spellsource_AcceptInviteResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.AcceptInviteResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.ChangePasswordRequest> __Marshaller_spellsource_ChangePasswordRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.ChangePasswordRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.ChangePasswordResponse> __Marshaller_spellsource_ChangePasswordResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.ChangePasswordResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.CreateAccountRequest> __Marshaller_spellsource_CreateAccountRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.CreateAccountRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.CreateAccountResponse> __Marshaller_spellsource_CreateAccountResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.CreateAccountResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.DecksDeleteRequest> __Marshaller_spellsource_DecksDeleteRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DecksDeleteRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.DecksGetRequest> __Marshaller_spellsource_DecksGetRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DecksGetRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.DecksGetResponse> __Marshaller_spellsource_DecksGetResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DecksGetResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.DecksGetAllResponse> __Marshaller_spellsource_DecksGetAllResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DecksGetAllResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.DecksPutRequest> __Marshaller_spellsource_DecksPutRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DecksPutRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.DecksPutResponse> __Marshaller_spellsource_DecksPutResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DecksPutResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.DecksUpdateRequest> __Marshaller_spellsource_DecksUpdateRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DecksUpdateRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Google.Protobuf.WellKnownTypes.StringValue> __Marshaller_google_protobuf_StringValue = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Google.Protobuf.WellKnownTypes.StringValue.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.DeleteInviteRequest> __Marshaller_spellsource_DeleteInviteRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DeleteInviteRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.InviteResponse> __Marshaller_spellsource_InviteResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.InviteResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.DraftsChooseCardRequest> __Marshaller_spellsource_DraftsChooseCardRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DraftsChooseCardRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.DraftState> __Marshaller_spellsource_DraftState = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DraftState.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.DraftsChooseHeroRequest> __Marshaller_spellsource_DraftsChooseHeroRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DraftsChooseHeroRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.DraftsPostRequest> __Marshaller_spellsource_DraftsPostRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.DraftsPostRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.FriendDeleteRequest> __Marshaller_spellsource_FriendDeleteRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.FriendDeleteRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.UnfriendResponse> __Marshaller_spellsource_UnfriendResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.UnfriendResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.FriendPutRequest> __Marshaller_spellsource_FriendPutRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.FriendPutRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.FriendPutResponse> __Marshaller_spellsource_FriendPutResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.FriendPutResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.GetAccountRequest> __Marshaller_spellsource_GetAccountRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.GetAccountRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.GetAccountsResponse> __Marshaller_spellsource_GetAccountsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.GetAccountsResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.GetAccountsRequest> __Marshaller_spellsource_GetAccountsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.GetAccountsRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.GetGameRecordRequest> __Marshaller_spellsource_GetGameRecordRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.GetGameRecordRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.GetGameRecordResponse> __Marshaller_spellsource_GetGameRecordResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.GetGameRecordResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.GetGameRecordIdsResponse> __Marshaller_spellsource_GetGameRecordIdsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.GetGameRecordIdsResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.GetInviteRequest> __Marshaller_spellsource_GetInviteRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.GetInviteRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.InviteGetResponse> __Marshaller_spellsource_InviteGetResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.InviteGetResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.LoginRequest> __Marshaller_spellsource_LoginRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.LoginRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.LoginResponse> __Marshaller_spellsource_LoginResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.LoginResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.PostInviteRequest> __Marshaller_spellsource_PostInviteRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.PostInviteRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Spellsource.Proto.PostPasswordResetRequest> __Marshaller_spellsource_PostPasswordResetRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Spellsource.Proto.PostPasswordResetRequest.Parser));
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage, global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage> __Method_PutCard = new grpc::Method<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage, global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -347,6 +431,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_Envelope_MethodMessage_PutCardMessage,
         __Marshaller_spellsource_Envelope_ResultMessage_PutCardMessage);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.SendMessageMessage, global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.SendMessageMessage> __Method_SendMessage = new grpc::Method<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.SendMessageMessage, global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.SendMessageMessage>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -354,6 +439,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_Envelope_MethodMessage_SendMessageMessage,
         __Marshaller_spellsource_Envelope_ResultMessage_SendMessageMessage);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.DeleteCardMessage, global::Spellsource.Proto.Envelope.Types.RemovedMessage> __Method_DeleteCard = new grpc::Method<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.DeleteCardMessage, global::Spellsource.Proto.Envelope.Types.RemovedMessage>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -361,6 +447,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_Envelope_MethodMessage_DeleteCardMessage,
         __Marshaller_spellsource_Envelope_RemovedMessage);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.Friend> __Method_SubscribeFriends = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.Friend>(
         grpc::MethodType.ServerStreaming,
         __ServiceName,
@@ -368,6 +455,7 @@ namespace Spellsource.Proto {
         __Marshaller_google_protobuf_Empty,
         __Marshaller_spellsource_Friend);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.Invite> __Method_SubscribeInvites = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.Invite>(
         grpc::MethodType.ServerStreaming,
         __ServiceName,
@@ -375,6 +463,7 @@ namespace Spellsource.Proto {
         __Marshaller_google_protobuf_Empty,
         __Marshaller_spellsource_Invite);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.EditableCard> __Method_SubscribeEditableCards = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.EditableCard>(
         grpc::MethodType.ServerStreaming,
         __ServiceName,
@@ -382,6 +471,7 @@ namespace Spellsource.Proto {
         __Marshaller_google_protobuf_Empty,
         __Marshaller_spellsource_EditableCard);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.Match> __Method_SubscribeMatch = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.Match>(
         grpc::MethodType.ServerStreaming,
         __ServiceName,
@@ -389,6 +479,7 @@ namespace Spellsource.Proto {
         __Marshaller_google_protobuf_Empty,
         __Marshaller_spellsource_Match);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.ClientToServerMessage, global::Spellsource.Proto.ServerToClientMessage> __Method_SubscribeGame = new grpc::Method<global::Spellsource.Proto.ClientToServerMessage, global::Spellsource.Proto.ServerToClientMessage>(
         grpc::MethodType.DuplexStreaming,
         __ServiceName,
@@ -396,6 +487,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_ClientToServerMessage,
         __Marshaller_spellsource_ServerToClientMessage);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.AcceptInviteRequest, global::Spellsource.Proto.AcceptInviteResponse> __Method_AcceptInvite = new grpc::Method<global::Spellsource.Proto.AcceptInviteRequest, global::Spellsource.Proto.AcceptInviteResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -403,6 +495,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_AcceptInviteRequest,
         __Marshaller_spellsource_AcceptInviteResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.ChangePasswordRequest, global::Spellsource.Proto.ChangePasswordResponse> __Method_ChangePassword = new grpc::Method<global::Spellsource.Proto.ChangePasswordRequest, global::Spellsource.Proto.ChangePasswordResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -410,6 +503,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_ChangePasswordRequest,
         __Marshaller_spellsource_ChangePasswordResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.CreateAccountRequest, global::Spellsource.Proto.CreateAccountResponse> __Method_CreateAccount = new grpc::Method<global::Spellsource.Proto.CreateAccountRequest, global::Spellsource.Proto.CreateAccountResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -417,6 +511,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_CreateAccountRequest,
         __Marshaller_spellsource_CreateAccountResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.DecksDeleteRequest, global::Google.Protobuf.WellKnownTypes.Empty> __Method_DecksDelete = new grpc::Method<global::Spellsource.Proto.DecksDeleteRequest, global::Google.Protobuf.WellKnownTypes.Empty>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -424,6 +519,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_DecksDeleteRequest,
         __Marshaller_google_protobuf_Empty);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.DecksGetRequest, global::Spellsource.Proto.DecksGetResponse> __Method_DecksGet = new grpc::Method<global::Spellsource.Proto.DecksGetRequest, global::Spellsource.Proto.DecksGetResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -431,6 +527,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_DecksGetRequest,
         __Marshaller_spellsource_DecksGetResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.DecksGetAllResponse> __Method_DecksGetAll = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.DecksGetAllResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -438,6 +535,7 @@ namespace Spellsource.Proto {
         __Marshaller_google_protobuf_Empty,
         __Marshaller_spellsource_DecksGetAllResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.DecksPutRequest, global::Spellsource.Proto.DecksPutResponse> __Method_DecksPut = new grpc::Method<global::Spellsource.Proto.DecksPutRequest, global::Spellsource.Proto.DecksPutResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -445,6 +543,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_DecksPutRequest,
         __Marshaller_spellsource_DecksPutResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.DecksUpdateRequest, global::Spellsource.Proto.DecksGetResponse> __Method_DecksUpdate = new grpc::Method<global::Spellsource.Proto.DecksUpdateRequest, global::Spellsource.Proto.DecksGetResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -452,6 +551,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_DecksUpdateRequest,
         __Marshaller_spellsource_DecksGetResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.StringValue, global::Spellsource.Proto.DecksGetResponse> __Method_DuplicateDeck = new grpc::Method<global::Google.Protobuf.WellKnownTypes.StringValue, global::Spellsource.Proto.DecksGetResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -459,6 +559,7 @@ namespace Spellsource.Proto {
         __Marshaller_google_protobuf_StringValue,
         __Marshaller_spellsource_DecksGetResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.DeleteInviteRequest, global::Spellsource.Proto.InviteResponse> __Method_DeleteInvite = new grpc::Method<global::Spellsource.Proto.DeleteInviteRequest, global::Spellsource.Proto.InviteResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -466,6 +567,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_DeleteInviteRequest,
         __Marshaller_spellsource_InviteResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.DraftsChooseCardRequest, global::Spellsource.Proto.DraftState> __Method_DraftsChooseCard = new grpc::Method<global::Spellsource.Proto.DraftsChooseCardRequest, global::Spellsource.Proto.DraftState>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -473,6 +575,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_DraftsChooseCardRequest,
         __Marshaller_spellsource_DraftState);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.DraftsChooseHeroRequest, global::Spellsource.Proto.DraftState> __Method_DraftsChooseHero = new grpc::Method<global::Spellsource.Proto.DraftsChooseHeroRequest, global::Spellsource.Proto.DraftState>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -480,6 +583,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_DraftsChooseHeroRequest,
         __Marshaller_spellsource_DraftState);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.DraftState> __Method_DraftsGet = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.DraftState>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -487,6 +591,7 @@ namespace Spellsource.Proto {
         __Marshaller_google_protobuf_Empty,
         __Marshaller_spellsource_DraftState);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.DraftsPostRequest, global::Spellsource.Proto.DraftState> __Method_DraftsPost = new grpc::Method<global::Spellsource.Proto.DraftsPostRequest, global::Spellsource.Proto.DraftState>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -494,6 +599,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_DraftsPostRequest,
         __Marshaller_spellsource_DraftState);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.FriendDeleteRequest, global::Spellsource.Proto.UnfriendResponse> __Method_FriendDelete = new grpc::Method<global::Spellsource.Proto.FriendDeleteRequest, global::Spellsource.Proto.UnfriendResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -501,6 +607,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_FriendDeleteRequest,
         __Marshaller_spellsource_UnfriendResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.FriendPutRequest, global::Spellsource.Proto.FriendPutResponse> __Method_FriendPut = new grpc::Method<global::Spellsource.Proto.FriendPutRequest, global::Spellsource.Proto.FriendPutResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -508,6 +615,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_FriendPutRequest,
         __Marshaller_spellsource_FriendPutResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.GetAccountRequest, global::Spellsource.Proto.GetAccountsResponse> __Method_GetAccount = new grpc::Method<global::Spellsource.Proto.GetAccountRequest, global::Spellsource.Proto.GetAccountsResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -515,6 +623,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_GetAccountRequest,
         __Marshaller_spellsource_GetAccountsResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.GetAccountsRequest, global::Spellsource.Proto.GetAccountsResponse> __Method_GetAccounts = new grpc::Method<global::Spellsource.Proto.GetAccountsRequest, global::Spellsource.Proto.GetAccountsResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -522,6 +631,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_GetAccountsRequest,
         __Marshaller_spellsource_GetAccountsResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.GetGameRecordRequest, global::Spellsource.Proto.GetGameRecordResponse> __Method_GetGameRecord = new grpc::Method<global::Spellsource.Proto.GetGameRecordRequest, global::Spellsource.Proto.GetGameRecordResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -529,6 +639,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_GetGameRecordRequest,
         __Marshaller_spellsource_GetGameRecordResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.GetGameRecordIdsResponse> __Method_GetGameRecordIds = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.GetGameRecordIdsResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -536,6 +647,7 @@ namespace Spellsource.Proto {
         __Marshaller_google_protobuf_Empty,
         __Marshaller_spellsource_GetGameRecordIdsResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.GetInviteRequest, global::Spellsource.Proto.InviteResponse> __Method_GetInvite = new grpc::Method<global::Spellsource.Proto.GetInviteRequest, global::Spellsource.Proto.InviteResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -543,6 +655,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_GetInviteRequest,
         __Marshaller_spellsource_InviteResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.InviteGetResponse> __Method_GetInvites = new grpc::Method<global::Google.Protobuf.WellKnownTypes.Empty, global::Spellsource.Proto.InviteGetResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -550,6 +663,7 @@ namespace Spellsource.Proto {
         __Marshaller_google_protobuf_Empty,
         __Marshaller_spellsource_InviteGetResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.LoginRequest, global::Spellsource.Proto.LoginResponse> __Method_Login = new grpc::Method<global::Spellsource.Proto.LoginRequest, global::Spellsource.Proto.LoginResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -557,6 +671,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_LoginRequest,
         __Marshaller_spellsource_LoginResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.PostInviteRequest, global::Spellsource.Proto.InviteResponse> __Method_PostInvite = new grpc::Method<global::Spellsource.Proto.PostInviteRequest, global::Spellsource.Proto.InviteResponse>(
         grpc::MethodType.ServerStreaming,
         __ServiceName,
@@ -564,6 +679,7 @@ namespace Spellsource.Proto {
         __Marshaller_spellsource_PostInviteRequest,
         __Marshaller_spellsource_InviteResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Spellsource.Proto.PostPasswordResetRequest, global::Google.Protobuf.WellKnownTypes.Empty> __Method_PostPasswordReset = new grpc::Method<global::Spellsource.Proto.PostPasswordResetRequest, global::Google.Protobuf.WellKnownTypes.Empty>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -581,41 +697,49 @@ namespace Spellsource.Proto {
     [grpc::BindServiceMethod(typeof(HiddenSwitchSpellsourceAPIService), "BindService")]
     public abstract partial class HiddenSwitchSpellsourceAPIServiceBase
     {
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage> PutCard(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.SendMessageMessage> SendMessage(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.SendMessageMessage request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.Envelope.Types.RemovedMessage> DeleteCard(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.DeleteCardMessage request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task SubscribeFriends(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::IServerStreamWriter<global::Spellsource.Proto.Friend> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task SubscribeInvites(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::IServerStreamWriter<global::Spellsource.Proto.Invite> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task SubscribeEditableCards(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::IServerStreamWriter<global::Spellsource.Proto.EditableCard> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task SubscribeMatch(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::IServerStreamWriter<global::Spellsource.Proto.Match> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task SubscribeGame(grpc::IAsyncStreamReader<global::Spellsource.Proto.ClientToServerMessage> requestStream, grpc::IServerStreamWriter<global::Spellsource.Proto.ServerToClientMessage> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -629,6 +753,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.AcceptInviteResponse> AcceptInvite(global::Spellsource.Proto.AcceptInviteRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -640,6 +765,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.ChangePasswordResponse> ChangePassword(global::Spellsource.Proto.ChangePasswordRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -651,6 +777,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.CreateAccountResponse> CreateAccount(global::Spellsource.Proto.CreateAccountRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -662,6 +789,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Google.Protobuf.WellKnownTypes.Empty> DecksDelete(global::Spellsource.Proto.DecksDeleteRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -673,6 +801,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.DecksGetResponse> DecksGet(global::Spellsource.Proto.DecksGetRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -684,6 +813,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.DecksGetAllResponse> DecksGetAll(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -695,6 +825,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.DecksPutResponse> DecksPut(global::Spellsource.Proto.DecksPutRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -708,6 +839,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.DecksGetResponse> DecksUpdate(global::Spellsource.Proto.DecksUpdateRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -719,6 +851,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.DecksGetResponse> DuplicateDeck(global::Google.Protobuf.WellKnownTypes.StringValue request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -730,6 +863,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.InviteResponse> DeleteInvite(global::Spellsource.Proto.DeleteInviteRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -741,6 +875,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.DraftState> DraftsChooseCard(global::Spellsource.Proto.DraftsChooseCardRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -752,6 +887,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.DraftState> DraftsChooseHero(global::Spellsource.Proto.DraftsChooseHeroRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -763,6 +899,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.DraftState> DraftsGet(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -774,6 +911,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.DraftState> DraftsPost(global::Spellsource.Proto.DraftsPostRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -785,6 +923,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.UnfriendResponse> FriendDelete(global::Spellsource.Proto.FriendDeleteRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -796,6 +935,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.FriendPutResponse> FriendPut(global::Spellsource.Proto.FriendPutRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -807,6 +947,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.GetAccountsResponse> GetAccount(global::Spellsource.Proto.GetAccountRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -818,6 +959,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.GetAccountsResponse> GetAccounts(global::Spellsource.Proto.GetAccountsRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -830,6 +972,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.GetGameRecordResponse> GetGameRecord(global::Spellsource.Proto.GetGameRecordRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -841,6 +984,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.GetGameRecordIdsResponse> GetGameRecordIds(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -852,6 +996,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.InviteResponse> GetInvite(global::Spellsource.Proto.GetInviteRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -863,6 +1008,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.InviteGetResponse> GetInvites(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -874,6 +1020,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Spellsource.Proto.LoginResponse> Login(global::Spellsource.Proto.LoginRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -886,6 +1033,7 @@ namespace Spellsource.Proto {
       /// <param name="responseStream">Used for sending responses back to the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>A task indicating completion of the handler.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task PostInvite(global::Spellsource.Proto.PostInviteRequest request, grpc::IServerStreamWriter<global::Spellsource.Proto.InviteResponse> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -897,6 +1045,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Google.Protobuf.WellKnownTypes.Empty> PostPasswordReset(global::Spellsource.Proto.PostPasswordResetRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
@@ -909,108 +1058,134 @@ namespace Spellsource.Proto {
     {
       /// <summary>Creates a new client for HiddenSwitchSpellsourceAPIService</summary>
       /// <param name="channel">The channel to use to make remote calls.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public HiddenSwitchSpellsourceAPIServiceClient(grpc::ChannelBase channel) : base(channel)
       {
       }
       /// <summary>Creates a new client for HiddenSwitchSpellsourceAPIService that uses a custom <c>CallInvoker</c>.</summary>
       /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public HiddenSwitchSpellsourceAPIServiceClient(grpc::CallInvoker callInvoker) : base(callInvoker)
       {
       }
       /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       protected HiddenSwitchSpellsourceAPIServiceClient() : base()
       {
       }
       /// <summary>Protected constructor to allow creation of configured clients.</summary>
       /// <param name="configuration">The client configuration.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       protected HiddenSwitchSpellsourceAPIServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
       }
 
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage PutCard(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return PutCard(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage PutCard(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_PutCard, null, options, request);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage> PutCardAsync(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return PutCardAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage> PutCardAsync(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_PutCard, null, options, request);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.SendMessageMessage SendMessage(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.SendMessageMessage request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return SendMessage(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.SendMessageMessage SendMessage(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.SendMessageMessage request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_SendMessage, null, options, request);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.SendMessageMessage> SendMessageAsync(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.SendMessageMessage request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return SendMessageAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.SendMessageMessage> SendMessageAsync(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.SendMessageMessage request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_SendMessage, null, options, request);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.Envelope.Types.RemovedMessage DeleteCard(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.DeleteCardMessage request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DeleteCard(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.Envelope.Types.RemovedMessage DeleteCard(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.DeleteCardMessage request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_DeleteCard, null, options, request);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.Envelope.Types.RemovedMessage> DeleteCardAsync(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.DeleteCardMessage request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DeleteCardAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.Envelope.Types.RemovedMessage> DeleteCardAsync(global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.DeleteCardMessage request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_DeleteCard, null, options, request);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncServerStreamingCall<global::Spellsource.Proto.Friend> SubscribeFriends(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return SubscribeFriends(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncServerStreamingCall<global::Spellsource.Proto.Friend> SubscribeFriends(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncServerStreamingCall(__Method_SubscribeFriends, null, options, request);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncServerStreamingCall<global::Spellsource.Proto.Invite> SubscribeInvites(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return SubscribeInvites(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncServerStreamingCall<global::Spellsource.Proto.Invite> SubscribeInvites(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncServerStreamingCall(__Method_SubscribeInvites, null, options, request);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncServerStreamingCall<global::Spellsource.Proto.EditableCard> SubscribeEditableCards(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return SubscribeEditableCards(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncServerStreamingCall<global::Spellsource.Proto.EditableCard> SubscribeEditableCards(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncServerStreamingCall(__Method_SubscribeEditableCards, null, options, request);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncServerStreamingCall<global::Spellsource.Proto.Match> SubscribeMatch(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return SubscribeMatch(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncServerStreamingCall<global::Spellsource.Proto.Match> SubscribeMatch(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncServerStreamingCall(__Method_SubscribeMatch, null, options, request);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncDuplexStreamingCall<global::Spellsource.Proto.ClientToServerMessage, global::Spellsource.Proto.ServerToClientMessage> SubscribeGame(grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return SubscribeGame(new grpc::CallOptions(headers, deadline, cancellationToken));
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncDuplexStreamingCall<global::Spellsource.Proto.ClientToServerMessage, global::Spellsource.Proto.ServerToClientMessage> SubscribeGame(grpc::CallOptions options)
       {
         return CallInvoker.AsyncDuplexStreamingCall(__Method_SubscribeGame, null, options);
@@ -1025,6 +1200,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.AcceptInviteResponse AcceptInvite(global::Spellsource.Proto.AcceptInviteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return AcceptInvite(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1037,6 +1213,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.AcceptInviteResponse AcceptInvite(global::Spellsource.Proto.AcceptInviteRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_AcceptInvite, null, options, request);
@@ -1051,6 +1228,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.AcceptInviteResponse> AcceptInviteAsync(global::Spellsource.Proto.AcceptInviteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return AcceptInviteAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1063,6 +1241,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.AcceptInviteResponse> AcceptInviteAsync(global::Spellsource.Proto.AcceptInviteRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_AcceptInvite, null, options, request);
@@ -1075,6 +1254,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.ChangePasswordResponse ChangePassword(global::Spellsource.Proto.ChangePasswordRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return ChangePassword(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1085,6 +1265,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.ChangePasswordResponse ChangePassword(global::Spellsource.Proto.ChangePasswordRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_ChangePassword, null, options, request);
@@ -1097,6 +1278,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.ChangePasswordResponse> ChangePasswordAsync(global::Spellsource.Proto.ChangePasswordRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return ChangePasswordAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1107,6 +1289,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.ChangePasswordResponse> ChangePasswordAsync(global::Spellsource.Proto.ChangePasswordRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_ChangePassword, null, options, request);
@@ -1119,6 +1302,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.CreateAccountResponse CreateAccount(global::Spellsource.Proto.CreateAccountRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return CreateAccount(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1129,6 +1313,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.CreateAccountResponse CreateAccount(global::Spellsource.Proto.CreateAccountRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_CreateAccount, null, options, request);
@@ -1141,6 +1326,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.CreateAccountResponse> CreateAccountAsync(global::Spellsource.Proto.CreateAccountRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return CreateAccountAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1151,6 +1337,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.CreateAccountResponse> CreateAccountAsync(global::Spellsource.Proto.CreateAccountRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_CreateAccount, null, options, request);
@@ -1163,6 +1350,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Google.Protobuf.WellKnownTypes.Empty DecksDelete(global::Spellsource.Proto.DecksDeleteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DecksDelete(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1173,6 +1361,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Google.Protobuf.WellKnownTypes.Empty DecksDelete(global::Spellsource.Proto.DecksDeleteRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_DecksDelete, null, options, request);
@@ -1185,6 +1374,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Google.Protobuf.WellKnownTypes.Empty> DecksDeleteAsync(global::Spellsource.Proto.DecksDeleteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DecksDeleteAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1195,6 +1385,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Google.Protobuf.WellKnownTypes.Empty> DecksDeleteAsync(global::Spellsource.Proto.DecksDeleteRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_DecksDelete, null, options, request);
@@ -1207,6 +1398,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DecksGetResponse DecksGet(global::Spellsource.Proto.DecksGetRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DecksGet(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1217,6 +1409,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DecksGetResponse DecksGet(global::Spellsource.Proto.DecksGetRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_DecksGet, null, options, request);
@@ -1229,6 +1422,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DecksGetResponse> DecksGetAsync(global::Spellsource.Proto.DecksGetRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DecksGetAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1239,6 +1433,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DecksGetResponse> DecksGetAsync(global::Spellsource.Proto.DecksGetRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_DecksGet, null, options, request);
@@ -1251,6 +1446,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DecksGetAllResponse DecksGetAll(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DecksGetAll(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1261,6 +1457,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DecksGetAllResponse DecksGetAll(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_DecksGetAll, null, options, request);
@@ -1273,6 +1470,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DecksGetAllResponse> DecksGetAllAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DecksGetAllAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1283,6 +1481,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DecksGetAllResponse> DecksGetAllAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_DecksGetAll, null, options, request);
@@ -1295,6 +1494,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DecksPutResponse DecksPut(global::Spellsource.Proto.DecksPutRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DecksPut(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1305,6 +1505,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DecksPutResponse DecksPut(global::Spellsource.Proto.DecksPutRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_DecksPut, null, options, request);
@@ -1317,6 +1518,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DecksPutResponse> DecksPutAsync(global::Spellsource.Proto.DecksPutRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DecksPutAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1327,6 +1529,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DecksPutResponse> DecksPutAsync(global::Spellsource.Proto.DecksPutRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_DecksPut, null, options, request);
@@ -1341,6 +1544,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DecksGetResponse DecksUpdate(global::Spellsource.Proto.DecksUpdateRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DecksUpdate(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1353,6 +1557,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DecksGetResponse DecksUpdate(global::Spellsource.Proto.DecksUpdateRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_DecksUpdate, null, options, request);
@@ -1367,6 +1572,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DecksGetResponse> DecksUpdateAsync(global::Spellsource.Proto.DecksUpdateRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DecksUpdateAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1379,6 +1585,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DecksGetResponse> DecksUpdateAsync(global::Spellsource.Proto.DecksUpdateRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_DecksUpdate, null, options, request);
@@ -1391,6 +1598,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DecksGetResponse DuplicateDeck(global::Google.Protobuf.WellKnownTypes.StringValue request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DuplicateDeck(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1401,6 +1609,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DecksGetResponse DuplicateDeck(global::Google.Protobuf.WellKnownTypes.StringValue request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_DuplicateDeck, null, options, request);
@@ -1413,6 +1622,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DecksGetResponse> DuplicateDeckAsync(global::Google.Protobuf.WellKnownTypes.StringValue request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DuplicateDeckAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1423,6 +1633,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DecksGetResponse> DuplicateDeckAsync(global::Google.Protobuf.WellKnownTypes.StringValue request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_DuplicateDeck, null, options, request);
@@ -1435,6 +1646,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.InviteResponse DeleteInvite(global::Spellsource.Proto.DeleteInviteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DeleteInvite(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1445,6 +1657,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.InviteResponse DeleteInvite(global::Spellsource.Proto.DeleteInviteRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_DeleteInvite, null, options, request);
@@ -1457,6 +1670,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.InviteResponse> DeleteInviteAsync(global::Spellsource.Proto.DeleteInviteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DeleteInviteAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1467,6 +1681,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.InviteResponse> DeleteInviteAsync(global::Spellsource.Proto.DeleteInviteRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_DeleteInvite, null, options, request);
@@ -1479,6 +1694,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DraftState DraftsChooseCard(global::Spellsource.Proto.DraftsChooseCardRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DraftsChooseCard(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1489,6 +1705,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DraftState DraftsChooseCard(global::Spellsource.Proto.DraftsChooseCardRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_DraftsChooseCard, null, options, request);
@@ -1501,6 +1718,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DraftState> DraftsChooseCardAsync(global::Spellsource.Proto.DraftsChooseCardRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DraftsChooseCardAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1511,6 +1729,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DraftState> DraftsChooseCardAsync(global::Spellsource.Proto.DraftsChooseCardRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_DraftsChooseCard, null, options, request);
@@ -1523,6 +1742,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DraftState DraftsChooseHero(global::Spellsource.Proto.DraftsChooseHeroRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DraftsChooseHero(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1533,6 +1753,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DraftState DraftsChooseHero(global::Spellsource.Proto.DraftsChooseHeroRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_DraftsChooseHero, null, options, request);
@@ -1545,6 +1766,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DraftState> DraftsChooseHeroAsync(global::Spellsource.Proto.DraftsChooseHeroRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DraftsChooseHeroAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1555,6 +1777,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DraftState> DraftsChooseHeroAsync(global::Spellsource.Proto.DraftsChooseHeroRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_DraftsChooseHero, null, options, request);
@@ -1567,6 +1790,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DraftState DraftsGet(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DraftsGet(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1577,6 +1801,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DraftState DraftsGet(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_DraftsGet, null, options, request);
@@ -1589,6 +1814,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DraftState> DraftsGetAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DraftsGetAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1599,6 +1825,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DraftState> DraftsGetAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_DraftsGet, null, options, request);
@@ -1611,6 +1838,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DraftState DraftsPost(global::Spellsource.Proto.DraftsPostRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DraftsPost(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1621,6 +1849,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.DraftState DraftsPost(global::Spellsource.Proto.DraftsPostRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_DraftsPost, null, options, request);
@@ -1633,6 +1862,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DraftState> DraftsPostAsync(global::Spellsource.Proto.DraftsPostRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return DraftsPostAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1643,6 +1873,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.DraftState> DraftsPostAsync(global::Spellsource.Proto.DraftsPostRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_DraftsPost, null, options, request);
@@ -1655,6 +1886,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.UnfriendResponse FriendDelete(global::Spellsource.Proto.FriendDeleteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return FriendDelete(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1665,6 +1897,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.UnfriendResponse FriendDelete(global::Spellsource.Proto.FriendDeleteRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_FriendDelete, null, options, request);
@@ -1677,6 +1910,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.UnfriendResponse> FriendDeleteAsync(global::Spellsource.Proto.FriendDeleteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return FriendDeleteAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1687,6 +1921,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.UnfriendResponse> FriendDeleteAsync(global::Spellsource.Proto.FriendDeleteRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_FriendDelete, null, options, request);
@@ -1699,6 +1934,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.FriendPutResponse FriendPut(global::Spellsource.Proto.FriendPutRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return FriendPut(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1709,6 +1945,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.FriendPutResponse FriendPut(global::Spellsource.Proto.FriendPutRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_FriendPut, null, options, request);
@@ -1721,6 +1958,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.FriendPutResponse> FriendPutAsync(global::Spellsource.Proto.FriendPutRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return FriendPutAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1731,6 +1969,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.FriendPutResponse> FriendPutAsync(global::Spellsource.Proto.FriendPutRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_FriendPut, null, options, request);
@@ -1743,6 +1982,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.GetAccountsResponse GetAccount(global::Spellsource.Proto.GetAccountRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return GetAccount(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1753,6 +1993,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.GetAccountsResponse GetAccount(global::Spellsource.Proto.GetAccountRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_GetAccount, null, options, request);
@@ -1765,6 +2006,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.GetAccountsResponse> GetAccountAsync(global::Spellsource.Proto.GetAccountRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return GetAccountAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1775,6 +2017,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.GetAccountsResponse> GetAccountAsync(global::Spellsource.Proto.GetAccountRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetAccount, null, options, request);
@@ -1787,6 +2030,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.GetAccountsResponse GetAccounts(global::Spellsource.Proto.GetAccountsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return GetAccounts(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1797,6 +2041,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.GetAccountsResponse GetAccounts(global::Spellsource.Proto.GetAccountsRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_GetAccounts, null, options, request);
@@ -1809,6 +2054,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.GetAccountsResponse> GetAccountsAsync(global::Spellsource.Proto.GetAccountsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return GetAccountsAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1819,6 +2065,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.GetAccountsResponse> GetAccountsAsync(global::Spellsource.Proto.GetAccountsRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetAccounts, null, options, request);
@@ -1832,6 +2079,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.GetGameRecordResponse GetGameRecord(global::Spellsource.Proto.GetGameRecordRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return GetGameRecord(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1843,6 +2091,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.GetGameRecordResponse GetGameRecord(global::Spellsource.Proto.GetGameRecordRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_GetGameRecord, null, options, request);
@@ -1856,6 +2105,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.GetGameRecordResponse> GetGameRecordAsync(global::Spellsource.Proto.GetGameRecordRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return GetGameRecordAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1867,6 +2117,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.GetGameRecordResponse> GetGameRecordAsync(global::Spellsource.Proto.GetGameRecordRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetGameRecord, null, options, request);
@@ -1879,6 +2130,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.GetGameRecordIdsResponse GetGameRecordIds(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return GetGameRecordIds(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1889,6 +2141,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.GetGameRecordIdsResponse GetGameRecordIds(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_GetGameRecordIds, null, options, request);
@@ -1901,6 +2154,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.GetGameRecordIdsResponse> GetGameRecordIdsAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return GetGameRecordIdsAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1911,6 +2165,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.GetGameRecordIdsResponse> GetGameRecordIdsAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetGameRecordIds, null, options, request);
@@ -1923,6 +2178,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.InviteResponse GetInvite(global::Spellsource.Proto.GetInviteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return GetInvite(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1933,6 +2189,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.InviteResponse GetInvite(global::Spellsource.Proto.GetInviteRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_GetInvite, null, options, request);
@@ -1945,6 +2202,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.InviteResponse> GetInviteAsync(global::Spellsource.Proto.GetInviteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return GetInviteAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1955,6 +2213,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.InviteResponse> GetInviteAsync(global::Spellsource.Proto.GetInviteRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetInvite, null, options, request);
@@ -1967,6 +2226,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.InviteGetResponse GetInvites(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return GetInvites(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1977,6 +2237,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.InviteGetResponse GetInvites(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_GetInvites, null, options, request);
@@ -1989,6 +2250,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.InviteGetResponse> GetInvitesAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return GetInvitesAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1999,6 +2261,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.InviteGetResponse> GetInvitesAsync(global::Google.Protobuf.WellKnownTypes.Empty request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetInvites, null, options, request);
@@ -2011,6 +2274,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.LoginResponse Login(global::Spellsource.Proto.LoginRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return Login(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -2021,6 +2285,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Spellsource.Proto.LoginResponse Login(global::Spellsource.Proto.LoginRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_Login, null, options, request);
@@ -2033,6 +2298,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.LoginResponse> LoginAsync(global::Spellsource.Proto.LoginRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return LoginAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -2043,6 +2309,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Spellsource.Proto.LoginResponse> LoginAsync(global::Spellsource.Proto.LoginRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_Login, null, options, request);
@@ -2055,6 +2322,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncServerStreamingCall<global::Spellsource.Proto.InviteResponse> PostInvite(global::Spellsource.Proto.PostInviteRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return PostInvite(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -2065,6 +2333,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncServerStreamingCall<global::Spellsource.Proto.InviteResponse> PostInvite(global::Spellsource.Proto.PostInviteRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncServerStreamingCall(__Method_PostInvite, null, options, request);
@@ -2077,6 +2346,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Google.Protobuf.WellKnownTypes.Empty PostPasswordReset(global::Spellsource.Proto.PostPasswordResetRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return PostPasswordReset(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -2087,6 +2357,7 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Google.Protobuf.WellKnownTypes.Empty PostPasswordReset(global::Spellsource.Proto.PostPasswordResetRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_PostPasswordReset, null, options, request);
@@ -2099,6 +2370,7 @@ namespace Spellsource.Proto {
       /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Google.Protobuf.WellKnownTypes.Empty> PostPasswordResetAsync(global::Spellsource.Proto.PostPasswordResetRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return PostPasswordResetAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -2109,11 +2381,13 @@ namespace Spellsource.Proto {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Google.Protobuf.WellKnownTypes.Empty> PostPasswordResetAsync(global::Spellsource.Proto.PostPasswordResetRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_PostPasswordReset, null, options, request);
       }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       protected override HiddenSwitchSpellsourceAPIServiceClient NewInstance(ClientBaseConfiguration configuration)
       {
         return new HiddenSwitchSpellsourceAPIServiceClient(configuration);
@@ -2122,6 +2396,7 @@ namespace Spellsource.Proto {
 
     /// <summary>Creates service definition that can be registered with a server</summary>
     /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     public static grpc::ServerServiceDefinition BindService(HiddenSwitchSpellsourceAPIServiceBase serviceImpl)
     {
       return grpc::ServerServiceDefinition.CreateBuilder()
@@ -2164,6 +2439,7 @@ namespace Spellsource.Proto {
     /// Note: this method is part of an experimental API that can change or be removed without any prior notice.</summary>
     /// <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
     /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     public static void BindService(grpc::ServiceBinderBase serviceBinder, HiddenSwitchSpellsourceAPIServiceBase serviceImpl)
     {
       serviceBinder.AddMethod(__Method_PutCard, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Spellsource.Proto.Envelope.Types.MethodMessage.Types.PutCardMessage, global::Spellsource.Proto.Envelope.Types.ResultMessage.Types.PutCardMessage>(serviceImpl.PutCard));

@@ -14,31 +14,30 @@ import com.hiddenswitch.framework.schema.keycloak.tables.AuthenticatorConfigEntr
 import com.hiddenswitch.framework.schema.keycloak.tables.BrokerLink;
 import com.hiddenswitch.framework.schema.keycloak.tables.Client;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientAttributes;
-import com.hiddenswitch.framework.schema.keycloak.tables.ClientAuthFlowBindings;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientDefaultRoles;
-import com.hiddenswitch.framework.schema.keycloak.tables.ClientInitialAccess;
+import com.hiddenswitch.framework.schema.keycloak.tables.ClientIdentityProvMapping;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientNodeRegistrations;
-import com.hiddenswitch.framework.schema.keycloak.tables.ClientScope;
-import com.hiddenswitch.framework.schema.keycloak.tables.ClientScopeAttributes;
-import com.hiddenswitch.framework.schema.keycloak.tables.ClientScopeClient;
-import com.hiddenswitch.framework.schema.keycloak.tables.ClientScopeRoleMapping;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientSession;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientSessionAuthStatus;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientSessionNote;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientSessionProtMapper;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientSessionRole;
+import com.hiddenswitch.framework.schema.keycloak.tables.ClientTemplate;
+import com.hiddenswitch.framework.schema.keycloak.tables.ClientTemplateAttributes;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientUserSessionNote;
 import com.hiddenswitch.framework.schema.keycloak.tables.Component;
 import com.hiddenswitch.framework.schema.keycloak.tables.ComponentConfig;
 import com.hiddenswitch.framework.schema.keycloak.tables.CompositeRole;
 import com.hiddenswitch.framework.schema.keycloak.tables.Credential;
+import com.hiddenswitch.framework.schema.keycloak.tables.CredentialAttribute;
 import com.hiddenswitch.framework.schema.keycloak.tables.Databasechangelog;
 import com.hiddenswitch.framework.schema.keycloak.tables.Databasechangeloglock;
-import com.hiddenswitch.framework.schema.keycloak.tables.DefaultClientScope;
 import com.hiddenswitch.framework.schema.keycloak.tables.EventEntity;
+import com.hiddenswitch.framework.schema.keycloak.tables.FedCredentialAttribute;
 import com.hiddenswitch.framework.schema.keycloak.tables.FedUserAttribute;
 import com.hiddenswitch.framework.schema.keycloak.tables.FedUserConsent;
-import com.hiddenswitch.framework.schema.keycloak.tables.FedUserConsentClScope;
+import com.hiddenswitch.framework.schema.keycloak.tables.FedUserConsentProtMapper;
+import com.hiddenswitch.framework.schema.keycloak.tables.FedUserConsentRole;
 import com.hiddenswitch.framework.schema.keycloak.tables.FedUserCredential;
 import com.hiddenswitch.framework.schema.keycloak.tables.FedUserGroupMembership;
 import com.hiddenswitch.framework.schema.keycloak.tables.FedUserRequiredAction;
@@ -65,28 +64,25 @@ import com.hiddenswitch.framework.schema.keycloak.tables.RealmDefaultGroups;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmDefaultRoles;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmEnabledEventTypes;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmEventsListeners;
-import com.hiddenswitch.framework.schema.keycloak.tables.RealmLocalizations;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmRequiredCredential;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmSmtpConfig;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmSupportedLocales;
 import com.hiddenswitch.framework.schema.keycloak.tables.RedirectUris;
 import com.hiddenswitch.framework.schema.keycloak.tables.RequiredActionConfig;
 import com.hiddenswitch.framework.schema.keycloak.tables.RequiredActionProvider;
-import com.hiddenswitch.framework.schema.keycloak.tables.ResourceAttribute;
 import com.hiddenswitch.framework.schema.keycloak.tables.ResourcePolicy;
 import com.hiddenswitch.framework.schema.keycloak.tables.ResourceScope;
 import com.hiddenswitch.framework.schema.keycloak.tables.ResourceServer;
-import com.hiddenswitch.framework.schema.keycloak.tables.ResourceServerPermTicket;
 import com.hiddenswitch.framework.schema.keycloak.tables.ResourceServerPolicy;
 import com.hiddenswitch.framework.schema.keycloak.tables.ResourceServerResource;
 import com.hiddenswitch.framework.schema.keycloak.tables.ResourceServerScope;
-import com.hiddenswitch.framework.schema.keycloak.tables.ResourceUris;
-import com.hiddenswitch.framework.schema.keycloak.tables.RoleAttribute;
 import com.hiddenswitch.framework.schema.keycloak.tables.ScopeMapping;
 import com.hiddenswitch.framework.schema.keycloak.tables.ScopePolicy;
+import com.hiddenswitch.framework.schema.keycloak.tables.TemplateScopeMapping;
 import com.hiddenswitch.framework.schema.keycloak.tables.UserAttribute;
 import com.hiddenswitch.framework.schema.keycloak.tables.UserConsent;
-import com.hiddenswitch.framework.schema.keycloak.tables.UserConsentClientScope;
+import com.hiddenswitch.framework.schema.keycloak.tables.UserConsentProtMapper;
+import com.hiddenswitch.framework.schema.keycloak.tables.UserConsentRole;
 import com.hiddenswitch.framework.schema.keycloak.tables.UserEntity;
 import com.hiddenswitch.framework.schema.keycloak.tables.UserFederationConfig;
 import com.hiddenswitch.framework.schema.keycloak.tables.UserFederationMapper;
@@ -114,7 +110,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Keycloak extends SchemaImpl {
 
-    private static final long serialVersionUID = -876269034;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak</code>
@@ -167,44 +163,19 @@ public class Keycloak extends SchemaImpl {
     public final ClientAttributes CLIENT_ATTRIBUTES = ClientAttributes.CLIENT_ATTRIBUTES;
 
     /**
-     * The table <code>keycloak.client_auth_flow_bindings</code>.
-     */
-    public final ClientAuthFlowBindings CLIENT_AUTH_FLOW_BINDINGS = ClientAuthFlowBindings.CLIENT_AUTH_FLOW_BINDINGS;
-
-    /**
      * The table <code>keycloak.client_default_roles</code>.
      */
     public final ClientDefaultRoles CLIENT_DEFAULT_ROLES = ClientDefaultRoles.CLIENT_DEFAULT_ROLES;
 
     /**
-     * The table <code>keycloak.client_initial_access</code>.
+     * The table <code>keycloak.client_identity_prov_mapping</code>.
      */
-    public final ClientInitialAccess CLIENT_INITIAL_ACCESS = ClientInitialAccess.CLIENT_INITIAL_ACCESS;
+    public final ClientIdentityProvMapping CLIENT_IDENTITY_PROV_MAPPING = ClientIdentityProvMapping.CLIENT_IDENTITY_PROV_MAPPING;
 
     /**
      * The table <code>keycloak.client_node_registrations</code>.
      */
     public final ClientNodeRegistrations CLIENT_NODE_REGISTRATIONS = ClientNodeRegistrations.CLIENT_NODE_REGISTRATIONS;
-
-    /**
-     * The table <code>keycloak.client_scope</code>.
-     */
-    public final ClientScope CLIENT_SCOPE = ClientScope.CLIENT_SCOPE;
-
-    /**
-     * The table <code>keycloak.client_scope_attributes</code>.
-     */
-    public final ClientScopeAttributes CLIENT_SCOPE_ATTRIBUTES = ClientScopeAttributes.CLIENT_SCOPE_ATTRIBUTES;
-
-    /**
-     * The table <code>keycloak.client_scope_client</code>.
-     */
-    public final ClientScopeClient CLIENT_SCOPE_CLIENT = ClientScopeClient.CLIENT_SCOPE_CLIENT;
-
-    /**
-     * The table <code>keycloak.client_scope_role_mapping</code>.
-     */
-    public final ClientScopeRoleMapping CLIENT_SCOPE_ROLE_MAPPING = ClientScopeRoleMapping.CLIENT_SCOPE_ROLE_MAPPING;
 
     /**
      * The table <code>keycloak.client_session</code>.
@@ -232,6 +203,16 @@ public class Keycloak extends SchemaImpl {
     public final ClientSessionRole CLIENT_SESSION_ROLE = ClientSessionRole.CLIENT_SESSION_ROLE;
 
     /**
+     * The table <code>keycloak.client_template</code>.
+     */
+    public final ClientTemplate CLIENT_TEMPLATE = ClientTemplate.CLIENT_TEMPLATE;
+
+    /**
+     * The table <code>keycloak.client_template_attributes</code>.
+     */
+    public final ClientTemplateAttributes CLIENT_TEMPLATE_ATTRIBUTES = ClientTemplateAttributes.CLIENT_TEMPLATE_ATTRIBUTES;
+
+    /**
      * The table <code>keycloak.client_user_session_note</code>.
      */
     public final ClientUserSessionNote CLIENT_USER_SESSION_NOTE = ClientUserSessionNote.CLIENT_USER_SESSION_NOTE;
@@ -257,6 +238,11 @@ public class Keycloak extends SchemaImpl {
     public final Credential CREDENTIAL = Credential.CREDENTIAL;
 
     /**
+     * The table <code>keycloak.credential_attribute</code>.
+     */
+    public final CredentialAttribute CREDENTIAL_ATTRIBUTE = CredentialAttribute.CREDENTIAL_ATTRIBUTE;
+
+    /**
      * The table <code>keycloak.databasechangelog</code>.
      */
     public final Databasechangelog DATABASECHANGELOG = Databasechangelog.DATABASECHANGELOG;
@@ -267,14 +253,14 @@ public class Keycloak extends SchemaImpl {
     public final Databasechangeloglock DATABASECHANGELOGLOCK = Databasechangeloglock.DATABASECHANGELOGLOCK;
 
     /**
-     * The table <code>keycloak.default_client_scope</code>.
-     */
-    public final DefaultClientScope DEFAULT_CLIENT_SCOPE = DefaultClientScope.DEFAULT_CLIENT_SCOPE;
-
-    /**
      * The table <code>keycloak.event_entity</code>.
      */
     public final EventEntity EVENT_ENTITY = EventEntity.EVENT_ENTITY;
+
+    /**
+     * The table <code>keycloak.fed_credential_attribute</code>.
+     */
+    public final FedCredentialAttribute FED_CREDENTIAL_ATTRIBUTE = FedCredentialAttribute.FED_CREDENTIAL_ATTRIBUTE;
 
     /**
      * The table <code>keycloak.fed_user_attribute</code>.
@@ -287,9 +273,14 @@ public class Keycloak extends SchemaImpl {
     public final FedUserConsent FED_USER_CONSENT = FedUserConsent.FED_USER_CONSENT;
 
     /**
-     * The table <code>keycloak.fed_user_consent_cl_scope</code>.
+     * The table <code>keycloak.fed_user_consent_prot_mapper</code>.
      */
-    public final FedUserConsentClScope FED_USER_CONSENT_CL_SCOPE = FedUserConsentClScope.FED_USER_CONSENT_CL_SCOPE;
+    public final FedUserConsentProtMapper FED_USER_CONSENT_PROT_MAPPER = FedUserConsentProtMapper.FED_USER_CONSENT_PROT_MAPPER;
+
+    /**
+     * The table <code>keycloak.fed_user_consent_role</code>.
+     */
+    public final FedUserConsentRole FED_USER_CONSENT_ROLE = FedUserConsentRole.FED_USER_CONSENT_ROLE;
 
     /**
      * The table <code>keycloak.fed_user_credential</code>.
@@ -422,11 +413,6 @@ public class Keycloak extends SchemaImpl {
     public final RealmEventsListeners REALM_EVENTS_LISTENERS = RealmEventsListeners.REALM_EVENTS_LISTENERS;
 
     /**
-     * The table <code>keycloak.realm_localizations</code>.
-     */
-    public final RealmLocalizations REALM_LOCALIZATIONS = RealmLocalizations.REALM_LOCALIZATIONS;
-
-    /**
      * The table <code>keycloak.realm_required_credential</code>.
      */
     public final RealmRequiredCredential REALM_REQUIRED_CREDENTIAL = RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL;
@@ -457,11 +443,6 @@ public class Keycloak extends SchemaImpl {
     public final RequiredActionProvider REQUIRED_ACTION_PROVIDER = RequiredActionProvider.REQUIRED_ACTION_PROVIDER;
 
     /**
-     * The table <code>keycloak.resource_attribute</code>.
-     */
-    public final ResourceAttribute RESOURCE_ATTRIBUTE = ResourceAttribute.RESOURCE_ATTRIBUTE;
-
-    /**
      * The table <code>keycloak.resource_policy</code>.
      */
     public final ResourcePolicy RESOURCE_POLICY = ResourcePolicy.RESOURCE_POLICY;
@@ -475,11 +456,6 @@ public class Keycloak extends SchemaImpl {
      * The table <code>keycloak.resource_server</code>.
      */
     public final ResourceServer RESOURCE_SERVER = ResourceServer.RESOURCE_SERVER;
-
-    /**
-     * The table <code>keycloak.resource_server_perm_ticket</code>.
-     */
-    public final ResourceServerPermTicket RESOURCE_SERVER_PERM_TICKET = ResourceServerPermTicket.RESOURCE_SERVER_PERM_TICKET;
 
     /**
      * The table <code>keycloak.resource_server_policy</code>.
@@ -497,16 +473,6 @@ public class Keycloak extends SchemaImpl {
     public final ResourceServerScope RESOURCE_SERVER_SCOPE = ResourceServerScope.RESOURCE_SERVER_SCOPE;
 
     /**
-     * The table <code>keycloak.resource_uris</code>.
-     */
-    public final ResourceUris RESOURCE_URIS = ResourceUris.RESOURCE_URIS;
-
-    /**
-     * The table <code>keycloak.role_attribute</code>.
-     */
-    public final RoleAttribute ROLE_ATTRIBUTE = RoleAttribute.ROLE_ATTRIBUTE;
-
-    /**
      * The table <code>keycloak.scope_mapping</code>.
      */
     public final ScopeMapping SCOPE_MAPPING = ScopeMapping.SCOPE_MAPPING;
@@ -515,6 +481,11 @@ public class Keycloak extends SchemaImpl {
      * The table <code>keycloak.scope_policy</code>.
      */
     public final ScopePolicy SCOPE_POLICY = ScopePolicy.SCOPE_POLICY;
+
+    /**
+     * The table <code>keycloak.template_scope_mapping</code>.
+     */
+    public final TemplateScopeMapping TEMPLATE_SCOPE_MAPPING = TemplateScopeMapping.TEMPLATE_SCOPE_MAPPING;
 
     /**
      * The table <code>keycloak.user_attribute</code>.
@@ -527,9 +498,14 @@ public class Keycloak extends SchemaImpl {
     public final UserConsent USER_CONSENT = UserConsent.USER_CONSENT;
 
     /**
-     * The table <code>keycloak.user_consent_client_scope</code>.
+     * The table <code>keycloak.user_consent_prot_mapper</code>.
      */
-    public final UserConsentClientScope USER_CONSENT_CLIENT_SCOPE = UserConsentClientScope.USER_CONSENT_CLIENT_SCOPE;
+    public final UserConsentProtMapper USER_CONSENT_PROT_MAPPER = UserConsentProtMapper.USER_CONSENT_PROT_MAPPER;
+
+    /**
+     * The table <code>keycloak.user_consent_role</code>.
+     */
+    public final UserConsentRole USER_CONSENT_ROLE = UserConsentRole.USER_CONSENT_ROLE;
 
     /**
      * The table <code>keycloak.user_entity</code>.
@@ -606,7 +582,7 @@ public class Keycloak extends SchemaImpl {
 
     @Override
     public final List<Table<?>> getTables() {
-        return Arrays.<Table<?>>asList(
+        return Arrays.asList(
             AdminEventEntity.ADMIN_EVENT_ENTITY,
             AssociatedPolicy.ASSOCIATED_POLICY,
             AuthenticationExecution.AUTHENTICATION_EXECUTION,
@@ -616,31 +592,30 @@ public class Keycloak extends SchemaImpl {
             BrokerLink.BROKER_LINK,
             Client.CLIENT,
             ClientAttributes.CLIENT_ATTRIBUTES,
-            ClientAuthFlowBindings.CLIENT_AUTH_FLOW_BINDINGS,
             ClientDefaultRoles.CLIENT_DEFAULT_ROLES,
-            ClientInitialAccess.CLIENT_INITIAL_ACCESS,
+            ClientIdentityProvMapping.CLIENT_IDENTITY_PROV_MAPPING,
             ClientNodeRegistrations.CLIENT_NODE_REGISTRATIONS,
-            ClientScope.CLIENT_SCOPE,
-            ClientScopeAttributes.CLIENT_SCOPE_ATTRIBUTES,
-            ClientScopeClient.CLIENT_SCOPE_CLIENT,
-            ClientScopeRoleMapping.CLIENT_SCOPE_ROLE_MAPPING,
             ClientSession.CLIENT_SESSION,
             ClientSessionAuthStatus.CLIENT_SESSION_AUTH_STATUS,
             ClientSessionNote.CLIENT_SESSION_NOTE,
             ClientSessionProtMapper.CLIENT_SESSION_PROT_MAPPER,
             ClientSessionRole.CLIENT_SESSION_ROLE,
+            ClientTemplate.CLIENT_TEMPLATE,
+            ClientTemplateAttributes.CLIENT_TEMPLATE_ATTRIBUTES,
             ClientUserSessionNote.CLIENT_USER_SESSION_NOTE,
             Component.COMPONENT,
             ComponentConfig.COMPONENT_CONFIG,
             CompositeRole.COMPOSITE_ROLE,
             Credential.CREDENTIAL,
+            CredentialAttribute.CREDENTIAL_ATTRIBUTE,
             Databasechangelog.DATABASECHANGELOG,
             Databasechangeloglock.DATABASECHANGELOGLOCK,
-            DefaultClientScope.DEFAULT_CLIENT_SCOPE,
             EventEntity.EVENT_ENTITY,
+            FedCredentialAttribute.FED_CREDENTIAL_ATTRIBUTE,
             FedUserAttribute.FED_USER_ATTRIBUTE,
             FedUserConsent.FED_USER_CONSENT,
-            FedUserConsentClScope.FED_USER_CONSENT_CL_SCOPE,
+            FedUserConsentProtMapper.FED_USER_CONSENT_PROT_MAPPER,
+            FedUserConsentRole.FED_USER_CONSENT_ROLE,
             FedUserCredential.FED_USER_CREDENTIAL,
             FedUserGroupMembership.FED_USER_GROUP_MEMBERSHIP,
             FedUserRequiredAction.FED_USER_REQUIRED_ACTION,
@@ -667,28 +642,25 @@ public class Keycloak extends SchemaImpl {
             RealmDefaultRoles.REALM_DEFAULT_ROLES,
             RealmEnabledEventTypes.REALM_ENABLED_EVENT_TYPES,
             RealmEventsListeners.REALM_EVENTS_LISTENERS,
-            RealmLocalizations.REALM_LOCALIZATIONS,
             RealmRequiredCredential.REALM_REQUIRED_CREDENTIAL,
             RealmSmtpConfig.REALM_SMTP_CONFIG,
             RealmSupportedLocales.REALM_SUPPORTED_LOCALES,
             RedirectUris.REDIRECT_URIS,
             RequiredActionConfig.REQUIRED_ACTION_CONFIG,
             RequiredActionProvider.REQUIRED_ACTION_PROVIDER,
-            ResourceAttribute.RESOURCE_ATTRIBUTE,
             ResourcePolicy.RESOURCE_POLICY,
             ResourceScope.RESOURCE_SCOPE,
             ResourceServer.RESOURCE_SERVER,
-            ResourceServerPermTicket.RESOURCE_SERVER_PERM_TICKET,
             ResourceServerPolicy.RESOURCE_SERVER_POLICY,
             ResourceServerResource.RESOURCE_SERVER_RESOURCE,
             ResourceServerScope.RESOURCE_SERVER_SCOPE,
-            ResourceUris.RESOURCE_URIS,
-            RoleAttribute.ROLE_ATTRIBUTE,
             ScopeMapping.SCOPE_MAPPING,
             ScopePolicy.SCOPE_POLICY,
+            TemplateScopeMapping.TEMPLATE_SCOPE_MAPPING,
             UserAttribute.USER_ATTRIBUTE,
             UserConsent.USER_CONSENT,
-            UserConsentClientScope.USER_CONSENT_CLIENT_SCOPE,
+            UserConsentProtMapper.USER_CONSENT_PROT_MAPPER,
+            UserConsentRole.USER_CONSENT_ROLE,
             UserEntity.USER_ENTITY,
             UserFederationConfig.USER_FEDERATION_CONFIG,
             UserFederationMapper.USER_FEDERATION_MAPPER,
@@ -700,6 +672,7 @@ public class Keycloak extends SchemaImpl {
             UserSession.USER_SESSION,
             UserSessionNote.USER_SESSION_NOTE,
             UsernameLoginFailure.USERNAME_LOGIN_FAILURE,
-            WebOrigins.WEB_ORIGINS);
+            WebOrigins.WEB_ORIGINS
+        );
     }
 }

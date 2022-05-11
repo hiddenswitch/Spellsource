@@ -22,8 +22,8 @@ import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class RealmSupportedLocales extends TableImpl<RealmSupportedLocalesRecord> {
 
-    private static final long serialVersionUID = 409834263;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.realm_supported_locales</code>
@@ -51,33 +51,12 @@ public class RealmSupportedLocales extends TableImpl<RealmSupportedLocalesRecord
     /**
      * The column <code>keycloak.realm_supported_locales.realm_id</code>.
      */
-    public final TableField<RealmSupportedLocalesRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<RealmSupportedLocalesRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.realm_supported_locales.value</code>.
      */
-    public final TableField<RealmSupportedLocalesRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
-
-    /**
-     * Create a <code>keycloak.realm_supported_locales</code> table reference
-     */
-    public RealmSupportedLocales() {
-        this(DSL.name("realm_supported_locales"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.realm_supported_locales</code> table reference
-     */
-    public RealmSupportedLocales(String alias) {
-        this(DSL.name(alias), REALM_SUPPORTED_LOCALES);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.realm_supported_locales</code> table reference
-     */
-    public RealmSupportedLocales(Name alias) {
-        this(alias, REALM_SUPPORTED_LOCALES);
-    }
+    public final TableField<RealmSupportedLocalesRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
 
     private RealmSupportedLocales(Name alias, Table<RealmSupportedLocalesRecord> aliased) {
         this(alias, aliased, null);
@@ -87,37 +66,58 @@ public class RealmSupportedLocales extends TableImpl<RealmSupportedLocalesRecord
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.realm_supported_locales</code> table
+     * reference
+     */
+    public RealmSupportedLocales(String alias) {
+        this(DSL.name(alias), REALM_SUPPORTED_LOCALES);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.realm_supported_locales</code> table
+     * reference
+     */
+    public RealmSupportedLocales(Name alias) {
+        this(alias, REALM_SUPPORTED_LOCALES);
+    }
+
+    /**
+     * Create a <code>keycloak.realm_supported_locales</code> table reference
+     */
+    public RealmSupportedLocales() {
+        this(DSL.name("realm_supported_locales"), null);
+    }
+
     public <O extends Record> RealmSupportedLocales(Table<O> child, ForeignKey<O, RealmSupportedLocalesRecord> key) {
         super(child, key, REALM_SUPPORTED_LOCALES);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_REALM_SUPP_LOCAL_REALM);
-    }
-
-    @Override
-    public UniqueKey<RealmSupportedLocalesRecord> getPrimaryKey() {
-        return Keys.CONSTR_REALM_SUPPORTED_LOCALES;
-    }
-
-    @Override
-    public List<UniqueKey<RealmSupportedLocalesRecord>> getKeys() {
-        return Arrays.<UniqueKey<RealmSupportedLocalesRecord>>asList(Keys.CONSTR_REALM_SUPPORTED_LOCALES);
+        return Arrays.asList(Indexes.IDX_REALM_SUPP_LOCAL_REALM);
     }
 
     @Override
     public List<ForeignKey<RealmSupportedLocalesRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RealmSupportedLocalesRecord, ?>>asList(Keys.REALM_SUPPORTED_LOCALES__FK_SUPPORTED_LOCALES_REALM);
+        return Arrays.asList(Keys.REALM_SUPPORTED_LOCALES__FK_SUPPORTED_LOCALES_REALM);
     }
 
+    private transient Realm _realm;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.realm</code> table.
+     */
     public Realm realm() {
-        return new Realm(this, Keys.REALM_SUPPORTED_LOCALES__FK_SUPPORTED_LOCALES_REALM);
+        if (_realm == null)
+            _realm = new Realm(this, Keys.REALM_SUPPORTED_LOCALES__FK_SUPPORTED_LOCALES_REALM);
+
+        return _realm;
     }
 
     @Override

@@ -10,6 +10,7 @@ import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowSet;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -62,13 +63,19 @@ public class RealtimeTests extends FrameworkTestBase {
 	}
 
 	@Test
+	@Disabled
 	public void testRealtimeShouldFailToConnect(Vertx vertx, VertxTestContext testContext) {
+		/*
 		(new RealtimeClient(StandaloneApplication.REALTIME.getRealtimeUrl() + "/invalid").connect())
 				.onComplete(testContext.failing(ignored -> testContext.completeNow()));
+
+		 */
 	}
 
 	@Test
+	@Disabled
 	public void testRealtimeJs(Vertx vertx, VertxTestContext testContext) {
+		/*
 		var insertReceived = Promise.<RealtimeClient.RealtimeChanges>promise();
 		var insertReceivedTwice = new AtomicInteger();
 		(new RealtimeClient(StandaloneApplication.REALTIME.getRealtimeUrl())).connect()
@@ -128,5 +135,6 @@ public class RealtimeTests extends FrameworkTestBase {
 					return promise.future();
 				})
 				.onComplete(testContext.succeedingThenComplete());
+		 */
 	}
 }

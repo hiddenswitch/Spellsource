@@ -23,6 +23,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -32,7 +33,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserEntityAddons extends TableImpl<UserEntityAddonsRecord> {
 
-    private static final long serialVersionUID = -100778619;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>spellsource.user_entity_addons</code>
@@ -50,38 +51,17 @@ public class UserEntityAddons extends TableImpl<UserEntityAddonsRecord> {
     /**
      * The column <code>spellsource.user_entity_addons.id</code>.
      */
-    public final TableField<UserEntityAddonsRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<UserEntityAddonsRecord, String> ID = createField(DSL.name("id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.user_entity_addons.privacy_token</code>.
      */
-    public final TableField<UserEntityAddonsRecord, String> PRIVACY_TOKEN = createField(DSL.name("privacy_token"), org.jooq.impl.SQLDataType.CLOB.defaultValue(org.jooq.impl.DSL.field("floor(((1000)::double precision + (random() * (8999)::double precision)))", org.jooq.impl.SQLDataType.CLOB)), this, "");
+    public final TableField<UserEntityAddonsRecord, String> PRIVACY_TOKEN = createField(DSL.name("privacy_token"), SQLDataType.CLOB.defaultValue(DSL.field("floor(((1000)::double precision + (random() * (8999)::double precision)))", SQLDataType.CLOB)), this, "");
 
     /**
      * The column <code>spellsource.user_entity_addons.migrated</code>.
      */
-    public final TableField<UserEntityAddonsRecord, Boolean> MIGRATED = createField(DSL.name("migrated"), org.jooq.impl.SQLDataType.BOOLEAN.defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
-
-    /**
-     * Create a <code>spellsource.user_entity_addons</code> table reference
-     */
-    public UserEntityAddons() {
-        this(DSL.name("user_entity_addons"), null);
-    }
-
-    /**
-     * Create an aliased <code>spellsource.user_entity_addons</code> table reference
-     */
-    public UserEntityAddons(String alias) {
-        this(DSL.name(alias), USER_ENTITY_ADDONS);
-    }
-
-    /**
-     * Create an aliased <code>spellsource.user_entity_addons</code> table reference
-     */
-    public UserEntityAddons(Name alias) {
-        this(alias, USER_ENTITY_ADDONS);
-    }
+    public final TableField<UserEntityAddonsRecord, Boolean> MIGRATED = createField(DSL.name("migrated"), SQLDataType.BOOLEAN.defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     private UserEntityAddons(Name alias, Table<UserEntityAddonsRecord> aliased) {
         this(alias, aliased, null);
@@ -91,13 +71,36 @@ public class UserEntityAddons extends TableImpl<UserEntityAddonsRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>spellsource.user_entity_addons</code> table
+     * reference
+     */
+    public UserEntityAddons(String alias) {
+        this(DSL.name(alias), USER_ENTITY_ADDONS);
+    }
+
+    /**
+     * Create an aliased <code>spellsource.user_entity_addons</code> table
+     * reference
+     */
+    public UserEntityAddons(Name alias) {
+        this(alias, USER_ENTITY_ADDONS);
+    }
+
+    /**
+     * Create a <code>spellsource.user_entity_addons</code> table reference
+     */
+    public UserEntityAddons() {
+        this(DSL.name("user_entity_addons"), null);
+    }
+
     public <O extends Record> UserEntityAddons(Table<O> child, ForeignKey<O, UserEntityAddonsRecord> key) {
         super(child, key, USER_ENTITY_ADDONS);
     }
 
     @Override
     public Schema getSchema() {
-        return Spellsource.SPELLSOURCE;
+        return aliased() ? null : Spellsource.SPELLSOURCE;
     }
 
     @Override
@@ -106,17 +109,21 @@ public class UserEntityAddons extends TableImpl<UserEntityAddonsRecord> {
     }
 
     @Override
-    public List<UniqueKey<UserEntityAddonsRecord>> getKeys() {
-        return Arrays.<UniqueKey<UserEntityAddonsRecord>>asList(Keys.USER_ENTITY_ADDONS_PKEY);
-    }
-
-    @Override
     public List<ForeignKey<UserEntityAddonsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<UserEntityAddonsRecord, ?>>asList(Keys.USER_ENTITY_ADDONS__USER_ENTITY_ADDONS_ID_FKEY);
+        return Arrays.asList(Keys.USER_ENTITY_ADDONS__USER_ENTITY_ADDONS_ID_FKEY);
     }
 
+    private transient UserEntity _userEntity;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.user_entity</code>
+     * table.
+     */
     public UserEntity userEntity() {
-        return new UserEntity(this, Keys.USER_ENTITY_ADDONS__USER_ENTITY_ADDONS_ID_FKEY);
+        if (_userEntity == null)
+            _userEntity = new UserEntity(this, Keys.USER_ENTITY_ADDONS__USER_ENTITY_ADDONS_ID_FKEY);
+
+        return _userEntity;
     }
 
     @Override

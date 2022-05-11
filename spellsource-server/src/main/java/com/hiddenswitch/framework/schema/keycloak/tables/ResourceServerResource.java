@@ -17,13 +17,14 @@ import org.jooq.ForeignKey;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ResourceServerResource extends TableImpl<ResourceServerResourceRecord> {
 
-    private static final long serialVersionUID = 1473566078;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.resource_server_resource</code>
@@ -51,63 +52,38 @@ public class ResourceServerResource extends TableImpl<ResourceServerResourceReco
     /**
      * The column <code>keycloak.resource_server_resource.id</code>.
      */
-    public final TableField<ResourceServerResourceRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ResourceServerResourceRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.resource_server_resource.name</code>.
      */
-    public final TableField<ResourceServerResourceRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<ResourceServerResourceRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+
+    /**
+     * The column <code>keycloak.resource_server_resource.uri</code>.
+     */
+    public final TableField<ResourceServerResourceRecord, String> URI = createField(DSL.name("uri"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.resource_server_resource.type</code>.
      */
-    public final TableField<ResourceServerResourceRecord, String> TYPE = createField(DSL.name("type"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ResourceServerResourceRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.resource_server_resource.icon_uri</code>.
      */
-    public final TableField<ResourceServerResourceRecord, String> ICON_URI = createField(DSL.name("icon_uri"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<ResourceServerResourceRecord, String> ICON_URI = createField(DSL.name("icon_uri"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.resource_server_resource.owner</code>.
      */
-    public final TableField<ResourceServerResourceRecord, String> OWNER = createField(DSL.name("owner"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<ResourceServerResourceRecord, String> OWNER = createField(DSL.name("owner"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
-     * The column <code>keycloak.resource_server_resource.resource_server_id</code>.
+     * The column
+     * <code>keycloak.resource_server_resource.resource_server_id</code>.
      */
-    public final TableField<ResourceServerResourceRecord, String> RESOURCE_SERVER_ID = createField(DSL.name("resource_server_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
-     * The column <code>keycloak.resource_server_resource.owner_managed_access</code>.
-     */
-    public final TableField<ResourceServerResourceRecord, Boolean> OWNER_MANAGED_ACCESS = createField(DSL.name("owner_managed_access"), org.jooq.impl.SQLDataType.BOOLEAN.nullable(false).defaultValue(org.jooq.impl.DSL.field("false", org.jooq.impl.SQLDataType.BOOLEAN)), this, "");
-
-    /**
-     * The column <code>keycloak.resource_server_resource.display_name</code>.
-     */
-    public final TableField<ResourceServerResourceRecord, String> DISPLAY_NAME = createField(DSL.name("display_name"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
-
-    /**
-     * Create a <code>keycloak.resource_server_resource</code> table reference
-     */
-    public ResourceServerResource() {
-        this(DSL.name("resource_server_resource"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.resource_server_resource</code> table reference
-     */
-    public ResourceServerResource(String alias) {
-        this(DSL.name(alias), RESOURCE_SERVER_RESOURCE);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.resource_server_resource</code> table reference
-     */
-    public ResourceServerResource(Name alias) {
-        this(alias, RESOURCE_SERVER_RESOURCE);
-    }
+    public final TableField<ResourceServerResourceRecord, String> RESOURCE_SERVER_ID = createField(DSL.name("resource_server_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     private ResourceServerResource(Name alias, Table<ResourceServerResourceRecord> aliased) {
         this(alias, aliased, null);
@@ -117,18 +93,41 @@ public class ResourceServerResource extends TableImpl<ResourceServerResourceReco
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.resource_server_resource</code> table
+     * reference
+     */
+    public ResourceServerResource(String alias) {
+        this(DSL.name(alias), RESOURCE_SERVER_RESOURCE);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.resource_server_resource</code> table
+     * reference
+     */
+    public ResourceServerResource(Name alias) {
+        this(alias, RESOURCE_SERVER_RESOURCE);
+    }
+
+    /**
+     * Create a <code>keycloak.resource_server_resource</code> table reference
+     */
+    public ResourceServerResource() {
+        this(DSL.name("resource_server_resource"), null);
+    }
+
     public <O extends Record> ResourceServerResource(Table<O> child, ForeignKey<O, ResourceServerResourceRecord> key) {
         super(child, key, RESOURCE_SERVER_RESOURCE);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_RES_SRV_RES_RES_SRV);
+        return Arrays.asList(Indexes.IDX_RES_SRV_RES_RES_SRV);
     }
 
     @Override
@@ -137,17 +136,8 @@ public class ResourceServerResource extends TableImpl<ResourceServerResourceReco
     }
 
     @Override
-    public List<UniqueKey<ResourceServerResourceRecord>> getKeys() {
-        return Arrays.<UniqueKey<ResourceServerResourceRecord>>asList(Keys.CONSTRAINT_FARSR, Keys.UK_FRSR6T700S9V50BU18WS5HA6);
-    }
-
-    @Override
-    public List<ForeignKey<ResourceServerResourceRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ResourceServerResourceRecord, ?>>asList(Keys.RESOURCE_SERVER_RESOURCE__FK_FRSRHO213XCX4WNKOG82SSRFY);
-    }
-
-    public ResourceServer resourceServer() {
-        return new ResourceServer(this, Keys.RESOURCE_SERVER_RESOURCE__FK_FRSRHO213XCX4WNKOG82SSRFY);
+    public List<UniqueKey<ResourceServerResourceRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.UK_FRSR6T700S9V50BU18WS5HA6);
     }
 
     @Override
@@ -177,11 +167,11 @@ public class ResourceServerResource extends TableImpl<ResourceServerResourceReco
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<String, String, String, String, String, String, Boolean, String> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row7<String, String, String, String, String, String, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

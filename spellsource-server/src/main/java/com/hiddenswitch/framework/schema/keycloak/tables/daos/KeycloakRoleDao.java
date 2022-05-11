@@ -23,119 +23,147 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class KeycloakRoleDao extends AbstractReactiveVertxDAO<KeycloakRoleRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole, String, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>, Future<Integer>, Future<String>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<KeycloakRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole,String> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public KeycloakRoleDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(KeycloakRole.KEYCLOAK_ROLE, com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole.class, new ReactiveClassicQueryExecutor<KeycloakRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getKeycloakRoleMapper()));
-    }
+        public KeycloakRoleDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(KeycloakRole.KEYCLOAK_ROLE, com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole.class, new ReactiveClassicQueryExecutor<KeycloakRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getKeycloakRoleMapper()));
+        }
 
-    @Override
-    protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole object) {
-        return object.getId();
-    }
+        @Override
+        protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole object) {
+                return object.getId();
+        }
 
-    /**
-     * Find records that have <code>client_realm_constraint IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>client_realm_constraint IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByClientRealmConstraint(Collection<String> values) {
-        return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.CLIENT_REALM_CONSTRAINT.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByClientRealmConstraint(Collection<String> values) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.CLIENT_REALM_CONSTRAINT.in(values));
+        }
 
-    /**
-     * Find records that have <code>client_realm_constraint IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>client_realm_constraint IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByClientRealmConstraint(Collection<String> values, int limit) {
-        return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.CLIENT_REALM_CONSTRAINT.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByClientRealmConstraint(Collection<String> values, int limit) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.CLIENT_REALM_CONSTRAINT.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>client_role IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>client_role IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByClientRole(Collection<Boolean> values) {
-        return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.CLIENT_ROLE.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByClientRole(Collection<Boolean> values) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.CLIENT_ROLE.in(values));
+        }
 
-    /**
-     * Find records that have <code>client_role IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>client_role IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByClientRole(Collection<Boolean> values, int limit) {
-        return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.CLIENT_ROLE.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByClientRole(Collection<Boolean> values, int limit) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.CLIENT_ROLE.in(values),limit);
+        }
 
-    /**
-     * Find records that have <code>description IN (values)</code> asynchronously
+        /**
+     * Find records that have <code>description IN (values)</code>
+     * asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByDescription(Collection<String> values) {
-        return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.DESCRIPTION.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByDescription(Collection<String> values) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.DESCRIPTION.in(values));
+        }
 
-    /**
-     * Find records that have <code>description IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>description IN (values)</code>
+     * asynchronously limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByDescription(Collection<String> values, int limit) {
-        return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.DESCRIPTION.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByDescription(Collection<String> values, int limit) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.DESCRIPTION.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>name IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByName(Collection<String> values) {
-        return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.NAME.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByName(Collection<String> values) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.NAME.in(values));
+        }
 
-    /**
-     * Find records that have <code>name IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>name IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByName(Collection<String> values, int limit) {
-        return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.NAME.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByName(Collection<String> values, int limit) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.NAME.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>realm_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByRealmId(Collection<String> values) {
-        return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.REALM_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByRealmId(Collection<String> values) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.REALM_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>realm_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>realm_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByRealmId(Collection<String> values, int limit) {
-        return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.REALM_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByRealmId(Collection<String> values, int limit) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.REALM_ID.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>client IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByClient(Collection<String> values) {
-        return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.CLIENT.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByClient(Collection<String> values) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.CLIENT.in(values));
+        }
 
-    /**
-     * Find records that have <code>client IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>client IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByClient(Collection<String> values, int limit) {
-        return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.CLIENT.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByClient(Collection<String> values, int limit) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.CLIENT.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>realm IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByRealm(Collection<String> values) {
-        return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.REALM.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByRealm(Collection<String> values) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.REALM.in(values));
+        }
 
-    /**
-     * Find records that have <code>realm IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>realm IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByRealm(Collection<String> values, int limit) {
-        return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.REALM.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByRealm(Collection<String> values, int limit) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.REALM.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<KeycloakRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole,String> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<KeycloakRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole,String>) super.queryExecutor();
-    }
+        /**
+     * Find records that have <code>scope_param_required IN (values)</code>
+     * asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByScopeParamRequired(Collection<Boolean> values) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.SCOPE_PARAM_REQUIRED.in(values));
+        }
+
+        /**
+     * Find records that have <code>scope_param_required IN (values)</code>
+     * asynchronously limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByScopeParamRequired(Collection<Boolean> values, int limit) {
+                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.SCOPE_PARAM_REQUIRED.in(values),limit);
+        }
+
+        @Override
+        public ReactiveClassicQueryExecutor<KeycloakRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole,String> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<KeycloakRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole,String>) super.queryExecutor();
+        }
 }

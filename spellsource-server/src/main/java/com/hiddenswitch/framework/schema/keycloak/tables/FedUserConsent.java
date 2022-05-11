@@ -4,26 +4,22 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
-import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.FedUserConsentRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row9;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class FedUserConsent extends TableImpl<FedUserConsentRecord> {
 
-    private static final long serialVersionUID = -1361416687;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.fed_user_consent</code>
@@ -51,53 +47,44 @@ public class FedUserConsent extends TableImpl<FedUserConsentRecord> {
     /**
      * The column <code>keycloak.fed_user_consent.id</code>.
      */
-    public final TableField<FedUserConsentRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<FedUserConsentRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.fed_user_consent.client_id</code>.
      */
-    public final TableField<FedUserConsentRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<FedUserConsentRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.fed_user_consent.user_id</code>.
      */
-    public final TableField<FedUserConsentRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<FedUserConsentRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.fed_user_consent.realm_id</code>.
      */
-    public final TableField<FedUserConsentRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<FedUserConsentRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.fed_user_consent.storage_provider_id</code>.
      */
-    public final TableField<FedUserConsentRecord, String> STORAGE_PROVIDER_ID = createField(DSL.name("storage_provider_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<FedUserConsentRecord, String> STORAGE_PROVIDER_ID = createField(DSL.name("storage_provider_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.fed_user_consent.created_date</code>.
      */
-    public final TableField<FedUserConsentRecord, Long> CREATED_DATE = createField(DSL.name("created_date"), org.jooq.impl.SQLDataType.BIGINT, this, "");
+    public final TableField<FedUserConsentRecord, Long> CREATED_DATE = createField(DSL.name("created_date"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>keycloak.fed_user_consent.last_updated_date</code>.
      */
-    public final TableField<FedUserConsentRecord, Long> LAST_UPDATED_DATE = createField(DSL.name("last_updated_date"), org.jooq.impl.SQLDataType.BIGINT, this, "");
+    public final TableField<FedUserConsentRecord, Long> LAST_UPDATED_DATE = createField(DSL.name("last_updated_date"), SQLDataType.BIGINT, this, "");
 
-    /**
-     * The column <code>keycloak.fed_user_consent.client_storage_provider</code>.
-     */
-    public final TableField<FedUserConsentRecord, String> CLIENT_STORAGE_PROVIDER = createField(DSL.name("client_storage_provider"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    private FedUserConsent(Name alias, Table<FedUserConsentRecord> aliased) {
+        this(alias, aliased, null);
+    }
 
-    /**
-     * The column <code>keycloak.fed_user_consent.external_client_id</code>.
-     */
-    public final TableField<FedUserConsentRecord, String> EXTERNAL_CLIENT_ID = createField(DSL.name("external_client_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
-
-    /**
-     * Create a <code>keycloak.fed_user_consent</code> table reference
-     */
-    public FedUserConsent() {
-        this(DSL.name("fed_user_consent"), null);
+    private FedUserConsent(Name alias, Table<FedUserConsentRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -114,12 +101,11 @@ public class FedUserConsent extends TableImpl<FedUserConsentRecord> {
         this(alias, FED_USER_CONSENT);
     }
 
-    private FedUserConsent(Name alias, Table<FedUserConsentRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private FedUserConsent(Name alias, Table<FedUserConsentRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.fed_user_consent</code> table reference
+     */
+    public FedUserConsent() {
+        this(DSL.name("fed_user_consent"), null);
     }
 
     public <O extends Record> FedUserConsent(Table<O> child, ForeignKey<O, FedUserConsentRecord> key) {
@@ -128,22 +114,12 @@ public class FedUserConsent extends TableImpl<FedUserConsentRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
-    }
-
-    @Override
-    public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_FU_CNSNT_EXT, Indexes.IDX_FU_CONSENT, Indexes.IDX_FU_CONSENT_RU);
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public UniqueKey<FedUserConsentRecord> getPrimaryKey() {
         return Keys.CONSTR_FED_USER_CONSENT_PK;
-    }
-
-    @Override
-    public List<UniqueKey<FedUserConsentRecord>> getKeys() {
-        return Arrays.<UniqueKey<FedUserConsentRecord>>asList(Keys.CONSTR_FED_USER_CONSENT_PK);
     }
 
     @Override
@@ -173,11 +149,11 @@ public class FedUserConsent extends TableImpl<FedUserConsentRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<String, String, String, String, String, Long, Long, String, String> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row7<String, String, String, String, String, Long, Long> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

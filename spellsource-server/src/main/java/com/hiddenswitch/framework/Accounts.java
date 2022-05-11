@@ -2,27 +2,30 @@ package com.hiddenswitch.framework;
 
 import com.avast.grpc.jwt.server.JwtServerInterceptor;
 import com.avast.grpc.jwt.server.JwtTokenParser;
+import com.github.benmanes.caffeine.cache.AsyncCacheLoader;
+import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.ImmutableMap;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
-import com.hiddenswitch.framework.rpc.Hiddenswitch;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.ClientConfiguration.AccountsConfiguration;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity.Builder;
-import com.hiddenswitch.framework.rpc.VertxAccountsGrpc;
 import com.hiddenswitch.framework.rpc.VertxAccountsGrpc.AccountsVertxImplBase;
-import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc.UnauthenticatedVertxImplBase;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc.UnauthenticatedVertxStub;
 import com.hiddenswitch.framework.schema.keycloak.tables.daos.UserEntityDao;
-import com.hiddenswitch.framework.schema.keycloak.tables.interfaces.IUserEntity;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.grpc.*;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
+import io.vertx.core.impl.ContextInternal;
+import io.vertx.core.impl.VertxInternal;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.Shareable;
+import io.vertx.ext.auth.impl.jose.JWT;
 import io.vertx.ext.web.client.WebClient;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -46,10 +49,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -64,11 +64,12 @@ import static java.util.stream.Collectors.toMap;
  * In the server, a {@link Keycloak} instance is used to create and manage user accounts.
  * <p>
  * The client creates an account with {@link UnauthenticatedVertxStub#createAccount(CreateAccountRequest)}. The access
- * token returned by the reply, {@link LoginOrCreateReply#getAccessTokenResponse()}'s {@link AccessTokenResponse#getToken()}
+ * token returned by the reply, {@link LoginOrCreateReply#getAccessTokenResponse()}'s
+ * {@link AccessTokenResponse#getToken()}
  * <p>
  * Keycloak manages the migration of the {@link com.hiddenswitch.framework.schema.keycloak.Keycloak} SQL schema. The
- * {@link com.hiddenswitch.framework.schema.keycloak.tables.UserEntity} table's {@link
- * com.hiddenswitch.framework.schema.keycloak.tables.UserEntity#ID} field is the user ID used throughout the
+ * {@link com.hiddenswitch.framework.schema.keycloak.tables.UserEntity} table's
+ * {@link com.hiddenswitch.framework.schema.keycloak.tables.UserEntity#ID} field is the user ID used throughout the
  * application.
  */
 public class Accounts {
@@ -77,6 +78,26 @@ public class Accounts {
 	private static final String RSA = "RSA";
 	private static final WeakVertxMap<Keycloak> keycloakReference = new WeakVertxMap<>(Accounts::keycloakConstructor);
 	private static final WeakVertxMap<PublicKeyJwtServerInterceptor> interceptor = new WeakVertxMap<>(Accounts::authorizationInterceptorConstructor);
+	private static final AsyncLoadingCache<String, PublicKey> keys = Caffeine.newBuilder()
+			.buildAsync((key, executor) -> get().toCompletionStage().thenCompose(realm -> {
+				var keys = realm.keys().getKeyMetadata().getKeys();
+				var keyBase64 = keys.stream().filter(x -> x.getKid().equals(key)).findFirst();
+				if (keyBase64.isEmpty()) {
+					final var inKey = key;
+					return CompletableFuture.failedFuture(new NoSuchElementException("could not find key") {
+						public final String key = inKey;
+						public final String[] existingKeys = keys.stream().map(KeysMetadataRepresentation.KeyMetadataRepresentation::getKid).toArray(String[]::new);
+					});
+				}
+				var keyBytes = Base64.getDecoder().decode(keyBase64.get().getPublicKey());
+				var encodedKeySpec = new X509EncodedKeySpec(keyBytes);
+				try {
+					var factory = KeyFactory.getInstance(RSA);
+					return CompletableFuture.completedFuture(factory.generatePublic(encodedKeySpec));
+				} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+					return CompletableFuture.failedFuture(new RuntimeException(e));
+				}
+			}).toCompletableFuture());
 
 	/**
 	 * Helps cache the JWT public key.
@@ -135,11 +156,27 @@ public class Accounts {
 	}
 
 	private static PublicKeyJwtServerInterceptor authorizationInterceptorConstructor(Vertx vertx) {
-		var publicKey = vertx == null ? new AtomicReferencePublicKeyStorage() : new VertxPublicKeyStorage(vertx);
-		return new PublicKeyJwtServerInterceptor(publicKey, jwtToken -> {
-			var pk = publicKey.get();
-			return verify(jwtToken, pk);
+		return new PublicKeyJwtServerInterceptor(accessToken -> {
+			var kid = getKid(accessToken);
+			if (kid == null) {
+				final String inToken = accessToken;
+				return CompletableFuture.failedFuture(new IllegalArgumentException("access token could not be parsed for kid") {
+					public final String accessToken = inToken;
+				});
+			}
+
+			return keys.get(kid)
+					.thenCompose(publicKey -> verify(accessToken, publicKey));
 		});
+	}
+
+	private static String getKid(String accessToken) {
+		try {
+			JsonObject parsed = JWT.parse(accessToken);
+			return parsed.getJsonObject("header").getString("kid");
+		} catch (Throwable t) {
+			return null;
+		}
 	}
 
 	/**
@@ -165,15 +202,8 @@ public class Accounts {
 	}
 
 	private static class PublicKeyJwtServerInterceptor extends JwtServerInterceptor<AccessToken> {
-		private PublicKeyStorage publicKey;
-
-		public PublicKeyJwtServerInterceptor(PublicKeyStorage publicKey, JwtTokenParser<AccessToken> tokenParser) {
+		public PublicKeyJwtServerInterceptor(JwtTokenParser<AccessToken> tokenParser) {
 			super(tokenParser);
-			this.publicKey = publicKey;
-		}
-
-		public PublicKeyStorage getPublicKey() {
-			return publicKey;
 		}
 	}
 
@@ -183,47 +213,7 @@ public class Accounts {
 	 * @return an interceptor
 	 */
 	public static Future<ServerInterceptor> authorizationInterceptor() {
-		// retrieve public key
-		Future<PublicKey> publicKeyFut = getPublicKey();
-
-		return publicKeyFut.compose(publicKey -> {
-			var thisInterceptor = interceptor.get();
-			return Future.succeededFuture(thisInterceptor);
-		});
-	}
-
-	/**
-	 * Retrieves the public key used for JWT signing from Keycloak and caches it.
-	 *
-	 * @return the key
-	 */
-	private static Future<PublicKey> getPublicKey() {
-		var publicKeyStorage = new VertxPublicKeyStorage(Vertx.currentContext().owner());
-		Future<PublicKey> publicKeyFut;
-		if (publicKeyStorage.get() == null) {
-			publicKeyFut = get()
-					.compose(realm -> Environment.executeBlocking(() -> {
-						var keys = realm.keys().getKeyMetadata().getKeys();
-						var keyBase64 = keys.stream().filter(key -> key.getPublicKey() != null
-								&& key.getType().equals(RSA)).findFirst().orElseThrow().getPublicKey();
-						var keyBytes = Base64.getDecoder().decode(keyBase64);
-						var encodedKeySpec = new X509EncodedKeySpec(keyBytes);
-						try {
-							var factory = KeyFactory.getInstance(RSA);
-							return factory.generatePublic(encodedKeySpec);
-						} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-							throw new RuntimeException(e);
-						}
-					}).compose(publicKey -> {
-						var thisInterceptor = interceptor.get();
-						thisInterceptor.getPublicKey().set(publicKey);
-						return Future.succeededFuture(publicKey);
-					}))
-					.onFailure(Environment.onFailure());
-		} else {
-			publicKeyFut = Future.succeededFuture(publicKeyStorage.get());
-		}
-		return publicKeyFut;
+		return Future.succeededFuture(interceptor.get());
 	}
 
 	/**
@@ -379,7 +369,11 @@ public class Accounts {
 			@Override
 			public Future<BoolValue> verifyToken(AccessTokenResponse request) {
 				var context = Vertx.currentContext();
-				return Accounts.getPublicKey()
+				var kid = getKid(request.getToken());
+				if (kid == null) {
+					return Future.succeededFuture(BoolValue.of(false));
+				}
+				return Future.fromCompletionStage(keys.get(kid))
 						.compose(pk -> Future.fromCompletionStage(verify(request.getToken(), pk).minimalCompletionStage(), context))
 						.map(BoolValue.of(true))
 						.otherwise(BoolValue.of(false))
@@ -409,74 +403,74 @@ public class Accounts {
 		// Does not require vertx blocking service because it makes no blocking calls
 		return Future.succeededFuture(new AccountsVertxImplBase() {
 
-			@Override
-			public Future<LoginOrCreateReply> changePassword(ChangePasswordRequest request) {
-				var userId = Accounts.userId();
-				// for now we don't invalidate and refresh the old token
-				var token = Accounts.token();
-				if (token == null) {
-					return Future.failedFuture("must log in with old password first");
-				}
-				return get()
-						.compose(realm -> Environment.executeBlocking(() -> {
-							realm.users().get(userId).resetPassword(getPasswordCredential(request.getNewPassword()));
-							return Future.succeededFuture();
-						}))
-						.compose(v -> (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate()).findOneById(userId)))
-						.map(userEntity -> LoginOrCreateReply.newBuilder()
-								.setUserEntity(toProto(userEntity))
-								.setAccessTokenResponse(AccessTokenResponse.newBuilder()
-										.setToken(token)
-										.build()).build())
-						.recover(Environment.onGrpcFailure());
-			}
+					@Override
+					public Future<LoginOrCreateReply> changePassword(ChangePasswordRequest request) {
+						var userId = Accounts.userId();
+						// for now we don't invalidate and refresh the old token
+						var token = Accounts.token();
+						if (token == null) {
+							return Future.failedFuture("must log in with old password first");
+						}
+						return get()
+								.compose(realm -> Environment.executeBlocking(() -> {
+									realm.users().get(userId).resetPassword(getPasswordCredential(request.getNewPassword()));
+									return Future.succeededFuture();
+								}))
+								.compose(v -> (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate()).findOneById(userId)))
+								.map(userEntity -> LoginOrCreateReply.newBuilder()
+										.setUserEntity(toProto(userEntity))
+										.setAccessTokenResponse(AccessTokenResponse.newBuilder()
+												.setToken(token)
+												.build()).build())
+								.recover(Environment.onGrpcFailure());
+					}
 
-			@Override
-			public Future<GetAccountsReply> getAccount(Empty request) {
-				return user()
-						.compose(thisUser -> {
-							if (thisUser == null) {
-								return Future.failedFuture("must log in");
-							}
+					@Override
+					public Future<GetAccountsReply> getAccount(Empty request) {
+						return user()
+								.compose(thisUser -> {
+									if (thisUser == null) {
+										return Future.failedFuture("must log in");
+									}
 
-							return Future.succeededFuture(GetAccountsReply.newBuilder().addUserEntities(
-									com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity.newBuilder()
-											.setUsername(thisUser.getUsername())
-											.setEmail(thisUser.getEmail())
-											.setId(thisUser.getId())
-											.build()
-							).build());
-						})
-						.recover(Environment.onGrpcFailure());
-			}
+									return Future.succeededFuture(GetAccountsReply.newBuilder().addUserEntities(
+											com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity.newBuilder()
+													.setUsername(thisUser.getUsername())
+													.setEmail(thisUser.getEmail())
+													.setId(thisUser.getId())
+													.build()
+									).build());
+								})
+								.recover(Environment.onGrpcFailure());
+					}
 
-			@Override
-			public Future<GetAccountsReply> getAccounts(GetAccountsRequest request) {
-				return user()
-						.compose(thisUser -> {
-							if (thisUser == null) {
-								return Future.failedFuture("must log in");
-							}
+					@Override
+					public Future<GetAccountsReply> getAccounts(GetAccountsRequest request) {
+						return user()
+								.compose(thisUser -> {
+									if (thisUser == null) {
+										return Future.failedFuture("must log in");
+									}
 
-							// TODO: Join with friends
-							return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate()))
-									.findManyByIds(request.getIdsList())
-									.map(users ->
-											GetAccountsReply.newBuilder()
-													.addAllUserEntities(users.stream().map(ue -> {
-														var build = com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity.newBuilder()
-																.setUsername(ue.getUsername())
-																.setId(ue.getId());
+									// TODO: Join with friends
+									return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate()))
+											.findManyByIds(request.getIdsList())
+											.map(users ->
+													GetAccountsReply.newBuilder()
+															.addAllUserEntities(users.stream().map(ue -> {
+																var build = com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity.newBuilder()
+																		.setUsername(ue.getUsername())
+																		.setId(ue.getId());
 
-														if (ue.getId().equals(thisUser.getId())) {
-															build.setEmail(ue.getEmail());
-														}
-														return build.build();
-													}).collect(Collectors.toList())).build());
-						})
-						.recover(Environment.onGrpcFailure());
-			}
-		})
+																if (ue.getId().equals(thisUser.getId())) {
+																	build.setEmail(ue.getEmail());
+																}
+																return build.build();
+															}).collect(Collectors.toList())).build());
+								})
+								.recover(Environment.onGrpcFailure());
+					}
+				})
 				.compose(Accounts::requiresAuthorization);
 	}
 
@@ -508,9 +502,9 @@ public class Accounts {
 
 	public static Future<RealmResource> get() {
 		return Environment.executeBlocking(() -> {
-			var realmId = Environment.getConfiguration().getKeycloak().getRealmId();
-			return keycloakReference.get().realm(realmId);
-		})
+					var realmId = Environment.getConfiguration().getKeycloak().getRealmId();
+					return keycloakReference.get().realm(realmId);
+				})
 				.onFailure(Environment.onFailure());
 	}
 
@@ -629,58 +623,58 @@ public class Accounts {
 
 	public static Future<RealmResource> createRealmIfAbsent() {
 		return Environment.executeBlocking(() -> {
-			var configuration = Environment.getConfiguration();
-			var keycloak = keycloakReference.get();
-			var existing = Optional.<RealmRepresentation>empty();
-			var realmId = configuration.getKeycloak().getRealmId();
-			try {
-				existing = keycloak.realms().findAll().stream().filter(realm -> realm.getRealm().equals(realmId)).findFirst();
-			} catch (NotFoundException ignored) {
-			}
+					var configuration = Environment.getConfiguration();
+					var keycloak = keycloakReference.get();
+					var existing = Optional.<RealmRepresentation>empty();
+					var realmId = configuration.getKeycloak().getRealmId();
+					try {
+						existing = keycloak.realms().findAll().stream().filter(realm -> realm.getRealm().equals(realmId)).findFirst();
+					} catch (NotFoundException ignored) {
+					}
 
-			if (existing.isPresent()) {
-				return keycloak.realm(realmId);
-			}
+					if (existing.isPresent()) {
+						return keycloak.realm(realmId);
+					}
 
-			// Create a default
-			var realmRepresentation = new RealmRepresentation();
-			realmRepresentation.setRealm(realmId);
-			realmRepresentation.setDisplayName(configuration.getKeycloak().getRealmDisplayName());
-			realmRepresentation.setSslRequired(SslRequired.EXTERNAL.toString());
-			realmRepresentation.setEnabled(true);
-			// use scrypt provider
-			realmRepresentation.setPasswordPolicy("hashAlgorithm(scrypt)");
-			realmRepresentation.setRegistrationAllowed(true);
-			realmRepresentation.setResetPasswordAllowed(true);
-			realmRepresentation.setResetCredentialsFlow("reset credentials");
-			realmRepresentation.setRegistrationFlow("registration");
-			realmRepresentation.setRememberMe(true);
-			realmRepresentation.setLoginWithEmailAllowed(true);
+					// Create a default
+					var realmRepresentation = new RealmRepresentation();
+					realmRepresentation.setRealm(realmId);
+					realmRepresentation.setDisplayName(configuration.getKeycloak().getRealmDisplayName());
+					realmRepresentation.setSslRequired(SslRequired.EXTERNAL.toString());
+					realmRepresentation.setEnabled(true);
+					// use scrypt provider
+					realmRepresentation.setPasswordPolicy("hashAlgorithm(scrypt)");
+					realmRepresentation.setRegistrationAllowed(true);
+					realmRepresentation.setResetPasswordAllowed(true);
+					realmRepresentation.setResetCredentialsFlow("reset credentials");
+					realmRepresentation.setRegistrationFlow("registration");
+					realmRepresentation.setRememberMe(true);
+					realmRepresentation.setLoginWithEmailAllowed(true);
 
-			keycloak.realms().create(realmRepresentation);
+					keycloak.realms().create(realmRepresentation);
 
-			var realm = keycloak.realms().realm(realmId);
-			var flows = realm.flows().getFlows()
-					.stream().collect(toMap(AuthenticationFlowRepresentation::getAlias, AuthenticationFlowRepresentation::getId));
-			var client = new ClientRepresentation();
-			client.setClientId(configuration.getKeycloak().getClientId());
-			client.setDirectAccessGrantsEnabled(true);
+					var realm = keycloak.realms().realm(realmId);
+					var flows = realm.flows().getFlows()
+							.stream().collect(toMap(AuthenticationFlowRepresentation::getAlias, AuthenticationFlowRepresentation::getId));
+					var client = new ClientRepresentation();
+					client.setClientId(configuration.getKeycloak().getClientId());
+					client.setDirectAccessGrantsEnabled(true);
 
-			// Should now be confidential
-			client.setClientAuthenticatorType("client-secret");
-			client.setServiceAccountsEnabled(false);
-			client.setStandardFlowEnabled(true);
-			client.setSecret(configuration.getKeycloak().getClientSecret());
-			client.setRedirectUris(Collections.singletonList("/oauth2callback"));
-			client.setAuthenticationFlowBindingOverrides(ImmutableMap.of(
-					"direct_grant", flows.get("direct grant"),
-					"browser", flows.get("browser")
-			));
+					// Should now be confidential
+					client.setClientAuthenticatorType("client-secret");
+					client.setServiceAccountsEnabled(false);
+					client.setStandardFlowEnabled(true);
+					client.setSecret(configuration.getKeycloak().getClientSecret());
+					client.setRedirectUris(Collections.singletonList("/oauth2callback"));
+					client.setAuthenticationFlowBindingOverrides(ImmutableMap.of(
+							"direct_grant", flows.get("direct grant"),
+							"browser", flows.get("browser")
+					));
 
-			client.setWebOrigins(Collections.singletonList("+"));
-			realm.clients().create(client);
-			return realm;
-		})
+					client.setWebOrigins(Collections.singletonList("+"));
+					realm.clients().create(client);
+					return realm;
+				})
 				.onFailure(Environment.onFailure());
 	}
 

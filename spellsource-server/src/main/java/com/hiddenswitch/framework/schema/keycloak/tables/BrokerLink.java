@@ -8,9 +8,6 @@ import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.BrokerLinkRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
@@ -22,6 +19,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class BrokerLink extends TableImpl<BrokerLinkRecord> {
 
-    private static final long serialVersionUID = -1412803806;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.broker_link</code>
@@ -49,43 +47,44 @@ public class BrokerLink extends TableImpl<BrokerLinkRecord> {
     /**
      * The column <code>keycloak.broker_link.identity_provider</code>.
      */
-    public final TableField<BrokerLinkRecord, String> IDENTITY_PROVIDER = createField(DSL.name("identity_provider"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<BrokerLinkRecord, String> IDENTITY_PROVIDER = createField(DSL.name("identity_provider"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.broker_link.storage_provider_id</code>.
      */
-    public final TableField<BrokerLinkRecord, String> STORAGE_PROVIDER_ID = createField(DSL.name("storage_provider_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<BrokerLinkRecord, String> STORAGE_PROVIDER_ID = createField(DSL.name("storage_provider_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.broker_link.realm_id</code>.
      */
-    public final TableField<BrokerLinkRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<BrokerLinkRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.broker_link.broker_user_id</code>.
      */
-    public final TableField<BrokerLinkRecord, String> BROKER_USER_ID = createField(DSL.name("broker_user_id"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<BrokerLinkRecord, String> BROKER_USER_ID = createField(DSL.name("broker_user_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.broker_link.broker_username</code>.
      */
-    public final TableField<BrokerLinkRecord, String> BROKER_USERNAME = createField(DSL.name("broker_username"), org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
+    public final TableField<BrokerLinkRecord, String> BROKER_USERNAME = createField(DSL.name("broker_username"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.broker_link.token</code>.
      */
-    public final TableField<BrokerLinkRecord, String> TOKEN = createField(DSL.name("token"), org.jooq.impl.SQLDataType.CLOB, this, "");
+    public final TableField<BrokerLinkRecord, String> TOKEN = createField(DSL.name("token"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>keycloak.broker_link.user_id</code>.
      */
-    public final TableField<BrokerLinkRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<BrokerLinkRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
-    /**
-     * Create a <code>keycloak.broker_link</code> table reference
-     */
-    public BrokerLink() {
-        this(DSL.name("broker_link"), null);
+    private BrokerLink(Name alias, Table<BrokerLinkRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private BrokerLink(Name alias, Table<BrokerLinkRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -102,12 +101,11 @@ public class BrokerLink extends TableImpl<BrokerLinkRecord> {
         this(alias, BROKER_LINK);
     }
 
-    private BrokerLink(Name alias, Table<BrokerLinkRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private BrokerLink(Name alias, Table<BrokerLinkRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.broker_link</code> table reference
+     */
+    public BrokerLink() {
+        this(DSL.name("broker_link"), null);
     }
 
     public <O extends Record> BrokerLink(Table<O> child, ForeignKey<O, BrokerLinkRecord> key) {
@@ -116,17 +114,12 @@ public class BrokerLink extends TableImpl<BrokerLinkRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public UniqueKey<BrokerLinkRecord> getPrimaryKey() {
         return Keys.CONSTR_BROKER_LINK_PK;
-    }
-
-    @Override
-    public List<UniqueKey<BrokerLinkRecord>> getKeys() {
-        return Arrays.<UniqueKey<BrokerLinkRecord>>asList(Keys.CONSTR_BROKER_LINK_PK);
     }
 
     @Override

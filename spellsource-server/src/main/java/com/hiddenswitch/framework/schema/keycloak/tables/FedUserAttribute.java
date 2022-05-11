@@ -4,17 +4,12 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
-import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.FedUserAttributeRecord;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Row6;
@@ -24,6 +19,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -33,7 +29,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class FedUserAttribute extends TableImpl<FedUserAttributeRecord> {
 
-    private static final long serialVersionUID = -687986982;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.fed_user_attribute</code>
@@ -51,53 +47,32 @@ public class FedUserAttribute extends TableImpl<FedUserAttributeRecord> {
     /**
      * The column <code>keycloak.fed_user_attribute.id</code>.
      */
-    public final TableField<FedUserAttributeRecord, String> ID = createField(DSL.name("id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<FedUserAttributeRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.fed_user_attribute.name</code>.
      */
-    public final TableField<FedUserAttributeRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<FedUserAttributeRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.fed_user_attribute.user_id</code>.
      */
-    public final TableField<FedUserAttributeRecord, String> USER_ID = createField(DSL.name("user_id"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<FedUserAttributeRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.fed_user_attribute.realm_id</code>.
      */
-    public final TableField<FedUserAttributeRecord, String> REALM_ID = createField(DSL.name("realm_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<FedUserAttributeRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.fed_user_attribute.storage_provider_id</code>.
      */
-    public final TableField<FedUserAttributeRecord, String> STORAGE_PROVIDER_ID = createField(DSL.name("storage_provider_id"), org.jooq.impl.SQLDataType.VARCHAR(36), this, "");
+    public final TableField<FedUserAttributeRecord, String> STORAGE_PROVIDER_ID = createField(DSL.name("storage_provider_id"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>keycloak.fed_user_attribute.value</code>.
      */
-    public final TableField<FedUserAttributeRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(2024), this, "");
-
-    /**
-     * Create a <code>keycloak.fed_user_attribute</code> table reference
-     */
-    public FedUserAttribute() {
-        this(DSL.name("fed_user_attribute"), null);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.fed_user_attribute</code> table reference
-     */
-    public FedUserAttribute(String alias) {
-        this(DSL.name(alias), FED_USER_ATTRIBUTE);
-    }
-
-    /**
-     * Create an aliased <code>keycloak.fed_user_attribute</code> table reference
-     */
-    public FedUserAttribute(Name alias) {
-        this(alias, FED_USER_ATTRIBUTE);
-    }
+    public final TableField<FedUserAttributeRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(2024), this, "");
 
     private FedUserAttribute(Name alias, Table<FedUserAttributeRecord> aliased) {
         this(alias, aliased, null);
@@ -107,28 +82,41 @@ public class FedUserAttribute extends TableImpl<FedUserAttributeRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
+    /**
+     * Create an aliased <code>keycloak.fed_user_attribute</code> table
+     * reference
+     */
+    public FedUserAttribute(String alias) {
+        this(DSL.name(alias), FED_USER_ATTRIBUTE);
+    }
+
+    /**
+     * Create an aliased <code>keycloak.fed_user_attribute</code> table
+     * reference
+     */
+    public FedUserAttribute(Name alias) {
+        this(alias, FED_USER_ATTRIBUTE);
+    }
+
+    /**
+     * Create a <code>keycloak.fed_user_attribute</code> table reference
+     */
+    public FedUserAttribute() {
+        this(DSL.name("fed_user_attribute"), null);
+    }
+
     public <O extends Record> FedUserAttribute(Table<O> child, ForeignKey<O, FedUserAttributeRecord> key) {
         super(child, key, FED_USER_ATTRIBUTE);
     }
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
-    }
-
-    @Override
-    public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_FU_ATTRIBUTE);
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
     public UniqueKey<FedUserAttributeRecord> getPrimaryKey() {
         return Keys.CONSTR_FED_USER_ATTR_PK;
-    }
-
-    @Override
-    public List<UniqueKey<FedUserAttributeRecord>> getKeys() {
-        return Arrays.<UniqueKey<FedUserAttributeRecord>>asList(Keys.CONSTR_FED_USER_ATTR_PK);
     }
 
     @Override

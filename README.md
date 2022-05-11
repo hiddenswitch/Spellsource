@@ -38,33 +38,28 @@ The client is private, please contact for access on the Discord.
 
 ```shell script
 $ ./gradlew tasks --group spellsource
-
 > Task :tasks
 
 ------------------------------------------------------------
-Tasks runnable from root project
+Tasks runnable from root project 'spellsource'
 ------------------------------------------------------------
 
 Spellsource tasks
 -----------------
-bumpVersion - Bumps the server version
-cloneMongo - Connects to the production database, dumps its database file, then restores the database to your local mongo.
-deployAll - Deploys the server, the client and the website
+buildAndroid - Builds the Android version of the game using deploy.sh file and your local Unity version.
+buildIOS - Builds the Windows version of the game using deploy.sh file and your local Unity version.
+buildMacOS - Builds the macOS versions of the game using deploy.sh file and your local Unity version.
+buildWindows - Builds the Windows version of the game using deploy.sh file and your local Unity version.
+deploySpellsourceProd - Deploys Spellsource to production. Requires access to Spellsource secrets.
 distAndroid - Builds and uploads the Android project to Google Play
 distIOS - Builds and uploads to Testflight the iOS project
 distSteam - Uploads the macOS and Windows builds to Steam
-distSwarm - Deploys to a Docker Swarm
-distWebGL - Uploads the WebGL build to playspellsource.com
-distWWW - Builds and deploys the website (requires npm, python, the .venv virtualenv installed)
-netRun - Starts the Spellsource server
-netRunDebug - Starts the Spellsource server attachable as a Remote debug target from IntelliJ
-swagger - Generates sources from the client/swagger-api.yaml. Run this whenever you change that file.
-testAll - Runs all tests. When testing custom cards, failed fuzzing results are put in cards/src/test/resources/traces by testRandomMassPlay.
-
-To see all tasks and more detail, run gradle tasks --all
-
-To see more detail about a task, run gradle help --task <task>
-
+distWWW - Builds and deploys the website
+migrationsOrSqlChanged - Run whenever the schema as encoded in spellsource-server/src/main/resources/db/migration has changed - recreates the JOOQ DSL and dumps a ddl.sql file for autocompletion
+protosChanged - Run whenever the files in src/main/proto have been changed. Recreates the models and updates the client.
+run - Starts the Spellsource server locally. Starts all dependencies using Docker (must be installed).
+test - Runs the test suite.
+testLegacyMigration - Tests the migration from the legacy server to this current server 
 ```
 
 ### Cloning this repository
@@ -88,7 +83,7 @@ Make sure `longpaths` is enabled on Windows. Run a `bash` or other command promp
 git lfs install
 git clone --recurse-submodules git@github.com:hiddenswitch/Spellsource.git
 cd Spellsource
-git submodule update --init --recursive unityclient/src/unity
+git submodule update --init --recursive
 ```
 
 Failures are normal if you do not have permissions to the repositories.
@@ -110,7 +105,7 @@ Requirements: **Java 11 or later** and **Docker**. Check your current version of
     # Docker. Look carefully at any messages brew tells you and do them
     brew cask install docker
     # Java (if required)
-    brew install openjdk@11
+    brew install openjdk@11 dotnet-sdk
     # Not sure why brew doesn't just do this for you
     sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
     brew link --force openjdk@11

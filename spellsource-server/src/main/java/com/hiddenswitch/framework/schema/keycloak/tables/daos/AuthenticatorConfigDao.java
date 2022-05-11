@@ -23,49 +23,53 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class AuthenticatorConfigDao extends AbstractReactiveVertxDAO<AuthenticatorConfigRecord, com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig, String, Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig>>, Future<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig>, Future<Integer>, Future<String>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<AuthenticatorConfigRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig,String> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public AuthenticatorConfigDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(AuthenticatorConfig.AUTHENTICATOR_CONFIG, com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig.class, new ReactiveClassicQueryExecutor<AuthenticatorConfigRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getAuthenticatorConfigMapper()));
-    }
+        public AuthenticatorConfigDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(AuthenticatorConfig.AUTHENTICATOR_CONFIG, com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig.class, new ReactiveClassicQueryExecutor<AuthenticatorConfigRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig,String>(configuration,delegate,com.hiddenswitch.framework.schema.keycloak.tables.mappers.RowMappers.getAuthenticatorConfigMapper()));
+        }
 
-    @Override
-    protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig object) {
-        return object.getId();
-    }
+        @Override
+        protected String getId(com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig object) {
+                return object.getId();
+        }
 
-    /**
+        /**
      * Find records that have <code>alias IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig>> findManyByAlias(Collection<String> values) {
-        return findManyByCondition(AuthenticatorConfig.AUTHENTICATOR_CONFIG.ALIAS.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig>> findManyByAlias(Collection<String> values) {
+                return findManyByCondition(AuthenticatorConfig.AUTHENTICATOR_CONFIG.ALIAS.in(values));
+        }
 
-    /**
-     * Find records that have <code>alias IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>alias IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig>> findManyByAlias(Collection<String> values, int limit) {
-        return findManyByCondition(AuthenticatorConfig.AUTHENTICATOR_CONFIG.ALIAS.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig>> findManyByAlias(Collection<String> values, int limit) {
+                return findManyByCondition(AuthenticatorConfig.AUTHENTICATOR_CONFIG.ALIAS.in(values),limit);
+        }
 
-    /**
+        /**
      * Find records that have <code>realm_id IN (values)</code> asynchronously
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig>> findManyByRealmId(Collection<String> values) {
-        return findManyByCondition(AuthenticatorConfig.AUTHENTICATOR_CONFIG.REALM_ID.in(values));
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig>> findManyByRealmId(Collection<String> values) {
+                return findManyByCondition(AuthenticatorConfig.AUTHENTICATOR_CONFIG.REALM_ID.in(values));
+        }
 
-    /**
-     * Find records that have <code>realm_id IN (values)</code> asynchronously limited by the given limit
+        /**
+     * Find records that have <code>realm_id IN (values)</code> asynchronously
+     * limited by the given limit
      */
-    public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig>> findManyByRealmId(Collection<String> values, int limit) {
-        return findManyByCondition(AuthenticatorConfig.AUTHENTICATOR_CONFIG.REALM_ID.in(values),limit);
-    }
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig>> findManyByRealmId(Collection<String> values, int limit) {
+                return findManyByCondition(AuthenticatorConfig.AUTHENTICATOR_CONFIG.REALM_ID.in(values),limit);
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<AuthenticatorConfigRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig,String> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<AuthenticatorConfigRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig,String>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<AuthenticatorConfigRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig,String> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<AuthenticatorConfigRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AuthenticatorConfig,String>) super.queryExecutor();
+        }
 }

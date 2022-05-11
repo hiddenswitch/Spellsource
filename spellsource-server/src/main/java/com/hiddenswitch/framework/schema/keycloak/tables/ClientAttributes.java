@@ -22,6 +22,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 
@@ -31,7 +32,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ClientAttributes extends TableImpl<ClientAttributesRecord> {
 
-    private static final long serialVersionUID = 1491006960;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>keycloak.client_attributes</code>
@@ -49,23 +50,24 @@ public class ClientAttributes extends TableImpl<ClientAttributesRecord> {
     /**
      * The column <code>keycloak.client_attributes.client_id</code>.
      */
-    public final TableField<ClientAttributesRecord, String> CLIENT_ID = createField(DSL.name("client_id"), org.jooq.impl.SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ClientAttributesRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.client_attributes.value</code>.
      */
-    public final TableField<ClientAttributesRecord, String> VALUE = createField(DSL.name("value"), org.jooq.impl.SQLDataType.VARCHAR(4000), this, "");
+    public final TableField<ClientAttributesRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(2048), this, "");
 
     /**
      * The column <code>keycloak.client_attributes.name</code>.
      */
-    public final TableField<ClientAttributesRecord, String> NAME = createField(DSL.name("name"), org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<ClientAttributesRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
-    /**
-     * Create a <code>keycloak.client_attributes</code> table reference
-     */
-    public ClientAttributes() {
-        this(DSL.name("client_attributes"), null);
+    private ClientAttributes(Name alias, Table<ClientAttributesRecord> aliased) {
+        this(alias, aliased, null);
+    }
+
+    private ClientAttributes(Name alias, Table<ClientAttributesRecord> aliased, Field<?>[] parameters) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
     }
 
     /**
@@ -82,12 +84,11 @@ public class ClientAttributes extends TableImpl<ClientAttributesRecord> {
         this(alias, CLIENT_ATTRIBUTES);
     }
 
-    private ClientAttributes(Name alias, Table<ClientAttributesRecord> aliased) {
-        this(alias, aliased, null);
-    }
-
-    private ClientAttributes(Name alias, Table<ClientAttributesRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    /**
+     * Create a <code>keycloak.client_attributes</code> table reference
+     */
+    public ClientAttributes() {
+        this(DSL.name("client_attributes"), null);
     }
 
     public <O extends Record> ClientAttributes(Table<O> child, ForeignKey<O, ClientAttributesRecord> key) {
@@ -96,7 +97,7 @@ public class ClientAttributes extends TableImpl<ClientAttributesRecord> {
 
     @Override
     public Schema getSchema() {
-        return Keycloak.KEYCLOAK;
+        return aliased() ? null : Keycloak.KEYCLOAK;
     }
 
     @Override
@@ -105,17 +106,20 @@ public class ClientAttributes extends TableImpl<ClientAttributesRecord> {
     }
 
     @Override
-    public List<UniqueKey<ClientAttributesRecord>> getKeys() {
-        return Arrays.<UniqueKey<ClientAttributesRecord>>asList(Keys.CONSTRAINT_3C);
-    }
-
-    @Override
     public List<ForeignKey<ClientAttributesRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ClientAttributesRecord, ?>>asList(Keys.CLIENT_ATTRIBUTES__FK3C47C64BEACCA966);
+        return Arrays.asList(Keys.CLIENT_ATTRIBUTES__FK3C47C64BEACCA966);
     }
 
+    private transient Client _client;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.client</code> table.
+     */
     public Client client() {
-        return new Client(this, Keys.CLIENT_ATTRIBUTES__FK3C47C64BEACCA966);
+        if (_client == null)
+            _client = new Client(this, Keys.CLIENT_ATTRIBUTES__FK3C47C64BEACCA966);
+
+        return _client;
     }
 
     @Override

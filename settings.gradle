@@ -7,7 +7,6 @@ buildCache {
 
 rootProject.name = 'spellsource'
 
-include 'quasar-core'
 include 'spellsource-game'
 include 'spellsource-protos'
 include 'spellsource-cards-git'

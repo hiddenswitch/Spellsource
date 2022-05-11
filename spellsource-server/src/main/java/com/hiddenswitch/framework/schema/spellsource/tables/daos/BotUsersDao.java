@@ -21,21 +21,23 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicQueryE
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class BotUsersDao extends AbstractReactiveVertxDAO<BotUsersRecord, com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers, String, Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers>>, Future<com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers>, Future<Integer>, Future<String>> implements io.github.jklingsporn.vertx.jooq.classic.VertxDAO<BotUsersRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers,String> {
 
-    /**
-     * @param configuration Used for rendering, so only SQLDialect must be set and must be one of the POSTGREs types.
-     * @param delegate A configured AsyncSQLClient that is used for query execution
+        /**
+     * @param configuration Used for rendering, so only SQLDialect must be set
+     * and must be one of the POSTGREs types.
+     * @param delegate A configured AsyncSQLClient that is used for query
+     * execution
      */
-    public BotUsersDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
-        super(BotUsers.BOT_USERS, com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers.class, new ReactiveClassicQueryExecutor<BotUsersRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers,String>(configuration,delegate,com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getBotUsersMapper()));
-    }
+        public BotUsersDao(Configuration configuration, io.vertx.sqlclient.SqlClient delegate) {
+                super(BotUsers.BOT_USERS, com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers.class, new ReactiveClassicQueryExecutor<BotUsersRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers,String>(configuration,delegate,com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers.getBotUsersMapper()));
+        }
 
-    @Override
-    protected String getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers object) {
-        return object.getId();
-    }
+        @Override
+        protected String getId(com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers object) {
+                return object.getId();
+        }
 
-    @Override
-    public ReactiveClassicQueryExecutor<BotUsersRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers,String> queryExecutor(){
-        return (ReactiveClassicQueryExecutor<BotUsersRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers,String>) super.queryExecutor();
-    }
+        @Override
+        public ReactiveClassicQueryExecutor<BotUsersRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers,String> queryExecutor(){
+                return (ReactiveClassicQueryExecutor<BotUsersRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers,String>) super.queryExecutor();
+        }
 }
