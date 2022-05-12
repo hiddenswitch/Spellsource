@@ -1,4 +1,0 @@
-# helm install cassandra bitnami/cassandra
-dbUser:
-  user: cassandra
-  password: password

@@ -5,48 +5,24 @@ version = '0.9.0'
 
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def sourceDir = "$project.projectDir.absolutePath/src/main/helm"
-def helmBinary = isWindows ? "$project.rootProject.projectDir.absolutePath/bin/helm.exe" : "helm"
 def kubectlBinary = isWindows ? "$project.rootProject.projectDir.absolutePath/bin/kubectl.exe" : "kubectl"
 def privateProject = project(':spellsource-private')
-
-task deployPostgresLocal(type: Exec, group: 'Spellsource Internal') {
-    description('Deploys Postgres HA to your configured Kubernetes endpoint.')
-    inputs.file("$sourceDir/postgres-values.yaml")
-    commandLine helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/postgres-values.yaml", "postgres", "bitnami/postgresql-ha"
-}
-
-task deployKeycloakLocal(type: Exec, group: 'Spellsource Internal') {
-    description('Deploys Keycloak to your configured Kubernetes endpoint.')
-    dependsOn deployPostgresLocal, project(':spellsource-containers').tasks.pushKeycloakClusteredImage
-    inputs.file("$sourceDir/keycloak-values.yaml")
-    commandLine helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/keycloak-values.yaml", "postgres", "bitnami/keycloak"
-}
-
-task deployRedisLocal(type: Exec, group: 'Spellsource Internal') {
-    description('Deploys Redis to your configured Kubernetes endpoint.')
-    inputs.file("$sourceDir/redis-values.yaml")
-    commandLine helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/redis-values.yaml", "redis", "bitnami/redis"
-}
-
-task deploySpellsourceLocal(type: Exec) {
-    description('Deploys Spellsource to your configured Kubernetes endpoint.')
-    dependsOn project(':spellsource-server').tasks.jib, deployKeycloakLocal, deployRedisLocal
-    inputs.dir(sourceDir)
-    commandLine helmBinary, "upgrade", "-i", "--atomic", "--debug", "-f", "$sourceDir/spellsource-values.yaml", "spellsource", "$sourceDir/spellsource"
-}
 
 task deploySpellsourceProd(group: 'Spellsource') {
     description('Deploys Spellsource to production. Requires access to Spellsource secrets.')
     dependsOn ':spellsource-server:jib', ':spellsource-private:build', ':spellsource-containers:pushKeycloakClusteredImage'
-    def taskPath = "${privateProject.projectDir}/src/secrets/eksctl/spellsource"
+    def taskPath = "${privateProject.projectDir}/src/secrets/"
     inputs.dir(sourceDir)
+
+    def kubeconfigPath = "$taskPath/eksctl/kubeconfig.yaml"
+    inputs.file(kubeconfigPath)
     doLast {
         [[kubectlBinary, "rollout", "restart", "deployments/spellsource", "--namespace", "spellsource"],
-         [kubectlBinary, "rollout", "restart", "deployments/keycloak", "--namespace", "spellsource"]]
+         [kubectlBinary, "rollout", "restart", "statefulset/keycloak", "--namespace", "spellsource"]]
                 .forEach({ cmd ->
                     exec { t ->
                         Utilities.dotEnv(t, new File("${privateProject.projectDir}/src/secrets/common-deployment.env"))
-                        environment "KUBECONFIG", "$taskPath/../kubeconfig.yaml"
+                        environment "KUBECONFIG", kubeconfigPath
                         commandLine(cmd)
                     }
                 })
