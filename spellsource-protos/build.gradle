@@ -22,7 +22,15 @@ plugins {
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def csharpRootDir = 'src/csharp/HiddenSwitch'
 def dotnetCmd = ["dotnet"]
-def csharpGrpcPath = "$project.rootProject.projectDir/bin/grpc_csharp_plugin" + (isWindows ? ".exe" : "")
+def csharpGrpcPath = "";
+if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+    csharpGrpcPath = "$project.rootProject.projectDir/bin/grpc_csharp_plugin.exe"
+} else if (Os.isFamily(Os.FAMILY_MAC)) {
+    csharpGrpcPath = "$project.rootProject.projectDir/bin/grpc_csharp_plugin"
+} else {
+    csharpGrpcPath = "$project.rootProject.projectDir/bin/linux/grpc_csharp_plugin"
+}
+
 
 dependencies {
     api group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
