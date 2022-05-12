@@ -363,6 +363,12 @@ test {
     dependsOn += [createPostgresImage]
     useJUnitPlatform()
     enableAssertions = false
+    testLogging {
+        showExceptions true
+        exceptionFormat "full"
+        showCauses true
+        showStackTraces true
+    }
 }
 
 task testLegacyMigration(type: Test, group: 'Spellsource') {
