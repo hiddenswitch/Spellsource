@@ -9,9 +9,9 @@ apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 dependencies {
-    implementation 'org.slf4j:slf4j-api:1.7.22'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
     implementation 'org.jetbrains:annotations:16.0.2'
-    runtimeOnly 'ch.qos.logback:logback-classic:1.2.3'
+    runtimeOnly 'ch.qos.logback:logback-classic:1.2.11'
     implementation "com.google.guava:guava:$guavaVersion"
 
     testImplementation project(':spellsource-testutils')
@@ -22,7 +22,7 @@ dependencies {
     implementation project(':spellsource-protos')
     implementation project(':spellsource-common')
     implementation project(':spellsource-cards-git')
-    implementation('net.dv8tion:JDA:4.2.0_187') {
+    implementation("net.dv8tion:JDA:5.0.0-alpha.10") {
         exclude module: 'opus-java'
     }
 }

@@ -20,7 +20,6 @@ allprojects {
 
 subprojects {
     repositories {
-        jcenter()
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
@@ -95,7 +94,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'commons-io') {
-                    details.useVersion "2.4"
+                    details.useVersion "2.11.0"
                 }
 
                 if (details.requested.group == 'commons-logging') {

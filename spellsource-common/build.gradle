@@ -7,10 +7,10 @@ group 'com.hiddenswitch'
 dependencies {
     api "com.hiddenswitch:quasar-core:10.0.6"
     api "io.vertx:vertx-core:$vertxVersion"
-    api 'org.slf4j:slf4j-api:1.7.22'
+    api 'org.slf4j:slf4j-api:1.7.36'
     api "com.google.guava:guava:$guavaVersion"
     api 'org.jetbrains:annotations:16.0.2'
-    api 'com.fasterxml.jackson.core:jackson-databind:2.10.2'
+    api "com.fasterxml.jackson.core:jackson-databind:$jacksonDatabindVersion"
     api "io.jaegertracing:jaeger-client:$jaegerVersion"
     implementation "io.github.classgraph:classgraph:$classgraphVersion"
 }

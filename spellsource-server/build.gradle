@@ -100,9 +100,9 @@ dependencies {
     implementation "org.keycloak:keycloak-server-spi-private:$keycloakVersion"
 
     // environment
-    implementation "ch.qos.logback:logback-classic:1.2.3"
+    implementation "ch.qos.logback:logback-classic:1.2.11"
     implementation 'org.slf4j:slf4j-simple:1.7.36'
-    implementation group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.2'
+    implementation group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.7'
     implementation("com.databasesandlife:java-common:$databasesandlifeVersion") {
         exclude group: 'com.google.gdata', module: '*'
         exclude group: 'log4j', module: '*'

@@ -17,5 +17,5 @@ dependencies {
     implementation "com.google.guava:guava:$guavaVersion"
     implementation 'org.apache.commons:commons-lang3:3.7'
     implementation 'org.apache.commons:commons-math3:3.7'
-    implementation 'commons-io:commons-io:2.4'
+    implementation 'commons-io:commons-io:2.11.0'
 }
