@@ -9,8 +9,8 @@ from setuptools.command.install import install
 
 DIR = pathlib.Path(__file__).parent.absolute()
 
-if sys.version_info < (3, 6):
-    sys.exit('Spellsource requires at least Python 3.6\n  Visit https://www.python.org/downloads/ to download it.')
+if sys.version_info < (3, 8):
+    sys.exit('Spellsource requires at least Python 3.8\n  Visit https://www.python.org/downloads/ to download it.')
 
 try:
     java_version = subprocess.check_output(["java", "-version"], stderr=subprocess.STDOUT).decode('utf-8')
@@ -68,7 +68,7 @@ setup(name='spellsource',
       include_package_data=True,
       author_email='ben@hiddenswitch.com',
       license='AGPLv3',
-      install_requires=['py4j==0.10.8.1',
+      install_requires=['py4j==0.10.9.5',
                         'tqdm>=4',
                         'objdict',
                         'msgpack',

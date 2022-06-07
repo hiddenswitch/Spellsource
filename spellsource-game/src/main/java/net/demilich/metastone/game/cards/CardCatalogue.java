@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.nio.file.spi.FileSystemProvider;
 import java.util.*;
@@ -101,8 +102,8 @@ public class CardCatalogue {
 	 * {@link DeckFormat} filters here, and will return any card with a valid ID.
 	 * <p>
 	 * Some effects, like {@link net.demilich.metastone.game.spells.CastFromGroupSpell}, create temporary cards that exist
-	 * only in the game context. Generally, you should call {@link net.demilich.metastone.game.GameContext#getCardById(String)}
-	 * in order to correctly retrieve those cards.
+	 * only in the game context. Generally, you should call
+	 * {@link net.demilich.metastone.game.GameContext#getCardById(String)} in order to correctly retrieve those cards.
 	 *
 	 * @param id
 	 * @return
@@ -271,15 +272,8 @@ public class CardCatalogue {
 		}
 
 		var id = cardDesc.getId();
-		ReaderInputStream targetStream = null;
-		try {
-			targetStream =
-					new ReaderInputStream(CharSource.wrap(Json.encode(cardDesc)).openStream());
+		try (ReaderInputStream targetStream = new ReaderInputStream(CharSource.wrap(Json.encode(cardDesc)).openStream(), Charset.defaultCharset())) {
 			loadCards(Collections.singletonList(new ResourceInputStream(id + ".json", targetStream)));
-		} finally {
-			if (targetStream != null) {
-				targetStream.close();
-			}
 		}
 		return id;
 	}
@@ -521,7 +515,8 @@ public class CardCatalogue {
 					.map(thisClass -> {
 						try {
 							return (CardResources) thisClass.getConstructor().newInstance();
-						} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+						} catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+						         NoSuchMethodException e) {
 							throw new RuntimeException(e);
 						}
 					})

@@ -58,7 +58,7 @@ class Context(contextlib.AbstractContextManager):
             self.status = Context.STATUS_FAILED
             raise FileNotFoundError(
                 'Is Java installed? On Windows, is java.exe somewhere in your PATH? If this command was run from the '
-                'repository, did you run ./gradlew net:shadowJar (./gradlew.bat net:shadowJar on Windows)? These '
+                'repository, did you run ./gradlew spellsource-server:shadowJar (./gradlew.bat spellsource-server:shadowJar on Windows)? These '
                 'commands build the Java library.')
         except Exception as ex:
             self.status = Context.STATUS_FAILED
@@ -75,8 +75,7 @@ class Context(contextlib.AbstractContextManager):
                               ('targeting', 'net.demilich.metastone.game.targeting.*'),
                               ('utils', 'net.demilich.metastone.game.utils.*'),
                               ('behaviour', 'net.demilich.metastone.game.behaviour.*'),
-                              ('spellsource', 'com.hiddenswitch.spellsource.net.*'),
-                              ('applications', 'com.hiddenswitch.spellsource.net.applications.*'),
+                              ('framework', 'com.hiddenswitch.framework.*'),
                               ('util', 'java.util.*')):
             view = self._gateway.new_jvm_view(name)
             java_import(view, package)
@@ -104,9 +103,8 @@ class Context(contextlib.AbstractContextManager):
         self.Zones = self.targeting.Zones
         self.HeroClass = self.entities.heroes.HeroClass
         self.CardCatalogue = self.cards.CardCatalogue
-        self.PythonBridge = self.applications.PythonBridge
+        self.PythonBridge = self.framework.PythonBridge
         self.ArrayList = self.util.ArrayList
-        self.Spellsource = self.spellsource.Spellsource
 
         self.CardCatalogue.loadCardsFromPackage()
         self.status = Context.STATUS_READY
@@ -143,7 +141,7 @@ class Context(contextlib.AbstractContextManager):
         self.close()
 
     @staticmethod
-    def find_resource_path(filename='net-0.8.89-all.jar'):
+    def find_resource_path(filename='spellsource-server-0.9.0-all.jar'):
         """
         Tries to find the path where the Spellsource jar is located.
         """
@@ -151,8 +149,8 @@ class Context(contextlib.AbstractContextManager):
         paths.append(filename)
         # local
         dirname = os.path.dirname(os.path.realpath(__file__))
-        paths.append(os.path.join(dirname, '..', '..', 'net', 'build', 'libs', filename))
-        paths.append(os.path.join(dirname, '..', '..', 'internalcontent', 'build', 'libs', filename))
+        paths.append(os.path.join(dirname, '..', '..', 'spellsource-server', 'build', 'libs', filename))
+        paths.append(os.path.join(dirname, '..', '..', 'spellsource-cards-private', 'build', 'libs', filename))
         paths.append(os.path.join(dirname, '..', 'docs', filename))
         paths.append(os.path.join(dirname, '..', 'share', 'spellsource', filename))
         paths.append(os.path.join(sys.prefix, 'share', 'spellsource', filename))
@@ -177,9 +175,9 @@ class Context(contextlib.AbstractContextManager):
     def _start_gateway(port=0) -> JavaGateway:
         # launch Java side with dynamic port and get back the port on which the
         # server was bound to.
-        net_jar_path = Context.find_resource_path('net-0.8.89-all.jar')
+        net_jar_path = Context.find_resource_path('spellsource-server-0.9.0-all.jar')
         try:
-            internalcontent_jar_path = Context.find_resource_path('internalcontent-0.8.89.jar')
+            internalcontent_jar_path = Context.find_resource_path('spellsource-cards-private-0.9.0.jar')
         except:
             internalcontent_jar_path = None
         port = launch_gateway(port=port,

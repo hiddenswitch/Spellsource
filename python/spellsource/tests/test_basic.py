@@ -123,6 +123,7 @@ class BasicTest(unittest.TestCase):
             self.assertIsNotNone(results)
             self.assertEqual(len(results), 6)
 
+    @unittest.skip("FiberBehaviour is deprecated")
     def test_faq(self):
         from spellsource.context import Context
         with Context() as ctx:

@@ -19,7 +19,7 @@ class PlayRandomBehaviour(Behaviour):
         return 'Python test behaviour'
     
     def mulligan(self, context, player, cards):
-        return self.random.sample(cards, self.random.randrange(0, len(cards)))
+        return []
     
     def request_action(self, context, player, valid_actions):
         return self.random.choice(valid_actions)
