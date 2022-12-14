@@ -2,9 +2,6 @@ plugins {
     id 'java-library'
 }
 
-apply plugin: 'java-library'
-apply from: '../gradle/instrument.gradle'
-
 group 'com.hiddenswitch'
 
 dependencies {

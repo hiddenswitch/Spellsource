@@ -2,15 +2,11 @@ plugins {
     id 'java-library'
 }
 
-apply plugin: 'java-library'
-apply from: '../gradle/instrument.gradle'
-
 dependencies {
     api project(':spellsource-common')
     api project(':spellsource-protos')
     api "io.vertx:vertx-core:$vertxVersion"
     implementation "io.github.classgraph:classgraph:$classgraphVersion"
-    implementation project(':vertx-sync')
 
     implementation 'org.slf4j:slf4j-api'
     api 'org.jetbrains:annotations'

@@ -2,8 +2,6 @@ plugins {
     id 'java-library'
 }
 
-apply plugin: 'java-library'
-
 dependencies {
     implementation project(':spellsource-common')
     testImplementation 'com.hiddenswitch:quasar-core:10.0.6'
