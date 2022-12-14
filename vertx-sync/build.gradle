@@ -6,8 +6,8 @@ apply from: '../gradle/instrument.gradle'
 
 dependencies {
     api "io.vertx:vertx-core:$vertxVersion"
-    api 'org.jetbrains:annotations:16.0.2'
-    implementation 'org.slf4j:slf4j-api:1.7.36'
+    api 'org.jetbrains:annotations'
+    implementation 'org.slf4j:slf4j-api'
     implementation "com.google.guava:guava:$guavaVersion"
     implementation 'io.vertx:vertx-docgen:0.9.2'
     implementation "io.vertx:vertx-codegen:$vertxVersion"

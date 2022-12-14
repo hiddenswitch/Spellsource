@@ -30,7 +30,7 @@ subprojects {
             failOnVersionConflict()
             eachDependency { DependencyResolveDetails details ->
                 if (details.requested.module.name == 'slf4j-api') {
-                    details.useVersion '1.7.30'
+                    details.useVersion '2.0.4'
                 }
                 if ([
                         'com.fasterxml.jackson.core',
@@ -39,90 +39,82 @@ subprojects {
                         'com.fasterxml.jackson.module',
                         'com.fasterxml.jackson.dataformat'
                 ].contains(details.requested.group)) {
-                    if (details.requested.name == 'jackson-databind') {
-                        details.useVersion jacksonDatabindVersion
-                    } else {
-                        details.useVersion jacksonVersion
-                    }
-                }
-
-                if (details.requested.group == 'io.jaegertracing') {
-                    details.useVersion '1.2.0'
+                    details.useVersion jacksonVersion
                 }
 
                 if (details.requested.group == 'io.netty'
                         && details.requested.version.contains('Final')
                         && details.requested.name != 'netty-tcnative-boringssl-static'
                         && details.requested.name != 'netty-tcnative-classes') {
-                    details.useVersion "4.1.74.Final"
+                    details.useVersion nettyVersion
                 }
 
                 if (details.requested.group == 'org.checkerframework' && details.requested.module.name == 'checker-qual') {
-                    details.useVersion '3.5.0'
+                    details.useVersion '3.28.0'
                 }
 
-                if (details.requested.group == 'org.apache.zookeeper') {
-                    details.useVersion '3.5.8'
-                }
+//                if (details.requested.group == 'org.apache.zookeeper') {
+//                    details.useVersion '3.5.8'
+//                }
 
                 if (details.requested.module.name == 'reactive-streams') {
-                    details.useVersion '1.0.3'
+                    details.useVersion '1.0.4'
                 }
 
                 if (details.requested.group == 'org.apache.commons' && details.requested.module.name == "commons-math3") {
-                    details.useVersion "3.5"
+                    details.useVersion "3.6.1"
                 }
-
-                if (details.requested.group == 'org.apache.commons' && details.requested.module.name == "commons-lang3") {
-                    details.useVersion "3.7"
-                }
-
+//
+//                if (details.requested.group == 'org.apache.commons' && details.requested.module.name == "commons-lang3") {
+//                    details.useVersion "3.7"
+//                }
+//
                 if (details.requested.group == 'io.reactivex.rxjava3' && details.requested.module.name == "rxjava") {
-                    details.useVersion "3.0.7"
+                    details.useVersion "3.0.13"
                 }
-
-                if (details.requested.group == 'commons-lang') {
-                    details.useVersion "2.5"
-                }
-
-                if (details.requested.group == 'commons-collections') {
-                    details.useVersion "3.2.2"
-                }
-
-                if (details.requested.group == 'org.apache.commons' && details.requested.module.name == 'commons-collections4') {
-                    details.useVersion "4.2"
-                }
-
+//
+//                if (details.requested.group == 'commons-lang') {
+//                    details.useVersion "2.5"
+//                }
+//
+//                if (details.requested.group == 'commons-collections') {
+//                    details.useVersion "3.2.2"
+//                }
+//
+//                if (details.requested.group == 'org.apache.commons' && details.requested.module.name == 'commons-collections4') {
+//                    details.useVersion "4.2"
+//                }
+//
                 if (details.requested.group == 'commons-io') {
                     details.useVersion "2.11.0"
                 }
-
-                if (details.requested.group == 'commons-logging') {
-                    details.useVersion "1.2"
-                }
+//
+//                if (details.requested.group == 'commons-logging') {
+//                    details.useVersion "1.2"
+//                }
 
                 if (details.requested.group == 'ch.qos.logback') {
-                    details.useVersion "1.3.0-alpha5"
+                    details.useVersion "1.3.5"
                 }
 
                 if (details.requested.group == 'com.sun.mail' && details.requested.module.name == 'javax.mail') {
                     details.useVersion "1.6.2"
                 }
+//
+//                if (details.requested.group == 'log4j') {
+//                    details.useVersion "1.2.17"
+//                }
 
-                if (details.requested.group == 'log4j') {
-                    details.useVersion "1.2.17"
-                }
-
-                if (details.requested.group == 'com.google.truth') {
-                    details.useVersion '0.42'
-                }
-
-                if (details.requested.group == 'com.google.j2objc') {
-                    details.useVersion '1.3'
-                }
-
+//                if (details.requested.group == 'com.google.truth') {
+//                    details.useVersion '0.42'
+//                }
+//
+//                if (details.requested.group == 'com.google.j2objc') {
+//                    details.useVersion '1.3'
+//                }
+//
                 if (details.requested.module.name == 'mockito-core') {
-                    details.useVersion '2.24.5'
+                    details.useVersion '4.8.0'
                 }
 
                 if (details.requested.group == 'com.google.guava' && details.requested.module.name == 'guava') {
@@ -133,129 +125,150 @@ subprojects {
                     details.useVersion protocVersion
                 }
 
-                if (details.requested.name == 'micronaut-inject' || details.requested.name == 'micronaut-runtime') {
-                    details.useVersion '1.3.7'
+                if (details.requested.group == 'org.openjdk.jmh') {
+                    details.useVersion jmhVersion
                 }
-
-                if (details.requested.group == 'org.graalvm.nativeimage') {
-                    details.useVersion '20.2.0'
-                }
+//
+//                if (details.requested.name == 'micronaut-inject' || details.requested.name == 'micronaut-runtime') {
+//                    details.useVersion '1.3.7'
+//                }
+//
+//                if (details.requested.group == 'org.graalvm.nativeimage') {
+//                    details.useVersion '20.2.0'
+//                }
 
                 if (details.requested.group == 'org.junit.jupiter') {
                     details.useVersion junitVersion
                 }
-
-                if (details.requested.name == 'joda-time') {
-                    details.useVersion '2.10.2'
+//
+//                if (details.requested.name == 'joda-time') {
+//                    details.useVersion '2.10.2'
+//                }
+//
+                if (details.requested.group == 'org.jetbrains' && details.requested.name == 'annotations') {
+                    details.useVersion '23.0.0'
                 }
 
-                if (details.requested.group == 'org.jetbrains' && details.requested.name == 'annotations') {
-                    details.useVersion '16.0.2'
+                if (details.requested.group == 'org.jetbrains.kotlin') {
+                    details.useVersion '1.4.10'
                 }
 
                 if (details.requested.group == 'net.bytebuddy') {
-                    details.useVersion '1.9.7'
+                    details.useVersion '1.12.14'
                 }
-
-                if (details.requested.group == 'org.javassist') {
-                    details.useVersion '3.24.0-GA'
-                }
-
-                if (details.requested.group == 'com.squareup.okhttp3') {
-                    details.useVersion '3.13.0'
-                }
-
+//
+//                if (details.requested.group == 'org.javassist') {
+//                    details.useVersion '3.24.0-GA'
+//                }
+//
+//                if (details.requested.group == 'com.squareup.okhttp3') {
+//                    details.useVersion '3.13.0'
+//                }
+//
                 if (details.requested.group == 'org.apache.httpcomponents' && details.requested.name == 'httpclient') {
-                    details.useVersion '4.5.4'
+                    details.useVersion '4.5.13'
                 }
 
                 if (details.requested.group == 'org.jboss.logging') {
                     details.useVersion '3.4.1.Final'
                 }
-
-                if (details.requested.group == 'io.reactivex.rxjava2') {
-                    details.useVersion '2.2.20'
-                }
-
-                if (details.requested.group == 'javax.xml.bind' && details.requested.module.name == 'jaxb-api') {
-                    details.useVersion '2.3.1'
-                }
-
-                if (details.requested.group == 'com.google.code.gson') {
-                    details.useVersion '2.8.6'
-                }
-
+//
+//                if (details.requested.group == 'io.reactivex.rxjava2') {
+//                    details.useVersion '2.2.20'
+//                }
+//
+//                if (details.requested.group == 'javax.xml.bind' && details.requested.module.name == 'jaxb-api') {
+//                    details.useVersion '2.3.1'
+//                }
+//
+//                if (details.requested.group == 'com.google.code.gson') {
+//                    details.useVersion '2.8.6'
+//                }
+//
                 if (details.requested.group == 'com.google.code.findbugs') {
-                    details.useVersion '3.0.1'
+                    details.useVersion '3.0.2'
                 }
-
+//
                 if (details.requested.group == 'com.google.errorprone') {
-                    details.useVersion '2.1.3'
+                    details.useVersion '2.11.0'
                 }
 
                 if (details.requested.group == 'io.grpc') {
                     details.useVersion grpcVersion
                 }
 
-                if (details.requested.group == 'com.github.docker-java') {
-                    details.useVersion '3.2.13'
-                }
+//                if (details.requested.group == 'com.github.docker-java') {
+//                    details.useVersion '3.2.13'
+//                }
 
                 if (details.requested.group == 'org.testcontainers') {
                     details.useVersion testcontainersVersion
                 }
-
-                if (details.requested.group == 'org.apache.ignite') {
-                    details.useVersion '2.8.1'
-                }
-
-                if (details.requested.group == 'org.jvnet.mimepull') {
-                    details.useVersion '1.9.10'
-                }
-
+//
+//                if (details.requested.group == 'org.apache.ignite') {
+//                    details.useVersion '2.8.1'
+//                }
+//
+//                if (details.requested.group == 'org.jvnet.mimepull') {
+//                    details.useVersion '1.9.10'
+//                }
+//
                 if (details.requested.group == 'commons-codec') {
-                    details.useVersion '1.13'
+                    details.useVersion '1.15'
                 }
-
-                if (details.requested.group == 'org.codehaus.mojo') {
-                    details.useVersion '1.17'
-                }
-
-                if (details.requested.group == 'org.glassfish.jaxb' && details.requested.name == 'jaxb-runtime') {
-                    details.useVersion '2.3.1'
-                }
-
+//
+//                if (details.requested.group == 'org.codehaus.mojo') {
+//                    details.useVersion '1.17'
+//                }
+//
+//                if (details.requested.group == 'org.glassfish.jaxb' && details.requested.name == 'jaxb-runtime') {
+//                    details.useVersion '2.3.1'
+//                }
+//
                 if (details.requested.group == 'com.sun.activation' && details.requested.name == 'jakarta.activation') {
-                    details.useVersion '2.0.0'
+                    details.useVersion '2.0.1'
                 }
-
-                if (details.requested.group == 'org.jboss.resteasy') {
-                    details.useVersion '4.5.6.Final'
-                }
-
+//
+//                if (details.requested.group == 'org.jboss.resteasy') {
+//                    details.useVersion '4.5.6.Final'
+//                }
+//
                 if (details.requested.group == 'org.yaml' && details.requested.name == 'snakeyaml') {
-                    details.useVersion '1.27'
+                    details.useVersion '1.33'
                 }
+
+                if (details.requested.group == 'jakarta.xml.bind') {
+                    details.useVersion "3.0.1"
+                }
+
+                if (details.requested.group == 'jakarta.validation') {
+                    details.useVersion "3.0.1"
+                }
+
+                if (details.requested.group == 'jakarta.activation') {
+                    details.useVersion "2.1.0"
+                }
+
 
                 if (details.requested.group == 'io.micrometer') {
-                    details.useVersion '1.5.1'
+                    details.useVersion '1.10.2'
                 }
-
-                if (details.requested.group == 'org.hdrhistogram') {
-                    details.useVersion '2.1.12'
-                }
-
-                if (details.requested.group == 'javax.cache') {
-                    details.useVersion '1.1.1'
-                }
-
+//
+//                if (details.requested.group == 'org.hdrhistogram') {
+//                    details.useVersion '2.1.12'
+//                }
+//
+//                if (details.requested.group == 'javax.cache') {
+//                    details.useVersion '1.1.1'
+//                }
+//
                 if (details.requested.group == 'com.github.ben-manes.caffeine') {
                     details.useVersion '2.8.4'
                 }
-
-                if (details.requested.group == 'net.java.dev.jna') {
-                    details.useVersion '5.10.0'
-                }
+//
+//                if (details.requested.group == 'net.java.dev.jna') {
+//                    details.useVersion '5.10.0'
+//                }
             }
         }
     }

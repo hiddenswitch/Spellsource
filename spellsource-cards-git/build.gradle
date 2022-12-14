@@ -9,7 +9,7 @@ dependencies {
     testImplementation 'com.hiddenswitch:quasar-core:10.0.6'
     testImplementation "com.google.guava:guava:$guavaVersion"
     testImplementation "io.github.classgraph:classgraph:$classgraphVersion"
-    testImplementation 'org.jetbrains:annotations:16.0.2'
+    testImplementation 'org.jetbrains:annotations'
     testImplementation project(':spellsource-testutils')
     testRuntimeOnly "ch.qos.logback:logback-classic:1.2.11"
     testRuntimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.7'

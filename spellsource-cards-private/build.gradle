@@ -9,7 +9,7 @@ group 'com.hiddenswitch'
 dependencies {
     implementation project(':spellsource-common')
     api project(':spellsource-protos')
-    testImplementation 'org.jetbrains:annotations:16.0.2'
+    testImplementation 'org.jetbrains:annotations'
     testImplementation "com.google.guava:guava:$guavaVersion"
     testImplementation 'com.hiddenswitch:quasar-core:10.0.6'
     testImplementation project(':spellsource-testutils')

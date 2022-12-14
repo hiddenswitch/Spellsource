@@ -49,8 +49,9 @@ dependencies {
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
     }
-    api("com.hubspot.jackson:jackson-datatype-protobuf:0.9.12") {
+    api("com.hubspot.jackson:jackson-datatype-protobuf:0.9.13") {
         exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
+        exclude group: 'com.google.code.findbugs', module: 'annotations'
     }
     api('com.netflix.concurrency-limits:concurrency-limits-grpc:0.3.6') {
         exclude group: 'com.google.protobuf', module: 'protobuf-java'

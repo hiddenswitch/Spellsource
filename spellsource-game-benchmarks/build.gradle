@@ -1,6 +1,6 @@
 plugins {
     id 'java-library'
-    id "me.champeau.gradle.jmh" version "0.5.2"
+    id "me.champeau.gradle.jmh" version "0.5.3"
 }
 
 apply plugin: 'java-library'
@@ -10,7 +10,7 @@ apply from: '../gradle/instrument.gradle'
 dependencies {
     implementation project(':spellsource-game')
     implementation project(':spellsource-cards-git')
-    implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'org.slf4j:slf4j-api'
 
     jmh "org.openjdk.jmh:jmh-core:$jmhVersion"
     jmh "org.openjdk.jmh:jmh-generator-annprocess:$jmhVersion"
