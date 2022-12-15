@@ -18,33 +18,33 @@ public class Realm implements VertxPojo, IRealm {
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
+    private String id;
     private Integer accessCodeLifespan;
     private Integer userActionLifespan;
     private Integer accessTokenLifespan;
-    private String  accountTheme;
-    private String  adminTheme;
-    private String  emailTheme;
+    private String accountTheme;
+    private String adminTheme;
+    private String emailTheme;
     private Boolean enabled;
     private Boolean eventsEnabled;
-    private Long    eventsExpiration;
-    private String  loginTheme;
-    private String  name;
+    private Long eventsExpiration;
+    private String loginTheme;
+    private String name;
     private Integer notBefore;
-    private String  passwordPolicy;
+    private String passwordPolicy;
     private Boolean registrationAllowed;
     private Boolean rememberMe;
     private Boolean resetPasswordAllowed;
     private Boolean social;
-    private String  sslRequired;
+    private String sslRequired;
     private Integer ssoIdleTimeout;
     private Integer ssoMaxLifespan;
     private Boolean updateProfileOnSocLogin;
     private Boolean verifyEmail;
-    private String  masterAdminClient;
+    private String masterAdminClient;
     private Integer loginLifespan;
     private Boolean internationalizationEnabled;
-    private String  defaultLocale;
+    private String defaultLocale;
     private Boolean regEmailAsUsername;
     private Boolean adminEventsEnabled;
     private Boolean adminEventsDetailsEnabled;
@@ -53,19 +53,24 @@ public class Realm implements VertxPojo, IRealm {
     private Integer otpPolicyWindow;
     private Integer otpPolicyPeriod;
     private Integer otpPolicyDigits;
-    private String  otpPolicyAlg;
-    private String  otpPolicyType;
-    private String  browserFlow;
-    private String  registrationFlow;
-    private String  directGrantFlow;
-    private String  resetCredentialsFlow;
-    private String  clientAuthFlow;
+    private String otpPolicyAlg;
+    private String otpPolicyType;
+    private String browserFlow;
+    private String registrationFlow;
+    private String directGrantFlow;
+    private String resetCredentialsFlow;
+    private String clientAuthFlow;
     private Integer offlineSessionIdleTimeout;
     private Boolean revokeRefreshToken;
     private Integer accessTokenLifeImplicit;
     private Boolean loginWithEmailAllowed;
     private Boolean duplicateEmailsAllowed;
-    private String  dockerAuthFlow;
+    private String dockerAuthFlow;
+    private Integer refreshTokenMaxReuse;
+    private Boolean allowUserManagedAccess;
+    private Integer ssoMaxLifespanRememberMe;
+    private Integer ssoIdleTimeoutRememberMe;
+    private String defaultRole;
 
     public Realm() {}
 
@@ -118,36 +123,41 @@ public class Realm implements VertxPojo, IRealm {
         this.loginWithEmailAllowed = value.getLoginWithEmailAllowed();
         this.duplicateEmailsAllowed = value.getDuplicateEmailsAllowed();
         this.dockerAuthFlow = value.getDockerAuthFlow();
+        this.refreshTokenMaxReuse = value.getRefreshTokenMaxReuse();
+        this.allowUserManagedAccess = value.getAllowUserManagedAccess();
+        this.ssoMaxLifespanRememberMe = value.getSsoMaxLifespanRememberMe();
+        this.ssoIdleTimeoutRememberMe = value.getSsoIdleTimeoutRememberMe();
+        this.defaultRole = value.getDefaultRole();
     }
 
     public Realm(
-        String  id,
+        String id,
         Integer accessCodeLifespan,
         Integer userActionLifespan,
         Integer accessTokenLifespan,
-        String  accountTheme,
-        String  adminTheme,
-        String  emailTheme,
+        String accountTheme,
+        String adminTheme,
+        String emailTheme,
         Boolean enabled,
         Boolean eventsEnabled,
-        Long    eventsExpiration,
-        String  loginTheme,
-        String  name,
+        Long eventsExpiration,
+        String loginTheme,
+        String name,
         Integer notBefore,
-        String  passwordPolicy,
+        String passwordPolicy,
         Boolean registrationAllowed,
         Boolean rememberMe,
         Boolean resetPasswordAllowed,
         Boolean social,
-        String  sslRequired,
+        String sslRequired,
         Integer ssoIdleTimeout,
         Integer ssoMaxLifespan,
         Boolean updateProfileOnSocLogin,
         Boolean verifyEmail,
-        String  masterAdminClient,
+        String masterAdminClient,
         Integer loginLifespan,
         Boolean internationalizationEnabled,
-        String  defaultLocale,
+        String defaultLocale,
         Boolean regEmailAsUsername,
         Boolean adminEventsEnabled,
         Boolean adminEventsDetailsEnabled,
@@ -156,19 +166,24 @@ public class Realm implements VertxPojo, IRealm {
         Integer otpPolicyWindow,
         Integer otpPolicyPeriod,
         Integer otpPolicyDigits,
-        String  otpPolicyAlg,
-        String  otpPolicyType,
-        String  browserFlow,
-        String  registrationFlow,
-        String  directGrantFlow,
-        String  resetCredentialsFlow,
-        String  clientAuthFlow,
+        String otpPolicyAlg,
+        String otpPolicyType,
+        String browserFlow,
+        String registrationFlow,
+        String directGrantFlow,
+        String resetCredentialsFlow,
+        String clientAuthFlow,
         Integer offlineSessionIdleTimeout,
         Boolean revokeRefreshToken,
         Integer accessTokenLifeImplicit,
         Boolean loginWithEmailAllowed,
         Boolean duplicateEmailsAllowed,
-        String  dockerAuthFlow
+        String dockerAuthFlow,
+        Integer refreshTokenMaxReuse,
+        Boolean allowUserManagedAccess,
+        Integer ssoMaxLifespanRememberMe,
+        Integer ssoIdleTimeoutRememberMe,
+        String defaultRole
     ) {
         this.id = id;
         this.accessCodeLifespan = accessCodeLifespan;
@@ -218,6 +233,11 @@ public class Realm implements VertxPojo, IRealm {
         this.loginWithEmailAllowed = loginWithEmailAllowed;
         this.duplicateEmailsAllowed = duplicateEmailsAllowed;
         this.dockerAuthFlow = dockerAuthFlow;
+        this.refreshTokenMaxReuse = refreshTokenMaxReuse;
+        this.allowUserManagedAccess = allowUserManagedAccess;
+        this.ssoMaxLifespanRememberMe = ssoMaxLifespanRememberMe;
+        this.ssoIdleTimeoutRememberMe = ssoIdleTimeoutRememberMe;
+        this.defaultRole = defaultRole;
     }
 
         public Realm(io.vertx.core.json.JsonObject json) {
@@ -1041,6 +1061,481 @@ public class Realm implements VertxPojo, IRealm {
         return this;
     }
 
+    /**
+     * Getter for <code>keycloak.realm.refresh_token_max_reuse</code>.
+     */
+    @Override
+    public Integer getRefreshTokenMaxReuse() {
+        return this.refreshTokenMaxReuse;
+    }
+
+    /**
+     * Setter for <code>keycloak.realm.refresh_token_max_reuse</code>.
+     */
+    @Override
+    public Realm setRefreshTokenMaxReuse(Integer refreshTokenMaxReuse) {
+        this.refreshTokenMaxReuse = refreshTokenMaxReuse;
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.realm.allow_user_managed_access</code>.
+     */
+    @Override
+    public Boolean getAllowUserManagedAccess() {
+        return this.allowUserManagedAccess;
+    }
+
+    /**
+     * Setter for <code>keycloak.realm.allow_user_managed_access</code>.
+     */
+    @Override
+    public Realm setAllowUserManagedAccess(Boolean allowUserManagedAccess) {
+        this.allowUserManagedAccess = allowUserManagedAccess;
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.realm.sso_max_lifespan_remember_me</code>.
+     */
+    @Override
+    public Integer getSsoMaxLifespanRememberMe() {
+        return this.ssoMaxLifespanRememberMe;
+    }
+
+    /**
+     * Setter for <code>keycloak.realm.sso_max_lifespan_remember_me</code>.
+     */
+    @Override
+    public Realm setSsoMaxLifespanRememberMe(Integer ssoMaxLifespanRememberMe) {
+        this.ssoMaxLifespanRememberMe = ssoMaxLifespanRememberMe;
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.realm.sso_idle_timeout_remember_me</code>.
+     */
+    @Override
+    public Integer getSsoIdleTimeoutRememberMe() {
+        return this.ssoIdleTimeoutRememberMe;
+    }
+
+    /**
+     * Setter for <code>keycloak.realm.sso_idle_timeout_remember_me</code>.
+     */
+    @Override
+    public Realm setSsoIdleTimeoutRememberMe(Integer ssoIdleTimeoutRememberMe) {
+        this.ssoIdleTimeoutRememberMe = ssoIdleTimeoutRememberMe;
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.realm.default_role</code>.
+     */
+    @Override
+    public String getDefaultRole() {
+        return this.defaultRole;
+    }
+
+    /**
+     * Setter for <code>keycloak.realm.default_role</code>.
+     */
+    @Override
+    public Realm setDefaultRole(String defaultRole) {
+        this.defaultRole = defaultRole;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Realm other = (Realm) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.accessCodeLifespan == null) {
+            if (other.accessCodeLifespan != null)
+                return false;
+        }
+        else if (!this.accessCodeLifespan.equals(other.accessCodeLifespan))
+            return false;
+        if (this.userActionLifespan == null) {
+            if (other.userActionLifespan != null)
+                return false;
+        }
+        else if (!this.userActionLifespan.equals(other.userActionLifespan))
+            return false;
+        if (this.accessTokenLifespan == null) {
+            if (other.accessTokenLifespan != null)
+                return false;
+        }
+        else if (!this.accessTokenLifespan.equals(other.accessTokenLifespan))
+            return false;
+        if (this.accountTheme == null) {
+            if (other.accountTheme != null)
+                return false;
+        }
+        else if (!this.accountTheme.equals(other.accountTheme))
+            return false;
+        if (this.adminTheme == null) {
+            if (other.adminTheme != null)
+                return false;
+        }
+        else if (!this.adminTheme.equals(other.adminTheme))
+            return false;
+        if (this.emailTheme == null) {
+            if (other.emailTheme != null)
+                return false;
+        }
+        else if (!this.emailTheme.equals(other.emailTheme))
+            return false;
+        if (this.enabled == null) {
+            if (other.enabled != null)
+                return false;
+        }
+        else if (!this.enabled.equals(other.enabled))
+            return false;
+        if (this.eventsEnabled == null) {
+            if (other.eventsEnabled != null)
+                return false;
+        }
+        else if (!this.eventsEnabled.equals(other.eventsEnabled))
+            return false;
+        if (this.eventsExpiration == null) {
+            if (other.eventsExpiration != null)
+                return false;
+        }
+        else if (!this.eventsExpiration.equals(other.eventsExpiration))
+            return false;
+        if (this.loginTheme == null) {
+            if (other.loginTheme != null)
+                return false;
+        }
+        else if (!this.loginTheme.equals(other.loginTheme))
+            return false;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        if (this.notBefore == null) {
+            if (other.notBefore != null)
+                return false;
+        }
+        else if (!this.notBefore.equals(other.notBefore))
+            return false;
+        if (this.passwordPolicy == null) {
+            if (other.passwordPolicy != null)
+                return false;
+        }
+        else if (!this.passwordPolicy.equals(other.passwordPolicy))
+            return false;
+        if (this.registrationAllowed == null) {
+            if (other.registrationAllowed != null)
+                return false;
+        }
+        else if (!this.registrationAllowed.equals(other.registrationAllowed))
+            return false;
+        if (this.rememberMe == null) {
+            if (other.rememberMe != null)
+                return false;
+        }
+        else if (!this.rememberMe.equals(other.rememberMe))
+            return false;
+        if (this.resetPasswordAllowed == null) {
+            if (other.resetPasswordAllowed != null)
+                return false;
+        }
+        else if (!this.resetPasswordAllowed.equals(other.resetPasswordAllowed))
+            return false;
+        if (this.social == null) {
+            if (other.social != null)
+                return false;
+        }
+        else if (!this.social.equals(other.social))
+            return false;
+        if (this.sslRequired == null) {
+            if (other.sslRequired != null)
+                return false;
+        }
+        else if (!this.sslRequired.equals(other.sslRequired))
+            return false;
+        if (this.ssoIdleTimeout == null) {
+            if (other.ssoIdleTimeout != null)
+                return false;
+        }
+        else if (!this.ssoIdleTimeout.equals(other.ssoIdleTimeout))
+            return false;
+        if (this.ssoMaxLifespan == null) {
+            if (other.ssoMaxLifespan != null)
+                return false;
+        }
+        else if (!this.ssoMaxLifespan.equals(other.ssoMaxLifespan))
+            return false;
+        if (this.updateProfileOnSocLogin == null) {
+            if (other.updateProfileOnSocLogin != null)
+                return false;
+        }
+        else if (!this.updateProfileOnSocLogin.equals(other.updateProfileOnSocLogin))
+            return false;
+        if (this.verifyEmail == null) {
+            if (other.verifyEmail != null)
+                return false;
+        }
+        else if (!this.verifyEmail.equals(other.verifyEmail))
+            return false;
+        if (this.masterAdminClient == null) {
+            if (other.masterAdminClient != null)
+                return false;
+        }
+        else if (!this.masterAdminClient.equals(other.masterAdminClient))
+            return false;
+        if (this.loginLifespan == null) {
+            if (other.loginLifespan != null)
+                return false;
+        }
+        else if (!this.loginLifespan.equals(other.loginLifespan))
+            return false;
+        if (this.internationalizationEnabled == null) {
+            if (other.internationalizationEnabled != null)
+                return false;
+        }
+        else if (!this.internationalizationEnabled.equals(other.internationalizationEnabled))
+            return false;
+        if (this.defaultLocale == null) {
+            if (other.defaultLocale != null)
+                return false;
+        }
+        else if (!this.defaultLocale.equals(other.defaultLocale))
+            return false;
+        if (this.regEmailAsUsername == null) {
+            if (other.regEmailAsUsername != null)
+                return false;
+        }
+        else if (!this.regEmailAsUsername.equals(other.regEmailAsUsername))
+            return false;
+        if (this.adminEventsEnabled == null) {
+            if (other.adminEventsEnabled != null)
+                return false;
+        }
+        else if (!this.adminEventsEnabled.equals(other.adminEventsEnabled))
+            return false;
+        if (this.adminEventsDetailsEnabled == null) {
+            if (other.adminEventsDetailsEnabled != null)
+                return false;
+        }
+        else if (!this.adminEventsDetailsEnabled.equals(other.adminEventsDetailsEnabled))
+            return false;
+        if (this.editUsernameAllowed == null) {
+            if (other.editUsernameAllowed != null)
+                return false;
+        }
+        else if (!this.editUsernameAllowed.equals(other.editUsernameAllowed))
+            return false;
+        if (this.otpPolicyCounter == null) {
+            if (other.otpPolicyCounter != null)
+                return false;
+        }
+        else if (!this.otpPolicyCounter.equals(other.otpPolicyCounter))
+            return false;
+        if (this.otpPolicyWindow == null) {
+            if (other.otpPolicyWindow != null)
+                return false;
+        }
+        else if (!this.otpPolicyWindow.equals(other.otpPolicyWindow))
+            return false;
+        if (this.otpPolicyPeriod == null) {
+            if (other.otpPolicyPeriod != null)
+                return false;
+        }
+        else if (!this.otpPolicyPeriod.equals(other.otpPolicyPeriod))
+            return false;
+        if (this.otpPolicyDigits == null) {
+            if (other.otpPolicyDigits != null)
+                return false;
+        }
+        else if (!this.otpPolicyDigits.equals(other.otpPolicyDigits))
+            return false;
+        if (this.otpPolicyAlg == null) {
+            if (other.otpPolicyAlg != null)
+                return false;
+        }
+        else if (!this.otpPolicyAlg.equals(other.otpPolicyAlg))
+            return false;
+        if (this.otpPolicyType == null) {
+            if (other.otpPolicyType != null)
+                return false;
+        }
+        else if (!this.otpPolicyType.equals(other.otpPolicyType))
+            return false;
+        if (this.browserFlow == null) {
+            if (other.browserFlow != null)
+                return false;
+        }
+        else if (!this.browserFlow.equals(other.browserFlow))
+            return false;
+        if (this.registrationFlow == null) {
+            if (other.registrationFlow != null)
+                return false;
+        }
+        else if (!this.registrationFlow.equals(other.registrationFlow))
+            return false;
+        if (this.directGrantFlow == null) {
+            if (other.directGrantFlow != null)
+                return false;
+        }
+        else if (!this.directGrantFlow.equals(other.directGrantFlow))
+            return false;
+        if (this.resetCredentialsFlow == null) {
+            if (other.resetCredentialsFlow != null)
+                return false;
+        }
+        else if (!this.resetCredentialsFlow.equals(other.resetCredentialsFlow))
+            return false;
+        if (this.clientAuthFlow == null) {
+            if (other.clientAuthFlow != null)
+                return false;
+        }
+        else if (!this.clientAuthFlow.equals(other.clientAuthFlow))
+            return false;
+        if (this.offlineSessionIdleTimeout == null) {
+            if (other.offlineSessionIdleTimeout != null)
+                return false;
+        }
+        else if (!this.offlineSessionIdleTimeout.equals(other.offlineSessionIdleTimeout))
+            return false;
+        if (this.revokeRefreshToken == null) {
+            if (other.revokeRefreshToken != null)
+                return false;
+        }
+        else if (!this.revokeRefreshToken.equals(other.revokeRefreshToken))
+            return false;
+        if (this.accessTokenLifeImplicit == null) {
+            if (other.accessTokenLifeImplicit != null)
+                return false;
+        }
+        else if (!this.accessTokenLifeImplicit.equals(other.accessTokenLifeImplicit))
+            return false;
+        if (this.loginWithEmailAllowed == null) {
+            if (other.loginWithEmailAllowed != null)
+                return false;
+        }
+        else if (!this.loginWithEmailAllowed.equals(other.loginWithEmailAllowed))
+            return false;
+        if (this.duplicateEmailsAllowed == null) {
+            if (other.duplicateEmailsAllowed != null)
+                return false;
+        }
+        else if (!this.duplicateEmailsAllowed.equals(other.duplicateEmailsAllowed))
+            return false;
+        if (this.dockerAuthFlow == null) {
+            if (other.dockerAuthFlow != null)
+                return false;
+        }
+        else if (!this.dockerAuthFlow.equals(other.dockerAuthFlow))
+            return false;
+        if (this.refreshTokenMaxReuse == null) {
+            if (other.refreshTokenMaxReuse != null)
+                return false;
+        }
+        else if (!this.refreshTokenMaxReuse.equals(other.refreshTokenMaxReuse))
+            return false;
+        if (this.allowUserManagedAccess == null) {
+            if (other.allowUserManagedAccess != null)
+                return false;
+        }
+        else if (!this.allowUserManagedAccess.equals(other.allowUserManagedAccess))
+            return false;
+        if (this.ssoMaxLifespanRememberMe == null) {
+            if (other.ssoMaxLifespanRememberMe != null)
+                return false;
+        }
+        else if (!this.ssoMaxLifespanRememberMe.equals(other.ssoMaxLifespanRememberMe))
+            return false;
+        if (this.ssoIdleTimeoutRememberMe == null) {
+            if (other.ssoIdleTimeoutRememberMe != null)
+                return false;
+        }
+        else if (!this.ssoIdleTimeoutRememberMe.equals(other.ssoIdleTimeoutRememberMe))
+            return false;
+        if (this.defaultRole == null) {
+            if (other.defaultRole != null)
+                return false;
+        }
+        else if (!this.defaultRole.equals(other.defaultRole))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.accessCodeLifespan == null) ? 0 : this.accessCodeLifespan.hashCode());
+        result = prime * result + ((this.userActionLifespan == null) ? 0 : this.userActionLifespan.hashCode());
+        result = prime * result + ((this.accessTokenLifespan == null) ? 0 : this.accessTokenLifespan.hashCode());
+        result = prime * result + ((this.accountTheme == null) ? 0 : this.accountTheme.hashCode());
+        result = prime * result + ((this.adminTheme == null) ? 0 : this.adminTheme.hashCode());
+        result = prime * result + ((this.emailTheme == null) ? 0 : this.emailTheme.hashCode());
+        result = prime * result + ((this.enabled == null) ? 0 : this.enabled.hashCode());
+        result = prime * result + ((this.eventsEnabled == null) ? 0 : this.eventsEnabled.hashCode());
+        result = prime * result + ((this.eventsExpiration == null) ? 0 : this.eventsExpiration.hashCode());
+        result = prime * result + ((this.loginTheme == null) ? 0 : this.loginTheme.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.notBefore == null) ? 0 : this.notBefore.hashCode());
+        result = prime * result + ((this.passwordPolicy == null) ? 0 : this.passwordPolicy.hashCode());
+        result = prime * result + ((this.registrationAllowed == null) ? 0 : this.registrationAllowed.hashCode());
+        result = prime * result + ((this.rememberMe == null) ? 0 : this.rememberMe.hashCode());
+        result = prime * result + ((this.resetPasswordAllowed == null) ? 0 : this.resetPasswordAllowed.hashCode());
+        result = prime * result + ((this.social == null) ? 0 : this.social.hashCode());
+        result = prime * result + ((this.sslRequired == null) ? 0 : this.sslRequired.hashCode());
+        result = prime * result + ((this.ssoIdleTimeout == null) ? 0 : this.ssoIdleTimeout.hashCode());
+        result = prime * result + ((this.ssoMaxLifespan == null) ? 0 : this.ssoMaxLifespan.hashCode());
+        result = prime * result + ((this.updateProfileOnSocLogin == null) ? 0 : this.updateProfileOnSocLogin.hashCode());
+        result = prime * result + ((this.verifyEmail == null) ? 0 : this.verifyEmail.hashCode());
+        result = prime * result + ((this.masterAdminClient == null) ? 0 : this.masterAdminClient.hashCode());
+        result = prime * result + ((this.loginLifespan == null) ? 0 : this.loginLifespan.hashCode());
+        result = prime * result + ((this.internationalizationEnabled == null) ? 0 : this.internationalizationEnabled.hashCode());
+        result = prime * result + ((this.defaultLocale == null) ? 0 : this.defaultLocale.hashCode());
+        result = prime * result + ((this.regEmailAsUsername == null) ? 0 : this.regEmailAsUsername.hashCode());
+        result = prime * result + ((this.adminEventsEnabled == null) ? 0 : this.adminEventsEnabled.hashCode());
+        result = prime * result + ((this.adminEventsDetailsEnabled == null) ? 0 : this.adminEventsDetailsEnabled.hashCode());
+        result = prime * result + ((this.editUsernameAllowed == null) ? 0 : this.editUsernameAllowed.hashCode());
+        result = prime * result + ((this.otpPolicyCounter == null) ? 0 : this.otpPolicyCounter.hashCode());
+        result = prime * result + ((this.otpPolicyWindow == null) ? 0 : this.otpPolicyWindow.hashCode());
+        result = prime * result + ((this.otpPolicyPeriod == null) ? 0 : this.otpPolicyPeriod.hashCode());
+        result = prime * result + ((this.otpPolicyDigits == null) ? 0 : this.otpPolicyDigits.hashCode());
+        result = prime * result + ((this.otpPolicyAlg == null) ? 0 : this.otpPolicyAlg.hashCode());
+        result = prime * result + ((this.otpPolicyType == null) ? 0 : this.otpPolicyType.hashCode());
+        result = prime * result + ((this.browserFlow == null) ? 0 : this.browserFlow.hashCode());
+        result = prime * result + ((this.registrationFlow == null) ? 0 : this.registrationFlow.hashCode());
+        result = prime * result + ((this.directGrantFlow == null) ? 0 : this.directGrantFlow.hashCode());
+        result = prime * result + ((this.resetCredentialsFlow == null) ? 0 : this.resetCredentialsFlow.hashCode());
+        result = prime * result + ((this.clientAuthFlow == null) ? 0 : this.clientAuthFlow.hashCode());
+        result = prime * result + ((this.offlineSessionIdleTimeout == null) ? 0 : this.offlineSessionIdleTimeout.hashCode());
+        result = prime * result + ((this.revokeRefreshToken == null) ? 0 : this.revokeRefreshToken.hashCode());
+        result = prime * result + ((this.accessTokenLifeImplicit == null) ? 0 : this.accessTokenLifeImplicit.hashCode());
+        result = prime * result + ((this.loginWithEmailAllowed == null) ? 0 : this.loginWithEmailAllowed.hashCode());
+        result = prime * result + ((this.duplicateEmailsAllowed == null) ? 0 : this.duplicateEmailsAllowed.hashCode());
+        result = prime * result + ((this.dockerAuthFlow == null) ? 0 : this.dockerAuthFlow.hashCode());
+        result = prime * result + ((this.refreshTokenMaxReuse == null) ? 0 : this.refreshTokenMaxReuse.hashCode());
+        result = prime * result + ((this.allowUserManagedAccess == null) ? 0 : this.allowUserManagedAccess.hashCode());
+        result = prime * result + ((this.ssoMaxLifespanRememberMe == null) ? 0 : this.ssoMaxLifespanRememberMe.hashCode());
+        result = prime * result + ((this.ssoIdleTimeoutRememberMe == null) ? 0 : this.ssoIdleTimeoutRememberMe.hashCode());
+        result = prime * result + ((this.defaultRole == null) ? 0 : this.defaultRole.hashCode());
+        return result;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Realm (");
@@ -1093,6 +1588,11 @@ public class Realm implements VertxPojo, IRealm {
         sb.append(", ").append(loginWithEmailAllowed);
         sb.append(", ").append(duplicateEmailsAllowed);
         sb.append(", ").append(dockerAuthFlow);
+        sb.append(", ").append(refreshTokenMaxReuse);
+        sb.append(", ").append(allowUserManagedAccess);
+        sb.append(", ").append(ssoMaxLifespanRememberMe);
+        sb.append(", ").append(ssoIdleTimeoutRememberMe);
+        sb.append(", ").append(defaultRole);
 
         sb.append(")");
         return sb.toString();
@@ -1152,6 +1652,11 @@ public class Realm implements VertxPojo, IRealm {
         setLoginWithEmailAllowed(from.getLoginWithEmailAllowed());
         setDuplicateEmailsAllowed(from.getDuplicateEmailsAllowed());
         setDockerAuthFlow(from.getDockerAuthFlow());
+        setRefreshTokenMaxReuse(from.getRefreshTokenMaxReuse());
+        setAllowUserManagedAccess(from.getAllowUserManagedAccess());
+        setSsoMaxLifespanRememberMe(from.getSsoMaxLifespanRememberMe());
+        setSsoIdleTimeoutRememberMe(from.getSsoIdleTimeoutRememberMe());
+        setDefaultRole(from.getDefaultRole());
     }
 
     @Override

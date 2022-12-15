@@ -66,6 +66,30 @@ public interface IOfflineClientSession extends VertxPojo, Serializable {
      */
     public String getData();
 
+    /**
+     * Setter for
+     * <code>keycloak.offline_client_session.client_storage_provider</code>.
+     */
+    public IOfflineClientSession setClientStorageProvider(String value);
+
+    /**
+     * Getter for
+     * <code>keycloak.offline_client_session.client_storage_provider</code>.
+     */
+    public String getClientStorageProvider();
+
+    /**
+     * Setter for
+     * <code>keycloak.offline_client_session.external_client_id</code>.
+     */
+    public IOfflineClientSession setExternalClientId(String value);
+
+    /**
+     * Getter for
+     * <code>keycloak.offline_client_session.external_client_id</code>.
+     */
+    public String getExternalClientId();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -89,6 +113,8 @@ public interface IOfflineClientSession extends VertxPojo, Serializable {
                 setOrThrow(this::setOfflineFlag,json::getString,"offline_flag","java.lang.String");
                 setOrThrow(this::setTimestamp,json::getInteger,"timestamp","java.lang.Integer");
                 setOrThrow(this::setData,json::getString,"data","java.lang.String");
+                setOrThrow(this::setClientStorageProvider,json::getString,"client_storage_provider","java.lang.String");
+                setOrThrow(this::setExternalClientId,json::getString,"external_client_id","java.lang.String");
                 return this;
         }
 
@@ -101,6 +127,8 @@ public interface IOfflineClientSession extends VertxPojo, Serializable {
                 json.put("offline_flag",getOfflineFlag());
                 json.put("timestamp",getTimestamp());
                 json.put("data",getData());
+                json.put("client_storage_provider",getClientStorageProvider());
+                json.put("external_client_id",getExternalClientId());
                 return json;
         }
 

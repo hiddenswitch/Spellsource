@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -21,7 +20,6 @@ public class RecastMinionSpells extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(RecastMinionSpells.class);
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, final Entity target) {
 		List<Card> cards = EnvironmentEntityList.getList(context, Environment.LYNESSA_SUNSORROW_ENTITY_LIST).getCards(context, player);
 		for (Card card : cards) {

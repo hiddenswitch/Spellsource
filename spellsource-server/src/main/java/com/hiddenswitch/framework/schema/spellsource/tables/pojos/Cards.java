@@ -23,11 +23,11 @@ public class Cards implements VertxPojo, ICards {
 
     private static final long serialVersionUID = 1L;
 
-    private String         id;
-    private String         createdBy;
-    private String         uri;
-    private XML            blocklyWorkspace;
-    private JsonObject     cardScript;
+    private String id;
+    private String createdBy;
+    private String uri;
+    private XML blocklyWorkspace;
+    private JsonObject cardScript;
     private OffsetDateTime createdAt;
     private OffsetDateTime lastModified;
 
@@ -44,11 +44,11 @@ public class Cards implements VertxPojo, ICards {
     }
 
     public Cards(
-        String         id,
-        String         createdBy,
-        String         uri,
-        XML            blocklyWorkspace,
-        JsonObject     cardScript,
+        String id,
+        String createdBy,
+        String uri,
+        XML blocklyWorkspace,
+        JsonObject cardScript,
         OffsetDateTime createdAt,
         OffsetDateTime lastModified
     ) {
@@ -183,6 +183,74 @@ public class Cards implements VertxPojo, ICards {
     public Cards setLastModified(OffsetDateTime lastModified) {
         this.lastModified = lastModified;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Cards other = (Cards) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.createdBy == null) {
+            if (other.createdBy != null)
+                return false;
+        }
+        else if (!this.createdBy.equals(other.createdBy))
+            return false;
+        if (this.uri == null) {
+            if (other.uri != null)
+                return false;
+        }
+        else if (!this.uri.equals(other.uri))
+            return false;
+        if (this.blocklyWorkspace == null) {
+            if (other.blocklyWorkspace != null)
+                return false;
+        }
+        else if (!this.blocklyWorkspace.equals(other.blocklyWorkspace))
+            return false;
+        if (this.cardScript == null) {
+            if (other.cardScript != null)
+                return false;
+        }
+        else if (!this.cardScript.equals(other.cardScript))
+            return false;
+        if (this.createdAt == null) {
+            if (other.createdAt != null)
+                return false;
+        }
+        else if (!this.createdAt.equals(other.createdAt))
+            return false;
+        if (this.lastModified == null) {
+            if (other.lastModified != null)
+                return false;
+        }
+        else if (!this.lastModified.equals(other.lastModified))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.createdBy == null) ? 0 : this.createdBy.hashCode());
+        result = prime * result + ((this.uri == null) ? 0 : this.uri.hashCode());
+        result = prime * result + ((this.blocklyWorkspace == null) ? 0 : this.blocklyWorkspace.hashCode());
+        result = prime * result + ((this.cardScript == null) ? 0 : this.cardScript.hashCode());
+        result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
+        result = prime * result + ((this.lastModified == null) ? 0 : this.lastModified.hashCode());
+        return result;
     }
 
     @Override

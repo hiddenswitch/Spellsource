@@ -4,16 +4,25 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
+import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.EventEntityRecord;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function10;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row10;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -133,6 +142,11 @@ public class EventEntity extends TableImpl<EventEntityRecord> {
     }
 
     @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.IDX_EVENT_TIME);
+    }
+
+    @Override
     public UniqueKey<EventEntityRecord> getPrimaryKey() {
         return Keys.CONSTRAINT_4;
     }
@@ -145,6 +159,11 @@ public class EventEntity extends TableImpl<EventEntityRecord> {
     @Override
     public EventEntity as(Name alias) {
         return new EventEntity(alias, this);
+    }
+
+    @Override
+    public EventEntity as(Table<?> alias) {
+        return new EventEntity(alias.getQualifiedName(), this);
     }
 
     /**
@@ -163,6 +182,14 @@ public class EventEntity extends TableImpl<EventEntityRecord> {
         return new EventEntity(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public EventEntity rename(Table<?> name) {
+        return new EventEntity(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row10 type methods
     // -------------------------------------------------------------------------
@@ -170,5 +197,20 @@ public class EventEntity extends TableImpl<EventEntityRecord> {
     @Override
     public Row10<String, String, String, String, String, String, String, Long, String, String> fieldsRow() {
         return (Row10) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function10<? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

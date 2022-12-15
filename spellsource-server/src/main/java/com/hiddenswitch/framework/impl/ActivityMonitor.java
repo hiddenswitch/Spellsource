@@ -1,10 +1,9 @@
 package com.hiddenswitch.framework.impl;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SuspendableAction1;
-
 import java.lang.ref.WeakReference;
+import java.util.function.Consumer;
+
+import static com.hiddenswitch.framework.Environment.fiber;
 
 /**
  * A timer for keeping track of a client's activity. Uses a {@link Scheduler} (typically implemented from vertx) for
@@ -14,18 +13,14 @@ public class ActivityMonitor {
 	private final long noActivityTimeout;
 	private final WeakReference<Scheduler> scheduler;
 	private final String gameId;
-	private final SuspendableAction1<ActivityMonitor> onTimeout;
+	private final Consumer<ActivityMonitor> onTimeout;
 	private Long lastTimerId;
 
-	public ActivityMonitor(Scheduler scheduler, long noActivityTimeout, SuspendableAction1<ActivityMonitor> onTimeout, String gameId) {
+	public ActivityMonitor(Scheduler scheduler, long noActivityTimeout, Consumer<ActivityMonitor> onTimeout, String gameId) {
 		this.gameId = gameId;
 		this.scheduler = new WeakReference<>(scheduler);
 		this.noActivityTimeout = noActivityTimeout;
 		this.onTimeout = onTimeout;
-	}
-
-	private void handleTimeout(long t) throws InterruptedException, SuspendExecution {
-		onTimeout.call(this);
 	}
 
 	public void activity() {
@@ -36,10 +31,12 @@ public class ActivityMonitor {
 
 		cancel();
 
-		lastTimerId = scheduler.setTimer(noActivityTimeout, io.vertx.ext.sync.Sync.fiber(this::handleTimeout));
+		lastTimerId = scheduler.setTimer(noActivityTimeout, v -> fiber(() -> {
+			onTimeout.accept(this);
+			return (Void) null;
+		}));
 	}
 
-	@Suspendable
 	public void cancel() {
 		Scheduler scheduler = this.scheduler.get();
 

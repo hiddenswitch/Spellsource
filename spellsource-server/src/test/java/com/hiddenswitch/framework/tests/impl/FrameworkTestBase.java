@@ -1,14 +1,10 @@
 package com.hiddenswitch.framework.tests.impl;
 
-import com.hiddenswitch.framework.Accounts;
 import com.hiddenswitch.framework.Gateway;
 import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
-import io.vertx.codegen.annotations.Fluent;
-import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.core.*;
 import io.vertx.junit5.VertxExtension;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.ToxiproxyContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -63,19 +59,16 @@ public class FrameworkTestBase {
 		}
 
 		@Override
-		@Fluent
 		public Future<Void> onComplete(Handler<AsyncResult<Void>> handler) {
 			return future.onComplete(handler);
 		}
 
 		@Override
-		@Fluent
 		public Future<Void> onSuccess(Handler<Void> handler) {
 			return future.onSuccess(handler);
 		}
 
 		@Override
-		@Fluent
 		public Future<Void> onFailure(Handler<Throwable> handler) {
 			return future.onFailure(handler);
 		}
@@ -161,17 +154,14 @@ public class FrameworkTestBase {
 		}
 
 		@Override
-		@GenIgnore
 		public CompletionStage<Void> toCompletionStage() {
 			return future.toCompletionStage();
 		}
 
-		@GenIgnore
 		public static <T> Future<T> fromCompletionStage(CompletionStage<T> completionStage) {
 			return Future.fromCompletionStage(completionStage);
 		}
 
-		@GenIgnore
 		public static <T> Future<T> fromCompletionStage(CompletionStage<T> completionStage, Context context) {
 			return Future.fromCompletionStage(completionStage, context);
 		}

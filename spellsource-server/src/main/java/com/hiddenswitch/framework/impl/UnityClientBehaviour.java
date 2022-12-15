@@ -1,30 +1,25 @@
 package com.hiddenswitch.framework.impl;
 
-import co.paralleluniverse.fibers.Fiber;
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.StrandLocalRandom;
-import co.paralleluniverse.strands.SuspendableAction1;
-import co.paralleluniverse.strands.concurrent.ReentrantLock;
-import com.google.common.base.Throwables;
 import com.google.protobuf.Int32Value;
-import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.diagnostics.Tracing;
+import com.hiddenswitch.framework.Environment;
+import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
-import com.hiddenswitch.spellsource.rpc.Spellsource.*;
-import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
-import com.hiddenswitch.spellsource.rpc.Spellsource.MessageTypeMessage.MessageType;
+import com.hiddenswitch.spellsource.rpc.Spellsource.*;
+import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.GameEventTypeMessage.GameEventType;
+import com.hiddenswitch.spellsource.rpc.Spellsource.MessageTypeMessage.MessageType;
 import io.opentracing.util.GlobalTracer;
+import io.vertx.await.Async;
 import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
-import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -35,25 +30,29 @@ import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
 import net.demilich.metastone.game.logic.TurnState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vertx.ext.sync.Sync.await;
+import static io.vertx.await.Async.await;
 import static java.util.stream.Collectors.toList;
 import static net.demilich.metastone.game.GameContext.PLAYER_1;
 import static net.demilich.metastone.game.GameContext.PLAYER_2;
 
 /**
- * Represents a behaviour that converts requests from {@link ActionListener} and game event updates from {@link
- * EventListener} into messages on a {@link ReadStream} and {@link WriteStream}, decoding the read buffers as {@link
- * ClientToServerMessage} and encoding the sent buffers with {@link ServerToClientMessage}.
+ * Represents a behaviour that converts requests from {@link ActionListener} and game event updates from
+ * {@link EventListener} into messages on a {@link ReadStream} and {@link WriteStream}, decoding the read buffers as
+ * {@link ClientToServerMessage} and encoding the sent buffers with {@link ServerToClientMessage}.
  */
 public class UnityClientBehaviour extends UtilityBehaviour implements Client, Closeable, HasElapsableTurns {
+	private static final Logger LOGGER = LoggerFactory.getLogger(UnityClientBehaviour.class);
 	public static final int MAX_POWER_HISTORY_SIZE = 10;
 
 	private final Queue<ServerToClientMessage.Builder> messageBuffer = new ConcurrentLinkedQueue<>();
@@ -69,12 +68,14 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final Server server;
 	private final Long turnTimer;
 	private final Deque<GameEvent> powerHistory = new ArrayDeque<>();
+	private final Async async;
 
 	private GameState lastStateSent;
 	private boolean inboundMessagesClosed;
 	private boolean elapsed;
 	private GameOver gameOver;
 	private boolean needsPowerHistory;
+	private Thread readingThread;
 
 
 	public UnityClientBehaviour(Server server,
@@ -90,6 +91,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		this.playerId = playerId;
 		this.server = server;
 		this.turnTimer = scheduler.setInterval(1000L, this::secondIntervalElapsed);
+		this.async = Environment.async();
 		if (noActivityTimeout > 0L) {
 			var activityMonitor = new ActivityMonitor(scheduler, noActivityTimeout, this::noActivity, null);
 			activityMonitor.activity();
@@ -98,7 +100,24 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			throw new IllegalArgumentException("noActivityTimeout must be positive");
 		}
 
-		reader.handler(Sync.fiber(this::handleWebSocketMessage));
+
+		var queue = new LinkedBlockingQueue<ClientToServerMessage>();
+		reader.handler(queue::offer);
+		async.run(v -> {
+			readingThread = Thread.currentThread();
+			readingThread.setName("UnityClientBehavior/handleWebSocketMessage{userId=%s}".formatted(userId));
+			while (true) {
+				try {
+					var message = queue.take();
+					this.handleWebSocketMessage(message);
+				} catch (InterruptedException e) {
+					// peacefully closing
+					break;
+				} catch (Throwable t) {
+					LOGGER.warn("unitybehavior did error with ", t);
+				}
+			}
+		});
 	}
 
 	private void secondIntervalElapsed(Long timer) {
@@ -113,7 +132,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 						.setMillisRemaining(millisRemaining)));
 	}
 
-	@Suspendable
+
 	private void noActivity(ActivityMonitor activityMonitor) {
 		elapseAwaitingRequests();
 		server.onConcede(this);
@@ -134,7 +153,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 * Elapses this client's turn, typically due to a timeout.
 	 */
 	@Override
-	@Suspendable
 	public void elapseAwaitingRequests() {
 		requestsLock.lock();
 		elapsed = true;
@@ -144,15 +162,12 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			while ((request = requests.poll()) != null) {
 				if (request.getType() == GameplayRequestType.ACTION) {
 					@SuppressWarnings("unchecked")
-					var callback = (SuspendableAction1<GameAction>) request.getCallback();
+					var callback = (Consumer<GameAction>) request.getCallback();
 					processActionForElapsedTurn(request.getActions(), callback);
 				} else if (request.getType() == GameplayRequestType.MULLIGAN) {
 					@SuppressWarnings("unchecked")
-					var handler = (SuspendableAction1<List<Card>>) request.getCallback();
-					try {
-						handler.call(new ArrayList<>());
-					} catch (SuspendExecution | InterruptedException ignored) {
-					}
+					var handler = (Consumer<List<Card>>) request.getCallback();
+					handler.accept(new ArrayList<>());
 				}
 			}
 		} finally {
@@ -160,7 +175,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 	}
 
-	@Suspendable
+
 	private GameplayRequest getMulliganRequest() {
 		requestsLock.lock();
 		try {
@@ -175,7 +190,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 	}
 
-	@Suspendable
+
 	private GameplayRequest getRequest(String messageId) {
 		requestsLock.lock();
 		try {
@@ -195,7 +210,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 *
 	 * @param message The buffer containing the JSON of the message.
 	 */
-	@Suspendable
+
 	protected void handleWebSocketMessage(ClientToServerMessage message) {
 		var tracer = GlobalTracer.get();
 		var span = tracer.buildSpan("UnityClientBehaviour/handleWebSocketMessage")
@@ -220,11 +235,13 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					sendMessage(ServerToClientMessage.newBuilder().setMessageType(MessageType.PINGPONG));
 					break;
 				case FIRST_MESSAGE:
+					LOGGER.debug("received first message");
 					lastStateSent = null;
 					// The first message indicates the player has connected or reconnected.
 					for (var activityMonitor : getActivityMonitors()) {
 						activityMonitor.activity();
 					}
+
 
 					if (server.isGameReady()) {
 						// Replace the client
@@ -234,6 +251,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 						retryRequests();
 					} else {
 						span.log("receiveFirstMessage/playerReady");
+						LOGGER.debug("onplayerready");
 						server.onPlayerReady(this);
 					}
 					break;
@@ -276,7 +294,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 	}
 
-	@Suspendable
+
 	protected void retryRequests() {
 		requestsLock.lock();
 		try {
@@ -301,17 +319,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	@Override
-	@Suspendable
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
 		var promise = Promise.<List<Card>>promise();
 		mulliganAsync(context, player, cards, promise::tryComplete);
-		return await(promise);
+		return await(promise.future());
 	}
 
 
 	@Override
-	@Suspendable
-	public void mulliganAsync(GameContext context, Player player, List<Card> cards, SuspendableAction1<List<Card>> next) {
+	public void mulliganAsync(GameContext context, Player player, List<Card> cards, Consumer<List<Card>> next) {
 		var id = Integer.toString(callbackIdCounter.getAndIncrement());
 		requestsLock.lock();
 		try {
@@ -329,12 +345,13 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	/**
 	 * Handles a mulligan from a Unity client.
 	 * <p>
-	 * The starting hand is also sent in the {@link com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones#SET_ASIDE_ZONE}, where the
-	 * index in the set aside zone corresponds to the index that should be sent to discard.
+	 * The starting hand is also sent in the
+	 * {@link com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones#SET_ASIDE_ZONE}, where the index in the set
+	 * aside zone corresponds to the index that should be sent to discard.
 	 *
 	 * @param discardedCardIndices A list of indices in the list of starter cards that should be discarded.
 	 */
-	@Suspendable
+
 	public void onMulliganReceived(List<Integer> discardedCardIndices) {
 		requestsLock.lock();
 		try {
@@ -361,22 +378,18 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					.collect(toList());
 
 			@SuppressWarnings("unchecked")
-			SuspendableAction1<List<Card>> callback = (SuspendableAction1<List<Card>>) request.getCallback();
-
-			callback.call(discardedCards);
-		} catch (InterruptedException | SuspendExecution e) {
-			Throwables.throwIfUnchecked(e);
+			Consumer<List<Card>> callback = (Consumer<List<Card>>) request.getCallback();
+			callback.accept(discardedCards);
 		} finally {
 			requestsLock.unlock();
 		}
 	}
 
 	@Override
-	@Suspendable
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 		var promise = Promise.<GameAction>promise();
 		requestActionAsync(context, player, validActions, promise::tryComplete);
-		return await(promise);
+		return await(promise.future());
 	}
 
 	/**
@@ -390,7 +403,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 * @param context the game context
 	 * @param actions the new actions
 	 */
-	@Suspendable
 	public void updateActions(GameContext context, List<GameAction> actions) {
 		requestsLock.lock();
 		try {
@@ -409,8 +421,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	@Override
-	@Suspendable
-	public void requestActionAsync(GameContext context, Player player, List<GameAction> actions, SuspendableAction1<GameAction> callback) {
+	public void requestActionAsync(GameContext context, Player player, List<GameAction> actions, Consumer<GameAction> callback) {
 		requestsLock.lock();
 		try {
 			var id = Integer.toString(callbackIdCounter.getAndIncrement());
@@ -440,15 +451,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 
 	/**
-	 * When a player's turn ends prematurely, this method will process a player's turn, choosing {@link
-	 * ActionType#BATTLECRY} and {@link ActionType#DISCOVER} randomly and performing an {@link
-	 * ActionType#END_TURN} as soon as possible.
+	 * When a player's turn ends prematurely, this method will process a player's turn, choosing
+	 * {@link ActionType#BATTLECRY} and {@link ActionType#DISCOVER} randomly and performing an {@link ActionType#END_TURN}
+	 * as soon as possible.
 	 *
 	 * @param actions  The possible {@link GameAction} for this request.
 	 * @param callback The callback for this request.
 	 */
-	@Suspendable
-	private void processActionForElapsedTurn(List<GameAction> actions, SuspendableAction1<GameAction> callback) {
+
+	private void processActionForElapsedTurn(List<GameAction> actions, Consumer<GameAction> callback) {
 		// If the request contains an end turn action, execute it. Otherwise, choose an action
 		// at random.
 		final var action = actions.stream()
@@ -459,12 +470,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			throw new IllegalStateException("No action was returned");
 		}
 
-		if (Fiber.isCurrentFiber()) {
-			try {
-				callback.call(action);
-			} catch (SuspendExecution | InterruptedException execution) {
-				throw new RuntimeException(execution);
-			}
+		if (Thread.currentThread().isVirtual()) {
+			callback.accept(action);
 		} else {
 			throw new UnsupportedOperationException("should not process elapsed turn outside of fiber");
 		}
@@ -475,7 +482,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		if (server.getRandom() != null) {
 			return actions.get(server.getRandom().nextInt(actions.size()));
 		}
-		return actions.get(StrandLocalRandom.current().nextInt(actions.size()));
+		return actions.get(ThreadLocalRandom.current().nextInt(actions.size()));
 	}
 
 
@@ -485,31 +492,33 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 * @param messageId   The ID of the message used to request the action.
 	 * @param actionIndex The action chosen.
 	 */
-	@Suspendable
+
 	public void onActionReceived(String messageId, int actionIndex) {
 		// The action may have been removed due to the timer or because the game ended, so it's okay if it doesn't exist.
+		var request = getRequest(messageId);
+		if (request == null) {
+			return;
+		}
+
 		requestsLock.lock();
 		try {
-			var request = getRequest(messageId);
-			if (request == null) {
-				return;
-			}
-
-			getRequests().remove(request);
 			var action = request.getActions().get(actionIndex);
 
 			@SuppressWarnings("unchecked")
-			SuspendableAction1<GameAction> callback = (SuspendableAction1<GameAction>) request.getCallback();
-			callback.call(action);
-		} catch (InterruptedException | SuspendExecution e) {
-			Throwables.throwIfUnchecked(e);
+			Consumer<GameAction> callback = (Consumer<GameAction>) request.getCallback();
+			callback.accept(action);
+		} catch (Throwable recoverFromError) {
+			LOGGER.debug("recovering from error", recoverFromError);
+			Tracing.error(recoverFromError);
+
+			elapseAwaitingRequests();
 		} finally {
+			getRequests().remove(request);
 			requestsLock.unlock();
 		}
 	}
 
 	@Override
-	@Suspendable
 	public void onGameOver(GameContext context, int playerId, int winningPlayerId) {
 		for (var activityMonitor : getActivityMonitors()) {
 			activityMonitor.cancel();
@@ -518,12 +527,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 
-	@Suspendable
 	private void sendMessage(ServerToClientMessage.Builder message) {
 		sendMessage(getWriter(), message);
 	}
 
-	@Suspendable
+
 	private void sendMessage(MessageProducer<ServerToClientMessage> socket, ServerToClientMessage.Builder message) {
 		// Always include the playerId in the message
 		message.setLocalPlayerId(playerId);
@@ -543,7 +551,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	@Override
-	@Suspendable
 	public void sendNotification(Notification event, GameState gameState) {
 		if (!event.isClientInterested()) {
 			return;
@@ -680,7 +687,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	@Override
-	@Suspendable
 	public void sendGameOver(GameState state, Player winner) {
 		flush();
 		if (state == null || lastStateSent == null) {
@@ -711,18 +717,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	@Override
-	@Suspendable
 	public void onConnectionStarted(Player activePlayer) {
 		needsPowerHistory = true;
 	}
 
 	@Override
-	@Suspendable
 	public void onTurnEnd(Player activePlayer, int turnNumber, TurnState turnState) {
 	}
 
 	@Override
-	@Suspendable
 	public void onUpdate(GameState state) {
 		var gameState = getClientGameState(playerId, state);
 		if (needsPowerHistory) {
@@ -758,7 +761,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	@Override
-	@Suspendable
 	public void onRequestAction(String id, GameState state, List<GameAction> availableActions) {
 		flush();
 		// Set the ids on the available actions
@@ -777,8 +779,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	/**
 	 * Sends a mulligan request to a Unity client.
 	 * <p>
-	 * The {@link com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones#SET_ASIDE_ZONE} will contain the cards that can be
-	 * mulliganned.
+	 * The {@link com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones#SET_ASIDE_ZONE} will contain the cards
+	 * that can be mulliganned.
 	 *
 	 * @param id       Mulligan ID
 	 * @param state    The game state
@@ -786,7 +788,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 * @param playerId The player doing the discards
 	 */
 	@Override
-	@Suspendable
 	public void onMulligan(String id, GameState state, List<Card> cards, int playerId) {
 		flush();
 		var simulatedContext = new GameContext();
@@ -800,7 +801,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	@Override
-	@Suspendable
 	public void sendEmote(int entityId, String emote) {
 		sendMessage(ServerToClientMessage.newBuilder()
 				.setMessageType(MessageType.EMOTE)
@@ -852,8 +852,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	@Override
-	@Suspendable
 	public void close(Promise<Void> completionHandler) {
+		readingThread.interrupt();
 		closeInboundMessages();
 		scheduler.cancelTimer(turnTimer);
 		for (var activityMonitor : getActivityMonitors()) {

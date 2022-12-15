@@ -57,26 +57,6 @@ public interface IProtocolMapper extends VertxPojo, Serializable {
     public String getProtocolMapperName();
 
     /**
-     * Setter for <code>keycloak.protocol_mapper.consent_required</code>.
-     */
-    public IProtocolMapper setConsentRequired(Boolean value);
-
-    /**
-     * Getter for <code>keycloak.protocol_mapper.consent_required</code>.
-     */
-    public Boolean getConsentRequired();
-
-    /**
-     * Setter for <code>keycloak.protocol_mapper.consent_text</code>.
-     */
-    public IProtocolMapper setConsentText(String value);
-
-    /**
-     * Getter for <code>keycloak.protocol_mapper.consent_text</code>.
-     */
-    public String getConsentText();
-
-    /**
      * Setter for <code>keycloak.protocol_mapper.client_id</code>.
      */
     public IProtocolMapper setClientId(String value);
@@ -87,14 +67,14 @@ public interface IProtocolMapper extends VertxPojo, Serializable {
     public String getClientId();
 
     /**
-     * Setter for <code>keycloak.protocol_mapper.client_template_id</code>.
+     * Setter for <code>keycloak.protocol_mapper.client_scope_id</code>.
      */
-    public IProtocolMapper setClientTemplateId(String value);
+    public IProtocolMapper setClientScopeId(String value);
 
     /**
-     * Getter for <code>keycloak.protocol_mapper.client_template_id</code>.
+     * Getter for <code>keycloak.protocol_mapper.client_scope_id</code>.
      */
-    public String getClientTemplateId();
+    public String getClientScopeId();
 
     // -------------------------------------------------------------------------
     // FROM and INTO
@@ -118,10 +98,8 @@ public interface IProtocolMapper extends VertxPojo, Serializable {
                 setOrThrow(this::setName,json::getString,"name","java.lang.String");
                 setOrThrow(this::setProtocol,json::getString,"protocol","java.lang.String");
                 setOrThrow(this::setProtocolMapperName,json::getString,"protocol_mapper_name","java.lang.String");
-                setOrThrow(this::setConsentRequired,json::getBoolean,"consent_required","java.lang.Boolean");
-                setOrThrow(this::setConsentText,json::getString,"consent_text","java.lang.String");
                 setOrThrow(this::setClientId,json::getString,"client_id","java.lang.String");
-                setOrThrow(this::setClientTemplateId,json::getString,"client_template_id","java.lang.String");
+                setOrThrow(this::setClientScopeId,json::getString,"client_scope_id","java.lang.String");
                 return this;
         }
 
@@ -133,10 +111,8 @@ public interface IProtocolMapper extends VertxPojo, Serializable {
                 json.put("name",getName());
                 json.put("protocol",getProtocol());
                 json.put("protocol_mapper_name",getProtocolMapperName());
-                json.put("consent_required",getConsentRequired());
-                json.put("consent_text",getConsentText());
                 json.put("client_id",getClientId());
-                json.put("client_template_id",getClientTemplateId());
+                json.put("client_scope_id",getClientScopeId());
                 return json;
         }
 

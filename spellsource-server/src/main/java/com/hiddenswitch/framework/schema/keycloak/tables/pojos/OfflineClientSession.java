@@ -18,11 +18,13 @@ public class OfflineClientSession implements VertxPojo, IOfflineClientSession {
 
     private static final long serialVersionUID = 1L;
 
-    private String  userSessionId;
-    private String  clientId;
-    private String  offlineFlag;
+    private String userSessionId;
+    private String clientId;
+    private String offlineFlag;
     private Integer timestamp;
-    private String  data;
+    private String data;
+    private String clientStorageProvider;
+    private String externalClientId;
 
     public OfflineClientSession() {}
 
@@ -32,20 +34,26 @@ public class OfflineClientSession implements VertxPojo, IOfflineClientSession {
         this.offlineFlag = value.getOfflineFlag();
         this.timestamp = value.getTimestamp();
         this.data = value.getData();
+        this.clientStorageProvider = value.getClientStorageProvider();
+        this.externalClientId = value.getExternalClientId();
     }
 
     public OfflineClientSession(
-        String  userSessionId,
-        String  clientId,
-        String  offlineFlag,
+        String userSessionId,
+        String clientId,
+        String offlineFlag,
         Integer timestamp,
-        String  data
+        String data,
+        String clientStorageProvider,
+        String externalClientId
     ) {
         this.userSessionId = userSessionId;
         this.clientId = clientId;
         this.offlineFlag = offlineFlag;
         this.timestamp = timestamp;
         this.data = data;
+        this.clientStorageProvider = clientStorageProvider;
+        this.externalClientId = externalClientId;
     }
 
         public OfflineClientSession(io.vertx.core.json.JsonObject json) {
@@ -138,6 +146,112 @@ public class OfflineClientSession implements VertxPojo, IOfflineClientSession {
         return this;
     }
 
+    /**
+     * Getter for
+     * <code>keycloak.offline_client_session.client_storage_provider</code>.
+     */
+    @Override
+    public String getClientStorageProvider() {
+        return this.clientStorageProvider;
+    }
+
+    /**
+     * Setter for
+     * <code>keycloak.offline_client_session.client_storage_provider</code>.
+     */
+    @Override
+    public OfflineClientSession setClientStorageProvider(String clientStorageProvider) {
+        this.clientStorageProvider = clientStorageProvider;
+        return this;
+    }
+
+    /**
+     * Getter for
+     * <code>keycloak.offline_client_session.external_client_id</code>.
+     */
+    @Override
+    public String getExternalClientId() {
+        return this.externalClientId;
+    }
+
+    /**
+     * Setter for
+     * <code>keycloak.offline_client_session.external_client_id</code>.
+     */
+    @Override
+    public OfflineClientSession setExternalClientId(String externalClientId) {
+        this.externalClientId = externalClientId;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final OfflineClientSession other = (OfflineClientSession) obj;
+        if (this.userSessionId == null) {
+            if (other.userSessionId != null)
+                return false;
+        }
+        else if (!this.userSessionId.equals(other.userSessionId))
+            return false;
+        if (this.clientId == null) {
+            if (other.clientId != null)
+                return false;
+        }
+        else if (!this.clientId.equals(other.clientId))
+            return false;
+        if (this.offlineFlag == null) {
+            if (other.offlineFlag != null)
+                return false;
+        }
+        else if (!this.offlineFlag.equals(other.offlineFlag))
+            return false;
+        if (this.timestamp == null) {
+            if (other.timestamp != null)
+                return false;
+        }
+        else if (!this.timestamp.equals(other.timestamp))
+            return false;
+        if (this.data == null) {
+            if (other.data != null)
+                return false;
+        }
+        else if (!this.data.equals(other.data))
+            return false;
+        if (this.clientStorageProvider == null) {
+            if (other.clientStorageProvider != null)
+                return false;
+        }
+        else if (!this.clientStorageProvider.equals(other.clientStorageProvider))
+            return false;
+        if (this.externalClientId == null) {
+            if (other.externalClientId != null)
+                return false;
+        }
+        else if (!this.externalClientId.equals(other.externalClientId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.userSessionId == null) ? 0 : this.userSessionId.hashCode());
+        result = prime * result + ((this.clientId == null) ? 0 : this.clientId.hashCode());
+        result = prime * result + ((this.offlineFlag == null) ? 0 : this.offlineFlag.hashCode());
+        result = prime * result + ((this.timestamp == null) ? 0 : this.timestamp.hashCode());
+        result = prime * result + ((this.data == null) ? 0 : this.data.hashCode());
+        result = prime * result + ((this.clientStorageProvider == null) ? 0 : this.clientStorageProvider.hashCode());
+        result = prime * result + ((this.externalClientId == null) ? 0 : this.externalClientId.hashCode());
+        return result;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("OfflineClientSession (");
@@ -147,6 +261,8 @@ public class OfflineClientSession implements VertxPojo, IOfflineClientSession {
         sb.append(", ").append(offlineFlag);
         sb.append(", ").append(timestamp);
         sb.append(", ").append(data);
+        sb.append(", ").append(clientStorageProvider);
+        sb.append(", ").append(externalClientId);
 
         sb.append(")");
         return sb.toString();
@@ -163,6 +279,8 @@ public class OfflineClientSession implements VertxPojo, IOfflineClientSession {
         setOfflineFlag(from.getOfflineFlag());
         setTimestamp(from.getTimestamp());
         setData(from.getData());
+        setClientStorageProvider(from.getClientStorageProvider());
+        setExternalClientId(from.getExternalClientId());
     }
 
     @Override

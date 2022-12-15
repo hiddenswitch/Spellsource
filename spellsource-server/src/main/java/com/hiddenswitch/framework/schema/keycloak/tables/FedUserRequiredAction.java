@@ -4,16 +4,25 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
+import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.FedUserRequiredActionRecord;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function4;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row4;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -107,6 +116,11 @@ public class FedUserRequiredAction extends TableImpl<FedUserRequiredActionRecord
     }
 
     @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.IDX_FU_REQUIRED_ACTION, Indexes.IDX_FU_REQUIRED_ACTION_RU);
+    }
+
+    @Override
     public UniqueKey<FedUserRequiredActionRecord> getPrimaryKey() {
         return Keys.CONSTR_FED_REQUIRED_ACTION;
     }
@@ -119,6 +133,11 @@ public class FedUserRequiredAction extends TableImpl<FedUserRequiredActionRecord
     @Override
     public FedUserRequiredAction as(Name alias) {
         return new FedUserRequiredAction(alias, this);
+    }
+
+    @Override
+    public FedUserRequiredAction as(Table<?> alias) {
+        return new FedUserRequiredAction(alias.getQualifiedName(), this);
     }
 
     /**
@@ -137,6 +156,14 @@ public class FedUserRequiredAction extends TableImpl<FedUserRequiredActionRecord
         return new FedUserRequiredAction(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public FedUserRequiredAction rename(Table<?> name) {
+        return new FedUserRequiredAction(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
@@ -144,5 +171,20 @@ public class FedUserRequiredAction extends TableImpl<FedUserRequiredActionRecord
     @Override
     public Row4<String, String, String, String> fieldsRow() {
         return (Row4) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function4<? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

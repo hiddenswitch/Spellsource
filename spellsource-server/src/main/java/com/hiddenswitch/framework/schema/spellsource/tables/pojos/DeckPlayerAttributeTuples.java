@@ -18,10 +18,10 @@ public class DeckPlayerAttributeTuples implements VertxPojo, IDeckPlayerAttribut
 
     private static final long serialVersionUID = 1L;
 
-    private Long    id;
-    private String  deckId;
+    private Long id;
+    private String deckId;
     private Integer attribute;
-    private String  stringValue;
+    private String stringValue;
 
     public DeckPlayerAttributeTuples() {}
 
@@ -33,10 +33,10 @@ public class DeckPlayerAttributeTuples implements VertxPojo, IDeckPlayerAttribut
     }
 
     public DeckPlayerAttributeTuples(
-        Long    id,
-        String  deckId,
+        Long id,
+        String deckId,
         Integer attribute,
-        String  stringValue
+        String stringValue
     ) {
         this.id = id;
         this.deckId = deckId;
@@ -119,6 +119,53 @@ public class DeckPlayerAttributeTuples implements VertxPojo, IDeckPlayerAttribut
     public DeckPlayerAttributeTuples setStringValue(String stringValue) {
         this.stringValue = stringValue;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final DeckPlayerAttributeTuples other = (DeckPlayerAttributeTuples) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.deckId == null) {
+            if (other.deckId != null)
+                return false;
+        }
+        else if (!this.deckId.equals(other.deckId))
+            return false;
+        if (this.attribute == null) {
+            if (other.attribute != null)
+                return false;
+        }
+        else if (!this.attribute.equals(other.attribute))
+            return false;
+        if (this.stringValue == null) {
+            if (other.stringValue != null)
+                return false;
+        }
+        else if (!this.stringValue.equals(other.stringValue))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.deckId == null) ? 0 : this.deckId.hashCode());
+        result = prime * result + ((this.attribute == null) ? 0 : this.attribute.hashCode());
+        result = prime * result + ((this.stringValue == null) ? 0 : this.stringValue.hashCode());
+        return result;
     }
 
     @Override

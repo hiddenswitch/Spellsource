@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -80,7 +79,6 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 * @see SpellUtils#getValidTargets(GameContext, Player, List, EntityFilter, Entity) for the logic which filters the
 	 * 		targets argument.
 	 */
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		// no target specified, cast the spell once with target NULL
 		if (targets == null) {
@@ -120,7 +118,6 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 * @param source
 	 * @param target
 	 */
-	@Suspendable
 	protected void castForPlayer(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		TargetPlayer targetPlayer = desc.getTargetPlayer();
 		if (targetPlayer == null) {
@@ -177,7 +174,6 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 * @see SummonSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity) for an example of a complex spell
 	 * 		implementation.
 	 */
-	@Suspendable
 	protected abstract void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target);
 
 	@Override

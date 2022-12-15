@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.behaviour;
 
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
@@ -264,7 +262,6 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * @return A list of cards to discard.
 	 */
 	@Override
-	@Suspendable
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
 		return super.mulligan(context, player, cards);
 	}
@@ -353,7 +350,6 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * @see ThreatBasedHeuristic for an overview of the scoring function.
 	 */
 	@Override
-	@Suspendable
 	public @Nullable
 	GameAction requestAction(@NotNull GameContext context, @NotNull Player player, @NotNull List<GameAction> validActions) {
 		var tracer = GlobalTracer.get();
@@ -663,7 +659,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * @return
 	 */
 	protected boolean isInterrupted() {
-		return Strand.currentStrand().isInterrupted()
+		return Thread.currentThread().isInterrupted()
 				|| (getTimeout() != 0 && System.currentTimeMillis() - getRequestActionStartTime() > getTimeout());
 	}
 
@@ -794,7 +790,6 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * @param depth        The current depth of this rollout. This is the count of non-intermediate actions from the game
 	 *                     state that {@link #requestAction(GameContext, Player, List)} was called with.
 	 */
-	@Suspendable
 	protected void evaluate(Deque<Node> contextStack, int playerId, Node node, GameAction action, int depth) {
 		// Clone out the context because we're not going to mutate the node's context.
 		var mutateContext = getClone(node.context);
@@ -1147,9 +1142,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	private void traceMemory(String location) {
 		var currentMemoryUsage = Runtime.getRuntime().freeMemory();
 		if (currentMemoryUsage < minFreeMemory) {
-			if (LOGGER.isTraceEnabled()) {
-				LOGGER.trace("traceMemory {}: Free memory decreased from {} MB to {} MB", location, minFreeMemory / (1024 * 1024), currentMemoryUsage / (1024 * 1024));
-			}
+			LOGGER.trace("traceMemory {}: Free memory decreased from {} MB to {} MB", location, minFreeMemory / (1024 * 1024), currentMemoryUsage / (1024 * 1024));
 			minFreeMemory = currentMemoryUsage;
 		}
 	}

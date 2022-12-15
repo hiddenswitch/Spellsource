@@ -43,28 +43,11 @@ public class RealmAttributeRecord extends UpdatableRecordImpl<RealmAttributeReco
     }
 
     /**
-     * Setter for <code>keycloak.realm_attribute.value</code>.
-     */
-    @Override
-    public RealmAttributeRecord setValue(String value) {
-        set(1, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>keycloak.realm_attribute.value</code>.
-     */
-    @Override
-    public String getValue() {
-        return (String) get(1);
-    }
-
-    /**
      * Setter for <code>keycloak.realm_attribute.realm_id</code>.
      */
     @Override
     public RealmAttributeRecord setRealmId(String value) {
-        set(2, value);
+        set(1, value);
         return this;
     }
 
@@ -73,6 +56,23 @@ public class RealmAttributeRecord extends UpdatableRecordImpl<RealmAttributeReco
      */
     @Override
     public String getRealmId() {
+        return (String) get(1);
+    }
+
+    /**
+     * Setter for <code>keycloak.realm_attribute.value</code>.
+     */
+    @Override
+    public RealmAttributeRecord setValue(String value) {
+        set(2, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.realm_attribute.value</code>.
+     */
+    @Override
+    public String getValue() {
         return (String) get(2);
     }
 
@@ -106,12 +106,12 @@ public class RealmAttributeRecord extends UpdatableRecordImpl<RealmAttributeReco
 
     @Override
     public Field<String> field2() {
-        return RealmAttribute.REALM_ATTRIBUTE.VALUE;
+        return RealmAttribute.REALM_ATTRIBUTE.REALM_ID;
     }
 
     @Override
     public Field<String> field3() {
-        return RealmAttribute.REALM_ATTRIBUTE.REALM_ID;
+        return RealmAttribute.REALM_ATTRIBUTE.VALUE;
     }
 
     @Override
@@ -121,12 +121,12 @@ public class RealmAttributeRecord extends UpdatableRecordImpl<RealmAttributeReco
 
     @Override
     public String component2() {
-        return getValue();
+        return getRealmId();
     }
 
     @Override
     public String component3() {
-        return getRealmId();
+        return getValue();
     }
 
     @Override
@@ -136,12 +136,12 @@ public class RealmAttributeRecord extends UpdatableRecordImpl<RealmAttributeReco
 
     @Override
     public String value2() {
-        return getValue();
+        return getRealmId();
     }
 
     @Override
     public String value3() {
-        return getRealmId();
+        return getValue();
     }
 
     @Override
@@ -152,13 +152,13 @@ public class RealmAttributeRecord extends UpdatableRecordImpl<RealmAttributeReco
 
     @Override
     public RealmAttributeRecord value2(String value) {
-        setValue(value);
+        setRealmId(value);
         return this;
     }
 
     @Override
     public RealmAttributeRecord value3(String value) {
-        setRealmId(value);
+        setValue(value);
         return this;
     }
 
@@ -177,8 +177,8 @@ public class RealmAttributeRecord extends UpdatableRecordImpl<RealmAttributeReco
     @Override
     public void from(IRealmAttribute from) {
         setName(from.getName());
-        setValue(from.getValue());
         setRealmId(from.getRealmId());
+        setValue(from.getValue());
     }
 
     @Override
@@ -201,12 +201,12 @@ public class RealmAttributeRecord extends UpdatableRecordImpl<RealmAttributeReco
     /**
      * Create a detached, initialised RealmAttributeRecord
      */
-    public RealmAttributeRecord(String name, String value, String realmId) {
+    public RealmAttributeRecord(String name, String realmId, String value) {
         super(RealmAttribute.REALM_ATTRIBUTE);
 
         setName(name);
-        setValue(value);
         setRealmId(realmId);
+        setValue(value);
     }
 
     /**
@@ -217,8 +217,8 @@ public class RealmAttributeRecord extends UpdatableRecordImpl<RealmAttributeReco
 
         if (value != null) {
             setName(value.getName());
-            setValue(value.getValue());
             setRealmId(value.getRealmId());
+            setValue(value.getValue());
         }
     }
 

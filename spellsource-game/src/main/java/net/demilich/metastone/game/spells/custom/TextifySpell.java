@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -28,7 +27,6 @@ public class TextifySpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(TextifySpell.class);
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity spellSource, Entity spellTarget) {
 		// For now, don't support textifying anything but MinionCards directly
 		if (!(spellTarget instanceof Card)

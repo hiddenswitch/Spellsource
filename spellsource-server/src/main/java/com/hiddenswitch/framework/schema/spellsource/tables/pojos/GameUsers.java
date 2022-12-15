@@ -19,10 +19,10 @@ public class GameUsers implements VertxPojo, IGameUsers {
 
     private static final long serialVersionUID = 1L;
 
-    private Short               playerIndex;
-    private Long                gameId;
-    private String              userId;
-    private String              deckId;
+    private Short playerIndex;
+    private Long gameId;
+    private String userId;
+    private String deckId;
     private GameUserVictoryEnum victoryStatus;
 
     public GameUsers() {}
@@ -36,10 +36,10 @@ public class GameUsers implements VertxPojo, IGameUsers {
     }
 
     public GameUsers(
-        Short               playerIndex,
-        Long                gameId,
-        String              userId,
-        String              deckId,
+        Short playerIndex,
+        Long gameId,
+        String userId,
+        String deckId,
         GameUserVictoryEnum victoryStatus
     ) {
         this.playerIndex = playerIndex;
@@ -137,6 +137,60 @@ public class GameUsers implements VertxPojo, IGameUsers {
     public GameUsers setVictoryStatus(GameUserVictoryEnum victoryStatus) {
         this.victoryStatus = victoryStatus;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final GameUsers other = (GameUsers) obj;
+        if (this.playerIndex == null) {
+            if (other.playerIndex != null)
+                return false;
+        }
+        else if (!this.playerIndex.equals(other.playerIndex))
+            return false;
+        if (this.gameId == null) {
+            if (other.gameId != null)
+                return false;
+        }
+        else if (!this.gameId.equals(other.gameId))
+            return false;
+        if (this.userId == null) {
+            if (other.userId != null)
+                return false;
+        }
+        else if (!this.userId.equals(other.userId))
+            return false;
+        if (this.deckId == null) {
+            if (other.deckId != null)
+                return false;
+        }
+        else if (!this.deckId.equals(other.deckId))
+            return false;
+        if (this.victoryStatus == null) {
+            if (other.victoryStatus != null)
+                return false;
+        }
+        else if (!this.victoryStatus.equals(other.victoryStatus))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.playerIndex == null) ? 0 : this.playerIndex.hashCode());
+        result = prime * result + ((this.gameId == null) ? 0 : this.gameId.hashCode());
+        result = prime * result + ((this.userId == null) ? 0 : this.userId.hashCode());
+        result = prime * result + ((this.deckId == null) ? 0 : this.deckId.hashCode());
+        result = prime * result + ((this.victoryStatus == null) ? 0 : this.victoryStatus.hashCode());
+        return result;
     }
 
     @Override

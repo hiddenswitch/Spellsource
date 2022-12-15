@@ -22,6 +22,7 @@ public class ResourceServerScope implements VertxPojo, IResourceServerScope {
     private String name;
     private String iconUri;
     private String resourceServerId;
+    private String displayName;
 
     public ResourceServerScope() {}
 
@@ -30,18 +31,21 @@ public class ResourceServerScope implements VertxPojo, IResourceServerScope {
         this.name = value.getName();
         this.iconUri = value.getIconUri();
         this.resourceServerId = value.getResourceServerId();
+        this.displayName = value.getDisplayName();
     }
 
     public ResourceServerScope(
         String id,
         String name,
         String iconUri,
-        String resourceServerId
+        String resourceServerId,
+        String displayName
     ) {
         this.id = id;
         this.name = name;
         this.iconUri = iconUri;
         this.resourceServerId = resourceServerId;
+        this.displayName = displayName;
     }
 
         public ResourceServerScope(io.vertx.core.json.JsonObject json) {
@@ -119,6 +123,77 @@ public class ResourceServerScope implements VertxPojo, IResourceServerScope {
         return this;
     }
 
+    /**
+     * Getter for <code>keycloak.resource_server_scope.display_name</code>.
+     */
+    @Override
+    public String getDisplayName() {
+        return this.displayName;
+    }
+
+    /**
+     * Setter for <code>keycloak.resource_server_scope.display_name</code>.
+     */
+    @Override
+    public ResourceServerScope setDisplayName(String displayName) {
+        this.displayName = displayName;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ResourceServerScope other = (ResourceServerScope) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        if (this.iconUri == null) {
+            if (other.iconUri != null)
+                return false;
+        }
+        else if (!this.iconUri.equals(other.iconUri))
+            return false;
+        if (this.resourceServerId == null) {
+            if (other.resourceServerId != null)
+                return false;
+        }
+        else if (!this.resourceServerId.equals(other.resourceServerId))
+            return false;
+        if (this.displayName == null) {
+            if (other.displayName != null)
+                return false;
+        }
+        else if (!this.displayName.equals(other.displayName))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.iconUri == null) ? 0 : this.iconUri.hashCode());
+        result = prime * result + ((this.resourceServerId == null) ? 0 : this.resourceServerId.hashCode());
+        result = prime * result + ((this.displayName == null) ? 0 : this.displayName.hashCode());
+        return result;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ResourceServerScope (");
@@ -127,6 +202,7 @@ public class ResourceServerScope implements VertxPojo, IResourceServerScope {
         sb.append(", ").append(name);
         sb.append(", ").append(iconUri);
         sb.append(", ").append(resourceServerId);
+        sb.append(", ").append(displayName);
 
         sb.append(")");
         return sb.toString();
@@ -142,6 +218,7 @@ public class ResourceServerScope implements VertxPojo, IResourceServerScope {
         setName(from.getName());
         setIconUri(from.getIconUri());
         setResourceServerId(from.getResourceServerId());
+        setDisplayName(from.getDisplayName());
     }
 
     @Override

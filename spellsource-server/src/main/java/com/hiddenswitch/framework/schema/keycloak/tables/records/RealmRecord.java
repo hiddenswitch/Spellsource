@@ -838,6 +838,91 @@ public class RealmRecord extends UpdatableRecordImpl<RealmRecord> implements Ver
         return (String) get(47);
     }
 
+    /**
+     * Setter for <code>keycloak.realm.refresh_token_max_reuse</code>.
+     */
+    @Override
+    public RealmRecord setRefreshTokenMaxReuse(Integer value) {
+        set(48, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.realm.refresh_token_max_reuse</code>.
+     */
+    @Override
+    public Integer getRefreshTokenMaxReuse() {
+        return (Integer) get(48);
+    }
+
+    /**
+     * Setter for <code>keycloak.realm.allow_user_managed_access</code>.
+     */
+    @Override
+    public RealmRecord setAllowUserManagedAccess(Boolean value) {
+        set(49, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.realm.allow_user_managed_access</code>.
+     */
+    @Override
+    public Boolean getAllowUserManagedAccess() {
+        return (Boolean) get(49);
+    }
+
+    /**
+     * Setter for <code>keycloak.realm.sso_max_lifespan_remember_me</code>.
+     */
+    @Override
+    public RealmRecord setSsoMaxLifespanRememberMe(Integer value) {
+        set(50, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.realm.sso_max_lifespan_remember_me</code>.
+     */
+    @Override
+    public Integer getSsoMaxLifespanRememberMe() {
+        return (Integer) get(50);
+    }
+
+    /**
+     * Setter for <code>keycloak.realm.sso_idle_timeout_remember_me</code>.
+     */
+    @Override
+    public RealmRecord setSsoIdleTimeoutRememberMe(Integer value) {
+        set(51, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.realm.sso_idle_timeout_remember_me</code>.
+     */
+    @Override
+    public Integer getSsoIdleTimeoutRememberMe() {
+        return (Integer) get(51);
+    }
+
+    /**
+     * Setter for <code>keycloak.realm.default_role</code>.
+     */
+    @Override
+    public RealmRecord setDefaultRole(String value) {
+        set(52, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.realm.default_role</code>.
+     */
+    @Override
+    public String getDefaultRole() {
+        return (String) get(52);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -901,6 +986,11 @@ public class RealmRecord extends UpdatableRecordImpl<RealmRecord> implements Ver
         setLoginWithEmailAllowed(from.getLoginWithEmailAllowed());
         setDuplicateEmailsAllowed(from.getDuplicateEmailsAllowed());
         setDockerAuthFlow(from.getDockerAuthFlow());
+        setRefreshTokenMaxReuse(from.getRefreshTokenMaxReuse());
+        setAllowUserManagedAccess(from.getAllowUserManagedAccess());
+        setSsoMaxLifespanRememberMe(from.getSsoMaxLifespanRememberMe());
+        setSsoIdleTimeoutRememberMe(from.getSsoIdleTimeoutRememberMe());
+        setDefaultRole(from.getDefaultRole());
     }
 
     @Override
@@ -923,7 +1013,7 @@ public class RealmRecord extends UpdatableRecordImpl<RealmRecord> implements Ver
     /**
      * Create a detached, initialised RealmRecord
      */
-    public RealmRecord(String id, Integer accessCodeLifespan, Integer userActionLifespan, Integer accessTokenLifespan, String accountTheme, String adminTheme, String emailTheme, Boolean enabled, Boolean eventsEnabled, Long eventsExpiration, String loginTheme, String name, Integer notBefore, String passwordPolicy, Boolean registrationAllowed, Boolean rememberMe, Boolean resetPasswordAllowed, Boolean social, String sslRequired, Integer ssoIdleTimeout, Integer ssoMaxLifespan, Boolean updateProfileOnSocLogin, Boolean verifyEmail, String masterAdminClient, Integer loginLifespan, Boolean internationalizationEnabled, String defaultLocale, Boolean regEmailAsUsername, Boolean adminEventsEnabled, Boolean adminEventsDetailsEnabled, Boolean editUsernameAllowed, Integer otpPolicyCounter, Integer otpPolicyWindow, Integer otpPolicyPeriod, Integer otpPolicyDigits, String otpPolicyAlg, String otpPolicyType, String browserFlow, String registrationFlow, String directGrantFlow, String resetCredentialsFlow, String clientAuthFlow, Integer offlineSessionIdleTimeout, Boolean revokeRefreshToken, Integer accessTokenLifeImplicit, Boolean loginWithEmailAllowed, Boolean duplicateEmailsAllowed, String dockerAuthFlow) {
+    public RealmRecord(String id, Integer accessCodeLifespan, Integer userActionLifespan, Integer accessTokenLifespan, String accountTheme, String adminTheme, String emailTheme, Boolean enabled, Boolean eventsEnabled, Long eventsExpiration, String loginTheme, String name, Integer notBefore, String passwordPolicy, Boolean registrationAllowed, Boolean rememberMe, Boolean resetPasswordAllowed, Boolean social, String sslRequired, Integer ssoIdleTimeout, Integer ssoMaxLifespan, Boolean updateProfileOnSocLogin, Boolean verifyEmail, String masterAdminClient, Integer loginLifespan, Boolean internationalizationEnabled, String defaultLocale, Boolean regEmailAsUsername, Boolean adminEventsEnabled, Boolean adminEventsDetailsEnabled, Boolean editUsernameAllowed, Integer otpPolicyCounter, Integer otpPolicyWindow, Integer otpPolicyPeriod, Integer otpPolicyDigits, String otpPolicyAlg, String otpPolicyType, String browserFlow, String registrationFlow, String directGrantFlow, String resetCredentialsFlow, String clientAuthFlow, Integer offlineSessionIdleTimeout, Boolean revokeRefreshToken, Integer accessTokenLifeImplicit, Boolean loginWithEmailAllowed, Boolean duplicateEmailsAllowed, String dockerAuthFlow, Integer refreshTokenMaxReuse, Boolean allowUserManagedAccess, Integer ssoMaxLifespanRememberMe, Integer ssoIdleTimeoutRememberMe, String defaultRole) {
         super(Realm.REALM);
 
         setId(id);
@@ -974,6 +1064,11 @@ public class RealmRecord extends UpdatableRecordImpl<RealmRecord> implements Ver
         setLoginWithEmailAllowed(loginWithEmailAllowed);
         setDuplicateEmailsAllowed(duplicateEmailsAllowed);
         setDockerAuthFlow(dockerAuthFlow);
+        setRefreshTokenMaxReuse(refreshTokenMaxReuse);
+        setAllowUserManagedAccess(allowUserManagedAccess);
+        setSsoMaxLifespanRememberMe(ssoMaxLifespanRememberMe);
+        setSsoIdleTimeoutRememberMe(ssoIdleTimeoutRememberMe);
+        setDefaultRole(defaultRole);
     }
 
     /**
@@ -1031,6 +1126,11 @@ public class RealmRecord extends UpdatableRecordImpl<RealmRecord> implements Ver
             setLoginWithEmailAllowed(value.getLoginWithEmailAllowed());
             setDuplicateEmailsAllowed(value.getDuplicateEmailsAllowed());
             setDockerAuthFlow(value.getDockerAuthFlow());
+            setRefreshTokenMaxReuse(value.getRefreshTokenMaxReuse());
+            setAllowUserManagedAccess(value.getAllowUserManagedAccess());
+            setSsoMaxLifespanRememberMe(value.getSsoMaxLifespanRememberMe());
+            setSsoIdleTimeoutRememberMe(value.getSsoIdleTimeoutRememberMe());
+            setDefaultRole(value.getDefaultRole());
         }
     }
 

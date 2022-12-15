@@ -11,17 +11,22 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.WebOriginsRecor
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function2;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row2;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -56,7 +61,7 @@ public class WebOrigins extends TableImpl<WebOriginsRecord> {
     /**
      * The column <code>keycloak.web_origins.value</code>.
      */
-    public final TableField<WebOriginsRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
+    public final TableField<WebOriginsRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     private WebOrigins(Name alias, Table<WebOriginsRecord> aliased) {
         this(alias, aliased, null);
@@ -102,6 +107,11 @@ public class WebOrigins extends TableImpl<WebOriginsRecord> {
     }
 
     @Override
+    public UniqueKey<WebOriginsRecord> getPrimaryKey() {
+        return Keys.CONSTRAINT_WEB_ORIGINS;
+    }
+
+    @Override
     public List<ForeignKey<WebOriginsRecord, ?>> getReferences() {
         return Arrays.asList(Keys.WEB_ORIGINS__FK_LOJPHO213XCX4WNKOG82SSRFY);
     }
@@ -128,6 +138,11 @@ public class WebOrigins extends TableImpl<WebOriginsRecord> {
         return new WebOrigins(alias, this);
     }
 
+    @Override
+    public WebOrigins as(Table<?> alias) {
+        return new WebOrigins(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -144,6 +159,14 @@ public class WebOrigins extends TableImpl<WebOriginsRecord> {
         return new WebOrigins(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public WebOrigins rename(Table<?> name) {
+        return new WebOrigins(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row2 type methods
     // -------------------------------------------------------------------------
@@ -151,5 +174,20 @@ public class WebOrigins extends TableImpl<WebOriginsRecord> {
     @Override
     public Row2<String, String> fieldsRow() {
         return (Row2) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

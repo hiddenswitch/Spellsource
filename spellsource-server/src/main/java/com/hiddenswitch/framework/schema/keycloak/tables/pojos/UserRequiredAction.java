@@ -76,6 +76,39 @@ public class UserRequiredAction implements VertxPojo, IUserRequiredAction {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final UserRequiredAction other = (UserRequiredAction) obj;
+        if (this.userId == null) {
+            if (other.userId != null)
+                return false;
+        }
+        else if (!this.userId.equals(other.userId))
+            return false;
+        if (this.requiredAction == null) {
+            if (other.requiredAction != null)
+                return false;
+        }
+        else if (!this.requiredAction.equals(other.requiredAction))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.userId == null) ? 0 : this.userId.hashCode());
+        result = prime * result + ((this.requiredAction == null) ? 0 : this.requiredAction.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("UserRequiredAction (");
 

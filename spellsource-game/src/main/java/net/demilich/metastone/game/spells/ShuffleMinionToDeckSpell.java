@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -24,7 +23,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 public class ShuffleMinionToDeckSpell extends ShuffleToDeckSpell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (!target.isDestroyed() && target instanceof Minion) {
 			context.getLogic().removeActor((Minion) target, true);
@@ -34,7 +32,6 @@ public class ShuffleMinionToDeckSpell extends ShuffleToDeckSpell {
 	}
 
 	@Override
-	@Suspendable
 	protected Card shuffle(GameContext context, Player player, Entity source, Entity targetEntity, Card targetCard, boolean extraCopy, int sourcePlayerId) {
 		return CopyCardSpell.copyCard(context, player, source, targetCard, (playerId, card) -> context.getLogic().shuffleToDeck(player, targetEntity, card, extraCopy, false, sourcePlayerId));
 	}

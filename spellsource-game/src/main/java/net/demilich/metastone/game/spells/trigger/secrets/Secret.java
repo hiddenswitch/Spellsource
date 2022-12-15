@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.trigger.secrets;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import net.demilich.metastone.game.Player;
@@ -44,7 +43,6 @@ public class Secret extends Enchantment {
 	}
 
 	@Override
-	@Suspendable
 	protected boolean process(int ownerId, SpellDesc spell, GameEvent event) {
 		boolean spellCasts = super.process(ownerId, spell, event);
 		if (isInPlay() && spellCasts) {
@@ -56,7 +54,6 @@ public class Secret extends Enchantment {
 	}
 
 	@Override
-	@Suspendable
 	public void onGameEvent(GameEvent event) {
 		if (event.getGameContext().getActivePlayerId() == getOwner()) {
 			return;
@@ -80,7 +77,6 @@ public class Secret extends Enchantment {
 	}
 
 	@Override
-	@Suspendable
 	protected void cast(int ownerId, SpellDesc spell, GameEvent event) {
 		if (SpellUtils.hasAura(event.getGameContext(), ownerId, SecretsTriggerTwiceAura.class)) {
 			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);

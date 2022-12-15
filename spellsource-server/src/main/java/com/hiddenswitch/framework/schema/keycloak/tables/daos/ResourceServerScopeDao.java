@@ -84,6 +84,22 @@ public class ResourceServerScopeDao extends AbstractReactiveVertxDAO<ResourceSer
                 return findManyByCondition(ResourceServerScope.RESOURCE_SERVER_SCOPE.RESOURCE_SERVER_ID.in(values),limit);
         }
 
+        /**
+     * Find records that have <code>display_name IN (values)</code>
+     * asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerScope>> findManyByDisplayName(Collection<String> values) {
+                return findManyByCondition(ResourceServerScope.RESOURCE_SERVER_SCOPE.DISPLAY_NAME.in(values));
+        }
+
+        /**
+     * Find records that have <code>display_name IN (values)</code>
+     * asynchronously limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerScope>> findManyByDisplayName(Collection<String> values, int limit) {
+                return findManyByCondition(ResourceServerScope.RESOURCE_SERVER_SCOPE.DISPLAY_NAME.in(values),limit);
+        }
+
         @Override
         public ReactiveClassicQueryExecutor<ResourceServerScopeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerScope,String> queryExecutor(){
                 return (ReactiveClassicQueryExecutor<ResourceServerScopeRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerScope,String>) super.queryExecutor();

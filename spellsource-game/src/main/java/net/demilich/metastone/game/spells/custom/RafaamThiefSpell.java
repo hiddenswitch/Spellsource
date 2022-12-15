@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -19,7 +18,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public final class RafaamThiefSpell extends AddDeathrattleSpell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		desc = desc.clone();
 		SpellDesc deathrattle = new SpellDesc(ShuffleMinionToDeckSpell.class);

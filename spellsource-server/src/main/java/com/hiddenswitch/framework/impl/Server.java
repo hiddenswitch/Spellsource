@@ -1,6 +1,5 @@
 package com.hiddenswitch.framework.impl;
 
-import co.paralleluniverse.fibers.Suspendable;
 import io.opentracing.SpanContext;
 
 import java.util.Random;
@@ -10,16 +9,12 @@ import java.util.Random;
  */
 public interface Server extends ClientConnectionHandler {
 
-	@Suspendable
 	void onEmote(Client sender, int entityId, String message);
 
-	@Suspendable
 	void onConcede(Client sender);
 
-	@Suspendable
 	void onTouch(Client sender, int entityId);
 
-	@Suspendable
 	void onUntouch(Client sender, int entityId);
 
 	/**

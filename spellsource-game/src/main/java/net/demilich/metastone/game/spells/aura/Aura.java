@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.aura;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.Streams;
 import net.demilich.metastone.game.GameContext;
@@ -166,13 +165,11 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	}
 
 	@Override
-	@Suspendable
 	public void onAdd(GameContext context, Player player, Entity source, Entity host) {
 		super.onAdd(context, player, source, host);
 		affectedEntities.clear();
 	}
 
-	@Suspendable
 	@Override
 	public void onGameEvent(GameEvent event) {
 		// During an aura's processing of a trigger, targets may have been transformed, removed from play, etc.
@@ -222,7 +219,6 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		return !applied(target) || getDesc() != null && getDesc().getBool(AuraArg.ALWAYS_APPLY);
 	}
 
-	@Suspendable
 	protected void removeAuraEffect(GameContext context, Entity target) {
 		// By default, never cast this on targets that have been removed from play. It is generally safe for auras to be
 		// removed from actors in the graveyard
@@ -235,7 +231,6 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		context.getLogic().castSpell(getOwner(), getRemoveAuraEffect(), getHostReference(), target.getReference(), TargetSelection.NONE, true, null);
 	}
 
-	@Suspendable
 	protected void applyAuraEffect(GameContext context, Entity target) {
 		// By default, never cast on targets that have been removed from play. This prevents auras from casting twice on the
 		// same target, once on the original target and again on its transformed replacement.
@@ -249,7 +244,6 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	}
 
 	@Override
-	@Suspendable
 	public void expire(GameContext context) {
 		for (int targetId : affectedEntities) {
 			EntityReference targetKey = new EntityReference(targetId);
@@ -302,7 +296,6 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	}
 
 	@Override
-	@Suspendable
 	protected void cast(int ownerId, SpellDesc spell, GameEvent event) {
 	}
 }

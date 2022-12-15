@@ -10,13 +10,17 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.KeycloakGroupRe
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function4;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row4;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -60,7 +64,7 @@ public class KeycloakGroup extends TableImpl<KeycloakGroupRecord> {
     /**
      * The column <code>keycloak.keycloak_group.parent_group</code>.
      */
-    public final TableField<KeycloakGroupRecord, String> PARENT_GROUP = createField(DSL.name("parent_group"), SQLDataType.VARCHAR(36), this, "");
+    public final TableField<KeycloakGroupRecord, String> PARENT_GROUP = createField(DSL.name("parent_group"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.keycloak_group.realm_id</code>.
@@ -116,23 +120,6 @@ public class KeycloakGroup extends TableImpl<KeycloakGroupRecord> {
     }
 
     @Override
-    public List<ForeignKey<KeycloakGroupRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.KEYCLOAK_GROUP__FK_GROUP_REALM);
-    }
-
-    private transient Realm _realm;
-
-    /**
-     * Get the implicit join path to the <code>keycloak.realm</code> table.
-     */
-    public Realm realm() {
-        if (_realm == null)
-            _realm = new Realm(this, Keys.KEYCLOAK_GROUP__FK_GROUP_REALM);
-
-        return _realm;
-    }
-
-    @Override
     public KeycloakGroup as(String alias) {
         return new KeycloakGroup(DSL.name(alias), this);
     }
@@ -140,6 +127,11 @@ public class KeycloakGroup extends TableImpl<KeycloakGroupRecord> {
     @Override
     public KeycloakGroup as(Name alias) {
         return new KeycloakGroup(alias, this);
+    }
+
+    @Override
+    public KeycloakGroup as(Table<?> alias) {
+        return new KeycloakGroup(alias.getQualifiedName(), this);
     }
 
     /**
@@ -158,6 +150,14 @@ public class KeycloakGroup extends TableImpl<KeycloakGroupRecord> {
         return new KeycloakGroup(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public KeycloakGroup rename(Table<?> name) {
+        return new KeycloakGroup(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
@@ -165,5 +165,20 @@ public class KeycloakGroup extends TableImpl<KeycloakGroupRecord> {
     @Override
     public Row4<String, String, String, String> fieldsRow() {
         return (Row4) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function4<? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

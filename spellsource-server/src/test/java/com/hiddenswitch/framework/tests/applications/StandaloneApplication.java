@@ -31,16 +31,6 @@ public class StandaloneApplication extends Application {
 			.dependsOn(POSTGRES)
 			.withNetwork(Network.SHARED)
 			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD);
-	/*
-	public static RealtimeContainer REALTIME = new RealtimeContainer("realtimesecret", 4000)
-			.dependsOn(POSTGRES)
-			.withNetwork(Network.SHARED)
-			.withEnv("DB_HOST", PGHOST)
-			.withEnv("DB_NAME", PGDATABASE)
-			.withEnv("DB_USER", PGUSER)
-			.withEnv("DB_PASSWORD", PGPASSWORD)
-			.withEnv("DB_PORT", Integer.toString(PGPORT))
-			.withReuse(true);*/
 
 	public static RedisContainer REDIS = new RedisContainer()
 			.withNetwork(Network.SHARED)
@@ -90,12 +80,6 @@ public class StandaloneApplication extends Application {
 		// set the configuration so far so that migrations pick up on it
 		Environment.setConfiguration(configuration.buildPartial());
 		Environment.migrate().toCompletionStage().toCompletableFuture().join();
-
-		/*
-		Startables.deepStart(Stream.of(REALTIME)).join();
-		configuration.setRealtime(ServerConfiguration.RealtimeConfiguration.newBuilder()
-				.setUri(REALTIME.getRealtimeUrl()).build());
-		*/
 
 		Environment.setConfiguration(configuration.build());
 		return true;

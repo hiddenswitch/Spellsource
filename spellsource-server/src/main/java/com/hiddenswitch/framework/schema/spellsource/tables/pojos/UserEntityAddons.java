@@ -18,8 +18,8 @@ public class UserEntityAddons implements VertxPojo, IUserEntityAddons {
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
-    private String  privacyToken;
+    private String id;
+    private String privacyToken;
     private Boolean migrated;
 
     public UserEntityAddons() {}
@@ -31,8 +31,8 @@ public class UserEntityAddons implements VertxPojo, IUserEntityAddons {
     }
 
     public UserEntityAddons(
-        String  id,
-        String  privacyToken,
+        String id,
+        String privacyToken,
         Boolean migrated
     ) {
         this.id = id;
@@ -94,6 +94,46 @@ public class UserEntityAddons implements VertxPojo, IUserEntityAddons {
     public UserEntityAddons setMigrated(Boolean migrated) {
         this.migrated = migrated;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final UserEntityAddons other = (UserEntityAddons) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.privacyToken == null) {
+            if (other.privacyToken != null)
+                return false;
+        }
+        else if (!this.privacyToken.equals(other.privacyToken))
+            return false;
+        if (this.migrated == null) {
+            if (other.migrated != null)
+                return false;
+        }
+        else if (!this.migrated.equals(other.migrated))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.privacyToken == null) ? 0 : this.privacyToken.hashCode());
+        result = prime * result + ((this.migrated == null) ? 0 : this.migrated.hashCode());
+        return result;
     }
 
     @Override

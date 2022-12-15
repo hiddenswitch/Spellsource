@@ -4,16 +4,25 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
+import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.FedUserCredentialRecord;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function11;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row14;
+import org.jooq.Records;
+import org.jooq.Row11;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -50,16 +59,6 @@ public class FedUserCredential extends TableImpl<FedUserCredentialRecord> {
     public final TableField<FedUserCredentialRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
-     * The column <code>keycloak.fed_user_credential.device</code>.
-     */
-    public final TableField<FedUserCredentialRecord, String> DEVICE = createField(DSL.name("device"), SQLDataType.VARCHAR(255), this, "");
-
-    /**
-     * The column <code>keycloak.fed_user_credential.hash_iterations</code>.
-     */
-    public final TableField<FedUserCredentialRecord, Integer> HASH_ITERATIONS = createField(DSL.name("hash_iterations"), SQLDataType.INTEGER, this, "");
-
-    /**
      * The column <code>keycloak.fed_user_credential.salt</code>.
      */
     public final TableField<FedUserCredentialRecord, byte[]> SALT = createField(DSL.name("salt"), SQLDataType.BLOB, this, "");
@@ -70,34 +69,9 @@ public class FedUserCredential extends TableImpl<FedUserCredentialRecord> {
     public final TableField<FedUserCredentialRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR(255), this, "");
 
     /**
-     * The column <code>keycloak.fed_user_credential.value</code>.
-     */
-    public final TableField<FedUserCredentialRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
-
-    /**
      * The column <code>keycloak.fed_user_credential.created_date</code>.
      */
     public final TableField<FedUserCredentialRecord, Long> CREATED_DATE = createField(DSL.name("created_date"), SQLDataType.BIGINT, this, "");
-
-    /**
-     * The column <code>keycloak.fed_user_credential.counter</code>.
-     */
-    public final TableField<FedUserCredentialRecord, Integer> COUNTER = createField(DSL.name("counter"), SQLDataType.INTEGER.defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
-
-    /**
-     * The column <code>keycloak.fed_user_credential.digits</code>.
-     */
-    public final TableField<FedUserCredentialRecord, Integer> DIGITS = createField(DSL.name("digits"), SQLDataType.INTEGER.defaultValue(DSL.field("6", SQLDataType.INTEGER)), this, "");
-
-    /**
-     * The column <code>keycloak.fed_user_credential.period</code>.
-     */
-    public final TableField<FedUserCredentialRecord, Integer> PERIOD = createField(DSL.name("period"), SQLDataType.INTEGER.defaultValue(DSL.field("30", SQLDataType.INTEGER)), this, "");
-
-    /**
-     * The column <code>keycloak.fed_user_credential.algorithm</code>.
-     */
-    public final TableField<FedUserCredentialRecord, String> ALGORITHM = createField(DSL.name("algorithm"), SQLDataType.VARCHAR(36).defaultValue(DSL.field("'HmacSHA1'::character varying", SQLDataType.VARCHAR)), this, "");
 
     /**
      * The column <code>keycloak.fed_user_credential.user_id</code>.
@@ -113,6 +87,26 @@ public class FedUserCredential extends TableImpl<FedUserCredentialRecord> {
      * The column <code>keycloak.fed_user_credential.storage_provider_id</code>.
      */
     public final TableField<FedUserCredentialRecord, String> STORAGE_PROVIDER_ID = createField(DSL.name("storage_provider_id"), SQLDataType.VARCHAR(36), this, "");
+
+    /**
+     * The column <code>keycloak.fed_user_credential.user_label</code>.
+     */
+    public final TableField<FedUserCredentialRecord, String> USER_LABEL = createField(DSL.name("user_label"), SQLDataType.VARCHAR(255), this, "");
+
+    /**
+     * The column <code>keycloak.fed_user_credential.secret_data</code>.
+     */
+    public final TableField<FedUserCredentialRecord, String> SECRET_DATA = createField(DSL.name("secret_data"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>keycloak.fed_user_credential.credential_data</code>.
+     */
+    public final TableField<FedUserCredentialRecord, String> CREDENTIAL_DATA = createField(DSL.name("credential_data"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>keycloak.fed_user_credential.priority</code>.
+     */
+    public final TableField<FedUserCredentialRecord, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER, this, "");
 
     private FedUserCredential(Name alias, Table<FedUserCredentialRecord> aliased) {
         this(alias, aliased, null);
@@ -155,6 +149,11 @@ public class FedUserCredential extends TableImpl<FedUserCredentialRecord> {
     }
 
     @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.IDX_FU_CREDENTIAL, Indexes.IDX_FU_CREDENTIAL_RU);
+    }
+
+    @Override
     public UniqueKey<FedUserCredentialRecord> getPrimaryKey() {
         return Keys.CONSTR_FED_USER_CRED_PK;
     }
@@ -167,6 +166,11 @@ public class FedUserCredential extends TableImpl<FedUserCredentialRecord> {
     @Override
     public FedUserCredential as(Name alias) {
         return new FedUserCredential(alias, this);
+    }
+
+    @Override
+    public FedUserCredential as(Table<?> alias) {
+        return new FedUserCredential(alias.getQualifiedName(), this);
     }
 
     /**
@@ -185,12 +189,35 @@ public class FedUserCredential extends TableImpl<FedUserCredentialRecord> {
         return new FedUserCredential(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public FedUserCredential rename(Table<?> name) {
+        return new FedUserCredential(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
-    // Row14 type methods
+    // Row11 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row14<String, String, Integer, byte[], String, String, Long, Integer, Integer, Integer, String, String, String, String> fieldsRow() {
-        return (Row14) super.fieldsRow();
+    public Row11<String, byte[], String, Long, String, String, String, String, String, String, Integer> fieldsRow() {
+        return (Row11) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function11<? super String, ? super byte[], ? super String, ? super Long, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Integer, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function11<? super String, ? super byte[], ? super String, ? super Long, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Integer, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

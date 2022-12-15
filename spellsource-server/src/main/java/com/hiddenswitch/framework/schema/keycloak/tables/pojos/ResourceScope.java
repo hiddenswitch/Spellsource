@@ -76,6 +76,39 @@ public class ResourceScope implements VertxPojo, IResourceScope {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ResourceScope other = (ResourceScope) obj;
+        if (this.resourceId == null) {
+            if (other.resourceId != null)
+                return false;
+        }
+        else if (!this.resourceId.equals(other.resourceId))
+            return false;
+        if (this.scopeId == null) {
+            if (other.scopeId != null)
+                return false;
+        }
+        else if (!this.scopeId.equals(other.scopeId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.resourceId == null) ? 0 : this.resourceId.hashCode());
+        result = prime * result + ((this.scopeId == null) ? 0 : this.scopeId.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ResourceScope (");
 

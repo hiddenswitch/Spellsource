@@ -9,14 +9,11 @@ apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 dependencies {
-    implementation 'org.slf4j:slf4j-api'
+    
     implementation 'org.jetbrains:annotations'
-    runtimeOnly 'ch.qos.logback:logback-classic:1.2.11'
     implementation "com.google.guava:guava:$guavaVersion"
 
     testImplementation project(':spellsource-testutils')
-
-    compileOnly 'org.graalvm.nativeimage:svm:20.0.0'
 
     implementation project(':spellsource-game')
     implementation project(':spellsource-protos')

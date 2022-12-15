@@ -9,7 +9,12 @@ public class ToxiClient extends Client {
 	}
 
 	@Override
-	public String grpcAddress() {
-		return FrameworkTestBase.toxicGrpcProxy().getContainerIpAddress() + ":" + FrameworkTestBase.toxicGrpcProxy().getProxyPort();
+	protected int port() {
+		return FrameworkTestBase.toxicGrpcProxy().getProxyPort();
+	}
+
+	@Override
+	protected String host() {
+		return FrameworkTestBase.toxicGrpcProxy().getContainerIpAddress();
 	}
 }

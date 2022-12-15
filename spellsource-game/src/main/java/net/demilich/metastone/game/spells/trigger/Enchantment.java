@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.GameEventTypeMessage.GameEventType;
 import net.demilich.metastone.game.GameContext;
@@ -133,7 +132,6 @@ public class Enchantment extends Entity implements Trigger {
 		return EntityType.ENCHANTMENT;
 	}
 
-	@Suspendable
 	public void expire(GameContext context) {
 		expired = true;
 	}
@@ -176,7 +174,6 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	@Override
-	@Suspendable
 	public void onAdd(GameContext context, Player player, Entity source, Entity host) {
 		added = true;
 	}
@@ -189,7 +186,6 @@ public class Enchantment extends Entity implements Trigger {
 	 * @param event
 	 * @return {@code true} if processing succeeded.
 	 */
-	@Suspendable
 	protected boolean process(int ownerId, SpellDesc spell, GameEvent event) {
 		if (!usesSpellTrigger) {
 			return false;
@@ -226,7 +222,6 @@ public class Enchantment extends Entity implements Trigger {
 		return spellCasts;
 	}
 
-	@Suspendable
 	protected void cast(int ownerId, SpellDesc spell, GameEvent event) {
 		if (event.getEventType().equals(GameEventType.TURN_END) && SpellUtils.getAuras(event.getGameContext(), ownerId, DoubleTurnEndTriggersAura.class).size() > 0) {
 			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, TargetSelection.NONE, false, null);
@@ -235,7 +230,6 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	@Override
-	@Suspendable
 	public void onGameEvent(GameEvent event) {
 		if (!isActivated() || isExpired() || !usesSpellTrigger) {
 			return;
@@ -262,7 +256,6 @@ public class Enchantment extends Entity implements Trigger {
 		process(ownerId, getSpell(), event);
 	}
 
-	@Suspendable
 	protected boolean shouldNotifyEnchantmentFired(GameEvent event) {
 		return event.getEventType() != GameEventType.BOARD_CHANGED
 				&& event.getEventType() != GameEventType.WILL_END_SEQUENCE
@@ -302,7 +295,6 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	@Override
-	@Suspendable
 	public final boolean queues(GameEvent event) {
 		Entity host = event.getGameContext().resolveSingleTarget(hostReference, false);
 
@@ -371,7 +363,6 @@ public class Enchantment extends Entity implements Trigger {
 		return false;
 	}
 
-	@Suspendable
 	protected boolean innerQueues(GameEvent event, Entity host) {
 		return Arrays.stream(getZones()).anyMatch(z -> z == host.getZone());
 	}
@@ -388,7 +379,6 @@ public class Enchantment extends Entity implements Trigger {
 		return oneTurn;
 	}
 
-	@Suspendable
 	public boolean fires(GameEvent event) {
 		var host = event.getGameContext().resolveSingleTarget(hostReference, false);
 		// Expired

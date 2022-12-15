@@ -12,36 +12,42 @@ import io.micrometer.core.instrument.Metrics;
 import io.opentracing.contrib.grpc.TracingServerInterceptor;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Closeable;
 import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
 import io.vertx.core.Promise;
-import io.vertx.grpc.VertxServer;
-import io.vertx.grpc.VertxServerBuilder;
+import io.vertx.core.http.Http2Settings;
+import io.vertx.core.http.HttpServerOptions;
+import io.vertx.grpc.server.GrpcServer;
+import io.vertx.grpc.server.GrpcServiceBridge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Gateway extends AbstractVerticle {
 	private static Logger LOGGER = LoggerFactory.getLogger(Gateway.class);
-	VertxServer server;
+	List<Closeable> closeables = new ArrayList<>();
 
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
 		var configuration = Environment.getConfiguration();
 		CompositeFuture.all(
-				Legacy.services(),
-				Legacy.unauthenticatedCards(),
-				Matchmaking.services(),
-				Accounts.unauthenticatedService(),
-				Accounts.authenticatedService(),
-				Games.services())
+						Legacy.services(),
+						Legacy.unauthenticatedCards(),
+						Matchmaking.services(),
+						Accounts.unauthenticatedService(),
+						Accounts.authenticatedService(),
+						Games.services())
 				.compose(services -> {
-					var serverConfiguration = Environment.getConfiguration();
-					var builder = VertxServerBuilder.forPort(vertx, grpcPort());
+					var server = GrpcServer.server(vertx);
+					var httpServer = vertx.createHttpServer(new HttpServerOptions()
+									.setIdleTimeout(Integer.MAX_VALUE))
+							.requestHandler(server)
+							.listen(grpcPort());
 
 					var list = services.list();
 					for (var service : list) {
@@ -77,13 +83,13 @@ public class Gateway extends AbstractVerticle {
 											.build()).build());
 						}
 						boundService = ServerInterceptors.intercept(boundService, Streams.concat(interceptors, limiter).collect(Collectors.toList()));
-						builder.addService(boundService);
+						GrpcServiceBridge.bridge(boundService).bind(server);
 					}
 
 					// include reflection
-					builder.addService(ProtoReflectionService.newInstance());
+					GrpcServiceBridge.bridge(ProtoReflectionService.newInstance()).bind(server);
 
-					var nettyServerBuilder = builder.nettyBuilder();
+					/*
 					nettyServerBuilder
 							.maxConnectionIdle(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
 							.maxConnectionAge(29, TimeUnit.DAYS)
@@ -91,16 +97,24 @@ public class Gateway extends AbstractVerticle {
 							.keepAliveTimeout(serverConfiguration.getGrpcConfiguration().getServerKeepAliveTimeoutMillis(), TimeUnit.MILLISECONDS)
 							.permitKeepAliveTime(Math.max(serverConfiguration.getGrpcConfiguration().getServerKeepAliveTimeMillis() - 400, 100), TimeUnit.MILLISECONDS)
 							.permitKeepAliveWithoutCalls(serverConfiguration.getGrpcConfiguration().getServerPermitKeepAliveWithoutCalls());
-					return Future.succeededFuture(builder);
-				})
-				.compose(builder -> {
-					var promise = Promise.<Void>promise();
-					server = builder.build();
-					server.start(promise);
-					return promise.future();
+					 */
+					return httpServer
+							.onSuccess(listening -> closeables.add(listening::close))
+							.map((Void) null);
 				})
 				.onFailure(Environment.onFailure())
 				.onComplete(startPromise);
+	}
+
+	@Override
+	public void stop(Promise<Void> stopPromise) {
+		CompositeFuture.all(closeables.stream().map(closeable -> {
+					var promise = Promise.<Void>promise();
+					closeable.close(promise);
+					return promise.future();
+				}).collect(Collectors.toList()))
+				.map((Void) null)
+				.onComplete(stopPromise);
 	}
 
 	public static int grpcPort() {

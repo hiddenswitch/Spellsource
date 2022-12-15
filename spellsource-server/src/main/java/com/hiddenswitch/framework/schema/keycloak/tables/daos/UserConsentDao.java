@@ -100,6 +100,38 @@ public class UserConsentDao extends AbstractReactiveVertxDAO<UserConsentRecord, 
                 return findManyByCondition(UserConsent.USER_CONSENT.LAST_UPDATED_DATE.in(values),limit);
         }
 
+        /**
+     * Find records that have <code>client_storage_provider IN (values)</code>
+     * asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsent>> findManyByClientStorageProvider(Collection<String> values) {
+                return findManyByCondition(UserConsent.USER_CONSENT.CLIENT_STORAGE_PROVIDER.in(values));
+        }
+
+        /**
+     * Find records that have <code>client_storage_provider IN (values)</code>
+     * asynchronously limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsent>> findManyByClientStorageProvider(Collection<String> values, int limit) {
+                return findManyByCondition(UserConsent.USER_CONSENT.CLIENT_STORAGE_PROVIDER.in(values),limit);
+        }
+
+        /**
+     * Find records that have <code>external_client_id IN (values)</code>
+     * asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsent>> findManyByExternalClientId(Collection<String> values) {
+                return findManyByCondition(UserConsent.USER_CONSENT.EXTERNAL_CLIENT_ID.in(values));
+        }
+
+        /**
+     * Find records that have <code>external_client_id IN (values)</code>
+     * asynchronously limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsent>> findManyByExternalClientId(Collection<String> values, int limit) {
+                return findManyByCondition(UserConsent.USER_CONSENT.EXTERNAL_CLIENT_ID.in(values),limit);
+        }
+
         @Override
         public ReactiveClassicQueryExecutor<UserConsentRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsent,String> queryExecutor(){
                 return (ReactiveClassicQueryExecutor<UserConsentRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsent,String>) super.queryExecutor();

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -39,7 +38,6 @@ public class SwapCardsSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(SwapCardsSpell.class);
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity spellSource, Entity spellTarget) {
 		checkArguments(logger, context, spellSource, desc, SpellArg.SECONDARY_TARGET);
 		Entity toSwap = context.resolveSingleTarget(player, spellSource, (EntityReference) desc.getOrDefault(SpellArg.SECONDARY_TARGET, EntityReference.SELF));
@@ -67,7 +65,6 @@ public class SwapCardsSpell extends Spell {
 	 * @param card1
 	 * @param card2
 	 */
-	@Suspendable
 	public static void swap(GameContext context, Card card1, Card card2) {
 		EntityZone.swap(card1, card2, context);
 		context.getLogic().removeEnchantments(card1);

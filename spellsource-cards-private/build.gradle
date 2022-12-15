@@ -1,8 +1,8 @@
 plugins {
-    id 'java'
+    id 'java-library'
 }
 
-apply plugin: 'java-library'
+apply from: '../gradle/instrument.gradle'
 
 group 'com.hiddenswitch'
 
@@ -11,10 +11,10 @@ dependencies {
     api project(':spellsource-protos')
     testImplementation 'org.jetbrains:annotations'
     testImplementation "com.google.guava:guava:$guavaVersion"
-    testImplementation 'com.hiddenswitch:quasar-core:10.0.6'
     testImplementation project(':spellsource-testutils')
     testImplementation project(':spellsource-cards-git')
-    testRuntimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.7'
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
 }
 
 test {

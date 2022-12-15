@@ -1,6 +1,5 @@
 package net.demilich.metastone.tests.util;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -17,13 +16,11 @@ public class DebugContext extends GameContext {
 	}
 
 	@Override
-	@Suspendable
 	public void init() {
 		super.init();
 		startTurn(getActivePlayerId());
 	}
 
-	@Suspendable
 	public void endTurn() {
 		super.endTurn();
 		startTurn(getActivePlayerId());

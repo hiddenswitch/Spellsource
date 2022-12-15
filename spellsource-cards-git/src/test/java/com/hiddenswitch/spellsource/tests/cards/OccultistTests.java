@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
-import co.paralleluniverse.common.util.Objects;
+import com.google.common.base.Objects;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;

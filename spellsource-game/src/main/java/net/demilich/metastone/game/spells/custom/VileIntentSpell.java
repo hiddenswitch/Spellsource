@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -22,7 +21,6 @@ import static java.util.stream.Collectors.toSet;
 public final class VileIntentSpell extends BuffSpell {
 
 	@Override
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		var minionsInGraveyard = GraveyardCardAndActorSourceCardSource.graveyardCards(context, player).stream()
 				.filter(c -> GameLogic.isCardType(c.getCardType(), CardType.MINION))

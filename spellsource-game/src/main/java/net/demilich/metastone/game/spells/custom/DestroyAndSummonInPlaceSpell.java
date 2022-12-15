@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -27,7 +26,6 @@ import static java.util.stream.Collectors.toMap;
 public final class DestroyAndSummonInPlaceSpell extends SummonSpell {
 
 	@Override
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		Map<Integer, Integer> targetLocations = targets.stream()
 				.collect(toMap(Entity::getId, e -> e.getEntityLocation().getIndex()));

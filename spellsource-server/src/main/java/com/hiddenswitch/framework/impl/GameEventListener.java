@@ -1,6 +1,5 @@
 package com.hiddenswitch.framework.impl;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.common.GameState;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.events.Notification;
@@ -16,7 +15,6 @@ public interface GameEventListener {
 	 * @param event
 	 * @param gameState
 	 */
-	@Suspendable
 	void sendNotification(Notification event, GameState gameState);
 
 	/**
@@ -25,7 +23,6 @@ public interface GameEventListener {
 	 * @param gameState
 	 * @param winner
 	 */
-	@Suspendable
 	void sendGameOver(GameState gameState, Player winner);
 
 	/**
@@ -33,7 +30,6 @@ public interface GameEventListener {
 	 *
 	 * @param activePlayer
 	 */
-	@Suspendable
 	void onConnectionStarted(Player activePlayer);
 
 	/**
@@ -43,7 +39,6 @@ public interface GameEventListener {
 	 * @param turnNumber
 	 * @param turnState
 	 */
-	@Suspendable
 	void onTurnEnd(Player activePlayer, int turnNumber, TurnState turnState);
 
 	/**
@@ -51,7 +46,6 @@ public interface GameEventListener {
 	 *
 	 * @param state
 	 */
-	@Suspendable
 	void onUpdate(GameState state);
 
 	/**
@@ -59,6 +53,5 @@ public interface GameEventListener {
 	 *  @param entityId
 	 * @param emote
 	 */
-	@Suspendable
 	void sendEmote(int entityId, String emote);
 }

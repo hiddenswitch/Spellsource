@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
@@ -30,7 +29,6 @@ import java.util.stream.Stream;
 public final class FarseerNobundoSpell extends Spell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity spellSource, Entity spellTarget) {
 		if (spellTarget == null) {
 			return;

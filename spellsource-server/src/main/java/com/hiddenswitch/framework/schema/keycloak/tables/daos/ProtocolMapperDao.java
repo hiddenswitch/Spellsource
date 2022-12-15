@@ -85,38 +85,6 @@ public class ProtocolMapperDao extends AbstractReactiveVertxDAO<ProtocolMapperRe
         }
 
         /**
-     * Find records that have <code>consent_required IN (values)</code>
-     * asynchronously
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByConsentRequired(Collection<Boolean> values) {
-                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CONSENT_REQUIRED.in(values));
-        }
-
-        /**
-     * Find records that have <code>consent_required IN (values)</code>
-     * asynchronously limited by the given limit
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByConsentRequired(Collection<Boolean> values, int limit) {
-                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CONSENT_REQUIRED.in(values),limit);
-        }
-
-        /**
-     * Find records that have <code>consent_text IN (values)</code>
-     * asynchronously
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByConsentText(Collection<String> values) {
-                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CONSENT_TEXT.in(values));
-        }
-
-        /**
-     * Find records that have <code>consent_text IN (values)</code>
-     * asynchronously limited by the given limit
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByConsentText(Collection<String> values, int limit) {
-                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CONSENT_TEXT.in(values),limit);
-        }
-
-        /**
      * Find records that have <code>client_id IN (values)</code> asynchronously
      */
         public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByClientId(Collection<String> values) {
@@ -132,19 +100,19 @@ public class ProtocolMapperDao extends AbstractReactiveVertxDAO<ProtocolMapperRe
         }
 
         /**
-     * Find records that have <code>client_template_id IN (values)</code>
+     * Find records that have <code>client_scope_id IN (values)</code>
      * asynchronously
      */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByClientTemplateId(Collection<String> values) {
-                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CLIENT_TEMPLATE_ID.in(values));
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByClientScopeId(Collection<String> values) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CLIENT_SCOPE_ID.in(values));
         }
 
         /**
-     * Find records that have <code>client_template_id IN (values)</code>
+     * Find records that have <code>client_scope_id IN (values)</code>
      * asynchronously limited by the given limit
      */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByClientTemplateId(Collection<String> values, int limit) {
-                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CLIENT_TEMPLATE_ID.in(values),limit);
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ProtocolMapper>> findManyByClientScopeId(Collection<String> values, int limit) {
+                return findManyByCondition(ProtocolMapper.PROTOCOL_MAPPER.CLIENT_SCOPE_ID.in(values),limit);
         }
 
         @Override

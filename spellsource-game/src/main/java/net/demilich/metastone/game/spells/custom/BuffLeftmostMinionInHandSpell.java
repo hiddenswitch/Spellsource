@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardList;
@@ -20,7 +19,6 @@ import java.util.List;
 public final class BuffLeftmostMinionInHandSpell extends BuffSpell {
 
 	@Override
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		CardList minions = player.getHand().filtered(c -> c.getCardType() == CardType.MINION);
 		if (minions.isEmpty()) {

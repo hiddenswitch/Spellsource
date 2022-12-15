@@ -10,13 +10,17 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.RealmRequiredCr
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function5;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row5;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -144,6 +148,11 @@ public class RealmRequiredCredential extends TableImpl<RealmRequiredCredentialRe
         return new RealmRequiredCredential(alias, this);
     }
 
+    @Override
+    public RealmRequiredCredential as(Table<?> alias) {
+        return new RealmRequiredCredential(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -160,6 +169,14 @@ public class RealmRequiredCredential extends TableImpl<RealmRequiredCredentialRe
         return new RealmRequiredCredential(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public RealmRequiredCredential rename(Table<?> name) {
+        return new RealmRequiredCredential(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row5 type methods
     // -------------------------------------------------------------------------
@@ -167,5 +184,20 @@ public class RealmRequiredCredential extends TableImpl<RealmRequiredCredentialRe
     @Override
     public Row5<String, String, Boolean, Boolean, String> fieldsRow() {
         return (Row5) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function5<? super String, ? super String, ? super Boolean, ? super Boolean, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function5<? super String, ? super String, ? super Boolean, ? super Boolean, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.behaviour;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -34,7 +33,6 @@ public class FlatMonteCarloBehaviour extends IntelligentBehaviour {
 		this.iterations = iterations;
 	}
 
-	@Suspendable
 	private GameAction getBestAction(Map<GameAction, Double> actionScores) {
 		GameAction bestAction = null;
 		double bestScore = Integer.MIN_VALUE;
@@ -55,7 +53,6 @@ public class FlatMonteCarloBehaviour extends IntelligentBehaviour {
 	}
 
 	@Override
-	@Suspendable
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
 		List<Card> discardedCards = new ArrayList<Card>();
 		for (Card card : cards) {
@@ -66,7 +63,6 @@ public class FlatMonteCarloBehaviour extends IntelligentBehaviour {
 		return discardedCards;
 	}
 
-	@Suspendable
 	private int playRandomUntilEnd(GameContext simulation, int playerId) {
 		simulation.setBehaviours(new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()});
 		simulation.resume();
@@ -74,7 +70,6 @@ public class FlatMonteCarloBehaviour extends IntelligentBehaviour {
 	}
 
 	@Override
-	@Suspendable
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 		if (validActions.size() == 1) {
 			return validActions.get(0);
@@ -94,7 +89,6 @@ public class FlatMonteCarloBehaviour extends IntelligentBehaviour {
 		return getBestAction(actionScores);
 	}
 
-	@Suspendable
 	private double simulate(GameContext context, int playerId, GameAction action, long startMillis) {
 		GameContext simulation = context.clone();
 		simulation.performAction(simulation.getActivePlayerId(), action);

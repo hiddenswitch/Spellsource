@@ -130,6 +130,21 @@ public class RequiredActionProviderDao extends AbstractReactiveVertxDAO<Required
                 return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.PROVIDER_ID.in(values),limit);
         }
 
+        /**
+     * Find records that have <code>priority IN (values)</code> asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByPriority(Collection<Integer> values) {
+                return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.PRIORITY.in(values));
+        }
+
+        /**
+     * Find records that have <code>priority IN (values)</code> asynchronously
+     * limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider>> findManyByPriority(Collection<Integer> values, int limit) {
+                return findManyByCondition(RequiredActionProvider.REQUIRED_ACTION_PROVIDER.PRIORITY.in(values),limit);
+        }
+
         @Override
         public ReactiveClassicQueryExecutor<RequiredActionProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider,String> queryExecutor(){
                 return (ReactiveClassicQueryExecutor<RequiredActionProviderRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionProvider,String>) super.queryExecutor();

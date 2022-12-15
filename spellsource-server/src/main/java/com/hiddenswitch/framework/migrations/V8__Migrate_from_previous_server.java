@@ -1,6 +1,5 @@
 package com.hiddenswitch.framework.migrations;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.annotation.*;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.HashMultiset;
@@ -11,7 +10,6 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.FriendsRecor
 import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -22,7 +20,6 @@ import io.vertx.ext.auth.AuthProvider;
 import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.authorization.Authorization;
 import io.vertx.ext.auth.authorization.Authorizations;
-import io.vertx.ext.mongo.MongoClient;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
@@ -34,6 +31,7 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
+import org.jetbrains.annotations.Nullable;
 import org.jooq.InsertValuesStepN;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,8 +51,6 @@ import java.util.stream.Collectors;
 import static com.hiddenswitch.framework.schema.keycloak.Tables.USER_ENTITY;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.FRIENDS;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.USER_ENTITY_ADDONS;
-import static io.vertx.ext.sync.Sync.await;
-import static io.vertx.ext.sync.Sync.fiber;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
@@ -87,6 +83,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 		LOGGER.debug("mongoUri: {}", mongoUri);
 
+		/*
 		// try to connect to mongo and see if it actually works
 		var mongoClient = MongoClient.create(vertx, new JsonObject().put("connection_string", mongoUri));
 		var canRead = mongoClient.findOne("migrations", new JsonObject(), new JsonObject().put("_id", 1)).toCompletionStage().toCompletableFuture().get(8000, TimeUnit.MILLISECONDS);
@@ -212,14 +209,15 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 			return (Void) null;
 		}));
+
+		 */
 	}
 
 	public static String getMongoUrl() {
 		return System.getProperty("mongo.url", System.getenv().getOrDefault("MONGO_URL", ""));
 	}
 
-	@Suspendable
-	static GetCollectionResponse getCollection(MongoClient mongoClient, GetCollectionRequest request) {
+	static GetCollectionResponse getCollection(/*MongoClient*/ Object mongoClient, GetCollectionRequest request) {
 		if (request.isBatchRequest()) {
 			List<GetCollectionResponse> responses = new ArrayList<>();
 			var requests = request.getRequests();
@@ -239,6 +237,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 
 			// Bulk retrieve deck inventory records and collection information
 			var deckIds = deckRequests.stream().map(GetCollectionRequest::getDeckId).collect(toList());
+			/*
 			var deckRecords = await(mongoClient.find(COLLECTIONS, new JsonObject().put("_id", new JsonObject().put("$in", new JsonArray(deckIds)))))
 					.stream().map(r -> r.mapTo(CollectionRecord.class)).collect(toMap(CollectionRecord::getId, Function.identity()));
 
@@ -260,6 +259,8 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 				var record = deckRecords.get(deckId);
 				responses.add(GetCollectionResponse.collection(record, deckInventories.get(deckId)));
 			});
+
+			 */
 
 			return GetCollectionResponse.batch(responses);
 		}
@@ -283,12 +284,16 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 			throw new NullPointerException("No collection was specified");
 		}
 
+		throw new UnsupportedOperationException();
+		/*
 		var results = await(mongoClient.find(INVENTORY, new JsonObject().put("collectionIds", collectionId)));
 		final var inventoryRecords = results.stream().map(r -> r.mapTo(InventoryRecord.class)).collect(toList());
 
 		var collection = await(mongoClient.find(COLLECTIONS, new JsonObject().put("_id", collectionId))).get(0).mapTo(CollectionRecord.class);
 
 		return GetCollectionResponse.collection(collection, inventoryRecords);
+
+		 */
 	}
 
 	/**

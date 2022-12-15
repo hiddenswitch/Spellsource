@@ -47,16 +47,14 @@ public interface IOfflineUserSession extends VertxPojo, Serializable {
     public String getRealmId();
 
     /**
-     * Setter for
-     * <code>keycloak.offline_user_session.last_session_refresh</code>.
+     * Setter for <code>keycloak.offline_user_session.created_on</code>.
      */
-    public IOfflineUserSession setLastSessionRefresh(Integer value);
+    public IOfflineUserSession setCreatedOn(Integer value);
 
     /**
-     * Getter for
-     * <code>keycloak.offline_user_session.last_session_refresh</code>.
+     * Getter for <code>keycloak.offline_user_session.created_on</code>.
      */
-    public Integer getLastSessionRefresh();
+    public Integer getCreatedOn();
 
     /**
      * Setter for <code>keycloak.offline_user_session.offline_flag</code>.
@@ -77,6 +75,18 @@ public interface IOfflineUserSession extends VertxPojo, Serializable {
      * Getter for <code>keycloak.offline_user_session.data</code>.
      */
     public String getData();
+
+    /**
+     * Setter for
+     * <code>keycloak.offline_user_session.last_session_refresh</code>.
+     */
+    public IOfflineUserSession setLastSessionRefresh(Integer value);
+
+    /**
+     * Getter for
+     * <code>keycloak.offline_user_session.last_session_refresh</code>.
+     */
+    public Integer getLastSessionRefresh();
 
     // -------------------------------------------------------------------------
     // FROM and INTO
@@ -99,9 +109,10 @@ public interface IOfflineUserSession extends VertxPojo, Serializable {
                 setOrThrow(this::setUserSessionId,json::getString,"user_session_id","java.lang.String");
                 setOrThrow(this::setUserId,json::getString,"user_id","java.lang.String");
                 setOrThrow(this::setRealmId,json::getString,"realm_id","java.lang.String");
-                setOrThrow(this::setLastSessionRefresh,json::getInteger,"last_session_refresh","java.lang.Integer");
+                setOrThrow(this::setCreatedOn,json::getInteger,"created_on","java.lang.Integer");
                 setOrThrow(this::setOfflineFlag,json::getString,"offline_flag","java.lang.String");
                 setOrThrow(this::setData,json::getString,"data","java.lang.String");
+                setOrThrow(this::setLastSessionRefresh,json::getInteger,"last_session_refresh","java.lang.Integer");
                 return this;
         }
 
@@ -112,9 +123,10 @@ public interface IOfflineUserSession extends VertxPojo, Serializable {
                 json.put("user_session_id",getUserSessionId());
                 json.put("user_id",getUserId());
                 json.put("realm_id",getRealmId());
-                json.put("last_session_refresh",getLastSessionRefresh());
+                json.put("created_on",getCreatedOn());
                 json.put("offline_flag",getOfflineFlag());
                 json.put("data",getData());
+                json.put("last_session_refresh",getLastSessionRefresh());
                 return json;
         }
 

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -24,7 +23,6 @@ public final class FormlessAgonyMissilesSpell extends MissilesSpell {
 	private List<Actor> hits;
 
 	@Override
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		hits = new ArrayList<>(targets.size());
 		super.cast(context, player, desc, source, targets);
@@ -41,7 +39,6 @@ public final class FormlessAgonyMissilesSpell extends MissilesSpell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 	}
 }

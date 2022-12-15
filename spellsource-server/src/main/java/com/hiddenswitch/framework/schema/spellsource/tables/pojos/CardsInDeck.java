@@ -18,7 +18,7 @@ public class CardsInDeck implements VertxPojo, ICardsInDeck {
 
     private static final long serialVersionUID = 1L;
 
-    private Long   id;
+    private Long id;
     private String deckId;
     private String cardId;
 
@@ -31,7 +31,7 @@ public class CardsInDeck implements VertxPojo, ICardsInDeck {
     }
 
     public CardsInDeck(
-        Long   id,
+        Long id,
         String deckId,
         String cardId
     ) {
@@ -98,6 +98,46 @@ public class CardsInDeck implements VertxPojo, ICardsInDeck {
     public CardsInDeck setCardId(String cardId) {
         this.cardId = cardId;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final CardsInDeck other = (CardsInDeck) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.deckId == null) {
+            if (other.deckId != null)
+                return false;
+        }
+        else if (!this.deckId.equals(other.deckId))
+            return false;
+        if (this.cardId == null) {
+            if (other.cardId != null)
+                return false;
+        }
+        else if (!this.cardId.equals(other.cardId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.deckId == null) ? 0 : this.deckId.hashCode());
+        result = prime * result + ((this.cardId == null) ? 0 : this.cardId.hashCode());
+        return result;
     }
 
     @Override

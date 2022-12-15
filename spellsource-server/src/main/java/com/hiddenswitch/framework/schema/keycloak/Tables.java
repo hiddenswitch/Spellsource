@@ -13,30 +13,30 @@ import com.hiddenswitch.framework.schema.keycloak.tables.AuthenticatorConfigEntr
 import com.hiddenswitch.framework.schema.keycloak.tables.BrokerLink;
 import com.hiddenswitch.framework.schema.keycloak.tables.Client;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientAttributes;
-import com.hiddenswitch.framework.schema.keycloak.tables.ClientDefaultRoles;
-import com.hiddenswitch.framework.schema.keycloak.tables.ClientIdentityProvMapping;
+import com.hiddenswitch.framework.schema.keycloak.tables.ClientAuthFlowBindings;
+import com.hiddenswitch.framework.schema.keycloak.tables.ClientInitialAccess;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientNodeRegistrations;
+import com.hiddenswitch.framework.schema.keycloak.tables.ClientScope;
+import com.hiddenswitch.framework.schema.keycloak.tables.ClientScopeAttributes;
+import com.hiddenswitch.framework.schema.keycloak.tables.ClientScopeClient;
+import com.hiddenswitch.framework.schema.keycloak.tables.ClientScopeRoleMapping;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientSession;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientSessionAuthStatus;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientSessionNote;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientSessionProtMapper;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientSessionRole;
-import com.hiddenswitch.framework.schema.keycloak.tables.ClientTemplate;
-import com.hiddenswitch.framework.schema.keycloak.tables.ClientTemplateAttributes;
 import com.hiddenswitch.framework.schema.keycloak.tables.ClientUserSessionNote;
 import com.hiddenswitch.framework.schema.keycloak.tables.Component;
 import com.hiddenswitch.framework.schema.keycloak.tables.ComponentConfig;
 import com.hiddenswitch.framework.schema.keycloak.tables.CompositeRole;
 import com.hiddenswitch.framework.schema.keycloak.tables.Credential;
-import com.hiddenswitch.framework.schema.keycloak.tables.CredentialAttribute;
 import com.hiddenswitch.framework.schema.keycloak.tables.Databasechangelog;
 import com.hiddenswitch.framework.schema.keycloak.tables.Databasechangeloglock;
+import com.hiddenswitch.framework.schema.keycloak.tables.DefaultClientScope;
 import com.hiddenswitch.framework.schema.keycloak.tables.EventEntity;
-import com.hiddenswitch.framework.schema.keycloak.tables.FedCredentialAttribute;
 import com.hiddenswitch.framework.schema.keycloak.tables.FedUserAttribute;
 import com.hiddenswitch.framework.schema.keycloak.tables.FedUserConsent;
-import com.hiddenswitch.framework.schema.keycloak.tables.FedUserConsentProtMapper;
-import com.hiddenswitch.framework.schema.keycloak.tables.FedUserConsentRole;
+import com.hiddenswitch.framework.schema.keycloak.tables.FedUserConsentClScope;
 import com.hiddenswitch.framework.schema.keycloak.tables.FedUserCredential;
 import com.hiddenswitch.framework.schema.keycloak.tables.FedUserGroupMembership;
 import com.hiddenswitch.framework.schema.keycloak.tables.FedUserRequiredAction;
@@ -60,28 +60,30 @@ import com.hiddenswitch.framework.schema.keycloak.tables.ProtocolMapperConfig;
 import com.hiddenswitch.framework.schema.keycloak.tables.Realm;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmAttribute;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmDefaultGroups;
-import com.hiddenswitch.framework.schema.keycloak.tables.RealmDefaultRoles;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmEnabledEventTypes;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmEventsListeners;
+import com.hiddenswitch.framework.schema.keycloak.tables.RealmLocalizations;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmRequiredCredential;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmSmtpConfig;
 import com.hiddenswitch.framework.schema.keycloak.tables.RealmSupportedLocales;
 import com.hiddenswitch.framework.schema.keycloak.tables.RedirectUris;
 import com.hiddenswitch.framework.schema.keycloak.tables.RequiredActionConfig;
 import com.hiddenswitch.framework.schema.keycloak.tables.RequiredActionProvider;
+import com.hiddenswitch.framework.schema.keycloak.tables.ResourceAttribute;
 import com.hiddenswitch.framework.schema.keycloak.tables.ResourcePolicy;
 import com.hiddenswitch.framework.schema.keycloak.tables.ResourceScope;
 import com.hiddenswitch.framework.schema.keycloak.tables.ResourceServer;
+import com.hiddenswitch.framework.schema.keycloak.tables.ResourceServerPermTicket;
 import com.hiddenswitch.framework.schema.keycloak.tables.ResourceServerPolicy;
 import com.hiddenswitch.framework.schema.keycloak.tables.ResourceServerResource;
 import com.hiddenswitch.framework.schema.keycloak.tables.ResourceServerScope;
+import com.hiddenswitch.framework.schema.keycloak.tables.ResourceUris;
+import com.hiddenswitch.framework.schema.keycloak.tables.RoleAttribute;
 import com.hiddenswitch.framework.schema.keycloak.tables.ScopeMapping;
 import com.hiddenswitch.framework.schema.keycloak.tables.ScopePolicy;
-import com.hiddenswitch.framework.schema.keycloak.tables.TemplateScopeMapping;
 import com.hiddenswitch.framework.schema.keycloak.tables.UserAttribute;
 import com.hiddenswitch.framework.schema.keycloak.tables.UserConsent;
-import com.hiddenswitch.framework.schema.keycloak.tables.UserConsentProtMapper;
-import com.hiddenswitch.framework.schema.keycloak.tables.UserConsentRole;
+import com.hiddenswitch.framework.schema.keycloak.tables.UserConsentClientScope;
 import com.hiddenswitch.framework.schema.keycloak.tables.UserEntity;
 import com.hiddenswitch.framework.schema.keycloak.tables.UserFederationConfig;
 import com.hiddenswitch.framework.schema.keycloak.tables.UserFederationMapper;
@@ -148,19 +150,39 @@ public class Tables {
     public static final ClientAttributes CLIENT_ATTRIBUTES = ClientAttributes.CLIENT_ATTRIBUTES;
 
     /**
-     * The table <code>keycloak.client_default_roles</code>.
+     * The table <code>keycloak.client_auth_flow_bindings</code>.
      */
-    public static final ClientDefaultRoles CLIENT_DEFAULT_ROLES = ClientDefaultRoles.CLIENT_DEFAULT_ROLES;
+    public static final ClientAuthFlowBindings CLIENT_AUTH_FLOW_BINDINGS = ClientAuthFlowBindings.CLIENT_AUTH_FLOW_BINDINGS;
 
     /**
-     * The table <code>keycloak.client_identity_prov_mapping</code>.
+     * The table <code>keycloak.client_initial_access</code>.
      */
-    public static final ClientIdentityProvMapping CLIENT_IDENTITY_PROV_MAPPING = ClientIdentityProvMapping.CLIENT_IDENTITY_PROV_MAPPING;
+    public static final ClientInitialAccess CLIENT_INITIAL_ACCESS = ClientInitialAccess.CLIENT_INITIAL_ACCESS;
 
     /**
      * The table <code>keycloak.client_node_registrations</code>.
      */
     public static final ClientNodeRegistrations CLIENT_NODE_REGISTRATIONS = ClientNodeRegistrations.CLIENT_NODE_REGISTRATIONS;
+
+    /**
+     * The table <code>keycloak.client_scope</code>.
+     */
+    public static final ClientScope CLIENT_SCOPE = ClientScope.CLIENT_SCOPE;
+
+    /**
+     * The table <code>keycloak.client_scope_attributes</code>.
+     */
+    public static final ClientScopeAttributes CLIENT_SCOPE_ATTRIBUTES = ClientScopeAttributes.CLIENT_SCOPE_ATTRIBUTES;
+
+    /**
+     * The table <code>keycloak.client_scope_client</code>.
+     */
+    public static final ClientScopeClient CLIENT_SCOPE_CLIENT = ClientScopeClient.CLIENT_SCOPE_CLIENT;
+
+    /**
+     * The table <code>keycloak.client_scope_role_mapping</code>.
+     */
+    public static final ClientScopeRoleMapping CLIENT_SCOPE_ROLE_MAPPING = ClientScopeRoleMapping.CLIENT_SCOPE_ROLE_MAPPING;
 
     /**
      * The table <code>keycloak.client_session</code>.
@@ -188,16 +210,6 @@ public class Tables {
     public static final ClientSessionRole CLIENT_SESSION_ROLE = ClientSessionRole.CLIENT_SESSION_ROLE;
 
     /**
-     * The table <code>keycloak.client_template</code>.
-     */
-    public static final ClientTemplate CLIENT_TEMPLATE = ClientTemplate.CLIENT_TEMPLATE;
-
-    /**
-     * The table <code>keycloak.client_template_attributes</code>.
-     */
-    public static final ClientTemplateAttributes CLIENT_TEMPLATE_ATTRIBUTES = ClientTemplateAttributes.CLIENT_TEMPLATE_ATTRIBUTES;
-
-    /**
      * The table <code>keycloak.client_user_session_note</code>.
      */
     public static final ClientUserSessionNote CLIENT_USER_SESSION_NOTE = ClientUserSessionNote.CLIENT_USER_SESSION_NOTE;
@@ -223,11 +235,6 @@ public class Tables {
     public static final Credential CREDENTIAL = Credential.CREDENTIAL;
 
     /**
-     * The table <code>keycloak.credential_attribute</code>.
-     */
-    public static final CredentialAttribute CREDENTIAL_ATTRIBUTE = CredentialAttribute.CREDENTIAL_ATTRIBUTE;
-
-    /**
      * The table <code>keycloak.databasechangelog</code>.
      */
     public static final Databasechangelog DATABASECHANGELOG = Databasechangelog.DATABASECHANGELOG;
@@ -238,14 +245,14 @@ public class Tables {
     public static final Databasechangeloglock DATABASECHANGELOGLOCK = Databasechangeloglock.DATABASECHANGELOGLOCK;
 
     /**
+     * The table <code>keycloak.default_client_scope</code>.
+     */
+    public static final DefaultClientScope DEFAULT_CLIENT_SCOPE = DefaultClientScope.DEFAULT_CLIENT_SCOPE;
+
+    /**
      * The table <code>keycloak.event_entity</code>.
      */
     public static final EventEntity EVENT_ENTITY = EventEntity.EVENT_ENTITY;
-
-    /**
-     * The table <code>keycloak.fed_credential_attribute</code>.
-     */
-    public static final FedCredentialAttribute FED_CREDENTIAL_ATTRIBUTE = FedCredentialAttribute.FED_CREDENTIAL_ATTRIBUTE;
 
     /**
      * The table <code>keycloak.fed_user_attribute</code>.
@@ -258,14 +265,9 @@ public class Tables {
     public static final FedUserConsent FED_USER_CONSENT = FedUserConsent.FED_USER_CONSENT;
 
     /**
-     * The table <code>keycloak.fed_user_consent_prot_mapper</code>.
+     * The table <code>keycloak.fed_user_consent_cl_scope</code>.
      */
-    public static final FedUserConsentProtMapper FED_USER_CONSENT_PROT_MAPPER = FedUserConsentProtMapper.FED_USER_CONSENT_PROT_MAPPER;
-
-    /**
-     * The table <code>keycloak.fed_user_consent_role</code>.
-     */
-    public static final FedUserConsentRole FED_USER_CONSENT_ROLE = FedUserConsentRole.FED_USER_CONSENT_ROLE;
+    public static final FedUserConsentClScope FED_USER_CONSENT_CL_SCOPE = FedUserConsentClScope.FED_USER_CONSENT_CL_SCOPE;
 
     /**
      * The table <code>keycloak.fed_user_credential</code>.
@@ -383,11 +385,6 @@ public class Tables {
     public static final RealmDefaultGroups REALM_DEFAULT_GROUPS = RealmDefaultGroups.REALM_DEFAULT_GROUPS;
 
     /**
-     * The table <code>keycloak.realm_default_roles</code>.
-     */
-    public static final RealmDefaultRoles REALM_DEFAULT_ROLES = RealmDefaultRoles.REALM_DEFAULT_ROLES;
-
-    /**
      * The table <code>keycloak.realm_enabled_event_types</code>.
      */
     public static final RealmEnabledEventTypes REALM_ENABLED_EVENT_TYPES = RealmEnabledEventTypes.REALM_ENABLED_EVENT_TYPES;
@@ -396,6 +393,11 @@ public class Tables {
      * The table <code>keycloak.realm_events_listeners</code>.
      */
     public static final RealmEventsListeners REALM_EVENTS_LISTENERS = RealmEventsListeners.REALM_EVENTS_LISTENERS;
+
+    /**
+     * The table <code>keycloak.realm_localizations</code>.
+     */
+    public static final RealmLocalizations REALM_LOCALIZATIONS = RealmLocalizations.REALM_LOCALIZATIONS;
 
     /**
      * The table <code>keycloak.realm_required_credential</code>.
@@ -428,6 +430,11 @@ public class Tables {
     public static final RequiredActionProvider REQUIRED_ACTION_PROVIDER = RequiredActionProvider.REQUIRED_ACTION_PROVIDER;
 
     /**
+     * The table <code>keycloak.resource_attribute</code>.
+     */
+    public static final ResourceAttribute RESOURCE_ATTRIBUTE = ResourceAttribute.RESOURCE_ATTRIBUTE;
+
+    /**
      * The table <code>keycloak.resource_policy</code>.
      */
     public static final ResourcePolicy RESOURCE_POLICY = ResourcePolicy.RESOURCE_POLICY;
@@ -441,6 +448,11 @@ public class Tables {
      * The table <code>keycloak.resource_server</code>.
      */
     public static final ResourceServer RESOURCE_SERVER = ResourceServer.RESOURCE_SERVER;
+
+    /**
+     * The table <code>keycloak.resource_server_perm_ticket</code>.
+     */
+    public static final ResourceServerPermTicket RESOURCE_SERVER_PERM_TICKET = ResourceServerPermTicket.RESOURCE_SERVER_PERM_TICKET;
 
     /**
      * The table <code>keycloak.resource_server_policy</code>.
@@ -458,6 +470,16 @@ public class Tables {
     public static final ResourceServerScope RESOURCE_SERVER_SCOPE = ResourceServerScope.RESOURCE_SERVER_SCOPE;
 
     /**
+     * The table <code>keycloak.resource_uris</code>.
+     */
+    public static final ResourceUris RESOURCE_URIS = ResourceUris.RESOURCE_URIS;
+
+    /**
+     * The table <code>keycloak.role_attribute</code>.
+     */
+    public static final RoleAttribute ROLE_ATTRIBUTE = RoleAttribute.ROLE_ATTRIBUTE;
+
+    /**
      * The table <code>keycloak.scope_mapping</code>.
      */
     public static final ScopeMapping SCOPE_MAPPING = ScopeMapping.SCOPE_MAPPING;
@@ -466,11 +488,6 @@ public class Tables {
      * The table <code>keycloak.scope_policy</code>.
      */
     public static final ScopePolicy SCOPE_POLICY = ScopePolicy.SCOPE_POLICY;
-
-    /**
-     * The table <code>keycloak.template_scope_mapping</code>.
-     */
-    public static final TemplateScopeMapping TEMPLATE_SCOPE_MAPPING = TemplateScopeMapping.TEMPLATE_SCOPE_MAPPING;
 
     /**
      * The table <code>keycloak.user_attribute</code>.
@@ -483,14 +500,9 @@ public class Tables {
     public static final UserConsent USER_CONSENT = UserConsent.USER_CONSENT;
 
     /**
-     * The table <code>keycloak.user_consent_prot_mapper</code>.
+     * The table <code>keycloak.user_consent_client_scope</code>.
      */
-    public static final UserConsentProtMapper USER_CONSENT_PROT_MAPPER = UserConsentProtMapper.USER_CONSENT_PROT_MAPPER;
-
-    /**
-     * The table <code>keycloak.user_consent_role</code>.
-     */
-    public static final UserConsentRole USER_CONSENT_ROLE = UserConsentRole.USER_CONSENT_ROLE;
+    public static final UserConsentClientScope USER_CONSENT_CLIENT_SCOPE = UserConsentClientScope.USER_CONSENT_CLIENT_SCOPE;
 
     /**
      * The table <code>keycloak.user_entity</code>.

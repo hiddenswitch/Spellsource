@@ -18,18 +18,18 @@ public class UserEntity implements VertxPojo, IUserEntity {
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
-    private String  email;
-    private String  emailConstraint;
+    private String id;
+    private String email;
+    private String emailConstraint;
     private Boolean emailVerified;
     private Boolean enabled;
-    private String  federationLink;
-    private String  firstName;
-    private String  lastName;
-    private String  realmId;
-    private String  username;
-    private Long    createdTimestamp;
-    private String  serviceAccountClientLink;
+    private String federationLink;
+    private String firstName;
+    private String lastName;
+    private String realmId;
+    private String username;
+    private Long createdTimestamp;
+    private String serviceAccountClientLink;
     private Integer notBefore;
 
     public UserEntity() {}
@@ -51,18 +51,18 @@ public class UserEntity implements VertxPojo, IUserEntity {
     }
 
     public UserEntity(
-        String  id,
-        String  email,
-        String  emailConstraint,
+        String id,
+        String email,
+        String emailConstraint,
         Boolean emailVerified,
         Boolean enabled,
-        String  federationLink,
-        String  firstName,
-        String  lastName,
-        String  realmId,
-        String  username,
-        Long    createdTimestamp,
-        String  serviceAccountClientLink,
+        String federationLink,
+        String firstName,
+        String lastName,
+        String realmId,
+        String username,
+        Long createdTimestamp,
+        String serviceAccountClientLink,
         Integer notBefore
     ) {
         this.id = id;
@@ -304,6 +304,116 @@ public class UserEntity implements VertxPojo, IUserEntity {
     public UserEntity setNotBefore(Integer notBefore) {
         this.notBefore = notBefore;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final UserEntity other = (UserEntity) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.email == null) {
+            if (other.email != null)
+                return false;
+        }
+        else if (!this.email.equals(other.email))
+            return false;
+        if (this.emailConstraint == null) {
+            if (other.emailConstraint != null)
+                return false;
+        }
+        else if (!this.emailConstraint.equals(other.emailConstraint))
+            return false;
+        if (this.emailVerified == null) {
+            if (other.emailVerified != null)
+                return false;
+        }
+        else if (!this.emailVerified.equals(other.emailVerified))
+            return false;
+        if (this.enabled == null) {
+            if (other.enabled != null)
+                return false;
+        }
+        else if (!this.enabled.equals(other.enabled))
+            return false;
+        if (this.federationLink == null) {
+            if (other.federationLink != null)
+                return false;
+        }
+        else if (!this.federationLink.equals(other.federationLink))
+            return false;
+        if (this.firstName == null) {
+            if (other.firstName != null)
+                return false;
+        }
+        else if (!this.firstName.equals(other.firstName))
+            return false;
+        if (this.lastName == null) {
+            if (other.lastName != null)
+                return false;
+        }
+        else if (!this.lastName.equals(other.lastName))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.username == null) {
+            if (other.username != null)
+                return false;
+        }
+        else if (!this.username.equals(other.username))
+            return false;
+        if (this.createdTimestamp == null) {
+            if (other.createdTimestamp != null)
+                return false;
+        }
+        else if (!this.createdTimestamp.equals(other.createdTimestamp))
+            return false;
+        if (this.serviceAccountClientLink == null) {
+            if (other.serviceAccountClientLink != null)
+                return false;
+        }
+        else if (!this.serviceAccountClientLink.equals(other.serviceAccountClientLink))
+            return false;
+        if (this.notBefore == null) {
+            if (other.notBefore != null)
+                return false;
+        }
+        else if (!this.notBefore.equals(other.notBefore))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.email == null) ? 0 : this.email.hashCode());
+        result = prime * result + ((this.emailConstraint == null) ? 0 : this.emailConstraint.hashCode());
+        result = prime * result + ((this.emailVerified == null) ? 0 : this.emailVerified.hashCode());
+        result = prime * result + ((this.enabled == null) ? 0 : this.enabled.hashCode());
+        result = prime * result + ((this.federationLink == null) ? 0 : this.federationLink.hashCode());
+        result = prime * result + ((this.firstName == null) ? 0 : this.firstName.hashCode());
+        result = prime * result + ((this.lastName == null) ? 0 : this.lastName.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.username == null) ? 0 : this.username.hashCode());
+        result = prime * result + ((this.createdTimestamp == null) ? 0 : this.createdTimestamp.hashCode());
+        result = prime * result + ((this.serviceAccountClientLink == null) ? 0 : this.serviceAccountClientLink.hashCode());
+        result = prime * result + ((this.notBefore == null) ? 0 : this.notBefore.hashCode());
+        return result;
     }
 
     @Override

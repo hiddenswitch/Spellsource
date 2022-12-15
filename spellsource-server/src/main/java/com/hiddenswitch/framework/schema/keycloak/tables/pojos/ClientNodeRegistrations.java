@@ -18,9 +18,9 @@ public class ClientNodeRegistrations implements VertxPojo, IClientNodeRegistrati
 
     private static final long serialVersionUID = 1L;
 
-    private String  clientId;
+    private String clientId;
     private Integer value;
-    private String  name;
+    private String name;
 
     public ClientNodeRegistrations() {}
 
@@ -31,9 +31,9 @@ public class ClientNodeRegistrations implements VertxPojo, IClientNodeRegistrati
     }
 
     public ClientNodeRegistrations(
-        String  clientId,
+        String clientId,
         Integer value,
-        String  name
+        String name
     ) {
         this.clientId = clientId;
         this.value = value;
@@ -94,6 +94,46 @@ public class ClientNodeRegistrations implements VertxPojo, IClientNodeRegistrati
     public ClientNodeRegistrations setName(String name) {
         this.name = name;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ClientNodeRegistrations other = (ClientNodeRegistrations) obj;
+        if (this.clientId == null) {
+            if (other.clientId != null)
+                return false;
+        }
+        else if (!this.clientId.equals(other.clientId))
+            return false;
+        if (this.value == null) {
+            if (other.value != null)
+                return false;
+        }
+        else if (!this.value.equals(other.value))
+            return false;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.clientId == null) ? 0 : this.clientId.hashCode());
+        result = prime * result + ((this.value == null) ? 0 : this.value.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        return result;
     }
 
     @Override

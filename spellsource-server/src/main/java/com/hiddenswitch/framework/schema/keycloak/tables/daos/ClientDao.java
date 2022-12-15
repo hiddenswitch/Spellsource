@@ -414,67 +414,19 @@ public class ClientDao extends AbstractReactiveVertxDAO<ClientRecord, com.hidden
         }
 
         /**
-     * Find records that have <code>client_template_id IN (values)</code>
+     * Find records that have <code>always_display_in_console IN (values)</code>
      * asynchronously
      */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.Client>> findManyByClientTemplateId(Collection<String> values) {
-                return findManyByCondition(Client.CLIENT.CLIENT_TEMPLATE_ID.in(values));
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.Client>> findManyByAlwaysDisplayInConsole(Collection<Boolean> values) {
+                return findManyByCondition(Client.CLIENT.ALWAYS_DISPLAY_IN_CONSOLE.in(values));
         }
 
         /**
-     * Find records that have <code>client_template_id IN (values)</code>
+     * Find records that have <code>always_display_in_console IN (values)</code>
      * asynchronously limited by the given limit
      */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.Client>> findManyByClientTemplateId(Collection<String> values, int limit) {
-                return findManyByCondition(Client.CLIENT.CLIENT_TEMPLATE_ID.in(values),limit);
-        }
-
-        /**
-     * Find records that have <code>use_template_config IN (values)</code>
-     * asynchronously
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.Client>> findManyByUseTemplateConfig(Collection<Boolean> values) {
-                return findManyByCondition(Client.CLIENT.USE_TEMPLATE_CONFIG.in(values));
-        }
-
-        /**
-     * Find records that have <code>use_template_config IN (values)</code>
-     * asynchronously limited by the given limit
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.Client>> findManyByUseTemplateConfig(Collection<Boolean> values, int limit) {
-                return findManyByCondition(Client.CLIENT.USE_TEMPLATE_CONFIG.in(values),limit);
-        }
-
-        /**
-     * Find records that have <code>use_template_scope IN (values)</code>
-     * asynchronously
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.Client>> findManyByUseTemplateScope(Collection<Boolean> values) {
-                return findManyByCondition(Client.CLIENT.USE_TEMPLATE_SCOPE.in(values));
-        }
-
-        /**
-     * Find records that have <code>use_template_scope IN (values)</code>
-     * asynchronously limited by the given limit
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.Client>> findManyByUseTemplateScope(Collection<Boolean> values, int limit) {
-                return findManyByCondition(Client.CLIENT.USE_TEMPLATE_SCOPE.in(values),limit);
-        }
-
-        /**
-     * Find records that have <code>use_template_mappers IN (values)</code>
-     * asynchronously
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.Client>> findManyByUseTemplateMappers(Collection<Boolean> values) {
-                return findManyByCondition(Client.CLIENT.USE_TEMPLATE_MAPPERS.in(values));
-        }
-
-        /**
-     * Find records that have <code>use_template_mappers IN (values)</code>
-     * asynchronously limited by the given limit
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.Client>> findManyByUseTemplateMappers(Collection<Boolean> values, int limit) {
-                return findManyByCondition(Client.CLIENT.USE_TEMPLATE_MAPPERS.in(values),limit);
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.Client>> findManyByAlwaysDisplayInConsole(Collection<Boolean> values, int limit) {
+                return findManyByCondition(Client.CLIENT.ALWAYS_DISPLAY_IN_CONSOLE.in(values),limit);
         }
 
         @Override

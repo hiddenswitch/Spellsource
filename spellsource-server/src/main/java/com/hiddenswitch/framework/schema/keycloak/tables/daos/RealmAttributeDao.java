@@ -40,21 +40,6 @@ public class RealmAttributeDao extends AbstractReactiveVertxDAO<RealmAttributeRe
         }
 
         /**
-     * Find records that have <code>value IN (values)</code> asynchronously
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>> findManyByValue(Collection<String> values) {
-                return findManyByCondition(RealmAttribute.REALM_ATTRIBUTE.VALUE.in(values));
-        }
-
-        /**
-     * Find records that have <code>value IN (values)</code> asynchronously
-     * limited by the given limit
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>> findManyByValue(Collection<String> values, int limit) {
-                return findManyByCondition(RealmAttribute.REALM_ATTRIBUTE.VALUE.in(values),limit);
-        }
-
-        /**
      * Find records that have <code>realm_id IN (values)</code> asynchronously
      */
         public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>> findManyByRealmId(Collection<String> values) {
@@ -67,6 +52,21 @@ public class RealmAttributeDao extends AbstractReactiveVertxDAO<RealmAttributeRe
      */
         public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>> findManyByRealmId(Collection<String> values, int limit) {
                 return findManyByCondition(RealmAttribute.REALM_ATTRIBUTE.REALM_ID.in(values),limit);
+        }
+
+        /**
+     * Find records that have <code>value IN (values)</code> asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>> findManyByValue(Collection<String> values) {
+                return findManyByCondition(RealmAttribute.REALM_ATTRIBUTE.VALUE.in(values));
+        }
+
+        /**
+     * Find records that have <code>value IN (values)</code> asynchronously
+     * limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute>> findManyByValue(Collection<String> values, int limit) {
+                return findManyByCondition(RealmAttribute.REALM_ATTRIBUTE.VALUE.in(values),limit);
         }
 
         @Override

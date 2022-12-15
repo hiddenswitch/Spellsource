@@ -2,15 +2,16 @@ plugins {
     id 'java-library'
 }
 
+apply from: '../gradle/instrument.gradle'
+
 dependencies {
     implementation project(':spellsource-common')
-    testImplementation 'com.hiddenswitch:quasar-core:10.0.6'
     testImplementation "com.google.guava:guava:$guavaVersion"
     testImplementation "io.github.classgraph:classgraph:$classgraphVersion"
     testImplementation 'org.jetbrains:annotations'
     testImplementation project(':spellsource-testutils')
-    testRuntimeOnly "ch.qos.logback:logback-classic:1.2.11"
-    testRuntimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.7'
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
 }
 
 test {

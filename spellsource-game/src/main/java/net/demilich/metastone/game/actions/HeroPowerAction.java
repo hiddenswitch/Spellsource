@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.actions;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -39,7 +38,6 @@ public final class HeroPowerAction extends PlaySpellCardAction implements HasCho
 	}
 
 	@Override
-	@Suspendable
 	public void execute(GameContext context, int playerId) {
 		GameLogic gameLogic = context.getLogic();
 		Player player = context.getPlayer(playerId);
@@ -61,7 +59,6 @@ public final class HeroPowerAction extends PlaySpellCardAction implements HasCho
 	}
 
 	@Override
-	@Suspendable
 	public void innerExecute(GameContext context, int playerId) {
 		context.getLogic().castSpell(playerId, getSpell(), getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
 	}

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -36,7 +35,6 @@ public class SetAttributeSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(LOGGER, context, source, desc, SpellArg.ATTRIBUTE, SpellArg.VALUE);
 		Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);

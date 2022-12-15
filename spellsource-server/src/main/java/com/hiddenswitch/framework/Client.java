@@ -2,39 +2,46 @@ package com.hiddenswitch.framework;
 
 import com.avast.grpc.jwt.client.JwtCallCredentials;
 import com.google.protobuf.Empty;
-import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
+import com.hiddenswitch.framework.rpc.Hiddenswitch.CreateAccountRequest;
+import com.hiddenswitch.framework.rpc.Hiddenswitch.LoginOrCreateReply;
+import com.hiddenswitch.framework.rpc.Hiddenswitch.LoginOrCreateReplyOrBuilder;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpc;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc;
-import com.hiddenswitch.framework.rpc.Hiddenswitch.CreateAccountRequest;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
 import com.hiddenswitch.spellsource.rpc.Spellsource.*;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MessageTypeMessage.MessageType;
 import com.hiddenswitch.spellsource.rpc.VertxHiddenSwitchSpellsourceAPIServiceGrpc;
 import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpc;
-import io.grpc.CallCredentials;
-import io.grpc.ManagedChannel;
+import io.grpc.*;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.Http2Settings;
+import io.vertx.core.http.HttpClientOptions;
+import io.vertx.core.http.HttpVersion;
+import io.vertx.core.net.SocketAddress;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
-import io.vertx.grpc.VertxChannelBuilder;
+import io.vertx.grpc.client.GrpcClient;
+import io.vertx.grpc.client.GrpcClientChannel;
 import net.demilich.metastone.game.logic.XORShiftRandom;
 import org.keycloak.representations.AccessTokenResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.vertx.core.CompositeFuture.all;
 import static io.vertx.core.CompositeFuture.any;
-import static io.vertx.reactivex.ObservableHelper.toObservable;
-import static io.vertx.reactivex.SingleHelper.toFuture;
 
 public class Client implements AutoCloseable {
-	protected final AtomicReference<ManagedChannel> managedChannel = new AtomicReference<>();
+	private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
+	protected final AtomicReference<GrpcClientChannel> managedChannel = new AtomicReference<>();
 	protected final Vertx vertx;
 	protected final WebClient webClient;
 	protected final String keycloakPath;
@@ -47,6 +54,7 @@ public class Client implements AutoCloseable {
 	private Promise<MatchmakingQueuePutResponse> matchmakingResponseFut;
 	private Promise<Void> matchmakingEndedFut;
 	private XORShiftRandom random = new XORShiftRandom(System.nanoTime());
+	private GrpcClient grpcClient;
 
 	public Client(Vertx vertx, WebClient webClient, String keycloakPath) {
 		this.vertx = vertx;
@@ -72,13 +80,18 @@ public class Client implements AutoCloseable {
 
 	public Future<ServerToClientMessage> connectToGame() {
 		var writerFut = Promise.<WriteStream<ClientToServerMessage>>promise();
+		var promise = Promise.<ServerToClientMessage>promise();
 		var reader = legacy().subscribeGame(writerFut::tryComplete);
+
+		reader.handler(promise::complete);
+		reader.exceptionHandler(promise::fail);
 
 		return writerFut.future().compose(writer -> {
 			writer.write(ClientToServerMessage.newBuilder()
-					.setMessageType(MessageTypeMessage.MessageType.FIRST_MESSAGE)
-					.build());
-			return toFuture(toObservable(reader).take(1).singleOrError());
+							.setMessageType(MessageTypeMessage.MessageType.FIRST_MESSAGE)
+							.build())
+					.onFailure(promise::tryFail);
+			return promise.future();
 		});
 	}
 
@@ -93,47 +106,54 @@ public class Client implements AutoCloseable {
 			switch (message.getMessageType()) {
 				case ON_MULLIGAN:
 					writer.write(ClientToServerMessage.newBuilder()
-							.setMessageType(MessageTypeMessage.MessageType.UPDATE_MULLIGAN)
-							.setRepliesTo(message.getId())
-							.addDiscardedCardIndices(0)
-							.build());
+									.setMessageType(MessageTypeMessage.MessageType.UPDATE_MULLIGAN)
+									.setRepliesTo(message.getId())
+									.addDiscardedCardIndices(0)
+									.build())
+							.onFailure(gameOverPromise::tryFail);
 					break;
 				case ON_REQUEST_ACTION:
 					writer.write(ClientToServerMessage.newBuilder()
-							.setMessageType(MessageType.UPDATE_ACTION)
-							.setRepliesTo(message.getId())
-							.setActionIndex(random.nextInt(message.getActions().getAllCount()))
-							.build());
+									.setMessageType(MessageType.UPDATE_ACTION)
+									.setRepliesTo(message.getId())
+									.setActionIndex(random.nextInt(message.getActions().getAllCount()))
+									.build())
+							.onFailure(gameOverPromise::tryFail);
 					break;
 				case ON_GAME_END:
 					gameOverPromise.complete(message);
 					break;
 			}
 		});
+
 		reader.exceptionHandler(gameOverPromise::tryFail);
 
-		return writerFut.compose(writer -> {
-			writer.exceptionHandler(gameOverPromise::tryFail);
-			writer.write(ClientToServerMessage.newBuilder()
-					.setMessageType(MessageType.FIRST_MESSAGE)
-					.build());
-			return gameOverPromise.future();
-		});
-	}
-
-	public Future<MatchmakingQueuePutResponse> matchmake(String queueId, String deckId) {
-		return matchmake(matchmaking(), queueId, deckId);
+		return writerFut
+				.compose(writer -> {
+					writer.exceptionHandler(gameOverPromise::tryFail);
+					writer.write(ClientToServerMessage.newBuilder()
+									.setMessageType(MessageType.FIRST_MESSAGE)
+									.build())
+							.onSuccess(v -> LOGGER.debug("sent first message"))
+							.onFailure(gameOverPromise::tryFail);
+					return gameOverPromise.future();
+				});
 	}
 
 	public Future<MatchmakingQueuePutResponse> matchmake(VertxMatchmakingGrpc.MatchmakingVertxStub matchmaking, String queueId, String deckId) {
 		if (matchmakingResponseFut != null) {
 			throw new RuntimeException("already matchmaking");
 		}
+		LOGGER.debug("starting matchmaking for {}", userEntity.getId());
 		var matchmakingRequestsFut = Promise.<WriteStream<MatchmakingQueuePutRequest>>promise();
 		var matchmakingResponses = matchmaking.enqueue(matchmakingRequestsFut::complete);
-		var request = matchmakingRequestsFut.future().compose(matchmakingRequests -> matchmakingRequests.write(MatchmakingQueuePutRequest.newBuilder()
-				.setDeckId(deckId)
-				.setQueueId(queueId).build()));
+		var request = matchmakingRequestsFut.future()
+				.compose(matchmakingRequests -> {
+					LOGGER.debug("sent matchmaking put for {}", userEntity.getId());
+					return matchmakingRequests.write(MatchmakingQueuePutRequest.newBuilder()
+							.setDeckId(deckId)
+							.setQueueId(queueId).build());
+				});
 		matchmakingResponseFut = Promise.<MatchmakingQueuePutResponse>promise();
 		matchmakingEndedFut = Promise.<Void>promise();
 		matchmakingResponses.handler(matchmakingResponseFut::complete);
@@ -152,7 +172,12 @@ public class Client implements AutoCloseable {
 			}
 			return null;
 		}))
-				.onComplete(ignored -> matchmakingResponseFut = null)
+				.onComplete(ignored -> {
+					if (matchmakingResponseFut.future().succeeded()) {
+						matchmakingRequestsFut.future().result().end();
+					}
+					matchmakingResponseFut = null;
+				})
 				.map(f -> f.resultAt(1));
 	}
 
@@ -161,8 +186,13 @@ public class Client implements AutoCloseable {
 	}
 
 	public Future<MatchmakingQueuePutResponse> matchmake(VertxMatchmakingGrpc.MatchmakingVertxStub matchmaking, String queueId) {
-		return legacy().decksGetAll(Empty.getDefaultInstance())
-				.compose(decks -> matchmake(matchmaking, queueId, decks.getDecks(0).getCollection().getId()));
+		var random = new Random();
+		return legacy()
+				.decksGetAll(Empty.getDefaultInstance())
+				.compose(decks -> {
+					var index = random.nextInt(0, decks.getDecksCount());
+					return matchmake(matchmaking, queueId, decks.getDecks(index).getCollection().getId());
+				});
 	}
 
 	public Future<Void> cancelMatchmaking() {
@@ -176,9 +206,9 @@ public class Client implements AutoCloseable {
 	public Future<LoginOrCreateReply> createAndLogin(String username, String email, String password) {
 		var stub = VertxUnauthenticatedGrpc.newVertxStub(channel());
 		return stub.createAccount(CreateAccountRequest.newBuilder()
-				.setUsername(username)
-				.setEmail(email)
-				.setPassword(password).build())
+						.setUsername(username)
+						.setEmail(email)
+						.setPassword(password).build())
 				.onSuccess(this::handleCreateAccountReply);
 	}
 
@@ -243,35 +273,32 @@ public class Client implements AutoCloseable {
 		return userEntity;
 	}
 
-	public ManagedChannel channel() {
+	public GrpcClientChannel channel() {
 		return managedChannel.updateAndGet(existing -> {
 			if (existing != null) {
 				return existing;
 			}
 
-			return VertxChannelBuilder.forTarget(vertx, grpcAddress())
-					.usePlaintext()
-					.build();
+			this.grpcClient = GrpcClient.client(vertx, new HttpClientOptions()
+					.setProtocolVersion(HttpVersion.HTTP_2)
+					.setSsl(false));
+			return new GrpcClientChannel(grpcClient, SocketAddress.inetSocketAddress(port(), host()));
 		});
 	}
 
-	public String grpcAddress() {
-		return defaultGrpcAddress();
+	protected String host() {
+		return "localhost";
 	}
 
-	public static String defaultGrpcAddress() {
-		return "localhost:" + Gateway.grpcPort();
+	protected int port() {
+		return Gateway.grpcPort();
 	}
 
 	@Override
 	public void close() {
-		var managedChannel = this.managedChannel.get();
-		if (managedChannel != null && !managedChannel.isShutdown()) {
-			try {
-				managedChannel.shutdownNow();
-			} catch (Throwable t) {
-				t.printStackTrace();
-			}
+		if (grpcClient != null) {
+			grpcClient.close();
+			grpcClient = null;
 		}
 	}
 
@@ -303,6 +330,15 @@ public class Client implements AutoCloseable {
 
 	public VertxMatchmakingGrpc.MatchmakingVertxStub matchmaking() {
 		return VertxMatchmakingGrpc.newVertxStub(channel())
+				.withInterceptors(new ClientInterceptor() {
+					@Override
+					public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
+						if (method.getFullMethodName().toLowerCase().contains("enqueue")) {
+							LOGGER.debug("did call enqueue for real");
+						}
+						return next.newCall(method, callOptions);
+					}
+				})
 				.withCallCredentials(credentials());
 	}
 

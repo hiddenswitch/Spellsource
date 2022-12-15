@@ -5,6 +5,7 @@ import org.gradle.api.services.BuildService
 import org.gradle.api.services.BuildServiceParameters
 import org.gradle.api.tasks.AbstractExecTask
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 
 class UnityTask extends AbstractExecTask<UnityTask> {
@@ -15,6 +16,7 @@ class UnityTask extends AbstractExecTask<UnityTask> {
     @Input
     String outputDir = ''
 
+    @Internal
     Provider<BuildService<BuildServiceParameters>> unity3d
 
     UnityTask() {

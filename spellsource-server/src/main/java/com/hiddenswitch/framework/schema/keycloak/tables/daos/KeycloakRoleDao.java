@@ -146,22 +146,6 @@ public class KeycloakRoleDao extends AbstractReactiveVertxDAO<KeycloakRoleRecord
                 return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.REALM.in(values),limit);
         }
 
-        /**
-     * Find records that have <code>scope_param_required IN (values)</code>
-     * asynchronously
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByScopeParamRequired(Collection<Boolean> values) {
-                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.SCOPE_PARAM_REQUIRED.in(values));
-        }
-
-        /**
-     * Find records that have <code>scope_param_required IN (values)</code>
-     * asynchronously limited by the given limit
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole>> findManyByScopeParamRequired(Collection<Boolean> values, int limit) {
-                return findManyByCondition(KeycloakRole.KEYCLOAK_ROLE.SCOPE_PARAM_REQUIRED.in(values),limit);
-        }
-
         @Override
         public ReactiveClassicQueryExecutor<KeycloakRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole,String> queryExecutor(){
                 return (ReactiveClassicQueryExecutor<KeycloakRoleRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.KeycloakRole,String>) super.queryExecutor();

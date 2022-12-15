@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
 import net.demilich.metastone.game.GameContext;
@@ -26,7 +25,6 @@ import java.util.stream.Collectors;
 @Deprecated
 public class CreateCardSpell extends Spell {
 
-	@Suspendable
 	private SpellDesc[] discoverCardParts(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		List<SpellDesc> spells = new ArrayList<SpellDesc>();
 		SpellDesc[] spellArray = (SpellDesc[]) desc.get(SpellArg.SPELLS);
@@ -71,7 +69,6 @@ public class CreateCardSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		String heroClass = HeroClass.ANY;
 		Rarity rarity = Rarity.FREE;

@@ -1,8 +1,5 @@
 package net.demilich.metastone.game;
 
-import co.paralleluniverse.fibers.Fiber;
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
 import com.hiddenswitch.spellsource.common.GameState;
 import io.opentracing.Scope;
@@ -225,7 +222,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	private boolean didCallEndGame;
 
 	private transient Trace trace = new Trace();
-	private transient Fiber<Void> fiber;
+	private transient Thread thread;
 
 	/**
 	 * Creates a game context with two empty players and two {@link PlayRandomBehaviour} behaviours.
@@ -344,7 +341,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	/**
 	 * Clears state to ensure this context isn't referencing it anymore.
 	 */
-	@Suspendable
 	protected void close() {
 		getLogic().dispose();
 	}
@@ -352,7 +348,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	/**
 	 * Ends the game immediately.
 	 */
-	@Suspendable
 	protected void endGame() {
 		updateAndGetGameOver();
 
@@ -372,7 +367,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		calculateStatistics();
 	}
 
-	@Suspendable
 	protected void notifyPlayersGameOver() {
 		for (int i = 0; i < behaviours.length; i++) {
 			if (behaviours[i] == null) {
@@ -398,7 +392,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	/**
 	 * Ends the current player's turn immediately, setting the active player to their opponent.
 	 */
-	@Suspendable
 	public void endTurn() {
 		LOGGER.trace("{} endTurn: Ending turn {}", getGameId(), getActivePlayer().getId());
 		getLogic().endTurn(getActivePlayerId());
@@ -413,7 +406,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @return {@code true} if the game has been decided by concession or because one of the two heroes have been
 	 * destroyed.
 	 */
-	@Suspendable
 	public boolean updateAndGetGameOver() {
 		if (getPlayer1() == null
 				|| getPlayer2() == null) {
@@ -792,7 +784,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * This function will choose a starting player, then move cards into the mulligan (set aside) zone, ask for mulligans,
 	 * and start the game. {@link #resume()} will start the first turn.
 	 */
-	@Suspendable
 	public void init() {
 		getLogic().contextReady();
 		startTrace();
@@ -805,7 +796,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @param startingPlayerId
 	 */
-	@Suspendable
 	public void init(int startingPlayerId) {
 		setActivePlayerId(startingPlayerId);
 		getEnvironment().put(Environment.STARTING_PLAYER, startingPlayerId);
@@ -854,7 +844,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param gameAction The action to perform.
 	 * @see GameLogic#performGameAction(int, GameAction) for more about game actions.
 	 */
-	@Suspendable
 	public void performAction(int playerId, GameAction gameAction) {
 		getLogic().performGameAction(playerId, gameAction);
 	}
@@ -871,26 +860,22 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @see #takeActionInTurn() for a breakdown of a specific turn.
 	 */
-	@Suspendable
 	public void play() {
 		LOGGER.debug("play {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
 		play(false);
 	}
 
-	@Suspendable
 	public void play(boolean fork) {
 		if (fork) {
-			if (getFiber() != null) {
+			if (getThread() != null) {
 				throw new IllegalStateException("fiber");
 			}
 
-			setFiber(new Fiber<>(() -> {
+			setThread(Thread.startVirtualThread(() -> {
 				init();
 				resume();
-				return null;
 			}));
 
-			getFiber().start();
 		} else {
 			try {
 				init();
@@ -912,7 +897,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @return {@code false} if the player selected an {@link EndTurnAction}, indicating the player would like to end
 	 * their turn.
 	 */
-	@Suspendable
 	public boolean takeActionInTurn() {
 		Tracer tracer = GlobalTracer.get();
 		Span span = tracer.buildSpan("GameContext/takeActionInTurn")
@@ -1073,7 +1057,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	/**
 	 * Fire the start game events here instead
 	 */
-	@Suspendable
 	protected void startGame() {
 		getLogic().startGameForPlayer(getPlayer(PLAYER_1));
 		getLogic().startGameForPlayer(getPlayer(PLAYER_2));
@@ -1088,7 +1071,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @param playerId The player whose turn should be started.
 	 */
-	@Suspendable
 	public void startTurn(int playerId) {
 		LOGGER.trace("{} startTurn: Starting turn {} for playerId={}", getGameId(), getTurn() + 1, playerId);
 		setTurn(getTurn() + 1);
@@ -1261,11 +1243,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 				getPlayer2().getLookup().values().stream());
 	}
 
-	@Suspendable
 	public void onWillPerformGameAction(int playerId, GameAction action) {
 	}
 
-	@Suspendable
 	public void onDidPerformGameAction(int playerId, GameAction action) {
 	}
 
@@ -1282,7 +1262,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @param playerId The player that should concede/lose
 	 */
-	@Suspendable
 	public void concede(int playerId) {
 		// Make sure IDs are assigned before we try to repeatedly destroy hero
 		if (getEntities().anyMatch(e -> e.getId() == IdFactory.UNASSIGNED)) {
@@ -1300,7 +1279,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *
 	 * @param enchantment The spell trigger that fired.
 	 */
-	@Suspendable
 	public void onEnchantmentFired(Enchantment enchantment) {
 	}
 
@@ -1419,12 +1397,11 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * <p>
 	 * Useful for implementing Monte Carlo Tree Search AI algorithms.
 	 */
-	@Suspendable
 	public void resume() {
 		while (!updateAndGetGameOver()) {
 			startTurn(getActivePlayerId());
 			while (takeActionInTurn()) {
-				if (Strand.currentStrand().isInterrupted()) {
+				if (Thread.currentThread().isInterrupted()) {
 					break;
 				}
 			}
@@ -1821,7 +1798,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @return
 	 */
 	@Override
-	@Suspendable
 	public GameDeck getDeck(Player player, String name) {
 		return null;
 	}
@@ -1899,12 +1875,12 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		return didCallEndGame;
 	}
 
-	public Fiber<Void> getFiber() {
-		return fiber;
+	public Thread getThread() {
+		return thread;
 	}
 
-	protected GameContext setFiber(Fiber<Void> fiber) {
-		this.fiber = fiber;
+	protected GameContext setThread(Thread fiber) {
+		this.thread = fiber;
 		return this;
 	}
 
@@ -2032,11 +2008,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		return actionStack.peekLast();
 	}
 
-	@Suspendable
 	public void onNotificationWillFire(Notification event) {
 	}
 
-	@Suspendable
 	public void onNotificationDidFire(Notification event) {
 	}
 }

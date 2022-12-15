@@ -288,6 +288,31 @@ public class Realm extends TableImpl<RealmRecord> {
      */
     public final TableField<RealmRecord, String> DOCKER_AUTH_FLOW = createField(DSL.name("docker_auth_flow"), SQLDataType.VARCHAR(36), this, "");
 
+    /**
+     * The column <code>keycloak.realm.refresh_token_max_reuse</code>.
+     */
+    public final TableField<RealmRecord, Integer> REFRESH_TOKEN_MAX_REUSE = createField(DSL.name("refresh_token_max_reuse"), SQLDataType.INTEGER.defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
+
+    /**
+     * The column <code>keycloak.realm.allow_user_managed_access</code>.
+     */
+    public final TableField<RealmRecord, Boolean> ALLOW_USER_MANAGED_ACCESS = createField(DSL.name("allow_user_managed_access"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>keycloak.realm.sso_max_lifespan_remember_me</code>.
+     */
+    public final TableField<RealmRecord, Integer> SSO_MAX_LIFESPAN_REMEMBER_ME = createField(DSL.name("sso_max_lifespan_remember_me"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
+
+    /**
+     * The column <code>keycloak.realm.sso_idle_timeout_remember_me</code>.
+     */
+    public final TableField<RealmRecord, Integer> SSO_IDLE_TIMEOUT_REMEMBER_ME = createField(DSL.name("sso_idle_timeout_remember_me"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
+
+    /**
+     * The column <code>keycloak.realm.default_role</code>.
+     */
+    public final TableField<RealmRecord, String> DEFAULT_ROLE = createField(DSL.name("default_role"), SQLDataType.VARCHAR(255), this, "");
+
     private Realm(Name alias, Table<RealmRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -342,23 +367,6 @@ public class Realm extends TableImpl<RealmRecord> {
     }
 
     @Override
-    public List<ForeignKey<RealmRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.REALM__FK_TRAF444KK6QRKMS7N56AIWQ5Y);
-    }
-
-    private transient Client _client;
-
-    /**
-     * Get the implicit join path to the <code>keycloak.client</code> table.
-     */
-    public Client client() {
-        if (_client == null)
-            _client = new Client(this, Keys.REALM__FK_TRAF444KK6QRKMS7N56AIWQ5Y);
-
-        return _client;
-    }
-
-    @Override
     public Realm as(String alias) {
         return new Realm(DSL.name(alias), this);
     }
@@ -366,6 +374,11 @@ public class Realm extends TableImpl<RealmRecord> {
     @Override
     public Realm as(Name alias) {
         return new Realm(alias, this);
+    }
+
+    @Override
+    public Realm as(Table<?> alias) {
+        return new Realm(alias.getQualifiedName(), this);
     }
 
     /**
@@ -382,5 +395,13 @@ public class Realm extends TableImpl<RealmRecord> {
     @Override
     public Realm rename(Name name) {
         return new Realm(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public Realm rename(Table<?> name) {
+        return new Realm(name.getQualifiedName(), null);
     }
 }

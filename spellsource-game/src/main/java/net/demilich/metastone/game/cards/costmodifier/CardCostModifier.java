@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.cards.costmodifier;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import net.demilich.metastone.game.GameContext;
@@ -304,7 +303,6 @@ public class CardCostModifier extends Enchantment implements HasDesc<CardCostMod
 	}
 
 	@Override
-	@Suspendable
 	protected void cast(int ownerId, SpellDesc spell, GameEvent event) {
 		// Card cost modifiers have no effects
 	}

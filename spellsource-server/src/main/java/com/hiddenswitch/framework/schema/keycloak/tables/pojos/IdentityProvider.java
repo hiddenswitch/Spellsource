@@ -18,18 +18,18 @@ public class IdentityProvider implements VertxPojo, IIdentityProvider {
 
     private static final long serialVersionUID = 1L;
 
-    private String  internalId;
+    private String internalId;
     private Boolean enabled;
-    private String  providerAlias;
-    private String  providerId;
+    private String providerAlias;
+    private String providerId;
     private Boolean storeToken;
     private Boolean authenticateByDefault;
-    private String  realmId;
+    private String realmId;
     private Boolean addTokenRole;
     private Boolean trustEmail;
-    private String  firstBrokerLoginFlowId;
-    private String  postBrokerLoginFlowId;
-    private String  providerDisplayName;
+    private String firstBrokerLoginFlowId;
+    private String postBrokerLoginFlowId;
+    private String providerDisplayName;
     private Boolean linkOnly;
 
     public IdentityProvider() {}
@@ -51,18 +51,18 @@ public class IdentityProvider implements VertxPojo, IIdentityProvider {
     }
 
     public IdentityProvider(
-        String  internalId,
+        String internalId,
         Boolean enabled,
-        String  providerAlias,
-        String  providerId,
+        String providerAlias,
+        String providerId,
         Boolean storeToken,
         Boolean authenticateByDefault,
-        String  realmId,
+        String realmId,
         Boolean addTokenRole,
         Boolean trustEmail,
-        String  firstBrokerLoginFlowId,
-        String  postBrokerLoginFlowId,
-        String  providerDisplayName,
+        String firstBrokerLoginFlowId,
+        String postBrokerLoginFlowId,
+        String providerDisplayName,
         Boolean linkOnly
     ) {
         this.internalId = internalId;
@@ -310,6 +310,116 @@ public class IdentityProvider implements VertxPojo, IIdentityProvider {
     public IdentityProvider setLinkOnly(Boolean linkOnly) {
         this.linkOnly = linkOnly;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final IdentityProvider other = (IdentityProvider) obj;
+        if (this.internalId == null) {
+            if (other.internalId != null)
+                return false;
+        }
+        else if (!this.internalId.equals(other.internalId))
+            return false;
+        if (this.enabled == null) {
+            if (other.enabled != null)
+                return false;
+        }
+        else if (!this.enabled.equals(other.enabled))
+            return false;
+        if (this.providerAlias == null) {
+            if (other.providerAlias != null)
+                return false;
+        }
+        else if (!this.providerAlias.equals(other.providerAlias))
+            return false;
+        if (this.providerId == null) {
+            if (other.providerId != null)
+                return false;
+        }
+        else if (!this.providerId.equals(other.providerId))
+            return false;
+        if (this.storeToken == null) {
+            if (other.storeToken != null)
+                return false;
+        }
+        else if (!this.storeToken.equals(other.storeToken))
+            return false;
+        if (this.authenticateByDefault == null) {
+            if (other.authenticateByDefault != null)
+                return false;
+        }
+        else if (!this.authenticateByDefault.equals(other.authenticateByDefault))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.addTokenRole == null) {
+            if (other.addTokenRole != null)
+                return false;
+        }
+        else if (!this.addTokenRole.equals(other.addTokenRole))
+            return false;
+        if (this.trustEmail == null) {
+            if (other.trustEmail != null)
+                return false;
+        }
+        else if (!this.trustEmail.equals(other.trustEmail))
+            return false;
+        if (this.firstBrokerLoginFlowId == null) {
+            if (other.firstBrokerLoginFlowId != null)
+                return false;
+        }
+        else if (!this.firstBrokerLoginFlowId.equals(other.firstBrokerLoginFlowId))
+            return false;
+        if (this.postBrokerLoginFlowId == null) {
+            if (other.postBrokerLoginFlowId != null)
+                return false;
+        }
+        else if (!this.postBrokerLoginFlowId.equals(other.postBrokerLoginFlowId))
+            return false;
+        if (this.providerDisplayName == null) {
+            if (other.providerDisplayName != null)
+                return false;
+        }
+        else if (!this.providerDisplayName.equals(other.providerDisplayName))
+            return false;
+        if (this.linkOnly == null) {
+            if (other.linkOnly != null)
+                return false;
+        }
+        else if (!this.linkOnly.equals(other.linkOnly))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.internalId == null) ? 0 : this.internalId.hashCode());
+        result = prime * result + ((this.enabled == null) ? 0 : this.enabled.hashCode());
+        result = prime * result + ((this.providerAlias == null) ? 0 : this.providerAlias.hashCode());
+        result = prime * result + ((this.providerId == null) ? 0 : this.providerId.hashCode());
+        result = prime * result + ((this.storeToken == null) ? 0 : this.storeToken.hashCode());
+        result = prime * result + ((this.authenticateByDefault == null) ? 0 : this.authenticateByDefault.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.addTokenRole == null) ? 0 : this.addTokenRole.hashCode());
+        result = prime * result + ((this.trustEmail == null) ? 0 : this.trustEmail.hashCode());
+        result = prime * result + ((this.firstBrokerLoginFlowId == null) ? 0 : this.firstBrokerLoginFlowId.hashCode());
+        result = prime * result + ((this.postBrokerLoginFlowId == null) ? 0 : this.postBrokerLoginFlowId.hashCode());
+        result = prime * result + ((this.providerDisplayName == null) ? 0 : this.providerDisplayName.hashCode());
+        result = prime * result + ((this.linkOnly == null) ? 0 : this.linkOnly.hashCode());
+        return result;
     }
 
     @Override

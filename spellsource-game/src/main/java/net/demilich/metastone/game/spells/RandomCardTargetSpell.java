@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -49,7 +48,6 @@ import java.util.List;
  */
 public class RandomCardTargetSpell extends Spell {
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card card = SpellUtils.getCard(context, desc);
 		// If the spell is not exclusive, it will copy the target card. Otherwise, it will cast the card.
@@ -67,7 +65,6 @@ public class RandomCardTargetSpell extends Spell {
 		castCardWithRandomTargets(context, player, source, card);
 	}
 
-	@Suspendable
 	public static void castCardWithRandomTargets(GameContext context, Player player, Entity source, Card card) {
 		GameAction action;
 		Card spellCard;

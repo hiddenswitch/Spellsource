@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.cards.desc;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -89,7 +88,6 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Base
 		return containsKey(arg) ? (String) get(arg) : "";
 	}
 
-	@Suspendable
 	public int getValue(T arg, GameContext context, Player player, Entity target, Entity host, int defaultValue) {
 		Object storedValue = this.get(arg);
 		if (storedValue == null) {

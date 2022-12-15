@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -58,7 +57,6 @@ public class LambdaSpellDesc extends SpellDesc {
 		 * @param lambdaTargets
 		 * @param logger
 		 */
-		@Suspendable
 		void cast(GameContext lambdaContext, Player lambdaPlayer, SpellDesc lambdaDesc, Entity lambdaSource, List<Entity> lambdaTargets, Logger logger);
 	}
 
@@ -71,13 +69,11 @@ public class LambdaSpellDesc extends SpellDesc {
 		}
 
 		@Override
-		@Suspendable
 		public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 			lambdaSpell.cast(context, player, desc, source, targets, LOGGER);
 		}
 
 		@Override
-		@Suspendable
 		protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		}
 	}

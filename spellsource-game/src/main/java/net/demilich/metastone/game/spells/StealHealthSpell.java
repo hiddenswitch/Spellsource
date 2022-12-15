@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -23,7 +22,6 @@ public final class StealHealthSpell extends BuffSpell {
 	private static Logger LOGGER = LoggerFactory.getLogger(StealHealthSpell.class);
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (!GameLogic.isEntityType(target.getEntityType(), EntityType.ACTOR)) {
 			return;

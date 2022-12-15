@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.GroupRoleMappin
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function2;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row2;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -111,22 +115,10 @@ public class GroupRoleMapping extends TableImpl<GroupRoleMappingRecord> {
 
     @Override
     public List<ForeignKey<GroupRoleMappingRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.GROUP_ROLE_MAPPING__FK_GROUP_ROLE_ROLE, Keys.GROUP_ROLE_MAPPING__FK_GROUP_ROLE_GROUP);
+        return Arrays.asList(Keys.GROUP_ROLE_MAPPING__FK_GROUP_ROLE_GROUP);
     }
 
-    private transient KeycloakRole _keycloakRole;
     private transient KeycloakGroup _keycloakGroup;
-
-    /**
-     * Get the implicit join path to the <code>keycloak.keycloak_role</code>
-     * table.
-     */
-    public KeycloakRole keycloakRole() {
-        if (_keycloakRole == null)
-            _keycloakRole = new KeycloakRole(this, Keys.GROUP_ROLE_MAPPING__FK_GROUP_ROLE_ROLE);
-
-        return _keycloakRole;
-    }
 
     /**
      * Get the implicit join path to the <code>keycloak.keycloak_group</code>
@@ -149,6 +141,11 @@ public class GroupRoleMapping extends TableImpl<GroupRoleMappingRecord> {
         return new GroupRoleMapping(alias, this);
     }
 
+    @Override
+    public GroupRoleMapping as(Table<?> alias) {
+        return new GroupRoleMapping(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -165,6 +162,14 @@ public class GroupRoleMapping extends TableImpl<GroupRoleMappingRecord> {
         return new GroupRoleMapping(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public GroupRoleMapping rename(Table<?> name) {
+        return new GroupRoleMapping(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row2 type methods
     // -------------------------------------------------------------------------
@@ -172,5 +177,20 @@ public class GroupRoleMapping extends TableImpl<GroupRoleMappingRecord> {
     @Override
     public Row2<String, String> fieldsRow() {
         return (Row2) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

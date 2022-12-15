@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.actions;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -36,7 +35,6 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	private EntityReference targetReference;
 	private boolean overrideChild;
 
-	@Suspendable
 	public boolean canBeExecutedOn(GameContext gameContext, Player player, Entity entity) {
 		return true;
 	}
@@ -60,7 +58,6 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	 * @param playerId The invoking player
 	 * @see PlayCardAction#execute(GameContext, int) for an important implementation for playing cards.
 	 */
-	@Suspendable
 	public abstract void execute(GameContext context, int playerId);
 
 	public ActionType getActionType() {

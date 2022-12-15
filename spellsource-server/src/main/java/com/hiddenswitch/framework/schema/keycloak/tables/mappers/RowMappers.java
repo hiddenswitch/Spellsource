@@ -7,6 +7,25 @@ public class RowMappers {
 
         private RowMappers(){}
 
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AdminEventEntity> getAdminEventEntityMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.AdminEventEntity pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.AdminEventEntity();
+                        pojo.setId(row.getString("id"));
+                        pojo.setAdminEventTime(row.getLong("admin_event_time"));
+                        pojo.setRealmId(row.getString("realm_id"));
+                        pojo.setOperationType(row.getString("operation_type"));
+                        pojo.setAuthRealmId(row.getString("auth_realm_id"));
+                        pojo.setAuthClientId(row.getString("auth_client_id"));
+                        pojo.setAuthUserId(row.getString("auth_user_id"));
+                        pojo.setIpAddress(row.getString("ip_address"));
+                        pojo.setResourcePath(row.getString("resource_path"));
+                        pojo.setRepresentation(row.getString("representation"));
+                        pojo.setError(row.getString("error"));
+                        pojo.setResourceType(row.getString("resource_type"));
+                        return pojo;
+                };
+        }
+
         public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy> getAssociatedPolicyMapper() {
                 return row -> {
                         com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.AssociatedPolicy();
@@ -109,10 +128,7 @@ public class RowMappers {
                         pojo.setStandardFlowEnabled(row.getBoolean("standard_flow_enabled"));
                         pojo.setImplicitFlowEnabled(row.getBoolean("implicit_flow_enabled"));
                         pojo.setDirectAccessGrantsEnabled(row.getBoolean("direct_access_grants_enabled"));
-                        pojo.setClientTemplateId(row.getString("client_template_id"));
-                        pojo.setUseTemplateConfig(row.getBoolean("use_template_config"));
-                        pojo.setUseTemplateScope(row.getBoolean("use_template_scope"));
-                        pojo.setUseTemplateMappers(row.getBoolean("use_template_mappers"));
+                        pojo.setAlwaysDisplayInConsole(row.getBoolean("always_display_in_console"));
                         return pojo;
                 };
         }
@@ -121,8 +137,31 @@ public class RowMappers {
                 return row -> {
                         com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientAttributes pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientAttributes();
                         pojo.setClientId(row.getString("client_id"));
-                        pojo.setValue(row.getString("value"));
                         pojo.setName(row.getString("name"));
+                        pojo.setValue(row.getString("value"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientAuthFlowBindings> getClientAuthFlowBindingsMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientAuthFlowBindings pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientAuthFlowBindings();
+                        pojo.setClientId(row.getString("client_id"));
+                        pojo.setFlowId(row.getString("flow_id"));
+                        pojo.setBindingName(row.getString("binding_name"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientInitialAccess> getClientInitialAccessMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientInitialAccess pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientInitialAccess();
+                        pojo.setId(row.getString("id"));
+                        pojo.setRealmId(row.getString("realm_id"));
+                        pojo.setTimestamp(row.getInteger("timestamp"));
+                        pojo.setExpiration(row.getInteger("expiration"));
+                        pojo.setCount(row.getInteger("count"));
+                        pojo.setRemainingCount(row.getInteger("remaining_count"));
                         return pojo;
                 };
         }
@@ -133,6 +172,47 @@ public class RowMappers {
                         pojo.setClientId(row.getString("client_id"));
                         pojo.setValue(row.getInteger("value"));
                         pojo.setName(row.getString("name"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientScope> getClientScopeMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientScope pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientScope();
+                        pojo.setId(row.getString("id"));
+                        pojo.setName(row.getString("name"));
+                        pojo.setRealmId(row.getString("realm_id"));
+                        pojo.setDescription(row.getString("description"));
+                        pojo.setProtocol(row.getString("protocol"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientScopeAttributes> getClientScopeAttributesMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientScopeAttributes pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientScopeAttributes();
+                        pojo.setScopeId(row.getString("scope_id"));
+                        pojo.setValue(row.getString("value"));
+                        pojo.setName(row.getString("name"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientScopeClient> getClientScopeClientMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientScopeClient pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientScopeClient();
+                        pojo.setClientId(row.getString("client_id"));
+                        pojo.setScopeId(row.getString("scope_id"));
+                        pojo.setDefaultScope(row.getBoolean("default_scope"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientScopeRoleMapping> getClientScopeRoleMappingMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientScopeRoleMapping pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientScopeRoleMapping();
+                        pojo.setScopeId(row.getString("scope_id"));
+                        pojo.setRoleId(row.getString("role_id"));
                         return pojo;
                 };
         }
@@ -192,37 +272,6 @@ public class RowMappers {
                 };
         }
 
-        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientTemplate> getClientTemplateMapper() {
-                return row -> {
-                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientTemplate pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientTemplate();
-                        pojo.setId(row.getString("id"));
-                        pojo.setName(row.getString("name"));
-                        pojo.setRealmId(row.getString("realm_id"));
-                        pojo.setDescription(row.getString("description"));
-                        pojo.setProtocol(row.getString("protocol"));
-                        pojo.setFullScopeAllowed(row.getBoolean("full_scope_allowed"));
-                        pojo.setConsentRequired(row.getBoolean("consent_required"));
-                        pojo.setStandardFlowEnabled(row.getBoolean("standard_flow_enabled"));
-                        pojo.setImplicitFlowEnabled(row.getBoolean("implicit_flow_enabled"));
-                        pojo.setDirectAccessGrantsEnabled(row.getBoolean("direct_access_grants_enabled"));
-                        pojo.setServiceAccountsEnabled(row.getBoolean("service_accounts_enabled"));
-                        pojo.setFrontchannelLogout(row.getBoolean("frontchannel_logout"));
-                        pojo.setBearerOnly(row.getBoolean("bearer_only"));
-                        pojo.setPublicClient(row.getBoolean("public_client"));
-                        return pojo;
-                };
-        }
-
-        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientTemplateAttributes> getClientTemplateAttributesMapper() {
-                return row -> {
-                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientTemplateAttributes pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientTemplateAttributes();
-                        pojo.setTemplateId(row.getString("template_id"));
-                        pojo.setValue(row.getString("value"));
-                        pojo.setName(row.getString("name"));
-                        return pojo;
-                };
-        }
-
         public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientUserSessionNote> getClientUserSessionNoteMapper() {
                 return row -> {
                         com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientUserSessionNote pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientUserSessionNote();
@@ -258,22 +307,28 @@ public class RowMappers {
                 };
         }
 
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.CompositeRole> getCompositeRoleMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.CompositeRole pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.CompositeRole();
+                        pojo.setComposite(row.getString("composite"));
+                        pojo.setChildRole(row.getString("child_role"));
+                        return pojo;
+                };
+        }
+
         public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.Credential> getCredentialMapper() {
                 return row -> {
                         com.hiddenswitch.framework.schema.keycloak.tables.pojos.Credential pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.Credential();
                         pojo.setId(row.getString("id"));
-                        pojo.setDevice(row.getString("device"));
-                        pojo.setHashIterations(row.getInteger("hash_iterations"));
                         io.vertx.core.buffer.Buffer saltBuffer = row.getBuffer("salt");
                         pojo.setSalt(saltBuffer == null?null:saltBuffer.getBytes());
                         pojo.setType(row.getString("type"));
-                        pojo.setValue(row.getString("value"));
                         pojo.setUserId(row.getString("user_id"));
                         pojo.setCreatedDate(row.getLong("created_date"));
-                        pojo.setCounter(row.getInteger("counter"));
-                        pojo.setDigits(row.getInteger("digits"));
-                        pojo.setPeriod(row.getInteger("period"));
-                        pojo.setAlgorithm(row.getString("algorithm"));
+                        pojo.setUserLabel(row.getString("user_label"));
+                        pojo.setSecretData(row.getString("secret_data"));
+                        pojo.setCredentialData(row.getString("credential_data"));
+                        pojo.setPriority(row.getInteger("priority"));
                         return pojo;
                 };
         }
@@ -285,6 +340,16 @@ public class RowMappers {
                         pojo.setLocked(row.getBoolean("locked"));
                         pojo.setLockgranted(row.getLocalDateTime("lockgranted"));
                         pojo.setLockedby(row.getString("lockedby"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.DefaultClientScope> getDefaultClientScopeMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.DefaultClientScope pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.DefaultClientScope();
+                        pojo.setRealmId(row.getString("realm_id"));
+                        pojo.setScopeId(row.getString("scope_id"));
+                        pojo.setDefaultScope(row.getBoolean("default_scope"));
                         return pojo;
                 };
         }
@@ -329,24 +394,17 @@ public class RowMappers {
                         pojo.setStorageProviderId(row.getString("storage_provider_id"));
                         pojo.setCreatedDate(row.getLong("created_date"));
                         pojo.setLastUpdatedDate(row.getLong("last_updated_date"));
+                        pojo.setClientStorageProvider(row.getString("client_storage_provider"));
+                        pojo.setExternalClientId(row.getString("external_client_id"));
                         return pojo;
                 };
         }
 
-        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserConsentProtMapper> getFedUserConsentProtMapperMapper() {
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserConsentClScope> getFedUserConsentClScopeMapper() {
                 return row -> {
-                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserConsentProtMapper pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserConsentProtMapper();
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserConsentClScope pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserConsentClScope();
                         pojo.setUserConsentId(row.getString("user_consent_id"));
-                        pojo.setProtocolMapperId(row.getString("protocol_mapper_id"));
-                        return pojo;
-                };
-        }
-
-        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserConsentRole> getFedUserConsentRoleMapper() {
-                return row -> {
-                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserConsentRole pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserConsentRole();
-                        pojo.setUserConsentId(row.getString("user_consent_id"));
-                        pojo.setRoleId(row.getString("role_id"));
+                        pojo.setScopeId(row.getString("scope_id"));
                         return pojo;
                 };
         }
@@ -355,20 +413,17 @@ public class RowMappers {
                 return row -> {
                         com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.FedUserCredential();
                         pojo.setId(row.getString("id"));
-                        pojo.setDevice(row.getString("device"));
-                        pojo.setHashIterations(row.getInteger("hash_iterations"));
                         io.vertx.core.buffer.Buffer saltBuffer = row.getBuffer("salt");
                         pojo.setSalt(saltBuffer == null?null:saltBuffer.getBytes());
                         pojo.setType(row.getString("type"));
-                        pojo.setValue(row.getString("value"));
                         pojo.setCreatedDate(row.getLong("created_date"));
-                        pojo.setCounter(row.getInteger("counter"));
-                        pojo.setDigits(row.getInteger("digits"));
-                        pojo.setPeriod(row.getInteger("period"));
-                        pojo.setAlgorithm(row.getString("algorithm"));
                         pojo.setUserId(row.getString("user_id"));
                         pojo.setRealmId(row.getString("realm_id"));
                         pojo.setStorageProviderId(row.getString("storage_provider_id"));
+                        pojo.setUserLabel(row.getString("user_label"));
+                        pojo.setSecretData(row.getString("secret_data"));
+                        pojo.setCredentialData(row.getString("credential_data"));
+                        pojo.setPriority(row.getInteger("priority"));
                         return pojo;
                 };
         }
@@ -523,7 +578,6 @@ public class RowMappers {
                         pojo.setRealmId(row.getString("realm_id"));
                         pojo.setClient(row.getString("client"));
                         pojo.setRealm(row.getString("realm"));
-                        pojo.setScopeParamRequired(row.getBoolean("scope_param_required"));
                         return pojo;
                 };
         }
@@ -533,6 +587,7 @@ public class RowMappers {
                         com.hiddenswitch.framework.schema.keycloak.tables.pojos.MigrationModel pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.MigrationModel();
                         pojo.setId(row.getString("id"));
                         pojo.setVersion(row.getString("version"));
+                        pojo.setUpdateTime(row.getLong("update_time"));
                         return pojo;
                 };
         }
@@ -545,6 +600,8 @@ public class RowMappers {
                         pojo.setOfflineFlag(row.getString("offline_flag"));
                         pojo.setTimestamp(row.getInteger("timestamp"));
                         pojo.setData(row.getString("data"));
+                        pojo.setClientStorageProvider(row.getString("client_storage_provider"));
+                        pojo.setExternalClientId(row.getString("external_client_id"));
                         return pojo;
                 };
         }
@@ -555,9 +612,10 @@ public class RowMappers {
                         pojo.setUserSessionId(row.getString("user_session_id"));
                         pojo.setUserId(row.getString("user_id"));
                         pojo.setRealmId(row.getString("realm_id"));
-                        pojo.setLastSessionRefresh(row.getInteger("last_session_refresh"));
+                        pojo.setCreatedOn(row.getInteger("created_on"));
                         pojo.setOfflineFlag(row.getString("offline_flag"));
                         pojo.setData(row.getString("data"));
+                        pojo.setLastSessionRefresh(row.getInteger("last_session_refresh"));
                         return pojo;
                 };
         }
@@ -579,10 +637,8 @@ public class RowMappers {
                         pojo.setName(row.getString("name"));
                         pojo.setProtocol(row.getString("protocol"));
                         pojo.setProtocolMapperName(row.getString("protocol_mapper_name"));
-                        pojo.setConsentRequired(row.getBoolean("consent_required"));
-                        pojo.setConsentText(row.getString("consent_text"));
                         pojo.setClientId(row.getString("client_id"));
-                        pojo.setClientTemplateId(row.getString("client_template_id"));
+                        pojo.setClientScopeId(row.getString("client_scope_id"));
                         return pojo;
                 };
         }
@@ -648,6 +704,11 @@ public class RowMappers {
                         pojo.setLoginWithEmailAllowed(row.getBoolean("login_with_email_allowed"));
                         pojo.setDuplicateEmailsAllowed(row.getBoolean("duplicate_emails_allowed"));
                         pojo.setDockerAuthFlow(row.getString("docker_auth_flow"));
+                        pojo.setRefreshTokenMaxReuse(row.getInteger("refresh_token_max_reuse"));
+                        pojo.setAllowUserManagedAccess(row.getBoolean("allow_user_managed_access"));
+                        pojo.setSsoMaxLifespanRememberMe(row.getInteger("sso_max_lifespan_remember_me"));
+                        pojo.setSsoIdleTimeoutRememberMe(row.getInteger("sso_idle_timeout_remember_me"));
+                        pojo.setDefaultRole(row.getString("default_role"));
                         return pojo;
                 };
         }
@@ -656,8 +717,45 @@ public class RowMappers {
                 return row -> {
                         com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmAttribute();
                         pojo.setName(row.getString("name"));
-                        pojo.setValue(row.getString("value"));
                         pojo.setRealmId(row.getString("realm_id"));
+                        pojo.setValue(row.getString("value"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmDefaultGroups> getRealmDefaultGroupsMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmDefaultGroups pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmDefaultGroups();
+                        pojo.setRealmId(row.getString("realm_id"));
+                        pojo.setGroupId(row.getString("group_id"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmEnabledEventTypes> getRealmEnabledEventTypesMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmEnabledEventTypes pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmEnabledEventTypes();
+                        pojo.setRealmId(row.getString("realm_id"));
+                        pojo.setValue(row.getString("value"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmEventsListeners> getRealmEventsListenersMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmEventsListeners pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmEventsListeners();
+                        pojo.setRealmId(row.getString("realm_id"));
+                        pojo.setValue(row.getString("value"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmLocalizations> getRealmLocalizationsMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmLocalizations pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmLocalizations();
+                        pojo.setRealmId(row.getString("realm_id"));
+                        pojo.setLocale(row.getString("locale"));
+                        pojo.setTexts(row.getString("texts"));
                         return pojo;
                 };
         }
@@ -684,6 +782,24 @@ public class RowMappers {
                 };
         }
 
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmSupportedLocales> getRealmSupportedLocalesMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmSupportedLocales pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.RealmSupportedLocales();
+                        pojo.setRealmId(row.getString("realm_id"));
+                        pojo.setValue(row.getString("value"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RedirectUris> getRedirectUrisMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.RedirectUris pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.RedirectUris();
+                        pojo.setClientId(row.getString("client_id"));
+                        pojo.setValue(row.getString("value"));
+                        return pojo;
+                };
+        }
+
         public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionConfig> getRequiredActionConfigMapper() {
                 return row -> {
                         com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionConfig pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.RequiredActionConfig();
@@ -704,6 +820,18 @@ public class RowMappers {
                         pojo.setEnabled(row.getBoolean("enabled"));
                         pojo.setDefaultAction(row.getBoolean("default_action"));
                         pojo.setProviderId(row.getString("provider_id"));
+                        pojo.setPriority(row.getInteger("priority"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceAttribute> getResourceAttributeMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceAttribute pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceAttribute();
+                        pojo.setId(row.getString("id"));
+                        pojo.setName(row.getString("name"));
+                        pojo.setValue(row.getString("value"));
+                        pojo.setResourceId(row.getString("resource_id"));
                         return pojo;
                 };
         }
@@ -730,9 +858,25 @@ public class RowMappers {
                 return row -> {
                         com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer();
                         pojo.setId(row.getString("id"));
-                        pojo.setClientId(row.getString("client_id"));
                         pojo.setAllowRsRemoteMgmt(row.getBoolean("allow_rs_remote_mgmt"));
                         pojo.setPolicyEnforceMode(row.getString("policy_enforce_mode"));
+                        pojo.setDecisionStrategy(row.getShort("decision_strategy"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPermTicket> getResourceServerPermTicketMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPermTicket pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPermTicket();
+                        pojo.setId(row.getString("id"));
+                        pojo.setOwner(row.getString("owner"));
+                        pojo.setRequester(row.getString("requester"));
+                        pojo.setCreatedTimestamp(row.getLong("created_timestamp"));
+                        pojo.setGrantedTimestamp(row.getLong("granted_timestamp"));
+                        pojo.setResourceId(row.getString("resource_id"));
+                        pojo.setScopeId(row.getString("scope_id"));
+                        pojo.setResourceServerId(row.getString("resource_server_id"));
+                        pojo.setPolicyId(row.getString("policy_id"));
                         return pojo;
                 };
         }
@@ -747,6 +891,7 @@ public class RowMappers {
                         pojo.setDecisionStrategy(row.getString("decision_strategy"));
                         pojo.setLogic(row.getString("logic"));
                         pojo.setResourceServerId(row.getString("resource_server_id"));
+                        pojo.setOwner(row.getString("owner"));
                         return pojo;
                 };
         }
@@ -756,11 +901,12 @@ public class RowMappers {
                         com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerResource pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerResource();
                         pojo.setId(row.getString("id"));
                         pojo.setName(row.getString("name"));
-                        pojo.setUri(row.getString("uri"));
                         pojo.setType(row.getString("type"));
                         pojo.setIconUri(row.getString("icon_uri"));
                         pojo.setOwner(row.getString("owner"));
                         pojo.setResourceServerId(row.getString("resource_server_id"));
+                        pojo.setOwnerManagedAccess(row.getBoolean("owner_managed_access"));
+                        pojo.setDisplayName(row.getString("display_name"));
                         return pojo;
                 };
         }
@@ -772,6 +918,27 @@ public class RowMappers {
                         pojo.setName(row.getString("name"));
                         pojo.setIconUri(row.getString("icon_uri"));
                         pojo.setResourceServerId(row.getString("resource_server_id"));
+                        pojo.setDisplayName(row.getString("display_name"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceUris> getResourceUrisMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceUris pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceUris();
+                        pojo.setResourceId(row.getString("resource_id"));
+                        pojo.setValue(row.getString("value"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.RoleAttribute> getRoleAttributeMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.RoleAttribute pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.RoleAttribute();
+                        pojo.setId(row.getString("id"));
+                        pojo.setRoleId(row.getString("role_id"));
+                        pojo.setName(row.getString("name"));
+                        pojo.setValue(row.getString("value"));
                         return pojo;
                 };
         }
@@ -790,15 +957,6 @@ public class RowMappers {
                         com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopePolicy pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ScopePolicy();
                         pojo.setScopeId(row.getString("scope_id"));
                         pojo.setPolicyId(row.getString("policy_id"));
-                        return pojo;
-                };
-        }
-
-        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.TemplateScopeMapping> getTemplateScopeMappingMapper() {
-                return row -> {
-                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.TemplateScopeMapping pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.TemplateScopeMapping();
-                        pojo.setTemplateId(row.getString("template_id"));
-                        pojo.setRoleId(row.getString("role_id"));
                         return pojo;
                 };
         }
@@ -822,24 +980,17 @@ public class RowMappers {
                         pojo.setUserId(row.getString("user_id"));
                         pojo.setCreatedDate(row.getLong("created_date"));
                         pojo.setLastUpdatedDate(row.getLong("last_updated_date"));
+                        pojo.setClientStorageProvider(row.getString("client_storage_provider"));
+                        pojo.setExternalClientId(row.getString("external_client_id"));
                         return pojo;
                 };
         }
 
-        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsentProtMapper> getUserConsentProtMapperMapper() {
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsentClientScope> getUserConsentClientScopeMapper() {
                 return row -> {
-                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsentProtMapper pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsentProtMapper();
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsentClientScope pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsentClientScope();
                         pojo.setUserConsentId(row.getString("user_consent_id"));
-                        pojo.setProtocolMapperId(row.getString("protocol_mapper_id"));
-                        return pojo;
-                };
-        }
-
-        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsentRole> getUserConsentRoleMapper() {
-                return row -> {
-                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsentRole pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserConsentRole();
-                        pojo.setUserConsentId(row.getString("user_consent_id"));
-                        pojo.setRoleId(row.getString("role_id"));
+                        pojo.setScopeId(row.getString("scope_id"));
                         return pojo;
                 };
         }
@@ -976,6 +1127,15 @@ public class RowMappers {
                         pojo.setLastFailure(row.getLong("last_failure"));
                         pojo.setLastIpFailure(row.getString("last_ip_failure"));
                         pojo.setNumFailures(row.getInteger("num_failures"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.keycloak.tables.pojos.WebOrigins> getWebOriginsMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.keycloak.tables.pojos.WebOrigins pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.WebOrigins();
+                        pojo.setClientId(row.getString("client_id"));
+                        pojo.setValue(row.getString("value"));
                         return pojo;
                 };
         }

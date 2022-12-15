@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
@@ -25,7 +24,6 @@ public final class BloodElfChampionSpell extends SwapHpSpell {
 	private static Logger LOGGER = LoggerFactory.getLogger(BloodElfChampionSpell.class);
 
 	@Override
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		int targetCount = targets.size();
 		if (targetCount == 0) {

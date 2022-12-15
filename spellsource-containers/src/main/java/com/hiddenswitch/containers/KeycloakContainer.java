@@ -12,7 +12,7 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 
 	private static final String KEYCLOAK_ADMIN_USER = "admin";
 	private static final String KEYCLOAK_ADMIN_PASSWORD = "admin";
-	private static final String KEYCLOAK_AUTH_PATH = "/auth";
+	private static final String KEYCLOAK_AUTH_PATH = "/";
 
 	private String adminUsername = KEYCLOAK_ADMIN_USER;
 	private String adminPassword = KEYCLOAK_ADMIN_PASSWORD;
@@ -26,11 +26,12 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 	 * Create a KeycloakContainer by passing the full docker image name
 	 */
 	public KeycloakContainer() {
-		super("doctorpangloss/keycloak-clustered:latest");
+		super("quay.io/keycloak/keycloak:20.0");
+		withCommand("start-dev");
 		withExposedPorts(KEYCLOAK_PORT_HTTP);
 		withReuse(false);
 		setWaitStrategy(Wait
-				.forHttp(KEYCLOAK_AUTH_PATH)
+				.forHttp("/")
 				.forPort(KEYCLOAK_PORT_HTTP)
 				.withStartupTimeout(Duration.ofSeconds(60))
 		);
@@ -39,9 +40,10 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 	@Override
 	protected void configure() {
 
-		withEnv("KEYCLOAK_ADMIN_USER", adminUsername);
+		withEnv("KEYCLOAK_ADMIN", adminUsername);
 		withEnv("KEYCLOAK_ADMIN_PASSWORD", adminPassword);
-		withEnv("KEYCLOAK_DATABASE_SCHEMA", "keycloak");
+		withEnv("KC_DB_SCHEMA", "keycloak");
+		withEnv("KC_HOSTNAME_STRICT", "false");
 
 		if (importFile != null) {
 			String importFileInContainer = "/tmp/" + importFile;
@@ -78,14 +80,15 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 	}
 
 	public String getAuthServerUrl() {
-		return String.format("http%s://%s:%s%s", "", getContainerIpAddress(), getMappedPort(KEYCLOAK_PORT_HTTP), KEYCLOAK_AUTH_PATH);
+		return String.format("http%s://%s:%s%s", "", getHost(), getMappedPort(KEYCLOAK_PORT_HTTP), KEYCLOAK_AUTH_PATH);
 	}
 
 	public KeycloakContainer withPostgres(String postgresHostPort, String databaseName, String username, String password) {
-		withEnv("KEYCLOAK_DATABASE_HOST", postgresHostPort);
-		withEnv("KEYCLOAK_DATABASE_USER", username);
-		withEnv("KEYCLOAK_DATABASE_PASSWORD", password);
-		withEnv("KEYCLOAK_DATABASE_NAME", databaseName);
+		withEnv("KC_DB", "postgres");
+		withEnv("KC_DB_URL_HOST", postgresHostPort);
+		withEnv("KC_DB_URL_DATABASE", databaseName);
+		withEnv("KC_DB_USERNAME", username);
+		withEnv("KC_DB_PASSWORD", password);
 		return self();
 	}
 

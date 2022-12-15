@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -70,7 +69,6 @@ public class MetaSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (desc.containsKey(SpellArg.VALUE)) {
 			context.getSpellValueStack().addLast(desc.getValue(SpellArg.VALUE, context, player, target, source, 0));
@@ -131,7 +129,6 @@ public class MetaSpell extends Spell {
 	 * @param target
 	 * @param spell
 	 */
-	@Suspendable
 	protected void each(GameContext context, Player player, Entity source, Entity target, SpellDesc spell) {
 		SpellUtils.castChildSpell(context, player, spell, source, target);
 	}

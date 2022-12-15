@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc.filter;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -63,7 +62,6 @@ public abstract class EntityFilter implements Serializable, HasDesc<EntityFilter
 	 * @param host
 	 * @return {@code true} if the {@code entity} passes the filter, otherwise {@code false}.
 	 */
-	@Suspendable
 	public boolean matches(GameContext context, Player player, Entity entity, Entity host) {
 		boolean invert = getDesc().getBool(EntityFilterArg.INVERT);
 		TargetPlayer targetPlayer = (TargetPlayer) getDesc().get(EntityFilterArg.TARGET_PLAYER);
@@ -128,7 +126,6 @@ public abstract class EntityFilter implements Serializable, HasDesc<EntityFilter
 	 * @param host
 	 * @return
 	 */
-	@Suspendable
 	protected abstract boolean test(GameContext context, Player player, Entity entity, Entity host);
 
 	@Override

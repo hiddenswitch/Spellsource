@@ -27,26 +27,6 @@ public interface ICredential extends VertxPojo, Serializable {
     public String getId();
 
     /**
-     * Setter for <code>keycloak.credential.device</code>.
-     */
-    public ICredential setDevice(String value);
-
-    /**
-     * Getter for <code>keycloak.credential.device</code>.
-     */
-    public String getDevice();
-
-    /**
-     * Setter for <code>keycloak.credential.hash_iterations</code>.
-     */
-    public ICredential setHashIterations(Integer value);
-
-    /**
-     * Getter for <code>keycloak.credential.hash_iterations</code>.
-     */
-    public Integer getHashIterations();
-
-    /**
      * Setter for <code>keycloak.credential.salt</code>.
      */
     public ICredential setSalt(byte[] value);
@@ -65,16 +45,6 @@ public interface ICredential extends VertxPojo, Serializable {
      * Getter for <code>keycloak.credential.type</code>.
      */
     public String getType();
-
-    /**
-     * Setter for <code>keycloak.credential.value</code>.
-     */
-    public ICredential setValue(String value);
-
-    /**
-     * Getter for <code>keycloak.credential.value</code>.
-     */
-    public String getValue();
 
     /**
      * Setter for <code>keycloak.credential.user_id</code>.
@@ -97,44 +67,44 @@ public interface ICredential extends VertxPojo, Serializable {
     public Long getCreatedDate();
 
     /**
-     * Setter for <code>keycloak.credential.counter</code>.
+     * Setter for <code>keycloak.credential.user_label</code>.
      */
-    public ICredential setCounter(Integer value);
+    public ICredential setUserLabel(String value);
 
     /**
-     * Getter for <code>keycloak.credential.counter</code>.
+     * Getter for <code>keycloak.credential.user_label</code>.
      */
-    public Integer getCounter();
+    public String getUserLabel();
 
     /**
-     * Setter for <code>keycloak.credential.digits</code>.
+     * Setter for <code>keycloak.credential.secret_data</code>.
      */
-    public ICredential setDigits(Integer value);
+    public ICredential setSecretData(String value);
 
     /**
-     * Getter for <code>keycloak.credential.digits</code>.
+     * Getter for <code>keycloak.credential.secret_data</code>.
      */
-    public Integer getDigits();
+    public String getSecretData();
 
     /**
-     * Setter for <code>keycloak.credential.period</code>.
+     * Setter for <code>keycloak.credential.credential_data</code>.
      */
-    public ICredential setPeriod(Integer value);
+    public ICredential setCredentialData(String value);
 
     /**
-     * Getter for <code>keycloak.credential.period</code>.
+     * Getter for <code>keycloak.credential.credential_data</code>.
      */
-    public Integer getPeriod();
+    public String getCredentialData();
 
     /**
-     * Setter for <code>keycloak.credential.algorithm</code>.
+     * Setter for <code>keycloak.credential.priority</code>.
      */
-    public ICredential setAlgorithm(String value);
+    public ICredential setPriority(Integer value);
 
     /**
-     * Getter for <code>keycloak.credential.algorithm</code>.
+     * Getter for <code>keycloak.credential.priority</code>.
      */
-    public String getAlgorithm();
+    public Integer getPriority();
 
     // -------------------------------------------------------------------------
     // FROM and INTO
@@ -155,17 +125,14 @@ public interface ICredential extends VertxPojo, Serializable {
         @Override
         public default ICredential fromJson(io.vertx.core.json.JsonObject json) {
                 setOrThrow(this::setId,json::getString,"id","java.lang.String");
-                setOrThrow(this::setDevice,json::getString,"device","java.lang.String");
-                setOrThrow(this::setHashIterations,json::getInteger,"hash_iterations","java.lang.Integer");
                 setOrThrow(this::setSalt,json::getBinary,"salt","byte[]");
                 setOrThrow(this::setType,json::getString,"type","java.lang.String");
-                setOrThrow(this::setValue,json::getString,"value","java.lang.String");
                 setOrThrow(this::setUserId,json::getString,"user_id","java.lang.String");
                 setOrThrow(this::setCreatedDate,json::getLong,"created_date","java.lang.Long");
-                setOrThrow(this::setCounter,json::getInteger,"counter","java.lang.Integer");
-                setOrThrow(this::setDigits,json::getInteger,"digits","java.lang.Integer");
-                setOrThrow(this::setPeriod,json::getInteger,"period","java.lang.Integer");
-                setOrThrow(this::setAlgorithm,json::getString,"algorithm","java.lang.String");
+                setOrThrow(this::setUserLabel,json::getString,"user_label","java.lang.String");
+                setOrThrow(this::setSecretData,json::getString,"secret_data","java.lang.String");
+                setOrThrow(this::setCredentialData,json::getString,"credential_data","java.lang.String");
+                setOrThrow(this::setPriority,json::getInteger,"priority","java.lang.Integer");
                 return this;
         }
 
@@ -174,17 +141,14 @@ public interface ICredential extends VertxPojo, Serializable {
         public default io.vertx.core.json.JsonObject toJson() {
                 io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
                 json.put("id",getId());
-                json.put("device",getDevice());
-                json.put("hash_iterations",getHashIterations());
                 json.put("salt",getSalt());
                 json.put("type",getType());
-                json.put("value",getValue());
                 json.put("user_id",getUserId());
                 json.put("created_date",getCreatedDate());
-                json.put("counter",getCounter());
-                json.put("digits",getDigits());
-                json.put("period",getPeriod());
-                json.put("algorithm",getAlgorithm());
+                json.put("user_label",getUserLabel());
+                json.put("secret_data",getSecretData());
+                json.put("credential_data",getCredentialData());
+                json.put("priority",getPriority());
                 return json;
         }
 

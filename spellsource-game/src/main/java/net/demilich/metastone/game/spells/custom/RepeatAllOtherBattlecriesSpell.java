@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.OpenerAction;
@@ -38,7 +37,6 @@ public final class RepeatAllOtherBattlecriesSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(RepeatAllOtherBattlecriesSpell.class);
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		// Retrieve all other battlecry cards this player has played
 		CardList cards = desc.getFilteredCards(context, player, source);
@@ -86,7 +84,6 @@ public final class RepeatAllOtherBattlecriesSpell extends Spell {
 	 * @param battlecrySource     The source entity that is actually casting the battlecry. Should typically be an actor.
 	 * @return
 	 */
-	@Suspendable
 	public static boolean castBattlecryRandomly(GameContext context, Player player, Card battlecryCardSource, Actor battlecrySource) {
 		OpenerAction action;
 		OpenerDesc[] chooseOneBattlecries = battlecryCardSource.getDesc().getChooseOneBattlecries();

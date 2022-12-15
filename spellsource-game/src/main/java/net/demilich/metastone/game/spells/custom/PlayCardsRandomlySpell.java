@@ -1,7 +1,7 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.common.util.Objects;
-import co.paralleluniverse.fibers.Suspendable;
+
+import com.google.common.base.Objects;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -58,7 +58,6 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
 public class PlayCardsRandomlySpell extends Spell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		CardList cards = getCards(context, player, desc, source, target);
 		// Shuffle

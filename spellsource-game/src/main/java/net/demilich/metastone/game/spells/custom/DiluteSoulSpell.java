@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -31,7 +30,6 @@ import static java.util.stream.Collectors.toSet;
 public final class DiluteSoulSpell extends Spell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		// Fix to work with Scepter of Sargeras.
 		Set<Integer> beforeDiscard = player.getGraveyard()

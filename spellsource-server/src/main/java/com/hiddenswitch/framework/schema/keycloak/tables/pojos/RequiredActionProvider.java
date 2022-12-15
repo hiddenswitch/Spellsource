@@ -18,13 +18,14 @@ public class RequiredActionProvider implements VertxPojo, IRequiredActionProvide
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
-    private String  alias;
-    private String  name;
-    private String  realmId;
+    private String id;
+    private String alias;
+    private String name;
+    private String realmId;
     private Boolean enabled;
     private Boolean defaultAction;
-    private String  providerId;
+    private String providerId;
+    private Integer priority;
 
     public RequiredActionProvider() {}
 
@@ -36,16 +37,18 @@ public class RequiredActionProvider implements VertxPojo, IRequiredActionProvide
         this.enabled = value.getEnabled();
         this.defaultAction = value.getDefaultAction();
         this.providerId = value.getProviderId();
+        this.priority = value.getPriority();
     }
 
     public RequiredActionProvider(
-        String  id,
-        String  alias,
-        String  name,
-        String  realmId,
+        String id,
+        String alias,
+        String name,
+        String realmId,
         Boolean enabled,
         Boolean defaultAction,
-        String  providerId
+        String providerId,
+        Integer priority
     ) {
         this.id = id;
         this.alias = alias;
@@ -54,6 +57,7 @@ public class RequiredActionProvider implements VertxPojo, IRequiredActionProvide
         this.enabled = enabled;
         this.defaultAction = defaultAction;
         this.providerId = providerId;
+        this.priority = priority;
     }
 
         public RequiredActionProvider(io.vertx.core.json.JsonObject json) {
@@ -180,6 +184,98 @@ public class RequiredActionProvider implements VertxPojo, IRequiredActionProvide
         return this;
     }
 
+    /**
+     * Getter for <code>keycloak.required_action_provider.priority</code>.
+     */
+    @Override
+    public Integer getPriority() {
+        return this.priority;
+    }
+
+    /**
+     * Setter for <code>keycloak.required_action_provider.priority</code>.
+     */
+    @Override
+    public RequiredActionProvider setPriority(Integer priority) {
+        this.priority = priority;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final RequiredActionProvider other = (RequiredActionProvider) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.alias == null) {
+            if (other.alias != null)
+                return false;
+        }
+        else if (!this.alias.equals(other.alias))
+            return false;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.enabled == null) {
+            if (other.enabled != null)
+                return false;
+        }
+        else if (!this.enabled.equals(other.enabled))
+            return false;
+        if (this.defaultAction == null) {
+            if (other.defaultAction != null)
+                return false;
+        }
+        else if (!this.defaultAction.equals(other.defaultAction))
+            return false;
+        if (this.providerId == null) {
+            if (other.providerId != null)
+                return false;
+        }
+        else if (!this.providerId.equals(other.providerId))
+            return false;
+        if (this.priority == null) {
+            if (other.priority != null)
+                return false;
+        }
+        else if (!this.priority.equals(other.priority))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.alias == null) ? 0 : this.alias.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.enabled == null) ? 0 : this.enabled.hashCode());
+        result = prime * result + ((this.defaultAction == null) ? 0 : this.defaultAction.hashCode());
+        result = prime * result + ((this.providerId == null) ? 0 : this.providerId.hashCode());
+        result = prime * result + ((this.priority == null) ? 0 : this.priority.hashCode());
+        return result;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("RequiredActionProvider (");
@@ -191,6 +287,7 @@ public class RequiredActionProvider implements VertxPojo, IRequiredActionProvide
         sb.append(", ").append(enabled);
         sb.append(", ").append(defaultAction);
         sb.append(", ").append(providerId);
+        sb.append(", ").append(priority);
 
         sb.append(")");
         return sb.toString();
@@ -209,6 +306,7 @@ public class RequiredActionProvider implements VertxPojo, IRequiredActionProvide
         setEnabled(from.getEnabled());
         setDefaultAction(from.getDefaultAction());
         setProviderId(from.getProviderId());
+        setPriority(from.getPriority());
     }
 
     @Override

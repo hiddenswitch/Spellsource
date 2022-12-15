@@ -131,6 +131,21 @@ public class ResourceServerPolicyDao extends AbstractReactiveVertxDAO<ResourceSe
                 return findManyByCondition(ResourceServerPolicy.RESOURCE_SERVER_POLICY.RESOURCE_SERVER_ID.in(values),limit);
         }
 
+        /**
+     * Find records that have <code>owner IN (values)</code> asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPolicy>> findManyByOwner(Collection<String> values) {
+                return findManyByCondition(ResourceServerPolicy.RESOURCE_SERVER_POLICY.OWNER.in(values));
+        }
+
+        /**
+     * Find records that have <code>owner IN (values)</code> asynchronously
+     * limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPolicy>> findManyByOwner(Collection<String> values, int limit) {
+                return findManyByCondition(ResourceServerPolicy.RESOURCE_SERVER_POLICY.OWNER.in(values),limit);
+        }
+
         @Override
         public ReactiveClassicQueryExecutor<ResourceServerPolicyRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPolicy,String> queryExecutor(){
                 return (ReactiveClassicQueryExecutor<ResourceServerPolicyRecord,com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPolicy,String>) super.queryExecutor();

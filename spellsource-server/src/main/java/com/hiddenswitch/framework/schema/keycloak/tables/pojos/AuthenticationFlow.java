@@ -18,11 +18,11 @@ public class AuthenticationFlow implements VertxPojo, IAuthenticationFlow {
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
-    private String  alias;
-    private String  description;
-    private String  realmId;
-    private String  providerId;
+    private String id;
+    private String alias;
+    private String description;
+    private String realmId;
+    private String providerId;
     private Boolean topLevel;
     private Boolean builtIn;
 
@@ -39,11 +39,11 @@ public class AuthenticationFlow implements VertxPojo, IAuthenticationFlow {
     }
 
     public AuthenticationFlow(
-        String  id,
-        String  alias,
-        String  description,
-        String  realmId,
-        String  providerId,
+        String id,
+        String alias,
+        String description,
+        String realmId,
+        String providerId,
         Boolean topLevel,
         Boolean builtIn
     ) {
@@ -178,6 +178,74 @@ public class AuthenticationFlow implements VertxPojo, IAuthenticationFlow {
     public AuthenticationFlow setBuiltIn(Boolean builtIn) {
         this.builtIn = builtIn;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final AuthenticationFlow other = (AuthenticationFlow) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.alias == null) {
+            if (other.alias != null)
+                return false;
+        }
+        else if (!this.alias.equals(other.alias))
+            return false;
+        if (this.description == null) {
+            if (other.description != null)
+                return false;
+        }
+        else if (!this.description.equals(other.description))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.providerId == null) {
+            if (other.providerId != null)
+                return false;
+        }
+        else if (!this.providerId.equals(other.providerId))
+            return false;
+        if (this.topLevel == null) {
+            if (other.topLevel != null)
+                return false;
+        }
+        else if (!this.topLevel.equals(other.topLevel))
+            return false;
+        if (this.builtIn == null) {
+            if (other.builtIn != null)
+                return false;
+        }
+        else if (!this.builtIn.equals(other.builtIn))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.alias == null) ? 0 : this.alias.hashCode());
+        result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.providerId == null) ? 0 : this.providerId.hashCode());
+        result = prime * result + ((this.topLevel == null) ? 0 : this.topLevel.hashCode());
+        result = prime * result + ((this.builtIn == null) ? 0 : this.builtIn.hashCode());
+        return result;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -21,7 +20,6 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 public class JoustSpell extends Spell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		JoustEvent joustEvent = context.getLogic().joust(player, desc.getCardFilter(), source);
 		if (!joustEvent.isWon()) {

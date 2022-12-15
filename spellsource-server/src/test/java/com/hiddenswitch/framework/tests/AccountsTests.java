@@ -38,7 +38,7 @@ public class AccountsTests extends FrameworkTestBase {
 		var application = new Application();
 		var deploy = application.deploy();
 		deploy
-				.compose(v -> Accounts.createUser(UUID.randomUUID().toString() + "@hiddenswitch.com", UUID.randomUUID().toString(), "password"))
+				.compose(v -> Accounts.createUser(UUID.randomUUID() + "@hiddenswitch.com", UUID.randomUUID().toString(), "password"))
 				.compose(ue -> {
 					testContext.verify(() -> {
 						assertNotNull(ue.getId());

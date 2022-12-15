@@ -18,11 +18,11 @@ public class UsernameLoginFailure implements VertxPojo, IUsernameLoginFailure {
 
     private static final long serialVersionUID = 1L;
 
-    private String  realmId;
-    private String  username;
+    private String realmId;
+    private String username;
     private Integer failedLoginNotBefore;
-    private Long    lastFailure;
-    private String  lastIpFailure;
+    private Long lastFailure;
+    private String lastIpFailure;
     private Integer numFailures;
 
     public UsernameLoginFailure() {}
@@ -37,11 +37,11 @@ public class UsernameLoginFailure implements VertxPojo, IUsernameLoginFailure {
     }
 
     public UsernameLoginFailure(
-        String  realmId,
-        String  username,
+        String realmId,
+        String username,
         Integer failedLoginNotBefore,
-        Long    lastFailure,
-        String  lastIpFailure,
+        Long lastFailure,
+        String lastIpFailure,
         Integer numFailures
     ) {
         this.realmId = realmId;
@@ -159,6 +159,67 @@ public class UsernameLoginFailure implements VertxPojo, IUsernameLoginFailure {
     public UsernameLoginFailure setNumFailures(Integer numFailures) {
         this.numFailures = numFailures;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final UsernameLoginFailure other = (UsernameLoginFailure) obj;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.username == null) {
+            if (other.username != null)
+                return false;
+        }
+        else if (!this.username.equals(other.username))
+            return false;
+        if (this.failedLoginNotBefore == null) {
+            if (other.failedLoginNotBefore != null)
+                return false;
+        }
+        else if (!this.failedLoginNotBefore.equals(other.failedLoginNotBefore))
+            return false;
+        if (this.lastFailure == null) {
+            if (other.lastFailure != null)
+                return false;
+        }
+        else if (!this.lastFailure.equals(other.lastFailure))
+            return false;
+        if (this.lastIpFailure == null) {
+            if (other.lastIpFailure != null)
+                return false;
+        }
+        else if (!this.lastIpFailure.equals(other.lastIpFailure))
+            return false;
+        if (this.numFailures == null) {
+            if (other.numFailures != null)
+                return false;
+        }
+        else if (!this.numFailures.equals(other.numFailures))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.username == null) ? 0 : this.username.hashCode());
+        result = prime * result + ((this.failedLoginNotBefore == null) ? 0 : this.failedLoginNotBefore.hashCode());
+        result = prime * result + ((this.lastFailure == null) ? 0 : this.lastFailure.hashCode());
+        result = prime * result + ((this.lastIpFailure == null) ? 0 : this.lastIpFailure.hashCode());
+        result = prime * result + ((this.numFailures == null) ? 0 : this.numFailures.hashCode());
+        return result;
     }
 
     @Override

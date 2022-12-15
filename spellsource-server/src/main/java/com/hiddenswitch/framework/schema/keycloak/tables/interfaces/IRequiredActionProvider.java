@@ -86,6 +86,16 @@ public interface IRequiredActionProvider extends VertxPojo, Serializable {
      */
     public String getProviderId();
 
+    /**
+     * Setter for <code>keycloak.required_action_provider.priority</code>.
+     */
+    public IRequiredActionProvider setPriority(Integer value);
+
+    /**
+     * Getter for <code>keycloak.required_action_provider.priority</code>.
+     */
+    public Integer getPriority();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -111,6 +121,7 @@ public interface IRequiredActionProvider extends VertxPojo, Serializable {
                 setOrThrow(this::setEnabled,json::getBoolean,"enabled","java.lang.Boolean");
                 setOrThrow(this::setDefaultAction,json::getBoolean,"default_action","java.lang.Boolean");
                 setOrThrow(this::setProviderId,json::getString,"provider_id","java.lang.String");
+                setOrThrow(this::setPriority,json::getInteger,"priority","java.lang.Integer");
                 return this;
         }
 
@@ -125,6 +136,7 @@ public interface IRequiredActionProvider extends VertxPojo, Serializable {
                 json.put("enabled",getEnabled());
                 json.put("default_action",getDefaultAction());
                 json.put("provider_id",getProviderId());
+                json.put("priority",getPriority());
                 return json;
         }
 

@@ -18,35 +18,32 @@ public class Client implements VertxPojo, IClient {
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
+    private String id;
     private Boolean enabled;
     private Boolean fullScopeAllowed;
-    private String  clientId;
+    private String clientId;
     private Integer notBefore;
     private Boolean publicClient;
-    private String  secret;
-    private String  baseUrl;
+    private String secret;
+    private String baseUrl;
     private Boolean bearerOnly;
-    private String  managementUrl;
+    private String managementUrl;
     private Boolean surrogateAuthRequired;
-    private String  realmId;
-    private String  protocol;
+    private String realmId;
+    private String protocol;
     private Integer nodeReregTimeout;
     private Boolean frontchannelLogout;
     private Boolean consentRequired;
-    private String  name;
+    private String name;
     private Boolean serviceAccountsEnabled;
-    private String  clientAuthenticatorType;
-    private String  rootUrl;
-    private String  description;
-    private String  registrationToken;
+    private String clientAuthenticatorType;
+    private String rootUrl;
+    private String description;
+    private String registrationToken;
     private Boolean standardFlowEnabled;
     private Boolean implicitFlowEnabled;
     private Boolean directAccessGrantsEnabled;
-    private String  clientTemplateId;
-    private Boolean useTemplateConfig;
-    private Boolean useTemplateScope;
-    private Boolean useTemplateMappers;
+    private Boolean alwaysDisplayInConsole;
 
     public Client() {}
 
@@ -76,42 +73,36 @@ public class Client implements VertxPojo, IClient {
         this.standardFlowEnabled = value.getStandardFlowEnabled();
         this.implicitFlowEnabled = value.getImplicitFlowEnabled();
         this.directAccessGrantsEnabled = value.getDirectAccessGrantsEnabled();
-        this.clientTemplateId = value.getClientTemplateId();
-        this.useTemplateConfig = value.getUseTemplateConfig();
-        this.useTemplateScope = value.getUseTemplateScope();
-        this.useTemplateMappers = value.getUseTemplateMappers();
+        this.alwaysDisplayInConsole = value.getAlwaysDisplayInConsole();
     }
 
     public Client(
-        String  id,
+        String id,
         Boolean enabled,
         Boolean fullScopeAllowed,
-        String  clientId,
+        String clientId,
         Integer notBefore,
         Boolean publicClient,
-        String  secret,
-        String  baseUrl,
+        String secret,
+        String baseUrl,
         Boolean bearerOnly,
-        String  managementUrl,
+        String managementUrl,
         Boolean surrogateAuthRequired,
-        String  realmId,
-        String  protocol,
+        String realmId,
+        String protocol,
         Integer nodeReregTimeout,
         Boolean frontchannelLogout,
         Boolean consentRequired,
-        String  name,
+        String name,
         Boolean serviceAccountsEnabled,
-        String  clientAuthenticatorType,
-        String  rootUrl,
-        String  description,
-        String  registrationToken,
+        String clientAuthenticatorType,
+        String rootUrl,
+        String description,
+        String registrationToken,
         Boolean standardFlowEnabled,
         Boolean implicitFlowEnabled,
         Boolean directAccessGrantsEnabled,
-        String  clientTemplateId,
-        Boolean useTemplateConfig,
-        Boolean useTemplateScope,
-        Boolean useTemplateMappers
+        Boolean alwaysDisplayInConsole
     ) {
         this.id = id;
         this.enabled = enabled;
@@ -138,10 +129,7 @@ public class Client implements VertxPojo, IClient {
         this.standardFlowEnabled = standardFlowEnabled;
         this.implicitFlowEnabled = implicitFlowEnabled;
         this.directAccessGrantsEnabled = directAccessGrantsEnabled;
-        this.clientTemplateId = clientTemplateId;
-        this.useTemplateConfig = useTemplateConfig;
-        this.useTemplateScope = useTemplateScope;
-        this.useTemplateMappers = useTemplateMappers;
+        this.alwaysDisplayInConsole = alwaysDisplayInConsole;
     }
 
         public Client(io.vertx.core.json.JsonObject json) {
@@ -575,71 +563,221 @@ public class Client implements VertxPojo, IClient {
     }
 
     /**
-     * Getter for <code>keycloak.client.client_template_id</code>.
+     * Getter for <code>keycloak.client.always_display_in_console</code>.
      */
     @Override
-    public String getClientTemplateId() {
-        return this.clientTemplateId;
+    public Boolean getAlwaysDisplayInConsole() {
+        return this.alwaysDisplayInConsole;
     }
 
     /**
-     * Setter for <code>keycloak.client.client_template_id</code>.
+     * Setter for <code>keycloak.client.always_display_in_console</code>.
      */
     @Override
-    public Client setClientTemplateId(String clientTemplateId) {
-        this.clientTemplateId = clientTemplateId;
+    public Client setAlwaysDisplayInConsole(Boolean alwaysDisplayInConsole) {
+        this.alwaysDisplayInConsole = alwaysDisplayInConsole;
         return this;
     }
 
-    /**
-     * Getter for <code>keycloak.client.use_template_config</code>.
-     */
     @Override
-    public Boolean getUseTemplateConfig() {
-        return this.useTemplateConfig;
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Client other = (Client) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.enabled == null) {
+            if (other.enabled != null)
+                return false;
+        }
+        else if (!this.enabled.equals(other.enabled))
+            return false;
+        if (this.fullScopeAllowed == null) {
+            if (other.fullScopeAllowed != null)
+                return false;
+        }
+        else if (!this.fullScopeAllowed.equals(other.fullScopeAllowed))
+            return false;
+        if (this.clientId == null) {
+            if (other.clientId != null)
+                return false;
+        }
+        else if (!this.clientId.equals(other.clientId))
+            return false;
+        if (this.notBefore == null) {
+            if (other.notBefore != null)
+                return false;
+        }
+        else if (!this.notBefore.equals(other.notBefore))
+            return false;
+        if (this.publicClient == null) {
+            if (other.publicClient != null)
+                return false;
+        }
+        else if (!this.publicClient.equals(other.publicClient))
+            return false;
+        if (this.secret == null) {
+            if (other.secret != null)
+                return false;
+        }
+        else if (!this.secret.equals(other.secret))
+            return false;
+        if (this.baseUrl == null) {
+            if (other.baseUrl != null)
+                return false;
+        }
+        else if (!this.baseUrl.equals(other.baseUrl))
+            return false;
+        if (this.bearerOnly == null) {
+            if (other.bearerOnly != null)
+                return false;
+        }
+        else if (!this.bearerOnly.equals(other.bearerOnly))
+            return false;
+        if (this.managementUrl == null) {
+            if (other.managementUrl != null)
+                return false;
+        }
+        else if (!this.managementUrl.equals(other.managementUrl))
+            return false;
+        if (this.surrogateAuthRequired == null) {
+            if (other.surrogateAuthRequired != null)
+                return false;
+        }
+        else if (!this.surrogateAuthRequired.equals(other.surrogateAuthRequired))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.protocol == null) {
+            if (other.protocol != null)
+                return false;
+        }
+        else if (!this.protocol.equals(other.protocol))
+            return false;
+        if (this.nodeReregTimeout == null) {
+            if (other.nodeReregTimeout != null)
+                return false;
+        }
+        else if (!this.nodeReregTimeout.equals(other.nodeReregTimeout))
+            return false;
+        if (this.frontchannelLogout == null) {
+            if (other.frontchannelLogout != null)
+                return false;
+        }
+        else if (!this.frontchannelLogout.equals(other.frontchannelLogout))
+            return false;
+        if (this.consentRequired == null) {
+            if (other.consentRequired != null)
+                return false;
+        }
+        else if (!this.consentRequired.equals(other.consentRequired))
+            return false;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        if (this.serviceAccountsEnabled == null) {
+            if (other.serviceAccountsEnabled != null)
+                return false;
+        }
+        else if (!this.serviceAccountsEnabled.equals(other.serviceAccountsEnabled))
+            return false;
+        if (this.clientAuthenticatorType == null) {
+            if (other.clientAuthenticatorType != null)
+                return false;
+        }
+        else if (!this.clientAuthenticatorType.equals(other.clientAuthenticatorType))
+            return false;
+        if (this.rootUrl == null) {
+            if (other.rootUrl != null)
+                return false;
+        }
+        else if (!this.rootUrl.equals(other.rootUrl))
+            return false;
+        if (this.description == null) {
+            if (other.description != null)
+                return false;
+        }
+        else if (!this.description.equals(other.description))
+            return false;
+        if (this.registrationToken == null) {
+            if (other.registrationToken != null)
+                return false;
+        }
+        else if (!this.registrationToken.equals(other.registrationToken))
+            return false;
+        if (this.standardFlowEnabled == null) {
+            if (other.standardFlowEnabled != null)
+                return false;
+        }
+        else if (!this.standardFlowEnabled.equals(other.standardFlowEnabled))
+            return false;
+        if (this.implicitFlowEnabled == null) {
+            if (other.implicitFlowEnabled != null)
+                return false;
+        }
+        else if (!this.implicitFlowEnabled.equals(other.implicitFlowEnabled))
+            return false;
+        if (this.directAccessGrantsEnabled == null) {
+            if (other.directAccessGrantsEnabled != null)
+                return false;
+        }
+        else if (!this.directAccessGrantsEnabled.equals(other.directAccessGrantsEnabled))
+            return false;
+        if (this.alwaysDisplayInConsole == null) {
+            if (other.alwaysDisplayInConsole != null)
+                return false;
+        }
+        else if (!this.alwaysDisplayInConsole.equals(other.alwaysDisplayInConsole))
+            return false;
+        return true;
     }
 
-    /**
-     * Setter for <code>keycloak.client.use_template_config</code>.
-     */
     @Override
-    public Client setUseTemplateConfig(Boolean useTemplateConfig) {
-        this.useTemplateConfig = useTemplateConfig;
-        return this;
-    }
-
-    /**
-     * Getter for <code>keycloak.client.use_template_scope</code>.
-     */
-    @Override
-    public Boolean getUseTemplateScope() {
-        return this.useTemplateScope;
-    }
-
-    /**
-     * Setter for <code>keycloak.client.use_template_scope</code>.
-     */
-    @Override
-    public Client setUseTemplateScope(Boolean useTemplateScope) {
-        this.useTemplateScope = useTemplateScope;
-        return this;
-    }
-
-    /**
-     * Getter for <code>keycloak.client.use_template_mappers</code>.
-     */
-    @Override
-    public Boolean getUseTemplateMappers() {
-        return this.useTemplateMappers;
-    }
-
-    /**
-     * Setter for <code>keycloak.client.use_template_mappers</code>.
-     */
-    @Override
-    public Client setUseTemplateMappers(Boolean useTemplateMappers) {
-        this.useTemplateMappers = useTemplateMappers;
-        return this;
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.enabled == null) ? 0 : this.enabled.hashCode());
+        result = prime * result + ((this.fullScopeAllowed == null) ? 0 : this.fullScopeAllowed.hashCode());
+        result = prime * result + ((this.clientId == null) ? 0 : this.clientId.hashCode());
+        result = prime * result + ((this.notBefore == null) ? 0 : this.notBefore.hashCode());
+        result = prime * result + ((this.publicClient == null) ? 0 : this.publicClient.hashCode());
+        result = prime * result + ((this.secret == null) ? 0 : this.secret.hashCode());
+        result = prime * result + ((this.baseUrl == null) ? 0 : this.baseUrl.hashCode());
+        result = prime * result + ((this.bearerOnly == null) ? 0 : this.bearerOnly.hashCode());
+        result = prime * result + ((this.managementUrl == null) ? 0 : this.managementUrl.hashCode());
+        result = prime * result + ((this.surrogateAuthRequired == null) ? 0 : this.surrogateAuthRequired.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.protocol == null) ? 0 : this.protocol.hashCode());
+        result = prime * result + ((this.nodeReregTimeout == null) ? 0 : this.nodeReregTimeout.hashCode());
+        result = prime * result + ((this.frontchannelLogout == null) ? 0 : this.frontchannelLogout.hashCode());
+        result = prime * result + ((this.consentRequired == null) ? 0 : this.consentRequired.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.serviceAccountsEnabled == null) ? 0 : this.serviceAccountsEnabled.hashCode());
+        result = prime * result + ((this.clientAuthenticatorType == null) ? 0 : this.clientAuthenticatorType.hashCode());
+        result = prime * result + ((this.rootUrl == null) ? 0 : this.rootUrl.hashCode());
+        result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
+        result = prime * result + ((this.registrationToken == null) ? 0 : this.registrationToken.hashCode());
+        result = prime * result + ((this.standardFlowEnabled == null) ? 0 : this.standardFlowEnabled.hashCode());
+        result = prime * result + ((this.implicitFlowEnabled == null) ? 0 : this.implicitFlowEnabled.hashCode());
+        result = prime * result + ((this.directAccessGrantsEnabled == null) ? 0 : this.directAccessGrantsEnabled.hashCode());
+        result = prime * result + ((this.alwaysDisplayInConsole == null) ? 0 : this.alwaysDisplayInConsole.hashCode());
+        return result;
     }
 
     @Override
@@ -671,10 +809,7 @@ public class Client implements VertxPojo, IClient {
         sb.append(", ").append(standardFlowEnabled);
         sb.append(", ").append(implicitFlowEnabled);
         sb.append(", ").append(directAccessGrantsEnabled);
-        sb.append(", ").append(clientTemplateId);
-        sb.append(", ").append(useTemplateConfig);
-        sb.append(", ").append(useTemplateScope);
-        sb.append(", ").append(useTemplateMappers);
+        sb.append(", ").append(alwaysDisplayInConsole);
 
         sb.append(")");
         return sb.toString();
@@ -711,10 +846,7 @@ public class Client implements VertxPojo, IClient {
         setStandardFlowEnabled(from.getStandardFlowEnabled());
         setImplicitFlowEnabled(from.getImplicitFlowEnabled());
         setDirectAccessGrantsEnabled(from.getDirectAccessGrantsEnabled());
-        setClientTemplateId(from.getClientTemplateId());
-        setUseTemplateConfig(from.getUseTemplateConfig());
-        setUseTemplateScope(from.getUseTemplateScope());
-        setUseTemplateMappers(from.getUseTemplateMappers());
+        setAlwaysDisplayInConsole(from.getAlwaysDisplayInConsole());
     }
 
     @Override

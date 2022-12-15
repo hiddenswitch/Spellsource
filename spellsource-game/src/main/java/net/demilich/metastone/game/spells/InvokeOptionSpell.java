@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
@@ -18,7 +17,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  */
 public class InvokeOptionSpell extends ChooseOneOptionSpell {
 
-	@Suspendable
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		var mana = desc.getInt(SpellArg.MANA, 0);

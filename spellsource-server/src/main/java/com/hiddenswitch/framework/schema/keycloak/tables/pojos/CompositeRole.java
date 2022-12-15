@@ -76,6 +76,39 @@ public class CompositeRole implements VertxPojo, ICompositeRole {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final CompositeRole other = (CompositeRole) obj;
+        if (this.composite == null) {
+            if (other.composite != null)
+                return false;
+        }
+        else if (!this.composite.equals(other.composite))
+            return false;
+        if (this.childRole == null) {
+            if (other.childRole != null)
+                return false;
+        }
+        else if (!this.childRole.equals(other.childRole))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.composite == null) ? 0 : this.composite.hashCode());
+        result = prime * result + ((this.childRole == null) ? 0 : this.childRole.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("CompositeRole (");
 

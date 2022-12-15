@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -19,7 +17,6 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
  */
 public class RecastWhileSpell extends Spell {
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		// If Grim Patron is on the board
 		int limit = context.getPlayers().stream()
@@ -31,7 +28,7 @@ public class RecastWhileSpell extends Spell {
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
 		do {
-			if (Strand.currentStrand().isInterrupted()) {
+			if (Thread.currentThread().isInterrupted()) {
 				break;
 			}
 			if (limit == 0) {
@@ -55,7 +52,6 @@ public class RecastWhileSpell extends Spell {
 	protected void afterCast(GameContext context, SpellDesc desc) {
 	}
 
-	@Suspendable
 	protected boolean isFulfilled(GameContext context, Player player, Entity source, Entity target, Condition condition, SpellDesc desc) {
 		return condition == null || condition.isFulfilled(context, player, source, target);
 	}

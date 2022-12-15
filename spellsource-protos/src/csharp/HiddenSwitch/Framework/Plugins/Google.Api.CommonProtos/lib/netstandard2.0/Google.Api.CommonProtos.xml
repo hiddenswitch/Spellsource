@@ -257,7 +257,7 @@
              <summary>
              OAuth scopes are a way to define data and permissions on data. For example,
              there are scopes defined for "Read-only access to Google Calendar" and
-             "Access to Cloud Platform". Users can consent to a scope for an application,
+             "Access to Cloud Platform". Streaming can consent to a scope for an application,
              giving it permission to access that data on their behalf.
             
              OAuth scope specifications should be fairly coarse grained; a user will need
@@ -2307,7 +2307,7 @@
         </member>
         <member name="F:Google.Api.LaunchStage.Unimplemented">
             <summary>
-            The feature is not yet implemented. Users can not use it.
+            The feature is not yet implemented. Streaming can not use it.
             </summary>
         </member>
         <member name="F:Google.Api.LaunchStage.Prelaunch">
@@ -6183,7 +6183,7 @@
              Advice on address input / editing:
               - Use an i18n-ready address widget such as
                 https://github.com/google/libaddressinput)
-             - Users should not be presented with UI elements for input or editing of
+             - Streaming should not be presented with UI elements for input or editing of
                fields outside countries where that field is used.
             
              For more guidance on how to use this schema, please see:

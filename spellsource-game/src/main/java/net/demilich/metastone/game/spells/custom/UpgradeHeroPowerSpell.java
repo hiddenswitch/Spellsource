@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -17,7 +16,6 @@ import java.util.List;
 public class UpgradeHeroPowerSpell extends ChangeHeroPowerSpell {
 
 	@Override
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		Card heroPower = player.getHeroPowerZone().get(0);
 		if (heroPower.getDesc().getHeroPower() != null) {

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;
@@ -31,7 +30,6 @@ public class DiscoverOptionSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		List<SpellDesc> spells = new Vector<SpellDesc>();
 		SpellDesc[] spellArray = (SpellDesc[]) desc.get(SpellArg.SPELLS);

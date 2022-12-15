@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
@@ -21,7 +20,6 @@ import net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvi
 public final class HealAndBuffExcessAsDrainSpell extends Spell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int amount = AttributeValueProvider.create(Attribute.LAST_HIT, target.getReference()).create().getValue(context, player, target, source);
 		DrainSpell.drain(context, player, source, amount, context.resolveSingleTarget(player, source, desc.getSecondaryTarget()));

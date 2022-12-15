@@ -54,21 +54,6 @@ public class ResourceServerResourceDao extends AbstractReactiveVertxDAO<Resource
         }
 
         /**
-     * Find records that have <code>uri IN (values)</code> asynchronously
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerResource>> findManyByUri(Collection<String> values) {
-                return findManyByCondition(ResourceServerResource.RESOURCE_SERVER_RESOURCE.URI.in(values));
-        }
-
-        /**
-     * Find records that have <code>uri IN (values)</code> asynchronously
-     * limited by the given limit
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerResource>> findManyByUri(Collection<String> values, int limit) {
-                return findManyByCondition(ResourceServerResource.RESOURCE_SERVER_RESOURCE.URI.in(values),limit);
-        }
-
-        /**
      * Find records that have <code>type IN (values)</code> asynchronously
      */
         public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerResource>> findManyByType(Collection<String> values) {
@@ -127,6 +112,38 @@ public class ResourceServerResourceDao extends AbstractReactiveVertxDAO<Resource
      */
         public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerResource>> findManyByResourceServerId(Collection<String> values, int limit) {
                 return findManyByCondition(ResourceServerResource.RESOURCE_SERVER_RESOURCE.RESOURCE_SERVER_ID.in(values),limit);
+        }
+
+        /**
+     * Find records that have <code>owner_managed_access IN (values)</code>
+     * asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerResource>> findManyByOwnerManagedAccess(Collection<Boolean> values) {
+                return findManyByCondition(ResourceServerResource.RESOURCE_SERVER_RESOURCE.OWNER_MANAGED_ACCESS.in(values));
+        }
+
+        /**
+     * Find records that have <code>owner_managed_access IN (values)</code>
+     * asynchronously limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerResource>> findManyByOwnerManagedAccess(Collection<Boolean> values, int limit) {
+                return findManyByCondition(ResourceServerResource.RESOURCE_SERVER_RESOURCE.OWNER_MANAGED_ACCESS.in(values),limit);
+        }
+
+        /**
+     * Find records that have <code>display_name IN (values)</code>
+     * asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerResource>> findManyByDisplayName(Collection<String> values) {
+                return findManyByCondition(ResourceServerResource.RESOURCE_SERVER_RESOURCE.DISPLAY_NAME.in(values));
+        }
+
+        /**
+     * Find records that have <code>display_name IN (values)</code>
+     * asynchronously limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerResource>> findManyByDisplayName(Collection<String> values, int limit) {
+                return findManyByCondition(ResourceServerResource.RESOURCE_SERVER_RESOURCE.DISPLAY_NAME.in(values),limit);
         }
 
         @Override

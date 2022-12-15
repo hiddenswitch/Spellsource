@@ -1,36 +1,24 @@
 # Spellsource-Server
 
-[![Build Status](https://travis-ci.org/hiddenswitch/Spellsource.svg?branch=master)](https://travis-ci.org/hiddenswitch/Spellsource)
 [![Discord](https://img.shields.io/badge/chat-join%20us%20on%20discord-blue.svg?longCache=true&style=flat&icon=discord)](https://discord.gg/HmbESh2)
-[![Documentation](https://img.shields.io/badge/docs-java-yellow.svg?longCache=true&style=flat)](https://www.playspellsource.com/javadoc)
 
-This is a simulator and game server for Spellsource, a community-authored card game, licensed under the Affero GPLv3.
+This is a simulator and game server for Spellsource, a community-authored card game.
 
-**[Download for your platform here.](https://www.playspellsource.com/download)**
-
-Steam keys for the Alpha are available for bonafide testers. Contact us in the Discord.
-
-Please see the [Issues](https://github.com/hiddenswitch/Spellsource/issues) tab to report bugs or request functionality. 
-
-### Changelist
-
-Read [the latest changes here](www/src/pages-markdown/whatsnew.md) or the deployed changes on the [website](https://www.playspellsource.com/whats-new).
+Please see the [Issues](https://github.com/hiddenswitch/Spellsource/issues) tab to report bugs or request functionality.
 
 ### Description
 
-The `Spellsource-Server` project is a 2-player card battler that supports hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches.
-
-See the complete code reference [here](https://www.playspellsource.com/javadoc).
+The `Spellsource-Server` project is a 2-player card battler that supports hosted, networked gameplay. It features matchmaking, collection management and support for game mechanics that persist between matches.
 
 ### Getting Around
 
-Cards are located at [cards/src/main/resources/cards/custom](cards/src/main/resources/cards/custom).
+Cards are located at [spellsource-cards-git/src/main/resources/cards/custom](spellsource-cards-git/src/main/resources/cards/custom).
 
-To implement new effects (called **Spells** inside Spellsource) add a new Spell subclass to [game/src/main/java/net/demilich/metastone/game/spells](game/src/main/java/net/demilich/metastone/game/spells).
+To implement new effects (called **Spells** inside Spellsource) add a new Spell subclass to [spellsource-game/src/main/java/net/demilich/metastone/game/spells](spellsource-game/src/main/java/net/demilich/metastone/game/spells).
 
-You can learn more about the Spellsource AI as implemented in the [GameStateValueBehaviour](game/src/main/java/net/demilich/metastone/game/behaviour/GameStateValueBehaviour.java) class.
+You can learn more about the Spellsource AI as implemented in the [GameStateValueBehaviour](spellsource-game/src/main/java/net/demilich/metastone/game/behaviour/GameStateValueBehaviour.java) class.
 
-The server application starts in [Clustered](net/src/main/java/com/hiddenswitch/spellsource/net/applications/Clustered.java). `./gradlew netRun` uses [LocalClustered](net/src/test/java/com/hiddenswitch/spellsource/net/tests/LocalClustered.java).
+The server application starts in [EntryPoint](spellsource-server/src/main/java/com/hiddenswitch/framework/EntryPoint.java). `./gradlew spellsource:run` uses the test [EntryPoint](spellsource-server/src/test/java/com/hiddenswitch/framework/tests/applications/EntryPoint.java).
 
 The client is private, please contact for access on the Discord.
 
@@ -64,7 +52,7 @@ testLegacyMigration - Tests the migration from the legacy server to this current
 
 ### Cloning this repository
 
-Typically you do not have access to the private submodules. Use the following commands to clone the repository:
+You do not have access to the private submodules. Use the following commands to clone the repository:
 
 ```shell
 git clone https://github.com/hiddenswitch/Spellsource.git
@@ -94,7 +82,7 @@ You cannot use the GitHub Desktop app to download this repository.
 
 ### Getting started with Development on macOS
 
-Requirements: **Java 11 or later** and **Docker**. Check your current version of Java using `java --version`.
+Requirements: **Java 19 or later** and **Docker**. Check your current version of Java using `java --version`.
 
  1. Install dependencies:
     ```shell script
@@ -105,61 +93,25 @@ Requirements: **Java 11 or later** and **Docker**. Check your current version of
     # Docker. Look carefully at any messages brew tells you and do them
     brew cask install docker
     # Java (if required)
-    brew install openjdk@11 dotnet-sdk
-    # Not sure why brew doesn't just do this for you
+    # Install openjdk 19 or higher
+    brew install openjdk dotnet-sdk
     sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
-    brew link --force openjdk@11
+    brew link --force openjdk
     ```
  2. Clone the repository:
     ```shell script
     git clone https://github.com/hiddenswitch/Spellsource.git
     cd Spellsource
-    # If you have access
+    # If you have access to the client, this will succeed.
     git submodule update --init --recursive unityclient/src/unity
     ```
  3. See Spellsource-specific tasks using `./gradlew tasks --group spellsource`.
- 4. Run tests using `./gradlew --no-parallel test`
- 5. Start a local server using `./gradlew netRun`
- 6. Generate project files using `./gradlew idea`, then open the project with **IntelliJ Community Edition**. You can install this with `brew cask install intellij-idea-ce`.
-
-### Getting started with Development on Windows
-
-Requirements: **Java 11 or later**, **Docker**, **bash** and **GNU binutils** like MinGW that comes with **git**.
-
- 1. Install dependencies:
-    1. Java AdoptOpenJDK [11.0.9](https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.9.1%2B1/OpenJDK11U-jdk_x64_windows_hotspot_11.0.9.1_1.msi) or later. During installation, choose to set `JAVA_HOME` and add `java` to your `PATH`.
-    2. [Docker for Windows Desktop](https://desktop.docker.com/win/stable/Docker%20Desktop%20Installer.exe). You will be prompted to enable and install Windows Subsystem for Linux 2 (WSL2) features, carefully follow those instructions including the new MSI it downloads into your downloads folder.
-    3. Git [2.29.2](https://github.com/git-for-windows/git/releases/download/v2.29.2.windows.2/Git-2.29.2.2-64-bit.exe) or later. During installation, choose **Use Git and optional Unix tools from the Windows Command Prompt**.
-    4. PuTTY [0.74](https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.74-installer.msi) or later. Then, follow the instructions from [here](https://vladmihalcea.com/tutorials/git/windows-git-ssh-authentication-to-github/) starting with "Installing SSH Tools" to get authorization configured for GitHub.
-    5. `dotnet` [3.1](https://download.visualstudio.microsoft.com/download/pr/3366b2e6-ed46-48ae-bf7b-f5804f6ee4c9/186f681ff967b509c6c9ad31d3d343da/dotnet-sdk-3.1.404-win-x64.exe
-    6. `git lfs` [2.12.2](https://github.com/git-lfs/git-lfs/releases/download/v2.12.1/git-lfs-windows-v2.12.1.exe) or later.
-) or later.
- 2. Right click in the folder where you'd like to store your Spellsource files, then choose **Git Bash Here**. Then, clone the repository:
-    ```shell
-    git lfs install
-    ```
-    ##### I have private repo access
-    ```shell
-    git clone --recurse-submodules git@github.com:hiddenswitch/Spellsource.git
-    cd Spellsource
-    git submodule update --init --recursive unityclient/src/unity
-    ```
-    
-    ##### I am a public user
-    ```shell
-    git clone https://github.com/hiddenswitch/Spellsource.git
-    cd Spellsource
-    ``` 
- 3. See Spellsource-specific tasks using `TERM=mintty ./gradlew tasks --group spellsource`.
- 4. Run tests using `TERM=mintty ./gradlew --no-parallel test`
- 5. Start a local server using `TERM=mintty ./gradlew netRun`
- 6. Generate project files using `TERM=mintty ./gradlew idea`, then open the project with **IntelliJ Community Edition**. You can install this from [here](https://www.jetbrains.com/idea/download/download-thanks.html?platform=windows&code=IIC).
-
-Unfortunately, it's true, you have to prefix every `gradlew` command with `TERM=mintty` until a [bug in Gradle](https://github.com/gradle/gradle/issues/8204) is fixed.
+ 4. Run tests using `./gradlew test`
+ 5. Start a local server using `./gradlew run`
 
 ### Contributing Cards
 
-Visit the [Contribution Guide](www/src/pages-markdown/contribute.md) for more about contributions, including guidelines.
+Visit the [Contribution Guide](CONTRIBUTE.md) for more about contributions, including guidelines.
 
 ### Deployment
 
@@ -202,18 +154,6 @@ Visit the [Steam partner's page](https://partner.steamgames.com/apps/builds/9871
 
 Make sure the Public group is [added here](https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1257566265/testflight?section=iosbuilds).
 
-> The Discord bot will not compile due to an error that reads, in part, "Classes that should be initialized at run time got initialized during image building"
-
-Add the class or the package containing it to end of the list of classes in the `Args = --initialize-at-build-time=...` line to [native-image.properties](discordbot/src/main/resources/META-INF/native-image/com.hiddenswitch/discordbot/native-image.properties).
-
-You may have to regenerate reflection config using **sdkman**'s Graal distributable. The following commands will fix this issue:
-
-```
-sdk use java 20.1.0.r11-grl
-./gradlew --no-daemon clean
-./gradlew --no-daemon discordbot:genReflectionProps
-```
-
 > `./gradlew distSwarm` fails with the message of the form:
 
 ```shell script
@@ -231,15 +171,11 @@ sdk use java 20.1.0.r11-grl
 
 Make sure to add the sub project directory and any others that need to be visible to Docker to [.dockerignore](.dockerignore) in the form of `!directory/*`.
 
-> `discordbot` Swarm build (`./gradlew distSwarm`) fails with `com.oracle.svm.driver.NativeImage$NativeImageError: Image build request failed with exit status 137`
-
-On **macOS** and **Windows**, allocate more memory to your Docker host.
-
-> `./gradlew net:run` hangs with error `Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out waiting for log output matching '.*waiting for connections on port.*'`
+> `./gradlew spellsource-server:run` hangs with error `Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out waiting for log output matching '.*waiting for connections on port.*'`
 
 Make sure to use your local `docker` context using `docker context use default`.
 
-> I receive an error starting the server with `gradle net:run` of the form:
+> I receive an error starting the server with `gradle spellsource-server:run` of the form:
 
 ```shell script
 main ERROR o.t.d.DockerClientProviderStrategy Could not find a valid Docker environment. Please check configuration. Attempted configurations were:
@@ -249,14 +185,6 @@ main ERROR o.t.d.DockerClientProviderStrategy As no valid configuration was foun
 ```
 
 Restart Docker. Make sure Docker is running.
-
-> The MongoDB container doesn't start with `gradle net:run` with the following error: `Timed out waiting for log output matching '.*waiting for connections on port.*'`
-
-Try deleting your local database which is automatically bind-mounted to the container at `.mongo`:
-
-```shell script
-rm -rf .mongo/
-```
 
 > I cannot connect to the Hidden Switch cluster to deploy the servers.
 

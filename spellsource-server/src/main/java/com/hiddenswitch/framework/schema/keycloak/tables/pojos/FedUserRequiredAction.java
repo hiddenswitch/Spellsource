@@ -122,6 +122,53 @@ public class FedUserRequiredAction implements VertxPojo, IFedUserRequiredAction 
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final FedUserRequiredAction other = (FedUserRequiredAction) obj;
+        if (this.requiredAction == null) {
+            if (other.requiredAction != null)
+                return false;
+        }
+        else if (!this.requiredAction.equals(other.requiredAction))
+            return false;
+        if (this.userId == null) {
+            if (other.userId != null)
+                return false;
+        }
+        else if (!this.userId.equals(other.userId))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.storageProviderId == null) {
+            if (other.storageProviderId != null)
+                return false;
+        }
+        else if (!this.storageProviderId.equals(other.storageProviderId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.requiredAction == null) ? 0 : this.requiredAction.hashCode());
+        result = prime * result + ((this.userId == null) ? 0 : this.userId.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.storageProviderId == null) ? 0 : this.storageProviderId.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("FedUserRequiredAction (");
 

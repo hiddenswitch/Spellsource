@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -27,7 +26,6 @@ public class RefreshAttacksSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(RefreshAttacksSpell.class);
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (!(target instanceof Actor)) {
 			logger.error("onCast {} {}: Cannot refresh attacks of {}, which is not an actor.", context.getGameId(), source, target);

@@ -1,6 +1,5 @@
 package com.hiddenswitch.diagnostics;
 
-import co.paralleluniverse.fibers.Fiber;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.spellsource.core.Version;
@@ -36,7 +35,7 @@ public class Tracing {
 		tracing();
 		vertx.exceptionHandler(Tracing::error);
 		try {
-			Fiber.setDefaultUncaughtExceptionHandler((a, b) -> error(b));
+			Thread.setDefaultUncaughtExceptionHandler((a, b) -> error(b));
 		} catch (NoClassDefFoundError compileOnlyDependency) {
 		}
 		return GlobalTracer.get();

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -53,7 +52,6 @@ public abstract class ValueProvider implements Serializable, HasDesc<ValueProvid
 		this.desc = desc;
 	}
 
-	@Suspendable
 	public int getValue(GameContext context, Player player, Entity target, Entity host) {
 		TargetPlayer targetPlayer = (TargetPlayer) getDesc().get(ValueProviderArg.TARGET_PLAYER);
 		if (targetPlayer == null) {
@@ -99,7 +97,6 @@ public abstract class ValueProvider implements Serializable, HasDesc<ValueProvid
 		return value;
 	}
 
-	@Suspendable
 	protected abstract int provideValue(GameContext context, Player player, Entity target, Entity host);
 
 	@Override

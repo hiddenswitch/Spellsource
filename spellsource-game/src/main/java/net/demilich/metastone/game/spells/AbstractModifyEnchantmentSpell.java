@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -15,7 +14,6 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 public abstract class AbstractModifyEnchantmentSpell extends Spell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (target.getEntityType() == EntityType.ENCHANTMENT) {
 			var enchantment = (Enchantment) target;

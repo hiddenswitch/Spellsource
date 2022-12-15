@@ -160,6 +160,67 @@ public class FederatedIdentity implements VertxPojo, IFederatedIdentity {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final FederatedIdentity other = (FederatedIdentity) obj;
+        if (this.identityProvider == null) {
+            if (other.identityProvider != null)
+                return false;
+        }
+        else if (!this.identityProvider.equals(other.identityProvider))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.federatedUserId == null) {
+            if (other.federatedUserId != null)
+                return false;
+        }
+        else if (!this.federatedUserId.equals(other.federatedUserId))
+            return false;
+        if (this.federatedUsername == null) {
+            if (other.federatedUsername != null)
+                return false;
+        }
+        else if (!this.federatedUsername.equals(other.federatedUsername))
+            return false;
+        if (this.token == null) {
+            if (other.token != null)
+                return false;
+        }
+        else if (!this.token.equals(other.token))
+            return false;
+        if (this.userId == null) {
+            if (other.userId != null)
+                return false;
+        }
+        else if (!this.userId.equals(other.userId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.identityProvider == null) ? 0 : this.identityProvider.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.federatedUserId == null) ? 0 : this.federatedUserId.hashCode());
+        result = prime * result + ((this.federatedUsername == null) ? 0 : this.federatedUsername.hashCode());
+        result = prime * result + ((this.token == null) ? 0 : this.token.hashCode());
+        result = prime * result + ((this.userId == null) ? 0 : this.userId.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("FederatedIdentity (");
 

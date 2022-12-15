@@ -174,24 +174,9 @@ public class Client extends TableImpl<ClientRecord> {
     public final TableField<ClientRecord, Boolean> DIRECT_ACCESS_GRANTS_ENABLED = createField(DSL.name("direct_access_grants_enabled"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * The column <code>keycloak.client.client_template_id</code>.
+     * The column <code>keycloak.client.always_display_in_console</code>.
      */
-    public final TableField<ClientRecord, String> CLIENT_TEMPLATE_ID = createField(DSL.name("client_template_id"), SQLDataType.VARCHAR(36), this, "");
-
-    /**
-     * The column <code>keycloak.client.use_template_config</code>.
-     */
-    public final TableField<ClientRecord, Boolean> USE_TEMPLATE_CONFIG = createField(DSL.name("use_template_config"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
-
-    /**
-     * The column <code>keycloak.client.use_template_scope</code>.
-     */
-    public final TableField<ClientRecord, Boolean> USE_TEMPLATE_SCOPE = createField(DSL.name("use_template_scope"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
-
-    /**
-     * The column <code>keycloak.client.use_template_mappers</code>.
-     */
-    public final TableField<ClientRecord, Boolean> USE_TEMPLATE_MAPPERS = createField(DSL.name("use_template_mappers"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+    public final TableField<ClientRecord, Boolean> ALWAYS_DISPLAY_IN_CONSOLE = createField(DSL.name("always_display_in_console"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     private Client(Name alias, Table<ClientRecord> aliased) {
         this(alias, aliased, null);
@@ -233,7 +218,7 @@ public class Client extends TableImpl<ClientRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.asList(Indexes.IDX_CLIENT_CLIENT_TEMPL_ID);
+        return Arrays.asList(Indexes.IDX_CLIENT_ID);
     }
 
     @Override
@@ -247,35 +232,6 @@ public class Client extends TableImpl<ClientRecord> {
     }
 
     @Override
-    public List<ForeignKey<ClientRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.CLIENT__FK_P56CTINXXB9GSK57FO49F9TAC, Keys.CLIENT__FK_CLI_TMPLT_CLIENT);
-    }
-
-    private transient Realm _realm;
-    private transient ClientTemplate _clientTemplate;
-
-    /**
-     * Get the implicit join path to the <code>keycloak.realm</code> table.
-     */
-    public Realm realm() {
-        if (_realm == null)
-            _realm = new Realm(this, Keys.CLIENT__FK_P56CTINXXB9GSK57FO49F9TAC);
-
-        return _realm;
-    }
-
-    /**
-     * Get the implicit join path to the <code>keycloak.client_template</code>
-     * table.
-     */
-    public ClientTemplate clientTemplate() {
-        if (_clientTemplate == null)
-            _clientTemplate = new ClientTemplate(this, Keys.CLIENT__FK_CLI_TMPLT_CLIENT);
-
-        return _clientTemplate;
-    }
-
-    @Override
     public Client as(String alias) {
         return new Client(DSL.name(alias), this);
     }
@@ -283,6 +239,11 @@ public class Client extends TableImpl<ClientRecord> {
     @Override
     public Client as(Name alias) {
         return new Client(alias, this);
+    }
+
+    @Override
+    public Client as(Table<?> alias) {
+        return new Client(alias.getQualifiedName(), this);
     }
 
     /**
@@ -299,5 +260,13 @@ public class Client extends TableImpl<ClientRecord> {
     @Override
     public Client rename(Name name) {
         return new Client(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public Client rename(Table<?> name) {
+        return new Client(name.getQualifiedName(), null);
     }
 }

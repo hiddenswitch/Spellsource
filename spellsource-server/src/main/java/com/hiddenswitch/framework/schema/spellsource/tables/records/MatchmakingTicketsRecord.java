@@ -12,7 +12,7 @@ import io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo;
 import java.time.OffsetDateTime;
 
 import org.jooq.Field;
-import org.jooq.Record2;
+import org.jooq.Record1;
 import org.jooq.Record6;
 import org.jooq.Row6;
 import org.jooq.impl.UpdatableRecordImpl;
@@ -28,19 +28,19 @@ public class MatchmakingTicketsRecord extends UpdatableRecordImpl<MatchmakingTic
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>spellsource.matchmaking_tickets.id</code>.
+     * Setter for <code>spellsource.matchmaking_tickets.ticket_id</code>.
      */
     @Override
-    public MatchmakingTicketsRecord setId(Long value) {
+    public MatchmakingTicketsRecord setTicketId(Long value) {
         set(0, value);
         return this;
     }
 
     /**
-     * Getter for <code>spellsource.matchmaking_tickets.id</code>.
+     * Getter for <code>spellsource.matchmaking_tickets.ticket_id</code>.
      */
     @Override
-    public Long getId() {
+    public Long getTicketId() {
         return (Long) get(0);
     }
 
@@ -134,8 +134,8 @@ public class MatchmakingTicketsRecord extends UpdatableRecordImpl<MatchmakingTic
     // -------------------------------------------------------------------------
 
     @Override
-    public Record2<Long, String> key() {
-        return (Record2) super.key();
+    public Record1<String> key() {
+        return (Record1) super.key();
     }
 
     // -------------------------------------------------------------------------
@@ -154,7 +154,7 @@ public class MatchmakingTicketsRecord extends UpdatableRecordImpl<MatchmakingTic
 
     @Override
     public Field<Long> field1() {
-        return MatchmakingTickets.MATCHMAKING_TICKETS.ID;
+        return MatchmakingTickets.MATCHMAKING_TICKETS.TICKET_ID;
     }
 
     @Override
@@ -184,7 +184,7 @@ public class MatchmakingTicketsRecord extends UpdatableRecordImpl<MatchmakingTic
 
     @Override
     public Long component1() {
-        return getId();
+        return getTicketId();
     }
 
     @Override
@@ -214,7 +214,7 @@ public class MatchmakingTicketsRecord extends UpdatableRecordImpl<MatchmakingTic
 
     @Override
     public Long value1() {
-        return getId();
+        return getTicketId();
     }
 
     @Override
@@ -244,7 +244,7 @@ public class MatchmakingTicketsRecord extends UpdatableRecordImpl<MatchmakingTic
 
     @Override
     public MatchmakingTicketsRecord value1(Long value) {
-        setId(value);
+        setTicketId(value);
         return this;
     }
 
@@ -295,7 +295,7 @@ public class MatchmakingTicketsRecord extends UpdatableRecordImpl<MatchmakingTic
 
     @Override
     public void from(IMatchmakingTickets from) {
-        setId(from.getId());
+        setTicketId(from.getTicketId());
         setQueueId(from.getQueueId());
         setUserId(from.getUserId());
         setDeckId(from.getDeckId());
@@ -323,10 +323,10 @@ public class MatchmakingTicketsRecord extends UpdatableRecordImpl<MatchmakingTic
     /**
      * Create a detached, initialised MatchmakingTicketsRecord
      */
-    public MatchmakingTicketsRecord(Long id, String queueId, String userId, String deckId, String botDeckId, OffsetDateTime createdAt) {
+    public MatchmakingTicketsRecord(Long ticketId, String queueId, String userId, String deckId, String botDeckId, OffsetDateTime createdAt) {
         super(MatchmakingTickets.MATCHMAKING_TICKETS);
 
-        setId(id);
+        setTicketId(ticketId);
         setQueueId(queueId);
         setUserId(userId);
         setDeckId(deckId);
@@ -341,7 +341,7 @@ public class MatchmakingTicketsRecord extends UpdatableRecordImpl<MatchmakingTic
         super(MatchmakingTickets.MATCHMAKING_TICKETS);
 
         if (value != null) {
-            setId(value.getId());
+            setTicketId(value.getTicketId());
             setQueueId(value.getQueueId());
             setUserId(value.getUserId());
             setDeckId(value.getDeckId());

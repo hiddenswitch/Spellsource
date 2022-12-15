@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -24,7 +23,6 @@ public class MergeSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		List<Entity> entities = context.resolveTarget(player, source, EntityReference.OTHER_FRIENDLY_MINIONS);
 		SpellDesc destroySpell = DestroySpell.create(target.getReference());

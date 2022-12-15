@@ -18,14 +18,14 @@ import static io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo.*;
 public interface IMatchmakingTickets extends VertxPojo, Serializable {
 
     /**
-     * Setter for <code>spellsource.matchmaking_tickets.id</code>.
+     * Setter for <code>spellsource.matchmaking_tickets.ticket_id</code>.
      */
-    public IMatchmakingTickets setId(Long value);
+    public IMatchmakingTickets setTicketId(Long value);
 
     /**
-     * Getter for <code>spellsource.matchmaking_tickets.id</code>.
+     * Getter for <code>spellsource.matchmaking_tickets.ticket_id</code>.
      */
-    public Long getId();
+    public Long getTicketId();
 
     /**
      * Setter for <code>spellsource.matchmaking_tickets.queue_id</code>.
@@ -95,7 +95,7 @@ public interface IMatchmakingTickets extends VertxPojo, Serializable {
 
         @Override
         public default IMatchmakingTickets fromJson(io.vertx.core.json.JsonObject json) {
-                setOrThrow(this::setId,json::getLong,"id","java.lang.Long");
+                setOrThrow(this::setTicketId,json::getLong,"ticket_id","java.lang.Long");
                 setOrThrow(this::setQueueId,json::getString,"queue_id","java.lang.String");
                 setOrThrow(this::setUserId,json::getString,"user_id","java.lang.String");
                 setOrThrow(this::setDeckId,json::getString,"deck_id","java.lang.String");
@@ -108,7 +108,7 @@ public interface IMatchmakingTickets extends VertxPojo, Serializable {
         @Override
         public default io.vertx.core.json.JsonObject toJson() {
                 io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
-                json.put("id",getId());
+                json.put("ticket_id",getTicketId());
                 json.put("queue_id",getQueueId());
                 json.put("user_id",getUserId());
                 json.put("deck_id",getDeckId());

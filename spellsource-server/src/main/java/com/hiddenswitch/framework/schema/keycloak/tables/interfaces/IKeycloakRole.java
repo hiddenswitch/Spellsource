@@ -96,16 +96,6 @@ public interface IKeycloakRole extends VertxPojo, Serializable {
      */
     public String getRealm();
 
-    /**
-     * Setter for <code>keycloak.keycloak_role.scope_param_required</code>.
-     */
-    public IKeycloakRole setScopeParamRequired(Boolean value);
-
-    /**
-     * Getter for <code>keycloak.keycloak_role.scope_param_required</code>.
-     */
-    public Boolean getScopeParamRequired();
-
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -132,7 +122,6 @@ public interface IKeycloakRole extends VertxPojo, Serializable {
                 setOrThrow(this::setRealmId,json::getString,"realm_id","java.lang.String");
                 setOrThrow(this::setClient,json::getString,"client","java.lang.String");
                 setOrThrow(this::setRealm,json::getString,"realm","java.lang.String");
-                setOrThrow(this::setScopeParamRequired,json::getBoolean,"scope_param_required","java.lang.Boolean");
                 return this;
         }
 
@@ -148,7 +137,6 @@ public interface IKeycloakRole extends VertxPojo, Serializable {
                 json.put("realm_id",getRealmId());
                 json.put("client",getClient());
                 json.put("realm",getRealm());
-                json.put("scope_param_required",getScopeParamRequired());
                 return json;
         }
 

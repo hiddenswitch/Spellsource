@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc.filter;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -36,7 +35,6 @@ public class ManaCostFilter extends EntityFilter {
 		return SpellUtils.evaluateOperation(operation, actualValue, mana);
 	}
 
-	@Suspendable
 	protected int getManaCost(GameContext context, Player player, Entity entity) {
 		Card card = entity.getSourceCard();
 		return context.getLogic().getModifiedManaCost(player, card);

@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.CredentialRecor
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function9;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row12;
+import org.jooq.Records;
+import org.jooq.Row9;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -55,16 +59,6 @@ public class Credential extends TableImpl<CredentialRecord> {
     public final TableField<CredentialRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
-     * The column <code>keycloak.credential.device</code>.
-     */
-    public final TableField<CredentialRecord, String> DEVICE = createField(DSL.name("device"), SQLDataType.VARCHAR(255), this, "");
-
-    /**
-     * The column <code>keycloak.credential.hash_iterations</code>.
-     */
-    public final TableField<CredentialRecord, Integer> HASH_ITERATIONS = createField(DSL.name("hash_iterations"), SQLDataType.INTEGER, this, "");
-
-    /**
      * The column <code>keycloak.credential.salt</code>.
      */
     public final TableField<CredentialRecord, byte[]> SALT = createField(DSL.name("salt"), SQLDataType.BLOB, this, "");
@@ -73,11 +67,6 @@ public class Credential extends TableImpl<CredentialRecord> {
      * The column <code>keycloak.credential.type</code>.
      */
     public final TableField<CredentialRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR(255), this, "");
-
-    /**
-     * The column <code>keycloak.credential.value</code>.
-     */
-    public final TableField<CredentialRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(4000), this, "");
 
     /**
      * The column <code>keycloak.credential.user_id</code>.
@@ -90,24 +79,24 @@ public class Credential extends TableImpl<CredentialRecord> {
     public final TableField<CredentialRecord, Long> CREATED_DATE = createField(DSL.name("created_date"), SQLDataType.BIGINT, this, "");
 
     /**
-     * The column <code>keycloak.credential.counter</code>.
+     * The column <code>keycloak.credential.user_label</code>.
      */
-    public final TableField<CredentialRecord, Integer> COUNTER = createField(DSL.name("counter"), SQLDataType.INTEGER.defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
+    public final TableField<CredentialRecord, String> USER_LABEL = createField(DSL.name("user_label"), SQLDataType.VARCHAR(255), this, "");
 
     /**
-     * The column <code>keycloak.credential.digits</code>.
+     * The column <code>keycloak.credential.secret_data</code>.
      */
-    public final TableField<CredentialRecord, Integer> DIGITS = createField(DSL.name("digits"), SQLDataType.INTEGER.defaultValue(DSL.field("6", SQLDataType.INTEGER)), this, "");
+    public final TableField<CredentialRecord, String> SECRET_DATA = createField(DSL.name("secret_data"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>keycloak.credential.period</code>.
+     * The column <code>keycloak.credential.credential_data</code>.
      */
-    public final TableField<CredentialRecord, Integer> PERIOD = createField(DSL.name("period"), SQLDataType.INTEGER.defaultValue(DSL.field("30", SQLDataType.INTEGER)), this, "");
+    public final TableField<CredentialRecord, String> CREDENTIAL_DATA = createField(DSL.name("credential_data"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>keycloak.credential.algorithm</code>.
+     * The column <code>keycloak.credential.priority</code>.
      */
-    public final TableField<CredentialRecord, String> ALGORITHM = createField(DSL.name("algorithm"), SQLDataType.VARCHAR(36).defaultValue(DSL.field("NULL::character varying", SQLDataType.VARCHAR)), this, "");
+    public final TableField<CredentialRecord, Integer> PRIORITY = createField(DSL.name("priority"), SQLDataType.INTEGER, this, "");
 
     private Credential(Name alias, Table<CredentialRecord> aliased) {
         this(alias, aliased, null);
@@ -185,6 +174,11 @@ public class Credential extends TableImpl<CredentialRecord> {
         return new Credential(alias, this);
     }
 
+    @Override
+    public Credential as(Table<?> alias) {
+        return new Credential(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -201,12 +195,35 @@ public class Credential extends TableImpl<CredentialRecord> {
         return new Credential(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public Credential rename(Table<?> name) {
+        return new Credential(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
-    // Row12 type methods
+    // Row9 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row12<String, String, Integer, byte[], String, String, String, Long, Integer, Integer, Integer, String> fieldsRow() {
-        return (Row12) super.fieldsRow();
+    public Row9<String, byte[], String, String, Long, String, String, String, Integer> fieldsRow() {
+        return (Row9) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function9<? super String, ? super byte[], ? super String, ? super String, ? super Long, ? super String, ? super String, ? super String, ? super Integer, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super String, ? super byte[], ? super String, ? super String, ? super Long, ? super String, ? super String, ? super String, ? super Integer, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

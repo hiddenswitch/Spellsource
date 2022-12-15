@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -23,7 +22,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public final class AnobiiSpell extends AddDeathrattleSpell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Entity deathrattleHost = context.resolveSingleTarget(player, source, (EntityReference) desc.getOrDefault(SpellArg.SECONDARY_TARGET, EntityReference.SELF));
 		Card cocoonCard = SpellUtils.getCard(context, desc);

@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.ScopeMappingRec
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function2;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row2;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -109,11 +113,10 @@ public class ScopeMapping extends TableImpl<ScopeMappingRecord> {
 
     @Override
     public List<ForeignKey<ScopeMappingRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.SCOPE_MAPPING__FK_OUSE064PLMLR732LXJCN1Q5F1, Keys.SCOPE_MAPPING__FK_P3RH9GRKU11KQFRS4FLTT7RNQ);
+        return Arrays.asList(Keys.SCOPE_MAPPING__FK_OUSE064PLMLR732LXJCN1Q5F1);
     }
 
     private transient Client _client;
-    private transient KeycloakRole _keycloakRole;
 
     /**
      * Get the implicit join path to the <code>keycloak.client</code> table.
@@ -125,17 +128,6 @@ public class ScopeMapping extends TableImpl<ScopeMappingRecord> {
         return _client;
     }
 
-    /**
-     * Get the implicit join path to the <code>keycloak.keycloak_role</code>
-     * table.
-     */
-    public KeycloakRole keycloakRole() {
-        if (_keycloakRole == null)
-            _keycloakRole = new KeycloakRole(this, Keys.SCOPE_MAPPING__FK_P3RH9GRKU11KQFRS4FLTT7RNQ);
-
-        return _keycloakRole;
-    }
-
     @Override
     public ScopeMapping as(String alias) {
         return new ScopeMapping(DSL.name(alias), this);
@@ -144,6 +136,11 @@ public class ScopeMapping extends TableImpl<ScopeMappingRecord> {
     @Override
     public ScopeMapping as(Name alias) {
         return new ScopeMapping(alias, this);
+    }
+
+    @Override
+    public ScopeMapping as(Table<?> alias) {
+        return new ScopeMapping(alias.getQualifiedName(), this);
     }
 
     /**
@@ -162,6 +159,14 @@ public class ScopeMapping extends TableImpl<ScopeMappingRecord> {
         return new ScopeMapping(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public ScopeMapping rename(Table<?> name) {
+        return new ScopeMapping(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row2 type methods
     // -------------------------------------------------------------------------
@@ -169,5 +174,20 @@ public class ScopeMapping extends TableImpl<ScopeMappingRecord> {
     @Override
     public Row2<String, String> fieldsRow() {
         return (Row2) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

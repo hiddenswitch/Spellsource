@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc.condition;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -21,7 +20,6 @@ public class ManaCostCondition extends Condition {
 	}
 
 	@Override
-	@Suspendable
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		if (!(target instanceof Card)) {
 			target = target.getSourceCard();

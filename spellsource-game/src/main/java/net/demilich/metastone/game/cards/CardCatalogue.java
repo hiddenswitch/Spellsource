@@ -31,6 +31,7 @@ import java.nio.file.spi.FileSystemProvider;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -73,6 +74,7 @@ public class CardCatalogue {
 	private final static Map<String, Card> cards = new ConcurrentHashMap<>(8196);
 	private final static Map<String, CardCatalogueRecord> records = new LinkedHashMap<>(8196);
 	private final static Map<String, List<CardCatalogueRecord>> recordsByName = new LinkedHashMap<>(8196);
+	private final static ReentrantLock lock = new ReentrantLock();
 
 	@NotNull
 	public static CardList getAll() {
@@ -493,10 +495,11 @@ public class CardCatalogue {
 	 * Loads all the cards specified in the {@code "cards/src/main/resources" + DEFAULT_CARDS_FOLDER } directory in the
 	 * {@code cards} module. This can be called multiple times, but will not "refresh" the catalogue file.
 	 */
-	public synchronized static void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
+	public static void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
 		if (!firstLoad()) {
 			return;
 		}
+		lock.lock();
 		List<CardResources> cardResources = null;
 
 		try (ScanResult scanResult =
@@ -525,6 +528,7 @@ public class CardCatalogue {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
+			lock.unlock();
 			if (cardResources != null) {
 				for (CardResources cardResources1 : cardResources) {
 					try {

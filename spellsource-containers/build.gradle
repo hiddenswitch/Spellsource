@@ -28,22 +28,9 @@ task createPythonImage(type: DockerBuildImage) {
     images.set(["doctorpangloss/spellsource-pythonjava:latest"])
 }
 
-task createKeycloakImage(type: DockerBuildImage) {
-    dependsOn += [tasks.processResources]
-    inputDir.set(new File("$project.projectDir/src/main/resources/docker/keycloak"))
-    dockerFile.set(new File("$project.projectDir/src/main/resources/docker/keycloak/Dockerfile"))
-    quiet.set(true)
-    images.set(["doctorpangloss/keycloak-clustered:latest"])
-}
-
-task pushKeycloakClusteredImage(type: DockerPushImage) {
-    dependsOn += [createKeycloakImage]
-    images.set(createKeycloakImage.images.get())
-}
-
 compileJava {
     // you won't really be able to use the postgres image unless you build it
-    dependsOn += [tasks.createPostgresImage, tasks.createKeycloakImage, tasks.createKeycloakImage]
+    dependsOn += [tasks.createPostgresImage]
     options.warnings = false
 }
 

@@ -58,6 +58,16 @@ public interface IResourceServerScope extends VertxPojo, Serializable {
      */
     public String getResourceServerId();
 
+    /**
+     * Setter for <code>keycloak.resource_server_scope.display_name</code>.
+     */
+    public IResourceServerScope setDisplayName(String value);
+
+    /**
+     * Getter for <code>keycloak.resource_server_scope.display_name</code>.
+     */
+    public String getDisplayName();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -80,6 +90,7 @@ public interface IResourceServerScope extends VertxPojo, Serializable {
                 setOrThrow(this::setName,json::getString,"name","java.lang.String");
                 setOrThrow(this::setIconUri,json::getString,"icon_uri","java.lang.String");
                 setOrThrow(this::setResourceServerId,json::getString,"resource_server_id","java.lang.String");
+                setOrThrow(this::setDisplayName,json::getString,"display_name","java.lang.String");
                 return this;
         }
 
@@ -91,6 +102,7 @@ public interface IResourceServerScope extends VertxPojo, Serializable {
                 json.put("name",getName());
                 json.put("icon_uri",getIconUri());
                 json.put("resource_server_id",getResourceServerId());
+                json.put("display_name",getDisplayName());
                 return json;
         }
 

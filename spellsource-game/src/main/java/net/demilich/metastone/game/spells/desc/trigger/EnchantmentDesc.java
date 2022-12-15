@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc.trigger;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import net.demilich.metastone.game.GameContext;
@@ -352,7 +351,6 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	}
 
 	@Override
-	@Suspendable
 	public Optional<Enchantment> tryCreate(GameContext context, Player player, Entity effectSource, Card enchantmentSource, Entity host, boolean force) {
 		return context.getLogic().tryCreateEnchantment(player, this, effectSource, enchantmentSource, host, force);
 	}

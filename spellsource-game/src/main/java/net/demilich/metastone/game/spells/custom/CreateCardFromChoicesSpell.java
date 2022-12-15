@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import net.demilich.metastone.game.GameContext;
@@ -32,7 +31,6 @@ public final class CreateCardFromChoicesSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		EntityFilter[] filters = (EntityFilter[]) desc.get(SpellArg.CARD_FILTERS);
 		int howMany = filters.length;

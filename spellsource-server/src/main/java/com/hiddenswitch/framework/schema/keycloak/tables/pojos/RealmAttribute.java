@@ -19,25 +19,25 @@ public class RealmAttribute implements VertxPojo, IRealmAttribute {
     private static final long serialVersionUID = 1L;
 
     private String name;
-    private String value;
     private String realmId;
+    private String value;
 
     public RealmAttribute() {}
 
     public RealmAttribute(IRealmAttribute value) {
         this.name = value.getName();
-        this.value = value.getValue();
         this.realmId = value.getRealmId();
+        this.value = value.getValue();
     }
 
     public RealmAttribute(
         String name,
-        String value,
-        String realmId
+        String realmId,
+        String value
     ) {
         this.name = name;
-        this.value = value;
         this.realmId = realmId;
+        this.value = value;
     }
 
         public RealmAttribute(io.vertx.core.json.JsonObject json) {
@@ -63,23 +63,6 @@ public class RealmAttribute implements VertxPojo, IRealmAttribute {
     }
 
     /**
-     * Getter for <code>keycloak.realm_attribute.value</code>.
-     */
-    @Override
-    public String getValue() {
-        return this.value;
-    }
-
-    /**
-     * Setter for <code>keycloak.realm_attribute.value</code>.
-     */
-    @Override
-    public RealmAttribute setValue(String value) {
-        this.value = value;
-        return this;
-    }
-
-    /**
      * Getter for <code>keycloak.realm_attribute.realm_id</code>.
      */
     @Override
@@ -96,13 +79,70 @@ public class RealmAttribute implements VertxPojo, IRealmAttribute {
         return this;
     }
 
+    /**
+     * Getter for <code>keycloak.realm_attribute.value</code>.
+     */
+    @Override
+    public String getValue() {
+        return this.value;
+    }
+
+    /**
+     * Setter for <code>keycloak.realm_attribute.value</code>.
+     */
+    @Override
+    public RealmAttribute setValue(String value) {
+        this.value = value;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final RealmAttribute other = (RealmAttribute) obj;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.value == null) {
+            if (other.value != null)
+                return false;
+        }
+        else if (!this.value.equals(other.value))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.value == null) ? 0 : this.value.hashCode());
+        return result;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("RealmAttribute (");
 
         sb.append(name);
-        sb.append(", ").append(value);
         sb.append(", ").append(realmId);
+        sb.append(", ").append(value);
 
         sb.append(")");
         return sb.toString();
@@ -115,8 +155,8 @@ public class RealmAttribute implements VertxPojo, IRealmAttribute {
     @Override
     public void from(IRealmAttribute from) {
         setName(from.getName());
-        setValue(from.getValue());
         setRealmId(from.getRealmId());
+        setValue(from.getValue());
     }
 
     @Override

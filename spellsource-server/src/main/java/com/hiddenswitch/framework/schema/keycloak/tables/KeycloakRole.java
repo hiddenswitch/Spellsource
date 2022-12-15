@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.KeycloakRoleRec
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function8;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row9;
+import org.jooq.Records;
+import org.jooq.Row8;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -57,7 +61,7 @@ public class KeycloakRole extends TableImpl<KeycloakRoleRecord> {
     /**
      * The column <code>keycloak.keycloak_role.client_realm_constraint</code>.
      */
-    public final TableField<KeycloakRoleRecord, String> CLIENT_REALM_CONSTRAINT = createField(DSL.name("client_realm_constraint"), SQLDataType.VARCHAR(36), this, "");
+    public final TableField<KeycloakRoleRecord, String> CLIENT_REALM_CONSTRAINT = createField(DSL.name("client_realm_constraint"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.keycloak_role.client_role</code>.
@@ -88,11 +92,6 @@ public class KeycloakRole extends TableImpl<KeycloakRoleRecord> {
      * The column <code>keycloak.keycloak_role.realm</code>.
      */
     public final TableField<KeycloakRoleRecord, String> REALM = createField(DSL.name("realm"), SQLDataType.VARCHAR(36), this, "");
-
-    /**
-     * The column <code>keycloak.keycloak_role.scope_param_required</code>.
-     */
-    public final TableField<KeycloakRoleRecord, Boolean> SCOPE_PARAM_REQUIRED = createField(DSL.name("scope_param_required"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     private KeycloakRole(Name alias, Table<KeycloakRoleRecord> aliased) {
         this(alias, aliased, null);
@@ -149,21 +148,10 @@ public class KeycloakRole extends TableImpl<KeycloakRoleRecord> {
 
     @Override
     public List<ForeignKey<KeycloakRoleRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.KEYCLOAK_ROLE__FK_KJHO5LE2C0RAL09FL8CM9WFW9, Keys.KEYCLOAK_ROLE__FK_6VYQFE4CN4WLQ8R6KT5VDSJ5C);
+        return Arrays.asList(Keys.KEYCLOAK_ROLE__FK_6VYQFE4CN4WLQ8R6KT5VDSJ5C);
     }
 
-    private transient Client _client;
     private transient Realm _realm;
-
-    /**
-     * Get the implicit join path to the <code>keycloak.client</code> table.
-     */
-    public Client client() {
-        if (_client == null)
-            _client = new Client(this, Keys.KEYCLOAK_ROLE__FK_KJHO5LE2C0RAL09FL8CM9WFW9);
-
-        return _client;
-    }
 
     /**
      * Get the implicit join path to the <code>keycloak.realm</code> table.
@@ -185,6 +173,11 @@ public class KeycloakRole extends TableImpl<KeycloakRoleRecord> {
         return new KeycloakRole(alias, this);
     }
 
+    @Override
+    public KeycloakRole as(Table<?> alias) {
+        return new KeycloakRole(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -201,12 +194,35 @@ public class KeycloakRole extends TableImpl<KeycloakRoleRecord> {
         return new KeycloakRole(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public KeycloakRole rename(Table<?> name) {
+        return new KeycloakRole(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<String, String, Boolean, String, String, String, String, String, Boolean> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row8<String, String, Boolean, String, String, String, String, String> fieldsRow() {
+        return (Row8) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function8<? super String, ? super String, ? super Boolean, ? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super String, ? super String, ? super Boolean, ? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

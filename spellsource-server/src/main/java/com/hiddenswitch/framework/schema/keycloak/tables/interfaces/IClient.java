@@ -267,44 +267,14 @@ public interface IClient extends VertxPojo, Serializable {
     public Boolean getDirectAccessGrantsEnabled();
 
     /**
-     * Setter for <code>keycloak.client.client_template_id</code>.
+     * Setter for <code>keycloak.client.always_display_in_console</code>.
      */
-    public IClient setClientTemplateId(String value);
+    public IClient setAlwaysDisplayInConsole(Boolean value);
 
     /**
-     * Getter for <code>keycloak.client.client_template_id</code>.
+     * Getter for <code>keycloak.client.always_display_in_console</code>.
      */
-    public String getClientTemplateId();
-
-    /**
-     * Setter for <code>keycloak.client.use_template_config</code>.
-     */
-    public IClient setUseTemplateConfig(Boolean value);
-
-    /**
-     * Getter for <code>keycloak.client.use_template_config</code>.
-     */
-    public Boolean getUseTemplateConfig();
-
-    /**
-     * Setter for <code>keycloak.client.use_template_scope</code>.
-     */
-    public IClient setUseTemplateScope(Boolean value);
-
-    /**
-     * Getter for <code>keycloak.client.use_template_scope</code>.
-     */
-    public Boolean getUseTemplateScope();
-
-    /**
-     * Setter for <code>keycloak.client.use_template_mappers</code>.
-     */
-    public IClient setUseTemplateMappers(Boolean value);
-
-    /**
-     * Getter for <code>keycloak.client.use_template_mappers</code>.
-     */
-    public Boolean getUseTemplateMappers();
+    public Boolean getAlwaysDisplayInConsole();
 
     // -------------------------------------------------------------------------
     // FROM and INTO
@@ -349,10 +319,7 @@ public interface IClient extends VertxPojo, Serializable {
                 setOrThrow(this::setStandardFlowEnabled,json::getBoolean,"standard_flow_enabled","java.lang.Boolean");
                 setOrThrow(this::setImplicitFlowEnabled,json::getBoolean,"implicit_flow_enabled","java.lang.Boolean");
                 setOrThrow(this::setDirectAccessGrantsEnabled,json::getBoolean,"direct_access_grants_enabled","java.lang.Boolean");
-                setOrThrow(this::setClientTemplateId,json::getString,"client_template_id","java.lang.String");
-                setOrThrow(this::setUseTemplateConfig,json::getBoolean,"use_template_config","java.lang.Boolean");
-                setOrThrow(this::setUseTemplateScope,json::getBoolean,"use_template_scope","java.lang.Boolean");
-                setOrThrow(this::setUseTemplateMappers,json::getBoolean,"use_template_mappers","java.lang.Boolean");
+                setOrThrow(this::setAlwaysDisplayInConsole,json::getBoolean,"always_display_in_console","java.lang.Boolean");
                 return this;
         }
 
@@ -385,10 +352,7 @@ public interface IClient extends VertxPojo, Serializable {
                 json.put("standard_flow_enabled",getStandardFlowEnabled());
                 json.put("implicit_flow_enabled",getImplicitFlowEnabled());
                 json.put("direct_access_grants_enabled",getDirectAccessGrantsEnabled());
-                json.put("client_template_id",getClientTemplateId());
-                json.put("use_template_config",getUseTemplateConfig());
-                json.put("use_template_scope",getUseTemplateScope());
-                json.put("use_template_mappers",getUseTemplateMappers());
+                json.put("always_display_in_console",getAlwaysDisplayInConsole());
                 return json;
         }
 

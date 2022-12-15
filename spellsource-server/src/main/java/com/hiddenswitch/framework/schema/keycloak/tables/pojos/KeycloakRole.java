@@ -18,15 +18,14 @@ public class KeycloakRole implements VertxPojo, IKeycloakRole {
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
-    private String  clientRealmConstraint;
+    private String id;
+    private String clientRealmConstraint;
     private Boolean clientRole;
-    private String  description;
-    private String  name;
-    private String  realmId;
-    private String  client;
-    private String  realm;
-    private Boolean scopeParamRequired;
+    private String description;
+    private String name;
+    private String realmId;
+    private String client;
+    private String realm;
 
     public KeycloakRole() {}
 
@@ -39,19 +38,17 @@ public class KeycloakRole implements VertxPojo, IKeycloakRole {
         this.realmId = value.getRealmId();
         this.client = value.getClient();
         this.realm = value.getRealm();
-        this.scopeParamRequired = value.getScopeParamRequired();
     }
 
     public KeycloakRole(
-        String  id,
-        String  clientRealmConstraint,
+        String id,
+        String clientRealmConstraint,
         Boolean clientRole,
-        String  description,
-        String  name,
-        String  realmId,
-        String  client,
-        String  realm,
-        Boolean scopeParamRequired
+        String description,
+        String name,
+        String realmId,
+        String client,
+        String realm
     ) {
         this.id = id;
         this.clientRealmConstraint = clientRealmConstraint;
@@ -61,7 +58,6 @@ public class KeycloakRole implements VertxPojo, IKeycloakRole {
         this.realmId = realmId;
         this.client = client;
         this.realm = realm;
-        this.scopeParamRequired = scopeParamRequired;
     }
 
         public KeycloakRole(io.vertx.core.json.JsonObject json) {
@@ -205,21 +201,79 @@ public class KeycloakRole implements VertxPojo, IKeycloakRole {
         return this;
     }
 
-    /**
-     * Getter for <code>keycloak.keycloak_role.scope_param_required</code>.
-     */
     @Override
-    public Boolean getScopeParamRequired() {
-        return this.scopeParamRequired;
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final KeycloakRole other = (KeycloakRole) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.clientRealmConstraint == null) {
+            if (other.clientRealmConstraint != null)
+                return false;
+        }
+        else if (!this.clientRealmConstraint.equals(other.clientRealmConstraint))
+            return false;
+        if (this.clientRole == null) {
+            if (other.clientRole != null)
+                return false;
+        }
+        else if (!this.clientRole.equals(other.clientRole))
+            return false;
+        if (this.description == null) {
+            if (other.description != null)
+                return false;
+        }
+        else if (!this.description.equals(other.description))
+            return false;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.client == null) {
+            if (other.client != null)
+                return false;
+        }
+        else if (!this.client.equals(other.client))
+            return false;
+        if (this.realm == null) {
+            if (other.realm != null)
+                return false;
+        }
+        else if (!this.realm.equals(other.realm))
+            return false;
+        return true;
     }
 
-    /**
-     * Setter for <code>keycloak.keycloak_role.scope_param_required</code>.
-     */
     @Override
-    public KeycloakRole setScopeParamRequired(Boolean scopeParamRequired) {
-        this.scopeParamRequired = scopeParamRequired;
-        return this;
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.clientRealmConstraint == null) ? 0 : this.clientRealmConstraint.hashCode());
+        result = prime * result + ((this.clientRole == null) ? 0 : this.clientRole.hashCode());
+        result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.client == null) ? 0 : this.client.hashCode());
+        result = prime * result + ((this.realm == null) ? 0 : this.realm.hashCode());
+        return result;
     }
 
     @Override
@@ -234,7 +288,6 @@ public class KeycloakRole implements VertxPojo, IKeycloakRole {
         sb.append(", ").append(realmId);
         sb.append(", ").append(client);
         sb.append(", ").append(realm);
-        sb.append(", ").append(scopeParamRequired);
 
         sb.append(")");
         return sb.toString();
@@ -254,7 +307,6 @@ public class KeycloakRole implements VertxPojo, IKeycloakRole {
         setRealmId(from.getRealmId());
         setClient(from.getClient());
         setRealm(from.getRealm());
-        setScopeParamRequired(from.getScopeParamRequired());
     }
 
     @Override

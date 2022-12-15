@@ -4,16 +4,25 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
+import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.FedUserAttributeRecord;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function6;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row6;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -115,6 +124,11 @@ public class FedUserAttribute extends TableImpl<FedUserAttributeRecord> {
     }
 
     @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.IDX_FU_ATTRIBUTE);
+    }
+
+    @Override
     public UniqueKey<FedUserAttributeRecord> getPrimaryKey() {
         return Keys.CONSTR_FED_USER_ATTR_PK;
     }
@@ -127,6 +141,11 @@ public class FedUserAttribute extends TableImpl<FedUserAttributeRecord> {
     @Override
     public FedUserAttribute as(Name alias) {
         return new FedUserAttribute(alias, this);
+    }
+
+    @Override
+    public FedUserAttribute as(Table<?> alias) {
+        return new FedUserAttribute(alias.getQualifiedName(), this);
     }
 
     /**
@@ -145,6 +164,14 @@ public class FedUserAttribute extends TableImpl<FedUserAttributeRecord> {
         return new FedUserAttribute(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public FedUserAttribute rename(Table<?> name) {
+        return new FedUserAttribute(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row6 type methods
     // -------------------------------------------------------------------------
@@ -152,5 +179,20 @@ public class FedUserAttribute extends TableImpl<FedUserAttributeRecord> {
     @Override
     public Row6<String, String, String, String, String, String> fieldsRow() {
         return (Row6) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function6<? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function6<? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

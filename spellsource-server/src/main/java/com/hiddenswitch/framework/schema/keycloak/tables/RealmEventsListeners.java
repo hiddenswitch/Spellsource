@@ -11,17 +11,22 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.RealmEventsList
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function2;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row2;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -56,7 +61,7 @@ public class RealmEventsListeners extends TableImpl<RealmEventsListenersRecord> 
     /**
      * The column <code>keycloak.realm_events_listeners.value</code>.
      */
-    public final TableField<RealmEventsListenersRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RealmEventsListenersRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     private RealmEventsListeners(Name alias, Table<RealmEventsListenersRecord> aliased) {
         this(alias, aliased, null);
@@ -104,6 +109,11 @@ public class RealmEventsListeners extends TableImpl<RealmEventsListenersRecord> 
     }
 
     @Override
+    public UniqueKey<RealmEventsListenersRecord> getPrimaryKey() {
+        return Keys.CONSTR_REALM_EVENTS_LISTENERS;
+    }
+
+    @Override
     public List<ForeignKey<RealmEventsListenersRecord, ?>> getReferences() {
         return Arrays.asList(Keys.REALM_EVENTS_LISTENERS__FK_H846O4H0W8EPX5NXEV9F5Y69J);
     }
@@ -130,6 +140,11 @@ public class RealmEventsListeners extends TableImpl<RealmEventsListenersRecord> 
         return new RealmEventsListeners(alias, this);
     }
 
+    @Override
+    public RealmEventsListeners as(Table<?> alias) {
+        return new RealmEventsListeners(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -146,6 +161,14 @@ public class RealmEventsListeners extends TableImpl<RealmEventsListenersRecord> 
         return new RealmEventsListeners(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public RealmEventsListeners rename(Table<?> name) {
+        return new RealmEventsListeners(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row2 type methods
     // -------------------------------------------------------------------------
@@ -153,5 +176,20 @@ public class RealmEventsListeners extends TableImpl<RealmEventsListenersRecord> 
     @Override
     public Row2<String, String> fieldsRow() {
         return (Row2) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

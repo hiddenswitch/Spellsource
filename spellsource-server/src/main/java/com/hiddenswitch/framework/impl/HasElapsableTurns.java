@@ -1,7 +1,5 @@
 package com.hiddenswitch.framework.impl;
 
-import co.paralleluniverse.fibers.Suspendable;
-
 /**
  * Indicates that this behvaiour can process elapsed turns
  */
@@ -19,12 +17,10 @@ public interface HasElapsableTurns {
 	 * @param elapsed
 	 * @return
 	 */
-	@Suspendable
 	HasElapsableTurns setElapsed(boolean elapsed);
 
 	/**
 	 * Elapses all awaiting requests.
 	 */
-	@Suspendable
 	void elapseAwaitingRequests();
 }

@@ -1,8 +1,5 @@
 package net.demilich.metastone.game.behaviour;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SuspendableAction1;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -10,6 +7,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.logic.GameLogic;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Behaviours specify a delegate for player action and mulligan requests.
@@ -30,8 +28,8 @@ public interface Behaviour extends Cloneable {
 	Behaviour clone();
 
 	/**
-	 * Gets a name for the behaviour. This should correspond to how the decisions are being made, e.g., a {@code "Human
-	 * Behaviour"} or an {@code "AI Behaviour}.
+	 * Gets a name for the behaviour. This should correspond to how the decisions are being made, e.g., a
+	 * {@code "Human Behaviour"} or an {@code "AI Behaviour}.
 	 *
 	 * @return A {@link String} description of the behaviour.
 	 */
@@ -45,7 +43,6 @@ public interface Behaviour extends Cloneable {
 	 * @param cards   The cards in the player's first hand.
 	 * @return The cards the player chose to discard.
 	 */
-	@Suspendable
 	List<Card> mulligan(GameContext context, Player player, List<Card> cards);
 
 	/**
@@ -55,7 +52,6 @@ public interface Behaviour extends Cloneable {
 	 * @param playerId        The player that corresponds to this behaviour.
 	 * @param winningPlayerId The winning player.
 	 */
-	@Suspendable
 	void onGameOver(GameContext context, int playerId, int winningPlayerId);
 
 	/**
@@ -66,7 +62,6 @@ public interface Behaviour extends Cloneable {
 	 * @param validActions The valid actions the player has to choose from.
 	 * @return One of the {@code validActions} that correspond to the player's choice.
 	 */
-	@Suspendable
 	GameAction requestAction(GameContext context, Player player, List<GameAction> validActions);
 
 	/**
@@ -78,14 +73,10 @@ public interface Behaviour extends Cloneable {
 	 * @param handler The callback when the player chose which cards to discard.
 	 * @see #mulligan(GameContext, Player, List) for a complete description of this method.
 	 */
-	@Suspendable
-	default void mulliganAsync(GameContext context, Player player, List<Card> cards, SuspendableAction1<List<Card>> handler) {
+	default void mulliganAsync(GameContext context, Player player, List<Card> cards, Consumer<List<Card>> handler) {
 		final List<Card> mulligan = mulligan(context, player, cards);
 		if (handler != null) {
-			try {
-				handler.call(mulligan);
-			} catch (SuspendExecution | InterruptedException suspendExecution) {
-			}
+			handler.accept(mulligan);
 		}
 	}
 
@@ -97,14 +88,10 @@ public interface Behaviour extends Cloneable {
 	 * @param validActions The valid actions the player has to choose from.
 	 * @param callback     The callback whose argument is one of the {@code validActions} that correspond to the player's
 	 */
-	@Suspendable
-	default void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, SuspendableAction1<GameAction> callback) {
+	default void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Consumer<GameAction> callback) {
 		GameAction action = requestAction(context, player, validActions);
 		if (callback != null) {
-			try {
-				callback.call(action);
-			} catch (SuspendExecution | InterruptedException suspendExecution) {
-			}
+			callback.accept(action);
 		}
 	}
 

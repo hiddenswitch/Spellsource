@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.AuthenticationE
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function10;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row10;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -189,6 +193,11 @@ public class AuthenticationExecution extends TableImpl<AuthenticationExecutionRe
         return new AuthenticationExecution(alias, this);
     }
 
+    @Override
+    public AuthenticationExecution as(Table<?> alias) {
+        return new AuthenticationExecution(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -205,6 +214,14 @@ public class AuthenticationExecution extends TableImpl<AuthenticationExecutionRe
         return new AuthenticationExecution(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public AuthenticationExecution rename(Table<?> name) {
+        return new AuthenticationExecution(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row10 type methods
     // -------------------------------------------------------------------------
@@ -212,5 +229,20 @@ public class AuthenticationExecution extends TableImpl<AuthenticationExecutionRe
     @Override
     public Row10<String, String, String, String, String, Integer, Integer, Boolean, String, String> fieldsRow() {
         return (Row10) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function10<? super String, ? super String, ? super String, ? super String, ? super String, ? super Integer, ? super Integer, ? super Boolean, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super String, ? super String, ? super String, ? super String, ? super String, ? super Integer, ? super Integer, ? super Boolean, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

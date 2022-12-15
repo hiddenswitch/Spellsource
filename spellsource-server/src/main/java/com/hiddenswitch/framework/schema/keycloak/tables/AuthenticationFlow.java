@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.AuthenticationF
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function7;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row7;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -161,6 +165,11 @@ public class AuthenticationFlow extends TableImpl<AuthenticationFlowRecord> {
         return new AuthenticationFlow(alias, this);
     }
 
+    @Override
+    public AuthenticationFlow as(Table<?> alias) {
+        return new AuthenticationFlow(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -177,6 +186,14 @@ public class AuthenticationFlow extends TableImpl<AuthenticationFlowRecord> {
         return new AuthenticationFlow(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public AuthenticationFlow rename(Table<?> name) {
+        return new AuthenticationFlow(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row7 type methods
     // -------------------------------------------------------------------------
@@ -184,5 +201,20 @@ public class AuthenticationFlow extends TableImpl<AuthenticationFlowRecord> {
     @Override
     public Row7<String, String, String, String, String, Boolean, Boolean> fieldsRow() {
         return (Row7) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function7<? super String, ? super String, ? super String, ? super String, ? super String, ? super Boolean, ? super Boolean, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function7<? super String, ? super String, ? super String, ? super String, ? super String, ? super Boolean, ? super Boolean, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

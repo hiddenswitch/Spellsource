@@ -1,6 +1,5 @@
 package com.hiddenswitch.framework.impl;
 
-import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.Closeable;
 import net.demilich.metastone.game.events.GameEvent;
 
@@ -16,7 +15,6 @@ public interface Client extends ActionListener, GameEventListener, HasElapsableT
 	 * @param emote    The emote to send
 	 */
 	@Override
-	@Suspendable
 	void sendEmote(int entityId, String emote);
 
 	/**
@@ -24,7 +22,6 @@ public interface Client extends ActionListener, GameEventListener, HasElapsableT
 	 * notified of an entire sequence of events, so that it has valid data at the end of each event, rather than as the
 	 * events are processed.
 	 */
-	@Suspendable
 	void lastEvent();
 
 	int getPlayerId();

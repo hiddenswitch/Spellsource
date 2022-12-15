@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import net.demilich.metastone.game.GameContext;
@@ -41,7 +40,6 @@ public class MissilesSpell extends DamageSpell {
 	private static Logger logger = LoggerFactory.getLogger(MissilesSpell.class);
 
 	@Override
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		if (desc.getTarget() == null
 				|| desc.getTarget().equals(EntityReference.TARGET)) {
@@ -89,7 +87,6 @@ public class MissilesSpell extends DamageSpell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 	}
 }

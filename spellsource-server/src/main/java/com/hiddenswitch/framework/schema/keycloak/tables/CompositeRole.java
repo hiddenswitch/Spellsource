@@ -11,17 +11,22 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.CompositeRoleRe
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function2;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row2;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -102,6 +107,11 @@ public class CompositeRole extends TableImpl<CompositeRoleRecord> {
     }
 
     @Override
+    public UniqueKey<CompositeRoleRecord> getPrimaryKey() {
+        return Keys.CONSTRAINT_COMPOSITE_ROLE;
+    }
+
+    @Override
     public List<ForeignKey<CompositeRoleRecord, ?>> getReferences() {
         return Arrays.asList(Keys.COMPOSITE_ROLE__FK_A63WVEKFTU8JO1PNJ81E7MCE2, Keys.COMPOSITE_ROLE__FK_GR7THLLB9LU8Q4VQA4524JJY8);
     }
@@ -141,6 +151,11 @@ public class CompositeRole extends TableImpl<CompositeRoleRecord> {
         return new CompositeRole(alias, this);
     }
 
+    @Override
+    public CompositeRole as(Table<?> alias) {
+        return new CompositeRole(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -157,6 +172,14 @@ public class CompositeRole extends TableImpl<CompositeRoleRecord> {
         return new CompositeRole(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public CompositeRole rename(Table<?> name) {
+        return new CompositeRole(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row2 type methods
     // -------------------------------------------------------------------------
@@ -164,5 +187,20 @@ public class CompositeRole extends TableImpl<CompositeRoleRecord> {
     @Override
     public Row2<String, String> fieldsRow() {
         return (Row2) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

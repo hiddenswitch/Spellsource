@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -21,7 +20,6 @@ import java.util.Map;
  */
 public class SummonMinionWithMostCopiesInDeckSpell extends SummonSpell {
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Map<String, Integer> countOfCard = new HashMap<>();
 		for (int i = 0; i < player.getDeck().size(); i++) {

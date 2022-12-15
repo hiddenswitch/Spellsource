@@ -4,16 +4,25 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
+import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.FedUserGroupMembershipRecord;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function4;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row4;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -106,6 +115,11 @@ public class FedUserGroupMembership extends TableImpl<FedUserGroupMembershipReco
     }
 
     @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.IDX_FU_GROUP_MEMBERSHIP, Indexes.IDX_FU_GROUP_MEMBERSHIP_RU);
+    }
+
+    @Override
     public UniqueKey<FedUserGroupMembershipRecord> getPrimaryKey() {
         return Keys.CONSTR_FED_USER_GROUP;
     }
@@ -118,6 +132,11 @@ public class FedUserGroupMembership extends TableImpl<FedUserGroupMembershipReco
     @Override
     public FedUserGroupMembership as(Name alias) {
         return new FedUserGroupMembership(alias, this);
+    }
+
+    @Override
+    public FedUserGroupMembership as(Table<?> alias) {
+        return new FedUserGroupMembership(alias.getQualifiedName(), this);
     }
 
     /**
@@ -136,6 +155,14 @@ public class FedUserGroupMembership extends TableImpl<FedUserGroupMembershipReco
         return new FedUserGroupMembership(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public FedUserGroupMembership rename(Table<?> name) {
+        return new FedUserGroupMembership(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
@@ -143,5 +170,20 @@ public class FedUserGroupMembership extends TableImpl<FedUserGroupMembershipReco
     @Override
     public Row4<String, String, String, String> fieldsRow() {
         return (Row4) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function4<? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

@@ -20,17 +20,17 @@ public class MatchmakingTickets implements VertxPojo, IMatchmakingTickets {
 
     private static final long serialVersionUID = 1L;
 
-    private Long           id;
-    private String         queueId;
-    private String         userId;
-    private String         deckId;
-    private String         botDeckId;
+    private Long ticketId;
+    private String queueId;
+    private String userId;
+    private String deckId;
+    private String botDeckId;
     private OffsetDateTime createdAt;
 
     public MatchmakingTickets() {}
 
     public MatchmakingTickets(IMatchmakingTickets value) {
-        this.id = value.getId();
+        this.ticketId = value.getTicketId();
         this.queueId = value.getQueueId();
         this.userId = value.getUserId();
         this.deckId = value.getDeckId();
@@ -39,14 +39,14 @@ public class MatchmakingTickets implements VertxPojo, IMatchmakingTickets {
     }
 
     public MatchmakingTickets(
-        Long           id,
-        String         queueId,
-        String         userId,
-        String         deckId,
-        String         botDeckId,
+        Long ticketId,
+        String queueId,
+        String userId,
+        String deckId,
+        String botDeckId,
         OffsetDateTime createdAt
     ) {
-        this.id = id;
+        this.ticketId = ticketId;
         this.queueId = queueId;
         this.userId = userId;
         this.deckId = deckId;
@@ -60,19 +60,19 @@ public class MatchmakingTickets implements VertxPojo, IMatchmakingTickets {
         }
 
     /**
-     * Getter for <code>spellsource.matchmaking_tickets.id</code>.
+     * Getter for <code>spellsource.matchmaking_tickets.ticket_id</code>.
      */
     @Override
-    public Long getId() {
-        return this.id;
+    public Long getTicketId() {
+        return this.ticketId;
     }
 
     /**
-     * Setter for <code>spellsource.matchmaking_tickets.id</code>.
+     * Setter for <code>spellsource.matchmaking_tickets.ticket_id</code>.
      */
     @Override
-    public MatchmakingTickets setId(Long id) {
-        this.id = id;
+    public MatchmakingTickets setTicketId(Long ticketId) {
+        this.ticketId = ticketId;
         return this;
     }
 
@@ -162,10 +162,71 @@ public class MatchmakingTickets implements VertxPojo, IMatchmakingTickets {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final MatchmakingTickets other = (MatchmakingTickets) obj;
+        if (this.ticketId == null) {
+            if (other.ticketId != null)
+                return false;
+        }
+        else if (!this.ticketId.equals(other.ticketId))
+            return false;
+        if (this.queueId == null) {
+            if (other.queueId != null)
+                return false;
+        }
+        else if (!this.queueId.equals(other.queueId))
+            return false;
+        if (this.userId == null) {
+            if (other.userId != null)
+                return false;
+        }
+        else if (!this.userId.equals(other.userId))
+            return false;
+        if (this.deckId == null) {
+            if (other.deckId != null)
+                return false;
+        }
+        else if (!this.deckId.equals(other.deckId))
+            return false;
+        if (this.botDeckId == null) {
+            if (other.botDeckId != null)
+                return false;
+        }
+        else if (!this.botDeckId.equals(other.botDeckId))
+            return false;
+        if (this.createdAt == null) {
+            if (other.createdAt != null)
+                return false;
+        }
+        else if (!this.createdAt.equals(other.createdAt))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.ticketId == null) ? 0 : this.ticketId.hashCode());
+        result = prime * result + ((this.queueId == null) ? 0 : this.queueId.hashCode());
+        result = prime * result + ((this.userId == null) ? 0 : this.userId.hashCode());
+        result = prime * result + ((this.deckId == null) ? 0 : this.deckId.hashCode());
+        result = prime * result + ((this.botDeckId == null) ? 0 : this.botDeckId.hashCode());
+        result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("MatchmakingTickets (");
 
-        sb.append(id);
+        sb.append(ticketId);
         sb.append(", ").append(queueId);
         sb.append(", ").append(userId);
         sb.append(", ").append(deckId);
@@ -182,7 +243,7 @@ public class MatchmakingTickets implements VertxPojo, IMatchmakingTickets {
 
     @Override
     public void from(IMatchmakingTickets from) {
-        setId(from.getId());
+        setTicketId(from.getTicketId());
         setQueueId(from.getQueueId());
         setUserId(from.getUserId());
         setDeckId(from.getDeckId());

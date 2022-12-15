@@ -8,12 +8,17 @@ import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.ResourceServerRecord;
 
+import java.util.function.Function;
+
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function4;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row4;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -50,11 +55,6 @@ public class ResourceServer extends TableImpl<ResourceServerRecord> {
     public final TableField<ResourceServerRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
-     * The column <code>keycloak.resource_server.client_id</code>.
-     */
-    public final TableField<ResourceServerRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
-
-    /**
      * The column <code>keycloak.resource_server.allow_rs_remote_mgmt</code>.
      */
     public final TableField<ResourceServerRecord, Boolean> ALLOW_RS_REMOTE_MGMT = createField(DSL.name("allow_rs_remote_mgmt"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
@@ -63,6 +63,11 @@ public class ResourceServer extends TableImpl<ResourceServerRecord> {
      * The column <code>keycloak.resource_server.policy_enforce_mode</code>.
      */
     public final TableField<ResourceServerRecord, String> POLICY_ENFORCE_MODE = createField(DSL.name("policy_enforce_mode"), SQLDataType.VARCHAR(15).nullable(false), this, "");
+
+    /**
+     * The column <code>keycloak.resource_server.decision_strategy</code>.
+     */
+    public final TableField<ResourceServerRecord, Short> DECISION_STRATEGY = createField(DSL.name("decision_strategy"), SQLDataType.SMALLINT.nullable(false).defaultValue(DSL.field("1", SQLDataType.SMALLINT)), this, "");
 
     private ResourceServer(Name alias, Table<ResourceServerRecord> aliased) {
         this(alias, aliased, null);
@@ -104,7 +109,7 @@ public class ResourceServer extends TableImpl<ResourceServerRecord> {
 
     @Override
     public UniqueKey<ResourceServerRecord> getPrimaryKey() {
-        return Keys.CONSTRAINT_FARS;
+        return Keys.PK_RESOURCE_SERVER;
     }
 
     @Override
@@ -115,6 +120,11 @@ public class ResourceServer extends TableImpl<ResourceServerRecord> {
     @Override
     public ResourceServer as(Name alias) {
         return new ResourceServer(alias, this);
+    }
+
+    @Override
+    public ResourceServer as(Table<?> alias) {
+        return new ResourceServer(alias.getQualifiedName(), this);
     }
 
     /**
@@ -133,12 +143,35 @@ public class ResourceServer extends TableImpl<ResourceServerRecord> {
         return new ResourceServer(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public ResourceServer rename(Table<?> name) {
+        return new ResourceServer(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<String, String, Boolean, String> fieldsRow() {
+    public Row4<String, Boolean, String, Short> fieldsRow() {
         return (Row4) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function4<? super String, ? super Boolean, ? super String, ? super Short, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super String, ? super Boolean, ? super String, ? super Short, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

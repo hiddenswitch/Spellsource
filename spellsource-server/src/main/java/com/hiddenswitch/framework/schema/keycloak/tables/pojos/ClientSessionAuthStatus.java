@@ -18,9 +18,9 @@ public class ClientSessionAuthStatus implements VertxPojo, IClientSessionAuthSta
 
     private static final long serialVersionUID = 1L;
 
-    private String  authenticator;
+    private String authenticator;
     private Integer status;
-    private String  clientSession;
+    private String clientSession;
 
     public ClientSessionAuthStatus() {}
 
@@ -31,9 +31,9 @@ public class ClientSessionAuthStatus implements VertxPojo, IClientSessionAuthSta
     }
 
     public ClientSessionAuthStatus(
-        String  authenticator,
+        String authenticator,
         Integer status,
-        String  clientSession
+        String clientSession
     ) {
         this.authenticator = authenticator;
         this.status = status;
@@ -98,6 +98,46 @@ public class ClientSessionAuthStatus implements VertxPojo, IClientSessionAuthSta
     public ClientSessionAuthStatus setClientSession(String clientSession) {
         this.clientSession = clientSession;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ClientSessionAuthStatus other = (ClientSessionAuthStatus) obj;
+        if (this.authenticator == null) {
+            if (other.authenticator != null)
+                return false;
+        }
+        else if (!this.authenticator.equals(other.authenticator))
+            return false;
+        if (this.status == null) {
+            if (other.status != null)
+                return false;
+        }
+        else if (!this.status.equals(other.status))
+            return false;
+        if (this.clientSession == null) {
+            if (other.clientSession != null)
+                return false;
+        }
+        else if (!this.clientSession.equals(other.clientSession))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.authenticator == null) ? 0 : this.authenticator.hashCode());
+        result = prime * result + ((this.status == null) ? 0 : this.status.hashCode());
+        result = prime * result + ((this.clientSession == null) ? 0 : this.clientSession.hashCode());
+        return result;
     }
 
     @Override

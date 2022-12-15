@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.RealmDefaultGro
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function2;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row2;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -105,17 +109,21 @@ public class RealmDefaultGroups extends TableImpl<RealmDefaultGroupsRecord> {
     }
 
     @Override
+    public UniqueKey<RealmDefaultGroupsRecord> getPrimaryKey() {
+        return Keys.CONSTR_REALM_DEFAULT_GROUPS;
+    }
+
+    @Override
     public List<UniqueKey<RealmDefaultGroupsRecord>> getUniqueKeys() {
         return Arrays.asList(Keys.CON_GROUP_ID_DEF_GROUPS);
     }
 
     @Override
     public List<ForeignKey<RealmDefaultGroupsRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_REALM, Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_GROUP);
+        return Arrays.asList(Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_REALM);
     }
 
     private transient Realm _realm;
-    private transient KeycloakGroup _keycloakGroup;
 
     /**
      * Get the implicit join path to the <code>keycloak.realm</code> table.
@@ -127,17 +135,6 @@ public class RealmDefaultGroups extends TableImpl<RealmDefaultGroupsRecord> {
         return _realm;
     }
 
-    /**
-     * Get the implicit join path to the <code>keycloak.keycloak_group</code>
-     * table.
-     */
-    public KeycloakGroup keycloakGroup() {
-        if (_keycloakGroup == null)
-            _keycloakGroup = new KeycloakGroup(this, Keys.REALM_DEFAULT_GROUPS__FK_DEF_GROUPS_GROUP);
-
-        return _keycloakGroup;
-    }
-
     @Override
     public RealmDefaultGroups as(String alias) {
         return new RealmDefaultGroups(DSL.name(alias), this);
@@ -146,6 +143,11 @@ public class RealmDefaultGroups extends TableImpl<RealmDefaultGroupsRecord> {
     @Override
     public RealmDefaultGroups as(Name alias) {
         return new RealmDefaultGroups(alias, this);
+    }
+
+    @Override
+    public RealmDefaultGroups as(Table<?> alias) {
+        return new RealmDefaultGroups(alias.getQualifiedName(), this);
     }
 
     /**
@@ -164,6 +166,14 @@ public class RealmDefaultGroups extends TableImpl<RealmDefaultGroupsRecord> {
         return new RealmDefaultGroups(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public RealmDefaultGroups rename(Table<?> name) {
+        return new RealmDefaultGroups(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row2 type methods
     // -------------------------------------------------------------------------
@@ -171,5 +181,20 @@ public class RealmDefaultGroups extends TableImpl<RealmDefaultGroupsRecord> {
     @Override
     public Row2<String, String> fieldsRow() {
         return (Row2) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }
