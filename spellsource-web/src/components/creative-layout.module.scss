@@ -6,8 +6,9 @@
  * Style variables
  */
 $base-font-family: 'Space Grotesk', sans-serif;
-$base-font-size: 17pt !default;
-$mobile-font-size: 17pt !default;
+$base-font-size: 22px !default;
+$font-size-footer: 16px;
+$mobile-font-size: 18px !default;
 $base-line-height: 1.2 !default;
 $container-width: 100% !default;
 $main-width: 700px !default;
@@ -66,7 +67,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0px;
   margin-top: 22px;
   font-weight: bold;
-  color: var(--text-color);
+  color: var(--text-dark);
 }
 
 h1 {
@@ -94,12 +95,14 @@ h6 {
 }
 
 p, ul, ol {
-  margin: 0 0 $base-font-size 0;
-  color: var(--text-color);
+  color: var(--text-dark);
 }
 
 
-a:visited { text-decoration: none; color:var(--text-dark); }
+a:visited { 
+  text-decoration: none; 
+  color:var(--text-dark); 
+}
 
 figure {
   display: inline-block;
@@ -150,34 +153,22 @@ summary:hover {
 /**
  * Layout
  */
-.container {
-  width: $container-width;
-  margin-right: auto;
-  margin-left: auto;
-}
+// .container {
+//   width: $container-width;
+//   margin-right: auto;
+//   margin-left: auto;
+// }
 
-main {
-  max-width: calc(100% - 50px);
-  width: $main-width;
-  margin-right: auto;
-  margin-left: auto;
-}
+// main {
+//   max-width: calc(100% - 50px);
+//   width: $main-width;
+//   margin-right: auto;
+//   margin-left: auto;
+// }
 
 section {
   margin-right: auto;
   margin-left: auto;
-}
-
-footer {
-  color: var(--text-color);
-  border-top: var(--border);
-  margin: 22px auto 15px;
-  padding-top: 10px;
-  text-align: right;
-}
-
-footer p {
-  margin-right: 2.5%;
 }
 
 .fullscreen-div {
@@ -291,6 +282,40 @@ footer p {
   padding-right: 0.25em;
 }
 
+/**
+ * Footer
+ */
+ 
+.footer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  background-image: url('../assets/gradient-footer.png');
+  font-size: $font-size-footer;
+  padding: 0 90px;
+  text-decoration: none !important;
+
+  strong{ 
+    color: var(--text-dark);
+  }
+
+  ul {
+    display: flex;
+    align-items: flex-end;
+    color:var(--text-dark); 
+    text-decoration: none;
+  }
+  li{
+    text-decoration: none;
+    padding: 0 10px;
+    color:var(--text-dark); 
+  }
+  a:visited { 
+    text-decoration: none; 
+    color:var(--text-dark); 
+  }
+}
 
 /**
  * Form
@@ -372,7 +397,7 @@ pre {
   margin: 0;
   overflow: auto;
   font-size: $base-font-size;
-  color: var(--text-color);
+  color: var(--text-dark);
   line-height: 1.7 !important;
   font-family: $base-font-family !important;
 }
