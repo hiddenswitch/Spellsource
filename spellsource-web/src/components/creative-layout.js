@@ -1,5 +1,7 @@
 import React from 'react'
 import Header from './header'
+import Footer from './footer'
+
 import * as styles from './creative-layout.module.scss'
 
 export default ({ children }) => {
@@ -9,6 +11,6 @@ export default ({ children }) => {
       {children}
     </main>
     <br/>
-    {/*<footer><p>Copyright © 2020 Hidden Switch</p></footer>*/}
+    <Footer/>
   </div>
 }

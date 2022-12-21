@@ -46,14 +46,17 @@ const Header = () => {
     .map(edge => <li key={edge.node.id}><PostLink post={edge.node}/></li>)
 
   return <header>
-    <div className={styles.menu} ref={headerDiv} onScroll={e => {handleScroll(e)}}>
-      <ul>
-        <li key={'headerImage'}><Link to="/"><StaticImage src={'../assets/icon.png'} alt={'Icon'}
-                                                          style={{ width: 25, height: 25 }}/></Link></li>
-        <li key={'javadocs'}><a href="/javadoc">[Docs]</a></li>
+    <div className={styles.menuContainer} ref={headerDiv} onScroll={e => {handleScroll(e)}}>
+      <a key={'headerImage'} style={{textDecoration: 'none'}}>
+        <Link to="/"><StaticImage src={'../assets/icon.png'} alt={'Icon'} style={{ width: 32, height: 32 }}/>
+          <strong>Spellsource</strong>
+        </Link>
+        </a>
+      <ul>       
+        <li key={'javadocs'}><a href="/javadoc">Docs</a></li>
         {pages}
-        <li key={'download'}><Link to="/download">[Play Now]</Link></li>
-        <li key={'search'}><Search placeholder={'Search'}/></li>
+        <li key={'download'}><Link to="/download">Play Now</Link></li>
+        {/* <li key={'search'}><Search placeholder={'Search'}/></li> */}
       </ul>
     </div>
   </header>
