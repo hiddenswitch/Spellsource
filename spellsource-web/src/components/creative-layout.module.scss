@@ -1,11 +1,11 @@
 @charset "utf-8";
-@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap');
 @import "../styles/font";
 
 /**
  * Style variables
  */
-$base-font-family: 'compasspromedium', 'Source Code Pro', monospace !default;
+$base-font-family: 'Space Grotesk', sans-serif;
 $base-font-size: 17pt !default;
 $mobile-font-size: 17pt !default;
 $base-line-height: 1.2 !default;
@@ -16,11 +16,15 @@ $main-width: 700px !default;
 :root {
   --base-color: #DBDBDB;
   --primary-color: #A2FC8F;
-  --border: solid 1px #DBDBDB;
+  --border: solid 2px #1B1B1B;
   --selection-background: #DBDBDB;
   --selection-text: #21215c;
   --background-color: #21215c;
   --text-color: var(--base-color);
+  --text-dark: #1B1B1B;
+  --text-light: #FCFCFC;
+  --hover-color: #2837FF;
+  --header-background-color: #ffffff;
   --placeholder-color: var(--base-color);
   --link-color: var(--base-color);
   --code-color-1: #aaaaaa;
@@ -66,7 +70,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 60px;
+  font-size: 64px;
 }
 
 h2 {
@@ -94,15 +98,8 @@ p, ul, ol {
   color: var(--text-color);
 }
 
-a {
-  text-decoration: underline;
-  color: var(--link-color);
-}
 
-a:hover {
-  color: var(--background-color);
-  background-color: var(--base-color);
-}
+a:visited { text-decoration: none; color:var(--text-dark); }
 
 figure {
   display: inline-block;
@@ -183,16 +180,6 @@ footer p {
   margin-right: 2.5%;
 }
 
-header {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-header p {
-  text-align: left;
-  margin: 0;
-}
-
 .fullscreen-div {
   width: 100vw;
   margin-left: calc(-50vw + 50%);
@@ -234,24 +221,22 @@ header p {
   padding-left: 0;
 }
 
-:not(.menu) > ul {
-}
-
 :not(.menu) > ul > li:before {
-  content: "-";
-  margin-right: 9px;
+  margin-right: 20px;
 }
 
 /**
  * Header/Navigation
  */
-.menu {
+.menuContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  background-color: var(--header-background-color);
   border-top: var(--border);
   border-bottom: var(--border);
-  margin-bottom: 25px;
-  white-space: nowrap;
-  overflow-x: auto;
-  position: relative;
+  padding: 0 90px;
 
   .search-results {
     background-color: var(--background-color);
@@ -263,6 +248,14 @@ header p {
     top: auto;
   }
 
+  strong {
+    padding-left: 10px;
+  }
+
+  a:link {
+    text-decoration: none;
+  }
+
   .search-list-group-item {
     text-align: left;
     padding-left: 0.2em;
@@ -270,24 +263,22 @@ header p {
   }
 
   ul {
-    margin-top: 12px;
-    margin-bottom: 12px;
+    margin: 20px 0;
     padding-left: 0px;
     list-style-type: none;
     text-align: center;
 
     li {
       display: inline-block;
-      margin-left: 10px;
+      margin: 5px 10px;
       user-select: none;
       a {
         text-decoration: none;
-        color: var(--text-color);
+        color: var(--text-dark);
 
         &:hover {
           text-decoration: none;
-          color: var(--background-color);
-          background-color: var(--base-color);
+          color: var(--hover-color);
         }
       }
     }
