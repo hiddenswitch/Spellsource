@@ -1,30 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
-import PostLink from './post-link'
-import { useStaticQuery, graphql, Link } from 'gatsby'
+import React, { useEffect, useRef } from 'react'
+import { Link } from 'gatsby'
 import { StaticImage } from 'gatsby-plugin-image'
 import * as styles from './creative-layout.module.scss'
 import Search from './search'
 
-const Header = () => {
-  const data = useStaticQuery(graphql`
-  query {
-    allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }) {
-      edges {
-        node {
-          id
-          excerpt(pruneLength: 250)
-          frontmatter {
-            date(formatString: "MMMM DD, YYYY")
-            path
-            title
-            header
-          }
-        }
-      }
-    }
-  }
-`)
-
+const Header = ({pages}) => {
   const headerDiv = useRef(null)
 
   const handleScroll = event => {
@@ -41,13 +21,9 @@ const Header = () => {
     keepHorizontalScroll()
   }, [])
 
-  const pages = data.allMarkdownRemark.edges
-    .filter(edge => !!edge.node.frontmatter.header)
-    .map(edge => <li key={edge.node.id}><PostLink post={edge.node}/></li>)
-
   return <header>
     <div className={styles.menuContainer} ref={headerDiv} onScroll={e => {handleScroll(e)}}>
-      <a key={'headerImage'} style={{textDecoration: 'none'}}>
+      <a key={'headerImage'}>
         <Link to="/"><StaticImage src={'../assets/icon.png'} alt={'Icon'} style={{ width: 32, height: 32 }}/>
           <strong>Spellsource</strong>
         </Link>
