@@ -11,6 +11,7 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@gatsby-contrib/gatsby-plugin-elasticlunr-search": "^3.0.2",
+    "@react-icons/all-files": "^4.1.0",
     "@react-spring/parallax": "^9.1.2",
     "acorn": "^8.2.4",
     "aseprite": "^0.3.0",
