@@ -65,7 +65,6 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0px;
-  margin-top: 22px;
   font-weight: bold;
   color: var(--text-dark);
 }
@@ -84,6 +83,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 64px;
+  padding-bottom: 20px;
 }
 
 h2 {
@@ -92,6 +92,7 @@ h2 {
 
 h3 {
   font-size: 24px;
+  padding-bottom: 5px;
 }
 
 h4 {
@@ -432,7 +433,7 @@ section {
  }
 
  .logos{
-  padding: 30px 20px;
+  padding: 10px 20px;
   min-width: 45px;
   height: auto;
  }
@@ -447,7 +448,9 @@ section {
  .heroIntroSubText{
   color: var(--text-dark);
   font-size: 24px;
-  font-weight: bold,
+  font-weight: bold;
+  padding-bottom: 10px;
+  
  }
 
 .heroTextContainer{
@@ -484,9 +487,14 @@ section {
   font-weight: bold;
  }
 
+ .githubTextContainer{
+  display: flex;
+  flex-direction: column;
+}
  .githubSectionTitle {
   color: var(--text-dark);
   min-width: 320px;
+  align-self: center;
  }
 
  .githubSectionSubText{
@@ -520,8 +528,9 @@ section {
 .footer{
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
   justify-content: space-between;
+  margin:-10px;
   align-items: baseline;
   background-image: url('../assets/gradient-footer.png');
   background-repeat: no-repeat;
