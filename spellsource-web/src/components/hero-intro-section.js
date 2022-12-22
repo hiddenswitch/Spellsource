@@ -18,7 +18,7 @@ function HeroIntroSection() {
  });
 
   return (
-    <div className={`${styles.heroContainer} ${styles.herobg1}`}>
+    <div className={`${styles.heroContainer} ${styles.backgroundGradient1}`}>
       <div className={styles.heroTextContainer}>
           <div className={styles.heroTitle}><h1>{title}</h1></div>
           <div className={styles.heroBody}>{body}</div>
