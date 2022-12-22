@@ -3,7 +3,6 @@ import { Link } from 'gatsby'
 import { StaticImage } from 'gatsby-plugin-image'
 import * as styles from './creative-layout.module.scss'
 import Search from './search'
-import { FaBeer } from "@react-icons/all-files/fa/FaBeer";
 import  {AiOutlineMenu} from "@react-icons/all-files/ai/AiOutlineMenu"
 import {AiOutlineClose} from "@react-icons/all-files/ai/AiOutlineClose"
 
