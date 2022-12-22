@@ -79,7 +79,7 @@ h2 {
 }
 
 h3 {
-  font-size: 27px;
+  font-size: 24px;
 }
 
 h4 {
@@ -285,7 +285,7 @@ section {
 /**
  * Backgrounds
  */
- 
+
 .backgroundGradient0{
   background-image: url('../assets/gradient-section-1.png');
 }
@@ -305,6 +305,13 @@ section {
  .heroContainer{
   display: flex;
   flex-direction: column;
+  padding: 145px 90px;
+}
+
+.heroContainerAlt{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   padding: 145px 90px;
 }
 
@@ -357,9 +364,9 @@ section {
 .heroTextContainer{
   display: flex;
   flex-direction: column;
-  max-width: 965px;
+  max-width: 996px;
 }
- //hero text container is flex column
+ 
  .heroTitle{
   font-weight: 700;
   padding-bottom: 20px;
@@ -370,7 +377,31 @@ section {
   color: var(--text-dark);
   font-size: 40px;
  }
- //image is outside as a row element
+
+ .heroSectionTitle{
+  color: var(--text-light);
+ }
+
+ .playSectionTitle{
+  color: var(--text-light);
+  font-weight: bold;
+ }
+
+.playSectionBody{
+  color: var(--text-light);
+  font: medium;
+  margin: 0;
+} 
+
+ .heroImageContainer{
+  padding: 0 20px;
+}
+ .heroImage{
+  width: 720px;
+  height: auto;
+  border: '2px solid #fff';
+  border-radius: 12px;
+ }
 
 /**
  * Footer
