@@ -10,7 +10,7 @@ function HeroPlaySection() {
 
   return (
     <div className={`${styles.heroContainerAlt} ${styles.backgroundGradient2}`}>
-      <div className={styles.heroTextContainer}>
+      <div className={styles.heroPlayContainer}>
         <SectionTitle title={title}/>
         <BodySectionTitle title='iOS Users'/>
         <BodySectionContent text={iOSBody}/>
