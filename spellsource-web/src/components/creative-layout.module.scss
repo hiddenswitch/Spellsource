@@ -298,6 +298,10 @@ section {
   background-image: url('../assets/gradient-section-3.png');
 }
 
+.backgroundGradient3{
+  background-image: url('../assets/gradient-section-4.png');
+}
+
 /**
  * Hero Section
  */
@@ -312,6 +316,15 @@ section {
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding: 145px 90px;
+}
+
+.heroContainerGithub{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   padding: 145px 90px;
 }
 
@@ -387,6 +400,14 @@ section {
   font-weight: bold;
  }
 
+ .githubSectionTitle {
+  color: var(--text-dark);
+ }
+
+ .githubSectionSubText{
+  color: var(--text-dark);
+ }
+
 .playSectionBody{
   color: var(--text-light);
   font: medium;
@@ -394,10 +415,11 @@ section {
 } 
 
  .heroImageContainer{
-  padding: 0 20px;
+  padding: 20px;
 }
  .heroImage{
-  width: 720px;
+  width: 640px;
+  margin-left: 20px;
   height: auto;
   border: '2px solid #fff';
   border-radius: 12px;
