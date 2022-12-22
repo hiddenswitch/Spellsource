@@ -35,7 +35,6 @@ export default ({ children }) => {
     <main>
       {children}
     </main>
-    <br/>
     <Footer pages={pages}/>
   </div>
 }
