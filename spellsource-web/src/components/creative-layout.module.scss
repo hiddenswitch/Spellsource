@@ -283,6 +283,96 @@ section {
 }
 
 /**
+ * Backgrounds
+ */
+ 
+.backgroundGradient0{
+  background-image: url('../assets/gradient-section-1.png');
+}
+
+.backgroundGradient1{
+  background-image: url('../assets/gradient-section-2.png');
+}
+
+.backgroundGradient2{
+  background-image: url('../assets/gradient-section-3.png');
+}
+
+/**
+ * Hero Section
+ */
+
+ .heroContainer{
+  display: flex;
+  flex-direction: column;
+  padding: 145px 90px;
+}
+
+/**
+ * Hero Logo Section
+ */
+ .heroSpellsourceLogo{
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 76px);
+    background-image: url('../assets/gradient-section-1.png');
+    padding: 0;
+ }
+
+ .spellsourceLogo{
+  min-width: 200px;
+  width: auto;
+ }
+
+/**
+ * Hero Text Section
+ */
+
+ .heroIntroLogos{
+  display: flex;
+  align-items: center;
+  padding-top: 41px;
+  flex-wrap: wrap;
+ }
+
+ .logos{
+  padding: 30px 20px;
+  min-width: 45px;
+  height: auto;
+ }
+
+ .heroButtonsContainer{
+  display: flex;
+  padding: 46px 0;
+ }
+
+ .heroIntroSubText{
+  color: var(--text-dark);
+  font-size: 24px;
+  font-weight: bold,
+ }
+
+.heroTextContainer{
+  display: flex;
+  flex-direction: column;
+  max-width: 965px;
+}
+ //hero text container is flex column
+ .heroTitle{
+  font-weight: 700;
+  padding-bottom: 20px;
+  font-size: 64px;
+ }
+
+ .heroBody{
+  color: var(--text-dark);
+  font-size: 40px;
+ }
+ //image is outside as a row element
+
+/**
  * Footer
  */
  
