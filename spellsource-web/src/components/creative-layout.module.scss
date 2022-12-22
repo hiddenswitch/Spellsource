@@ -219,15 +219,62 @@ section {
 /**
  * Header/Navigation
  */
-.menuContainer {
+
+ @media screen and (max-width: 850px){
+  .mobileNavbar{
+    display: flex !important;
+    margin: 22px;
+  }
+  .desktopNavbar{
+    display: none !important;
+  }
+  .navbarContainer{
+    // padding: 0 20px !important;
+  }
+ }
+
+ .mobileNavbar{
+  display: none;
+  justify-content: center;
+  align-items: flex-start;
+ }
+
+ .mobileUl{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  background-color: var(--header-background-color);
+  top: 60px;
+  left: 0;
+  text-align: left;
+  margin-top: 0;
+  padding: 0;
+  width: 100%;
+  border: 2px solid var(--text-dark);
+  border-top: none;
+ }
+
+ .desktopNavbar{
+  display: flex;
+ }
+
+ .gutter{
+  display: flex;
+  max-width: 20px;
+  flex-shrink: 1;
+ }
+
+.navbarContainer {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: baseline;
+  justify-content: space-around;
+  align-items: center;
   background-color: var(--header-background-color);
   border-top: var(--border);
   border-bottom: var(--border);
-  padding: 0 90px;
+  // padding: 0 90px;
 
   .search-results {
     background-color: var(--background-color);
@@ -342,7 +389,7 @@ section {
  }
 
  .spellsourceLogo{
-  min-width: 200px;
+  max-width: 80%;
   width: auto;
  }
 
