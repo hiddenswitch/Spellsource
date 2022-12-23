@@ -8,7 +8,9 @@ function HeroGithub() {
       <div className={styles.githubTextContainer}>
         <SectionTitle title='Ready to help our project?'/>
         <SectionSubText title='Join the over 40 contributors helping maintain and bring this project to life'/>
-        <img src={githubLogo} style={{maxWidth: '96px', alignSelf: 'center', padding: '92px 0 20px 0'}} />
+        <a href={'https://github.com/hiddenswitch/Spellsource'}>
+          <img src={githubLogo} style={{maxWidth: '96px', alignSelf: 'center', padding: '92px 0 20px 0'}} />
+        </a>
         <h3>Check out Spellsource on Github</h3>
         </div>
     </div>
