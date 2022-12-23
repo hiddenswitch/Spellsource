@@ -363,22 +363,22 @@ section {
 
 .backgroundGradient0{
   background-image: url('../assets/gradient-section-1.png');
-  background-size: 100% auto;
+  background-size: auto 100%;
 }
 
 .backgroundGradient1{
-  background-image: url('../assets/gradient-section-2.png');
-  background-size: 100% auto;
+  background-image: url('../assets/gradient-section-3.png');
+  background-size: auto 100%;
 }
 
 .backgroundGradient2{
-  background-image: url('../assets/gradient-section-3.png');
-  background-size: 100% auto;
+  background-image: url('../assets/gradient-section-1.png');
+  background-size: auto 100%;
 }
 
 .backgroundGradient3{
-  background-image: url('../assets/gradient-section-4.png');
-  background-size: 100% auto;
+  background-image: url('../assets/gradient-section-2.png');
+  background-size: auto 100%;
 }
 
 /**
@@ -442,8 +442,8 @@ section {
     position: relative;
     overflow-y:visible;
     height: calc(100vh - 76px);
-    background-image: url('../assets/gradient-section-1.png');
-    background-size: 100% auto;
+    background-image: url('../assets/gradient-section-4.png');
+    background-size: auto 100%;
     padding: 0;
  }
 
