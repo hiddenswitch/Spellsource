@@ -1,6 +1,7 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../components/creative-layout'
+import * as styles from './template-styles.module.scss'
 
 export default function Template ({
   data, // this prop will be injected by the GraphQL query below.
@@ -9,11 +10,10 @@ export default function Template ({
   const { html } = markdownRemark
   return (
     <Layout>
-      <h2>{data.markdownRemark.frontmatter.title}</h2>
-      <div
-        className="blog-post-content"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      <div className={styles.templateContainer}>
+        <h2>{data.markdownRemark.frontmatter.title}</h2>
+        <div dangerouslySetInnerHTML={{ __html: html }}/>
+      </div>
     </Layout>
   )
 }
