@@ -28,7 +28,7 @@ const Header = ({pages}) => {
   return <header>
       <div className={styles.navbarContainer} ref={headerDiv} onScroll={e => {handleScroll(e)}}>
         <a key={'headerImage'}>
-          <Link to="/"><StaticImage src={'../assets/icon.png'} alt={'Icon'} style={{ width: 32, height: 32 }}/>
+          <Link to="/"><StaticImage src={'../assets/icon.png'} alt={'Icon'} style={{ width: 36, height: 36 }}/>
             <strong>Spellsource</strong>
           </Link>
         </a>
