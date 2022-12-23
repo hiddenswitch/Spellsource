@@ -166,11 +166,13 @@ summary:hover {
 /**
  * Layout
  */
-// .container {
-//   width: $container-width;
-//   margin-right: auto;
-//   margin-left: auto;
-// }
+.container {
+  width: $container-width;
+  margin-right: auto;
+  margin-left: auto;
+  overflow: hidden;
+  position: relative;
+}
 
 // main {
 //   max-width: calc(100% - 50px);
@@ -246,6 +248,9 @@ section {
   }
   .heroButtonsContainer{
     align-self: 'center' !important;
+  }
+  .clouds{
+    width: calc(100% - 250px);
   }
  }
  
@@ -408,7 +413,6 @@ section {
  */
  .heroSpellsourceLogo{
     display: flex;
-    flex-grow: 1;
     align-items: center;
     justify-content: center;
     height: calc(100vh - 76px);
