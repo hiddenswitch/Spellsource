@@ -1,6 +1,7 @@
 import React from 'react'
 import * as styles from './creative-layout.module.scss'
 import playNow from '../assets/play-now.gif'
+import cloud from '../assets/transparent-cloud.png'
 
 function HeroPlaySection() {
   const title = 'Mobile Beta';
@@ -10,6 +11,11 @@ function HeroPlaySection() {
 
   return (
     <div className={`${styles.heroContainerAlt} ${styles.backgroundGradient2}`}>
+      <img src={cloud} style={{ top: '-10%', left: '8%' }} className={`${styles.cloud} ${styles.lcloud}`}/>
+      <img src={cloud} style={{ top: '0', right: '3%' }} className={`${styles.cloud} ${styles.mcloud}`}/>
+      <img src={cloud} style={{ bottom: '1%', right: '43%' }} className={`${styles.cloud} ${styles.mcloud}`}/>
+      <img src={cloud} style={{ bottom: '3%', right: '-5%' }} className={`${styles.cloud} ${styles.scloud}`}/>
+      <img src={cloud} style={{ top: '50%', left: '-11%' }} className={`${styles.cloud} ${styles.scloud}`}/>
       <div className={styles.heroPlayContainer}>
         <SectionTitle title={title}/>
         <BodySectionTitle title='iOS Users'/>
@@ -34,7 +40,7 @@ const BodySectionTitle = ({title}) => {
 }
 
 const BodySectionContent = ({text}) => {
-  return <h3 className={styles.playSectionBody}>{text}</h3>
+  return <h4 className={styles.playSectionBody}>{text}</h4>
 }
 
 export default HeroPlaySection

@@ -19,7 +19,7 @@ const SectionTitle = ({title}) => {
   return <h1 className={styles.githubSectionTitle}>{title}</h1>
 }
 const SectionSubText = ({title}) => {
-  return <h3 className={styles.githubSectionSubText}>{title}</h3>
+  return <h4 className={styles.githubSectionSubText}>{title}</h4>
 }
 
 export default HeroGithub
