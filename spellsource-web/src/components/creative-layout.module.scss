@@ -381,10 +381,28 @@ section {
 /**
  * Clouds
  */
+ @keyframes moveCloud {
+  0% {
+    transform: translateX(0);
+  }
+  24% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-20px);
+  }
+  49% {
+    transform: translateX(-20px);
+  }
+  50% {
+    transform: translateX(0);
+  }
 
+}
  .cloud{
   position: absolute;
   z-index: 11;
+  // animation: 1s infinite moveCloud;
 }
 
 .scloud{
