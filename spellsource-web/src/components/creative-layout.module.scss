@@ -562,14 +562,13 @@ section {
   flex-direction: row;
   flex-wrap: wrap-reverse;
   justify-content: space-between;
-  margin:-10px;
-  align-items: baseline;
-  background-image: url('../assets/gradient-footer.png');
-  background-repeat: no-repeat;
-  background-size: 100% auto;
+  min-height: 100px;
+  align-items: center;
+  background-color: var(--text-light);
   font-size: $font-size-footer;
+  border: 2px solid var(--text-dark);
   padding: 0 5%;
-  text-decoration: none !important;
+  text-decoration: none;
 
   strong{ 
     color: var(--text-dark);
@@ -577,15 +576,21 @@ section {
 
   ul {
     display: flex;
+    justify-content: space-between;
     flex-wrap: wrap;
-    align-items: flex-end;
     color:var(--text-dark); 
     text-decoration: none;
   }
   li{
+    flex-grow: 1;
+    column-gap: 30px;
     text-decoration: none;
     padding: 0 10px;
     color:var(--text-dark); 
+  }
+  a {
+    text-decoration: none;
+    color: var(--text-dark); 
   }
   a:visited { 
     text-decoration: none; 
