@@ -249,9 +249,6 @@ section {
   .heroButtonsContainer{
     align-self: 'center' !important;
   }
-  .clouds{
-    width: calc(100% - 250px);
-  }
  }
  
  @media screen and (max-width: 1200px){
@@ -272,6 +269,7 @@ section {
   justify-content: center;
   align-items: center;
   position: absolute;
+  z-index: 12;
   background-color: var(--header-background-color);
   top: 60px;
   left: 0;
@@ -380,6 +378,30 @@ section {
 }
 
 /**
+ * Clouds
+ */
+
+ .cloud{
+  position: absolute;
+  z-index: 11;
+}
+
+.scloud{
+  max-width: 18vw;
+  min-width: 120px;
+}
+
+.mcloud{
+  max-width: 25vw;
+  min-width: 160px;
+}
+
+.lcloud{
+  max-width: 40vw;
+  min-width: 220px;
+}
+
+/**
  * Hero Section
  */
 
@@ -412,9 +434,8 @@ section {
  * Hero Logo Section
  */
  .heroSpellsourceLogo{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    overflow-y:visible;
     height: calc(100vh - 76px);
     background-image: url('../assets/gradient-section-1.png');
     background-size: auto 100%;
@@ -422,6 +443,10 @@ section {
  }
 
  .spellsourceLogo{
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
   max-width: 80%;
   width: auto;
  }
