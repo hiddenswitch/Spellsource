@@ -20,8 +20,8 @@ $main-width: 700px !default;
   --border: solid 2px #1B1B1B;
   --selection-background: #DBDBDB;
   --selection-text: #21215c;
-  --background-color: #21215c;
-  --text-color: var(--base-color);
+  --background-color: #f9f9f9;
+  --text-color: #1B1B1B;
   --text-dark: #1B1B1B;
   --text-light: #FCFCFC;
   --hover-color: #2837FF;
@@ -180,8 +180,7 @@ summary:hover {
 // main {
 //   max-width: calc(100% - 50px);
 //   width: $main-width;
-//   margin-right: auto;
-//   margin-left: auto;
+//   margin: 90px auto 90px auto;
 // }
 
 section {
@@ -278,7 +277,7 @@ section {
   left: 0;
   text-align: left;
   margin-top: 0;
-  padding: 0;
+  padding-bottom: 20px;
   width: 100%;
   border: 2px solid var(--text-dark);
   border-top: none;
@@ -303,13 +302,11 @@ section {
   border: 2px solid var(--text-dark);
 
   .search-results {
-    background-color: var(--background-color);
-    z-index: 10;
-    margin-left: -0.25em;
-    margin-top: 0.25em;
-    padding-right: 2.5em;
+    background-color: var(--header-background-color);
+    z-index: 10;    
     position: fixed;
     top: auto;
+    width: 275px;
   }
 
   strong {
@@ -610,9 +607,9 @@ input, select, textarea {
 input[type=text], select, textarea {
   width: 100%;
   resize: none;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  caret-color: var(--text-color);
+  background-color: var(--header-background-color);
+  color: var(--text-dark);
+  caret-color: var(--hover-color);
   font-size: $base-font-size;
   font-family: $base-font-family;
   line-height: $base-line-height;
