@@ -2,6 +2,7 @@ import React from 'react'
 import Loadable from 'react-loadable'
 import Layout from '../components/card-editor-layout'
 import BlocklyMiscUtils from "../lib/blockly-misc-utils";
+import * as styles from '../templates/template-styles.module.scss';
 
 const LoadableComponent = Loadable.Map({
   loader: {
@@ -22,7 +23,9 @@ const LoadableComponent = Loadable.Map({
 
 const CardEditor = () => {
   return <Layout>
-    <LoadableComponent/>
+    <div className={styles.cardEditorContainer}>
+      <LoadableComponent/>
+    </div>
   </Layout>
 }
 
