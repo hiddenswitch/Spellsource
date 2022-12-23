@@ -43,8 +43,8 @@ const DesktopNavbar = ({pages}) => {
     <ul className={styles.desktopNavbar}>       
       <li key={'javadocs'}><a href="/javadoc">Docs</a></li>
         {pages}
-      <li key={'download'}><Link to="/download">Play Now</Link></li>
-      {/* <li key={'search'}><Search placeholder={'Search'}/></li> */}
+      {/* <li key={'download'}><Link to="/download">Play Now</Link></li> */}
+      <li key={'search'}><Search placeholder={'Search'}/></li>
     </ul>
   )
 }
@@ -61,7 +61,8 @@ const MobileNavbar = ({pages}) => {
           <ul className={styles.mobileUl}>       
             <li key={'javadocs'}><a href="/javadoc">Docs</a></li>
               {pages}
-            <li key={'download'}><Link to="/download">Play Now</Link></li>
+            {/* <li key={'download'}><Link to="/download">Play Now</Link></li> */}
+            <li key={'search'}><Search placeholder={'Search'}/></li>
           </ul>
         </div>}
   </div>
