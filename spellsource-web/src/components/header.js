@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'gatsby'
 import { StaticImage } from 'gatsby-plugin-image'
+import icon from '../assets/icon.png'
 import * as styles from './creative-layout.module.scss'
 import Search from './search'
 import  {AiOutlineMenu} from "@react-icons/all-files/ai/AiOutlineMenu"
@@ -28,8 +29,8 @@ const Header = ({pages}) => {
   return <header>
       <div className={styles.navbarContainer} ref={headerDiv} onScroll={e => {handleScroll(e)}}>
         <a key={'headerImage'}>
-          <Link to="/"><StaticImage src={'../assets/icon.png'} alt={'Icon'} style={{ width: 36, height: 36 }}/>
-            <strong>Spellsource</strong>
+          <Link to="/" style={{display: 'flex'}}><img src={icon} alt={'Icon'} style={{ width: 36, height: 36 }}/>
+            <strong style={{paddingTop: '4px'}}>Spellsource</strong>
           </Link>
         </a>
         <DesktopNavbar pages={pages}/>
