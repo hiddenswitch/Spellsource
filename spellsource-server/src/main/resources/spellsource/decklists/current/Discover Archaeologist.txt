@@ -1,0 +1,21 @@
+### Discover Archaeologist
+# Class: LIGHTBROWN
+# Format: Spellsource
+#
+# 2x (0) Scout
+# 2x (1) Avifauna
+# 2x (1) Gravedig
+# 2x (1) Steel Smash
+# 2x (2) Found Goods
+# 2x (2) Grassroot Mossling
+# 2x (2) Sand Filter
+# 2x (3) Massive Ore
+# 2x (3) Molten Cauterizer
+# 2x (4) Rolling Boulder
+# 1x (4) Thra'kul the Armor-Hulk
+# 2x (5) Armor Hoarder
+# 2x (5) Atumjun Trapfinder
+# 2x (5) Gravekeeper's Scythe
+# 1x (5) Paven, Elemental of Surprise
+# 2x (5) Trap Room
+#
