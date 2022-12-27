@@ -3,7 +3,7 @@ plugins {
     id 'java-library'
 }
 
-apply plugin: 'java-library'
+apply from: '../gradle/instrument.gradle'
 
 dependencies {
     api project(':spellsource-common')

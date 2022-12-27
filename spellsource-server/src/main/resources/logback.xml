@@ -14,10 +14,8 @@
     </encoder>
   </appender>
 
-  <root level="info">
+  <root level="WARN">
     <appender-ref ref="STDOUT"/>
   </root>
-  <logger name="io.grpc.netty" level="OFF" />
-  <logger name="io.netty" level="OFF" />
   <logger name="io.jaegertracing" level="OFF" />
 </configuration>

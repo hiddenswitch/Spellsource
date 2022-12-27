@@ -1,5 +1,6 @@
 package com.hiddenswitch.framework.impl;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.hiddenswitch.framework.Accounts;
@@ -64,26 +65,8 @@ public class ClientMatchmakingService extends VertxMatchmakingGrpc.MatchmakingVe
 					close(session);
 				}));
 
-		vertx.setPeriodic(500, timerId -> {
-			if (session.cancelled.get()) {
-				vertx.cancelTimer(timerId);
-				return;
-			}
-
-			response.write(Spellsource.MatchmakingQueuePutResponse.newBuilder()
-							.build())
-					.onFailure(t -> {
-						vertx.cancelTimer(timerId);
-						close(session);
-					});
-		});
-
-		response.exceptionHandler(v -> close(session));
-		// handle the request messages, which are queue tickets
-		request.exceptionHandler(v -> close(session));
-		request.endHandler(v -> close(session));
 		request.handler(message -> {
-			LOGGER.debug("client matchmaking service did get message {}", message);
+			LOGGER.trace("client matchmaking service did get message (has deck id? {} cancel={}) for userId={}", !Strings.isNullOrEmpty(message.getDeckId()), message.getCancel(), userId);
 			if (session.cancelled.get()) {
 				return;
 			}
@@ -121,6 +104,10 @@ public class ClientMatchmakingService extends VertxMatchmakingGrpc.MatchmakingVe
 					})
 					.onFailure(t -> close(session));
 		});
+		response.exceptionHandler(v -> close(session));
+		// handle the request messages, which are queue tickets
+		request.exceptionHandler(v -> close(session));
+		request.endHandler(v -> close(session));
 	}
 
 

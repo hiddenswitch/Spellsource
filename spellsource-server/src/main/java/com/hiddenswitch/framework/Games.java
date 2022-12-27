@@ -37,12 +37,10 @@ public class Games {
 	 * @param request All the required information to create a game.
 	 * @return Connection information for both users.
 	 */
-	public static Future<String> createGame(ConfigurationRequest request) {
-		LOGGER.debug("createMatch: Creating match for request {}", request);
+	public static Future<CreateGameSessionResponse> createGame(ConfigurationRequest request) {
 		CodecRegistration.register(CreateGameSessionResponse.class).andRegister(MatchCreateResponse.class).andRegister(ConfigurationRequest.class);
 		var eb = Vertx.currentContext().owner().eventBus();
-
-		return eb.<String>request(GAMES_CREATE_GAME_SESSION, request).map(Message::body);
+		return eb.<CreateGameSessionResponse>request(GAMES_CREATE_GAME_SESSION, request).map(Message::body);
 	}
 
 

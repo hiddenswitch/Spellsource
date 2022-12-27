@@ -12,7 +12,8 @@ import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQue
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import com.hiddenswitch.framework.tests.impl.ToxiClient;
-import com.hiddenswitch.spellsource.rpc.Spellsource.*;
+import com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutRequest;
+import com.hiddenswitch.spellsource.rpc.Spellsource.ServerToClientMessage;
 import io.vertx.core.*;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
@@ -21,13 +22,13 @@ import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxTestContext;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
@@ -176,7 +177,6 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
-	@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 	public void testMultiplayerQueueCreatesMatch(Vertx vertx, VertxTestContext testContext) {
 		var client1 = new Client(vertx);
 		var client2 = new Client(vertx);
@@ -307,7 +307,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.compose(v -> client.createAndLogin())
 				.compose(v -> {
 					client.matchmake(queueId);
-					return Environment.sleep(vertx, 1000);
+					return Environment.sleep(vertx, Environment.getConfiguration().getMatchmaking().getScanFrequencyMillis() + 1000);
 				})
 				.onSuccess(v -> toxicGrpcProxy().setConnectionCut(true))
 				.compose(v -> {
@@ -319,7 +319,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 						assertNotNull(ticket, "still connected and should have ticket");
 					});
 				})
-				.compose(v -> Environment.sleep(vertx, 10001))
+				.compose(v -> Environment.sleep(vertx, 20001))
 				.compose(v -> {
 					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate());
 					return ticketsDao.findOneById(client.getUserEntity().getId());
@@ -342,7 +342,6 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
-	@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 	public void testDeploysMultipleMatchmakingInstances(Vertx vertx, VertxTestContext testContext) {
 		var vertxInternal = (VertxInternal) vertx;
 		var currentMatchmakingCount = matchmakingCount(vertxInternal);
@@ -391,7 +390,6 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
-	@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 	@Timeout(value = 115, timeUnit = TimeUnit.SECONDS)
 	public void testManyClientsMatchmakeAcrossInstances(VertxTestContext testContext) {
 		var vertx = Vertx.vertx(Environment.vertxOptions());

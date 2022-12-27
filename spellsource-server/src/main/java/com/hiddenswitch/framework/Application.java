@@ -47,7 +47,7 @@ public class Application {
 	protected Future<Vertx> deploy(Vertx vertx) {
 		var deploymentPromise = Promise.<Void>promise();
 		var configuration = getConfiguration();
-		LOGGER.debug("main: Configuration: " + configuration.toString());
+		LOGGER.debug("configuration: " + configuration.toString());
 		vertx.runOnContext(v -> {
 			var broadcaster = configuration.getApplication().getUseBroadcaster() ? vertx.deployVerticle(Broadcaster.class, new DeploymentOptions().setInstances(1)) : Future.succeededFuture("");
 			// liveness should be going before we start the migration
@@ -69,13 +69,14 @@ public class Application {
 					.onSuccess(s -> {
 						// TODO: configurable grpc port
 						var host = Environment.getHostIpAddress();
-						LOGGER.info("main: Gateway listening grpc (h2c / http2) on " + host + ":" + configuration.getGrpcConfiguration().getPort());
-						LOGGER.info("main: Metrics listening on " + host + ":" + configuration.getMetrics().getPort() + configuration.getMetrics().getMetricsRoute());
-						LOGGER.info("main: Liveness listening on " + host + ":" + configuration.getMetrics().getPort() + configuration.getMetrics().getLivenessRoute());
-						LOGGER.info("main: Readiness listening on " + host + ":" + configuration.getMetrics().getPort() + configuration.getMetrics().getReadinessRoute());
+						LOGGER.info("Gateway listening grpc (h2c / http2) on " + host + ":" + configuration.getGrpcConfiguration().getPort());
+						var metricsPort = configuration.getMetrics().getPort();
+						LOGGER.info("Metrics listening on " + host + ":" + metricsPort + configuration.getMetrics().getMetricsRoute());
+						LOGGER.info("Liveness listening on " + host + ":" + metricsPort + configuration.getMetrics().getLivenessRoute());
+						LOGGER.info("Readiness listening on " + host + ":" + metricsPort + configuration.getMetrics().getReadinessRoute());
 					})
-					.onSuccess(s -> LOGGER.info("main: Started application, now broadcasting"))
-					.onFailure(t -> LOGGER.error("main: Failed to deploy",t))
+					.onSuccess(s -> LOGGER.info("Started application, now broadcasting"))
+					.onFailure(t -> LOGGER.error("Failed to deploy",t))
 					.map((Void) null)
 					.onComplete(deploymentPromise);
 		});

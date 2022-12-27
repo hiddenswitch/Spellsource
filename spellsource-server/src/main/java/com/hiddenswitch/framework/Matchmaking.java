@@ -3,6 +3,7 @@ package com.hiddenswitch.framework;
 import com.google.common.collect.Lists;
 import com.hiddenswitch.framework.impl.ClientMatchmakingService;
 import com.hiddenswitch.framework.impl.ConfigurationRequest;
+import com.hiddenswitch.framework.impl.CreateGameSessionResponse;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.MatchmakingQueuesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues;
@@ -92,7 +93,7 @@ public class Matchmaking extends AbstractVerticle {
 					.beginTransaction()
 					.compose(transaction -> {
 						var ticketsTaken = new ArrayList<String>();
-						LOGGER.trace("started matchmaking transaction");
+						LOGGER.trace("started matchmaking scan");
 						// gather tickets
 						// this will lock the rows that this matchmaker might match using the transaction, allowing other matchmakers
 						// to skip these easily naturally.
@@ -143,9 +144,17 @@ public class Matchmaking extends AbstractVerticle {
 														// actual body of matchmaking function, this is responsible for determining which players will play against
 														// each other
 														var thisGameTickets = tickets.subList(i, i + lobbySize).toArray(MatchmakingTickets[]::new);
-														// we will not await creating the game separately since it has DB side effects and it cause too many locks
-														// to process everything in a transaction
-														createGame(configuration, thisGameTickets).onFailure(Environment.onFailure("could not create game"));
+														// we will not await creating the game separately to maximize throughput
+														createGame(configuration, thisGameTickets)
+																.onFailure(Environment.onFailure("could not create game"))
+																.compose(gameId -> {
+																	var notifications = new ArrayList<Future>();
+																	for (var ticket : thisGameTickets) {
+																		notifications.add(Matchmaking.notifyGameReady(ticket.getUserId(), gameId));
+																	}
+																	return CompositeFuture.all(notifications);
+																})
+																.onFailure(Environment.onFailure("could not notify users"));
 
 														for (var ticket : thisGameTickets) {
 															ticketsTaken.add(ticket.getUserId());
@@ -159,8 +168,9 @@ public class Matchmaking extends AbstractVerticle {
 												// it's possible that some player's games never get started, we will not await them before committing though,
 												// we want this to happen as fast as possible
 
-											}).compose(v -> transaction.commit())
-											.onSuccess(v -> LOGGER.warn("did commit transaction with {} tickets", ticketsTaken.size()));
+											})
+											.compose(v -> transaction.commit())
+											.onSuccess(v -> LOGGER.trace("did commit transaction with {} tickets", ticketsTaken.size()));
 
 								})
 								.recover(t -> {
@@ -211,11 +221,13 @@ public class Matchmaking extends AbstractVerticle {
 					} else {
 						return Future.succeededFuture(ConfigurationRequest.versusMatch(gameId.toString(), tickets[0].getUserId(), tickets[0].getDeckId(), tickets[1].getUserId(), tickets[1].getDeckId()));
 					}
-				})).compose(Games::createGame);
+				}))
+				.compose(Games::createGame)
+				.map(CreateGameSessionResponse::getGameId);
 	}
 
 	public static Future<Void> deleteQueue(String queueId) {
-		LOGGER.debug("deleting {}", queueId);
+		LOGGER.trace("deleting queueId={}", queueId);
 		// setup transaction
 		return withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_QUEUES)
 				.where(MATCHMAKING_QUEUES.ID.eq(queueId)))

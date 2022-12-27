@@ -3,19 +3,15 @@ package com.hiddenswitch.framework.impl;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Legacy;
-import com.hiddenswitch.framework.Matchmaking;
 import com.hiddenswitch.framework.schema.spellsource.Tables;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameUserVictoryEnum;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ClientToServerMessage;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ServerToClientMessage;
-import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.binder.BaseUnits;
-import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.MessageConsumer;
-import io.vertx.sqlclient.SqlConnection;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -33,7 +29,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import static com.hiddenswitch.framework.schema.keycloak.Keycloak.KEYCLOAK;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.GAME_USERS;
 import static io.micrometer.core.instrument.Metrics.globalRegistry;
-import static io.vertx.await.Async.await;
 
 public class ClusteredGames extends AbstractVerticle {
 	private static final Counter GAMES_CREATED = Counter.builder("games.created")
@@ -149,14 +144,6 @@ public class ClusteredGames extends AbstractVerticle {
 							.map(response);
 				}).compose(response -> {
 					GAMES_CREATED.increment();
-
-					for (var configuration : request.getConfigurations()) {
-						if (configuration.isBot()) {
-							continue;
-						}
-						Matchmaking.notifyGameReady(configuration.getUserId(), response.getGameId()).onFailure(Environment.onFailure());
-					}
-
 					return Future.succeededFuture(response);
 				});
 
@@ -210,7 +197,7 @@ public class ClusteredGames extends AbstractVerticle {
 
 	@Override
 	public void stop(Promise<Void> stopPromise) {
-		LOGGER.debug("stop: Stopping the ClusteredGames, hosting contexts: {}", contexts.keySet().stream().map(String::toString).reduce((s1, s2) -> s1 + ", " + s2).orElseGet(() -> "none"));
+		LOGGER.trace("stop: Stopping the ClusteredGames, hosting contexts: {}", contexts.keySet().stream().map(String::toString).reduce((s1, s2) -> s1 + ", " + s2).orElseGet(() -> "none"));
 
 		for (var gameId : contexts.keySet()) {
 			Objects.requireNonNull(gameId);
@@ -222,7 +209,7 @@ public class ClusteredGames extends AbstractVerticle {
 		}
 
 		registration.unregister();
-		LOGGER.debug("stop: Unregistered");
+		LOGGER.trace("stop: Unregistered");
 		stopPromise.complete();
 	}
 }

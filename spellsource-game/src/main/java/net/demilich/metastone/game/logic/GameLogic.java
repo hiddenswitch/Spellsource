@@ -4801,7 +4801,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@NotNull
-	public List<Enchantment> addEnchantments(@NotNull Player player, @NotNull Entity effectSource, @NotNull Card enchantmentSource, @NotNull Entity host, boolean force, Predicate<AbstractEnchantmentDesc<? extends Enchantment>> predicate) {
+	public List<Enchantment> addEnchantments(@NotNull Player player, @NotNull Entity effectSource, @NotNull Card enchantmentSource, @NotNull Entity host, boolean force, Predicate<? super AbstractEnchantmentDesc<?>> predicate) {
 		var enchantments = new ArrayList<Enchantment>();
 
 		var desc = enchantmentSource.getSourceCard().getDesc();

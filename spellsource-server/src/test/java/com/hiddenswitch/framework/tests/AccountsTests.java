@@ -13,6 +13,7 @@ import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.junit5.VertxTestContext;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -116,6 +117,7 @@ public class AccountsTests extends FrameworkTestBase {
 	}
 
 	@Test
+	@Disabled
 	public void testLoginWithRestClient(Vertx vertx, VertxTestContext testContext) {
 		var webClient = WebClient.create(vertx);
 		var client = new Client(vertx, webClient);

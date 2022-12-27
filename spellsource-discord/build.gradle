@@ -19,6 +19,8 @@ dependencies {
     implementation project(':spellsource-protos')
     implementation project(':spellsource-common')
     implementation project(':spellsource-cards-git')
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
     implementation("net.dv8tion:JDA:5.0.0-alpha.10") {
         exclude module: 'opus-java'
     }

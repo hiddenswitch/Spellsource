@@ -95,62 +95,6 @@ public class Accounts {
 				}
 			}).toCompletableFuture());
 
-	/**
-	 * Helps cache the JWT public key.
-	 */
-	private interface PublicKeyStorage {
-		PublicKey get();
-
-		void set(PublicKey publicKey);
-	}
-
-	private static class VertxPublicKeyStorage implements PublicKeyStorage {
-
-		private static class ShareablePublicKey implements Shareable {
-			private final PublicKey value;
-
-			public ShareablePublicKey(PublicKey value) {
-				this.value = value;
-			}
-
-			public PublicKey getValue() {
-				return value;
-			}
-		}
-
-		private final Vertx vertx;
-
-		public VertxPublicKeyStorage(Vertx vertx) {
-			this.vertx = vertx;
-		}
-
-		@Override
-		public PublicKey get() {
-			var res = ((ShareablePublicKey) vertx.sharedData().getLocalMap("Accounts:VertxPublicKeyStorage").get("publicKey"));
-			return res == null ? null : res.getValue();
-		}
-
-		@Override
-		public void set(PublicKey publicKey) {
-			vertx.sharedData().getLocalMap("Accounts:VertxPublicKeyStorage").put("publicKey", new ShareablePublicKey(publicKey));
-		}
-	}
-
-	private static class AtomicReferencePublicKeyStorage implements PublicKeyStorage {
-
-		private static final AtomicReference<PublicKey> publicKey = new AtomicReference<>();
-
-		@Override
-		public PublicKey get() {
-			return publicKey.get();
-		}
-
-		@Override
-		public void set(PublicKey publicKey) {
-			AtomicReferencePublicKeyStorage.publicKey.set(publicKey);
-		}
-	}
-
 	private static PublicKeyJwtServerInterceptor authorizationInterceptorConstructor(Vertx vertx) {
 		return new PublicKeyJwtServerInterceptor(accessToken -> {
 			var kid = getKid(accessToken);
@@ -638,6 +582,7 @@ public class Accounts {
 						if (!(root instanceof NotFoundException)) {
 							throw t;
 						}
+						LOGGER.trace("because an existing realm was not found, created realm {}", realmId);
 					}
 
 					// Create a default
@@ -647,7 +592,10 @@ public class Accounts {
 					realmRepresentation.setSslRequired(SslRequired.EXTERNAL.toString());
 					realmRepresentation.setEnabled(true);
 					// use scrypt provider
-//					realmRepresentation.setPasswordPolicy("hashAlgorithm(scrypt)");
+					LOGGER.info("""
+							realm password policy was NOT set to hashAlgorithm(scrypt), not compatible with ancient passwords.
+							set realmRepresentation.setPasswordPolicy("hashAlgorithm(scrypt)") to make compatible""");
+
 					realmRepresentation.setRegistrationAllowed(true);
 					realmRepresentation.setResetPasswordAllowed(true);
 					realmRepresentation.setResetCredentialsFlow("reset credentials");

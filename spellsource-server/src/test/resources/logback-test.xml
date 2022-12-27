@@ -14,7 +14,7 @@
         </encoder>
     </appender>
 
-    <root level="OFF">
+    <root level="WARN">
         <appender-ref ref="STDOUT"/>
     </root>
     <logger name="com.hiddenswitch.framework" level="DEBUG"/>

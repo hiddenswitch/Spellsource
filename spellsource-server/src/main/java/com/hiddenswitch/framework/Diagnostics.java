@@ -12,6 +12,7 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.ext.web.Router;
+import io.vertx.sqlclient.SqlClient;
 import org.redisson.api.redisnode.RedisNodes;
 
 import java.util.concurrent.TimeUnit;
@@ -36,7 +37,7 @@ public class Diagnostics {
 
 					var protos = client.unauthenticated().getConfiguration(Empty.getDefaultInstance()).eventually(client::close);
 					var redis = Future.fromCompletionStage(Environment.redisson().getRedisNodes(RedisNodes.SINGLE).getInstance().pingAsync(200, TimeUnit.MILLISECONDS));
-					var sql = Environment.pgPoolAkaDaoDelegate().close();
+					var sql = Environment.pgPoolAkaDaoDelegate().getConnection().compose(SqlClient::close);
 
 					CompositeFuture.all(redis, sql, protos)
 							.onSuccess(v1 -> {
@@ -44,7 +45,7 @@ public class Diagnostics {
 							})
 							.onFailure(t -> {
 								routingContext.response().setStatusCode(500);
-								routingContext.end(Buffer.buffer("could not connect to SQL server with error:\n" + Throwables.getStackTraceAsString(t)));
+								routingContext.end(Buffer.buffer("health check failed with error:\n" + Throwables.getStackTraceAsString(t)));
 							});
 				});
 

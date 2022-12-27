@@ -1,0 +1,26 @@
+{
+  "seed" : 1814100903113099093,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "NAVY", "NEONGREEN" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_slamhammer_knight", "minion_wolfcrier", "minion_hunchback_supplier", "minion_prophet_waran", "spell_call_for_backup", "minion_end_reveler", "minion_tree_giant", "minion_lundurr_the_reborn", "minion_purity_keeper", "minion_tetradimensionalist", "minion_gilded_swarmer", "minion_novice_enchantress", "minion_doodles_v2", "minion_sideline_coach", "minion_hooded_ritualist", "minion_molten_cauterizer", "spell_self_appoint", "minion_jack_in_the_box", "spell_warfare_training", "minion_smug_smuggler", "minion_duelmaster_fizzle", "minion_gilded_swarmer", "minion_shouting_soldier", "minion_trojan_horse", "minion_stalwart_sculptor", "spell_whelp_encounter", "minion_stone_obelisk", "minion_stone_sentinel_basic", "minion_haunted_berserker", "minion_kawarimi_headbasher" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "spell_chemical_warfare", "minion_chaos_incarnate", "minion_hope_eater", "minion_timewalker_stormlord", "minion_nightmare_warden", "minion_chainwrecker_corsair", "spell_feeding_frenzy", "spell_malignancy", "minion_volcanic_elemental", "minion_mind_harvester", "minion_abandoned_geneticist", "minion_alemental", "spell_cull_and_reap", "spell_distort", "spell_scour_the_land", "minion_mighty_mufunga", "minion_chaos_incarnate", "minion_tetradimensionalist", "minion_timelost_sarcophagus", "spell_asteroid_impact", "spell_scour_the_land", "minion_novice_enchantress", "minion_emerald_dreamer", "minion_treeleach", "spell_m_a_d", "minion_natural_convert", "spell_tranquilizer_shot", "spell_dream_of_adaptation", "minion_fae_trickster", "minion_darkshard_duelist" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "CORE", "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 17, 28 ]
+  } ],
+  "actions" : [ 0, 2, 3, 2, 1, 2, 0, 0, 1, 0, 0, 4, 1, 0, 0, 0, 6, 0, 0, 0, 21, 1, 4, 1, 0, 6, 12, 3, 1, 0, 10, 18, 11, 11, 8, 2, 0, 11, 11, 5, 9, 0, 0, 0, 3, 0, 4, 12, 1, 0, 0, 5, 2, 1, 0, 0, 24, 21, 5, 0, 0, 6, 6, 4, 3, 0, 30, 16, 9, 15, 24, 8, 6, 5, 0, 0, 0, 0, 21, 35, 27, 0, 5, 4, 8, 17, 10, 18, 4, 0, 19, 8, 8, 4, 4, 0, 4, 0, 3, 0, 8, 4, 0, 8, 10, 3, 2, 2, 0, 5, 3, 4, 1, 8, 1, 1, 0, 7, 2, 4, 0, 0, 9, 4, 4, 0, 0, 1, 7, 6, 10, 9, 6, 5, 0, 1, 2 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

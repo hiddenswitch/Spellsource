@@ -4,7 +4,6 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.Accounts;
-import com.hiddenswitch.framework.Editor;
 import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Legacy;
 import com.hiddenswitch.framework.schema.spellsource.Tables;
@@ -137,9 +136,6 @@ public class ServerGameContext extends GameContext implements Server {
 			enablePersistenceEffects();
 			enableTriggers();
 
-			// Check if we should later enable editing
-			var isEditable = Editor.isEditable(this);
-
 			// Each configuration corresponds to a human or bot player
 			// To accommodate spectators or multiple-controllers-per-game-player, use additional Client objects
 			for (var configuration : getPlayerConfigurations()) {
@@ -215,7 +211,7 @@ public class ServerGameContext extends GameContext implements Server {
 					closeables.add(producer::close);
 
 					// Create a client that handles game events and action/mulligan requests
-					LOGGER.debug("creating unity client behavior for user Id {}", userId);
+					LOGGER.trace("creating unity client behavior for user Id {}", userId);
 					var client = new UnityClientBehaviour(this,
 							new VertxScheduler(context.owner()),
 							consumer.bodyStream(),
@@ -242,14 +238,9 @@ public class ServerGameContext extends GameContext implements Server {
 				var finalCloseableBehaviour = closeableBehaviour;
 
 				closeables.add(fut -> {
-					LOGGER.debug("closeables {}: closing client {}", gameId, finalCloseableBehaviour);
+					LOGGER.trace("closeables {}: closing client {}", gameId, finalCloseableBehaviour);
 					finalCloseableBehaviour.close(fut);
 				});
-			}
-
-			// Only enable editing if we actually got this far
-			if (isEditable) {
-				closeables.add(Editor.enableEditing(this));
 			}
 		} finally {
 			span.finish();
@@ -277,7 +268,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 	public static void clientToServer(EventBus bus, String userId, Spellsource.ClientToServerMessage msg) {
 		if (msg.getMessageType() == Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE) {
-			LOGGER.debug("did get first message, now publishing");
+			LOGGER.trace("did get first message, now publishing");
 		}
 		bus.publish(getMessagesFromClientAddress(userId), msg, new DeliveryOptions());
 	}
@@ -405,7 +396,7 @@ public class ServerGameContext extends GameContext implements Server {
 				// lead to a double loss
 				for (var entry : clientsReady.entrySet()) {
 					if (!entry.getValue().future().isComplete()) {
-						LOGGER.warn("init {}: Game prematurely ended because player id={} did not connect in {}ms", getGameId(), entry.getKey(), timeout);
+						LOGGER.debug("init {}: Game prematurely ended because player id={} did not connect in {}ms", getGameId(), entry.getKey(), timeout);
 						getLogic().concede(entry.getKey());
 					}
 				}
@@ -444,7 +435,7 @@ public class ServerGameContext extends GameContext implements Server {
 							return (Void) null;
 						}));
 			} else {
-				LOGGER.debug("init {}: No mulligan timer set for game because all players are not human", getGameId());
+				LOGGER.trace("init {}: No mulligan timer set for game because all players are not human", getGameId());
 				timerLengthMillis = null;
 				timerStartTimeMillis = null;
 				mulliganTimerId = null;
@@ -550,7 +541,7 @@ public class ServerGameContext extends GameContext implements Server {
 				// workaround for current limitations in vertx
 				this.interrupted = false;
 				try {
-					LOGGER.debug("play: Starting forked game");
+					LOGGER.trace("play: Starting forked game");
 					super.play(false);
 				} catch (Throwable throwable) {
 					var rootCause = Throwables.getRootCause(throwable);
@@ -637,7 +628,7 @@ public class ServerGameContext extends GameContext implements Server {
 			} else {
 				timerLengthMillis = null;
 				timerStartTimeMillis = null;
-				LOGGER.debug("startTurn {}: Not setting timer because opponent is not human.", getGameId());
+				LOGGER.trace("startTurn {}: Not setting timer because opponent is not human.", getGameId());
 			}
 			super.startTurn(playerId);
 			var state = new GameState(this, TurnState.TURN_IN_PROGRESS);
@@ -809,7 +800,7 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	protected void notifyPlayersGameOver() {
 		for (var client : getClients()) {
-			LOGGER.debug("notifyPlayersGameOver: notifying {}", client.getUserId());
+			LOGGER.trace("notifyPlayersGameOver: notifying {}", client.getUserId());
 			client.sendGameOver(getGameStateCopy(), getWinner());
 		}
 	}
@@ -828,7 +819,7 @@ public class ServerGameContext extends GameContext implements Server {
 	protected void endGame() {
 		lock.lock();
 		try {
-			LOGGER.debug("endGame {}: calling end game", gameId);
+			LOGGER.trace("endGame {}: calling end game", gameId);
 			isRunning = false;
 			// Close the inbound messages from the client, they should be ignored by these client instances
 			// This way, a user doesn't accidentally trigger some other kind of processing that's only going to be interrupted
@@ -847,7 +838,7 @@ public class ServerGameContext extends GameContext implements Server {
 			releaseUsers();
 			// Actually end the game
 			super.endGame();
-			LOGGER.debug("endGame {}: called super.endGame", gameId);
+			LOGGER.trace("endGame {}: called super.endGame", gameId);
 
 			// No end of game handler should be called more than once, so we're removing them one-by-one as we're processing
 			// them.
@@ -861,7 +852,7 @@ public class ServerGameContext extends GameContext implements Server {
 				}
 			}
 
-			LOGGER.debug("endGame {}: endGameHandlers run", gameId);
+			LOGGER.trace("endGame {}: endGameHandlers run", gameId);
 
 			// Now that the game is over, we have to stop processing the game event loop. We'll check that we're not in the
 			// loop right now. If we are, we don't need to interrupt ourselves. Conceding, server shutdown and other lifecycle
@@ -871,7 +862,7 @@ public class ServerGameContext extends GameContext implements Server {
 			// other callbacks that may be processing player modifications to the game.
 			if (getThread() != null && !Thread.currentThread().equals(getThread())) {
 				getThread().interrupt();
-				LOGGER.debug("endGame {}: interrupted fiber", gameId);
+				LOGGER.trace("endGame {}: interrupted fiber", gameId);
 				setThread(null);
 			}
 		} finally {
@@ -926,7 +917,7 @@ public class ServerGameContext extends GameContext implements Server {
 					iter.remove();
 				}
 			}
-			LOGGER.debug("dispose {}: closers closed", gameId);
+			LOGGER.trace("dispose {}: closers closed", gameId);
 			super.close();
 		} finally {
 			span.finish();
@@ -1008,7 +999,7 @@ public class ServerGameContext extends GameContext implements Server {
 		if (clientsReady.containsKey(client.getPlayerId())) {
 			clientsReady.get(client.getPlayerId()).tryComplete(client);
 		} else {
-			LOGGER.warn("tried to signal player was ready that was not");
+			LOGGER.trace("tried to signal player was ready that was not");
 		}
 	}
 

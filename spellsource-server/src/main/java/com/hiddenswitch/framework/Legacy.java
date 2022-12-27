@@ -10,7 +10,10 @@ import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.GetCardsRequest;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.GetCardsResponse;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpc;
-import com.hiddenswitch.framework.schema.spellsource.tables.daos.*;
+import com.hiddenswitch.framework.schema.spellsource.tables.daos.CardsDao;
+import com.hiddenswitch.framework.schema.spellsource.tables.daos.DeckPlayerAttributeTuplesDao;
+import com.hiddenswitch.framework.schema.spellsource.tables.daos.DeckSharesDao;
+import com.hiddenswitch.framework.schema.spellsource.tables.daos.DecksDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckPlayerAttributeTuples;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
@@ -23,6 +26,8 @@ import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGeneri
 import io.grpc.BindableService;
 import io.grpc.ServerServiceDefinition;
 import io.grpc.Status;
+import io.micrometer.core.instrument.LongTaskTimer;
+import io.micrometer.core.instrument.Metrics;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -41,21 +46,24 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
 import net.openhft.hashing.LongHashFunction;
-import org.jooq.*;
 import org.jooq.Record;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.redisson.api.RMapCacheAsync;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Comparator;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
-import static com.hiddenswitch.framework.Environment.*;
+import static com.hiddenswitch.framework.Environment.withConnection;
+import static com.hiddenswitch.framework.Environment.withExecutor;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.DECK_SHARES;
 import static com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS;
 import static com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck.CARDS_IN_DECK;
@@ -63,7 +71,6 @@ import static com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAtt
 import static com.hiddenswitch.framework.schema.spellsource.tables.Decks.DECKS;
 import static io.vertx.await.Async.await;
 import static java.util.stream.Collectors.*;
-import static org.jooq.impl.DSL.asterisk;
 
 /**
  * The legacy services for Spellsource, to rapidly transition the game into a new backend.
@@ -74,6 +81,10 @@ public class Legacy {
 	private static final WeakVertxMap<RMapCacheAsync<String, DecksGetResponse>> DECKS_CACHE = new WeakVertxMap<>(Legacy::decksCacheConstructor);
 	private static final Promise<GetCardsResponse> GET_CARDS_RESPONSE_PROMISE = Promise.promise();
 	private static final AtomicBoolean CARDS_BUILT = new AtomicBoolean();
+	private static final LongTaskTimer GET_ALL_DECKS_TIME = LongTaskTimer
+			.builder("get_all_decks.duration")
+			.description("the amount of time spent retrieving all the decks")
+			.register(Metrics.globalRegistry);
 
 	public static Future<BindableService> unauthenticatedCards() {
 		return Future.succeededFuture(new VertxUnauthenticatedCardsGrpc.UnauthenticatedCardsVertxImplBase() {
@@ -315,7 +326,7 @@ public class Legacy {
 																dsl.deleteFrom(CARDS_IN_DECK)
 																		.where(CARDS_IN_DECK.DECK_ID.eq(deckId).and(CARDS_IN_DECK.CARD_ID.eq(entry.getKey())))
 																		.limit(entry.getValue().intValue())))
-												.collect(toList()));
+												.toList());
 									}
 
 									if (updateCommand.getPullAllInventoryIdsCount() > 0) {
@@ -415,6 +426,7 @@ public class Legacy {
 	}
 
 	public static Future<DecksGetAllResponse> getAllDecks(String userId) {
+		var timer = GET_ALL_DECKS_TIME.start();
 		return getAllValidDeckIds(userId)
 				.compose(rows -> CompositeFuture.all(rows.stream()
 						.map(deckId -> getDeck(deckId, userId)).collect(toList())))
@@ -425,6 +437,11 @@ public class Legacy {
 						reply.addDecks(getDeckResponse);
 					}
 					return Future.succeededFuture(reply.build());
+				})
+				.onComplete(response -> {
+					var duration = Duration.ofNanos(timer.stop());
+					var tooLong = duration.compareTo(Duration.ofSeconds(1)) > 0;
+					LOGGER.atLevel(tooLong ? Level.WARN : Level.TRACE).log("getting {} deck(s) for userId={} took {}ms", response.succeeded() ? response.result().getDecksCount() : 0, userId, duration.toMillis());
 				});
 	}
 

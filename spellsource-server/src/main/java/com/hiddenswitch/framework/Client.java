@@ -15,7 +15,6 @@ import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpc;
 import io.grpc.*;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
-import io.vertx.core.http.Http2Settings;
 import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.HttpVersion;
 import io.vertx.core.net.SocketAddress;
@@ -134,7 +133,7 @@ public class Client implements AutoCloseable {
 					writer.write(ClientToServerMessage.newBuilder()
 									.setMessageType(MessageType.FIRST_MESSAGE)
 									.build())
-							.onSuccess(v -> LOGGER.debug("sent first message"))
+							.onSuccess(v -> LOGGER.trace("sent first message"))
 							.onFailure(gameOverPromise::tryFail);
 					return gameOverPromise.future();
 				});
@@ -144,12 +143,12 @@ public class Client implements AutoCloseable {
 		if (matchmakingResponseFut != null) {
 			throw new RuntimeException("already matchmaking");
 		}
-		LOGGER.debug("starting matchmaking for {}", userEntity.getId());
+		LOGGER.trace("starting matchmaking for {}", userEntity.getId());
 		var matchmakingRequestsFut = Promise.<WriteStream<MatchmakingQueuePutRequest>>promise();
 		var matchmakingResponses = matchmaking.enqueue(matchmakingRequestsFut::complete);
 		var request = matchmakingRequestsFut.future()
 				.compose(matchmakingRequests -> {
-					LOGGER.debug("sent matchmaking put for {}", userEntity.getId());
+					LOGGER.trace("sent matchmaking put for {}", userEntity.getId());
 					return matchmakingRequests.write(MatchmakingQueuePutRequest.newBuilder()
 							.setDeckId(deckId)
 							.setQueueId(queueId).build());
@@ -281,6 +280,7 @@ public class Client implements AutoCloseable {
 
 			this.grpcClient = GrpcClient.client(vertx, new HttpClientOptions()
 					.setProtocolVersion(HttpVersion.HTTP_2)
+					.setHttp2ClearTextUpgrade(false)
 					.setSsl(false));
 			return new GrpcClientChannel(grpcClient, SocketAddress.inetSocketAddress(port(), host()));
 		});
@@ -334,7 +334,7 @@ public class Client implements AutoCloseable {
 					@Override
 					public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
 						if (method.getFullMethodName().toLowerCase().contains("enqueue")) {
-							LOGGER.debug("did call enqueue for real");
+							LOGGER.trace("did call enqueue for real");
 						}
 						return next.newCall(method, callOptions);
 					}
