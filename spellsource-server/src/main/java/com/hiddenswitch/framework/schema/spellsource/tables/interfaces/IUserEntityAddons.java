@@ -46,6 +46,18 @@ public interface IUserEntityAddons extends VertxPojo, Serializable {
      */
     public Boolean getMigrated();
 
+    /**
+     * Setter for
+     * <code>spellsource.user_entity_addons.show_premade_decks</code>.
+     */
+    public IUserEntityAddons setShowPremadeDecks(Boolean value);
+
+    /**
+     * Getter for
+     * <code>spellsource.user_entity_addons.show_premade_decks</code>.
+     */
+    public Boolean getShowPremadeDecks();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -67,6 +79,7 @@ public interface IUserEntityAddons extends VertxPojo, Serializable {
                 setOrThrow(this::setId,json::getString,"id","java.lang.String");
                 setOrThrow(this::setPrivacyToken,json::getString,"privacy_token","java.lang.String");
                 setOrThrow(this::setMigrated,json::getBoolean,"migrated","java.lang.Boolean");
+                setOrThrow(this::setShowPremadeDecks,json::getBoolean,"show_premade_decks","java.lang.Boolean");
                 return this;
         }
 
@@ -77,6 +90,7 @@ public interface IUserEntityAddons extends VertxPojo, Serializable {
                 json.put("id",getId());
                 json.put("privacy_token",getPrivacyToken());
                 json.put("migrated",getMigrated());
+                json.put("show_premade_decks",getShowPremadeDecks());
                 return json;
         }
 

@@ -64,7 +64,7 @@ import java.util.function.Function;
 
 import static com.hiddenswitch.framework.Environment.withConnection;
 import static com.hiddenswitch.framework.Environment.withExecutor;
-import static com.hiddenswitch.framework.schema.spellsource.Tables.DECK_SHARES;
+import static com.hiddenswitch.framework.schema.spellsource.Tables.*;
 import static com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS;
 import static com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck.CARDS_IN_DECK;
 import static com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES;
@@ -82,7 +82,10 @@ public class Legacy {
 	private static final Promise<GetCardsResponse> GET_CARDS_RESPONSE_PROMISE = Promise.promise();
 	private static final AtomicBoolean CARDS_BUILT = new AtomicBoolean();
 	private static final LongTaskTimer GET_ALL_DECKS_TIME = LongTaskTimer
-			.builder("get_all_decks.duration")
+			.builder("spellsource_getalldecks_duration")
+			.minimumExpectedValue(Duration.ofMillis(5))
+			.maximumExpectedValue(Duration.ofSeconds(5))
+			.publishPercentileHistogram()
 			.description("the amount of time spent retrieving all the decks")
 			.register(Metrics.globalRegistry);
 
@@ -459,6 +462,12 @@ public class Legacy {
 								.on(DECKS.ID.eq(DECK_SHARES.DECK_ID)
 										// the record must match this user
 										.and(DECK_SHARES.SHARE_RECIPIENT_ID.eq(userId)))
+								// this user is a bot
+								.join(BOT_USERS, JoinType.LEFT_OUTER_JOIN)
+								.on(BOT_USERS.ID.eq(userId))
+								.join(USER_ENTITY_ADDONS, JoinType.LEFT_OUTER_JOIN)
+								// include the global preferences from the user entity add-ons
+								.on(USER_ENTITY_ADDONS.ID.eq(userId))
 								.where(
 										// the deck is not trashed and, if there is a deck share record, the deck share's trashed
 										// value is null or false
@@ -467,7 +476,9 @@ public class Legacy {
 										canEditDeckSql(userId)
 												.or(
 														// this is a premade deck - there's no share record or if there was a share record, it was trashed by the recipient
-														DECKS.IS_PREMADE.eq(true).and(DECK_SHARES.SHARE_RECIPIENT_ID.isNull().or(DECK_SHARES.TRASHED_BY_RECIPIENT.eq(false))))
+														DECKS.IS_PREMADE.eq(true)
+																.and(DECK_SHARES.SHARE_RECIPIENT_ID.isNull().or(DECK_SHARES.TRASHED_BY_RECIPIENT.eq(false)))
+																.and(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS.eq(true).or(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS.isNull()).or(BOT_USERS.ID.isNotNull())))
 												.or(
 														// this deck is shared with the user - it is not a premade deck, there is a recipient id, and it has not been trashed by the recipient
 														DECKS.IS_PREMADE.eq(false).and(DECK_SHARES.SHARE_RECIPIENT_ID.isNotNull().and(DECK_SHARES.TRASHED_BY_RECIPIENT.eq(false)))

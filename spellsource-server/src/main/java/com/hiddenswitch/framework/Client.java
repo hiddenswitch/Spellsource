@@ -203,11 +203,17 @@ public class Client implements AutoCloseable {
 	}
 
 	public Future<LoginOrCreateReply> createAndLogin(String username, String email, String password) {
+		return createAndLogin(username, email, password, true);
+	}
+
+	public Future<LoginOrCreateReply> createAndLogin(String username, String email, String password, boolean premadeDecks) {
 		var stub = VertxUnauthenticatedGrpc.newVertxStub(channel());
 		return stub.createAccount(CreateAccountRequest.newBuilder()
 						.setUsername(username)
 						.setEmail(email)
-						.setPassword(password).build())
+						.setPassword(password)
+						.setDecks(premadeDecks)
+						.build())
 				.onSuccess(this::handleCreateAccountReply);
 	}
 

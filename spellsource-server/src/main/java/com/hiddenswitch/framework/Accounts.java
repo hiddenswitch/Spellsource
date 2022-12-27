@@ -17,6 +17,8 @@ import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc.UnauthenticatedVe
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc.UnauthenticatedVertxStub;
 import com.hiddenswitch.framework.schema.keycloak.tables.daos.UserEntityDao;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
+import com.hiddenswitch.framework.schema.spellsource.Spellsource;
+import com.hiddenswitch.framework.schema.spellsource.Tables;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.grpc.*;
 import io.vertx.core.Future;
@@ -28,6 +30,7 @@ import io.vertx.ext.web.client.WebClient;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jetbrains.annotations.NotNull;
+import org.jooq.DSLContext;
 import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -35,6 +38,7 @@ import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.common.VerificationException;
 import org.keycloak.common.enums.SslRequired;
+import org.keycloak.credential.hash.Pbkdf2Sha512PasswordHashProviderFactory;
 import org.keycloak.models.credential.PasswordCredentialModel;
 import org.keycloak.models.utils.ModelToRepresentation;
 import org.keycloak.representations.AccessToken;
@@ -54,6 +58,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import static com.hiddenswitch.framework.schema.spellsource.Tables.DECK_SHARES;
+import static com.hiddenswitch.framework.schema.spellsource.Tables.USER_ENTITY_ADDONS;
 import static java.util.stream.Collectors.toMap;
 
 /**
@@ -287,6 +293,13 @@ public class Accounts {
 							return client.login(request.getEmail(), request.getPassword()).map(accessTokenResponse -> new Object[]{accessTokenResponse, userEntity});
 						})
 						.map(this::handleAccessTokenUserEntityTuple)
+						// hide the premade decks if the user requested to hide them
+						.compose(reply -> Environment.withDslContext(dsl -> dsl.insertInto(USER_ENTITY_ADDONS)
+										.set(USER_ENTITY_ADDONS.ID, reply.getUserEntity().getId())
+										.set(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS, request.getDecks())
+										.onDuplicateKeyUpdate()
+										.set(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS, request.getDecks()))
+								.map(reply))
 						.recover(Environment.onGrpcFailure());
 			}
 
@@ -493,41 +506,10 @@ public class Accounts {
 				});
 	}
 
-	public static Future<UserEntity> createUserWithHashed(String email, String username, String scryptHashedPassword) {
-		return get()
-				.compose(realm -> {
-					var credentialModel = PasswordCredentialModel.createFromValues("scrypt", new byte[0], 1, scryptHashedPassword);
-					var credential = ModelToRepresentation.toRepresentation(credentialModel);
-					credential.setTemporary(false);
-					var user = new UserRepresentation();
-					user.setEmail(email);
-					user.setUsername(username);
-					user.setEnabled(true);
-					user.setCredentials(Collections.singletonList(credential));
-					return Environment.executeBlocking(() -> {
-						var response = realm.users().create(user);
-						if (response.getStatus() >= 400) {
-							throw new RuntimeException("A user with the specified e-mail or username already exists.");
-						}
-						return response;
-					}).map(response -> {
-						var parts = response.getLocation().getPath().split("/");
-						var id = parts[parts.length - 1];
-						user.setId(id);
-						return user;
-					}).map(UserRepresentation::getId);
-				})
-				.compose(userId -> {
-					var users = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate());
-					return users.findOneById(userId);
-				})
-				.compose(res -> res == null ? Future.failedFuture("invalid user ID") : Future.succeededFuture(res))
-				.onFailure(Environment.onFailure());
-	}
-
 	@NotNull
 	private static CredentialRepresentation getPasswordCredential(String password) {
-		var credentialModel = PasswordCredentialModel.createFromValues("scrypt", new byte[0], 1, SCryptUtil.scrypt(password, 2048, 8, 1));
+		var factory = new Pbkdf2Sha512PasswordHashProviderFactory();
+		var credentialModel = factory.create(null).encodedCredential(password, -1);
 		var credential = ModelToRepresentation.toRepresentation(credentialModel);
 		credential.setTemporary(false);
 		return credential;

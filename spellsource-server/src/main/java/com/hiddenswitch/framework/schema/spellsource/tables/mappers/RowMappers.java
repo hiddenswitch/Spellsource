@@ -149,6 +149,7 @@ public class RowMappers {
                         pojo.setId(row.getString("id"));
                         pojo.setPrivacyToken(row.getString("privacy_token"));
                         pojo.setMigrated(row.getBoolean("migrated"));
+                        pojo.setShowPremadeDecks(row.getBoolean("show_premade_decks"));
                         return pojo;
                 };
         }

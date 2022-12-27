@@ -47,7 +47,6 @@ public class Tracing {
 
 	public static void error(Throwable throwable, Span span, boolean finish) {
 		if (span instanceof NoopSpan || span == null) {
-			LOGGER.error("An exception was reported to the tracer");
 			LOGGER.error("{}\n{}", throwable.getMessage(), Throwables.getStackTraceAsString(throwable));
 			return;
 		}

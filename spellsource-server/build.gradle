@@ -69,6 +69,7 @@ dependencies {
     implementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-service-discovery', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-web', version: vertxVersion
+    implementation 'javax.activation:activation:1.1.1'
 
     // includes withCallCredentials fix
     implementation ("com.github.doctorpangloss.vertx-grpc-1:vertx-grpc-server:c4d99c22f6") {

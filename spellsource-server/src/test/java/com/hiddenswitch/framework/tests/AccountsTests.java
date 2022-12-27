@@ -1,9 +1,7 @@
 package com.hiddenswitch.framework.tests;
 
-import com.hiddenswitch.framework.Accounts;
-import com.hiddenswitch.framework.Application;
-import com.hiddenswitch.framework.Client;
-import com.hiddenswitch.framework.Environment;
+import com.google.protobuf.Empty;
+import com.hiddenswitch.framework.*;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
 import com.hiddenswitch.framework.rpc.VertxAccountsGrpc;
 import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
@@ -15,6 +13,8 @@ import io.vertx.ext.web.client.WebClient;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
@@ -64,6 +64,24 @@ public class AccountsTests extends FrameworkTestBase {
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
+	@ParameterizedTest
+	@ValueSource(booleans = {true, false})
+	public void testCreateUserCheckPremadeDecks(boolean premade, Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
+		var userId = UUID.randomUUID().toString();
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin(userId, userId + "@hiddenswitch.com", "password", premade))
+				.compose(v -> client.legacy().decksGetAll(Empty.getDefaultInstance()))
+				.compose(decksGetAllResponse -> {
+					testContext.verify(() -> {
+						assertEquals(premade ? Legacy.getPremadeDecks().size() : 0, decksGetAllResponse.getDecksCount(), "premade decks count");
+					});
+					return Future.succeededFuture(decksGetAllResponse);
+				})
+				.onComplete(testContext.succeedingThenComplete());
+
+	}
+
 	@Test
 	public void testCreateAndLoginUserWithGrpc2(VertxTestContext testContext) {
 		var vertx = Vertx.vertx();
@@ -101,9 +119,9 @@ public class AccountsTests extends FrameworkTestBase {
 							var otherId = otherUser.getId();
 							var myAccount = myAccountReply.getUserEntity();
 							return stub.getAccounts(GetAccountsRequest.newBuilder()
-									.addIds(otherId)
-									.addIds(myAccount.getId())
-									.build())
+											.addIds(otherId)
+											.addIds(myAccount.getId())
+											.build())
 									.onSuccess(reply2 -> {
 										testContext.verify(() -> {
 											var records = reply2.getUserEntitiesList().stream().collect(toMap(UserEntity::getId, Function.identity()));

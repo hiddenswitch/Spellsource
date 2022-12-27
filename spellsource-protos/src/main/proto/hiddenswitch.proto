@@ -174,11 +174,11 @@ message LoginRequest {
     string password = 2;
 }
 
-// The request message containing the user's name.
 message CreateAccountRequest {
     string email = 1;
     string username = 2;
     string password = 3;
+    bool decks = 4;
 }
 
 message ChangePasswordRequest {

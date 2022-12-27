@@ -21,6 +21,7 @@ public class UserEntityAddons implements VertxPojo, IUserEntityAddons {
     private String id;
     private String privacyToken;
     private Boolean migrated;
+    private Boolean showPremadeDecks;
 
     public UserEntityAddons() {}
 
@@ -28,16 +29,19 @@ public class UserEntityAddons implements VertxPojo, IUserEntityAddons {
         this.id = value.getId();
         this.privacyToken = value.getPrivacyToken();
         this.migrated = value.getMigrated();
+        this.showPremadeDecks = value.getShowPremadeDecks();
     }
 
     public UserEntityAddons(
         String id,
         String privacyToken,
-        Boolean migrated
+        Boolean migrated,
+        Boolean showPremadeDecks
     ) {
         this.id = id;
         this.privacyToken = privacyToken;
         this.migrated = migrated;
+        this.showPremadeDecks = showPremadeDecks;
     }
 
         public UserEntityAddons(io.vertx.core.json.JsonObject json) {
@@ -96,6 +100,25 @@ public class UserEntityAddons implements VertxPojo, IUserEntityAddons {
         return this;
     }
 
+    /**
+     * Getter for
+     * <code>spellsource.user_entity_addons.show_premade_decks</code>.
+     */
+    @Override
+    public Boolean getShowPremadeDecks() {
+        return this.showPremadeDecks;
+    }
+
+    /**
+     * Setter for
+     * <code>spellsource.user_entity_addons.show_premade_decks</code>.
+     */
+    @Override
+    public UserEntityAddons setShowPremadeDecks(Boolean showPremadeDecks) {
+        this.showPremadeDecks = showPremadeDecks;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -123,6 +146,12 @@ public class UserEntityAddons implements VertxPojo, IUserEntityAddons {
         }
         else if (!this.migrated.equals(other.migrated))
             return false;
+        if (this.showPremadeDecks == null) {
+            if (other.showPremadeDecks != null)
+                return false;
+        }
+        else if (!this.showPremadeDecks.equals(other.showPremadeDecks))
+            return false;
         return true;
     }
 
@@ -133,6 +162,7 @@ public class UserEntityAddons implements VertxPojo, IUserEntityAddons {
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.privacyToken == null) ? 0 : this.privacyToken.hashCode());
         result = prime * result + ((this.migrated == null) ? 0 : this.migrated.hashCode());
+        result = prime * result + ((this.showPremadeDecks == null) ? 0 : this.showPremadeDecks.hashCode());
         return result;
     }
 
@@ -143,6 +173,7 @@ public class UserEntityAddons implements VertxPojo, IUserEntityAddons {
         sb.append(id);
         sb.append(", ").append(privacyToken);
         sb.append(", ").append(migrated);
+        sb.append(", ").append(showPremadeDecks);
 
         sb.append(")");
         return sb.toString();
@@ -157,6 +188,7 @@ public class UserEntityAddons implements VertxPojo, IUserEntityAddons {
         setId(from.getId());
         setPrivacyToken(from.getPrivacyToken());
         setMigrated(from.getMigrated());
+        setShowPremadeDecks(from.getShowPremadeDecks());
     }
 
     @Override

@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -29,7 +30,10 @@ import static io.vertx.core.CompositeFuture.join;
 
 public class ClientMatchmakingService extends VertxMatchmakingGrpc.MatchmakingVertxImplBase implements Closeable {
 	private final static LongTaskTimer MATCHMAKING_TICKETS_DURATION = LongTaskTimer
-			.builder("matchmaking.tickets.duration")
+			.builder("spellsource_matchmaking_tickets_duration")
+			.minimumExpectedValue(Duration.ofMillis(5))
+			.maximumExpectedValue(Duration.ofSeconds(120))
+			.publishPercentileHistogram()
 			.tag("status", "unknown")
 			.description("The duration the client waited until it was assigned to a match.")
 			.register(Metrics.globalRegistry);

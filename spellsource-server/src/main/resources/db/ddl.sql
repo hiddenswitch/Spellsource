@@ -1807,7 +1807,8 @@ ALTER TABLE spellsource.matchmaking_tickets ALTER COLUMN ticket_id ADD GENERATED
 CREATE TABLE spellsource.user_entity_addons (
     id text NOT NULL,
     privacy_token text DEFAULT floor(((1000)::double precision + (random() * (8999)::double precision))),
-    migrated boolean DEFAULT false
+    migrated boolean DEFAULT false,
+    show_premade_decks boolean DEFAULT true
 );
 
 
