@@ -1,0 +1,26 @@
+{
+  "seed" : -1227945108311465564,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "PEACH", "MAGENTA" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "spell_morning_flame", "minion_mosshorn", "minion_lunar_oracle", "spell_starlight_ceremony", "spell_whisper_of_betrayal", "minion_doctor_hatchett", "minion_prismatic_dancer", "spell_starlight_ceremony", "spell_celestial_guidance", "minion_tree_giant", "minion_wishseeker", "spell_golden_blessing", "minion_wishseeker", "minion_kitsune_handmaiden", "spell_golden_blessing", "spell_star_scripture", "minion_end_reveler", "permanent_the_end_time", "minion_twilight_annihilator", "spell_mind_games", "spell_nine_tail_fury", "minion_sky_high_surveyor", "spell_flame_formation", "spell_mark_of_twilight", "spell_nine_tail_fury", "minion_infinite_futurist", "spell_mind_games", "minion_bighand_brute", "minion_grape_merchant", "minion_starmaiden" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "spell_pyramid_scheme", "minion_shedding_chameleon", "minion_nightmare_dragon", "minion_savage_sprite", "minion_spirited_bomber", "spell_niche_in_the_market", "minion_holdout_soldier", "minion_slitherbow", "spell_steed_sale", "spell_flood_the_market", "spell_exotic_goods", "minion_ranjii_the_spiteful", "minion_kawarimi_headbasher", "minion_street_salesman", "minion_nusro_the_many", "minion_kiljaeden_deceiver", "minion_zaiko_the_generous", "spell_scavenged_steel", "minion_grape_merchant", "spell_exchange_wares", "spell_super_sale", "minion_pixie_knight", "minion_divine_cleric", "spell_coercion", "minion_hoarding_whelp", "spell_coercion", "spell_exotic_goods", "minion_street_salesman", "minion_persuasive_thug", "minion_kaula_the_wise" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "CORE", "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 24 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ ]
+  } ],
+  "actions" : [ 0, 0, 0, 0, 0, 1, 7, 0, 1, 0, 1, 0, 13, 3, 0, 1, 1, 1, 0, 0, 7, 0, 8, 2, 0, 0, 0, 14, 0, 12, 30, 17, 4, 4, 8, 0, 11, 30, 0, 4, 2, 2, 2, 13, 6, 3, 0, 5, 8, 2, 1, 0, 0, 2, 0, 0, 20, 37, 0, 9, 17, 18, 0, 15, 33, 21, 20, 13, 3, 18, 0, 7, 3, 16, 1, 0, 2, 1, 0, 5, 0, 7, 1, 5, 0, 2, 0, 2, 1, 0, 6, 8, 0, 1, 5, 2, 2, 3, 2, 6, 0, 8, 4, 0, 1, 1, 1, 0, 6, 3, 2, 10, 0, 0, 0, 3, 0, 5, 1, 10, 7, 3, 0, 19, 1, 29, 31, 1, 2, 0, 78, 33, 9, 21, 44, 1, 0, 1, 1, 5, 1, 6, 28, 15, 18, 31, 39, 45, 3, 2, 1, 1, 20, 8, 44, 18, 26, 7, 20, 0 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

@@ -323,7 +323,7 @@ public class RingmasterTests extends TestBase {
 	public void testElenaDreamhaze() {
 		for (int i = 0; i < 20; i++) {
 			runGym((context, player, opponent) -> {
-				context.setDeckFormat(DeckFormat.ALL);
+				context.setDeckFormat(DeckFormat.all());
 				playCard(context, player, "minion_elena_dreamhaze");
 				assertNotNull(player.getAttribute(Attribute.SIGNATURE));
 				assertNotEquals(player.getAttribute(Attribute.SIGNATURE), "");

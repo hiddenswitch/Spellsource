@@ -235,7 +235,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					sendMessage(ServerToClientMessage.newBuilder().setMessageType(MessageType.PINGPONG));
 					break;
 				case FIRST_MESSAGE:
-					LOGGER.debug("received first message");
+					LOGGER.trace("received first message");
 					lastStateSent = null;
 					// The first message indicates the player has connected or reconnected.
 					for (var activityMonitor : getActivityMonitors()) {
@@ -251,7 +251,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 						retryRequests();
 					} else {
 						span.log("receiveFirstMessage/playerReady");
-						LOGGER.debug("onplayerready");
 						server.onPlayerReady(this);
 					}
 					break;
@@ -508,7 +507,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			Consumer<GameAction> callback = (Consumer<GameAction>) request.getCallback();
 			callback.accept(action);
 		} catch (Throwable recoverFromError) {
-			LOGGER.debug("recovering from error", recoverFromError);
+			LOGGER.warn("recovering from error while processing callback, gameId={}", server.getGameId(), recoverFromError);
 			Tracing.error(recoverFromError);
 
 			elapseAwaitingRequests();

@@ -14,6 +14,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +34,11 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 	}
 
 	public Set<Attribute> unsafeKeySet() {
-		Set<Attribute> keys = new HashSet<>(super.keySet());
+		Set<Attribute> keys = super.keySet().isEmpty() ? EnumSet.noneOf(Attribute.class) : EnumSet.copyOf(super.keySet());
+		if (getCard() == null) {
+			return Collections.unmodifiableSet(keys);
+		}
+
 		CardDesc desc = getCard().getDesc();
 		AttributeMap attributes = desc.getAttributes();
 		if (attributes != null) {
@@ -81,7 +87,7 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 			keys.add(Attribute.MAX_HP);
 		}
 
-		return keys;
+		return Collections.unmodifiableSet(keys);
 	}
 
 	@Override

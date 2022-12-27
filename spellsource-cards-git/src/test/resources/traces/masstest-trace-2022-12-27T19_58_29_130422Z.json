@@ -1,0 +1,26 @@
+{
+  "seed" : -2861775037024648563,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "AZURE", "COPPER" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_xavius", "minion_avatar_iar", "minion_clash_flamecore", "minion_thunderclap_phoenix", "minion_end_reveler", "minion_lava_manticore", "minion_end", "spell_drop_from_the_sky", "minion_mistweaver", "minion_electric_hellkite", "minion_sun_rager", "spell_blurred_rains", "minion_inept_investigator", "minion_corona_fae_defender", "minion_stormbringer_kurt", "minion_baby_griffin", "minion_nezumi_master", "spell_unfurl_wings", "minion_buffeting_elemental", "minion_empyrean_eagle", "minion_emerald_cleanser", "minion_mossy_giant", "minion_mother_matron", "minion_jungle_king", "minion_dawn_drake", "minion_giggling_elfin", "minion_stormchaser", "minion_savage_sprite", "minion_micro_raptors", "minion_tree_giant" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_end", "minion_saloon_barkeep", "spell_armed_and_dangerous", "minion_mcgrief", "minion_blackboar", "minion_jungle_king", "minion_shady_stranger", "minion_macabre_samaritan", "minion_lounge_brownie", "spell_mass_betrayal", "minion_hired_gunsmith", "weapon_silvershot_pistol", "spell_dream_of_anarchy", "minion_mechanical_golem", "minion_tick_and_tock", "minion_festivity_golem", "minion_fairytale_tracker", "minion_mechanical_golem", "spell_bang", "spell_mob_party", "minion_nature_rager", "minion_squirrel_knight", "minion_flashbulb_spider", "minion_reckless_giant", "minion_lingering_spirit", "spell_trigger_happy", "spell_sheriffs_badge", "minion_enhancing_shaman", "minion_inspiring_sentry", "minion_spooky_turret" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "CORE", "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 22 ]
+  } ],
+  "actions" : [ 0, 1, 2, 0, 4, 3, 0, 2, 2, 2, 4, 6, 0, 0, 0, 0, 10, 5, 7, 0, 1, 14, 0, 0, 3, 0, 0, 4, 6, 1, 1, 1, 0, 0, 6, 6, 4, 0, 0, 9, 12, 2, 4, 28, 1, 1, 2, 0, 8, 3, 2, 1, 7, 20, 0, 0, 2, 2, 0, 2, 0, 1, 0, 0, 12, 18, 2, 1, 11, 0, 15, 12, 1, 0, 0, 4, 1, 1, 11, 7, 2, 3 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

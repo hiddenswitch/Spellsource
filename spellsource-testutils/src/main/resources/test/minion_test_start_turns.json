@@ -19,6 +19,6 @@
     }
   },
   "collectible": true,
-  "set": "SPELLSOURCE_BASIC",
+  "set": "TEST",
   "fileFormatVersion": 1
 }

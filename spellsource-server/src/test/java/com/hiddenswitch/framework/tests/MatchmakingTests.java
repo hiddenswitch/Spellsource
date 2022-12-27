@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -390,10 +391,10 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
-	@Timeout(value = 115, timeUnit = TimeUnit.SECONDS)
+	@Timeout(value = 180, timeUnit = TimeUnit.SECONDS)
 	public void testManyClientsMatchmakeAcrossInstances(VertxTestContext testContext) {
 		var vertx = Vertx.vertx(Environment.vertxOptions());
-		var clientsToDeploy = 200;
+		var clientsToDeploy = 100;
 		var verticesToDeploy = clientsToDeploy / CpuCoreSensor.availableProcessors();
 		// dedicated clients vertx
 		var queueIds = IntStream

@@ -18,6 +18,7 @@ import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.decks.Deck;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -63,9 +64,9 @@ public class GameTests extends FrameworkTestBase {
 						var validMessageTypes = EnumSet.of(MessageType.ON_UPDATE);
 						if (System.getenv().containsKey("CI")) {
 							// CI can be slow, might get timer before update... but how?
-							validMessageTypes = EnumSet.of(MessageType.ON_UPDATE, MessageType.TIMER);
+							validMessageTypes.add(MessageType.TIMER);
 						}
-						assertTrue(validMessageTypes.contains(msg.getMessageType()), "expected to get a valid message when connected");
+						assertTrue(validMessageTypes.contains(msg.getMessageType()), "expected to get a valid message when connected, got %s".formatted(msg.getMessageType()));
 					});
 					return Future.succeededFuture();
 				})

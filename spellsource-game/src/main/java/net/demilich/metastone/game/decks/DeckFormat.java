@@ -22,8 +22,9 @@ public class DeckFormat implements Serializable {
 	private String[] secondPlayerBonusCards = new String[0];
 	private ConditionDesc validDeckCondition;
 
-	public static DeckFormat ALL = new DeckFormat()
-			.withName("All");
+	public static final String FORMAT_NAME_ALL = "All";
+	private static final DeckFormat ALL = new DeckFormat()
+			.withName(FORMAT_NAME_ALL);
 
 	public static void populateAll(List<String> sets) {
 		ALL.sets.clear();
@@ -34,7 +35,7 @@ public class DeckFormat implements Serializable {
 
 
 	public static void populateFormats(CardList formatCards) {
-		CardCatalogue.FORMATS.put("All", ALL);
+		CardCatalogue.FORMATS.put(FORMAT_NAME_ALL, ALL);
 		for (Card formatCard : formatCards) {
 			CardCatalogue.FORMATS.put(formatCard.getName(), new DeckFormat()
 					.setSecondPlayerBonusCards(formatCard.getDesc().getSecondPlayerBonusCards())
@@ -53,7 +54,7 @@ public class DeckFormat implements Serializable {
 	}
 
 	public static DeckFormat getSmallestSupersetFormat(Set<String> requiredSets) {
-		DeckFormat smallestFormat = DeckFormat.getFormat("All");
+		DeckFormat smallestFormat = DeckFormat.getFormat(FORMAT_NAME_ALL);
 		int minExcess = smallestFormat.sets.size();
 
 		for (Map.Entry<String, DeckFormat> format : DeckFormat.formats().entrySet()) {
@@ -106,7 +107,7 @@ public class DeckFormat implements Serializable {
 	}
 
 	public static DeckFormat all() {
-		return getFormat("All");
+		return getFormat(FORMAT_NAME_ALL);
 	}
 
 	public DeckFormat addSet(String cardSet) {
