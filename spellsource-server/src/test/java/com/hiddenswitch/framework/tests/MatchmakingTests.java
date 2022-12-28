@@ -258,7 +258,6 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
-	@Timeout(9000)
 	public void testMultiplayerPlayerQueueCancel(Vertx vertx, VertxTestContext testContext) {
 		var client1 = new Client(vertx);
 		var client2 = new Client(vertx);
