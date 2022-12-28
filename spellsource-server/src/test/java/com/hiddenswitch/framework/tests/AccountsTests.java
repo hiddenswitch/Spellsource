@@ -1,5 +1,6 @@
 package com.hiddenswitch.framework.tests;
 
+import com.google.common.base.Strings;
 import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.*;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
@@ -80,6 +81,24 @@ public class AccountsTests extends FrameworkTestBase {
 				})
 				.onComplete(testContext.succeedingThenComplete());
 
+	}
+
+	@Test
+	public void testGuestAccountCreation(Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
+		startGateway(vertx)
+				.compose(v -> client.unauthenticated().createAccount(CreateAccountRequest.newBuilder()
+						.setGuest(true).build()))
+				// create two users to assert usernames were unique
+				.compose(v -> client.unauthenticated().createAccount(CreateAccountRequest.newBuilder()
+						.setGuest(true).build()))
+				.compose(reply -> {
+					testContext.verify(() -> {
+						assertTrue(reply.hasUserEntity());
+						assertFalse(Strings.isNullOrEmpty(reply.getUserEntity().getEmail()));
+					});
+					return Future.succeededFuture();
+				}).onComplete(testContext.succeedingThenComplete());
 	}
 
 	@Test

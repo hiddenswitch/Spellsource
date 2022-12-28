@@ -25,6 +25,7 @@ import io.vertx.micrometer.backends.PrometheusBackendRegistry;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
+import io.vertx.sqlclient.RowSet;
 import io.vertx.sqlclient.SqlConnection;
 import io.vertx.tracing.opentracing.OpenTracingOptions;
 import org.flywaydb.core.Flyway;
@@ -146,6 +147,10 @@ public class Environment {
 
 	public static Future<Integer> withDslContext(Function<DSLContext, ? extends Query> handler) {
 		return withExecutor(executor -> executor.execute(handler));
+	}
+
+	public static Future<RowSet<io.vertx.sqlclient.Row>> query(Function<DSLContext, ? extends Query> handler) {
+		return withExecutor(executor -> executor.executeAny(handler));
 	}
 
 	public static <T> Future<T> withExecutor(Function<ReactiveClassicGenericQueryExecutor, Future<T>> handler) {

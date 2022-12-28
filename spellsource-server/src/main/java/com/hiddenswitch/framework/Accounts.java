@@ -6,6 +6,7 @@ import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
@@ -19,6 +20,7 @@ import com.hiddenswitch.framework.schema.keycloak.tables.daos.UserEntityDao;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
 import com.hiddenswitch.framework.schema.spellsource.Spellsource;
 import com.hiddenswitch.framework.schema.spellsource.Tables;
+import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.grpc.*;
 import io.vertx.core.Future;
@@ -58,8 +60,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import static com.hiddenswitch.framework.schema.spellsource.Tables.DECK_SHARES;
-import static com.hiddenswitch.framework.schema.spellsource.Tables.USER_ENTITY_ADDONS;
+import static com.hiddenswitch.framework.Environment.query;
+import static com.hiddenswitch.framework.Environment.withDslContext;
+import static com.hiddenswitch.framework.schema.keycloak.Tables.USER_ENTITY;
+import static com.hiddenswitch.framework.schema.spellsource.Tables.*;
 import static java.util.stream.Collectors.toMap;
 
 /**
@@ -267,38 +271,68 @@ public class Accounts {
 
 			@Override
 			public Future<LoginOrCreateReply> createAccount(CreateAccountRequest request) {
-				if (!EmailValidator.getInstance().isValid(request.getEmail())) {
-					return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The e-mail address isn't valid.").asRuntimeException());
-				}
-				if (request.getUsername().length() <= 4) {
-					return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The username must be at least 4 characters.").asRuntimeException());
-				}
-				if (request.getPassword().length() <= 4) {
-					return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The password must be at least 4 characters.").asRuntimeException());
+				Future<UserEntity> createUserEntity;
+				var email = request.getEmail();
+				var password = request.getPassword();
+				if (request.getGuest()) {
+					var uuid1 = UUID.randomUUID().toString();
+					password = UUID.randomUUID().toString();
+					email = uuid1 + "@spellsource.com";
+					String finalEmail = email;
+					String finalPassword = password;
+					// todo: make this a longer transaction
+					createUserEntity = query(dsl -> dsl.insertInto(GUESTS).defaultValues().returning())
+							.map(rowSet -> Lists.newArrayList(rowSet.iterator()).stream().map(RowMappers.getGuestsMapper()).collect(Collectors.toList()))
+							.compose(guestRow -> {
+								Long guestId = guestRow.get(0).getId();
+								return createUser(finalEmail, "Guest " + guestId, finalPassword)
+										.compose(userEntity ->
+												withDslContext(dsl ->
+														dsl.update(GUESTS)
+																.set(GUESTS.USER_ID, userEntity.getId())
+																.where(GUESTS.ID.eq(guestId)))
+														.map(userEntity));
+							});
+				} else {
+					if (!EmailValidator.getInstance().isValid(email)) {
+						return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The e-mail address isn't valid.").asRuntimeException());
+					}
+					if (request.getUsername().length() <= 4) {
+						return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The username must be at least 4 characters.").asRuntimeException());
+					}
+					if (password.length() <= 4) {
+						return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The password must be at least 4 characters.").asRuntimeException());
+					}
+
+					final var finalEmail = email;
+					final var finalPassword = password;
+					createUserEntity = get()
+							.compose(realm -> Environment.executeBlocking(() -> realm.users().search(request.getUsername(), true)))
+							.compose(existingUsers -> {
+								if (!existingUsers.isEmpty()) {
+									return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("This username already exists.").asRuntimeException());
+								}
+
+								return createUser(finalEmail, request.getUsername(), finalPassword)
+										.recover(t -> Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The username, e-mail or password are invalid. Please check them and try again.").asRuntimeException()));
+							});
 				}
 
-				return get()
-						.compose(realm -> Environment.executeBlocking(() -> realm.users().search(request.getUsername(), true)))
-						.compose(existingUsers -> {
-							if (!existingUsers.isEmpty()) {
-								return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("This username already exists.").asRuntimeException());
-							}
 
-							return createUser(request.getEmail(), request.getUsername(), request.getPassword())
-									.recover(t -> Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The username, e-mail or password are invalid. Please check them and try again.").asRuntimeException()));
-						})
-						.compose(userEntity -> {
+				final var finalEmail = email;
+				final var finalPassword = password;
+				return createUserEntity.compose(userEntity -> {
 							// Login here
 							var client = new Client(context.owner(), webClient);
-							return client.login(request.getEmail(), request.getPassword()).map(accessTokenResponse -> new Object[]{accessTokenResponse, userEntity});
+							return client.login(finalEmail, finalPassword).map(accessTokenResponse -> new Object[]{accessTokenResponse, userEntity});
 						})
 						.map(this::handleAccessTokenUserEntityTuple)
 						// hide the premade decks if the user requested to hide them
-						.compose(reply -> Environment.withDslContext(dsl -> dsl.insertInto(USER_ENTITY_ADDONS)
-										.set(USER_ENTITY_ADDONS.ID, reply.getUserEntity().getId())
-										.set(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS, request.getDecks())
-										.onDuplicateKeyUpdate()
-										.set(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS, request.getDecks()))
+						.compose(reply -> withDslContext(dsl -> dsl.insertInto(USER_ENTITY_ADDONS)
+								.set(USER_ENTITY_ADDONS.ID, reply.getUserEntity().getId())
+								.set(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS, request.getDecks())
+								.onDuplicateKeyUpdate()
+								.set(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS, request.getDecks()))
 								.map(reply))
 						.recover(Environment.onGrpcFailure());
 			}
@@ -583,6 +617,8 @@ public class Accounts {
 					realmRepresentation.setResetCredentialsFlow("reset credentials");
 					realmRepresentation.setRegistrationFlow("registration");
 					realmRepresentation.setRememberMe(true);
+					realmRepresentation.setEditUsernameAllowed(true);
+					realmRepresentation.setVerifyEmail(false);
 					realmRepresentation.setLoginWithEmailAllowed(true);
 
 					keycloak.realms().create(realmRepresentation);

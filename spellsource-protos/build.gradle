@@ -91,7 +91,7 @@ task dll(type: Exec, group: 'build') {
     inputs.dir("$csharpRootDir/Framework/Plugins")
     inputs.file("$csharpRootDir/HiddenSwitch.sln")
     inputs.file("$csharpRootDir/Framework/Framework.csproj")
-    inputs.files("$csharpRootDir/Framework/*.cs")
+    inputs.files("$csharpRootDir/Framework/**/*.cs")
     // this is using docker-wrapped dotnet
     commandLine dotnetCmd + ['publish', '--output', "$project.buildDir/dlls"]
 }

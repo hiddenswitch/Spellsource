@@ -84,38 +84,38 @@ namespace HiddenSwitch.Proto {
             "GAIgASgJEhAKCGNhY2hlZE9rGAMgASgIGjEKB0NvbnRlbnQSJgoFY2FyZHMY",
             "ASADKAsyFy5zcGVsbHNvdXJjZS5DYXJkUmVjb3JkIjkKDExvZ2luUmVxdWVz",
             "dBIXCg91c2VybmFtZU9yRW1haWwYASABKAkSEAoIcGFzc3dvcmQYAiABKAki",
-            "WAoUQ3JlYXRlQWNjb3VudFJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIdXNl",
-            "cm5hbWUYAiABKAkSEAoIcGFzc3dvcmQYAyABKAkSDQoFZGVja3MYBCABKAgi",
-            "LAoVQ2hhbmdlUGFzc3dvcmRSZXF1ZXN0EhMKC25ld1Bhc3N3b3JkGAEgASgJ",
-            "IoIBChJMb2dpbk9yQ3JlYXRlUmVwbHkSPgoTYWNjZXNzVG9rZW5SZXNwb25z",
-            "ZRgBIAEoCzIhLmhpZGRlbnN3aXRjaC5BY2Nlc3NUb2tlblJlc3BvbnNlEiwK",
-            "CnVzZXJFbnRpdHkYAiABKAsyGC5oaWRkZW5zd2l0Y2guVXNlckVudGl0eSIk",
-            "ChNBY2Nlc3NUb2tlblJlc3BvbnNlEg0KBXRva2VuGAEgASgJIk8KClVzZXJF",
-            "bnRpdHkSCgoCaWQYASABKAkSDQoFZW1haWwYAiABKAkSEAoIdXNlcm5hbWUY",
-            "CiABKAkSFAoMcHJpdmFjeVRva2VuGAsgASgJIiEKEkdldEFjY291bnRzUmVx",
-            "dWVzdBILCgNpZHMYASADKAkiQgoQR2V0QWNjb3VudHNSZXBseRIuCgx1c2Vy",
-            "RW50aXRpZXMYASADKAsyGC5oaWRkZW5zd2l0Y2guVXNlckVudGl0eTLUAgoP",
-            "VW5hdXRoZW50aWNhdGVkElcKDUNyZWF0ZUFjY291bnQSIi5oaWRkZW5zd2l0",
-            "Y2guQ3JlYXRlQWNjb3VudFJlcXVlc3QaIC5oaWRkZW5zd2l0Y2guTG9naW5P",
-            "ckNyZWF0ZVJlcGx5IgASRwoFTG9naW4SGi5oaWRkZW5zd2l0Y2guTG9naW5S",
-            "ZXF1ZXN0GiAuaGlkZGVuc3dpdGNoLkxvZ2luT3JDcmVhdGVSZXBseSIAEk4K",
-            "C1ZlcmlmeVRva2VuEiEuaGlkZGVuc3dpdGNoLkFjY2Vzc1Rva2VuUmVzcG9u",
-            "c2UaGi5nb29nbGUucHJvdG9idWYuQm9vbFZhbHVlIgASTwoQR2V0Q29uZmln",
-            "dXJhdGlvbhIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRohLmhpZGRlbnN3aXRj",
-            "aC5DbGllbnRDb25maWd1cmF0aW9uIgAyYwoUVW5hdXRoZW50aWNhdGVkQ2Fy",
-            "ZHMSSwoIR2V0Q2FyZHMSHS5oaWRkZW5zd2l0Y2guR2V0Q2FyZHNSZXF1ZXN0",
-            "Gh4uaGlkZGVuc3dpdGNoLkdldENhcmRzUmVzcG9uc2UiADLPAgoIQWNjb3Vu",
-            "dHMSRgoKR2V0QWNjb3VudBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoeLmhp",
-            "ZGRlbnN3aXRjaC5HZXRBY2NvdW50c1JlcGx5IgASUQoLR2V0QWNjb3VudHMS",
-            "IC5oaWRkZW5zd2l0Y2guR2V0QWNjb3VudHNSZXF1ZXN0Gh4uaGlkZGVuc3dp",
-            "dGNoLkdldEFjY291bnRzUmVwbHkiABJZCg5DaGFuZ2VQYXNzd29yZBIjLmhp",
-            "ZGRlbnN3aXRjaC5DaGFuZ2VQYXNzd29yZFJlcXVlc3QaIC5oaWRkZW5zd2l0",
-            "Y2guTG9naW5PckNyZWF0ZVJlcGx5IgASTQoZUmVxdWVzdFBhc3N3b3JkUmVz",
-            "ZXRFbWFpbBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoWLmdvb2dsZS5wcm90",
-            "b2J1Zi5FbXB0eSIAMkwKBUdhbWVzEkMKCUlzSW5NYXRjaBIWLmdvb2dsZS5w",
-            "cm90b2J1Zi5FbXB0eRocLmdvb2dsZS5wcm90b2J1Zi5TdHJpbmdWYWx1ZSIA",
-            "QjcKHmNvbS5oaWRkZW5zd2l0Y2guZnJhbWV3b3JrLnJwY1AAqgISSGlkZGVu",
-            "U3dpdGNoLlByb3RvYgZwcm90bzM="));
+            "ZwoUQ3JlYXRlQWNjb3VudFJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIdXNl",
+            "cm5hbWUYAiABKAkSEAoIcGFzc3dvcmQYAyABKAkSDQoFZGVja3MYBCABKAgS",
+            "DQoFZ3Vlc3QYBSABKAgiLAoVQ2hhbmdlUGFzc3dvcmRSZXF1ZXN0EhMKC25l",
+            "d1Bhc3N3b3JkGAEgASgJIoIBChJMb2dpbk9yQ3JlYXRlUmVwbHkSPgoTYWNj",
+            "ZXNzVG9rZW5SZXNwb25zZRgBIAEoCzIhLmhpZGRlbnN3aXRjaC5BY2Nlc3NU",
+            "b2tlblJlc3BvbnNlEiwKCnVzZXJFbnRpdHkYAiABKAsyGC5oaWRkZW5zd2l0",
+            "Y2guVXNlckVudGl0eSIkChNBY2Nlc3NUb2tlblJlc3BvbnNlEg0KBXRva2Vu",
+            "GAEgASgJIk8KClVzZXJFbnRpdHkSCgoCaWQYASABKAkSDQoFZW1haWwYAiAB",
+            "KAkSEAoIdXNlcm5hbWUYCiABKAkSFAoMcHJpdmFjeVRva2VuGAsgASgJIiEK",
+            "EkdldEFjY291bnRzUmVxdWVzdBILCgNpZHMYASADKAkiQgoQR2V0QWNjb3Vu",
+            "dHNSZXBseRIuCgx1c2VyRW50aXRpZXMYASADKAsyGC5oaWRkZW5zd2l0Y2gu",
+            "VXNlckVudGl0eTLUAgoPVW5hdXRoZW50aWNhdGVkElcKDUNyZWF0ZUFjY291",
+            "bnQSIi5oaWRkZW5zd2l0Y2guQ3JlYXRlQWNjb3VudFJlcXVlc3QaIC5oaWRk",
+            "ZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJlcGx5IgASRwoFTG9naW4SGi5oaWRk",
+            "ZW5zd2l0Y2guTG9naW5SZXF1ZXN0GiAuaGlkZGVuc3dpdGNoLkxvZ2luT3JD",
+            "cmVhdGVSZXBseSIAEk4KC1ZlcmlmeVRva2VuEiEuaGlkZGVuc3dpdGNoLkFj",
+            "Y2Vzc1Rva2VuUmVzcG9uc2UaGi5nb29nbGUucHJvdG9idWYuQm9vbFZhbHVl",
+            "IgASTwoQR2V0Q29uZmlndXJhdGlvbhIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0",
+            "eRohLmhpZGRlbnN3aXRjaC5DbGllbnRDb25maWd1cmF0aW9uIgAyYwoUVW5h",
+            "dXRoZW50aWNhdGVkQ2FyZHMSSwoIR2V0Q2FyZHMSHS5oaWRkZW5zd2l0Y2gu",
+            "R2V0Q2FyZHNSZXF1ZXN0Gh4uaGlkZGVuc3dpdGNoLkdldENhcmRzUmVzcG9u",
+            "c2UiADLPAgoIQWNjb3VudHMSRgoKR2V0QWNjb3VudBIWLmdvb2dsZS5wcm90",
+            "b2J1Zi5FbXB0eRoeLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50c1JlcGx5IgAS",
+            "UQoLR2V0QWNjb3VudHMSIC5oaWRkZW5zd2l0Y2guR2V0QWNjb3VudHNSZXF1",
+            "ZXN0Gh4uaGlkZGVuc3dpdGNoLkdldEFjY291bnRzUmVwbHkiABJZCg5DaGFu",
+            "Z2VQYXNzd29yZBIjLmhpZGRlbnN3aXRjaC5DaGFuZ2VQYXNzd29yZFJlcXVl",
+            "c3QaIC5oaWRkZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJlcGx5IgASTQoZUmVx",
+            "dWVzdFBhc3N3b3JkUmVzZXRFbWFpbBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0",
+            "eRoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eSIAMkwKBUdhbWVzEkMKCUlzSW5N",
+            "YXRjaBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRocLmdvb2dsZS5wcm90b2J1",
+            "Zi5TdHJpbmdWYWx1ZSIAQjcKHmNvbS5oaWRkZW5zd2l0Y2guZnJhbWV3b3Jr",
+            "LnJwY1AAqgISSGlkZGVuU3dpdGNoLlByb3RvYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, global::Spellsource.Proto.SpellsourceReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -135,7 +135,7 @@ namespace HiddenSwitch.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsRequest), global::HiddenSwitch.Proto.GetCardsRequest.Parser, new[]{ "IfNoneMatch" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsResponse), global::HiddenSwitch.Proto.GetCardsResponse.Parser, new[]{ "Content", "Version", "CachedOk" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsResponse.Types.Content), global::HiddenSwitch.Proto.GetCardsResponse.Types.Content.Parser, new[]{ "Cards" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.LoginRequest), global::HiddenSwitch.Proto.LoginRequest.Parser, new[]{ "UsernameOrEmail", "Password" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.CreateAccountRequest), global::HiddenSwitch.Proto.CreateAccountRequest.Parser, new[]{ "Email", "Username", "Password", "Decks" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.CreateAccountRequest), global::HiddenSwitch.Proto.CreateAccountRequest.Parser, new[]{ "Email", "Username", "Password", "Decks", "Guest" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ChangePasswordRequest), global::HiddenSwitch.Proto.ChangePasswordRequest.Parser, new[]{ "NewPassword" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.LoginOrCreateReply), global::HiddenSwitch.Proto.LoginOrCreateReply.Parser, new[]{ "AccessTokenResponse", "UserEntity" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.AccessTokenResponse), global::HiddenSwitch.Proto.AccessTokenResponse.Parser, new[]{ "Token" }, null, null, null, null),
@@ -5639,6 +5639,7 @@ namespace HiddenSwitch.Proto {
       username_ = other.username_;
       password_ = other.password_;
       decks_ = other.decks_;
+      guest_ = other.guest_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -5696,6 +5697,18 @@ namespace HiddenSwitch.Proto {
       }
     }
 
+    /// <summary>Field number for the "guest" field.</summary>
+    public const int GuestFieldNumber = 5;
+    private bool guest_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Guest {
+      get { return guest_; }
+      set {
+        guest_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -5715,6 +5728,7 @@ namespace HiddenSwitch.Proto {
       if (Username != other.Username) return false;
       if (Password != other.Password) return false;
       if (Decks != other.Decks) return false;
+      if (Guest != other.Guest) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -5726,6 +5740,7 @@ namespace HiddenSwitch.Proto {
       if (Username.Length != 0) hash ^= Username.GetHashCode();
       if (Password.Length != 0) hash ^= Password.GetHashCode();
       if (Decks != false) hash ^= Decks.GetHashCode();
+      if (Guest != false) hash ^= Guest.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -5760,6 +5775,10 @@ namespace HiddenSwitch.Proto {
         output.WriteRawTag(32);
         output.WriteBool(Decks);
       }
+      if (Guest != false) {
+        output.WriteRawTag(40);
+        output.WriteBool(Guest);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -5786,6 +5805,10 @@ namespace HiddenSwitch.Proto {
         output.WriteRawTag(32);
         output.WriteBool(Decks);
       }
+      if (Guest != false) {
+        output.WriteRawTag(40);
+        output.WriteBool(Guest);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -5806,6 +5829,9 @@ namespace HiddenSwitch.Proto {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Password);
       }
       if (Decks != false) {
+        size += 1 + 1;
+      }
+      if (Guest != false) {
         size += 1 + 1;
       }
       if (_unknownFields != null) {
@@ -5831,6 +5857,9 @@ namespace HiddenSwitch.Proto {
       }
       if (other.Decks != false) {
         Decks = other.Decks;
+      }
+      if (other.Guest != false) {
+        Guest = other.Guest;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -5863,6 +5892,10 @@ namespace HiddenSwitch.Proto {
             Decks = input.ReadBool();
             break;
           }
+          case 40: {
+            Guest = input.ReadBool();
+            break;
+          }
         }
       }
     #endif
@@ -5892,6 +5925,10 @@ namespace HiddenSwitch.Proto {
           }
           case 32: {
             Decks = input.ReadBool();
+            break;
+          }
+          case 40: {
+            Guest = input.ReadBool();
             break;
           }
         }

@@ -179,6 +179,7 @@ message CreateAccountRequest {
     string username = 2;
     string password = 3;
     bool decks = 4;
+    bool guest = 5;
 }
 
 message ChangePasswordRequest {

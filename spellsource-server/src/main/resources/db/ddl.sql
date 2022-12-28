@@ -1748,6 +1748,32 @@ ALTER TABLE spellsource.games ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
 
 
 --
+-- Name: guests; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.guests (
+    id bigint NOT NULL,
+    user_id text
+);
+
+
+ALTER TABLE spellsource.guests OWNER TO admin;
+
+--
+-- Name: guests_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.guests ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME spellsource.guests_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: matchmaking_queues; Type: TABLE; Schema: spellsource; Owner: admin
 --
 
@@ -2732,6 +2758,14 @@ ALTER TABLE ONLY spellsource.game_users
 
 ALTER TABLE ONLY spellsource.games
     ADD CONSTRAINT games_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: guests guests_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.guests
+    ADD CONSTRAINT guests_pkey PRIMARY KEY (id);
 
 
 --
@@ -4083,6 +4117,14 @@ ALTER TABLE ONLY spellsource.game_users
 
 ALTER TABLE ONLY spellsource.game_users
     ADD CONSTRAINT game_users_user_id_fkey FOREIGN KEY (user_id) REFERENCES keycloak.user_entity(id) ON DELETE CASCADE;
+
+
+--
+-- Name: guests guests_user_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.guests
+    ADD CONSTRAINT guests_user_id_fkey FOREIGN KEY (user_id) REFERENCES keycloak.user_entity(id) ON DELETE CASCADE;
 
 
 --

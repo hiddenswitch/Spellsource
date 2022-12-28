@@ -111,6 +111,15 @@ public class RowMappers {
                 };
         }
 
+        public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Guests> getGuestsMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.spellsource.tables.pojos.Guests pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.Guests();
+                        pojo.setId(row.getLong("id"));
+                        pojo.setUserId(row.getString("user_id"));
+                        return pojo;
+                };
+        }
+
         public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues> getMatchmakingQueuesMapper() {
                 return row -> {
                         com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues();

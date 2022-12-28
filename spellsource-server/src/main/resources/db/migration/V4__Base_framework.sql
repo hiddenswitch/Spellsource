@@ -146,4 +146,10 @@ create table spellsource.friends
   friend text references keycloak.user_entity (id) on delete cascade,
   created_at timestamptz not null default now(),
   primary key (id, friend)
-)
+);
+
+create table spellsource.guests
+(
+    id bigint generated always as identity primary key unique,
+    user_id text default null references keycloak.user_entity (id) on delete cascade
+);
