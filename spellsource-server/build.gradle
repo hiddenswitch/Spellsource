@@ -357,7 +357,8 @@ jib {
         image = "eclipse-temurin:19.0.1_10-jre"
     }
     to {
-        image = 'docker.io/doctorpangloss/spellsource-server'
+        image = 'ghcr.io/hiddenswitch/spellsource'
+        tags = [project.version.toString()]
     }
     container {
         ports = ['8080']

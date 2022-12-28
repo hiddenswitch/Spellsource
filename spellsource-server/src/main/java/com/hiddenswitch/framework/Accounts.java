@@ -109,7 +109,7 @@ public class Accounts {
 		return new PublicKeyJwtServerInterceptor(accessToken -> {
 			var kid = getKid(accessToken);
 			if (kid == null) {
-				final String inToken = accessToken;
+				final var inToken = accessToken;
 				return CompletableFuture.failedFuture(new IllegalArgumentException("access token could not be parsed for kid") {
 					public final String accessToken = inToken;
 				});
@@ -122,7 +122,7 @@ public class Accounts {
 
 	private static String getKid(String accessToken) {
 		try {
-			JsonObject parsed = JWT.parse(accessToken);
+			var parsed = JWT.parse(accessToken);
 			return parsed.getJsonObject("header").getString("kid");
 		} catch (Throwable t) {
 			return null;
@@ -278,13 +278,13 @@ public class Accounts {
 					var uuid1 = UUID.randomUUID().toString();
 					password = UUID.randomUUID().toString();
 					email = uuid1 + "@spellsource.com";
-					String finalEmail = email;
-					String finalPassword = password;
+					var finalEmail = email;
+					var finalPassword = password;
 					// todo: make this a longer transaction
 					createUserEntity = query(dsl -> dsl.insertInto(GUESTS).defaultValues().returning())
 							.map(rowSet -> Lists.newArrayList(rowSet.iterator()).stream().map(RowMappers.getGuestsMapper()).collect(Collectors.toList()))
 							.compose(guestRow -> {
-								Long guestId = guestRow.get(0).getId();
+								var guestId = guestRow.get(0).getId();
 								return createUser(finalEmail, "Guest " + guestId, finalPassword)
 										.compose(userEntity ->
 												withDslContext(dsl ->
