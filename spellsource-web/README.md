@@ -7,18 +7,17 @@ This website is authored using Gatsby.js. You can add new pages by duplicating a
 **On macOS:**
 
 ```shell script
-npm install -g gatsby-cli
-# Ensure test dependencies get built correctly
-npm install
+npm install -D --frozen-lockfile --legacy-peer-deps
 ```
 
-After gatsby-cli is installed, run the website with `gatsby develop`.
+After gatsby-cli is installed, run the website with `npx gatsby develop`.
 
 ```shell script
-gatsby clean
-gatsby develop
+npx gatsby clean
+npx gatsby develop
 ```
 
+Now visit http://localhost:8000/.
 
 ## Testing
 
