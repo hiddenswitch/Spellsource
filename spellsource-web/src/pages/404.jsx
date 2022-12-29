@@ -1,8 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import containerStyles from './404.module.css'
 
-export default () => (<div className={containerStyles.container}>
+export default () => (<div>
     <h1>404</h1>
 
     <p>The requested page could not be found.</p>

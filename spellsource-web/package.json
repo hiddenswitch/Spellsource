@@ -16,6 +16,7 @@
     "acorn": "^8.2.4",
     "aseprite": "^0.3.0",
     "blockly": "^3.20200924.2",
+    "canvas": "^2.11.0",
     "enumify": "^2.0.0",
     "gatsby": "^3.4.2",
     "gatsby-plugin-anchor-links": "^1.1.1",
