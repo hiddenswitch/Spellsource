@@ -358,7 +358,7 @@ test {
     }
 }
 
-def spellsourceTags = [project.version.toString()]
+def spellsourceTags = ['latest', project.version.toString()]
 def spellsourceImage = 'ghcr.io/hiddenswitch/spellsource'
 jib {
     from {
