@@ -91,8 +91,11 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 	}
 
 	@Override
-	// TODO: Cache this
 	public Object get(Object key) {
+		if (getCard() == null) {
+			return super.get(key);
+		}
+
 		Attribute attr = (Attribute) key;
 		CardDesc desc = getCard().getDesc();
 		if (super.get(key) != null) {
