@@ -158,6 +158,12 @@ dependencies {
     testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.1'
 }
 
+javadoc {
+    def javadocOptions = options as CoreJavadocOptions
+    javadocOptions.addStringOption("source", "19")
+    javadocOptions.addBooleanOption("-enable-preview", true)
+}
+
 jar {
     manifest {
         attributes 'Main-Class': mainClassNameConst

@@ -1,10 +1,10 @@
 // polyfill for graal
-global.WebAssembly = global.WebAssembly || require('./src/lib/graal-compatibility/wasm-polyfill')
+global.WebAssembly = global.WebAssembly || require("./src/lib/graal-compatibility/wasm-polyfill");
 
-const remark = require('remark')
-const visit = require('unist-util-visit')
-const { resolveArt } = require('./src/lib/resolve-art')
-const { jsonTransformFileNode, jsonType } = require('./src/lib/json-transforms')
+const remark = require("remark");
+const visit = require("unist-util-visit");
+const { resolveArt } = require("./src/lib/resolve-art");
+const { jsonTransformFileNode, jsonType } = require("./src/lib/json-transforms");
 
 module.exports = {
   siteMetadata: {
@@ -17,17 +17,10 @@ module.exports = {
       options: {
         name: `src`,
         path: `${__dirname}/src/`,
-        ignore: [`${__dirname}/src/main/`, `${__dirname}/src/test/`, `**/*\.java`]
+        ignore: [`${__dirname}/src/main/`, `${__dirname}/src/test/`, `**/*\.java`],
       },
     },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `art`,
-        path: `${__dirname}/../spellsource-client/src/unity/Assets/Textures/`,
-        ignore: ['**/Land Fae\.ase']
-      },
-    },
+
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -43,19 +36,19 @@ module.exports = {
     `gatsby-transformer-photoshop`,
     `gatsby-transformer-aseprite`,
     {
-      resolve: `gatsby-markdown-textmesh-renderer`
+      resolve: `gatsby-markdown-textmesh-renderer`,
     },
     {
       resolve: `gatsby-transformer-json-hooks`,
       options: {
         onTransformObject: ({ fileNode, object }) => {
-          jsonTransformFileNode(object, fileNode)
+          jsonTransformFileNode(object, fileNode);
         },
         typeName: ({ node, object, isArray }) => {
           // This is card JSON
-          return jsonType(object)
-        }
-      }
+          return jsonType(object);
+        },
+      },
     },
     `gatsby-plugin-image`,
     `gatsby-plugin-sharp`,
@@ -75,11 +68,11 @@ module.exports = {
               // base for generating different widths of each image.
               maxWidth: 700,
               linkImagesToOriginal: false,
-              backgroundColor: 'transparent',
+              backgroundColor: "transparent",
               withWebp: true,
               disableBgImage: true,
               quality: 100,
-              wrapperStyle: `float: right; width: 100%; margin-left: 0.5em; margin-bottom: 0.5em;`
+              wrapperStyle: `float: right; width: 100%; margin-left: 0.5em; margin-bottom: 0.5em;`,
             },
           },
           {
@@ -101,59 +94,59 @@ module.exports = {
         resolvers: {
           // For any node of type MarkdownRemark, list how to resolve the fields` values
           MarkdownRemark: {
-            title: node => node.frontmatter.title,
-            path: node => node.frontmatter.path,
-            rawMarkdownBody: node => node.rawMarkdownBody,
-            excerpt: node => {
-              const excerptLength = 250 // Hard coded excerpt length
-              let excerpt = ''
-              const tree = remark().parse(node.rawMarkdownBody)
-              visit(tree, 'text', (node) => {
-                excerpt += node.value
-              })
-              return excerpt.slice(0, excerptLength) + '...'
+            title: (node) => node.frontmatter.title,
+            path: (node) => node.frontmatter.path,
+            rawMarkdownBody: (node) => node.rawMarkdownBody,
+            excerpt: (node) => {
+              const excerptLength = 250; // Hard coded excerpt length
+              let excerpt = "";
+              const tree = remark().parse(node.rawMarkdownBody);
+              visit(tree, "text", (node) => {
+                excerpt += node.value;
+              });
+              return excerpt.slice(0, excerptLength) + "...";
             },
-            nodeType: node => 'MarkdownRemark'
+            nodeType: (node) => "MarkdownRemark",
           },
           Card: {
             // TODO: Change the name of the field to be its content
-            title: node => node.name,
-            rawMarkdownBody: node => node.description,
-            path: node => node.path,
-            collectible: node => node.collectible,
-            excerpt: node => node.description, // is this necessary?
-            nodeType: node => 'Card',
-            heroClass: node => node.heroClass,
-            baseManaCost: node => node.baseManaCost,
+            title: (node) => node.name,
+            rawMarkdownBody: (node) => node.description,
+            path: (node) => node.path,
+            collectible: (node) => node.collectible,
+            excerpt: (node) => node.description, // is this necessary?
+            nodeType: (node) => "Card",
+            heroClass: (node) => node.heroClass,
+            baseManaCost: (node) => node.baseManaCost,
             art: (node, getNode) => {
               return resolveArt(node, {
                 nodeModel: {
-                  getNodeById: ({ id }) => getNode(id)
-                }
-              })
+                  getNodeById: ({ id }) => getNode(id),
+                },
+              });
             },
-            baseAttack: node => node.baseAttack,
-            baseHp: node => node.baseHp,
-            type: node => node.type,
-            id: node => node.id
+            baseAttack: (node) => node.baseAttack,
+            baseHp: (node) => node.baseHp,
+            type: (node) => node.type,
+            id: (node) => node.id,
           },
           Block: {
-            title: node => node.searchMessage,
-            nodeType: node => 'Block',
-            rawMarkdownBody: node => node.comment || ''
-          }
+            title: (node) => node.searchMessage,
+            nodeType: (node) => "Block",
+            rawMarkdownBody: (node) => node.comment || "",
+          },
         },
         // Optional filter to limit indexed nodes
-        filter: (node, getNode) => true
+        filter: (node, getNode) => true,
       },
     },
     {
       resolve: `gatsby-plugin-s3`,
       options: {
-        bucketName: 'www.playspellsource.com',
-        protocol: 'https',
-        hostname: 'www.playspellsource.com',
+        bucketName: "www.playspellsource.com",
+        protocol: "https",
+        hostname: "www.playspellsource.com",
       },
     },
   ],
-}
+};

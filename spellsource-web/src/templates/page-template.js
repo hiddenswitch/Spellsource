@@ -1,6 +1,7 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../components/creative-layout'
+import * as styles from './template-styles.module.scss'
 
 export default function Template ({
   data, // this prop will be injected by the GraphQL query below.
@@ -10,7 +11,7 @@ export default function Template ({
   return (
     <Layout>
       <div
-        className="blog-post-content"
+        className={styles.templateContainer}
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </Layout>

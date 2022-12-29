@@ -1,30 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
-import PostLink from './post-link'
-import { useStaticQuery, graphql, Link } from 'gatsby'
+import { Link } from 'gatsby'
 import { StaticImage } from 'gatsby-plugin-image'
+import icon from '../assets/icon.png'
 import * as styles from './creative-layout.module.scss'
 import Search from './search'
+import  {AiOutlineMenu} from "@react-icons/all-files/ai/AiOutlineMenu"
+import {AiOutlineClose} from "@react-icons/all-files/ai/AiOutlineClose"
 
-const Header = () => {
-  const data = useStaticQuery(graphql`
-  query {
-    allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }) {
-      edges {
-        node {
-          id
-          excerpt(pruneLength: 250)
-          frontmatter {
-            date(formatString: "MMMM DD, YYYY")
-            path
-            title
-            header
-          }
-        }
-      }
-    }
-  }
-`)
 
+
+const Header = ({pages}) => {
   const headerDiv = useRef(null)
 
   const handleScroll = event => {
@@ -41,22 +26,48 @@ const Header = () => {
     keepHorizontalScroll()
   }, [])
 
-  const pages = data.allMarkdownRemark.edges
-    .filter(edge => !!edge.node.frontmatter.header)
-    .map(edge => <li key={edge.node.id}><PostLink post={edge.node}/></li>)
-
   return <header>
-    <div className={styles.menu} ref={headerDiv} onScroll={e => {handleScroll(e)}}>
-      <ul>
-        <li key={'headerImage'}><Link to="/"><StaticImage src={'../assets/icon.png'} alt={'Icon'}
-                                                          style={{ width: 25, height: 25 }}/></Link></li>
-        <li key={'javadocs'}><a href="/javadoc">[Docs]</a></li>
-        {pages}
-        <li key={'download'}><Link to="/download">[Play Now]</Link></li>
-        <li key={'search'}><Search placeholder={'Search'}/></li>
-      </ul>
-    </div>
+      <div className={styles.navbarContainer} ref={headerDiv} onScroll={e => {handleScroll(e)}}>
+        <a key={'headerImage'}>
+          <Link to="/" style={{display: 'flex'}}><img src={icon} alt={'Icon'} style={{ width: 36, height: 36 }}/>
+            <strong style={{color: '#000', paddingTop: '4px'}}>Spellsource</strong>
+          </Link>
+        </a>
+        <DesktopNavbar pages={pages}/>
+        <MobileNavbar pages={pages}/>
+      </div>
   </header>
+}
+
+const DesktopNavbar = ({pages}) => {
+  return (
+    <ul className={styles.desktopNavbar}>       
+      <li key={'javadocs'}><a href="/javadoc">Docs</a></li>
+        {pages}
+      {/* <li key={'download'}><Link to="/download">Play Now</Link></li> */}
+      <li key={'search'}><Search placeholder={'Search'}/></li>
+    </ul>
+  )
+}
+
+const MobileNavbar = ({pages}) => {
+  const [open, setOpen] = useState(false);
+
+  return(
+    <div className={styles.mobileNavbar}>
+      {!open ? 
+        <AiOutlineMenu color="#000" size={32} onClick={()=>{setOpen(!open);}} /> : 
+        <div>
+          <AiOutlineClose color="#000" size={32} onClick={()=>{setOpen(!open);}}/>
+          <ul className={styles.mobileUl}>       
+            <li key={'javadocs'}><a href="/javadoc">Docs</a></li>
+              {pages}
+            {/* <li key={'download'}><Link to="/download">Play Now</Link></li> */}
+            <li key={'search'}><Search placeholder={'Search'}/></li>
+          </ul>
+        </div>}
+  </div>
+  )
 }
 
 export default Header
