@@ -366,8 +366,7 @@ jib {
     }
     to {
         image = spellsourceImage
-
-        tags = tags
+        tags = spellsourceTags
     }
     container {
         ports = ['8080']
@@ -379,7 +378,7 @@ task githubDockerPush {
     dependsOn jibDockerBuild
     doLast {
         exec {
-            commandLine(['docker','push'] + spellsourceTags.collect {tag -> "$spellsourceImage:$tag"})
+            commandLine(['docker', 'push'] + spellsourceTags.collect {tag -> "$spellsourceImage:$tag"})
         }
     }
 }
