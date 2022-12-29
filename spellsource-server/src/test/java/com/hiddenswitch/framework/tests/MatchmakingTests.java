@@ -390,10 +390,10 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
-	@Timeout(value = 180, timeUnit = TimeUnit.SECONDS)
+	@Timeout(value = 210, timeUnit = TimeUnit.SECONDS)
 	public void testManyClientsMatchmakeAcrossInstances(VertxTestContext testContext) {
 		var vertx = Vertx.vertx(Environment.vertxOptions());
-		var clientsToDeploy = 100;
+		var clientsToDeploy = CpuCoreSensor.availableProcessors() * 10;
 		var verticesToDeploy = clientsToDeploy / CpuCoreSensor.availableProcessors();
 		// dedicated clients vertx
 		var queueIds = IntStream
