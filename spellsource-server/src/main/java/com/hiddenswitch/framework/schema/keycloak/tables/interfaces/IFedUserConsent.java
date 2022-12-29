@@ -86,6 +86,28 @@ public interface IFedUserConsent extends VertxPojo, Serializable {
      */
     public Long getLastUpdatedDate();
 
+    /**
+     * Setter for
+     * <code>keycloak.fed_user_consent.client_storage_provider</code>.
+     */
+    public IFedUserConsent setClientStorageProvider(String value);
+
+    /**
+     * Getter for
+     * <code>keycloak.fed_user_consent.client_storage_provider</code>.
+     */
+    public String getClientStorageProvider();
+
+    /**
+     * Setter for <code>keycloak.fed_user_consent.external_client_id</code>.
+     */
+    public IFedUserConsent setExternalClientId(String value);
+
+    /**
+     * Getter for <code>keycloak.fed_user_consent.external_client_id</code>.
+     */
+    public String getExternalClientId();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -111,6 +133,8 @@ public interface IFedUserConsent extends VertxPojo, Serializable {
                 setOrThrow(this::setStorageProviderId,json::getString,"storage_provider_id","java.lang.String");
                 setOrThrow(this::setCreatedDate,json::getLong,"created_date","java.lang.Long");
                 setOrThrow(this::setLastUpdatedDate,json::getLong,"last_updated_date","java.lang.Long");
+                setOrThrow(this::setClientStorageProvider,json::getString,"client_storage_provider","java.lang.String");
+                setOrThrow(this::setExternalClientId,json::getString,"external_client_id","java.lang.String");
                 return this;
         }
 
@@ -125,6 +149,8 @@ public interface IFedUserConsent extends VertxPojo, Serializable {
                 json.put("storage_provider_id",getStorageProviderId());
                 json.put("created_date",getCreatedDate());
                 json.put("last_updated_date",getLastUpdatedDate());
+                json.put("client_storage_provider",getClientStorageProvider());
+                json.put("external_client_id",getExternalClientId());
                 return json;
         }
 

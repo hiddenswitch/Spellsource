@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -32,7 +31,6 @@ public final class DrawCardUntilConditionSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(DrawCardUntilConditionSpell.class);
 
 	@Override
-	@Suspendable
 	public void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(logger, context, source, desc, SpellArg.CONDITION, SpellArg.VALUE);
 		int cardCount = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);

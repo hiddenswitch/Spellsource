@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.UserConsentReco
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function7;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Records;
+import org.jooq.Row7;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -57,7 +61,7 @@ public class UserConsent extends TableImpl<UserConsentRecord> {
     /**
      * The column <code>keycloak.user_consent.client_id</code>.
      */
-    public final TableField<UserConsentRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<UserConsentRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_consent.user_id</code>.
@@ -73,6 +77,16 @@ public class UserConsent extends TableImpl<UserConsentRecord> {
      * The column <code>keycloak.user_consent.last_updated_date</code>.
      */
     public final TableField<UserConsentRecord, Long> LAST_UPDATED_DATE = createField(DSL.name("last_updated_date"), SQLDataType.BIGINT, this, "");
+
+    /**
+     * The column <code>keycloak.user_consent.client_storage_provider</code>.
+     */
+    public final TableField<UserConsentRecord, String> CLIENT_STORAGE_PROVIDER = createField(DSL.name("client_storage_provider"), SQLDataType.VARCHAR(36), this, "");
+
+    /**
+     * The column <code>keycloak.user_consent.external_client_id</code>.
+     */
+    public final TableField<UserConsentRecord, String> EXTERNAL_CLIENT_ID = createField(DSL.name("external_client_id"), SQLDataType.VARCHAR(255), this, "");
 
     private UserConsent(Name alias, Table<UserConsentRecord> aliased) {
         this(alias, aliased, null);
@@ -155,6 +169,11 @@ public class UserConsent extends TableImpl<UserConsentRecord> {
         return new UserConsent(alias, this);
     }
 
+    @Override
+    public UserConsent as(Table<?> alias) {
+        return new UserConsent(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -171,12 +190,35 @@ public class UserConsent extends TableImpl<UserConsentRecord> {
         return new UserConsent(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public UserConsent rename(Table<?> name) {
+        return new UserConsent(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<String, String, String, Long, Long> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row7<String, String, String, Long, Long, String, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function7<? super String, ? super String, ? super String, ? super Long, ? super Long, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function7<? super String, ? super String, ? super String, ? super Long, ? super Long, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

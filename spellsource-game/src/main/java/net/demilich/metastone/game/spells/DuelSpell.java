@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
@@ -27,7 +26,6 @@ public class DuelSpell extends FightSpell {
 	private static Logger logger = LoggerFactory.getLogger(DuelSpell.class);
 
 	@Override
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		EntityFilter filter = desc.getEntityFilter();
 		List<Entity> validDefenders = SpellUtils.getValidTargets(context, player, targets, filter, source);
@@ -36,7 +34,6 @@ public class DuelSpell extends FightSpell {
 		duel(context, player, source, validAttackers, validDefenders);
 	}
 
-	@Suspendable
 	protected void duel(GameContext context, Player player, Entity source, List<Entity> validAttackers, List<Entity> validDefenders) {
 		for (Entity attacker : validAttackers) {
 			if (!attacker.isInPlay() || attacker.isDestroyed()) {

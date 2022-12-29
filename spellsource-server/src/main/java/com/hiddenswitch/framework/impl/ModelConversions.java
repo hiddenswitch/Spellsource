@@ -1,6 +1,5 @@
 package com.hiddenswitch.framework.impl;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +19,6 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.DamageTypeMessage.DamageType;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -689,7 +687,6 @@ public class ModelConversions {
 	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
-	@Suspendable
 	public static Entity.Builder getEntity(GameContext workingContext, Card card, int localPlayerId) {
 		if (card == null) {
 			return Entity.newBuilder()

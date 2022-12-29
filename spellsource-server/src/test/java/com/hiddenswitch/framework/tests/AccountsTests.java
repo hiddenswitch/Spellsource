@@ -1,9 +1,8 @@
 package com.hiddenswitch.framework.tests;
 
-import com.hiddenswitch.framework.Accounts;
-import com.hiddenswitch.framework.Application;
-import com.hiddenswitch.framework.Client;
-import com.hiddenswitch.framework.Environment;
+import com.google.common.base.Strings;
+import com.google.protobuf.Empty;
+import com.hiddenswitch.framework.*;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
 import com.hiddenswitch.framework.rpc.VertxAccountsGrpc;
 import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
@@ -13,7 +12,10 @@ import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.junit5.VertxTestContext;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
@@ -38,7 +40,7 @@ public class AccountsTests extends FrameworkTestBase {
 		var application = new Application();
 		var deploy = application.deploy();
 		deploy
-				.compose(v -> Accounts.createUser(UUID.randomUUID().toString() + "@hiddenswitch.com", UUID.randomUUID().toString(), "password"))
+				.compose(v -> Accounts.createUser(UUID.randomUUID() + "@hiddenswitch.com", UUID.randomUUID().toString(), "password"))
 				.compose(ue -> {
 					testContext.verify(() -> {
 						assertNotNull(ue.getId());
@@ -61,6 +63,42 @@ public class AccountsTests extends FrameworkTestBase {
 		startGateway(vertx)
 				.compose(v -> client.createAndLogin("testusername2", "email@hiddenswitch.com", "password"))
 				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	@ParameterizedTest
+	@ValueSource(booleans = {true, false})
+	public void testCreateUserCheckPremadeDecks(boolean premade, Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
+		var userId = UUID.randomUUID().toString();
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin(userId, userId + "@hiddenswitch.com", "password", premade))
+				.compose(v -> client.legacy().decksGetAll(Empty.getDefaultInstance()))
+				.compose(decksGetAllResponse -> {
+					testContext.verify(() -> {
+						assertEquals(premade ? Legacy.getPremadeDecks().size() : 0, decksGetAllResponse.getDecksCount(), "premade decks count");
+					});
+					return Future.succeededFuture(decksGetAllResponse);
+				})
+				.onComplete(testContext.succeedingThenComplete());
+
+	}
+
+	@Test
+	public void testGuestAccountCreation(Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
+		startGateway(vertx)
+				.compose(v -> client.unauthenticated().createAccount(CreateAccountRequest.newBuilder()
+						.setGuest(true).build()))
+				// create two users to assert usernames were unique
+				.compose(v -> client.unauthenticated().createAccount(CreateAccountRequest.newBuilder()
+						.setGuest(true).build()))
+				.compose(reply -> {
+					testContext.verify(() -> {
+						assertTrue(reply.hasUserEntity());
+						assertFalse(Strings.isNullOrEmpty(reply.getUserEntity().getEmail()));
+					});
+					return Future.succeededFuture();
+				}).onComplete(testContext.succeedingThenComplete());
 	}
 
 	@Test
@@ -100,9 +138,9 @@ public class AccountsTests extends FrameworkTestBase {
 							var otherId = otherUser.getId();
 							var myAccount = myAccountReply.getUserEntity();
 							return stub.getAccounts(GetAccountsRequest.newBuilder()
-									.addIds(otherId)
-									.addIds(myAccount.getId())
-									.build())
+											.addIds(otherId)
+											.addIds(myAccount.getId())
+											.build())
 									.onSuccess(reply2 -> {
 										testContext.verify(() -> {
 											var records = reply2.getUserEntitiesList().stream().collect(toMap(UserEntity::getId, Function.identity()));
@@ -116,6 +154,7 @@ public class AccountsTests extends FrameworkTestBase {
 	}
 
 	@Test
+	@Disabled
 	public void testLoginWithRestClient(Vertx vertx, VertxTestContext testContext) {
 		var webClient = WebClient.create(vertx);
 		var client = new Client(vertx, webClient);

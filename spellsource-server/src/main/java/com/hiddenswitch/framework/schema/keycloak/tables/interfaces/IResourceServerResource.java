@@ -37,16 +37,6 @@ public interface IResourceServerResource extends VertxPojo, Serializable {
     public String getName();
 
     /**
-     * Setter for <code>keycloak.resource_server_resource.uri</code>.
-     */
-    public IResourceServerResource setUri(String value);
-
-    /**
-     * Getter for <code>keycloak.resource_server_resource.uri</code>.
-     */
-    public String getUri();
-
-    /**
      * Setter for <code>keycloak.resource_server_resource.type</code>.
      */
     public IResourceServerResource setType(String value);
@@ -88,6 +78,28 @@ public interface IResourceServerResource extends VertxPojo, Serializable {
      */
     public String getResourceServerId();
 
+    /**
+     * Setter for
+     * <code>keycloak.resource_server_resource.owner_managed_access</code>.
+     */
+    public IResourceServerResource setOwnerManagedAccess(Boolean value);
+
+    /**
+     * Getter for
+     * <code>keycloak.resource_server_resource.owner_managed_access</code>.
+     */
+    public Boolean getOwnerManagedAccess();
+
+    /**
+     * Setter for <code>keycloak.resource_server_resource.display_name</code>.
+     */
+    public IResourceServerResource setDisplayName(String value);
+
+    /**
+     * Getter for <code>keycloak.resource_server_resource.display_name</code>.
+     */
+    public String getDisplayName();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -108,11 +120,12 @@ public interface IResourceServerResource extends VertxPojo, Serializable {
         public default IResourceServerResource fromJson(io.vertx.core.json.JsonObject json) {
                 setOrThrow(this::setId,json::getString,"id","java.lang.String");
                 setOrThrow(this::setName,json::getString,"name","java.lang.String");
-                setOrThrow(this::setUri,json::getString,"uri","java.lang.String");
                 setOrThrow(this::setType,json::getString,"type","java.lang.String");
                 setOrThrow(this::setIconUri,json::getString,"icon_uri","java.lang.String");
                 setOrThrow(this::setOwner,json::getString,"owner","java.lang.String");
                 setOrThrow(this::setResourceServerId,json::getString,"resource_server_id","java.lang.String");
+                setOrThrow(this::setOwnerManagedAccess,json::getBoolean,"owner_managed_access","java.lang.Boolean");
+                setOrThrow(this::setDisplayName,json::getString,"display_name","java.lang.String");
                 return this;
         }
 
@@ -122,11 +135,12 @@ public interface IResourceServerResource extends VertxPojo, Serializable {
                 io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
                 json.put("id",getId());
                 json.put("name",getName());
-                json.put("uri",getUri());
                 json.put("type",getType());
                 json.put("icon_uri",getIconUri());
                 json.put("owner",getOwner());
                 json.put("resource_server_id",getResourceServerId());
+                json.put("owner_managed_access",getOwnerManagedAccess());
+                json.put("display_name",getDisplayName());
                 return json;
         }
 

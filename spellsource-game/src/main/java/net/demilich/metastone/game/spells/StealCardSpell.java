@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -29,7 +28,6 @@ public class StealCardSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(StealCardSpell.class);
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (!(target instanceof Card)) {
 			logger.error("onCast {} {}: StealCardSpell called on non-Card {}.", context.getGameId(), source, target);

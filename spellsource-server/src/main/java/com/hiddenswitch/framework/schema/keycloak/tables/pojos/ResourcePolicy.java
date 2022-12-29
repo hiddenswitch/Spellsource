@@ -76,6 +76,39 @@ public class ResourcePolicy implements VertxPojo, IResourcePolicy {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ResourcePolicy other = (ResourcePolicy) obj;
+        if (this.resourceId == null) {
+            if (other.resourceId != null)
+                return false;
+        }
+        else if (!this.resourceId.equals(other.resourceId))
+            return false;
+        if (this.policyId == null) {
+            if (other.policyId != null)
+                return false;
+        }
+        else if (!this.policyId.equals(other.policyId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.resourceId == null) ? 0 : this.resourceId.hashCode());
+        result = prime * result + ((this.policyId == null) ? 0 : this.policyId.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ResourcePolicy (");
 

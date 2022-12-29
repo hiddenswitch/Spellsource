@@ -4,16 +4,25 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
+import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.MigrationModelRecord;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function3;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row2;
+import org.jooq.Records;
+import org.jooq.Row3;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -54,6 +63,11 @@ public class MigrationModel extends TableImpl<MigrationModelRecord> {
      */
     public final TableField<MigrationModelRecord, String> VERSION = createField(DSL.name("version"), SQLDataType.VARCHAR(36), this, "");
 
+    /**
+     * The column <code>keycloak.migration_model.update_time</code>.
+     */
+    public final TableField<MigrationModelRecord, Long> UPDATE_TIME = createField(DSL.name("update_time"), SQLDataType.BIGINT.nullable(false).defaultValue(DSL.field("0", SQLDataType.BIGINT)), this, "");
+
     private MigrationModel(Name alias, Table<MigrationModelRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -93,6 +107,11 @@ public class MigrationModel extends TableImpl<MigrationModelRecord> {
     }
 
     @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.IDX_UPDATE_TIME);
+    }
+
+    @Override
     public UniqueKey<MigrationModelRecord> getPrimaryKey() {
         return Keys.CONSTRAINT_MIGMOD;
     }
@@ -105,6 +124,11 @@ public class MigrationModel extends TableImpl<MigrationModelRecord> {
     @Override
     public MigrationModel as(Name alias) {
         return new MigrationModel(alias, this);
+    }
+
+    @Override
+    public MigrationModel as(Table<?> alias) {
+        return new MigrationModel(alias.getQualifiedName(), this);
     }
 
     /**
@@ -123,12 +147,35 @@ public class MigrationModel extends TableImpl<MigrationModelRecord> {
         return new MigrationModel(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public MigrationModel rename(Table<?> name) {
+        return new MigrationModel(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
-    // Row2 type methods
+    // Row3 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row2<String, String> fieldsRow() {
-        return (Row2) super.fieldsRow();
+    public Row3<String, String, Long> fieldsRow() {
+        return (Row3) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function3<? super String, ? super String, ? super Long, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function3<? super String, ? super String, ? super Long, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

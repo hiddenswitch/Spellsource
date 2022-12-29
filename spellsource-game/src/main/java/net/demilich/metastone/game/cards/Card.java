@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.cards;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
@@ -363,7 +362,6 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @see net.demilich.metastone.game.logic.GameLogic#getModifiedManaCost(Player, Card) for the best method to get the
 	 * cost of a card.
 	 */
-	@Suspendable
 	public int getManaCost(GameContext context, Player player) {
 		return getBaseManaCost() - getManaCostModification(context, player);
 	}
@@ -377,7 +375,6 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @param player  The {@link Player} whose point of view should be considered, i.e. the owner.
 	 * @return The cost modfication
 	 */
-	@Suspendable
 	public int getManaCostModification(GameContext context, Player player) {
 		if (getManaCostModifier() != null) {
 			return getManaCostModifier().getValue(context, player, null, this);
@@ -453,7 +450,6 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return An action that should be evaluated by {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int,
 	 * GameAction)}.
 	 */
-	@Suspendable
 	public PlayCardAction play() {
 		if (hasChoices()) {
 			throw new UnsupportedOperationException("Use the choices interfaces instead.");

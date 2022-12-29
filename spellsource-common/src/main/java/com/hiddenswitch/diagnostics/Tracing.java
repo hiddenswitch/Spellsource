@@ -1,6 +1,5 @@
 package com.hiddenswitch.diagnostics;
 
-import co.paralleluniverse.fibers.Fiber;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.spellsource.core.Version;
@@ -36,7 +35,7 @@ public class Tracing {
 		tracing();
 		vertx.exceptionHandler(Tracing::error);
 		try {
-			Fiber.setDefaultUncaughtExceptionHandler((a, b) -> error(b));
+			Thread.setDefaultUncaughtExceptionHandler((a, b) -> error(b));
 		} catch (NoClassDefFoundError compileOnlyDependency) {
 		}
 		return GlobalTracer.get();
@@ -48,7 +47,6 @@ public class Tracing {
 
 	public static void error(Throwable throwable, Span span, boolean finish) {
 		if (span instanceof NoopSpan || span == null) {
-			LOGGER.error("An exception was reported to the tracer");
 			LOGGER.error("{}\n{}", throwable.getMessage(), Throwables.getStackTraceAsString(throwable));
 			return;
 		}

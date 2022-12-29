@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -21,7 +20,6 @@ import java.util.List;
 public final class DuelRandomSecondarySpell extends DuelSpell {
 
 	@Override
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		List<Entity> validDefenders = targets;
 		if (validDefenders == null || validDefenders.isEmpty()) {

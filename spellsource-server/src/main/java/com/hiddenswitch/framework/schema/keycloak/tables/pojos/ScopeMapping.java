@@ -76,6 +76,39 @@ public class ScopeMapping implements VertxPojo, IScopeMapping {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ScopeMapping other = (ScopeMapping) obj;
+        if (this.clientId == null) {
+            if (other.clientId != null)
+                return false;
+        }
+        else if (!this.clientId.equals(other.clientId))
+            return false;
+        if (this.roleId == null) {
+            if (other.roleId != null)
+                return false;
+        }
+        else if (!this.roleId.equals(other.roleId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.clientId == null) ? 0 : this.clientId.hashCode());
+        result = prime * result + ((this.roleId == null) ? 0 : this.roleId.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ScopeMapping (");
 

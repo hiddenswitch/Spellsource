@@ -11,17 +11,22 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.RealmEnabledEve
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function2;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row2;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -56,7 +61,7 @@ public class RealmEnabledEventTypes extends TableImpl<RealmEnabledEventTypesReco
     /**
      * The column <code>keycloak.realm_enabled_event_types.value</code>.
      */
-    public final TableField<RealmEnabledEventTypesRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RealmEnabledEventTypesRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     private RealmEnabledEventTypes(Name alias, Table<RealmEnabledEventTypesRecord> aliased) {
         this(alias, aliased, null);
@@ -104,6 +109,11 @@ public class RealmEnabledEventTypes extends TableImpl<RealmEnabledEventTypesReco
     }
 
     @Override
+    public UniqueKey<RealmEnabledEventTypesRecord> getPrimaryKey() {
+        return Keys.CONSTR_REALM_ENABL_EVENT_TYPES;
+    }
+
+    @Override
     public List<ForeignKey<RealmEnabledEventTypesRecord, ?>> getReferences() {
         return Arrays.asList(Keys.REALM_ENABLED_EVENT_TYPES__FK_H846O4H0W8EPX5NWEDRF5Y69J);
     }
@@ -130,6 +140,11 @@ public class RealmEnabledEventTypes extends TableImpl<RealmEnabledEventTypesReco
         return new RealmEnabledEventTypes(alias, this);
     }
 
+    @Override
+    public RealmEnabledEventTypes as(Table<?> alias) {
+        return new RealmEnabledEventTypes(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -146,6 +161,14 @@ public class RealmEnabledEventTypes extends TableImpl<RealmEnabledEventTypesReco
         return new RealmEnabledEventTypes(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public RealmEnabledEventTypes rename(Table<?> name) {
+        return new RealmEnabledEventTypes(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row2 type methods
     // -------------------------------------------------------------------------
@@ -153,5 +176,20 @@ public class RealmEnabledEventTypes extends TableImpl<RealmEnabledEventTypesReco
     @Override
     public Row2<String, String> fieldsRow() {
         return (Row2) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.trigger.secrets;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -92,7 +91,6 @@ public class Quest extends Enchantment {
 	}
 
 	@Override
-	@Suspendable
 	protected boolean process(int ownerId, SpellDesc spell, GameEvent event) {
 		// Also casts the spell!
 		boolean spellFired = super.process(ownerId, spell, event);
@@ -105,7 +103,6 @@ public class Quest extends Enchantment {
 	}
 
 	@Override
-	@Suspendable
 	protected void cast(int ownerId, SpellDesc spell, GameEvent event) {
 		expire(event.getGameContext());
 		super.cast(ownerId, spell, event);

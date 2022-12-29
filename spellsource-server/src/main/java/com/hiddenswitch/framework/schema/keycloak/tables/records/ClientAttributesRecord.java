@@ -43,28 +43,11 @@ public class ClientAttributesRecord extends UpdatableRecordImpl<ClientAttributes
     }
 
     /**
-     * Setter for <code>keycloak.client_attributes.value</code>.
-     */
-    @Override
-    public ClientAttributesRecord setValue(String value) {
-        set(1, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>keycloak.client_attributes.value</code>.
-     */
-    @Override
-    public String getValue() {
-        return (String) get(1);
-    }
-
-    /**
      * Setter for <code>keycloak.client_attributes.name</code>.
      */
     @Override
     public ClientAttributesRecord setName(String value) {
-        set(2, value);
+        set(1, value);
         return this;
     }
 
@@ -73,6 +56,23 @@ public class ClientAttributesRecord extends UpdatableRecordImpl<ClientAttributes
      */
     @Override
     public String getName() {
+        return (String) get(1);
+    }
+
+    /**
+     * Setter for <code>keycloak.client_attributes.value</code>.
+     */
+    @Override
+    public ClientAttributesRecord setValue(String value) {
+        set(2, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.client_attributes.value</code>.
+     */
+    @Override
+    public String getValue() {
         return (String) get(2);
     }
 
@@ -106,12 +106,12 @@ public class ClientAttributesRecord extends UpdatableRecordImpl<ClientAttributes
 
     @Override
     public Field<String> field2() {
-        return ClientAttributes.CLIENT_ATTRIBUTES.VALUE;
+        return ClientAttributes.CLIENT_ATTRIBUTES.NAME;
     }
 
     @Override
     public Field<String> field3() {
-        return ClientAttributes.CLIENT_ATTRIBUTES.NAME;
+        return ClientAttributes.CLIENT_ATTRIBUTES.VALUE;
     }
 
     @Override
@@ -121,12 +121,12 @@ public class ClientAttributesRecord extends UpdatableRecordImpl<ClientAttributes
 
     @Override
     public String component2() {
-        return getValue();
+        return getName();
     }
 
     @Override
     public String component3() {
-        return getName();
+        return getValue();
     }
 
     @Override
@@ -136,12 +136,12 @@ public class ClientAttributesRecord extends UpdatableRecordImpl<ClientAttributes
 
     @Override
     public String value2() {
-        return getValue();
+        return getName();
     }
 
     @Override
     public String value3() {
-        return getName();
+        return getValue();
     }
 
     @Override
@@ -152,13 +152,13 @@ public class ClientAttributesRecord extends UpdatableRecordImpl<ClientAttributes
 
     @Override
     public ClientAttributesRecord value2(String value) {
-        setValue(value);
+        setName(value);
         return this;
     }
 
     @Override
     public ClientAttributesRecord value3(String value) {
-        setName(value);
+        setValue(value);
         return this;
     }
 
@@ -177,8 +177,8 @@ public class ClientAttributesRecord extends UpdatableRecordImpl<ClientAttributes
     @Override
     public void from(IClientAttributes from) {
         setClientId(from.getClientId());
-        setValue(from.getValue());
         setName(from.getName());
+        setValue(from.getValue());
     }
 
     @Override
@@ -201,12 +201,12 @@ public class ClientAttributesRecord extends UpdatableRecordImpl<ClientAttributes
     /**
      * Create a detached, initialised ClientAttributesRecord
      */
-    public ClientAttributesRecord(String clientId, String value, String name) {
+    public ClientAttributesRecord(String clientId, String name, String value) {
         super(ClientAttributes.CLIENT_ATTRIBUTES);
 
         setClientId(clientId);
-        setValue(value);
         setName(name);
+        setValue(value);
     }
 
     /**
@@ -217,8 +217,8 @@ public class ClientAttributesRecord extends UpdatableRecordImpl<ClientAttributes
 
         if (value != null) {
             setClientId(value.getClientId());
-            setValue(value.getValue());
             setName(value.getName());
+            setValue(value.getValue());
         }
     }
 

@@ -4,18 +4,29 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
+import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
+import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.AdminEventEntityRecord;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function12;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row12;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -143,6 +154,16 @@ public class AdminEventEntity extends TableImpl<AdminEventEntityRecord> {
     }
 
     @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.IDX_ADMIN_EVENT_TIME);
+    }
+
+    @Override
+    public UniqueKey<AdminEventEntityRecord> getPrimaryKey() {
+        return Keys.CONSTRAINT_ADMIN_EVENT_ENTITY;
+    }
+
+    @Override
     public AdminEventEntity as(String alias) {
         return new AdminEventEntity(DSL.name(alias), this);
     }
@@ -150,6 +171,11 @@ public class AdminEventEntity extends TableImpl<AdminEventEntityRecord> {
     @Override
     public AdminEventEntity as(Name alias) {
         return new AdminEventEntity(alias, this);
+    }
+
+    @Override
+    public AdminEventEntity as(Table<?> alias) {
+        return new AdminEventEntity(alias.getQualifiedName(), this);
     }
 
     /**
@@ -168,6 +194,14 @@ public class AdminEventEntity extends TableImpl<AdminEventEntityRecord> {
         return new AdminEventEntity(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public AdminEventEntity rename(Table<?> name) {
+        return new AdminEventEntity(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row12 type methods
     // -------------------------------------------------------------------------
@@ -175,5 +209,20 @@ public class AdminEventEntity extends TableImpl<AdminEventEntityRecord> {
     @Override
     public Row12<String, Long, String, String, String, String, String, String, String, String, String, String> fieldsRow() {
         return (Row12) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function12<? super String, ? super Long, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function12<? super String, ? super Long, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

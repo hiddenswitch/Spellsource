@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -15,7 +14,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  */
 public class ChooseOneOptionSpell extends MetaSpell {
 
-	@Suspendable
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		super.onCast(context, player, desc, source, target);

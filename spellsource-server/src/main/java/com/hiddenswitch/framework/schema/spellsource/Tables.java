@@ -13,6 +13,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
 import com.hiddenswitch.framework.schema.spellsource.tables.Friends;
 import com.hiddenswitch.framework.schema.spellsource.tables.GameUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Games;
+import com.hiddenswitch.framework.schema.spellsource.tables.Guests;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
 import com.hiddenswitch.framework.schema.spellsource.tables.UserEntityAddons;
@@ -68,6 +69,11 @@ public class Tables {
      * The table <code>spellsource.games</code>.
      */
     public static final Games GAMES = Games.GAMES;
+
+    /**
+     * The table <code>spellsource.guests</code>.
+     */
+    public static final Guests GUESTS = Guests.GUESTS;
 
     /**
      * The table <code>spellsource.matchmaking_queues</code>.

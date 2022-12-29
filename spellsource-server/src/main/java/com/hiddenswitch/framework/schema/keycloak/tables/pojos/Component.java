@@ -181,6 +181,74 @@ public class Component implements VertxPojo, IComponent {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Component other = (Component) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        if (this.parentId == null) {
+            if (other.parentId != null)
+                return false;
+        }
+        else if (!this.parentId.equals(other.parentId))
+            return false;
+        if (this.providerId == null) {
+            if (other.providerId != null)
+                return false;
+        }
+        else if (!this.providerId.equals(other.providerId))
+            return false;
+        if (this.providerType == null) {
+            if (other.providerType != null)
+                return false;
+        }
+        else if (!this.providerType.equals(other.providerType))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.subType == null) {
+            if (other.subType != null)
+                return false;
+        }
+        else if (!this.subType.equals(other.subType))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.parentId == null) ? 0 : this.parentId.hashCode());
+        result = prime * result + ((this.providerId == null) ? 0 : this.providerId.hashCode());
+        result = prime * result + ((this.providerType == null) ? 0 : this.providerType.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.subType == null) ? 0 : this.subType.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Component (");
 

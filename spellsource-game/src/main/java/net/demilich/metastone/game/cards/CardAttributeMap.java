@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.JsonSerializable;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
-import io.vertx.core.impl.ConcurrentHashSet;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.HasEntrySet;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -15,6 +14,9 @@ import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -32,8 +34,11 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 	}
 
 	public Set<Attribute> unsafeKeySet() {
-		Set<Attribute> keys = new ConcurrentHashSet<>();
-		keys.addAll(super.keySet());
+		Set<Attribute> keys = super.keySet().isEmpty() ? EnumSet.noneOf(Attribute.class) : EnumSet.copyOf(super.keySet());
+		if (getCard() == null) {
+			return Collections.unmodifiableSet(keys);
+		}
+
 		CardDesc desc = getCard().getDesc();
 		AttributeMap attributes = desc.getAttributes();
 		if (attributes != null) {
@@ -82,7 +87,7 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 			keys.add(Attribute.MAX_HP);
 		}
 
-		return keys;
+		return Collections.unmodifiableSet(keys);
 	}
 
 	@Override
@@ -223,14 +228,6 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 		CardAttributeMap clone = (CardAttributeMap) super.clone();
 		clone.setCard(getCard());
 		return clone;
-	}
-
-	public Set<Entry<Attribute, Object>> unsafeEntrySet() {
-		ConcurrentHashSet<Entry<Attribute, Object>> unsafe = new ConcurrentHashSet<>();
-		for (Attribute key : unsafeKeySet()) {
-			unsafe.add(new SimpleEntry<>(key, get(key)));
-		}
-		return unsafe;
 	}
 
 	/**

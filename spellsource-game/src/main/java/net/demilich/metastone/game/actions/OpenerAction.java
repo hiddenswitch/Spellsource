@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.actions;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -82,7 +81,6 @@ public final class OpenerAction extends GameAction {
 	 * @return {@code true} if the entity is a valid target for the battlecry.
 	 */
 	@Override
-	@Suspendable
 	public final boolean canBeExecutedOn(GameContext context, Player player, Entity entity) {
 		if (!super.canBeExecutedOn(context, player, entity)) {
 			return false;
@@ -103,7 +101,6 @@ public final class OpenerAction extends GameAction {
 	 * @param playerId The casting player.
 	 */
 	@Override
-	@Suspendable
 	public void execute(GameContext context, int playerId) {
 		EntityReference target = getPredefinedSpellTargetOrUserTarget();
 		context.getLogic().castSpell(playerId, getSpell(), getSourceReference(), target, getTargetRequirement(), false, this);

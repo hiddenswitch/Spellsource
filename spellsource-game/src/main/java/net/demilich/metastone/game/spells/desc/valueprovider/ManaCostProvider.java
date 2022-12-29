@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -21,7 +20,6 @@ public class ManaCostProvider extends ValueProvider {
 	}
 
 	@Override
-	@Suspendable
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
 		EntityReference targetOverride = (EntityReference) getDesc().get(ValueProviderArg.TARGET);
 		if (targetOverride != null) {

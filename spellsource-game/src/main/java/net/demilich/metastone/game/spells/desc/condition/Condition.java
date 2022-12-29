@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc.condition;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -32,7 +31,6 @@ public abstract class Condition implements Serializable, HasDesc<ConditionDesc> 
 		this.desc = desc;
 	}
 
-	@Suspendable
 	protected abstract boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target);
 
 	/**
@@ -51,7 +49,6 @@ public abstract class Condition implements Serializable, HasDesc<ConditionDesc> 
 	 * @param target
 	 * @return
 	 */
-	@Suspendable
 	public final boolean isFulfilled(GameContext context, Player player, Entity source, Entity target) {
 		var invert = desc.getBool(ConditionArg.INVERT);
 		var targetPlayer = (TargetPlayer) desc.getOrDefault(ConditionArg.TARGET_PLAYER, TargetPlayer.SELF);

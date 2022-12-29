@@ -1,7 +1,5 @@
 package com.hiddenswitch.framework;
 
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SuspendableCallable;
 import com.github.marschall.micrometer.jfr.JfrMeterRegistry;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Streams;
@@ -17,19 +15,22 @@ import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.micrometer.core.instrument.Metrics;
 import io.opentracing.util.GlobalTracer;
+import io.vertx.await.Async;
 import io.vertx.core.Context;
 import io.vertx.core.*;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
-import io.vertx.ext.sync.Sync;
 import io.vertx.micrometer.MicrometerMetricsOptions;
 import io.vertx.micrometer.VertxPrometheusOptions;
 import io.vertx.micrometer.backends.PrometheusBackendRegistry;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
+import io.vertx.sqlclient.RowSet;
+import io.vertx.sqlclient.SqlConnection;
 import io.vertx.tracing.opentracing.OpenTracingOptions;
 import org.flywaydb.core.Flyway;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jooq.*;
 import org.jooq.impl.DefaultConfiguration;
 import org.redisson.Redisson;
@@ -51,6 +52,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -65,8 +68,10 @@ public class Environment {
 			.setPublishQuantiles(true));
 	private static final AtomicBoolean prometheusInited = new AtomicBoolean();
 	private static final AtomicReference<Configuration> jooqConfiguration = new AtomicReference<>();
-	private static final WeakVertxMap<PgPool> pools = new WeakVertxMap<>(Environment::poolConstructor);
+	private static final WeakVertxMap<PgPool> pgPools = new WeakVertxMap<>(Environment::pgPoolConstructor);
+	private static final WeakVertxMap<PgPool> pgPoolsForTransactions = new WeakVertxMap<>(Environment::pgPoolConstructor);
 	private static final WeakVertxMap<RedissonClient> redissonClients = new WeakVertxMap<>(Environment::redissonClientConstructor);
+	private static final WeakVertxMap<Async> asyncs = new WeakVertxMap<>(Environment::asyncConstructor);
 	private static final String CONFIGURATION_NAME_TOKEN = "spellsource";
 	private static ServerConfiguration programmaticConfiguration = ServerConfiguration.newBuilder().build();
 	private static final AtomicReference<ServerConfiguration> cachedConfiguration = new AtomicReference<>();
@@ -85,17 +90,38 @@ public class Environment {
 		return Redisson.create(config);
 	}
 
-	private static ReactiveClassicGenericQueryExecutor queryExecutorConstructor(Vertx vertx) {
-		return new ReactiveClassicGenericQueryExecutor(jooqAkaDaoConfiguration(), sqlPoolAkaDaoDelegate());
+	private static Async asyncConstructor(Vertx vertx) {
+		return new Async(vertx, false);
 	}
 
-	private static PgPool poolConstructor(Vertx vertx) {
-		var connectionOptions = connectOptions();
-		var poolOptions = new PoolOptions()
-				.setMaxSize(Math.max(Runtime.getRuntime().availableProcessors() * 2, 16));
-		if (vertx == null) {
-			return PgPool.pool(connectionOptions, poolOptions);
+	private static PgPool pgPoolConstructor(Vertx vertx) {
+		var connectionOptions = PgConnectOptions.fromEnv();
+		var cachedConfiguration = getConfiguration();
+		if (cachedConfiguration.hasPg()) {
+			var pg = cachedConfiguration.getPg();
+			if (pg.getPort() != 0) {
+				connectionOptions.setPort(pg.getPort());
+			}
+			if (!pg.getHost().isEmpty()) {
+				connectionOptions.setHost(pg.getHost());
+			}
+			if (!pg.getPassword().isEmpty()) {
+				connectionOptions.setPassword(pg.getPassword());
+
+			}
+			if (!pg.getDatabase().isEmpty()) {
+				connectionOptions.setDatabase(pg.getDatabase());
+			}
+			if (!pg.getUser().isEmpty()) {
+				connectionOptions.setUser(pg.getUser());
+			}
+			if (!pg.getPassword().isEmpty()) {
+				connectionOptions.setPassword(pg.getPassword());
+			}
 		}
+
+		var poolOptions = new PoolOptions()
+				.setMaxSize(Runtime.getRuntime().availableProcessors());
 		return PgPool.pool(vertx, connectionOptions, poolOptions);
 	}
 
@@ -107,61 +133,98 @@ public class Environment {
 		}
 	}
 
-	public synchronized static PgConnectOptions connectOptions() {
-		var options = PgConnectOptions.fromEnv();
-		var cachedConfiguration = getConfiguration();
-		if (!cachedConfiguration.hasPg()) {
-			return options;
-		}
-
-		var pg = cachedConfiguration.getPg();
-		if (pg.getPort() != 0) {
-			options.setPort(pg.getPort());
-		}
-		if (!pg.getHost().isEmpty()) {
-			options.setHost(pg.getHost());
-		}
-		if (!pg.getPassword().isEmpty()) {
-			options.setPassword(pg.getPassword());
-
-		}
-		if (!pg.getDatabase().isEmpty()) {
-			options.setDatabase(pg.getDatabase());
-		}
-		if (!pg.getUser().isEmpty()) {
-			options.setUser(pg.getUser());
-		}
-		if (!pg.getPassword().isEmpty()) {
-			options.setPassword(pg.getPassword());
-		}
-		return options;
+	public static PgPool pgPoolAkaDaoDelegate() {
+		return pgPools.get();
 	}
 
-	public static PgPool sqlPoolAkaDaoDelegate() {
-		return pools.get();
+	public static PgPool pgPoolForTransactionsAkaDaoDelegate() {
+		return pgPoolsForTransactions.get();
 	}
 
-	public static ReactiveClassicGenericQueryExecutor queryExecutor() {
-		return queryExecutorConstructor(null);
+	public static Async async() {
+		return asyncs.get();
+	}
+
+	public static Future<Integer> withDslContext(Function<DSLContext, ? extends Query> handler) {
+		return withExecutor(executor -> executor.execute(handler));
+	}
+
+	public static Future<RowSet<io.vertx.sqlclient.Row>> query(Function<DSLContext, ? extends Query> handler) {
+		return withExecutor(executor -> executor.executeAny(handler));
+	}
+
+	public static <T> Future<T> withExecutor(Function<ReactiveClassicGenericQueryExecutor, Future<T>> handler) {
+		return Environment.pgPoolAkaDaoDelegate()
+				.getConnection()
+				.compose(conn -> {
+					var executor = new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), conn);
+					return handler.apply(executor)
+							.onComplete(v -> conn.close());
+				});
+	}
+
+	public static <T> Future<T> withConnection(Function<SqlConnection, Future<T>> handler) {
+		return Environment.pgPoolAkaDaoDelegate()
+				.getConnection()
+				.compose(conn -> handler.apply(conn)
+						.onComplete(v -> conn.close()));
 	}
 
 	public static Handler<Throwable> onFailure() {
-		var here = new Throwable();
+		return onFailure("");
+	}
+
+	public static Handler<Throwable> onFailure(String optionalMessage) {
+		var here = new Throwable(optionalMessage);
 		var span = GlobalTracer.get().activeSpan();
 		return t -> {
-			t.setStackTrace(Sync.concatAndFilterStackTrace(t, here));
+			t.setStackTrace(concatAndFilterStackTrace(t, here));
 			Tracing.error(t, span, true);
 		};
 	}
 
+	public static StackTraceElement[] concatAndFilterStackTrace(Throwable... throwables) {
+		var length = 0;
+		for (var i = 0; i < throwables.length; i++) {
+			length += throwables[i].getStackTrace().length;
+		}
+		var newStack = new ArrayList<StackTraceElement>(length);
+		for (Throwable throwable : throwables) {
+			var stack = throwable.getStackTrace();
+			for (var i = 0; i < stack.length; i++) {
+				if (stack[i].getClassName().startsWith("co.paralleluniverse.fibers.") ||
+						stack[i].getClassName().startsWith("co.paralleluniverse.strands.") ||
+						stack[i].getClassName().startsWith("io.vertx.ext.sync.") ||
+						stack[i].getClassName().startsWith("io.vertx.core.impl.future.") ||
+						stack[i].getClassName().startsWith("io.vertx.core.Promise") ||
+						stack[i].getClassName().startsWith("io.netty.") ||
+						stack[i].getClassName().startsWith("io.vertx.core.impl.") ||
+						stack[i].getClassName().startsWith("sun.nio.") ||
+						stack[i].getClassName().startsWith("java.base/java.util.concurrent") ||
+						stack[i].getClassName().startsWith("java.base/java.lang.Thread") ||
+						stack[i].getClassName().startsWith("java.util.concurrent")) {
+					continue;
+				}
+				newStack.add(stack[i]);
+			}
+		}
+		return newStack.toArray(new StackTraceElement[0]);
+	}
+
 	public static Future<Void> sleep(Vertx vertx, long milliseconds) {
-		var fut = Promise.<Long>promise();
-		vertx.setTimer(milliseconds, fut::complete);
-		return fut.future().mapEmpty();
+		if (vertx == null) {
+			if (Vertx.currentContext() == null) {
+				return Future.failedFuture(new IllegalArgumentException("not on context, can't sleep"));
+			}
+			vertx = Vertx.currentContext().owner();
+		}
+		var promise = Promise.<Long>promise();
+		vertx.setTimer(milliseconds, promise::complete);
+		return promise.future().mapEmpty();
 	}
 
 	public static Future<Void> sleep(long milliseconds) {
-		return sleep(Vertx.currentContext().owner(), milliseconds);
+		return sleep(null, milliseconds);
 	}
 
 	public static Configuration jooqAkaDaoConfiguration() {
@@ -214,23 +277,36 @@ public class Environment {
 								.setEnabled(true));
 	}
 
-	@Suspendable
-	public static <T> Future<T> executeBlocking(SuspendableCallable<T> blockingCallable) {
+	public static <T> Future<T> executeBlocking(Callable<T> blockingCallable) {
 		return executeBlocking(Vertx.currentContext(), blockingCallable);
 	}
 
-	@Suspendable
-	public static <T> Future<T> executeBlocking(Vertx vertx, SuspendableCallable<T> blockingCallable) {
+	public static <T> Future<T> executeBlocking(Vertx vertx, Callable<T> blockingCallable) {
 		return executeBlocking(vertx.getOrCreateContext(), blockingCallable);
 	}
 
-	@Suspendable
-	public static <T> Future<T> executeBlocking(Context context, SuspendableCallable<T> blockingCallable) {
+	public static <T> Future<T> timeout(Future<T> future, long milliseconds) {
+		return timeout(future, milliseconds, null);
+	}
+
+	public static <T> Future<T> timeout(Future<T> future, long milliseconds, @Nullable Vertx vertx) {
+		return CompositeFuture.any(future, Environment.sleep(vertx, milliseconds))
+				.flatMap(res -> {
+					var timedOut = res.succeeded(1);
+					if (timedOut) {
+						return Future.failedFuture(new TimeoutException());
+					}
+
+					return future;
+				});
+	}
+
+	public static <T> Future<T> executeBlocking(Context context, Callable<T> blockingCallable) {
 		var result = Promise.<T>promise();
 		if (context != null) {
 			context.executeBlocking(promise -> {
 				try {
-					var res = blockingCallable.run();
+					var res = blockingCallable.call();
 					promise.complete(res);
 				} catch (Throwable e) {
 					promise.fail(e);
@@ -238,7 +314,7 @@ public class Environment {
 			}, false, result);
 		} else {
 			try {
-				result.complete(blockingCallable.run());
+				result.complete(blockingCallable.call());
 			} catch (Throwable t) {
 				result.fail(t);
 			}
@@ -307,8 +383,8 @@ public class Environment {
 						.setPassword("password")
 						.build())
 				.setKeycloak(ServerConfiguration.KeycloakConfiguration.newBuilder()
-						.setAuthUrl("http://localhost:9090/auth/")
-						.setPublicAuthUrl("http://localhost:9090/auth/")
+						.setAuthUrl("http://localhost:9090/")
+						.setPublicAuthUrl("http://localhost:9090/")
 						.setAdminUsername("admin")
 						.setAdminPassword("password")
 						.setRealmId("hiddenswitch")
@@ -429,5 +505,18 @@ public class Environment {
 
 	public static PrometheusBackendRegistry registry() {
 		return prometheusRegistry;
+	}
+
+	public static <O> Future<O> fiber(Callable<O> method) {
+		var async = Environment.async();
+		var promise = Promise.<O>promise();
+		async.run(v -> {
+			try {
+				promise.complete(method.call());
+			} catch (Throwable t) {
+				promise.fail(t);
+			}
+		});
+		return promise.future();
 	}
 }

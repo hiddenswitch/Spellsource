@@ -141,6 +141,60 @@ public class IdentityProviderMapper implements VertxPojo, IIdentityProviderMappe
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final IdentityProviderMapper other = (IdentityProviderMapper) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        if (this.idpAlias == null) {
+            if (other.idpAlias != null)
+                return false;
+        }
+        else if (!this.idpAlias.equals(other.idpAlias))
+            return false;
+        if (this.idpMapperName == null) {
+            if (other.idpMapperName != null)
+                return false;
+        }
+        else if (!this.idpMapperName.equals(other.idpMapperName))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.idpAlias == null) ? 0 : this.idpAlias.hashCode());
+        result = prime * result + ((this.idpMapperName == null) ? 0 : this.idpMapperName.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("IdentityProviderMapper (");
 

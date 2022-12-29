@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardArrayList;
@@ -29,7 +28,6 @@ import java.util.stream.Collectors;
 public class RepeatAllAftermathsSpell extends Spell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (SpellUtils.isRecursive(RepeatAllAftermathsSpell.class)) {
 			return;

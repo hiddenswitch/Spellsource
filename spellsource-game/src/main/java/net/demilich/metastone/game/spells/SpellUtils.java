@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
 import net.demilich.metastone.game.GameContext;
@@ -58,7 +56,6 @@ public class SpellUtils {
 	 * @param source  The source of the spell, typically the spell card or minion whose battlecry is being called.
 	 * @param target  The target reference.
 	 */
-	@Suspendable
 	public static void castChildSpell(GameContext context, Player player, SpellDesc spell, Entity source, Entity target) {
 		EntityReference sourceReference = source != null ? source.getReference() : null;
 		EntityReference targetReference = spell.getTarget();
@@ -100,7 +97,6 @@ public class SpellUtils {
 	 *                              or the underlying spell effects, are executed.
 	 * @return
 	 */
-	@Suspendable
 	public static boolean playCardRandomly(GameContext context,
 	                                       Player player,
 	                                       Card card,
@@ -377,7 +373,6 @@ public class SpellUtils {
 	 * @see ReceiveCardSpell for the spell that is typically the {@link SpellArg#SPELL} property of a {@link
 	 * DiscoverCardSpell}.
 	 */
-	@Suspendable
 	public static DiscoverAction discoverCard(GameContext context, Player player, Entity source, SpellDesc desc, CardList cards) {
 		// Discovers always work with a copy of the incoming cards
 		cards = cards.getCopy();
@@ -410,7 +405,6 @@ public class SpellUtils {
 	 * @param discoverActions
 	 * @return
 	 */
-	@Suspendable
 	public static DiscoverAction postDiscover(GameContext context, Player player, Iterable<? extends Card> cards, List<GameAction> discoverActions) {
 		if (discoverActions.size() == 0) {
 			return null;
@@ -447,7 +441,6 @@ public class SpellUtils {
 	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected card.
 	 * To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
 	 */
-	@Suspendable
 	public static DiscoverAction getSpellDiscover(GameContext context, Player player, SpellDesc desc, List<SpellDesc> spells, Entity source) {
 		List<GameAction> discoverActions = new ArrayList<>();
 		List<Card> cards = new ArrayList<>();
@@ -644,7 +637,6 @@ public class SpellUtils {
 	 * @param target
 	 * @param output  The card. When {@code null} or the card is located in the {@link Zones#GRAVEYARD}.
 	 */
-	@Suspendable
 	public static void castChildSpell(GameContext context, Player player, SpellDesc spell, Entity source, Entity target, Entity output) {
 		// card may be null (i.e. try to draw from deck, but already in
 		// fatigue)
@@ -749,7 +741,7 @@ public class SpellUtils {
 			int i = count;
 			while (cards.size() > 0
 					&& i > 0) {
-				if (Strand.currentStrand().isInterrupted()) {
+				if (Thread.currentThread().isInterrupted()) {
 					break;
 				}
 				result.add(context.getLogic().removeRandom(cards));

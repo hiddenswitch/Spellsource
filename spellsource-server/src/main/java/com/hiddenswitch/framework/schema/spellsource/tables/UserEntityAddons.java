@@ -11,13 +11,17 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.UserEntityAd
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function4;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row3;
+import org.jooq.Records;
+import org.jooq.Row4;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -62,6 +66,12 @@ public class UserEntityAddons extends TableImpl<UserEntityAddonsRecord> {
      * The column <code>spellsource.user_entity_addons.migrated</code>.
      */
     public final TableField<UserEntityAddonsRecord, Boolean> MIGRATED = createField(DSL.name("migrated"), SQLDataType.BOOLEAN.defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column
+     * <code>spellsource.user_entity_addons.show_premade_decks</code>.
+     */
+    public final TableField<UserEntityAddonsRecord, Boolean> SHOW_PREMADE_DECKS = createField(DSL.name("show_premade_decks"), SQLDataType.BOOLEAN.defaultValue(DSL.field("true", SQLDataType.BOOLEAN)), this, "");
 
     private UserEntityAddons(Name alias, Table<UserEntityAddonsRecord> aliased) {
         this(alias, aliased, null);
@@ -136,6 +146,11 @@ public class UserEntityAddons extends TableImpl<UserEntityAddonsRecord> {
         return new UserEntityAddons(alias, this);
     }
 
+    @Override
+    public UserEntityAddons as(Table<?> alias) {
+        return new UserEntityAddons(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -152,12 +167,35 @@ public class UserEntityAddons extends TableImpl<UserEntityAddonsRecord> {
         return new UserEntityAddons(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public UserEntityAddons rename(Table<?> name) {
+        return new UserEntityAddons(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row4 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row3<String, String, Boolean> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row4<String, String, Boolean, Boolean> fieldsRow() {
+        return (Row4) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function4<? super String, ? super String, ? super Boolean, ? super Boolean, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super String, ? super String, ? super Boolean, ? super Boolean, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

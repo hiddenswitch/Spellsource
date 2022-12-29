@@ -11,17 +11,22 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.RealmSupportedL
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function2;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row2;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -56,7 +61,7 @@ public class RealmSupportedLocales extends TableImpl<RealmSupportedLocalesRecord
     /**
      * The column <code>keycloak.realm_supported_locales.value</code>.
      */
-    public final TableField<RealmSupportedLocalesRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RealmSupportedLocalesRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     private RealmSupportedLocales(Name alias, Table<RealmSupportedLocalesRecord> aliased) {
         this(alias, aliased, null);
@@ -104,6 +109,11 @@ public class RealmSupportedLocales extends TableImpl<RealmSupportedLocalesRecord
     }
 
     @Override
+    public UniqueKey<RealmSupportedLocalesRecord> getPrimaryKey() {
+        return Keys.CONSTR_REALM_SUPPORTED_LOCALES;
+    }
+
+    @Override
     public List<ForeignKey<RealmSupportedLocalesRecord, ?>> getReferences() {
         return Arrays.asList(Keys.REALM_SUPPORTED_LOCALES__FK_SUPPORTED_LOCALES_REALM);
     }
@@ -130,6 +140,11 @@ public class RealmSupportedLocales extends TableImpl<RealmSupportedLocalesRecord
         return new RealmSupportedLocales(alias, this);
     }
 
+    @Override
+    public RealmSupportedLocales as(Table<?> alias) {
+        return new RealmSupportedLocales(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -146,6 +161,14 @@ public class RealmSupportedLocales extends TableImpl<RealmSupportedLocalesRecord
         return new RealmSupportedLocales(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public RealmSupportedLocales rename(Table<?> name) {
+        return new RealmSupportedLocales(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row2 type methods
     // -------------------------------------------------------------------------
@@ -153,5 +176,20 @@ public class RealmSupportedLocales extends TableImpl<RealmSupportedLocalesRecord
     @Override
     public Row2<String, String> fieldsRow() {
         return (Row2) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

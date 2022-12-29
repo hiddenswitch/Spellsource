@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.actions;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -37,7 +36,6 @@ public class PlayHeroCardAction extends PlayCardAction implements OpenerOverrida
 	}
 
 	@Override
-	@Suspendable
 	public void innerExecute(GameContext context, int playerId) {
 		Card heroCard = (Card) context.resolveSingleTarget(getSourceReference());
 		Hero hero = heroCard.hero();

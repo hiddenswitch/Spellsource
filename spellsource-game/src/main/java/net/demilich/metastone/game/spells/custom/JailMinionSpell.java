@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -30,7 +29,6 @@ public final class JailMinionSpell extends Spell {
 	private static Logger LOGGER = LoggerFactory.getLogger(JailMinionSpell.class);
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(LOGGER, context, source, desc, SpellArg.SECONDARY_TARGET, SpellArg.REVERT_TRIGGER, SpellArg.VALUE);
 		if (target.getEntityType() != EntityType.MINION) {

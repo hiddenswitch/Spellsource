@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -34,7 +33,6 @@ public class GetChooseOneChoicesSpell extends Spell {
 	 *                AoE damage effect, this method is called once for each target in the list of targets.
 	 */
 
-	@Suspendable
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		CardList cards = SpellUtils.getCards(context, player, target, source, desc);

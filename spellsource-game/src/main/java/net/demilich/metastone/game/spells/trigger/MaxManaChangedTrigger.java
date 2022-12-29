@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 ;
@@ -12,7 +11,6 @@ public final class MaxManaChangedTrigger extends EventTrigger {
 	}
 
 	@Override
-	@Suspendable
 	protected boolean innerQueues(GameEvent event, Enchantment enchantment, Entity host) {
 		return true;
 	}

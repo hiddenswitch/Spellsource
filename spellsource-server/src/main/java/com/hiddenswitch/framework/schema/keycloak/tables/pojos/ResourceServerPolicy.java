@@ -25,6 +25,7 @@ public class ResourceServerPolicy implements VertxPojo, IResourceServerPolicy {
     private String decisionStrategy;
     private String logic;
     private String resourceServerId;
+    private String owner;
 
     public ResourceServerPolicy() {}
 
@@ -36,6 +37,7 @@ public class ResourceServerPolicy implements VertxPojo, IResourceServerPolicy {
         this.decisionStrategy = value.getDecisionStrategy();
         this.logic = value.getLogic();
         this.resourceServerId = value.getResourceServerId();
+        this.owner = value.getOwner();
     }
 
     public ResourceServerPolicy(
@@ -45,7 +47,8 @@ public class ResourceServerPolicy implements VertxPojo, IResourceServerPolicy {
         String type,
         String decisionStrategy,
         String logic,
-        String resourceServerId
+        String resourceServerId,
+        String owner
     ) {
         this.id = id;
         this.name = name;
@@ -54,6 +57,7 @@ public class ResourceServerPolicy implements VertxPojo, IResourceServerPolicy {
         this.decisionStrategy = decisionStrategy;
         this.logic = logic;
         this.resourceServerId = resourceServerId;
+        this.owner = owner;
     }
 
         public ResourceServerPolicy(io.vertx.core.json.JsonObject json) {
@@ -184,6 +188,98 @@ public class ResourceServerPolicy implements VertxPojo, IResourceServerPolicy {
         return this;
     }
 
+    /**
+     * Getter for <code>keycloak.resource_server_policy.owner</code>.
+     */
+    @Override
+    public String getOwner() {
+        return this.owner;
+    }
+
+    /**
+     * Setter for <code>keycloak.resource_server_policy.owner</code>.
+     */
+    @Override
+    public ResourceServerPolicy setOwner(String owner) {
+        this.owner = owner;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ResourceServerPolicy other = (ResourceServerPolicy) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        if (this.description == null) {
+            if (other.description != null)
+                return false;
+        }
+        else if (!this.description.equals(other.description))
+            return false;
+        if (this.type == null) {
+            if (other.type != null)
+                return false;
+        }
+        else if (!this.type.equals(other.type))
+            return false;
+        if (this.decisionStrategy == null) {
+            if (other.decisionStrategy != null)
+                return false;
+        }
+        else if (!this.decisionStrategy.equals(other.decisionStrategy))
+            return false;
+        if (this.logic == null) {
+            if (other.logic != null)
+                return false;
+        }
+        else if (!this.logic.equals(other.logic))
+            return false;
+        if (this.resourceServerId == null) {
+            if (other.resourceServerId != null)
+                return false;
+        }
+        else if (!this.resourceServerId.equals(other.resourceServerId))
+            return false;
+        if (this.owner == null) {
+            if (other.owner != null)
+                return false;
+        }
+        else if (!this.owner.equals(other.owner))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
+        result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
+        result = prime * result + ((this.decisionStrategy == null) ? 0 : this.decisionStrategy.hashCode());
+        result = prime * result + ((this.logic == null) ? 0 : this.logic.hashCode());
+        result = prime * result + ((this.resourceServerId == null) ? 0 : this.resourceServerId.hashCode());
+        result = prime * result + ((this.owner == null) ? 0 : this.owner.hashCode());
+        return result;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ResourceServerPolicy (");
@@ -195,6 +291,7 @@ public class ResourceServerPolicy implements VertxPojo, IResourceServerPolicy {
         sb.append(", ").append(decisionStrategy);
         sb.append(", ").append(logic);
         sb.append(", ").append(resourceServerId);
+        sb.append(", ").append(owner);
 
         sb.append(")");
         return sb.toString();
@@ -213,6 +310,7 @@ public class ResourceServerPolicy implements VertxPojo, IResourceServerPolicy {
         setDecisionStrategy(from.getDecisionStrategy());
         setLogic(from.getLogic());
         setResourceServerId(from.getResourceServerId());
+        setOwner(from.getOwner());
     }
 
     @Override

@@ -18,11 +18,11 @@ public class RealmRequiredCredential implements VertxPojo, IRealmRequiredCredent
 
     private static final long serialVersionUID = 1L;
 
-    private String  type;
-    private String  formLabel;
+    private String type;
+    private String formLabel;
     private Boolean input;
     private Boolean secret;
-    private String  realmId;
+    private String realmId;
 
     public RealmRequiredCredential() {}
 
@@ -35,11 +35,11 @@ public class RealmRequiredCredential implements VertxPojo, IRealmRequiredCredent
     }
 
     public RealmRequiredCredential(
-        String  type,
-        String  formLabel,
+        String type,
+        String formLabel,
         Boolean input,
         Boolean secret,
-        String  realmId
+        String realmId
     ) {
         this.type = type;
         this.formLabel = formLabel;
@@ -136,6 +136,60 @@ public class RealmRequiredCredential implements VertxPojo, IRealmRequiredCredent
     public RealmRequiredCredential setRealmId(String realmId) {
         this.realmId = realmId;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final RealmRequiredCredential other = (RealmRequiredCredential) obj;
+        if (this.type == null) {
+            if (other.type != null)
+                return false;
+        }
+        else if (!this.type.equals(other.type))
+            return false;
+        if (this.formLabel == null) {
+            if (other.formLabel != null)
+                return false;
+        }
+        else if (!this.formLabel.equals(other.formLabel))
+            return false;
+        if (this.input == null) {
+            if (other.input != null)
+                return false;
+        }
+        else if (!this.input.equals(other.input))
+            return false;
+        if (this.secret == null) {
+            if (other.secret != null)
+                return false;
+        }
+        else if (!this.secret.equals(other.secret))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
+        result = prime * result + ((this.formLabel == null) ? 0 : this.formLabel.hashCode());
+        result = prime * result + ((this.input == null) ? 0 : this.input.hashCode());
+        result = prime * result + ((this.secret == null) ? 0 : this.secret.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        return result;
     }
 
     @Override

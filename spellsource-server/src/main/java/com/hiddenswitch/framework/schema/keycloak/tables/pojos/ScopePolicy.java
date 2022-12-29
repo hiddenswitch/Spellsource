@@ -76,6 +76,39 @@ public class ScopePolicy implements VertxPojo, IScopePolicy {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ScopePolicy other = (ScopePolicy) obj;
+        if (this.scopeId == null) {
+            if (other.scopeId != null)
+                return false;
+        }
+        else if (!this.scopeId.equals(other.scopeId))
+            return false;
+        if (this.policyId == null) {
+            if (other.policyId != null)
+                return false;
+        }
+        else if (!this.policyId.equals(other.policyId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.scopeId == null) ? 0 : this.scopeId.hashCode());
+        result = prime * result + ((this.policyId == null) ? 0 : this.policyId.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ScopePolicy (");
 

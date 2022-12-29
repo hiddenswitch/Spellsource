@@ -27,16 +27,6 @@ public interface IResourceServer extends VertxPojo, Serializable {
     public String getId();
 
     /**
-     * Setter for <code>keycloak.resource_server.client_id</code>.
-     */
-    public IResourceServer setClientId(String value);
-
-    /**
-     * Getter for <code>keycloak.resource_server.client_id</code>.
-     */
-    public String getClientId();
-
-    /**
      * Setter for <code>keycloak.resource_server.allow_rs_remote_mgmt</code>.
      */
     public IResourceServer setAllowRsRemoteMgmt(Boolean value);
@@ -55,6 +45,16 @@ public interface IResourceServer extends VertxPojo, Serializable {
      * Getter for <code>keycloak.resource_server.policy_enforce_mode</code>.
      */
     public String getPolicyEnforceMode();
+
+    /**
+     * Setter for <code>keycloak.resource_server.decision_strategy</code>.
+     */
+    public IResourceServer setDecisionStrategy(Short value);
+
+    /**
+     * Getter for <code>keycloak.resource_server.decision_strategy</code>.
+     */
+    public Short getDecisionStrategy();
 
     // -------------------------------------------------------------------------
     // FROM and INTO
@@ -75,9 +75,9 @@ public interface IResourceServer extends VertxPojo, Serializable {
         @Override
         public default IResourceServer fromJson(io.vertx.core.json.JsonObject json) {
                 setOrThrow(this::setId,json::getString,"id","java.lang.String");
-                setOrThrow(this::setClientId,json::getString,"client_id","java.lang.String");
                 setOrThrow(this::setAllowRsRemoteMgmt,json::getBoolean,"allow_rs_remote_mgmt","java.lang.Boolean");
                 setOrThrow(this::setPolicyEnforceMode,json::getString,"policy_enforce_mode","java.lang.String");
+                setOrThrow(this::setDecisionStrategy,key -> {Integer i = json.getInteger(key); return i==null?null:i.shortValue();},"decision_strategy","java.lang.Short");
                 return this;
         }
 
@@ -86,9 +86,9 @@ public interface IResourceServer extends VertxPojo, Serializable {
         public default io.vertx.core.json.JsonObject toJson() {
                 io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
                 json.put("id",getId());
-                json.put("client_id",getClientId());
                 json.put("allow_rs_remote_mgmt",getAllowRsRemoteMgmt());
                 json.put("policy_enforce_mode",getPolicyEnforceMode());
+                json.put("decision_strategy",getDecisionStrategy());
                 return json;
         }
 

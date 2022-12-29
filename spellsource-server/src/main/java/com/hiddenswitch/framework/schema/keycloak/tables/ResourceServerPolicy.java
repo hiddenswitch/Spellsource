@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.ResourceServerP
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function8;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.Records;
+import org.jooq.Row8;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -86,6 +90,11 @@ public class ResourceServerPolicy extends TableImpl<ResourceServerPolicyRecord> 
      */
     public final TableField<ResourceServerPolicyRecord, String> RESOURCE_SERVER_ID = createField(DSL.name("resource_server_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
+    /**
+     * The column <code>keycloak.resource_server_policy.owner</code>.
+     */
+    public final TableField<ResourceServerPolicyRecord, String> OWNER = createField(DSL.name("owner"), SQLDataType.VARCHAR(255), this, "");
+
     private ResourceServerPolicy(Name alias, Table<ResourceServerPolicyRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -142,6 +151,24 @@ public class ResourceServerPolicy extends TableImpl<ResourceServerPolicyRecord> 
     }
 
     @Override
+    public List<ForeignKey<ResourceServerPolicyRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.RESOURCE_SERVER_POLICY__FK_FRSRPO213XCX4WNKOG82SSRFY);
+    }
+
+    private transient ResourceServer _resourceServer;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.resource_server</code>
+     * table.
+     */
+    public ResourceServer resourceServer() {
+        if (_resourceServer == null)
+            _resourceServer = new ResourceServer(this, Keys.RESOURCE_SERVER_POLICY__FK_FRSRPO213XCX4WNKOG82SSRFY);
+
+        return _resourceServer;
+    }
+
+    @Override
     public ResourceServerPolicy as(String alias) {
         return new ResourceServerPolicy(DSL.name(alias), this);
     }
@@ -149,6 +176,11 @@ public class ResourceServerPolicy extends TableImpl<ResourceServerPolicyRecord> 
     @Override
     public ResourceServerPolicy as(Name alias) {
         return new ResourceServerPolicy(alias, this);
+    }
+
+    @Override
+    public ResourceServerPolicy as(Table<?> alias) {
+        return new ResourceServerPolicy(alias.getQualifiedName(), this);
     }
 
     /**
@@ -167,12 +199,35 @@ public class ResourceServerPolicy extends TableImpl<ResourceServerPolicyRecord> 
         return new ResourceServerPolicy(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public ResourceServerPolicy rename(Table<?> name) {
+        return new ResourceServerPolicy(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<String, String, String, String, String, String, String> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row8<String, String, String, String, String, String, String, String> fieldsRow() {
+        return (Row8) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function8<? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

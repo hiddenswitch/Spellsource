@@ -76,6 +76,39 @@ public class RedirectUris implements VertxPojo, IRedirectUris {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final RedirectUris other = (RedirectUris) obj;
+        if (this.clientId == null) {
+            if (other.clientId != null)
+                return false;
+        }
+        else if (!this.clientId.equals(other.clientId))
+            return false;
+        if (this.value == null) {
+            if (other.value != null)
+                return false;
+        }
+        else if (!this.value.equals(other.value))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.clientId == null) ? 0 : this.clientId.hashCode());
+        result = prime * result + ((this.value == null) ? 0 : this.value.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("RedirectUris (");
 

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -19,7 +18,6 @@ import java.util.List;
 public final class SowDistrustSpell extends Spell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		List<Entity> opposingMinions = context.resolveTarget(player, source, EntityReference.ENEMY_MINIONS);
 		if (opposingMinions.size() < 2) {

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -41,7 +40,6 @@ public final class AddEnchantmentToMinionCardSpell extends AddEnchantmentSpell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc oldDesc, Entity source, Entity target) {
 		throw new UnsupportedOperationException();
 		/*

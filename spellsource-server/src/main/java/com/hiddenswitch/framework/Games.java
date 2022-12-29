@@ -8,6 +8,7 @@ import io.grpc.ServerServiceDefinition;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
+import io.vertx.core.eventbus.Message;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +28,8 @@ public class Games {
 	public static final Comparator<net.demilich.metastone.game.entities.Entity> ENTITY_NATURAL_ORDER = Comparator
 			.comparing(net.demilich.metastone.game.entities.Entity::getZone)
 			.thenComparingInt(net.demilich.metastone.game.entities.Entity::getIndex);
-	public static final String GAMES_CREATE_GAME_SESSION = "Games.createGameSession";
-	public static final long CREATE_GAME_TIMEOUT_MILLIS = 4000L;
-	public static final int CREATE_GAME_RETRIES = 3;
+	public static final String GAMES_CREATE_GAME_SESSION = "games:createGameSession";
+	public static final String ADDRESS_IS_IN_GAME = "games:isInGame:";
 
 	/**
 	 * Creates a match without entering a queue entry between two users.
@@ -37,14 +37,10 @@ public class Games {
 	 * @param request All the required information to create a game.
 	 * @return Connection information for both users.
 	 */
-	public static Future<MatchCreateResponse> createGame(ConfigurationRequest request) {
-		LOGGER.debug("createMatch: Creating match for request {}", request);
+	public static Future<CreateGameSessionResponse> createGame(ConfigurationRequest request) {
 		CodecRegistration.register(CreateGameSessionResponse.class).andRegister(MatchCreateResponse.class).andRegister(ConfigurationRequest.class);
 		var eb = Vertx.currentContext().owner().eventBus();
-
-		return eb.<CreateGameSessionResponse>request(GAMES_CREATE_GAME_SESSION, request)
-				.onFailure(Environment.onFailure())
-				.map(response -> new MatchCreateResponse(response.body()));
+		return eb.<CreateGameSessionResponse>request(GAMES_CREATE_GAME_SESSION, request).map(Message::body);
 	}
 
 
@@ -55,13 +51,13 @@ public class Games {
 	 * @return
 	 */
 	public static long getDefaultConnectionTime() {
-		return 12000L;
+		return 8000L;
 	}
 
 
-	static Future<String> getGameId(@NotNull String userId) {
+	public static Future<String> getGameId(@NotNull String userId) {
 		var eb = Vertx.currentContext().owner().eventBus();
-		return eb.<String>request(userId + ".isInGame", "", new DeliveryOptions().setSendTimeout(100L))
+		return eb.<String>request(ADDRESS_IS_IN_GAME + userId, "", new DeliveryOptions().setSendTimeout(100L))
 				.otherwiseEmpty()
 				.map(res -> res != null ? res.body() : null);
 	}

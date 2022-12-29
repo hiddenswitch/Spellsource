@@ -15,6 +15,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
 import com.hiddenswitch.framework.schema.spellsource.tables.Friends;
 import com.hiddenswitch.framework.schema.spellsource.tables.GameUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Games;
+import com.hiddenswitch.framework.schema.spellsource.tables.Guests;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
 import com.hiddenswitch.framework.schema.spellsource.tables.UserEntityAddons;
@@ -27,6 +28,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.FriendsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GameUsersRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GamesRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.GuestsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingQueuesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingTicketsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.UserEntityAddonsRecord;
@@ -58,8 +60,9 @@ public class Keys {
     public static final UniqueKey<FriendsRecord> FRIENDS_PKEY = Internal.createUniqueKey(Friends.FRIENDS, DSL.name("friends_pkey"), new TableField[] { Friends.FRIENDS.ID, Friends.FRIENDS.FRIEND }, true);
     public static final UniqueKey<GameUsersRecord> GAME_USERS_PKEY = Internal.createUniqueKey(GameUsers.GAME_USERS, DSL.name("game_users_pkey"), new TableField[] { GameUsers.GAME_USERS.GAME_ID, GameUsers.GAME_USERS.USER_ID }, true);
     public static final UniqueKey<GamesRecord> GAMES_PKEY = Internal.createUniqueKey(Games.GAMES, DSL.name("games_pkey"), new TableField[] { Games.GAMES.ID }, true);
+    public static final UniqueKey<GuestsRecord> GUESTS_PKEY = Internal.createUniqueKey(Guests.GUESTS, DSL.name("guests_pkey"), new TableField[] { Guests.GUESTS.ID }, true);
     public static final UniqueKey<MatchmakingQueuesRecord> MATCHMAKING_QUEUES_PKEY = Internal.createUniqueKey(MatchmakingQueues.MATCHMAKING_QUEUES, DSL.name("matchmaking_queues_pkey"), new TableField[] { MatchmakingQueues.MATCHMAKING_QUEUES.ID }, true);
-    public static final UniqueKey<MatchmakingTicketsRecord> MATCHMAKING_TICKETS_PKEY = Internal.createUniqueKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_pkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.ID, MatchmakingTickets.MATCHMAKING_TICKETS.QUEUE_ID }, true);
+    public static final UniqueKey<MatchmakingTicketsRecord> MATCHMAKING_TICKETS_PKEY = Internal.createUniqueKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_pkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.USER_ID }, true);
     public static final UniqueKey<UserEntityAddonsRecord> USER_ENTITY_ADDONS_PKEY = Internal.createUniqueKey(UserEntityAddons.USER_ENTITY_ADDONS, DSL.name("user_entity_addons_pkey"), new TableField[] { UserEntityAddons.USER_ENTITY_ADDONS.ID }, true);
 
     // -------------------------------------------------------------------------
@@ -80,6 +83,7 @@ public class Keys {
     public static final ForeignKey<GameUsersRecord, DecksRecord> GAME_USERS__GAME_USERS_DECK_ID_FKEY = Internal.createForeignKey(GameUsers.GAME_USERS, DSL.name("game_users_deck_id_fkey"), new TableField[] { GameUsers.GAME_USERS.DECK_ID }, Keys.DECKS_PKEY, new TableField[] { Decks.DECKS.ID }, true);
     public static final ForeignKey<GameUsersRecord, GamesRecord> GAME_USERS__GAME_USERS_GAME_ID_FKEY = Internal.createForeignKey(GameUsers.GAME_USERS, DSL.name("game_users_game_id_fkey"), new TableField[] { GameUsers.GAME_USERS.GAME_ID }, Keys.GAMES_PKEY, new TableField[] { Games.GAMES.ID }, true);
     public static final ForeignKey<GameUsersRecord, UserEntityRecord> GAME_USERS__GAME_USERS_USER_ID_FKEY = Internal.createForeignKey(GameUsers.GAME_USERS, DSL.name("game_users_user_id_fkey"), new TableField[] { GameUsers.GAME_USERS.USER_ID }, com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, new TableField[] { UserEntity.USER_ENTITY.ID }, true);
+    public static final ForeignKey<GuestsRecord, UserEntityRecord> GUESTS__GUESTS_USER_ID_FKEY = Internal.createForeignKey(Guests.GUESTS, DSL.name("guests_user_id_fkey"), new TableField[] { Guests.GUESTS.USER_ID }, com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, new TableField[] { UserEntity.USER_ENTITY.ID }, true);
     public static final ForeignKey<MatchmakingTicketsRecord, DecksRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_BOT_DECK_ID_FKEY = Internal.createForeignKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_bot_deck_id_fkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.BOT_DECK_ID }, Keys.DECKS_PKEY, new TableField[] { Decks.DECKS.ID }, true);
     public static final ForeignKey<MatchmakingTicketsRecord, DecksRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_DECK_ID_FKEY = Internal.createForeignKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_deck_id_fkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.DECK_ID }, Keys.DECKS_PKEY, new TableField[] { Decks.DECKS.ID }, true);
     public static final ForeignKey<MatchmakingTicketsRecord, MatchmakingQueuesRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_QUEUE_ID_FKEY = Internal.createForeignKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_queue_id_fkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.QUEUE_ID }, Keys.MATCHMAKING_QUEUES_PKEY, new TableField[] { MatchmakingQueues.MATCHMAKING_QUEUES.ID }, true);

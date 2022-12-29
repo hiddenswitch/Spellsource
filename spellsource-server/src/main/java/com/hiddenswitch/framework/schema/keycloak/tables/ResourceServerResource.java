@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.ResourceServerR
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function8;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.Records;
+import org.jooq.Row8;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -60,11 +64,6 @@ public class ResourceServerResource extends TableImpl<ResourceServerResourceReco
     public final TableField<ResourceServerResourceRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
-     * The column <code>keycloak.resource_server_resource.uri</code>.
-     */
-    public final TableField<ResourceServerResourceRecord, String> URI = createField(DSL.name("uri"), SQLDataType.VARCHAR(255), this, "");
-
-    /**
      * The column <code>keycloak.resource_server_resource.type</code>.
      */
     public final TableField<ResourceServerResourceRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR(255), this, "");
@@ -77,13 +76,24 @@ public class ResourceServerResource extends TableImpl<ResourceServerResourceReco
     /**
      * The column <code>keycloak.resource_server_resource.owner</code>.
      */
-    public final TableField<ResourceServerResourceRecord, String> OWNER = createField(DSL.name("owner"), SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<ResourceServerResourceRecord, String> OWNER = createField(DSL.name("owner"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column
      * <code>keycloak.resource_server_resource.resource_server_id</code>.
      */
     public final TableField<ResourceServerResourceRecord, String> RESOURCE_SERVER_ID = createField(DSL.name("resource_server_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
+
+    /**
+     * The column
+     * <code>keycloak.resource_server_resource.owner_managed_access</code>.
+     */
+    public final TableField<ResourceServerResourceRecord, Boolean> OWNER_MANAGED_ACCESS = createField(DSL.name("owner_managed_access"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>keycloak.resource_server_resource.display_name</code>.
+     */
+    public final TableField<ResourceServerResourceRecord, String> DISPLAY_NAME = createField(DSL.name("display_name"), SQLDataType.VARCHAR(255), this, "");
 
     private ResourceServerResource(Name alias, Table<ResourceServerResourceRecord> aliased) {
         this(alias, aliased, null);
@@ -141,6 +151,24 @@ public class ResourceServerResource extends TableImpl<ResourceServerResourceReco
     }
 
     @Override
+    public List<ForeignKey<ResourceServerResourceRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.RESOURCE_SERVER_RESOURCE__FK_FRSRHO213XCX4WNKOG82SSRFY);
+    }
+
+    private transient ResourceServer _resourceServer;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.resource_server</code>
+     * table.
+     */
+    public ResourceServer resourceServer() {
+        if (_resourceServer == null)
+            _resourceServer = new ResourceServer(this, Keys.RESOURCE_SERVER_RESOURCE__FK_FRSRHO213XCX4WNKOG82SSRFY);
+
+        return _resourceServer;
+    }
+
+    @Override
     public ResourceServerResource as(String alias) {
         return new ResourceServerResource(DSL.name(alias), this);
     }
@@ -148,6 +176,11 @@ public class ResourceServerResource extends TableImpl<ResourceServerResourceReco
     @Override
     public ResourceServerResource as(Name alias) {
         return new ResourceServerResource(alias, this);
+    }
+
+    @Override
+    public ResourceServerResource as(Table<?> alias) {
+        return new ResourceServerResource(alias.getQualifiedName(), this);
     }
 
     /**
@@ -166,12 +199,35 @@ public class ResourceServerResource extends TableImpl<ResourceServerResourceReco
         return new ResourceServerResource(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public ResourceServerResource rename(Table<?> name) {
+        return new ResourceServerResource(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<String, String, String, String, String, String, String> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row8<String, String, String, String, String, String, Boolean, String> fieldsRow() {
+        return (Row8) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function8<? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Boolean, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Boolean, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

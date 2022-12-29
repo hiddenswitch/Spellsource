@@ -20,8 +20,8 @@ public class Friends implements VertxPojo, IFriends {
 
     private static final long serialVersionUID = 1L;
 
-    private String         id;
-    private String         friend;
+    private String id;
+    private String friend;
     private OffsetDateTime createdAt;
 
     public Friends() {}
@@ -33,8 +33,8 @@ public class Friends implements VertxPojo, IFriends {
     }
 
     public Friends(
-        String         id,
-        String         friend,
+        String id,
+        String friend,
         OffsetDateTime createdAt
     ) {
         this.id = id;
@@ -96,6 +96,46 @@ public class Friends implements VertxPojo, IFriends {
     public Friends setCreatedAt(OffsetDateTime createdAt) {
         this.createdAt = createdAt;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Friends other = (Friends) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.friend == null) {
+            if (other.friend != null)
+                return false;
+        }
+        else if (!this.friend.equals(other.friend))
+            return false;
+        if (this.createdAt == null) {
+            if (other.createdAt != null)
+                return false;
+        }
+        else if (!this.createdAt.equals(other.createdAt))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.friend == null) ? 0 : this.friend.hashCode());
+        result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
+        return result;
     }
 
     @Override

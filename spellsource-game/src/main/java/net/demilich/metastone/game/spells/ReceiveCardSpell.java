@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -132,7 +131,6 @@ public class ReceiveCardSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(ReceiveCardSpell.class);
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(logger, context, source, desc, SpellArg.VALUE, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.CARD, SpellArg.CARDS);
 		SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);

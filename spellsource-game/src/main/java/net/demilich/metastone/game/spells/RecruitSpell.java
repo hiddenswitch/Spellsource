@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -76,7 +75,6 @@ import java.util.List;
 public class RecruitSpell extends Spell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int numberToSummon = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		List<SpellDesc> subSpells = desc.subSpells(0);
@@ -90,7 +88,6 @@ public class RecruitSpell extends Spell {
 		}
 	}
 
-	@Suspendable
 	private Minion putMinionOntoBoard(GameContext context, Player player, Entity source, SpellDesc desc) {
 		Card card;
 		CardSource cardSource;

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -43,7 +42,6 @@ public class ResurrectSpell extends Spell {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		List<Minion> deadMinions = new ArrayList<>();
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);

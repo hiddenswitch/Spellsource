@@ -496,6 +496,56 @@ public interface IRealm extends VertxPojo, Serializable {
      */
     public String getDockerAuthFlow();
 
+    /**
+     * Setter for <code>keycloak.realm.refresh_token_max_reuse</code>.
+     */
+    public IRealm setRefreshTokenMaxReuse(Integer value);
+
+    /**
+     * Getter for <code>keycloak.realm.refresh_token_max_reuse</code>.
+     */
+    public Integer getRefreshTokenMaxReuse();
+
+    /**
+     * Setter for <code>keycloak.realm.allow_user_managed_access</code>.
+     */
+    public IRealm setAllowUserManagedAccess(Boolean value);
+
+    /**
+     * Getter for <code>keycloak.realm.allow_user_managed_access</code>.
+     */
+    public Boolean getAllowUserManagedAccess();
+
+    /**
+     * Setter for <code>keycloak.realm.sso_max_lifespan_remember_me</code>.
+     */
+    public IRealm setSsoMaxLifespanRememberMe(Integer value);
+
+    /**
+     * Getter for <code>keycloak.realm.sso_max_lifespan_remember_me</code>.
+     */
+    public Integer getSsoMaxLifespanRememberMe();
+
+    /**
+     * Setter for <code>keycloak.realm.sso_idle_timeout_remember_me</code>.
+     */
+    public IRealm setSsoIdleTimeoutRememberMe(Integer value);
+
+    /**
+     * Getter for <code>keycloak.realm.sso_idle_timeout_remember_me</code>.
+     */
+    public Integer getSsoIdleTimeoutRememberMe();
+
+    /**
+     * Setter for <code>keycloak.realm.default_role</code>.
+     */
+    public IRealm setDefaultRole(String value);
+
+    /**
+     * Getter for <code>keycloak.realm.default_role</code>.
+     */
+    public String getDefaultRole();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -562,6 +612,11 @@ public interface IRealm extends VertxPojo, Serializable {
                 setOrThrow(this::setLoginWithEmailAllowed,json::getBoolean,"login_with_email_allowed","java.lang.Boolean");
                 setOrThrow(this::setDuplicateEmailsAllowed,json::getBoolean,"duplicate_emails_allowed","java.lang.Boolean");
                 setOrThrow(this::setDockerAuthFlow,json::getString,"docker_auth_flow","java.lang.String");
+                setOrThrow(this::setRefreshTokenMaxReuse,json::getInteger,"refresh_token_max_reuse","java.lang.Integer");
+                setOrThrow(this::setAllowUserManagedAccess,json::getBoolean,"allow_user_managed_access","java.lang.Boolean");
+                setOrThrow(this::setSsoMaxLifespanRememberMe,json::getInteger,"sso_max_lifespan_remember_me","java.lang.Integer");
+                setOrThrow(this::setSsoIdleTimeoutRememberMe,json::getInteger,"sso_idle_timeout_remember_me","java.lang.Integer");
+                setOrThrow(this::setDefaultRole,json::getString,"default_role","java.lang.String");
                 return this;
         }
 
@@ -617,6 +672,11 @@ public interface IRealm extends VertxPojo, Serializable {
                 json.put("login_with_email_allowed",getLoginWithEmailAllowed());
                 json.put("duplicate_emails_allowed",getDuplicateEmailsAllowed());
                 json.put("docker_auth_flow",getDockerAuthFlow());
+                json.put("refresh_token_max_reuse",getRefreshTokenMaxReuse());
+                json.put("allow_user_managed_access",getAllowUserManagedAccess());
+                json.put("sso_max_lifespan_remember_me",getSsoMaxLifespanRememberMe());
+                json.put("sso_idle_timeout_remember_me",getSsoIdleTimeoutRememberMe());
+                json.put("default_role",getDefaultRole());
                 return json;
         }
 

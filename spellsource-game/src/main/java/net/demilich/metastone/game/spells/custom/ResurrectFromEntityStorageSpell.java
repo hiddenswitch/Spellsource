@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -30,7 +29,6 @@ public class ResurrectFromEntityStorageSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(ResurrectFromEntityStorageSpell.class);
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		// Snapshot the entity storage, do not use the transform
 		var resurrect = new ArrayList<>(EnvironmentEntityList.getList(context).getCards(context, source));

@@ -4,16 +4,25 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
+import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.FedUserConsentRecord;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function9;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row7;
+import org.jooq.Records;
+import org.jooq.Row9;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -52,7 +61,7 @@ public class FedUserConsent extends TableImpl<FedUserConsentRecord> {
     /**
      * The column <code>keycloak.fed_user_consent.client_id</code>.
      */
-    public final TableField<FedUserConsentRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<FedUserConsentRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.fed_user_consent.user_id</code>.
@@ -78,6 +87,17 @@ public class FedUserConsent extends TableImpl<FedUserConsentRecord> {
      * The column <code>keycloak.fed_user_consent.last_updated_date</code>.
      */
     public final TableField<FedUserConsentRecord, Long> LAST_UPDATED_DATE = createField(DSL.name("last_updated_date"), SQLDataType.BIGINT, this, "");
+
+    /**
+     * The column
+     * <code>keycloak.fed_user_consent.client_storage_provider</code>.
+     */
+    public final TableField<FedUserConsentRecord, String> CLIENT_STORAGE_PROVIDER = createField(DSL.name("client_storage_provider"), SQLDataType.VARCHAR(36), this, "");
+
+    /**
+     * The column <code>keycloak.fed_user_consent.external_client_id</code>.
+     */
+    public final TableField<FedUserConsentRecord, String> EXTERNAL_CLIENT_ID = createField(DSL.name("external_client_id"), SQLDataType.VARCHAR(255), this, "");
 
     private FedUserConsent(Name alias, Table<FedUserConsentRecord> aliased) {
         this(alias, aliased, null);
@@ -118,6 +138,11 @@ public class FedUserConsent extends TableImpl<FedUserConsentRecord> {
     }
 
     @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.IDX_FU_CNSNT_EXT, Indexes.IDX_FU_CONSENT, Indexes.IDX_FU_CONSENT_RU);
+    }
+
+    @Override
     public UniqueKey<FedUserConsentRecord> getPrimaryKey() {
         return Keys.CONSTR_FED_USER_CONSENT_PK;
     }
@@ -130,6 +155,11 @@ public class FedUserConsent extends TableImpl<FedUserConsentRecord> {
     @Override
     public FedUserConsent as(Name alias) {
         return new FedUserConsent(alias, this);
+    }
+
+    @Override
+    public FedUserConsent as(Table<?> alias) {
+        return new FedUserConsent(alias.getQualifiedName(), this);
     }
 
     /**
@@ -148,12 +178,35 @@ public class FedUserConsent extends TableImpl<FedUserConsentRecord> {
         return new FedUserConsent(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public FedUserConsent rename(Table<?> name) {
+        return new FedUserConsent(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row9 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<String, String, String, String, String, Long, Long> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row9<String, String, String, String, String, Long, Long, String, String> fieldsRow() {
+        return (Row9) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function9<? super String, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super Long, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super String, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super Long, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

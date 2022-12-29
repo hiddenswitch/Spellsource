@@ -66,6 +66,26 @@ public interface IUserConsent extends VertxPojo, Serializable {
      */
     public Long getLastUpdatedDate();
 
+    /**
+     * Setter for <code>keycloak.user_consent.client_storage_provider</code>.
+     */
+    public IUserConsent setClientStorageProvider(String value);
+
+    /**
+     * Getter for <code>keycloak.user_consent.client_storage_provider</code>.
+     */
+    public String getClientStorageProvider();
+
+    /**
+     * Setter for <code>keycloak.user_consent.external_client_id</code>.
+     */
+    public IUserConsent setExternalClientId(String value);
+
+    /**
+     * Getter for <code>keycloak.user_consent.external_client_id</code>.
+     */
+    public String getExternalClientId();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -89,6 +109,8 @@ public interface IUserConsent extends VertxPojo, Serializable {
                 setOrThrow(this::setUserId,json::getString,"user_id","java.lang.String");
                 setOrThrow(this::setCreatedDate,json::getLong,"created_date","java.lang.Long");
                 setOrThrow(this::setLastUpdatedDate,json::getLong,"last_updated_date","java.lang.Long");
+                setOrThrow(this::setClientStorageProvider,json::getString,"client_storage_provider","java.lang.String");
+                setOrThrow(this::setExternalClientId,json::getString,"external_client_id","java.lang.String");
                 return this;
         }
 
@@ -101,6 +123,8 @@ public interface IUserConsent extends VertxPojo, Serializable {
                 json.put("user_id",getUserId());
                 json.put("created_date",getCreatedDate());
                 json.put("last_updated_date",getLastUpdatedDate());
+                json.put("client_storage_provider",getClientStorageProvider());
+                json.put("external_client_id",getExternalClientId());
                 return json;
         }
 

@@ -4,8 +4,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import co.paralleluniverse.common.util.Objects;
-import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.base.Objects;
 import com.google.common.collect.Streams;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -39,7 +38,6 @@ public class TriggerDeathrattleSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int value = (int) desc.getOrDefault(SpellArg.VALUE, 1);
 		if (target instanceof Actor) {

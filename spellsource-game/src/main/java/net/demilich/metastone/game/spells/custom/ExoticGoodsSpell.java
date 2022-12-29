@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -21,7 +20,6 @@ import java.util.ArrayList;
 public final class ExoticGoodsSpell extends DiscoverSpell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		var allCards = CardCatalogue.query(context.getDeckFormat(), null, null, null, null, false);
 		for (var i = 0; i < 3; i++) {

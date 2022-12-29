@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -33,7 +32,6 @@ public interface Trigger extends Serializable {
 	 * @param event A game event.
 	 * @return {@code true} if the trigger should queue in response to this event.
 	 */
-	@Suspendable
 	boolean queues(GameEvent event);
 
 	/**
@@ -75,7 +73,6 @@ public interface Trigger extends Serializable {
 	 * @param source
 	 * @param host
 	 */
-	@Suspendable
 	void onAdd(GameContext context, Player player, Entity source, Entity host);
 
 	/**
@@ -83,7 +80,6 @@ public interface Trigger extends Serializable {
 	 *
 	 * @param event The game event this trigger is now processing.
 	 */
-	@Suspendable
 	void onGameEvent(GameEvent event);
 
 	/**
@@ -121,7 +117,6 @@ public interface Trigger extends Serializable {
 	 * Expires the trigger; marks it for removal and prevents it from executing in the future.
 	 * @param context
 	 */
-	@Suspendable
 	void expire(GameContext context);
 
 	/**
@@ -132,7 +127,6 @@ public interface Trigger extends Serializable {
 	 * @param event The currently raised event.
 	 * @return {@code true} if the trigger can fire.
 	 */
-	@Suspendable
 	default boolean fires(GameEvent event) {
 		return queues(event);
 	}

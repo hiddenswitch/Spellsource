@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -102,7 +101,6 @@ import java.util.stream.Collectors;
 public class QueryTargetSpell extends Spell {
 
 	@Override
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		Entity target = context.resolveSingleTarget(player, source, EntityReference.TARGET);
 		if (target == null) {
@@ -153,7 +151,6 @@ public class QueryTargetSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		SpellUtils.castChildSpell(context, player, desc, source, target);
 	}

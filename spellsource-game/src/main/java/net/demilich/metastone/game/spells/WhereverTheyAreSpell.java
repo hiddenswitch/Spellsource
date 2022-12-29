@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -57,7 +56,6 @@ public final class WhereverTheyAreSpell extends MetaSpell {
 	private static final Zones[] DEFAULT_ZONES = new Zones[]{Zones.BATTLEFIELD, Zones.GRAVEYARD};
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		EntityFilter filter;
 		if (target == null && desc.containsKey(SpellArg.CARD)) {

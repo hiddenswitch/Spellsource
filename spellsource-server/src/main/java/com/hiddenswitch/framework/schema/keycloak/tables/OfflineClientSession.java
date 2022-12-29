@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.OfflineClientSe
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function7;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row5;
+import org.jooq.Records;
+import org.jooq.Row7;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -57,7 +61,7 @@ public class OfflineClientSession extends TableImpl<OfflineClientSessionRecord> 
     /**
      * The column <code>keycloak.offline_client_session.client_id</code>.
      */
-    public final TableField<OfflineClientSessionRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
+    public final TableField<OfflineClientSessionRecord, String> CLIENT_ID = createField(DSL.name("client_id"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>keycloak.offline_client_session.offline_flag</code>.
@@ -73,6 +77,18 @@ public class OfflineClientSession extends TableImpl<OfflineClientSessionRecord> 
      * The column <code>keycloak.offline_client_session.data</code>.
      */
     public final TableField<OfflineClientSessionRecord, String> DATA = createField(DSL.name("data"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column
+     * <code>keycloak.offline_client_session.client_storage_provider</code>.
+     */
+    public final TableField<OfflineClientSessionRecord, String> CLIENT_STORAGE_PROVIDER = createField(DSL.name("client_storage_provider"), SQLDataType.VARCHAR(36).nullable(false).defaultValue(DSL.field("'local'::character varying", SQLDataType.VARCHAR)), this, "");
+
+    /**
+     * The column
+     * <code>keycloak.offline_client_session.external_client_id</code>.
+     */
+    public final TableField<OfflineClientSessionRecord, String> EXTERNAL_CLIENT_ID = createField(DSL.name("external_client_id"), SQLDataType.VARCHAR(255).nullable(false).defaultValue(DSL.field("'local'::character varying", SQLDataType.VARCHAR)), this, "");
 
     private OfflineClientSession(Name alias, Table<OfflineClientSessionRecord> aliased) {
         this(alias, aliased, null);
@@ -116,7 +132,7 @@ public class OfflineClientSession extends TableImpl<OfflineClientSessionRecord> 
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.asList(Indexes.IDX_US_SESS_ID_ON_CL_SESS);
+        return Arrays.asList(Indexes.IDX_OFFLINE_CSS_PRELOAD, Indexes.IDX_US_SESS_ID_ON_CL_SESS);
     }
 
     @Override
@@ -132,6 +148,11 @@ public class OfflineClientSession extends TableImpl<OfflineClientSessionRecord> 
     @Override
     public OfflineClientSession as(Name alias) {
         return new OfflineClientSession(alias, this);
+    }
+
+    @Override
+    public OfflineClientSession as(Table<?> alias) {
+        return new OfflineClientSession(alias.getQualifiedName(), this);
     }
 
     /**
@@ -150,12 +171,35 @@ public class OfflineClientSession extends TableImpl<OfflineClientSessionRecord> 
         return new OfflineClientSession(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public OfflineClientSession rename(Table<?> name) {
+        return new OfflineClientSession(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
-    // Row5 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<String, String, String, Integer, String> fieldsRow() {
-        return (Row5) super.fieldsRow();
+    public Row7<String, String, String, Integer, String, String, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function7<? super String, ? super String, ? super String, ? super Integer, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function7<? super String, ? super String, ? super String, ? super Integer, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

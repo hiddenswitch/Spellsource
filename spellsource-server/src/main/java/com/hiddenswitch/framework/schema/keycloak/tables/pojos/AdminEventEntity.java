@@ -19,7 +19,7 @@ public class AdminEventEntity implements VertxPojo, IAdminEventEntity {
     private static final long serialVersionUID = 1L;
 
     private String id;
-    private Long   adminEventTime;
+    private Long adminEventTime;
     private String realmId;
     private String operationType;
     private String authRealmId;
@@ -50,7 +50,7 @@ public class AdminEventEntity implements VertxPojo, IAdminEventEntity {
 
     public AdminEventEntity(
         String id,
-        Long   adminEventTime,
+        Long adminEventTime,
         String realmId,
         String operationType,
         String authRealmId,
@@ -283,6 +283,109 @@ public class AdminEventEntity implements VertxPojo, IAdminEventEntity {
     public AdminEventEntity setResourceType(String resourceType) {
         this.resourceType = resourceType;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final AdminEventEntity other = (AdminEventEntity) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.adminEventTime == null) {
+            if (other.adminEventTime != null)
+                return false;
+        }
+        else if (!this.adminEventTime.equals(other.adminEventTime))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.operationType == null) {
+            if (other.operationType != null)
+                return false;
+        }
+        else if (!this.operationType.equals(other.operationType))
+            return false;
+        if (this.authRealmId == null) {
+            if (other.authRealmId != null)
+                return false;
+        }
+        else if (!this.authRealmId.equals(other.authRealmId))
+            return false;
+        if (this.authClientId == null) {
+            if (other.authClientId != null)
+                return false;
+        }
+        else if (!this.authClientId.equals(other.authClientId))
+            return false;
+        if (this.authUserId == null) {
+            if (other.authUserId != null)
+                return false;
+        }
+        else if (!this.authUserId.equals(other.authUserId))
+            return false;
+        if (this.ipAddress == null) {
+            if (other.ipAddress != null)
+                return false;
+        }
+        else if (!this.ipAddress.equals(other.ipAddress))
+            return false;
+        if (this.resourcePath == null) {
+            if (other.resourcePath != null)
+                return false;
+        }
+        else if (!this.resourcePath.equals(other.resourcePath))
+            return false;
+        if (this.representation == null) {
+            if (other.representation != null)
+                return false;
+        }
+        else if (!this.representation.equals(other.representation))
+            return false;
+        if (this.error == null) {
+            if (other.error != null)
+                return false;
+        }
+        else if (!this.error.equals(other.error))
+            return false;
+        if (this.resourceType == null) {
+            if (other.resourceType != null)
+                return false;
+        }
+        else if (!this.resourceType.equals(other.resourceType))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.adminEventTime == null) ? 0 : this.adminEventTime.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.operationType == null) ? 0 : this.operationType.hashCode());
+        result = prime * result + ((this.authRealmId == null) ? 0 : this.authRealmId.hashCode());
+        result = prime * result + ((this.authClientId == null) ? 0 : this.authClientId.hashCode());
+        result = prime * result + ((this.authUserId == null) ? 0 : this.authUserId.hashCode());
+        result = prime * result + ((this.ipAddress == null) ? 0 : this.ipAddress.hashCode());
+        result = prime * result + ((this.resourcePath == null) ? 0 : this.resourcePath.hashCode());
+        result = prime * result + ((this.representation == null) ? 0 : this.representation.hashCode());
+        result = prime * result + ((this.error == null) ? 0 : this.error.hashCode());
+        result = prime * result + ((this.resourceType == null) ? 0 : this.resourceType.hashCode());
+        return result;
     }
 
     @Override

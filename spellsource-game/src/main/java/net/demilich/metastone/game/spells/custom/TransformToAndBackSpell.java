@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -14,7 +13,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public final class TransformToAndBackSpell extends AddEnchantmentSpell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		String originalName = target.getName();
 		SpellDesc transformTo = new SpellDesc(TransformMinionSpell.class, target.getReference(), null, false);

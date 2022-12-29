@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -39,7 +38,6 @@ public final class LastMinionCardInDeckSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(LastMinionCardInDeckSpell.class);
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(logger, context, source, desc);
 		// Note the top of the deck is the last element in the deck List, therefore the "last minion in the deck" is

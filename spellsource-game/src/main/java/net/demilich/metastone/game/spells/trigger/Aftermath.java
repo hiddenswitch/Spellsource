@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
@@ -30,7 +29,6 @@ public final class Aftermath extends Enchantment {
 	}
 
 	@Override
-	@Suspendable
 	public void onAdd(GameContext context, Player player, Entity source, Entity host) {
 		if (host != null && !added) {
 			host.modifyAttribute(Attribute.AFTERMATH_COUNT, 1);
@@ -39,7 +37,6 @@ public final class Aftermath extends Enchantment {
 	}
 
 	@Override
-	@Suspendable
 	public void expire(GameContext context) {
 		var host = context.resolveSingleTarget(getHostReference());
 		if (host != null && !expired) {
@@ -64,7 +61,6 @@ public final class Aftermath extends Enchantment {
 	}
 
 	@Override
-	@Suspendable
 	protected void cast(int ownerId, SpellDesc spell, GameEvent event) {
 		// Aftermaths do not cast
 	}

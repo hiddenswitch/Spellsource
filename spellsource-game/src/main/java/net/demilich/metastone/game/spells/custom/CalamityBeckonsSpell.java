@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
@@ -16,12 +14,11 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 public final class CalamityBeckonsSpell extends Spell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		var max = player.getDeck().size();
 		var i = 0;
 		while (!player.getDeck().isEmpty() && i < max) {
-			if (Strand.currentStrand().isInterrupted()) {
+			if (Thread.currentThread().isInterrupted()) {
 				break;
 			}
 			var card = context.getLogic().getRandom(player.getDeck());

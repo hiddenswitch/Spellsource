@@ -143,6 +143,60 @@ public class UserFederationMapper implements VertxPojo, IUserFederationMapper {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final UserFederationMapper other = (UserFederationMapper) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        if (this.federationProviderId == null) {
+            if (other.federationProviderId != null)
+                return false;
+        }
+        else if (!this.federationProviderId.equals(other.federationProviderId))
+            return false;
+        if (this.federationMapperType == null) {
+            if (other.federationMapperType != null)
+                return false;
+        }
+        else if (!this.federationMapperType.equals(other.federationMapperType))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.federationProviderId == null) ? 0 : this.federationProviderId.hashCode());
+        result = prime * result + ((this.federationMapperType == null) ? 0 : this.federationMapperType.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("UserFederationMapper (");
 

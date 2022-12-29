@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.HasEntrySet;
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 public final class TriggerQuickDrawSpell extends Spell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		// Find the quick draw spell by walking the card definition
 		var quickDrawSpells = target.getSourceCard().getDesc()

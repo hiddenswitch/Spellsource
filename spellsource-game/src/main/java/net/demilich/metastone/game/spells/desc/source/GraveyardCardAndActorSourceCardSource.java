@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc.source;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -44,7 +43,6 @@ public class GraveyardCardAndActorSourceCardSource extends CardSource {
 	 * @return
 	 */
 	@NotNull
-	@Suspendable
 	public static CardList graveyardCards(GameContext context, Player player) {
 		Set<Card> inPlay = context.getEntities()
 				.filter(Entity::isInPlay)

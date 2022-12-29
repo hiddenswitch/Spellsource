@@ -13,14 +13,18 @@ import io.github.jklingsporn.vertx.jooq.shared.postgres.JSONBToJsonObjectConvert
 import io.vertx.core.json.JsonObject;
 
 import java.time.OffsetDateTime;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function5;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row5;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -134,6 +138,11 @@ public class Games extends TableImpl<GamesRecord> {
         return new Games(alias, this);
     }
 
+    @Override
+    public Games as(Table<?> alias) {
+        return new Games(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -150,6 +159,14 @@ public class Games extends TableImpl<GamesRecord> {
         return new Games(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public Games rename(Table<?> name) {
+        return new Games(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row5 type methods
     // -------------------------------------------------------------------------
@@ -157,5 +174,20 @@ public class Games extends TableImpl<GamesRecord> {
     @Override
     public Row5<Long, GameStateEnum, String, JsonObject, OffsetDateTime> fieldsRow() {
         return (Row5) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function5<? super Long, ? super GameStateEnum, ? super String, ? super JsonObject, ? super OffsetDateTime, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function5<? super Long, ? super GameStateEnum, ? super String, ? super JsonObject, ? super OffsetDateTime, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

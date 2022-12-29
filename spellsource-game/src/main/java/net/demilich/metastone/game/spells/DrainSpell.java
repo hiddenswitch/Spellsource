@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
@@ -36,7 +35,6 @@ import java.util.List;
 public final class DrainSpell extends Spell {
 
 	@Override
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		if (targets.isEmpty()) {
 			return;
@@ -88,7 +86,6 @@ public final class DrainSpell extends Spell {
 	 * @param amount
 	 * @param healingTarget
 	 */
-	@Suspendable
 	public static void drain(GameContext context, Player player, Entity source, int amount, Entity healingTarget) {
 		if (amount > 0) {
 			SpellDesc buffSpell = BuffSpell.create(healingTarget.getReference(), 0, amount);
@@ -100,7 +97,6 @@ public final class DrainSpell extends Spell {
 		player.modifyAttribute(Attribute.TOTAL_DRAINED, amount);
 	}
 
-	@Suspendable
 	public static int drainDamage(GameContext context, Player player, Entity source, Entity target, int damage, List<DrainEvent> events) {
 		int thisDamageDealt = context.getLogic().damage(player, (Actor) target, damage, source, true, EnumSet.of(DamageType.DRAIN));
 		events.add(new DrainEvent(context, source, target, player.getId(), thisDamageDealt));
@@ -108,7 +104,6 @@ public final class DrainSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		throw new UnsupportedOperationException("should not call onCast");
 	}

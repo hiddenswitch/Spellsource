@@ -27,16 +27,6 @@ public interface IClientAttributes extends VertxPojo, Serializable {
     public String getClientId();
 
     /**
-     * Setter for <code>keycloak.client_attributes.value</code>.
-     */
-    public IClientAttributes setValue(String value);
-
-    /**
-     * Getter for <code>keycloak.client_attributes.value</code>.
-     */
-    public String getValue();
-
-    /**
      * Setter for <code>keycloak.client_attributes.name</code>.
      */
     public IClientAttributes setName(String value);
@@ -45,6 +35,16 @@ public interface IClientAttributes extends VertxPojo, Serializable {
      * Getter for <code>keycloak.client_attributes.name</code>.
      */
     public String getName();
+
+    /**
+     * Setter for <code>keycloak.client_attributes.value</code>.
+     */
+    public IClientAttributes setValue(String value);
+
+    /**
+     * Getter for <code>keycloak.client_attributes.value</code>.
+     */
+    public String getValue();
 
     // -------------------------------------------------------------------------
     // FROM and INTO
@@ -65,8 +65,8 @@ public interface IClientAttributes extends VertxPojo, Serializable {
         @Override
         public default IClientAttributes fromJson(io.vertx.core.json.JsonObject json) {
                 setOrThrow(this::setClientId,json::getString,"client_id","java.lang.String");
-                setOrThrow(this::setValue,json::getString,"value","java.lang.String");
                 setOrThrow(this::setName,json::getString,"name","java.lang.String");
+                setOrThrow(this::setValue,json::getString,"value","java.lang.String");
                 return this;
         }
 
@@ -75,8 +75,8 @@ public interface IClientAttributes extends VertxPojo, Serializable {
         public default io.vertx.core.json.JsonObject toJson() {
                 io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
                 json.put("client_id",getClientId());
-                json.put("value",getValue());
                 json.put("name",getName());
+                json.put("value",getValue());
                 return json;
         }
 

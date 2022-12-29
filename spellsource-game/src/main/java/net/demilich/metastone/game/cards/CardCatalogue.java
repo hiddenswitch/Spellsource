@@ -31,6 +31,7 @@ import java.nio.file.spi.FileSystemProvider;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -73,6 +74,7 @@ public class CardCatalogue {
 	private final static Map<String, Card> cards = new ConcurrentHashMap<>(8196);
 	private final static Map<String, CardCatalogueRecord> records = new LinkedHashMap<>(8196);
 	private final static Map<String, List<CardCatalogueRecord>> recordsByName = new LinkedHashMap<>(8196);
+	private final static ReentrantLock lock = new ReentrantLock();
 
 	@NotNull
 	public static CardList getAll() {
@@ -417,59 +419,65 @@ public class CardCatalogue {
 	 * @param directory
 	 */
 	public static void loadAllCards(String directory) {
-		if (!firstLoad()) {
-			return;
-		}
-
-		var inputStreams = new ArrayList<ResourceInputStream>();
-		var closeables = new ArrayList<AutoCloseable>();
+		lock.lock();
 
 		try {
-			var allCardDirs = ClassLoader.getSystemClassLoader().getResources(directory).asIterator();
-			for (; allCardDirs.hasNext(); ) {
-				var uri = allCardDirs.next().toURI();
-				var JAR = "jar";
-				if (Objects.equals(uri.getScheme(), JAR)) {
-					for (FileSystemProvider provider : FileSystemProvider.installedProviders()) {
-						if (provider.getScheme().equalsIgnoreCase(JAR)) {
-							try {
-								closeables.add(provider.getFileSystem(uri));
-							} catch (FileSystemNotFoundException e) {
-								// in this case we need to initialize it first:
-								closeables.add(provider.newFileSystem(uri, Collections.emptyMap()));
+			if (!firstLoad()) {
+				return;
+			}
+
+			var inputStreams = new ArrayList<ResourceInputStream>();
+			var closeables = new ArrayList<AutoCloseable>();
+
+			try {
+				var allCardDirs = ClassLoader.getSystemClassLoader().getResources(directory).asIterator();
+				for (; allCardDirs.hasNext(); ) {
+					var uri = allCardDirs.next().toURI();
+					var JAR = "jar";
+					if (Objects.equals(uri.getScheme(), JAR)) {
+						for (FileSystemProvider provider : FileSystemProvider.installedProviders()) {
+							if (provider.getScheme().equalsIgnoreCase(JAR)) {
+								try {
+									closeables.add(provider.getFileSystem(uri));
+								} catch (FileSystemNotFoundException e) {
+									// in this case we need to initialize it first:
+									closeables.add(provider.newFileSystem(uri, Collections.emptyMap()));
+								}
 							}
 						}
 					}
-				}
-				var path = Paths.get(uri);
-				var walk = Files.walk(path, FileVisitOption.FOLLOW_LINKS);
-				for (var it = walk.iterator(); it.hasNext(); ) {
-					var filename = it.next();
-					if (filename.getFileName().toString().endsWith(".json")) {
-						inputStreams.add(new ResourceInputStream(filename.getFileName().toString(), Files.newInputStream(filename)));
+					var path = Paths.get(uri);
+					var walk = Files.walk(path, FileVisitOption.FOLLOW_LINKS);
+					for (var it = walk.iterator(); it.hasNext(); ) {
+						var filename = it.next();
+						if (filename.getFileName().toString().endsWith(".json")) {
+							inputStreams.add(new ResourceInputStream(filename.getFileName().toString(), Files.newInputStream(filename)));
+						}
 					}
 				}
-			}
-		} catch (IOException | URISyntaxException e) {
-			throw new RuntimeException(e);
-		}
-
-		loadCards(inputStreams);
-
-		for (var inputStream : inputStreams) {
-			try {
-				inputStream.getInputStream().close();
-			} catch (IOException e) {
+			} catch (IOException | URISyntaxException e) {
 				throw new RuntimeException(e);
 			}
-		}
 
-		for (var closeable : closeables) {
-			try {
-				closeable.close();
-			} catch (Exception e) {
-				throw new RuntimeException(e);
+			loadCards(inputStreams);
+
+			for (var inputStream : inputStreams) {
+				try {
+					inputStream.getInputStream().close();
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 			}
+
+			for (var closeable : closeables) {
+				try {
+					closeable.close();
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+		} finally {
+			lock.unlock();
 		}
 	}
 
@@ -493,48 +501,52 @@ public class CardCatalogue {
 	 * Loads all the cards specified in the {@code "cards/src/main/resources" + DEFAULT_CARDS_FOLDER } directory in the
 	 * {@code cards} module. This can be called multiple times, but will not "refresh" the catalogue file.
 	 */
-	public synchronized static void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
-		if (!firstLoad()) {
-			return;
-		}
-		List<CardResources> cardResources = null;
+	public static void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
+		lock.lock();
+		try {
+			if (!firstLoad()) {
+				return;
+			}
 
-		try (ScanResult scanResult =
-				     new ClassGraph()
-						     .enableClassInfo()
-						     .disableRuntimeInvisibleAnnotations()
-						     .acceptPackages("com.hiddenswitch.spellsource.cards.*")
-						     .scan()) {
-			cardResources = scanResult
-					.getAllClasses()
-					.stream()
-					.filter(info -> info.getName().contains("CardResources"))
-					.map(ClassInfo::loadClass)
-					.filter(CardResources.class::isAssignableFrom)
-					.filter(c -> !Modifier.isAbstract(c.getModifiers()))
-					.map(thisClass -> {
+			List<CardResources> cardResources = null;
+			try (ScanResult scanResult =
+					     new ClassGraph()
+							     .enableClassInfo()
+							     .disableRuntimeInvisibleAnnotations()
+							     .acceptPackages("com.hiddenswitch.spellsource.cards.*")
+							     .scan()) {
+				cardResources = scanResult
+						.getAllClasses()
+						.stream()
+						.filter(info -> info.getName().contains("CardResources"))
+						.map(ClassInfo::loadClass)
+						.filter(CardResources.class::isAssignableFrom)
+						.filter(c -> !Modifier.isAbstract(c.getModifiers()))
+						.map(thisClass -> {
+							try {
+								return (CardResources) thisClass.getConstructor().newInstance();
+							} catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+							         NoSuchMethodException e) {
+								throw new RuntimeException(e);
+							}
+						})
+						.collect(Collectors.toList());
+				loadCardsFromPackage(cardResources);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			} finally {
+				if (cardResources != null) {
+					for (CardResources cardResources1 : cardResources) {
 						try {
-							return (CardResources) thisClass.getConstructor().newInstance();
-						} catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-						         NoSuchMethodException e) {
+							cardResources1.close();
+						} catch (Exception e) {
 							throw new RuntimeException(e);
 						}
-					})
-					.collect(Collectors.toList());
-			loadCardsFromPackage(cardResources);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		} finally {
-			if (cardResources != null) {
-				for (CardResources cardResources1 : cardResources) {
-					try {
-						cardResources1.close();
-					} catch (Exception e) {
-						throw new RuntimeException(e);
 					}
 				}
 			}
-
+		} finally {
+			lock.unlock();
 		}
 	}
 

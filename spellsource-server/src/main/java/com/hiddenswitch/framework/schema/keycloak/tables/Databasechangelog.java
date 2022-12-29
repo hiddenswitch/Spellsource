@@ -8,13 +8,17 @@ import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.DatabasechangelogRecord;
 
 import java.time.LocalDateTime;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function14;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row14;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -162,6 +166,11 @@ public class Databasechangelog extends TableImpl<DatabasechangelogRecord> {
         return new Databasechangelog(alias, this);
     }
 
+    @Override
+    public Databasechangelog as(Table<?> alias) {
+        return new Databasechangelog(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -178,6 +187,14 @@ public class Databasechangelog extends TableImpl<DatabasechangelogRecord> {
         return new Databasechangelog(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public Databasechangelog rename(Table<?> name) {
+        return new Databasechangelog(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row14 type methods
     // -------------------------------------------------------------------------
@@ -185,5 +202,20 @@ public class Databasechangelog extends TableImpl<DatabasechangelogRecord> {
     @Override
     public Row14<String, String, String, LocalDateTime, Integer, String, String, String, String, String, String, String, String, String> fieldsRow() {
         return (Row14) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function14<? super String, ? super String, ? super String, ? super LocalDateTime, ? super Integer, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function14<? super String, ? super String, ? super String, ? super LocalDateTime, ? super Integer, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

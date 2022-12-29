@@ -18,14 +18,14 @@ public class UserFederationProvider implements VertxPojo, IUserFederationProvide
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
+    private String id;
     private Integer changedSyncPeriod;
-    private String  displayName;
+    private String displayName;
     private Integer fullSyncPeriod;
     private Integer lastSync;
     private Integer priority;
-    private String  providerName;
-    private String  realmId;
+    private String providerName;
+    private String realmId;
 
     public UserFederationProvider() {}
 
@@ -41,14 +41,14 @@ public class UserFederationProvider implements VertxPojo, IUserFederationProvide
     }
 
     public UserFederationProvider(
-        String  id,
+        String id,
         Integer changedSyncPeriod,
-        String  displayName,
+        String displayName,
         Integer fullSyncPeriod,
         Integer lastSync,
         Integer priority,
-        String  providerName,
-        String  realmId
+        String providerName,
+        String realmId
     ) {
         this.id = id;
         this.changedSyncPeriod = changedSyncPeriod;
@@ -203,6 +203,81 @@ public class UserFederationProvider implements VertxPojo, IUserFederationProvide
     public UserFederationProvider setRealmId(String realmId) {
         this.realmId = realmId;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final UserFederationProvider other = (UserFederationProvider) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.changedSyncPeriod == null) {
+            if (other.changedSyncPeriod != null)
+                return false;
+        }
+        else if (!this.changedSyncPeriod.equals(other.changedSyncPeriod))
+            return false;
+        if (this.displayName == null) {
+            if (other.displayName != null)
+                return false;
+        }
+        else if (!this.displayName.equals(other.displayName))
+            return false;
+        if (this.fullSyncPeriod == null) {
+            if (other.fullSyncPeriod != null)
+                return false;
+        }
+        else if (!this.fullSyncPeriod.equals(other.fullSyncPeriod))
+            return false;
+        if (this.lastSync == null) {
+            if (other.lastSync != null)
+                return false;
+        }
+        else if (!this.lastSync.equals(other.lastSync))
+            return false;
+        if (this.priority == null) {
+            if (other.priority != null)
+                return false;
+        }
+        else if (!this.priority.equals(other.priority))
+            return false;
+        if (this.providerName == null) {
+            if (other.providerName != null)
+                return false;
+        }
+        else if (!this.providerName.equals(other.providerName))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.changedSyncPeriod == null) ? 0 : this.changedSyncPeriod.hashCode());
+        result = prime * result + ((this.displayName == null) ? 0 : this.displayName.hashCode());
+        result = prime * result + ((this.fullSyncPeriod == null) ? 0 : this.fullSyncPeriod.hashCode());
+        result = prime * result + ((this.lastSync == null) ? 0 : this.lastSync.hashCode());
+        result = prime * result + ((this.priority == null) ? 0 : this.priority.hashCode());
+        result = prime * result + ((this.providerName == null) ? 0 : this.providerName.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        return result;
     }
 
     @Override

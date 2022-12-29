@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.aura;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Entity;
@@ -80,7 +79,6 @@ public final class StatefulAttributeValueAura extends EffectlessAura {
 	}
 
 	@Override
-	@Suspendable
 	public void onGameEvent(GameEvent event) {
 		super.onGameEvent(event);
 		GameContext context = event.getGameContext();

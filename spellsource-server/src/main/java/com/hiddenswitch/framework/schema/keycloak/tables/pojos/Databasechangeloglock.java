@@ -20,10 +20,10 @@ public class Databasechangeloglock implements VertxPojo, IDatabasechangeloglock 
 
     private static final long serialVersionUID = 1L;
 
-    private Integer       id;
-    private Boolean       locked;
+    private Integer id;
+    private Boolean locked;
     private LocalDateTime lockgranted;
-    private String        lockedby;
+    private String lockedby;
 
     public Databasechangeloglock() {}
 
@@ -35,10 +35,10 @@ public class Databasechangeloglock implements VertxPojo, IDatabasechangeloglock 
     }
 
     public Databasechangeloglock(
-        Integer       id,
-        Boolean       locked,
+        Integer id,
+        Boolean locked,
         LocalDateTime lockgranted,
-        String        lockedby
+        String lockedby
     ) {
         this.id = id;
         this.locked = locked;
@@ -117,6 +117,53 @@ public class Databasechangeloglock implements VertxPojo, IDatabasechangeloglock 
     public Databasechangeloglock setLockedby(String lockedby) {
         this.lockedby = lockedby;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Databasechangeloglock other = (Databasechangeloglock) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.locked == null) {
+            if (other.locked != null)
+                return false;
+        }
+        else if (!this.locked.equals(other.locked))
+            return false;
+        if (this.lockgranted == null) {
+            if (other.lockgranted != null)
+                return false;
+        }
+        else if (!this.lockgranted.equals(other.lockgranted))
+            return false;
+        if (this.lockedby == null) {
+            if (other.lockedby != null)
+                return false;
+        }
+        else if (!this.lockedby.equals(other.lockedby))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.locked == null) ? 0 : this.locked.hashCode());
+        result = prime * result + ((this.lockgranted == null) ? 0 : this.lockgranted.hashCode());
+        result = prime * result + ((this.lockedby == null) ? 0 : this.lockedby.hashCode());
+        return result;
     }
 
     @Override

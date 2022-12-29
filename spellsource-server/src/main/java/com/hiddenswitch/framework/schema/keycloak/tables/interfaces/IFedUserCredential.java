@@ -27,26 +27,6 @@ public interface IFedUserCredential extends VertxPojo, Serializable {
     public String getId();
 
     /**
-     * Setter for <code>keycloak.fed_user_credential.device</code>.
-     */
-    public IFedUserCredential setDevice(String value);
-
-    /**
-     * Getter for <code>keycloak.fed_user_credential.device</code>.
-     */
-    public String getDevice();
-
-    /**
-     * Setter for <code>keycloak.fed_user_credential.hash_iterations</code>.
-     */
-    public IFedUserCredential setHashIterations(Integer value);
-
-    /**
-     * Getter for <code>keycloak.fed_user_credential.hash_iterations</code>.
-     */
-    public Integer getHashIterations();
-
-    /**
      * Setter for <code>keycloak.fed_user_credential.salt</code>.
      */
     public IFedUserCredential setSalt(byte[] value);
@@ -67,16 +47,6 @@ public interface IFedUserCredential extends VertxPojo, Serializable {
     public String getType();
 
     /**
-     * Setter for <code>keycloak.fed_user_credential.value</code>.
-     */
-    public IFedUserCredential setValue(String value);
-
-    /**
-     * Getter for <code>keycloak.fed_user_credential.value</code>.
-     */
-    public String getValue();
-
-    /**
      * Setter for <code>keycloak.fed_user_credential.created_date</code>.
      */
     public IFedUserCredential setCreatedDate(Long value);
@@ -85,46 +55,6 @@ public interface IFedUserCredential extends VertxPojo, Serializable {
      * Getter for <code>keycloak.fed_user_credential.created_date</code>.
      */
     public Long getCreatedDate();
-
-    /**
-     * Setter for <code>keycloak.fed_user_credential.counter</code>.
-     */
-    public IFedUserCredential setCounter(Integer value);
-
-    /**
-     * Getter for <code>keycloak.fed_user_credential.counter</code>.
-     */
-    public Integer getCounter();
-
-    /**
-     * Setter for <code>keycloak.fed_user_credential.digits</code>.
-     */
-    public IFedUserCredential setDigits(Integer value);
-
-    /**
-     * Getter for <code>keycloak.fed_user_credential.digits</code>.
-     */
-    public Integer getDigits();
-
-    /**
-     * Setter for <code>keycloak.fed_user_credential.period</code>.
-     */
-    public IFedUserCredential setPeriod(Integer value);
-
-    /**
-     * Getter for <code>keycloak.fed_user_credential.period</code>.
-     */
-    public Integer getPeriod();
-
-    /**
-     * Setter for <code>keycloak.fed_user_credential.algorithm</code>.
-     */
-    public IFedUserCredential setAlgorithm(String value);
-
-    /**
-     * Getter for <code>keycloak.fed_user_credential.algorithm</code>.
-     */
-    public String getAlgorithm();
 
     /**
      * Setter for <code>keycloak.fed_user_credential.user_id</code>.
@@ -156,6 +86,46 @@ public interface IFedUserCredential extends VertxPojo, Serializable {
      */
     public String getStorageProviderId();
 
+    /**
+     * Setter for <code>keycloak.fed_user_credential.user_label</code>.
+     */
+    public IFedUserCredential setUserLabel(String value);
+
+    /**
+     * Getter for <code>keycloak.fed_user_credential.user_label</code>.
+     */
+    public String getUserLabel();
+
+    /**
+     * Setter for <code>keycloak.fed_user_credential.secret_data</code>.
+     */
+    public IFedUserCredential setSecretData(String value);
+
+    /**
+     * Getter for <code>keycloak.fed_user_credential.secret_data</code>.
+     */
+    public String getSecretData();
+
+    /**
+     * Setter for <code>keycloak.fed_user_credential.credential_data</code>.
+     */
+    public IFedUserCredential setCredentialData(String value);
+
+    /**
+     * Getter for <code>keycloak.fed_user_credential.credential_data</code>.
+     */
+    public String getCredentialData();
+
+    /**
+     * Setter for <code>keycloak.fed_user_credential.priority</code>.
+     */
+    public IFedUserCredential setPriority(Integer value);
+
+    /**
+     * Getter for <code>keycloak.fed_user_credential.priority</code>.
+     */
+    public Integer getPriority();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -175,19 +145,16 @@ public interface IFedUserCredential extends VertxPojo, Serializable {
         @Override
         public default IFedUserCredential fromJson(io.vertx.core.json.JsonObject json) {
                 setOrThrow(this::setId,json::getString,"id","java.lang.String");
-                setOrThrow(this::setDevice,json::getString,"device","java.lang.String");
-                setOrThrow(this::setHashIterations,json::getInteger,"hash_iterations","java.lang.Integer");
                 setOrThrow(this::setSalt,json::getBinary,"salt","byte[]");
                 setOrThrow(this::setType,json::getString,"type","java.lang.String");
-                setOrThrow(this::setValue,json::getString,"value","java.lang.String");
                 setOrThrow(this::setCreatedDate,json::getLong,"created_date","java.lang.Long");
-                setOrThrow(this::setCounter,json::getInteger,"counter","java.lang.Integer");
-                setOrThrow(this::setDigits,json::getInteger,"digits","java.lang.Integer");
-                setOrThrow(this::setPeriod,json::getInteger,"period","java.lang.Integer");
-                setOrThrow(this::setAlgorithm,json::getString,"algorithm","java.lang.String");
                 setOrThrow(this::setUserId,json::getString,"user_id","java.lang.String");
                 setOrThrow(this::setRealmId,json::getString,"realm_id","java.lang.String");
                 setOrThrow(this::setStorageProviderId,json::getString,"storage_provider_id","java.lang.String");
+                setOrThrow(this::setUserLabel,json::getString,"user_label","java.lang.String");
+                setOrThrow(this::setSecretData,json::getString,"secret_data","java.lang.String");
+                setOrThrow(this::setCredentialData,json::getString,"credential_data","java.lang.String");
+                setOrThrow(this::setPriority,json::getInteger,"priority","java.lang.Integer");
                 return this;
         }
 
@@ -196,19 +163,16 @@ public interface IFedUserCredential extends VertxPojo, Serializable {
         public default io.vertx.core.json.JsonObject toJson() {
                 io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
                 json.put("id",getId());
-                json.put("device",getDevice());
-                json.put("hash_iterations",getHashIterations());
                 json.put("salt",getSalt());
                 json.put("type",getType());
-                json.put("value",getValue());
                 json.put("created_date",getCreatedDate());
-                json.put("counter",getCounter());
-                json.put("digits",getDigits());
-                json.put("period",getPeriod());
-                json.put("algorithm",getAlgorithm());
                 json.put("user_id",getUserId());
                 json.put("realm_id",getRealmId());
                 json.put("storage_provider_id",getStorageProviderId());
+                json.put("user_label",getUserLabel());
+                json.put("secret_data",getSecretData());
+                json.put("credential_data",getCredentialData());
+                json.put("priority",getPriority());
                 return json;
         }
 

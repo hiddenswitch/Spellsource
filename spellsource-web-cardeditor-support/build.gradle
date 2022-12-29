@@ -3,13 +3,11 @@ plugins {
     id 'java-library'
 }
 
-apply plugin: 'java-library'
+apply from: '../gradle/instrument.gradle'
 
 dependencies {
     api project(':spellsource-common')
     api project(':spellsource-game')
     api project(':spellsource-cards-git')
     api project(':spellsource-testutils')
-    runtimeOnly "ch.qos.logback:logback-classic:1.2.11"
-    runtimeOnly group: 'org.codehaus.groovy', name: 'groovy', version: '3.0.7'
 }

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
@@ -18,7 +17,6 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
 public final class ReturnToHandWithEnchantmentsSpell extends ShuffleToDeckWithEnchantmentsSpell {
 
 	@Override
-	@Suspendable
 	protected void moveCopyToDestination(GameContext context, Player player, Entity target, Card copiedCard) {
 		// Da Undatakah interaction
 		if (!copiedCard.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {

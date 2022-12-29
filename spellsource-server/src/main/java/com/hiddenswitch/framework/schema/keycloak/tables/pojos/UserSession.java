@@ -18,18 +18,18 @@ public class UserSession implements VertxPojo, IUserSession {
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
-    private String  authMethod;
-    private String  ipAddress;
+    private String id;
+    private String authMethod;
+    private String ipAddress;
     private Integer lastSessionRefresh;
-    private String  loginUsername;
-    private String  realmId;
+    private String loginUsername;
+    private String realmId;
     private Boolean rememberMe;
     private Integer started;
-    private String  userId;
+    private String userId;
     private Integer userSessionState;
-    private String  brokerSessionId;
-    private String  brokerUserId;
+    private String brokerSessionId;
+    private String brokerUserId;
 
     public UserSession() {}
 
@@ -49,18 +49,18 @@ public class UserSession implements VertxPojo, IUserSession {
     }
 
     public UserSession(
-        String  id,
-        String  authMethod,
-        String  ipAddress,
+        String id,
+        String authMethod,
+        String ipAddress,
         Integer lastSessionRefresh,
-        String  loginUsername,
-        String  realmId,
+        String loginUsername,
+        String realmId,
         Boolean rememberMe,
         Integer started,
-        String  userId,
+        String userId,
         Integer userSessionState,
-        String  brokerSessionId,
-        String  brokerUserId
+        String brokerSessionId,
+        String brokerUserId
     ) {
         this.id = id;
         this.authMethod = authMethod;
@@ -283,6 +283,109 @@ public class UserSession implements VertxPojo, IUserSession {
     public UserSession setBrokerUserId(String brokerUserId) {
         this.brokerUserId = brokerUserId;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final UserSession other = (UserSession) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.authMethod == null) {
+            if (other.authMethod != null)
+                return false;
+        }
+        else if (!this.authMethod.equals(other.authMethod))
+            return false;
+        if (this.ipAddress == null) {
+            if (other.ipAddress != null)
+                return false;
+        }
+        else if (!this.ipAddress.equals(other.ipAddress))
+            return false;
+        if (this.lastSessionRefresh == null) {
+            if (other.lastSessionRefresh != null)
+                return false;
+        }
+        else if (!this.lastSessionRefresh.equals(other.lastSessionRefresh))
+            return false;
+        if (this.loginUsername == null) {
+            if (other.loginUsername != null)
+                return false;
+        }
+        else if (!this.loginUsername.equals(other.loginUsername))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.rememberMe == null) {
+            if (other.rememberMe != null)
+                return false;
+        }
+        else if (!this.rememberMe.equals(other.rememberMe))
+            return false;
+        if (this.started == null) {
+            if (other.started != null)
+                return false;
+        }
+        else if (!this.started.equals(other.started))
+            return false;
+        if (this.userId == null) {
+            if (other.userId != null)
+                return false;
+        }
+        else if (!this.userId.equals(other.userId))
+            return false;
+        if (this.userSessionState == null) {
+            if (other.userSessionState != null)
+                return false;
+        }
+        else if (!this.userSessionState.equals(other.userSessionState))
+            return false;
+        if (this.brokerSessionId == null) {
+            if (other.brokerSessionId != null)
+                return false;
+        }
+        else if (!this.brokerSessionId.equals(other.brokerSessionId))
+            return false;
+        if (this.brokerUserId == null) {
+            if (other.brokerUserId != null)
+                return false;
+        }
+        else if (!this.brokerUserId.equals(other.brokerUserId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.authMethod == null) ? 0 : this.authMethod.hashCode());
+        result = prime * result + ((this.ipAddress == null) ? 0 : this.ipAddress.hashCode());
+        result = prime * result + ((this.lastSessionRefresh == null) ? 0 : this.lastSessionRefresh.hashCode());
+        result = prime * result + ((this.loginUsername == null) ? 0 : this.loginUsername.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.rememberMe == null) ? 0 : this.rememberMe.hashCode());
+        result = prime * result + ((this.started == null) ? 0 : this.started.hashCode());
+        result = prime * result + ((this.userId == null) ? 0 : this.userId.hashCode());
+        result = prime * result + ((this.userSessionState == null) ? 0 : this.userSessionState.hashCode());
+        result = prime * result + ((this.brokerSessionId == null) ? 0 : this.brokerSessionId.hashCode());
+        result = prime * result + ((this.brokerUserId == null) ? 0 : this.brokerUserId.hashCode());
+        return result;
     }
 
     @Override

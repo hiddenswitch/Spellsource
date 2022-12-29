@@ -1,6 +1,5 @@
 package com.hiddenswitch.framework.impl;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.common.GameState;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
@@ -14,7 +13,6 @@ public interface ActionListener {
 	/**
 	 * Elapses all awaiting requests, typically due to a timer running out.
 	 */
-	@Suspendable
 	void elapseAwaitingRequests();
 
 	/**
@@ -24,7 +22,6 @@ public interface ActionListener {
 	 * @param state     The game state
 	 * @param actions   The possible actions
 	 */
-	@Suspendable
 	void onRequestAction(String messageId, GameState state, List<GameAction> actions);
 
 	/**
@@ -35,6 +32,5 @@ public interface ActionListener {
 	 * @param cards     The cards that can be discarded
 	 * @param playerId  The player doing the discards
 	 */
-	@Suspendable
 	void onMulligan(String messageId, GameState state, List<Card> cards, int playerId);
 }

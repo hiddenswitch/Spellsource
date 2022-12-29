@@ -111,6 +111,15 @@ public class RowMappers {
                 };
         }
 
+        public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Guests> getGuestsMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.spellsource.tables.pojos.Guests pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.Guests();
+                        pojo.setId(row.getLong("id"));
+                        pojo.setUserId(row.getString("user_id"));
+                        return pojo;
+                };
+        }
+
         public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues> getMatchmakingQueuesMapper() {
                 return row -> {
                         com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues();
@@ -133,7 +142,7 @@ public class RowMappers {
         public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets> getMatchmakingTicketsMapper() {
                 return row -> {
                         com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets();
-                        pojo.setId(row.getLong("id"));
+                        pojo.setTicketId(row.getLong("ticket_id"));
                         pojo.setQueueId(row.getString("queue_id"));
                         pojo.setUserId(row.getString("user_id"));
                         pojo.setDeckId(row.getString("deck_id"));
@@ -149,6 +158,7 @@ public class RowMappers {
                         pojo.setId(row.getString("id"));
                         pojo.setPrivacyToken(row.getString("privacy_token"));
                         pojo.setMigrated(row.getBoolean("migrated"));
+                        pojo.setShowPremadeDecks(row.getBoolean("show_premade_decks"));
                         return pojo;
                 };
         }

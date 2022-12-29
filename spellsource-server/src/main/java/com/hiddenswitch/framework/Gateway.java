@@ -11,37 +11,59 @@ import io.grpc.protobuf.services.ProtoReflectionService;
 import io.micrometer.core.instrument.Metrics;
 import io.opentracing.contrib.grpc.TracingServerInterceptor;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
-import io.vertx.core.Promise;
+import io.vertx.core.*;
+import io.vertx.core.http.Http2Settings;
+import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.grpc.VertxServer;
 import io.vertx.grpc.VertxServerBuilder;
+import io.vertx.grpc.server.GrpcServer;
+import io.vertx.grpc.server.GrpcServiceBridge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Gateway extends AbstractVerticle {
 	private static Logger LOGGER = LoggerFactory.getLogger(Gateway.class);
-	VertxServer server;
+	List<Closeable> closeables = new ArrayList<>();
+	private boolean useVertxNativeGrpcServer = false;
+
+	public Gateway() {
+	}
+
+	public boolean useVertxNativeGrpcServer() {
+		return useVertxNativeGrpcServer;
+	}
+
+	public Gateway setUseVertxNativeGrpcServer(boolean useVertxNativeGrpcServer) {
+		this.useVertxNativeGrpcServer = useVertxNativeGrpcServer;
+		return this;
+	}
+
+	public static int grpcPort() {
+		return Environment.getConfiguration().getGrpcConfiguration().getPort();
+	}
 
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
 		var configuration = Environment.getConfiguration();
 		CompositeFuture.all(
-				Legacy.services(),
-				Legacy.unauthenticatedCards(),
-				Matchmaking.services(),
-				Accounts.unauthenticatedService(),
-				Accounts.authenticatedService(),
-				Games.services())
+						Legacy.services(),
+						Legacy.unauthenticatedCards(),
+						Matchmaking.services(),
+						Accounts.unauthenticatedService(),
+						Accounts.authenticatedService(),
+						Games.services())
 				.compose(services -> {
-					var serverConfiguration = Environment.getConfiguration();
-					var builder = VertxServerBuilder.forPort(vertx, grpcPort());
+					var server = useVertxNativeGrpcServer ? new VertxNativeGrpcServer(vertx, grpcPort()) : new NettyGrpcServer(vertx, grpcPort());
+					var inited = server.init();
 
 					var list = services.list();
 					for (var service : list) {
@@ -77,33 +99,117 @@ public class Gateway extends AbstractVerticle {
 											.build()).build());
 						}
 						boundService = ServerInterceptors.intercept(boundService, Streams.concat(interceptors, limiter).collect(Collectors.toList()));
-						builder.addService(boundService);
+						server.bind(boundService);
 					}
 
-					// include reflection
-					builder.addService(ProtoReflectionService.newInstance());
-
-					var nettyServerBuilder = builder.nettyBuilder();
-					nettyServerBuilder
-							.maxConnectionIdle(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
-							.maxConnectionAge(29, TimeUnit.DAYS)
-							.keepAliveTime(serverConfiguration.getGrpcConfiguration().getServerKeepAliveTimeMillis(), TimeUnit.MILLISECONDS)
-							.keepAliveTimeout(serverConfiguration.getGrpcConfiguration().getServerKeepAliveTimeoutMillis(), TimeUnit.MILLISECONDS)
-							.permitKeepAliveTime(Math.max(serverConfiguration.getGrpcConfiguration().getServerKeepAliveTimeMillis() - 400, 100), TimeUnit.MILLISECONDS)
-							.permitKeepAliveWithoutCalls(serverConfiguration.getGrpcConfiguration().getServerPermitKeepAliveWithoutCalls());
-					return Future.succeededFuture(builder);
-				})
-				.compose(builder -> {
-					var promise = Promise.<Void>promise();
-					server = builder.build();
-					server.start(promise);
-					return promise.future();
+					server.bind(ProtoReflectionService.newInstance().bindService());
+					closeables.add(server);
+					return inited.compose(v -> server.start());
 				})
 				.onFailure(Environment.onFailure())
 				.onComplete(startPromise);
 	}
 
-	public static int grpcPort() {
-		return Environment.getConfiguration().getGrpcConfiguration().getPort();
+	@Override
+	public void stop(Promise<Void> stopPromise) {
+		CompositeFuture.all(closeables.stream().map(closeable -> {
+					var promise = Promise.<Void>promise();
+					closeable.close(promise);
+					return promise.future();
+				}).collect(Collectors.toList()))
+				.map((Void) null)
+				.onComplete(stopPromise);
+	}
+
+	interface GatewayGrpcServer extends Closeable {
+		void bind(ServerServiceDefinition serverServiceDefinition);
+
+		Future<Void> init();
+
+		Future<Void> start();
+	}
+
+	static class NettyGrpcServer implements GatewayGrpcServer {
+
+		private final Vertx vertx;
+		private final int port;
+		private VertxServerBuilder builder;
+		private VertxServer server;
+
+		public NettyGrpcServer(Vertx vertx, int port) {
+			this.vertx = vertx;
+			this.port = port;
+		}
+
+		@Override
+		public void bind(ServerServiceDefinition serverServiceDefinition) {
+			builder.addService(serverServiceDefinition);
+		}
+
+		@Override
+		public Future<Void> init() {
+			this.builder = VertxServerBuilder.forPort(vertx, port);
+			return Future.succeededFuture();
+		}
+
+		@Override
+		public Future<Void> start() {
+			var nettyServerBuilder = builder.nettyBuilder();
+			var configuration = Environment.getConfiguration();
+			nettyServerBuilder
+					.maxConnectionIdle(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
+					.maxConnectionAge(29, TimeUnit.DAYS)
+					.keepAliveTime(configuration.getGrpcConfiguration().getServerKeepAliveTimeMillis(), TimeUnit.MILLISECONDS)
+					.keepAliveTimeout(configuration.getGrpcConfiguration().getServerKeepAliveTimeoutMillis(), TimeUnit.MILLISECONDS)
+					.permitKeepAliveTime(Math.max(configuration.getGrpcConfiguration().getServerKeepAliveTimeMillis() - 400, 100), TimeUnit.MILLISECONDS)
+					.permitKeepAliveWithoutCalls(configuration.getGrpcConfiguration().getServerPermitKeepAliveWithoutCalls());
+			this.server = builder.build();
+			var promise = Promise.<Void>promise();
+			this.server.start(promise);
+			return promise.future();
+		}
+
+		@Override
+		public void close(Promise<Void> completion) {
+			this.server.shutdown(completion);
+		}
+	}
+
+	static class VertxNativeGrpcServer implements GatewayGrpcServer {
+
+		private Vertx vertx;
+		private int port;
+		private HttpServer httpServer;
+		private GrpcServer server;
+
+		public VertxNativeGrpcServer(Vertx vertx, int port) {
+			this.vertx = vertx;
+			this.port = port;
+		}
+
+		@Override
+		public void bind(ServerServiceDefinition serverServiceDefinition) {
+			GrpcServiceBridge.bridge(serverServiceDefinition).bind(server);
+		}
+
+		@Override
+		public void close(Promise<Void> closePromise) {
+			this.httpServer.close(closePromise);
+		}
+
+		@Override
+		public Future<Void> init() {
+			this.server = GrpcServer.server(vertx);
+			this.httpServer = vertx.createHttpServer(new HttpServerOptions()
+					.setIdleTimeout(Integer.MAX_VALUE));
+			return httpServer.requestHandler(server)
+					.listen(port)
+					.map((Void) null);
+		}
+
+		@Override
+		public Future<Void> start() {
+			return Future.succeededFuture();
+		}
 	}
 }

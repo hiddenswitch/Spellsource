@@ -39,21 +39,6 @@ public class ResourceServerDao extends AbstractReactiveVertxDAO<ResourceServerRe
         }
 
         /**
-     * Find records that have <code>client_id IN (values)</code> asynchronously
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByClientId(Collection<String> values) {
-                return findManyByCondition(ResourceServer.RESOURCE_SERVER.CLIENT_ID.in(values));
-        }
-
-        /**
-     * Find records that have <code>client_id IN (values)</code> asynchronously
-     * limited by the given limit
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByClientId(Collection<String> values, int limit) {
-                return findManyByCondition(ResourceServer.RESOURCE_SERVER.CLIENT_ID.in(values),limit);
-        }
-
-        /**
      * Find records that have <code>allow_rs_remote_mgmt IN (values)</code>
      * asynchronously
      */
@@ -83,6 +68,22 @@ public class ResourceServerDao extends AbstractReactiveVertxDAO<ResourceServerRe
      */
         public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByPolicyEnforceMode(Collection<String> values, int limit) {
                 return findManyByCondition(ResourceServer.RESOURCE_SERVER.POLICY_ENFORCE_MODE.in(values),limit);
+        }
+
+        /**
+     * Find records that have <code>decision_strategy IN (values)</code>
+     * asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByDecisionStrategy(Collection<Short> values) {
+                return findManyByCondition(ResourceServer.RESOURCE_SERVER.DECISION_STRATEGY.in(values));
+        }
+
+        /**
+     * Find records that have <code>decision_strategy IN (values)</code>
+     * asynchronously limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByDecisionStrategy(Collection<Short> values, int limit) {
+                return findManyByCondition(ResourceServer.RESOURCE_SERVER.DECISION_STRATEGY.in(values),limit);
         }
 
         @Override

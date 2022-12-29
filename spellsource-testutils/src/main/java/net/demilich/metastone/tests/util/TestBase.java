@@ -1,7 +1,5 @@
 package net.demilich.metastone.tests.util;
 
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SuspendableRunnable;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Multiset;
 import com.hiddenswitch.spellsource.cards.test.TestCardResources;
@@ -33,7 +31,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 import org.junit.platform.commons.util.ExceptionUtils;
@@ -246,8 +243,7 @@ public class TestBase {
 		return context.getLogic().getModifiedManaCost(player, deckCard);
 	}
 
-	@Suspendable
-	public static void assertThrows(SuspendableRunnable runnable) {
+	public static void assertThrows(Runnable runnable) {
 		assertThrows(Throwable.class, runnable);
 	}
 
@@ -262,13 +258,11 @@ public class TestBase {
 	 * @since 6.9.5
 	 */
 	@SuppressWarnings("ThrowableResultOfMethodCallIgnored")
-	@Suspendable
-	public static <T extends Throwable> void assertThrows(Class<T> throwableClass, SuspendableRunnable runnable) {
+	public static <T extends Throwable> void assertThrows(Class<T> throwableClass, Runnable runnable) {
 		expectThrows(throwableClass, runnable);
 	}
 
-	@Suspendable
-	public static <T extends Throwable> T expectThrows(Class<T> throwableClass, SuspendableRunnable runnable) {
+	public static <T extends Throwable> T expectThrows(Class<T> throwableClass, Runnable runnable) {
 		try {
 			runnable.run();
 		} catch (Throwable t) {
@@ -310,10 +304,8 @@ public class TestBase {
 
 	@FunctionalInterface
 	public interface GymConsumer {
-		@Suspendable
 		void run(GameContext context, Player player, Player opponent);
 
-		@Suspendable
 		default GymConsumer andThen(GymConsumer after) {
 			Objects.requireNonNull(after);
 			return (c, p, o) -> {
@@ -335,7 +327,6 @@ public class TestBase {
 		return factory;
 	}
 
-	@Suspendable
 	public void runGym(GymConsumer consumer, String heroClass1, String heroClass2) {
 		var defaultFormat = getDefaultFormat();
 		var format = new DeckFormat()
@@ -380,7 +371,6 @@ public class TestBase {
 		consumer.run(context, context.getActivePlayer(), context.getOpponent(context.getActivePlayer()));
 	}
 
-	@Suspendable
 	public void runGym(GymConsumer consumer) {
 		runGym(consumer, getDefaultHeroClass(), getDefaultHeroClass());
 	}
@@ -526,12 +516,10 @@ public class TestBase {
 		return minionList.get(minionList.size() - 1);
 	}
 
-	@Suspendable
 	protected static void playCard(GameContext context, Player player, String cardId) {
 		playCard(context, player, CardCatalogue.getCardById(cardId));
 	}
 
-	@Suspendable
 	protected static void playCard(GameContext context, Player player, Card card) {
 		if (card.getZone() != Zones.HAND) {
 			context.getLogic().receiveCard(player.getId(), card);
@@ -542,12 +530,10 @@ public class TestBase {
 		context.performAction(player.getId(), card.play());
 	}
 
-	@Suspendable
 	protected static void useHeroPower(GameContext context, Player player) {
 		context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
 	}
 
-	@Suspendable
 	protected static void useHeroPower(GameContext context, Player player, EntityReference target) {
 		PlayCardAction action = player.getHeroPowerZone().get(0).play();
 		action.setTargetReference(target);

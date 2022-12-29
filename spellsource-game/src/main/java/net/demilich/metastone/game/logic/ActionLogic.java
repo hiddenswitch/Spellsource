@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.logic;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -28,7 +27,6 @@ import java.util.stream.Collectors;
 public class ActionLogic implements Serializable {
 	private final TargetLogic targetLogic = new TargetLogic();
 
-	@Suspendable
 	private List<GameAction> getHeroAttackActions(GameContext context, Player player) {
 		List<GameAction> heroAttackActions = new ArrayList<GameAction>();
 		Hero hero = player.getHero();
@@ -40,7 +38,6 @@ public class ActionLogic implements Serializable {
 		return heroAttackActions;
 	}
 
-	@Suspendable
 	private List<GameAction> getHeroPowerActions(GameContext context, Player player) {
 		List<GameAction> heroPowerActions = new ArrayList<GameAction>();
 		Card heroPower = player.getHeroPowerZone().get(0);
@@ -95,7 +92,6 @@ public class ActionLogic implements Serializable {
 		return physicalAttackActions;
 	}
 
-	@Suspendable
 	private List<GameAction> getPlayCardActions(GameContext context, Player player) {
 		List<GameAction> playCardActions = new ArrayList<GameAction>();
 		playCardActions.addAll(getHeroPowerActions(context, player));
@@ -146,7 +142,6 @@ public class ActionLogic implements Serializable {
 	 * @param player
 	 * @return
 	 */
-	@Suspendable
 	public List<GameAction> getValidActions(GameContext context, Player player) {
 		List<GameAction> validActions = new ArrayList<GameAction>();
 		validActions.addAll(getPhysicalAttackActions(context, player));

@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import io.vertx.core.VertxException;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.jackson.DatabindCodec;
+import io.vertx.core.shareddata.ClusterSerializable;
 import io.vertx.core.shareddata.Shareable;
-import io.vertx.core.shareddata.impl.ClusterSerializable;
 
 import java.io.IOException;
 

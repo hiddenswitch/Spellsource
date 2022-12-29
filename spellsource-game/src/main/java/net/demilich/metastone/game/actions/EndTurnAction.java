@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.actions;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
@@ -31,7 +30,6 @@ public class EndTurnAction extends GameAction {
 	}
 
 	@Override
-	@Suspendable
 	public void execute(GameContext context, int playerId) {
 		context.endTurn();
 	}

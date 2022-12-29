@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.spells.desc;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
@@ -303,7 +302,6 @@ public class SpellDesc extends Desc<SpellArg, Spell> implements AbstractEnchantm
 	 * @param host    The host entity from whose point of view the card source and filter should be evaluated.
 	 * @return A possibly empty list of cards.
 	 */
-	@Suspendable
 	public @NotNull
 	CardList getFilteredCards(GameContext context, Player player, Entity host) {
 		CardSource source = getCardSource();
@@ -335,7 +333,6 @@ public class SpellDesc extends Desc<SpellArg, Spell> implements AbstractEnchantm
 		return (String[]) get(SpellArg.CARDS);
 	}
 
-	@Suspendable
 	public Optional<Aftermath> tryCreate(GameContext context, Player player, Entity effectSource, Card enchantmentSource, Entity host, boolean force) {
 		return context.getLogic().tryCreateAftermath(this, effectSource, enchantmentSource, host, force);
 	}

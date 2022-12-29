@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.actions;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -38,7 +37,6 @@ public class PlayChooseOneCardAction extends PlayCardAction implements HasChoice
 	}
 
 	@Override
-	@Suspendable
 	public void innerExecute(GameContext context, int playerId) {
 		context.getLogic().castChooseOneSpell(playerId, spell, getSourceReference(), getTargetReference(), chosenCard, this);
 	}

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -17,7 +16,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public class SwipeSpell extends Spell {
 
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int primaryDamage = desc.getValue(SpellArg.VALUE, context, player, target, source, 2);
 		int secondaryDamage = desc.getValue(SpellArg.SECONDARY_VALUE, context, player, target, source, 1);

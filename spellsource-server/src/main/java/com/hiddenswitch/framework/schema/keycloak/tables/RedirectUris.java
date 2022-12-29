@@ -11,17 +11,22 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.RedirectUrisRec
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function2;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row2;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
+import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -56,7 +61,7 @@ public class RedirectUris extends TableImpl<RedirectUrisRecord> {
     /**
      * The column <code>keycloak.redirect_uris.value</code>.
      */
-    public final TableField<RedirectUrisRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255), this, "");
+    public final TableField<RedirectUrisRecord, String> VALUE = createField(DSL.name("value"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     private RedirectUris(Name alias, Table<RedirectUrisRecord> aliased) {
         this(alias, aliased, null);
@@ -102,6 +107,11 @@ public class RedirectUris extends TableImpl<RedirectUrisRecord> {
     }
 
     @Override
+    public UniqueKey<RedirectUrisRecord> getPrimaryKey() {
+        return Keys.CONSTRAINT_REDIRECT_URIS;
+    }
+
+    @Override
     public List<ForeignKey<RedirectUrisRecord, ?>> getReferences() {
         return Arrays.asList(Keys.REDIRECT_URIS__FK_1BURS8PB4OUJ97H5WUPPAHV9F);
     }
@@ -128,6 +138,11 @@ public class RedirectUris extends TableImpl<RedirectUrisRecord> {
         return new RedirectUris(alias, this);
     }
 
+    @Override
+    public RedirectUris as(Table<?> alias) {
+        return new RedirectUris(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -144,6 +159,14 @@ public class RedirectUris extends TableImpl<RedirectUrisRecord> {
         return new RedirectUris(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public RedirectUris rename(Table<?> name) {
+        return new RedirectUris(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row2 type methods
     // -------------------------------------------------------------------------
@@ -151,5 +174,20 @@ public class RedirectUris extends TableImpl<RedirectUrisRecord> {
     @Override
     public Row2<String, String> fieldsRow() {
         return (Row2) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function2<? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

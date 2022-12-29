@@ -10,14 +10,18 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsInDeckR
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function3;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row3;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -151,6 +155,11 @@ public class CardsInDeck extends TableImpl<CardsInDeckRecord> {
         return new CardsInDeck(alias, this);
     }
 
+    @Override
+    public CardsInDeck as(Table<?> alias) {
+        return new CardsInDeck(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -167,6 +176,14 @@ public class CardsInDeck extends TableImpl<CardsInDeckRecord> {
         return new CardsInDeck(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public CardsInDeck rename(Table<?> name) {
+        return new CardsInDeck(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row3 type methods
     // -------------------------------------------------------------------------
@@ -174,5 +191,20 @@ public class CardsInDeck extends TableImpl<CardsInDeckRecord> {
     @Override
     public Row3<Long, String, String> fieldsRow() {
         return (Row3) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function3<? super Long, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function3<? super Long, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

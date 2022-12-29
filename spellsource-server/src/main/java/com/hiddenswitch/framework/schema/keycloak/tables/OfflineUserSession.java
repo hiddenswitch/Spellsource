@@ -4,16 +4,25 @@
 package com.hiddenswitch.framework.schema.keycloak.tables;
 
 
+import com.hiddenswitch.framework.schema.keycloak.Indexes;
 import com.hiddenswitch.framework.schema.keycloak.Keycloak;
 import com.hiddenswitch.framework.schema.keycloak.Keys;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.OfflineUserSessionRecord;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function7;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Records;
+import org.jooq.Row7;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -60,10 +69,9 @@ public class OfflineUserSession extends TableImpl<OfflineUserSessionRecord> {
     public final TableField<OfflineUserSessionRecord, String> REALM_ID = createField(DSL.name("realm_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
 
     /**
-     * The column
-     * <code>keycloak.offline_user_session.last_session_refresh</code>.
+     * The column <code>keycloak.offline_user_session.created_on</code>.
      */
-    public final TableField<OfflineUserSessionRecord, Integer> LAST_SESSION_REFRESH = createField(DSL.name("last_session_refresh"), SQLDataType.INTEGER, this, "");
+    public final TableField<OfflineUserSessionRecord, Integer> CREATED_ON = createField(DSL.name("created_on"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>keycloak.offline_user_session.offline_flag</code>.
@@ -74,6 +82,12 @@ public class OfflineUserSession extends TableImpl<OfflineUserSessionRecord> {
      * The column <code>keycloak.offline_user_session.data</code>.
      */
     public final TableField<OfflineUserSessionRecord, String> DATA = createField(DSL.name("data"), SQLDataType.CLOB, this, "");
+
+    /**
+     * The column
+     * <code>keycloak.offline_user_session.last_session_refresh</code>.
+     */
+    public final TableField<OfflineUserSessionRecord, Integer> LAST_SESSION_REFRESH = createField(DSL.name("last_session_refresh"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("0", SQLDataType.INTEGER)), this, "");
 
     private OfflineUserSession(Name alias, Table<OfflineUserSessionRecord> aliased) {
         this(alias, aliased, null);
@@ -116,6 +130,11 @@ public class OfflineUserSession extends TableImpl<OfflineUserSessionRecord> {
     }
 
     @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.IDX_OFFLINE_USS_BY_USER, Indexes.IDX_OFFLINE_USS_BY_USERSESS, Indexes.IDX_OFFLINE_USS_CREATEDON, Indexes.IDX_OFFLINE_USS_PRELOAD);
+    }
+
+    @Override
     public UniqueKey<OfflineUserSessionRecord> getPrimaryKey() {
         return Keys.CONSTRAINT_OFFL_US_SES_PK2;
     }
@@ -128,6 +147,11 @@ public class OfflineUserSession extends TableImpl<OfflineUserSessionRecord> {
     @Override
     public OfflineUserSession as(Name alias) {
         return new OfflineUserSession(alias, this);
+    }
+
+    @Override
+    public OfflineUserSession as(Table<?> alias) {
+        return new OfflineUserSession(alias.getQualifiedName(), this);
     }
 
     /**
@@ -146,12 +170,35 @@ public class OfflineUserSession extends TableImpl<OfflineUserSessionRecord> {
         return new OfflineUserSession(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public OfflineUserSession rename(Table<?> name) {
+        return new OfflineUserSession(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<String, String, String, Integer, String, String> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<String, String, String, Integer, String, String, Integer> fieldsRow() {
+        return (Row7) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function7<? super String, ? super String, ? super String, ? super Integer, ? super String, ? super String, ? super Integer, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function7<? super String, ? super String, ? super String, ? super Integer, ? super String, ? super String, ? super Integer, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

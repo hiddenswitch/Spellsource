@@ -18,16 +18,16 @@ public class ClientSession implements VertxPojo, IClientSession {
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
-    private String  clientId;
-    private String  redirectUri;
-    private String  state;
+    private String id;
+    private String clientId;
+    private String redirectUri;
+    private String state;
     private Integer timestamp;
-    private String  sessionId;
-    private String  authMethod;
-    private String  realmId;
-    private String  authUserId;
-    private String  currentAction;
+    private String sessionId;
+    private String authMethod;
+    private String realmId;
+    private String authUserId;
+    private String currentAction;
 
     public ClientSession() {}
 
@@ -45,16 +45,16 @@ public class ClientSession implements VertxPojo, IClientSession {
     }
 
     public ClientSession(
-        String  id,
-        String  clientId,
-        String  redirectUri,
-        String  state,
+        String id,
+        String clientId,
+        String redirectUri,
+        String state,
         Integer timestamp,
-        String  sessionId,
-        String  authMethod,
-        String  realmId,
-        String  authUserId,
-        String  currentAction
+        String sessionId,
+        String authMethod,
+        String realmId,
+        String authUserId,
+        String currentAction
     ) {
         this.id = id;
         this.clientId = clientId;
@@ -241,6 +241,95 @@ public class ClientSession implements VertxPojo, IClientSession {
     public ClientSession setCurrentAction(String currentAction) {
         this.currentAction = currentAction;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ClientSession other = (ClientSession) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.clientId == null) {
+            if (other.clientId != null)
+                return false;
+        }
+        else if (!this.clientId.equals(other.clientId))
+            return false;
+        if (this.redirectUri == null) {
+            if (other.redirectUri != null)
+                return false;
+        }
+        else if (!this.redirectUri.equals(other.redirectUri))
+            return false;
+        if (this.state == null) {
+            if (other.state != null)
+                return false;
+        }
+        else if (!this.state.equals(other.state))
+            return false;
+        if (this.timestamp == null) {
+            if (other.timestamp != null)
+                return false;
+        }
+        else if (!this.timestamp.equals(other.timestamp))
+            return false;
+        if (this.sessionId == null) {
+            if (other.sessionId != null)
+                return false;
+        }
+        else if (!this.sessionId.equals(other.sessionId))
+            return false;
+        if (this.authMethod == null) {
+            if (other.authMethod != null)
+                return false;
+        }
+        else if (!this.authMethod.equals(other.authMethod))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.authUserId == null) {
+            if (other.authUserId != null)
+                return false;
+        }
+        else if (!this.authUserId.equals(other.authUserId))
+            return false;
+        if (this.currentAction == null) {
+            if (other.currentAction != null)
+                return false;
+        }
+        else if (!this.currentAction.equals(other.currentAction))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.clientId == null) ? 0 : this.clientId.hashCode());
+        result = prime * result + ((this.redirectUri == null) ? 0 : this.redirectUri.hashCode());
+        result = prime * result + ((this.state == null) ? 0 : this.state.hashCode());
+        result = prime * result + ((this.timestamp == null) ? 0 : this.timestamp.hashCode());
+        result = prime * result + ((this.sessionId == null) ? 0 : this.sessionId.hashCode());
+        result = prime * result + ((this.authMethod == null) ? 0 : this.authMethod.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.authUserId == null) ? 0 : this.authUserId.hashCode());
+        result = prime * result + ((this.currentAction == null) ? 0 : this.currentAction.hashCode());
+        return result;
     }
 
     @Override

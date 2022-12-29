@@ -2,10 +2,11 @@ package com.hiddenswitch.framework;
 
 import com.avast.grpc.jwt.server.JwtServerInterceptor;
 import com.avast.grpc.jwt.server.JwtTokenParser;
-import com.github.benmanes.caffeine.cache.AsyncCacheLoader;
 import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
@@ -17,12 +18,13 @@ import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc.UnauthenticatedVe
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc.UnauthenticatedVertxStub;
 import com.hiddenswitch.framework.schema.keycloak.tables.daos.UserEntityDao;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
+import com.hiddenswitch.framework.schema.spellsource.Spellsource;
+import com.hiddenswitch.framework.schema.spellsource.Tables;
+import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.grpc.*;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.impl.ContextInternal;
-import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.Shareable;
 import io.vertx.ext.auth.impl.jose.JWT;
@@ -30,6 +32,7 @@ import io.vertx.ext.web.client.WebClient;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jetbrains.annotations.NotNull;
+import org.jooq.DSLContext;
 import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -37,10 +40,13 @@ import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.common.VerificationException;
 import org.keycloak.common.enums.SslRequired;
+import org.keycloak.credential.hash.Pbkdf2Sha512PasswordHashProviderFactory;
 import org.keycloak.models.credential.PasswordCredentialModel;
 import org.keycloak.models.utils.ModelToRepresentation;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.NotFoundException;
 import java.net.URI;
@@ -51,10 +57,13 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import static com.hiddenswitch.framework.Environment.query;
+import static com.hiddenswitch.framework.Environment.withDslContext;
+import static com.hiddenswitch.framework.schema.keycloak.Tables.USER_ENTITY;
+import static com.hiddenswitch.framework.schema.spellsource.Tables.*;
 import static java.util.stream.Collectors.toMap;
 
 /**
@@ -73,6 +82,7 @@ import static java.util.stream.Collectors.toMap;
  * application.
  */
 public class Accounts {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Accounts.class);
 	protected static final String KEYCLOAK_LOGIN_PATH = "/realms/hiddenswitch/protocol/openid-connect/token";
 	protected static final String KEYCLOAK_FORGOT_PASSWORD_PATH = "/realms/hiddenswitch/login-actions/reset-credentials";
 	private static final String RSA = "RSA";
@@ -83,11 +93,7 @@ public class Accounts {
 				var keys = realm.keys().getKeyMetadata().getKeys();
 				var keyBase64 = keys.stream().filter(x -> x.getKid().equals(key)).findFirst();
 				if (keyBase64.isEmpty()) {
-					final var inKey = key;
-					return CompletableFuture.failedFuture(new NoSuchElementException("could not find key") {
-						public final String key = inKey;
-						public final String[] existingKeys = keys.stream().map(KeysMetadataRepresentation.KeyMetadataRepresentation::getKid).toArray(String[]::new);
-					});
+					return CompletableFuture.completedFuture(EmptyPublicKey.INSTANCE);
 				}
 				var keyBytes = Base64.getDecoder().decode(keyBase64.get().getPublicKey());
 				var encodedKeySpec = new X509EncodedKeySpec(keyBytes);
@@ -99,67 +105,11 @@ public class Accounts {
 				}
 			}).toCompletableFuture());
 
-	/**
-	 * Helps cache the JWT public key.
-	 */
-	private interface PublicKeyStorage {
-		PublicKey get();
-
-		void set(PublicKey publicKey);
-	}
-
-	private static class VertxPublicKeyStorage implements PublicKeyStorage {
-
-		private static class ShareablePublicKey implements Shareable {
-			private final PublicKey value;
-
-			public ShareablePublicKey(PublicKey value) {
-				this.value = value;
-			}
-
-			public PublicKey getValue() {
-				return value;
-			}
-		}
-
-		private final Vertx vertx;
-
-		public VertxPublicKeyStorage(Vertx vertx) {
-			this.vertx = vertx;
-		}
-
-		@Override
-		public PublicKey get() {
-			var res = ((ShareablePublicKey) vertx.sharedData().getLocalMap("Accounts:VertxPublicKeyStorage").get("publicKey"));
-			return res == null ? null : res.getValue();
-		}
-
-		@Override
-		public void set(PublicKey publicKey) {
-			vertx.sharedData().getLocalMap("Accounts:VertxPublicKeyStorage").put("publicKey", new ShareablePublicKey(publicKey));
-		}
-	}
-
-	private static class AtomicReferencePublicKeyStorage implements PublicKeyStorage {
-
-		private static final AtomicReference<PublicKey> publicKey = new AtomicReference<>();
-
-		@Override
-		public PublicKey get() {
-			return publicKey.get();
-		}
-
-		@Override
-		public void set(PublicKey publicKey) {
-			AtomicReferencePublicKeyStorage.publicKey.set(publicKey);
-		}
-	}
-
 	private static PublicKeyJwtServerInterceptor authorizationInterceptorConstructor(Vertx vertx) {
 		return new PublicKeyJwtServerInterceptor(accessToken -> {
 			var kid = getKid(accessToken);
 			if (kid == null) {
-				final String inToken = accessToken;
+				final var inToken = accessToken;
 				return CompletableFuture.failedFuture(new IllegalArgumentException("access token could not be parsed for kid") {
 					public final String accessToken = inToken;
 				});
@@ -172,7 +122,7 @@ public class Accounts {
 
 	private static String getKid(String accessToken) {
 		try {
-			JsonObject parsed = JWT.parse(accessToken);
+			var parsed = JWT.parse(accessToken);
 			return parsed.getJsonObject("header").getString("kid");
 		} catch (Throwable t) {
 			return null;
@@ -190,14 +140,18 @@ public class Accounts {
 	 */
 	@NotNull
 	public static CompletableFuture<AccessToken> verify(String jwt, PublicKey pk) {
-		Objects.requireNonNull(pk, "public key is null");
-		var verified = TokenVerifier.create(jwt, AccessToken.class);
-		verified.publicKey(pk);
 		try {
+			Objects.requireNonNull(pk, "public key is null");
+			if (Objects.equals(pk, EmptyPublicKey.INSTANCE)) {
+				return CompletableFuture.completedFuture(null);
+			}
+
+			var verified = TokenVerifier.create(jwt, AccessToken.class);
+			verified.publicKey(pk);
 			verified.verify();
 			return CompletableFuture.completedFuture(verified.getToken());
-		} catch (VerificationException e) {
-			return CompletableFuture.failedFuture(e);
+		} catch (Throwable t) {
+			return CompletableFuture.failedFuture(t);
 		}
 	}
 
@@ -247,7 +201,7 @@ public class Accounts {
 				if (accessToken == null) {
 					return Future.succeededFuture();
 				} else {
-					return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate())).findOneById(accessToken.getSubject());
+					return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate())).findOneById(accessToken.getSubject());
 				}
 			}
 		}
@@ -317,32 +271,69 @@ public class Accounts {
 
 			@Override
 			public Future<LoginOrCreateReply> createAccount(CreateAccountRequest request) {
-				if (!EmailValidator.getInstance().isValid(request.getEmail())) {
-					return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The e-mail address isn't valid.").asRuntimeException());
-				}
-				if (request.getUsername().length() <= 4) {
-					return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The username must be at least 4 characters.").asRuntimeException());
-				}
-				if (request.getPassword().length() <= 4) {
-					return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The password must be at least 4 characters.").asRuntimeException());
+				Future<UserEntity> createUserEntity;
+				var email = request.getEmail();
+				var password = request.getPassword();
+				if (request.getGuest()) {
+					var uuid1 = UUID.randomUUID().toString();
+					password = UUID.randomUUID().toString();
+					email = uuid1 + "@spellsource.com";
+					var finalEmail = email;
+					var finalPassword = password;
+					// todo: make this a longer transaction
+					createUserEntity = query(dsl -> dsl.insertInto(GUESTS).defaultValues().returning())
+							.map(rowSet -> Lists.newArrayList(rowSet.iterator()).stream().map(RowMappers.getGuestsMapper()).collect(Collectors.toList()))
+							.compose(guestRow -> {
+								var guestId = guestRow.get(0).getId();
+								return createUser(finalEmail, "Guest " + guestId, finalPassword)
+										.compose(userEntity ->
+												withDslContext(dsl ->
+														dsl.update(GUESTS)
+																.set(GUESTS.USER_ID, userEntity.getId())
+																.where(GUESTS.ID.eq(guestId)))
+														.map(userEntity));
+							});
+				} else {
+					if (!EmailValidator.getInstance().isValid(email)) {
+						return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The e-mail address isn't valid.").asRuntimeException());
+					}
+					if (request.getUsername().length() <= 4) {
+						return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The username must be at least 4 characters.").asRuntimeException());
+					}
+					if (password.length() <= 4) {
+						return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The password must be at least 4 characters.").asRuntimeException());
+					}
+
+					final var finalEmail = email;
+					final var finalPassword = password;
+					createUserEntity = get()
+							.compose(realm -> Environment.executeBlocking(() -> realm.users().search(request.getUsername(), true)))
+							.compose(existingUsers -> {
+								if (!existingUsers.isEmpty()) {
+									return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("This username already exists.").asRuntimeException());
+								}
+
+								return createUser(finalEmail, request.getUsername(), finalPassword)
+										.recover(t -> Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The username, e-mail or password are invalid. Please check them and try again.").asRuntimeException()));
+							});
 				}
 
-				return get()
-						.compose(realm -> Environment.executeBlocking(() -> realm.users().search(request.getUsername(), true)))
-						.compose(existingUsers -> {
-							if (!existingUsers.isEmpty()) {
-								return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("This username already exists.").asRuntimeException());
-							}
 
-							return createUser(request.getEmail(), request.getUsername(), request.getPassword())
-									.recover(t -> Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The username, e-mail or password are invalid. Please check them and try again.").asRuntimeException()));
-						})
-						.compose(userEntity -> {
+				final var finalEmail = email;
+				final var finalPassword = password;
+				return createUserEntity.compose(userEntity -> {
 							// Login here
 							var client = new Client(context.owner(), webClient);
-							return client.login(request.getEmail(), request.getPassword()).map(accessTokenResponse -> new Object[]{accessTokenResponse, userEntity});
+							return client.login(finalEmail, finalPassword).map(accessTokenResponse -> new Object[]{accessTokenResponse, userEntity});
 						})
 						.map(this::handleAccessTokenUserEntityTuple)
+						// hide the premade decks if the user requested to hide them
+						.compose(reply -> withDslContext(dsl -> dsl.insertInto(USER_ENTITY_ADDONS)
+								.set(USER_ENTITY_ADDONS.ID, reply.getUserEntity().getId())
+								.set(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS, request.getDecks())
+								.onDuplicateKeyUpdate()
+								.set(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS, request.getDecks()))
+								.map(reply))
 						.recover(Environment.onGrpcFailure());
 			}
 
@@ -355,7 +346,7 @@ public class Accounts {
 							var token = TokenVerifier.create(accessTokenResponse.getToken(), AccessToken.class);
 							try {
 								var userId = token.getToken().getSubject();
-								var userEntityRes = (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate()))
+								var userEntityRes = (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate()))
 										.findOneById(userId);
 								return userEntityRes.map(userEntity -> new Object[]{accessTokenResponse, userEntity});
 							} catch (VerificationException e) {
@@ -373,11 +364,15 @@ public class Accounts {
 				if (kid == null) {
 					return Future.succeededFuture(BoolValue.of(false));
 				}
+
 				return Future.fromCompletionStage(keys.get(kid))
-						.compose(pk -> Future.fromCompletionStage(verify(request.getToken(), pk).minimalCompletionStage(), context))
-						.map(BoolValue.of(true))
-						.otherwise(BoolValue.of(false))
-						.recover(Environment.onGrpcFailure());
+						.compose(pk -> {
+							if (Objects.equals(pk, EmptyPublicKey.INSTANCE)) {
+								return Future.succeededFuture(BoolValue.of(false));
+							}
+							return Future.fromCompletionStage(verify(request.getToken(), pk).minimalCompletionStage(), context).map(BoolValue.of(true));
+						})
+						.recover(t -> Future.succeededFuture(BoolValue.of(false)));
 			}
 
 			@Override
@@ -416,7 +411,7 @@ public class Accounts {
 									realm.users().get(userId).resetPassword(getPasswordCredential(request.getNewPassword()));
 									return Future.succeededFuture();
 								}))
-								.compose(v -> (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate()).findOneById(userId)))
+								.compose(v -> (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate()).findOneById(userId)))
 								.map(userEntity -> LoginOrCreateReply.newBuilder()
 										.setUserEntity(toProto(userEntity))
 										.setAccessTokenResponse(AccessTokenResponse.newBuilder()
@@ -453,7 +448,7 @@ public class Accounts {
 									}
 
 									// TODO: Join with friends
-									return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate()))
+									return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate()))
 											.findManyByIds(request.getIdsList())
 											.map(users ->
 													GetAccountsReply.newBuilder()
@@ -487,13 +482,11 @@ public class Accounts {
 	}
 
 	public static Future<ServerServiceDefinition> requiresAuthorization(BindableService service) {
-		return Accounts.authorizationInterceptor()
-				.compose(interceptor -> Future.succeededFuture(ServerInterceptors.intercept(service, interceptor)));
+		return Accounts.authorizationInterceptor().map(interceptor -> ServerInterceptors.intercept(service, interceptor));
 	}
 
 	public static Future<ServerServiceDefinition> requiresAuthorization(ServerServiceDefinition service) {
-		return Accounts.authorizationInterceptor()
-				.compose(interceptor -> Future.succeededFuture(ServerInterceptors.intercept(service, interceptor)));
+		return Accounts.authorizationInterceptor().map(interceptor -> ServerInterceptors.intercept(service, interceptor));
 	}
 
 	public static Future<Keycloak> admin() {
@@ -507,8 +500,6 @@ public class Accounts {
 				})
 				.onFailure(Environment.onFailure());
 	}
-
-	private static AtomicInteger v = new AtomicInteger();
 
 	public static Future<UserEntity> createUser(String email, String username, String password) {
 		return get()
@@ -538,7 +529,7 @@ public class Accounts {
 					});
 				})
 				.compose(userRepresentation -> {
-					var users = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate());
+					var users = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate());
 					return users.findOneById(userRepresentation.getId());
 				})
 				.compose(userEntity -> {
@@ -549,41 +540,10 @@ public class Accounts {
 				});
 	}
 
-	public static Future<UserEntity> createUserWithHashed(String email, String username, String scryptHashedPassword) {
-		return get()
-				.compose(realm -> {
-					var credentialModel = PasswordCredentialModel.createFromValues("scrypt", new byte[0], 1, scryptHashedPassword);
-					var credential = ModelToRepresentation.toRepresentation(credentialModel);
-					credential.setTemporary(false);
-					var user = new UserRepresentation();
-					user.setEmail(email);
-					user.setUsername(username);
-					user.setEnabled(true);
-					user.setCredentials(Collections.singletonList(credential));
-					return Environment.executeBlocking(() -> {
-						var response = realm.users().create(user);
-						if (response.getStatus() >= 400) {
-							throw new RuntimeException("A user with the specified e-mail or username already exists.");
-						}
-						return response;
-					}).map(response -> {
-						var parts = response.getLocation().getPath().split("/");
-						var id = parts[parts.length - 1];
-						user.setId(id);
-						return user;
-					}).map(UserRepresentation::getId);
-				})
-				.compose(userId -> {
-					var users = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlPoolAkaDaoDelegate());
-					return users.findOneById(userId);
-				})
-				.compose(res -> res == null ? Future.failedFuture("invalid user ID") : Future.succeededFuture(res))
-				.onFailure(Environment.onFailure());
-	}
-
 	@NotNull
 	private static CredentialRepresentation getPasswordCredential(String password) {
-		var credentialModel = PasswordCredentialModel.createFromValues("scrypt", new byte[0], 1, SCryptUtil.scrypt(password, 2048, 8, 1));
+		var factory = new Pbkdf2Sha512PasswordHashProviderFactory();
+		var credentialModel = factory.create(null).encodedCredential(password, -1);
 		var credential = ModelToRepresentation.toRepresentation(credentialModel);
 		credential.setTemporary(false);
 		return credential;
@@ -625,15 +585,20 @@ public class Accounts {
 		return Environment.executeBlocking(() -> {
 					var configuration = Environment.getConfiguration();
 					var keycloak = keycloakReference.get();
-					var existing = Optional.<RealmRepresentation>empty();
 					var realmId = configuration.getKeycloak().getRealmId();
-					try {
-						existing = keycloak.realms().findAll().stream().filter(realm -> realm.getRealm().equals(realmId)).findFirst();
-					} catch (NotFoundException ignored) {
-					}
 
-					if (existing.isPresent()) {
-						return keycloak.realm(realmId);
+					try {
+						var realm = keycloak.realm(realmId);
+						var exists = realm.toRepresentation();
+						if (exists.isEnabled()) {
+							return realm;
+						}
+					} catch (Throwable t) {
+						var root = Throwables.getRootCause(t);
+						if (!(root instanceof NotFoundException)) {
+							throw t;
+						}
+						LOGGER.trace("because an existing realm was not found, created realm {}", realmId);
 					}
 
 					// Create a default
@@ -643,12 +608,17 @@ public class Accounts {
 					realmRepresentation.setSslRequired(SslRequired.EXTERNAL.toString());
 					realmRepresentation.setEnabled(true);
 					// use scrypt provider
-					realmRepresentation.setPasswordPolicy("hashAlgorithm(scrypt)");
+					LOGGER.info("""
+							realm password policy was NOT set to hashAlgorithm(scrypt), not compatible with ancient passwords.
+							set realmRepresentation.setPasswordPolicy("hashAlgorithm(scrypt)") to make compatible""");
+
 					realmRepresentation.setRegistrationAllowed(true);
 					realmRepresentation.setResetPasswordAllowed(true);
 					realmRepresentation.setResetCredentialsFlow("reset credentials");
 					realmRepresentation.setRegistrationFlow("registration");
 					realmRepresentation.setRememberMe(true);
+					realmRepresentation.setEditUsernameAllowed(true);
+					realmRepresentation.setVerifyEmail(false);
 					realmRepresentation.setLoginWithEmailAllowed(true);
 
 					keycloak.realms().create(realmRepresentation);
@@ -678,7 +648,29 @@ public class Accounts {
 				.onFailure(Environment.onFailure());
 	}
 
-	public synchronized static String keycloakAuthUrl() {
+	public static String keycloakAuthUrl() {
 		return Environment.getConfiguration().getKeycloak().getAuthUrl();
+	}
+
+	public static class EmptyPublicKey implements PublicKey {
+		public static final EmptyPublicKey INSTANCE = new EmptyPublicKey();
+
+		private EmptyPublicKey() {
+		}
+
+		@Override
+		public String getAlgorithm() {
+			return "";
+		}
+
+		@Override
+		public String getFormat() {
+			return "";
+		}
+
+		@Override
+		public byte[] getEncoded() {
+			return new byte[0];
+		}
 	}
 }

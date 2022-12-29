@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -18,7 +17,7 @@ import static java.util.stream.Collectors.groupingBy;
 
 public class ChooseSignatureSpell extends Spell {
 
-    @Suspendable
+
     @Override
     protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
         // Find all the cards which started in your deck.

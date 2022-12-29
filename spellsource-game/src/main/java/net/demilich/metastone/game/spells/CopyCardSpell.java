@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
@@ -53,7 +52,6 @@ public class CopyCardSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(logger, context, source, desc, SpellArg.CARD_LOCATION, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.SPELL, SpellArg.VALUE);
 		int numberOfCardsToCopy = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
@@ -119,7 +117,6 @@ public class CopyCardSpell extends Spell {
 	 * @param handler Specifies how the card
 	 * @return
 	 */
-	@Suspendable
 	public static Card copyCard(GameContext context, Player player, Entity source, Card inCard, BiConsumer<Integer, Card> handler) {
 		if (inCard.getAttributes().containsKey(Attribute.TRANSFORM_REFERENCE)) {
 			logger.warn("copyCard {} {}: Attempting to copy card {} which contains a transform reference! Exiting gracefully.", context.getGameId(), source, inCard);

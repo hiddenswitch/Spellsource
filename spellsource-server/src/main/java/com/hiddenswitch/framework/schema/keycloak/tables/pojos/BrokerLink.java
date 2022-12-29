@@ -181,6 +181,74 @@ public class BrokerLink implements VertxPojo, IBrokerLink {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final BrokerLink other = (BrokerLink) obj;
+        if (this.identityProvider == null) {
+            if (other.identityProvider != null)
+                return false;
+        }
+        else if (!this.identityProvider.equals(other.identityProvider))
+            return false;
+        if (this.storageProviderId == null) {
+            if (other.storageProviderId != null)
+                return false;
+        }
+        else if (!this.storageProviderId.equals(other.storageProviderId))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.brokerUserId == null) {
+            if (other.brokerUserId != null)
+                return false;
+        }
+        else if (!this.brokerUserId.equals(other.brokerUserId))
+            return false;
+        if (this.brokerUsername == null) {
+            if (other.brokerUsername != null)
+                return false;
+        }
+        else if (!this.brokerUsername.equals(other.brokerUsername))
+            return false;
+        if (this.token == null) {
+            if (other.token != null)
+                return false;
+        }
+        else if (!this.token.equals(other.token))
+            return false;
+        if (this.userId == null) {
+            if (other.userId != null)
+                return false;
+        }
+        else if (!this.userId.equals(other.userId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.identityProvider == null) ? 0 : this.identityProvider.hashCode());
+        result = prime * result + ((this.storageProviderId == null) ? 0 : this.storageProviderId.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.brokerUserId == null) ? 0 : this.brokerUserId.hashCode());
+        result = prime * result + ((this.brokerUsername == null) ? 0 : this.brokerUsername.hashCode());
+        result = prime * result + ((this.token == null) ? 0 : this.token.hashCode());
+        result = prime * result + ((this.userId == null) ? 0 : this.userId.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("BrokerLink (");
 

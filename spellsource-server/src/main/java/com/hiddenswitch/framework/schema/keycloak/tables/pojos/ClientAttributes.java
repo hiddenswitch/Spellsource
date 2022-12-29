@@ -19,25 +19,25 @@ public class ClientAttributes implements VertxPojo, IClientAttributes {
     private static final long serialVersionUID = 1L;
 
     private String clientId;
-    private String value;
     private String name;
+    private String value;
 
     public ClientAttributes() {}
 
     public ClientAttributes(IClientAttributes value) {
         this.clientId = value.getClientId();
-        this.value = value.getValue();
         this.name = value.getName();
+        this.value = value.getValue();
     }
 
     public ClientAttributes(
         String clientId,
-        String value,
-        String name
+        String name,
+        String value
     ) {
         this.clientId = clientId;
-        this.value = value;
         this.name = name;
+        this.value = value;
     }
 
         public ClientAttributes(io.vertx.core.json.JsonObject json) {
@@ -63,23 +63,6 @@ public class ClientAttributes implements VertxPojo, IClientAttributes {
     }
 
     /**
-     * Getter for <code>keycloak.client_attributes.value</code>.
-     */
-    @Override
-    public String getValue() {
-        return this.value;
-    }
-
-    /**
-     * Setter for <code>keycloak.client_attributes.value</code>.
-     */
-    @Override
-    public ClientAttributes setValue(String value) {
-        this.value = value;
-        return this;
-    }
-
-    /**
      * Getter for <code>keycloak.client_attributes.name</code>.
      */
     @Override
@@ -96,13 +79,70 @@ public class ClientAttributes implements VertxPojo, IClientAttributes {
         return this;
     }
 
+    /**
+     * Getter for <code>keycloak.client_attributes.value</code>.
+     */
+    @Override
+    public String getValue() {
+        return this.value;
+    }
+
+    /**
+     * Setter for <code>keycloak.client_attributes.value</code>.
+     */
+    @Override
+    public ClientAttributes setValue(String value) {
+        this.value = value;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ClientAttributes other = (ClientAttributes) obj;
+        if (this.clientId == null) {
+            if (other.clientId != null)
+                return false;
+        }
+        else if (!this.clientId.equals(other.clientId))
+            return false;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        if (this.value == null) {
+            if (other.value != null)
+                return false;
+        }
+        else if (!this.value.equals(other.value))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.clientId == null) ? 0 : this.clientId.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.value == null) ? 0 : this.value.hashCode());
+        return result;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ClientAttributes (");
 
         sb.append(clientId);
-        sb.append(", ").append(value);
         sb.append(", ").append(name);
+        sb.append(", ").append(value);
 
         sb.append(")");
         return sb.toString();
@@ -115,8 +155,8 @@ public class ClientAttributes implements VertxPojo, IClientAttributes {
     @Override
     public void from(IClientAttributes from) {
         setClientId(from.getClientId());
-        setValue(from.getValue());
         setName(from.getName());
+        setValue(from.getValue());
     }
 
     @Override

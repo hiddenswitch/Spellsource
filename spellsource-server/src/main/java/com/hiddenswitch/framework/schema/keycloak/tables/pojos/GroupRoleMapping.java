@@ -76,6 +76,39 @@ public class GroupRoleMapping implements VertxPojo, IGroupRoleMapping {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final GroupRoleMapping other = (GroupRoleMapping) obj;
+        if (this.roleId == null) {
+            if (other.roleId != null)
+                return false;
+        }
+        else if (!this.roleId.equals(other.roleId))
+            return false;
+        if (this.groupId == null) {
+            if (other.groupId != null)
+                return false;
+        }
+        else if (!this.groupId.equals(other.groupId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.roleId == null) ? 0 : this.roleId.hashCode());
+        result = prime * result + ((this.groupId == null) ? 0 : this.groupId.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("GroupRoleMapping (");
 

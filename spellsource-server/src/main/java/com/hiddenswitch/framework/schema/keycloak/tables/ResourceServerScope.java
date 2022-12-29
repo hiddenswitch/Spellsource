@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.ResourceServerS
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function5;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Records;
+import org.jooq.Row5;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -69,6 +73,11 @@ public class ResourceServerScope extends TableImpl<ResourceServerScopeRecord> {
      * <code>keycloak.resource_server_scope.resource_server_id</code>.
      */
     public final TableField<ResourceServerScopeRecord, String> RESOURCE_SERVER_ID = createField(DSL.name("resource_server_id"), SQLDataType.VARCHAR(36).nullable(false), this, "");
+
+    /**
+     * The column <code>keycloak.resource_server_scope.display_name</code>.
+     */
+    public final TableField<ResourceServerScopeRecord, String> DISPLAY_NAME = createField(DSL.name("display_name"), SQLDataType.VARCHAR(255), this, "");
 
     private ResourceServerScope(Name alias, Table<ResourceServerScopeRecord> aliased) {
         this(alias, aliased, null);
@@ -126,6 +135,24 @@ public class ResourceServerScope extends TableImpl<ResourceServerScopeRecord> {
     }
 
     @Override
+    public List<ForeignKey<ResourceServerScopeRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.RESOURCE_SERVER_SCOPE__FK_FRSRSO213XCX4WNKOG82SSRFY);
+    }
+
+    private transient ResourceServer _resourceServer;
+
+    /**
+     * Get the implicit join path to the <code>keycloak.resource_server</code>
+     * table.
+     */
+    public ResourceServer resourceServer() {
+        if (_resourceServer == null)
+            _resourceServer = new ResourceServer(this, Keys.RESOURCE_SERVER_SCOPE__FK_FRSRSO213XCX4WNKOG82SSRFY);
+
+        return _resourceServer;
+    }
+
+    @Override
     public ResourceServerScope as(String alias) {
         return new ResourceServerScope(DSL.name(alias), this);
     }
@@ -133,6 +160,11 @@ public class ResourceServerScope extends TableImpl<ResourceServerScopeRecord> {
     @Override
     public ResourceServerScope as(Name alias) {
         return new ResourceServerScope(alias, this);
+    }
+
+    @Override
+    public ResourceServerScope as(Table<?> alias) {
+        return new ResourceServerScope(alias.getQualifiedName(), this);
     }
 
     /**
@@ -151,12 +183,35 @@ public class ResourceServerScope extends TableImpl<ResourceServerScopeRecord> {
         return new ResourceServerScope(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public ResourceServerScope rename(Table<?> name) {
+        return new ResourceServerScope(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<String, String, String, String> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row5<String, String, String, String, String> fieldsRow() {
+        return (Row5) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function5<? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function5<? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

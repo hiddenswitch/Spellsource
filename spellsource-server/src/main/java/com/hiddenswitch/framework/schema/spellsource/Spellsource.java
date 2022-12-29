@@ -14,6 +14,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
 import com.hiddenswitch.framework.schema.spellsource.tables.Friends;
 import com.hiddenswitch.framework.schema.spellsource.tables.GameUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Games;
+import com.hiddenswitch.framework.schema.spellsource.tables.Guests;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
 import com.hiddenswitch.framework.schema.spellsource.tables.UserEntityAddons;
@@ -85,6 +86,11 @@ public class Spellsource extends SchemaImpl {
     public final Games GAMES = Games.GAMES;
 
     /**
+     * The table <code>spellsource.guests</code>.
+     */
+    public final Guests GUESTS = Guests.GUESTS;
+
+    /**
      * The table <code>spellsource.matchmaking_queues</code>.
      */
     public final MatchmakingQueues MATCHMAKING_QUEUES = MatchmakingQueues.MATCHMAKING_QUEUES;
@@ -124,6 +130,7 @@ public class Spellsource extends SchemaImpl {
             Friends.FRIENDS,
             GameUsers.GAME_USERS,
             Games.GAMES,
+            Guests.GUESTS,
             MatchmakingQueues.MATCHMAKING_QUEUES,
             MatchmakingTickets.MATCHMAKING_TICKETS,
             UserEntityAddons.USER_ENTITY_ADDONS

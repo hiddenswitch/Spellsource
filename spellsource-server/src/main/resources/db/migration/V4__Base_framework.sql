@@ -116,13 +116,13 @@ create table spellsource.matchmaking_queues
 
 create table spellsource.matchmaking_tickets
 (
-  id bigint generated always as identity,
+  ticket_id bigint generated always as identity,
   queue_id text references spellsource.matchmaking_queues (id) on delete cascade,
-  user_id text references keycloak.user_entity (id) on delete cascade,
+  user_id text unique references keycloak.user_entity (id) on delete cascade,
   deck_id text references spellsource.decks (id) on delete cascade,
   bot_deck_id text null default null references spellsource.decks (id),
   created_at timestamptz not null default now(),
-  primary key (id, queue_id)
+  primary key (user_id)
 ); /* partition by range (queue_id);*/
 
 create index on spellsource.matchmaking_tickets (queue_id);
@@ -136,7 +136,8 @@ create table spellsource.user_entity_addons
 (
   id text references keycloak.user_entity (id) on delete cascade primary key,
   privacy_token text default floor(1000 + random() * 8999),
-  migrated boolean default false
+  migrated boolean default false,
+  show_premade_decks boolean default true
 );
 
 create table spellsource.friends
@@ -145,4 +146,10 @@ create table spellsource.friends
   friend text references keycloak.user_entity (id) on delete cascade,
   created_at timestamptz not null default now(),
   primary key (id, friend)
-)
+);
+
+create table spellsource.guests
+(
+    id bigint generated always as identity primary key unique,
+    user_id text default null references keycloak.user_entity (id) on delete cascade
+);

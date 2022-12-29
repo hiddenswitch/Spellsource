@@ -20,17 +20,17 @@ public class MatchmakingQueues implements VertxPojo, IMatchmakingQueues {
 
     private static final long serialVersionUID = 1L;
 
-    private String         id;
-    private String         name;
-    private Boolean        botOpponent;
-    private Boolean        privateLobby;
-    private Boolean        startsAutomatically;
-    private Long           stillConnectedTimeout;
-    private Long           emptyLobbyTimeout;
-    private Long           awaitingLobbyTimeout;
-    private Boolean        once;
-    private Boolean        automaticallyClose;
-    private Integer        lobbySize;
+    private String id;
+    private String name;
+    private Boolean botOpponent;
+    private Boolean privateLobby;
+    private Boolean startsAutomatically;
+    private Long stillConnectedTimeout;
+    private Long emptyLobbyTimeout;
+    private Long awaitingLobbyTimeout;
+    private Boolean once;
+    private Boolean automaticallyClose;
+    private Integer lobbySize;
     private OffsetDateTime queueCreatedAt;
 
     public MatchmakingQueues() {}
@@ -51,17 +51,17 @@ public class MatchmakingQueues implements VertxPojo, IMatchmakingQueues {
     }
 
     public MatchmakingQueues(
-        String         id,
-        String         name,
-        Boolean        botOpponent,
-        Boolean        privateLobby,
-        Boolean        startsAutomatically,
-        Long           stillConnectedTimeout,
-        Long           emptyLobbyTimeout,
-        Long           awaitingLobbyTimeout,
-        Boolean        once,
-        Boolean        automaticallyClose,
-        Integer        lobbySize,
+        String id,
+        String name,
+        Boolean botOpponent,
+        Boolean privateLobby,
+        Boolean startsAutomatically,
+        Long stillConnectedTimeout,
+        Long emptyLobbyTimeout,
+        Long awaitingLobbyTimeout,
+        Boolean once,
+        Boolean automaticallyClose,
+        Integer lobbySize,
         OffsetDateTime queueCreatedAt
     ) {
         this.id = id;
@@ -295,6 +295,109 @@ public class MatchmakingQueues implements VertxPojo, IMatchmakingQueues {
     public MatchmakingQueues setQueueCreatedAt(OffsetDateTime queueCreatedAt) {
         this.queueCreatedAt = queueCreatedAt;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final MatchmakingQueues other = (MatchmakingQueues) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        if (this.botOpponent == null) {
+            if (other.botOpponent != null)
+                return false;
+        }
+        else if (!this.botOpponent.equals(other.botOpponent))
+            return false;
+        if (this.privateLobby == null) {
+            if (other.privateLobby != null)
+                return false;
+        }
+        else if (!this.privateLobby.equals(other.privateLobby))
+            return false;
+        if (this.startsAutomatically == null) {
+            if (other.startsAutomatically != null)
+                return false;
+        }
+        else if (!this.startsAutomatically.equals(other.startsAutomatically))
+            return false;
+        if (this.stillConnectedTimeout == null) {
+            if (other.stillConnectedTimeout != null)
+                return false;
+        }
+        else if (!this.stillConnectedTimeout.equals(other.stillConnectedTimeout))
+            return false;
+        if (this.emptyLobbyTimeout == null) {
+            if (other.emptyLobbyTimeout != null)
+                return false;
+        }
+        else if (!this.emptyLobbyTimeout.equals(other.emptyLobbyTimeout))
+            return false;
+        if (this.awaitingLobbyTimeout == null) {
+            if (other.awaitingLobbyTimeout != null)
+                return false;
+        }
+        else if (!this.awaitingLobbyTimeout.equals(other.awaitingLobbyTimeout))
+            return false;
+        if (this.once == null) {
+            if (other.once != null)
+                return false;
+        }
+        else if (!this.once.equals(other.once))
+            return false;
+        if (this.automaticallyClose == null) {
+            if (other.automaticallyClose != null)
+                return false;
+        }
+        else if (!this.automaticallyClose.equals(other.automaticallyClose))
+            return false;
+        if (this.lobbySize == null) {
+            if (other.lobbySize != null)
+                return false;
+        }
+        else if (!this.lobbySize.equals(other.lobbySize))
+            return false;
+        if (this.queueCreatedAt == null) {
+            if (other.queueCreatedAt != null)
+                return false;
+        }
+        else if (!this.queueCreatedAt.equals(other.queueCreatedAt))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.botOpponent == null) ? 0 : this.botOpponent.hashCode());
+        result = prime * result + ((this.privateLobby == null) ? 0 : this.privateLobby.hashCode());
+        result = prime * result + ((this.startsAutomatically == null) ? 0 : this.startsAutomatically.hashCode());
+        result = prime * result + ((this.stillConnectedTimeout == null) ? 0 : this.stillConnectedTimeout.hashCode());
+        result = prime * result + ((this.emptyLobbyTimeout == null) ? 0 : this.emptyLobbyTimeout.hashCode());
+        result = prime * result + ((this.awaitingLobbyTimeout == null) ? 0 : this.awaitingLobbyTimeout.hashCode());
+        result = prime * result + ((this.once == null) ? 0 : this.once.hashCode());
+        result = prime * result + ((this.automaticallyClose == null) ? 0 : this.automaticallyClose.hashCode());
+        result = prime * result + ((this.lobbySize == null) ? 0 : this.lobbySize.hashCode());
+        result = prime * result + ((this.queueCreatedAt == null) ? 0 : this.queueCreatedAt.hashCode());
+        return result;
     }
 
     @Override

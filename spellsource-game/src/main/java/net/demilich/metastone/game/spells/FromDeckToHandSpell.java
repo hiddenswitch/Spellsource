@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -52,7 +51,6 @@ public class FromDeckToHandSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(FromDeckToHandSpell.class);
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(logger, context, source, desc, SpellArg.VALUE, SpellArg.CARD_FILTER, SpellArg.CARD, SpellArg.EXCLUSIVE);
 		drawFromDeck(context, player, source, target, desc.getValue(SpellArg.VALUE, context, player, target, source, 1), desc.getBool(SpellArg.EXCLUSIVE), (EntityFilter) desc.get(SpellArg.CARD_FILTER), desc.getSpell(), (String) desc.get(SpellArg.CARD));
@@ -74,7 +72,6 @@ public class FromDeckToHandSpell extends Spell {
 	 * @param replacementCard  when not {@code null}, receive this card instead if the deck does not contain any cards
 	 *                         that satisfies the {@code cardFilter}
 	 */
-	@Suspendable
 	public static void drawFromDeck(GameContext context, Player player, Entity source, Entity target, int cardsToDraw, boolean removeDuplicates, @Nullable EntityFilter cardFilter, @Nullable SpellDesc spellOnCard, @Nullable String replacementCard) {
 		if (target != null && target.getEntityType() == EntityType.CARD && target.getZone() == Zones.DECK && target.getOwner() == player.getId()) {
 			Card card = (Card) target;

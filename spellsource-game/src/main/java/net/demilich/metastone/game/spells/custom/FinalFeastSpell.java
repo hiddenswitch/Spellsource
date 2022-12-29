@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -19,7 +18,6 @@ import java.util.List;
 public final class FinalFeastSpell extends Spell {
 
 	@Override
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		for (Entity drainSource : targets) {
 			SpellDesc drain = new SpellDesc(DrainSpell.class);
@@ -30,7 +28,6 @@ public final class FinalFeastSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		throw new UnsupportedOperationException("should not be called");
 	}

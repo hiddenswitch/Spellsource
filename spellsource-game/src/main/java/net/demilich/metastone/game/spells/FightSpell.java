@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
@@ -51,7 +50,6 @@ public class FightSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(FightSpell.class);
 
 	@Override
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		if (desc.getDescClass().equals(FightSpell.class) && targets != null && desc.getBool(SpellArg.RANDOM_TARGET) && desc.getSecondaryTarget() != null) {
 			// Resolve the source. Remove the sources from the target
@@ -63,7 +61,6 @@ public class FightSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(logger, context, source, desc, SpellArg.SECONDARY_TARGET, SpellArg.EXCLUSIVE);
 		EntityReference secondaryTarget = (EntityReference) desc.getOrDefault(SpellArg.SECONDARY_TARGET, source == null ? EntityReference.NONE : source.getReference());

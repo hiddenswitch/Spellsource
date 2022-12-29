@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.LinkedHashMultiset;
 import com.google.common.collect.Multiset;
 import net.demilich.metastone.game.GameContext;
@@ -269,7 +268,6 @@ public class DiscoverSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		List<Card> specificCards = Arrays.asList(SpellUtils.getCards(context, desc));
 		boolean hasFilter = desc.containsKey(SpellArg.CARD_FILTER);

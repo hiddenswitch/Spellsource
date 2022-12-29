@@ -13,15 +13,19 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingT
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function6;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row6;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -53,19 +57,19 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
     }
 
     /**
-     * The column <code>spellsource.matchmaking_tickets.id</code>.
+     * The column <code>spellsource.matchmaking_tickets.ticket_id</code>.
      */
-    public final TableField<MatchmakingTicketsRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+    public final TableField<MatchmakingTicketsRecord, Long> TICKET_ID = createField(DSL.name("ticket_id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>spellsource.matchmaking_tickets.queue_id</code>.
      */
-    public final TableField<MatchmakingTicketsRecord, String> QUEUE_ID = createField(DSL.name("queue_id"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<MatchmakingTicketsRecord, String> QUEUE_ID = createField(DSL.name("queue_id"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>spellsource.matchmaking_tickets.user_id</code>.
      */
-    public final TableField<MatchmakingTicketsRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.CLOB, this, "");
+    public final TableField<MatchmakingTicketsRecord, String> USER_ID = createField(DSL.name("user_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>spellsource.matchmaking_tickets.deck_id</code>.
@@ -201,6 +205,11 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
         return new MatchmakingTickets(alias, this);
     }
 
+    @Override
+    public MatchmakingTickets as(Table<?> alias) {
+        return new MatchmakingTickets(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -217,6 +226,14 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
         return new MatchmakingTickets(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public MatchmakingTickets rename(Table<?> name) {
+        return new MatchmakingTickets(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row6 type methods
     // -------------------------------------------------------------------------
@@ -224,5 +241,20 @@ public class MatchmakingTickets extends TableImpl<MatchmakingTicketsRecord> {
     @Override
     public Row6<Long, String, String, String, String, OffsetDateTime> fieldsRow() {
         return (Row6) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function6<? super Long, ? super String, ? super String, ? super String, ? super String, ? super OffsetDateTime, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function6<? super Long, ? super String, ? super String, ? super String, ? super String, ? super OffsetDateTime, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

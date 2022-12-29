@@ -22,10 +22,10 @@ public class Games implements VertxPojo, IGames {
 
     private static final long serialVersionUID = 1L;
 
-    private Long           id;
-    private GameStateEnum  status;
-    private String         gitHash;
-    private JsonObject     trace;
+    private Long id;
+    private GameStateEnum status;
+    private String gitHash;
+    private JsonObject trace;
     private OffsetDateTime createdAt;
 
     public Games() {}
@@ -39,10 +39,10 @@ public class Games implements VertxPojo, IGames {
     }
 
     public Games(
-        Long           id,
-        GameStateEnum  status,
-        String         gitHash,
-        JsonObject     trace,
+        Long id,
+        GameStateEnum status,
+        String gitHash,
+        JsonObject trace,
         OffsetDateTime createdAt
     ) {
         this.id = id;
@@ -140,6 +140,60 @@ public class Games implements VertxPojo, IGames {
     public Games setCreatedAt(OffsetDateTime createdAt) {
         this.createdAt = createdAt;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Games other = (Games) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.status == null) {
+            if (other.status != null)
+                return false;
+        }
+        else if (!this.status.equals(other.status))
+            return false;
+        if (this.gitHash == null) {
+            if (other.gitHash != null)
+                return false;
+        }
+        else if (!this.gitHash.equals(other.gitHash))
+            return false;
+        if (this.trace == null) {
+            if (other.trace != null)
+                return false;
+        }
+        else if (!this.trace.equals(other.trace))
+            return false;
+        if (this.createdAt == null) {
+            if (other.createdAt != null)
+                return false;
+        }
+        else if (!this.createdAt.equals(other.createdAt))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.status == null) ? 0 : this.status.hashCode());
+        result = prime * result + ((this.gitHash == null) ? 0 : this.gitHash.hashCode());
+        result = prime * result + ((this.trace == null) ? 0 : this.trace.hashCode());
+        result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
+        return result;
     }
 
     @Override

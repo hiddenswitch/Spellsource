@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -19,7 +18,6 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
 public final class PutIntoEggSpell extends RevealCardSpell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card card = target.getSourceCard();
 		// Reveal the card

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc.source;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardArrayList;
@@ -24,7 +23,6 @@ public class DeckCollectionSource extends CardSource implements Serializable, Ha
 	}
 
 	@Override
-	@Suspendable
 	protected CardList match(GameContext context, Entity source, Player player) {
 		final String collectionName = getDesc().getString(CardSourceArg.COLLECTION_NAME);
 		final GameDeck deck = context.getDeck(player, collectionName);

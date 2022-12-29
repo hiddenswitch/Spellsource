@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -31,7 +30,6 @@ public class SwapMinionSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(SwapMinionSpell.class);
 
 	@Override
-	@Suspendable
 	@SuppressWarnings("unchecked")
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(logger, context, source, desc, SpellArg.SECONDARY_TARGET);

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.actions;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -69,7 +68,6 @@ public abstract class PlayCardAction extends GameAction {
 	 * @param playerId The player who actually plays the card
 	 */
 	@Override
-	@Suspendable
 	public void execute(GameContext context, int playerId) {
 		Player player = context.getPlayer(playerId);
 		Card card = (Card) context.resolveSingleTarget(getSourceReference());
@@ -123,7 +121,6 @@ public abstract class PlayCardAction extends GameAction {
 	 * @param context
 	 * @param playerId
 	 */
-	@Suspendable
 	public abstract void innerExecute(GameContext context, int playerId);
 
 	@Override

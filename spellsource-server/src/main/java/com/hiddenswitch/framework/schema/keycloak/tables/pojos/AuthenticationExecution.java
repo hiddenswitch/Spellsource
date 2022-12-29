@@ -18,16 +18,16 @@ public class AuthenticationExecution implements VertxPojo, IAuthenticationExecut
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
-    private String  alias;
-    private String  authenticator;
-    private String  realmId;
-    private String  flowId;
+    private String id;
+    private String alias;
+    private String authenticator;
+    private String realmId;
+    private String flowId;
     private Integer requirement;
     private Integer priority;
     private Boolean authenticatorFlow;
-    private String  authFlowId;
-    private String  authConfig;
+    private String authFlowId;
+    private String authConfig;
 
     public AuthenticationExecution() {}
 
@@ -45,16 +45,16 @@ public class AuthenticationExecution implements VertxPojo, IAuthenticationExecut
     }
 
     public AuthenticationExecution(
-        String  id,
-        String  alias,
-        String  authenticator,
-        String  realmId,
-        String  flowId,
+        String id,
+        String alias,
+        String authenticator,
+        String realmId,
+        String flowId,
         Integer requirement,
         Integer priority,
         Boolean authenticatorFlow,
-        String  authFlowId,
-        String  authConfig
+        String authFlowId,
+        String authConfig
     ) {
         this.id = id;
         this.alias = alias;
@@ -243,6 +243,95 @@ public class AuthenticationExecution implements VertxPojo, IAuthenticationExecut
     public AuthenticationExecution setAuthConfig(String authConfig) {
         this.authConfig = authConfig;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final AuthenticationExecution other = (AuthenticationExecution) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.alias == null) {
+            if (other.alias != null)
+                return false;
+        }
+        else if (!this.alias.equals(other.alias))
+            return false;
+        if (this.authenticator == null) {
+            if (other.authenticator != null)
+                return false;
+        }
+        else if (!this.authenticator.equals(other.authenticator))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.flowId == null) {
+            if (other.flowId != null)
+                return false;
+        }
+        else if (!this.flowId.equals(other.flowId))
+            return false;
+        if (this.requirement == null) {
+            if (other.requirement != null)
+                return false;
+        }
+        else if (!this.requirement.equals(other.requirement))
+            return false;
+        if (this.priority == null) {
+            if (other.priority != null)
+                return false;
+        }
+        else if (!this.priority.equals(other.priority))
+            return false;
+        if (this.authenticatorFlow == null) {
+            if (other.authenticatorFlow != null)
+                return false;
+        }
+        else if (!this.authenticatorFlow.equals(other.authenticatorFlow))
+            return false;
+        if (this.authFlowId == null) {
+            if (other.authFlowId != null)
+                return false;
+        }
+        else if (!this.authFlowId.equals(other.authFlowId))
+            return false;
+        if (this.authConfig == null) {
+            if (other.authConfig != null)
+                return false;
+        }
+        else if (!this.authConfig.equals(other.authConfig))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.alias == null) ? 0 : this.alias.hashCode());
+        result = prime * result + ((this.authenticator == null) ? 0 : this.authenticator.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.flowId == null) ? 0 : this.flowId.hashCode());
+        result = prime * result + ((this.requirement == null) ? 0 : this.requirement.hashCode());
+        result = prime * result + ((this.priority == null) ? 0 : this.priority.hashCode());
+        result = prime * result + ((this.authenticatorFlow == null) ? 0 : this.authenticatorFlow.hashCode());
+        result = prime * result + ((this.authFlowId == null) ? 0 : this.authFlowId.hashCode());
+        result = prime * result + ((this.authConfig == null) ? 0 : this.authConfig.hashCode());
+        return result;
     }
 
     @Override

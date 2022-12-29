@@ -90,6 +90,16 @@ public interface IResourceServerPolicy extends VertxPojo, Serializable {
      */
     public String getResourceServerId();
 
+    /**
+     * Setter for <code>keycloak.resource_server_policy.owner</code>.
+     */
+    public IResourceServerPolicy setOwner(String value);
+
+    /**
+     * Getter for <code>keycloak.resource_server_policy.owner</code>.
+     */
+    public String getOwner();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -115,6 +125,7 @@ public interface IResourceServerPolicy extends VertxPojo, Serializable {
                 setOrThrow(this::setDecisionStrategy,json::getString,"decision_strategy","java.lang.String");
                 setOrThrow(this::setLogic,json::getString,"logic","java.lang.String");
                 setOrThrow(this::setResourceServerId,json::getString,"resource_server_id","java.lang.String");
+                setOrThrow(this::setOwner,json::getString,"owner","java.lang.String");
                 return this;
         }
 
@@ -129,6 +140,7 @@ public interface IResourceServerPolicy extends VertxPojo, Serializable {
                 json.put("decision_strategy",getDecisionStrategy());
                 json.put("logic",getLogic());
                 json.put("resource_server_id",getResourceServerId());
+                json.put("owner",getOwner());
                 return json;
         }
 

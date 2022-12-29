@@ -1,6 +1,5 @@
 package com.hiddenswitch.framework.tests;
 
-import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.framework.PythonBridge;
 import com.hiddenswitch.framework.impl.SimulationResultGenerator;
 import net.demilich.metastone.game.behaviour.Behaviour;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 

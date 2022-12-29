@@ -1,7 +1,5 @@
 package com.hiddenswitch.spellsource.util;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.strands.Strand;
 import com.google.common.collect.ImmutableMap;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.Behaviour;
@@ -143,18 +141,18 @@ public class Simulation {
 	}
 
 	@NotNull
-	public static Strand getMonitor(AtomicInteger counter, int total) {
-		return Strand.of(new Thread(() -> {
+	public static Thread getMonitor(AtomicInteger counter, int total) {
+		return Thread.ofVirtual().start(() -> {
 			try {
 				while (counter.get() <= total) {
-					Strand.sleep(5000);
+					Thread.sleep(5000);
 					int matchesNow = counter.get();
 					LOGGER.info(String.format("Simulation getMonitor progress: %.2f%% (%d/%d completed)", (float) matchesNow / (float) total * 100.0f, matchesNow, total));
 				}
-			} catch (InterruptedException | SuspendExecution e) {
+			} catch (InterruptedException e) {
 				int matchesNow = counter.get();
 				LOGGER.info(String.format("Simulation getMonitor progress: %.2f%% (%d/%d completed)", (float) matchesNow / (float) total * 100.0f, matchesNow, total));
 			}
-		}));
+		});
 	}
 }

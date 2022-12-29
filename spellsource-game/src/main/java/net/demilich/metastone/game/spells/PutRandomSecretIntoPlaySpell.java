@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -48,7 +47,6 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
 		if (cardSource == null) {
@@ -75,7 +73,6 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 		}
 	}
 
-	@Suspendable
 	protected void putSecretIntoPlay(GameContext context, Player player, Card secretCard) {
 		if (secretCard.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
 			secretCard.setId(context.getLogic().generateId());

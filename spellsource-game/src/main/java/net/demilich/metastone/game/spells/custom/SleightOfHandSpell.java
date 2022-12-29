@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -22,7 +21,6 @@ public final class SleightOfHandSpell extends ReturnTargetToHandSpell {
 	private static Logger LOGGER = LoggerFactory.getLogger(SleightOfHandSpell.class);
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (target.getEntityType() != EntityType.MINION) {
 			LOGGER.error("onCast {} {}: Tried to return {} which is not a minion", context.getGameId(), source, target);

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Sets;
@@ -232,7 +231,6 @@ public final class OpenerDesc implements Serializable, HasEntrySet<BattlecryDesc
 	}
 
 	@Override
-	@Suspendable
 	public Optional<Opener> tryCreate(GameContext context, Player player, Entity effectSource, Card enchantmentSource, Entity host, boolean force) {
 		return context.getLogic().tryCreateOpener(player,this, effectSource,enchantmentSource,host, force);
 	}

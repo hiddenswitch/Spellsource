@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.UserFederationP
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function8;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row8;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -168,6 +172,11 @@ public class UserFederationProvider extends TableImpl<UserFederationProviderReco
         return new UserFederationProvider(alias, this);
     }
 
+    @Override
+    public UserFederationProvider as(Table<?> alias) {
+        return new UserFederationProvider(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -184,6 +193,14 @@ public class UserFederationProvider extends TableImpl<UserFederationProviderReco
         return new UserFederationProvider(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public UserFederationProvider rename(Table<?> name) {
+        return new UserFederationProvider(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row8 type methods
     // -------------------------------------------------------------------------
@@ -191,5 +208,20 @@ public class UserFederationProvider extends TableImpl<UserFederationProviderReco
     @Override
     public Row8<String, Integer, String, Integer, Integer, Integer, String, String> fieldsRow() {
         return (Row8) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function8<? super String, ? super Integer, ? super String, ? super Integer, ? super Integer, ? super Integer, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super String, ? super Integer, ? super String, ? super Integer, ? super Integer, ? super Integer, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

@@ -18,14 +18,12 @@ public class ProtocolMapper implements VertxPojo, IProtocolMapper {
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
-    private String  name;
-    private String  protocol;
-    private String  protocolMapperName;
-    private Boolean consentRequired;
-    private String  consentText;
-    private String  clientId;
-    private String  clientTemplateId;
+    private String id;
+    private String name;
+    private String protocol;
+    private String protocolMapperName;
+    private String clientId;
+    private String clientScopeId;
 
     public ProtocolMapper() {}
 
@@ -34,30 +32,24 @@ public class ProtocolMapper implements VertxPojo, IProtocolMapper {
         this.name = value.getName();
         this.protocol = value.getProtocol();
         this.protocolMapperName = value.getProtocolMapperName();
-        this.consentRequired = value.getConsentRequired();
-        this.consentText = value.getConsentText();
         this.clientId = value.getClientId();
-        this.clientTemplateId = value.getClientTemplateId();
+        this.clientScopeId = value.getClientScopeId();
     }
 
     public ProtocolMapper(
-        String  id,
-        String  name,
-        String  protocol,
-        String  protocolMapperName,
-        Boolean consentRequired,
-        String  consentText,
-        String  clientId,
-        String  clientTemplateId
+        String id,
+        String name,
+        String protocol,
+        String protocolMapperName,
+        String clientId,
+        String clientScopeId
     ) {
         this.id = id;
         this.name = name;
         this.protocol = protocol;
         this.protocolMapperName = protocolMapperName;
-        this.consentRequired = consentRequired;
-        this.consentText = consentText;
         this.clientId = clientId;
-        this.clientTemplateId = clientTemplateId;
+        this.clientScopeId = clientScopeId;
     }
 
         public ProtocolMapper(io.vertx.core.json.JsonObject json) {
@@ -134,40 +126,6 @@ public class ProtocolMapper implements VertxPojo, IProtocolMapper {
     }
 
     /**
-     * Getter for <code>keycloak.protocol_mapper.consent_required</code>.
-     */
-    @Override
-    public Boolean getConsentRequired() {
-        return this.consentRequired;
-    }
-
-    /**
-     * Setter for <code>keycloak.protocol_mapper.consent_required</code>.
-     */
-    @Override
-    public ProtocolMapper setConsentRequired(Boolean consentRequired) {
-        this.consentRequired = consentRequired;
-        return this;
-    }
-
-    /**
-     * Getter for <code>keycloak.protocol_mapper.consent_text</code>.
-     */
-    @Override
-    public String getConsentText() {
-        return this.consentText;
-    }
-
-    /**
-     * Setter for <code>keycloak.protocol_mapper.consent_text</code>.
-     */
-    @Override
-    public ProtocolMapper setConsentText(String consentText) {
-        this.consentText = consentText;
-        return this;
-    }
-
-    /**
      * Getter for <code>keycloak.protocol_mapper.client_id</code>.
      */
     @Override
@@ -185,20 +143,81 @@ public class ProtocolMapper implements VertxPojo, IProtocolMapper {
     }
 
     /**
-     * Getter for <code>keycloak.protocol_mapper.client_template_id</code>.
+     * Getter for <code>keycloak.protocol_mapper.client_scope_id</code>.
      */
     @Override
-    public String getClientTemplateId() {
-        return this.clientTemplateId;
+    public String getClientScopeId() {
+        return this.clientScopeId;
     }
 
     /**
-     * Setter for <code>keycloak.protocol_mapper.client_template_id</code>.
+     * Setter for <code>keycloak.protocol_mapper.client_scope_id</code>.
      */
     @Override
-    public ProtocolMapper setClientTemplateId(String clientTemplateId) {
-        this.clientTemplateId = clientTemplateId;
+    public ProtocolMapper setClientScopeId(String clientScopeId) {
+        this.clientScopeId = clientScopeId;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ProtocolMapper other = (ProtocolMapper) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        if (this.protocol == null) {
+            if (other.protocol != null)
+                return false;
+        }
+        else if (!this.protocol.equals(other.protocol))
+            return false;
+        if (this.protocolMapperName == null) {
+            if (other.protocolMapperName != null)
+                return false;
+        }
+        else if (!this.protocolMapperName.equals(other.protocolMapperName))
+            return false;
+        if (this.clientId == null) {
+            if (other.clientId != null)
+                return false;
+        }
+        else if (!this.clientId.equals(other.clientId))
+            return false;
+        if (this.clientScopeId == null) {
+            if (other.clientScopeId != null)
+                return false;
+        }
+        else if (!this.clientScopeId.equals(other.clientScopeId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.protocol == null) ? 0 : this.protocol.hashCode());
+        result = prime * result + ((this.protocolMapperName == null) ? 0 : this.protocolMapperName.hashCode());
+        result = prime * result + ((this.clientId == null) ? 0 : this.clientId.hashCode());
+        result = prime * result + ((this.clientScopeId == null) ? 0 : this.clientScopeId.hashCode());
+        return result;
     }
 
     @Override
@@ -209,10 +228,8 @@ public class ProtocolMapper implements VertxPojo, IProtocolMapper {
         sb.append(", ").append(name);
         sb.append(", ").append(protocol);
         sb.append(", ").append(protocolMapperName);
-        sb.append(", ").append(consentRequired);
-        sb.append(", ").append(consentText);
         sb.append(", ").append(clientId);
-        sb.append(", ").append(clientTemplateId);
+        sb.append(", ").append(clientScopeId);
 
         sb.append(")");
         return sb.toString();
@@ -228,10 +245,8 @@ public class ProtocolMapper implements VertxPojo, IProtocolMapper {
         setName(from.getName());
         setProtocol(from.getProtocol());
         setProtocolMapperName(from.getProtocolMapperName());
-        setConsentRequired(from.getConsentRequired());
-        setConsentText(from.getConsentText());
         setClientId(from.getClientId());
-        setClientTemplateId(from.getClientTemplateId());
+        setClientScopeId(from.getClientScopeId());
     }
 
     @Override

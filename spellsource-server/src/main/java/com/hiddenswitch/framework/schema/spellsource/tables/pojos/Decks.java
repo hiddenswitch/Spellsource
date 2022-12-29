@@ -18,13 +18,13 @@ public class Decks implements VertxPojo, IDecks {
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
-    private String  createdBy;
-    private String  lastEditedBy;
-    private String  name;
-    private String  heroClass;
+    private String id;
+    private String createdBy;
+    private String lastEditedBy;
+    private String name;
+    private String heroClass;
     private Boolean trashed;
-    private String  format;
+    private String format;
     private Integer deckType;
     private Boolean isPremade;
     private Boolean permittedToDuplicate;
@@ -45,13 +45,13 @@ public class Decks implements VertxPojo, IDecks {
     }
 
     public Decks(
-        String  id,
-        String  createdBy,
-        String  lastEditedBy,
-        String  name,
-        String  heroClass,
+        String id,
+        String createdBy,
+        String lastEditedBy,
+        String name,
+        String heroClass,
         Boolean trashed,
-        String  format,
+        String format,
         Integer deckType,
         Boolean isPremade,
         Boolean permittedToDuplicate
@@ -247,6 +247,95 @@ public class Decks implements VertxPojo, IDecks {
     public Decks setPermittedToDuplicate(Boolean permittedToDuplicate) {
         this.permittedToDuplicate = permittedToDuplicate;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Decks other = (Decks) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.createdBy == null) {
+            if (other.createdBy != null)
+                return false;
+        }
+        else if (!this.createdBy.equals(other.createdBy))
+            return false;
+        if (this.lastEditedBy == null) {
+            if (other.lastEditedBy != null)
+                return false;
+        }
+        else if (!this.lastEditedBy.equals(other.lastEditedBy))
+            return false;
+        if (this.name == null) {
+            if (other.name != null)
+                return false;
+        }
+        else if (!this.name.equals(other.name))
+            return false;
+        if (this.heroClass == null) {
+            if (other.heroClass != null)
+                return false;
+        }
+        else if (!this.heroClass.equals(other.heroClass))
+            return false;
+        if (this.trashed == null) {
+            if (other.trashed != null)
+                return false;
+        }
+        else if (!this.trashed.equals(other.trashed))
+            return false;
+        if (this.format == null) {
+            if (other.format != null)
+                return false;
+        }
+        else if (!this.format.equals(other.format))
+            return false;
+        if (this.deckType == null) {
+            if (other.deckType != null)
+                return false;
+        }
+        else if (!this.deckType.equals(other.deckType))
+            return false;
+        if (this.isPremade == null) {
+            if (other.isPremade != null)
+                return false;
+        }
+        else if (!this.isPremade.equals(other.isPremade))
+            return false;
+        if (this.permittedToDuplicate == null) {
+            if (other.permittedToDuplicate != null)
+                return false;
+        }
+        else if (!this.permittedToDuplicate.equals(other.permittedToDuplicate))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.createdBy == null) ? 0 : this.createdBy.hashCode());
+        result = prime * result + ((this.lastEditedBy == null) ? 0 : this.lastEditedBy.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.heroClass == null) ? 0 : this.heroClass.hashCode());
+        result = prime * result + ((this.trashed == null) ? 0 : this.trashed.hashCode());
+        result = prime * result + ((this.format == null) ? 0 : this.format.hashCode());
+        result = prime * result + ((this.deckType == null) ? 0 : this.deckType.hashCode());
+        result = prime * result + ((this.isPremade == null) ? 0 : this.isPremade.hashCode());
+        result = prime * result + ((this.permittedToDuplicate == null) ? 0 : this.permittedToDuplicate.hashCode());
+        return result;
     }
 
     @Override

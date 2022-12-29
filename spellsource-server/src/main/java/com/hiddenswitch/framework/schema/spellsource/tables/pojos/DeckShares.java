@@ -18,8 +18,8 @@ public class DeckShares implements VertxPojo, IDeckShares {
 
     private static final long serialVersionUID = 1L;
 
-    private String  deckId;
-    private String  shareRecipientId;
+    private String deckId;
+    private String shareRecipientId;
     private Boolean trashedByRecipient;
 
     public DeckShares() {}
@@ -31,8 +31,8 @@ public class DeckShares implements VertxPojo, IDeckShares {
     }
 
     public DeckShares(
-        String  deckId,
-        String  shareRecipientId,
+        String deckId,
+        String shareRecipientId,
         Boolean trashedByRecipient
     ) {
         this.deckId = deckId;
@@ -94,6 +94,46 @@ public class DeckShares implements VertxPojo, IDeckShares {
     public DeckShares setTrashedByRecipient(Boolean trashedByRecipient) {
         this.trashedByRecipient = trashedByRecipient;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final DeckShares other = (DeckShares) obj;
+        if (this.deckId == null) {
+            if (other.deckId != null)
+                return false;
+        }
+        else if (!this.deckId.equals(other.deckId))
+            return false;
+        if (this.shareRecipientId == null) {
+            if (other.shareRecipientId != null)
+                return false;
+        }
+        else if (!this.shareRecipientId.equals(other.shareRecipientId))
+            return false;
+        if (this.trashedByRecipient == null) {
+            if (other.trashedByRecipient != null)
+                return false;
+        }
+        else if (!this.trashedByRecipient.equals(other.trashedByRecipient))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.deckId == null) ? 0 : this.deckId.hashCode());
+        result = prime * result + ((this.shareRecipientId == null) ? 0 : this.shareRecipientId.hashCode());
+        result = prime * result + ((this.trashedByRecipient == null) ? 0 : this.trashedByRecipient.hashCode());
+        return result;
     }
 
     @Override

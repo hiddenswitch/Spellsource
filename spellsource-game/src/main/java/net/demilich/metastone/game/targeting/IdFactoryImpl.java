@@ -23,7 +23,7 @@ public class IdFactoryImpl extends CustomCloneable implements Serializable, IdFa
 	}
 
 	@Override
-	public synchronized int generateId() {
+	public int generateId() {
 		return nextId.getAndIncrement();
 	}
 

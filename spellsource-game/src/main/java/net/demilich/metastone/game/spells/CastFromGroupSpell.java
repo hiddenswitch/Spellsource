@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;
@@ -99,7 +98,6 @@ public class CastFromGroupSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, final List<Entity> originalTargets) {
 		Entity originalSource = source;
 		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
@@ -176,7 +174,6 @@ public class CastFromGroupSpell extends Spell {
 		}
 	}
 
-	@Suspendable
 	protected void subCast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> originalTargets, List<Entity> validTargets, Entity randomTarget, SpellDesc chosen) {
 		if (validTargets.size() > 0 && desc.getBool(SpellArg.RANDOM_TARGET)) {
 			onCast(context, player, chosen, source, randomTarget);
@@ -194,7 +191,6 @@ public class CastFromGroupSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		SpellUtils.castChildSpell(context, player, desc, source, target);
 	}

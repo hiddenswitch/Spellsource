@@ -18,30 +18,30 @@ public class ResourceServer implements VertxPojo, IResourceServer {
 
     private static final long serialVersionUID = 1L;
 
-    private String  id;
-    private String  clientId;
+    private String id;
     private Boolean allowRsRemoteMgmt;
-    private String  policyEnforceMode;
+    private String policyEnforceMode;
+    private Short decisionStrategy;
 
     public ResourceServer() {}
 
     public ResourceServer(IResourceServer value) {
         this.id = value.getId();
-        this.clientId = value.getClientId();
         this.allowRsRemoteMgmt = value.getAllowRsRemoteMgmt();
         this.policyEnforceMode = value.getPolicyEnforceMode();
+        this.decisionStrategy = value.getDecisionStrategy();
     }
 
     public ResourceServer(
-        String  id,
-        String  clientId,
+        String id,
         Boolean allowRsRemoteMgmt,
-        String  policyEnforceMode
+        String policyEnforceMode,
+        Short decisionStrategy
     ) {
         this.id = id;
-        this.clientId = clientId;
         this.allowRsRemoteMgmt = allowRsRemoteMgmt;
         this.policyEnforceMode = policyEnforceMode;
+        this.decisionStrategy = decisionStrategy;
     }
 
         public ResourceServer(io.vertx.core.json.JsonObject json) {
@@ -63,23 +63,6 @@ public class ResourceServer implements VertxPojo, IResourceServer {
     @Override
     public ResourceServer setId(String id) {
         this.id = id;
-        return this;
-    }
-
-    /**
-     * Getter for <code>keycloak.resource_server.client_id</code>.
-     */
-    @Override
-    public String getClientId() {
-        return this.clientId;
-    }
-
-    /**
-     * Setter for <code>keycloak.resource_server.client_id</code>.
-     */
-    @Override
-    public ResourceServer setClientId(String clientId) {
-        this.clientId = clientId;
         return this;
     }
 
@@ -117,14 +100,78 @@ public class ResourceServer implements VertxPojo, IResourceServer {
         return this;
     }
 
+    /**
+     * Getter for <code>keycloak.resource_server.decision_strategy</code>.
+     */
+    @Override
+    public Short getDecisionStrategy() {
+        return this.decisionStrategy;
+    }
+
+    /**
+     * Setter for <code>keycloak.resource_server.decision_strategy</code>.
+     */
+    @Override
+    public ResourceServer setDecisionStrategy(Short decisionStrategy) {
+        this.decisionStrategy = decisionStrategy;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ResourceServer other = (ResourceServer) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.allowRsRemoteMgmt == null) {
+            if (other.allowRsRemoteMgmt != null)
+                return false;
+        }
+        else if (!this.allowRsRemoteMgmt.equals(other.allowRsRemoteMgmt))
+            return false;
+        if (this.policyEnforceMode == null) {
+            if (other.policyEnforceMode != null)
+                return false;
+        }
+        else if (!this.policyEnforceMode.equals(other.policyEnforceMode))
+            return false;
+        if (this.decisionStrategy == null) {
+            if (other.decisionStrategy != null)
+                return false;
+        }
+        else if (!this.decisionStrategy.equals(other.decisionStrategy))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.allowRsRemoteMgmt == null) ? 0 : this.allowRsRemoteMgmt.hashCode());
+        result = prime * result + ((this.policyEnforceMode == null) ? 0 : this.policyEnforceMode.hashCode());
+        result = prime * result + ((this.decisionStrategy == null) ? 0 : this.decisionStrategy.hashCode());
+        return result;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ResourceServer (");
 
         sb.append(id);
-        sb.append(", ").append(clientId);
         sb.append(", ").append(allowRsRemoteMgmt);
         sb.append(", ").append(policyEnforceMode);
+        sb.append(", ").append(decisionStrategy);
 
         sb.append(")");
         return sb.toString();
@@ -137,9 +184,9 @@ public class ResourceServer implements VertxPojo, IResourceServer {
     @Override
     public void from(IResourceServer from) {
         setId(from.getId());
-        setClientId(from.getClientId());
         setAllowRsRemoteMgmt(from.getAllowRsRemoteMgmt());
         setPolicyEnforceMode(from.getPolicyEnforceMode());
+        setDecisionStrategy(from.getDecisionStrategy());
     }
 
     @Override

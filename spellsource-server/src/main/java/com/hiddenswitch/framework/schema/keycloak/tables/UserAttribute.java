@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.UserAttributeRe
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function4;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row4;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -109,7 +113,7 @@ public class UserAttribute extends TableImpl<UserAttributeRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.asList(Indexes.IDX_USER_ATTRIBUTE);
+        return Arrays.asList(Indexes.IDX_USER_ATTRIBUTE, Indexes.IDX_USER_ATTRIBUTE_NAME);
     }
 
     @Override
@@ -145,6 +149,11 @@ public class UserAttribute extends TableImpl<UserAttributeRecord> {
         return new UserAttribute(alias, this);
     }
 
+    @Override
+    public UserAttribute as(Table<?> alias) {
+        return new UserAttribute(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -161,6 +170,14 @@ public class UserAttribute extends TableImpl<UserAttributeRecord> {
         return new UserAttribute(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public UserAttribute rename(Table<?> name) {
+        return new UserAttribute(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
@@ -168,5 +185,20 @@ public class UserAttribute extends TableImpl<UserAttributeRecord> {
     @Override
     public Row4<String, String, String, String> fieldsRow() {
         return (Row4) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function4<? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

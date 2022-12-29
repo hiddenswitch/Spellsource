@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
@@ -23,7 +22,6 @@ import net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvi
 public final class FelfireDrakeSpell extends Spell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		CardList cards = SpellUtils.getCards(context, player, target, source, desc, 99);
 		int attack = cards.stream().mapToInt(c -> AttributeValueProvider.provideValueForAttribute(context, Attribute.ATTACK, c)).max().orElse(-1);

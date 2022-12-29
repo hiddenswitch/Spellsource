@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -26,7 +25,6 @@ public final class SpellToHeroPowerSpell extends ChangeHeroPowerSpell {
 	private static Logger LOGGER = LoggerFactory.getLogger(SpellToHeroPowerSpell.class);
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (target == null) {
 			return;

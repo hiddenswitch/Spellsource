@@ -76,6 +76,39 @@ public class ClientSessionRole implements VertxPojo, IClientSessionRole {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final ClientSessionRole other = (ClientSessionRole) obj;
+        if (this.roleId == null) {
+            if (other.roleId != null)
+                return false;
+        }
+        else if (!this.roleId.equals(other.roleId))
+            return false;
+        if (this.clientSession == null) {
+            if (other.clientSession != null)
+                return false;
+        }
+        else if (!this.clientSession.equals(other.clientSession))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.roleId == null) ? 0 : this.roleId.hashCode());
+        result = prime * result + ((this.clientSession == null) ? 0 : this.clientSession.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("ClientSessionRole (");
 

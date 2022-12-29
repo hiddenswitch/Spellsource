@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc.aura;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -98,7 +97,6 @@ public class AuraDesc extends Desc<AuraArg, Aura> implements AbstractEnchantment
 	}
 
 	@Override
-	@Suspendable
 	public Optional<Aura> tryCreate(GameContext context, Player player, Entity effectSource, Card enchantmentSource, Entity host, boolean force) {
 		return context.getLogic().tryCreateAura(player, this, effectSource, enchantmentSource, host, force);
 	}

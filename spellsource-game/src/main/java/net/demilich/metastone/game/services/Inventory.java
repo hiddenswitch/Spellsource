@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.services;
 
-import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.decks.GameDeck;
 
@@ -13,7 +12,6 @@ public interface Inventory {
 	 * @param name   The name of the deck to retrieve
 	 * @return The deck, or {@code null} if no deck was found with the given name.
 	 */
-	@Suspendable
 	GameDeck getDeck(Player player, String name);
 }
 

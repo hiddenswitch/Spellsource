@@ -23,8 +23,10 @@ public class FedUserConsent implements VertxPojo, IFedUserConsent {
     private String userId;
     private String realmId;
     private String storageProviderId;
-    private Long   createdDate;
-    private Long   lastUpdatedDate;
+    private Long createdDate;
+    private Long lastUpdatedDate;
+    private String clientStorageProvider;
+    private String externalClientId;
 
     public FedUserConsent() {}
 
@@ -36,6 +38,8 @@ public class FedUserConsent implements VertxPojo, IFedUserConsent {
         this.storageProviderId = value.getStorageProviderId();
         this.createdDate = value.getCreatedDate();
         this.lastUpdatedDate = value.getLastUpdatedDate();
+        this.clientStorageProvider = value.getClientStorageProvider();
+        this.externalClientId = value.getExternalClientId();
     }
 
     public FedUserConsent(
@@ -44,8 +48,10 @@ public class FedUserConsent implements VertxPojo, IFedUserConsent {
         String userId,
         String realmId,
         String storageProviderId,
-        Long   createdDate,
-        Long   lastUpdatedDate
+        Long createdDate,
+        Long lastUpdatedDate,
+        String clientStorageProvider,
+        String externalClientId
     ) {
         this.id = id;
         this.clientId = clientId;
@@ -54,6 +60,8 @@ public class FedUserConsent implements VertxPojo, IFedUserConsent {
         this.storageProviderId = storageProviderId;
         this.createdDate = createdDate;
         this.lastUpdatedDate = lastUpdatedDate;
+        this.clientStorageProvider = clientStorageProvider;
+        this.externalClientId = externalClientId;
     }
 
         public FedUserConsent(io.vertx.core.json.JsonObject json) {
@@ -180,6 +188,124 @@ public class FedUserConsent implements VertxPojo, IFedUserConsent {
         return this;
     }
 
+    /**
+     * Getter for
+     * <code>keycloak.fed_user_consent.client_storage_provider</code>.
+     */
+    @Override
+    public String getClientStorageProvider() {
+        return this.clientStorageProvider;
+    }
+
+    /**
+     * Setter for
+     * <code>keycloak.fed_user_consent.client_storage_provider</code>.
+     */
+    @Override
+    public FedUserConsent setClientStorageProvider(String clientStorageProvider) {
+        this.clientStorageProvider = clientStorageProvider;
+        return this;
+    }
+
+    /**
+     * Getter for <code>keycloak.fed_user_consent.external_client_id</code>.
+     */
+    @Override
+    public String getExternalClientId() {
+        return this.externalClientId;
+    }
+
+    /**
+     * Setter for <code>keycloak.fed_user_consent.external_client_id</code>.
+     */
+    @Override
+    public FedUserConsent setExternalClientId(String externalClientId) {
+        this.externalClientId = externalClientId;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final FedUserConsent other = (FedUserConsent) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.clientId == null) {
+            if (other.clientId != null)
+                return false;
+        }
+        else if (!this.clientId.equals(other.clientId))
+            return false;
+        if (this.userId == null) {
+            if (other.userId != null)
+                return false;
+        }
+        else if (!this.userId.equals(other.userId))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.storageProviderId == null) {
+            if (other.storageProviderId != null)
+                return false;
+        }
+        else if (!this.storageProviderId.equals(other.storageProviderId))
+            return false;
+        if (this.createdDate == null) {
+            if (other.createdDate != null)
+                return false;
+        }
+        else if (!this.createdDate.equals(other.createdDate))
+            return false;
+        if (this.lastUpdatedDate == null) {
+            if (other.lastUpdatedDate != null)
+                return false;
+        }
+        else if (!this.lastUpdatedDate.equals(other.lastUpdatedDate))
+            return false;
+        if (this.clientStorageProvider == null) {
+            if (other.clientStorageProvider != null)
+                return false;
+        }
+        else if (!this.clientStorageProvider.equals(other.clientStorageProvider))
+            return false;
+        if (this.externalClientId == null) {
+            if (other.externalClientId != null)
+                return false;
+        }
+        else if (!this.externalClientId.equals(other.externalClientId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.clientId == null) ? 0 : this.clientId.hashCode());
+        result = prime * result + ((this.userId == null) ? 0 : this.userId.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.storageProviderId == null) ? 0 : this.storageProviderId.hashCode());
+        result = prime * result + ((this.createdDate == null) ? 0 : this.createdDate.hashCode());
+        result = prime * result + ((this.lastUpdatedDate == null) ? 0 : this.lastUpdatedDate.hashCode());
+        result = prime * result + ((this.clientStorageProvider == null) ? 0 : this.clientStorageProvider.hashCode());
+        result = prime * result + ((this.externalClientId == null) ? 0 : this.externalClientId.hashCode());
+        return result;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("FedUserConsent (");
@@ -191,6 +317,8 @@ public class FedUserConsent implements VertxPojo, IFedUserConsent {
         sb.append(", ").append(storageProviderId);
         sb.append(", ").append(createdDate);
         sb.append(", ").append(lastUpdatedDate);
+        sb.append(", ").append(clientStorageProvider);
+        sb.append(", ").append(externalClientId);
 
         sb.append(")");
         return sb.toString();
@@ -209,6 +337,8 @@ public class FedUserConsent implements VertxPojo, IFedUserConsent {
         setStorageProviderId(from.getStorageProviderId());
         setCreatedDate(from.getCreatedDate());
         setLastUpdatedDate(from.getLastUpdatedDate());
+        setClientStorageProvider(from.getClientStorageProvider());
+        setExternalClientId(from.getExternalClientId());
     }
 
     @Override

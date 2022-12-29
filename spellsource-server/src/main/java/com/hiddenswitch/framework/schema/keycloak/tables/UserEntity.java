@@ -11,14 +11,18 @@ import com.hiddenswitch.framework.schema.keycloak.tables.records.UserEntityRecor
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Function13;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
+import org.jooq.Records;
 import org.jooq.Row13;
 import org.jooq.Schema;
+import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -107,7 +111,7 @@ public class UserEntity extends TableImpl<UserEntityRecord> {
     /**
      * The column <code>keycloak.user_entity.service_account_client_link</code>.
      */
-    public final TableField<UserEntityRecord, String> SERVICE_ACCOUNT_CLIENT_LINK = createField(DSL.name("service_account_client_link"), SQLDataType.VARCHAR(36), this, "");
+    public final TableField<UserEntityRecord, String> SERVICE_ACCOUNT_CLIENT_LINK = createField(DSL.name("service_account_client_link"), SQLDataType.VARCHAR(255), this, "");
 
     /**
      * The column <code>keycloak.user_entity.not_before</code>.
@@ -154,7 +158,7 @@ public class UserEntity extends TableImpl<UserEntityRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.asList(Indexes.IDX_USER_EMAIL);
+        return Arrays.asList(Indexes.IDX_USER_EMAIL, Indexes.IDX_USER_SERVICE_ACCOUNT);
     }
 
     @Override
@@ -177,6 +181,11 @@ public class UserEntity extends TableImpl<UserEntityRecord> {
         return new UserEntity(alias, this);
     }
 
+    @Override
+    public UserEntity as(Table<?> alias) {
+        return new UserEntity(alias.getQualifiedName(), this);
+    }
+
     /**
      * Rename this table
      */
@@ -193,6 +202,14 @@ public class UserEntity extends TableImpl<UserEntityRecord> {
         return new UserEntity(name, null);
     }
 
+    /**
+     * Rename this table
+     */
+    @Override
+    public UserEntity rename(Table<?> name) {
+        return new UserEntity(name.getQualifiedName(), null);
+    }
+
     // -------------------------------------------------------------------------
     // Row13 type methods
     // -------------------------------------------------------------------------
@@ -200,5 +217,20 @@ public class UserEntity extends TableImpl<UserEntityRecord> {
     @Override
     public Row13<String, String, String, Boolean, Boolean, String, String, String, String, String, Long, String, Integer> fieldsRow() {
         return (Row13) super.fieldsRow();
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     */
+    public <U> SelectField<U> mapping(Function13<? super String, ? super String, ? super String, ? super Boolean, ? super Boolean, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super String, ? super Integer, ? extends U> from) {
+        return convertFrom(Records.mapping(from));
+    }
+
+    /**
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
+     */
+    public <U> SelectField<U> mapping(Class<U> toType, Function13<? super String, ? super String, ? super String, ? super Boolean, ? super Boolean, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super String, ? super Integer, ? extends U> from) {
+        return convertFrom(toType, Records.mapping(from));
     }
 }

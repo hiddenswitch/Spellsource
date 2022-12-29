@@ -40,21 +40,6 @@ public class ClientAttributesDao extends AbstractReactiveVertxDAO<ClientAttribut
         }
 
         /**
-     * Find records that have <code>value IN (values)</code> asynchronously
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientAttributes>> findManyByValue(Collection<String> values) {
-                return findManyByCondition(ClientAttributes.CLIENT_ATTRIBUTES.VALUE.in(values));
-        }
-
-        /**
-     * Find records that have <code>value IN (values)</code> asynchronously
-     * limited by the given limit
-     */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientAttributes>> findManyByValue(Collection<String> values, int limit) {
-                return findManyByCondition(ClientAttributes.CLIENT_ATTRIBUTES.VALUE.in(values),limit);
-        }
-
-        /**
      * Find records that have <code>name IN (values)</code> asynchronously
      */
         public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientAttributes>> findManyByName(Collection<String> values) {
@@ -67,6 +52,21 @@ public class ClientAttributesDao extends AbstractReactiveVertxDAO<ClientAttribut
      */
         public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientAttributes>> findManyByName(Collection<String> values, int limit) {
                 return findManyByCondition(ClientAttributes.CLIENT_ATTRIBUTES.NAME.in(values),limit);
+        }
+
+        /**
+     * Find records that have <code>value IN (values)</code> asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientAttributes>> findManyByValue(Collection<String> values) {
+                return findManyByCondition(ClientAttributes.CLIENT_ATTRIBUTES.VALUE.in(values));
+        }
+
+        /**
+     * Find records that have <code>value IN (values)</code> asynchronously
+     * limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ClientAttributes>> findManyByValue(Collection<String> values, int limit) {
+                return findManyByCondition(ClientAttributes.CLIENT_ATTRIBUTES.VALUE.in(values),limit);
         }
 
         @Override

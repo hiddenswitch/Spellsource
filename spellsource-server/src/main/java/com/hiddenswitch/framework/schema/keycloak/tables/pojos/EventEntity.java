@@ -25,7 +25,7 @@ public class EventEntity implements VertxPojo, IEventEntity {
     private String ipAddress;
     private String realmId;
     private String sessionId;
-    private Long   eventTime;
+    private Long eventTime;
     private String type;
     private String userId;
 
@@ -52,7 +52,7 @@ public class EventEntity implements VertxPojo, IEventEntity {
         String ipAddress,
         String realmId,
         String sessionId,
-        Long   eventTime,
+        Long eventTime,
         String type,
         String userId
     ) {
@@ -241,6 +241,95 @@ public class EventEntity implements VertxPojo, IEventEntity {
     public EventEntity setUserId(String userId) {
         this.userId = userId;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final EventEntity other = (EventEntity) obj;
+        if (this.id == null) {
+            if (other.id != null)
+                return false;
+        }
+        else if (!this.id.equals(other.id))
+            return false;
+        if (this.clientId == null) {
+            if (other.clientId != null)
+                return false;
+        }
+        else if (!this.clientId.equals(other.clientId))
+            return false;
+        if (this.detailsJson == null) {
+            if (other.detailsJson != null)
+                return false;
+        }
+        else if (!this.detailsJson.equals(other.detailsJson))
+            return false;
+        if (this.error == null) {
+            if (other.error != null)
+                return false;
+        }
+        else if (!this.error.equals(other.error))
+            return false;
+        if (this.ipAddress == null) {
+            if (other.ipAddress != null)
+                return false;
+        }
+        else if (!this.ipAddress.equals(other.ipAddress))
+            return false;
+        if (this.realmId == null) {
+            if (other.realmId != null)
+                return false;
+        }
+        else if (!this.realmId.equals(other.realmId))
+            return false;
+        if (this.sessionId == null) {
+            if (other.sessionId != null)
+                return false;
+        }
+        else if (!this.sessionId.equals(other.sessionId))
+            return false;
+        if (this.eventTime == null) {
+            if (other.eventTime != null)
+                return false;
+        }
+        else if (!this.eventTime.equals(other.eventTime))
+            return false;
+        if (this.type == null) {
+            if (other.type != null)
+                return false;
+        }
+        else if (!this.type.equals(other.type))
+            return false;
+        if (this.userId == null) {
+            if (other.userId != null)
+                return false;
+        }
+        else if (!this.userId.equals(other.userId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+        result = prime * result + ((this.clientId == null) ? 0 : this.clientId.hashCode());
+        result = prime * result + ((this.detailsJson == null) ? 0 : this.detailsJson.hashCode());
+        result = prime * result + ((this.error == null) ? 0 : this.error.hashCode());
+        result = prime * result + ((this.ipAddress == null) ? 0 : this.ipAddress.hashCode());
+        result = prime * result + ((this.realmId == null) ? 0 : this.realmId.hashCode());
+        result = prime * result + ((this.sessionId == null) ? 0 : this.sessionId.hashCode());
+        result = prime * result + ((this.eventTime == null) ? 0 : this.eventTime.hashCode());
+        result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
+        result = prime * result + ((this.userId == null) ? 0 : this.userId.hashCode());
+        return result;
     }
 
     @Override

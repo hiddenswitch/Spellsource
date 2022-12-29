@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -24,7 +22,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class CelestialConduitSpell extends Spell {
 
 	@Override
-	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		// Create an atomic integer "sum".
 		// Then, we will tap into the card that was received using a LambdaSpellDesc.
@@ -72,7 +69,7 @@ public final class CelestialConduitSpell extends Spell {
 		discoverSpell.put(SpellArg.CARD_FILTER, desc.getCardFilter());
 		var invocations = 0;
 		while (sum.get() <= max && invocations < GameLogic.MAX_HAND_CARDS) {
-			if (Strand.currentStrand().isInterrupted()) {
+			if (Thread.currentThread().isInterrupted()) {
 				break;
 			}
 			SpellUtils.castChildSpell(context, player, discoverSpell, source, target);

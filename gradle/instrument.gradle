@@ -1,26 +1,16 @@
-// See ../quasar-core/README.md for an explanation of this file
-apply plugin: 'java-library'
-apply plugin: 'com.hiddenswitch.fibers.instrument'
-
-dependencies {
-    api "com.hiddenswitch:quasar-core:10.0.6"
+tasks.withType(JavaCompile) {
+    options.compilerArgs += "--enable-preview"
 }
 
-fibers {
-    // The Quasar instrumentation includes checks to see if the methods it is entering are instrumented.
-    check = false
-    // Prints instrumentation messages.
-    verbose = false
-    // Allows Java synchronized blocks to be instrumented.
-    allowMonitors = true
-    // Allows suspendable methods to call Java blocking methods.
-    allowBlocking = true
-    // Prints debug messaging.
-    debug = false
-    // Writes the instrumented classes
-    writeClasses = true
-    // Automatically determine which methods should be instrumented based on static analysis.
-    scanSuspendables = true
-    // Instrument the interfaces that suspendable methods override.
-    scanSuspendableSupers = true
+tasks.withType(Test) {
+    jvmArgs += ['--enable-preview', '--add-opens=java.base/java.lang=ALL-UNNAMED']
+}
+
+tasks.withType(JavaExec) {
+    jvmArgs += ['--enable-preview', '--add-opens=java.base/java.lang=ALL-UNNAMED']
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_19
+    targetCompatibility = JavaVersion.VERSION_19
 }

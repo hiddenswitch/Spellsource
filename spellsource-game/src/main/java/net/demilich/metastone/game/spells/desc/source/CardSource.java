@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc.source;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.collect.Lists;
 import net.demilich.metastone.game.GameContext;
@@ -38,7 +37,6 @@ public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc
 		return getDesc().containsKey(arg);
 	}
 
-	@Suspendable
 	public CardList getCards(GameContext context, Entity source, Player player) {
 		TargetPlayer targetPlayer = (TargetPlayer) getDesc().get(CardSourceArg.TARGET_PLAYER);
 		if (targetPlayer == null) {
@@ -103,7 +101,6 @@ public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc
 	 * @param player  The casting player
 	 * @return A list of cards pre-filter.
 	 */
-	@Suspendable
 	protected abstract CardList match(GameContext context, Entity source, Player player);
 
 	/**
@@ -119,7 +116,6 @@ public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc
 	 * @param shuffled
 	 * @return
 	 */
-	@Suspendable
 	protected Stream<Card> match(GameContext context, Entity source, Player player, Predicate<Card> filter, int limit, boolean shuffled) {
 		var match = match(context, source, player);
 		if (shuffled) {

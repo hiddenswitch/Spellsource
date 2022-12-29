@@ -76,6 +76,39 @@ public class AssociatedPolicy implements VertxPojo, IAssociatedPolicy {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final AssociatedPolicy other = (AssociatedPolicy) obj;
+        if (this.policyId == null) {
+            if (other.policyId != null)
+                return false;
+        }
+        else if (!this.policyId.equals(other.policyId))
+            return false;
+        if (this.associatedPolicyId == null) {
+            if (other.associatedPolicyId != null)
+                return false;
+        }
+        else if (!this.associatedPolicyId.equals(other.associatedPolicyId))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.policyId == null) ? 0 : this.policyId.hashCode());
+        result = prime * result + ((this.associatedPolicyId == null) ? 0 : this.associatedPolicyId.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("AssociatedPolicy (");
 
