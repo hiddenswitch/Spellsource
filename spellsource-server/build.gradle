@@ -358,16 +358,28 @@ test {
     }
 }
 
+def spellsourceTags = [project.version.toString()]
+def spellsourceImage = 'ghcr.io/hiddenswitch/spellsource'
 jib {
     from {
         image = "eclipse-temurin:19.0.1_10-jre"
     }
     to {
-        image = 'ghcr.io/hiddenswitch/spellsource'
-        tags = [project.version.toString()]
+        image = spellsourceImage
+
+        tags = tags
     }
     container {
         ports = ['8080']
         jvmFlags = jvmArgs
+    }
+}
+
+task githubDockerPush {
+    dependsOn jibDockerBuild
+    doLast {
+        exec {
+            commandLine(['docker','push'] + spellsourceTags.collect {tag -> "$spellsourceImage:$tag"})
+        }
     }
 }
