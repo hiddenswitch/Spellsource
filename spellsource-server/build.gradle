@@ -34,7 +34,6 @@ repositories {
 }
 
 
-
 import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerRemoveContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerStartContainer
@@ -72,10 +71,10 @@ dependencies {
     implementation 'javax.activation:activation:1.1.1'
 
     // includes withCallCredentials fix
-    implementation ("com.github.doctorpangloss.vertx-grpc-1:vertx-grpc-server:c4d99c22f6") {
+    implementation("com.github.doctorpangloss.vertx-grpc-1:vertx-grpc-server:c4d99c22f6") {
         exclude group: 'io.vertx', module: 'vertx-core'
     }
-    implementation ("com.github.doctorpangloss.vertx-grpc-1:vertx-grpc-client:c4d99c22f6") {
+    implementation("com.github.doctorpangloss.vertx-grpc-1:vertx-grpc-client:c4d99c22f6") {
         exclude group: 'io.vertx', module: 'vertx-core'
     }
 
@@ -377,8 +376,10 @@ jib {
 task githubDockerPush {
     dependsOn jibDockerBuild
     doLast {
-        exec {
-            commandLine(['docker', 'push'] + spellsourceTags.collect {tag -> "$spellsourceImage:$tag"})
+        for (def image : spellsourceTags.collect { tag -> "$spellsourceImage:$tag" }) {
+            exec {
+                commandLine(['docker', 'push'] + [image])
+            }
         }
     }
 }
