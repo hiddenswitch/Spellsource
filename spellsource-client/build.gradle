@@ -6,6 +6,7 @@ apply plugin: 'base'
 
 def secretsPath = "${project(':spellsource-private').projectDir}/src/secrets"
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
+def isMacOs = Os.isFamily(Os.FAMILY_MAC)
 
 task buildMacOS(type: UnityTask, group: 'Spellsource') {
     description("Builds the macOS versions of the game using deploy.sh file and your local Unity version.")
@@ -81,10 +82,14 @@ task distSteam(group: 'Spellsource') {
             standardOutput(steamGuardCode)
         }
         exec {
-            commandLine([
-                    "docker", "run", "-v=${rootProject.projectDir}:/home/steam/workdir", "-w=/home/steam/workdir", "cm2network/steamcmd", "/home/steam/steamcmd/steamcmd.sh",
+            def winLinuxCmd = ["docker", "run", "--rm", "-e", "CPU_MHZ=2000", "-v=${rootProject.projectDir}:/home/steam/workdir", "-w=/home/steam/workdir", "steamcmd/steamcmd:latest", "/home/steam/steamcmd/steamcmd.sh"]
+            def macOsCmd = ["/bin/bash", "$project.rootProject.projectDir/bin/steamcmd/steamcmd_osx/steamcmd.sh"]
+            def cmdProjectDir = isMacOs ? "$rootProject.projectDir" : "/home/steam/workdir"
+            commandLine([] +
+                    (isMacOs ? macOsCmd : winLinuxCmd)
+                    + [
                     "+login", steamAccount, steamCmdPassword, steamGuardCode.toString(),
-                    "+run_app_build_http", "/home/steam/workdir/spellsource-private/src/secrets/spellsource/steam-app-build.vdf",
+                    "+run_app_build_http", "$cmdProjectDir/spellsource-private/src/secrets/spellsource/steam-app-build.vdf",
                     "+quit"
             ])
         }
