@@ -33,6 +33,7 @@ repositories {
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
 }
 
+evaluationDependsOn(':spellsource-containers')
 
 import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerRemoveContainer
