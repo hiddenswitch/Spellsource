@@ -12,7 +12,7 @@ The `Spellsource-Server` project is a 2-player card battler that supports hosted
 
 ### Getting Around
 
-Cards are located at [spellsource-cards-git/src/main/resources/cards/custom](spellsource-cards-git/src/main/resources/cards/custom).
+Cards are located at [spellsource-cards-git/src/main/resources/cards/custom](https://github.com/hiddenswitch/Spellsource/tree/master/spellsource-cards-git).
 
 To implement new effects (called **Spells** inside Spellsource) add a new Spell subclass to [spellsource-game/src/main/java/net/demilich/metastone/game/spells](spellsource-game/src/main/java/net/demilich/metastone/game/spells).
 
