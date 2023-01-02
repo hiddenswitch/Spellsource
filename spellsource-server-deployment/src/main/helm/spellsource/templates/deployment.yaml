@@ -46,7 +46,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: "JAVA_TOOL_OPTIONS"
-              value: "-Djgroups.dns.query={{ include "spellsource.fullname" . }}internal.{{ .Release.Namespace }}.svc.cluster.local -Dlogback.configurationFile=/app/logback.groovy {{ .Values.extraJavaOptions }}"
+              value: "-Djgroups.dns.query={{ include "spellsource.fullname" . }}internal.{{ .Release.Namespace }}.svc.cluster.local -Dlogback.configurationFile=/app/logback.xml {{ .Values.extraJavaOptions }}"
           {{- if .Values.configmap.jaeger.enabled}}
             - name: "JAEGER_AGENT_HOST"
               value: {{ .Values.configmap.jaeger.agentHost | quote }}

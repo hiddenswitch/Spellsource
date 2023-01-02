@@ -107,6 +107,10 @@ task testDll(type: Exec, group: 'verification') {
 
 task installDll(type: Copy) {
     dependsOn dll
+    inputs.dir("$project.buildDir/dlls")
+    inputs.dir("$csharpRootDir/Framework/Plugins")
+    def destination = project(':spellsource-client').projectDir.path + '/src/unity/Assets/Client'
+    outputs.dir(destination)
     from("$project.buildDir/dlls") {
         include 'Framework.dll'
         include 'Framework.pdb'
@@ -114,7 +118,7 @@ task installDll(type: Copy) {
     from("$csharpRootDir/Framework/Plugins") {
         include '**/*.*'
     }
-    into(project(':spellsource-client').projectDir.absolutePath + '/src/unity/Assets/Client')
+    into(destination)
 }
 
 task protosChanged(group: 'Spellsource') {

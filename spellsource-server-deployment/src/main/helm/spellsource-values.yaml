@@ -14,7 +14,7 @@ configmap:
     port: 5432
   keycloak:
     # keycloak port is 8080 by default on bitnami images, and we override it to 9090
-    authUrl: "http://keycloak.default.svc.cluster.local:9090/auth/"
+    authUrl: "http://keycloak.default.svc.cluster.local:9090/"
     adminUsername: "admin"
     adminPassword: "password"
   redis:
@@ -32,20 +32,26 @@ migration:
   resources:
     requests:
       cpu: 200m
-      memory: 8Gi
+      memory: 4Gi
 logback: |
-  import ch.qos.logback.classic.filter.ThresholdFilter
+  <?xml version="1.0" encoding="UTF-8" ?>
+  <!DOCTYPE configuration>
 
-  appender("STDOUT", ConsoleAppender) {
-      encoder(PatternLayoutEncoder) {
-          pattern = "%level %logger{24} %msg%n"
-      }
+  <configuration
+          xmlns="http://ch.qos.logback/xml/ns/logback"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://ch.qos.logback/xml/ns/logback https://raw.githubusercontent.com/enricopulatzo/logback-XSD/master/src/main/xsd/logback.xsd">
+    <import class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"/>
+    <import class="ch.qos.logback.core.ConsoleAppender"/>
 
-      filter(ThresholdFilter) {
-          level = TRACE
-      }
-  }
+    <appender name="STDOUT" class="ConsoleAppender">
+      <encoder class="PatternLayoutEncoder">
+        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+      </encoder>
+    </appender>
 
-  scan("1 seconds")
-
-  root(ERROR, ["STDOUT"])
+    <root level="WARN">
+      <appender-ref ref="STDOUT"/>
+    </root>
+    <logger name="io.jaegertracing" level="OFF" />
+  </configuration>

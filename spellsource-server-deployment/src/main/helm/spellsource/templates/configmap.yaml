@@ -15,5 +15,5 @@ data:
   spellsource-config.yaml: |
     # Dummy comment: https://github.com/kubernetes/helm/blob/master/docs/chart_template_guide/yaml_techniques.md#strings-in-yaml
 {{ tpl $configMap . | indent 4 }}
-  logback.groovy: |
+  logback.xml: |
 {{ tpl $logback . | indent 4 }}

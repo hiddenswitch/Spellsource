@@ -6,7 +6,7 @@ keycloak:
   enabled: false
 replicaCount: 1
 image:
-  repository: docker.io/doctorpangloss/spellsource-server
+  repository: ghcr.io/hiddenswitch/spellsource
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
@@ -35,13 +35,16 @@ service:
 resources: { }
 migration:
   enabled: true
-  resources: { }
+  resources:
+    requests:
+      cpu: 200m
+      memory: 4Gi
   nodeSelector: { }
   annotations: { }
   tolerations: [ ]
   affinity: { }
 autoscaling:
-  enabled: true
+  enabled: false
   minReplicas: 1
   maxReplicas: 3
   targetCPUUtilizationPercentage: 80
@@ -81,22 +84,41 @@ configmap:
     enabled: false
     agentHost: "localhost"
     agentPort: 6831
+  pg:
+    host: "postgres-postgresql-ha-pgpool.default.svc.cluster.local"
+    user: "postgres"
+    password: "password"
+    database: "spellsource"
+    port: 5432
+  keycloak:
+    # keycloak port is 8080 by default on bitnami images, and we override it to 9090
+    authUrl: "http://keycloak.default.svc.cluster.local:9090/"
+    adminUsername: "admin"
+    adminPassword: "password"
+  redis:
+    uri: "redis://redis-master.default.svc.cluster.local:6379"
 extraJavaOptions: ""
 extraEnv: [ ]
 extraPorts: [ ]
 logback: |
-  import ch.qos.logback.classic.filter.ThresholdFilter
+  <?xml version="1.0" encoding="UTF-8" ?>
+  <!DOCTYPE configuration>
 
-  appender("STDOUT", ConsoleAppender) {
-      encoder(PatternLayoutEncoder) {
-          pattern = "%level %logger{24} %msg%n"
-      }
+  <configuration
+          xmlns="http://ch.qos.logback/xml/ns/logback"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://ch.qos.logback/xml/ns/logback https://raw.githubusercontent.com/enricopulatzo/logback-XSD/master/src/main/xsd/logback.xsd">
+    <import class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"/>
+    <import class="ch.qos.logback.core.ConsoleAppender"/>
 
-      filter(ThresholdFilter) {
-          level = TRACE
-      }
-  }
+    <appender name="STDOUT" class="ConsoleAppender">
+      <encoder class="PatternLayoutEncoder">
+        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+      </encoder>
+    </appender>
 
-  scan("2 seconds")
-
-  root(WARN, ["STDOUT"])
+    <root level="WARN">
+      <appender-ref ref="STDOUT"/>
+    </root>
+    <logger name="io.jaegertracing" level="OFF" />
+  </configuration>
