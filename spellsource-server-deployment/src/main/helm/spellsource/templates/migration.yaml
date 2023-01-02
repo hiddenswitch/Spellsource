@@ -19,6 +19,10 @@ spec:
     metadata:
       name: {{ .Chart.Name }}-migration-job-pod
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       restartPolicy: Never
       {{- with .Values.migration.nodeSelector }}
       nodeSelector:

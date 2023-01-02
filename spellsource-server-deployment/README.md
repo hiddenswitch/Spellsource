@@ -30,3 +30,24 @@ Creating an EKS cluster:
 ```shell
 eksctl create cluster --name hiddenswitch-cluster-1 --version 1.19 --fargate
 ```
+
+### Using images from `ghcr.io`
+
+Create a personal access token with `packages:read` permissions. Then create a manifest for the secret and reference it:
+
+```yaml
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: image-pull-secret
+stringData:
+  .dockerconfigjson: '{"auths":{"ghcr.io":{"auth":"yourusername:ghp_generatedtoken"}}}'
+```
+
+Then, in your `values.yaml`:
+
+```yaml
+imagePullSecrets:
+ - name: image-pull-secret
+```
