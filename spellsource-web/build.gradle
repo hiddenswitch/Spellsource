@@ -3,10 +3,11 @@ import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'base'
 
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
+def isMacOs = Os.isFamily(Os.FAMILY_MAC)
 def spellsourceDepTask = ':spellsource-web-cardeditor-support:shadowJar'
 def gatsbyBinary = "$project.projectDir/node_modules/.bin/gatsby${isWindows ? '.cmd' : ''}"
-def nodeBinary = isWindows ? "C:\\Program Files\\nodejs\\node.cmd" : "/opt/homebrew/bin/node"
-def npmBinary = isWindows ? "C:\\Program Files\\nodejs\\npm.cmd" : "/opt/homebrew/bin/npm"
+def nodeBinary = isWindows ? "C:\\Program Files\\nodejs\\node.cmd" : (isMacOs ? "/opt/homebrew/bin/node" : "node")
+def npmBinary = isWindows ? "C:\\Program Files\\nodejs\\npm.cmd" : (isMacOs ? "/opt/homebrew/bin/npm" : "npm")
 def graalNpmPrefix = 'node_modules_graal'
 
 clean {
