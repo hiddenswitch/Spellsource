@@ -1,14 +1,24 @@
 ---
 title: "What's New"
-date: "2020-02-01"
+date: "2023-01-01"
 path: "/whats-new"
 header: true
 ---
 
-## What's New
+## New and Now
 
 Thanks for playing this beta of Spellsource! Read more at [our website](https://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)!
+
+### Current Version 0.10.0 (January 1, 2023)
+
+New architectural enhancements.
+
+ - Matchmaking bugs have been resolved.
+ - Issues with the server gradually getting slower have been resolved.
+ - Guest accounts are now available.
+ - You can choose to create an account with or without the built in decks.
+ - Windows, Android, iOS, and macOS are all now supported.
 
 ### Current Version 0.9.0-4.0.0 (May 1, 2020)
 
