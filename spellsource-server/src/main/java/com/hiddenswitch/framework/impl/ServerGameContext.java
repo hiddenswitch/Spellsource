@@ -8,7 +8,6 @@ import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Legacy;
 import com.hiddenswitch.framework.schema.spellsource.Tables;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
-import com.hiddenswitch.framework.virtual.concurrent.SuspendableLock;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import io.opentracing.log.Fields;
@@ -236,13 +235,7 @@ public class ServerGameContext extends GameContext implements Server {
 					Promise<Client> fut = Promise.promise();
 					clientsReady.put(configuration.getPlayerId(), fut);
 				}
-
-				var finalCloseableBehaviour = closeableBehaviour;
-
-				closeables.add(fut -> {
-					LOGGER.trace("closeables {}: closing client {}", gameId, finalCloseableBehaviour);
-					finalCloseableBehaviour.close(fut);
-				});
+				closeables.add(closeableBehaviour);
 			}
 		} finally {
 			span.finish();
@@ -913,7 +906,7 @@ public class ServerGameContext extends GameContext implements Server {
 					var closeable = iter.next();
 					var promise = Promise.<Void>promise();
 					closeable.close(promise);
-					await(com.hiddenswitch.framework.Environment.timeout(promise.future(), CLOSE_TIMEOUT_MILLIS));
+					await(timeout(promise.future(), CLOSE_TIMEOUT_MILLIS));
 				} catch (Throwable any) {
 					Tracing.error(any, span, false);
 				} finally {
@@ -1098,12 +1091,4 @@ public class ServerGameContext extends GameContext implements Server {
 		return all(registrationsReady.stream().map(Promise::future).toList());
 	}
 
-	/**
-	 * The lock to prevent simultaneous editing of the game context from external sources.
-	 *
-	 * @return
-	 */
-	public Lock getLock() {
-		return lock;
-	}
 }

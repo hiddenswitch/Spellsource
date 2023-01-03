@@ -40,8 +40,7 @@ public class Application {
 		System.getProperties().put("vertx.jgroups.config", config);
 		return Vertx.clusteredVertx(new VertxOptions(Environment.vertxOptions())
 				// todo: https://github.com/eclipse-vertx/vert.x/issues/3829 awaiting fix
-				.setTracingOptions(new OpenTracingOptions(Tracing.tracing()))
-				.setClusterManager(new InfinispanClusterManager()));
+				.setTracingOptions(new OpenTracingOptions(Tracing.tracing())));
 	}
 
 	protected Future<Vertx> deploy(Vertx vertx) {

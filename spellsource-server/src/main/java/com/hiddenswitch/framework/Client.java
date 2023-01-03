@@ -135,7 +135,9 @@ public class Client implements AutoCloseable {
 									.build())
 							.onSuccess(v -> LOGGER.trace("sent first message"))
 							.onFailure(gameOverPromise::tryFail);
-					return gameOverPromise.future();
+					return gameOverPromise
+							.future()
+							.onComplete(v -> writer.end());
 				});
 	}
 

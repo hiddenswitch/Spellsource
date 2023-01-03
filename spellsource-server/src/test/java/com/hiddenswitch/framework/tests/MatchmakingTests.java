@@ -127,6 +127,40 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
+	public void testTwoGamesInRow(Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
+		startServices(vertx)
+				.compose(v -> client.createAndLogin())
+				.compose(v -> client.matchmake("quickPlay"))
+				.compose(v -> client.playUntilGameOver())
+				.compose(v -> Environment.sleep(2000))
+				.compose(v -> client.matchmake("quickPlay"))
+				.compose(v -> client.playUntilGameOver())
+				.compose(v -> client.closeFut())
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	@Test
+	public void testTwoGamesInRowSomeoneInConstructed(Vertx vertx, VertxTestContext testContext) {
+		var client1 = new Client(vertx);
+		var client2 = new Client(vertx);
+		startServices(vertx)
+				.compose(v -> client1.createAndLogin())
+				.compose(v -> client2.createAndLogin())
+				.onSuccess(v -> client2.matchmake("constructed"))
+				.compose(v -> Environment.sleep(2000))
+				.compose(v -> client1.matchmake("quickPlay"))
+				.compose(v -> client1.playUntilGameOver())
+				.compose(v -> Environment.sleep(2000))
+				.compose(v -> client1.matchmake("quickPlay"))
+				.compose(v -> client1.playUntilGameOver())
+				.compose(v -> client1.closeFut())
+				.compose(v -> client2.cancelMatchmaking())
+				.compose(v -> client2.closeFut())
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
+	@Test
 	public void testSinglePlayerQueueCreatesMatch(VertxTestContext testContext) throws InterruptedException {
 		var vertx = Vertx.vertx();
 		var gameCreated = checkpoint(1);

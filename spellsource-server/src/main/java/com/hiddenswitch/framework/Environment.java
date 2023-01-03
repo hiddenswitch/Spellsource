@@ -290,15 +290,27 @@ public class Environment {
 	}
 
 	public static <T> Future<T> timeout(Future<T> future, long milliseconds, @Nullable Vertx vertx) {
-		return CompositeFuture.any(future, Environment.sleep(vertx, milliseconds))
-				.flatMap(res -> {
-					var timedOut = res.succeeded(1);
-					if (timedOut) {
-						return Future.failedFuture(new TimeoutException());
+		var here = new Throwable();
+		var promise = Promise.<T>promise();
+		Environment.sleep(vertx, milliseconds)
+				.onComplete(v -> {
+					if (!promise.future().isComplete()) {
+						var t = new TimeoutException();
+						t.setStackTrace(Environment.concatAndFilterStackTrace(t, here));
+						promise.fail(t);
 					}
-
-					return future;
 				});
+
+		future.onComplete(res -> {
+			if (res.succeeded()) {
+				promise.tryComplete(res.result());
+			}
+			if (res.failed()) {
+				promise.tryFail(res.cause());
+			}
+		});
+
+		return promise.future();
 	}
 
 	public static <T> Future<T> executeBlocking(Context context, Callable<T> blockingCallable) {
