@@ -21,16 +21,6 @@ public interface SuspendableLock extends Closeable {
 
 
 	/**
-	 * Obtains a lock that doesn't do anything.
-	 *
-	 * @return
-	 */
-	@NotNull
-	static SuspendableLock noOpLock() {
-		return new NoOpLock();
-	}
-
-	/**
 	 * Obtains a lock using the cluster configured for Vertx.
 	 *
 	 * @param name    The unique identifier of this lock
@@ -90,23 +80,6 @@ public interface SuspendableLock extends Closeable {
 		@Override
 		public void close(Promise<Void> promise) {
 			release();
-			promise.complete();
-		}
-	}
-
-	class NoOpLock implements SuspendableLock {
-
-		@Override
-		public void release() {
-		}
-
-		@Override
-		public void destroy() {
-
-		}
-
-		@Override
-		public void close(Promise<Void> promise) {
 			promise.complete();
 		}
 	}

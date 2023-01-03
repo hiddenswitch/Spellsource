@@ -8,6 +8,7 @@ import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Legacy;
 import com.hiddenswitch.framework.schema.spellsource.Tables;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
+import com.hiddenswitch.framework.virtual.concurrent.SuspendableLock;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import io.opentracing.log.Fields;
@@ -38,6 +39,7 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.TurnState;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
+import org.infinispan.commons.util.concurrent.NonReentrantLock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -71,10 +73,10 @@ public class ServerGameContext extends GameContext implements Server {
 	private static final long CLOSE_TIMEOUT_MILLIS = 4000L;
 	private static final long REGISTRATION_TIMEOUT = 4000L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServerGameContext.class);
-	public static final String WRITER_ADDRESS_PREFIX = "Games.writer.";
-	public static final String READER_ADDRESS_PREFIX = "Games.reader.";
+	public static final String WRITER_ADDRESS_PREFIX = "games:writer:";
+	public static final String READER_ADDRESS_PREFIX = "games:reader:";
 
-	private final transient ReentrantLock lock = new ReentrantLock();
+	private final transient Lock lock = new NoOpLock();
 	private final transient Queue<Consumer<ServerGameContext>> onGameEndHandlers = new ConcurrentLinkedQueue<>();
 	private final transient Map<Integer, Promise<Client>> clientsReady = new ConcurrentHashMap<>();
 	private final transient List<Client> clients = new ArrayList<>();
@@ -84,6 +86,7 @@ public class ServerGameContext extends GameContext implements Server {
 	private transient Long turnTimerId;
 	private final List<Configuration> playerConfigurations = new ArrayList<>();
 	private final List<Closeable> closeables = new ArrayList<>();
+	private final Lock closeablesLock = new NonReentrantLock();
 	private final String gameId;
 	private final Deque<Trigger> gameTriggers = new ConcurrentLinkedDeque<>();
 	private final Scheduler scheduler;
@@ -903,6 +906,7 @@ public class ServerGameContext extends GameContext implements Server {
 				.withTag("gameId", getGameId())
 				.start();
 
+		closeablesLock.lock();
 		try (var s1 = tracer.activateSpan(span)) {
 			var iter = closeables.iterator();
 			while (iter.hasNext()) {
@@ -910,7 +914,7 @@ public class ServerGameContext extends GameContext implements Server {
 					var closeable = iter.next();
 					var promise = Promise.<Void>promise();
 					closeable.close(promise);
-					await(promise.future());
+					await(com.hiddenswitch.framework.Environment.timeout(promise.future(), CLOSE_TIMEOUT_MILLIS));
 				} catch (Throwable any) {
 					Tracing.error(any, span, false);
 				} finally {
@@ -920,6 +924,7 @@ public class ServerGameContext extends GameContext implements Server {
 			LOGGER.trace("dispose {}: closers closed", gameId);
 			super.close();
 		} finally {
+			closeablesLock.unlock();
 			span.finish();
 		}
 	}
@@ -1005,8 +1010,8 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	public void onPlayerReconnected(Client client) {
+		lock.lock();
 		try {
-			lock.lock();
 			// Update the client
 			var listIterator = getClients().listIterator();
 			while (listIterator.hasNext()) {

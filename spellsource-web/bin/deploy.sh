@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 set -e
 DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
-VARS=$(cat "${DIR}"/../../spellsource-private/src/secrets/common-deployment.env | xargs)
-export $VARS
+DEPLOYMENT_ENV_PATH="${DIR}"/../../spellsource-private/src/secrets/common-deployment.env
+if [[ -e $DEPLOYMENT_ENV_PATH ]] ; then
+  VARS=$(<"$DEPLOYMENT_ENV_PATH" xargs)
+  export "${VARS?}"
+fi
 
 if [[ $(command -v aws) ]] ; then
   AWS_CMD=aws
