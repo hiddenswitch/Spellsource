@@ -95,8 +95,8 @@ spec:
           - name: config-volume
             mountPath: /conf
           - name: config-volume
-            mountPath: /app/logback.groovy
-            subPath: logback.groovy
+            mountPath: /app/logback.xml
+            subPath: logback.xml
       volumes:
       - name: config-volume
         configMap:
