@@ -53,8 +53,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static com.hiddenswitch.framework.Environment.sleep;
-import static com.hiddenswitch.framework.Environment.withDslContext;
+import static com.hiddenswitch.framework.Environment.*;
 import static com.hiddenswitch.framework.Games.ADDRESS_IS_IN_GAME;
 import static io.vertx.await.Async.await;
 import static io.vertx.core.CompositeFuture.all;
@@ -1015,15 +1014,20 @@ public class ServerGameContext extends GameContext implements Server {
 			// Update the client
 			var listIterator = getClients().listIterator();
 			while (listIterator.hasNext()) {
-				var next = listIterator.next();
-				if (next.getPlayerId() == client.getPlayerId() && client != next) {
-					next.close(Promise.promise());
-					closeables.remove(next);
+				var iteratee = listIterator.next();
+				// we're only expecting to replace the client if a new one is actually made
+				// the lifecycle of the client isn't related to the lifecycle of the network connection
+				if (iteratee.getPlayerId() == client.getPlayerId() && client != iteratee) {
+					var promise = Promise.<Void>promise();
+					iteratee.copyRequestsTo(client);
+					iteratee.close(promise);
+					await(timeout(promise.future(), CLOSE_TIMEOUT_MILLIS));
+					closeables.remove(iteratee);
 					listIterator.set(client);
-					next = client;
+					iteratee = client;
 					closeables.add(client);
 				}
-				next.onConnectionStarted(getActivePlayer());
+				iteratee.onConnectionStarted(getActivePlayer());
 			}
 
 			if (client instanceof Behaviour) {

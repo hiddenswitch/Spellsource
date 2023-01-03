@@ -11,7 +11,8 @@ public interface Client extends ActionListener, GameEventListener, HasElapsableT
 
 	/**
 	 * Send an emote to a client. By default, there's no implementation except for Unity clients.
-	 *  @param entityId The entity from which the emote should originate. Typically a hero entity.
+	 *
+	 * @param entityId The entity from which the emote should originate. Typically a hero entity.
 	 * @param emote    The emote to send
 	 */
 	@Override
@@ -29,4 +30,13 @@ public interface Client extends ActionListener, GameEventListener, HasElapsableT
 	String getUserId();
 
 	void closeInboundMessages();
+
+	/**
+	 * Copies all the requests to the target client.
+	 * <p>
+	 * This allows the client to resume pending requests correctly.
+	 *
+	 * @param client
+	 */
+	void copyRequestsTo(Client client);
 }

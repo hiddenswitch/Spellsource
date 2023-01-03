@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework.impl;
 
 import com.google.common.base.Throwables;
+import com.google.common.collect.Sets;
 import com.google.protobuf.Int32Value;
 import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.Environment;
@@ -247,7 +248,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 
 					if (server.isGameReady()) {
-						// Replace the client
 						span.log("receiveFirstMessage/reconnected");
 						server.onPlayerReconnected(this);
 						// Since the player may have pending requests, we're going to send the data the client needs again.
@@ -392,34 +392,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		var promise = Promise.<GameAction>promise();
 		requestActionAsync(context, player, validActions, promise::tryComplete);
 		return await(promise.future());
-	}
-
-	/**
-	 * If there is an existing action request, update the available actions the player can take.
-	 * <p>
-	 * Because actions are requested in a blocking {@code resume()} loop on the {@link ServerGameContext#play(boolean)}
-	 * strand, changing the actions that are requested requires (1) notifying the client of new actions and (2) replacing
-	 * the existing valid game actions. The request callback ID is not changed, because the player is still responding to
-	 * the same request for actions, just for different actions.
-	 *
-	 * @param context the game context
-	 * @param actions the new actions
-	 */
-	public void updateActions(GameContext context, List<GameAction> actions) {
-		requestsLock.lock();
-		try {
-			if (requests.isEmpty()) {
-				throw new RuntimeException("no existing requests");
-			}
-
-			var request = getRequests().getLast();
-			if (request.getType() == GameplayRequestType.ACTION) {
-				request.setActions(actions);
-				onRequestAction(request.getCallbackId(), context.getGameStateCopy(), actions);
-			}
-		} finally {
-			requestsLock.unlock();
-		}
 	}
 
 	@Override
@@ -729,6 +701,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	public void onUpdate(GameState state) {
+		flush();
 		var gameState = getClientGameState(playerId, state);
 		if (needsPowerHistory) {
 			gameState.addAllPowerHistory(powerHistory);
@@ -834,6 +807,36 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	public void closeInboundMessages() {
 		inboundMessagesClosed = true;
+	}
+
+	@Override
+	public void copyRequestsTo(Client client) {
+		var targetClient = (UnityClientBehaviour) client;
+		var willAdd = new ArrayList<GameplayRequest>();
+		requestsLock.lock();
+		try {
+			outer:
+			for (var request : requests) {
+				if (targetClient.requestsLock.tryLock()) {
+					for (var otherRequest : targetClient.requests) {
+						if (Objects.equals(request.getCallbackId(), otherRequest.getCallbackId())) {
+							break outer;
+						}
+					}
+					targetClient.requestsLock.unlock();
+				}
+				willAdd.add(request);
+			}
+		} finally {
+			requestsLock.unlock();
+		}
+
+		targetClient.requestsLock.lock();
+		try {
+			targetClient.requests.addAll(willAdd);
+		} finally {
+			targetClient.requestsLock.unlock();
+		}
 	}
 
 	private void flush() {
