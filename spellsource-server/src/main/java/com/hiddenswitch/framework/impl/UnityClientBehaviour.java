@@ -1,5 +1,6 @@
 package com.hiddenswitch.framework.impl;
 
+import com.google.common.base.Throwables;
 import com.google.protobuf.Int32Value;
 import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.Environment;
@@ -75,7 +76,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private boolean elapsed;
 	private GameOver gameOver;
 	private boolean needsPowerHistory;
-	private Thread readingThread;
+	private Set<Thread> readingThreads = new CopyOnWriteArraySet<>();
 
 
 	public UnityClientBehaviour(Server server,
@@ -100,23 +101,25 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			throw new IllegalArgumentException("noActivityTimeout must be positive");
 		}
 
-
-		var queue = new LinkedBlockingQueue<ClientToServerMessage>();
-		reader.handler(queue::offer);
-		async.run(v -> {
-			readingThread = Thread.currentThread();
-			readingThread.setName("UnityClientBehavior/handleWebSocketMessage{userId=%s}".formatted(userId));
-			while (true) {
+		// allow concurrent request handling
+		var threadNum = new AtomicInteger();
+		reader.handler(message -> {
+			async.run(v -> {
+				var currentThread = Thread.currentThread();
+				readingThreads.add(currentThread);
+				currentThread.setName("UnityClientBehavior/handleWebSocketMessage{userId=%s,num=%d}".formatted(userId, threadNum.getAndIncrement()));
 				try {
-					var message = queue.take();
-					this.handleWebSocketMessage(message);
-				} catch (InterruptedException e) {
-					// peacefully closing
-					break;
+					handleWebSocketMessage(message);
 				} catch (Throwable t) {
-					LOGGER.warn("unitybehavior did error with ", t);
+					var isInterruptible = Throwables.getRootCause(t);
+					if (isInterruptible instanceof InterruptedException) {
+						return;
+					}
+					LOGGER.warn("error while handling message ", t);
+				} finally {
+					readingThreads.remove(currentThread);
 				}
-			}
+			});
 		});
 	}
 
@@ -852,7 +855,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Override
 	public void close(Promise<Void> completionHandler) {
-		readingThread.interrupt();
+		for (var readingThread : readingThreads) {
+			readingThread.interrupt();
+		}
 		closeInboundMessages();
 		scheduler.cancelTimer(turnTimer);
 		for (var activityMonitor : getActivityMonitors()) {
