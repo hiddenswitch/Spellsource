@@ -19,7 +19,6 @@ import io.vertx.core.eventbus.*;
 import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
-import io.vertx.executeblocking.ExecuteBlocking;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -122,7 +121,13 @@ public class ServerGameContext extends GameContext implements Server {
 			// Save the information used to create this game
 			this.playerConfigurations.addAll(playerConfigurations);
 			this.context = Vertx.currentContext();
-			Function<Callable<GameAction>, Future<GameAction>> execBlockingOnContext = ExecuteBlocking::executeBlocking;
+			Function<Callable<GameAction>, Future<GameAction>> execBlockingOnContext = gameActionCallable -> context.executeBlocking(promise -> {
+				try {
+					promise.tryComplete(gameActionCallable.call());
+				} catch (Throwable t) {
+					promise.tryFail(t);
+				}
+			}, false);
 
 			// The deck format will be the smallest one that can contain all the cards in the decks.
 			setDeckFormat(DeckFormat.getSmallestSupersetFormat(playerConfigurations
@@ -826,7 +831,6 @@ public class ServerGameContext extends GameContext implements Server {
 
 			// We have to release the users before we call end game, because that way when the client receives the end game
 			// message, their model of the world is that they're no longer in a game.
-			releaseUsers();
 			// Actually end the game
 			super.endGame();
 			LOGGER.trace("endGame {}: called super.endGame", gameId);
@@ -857,16 +861,11 @@ public class ServerGameContext extends GameContext implements Server {
 				setThread(null);
 			}
 		} finally {
-			releaseUsers();
 			close();
 			lock.unlock();
 		}
 	}
 
-
-	public void releaseUsers() {
-		// This should be a no-op in the new engineering of this
-	}
 
 	/**
 	 * Gets the user IDs of the players in this game context. Includes the AI player
@@ -1072,7 +1071,7 @@ public class ServerGameContext extends GameContext implements Server {
 			getLogic().loseBothPlayers();
 			endGame();
 		} finally {
-			releaseUsers();
+			// This should be a no-op in the new engineering of this
 		}
 	}
 

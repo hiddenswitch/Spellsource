@@ -1,5 +1,6 @@
 package com.hiddenswitch.framework.impl;
 
+import com.google.common.collect.Sets;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Legacy;
@@ -21,9 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.hiddenswitch.framework.schema.keycloak.Keycloak.KEYCLOAK;
@@ -158,6 +157,10 @@ public class ClusteredGames extends AbstractVerticle {
 	 */
 	private Future<Void> removeGameAndRecordReplay(@NotNull String gameId) {
 		Objects.requireNonNull(gameId);
+		if (!Thread.currentThread().isVirtual()) {
+			throw new UnsupportedOperationException("expected to be in virtual thread");
+		}
+
 		var gameIdLong = Long.parseLong(gameId);
 		var gameContext = contexts.remove(gameId);
 		if (gameContext == null) {
@@ -189,7 +192,8 @@ public class ClusteredGames extends AbstractVerticle {
 			return Future.succeededFuture();
 		}).recover(t -> {
 			if (gameContext.getStatus() == GameStatus.RUNNING) {
-				gameContext.loseBothPlayers();
+				var async = Environment.async();
+				async.run(v -> gameContext.loseBothPlayers());
 			}
 			return Future.succeededFuture(null);
 		}).onFailure(Environment.onFailure());
@@ -197,19 +201,32 @@ public class ClusteredGames extends AbstractVerticle {
 
 	@Override
 	public void stop(Promise<Void> stopPromise) {
-		LOGGER.trace("stop: Stopping the ClusteredGames, hosting contexts: {}", contexts.keySet().stream().map(String::toString).reduce((s1, s2) -> s1 + ", " + s2).orElseGet(() -> "none"));
+		var keys = Sets.newCopyOnWriteArraySet(contexts.keySet());
+		LOGGER.trace("stop: Stopping the ClusteredGames, hosting contexts: {}", keys.stream().map(String::toString).reduce((s1, s2) -> s1 + ", " + s2).orElseGet(() -> "none"));
+		var async = Environment.async();
 
-		for (var gameId : contexts.keySet()) {
-			Objects.requireNonNull(gameId);
-			removeGameAndRecordReplay(gameId);
-		}
-
-		if (contexts.size() != 0) {
-			LOGGER.warn("stop: Did not succeed in stopping all sessions");
+		for (var context : contexts.values()) {
+			if (context.isRunning()) {
+				LOGGER.warn("stop: Game gameId={} was still running when stop was called.", context.getGameId());
+			}
 		}
 
 		registration.unregister();
+
+		async.run(v -> {
+			try {
+				for (var gameId : keys) {
+					Objects.requireNonNull(gameId);
+					removeGameAndRecordReplay(gameId);
+				}
+			} finally {
+				if (!contexts.isEmpty()) {
+					LOGGER.warn("failed to close all contexts");
+				}
+				stopPromise.complete();
+			}
+		});
+
 		LOGGER.trace("stop: Unregistered");
-		stopPromise.complete();
 	}
 }

@@ -22,6 +22,7 @@ import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxTestContext;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -127,7 +128,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
-	@Test
+	@Timeout(value = 60, timeUnit = TimeUnit.SECONDS)
 	public void testTwoGamesInRow(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
 		startServices(vertx)
