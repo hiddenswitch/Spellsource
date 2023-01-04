@@ -43,10 +43,6 @@ message ServerConfiguration {
         }
     }
 
-    message RealtimeConfiguration {
-        string uri = 1;
-    }
-
     message GrpcConfiguration {
         int64 serverKeepAliveTimeMillis = 1;
         int64 serverKeepAliveTimeoutMillis = 2;
@@ -89,10 +85,14 @@ message ServerConfiguration {
         int32 agentPort = 3;
     }
 
+    message VertxConfiguration {
+        bool useInfinispanClusterManager = 1;
+    }
+
     PostgresConfiguration pg = 1;
     KeycloakConfiguration keycloak = 2;
     RedisConfiguration redis = 3;
-    RealtimeConfiguration realtime = 4;
+    reserved 4;
     GrpcConfiguration grpcConfiguration = 5;
     MatchmakingConfiguration matchmaking = 6;
     ApplicationConfiguration application = 7;
@@ -101,6 +101,7 @@ message ServerConfiguration {
     MetricsConfiguration metrics = 10;
     RateLimiterConfiguration rateLimiter = 11;
     JaegerConfiguration jaeger = 12;
+    VertxConfiguration vertx = 13;
 }
 
 message ClientConfiguration {

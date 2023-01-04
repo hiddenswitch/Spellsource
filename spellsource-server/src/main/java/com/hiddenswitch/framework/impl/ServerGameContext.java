@@ -38,7 +38,6 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.TurnState;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
-import org.infinispan.commons.util.concurrent.NonReentrantLock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -84,7 +83,7 @@ public class ServerGameContext extends GameContext implements Server {
 	private transient Long turnTimerId;
 	private final List<Configuration> playerConfigurations = new ArrayList<>();
 	private final List<Closeable> closeables = new ArrayList<>();
-	private final Lock closeablesLock = new NonReentrantLock();
+	private final Lock closeablesLock = new ReentrantLock();
 	private final String gameId;
 	private final Deque<Trigger> gameTriggers = new ConcurrentLinkedDeque<>();
 	private final Scheduler scheduler;
@@ -168,22 +167,7 @@ public class ServerGameContext extends GameContext implements Server {
 				// Bots simply forward their requests to a bot service provider, that executes the bot logic on a worker thread
 				if (configuration.isBot()) {
 					player.getAttributes().put(Attribute.AI_OPPONENT, true);
-					// TODO: this has to go to a blocking worker thread
-					var behaviour = new GameStateValueBehaviour() {
-						@Override
-						public @Nullable GameAction requestAction(@NotNull GameContext context, @NotNull Player player, @NotNull List<GameAction> validActions) {
-							var fut = new CompletableFuture<GameAction>();
-							execBlockingOnContext.apply(() -> {
-								try {
-									fut.complete(super.requestAction(context, player, validActions));
-								} catch (Throwable t) {
-									fut.completeExceptionally(t);
-								}
-								return null;
-							});
-							return fut.join();
-						}
-					};
+					var behaviour = new GameStateValueBehaviour();
 					behaviour.setParallel(false)
 							.setMaxDepth(2)
 							.setLethalTimeout(15000L)

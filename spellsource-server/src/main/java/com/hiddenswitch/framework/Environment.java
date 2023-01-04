@@ -19,6 +19,8 @@ import io.vertx.await.Async;
 import io.vertx.core.Context;
 import io.vertx.core.*;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
+import io.vertx.core.spi.cluster.ClusterManager;
+import io.vertx.ext.cluster.infinispan.InfinispanClusterManager;
 import io.vertx.micrometer.MicrometerMetricsOptions;
 import io.vertx.micrometer.VertxPrometheusOptions;
 import io.vertx.micrometer.backends.PrometheusBackendRegistry;
@@ -271,10 +273,32 @@ public class Environment {
 				.setEventLoopPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))
 				.setInternalBlockingPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 4, 16))
 				.setTracingOptions(new OpenTracingOptions(Tracing.tracing()))
+				.setClusterManager(clusterManager())
 				.setMetricsOptions(
 						new MicrometerMetricsOptions()
 								.setMicrometerRegistry(Metrics.globalRegistry)
 								.setEnabled(true));
+	}
+
+	private static ClusterManager clusterManager() {
+		var configuration = getConfiguration();
+		if (configuration.hasVertx() && configuration.getVertx().getUseInfinispanClusterManager()) {
+			// related to configuring the cluster manager
+			System.getProperties().put("java.net.preferIPv4Stack", "true");
+			System.getProperties().put("jgroups.bind.address", "GLOBAL");
+			System.getProperties().put("jgroups.bind.port", "7800");
+			var isKubernetes = System.getenv().containsKey("KUBERNETES_SERVICE_HOST");
+			String config;
+			if (isKubernetes) {
+				config = "default-configs/default-jgroups-kubernetes.xml";
+			} else {
+				config = "default-configs/default-jgroups-udp.xml";
+			}
+			System.getProperties().put("vertx.jgroups.config", config);
+			return new InfinispanClusterManager();
+		} else {
+			return null;
+		}
 	}
 
 	public static <T> Future<T> executeBlocking(Callable<T> blockingCallable) {
@@ -437,6 +461,9 @@ public class Environment {
 						.build())
 				.setJaeger(ServerConfiguration.JaegerConfiguration.newBuilder()
 						.setEnabled(false)
+						.build())
+				.setVertx(ServerConfiguration.VertxConfiguration.newBuilder()
+						.setUseInfinispanClusterManager(false)
 						.build())
 				.build();
 	}

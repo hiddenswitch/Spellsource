@@ -26,21 +26,7 @@ public class Application {
 	}
 
 	protected Future<Vertx> getVertx() {
-		// related to configuring the cluster manager
-		System.getProperties().put("java.net.preferIPv4Stack", "true");
-		System.getProperties().put("jgroups.bind.address", "GLOBAL");
-		System.getProperties().put("jgroups.bind.port", "7800");
-		var isKubernetes = System.getenv().containsKey("KUBERNETES_SERVICE_HOST");
-		String config;
-		if (isKubernetes) {
-			config = "default-configs/default-jgroups-kubernetes.xml";
-		} else {
-			config = "default-configs/default-jgroups-udp.xml";
-		}
-		System.getProperties().put("vertx.jgroups.config", config);
-		return Vertx.clusteredVertx(new VertxOptions(Environment.vertxOptions())
-				// todo: https://github.com/eclipse-vertx/vert.x/issues/3829 awaiting fix
-				.setTracingOptions(new OpenTracingOptions(Tracing.tracing())));
+		return Vertx.clusteredVertx(new VertxOptions(Environment.vertxOptions()));
 	}
 
 	protected Future<Vertx> deploy(Vertx vertx) {
