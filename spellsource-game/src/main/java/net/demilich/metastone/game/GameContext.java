@@ -925,6 +925,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 			}
 
 			// TODO: Does this need to respect random actions?
+			// todo: do we need to lock here, and unlock again later?
 			GameAction nextAction = behaviours[getActivePlayerId()].requestAction(this, getActivePlayer(), validActions);
 
 			if (nextAction == null) {

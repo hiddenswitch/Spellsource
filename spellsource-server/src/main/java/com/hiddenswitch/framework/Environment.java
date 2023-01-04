@@ -94,7 +94,7 @@ public class Environment {
 	}
 
 	private static Async asyncConstructor(Vertx vertx) {
-		return new Async(vertx, true);
+		return new Async(vertx, false);
 	}
 
 	private static PgPool pgPoolConstructor(Vertx vertx) {
@@ -124,7 +124,7 @@ public class Environment {
 		}
 
 		var poolOptions = new PoolOptions()
-				.setMaxSize(Runtime.getRuntime().availableProcessors());
+				.setMaxSize(Math.max(Runtime.getRuntime().availableProcessors(), 8));
 		return PgPool.pool(vertx, connectionOptions, poolOptions);
 	}
 

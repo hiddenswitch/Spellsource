@@ -34,7 +34,7 @@ import java.util.stream.Stream;
 public class Gateway extends AbstractVerticle {
 	private static Logger LOGGER = LoggerFactory.getLogger(Gateway.class);
 	List<Closeable> closeables = new ArrayList<>();
-	private boolean useVertxNativeGrpcServer = true;
+	private boolean useVertxNativeGrpcServer = false;
 
 	public Gateway() {
 	}

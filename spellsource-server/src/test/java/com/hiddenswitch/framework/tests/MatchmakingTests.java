@@ -334,7 +334,6 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
-	@Disabled
 	public void testClientFailureMultiplayerQueueCancel(Vertx vertx, VertxTestContext testContext) {
 		var client = new ToxiClient(vertx);
 		var queueId = UUID.randomUUID().toString();

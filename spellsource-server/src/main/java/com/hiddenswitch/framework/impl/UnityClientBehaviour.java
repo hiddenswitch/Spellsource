@@ -1,7 +1,6 @@
 package com.hiddenswitch.framework.impl;
 
 import com.google.common.base.Throwables;
-import com.google.common.collect.Sets;
 import com.google.protobuf.Int32Value;
 import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.Environment;
@@ -18,7 +17,6 @@ import io.vertx.await.Async;
 import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
-import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
@@ -127,6 +125,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private void secondIntervalElapsed(Long timer) {
 		var millisRemaining = server.getMillisRemaining();
 		if (millisRemaining == null) {
+			return;
+		}
+
+		// don't send the timer if we haven't ever sent an update
+		if (lastStateSent == null) {
 			return;
 		}
 
@@ -562,7 +565,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		var workingContext = GameContext.fromState(gameState);
 		var message = ServerToClientMessage.newBuilder()
 				.setMessageType(MessageType.ON_GAME_EVENT)
-				.setChanges(getChangeSet(gameState))
+				.setChanges(visibleEntities(gameState))
 				.setGameState(getClientGameState(playerId, gameState));
 		var messageEvent = GameEvent.newBuilder();
 		if (event instanceof TriggerFired) {
@@ -684,7 +687,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 		var message = ServerToClientMessage.newBuilder()
 				.setMessageType(MessageType.ON_GAME_END)
-				.setChanges(getChangeSet(state))
+				.setChanges(visibleEntities(state))
 				.setGameState(gameState)
 				.setGameOver(gameOver);
 		sendMessage(message);
@@ -710,7 +713,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 		sendMessage(ServerToClientMessage.newBuilder()
 				.setMessageType(MessageType.ON_UPDATE)
-				.setChanges(getChangeSet(state))
+				.setChanges(visibleEntities(state))
 				.setGameState(gameState));
 	}
 
@@ -746,7 +749,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		sendMessage(ServerToClientMessage.newBuilder()
 				.setId(id)
 				.setMessageType(MessageType.ON_REQUEST_ACTION)
-				.setChanges(getChangeSet(state))
+				.setChanges(visibleEntities(state))
 				.setGameState(getClientGameState(playerId, state))
 				.setActions(ModelConversions.getClientActions(GameContext.fromState(state), availableActions, playerId)));
 	}
@@ -770,7 +773,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		sendMessage(ServerToClientMessage.newBuilder()
 				.setId(id)
 				.setMessageType(MessageType.ON_MULLIGAN)
-				.setChanges(getChangeSet(state))
+				.setChanges(visibleEntities(state))
 				.setGameState(getClientGameState(playerId, state))
 				.addAllStartingCards(cards.stream().map(c -> ModelConversions.getEntity(simulatedContext, c, playerId).build()).collect(Collectors.toList())));
 	}
@@ -845,8 +848,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 	}
 
-	private EntityChangeSet getChangeSet(GameState current) {
-		var changes = ModelConversions.computeChangeSet(current);
+	private EntityChangeSet visibleEntities(GameState current) {
+		var changes = ModelConversions.visibleEntities(current);
 		lastStateSent = current;
 		return changes;
 	}

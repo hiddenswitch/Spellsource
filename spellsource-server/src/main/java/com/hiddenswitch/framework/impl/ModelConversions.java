@@ -895,13 +895,13 @@ public class ModelConversions {
 	/**
 	 * Compute the {@link EntityChangeSet} between two {@link GameState}s.
 	 *
-	 * @param gameStateNew
+	 * @param gameState
 	 * @return
 	 */
-	static EntityChangeSet computeChangeSet(
-			com.hiddenswitch.spellsource.common.GameState gameStateNew) {
+	static EntityChangeSet visibleEntities(
+			com.hiddenswitch.spellsource.common.GameState gameState) {
 		// TODO: Return array of indices
-		return EntityChangeSet.newBuilder().addAllIds(Stream.concat(gameStateNew.getPlayer1().getLookup().values().stream(), gameStateNew.getPlayer2().getLookup().values().stream())
+		return EntityChangeSet.newBuilder().addAllIds(Stream.concat(gameState.getPlayer1().getLookup().values().stream(), gameState.getPlayer2().getLookup().values().stream())
 				.sorted(Games.ENTITY_NATURAL_ORDER)
 				.map(net.demilich.metastone.game.entities.Entity::getId)
 				.collect(toList())).build();
@@ -928,11 +928,11 @@ public class ModelConversions {
 
 			var gameStateNew = ctx.getGameState();
 			var delta = ReplayDeltas.newBuilder();
-			delta.setForward(computeChangeSet(gameStateNew));
+			delta.setForward(visibleEntities(gameStateNew));
 			if (gameStateOld.get() != null) {
 				// NOTE: It is illegal to rewind past the beginning of the game, so the very first delta need not have
 				// backward populated.
-				delta.setBackward(computeChangeSet(gameStateOld.get()));
+				delta.setBackward(visibleEntities(gameStateOld.get()));
 			}
 			replay.addDeltas(delta);
 

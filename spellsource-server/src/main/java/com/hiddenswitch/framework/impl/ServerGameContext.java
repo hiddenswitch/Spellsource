@@ -72,7 +72,7 @@ public class ServerGameContext extends GameContext implements Server {
 	public static final String WRITER_ADDRESS_PREFIX = "games:writer:";
 	public static final String READER_ADDRESS_PREFIX = "games:reader:";
 
-	private final transient Lock lock = new NoOpLock();
+	private final transient Lock lock = new ReentrantLock();
 	private final transient Queue<Consumer<ServerGameContext>> onGameEndHandlers = new ConcurrentLinkedQueue<>();
 	private final transient Map<Integer, Promise<Client>> clientsReady = new ConcurrentHashMap<>();
 	private final transient List<Client> clients = new ArrayList<>();

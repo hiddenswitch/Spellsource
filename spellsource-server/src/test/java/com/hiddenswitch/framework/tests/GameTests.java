@@ -61,15 +61,13 @@ public class GameTests extends FrameworkTestBase {
 				.compose(res -> CompositeFuture.all(client1.connectToGame(), client2.connectToGame()).map(fut -> fut.<ServerToClientMessage>resultAt(0)))
 				.compose(msg -> {
 					vertxTestContext.verify(() -> {
-						var validMessageTypes = EnumSet.of(MessageType.ON_UPDATE);
-						if (System.getenv().containsKey("CI")) {
-							// CI can be slow, might get timer before update... but how?
-							validMessageTypes.add(MessageType.TIMER);
-						}
+						var validMessageTypes = EnumSet.of(MessageType.ON_UPDATE, MessageType.TIMER);
 						assertTrue(validMessageTypes.contains(msg.getMessageType()), "expected to get a valid message when connected, got %s".formatted(msg.getMessageType()));
 					});
 					return Future.succeededFuture();
 				})
+				.onComplete(v -> client1.close())
+				.onComplete(v -> client2.close())
 				.onComplete(vertxTestContext.succeedingThenComplete());
 	}
 
