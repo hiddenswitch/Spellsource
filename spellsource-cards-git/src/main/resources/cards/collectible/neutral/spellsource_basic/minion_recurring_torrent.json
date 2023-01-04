@@ -10,7 +10,7 @@
   "description": "Opener: Receive a copy of a spell cast this game.",
   "battlecry": {
     "spell": {
-      "class": "ReceiveCardSpell",
+      "class": "CopyCardSpell",
       "cardSource": {
         "class": "GraveyardCardsSource",
         "targetPlayer": "BOTH"

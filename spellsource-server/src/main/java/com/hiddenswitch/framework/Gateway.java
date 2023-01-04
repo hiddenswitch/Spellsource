@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework;
 
 import com.be_hase.grpc.micrometer.MicrometerServerInterceptor;
+import com.google.common.base.Strings;
 import com.google.common.collect.Streams;
 import com.netflix.concurrency.limits.grpc.server.ConcurrencyLimitServerInterceptor;
 import com.netflix.concurrency.limits.grpc.server.GrpcServerLimiterBuilder;
@@ -33,7 +34,7 @@ import java.util.stream.Stream;
 public class Gateway extends AbstractVerticle {
 	private static Logger LOGGER = LoggerFactory.getLogger(Gateway.class);
 	List<Closeable> closeables = new ArrayList<>();
-	private boolean useVertxNativeGrpcServer = false;
+	private boolean useVertxNativeGrpcServer = true;
 
 	public Gateway() {
 	}
@@ -54,6 +55,7 @@ public class Gateway extends AbstractVerticle {
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
 		var configuration = Environment.getConfiguration();
+
 		CompositeFuture.all(
 						Legacy.services(),
 						Legacy.unauthenticatedCards(),
@@ -65,20 +67,25 @@ public class Gateway extends AbstractVerticle {
 					var server = useVertxNativeGrpcServer ? new VertxNativeGrpcServer(vertx, grpcPort()) : new NettyGrpcServer(vertx, grpcPort());
 					var inited = server.init();
 
+
 					var list = services.list();
 					for (var service : list) {
 						var boundService = service instanceof BindableService ? ((BindableService) service).bindService() : (ServerServiceDefinition) service;
 						// basic interceptors for grpc
-						var interceptors = Stream.of(new MicrometerServerInterceptor(Metrics.globalRegistry),
-								TracingServerInterceptor
-										.newBuilder()
-										.withTracer(GlobalTracer.get())
-										.withStreaming()
-										.withVerbosity()
-										.build());
-						var limiter = Stream.<ServerInterceptor>empty();
+						var interceptors = new ArrayList<ServerInterceptor>();
+						if (configuration.hasMetrics()) {
+							interceptors.add(new MicrometerServerInterceptor(Metrics.globalRegistry));
+						}
+						if (configuration.hasJaeger() && configuration.getJaeger().getEnabled()) {
+							interceptors.add(TracingServerInterceptor
+									.newBuilder()
+									.withTracer(GlobalTracer.get())
+									.withStreaming()
+									.withVerbosity()
+									.build());
+						}
 						if (configuration.hasRateLimiter() && configuration.getRateLimiter().getEnabled()) {
-							limiter = Stream.of(ConcurrencyLimitServerInterceptor.newBuilder(
+							interceptors.add(ConcurrencyLimitServerInterceptor.newBuilder(
 									new GrpcServerLimiterBuilder()
 											.partitionResolver(context -> {
 												var address = context.getCall().getAttributes().get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR);
@@ -98,7 +105,7 @@ public class Gateway extends AbstractVerticle {
 															.build()))
 											.build()).build());
 						}
-						boundService = ServerInterceptors.intercept(boundService, Streams.concat(interceptors, limiter).collect(Collectors.toList()));
+						boundService = ServerInterceptors.intercept(boundService, interceptors);
 						server.bind(boundService);
 					}
 

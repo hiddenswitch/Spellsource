@@ -20,6 +20,7 @@ import io.vertx.core.Context;
 import io.vertx.core.*;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.core.spi.cluster.ClusterManager;
+import io.vertx.core.tracing.TracingOptions;
 import io.vertx.ext.cluster.infinispan.InfinispanClusterManager;
 import io.vertx.micrometer.MicrometerMetricsOptions;
 import io.vertx.micrometer.VertxPrometheusOptions;
@@ -93,7 +94,7 @@ public class Environment {
 	}
 
 	private static Async asyncConstructor(Vertx vertx) {
-		return new Async(vertx, false);
+		return new Async(vertx, true);
 	}
 
 	private static PgPool pgPoolConstructor(Vertx vertx) {
@@ -272,12 +273,21 @@ public class Environment {
 		return new VertxOptions()
 				.setEventLoopPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))
 				.setInternalBlockingPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 4, 16))
-				.setTracingOptions(new OpenTracingOptions(Tracing.tracing()))
+				.setTracingOptions(vertxTracingOptions())
 				.setClusterManager(clusterManager())
 				.setMetricsOptions(
 						new MicrometerMetricsOptions()
 								.setMicrometerRegistry(Metrics.globalRegistry)
 								.setEnabled(true));
+	}
+
+	private static TracingOptions vertxTracingOptions() {
+		var configuration = getConfiguration();
+		if (configuration.hasJaeger() && configuration.getJaeger().getEnabled()) {
+			return new OpenTracingOptions(Tracing.tracing());
+		} else {
+			return null;
+		}
 	}
 
 	private static ClusterManager clusterManager() {

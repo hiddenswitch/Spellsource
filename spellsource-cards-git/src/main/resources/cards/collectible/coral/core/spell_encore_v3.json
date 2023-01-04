@@ -7,7 +7,7 @@
   "description": "Receive all spells you cast last turn.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "ReceiveCardSpell",
+    "class": "CopyCardSpell",
     "value": -1,
     "cardFilter": {
       "class": "CardFilter",

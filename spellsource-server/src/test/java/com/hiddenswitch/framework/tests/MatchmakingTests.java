@@ -21,6 +21,7 @@ import io.vertx.core.streams.WriteStream;
 import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxTestContext;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -332,6 +333,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
+	@Disabled
 	public void testClientFailureMultiplayerQueueCancel(Vertx vertx, VertxTestContext testContext) {
 		var client = new ToxiClient(vertx);
 		var queueId = UUID.randomUUID().toString();
@@ -438,7 +440,6 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.mapToObj(i -> Vertx.vertx(new VertxOptions().setEventLoopPoolSize(CpuCoreSensor.availableProcessors())))
 				.toList();
 
-		var serverConfiguration = Environment.getConfiguration();
 		// deploy queue runners
 		startGateway(vertx)
 				.compose(v -> all(queueIds

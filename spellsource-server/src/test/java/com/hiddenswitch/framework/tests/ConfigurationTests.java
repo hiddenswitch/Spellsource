@@ -36,18 +36,15 @@ public class ConfigurationTests {
 		configureSerialization();
 		variables.set("FAILS_XXX_YYY", "fails");
 		var configuration = Hiddenswitch.ServerConfiguration.newBuilder()
-				.setRealtime(Hiddenswitch.ServerConfiguration.RealtimeConfiguration.newBuilder().setUri("realtime://other").build())
 				.setApplication(Hiddenswitch.ServerConfiguration.ApplicationConfiguration.newBuilder().setUseBroadcaster(false).build())
 				.build();
 		var map = ModelConversions.fromStringMap(configuration, "fails", "_", System.getenv());
 		// nothing should happen, should just not be red
 		variables.set("SPELLSOURCE_APPLICATION_USEBROADCASTER", "true");
 		variables.set("SPELLSOURCE_REDIS_HOSTPORTUSER_PORT", "10000");
-		variables.set("SPELLSOURCE_REALTIME_URI", "http://123.com");
 		var result = ModelConversions.fromStringMap(configuration, "spellsource", "_", System.getenv());
 		assertTrue(result.getApplication().getUseBroadcaster());
 		assertEquals(10000, result.getRedis().getHostPortUser().getPort());
-		assertEquals("http://123.com", result.getRealtime().getUri());
 		assertFalse(result.hasGrpcConfiguration());
 	}
 

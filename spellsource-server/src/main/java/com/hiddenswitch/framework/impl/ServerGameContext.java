@@ -39,7 +39,6 @@ import net.demilich.metastone.game.logic.TurnState;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -408,11 +407,9 @@ public class ServerGameContext extends GameContext implements Server {
 				// Only two human players will get timers
 				timerLengthMillis = getLogic().getMulliganTimeMillis();
 				timerStartTimeMillis = System.currentTimeMillis();
+				var async = async();
 				mulliganTimerId = scheduler.setTimer(timerLengthMillis,
-						event -> com.hiddenswitch.framework.Environment.fiber(() -> {
-							this.endMulligans(event);
-							return (Void) null;
-						}));
+						event -> async.run(v -> endMulligans(event)));
 			} else {
 				LOGGER.trace("init {}: No mulligan timer set for game because all players are not human", getGameId());
 				timerLengthMillis = null;
@@ -497,7 +494,7 @@ public class ServerGameContext extends GameContext implements Server {
 			if (getThread() != null) {
 				throw new UnsupportedOperationException("Cannot play with a fork twice!");
 			}
-			var async = com.hiddenswitch.framework.Environment.async();
+			var async = async();
 			async.run(v -> {
 				var thread = Thread.currentThread();
 				setThread(thread);
