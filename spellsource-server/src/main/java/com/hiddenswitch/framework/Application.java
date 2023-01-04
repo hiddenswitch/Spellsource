@@ -1,14 +1,9 @@
 package com.hiddenswitch.framework;
 
-import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.impl.ClusteredGames;
-import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
-import com.hiddenswitch.protos.Serialization;
+import com.hiddenswitch.framework.rpc.Hiddenswitch.ServerConfiguration;
 import io.vertx.core.*;
-import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
-import io.vertx.ext.cluster.infinispan.InfinispanClusterManager;
-import io.vertx.tracing.opentracing.OpenTracingOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +22,12 @@ public class Application {
 	}
 
 	protected Future<Vertx> getVertx() {
-		return Vertx.clusteredVertx(new VertxOptions(Environment.vertxOptions()));
+		var options = new VertxOptions(Environment.vertxOptions());
+		if (options.getClusterManager() != null) {
+			return Vertx.clusteredVertx(options);
+		} else {
+			return Future.succeededFuture(Vertx.vertx(options));
+		}
 	}
 
 	protected Future<Vertx> deploy(Vertx vertx) {
@@ -62,7 +62,7 @@ public class Application {
 						LOGGER.info("Readiness listening on " + host + ":" + metricsPort + configuration.getMetrics().getReadinessRoute());
 					})
 					.onSuccess(s -> LOGGER.info("Started application, now broadcasting"))
-					.onFailure(t -> LOGGER.error("Failed to deploy",t))
+					.onFailure(t -> LOGGER.error("Failed to deploy", t))
 					.map((Void) null)
 					.onComplete(deploymentPromise);
 		});
