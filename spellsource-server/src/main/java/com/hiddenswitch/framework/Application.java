@@ -5,6 +5,7 @@ import com.hiddenswitch.framework.impl.ClusteredGames;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
 import com.hiddenswitch.protos.Serialization;
 import io.vertx.core.*;
+import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.ext.cluster.infinispan.InfinispanClusterManager;
 import io.vertx.tracing.opentracing.OpenTracingOptions;
@@ -45,7 +46,7 @@ public class Application {
 						return Future.succeededFuture();
 					})
 					.compose(v1 ->
-							all(vertx.deployVerticle(Gateway.class, new DeploymentOptions().setInstances(CpuCoreSensor.availableProcessors() * 2)),
+							all(vertx.deployVerticle(Gateway.class, new DeploymentOptions().setInstances(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))),
 									vertx.deployVerticle(Matchmaking.class, new DeploymentOptions().setInstances(1)),
 									vertx.deployVerticle(ClusteredGames.class, new DeploymentOptions().setInstances(CpuCoreSensor.availableProcessors() * 2)),
 									broadcaster)

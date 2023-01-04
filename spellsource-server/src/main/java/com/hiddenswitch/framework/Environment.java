@@ -270,28 +270,12 @@ public class Environment {
 
 
 	public static VertxOptions vertxOptions() {
-		return new VertxOptions()
-				.setEventLoopPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))
-				.setInternalBlockingPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 4, 16))
-				.setTracingOptions(vertxTracingOptions())
-				.setClusterManager(clusterManager())
-				.setMetricsOptions(
-						new MicrometerMetricsOptions()
-								.setMicrometerRegistry(Metrics.globalRegistry)
-								.setEnabled(true));
-	}
-
-	private static TracingOptions vertxTracingOptions() {
 		var configuration = getConfiguration();
+		TracingOptions tracingOptions = null;
+		ClusterManager clusterManager = null;
 		if (configuration.hasJaeger() && configuration.getJaeger().getEnabled()) {
-			return new OpenTracingOptions(Tracing.tracing());
-		} else {
-			return null;
+			tracingOptions = new OpenTracingOptions(Tracing.tracing());
 		}
-	}
-
-	private static ClusterManager clusterManager() {
-		var configuration = getConfiguration();
 		if (configuration.hasVertx() && configuration.getVertx().getUseInfinispanClusterManager()) {
 			// related to configuring the cluster manager
 			System.getProperties().put("java.net.preferIPv4Stack", "true");
@@ -305,10 +289,17 @@ public class Environment {
 				config = "default-configs/default-jgroups-udp.xml";
 			}
 			System.getProperties().put("vertx.jgroups.config", config);
-			return new InfinispanClusterManager();
-		} else {
-			return null;
+			clusterManager = new InfinispanClusterManager();
 		}
+		return new VertxOptions()
+				.setEventLoopPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))
+				.setInternalBlockingPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 4, 16))
+				.setTracingOptions(tracingOptions)
+				.setClusterManager(clusterManager)
+				.setMetricsOptions(
+						new MicrometerMetricsOptions()
+								.setMicrometerRegistry(Metrics.globalRegistry)
+								.setEnabled(true));
 	}
 
 	public static <T> Future<T> executeBlocking(Callable<T> blockingCallable) {

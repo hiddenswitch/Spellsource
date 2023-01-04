@@ -39,6 +39,7 @@ import net.demilich.metastone.game.logic.TurnState;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +73,7 @@ public class ServerGameContext extends GameContext implements Server {
 	public static final String WRITER_ADDRESS_PREFIX = "games:writer:";
 	public static final String READER_ADDRESS_PREFIX = "games:reader:";
 
-	private final transient Lock lock = new ReentrantLock();
+	private final transient Lock lock = new NoOpLock();
 	private final transient Queue<Consumer<ServerGameContext>> onGameEndHandlers = new ConcurrentLinkedQueue<>();
 	private final transient Map<Integer, Promise<Client>> clientsReady = new ConcurrentHashMap<>();
 	private final transient List<Client> clients = new ArrayList<>();
@@ -121,7 +122,7 @@ public class ServerGameContext extends GameContext implements Server {
 			// Save the information used to create this game
 			this.playerConfigurations.addAll(playerConfigurations);
 			this.context = Vertx.currentContext();
-			Function<Callable<?>, Future<?>> execBlockingOnContext = ExecuteBlocking::executeBlocking;
+			Function<Callable<GameAction>, Future<GameAction>> execBlockingOnContext = ExecuteBlocking::executeBlocking;
 
 			// The deck format will be the smallest one that can contain all the cards in the decks.
 			setDeckFormat(DeckFormat.getSmallestSupersetFormat(playerConfigurations
@@ -166,7 +167,21 @@ public class ServerGameContext extends GameContext implements Server {
 				// Bots simply forward their requests to a bot service provider, that executes the bot logic on a worker thread
 				if (configuration.isBot()) {
 					player.getAttributes().put(Attribute.AI_OPPONENT, true);
-					var behaviour = new GameStateValueBehaviour();
+					var behaviour = new GameStateValueBehaviour() {
+						@Override
+						public @Nullable GameAction requestAction(@NotNull GameContext context, @NotNull Player player, @NotNull List<GameAction> validActions) {
+							Future<GameAction> nextAction = execBlockingOnContext.apply(() -> super.requestAction(context, player, validActions));
+							return await(nextAction);
+						}
+
+						@Override
+						public void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Consumer<GameAction> callback) {
+							execBlockingOnContext.apply(() -> super.requestAction(context, player, validActions))
+									.onSuccess(callback::accept)
+									.onFailure(t -> callback.accept(null));
+						}
+					};
+
 					behaviour.setParallel(false)
 							.setMaxDepth(2)
 							.setLethalTimeout(15000L)
