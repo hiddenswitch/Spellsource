@@ -11,7 +11,7 @@
     "target": "ENEMY_CHARACTERS",
     "value": 3
   },
-  "collectible": true,
+  "collectible": false,
   "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",

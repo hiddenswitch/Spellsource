@@ -18,7 +18,7 @@
       "card": "token_giggling_faerie"
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }

@@ -32,7 +32,7 @@
       "card": "spell_lightning_strike"
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "SOURCESTORM",
   "fileFormatVersion": 1
 }

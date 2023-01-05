@@ -21,7 +21,7 @@
       "targetPlayer": "SELF"
     }
   },
-  "collectible": true,
+  "collectible": false,
   "set": "SOURCESTORM",
   "fileFormatVersion": 1
 }
