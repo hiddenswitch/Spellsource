@@ -48,9 +48,14 @@ public class MassTest extends TestBase {
 							" trace using getStackTrace(). This will show you where the game context is stuck.");
 		} catch (Throwable any) {
 			var trace = context.getTrace();
-			LOGGER.error("To diagnose this issue, a trace (a completely reproducible replay of the game that fails) has been" +
-					" saved into cards/src/test/resources/traces. You can replay this trace using TraceTests.");
-			saveTraceWithException(trace, path1, path2);
+			var isCi = Boolean.parseBoolean(System.getenv().getOrDefault("CI", "false"));
+			if (isCi) {
+				LOGGER.error("To diagnose this issue, a trace (a completely reproducible replay of the game that fails) is printing now:\n{}", trace.dump());
+			} else {
+				LOGGER.error("To diagnose this issue, a trace (a completely reproducible replay of the game that fails) has been" +
+						" saved into cards/src/test/resources/traces. You can replay this trace using TraceTests.");
+				saveTraceWithException(trace, path1, path2);
+			}
 			throw any;
 		}
 	}
