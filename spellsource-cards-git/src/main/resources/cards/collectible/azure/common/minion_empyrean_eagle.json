@@ -12,7 +12,7 @@
     "BATTLECRY": true,
     "DIVINE_SHIELD": true
   },
-    "collectible": false,
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
