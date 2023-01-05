@@ -3,7 +3,7 @@
   "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "AZURE",
-  "rarity": "FREE",
+  "rarity": "RARE",
   "description": "Receive three Soar spells that draw.",
   "targetSelection": "NONE",
   "spell": {
@@ -21,8 +21,5 @@
   },
   "collectible": false,
   "fileFormatVersion": 1,
-  "sets": [
-    "CUSTOM",
-    "BASIC"
-  ]
+  "sets": "CUSTOM"
 }
