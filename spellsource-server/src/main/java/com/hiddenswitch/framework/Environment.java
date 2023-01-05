@@ -94,7 +94,7 @@ public class Environment {
 	}
 
 	private static Async asyncConstructor(Vertx vertx) {
-		return new Async(vertx, false);
+		return new Async(vertx, true);
 	}
 
 	private static PgPool pgPoolConstructor(Vertx vertx) {
