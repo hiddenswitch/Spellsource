@@ -1,0 +1,25 @@
+{
+  "name": "Windswept Elemental",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Opener: Recieve a Soar spell.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 1,
+      "card": "spell_soar"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "COMMON",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Skies Aflame",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "LEGENDARY",
+  "description": "For the rest of the game, your Soar spells turn into Firebolts that also deal 3 damage.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "aura": {
+      "class": "CardAura",
+      "target": "FRIENDLY_CARDS",
+      "card": "token_firebolt",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "spell_soar"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

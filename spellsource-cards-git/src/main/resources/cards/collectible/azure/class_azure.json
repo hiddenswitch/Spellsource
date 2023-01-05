@@ -1,5 +1,5 @@
 {
-  "name": "Skyward",
+  "name": "Voyager",
   "type": "CLASS",
   "heroClass": "AZURE",
   "rarity": "FREE",
@@ -43,11 +43,5 @@
       "named": "Blue Sparrow Skyward Champion"
     }
   },
-  "hero": "hero_ascella_aeon",
-  "tooltips": [
-    {
-      "keywords": ["decay"],
-      "text": "<b>Decay</b>: At the end of your turns, lose 1 Health."
-    }
-  ]
+  "hero": "hero_ascella_aeon"
 }

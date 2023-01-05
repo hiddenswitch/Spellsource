@@ -1,0 +1,21 @@
+{
+  "name": "Lightning Strike",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "COMMON",
+  "description": "Deal $3 damage to an enemy.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 3
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

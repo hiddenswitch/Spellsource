@@ -1,0 +1,34 @@
+{
+  "name": "Fae Trickster",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "FAE",
+  "description": "When you draw a card, reduce its Cost by (1) this turn.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "EVENT_TARGET",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 1,
+        "operation": "SUBTRACT",
+        "expirationTrigger": {
+          "class": "TurnEndTrigger",
+          "targetPlayer": "SELF"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

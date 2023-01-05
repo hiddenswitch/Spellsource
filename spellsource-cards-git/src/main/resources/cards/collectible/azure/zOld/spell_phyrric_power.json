@@ -1,0 +1,37 @@
+{
+  "name": "Phyrric Power",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "COMMON",
+  "description": "Give a unit +5/+5 and Decay.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "value": 5
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "DECAY"
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DecaySpell"
+          }
+        }
+      }
+    ]
+  },
+    "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
