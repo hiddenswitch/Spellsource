@@ -14,7 +14,7 @@ dependencies {
 }
 
 allprojects {
-    project.version = '0.10.0-SNAPSHOT'
+    project.version = '0.10.0'
 }
 
 subprojects {

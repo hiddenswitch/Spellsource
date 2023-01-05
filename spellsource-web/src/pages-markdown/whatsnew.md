@@ -10,7 +10,11 @@ header: true
 Thanks for playing this beta of Spellsource! Read more at [our website](https://www.playspellsource.com) and join our 
 [Discord](https://discord.gg/HmbESh2)!
 
-### Current Version 0.10.0 (January 1, 2023)
+<h3>0.10.0 (January 4, 2023)</h3>
+
+Game health restored.
+
+<h3>0.10.0-SNAPSHOT (January 1, 2023)</h3>
 
 New architectural enhancements.
 
@@ -20,11 +24,11 @@ New architectural enhancements.
  - You can choose to create an account with or without the built in decks.
  - Windows, Android, iOS, and macOS are all now supported.
 
-### Current Version 0.9.0-4.0.0 (May 1, 2020)
+<h3>0.9.0-4.0.0 (May 1, 2020)</h3>
 
 Spellsource is under development and underwent a major refactor.
 
-### Current Version 0.8.89-3.3.7 (September 2, 2020)
+<h3>0.8.89-3.3.7 (September 2, 2020)</h3>
 
  - The new large card art now appears on hovers / inspections.
  - Hover / inspection positioning is now improved on devices. Left handed users will soon be given a preferences option to flip the positioning of the inspected card.
