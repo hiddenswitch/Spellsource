@@ -11,12 +11,13 @@
   "aura": {
     "class": "PhysicalAttackTargetOverrideAura",
     "target": "PHYSICAL_ATTACK_TARGETS",
-    "filter": "OPPOSITE_MINIONS"
+    "filter": "OPPOSITE_MINIONS",
+    "invert": true
   },
   "attributes": {
     "LIFESTEAL": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "CORE",
   "fileFormatVersion": 1
 }
