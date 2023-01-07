@@ -1,0 +1,20 @@
+{
+  "name": "Hatchlings",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "COMMON",
+  "description": "Receive three 1/1 Larva.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "token_larva",
+      "token_larva",
+      "token_larva"
+    ]
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
