@@ -20,18 +20,9 @@
         "value": 1
       },
       "spell2": {
-      "class": "MetaSpell",
-        "spells": [
-          {
-            "class": "DestroySpell",
-            "target": "SELF"
-          },
-          {
-           "class": "SummonSpell",
-           "card": "token_centenarian"
-          }
-        ]
-      }
+        "class": "TransformMinionSpell",
+        "target": "SELF",
+        "card": "token_centenarian"
     }
   },
   "attributes": {
