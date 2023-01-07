@@ -1,0 +1,38 @@
+{
+  "name": "Shell Cutter Beetle",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Opener: Gain 5 Armor. If you have Armor, draw 2 instead.",
+  "battlecry": {
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "AttributeCondition",
+        "target": "FRIENDLY_HERO",
+        "value": 0,
+        "attribute": "ARMOR",
+        "operation": "GREATER"
+      },
+      "spell1": {
+        "class": "DrawCardSpell",
+        "value": 2
+      },
+      "spell2": {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 5
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
