@@ -1,0 +1,34 @@
+{
+  "name": "Puny Pawn",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "After this attacks the enemy Champion, promote.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "HERO"
+    },
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "TransformMinionSpell",
+        "target": "SELF"
+      },
+    "cards": [
+      "minion_chess_knight",
+      "minion_chess_rook",
+      "minion_chess_bishop"
+    ]
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
