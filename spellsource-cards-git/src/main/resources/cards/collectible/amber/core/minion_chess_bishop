@@ -1,0 +1,22 @@
+{
+  "name": "Praying Mantis",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Lifedrain. Can't attack units opposite it.",
+  "aura": {
+    "class": "PhysicalAttackTargetOverrideAura",
+    "target": "PHYSICAL_ATTACK_TARGETS",
+    "filter": "OPPOSITE_MINIONS"
+  },
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
