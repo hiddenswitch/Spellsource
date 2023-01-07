@@ -1,0 +1,31 @@
+{
+  "name": "Gather Replacements",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "COMMON",
+  "description": "Source a unit you control.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell"
+    },
+    "cardFilter": {
+      "class": "AttributeFilter",
+      "attribute": "PERMANENT",
+      "invert": true,
+      "operation": "HAS"
+    },
+    "cardSource": {
+      "class": "MinionsSource",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
