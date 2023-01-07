@@ -17,6 +17,9 @@
     },
     "cardLocation": "DECK",
     "targetPlayer": "SELF"
+  },  
+  "attributes": {
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "set": "CORE",
