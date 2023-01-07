@@ -1,0 +1,57 @@
+{
+  "name": "Annoying Mosquito",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Dodge x3. After this unit kills a unit, fully heal this unit.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "LoseDivineShieldTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "DIVINE_SHIELD"
+    }
+    "maxFiresPerSequence": 2
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "IsDeadCondition",
+            "target": "EVENT_TARGET"
+          },
+          {
+            "class": "IsDeadCondition",
+            "target": "TRIGGER_HOST",
+            "invert": true
+          }
+        ]
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "SELF",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "MAX_HP"
+      }
+    }
+  },
+  "attributes": {
+    "DIVINE_SHIELD": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
