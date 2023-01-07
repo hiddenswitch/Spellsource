@@ -1,0 +1,25 @@
+{
+  "name": "Acid Sprayer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Toxic. Opener: Deal 1 damage.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "POISONOUS": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
