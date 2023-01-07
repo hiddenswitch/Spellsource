@@ -1,0 +1,41 @@
+{
+  "name": "Guiding Light",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Draw a Beast, Dragon, and Fae.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "BEAST"
+        }
+      },
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "DRAGON"
+        }
+      },
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "FAE"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
