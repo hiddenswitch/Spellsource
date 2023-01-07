@@ -5,8 +5,7 @@
   "heroClass": "AMBER",
   "baseAttack": 0,
   "baseHp": 4,
-  "rarity": "NONE",
-  "race": "BEAST",
+  "rarity": "FREE",
   "description": "Guard.",
   "attributes": {
     "TAUNT": true
