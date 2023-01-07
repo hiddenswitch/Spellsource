@@ -1,0 +1,22 @@
+{
+  "name": "Decree",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Source a Command.",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "CastCardsSpell"
+    },
+    "cards": [
+      "spell_command_strike",
+      "spell_command_defend",
+      "spell_command_gather"
+    ]
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
