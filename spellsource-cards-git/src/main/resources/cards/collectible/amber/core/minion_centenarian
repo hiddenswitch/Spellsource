@@ -1,0 +1,43 @@
+{
+  "name": "Centenarian",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Opener: Deal 1 damage to a unit. If that kills it, promote.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "IsDeadCondition"
+      },
+      "spell1": {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      "spell2": {
+      "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "DestroySpell",
+            "target": "SELF"
+          },
+          {
+           "class": "SummonSpell",
+           "card": "token_centenarian"
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
