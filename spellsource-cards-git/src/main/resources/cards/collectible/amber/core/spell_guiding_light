@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "COMMON",
-  "description": "Draw a Beast, Dragon, and Fae.",
+  "description": "Draw an Animal, a Spirit, and a Fae.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -22,7 +22,7 @@
         "value": 1,
         "cardFilter": {
           "class": "CardFilter",
-          "race": "DRAGON"
+          "race": "SPIRIT"
         }
       },
       {
