@@ -1,0 +1,33 @@
+{
+  "name": "Royal Guard",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Opener: Give an allied unit Immune while you control this.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "aura": {
+        "class": "AttributeAura",
+        "condition": {
+          "class": "MinionOnBoardCondition",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "card": "minion_royal_guard"
+          }
+        },
+        "attribute": "AURA_IMMUNE"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1,
+}
