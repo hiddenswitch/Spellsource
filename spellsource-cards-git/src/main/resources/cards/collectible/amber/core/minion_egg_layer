@@ -1,0 +1,26 @@
+{
+  "name": "Egg Layer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "At the end of your turns, receive a 1/1 Larva.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "token_larva"
+      ]
+    },
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
