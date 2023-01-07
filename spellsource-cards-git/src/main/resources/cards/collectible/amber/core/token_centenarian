@@ -1,0 +1,17 @@
+{
+  "name": "Centenarian",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "race": "SPIRIT",
+  "description": "Elusive.",
+  "attributes": {
+    "UNTARGETABLE_BY_SPELLS": true
+  },
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
