@@ -1,0 +1,18 @@
+{
+  "name": "Tiny Calvalry",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "FAE",
+  "description": "Dash. Can't attack Champions",
+  "attributes": {
+    "CANNOT_ATTACK_HEROES": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
