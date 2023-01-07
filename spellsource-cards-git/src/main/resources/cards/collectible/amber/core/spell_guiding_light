@@ -3,7 +3,7 @@
   "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "AMBER",
-  "rarity": "RARE",
+  "rarity": "COMMON",
   "description": "Draw a Beast, Dragon, and Fae.",
   "targetSelection": "NONE",
   "spell": {
