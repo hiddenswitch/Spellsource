@@ -1,0 +1,20 @@
+{
+  "name": "Queen's Pheromones",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "COMMON",
+  "description": "Draw two 1-Cost cards.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "value": 2,
+    "cardFilter": {
+      "class": "CardFilter",
+      "manaCost": 1
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
