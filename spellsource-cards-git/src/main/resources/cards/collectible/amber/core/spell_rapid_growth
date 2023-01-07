@@ -1,0 +1,33 @@
+{
+  "name": "Rapid Growth",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Source a 5+ Cost Animal. Transform the Larva in your hand into copies of it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReplaceCardsSpell",
+      "target": "FRIENDLY_HAND",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "token_spiderling"
+      }
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "value": 5,
+      "attribute": "BASE_MANA_COST",
+      "cardType": "MINION",
+      "operation": "GREATER_OR_EQUAL"
+    }
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
