@@ -1,0 +1,30 @@
+{
+  "name": "Babysitter",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "SPIRIT",
+  "description": "Opener: Summon two Larva from your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RecruitSpell",
+      "value": 2,
+      "cardFilter": {
+       "class": "SpecificCardFilter",
+       "card": "token_larva"
+     },
+     "cardLocation": "HAND",
+     "targetPlayer": "SELF"
+   },
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
