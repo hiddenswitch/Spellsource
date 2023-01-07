@@ -1,6 +1,6 @@
 {
   "name": "Command: Strike",
-  "baseManaCost": 0,
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "FREE",
