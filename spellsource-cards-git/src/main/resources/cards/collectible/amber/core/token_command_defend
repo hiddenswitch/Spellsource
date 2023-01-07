@@ -1,6 +1,6 @@
 {
   "name": "Command: Defend",
-  "baseManaCost": 0,
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "FREE",
