@@ -1,0 +1,41 @@
+{
+  "name": "Narvina the Recluse",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Toxic. Whenever a unit dies, summon two 1/1 Larva. (Up to 14)",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "operation": "MAXIMUM",
+        "value1": {
+          "class": "AlgebraicValueProvider",
+          "operation": "SUBTRACT",
+          "value1": 7,
+          "value2": {
+            "class": "BoardCountValueProvider"
+          }
+        },
+        "value2": 2
+      },
+      "card": "token_larva"
+    },
+    "maxFiresPerSequence": 7
+  },  
+  "attributes": {
+    "POISONOUS": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
