@@ -1,0 +1,32 @@
+{
+  "name": "Ambush",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "COMMON",
+  "description": "Summon a random 1-Lun unit from your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecruitSpell",
+    "value": 1,
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        {
+          "class": "ManaCostFilter",
+          "value": 1,
+          "operation": "EQUAL"
+        }
+      ]
+    },
+    "cardLocation": "DECK",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
