@@ -1,0 +1,47 @@
+{
+  "name": "Little Bug",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "Can't attack. Immune while you control other non-Immune units. After 10 rounds, promote.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "SELF",
+    "condition": {
+      "class": "MinionCountCondition",
+      "value": 1,
+      "operation": "GREATER_OR_EQUAL",
+      "targetPlayer": "SELF"
+    },
+    "condition": {
+        "class": "AttributeCondition",
+        "attribute": "IMMUNE",
+        "operation": "HAS",
+        "invert": true
+      }
+    "attribute": "AURA_IMMUNE"
+  },
+  "trigger": {
+    "countUntilCast": 10,
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "token_grand_butterfly"
+    },
+    "maxFires": 10
+  },
+  "attributes": {
+    "CANNOT_ATTACK": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
