@@ -1,0 +1,25 @@
+{
+  "name": "Larval Mimic",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Aftermath: Receive three 1/1 Larva.",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "token_larva",
+      "token_larva",
+      "token_larva"
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
