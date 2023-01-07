@@ -1,0 +1,23 @@
+{
+  "name": "Shield Header",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Guard. Aftermath: Gain 4 Armor.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": 4
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
