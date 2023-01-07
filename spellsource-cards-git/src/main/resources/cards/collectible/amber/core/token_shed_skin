@@ -1,0 +1,17 @@
+{
+  "name": "Shed Skin",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "NONE",
+  "race": "BEAST",
+  "description": "Guard.",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
