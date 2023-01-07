@@ -1,0 +1,32 @@
+{
+  "name": "Encase in Amber",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Stun a Unit and make it Immune for the next round. Draw.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "IMMUNE",
+        "revertTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "SELF"
+        }
+      },
+      {
+        "class": "DrawCardSpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
