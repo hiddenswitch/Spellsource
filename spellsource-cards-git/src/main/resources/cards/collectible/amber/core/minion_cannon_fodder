@@ -1,0 +1,24 @@
+{
+  "name": "Cannon Fodder",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Aftermath: Summon a Cannon Fodder from your deck.",
+  "deathrattle": {
+    "class": "RecruitSpell",
+    "value": 1,
+    "cardFilter": {
+      "class": "SpecificCardFilter",
+      "card": "minion_cannon_fodder"
+    },
+    "cardLocation": "DECK",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
