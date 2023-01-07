@@ -1,0 +1,55 @@
+{
+  "name": "Lumina the Light",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 3,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "SPIRIT",
+  "description": "After you play a unit, Source one of a different Tribe.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "BeforeMinionPlayedTrigger",
+      "hostTargetType": "IGNORE_AS_SOURCE_CARD",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "CastAfterSequenceSpell",
+      "target": "EVENT_SOURCE",
+      "spell": {
+        "class": "ConditionalSpell",
+        "target": "SPELL_TARGET",
+        "condition": {
+          "class": "IsDeadCondition",
+          "target": "SELF",
+          "invert": true
+        },
+        "spell": {
+          "class": "DiscoverSpell",
+          "target": "SPELL_TARGET",
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "RaceEqualsFilter",
+                "secondaryTarget": "SPELL_TARGET",
+                "invert": true
+              },
+              {
+                "class": "CardFilter",
+                "cardType": "MINION"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "attributes": {
+    "DISCOVER": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
