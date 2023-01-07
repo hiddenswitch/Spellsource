@@ -1,0 +1,27 @@
+{
+  "name": "Emergency Molt",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Return an allied Unit to your hand. Summon a 0/4 Shed Skin with Guard.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+      "spell": {
+        "class": "ReturnTargetToHandSpell",
+        "target": "TARGET"
+      }
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_shed_skin"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
