@@ -1,0 +1,34 @@
+{
+  "name": "Wrapped Up",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "FREE",
+  "description": "Return an enemy unit and a random enemy unit to your opponent's hand.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 2,
+    "operation": "GREATER",
+    "targetPlayer": "OPPONENT"
+  },
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReturnTargetToHandSpell"
+      },
+      {
+        "class": "MultiTargetSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 1,
+        "spell": {
+          "class": "ReturnTargetToHandSpell"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
