@@ -1,0 +1,22 @@
+{
+  "name": "Nest Guardian",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "SPIRIT",
+  "description": "Guard. Can only attack Champions and the Unit opposite it.",
+  "aura": {
+    "class": "PhysicalAttackTargetOverrideAura",
+    "target": "PHYSICAL_ATTACK_TARGETS",
+    "filter": "OPPOSITE_MINIONS"
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
