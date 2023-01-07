@@ -1,0 +1,16 @@
+{
+  "name": "Back-Up Plan",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Choose a unit. Receive 2 copies of it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "PutCopyInHandSpell",
+    "howMany": 2
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
