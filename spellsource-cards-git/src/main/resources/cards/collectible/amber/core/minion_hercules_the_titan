@@ -1,0 +1,24 @@
+{
+  "name": "Hercules the Titan",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 4,
+  "baseHp": 13,
+  "rarity": "LEGENDARY",
+  "race": "SPIRIT",
+  "description": "Dash. Guard. Aftermath: Gain 13 Armor.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": 13
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true,
+    "RUSH": true,
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
