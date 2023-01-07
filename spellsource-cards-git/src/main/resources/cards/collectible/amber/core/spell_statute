@@ -1,0 +1,20 @@
+{
+  "name": "Statute",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "COMMON",
+  "description": "Receive all Commands.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "token_command_strike",
+      "token_command_defend",
+      "token_command_gather"
+    ]
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
