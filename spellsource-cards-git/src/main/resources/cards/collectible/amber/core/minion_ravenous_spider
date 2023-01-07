@@ -1,0 +1,36 @@
+{
+  "name": "Ravenous Spider",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Can't attack unless you control another unit. After this attacks, destroy another unit you control.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "SELF",
+    "condition": {
+      "class": "MinionCountCondition",
+      "value": 2,
+      "operation": "LESS_OR_EQUAL",
+      "targetPlayer": "SELF"
+    },
+    "attribute": "AURA_CANNOT_ATTACK"
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
