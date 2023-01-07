@@ -1,0 +1,59 @@
+{
+  "name": "Hungry Caterpillar",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Requires sacrificing a 1/1 unit to play.",
+  "condition": {
+    "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "value": 1,
+          "attribute": "ATTACK",
+          "cardType": "MINION",
+          "operation": "EQUAL"
+        },
+        {
+          "class": "CardFilter",
+          "value": 1,
+          "attribute": "HP",
+          "cardType": "MINION",
+          "operation": "EQUAL"
+        }
+      ]
+    },
+  },
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "Destroy",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "value": 1,
+            "attribute": "ATTACK",
+            "cardType": "MINION",
+			"operation": "EQUAL"
+          },
+          {
+           "class": "CardFilter",
+           "value": 1,
+           "attribute": "HP",
+           "cardType": "MINION",
+           "operation": "EQUAL"
+          }
+        ]
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
