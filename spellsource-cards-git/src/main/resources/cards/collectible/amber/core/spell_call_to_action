@@ -1,0 +1,33 @@
+{
+  "name": "Call to Action",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "COMMON",
+  "description": "Choose a unit. Summon all copies of it from your hand and deck.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      "class": "RecruitSpell",
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "operation": "SUBTRACT",
+        "value1": 7,
+        "value2": {
+          "class": "EntityCountValueProvider",
+          "target": "FRIENDLY_MINIONS"
+        }
+      },
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "TARGET"
+      },
+    "cardLocation": "HAND",
+    "targetPlayer": "SELF"
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "set": "CORE"
+}
