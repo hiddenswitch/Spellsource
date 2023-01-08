@@ -9,22 +9,42 @@
   "spell": {
     "class": "MetaSpell",
     "spells": [
-      "class": "RecruitSpell",
-      "value": {
-        "class": "AlgebraicValueProvider",
-        "operation": "SUBTRACT",
-        "value1": 7,
-        "value2": {
-          "class": "EntityCountValueProvider",
-          "target": "FRIENDLY_MINIONS"
-        }
-      },
-      "filter": {
-        "class": "SpecificCardFilter",
-        "card": "TARGET"
-      },
-    "cardLocation": "HAND",
-    "targetPlayer": "SELF"
+	  {
+        "class": "RecruitSpell",
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "operation": "SUBTRACT",
+          "value1": 7,
+          "value2": {
+            "class": "EntityCountValueProvider",
+            "target": "FRIENDLY_MINIONS"
+          }
+        },
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "TARGET"
+        },
+        "cardLocation": "HAND",
+        "targetPlayer": "SELF"
+	  },
+	  {
+        "class": "RecruitSpell",
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "operation": "SUBTRACT",
+          "value1": 7,
+          "value2": {
+            "class": "EntityCountValueProvider",
+            "target": "FRIENDLY_MINIONS"
+          }
+        },
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "TARGET"
+        },
+        "cardLocation": "DECK",
+        "targetPlayer": "SELF"
+	  },
     ]
   },
   "collectible": true,
