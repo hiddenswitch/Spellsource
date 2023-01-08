@@ -11,7 +11,18 @@
   "aura": {
     "class": "PhysicalAttackTargetOverrideAura",
     "target": "PHYSICAL_ATTACK_TARGETS",
-    "filter": "OPPOSITE_MINIONS"
+    "filter": {
+      "class": "OrFilter",
+      "filters": [
+        {
+          "filter": "OPPOSITE_MINIONS"
+        },
+        {
+          "class": "EntityTypeFilter",
+          "entityType": "HERO"
+        }
+      ]
+    }
   },
   "attributes": {
     "TAUNT": true
