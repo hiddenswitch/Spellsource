@@ -1,0 +1,28 @@
+{
+  "name": "Supplement",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Draw a unit and all copies of it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "value": 1,
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "target": "FRIENDLY_DECK",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "secondaryTarget": "EVENT_TARGET"
+      }
+    }
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": "CORE"
+}
