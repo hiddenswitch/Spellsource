@@ -1,10 +1,10 @@
 {
   "name": "Annoying Mosquito",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 1,
-  "baseHp": 4,
+  "baseHp": 3,
   "rarity": "EPIC",
   "description": "Dodge x3. After this attacks and kills a unit, fully heal this unit.",
   "triggers": [
