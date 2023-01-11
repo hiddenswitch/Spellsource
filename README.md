@@ -1,4 +1,6 @@
-# Spellsource-Server
+# Spellsource
+
+<img width="664" alt="Screenshot 2023-01-10 at 9 49 52 PM" src="https://user-images.githubusercontent.com/2229300/211727827-c259ed44-ae92-404b-9366-9648e307af9c.png">
 
 [![Discord](https://img.shields.io/badge/chat-join%20us%20on%20discord-blue.svg?longCache=true&style=flat&icon=discord)](https://discord.gg/HmbESh2)
 
