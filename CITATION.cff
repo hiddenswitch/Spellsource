@@ -1,0 +1,26 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Spellsource
+message: >-
+  A multiplayer, community authored digital card game and
+  artificial intelligence playground
+type: software
+authors:
+  - given-names: Benjamin
+    family-names: Berman
+  - given-names: James
+    family-names: Gale
+repository-code: 'https://github.com/hiddenswitch/Spellsource'
+url: 'https://playspellsource.com'
+keywords:
+  - digital card game
+  - interactive
+  - machine learning
+  - artificial intelligence
+  - magic the gathering
+  - hearthstone
+  - legends of runeterra
+  - bot
+license: AGPL-3.0
