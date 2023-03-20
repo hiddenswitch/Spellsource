@@ -2,6 +2,7 @@ import Blockly, {isNumber, Xml} from 'blockly'
 import {extend, filter, find, fromPairs, isArray, isPlainObject, isEmpty, map, merge} from 'lodash'
 import format from 'string-format'
 import BlocklyMiscUtils from "./blockly-misc-utils";
+import {BlockJson} from "./default-overrides";
 
 export default class WorkspaceUtils {
   static BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = 'BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE'
@@ -49,7 +50,7 @@ export default class WorkspaceUtils {
         break
       case 'xml':
         if (!!xml.firstElementChild) {
-          const elementNodes = filter(Array.from(xml.childNodes), cn => {
+          const elementNodes = filter(Array.from(xml.childNodes) as Element[], cn => {
             return cn.nodeType === Node.ELEMENT_NODE && BlocklyMiscUtils.isSpellsourceBlock(cn.getAttribute('type'))
           })
           if (elementNodes.length === 1) {
@@ -60,11 +61,11 @@ export default class WorkspaceUtils {
         break
       case 'shadow':
       case 'block':
-        const obj = {}
+        const obj: BlockJson = {}
         if (!xml.hasChildNodes()) {
           return obj
         }
-        const childNodes = Array.from(xml.childNodes)
+        const childNodes: Element[] = Array.from(xml.childNodes)
         const length = childNodes.length
         for (let i = 0; i < length; i++) {
           const childNode = childNodes[i]
@@ -76,7 +77,7 @@ export default class WorkspaceUtils {
               }
               break
             case 'field':
-              obj[childNode.attributes['name'].value] = !isNaN(childNode.innerHTML) ? +childNode.innerHTML : childNode.innerHTML
+              obj[childNode.attributes['name'].value] = !isNaN(parseFloat(childNode.innerHTML)) ? +childNode.innerHTML : childNode.innerHTML
               break
             case 'statement':
             case 'value':

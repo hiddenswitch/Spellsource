@@ -1,13 +1,13 @@
 import {Button, Form} from "react-bootstrap";
-import styles from './card-editor-view.module.scss'
+import * as styles from './card-editor-view.module.scss'
 import Blockly from "blockly";
 import AceEditor from "react-ace";
-import React, {useRef, useState} from "react";
+import React, {useCallback, useMemo, useRef, useState} from "react";
 import CardEditorWorkspace from "./card-editor-workspace";
 import useComponentWillMount from "../hooks/use-component-will-mount";
 import {CardProps} from "./card-display";
 
-const CardEditorView = (props: {defaultCard?: CardProps}) => {
+const CardEditorView = (props: {defaultCard?: boolean}) => {
 
   const [code, setCode] = useState(``)
   const [query, setQuery] = useState(``)
@@ -37,7 +37,7 @@ const CardEditorView = (props: {defaultCard?: CardProps}) => {
 
   const [realCode, setRealCode] = useState(``)
 
-  const workspace = blocklyEditor.current?.workspace;
+  const workspace = () => blocklyEditor.current?.workspace;
 
   const search = evt => {
     const query = evt.target.value
@@ -127,8 +127,8 @@ const CardEditorView = (props: {defaultCard?: CardProps}) => {
     </Form.Check>
     <Form.Check className={styles.editorOption}>
       <Form.Check.Input defaultChecked={showJSON}
-                        onChange={e => setShowJSON(!showJSON)}
-                        value={"" + showJSON}
+                        onChange={() => setShowJSON(!showJSON)}
+                        value={String(showJSON)}
                         className={styles.editorCheck}
                         ref={showJSONCheck}
       />
@@ -136,15 +136,15 @@ const CardEditorView = (props: {defaultCard?: CardProps}) => {
     </Form.Check>
     <Form.Check className={styles.editorOption}>
       <Form.Check.Input defaultChecked={showJS}
-                        onChange={e => setShowJS(!showJS)}
-                        value={"" + showJS}
+                        onChange={() => setShowJS(!showJS)}
+                        value={String(showJS)}
                         className={styles.editorCheck}
                         ref={showJSCheck}
       />
       <Form.Check.Label ref={showJSLabel}> Show JS</Form.Check.Label>
     </Form.Check>
     {
-      showJSON ? <AceEditor
+      showJSON && (<AceEditor
         width={'100%'}
         mode="json"
         theme="github"
@@ -154,10 +154,10 @@ const CardEditorView = (props: {defaultCard?: CardProps}) => {
         readOnly={true}
         value={code}
         editorProps={{$blockScrolling: true}}
-      /> : <div/>
+      /> )
     }
     {
-      showJS ? <AceEditor
+      showJS && (<AceEditor
         width={'100%'}
         mode="javascript"
         theme="github"
@@ -167,7 +167,7 @@ const CardEditorView = (props: {defaultCard?: CardProps}) => {
         readOnly={true}
         value={realCode}
         editorProps={{$blockScrolling: true}}
-      /> : <div/>
+      />)
     }
   </span>)
 }

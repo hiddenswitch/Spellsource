@@ -1,11 +1,16 @@
 import Blockly, {Block, BlockSvg} from 'blockly'
 import JsonConversionUtils from './json-conversion-utils'
-import {has, isArray} from 'lodash'
+import {has} from 'lodash'
 import recursiveOmitBy from 'recursive-omit-by'
 import {FieldLabelSerializableHidden} from '../components/field-label-serializable-hidden'
 import {FieldLabelPlural} from "../components/field-label-plural";
 import BlocklyModification from "./blockly-modification";
 import blocklyAdditions from '!!raw-loader!./block-additions.css'
+import {CardProps} from "../components/card-display";
+
+type DeepKeyOf<T> = T extends object ? keyof T | { [K in keyof T]: DeepKeyOf<T[K]> }[keyof T] : T extends unknown ? never : never;
+
+type CardInput = DeepKeyOf<CardProps>
 
 export default class BlocklyMiscUtils {
 
@@ -16,7 +21,7 @@ export default class BlocklyMiscUtils {
   }
 
   static addBlock(block: Partial<Block>) {
-    Blockly.Blocks[block.type] = {
+    Blockly.Blocks[block.type!] = {
       init: function () {
         this.jsonInit(block)
         if (!!block.data) {
@@ -25,7 +30,7 @@ export default class BlocklyMiscUtils {
         if (!!block.hat) {
           this.hat = block.hat
         }
-        if (block.type.endsWith('SHADOW')) {
+        if (block.type!.endsWith('SHADOW')) {
           this.setMovable(false)
         }
         if (!!block.comment) {
@@ -191,7 +196,7 @@ export default class BlocklyMiscUtils {
   }
 
   //make the message for a generated block for a catalogue/created card
-  static cardMessage(card) {
+  static cardMessage(card: CardProps) {
     let ret = ''
     if (card.baseManaCost !== null && card.baseManaCost !== undefined) {
       ret = '(' + card.baseManaCost + ') '
@@ -424,8 +429,8 @@ export default class BlocklyMiscUtils {
   static loadableInit(Blockly) {
     if (!Blockly.Css.injected_) {
       Blockly.Css.register(blocklyAdditions
-        .replaceAll(',','')
-        .replaceAll('  ','')
+        .replaceAll(',', '')
+        .replaceAll('  ', '')
         .replaceAll('\n\n', '\n')
         .split('\n')
       );

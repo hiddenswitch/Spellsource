@@ -1,5 +1,8 @@
-import { Enum } from 'enumify'
+// import { Enum } from 'enumify'
 
+// TODO was this actually still in use ?
+
+/*
 export default class EnumExtended extends Enum {
   static toBlocklyArray () {
     return _.map(this.enumValues, (value) => {
@@ -7,4 +10,4 @@ export default class EnumExtended extends Enum {
       return [string, string]
     })
   }
-}
+}*/

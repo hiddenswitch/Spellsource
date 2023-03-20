@@ -1,5 +1,9 @@
 import Blockly from "blockly"
 
+
+export type BlockJson = any; // TODO block json typing
+export type BlockJsonArg = any; // TODO block json typing
+
 export default class DefaultOverrides {
 
   static overrideAll() {
@@ -22,10 +26,10 @@ export default class DefaultOverrides {
         "args0": []
       }
     }
-    let arg = {
-      "name": name,
-      "shadow": {
-        "type": shadowType
+    let arg: BlockJsonArg = {
+      name,
+      shadow: {
+        type: shadowType
       }
     }
     if (!!fieldName) {

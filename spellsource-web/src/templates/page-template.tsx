@@ -1,7 +1,7 @@
 import React from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../components/creative-layout'
-import styles from './template-styles.module.scss'
+import * as styles from './template-styles.module.scss'
 
 export default function Template ({
   data, // this prop will be injected by the GraphQL query below.

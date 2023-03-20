@@ -2,7 +2,7 @@ import React, {ReactNode, useEffect, useRef, useState} from 'react'
 import { Link } from 'gatsby'
 import { StaticImage } from 'gatsby-plugin-image'
 import icon from '../assets/icon.png'
-import styles from './creative-layout.module.scss'
+import * as styles from './creative-layout.module.scss'
 import Search from './search'
 import  {AiOutlineMenu} from "@react-icons/all-files/ai/AiOutlineMenu"
 import {AiOutlineClose} from "@react-icons/all-files/ai/AiOutlineClose"

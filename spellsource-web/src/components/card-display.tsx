@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './card-display.module.scss'
+import * as styles from './card-display.module.scss'
 
 import backgroundLayer from '../card-images/layer-1.png'
 import whiteBanner from '../card-images/layer-3.png'
@@ -15,7 +15,9 @@ import pedestalShadow from '../card-images/pedestal-shadow.png'
 import windowBackground from '../card-images/large-card-window-background.png'
 import selkie from '../card-images/selkie.png'
 import selkieShadow from '../card-images/selkie-shadow.png'
-import { defaultsDeep } from 'lodash'
+import {defaultsDeep} from 'lodash'
+import {CardDesc} from "../lib/spellsource-game";
+import {DeepPartial} from "../lib/deep-partial";
 
 const defaultArt = {
   'primary': {
@@ -60,28 +62,31 @@ const toRgbaString = (v: { r: number; g: number; b: number; a: any }) => {
   return `rgba(${v.r * 255}, ${v.g * 255}, ${v.b * 255}, ${v.a})`
 }
 
-// TODO CardProps
-export type CardProps = any;
+type FixCardDesc<T> = T extends object ? {
+  [K in keyof T as K extends `${infer name}_` ? name : K]: K extends "unknownFields" ? never : FixCardDesc<T[K]>
+} : T
 
-// TODO CardArt
-export type CardArt = any;
+export type CardProps = FixCardDesc<CardDesc>;
 
-function CardDisplay (props: CardProps) {
-  let art: CardArt = {}
-  defaultsDeep(art, props.art, defaultArt)
-  art = {
-    ...art,
+type DeepReplace<T, V, N> = T extends object ? {
+  [K in keyof T]: T[K] extends V ? N : DeepReplace<T[K], V, N>
+} : T;
+
+function CardDisplay(props: DeepPartial<CardProps>) {
+  let cardArt = defaultsDeep(props.art, defaultArt) as CardProps["art"] & typeof defaultArt
+  const art = {
+    ...cardArt,
     body: {
-      ...art.body,
-      vertex: toRgbaString(art.body.vertex)
+      ...cardArt.body,
+      vertex: toRgbaString(cardArt.body.vertex)
     },
-    highlight: toRgbaString(art.highlight),
-    primary: toRgbaString(art.primary),
-    secondary: toRgbaString(art.secondary),
-    shadow: toRgbaString(art.shadow),
+    highlight: toRgbaString(cardArt.highlight),
+    primary: toRgbaString(cardArt.primary),
+    secondary: toRgbaString(cardArt.secondary),
+    shadow: toRgbaString(cardArt.shadow),
     sprite: {
       // named: art.sprite.named,
-      ...art.sprite
+      ...cardArt.sprite
     }
   }
 
@@ -118,21 +123,21 @@ function CardDisplay (props: CardProps) {
            textShadow: checkTextColor()
          }}>{props.name}</p>
       <div className={styles.primary}
-           style={{ background: `linear-gradient(${art.primary}, ${art.primary}), url(${whiteBanner}) no-repeat` }}/>
+           style={{background: `linear-gradient(${art.primary}, ${art.primary}), url(${whiteBanner}) no-repeat`}}/>
       <div className={styles.highlight}
-           style={{ background: `linear-gradient(${art.highlight}, ${art.highlight}), url(${highlight}) no-repeat` }}/>
+           style={{background: `linear-gradient(${art.highlight}, ${art.highlight}), url(${highlight}) no-repeat`}}/>
       <div className={styles.shadow}
-           style={{ background: `linear-gradient(${art.shadow}, ${art.shadow}), url(${shadow}) no-repeat` }}/>
+           style={{background: `linear-gradient(${art.shadow}, ${art.shadow}), url(${shadow}) no-repeat`}}/>
       <div className={styles.secondary}
-           style={{ background: `linear-gradient(${art.secondary}, ${art.secondary}), url(${secondary}) no-repeat` }}/>
+           style={{background: `linear-gradient(${art.secondary}, ${art.secondary}), url(${secondary}) no-repeat`}}/>
       <div className={styles.pedestalPrimary}
-           style={{ background: `linear-gradient(${art.primary}, ${art.primary}), url(${pedestalPrimary}) no-repeat` }}/>
+           style={{background: `linear-gradient(${art.primary}, ${art.primary}), url(${pedestalPrimary}) no-repeat`}}/>
       <div className={styles.pedestalSecondary}
-           style={{ background: `linear-gradient(${art.secondary}, ${art.secondary}), url(${pedestalSecondary}) no-repeat` }}/>
+           style={{background: `linear-gradient(${art.secondary}, ${art.secondary}), url(${pedestalSecondary}) no-repeat`}}/>
       <div className={styles.pedestalShadow}
-           style={{ background: `linear-gradient(${art.shadow}, ${art.shadow}), url(${pedestalShadow}) no-repeat` }}/>
+           style={{background: `linear-gradient(${art.shadow}, ${art.shadow}), url(${pedestalShadow}) no-repeat`}}/>
       <img src={windowBackground} className={styles.windowBackground} alt=""/>
-      <div style={{ display: checkTokens() }}>
+      <div style={{display: checkTokens()}}>
         <img src={baseAttack} className={styles.attackToken} alt=""/>
         <p className={styles.baseAttack}>{props.baseAttack}</p>
         <img src={baseHp} className={styles.hpToken} alt=""/>

@@ -89,10 +89,10 @@ exports.createSchemaCustomization = ({ actions }) => {
 exports.createPages = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions
 
-  const pageTemplate = path.resolve(`src/templates/page-template.js`)
-  const cardTemplate = path.resolve(`src/templates/card-template.js`)
-  const wikiTemplate = path.resolve(`src/templates/wiki-template.js`)
-  const collectionTemplate = path.resolve("./src/templates/collection-template.js")
+  const pageTemplate = path.resolve(`src/templates/page-template.tsx`)
+  const cardTemplate = path.resolve(`src/templates/card-template.tsx`)
+  const wikiTemplate = path.resolve(`src/templates/wiki-template.tsx`)
+  const collectionTemplate = path.resolve("./src/templates/collection-template.tsx")
 
   const result = await graphql(`
     {

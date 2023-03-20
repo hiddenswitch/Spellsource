@@ -1,6 +1,6 @@
-import React, {forwardRef, MutableRefObject, useEffect, useState} from 'react'
+import React, {forwardRef, MutableRefObject, useEffect, useMemo, useState} from 'react'
 import WorkspaceUtils from '../lib/workspace-utils'
-import styles from './card-editor-view.module.scss'
+import * as styles from './card-editor-view.module.scss'
 import Blockly, {Toolbox, ToolboxCategory} from 'blockly'
 import 'ace-builds/src-noconflict/mode-json'
 import 'ace-builds/src-noconflict/mode-xml'
@@ -22,7 +22,7 @@ interface CardEditorWorkspaceProps {
   searchCatalogueBlocks?: boolean;
   searchArtBlocks?: boolean;
   query: string;
-  defaultCard?: CardProps;
+  defaultCard?: boolean;
   renderer?: string;
 }
 
@@ -31,8 +31,8 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
   const [results, setResults] = useState([])
   const index = useIndex()
 
-  const mainWorkspace = blocklyEditor.current.workspace
-  const toolbox = mainWorkspace.getToolbox() as Toolbox;
+  const mainWorkspace = () => blocklyEditor.current?.workspace
+  const toolbox = () => mainWorkspace()?.getToolbox() as Toolbox;
 
   // Run once before the workspace has been created
   useComponentWillMount(() => {
@@ -58,9 +58,9 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
       }, 100)
     }
 
-    mainWorkspace.getTheme().setStartHats(true)
+    mainWorkspace().getTheme().setStartHats(true)
 
-    BlocklyToolbox.initCallbacks(mainWorkspace)
+    BlocklyToolbox.initCallbacks(mainWorkspace())
 
     let params = new URLSearchParams(window.location.search)
     let card = params.get('card')
@@ -78,26 +78,26 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
 
   //Switch the renderer
   useEffect(() => {
-    BlocklyMiscUtils.switchRenderer(props.renderer, mainWorkspace)
+    BlocklyMiscUtils.switchRenderer(props.renderer, mainWorkspace())
   }, [props.renderer])
 
   //The default workspace changed event handler
   const onWorkspaceChanged = () => {
     const cardScript = []//WorkspaceUtils.workspaceToCardScript(mainWorkspace)
     // Generate the blocks that correspond to the cards in the workspace
-    if (!mainWorkspace.isDragging()) {
-      let update = handleWorkspaceCards(mainWorkspace, cardScript)
+    if (!mainWorkspace().isDragging()) {
+      let update = handleWorkspaceCards(mainWorkspace(), cardScript)
       if (update) {
-        toolbox.getToolboxItemById<ToolboxCategory>('Cards').updateFlyoutContents(BlocklyToolbox.cardsCategory())
-        toolbox.getToolboxItemById<ToolboxCategory>('Classes').updateFlyoutContents(BlocklyToolbox.classesCategory())
+        toolbox().getToolboxItemById<ToolboxCategory>('Cards').updateFlyoutContents(BlocklyToolbox.cardsCategory())
+        toolbox().getToolboxItemById<ToolboxCategory>('Classes').updateFlyoutContents(BlocklyToolbox.classesCategory())
       }
 
-      BlocklyMiscUtils.pluralStuff(mainWorkspace)
+      BlocklyMiscUtils.pluralStuff(mainWorkspace())
 
       props.setJSON(JSON.stringify(cardScript, null, 2))
     }
 
-    props.setJS(Blockly.JavaScript.workspaceToCode(mainWorkspace))
+    props.setJS(Blockly.JavaScript.workspaceToCode(mainWorkspace()))
   }
 
   //Create a new WorkspaceCard block
@@ -349,19 +349,19 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
       return
     }
 
-    JsonConversionUtils.generateCard(mainWorkspace, card)
+    JsonConversionUtils.generateCard(mainWorkspace(), card)
   }
 
   const handleSearchResults = (query) => {
     if (query.length === 0) {
       setResults([])
     }
-    (mainWorkspace.getToolbox() as Toolbox).getToolboxItemById<ToolboxCategory>('Search Results')
+    toolbox().getToolboxItemById<ToolboxCategory>('Search Results')
       .updateFlyoutContents(BlocklyToolbox.searchResultsCategory(results))
-    mainWorkspace.getToolbox().clearSelection()
+    toolbox().clearSelection()
     if (query.length > 0) {
-      mainWorkspace.getToolbox().selectItemByPosition(0)
-      mainWorkspace.getToolbox().refreshSelection()
+      toolbox().selectItemByPosition(0)
+      toolbox().refreshSelection()
     }
   }
 

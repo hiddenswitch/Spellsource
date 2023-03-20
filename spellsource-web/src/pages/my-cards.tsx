@@ -1,8 +1,10 @@
 import Layout from '../components/card-editor-layout'
 import React from 'react'
 import CollectionCard from '../components/collection-card'
+import {CardProps} from "../components/card-display";
+import {DeepPartial} from "../lib/deep-partial";
 
-const cards = [
+const cards: Array<DeepPartial<CardProps>> = [
   {
     name: 'Test',
     description: 'Test Description',

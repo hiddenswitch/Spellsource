@@ -1,16 +1,17 @@
-import React, { cloneElement } from 'react'
+import React, {cloneElement, FunctionComponent} from 'react'
 import CardDisplay, {CardProps} from './card-display'
 import { Button } from 'react-bootstrap'
-import styles from './collection-card.module.scss'
+import * as styles from './collection-card.module.scss'
 import useArtData from '../hooks/use-art-data'
 import BlocklyMiscUtils from '../lib/blockly-misc-utils'
 import { Link } from 'gatsby'
+import {DeepPartial} from "../lib/deep-partial";
 
 interface CollectionCardProps {
-  card: CardProps
+  card: DeepPartial<CardProps>
 }
 
-const CollectionCard = (props) => {
+const CollectionCard: FunctionComponent<CollectionCardProps> = (props) => {
   const data = useArtData()
 
   let card = props.card

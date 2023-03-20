@@ -5,7 +5,7 @@ import WorkspaceUtils from "./workspace-utils";
 export default class SpellsourceGenerator {
 
   static generateJavaScript() {
-    Blockly.JavaScript['TestStarter_RunGym'] = function (block) {
+    Blockly.JavaScript['TestStarter_RunGym'] = function () {
       return "const context = SpellsourceTesting.runGym()\n"
     }
 
@@ -138,7 +138,7 @@ export default class SpellsourceGenerator {
     return json
   }
 
-  static blockToJson(block) {
+  static blockToJson(block: Blockly.Block) {
     let xml = Blockly.Xml.blockToDom(block, true)
     let json = WorkspaceUtils.xmlToCardScript(xml)
     return this.fixJsonVariables(json)

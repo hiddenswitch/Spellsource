@@ -2,8 +2,8 @@ import { FieldLabel } from 'blockly'
 import JsonConversionUtils from "../lib/json-conversion-utils";
 
 export class FieldLabelPlural extends FieldLabel {
-  constructor (opt_value, opt_validator, opt_config) {
-    super(opt_value, opt_validator, opt_config)
+  constructor (opt_value?: string, opt_class?: string, opt_config?: Object) {
+    super(opt_value, opt_class, opt_config)
   }
 
   static fromJson (options) {

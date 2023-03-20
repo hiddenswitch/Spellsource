@@ -1,5 +1,5 @@
-import React from 'react'
-import styles from './creative-layout.module.scss'
+import React, {CSSProperties} from 'react'
+import * as styles from './creative-layout.module.scss'
 import { Link } from 'gatsby'
 import harvard from '../assets/Harvard.png'
 import mit from '../assets/MIT.png'
@@ -35,7 +35,7 @@ function HeroIntroSection() {
 
 const Button = ({title, route, buttonStyle}) => {
   
-  const light = {
+  const light: CSSProperties = {
     color: '#1B1B1B',
     border: '2px solid #1B1B1B',
     borderRadius: '12px',
@@ -46,7 +46,7 @@ const Button = ({title, route, buttonStyle}) => {
     textDecoration: 'none',
     width: '195px'
   };
-  const dark = {
+  const dark: CSSProperties = {
     color: '#fff',
     backgroundColor: '#2837FF', 
     border: '2px solid #2837FF',

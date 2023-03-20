@@ -2,7 +2,7 @@ import Blockly from 'blockly'
 import BlocklyMiscUtils from "./blockly-misc-utils";
 
 const SpellsourceRenderer = function (name) {
-  SpellsourceRenderer.superClass_.constructor.call(this, name)
+  SpellsourceRenderer["superClass_"].constructor.call(this, name)
 }
 Blockly.utils.object.inherits(SpellsourceRenderer,
   Blockly.geras.Renderer);
@@ -13,7 +13,7 @@ SpellsourceRenderer.prototype.makeRenderInfo_ = function(block) {
 
 
 const SpellsourceRenderInfo = function (renderer, block) {
-  SpellsourceRenderInfo.superClass_.constructor.call(this, renderer, block)
+  SpellsourceRenderInfo["superClass_"].constructor.call(this, renderer, block)
 }
 Blockly.utils.object.inherits(SpellsourceRenderInfo,
   Blockly.geras.RenderInfo);

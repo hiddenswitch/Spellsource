@@ -1,11 +1,12 @@
 import Blockly, { isNumber } from 'blockly'
 import BlocklyMiscUtils from './blockly-misc-utils'
 import { isArray } from 'lodash'
+import {BlockJsonArg} from "./default-overrides";
 
 export default class JsonConversionUtils {
   static classBlocksDictionary = {} //A dictionary mapping the 'class' argument a block uses to the block itself
   static enumBlocksDictionary = {} //A dictionary mapping the enum value of the block to the block itself
-  static allArgNames = new Set() //Every different possible arg name that appears on blocks, (for searching)
+  static allArgNames = new Set<string>() //Every different possible arg name that appears on blocks, (for searching)
 
   static blockTypeColors = {}
 
@@ -956,7 +957,7 @@ export default class JsonConversionUtils {
    *
    * This method handles all the wrapper blocks that could be encountered
    * when handling an arg, successfully wrapping even in cases where
-   * multipler wrappers are needed.
+   * multiple wrappers are needed.
    * @param block The original block in need of wrapping
    * @param json The json that the block corresponds to
    * @param inputName The name of the argument that json is assigned to
@@ -1191,7 +1192,7 @@ export default class JsonConversionUtils {
           (prop === 'targetPlayer' || prop === 'sourcePlayer')) {
           shouldBeField = true
         }
-        let arg = {
+        let arg: BlockJsonArg = {
           name: prop
         }
         let newMessage = prop + ': %1'

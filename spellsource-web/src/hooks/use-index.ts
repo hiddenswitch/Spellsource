@@ -3,7 +3,7 @@ import { createContext, useContext } from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
 import { Index } from 'elasticlunr'
 
-const IndexContext = createContext({})
+const IndexContext = createContext({index: undefined})
 
 // returns index
 export const useIndex = () => {

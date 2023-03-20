@@ -1,7 +1,7 @@
 import React from 'react'
 import { AnchorLink } from "gatsby-plugin-anchor-links"
 import Layout from '../components/creative-layout'
-import styles from '../components/creative-layout.module.scss'
+import * as styles from '../components/creative-layout.module.scss'
 
 import android from '../assets/android-logo.png'
 import iOS from '../assets/iOS-logo.png'

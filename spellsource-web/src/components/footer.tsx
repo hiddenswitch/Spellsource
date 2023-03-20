@@ -1,5 +1,5 @@
 import React from "react";
-import styles from './creative-layout.module.scss'
+import * as styles from './creative-layout.module.scss'
 import { Link } from 'gatsby'
 
 function Footer({pages}) {

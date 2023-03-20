@@ -379,11 +379,11 @@ export default class BlocklyModification {
       show.call(this)
       if (!!Blockly.Tooltip.DIV) {
         if (!!Blockly.Tooltip["element_"].tooltipColor) {
-          Blockly.Tooltip.DIV.style.backgroundColor = Blockly.Tooltip["element_"].tooltipColor
-          Blockly.Tooltip.DIV.style.color = '#ffffff'
+          Blockly.Tooltip.DIV["style"].backgroundColor = Blockly.Tooltip["element_"].tooltipColor
+          Blockly.Tooltip.DIV["style"].color = '#ffffff'
         } else {
-          Blockly.Tooltip.DIV.style.backgroundColor = '#ffffc7'
-          Blockly.Tooltip.DIV.style.color = '#000'
+          Blockly.Tooltip.DIV["style"].backgroundColor = '#ffffc7'
+          Blockly.Tooltip.DIV["style"].color = '#000'
         }
       }
     }
@@ -495,7 +495,7 @@ export default class BlocklyModification {
           }
           if (content['value']) {
             child.textContent = content['value']
-            child.innerText = content['value']
+            child["innerText"] = content['value']
           }
           if (content['type']) {
             child.setAttribute('type', content['type'])
@@ -508,8 +508,8 @@ export default class BlocklyModification {
       }
     }
 
-    const getBlockXml = Blockly.Flyout.prototype.getBlockXml_
-    Blockly.Flyout.prototype.getBlockXml_ = function(blockInfo) {
+    const getBlockXml = Blockly.Flyout.prototype["getBlockXml_"]
+    Blockly.Flyout.prototype["getBlockXml_"] = function(blockInfo) {
       const blockElement = getBlockXml.call(this, blockInfo)
       if (!blockElement.contentsHandled) {
         handleContents(blockElement, blockInfo)
@@ -526,6 +526,7 @@ export default class BlocklyModification {
       if (check === 'Boolean') {
         this.check_.push('ConditionDesc')
       }
+      return ret;
     }
   }
 
@@ -543,9 +544,9 @@ export default class BlocklyModification {
   }
 
   static cardDisplay() {
-    const createBubble = Blockly.Comment.prototype.createBubble_
+    const createBubble = Blockly.Comment.prototype["createBubble_"]
 
-    Blockly.Comment.prototype.createBubble_ = function() {
+    Blockly.Comment.prototype["createBubble_"] = function() {
       createBubble.call(this)
 
       let block = this.block_
