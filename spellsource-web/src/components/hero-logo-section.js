@@ -1,5 +1,5 @@
 import React from 'react'
-import * as styles from './creative-layout.module.scss'
+import styles from './creative-layout.module.scss'
 import spellsourceLogo from '../assets/spellsource.png'
 import cloud from '../assets/transparent-cloud.png'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import * as styles from '../components/creative-layout.module.scss'
+import styles from '../components/creative-layout.module.scss'
 import * as templateStyles from '../templates/template-styles.module.scss'
 import queryString from 'query-string'
 import Layout from '../components/creative-layout'

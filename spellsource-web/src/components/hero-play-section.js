@@ -1,5 +1,5 @@
 import React from 'react'
-import * as styles from './creative-layout.module.scss'
+import styles from './creative-layout.module.scss'
 import playNow from '../assets/play-now.gif'
 import cloud from '../assets/transparent-cloud.png'
 

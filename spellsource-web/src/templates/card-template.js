@@ -3,7 +3,7 @@ import { graphql, Link } from 'gatsby'
 import Layout from '../components/creative-layout'
 import CardDisplay from '../components/card-display'
 import BlocklyMiscUtils from '../lib/blockly-misc-utils'
-import * as styles from '../templates/template-styles.module.scss';
+import styles from '../templates/template-styles.module.scss';
 
 export default function Template ({
   data, // this prop will be injected by the GraphQL query below.

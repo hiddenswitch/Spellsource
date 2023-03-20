@@ -1,10 +1,14 @@
 import React, { cloneElement } from 'react'
-import CardDisplay from './card-display'
+import CardDisplay, {CardProps} from './card-display'
 import { Button } from 'react-bootstrap'
-import * as styles from './collection-card.module.css'
+import styles from './collection-card.module.scss'
 import useArtData from '../hooks/use-art-data'
 import BlocklyMiscUtils from '../lib/blockly-misc-utils'
 import { Link } from 'gatsby'
+
+interface CollectionCardProps {
+  card: CardProps
+}
 
 const CollectionCard = (props) => {
   const data = useArtData()

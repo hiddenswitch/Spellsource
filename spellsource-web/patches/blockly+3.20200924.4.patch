@@ -1,0 +1,77 @@
+diff --git a/node_modules/blockly/blockly.d.ts b/node_modules/blockly/blockly.d.ts
+index 06d6468..a028eea 100644
+--- a/node_modules/blockly/blockly.d.ts
++++ b/node_modules/blockly/blockly.d.ts
+@@ -13,6 +13,32 @@ export = Blockly;
+ 
+ declare module Blockly {
+ 
++  import RenderInfo = Blockly.blockRendering.RenderInfo;
++  /**
++   * Added by spellsource. Stores the text colors for blocks by their IDs
++   */
++  var textColor: Record<string, string>
++
++  /**
++   * Added by spellsource. Stores the class colors for heroes by their IDs
++   */
++  var heroClassColors: Record<string, string>
++
++  /**
++   * Added by spellsource. Tracks whether spellsource has initialized this Blockly
++   */
++  var spellsourceInit: boolean
++
++  /**
++   * Documented by spellsource. The javascript generator
++   */
++  var JavaScript: Generator
++
++  /**
++   * Documented by spellsource. The default geras renderer
++   */
++  var geras: any
++
+   interface BlocklyOptions {
+     toolbox?: HTMLElement | string;
+     readOnly?: boolean;
+@@ -102,6 +128,21 @@ declare module Blockly {
+     /** Fake class which should be extended to avoid inheriting static properties */
+     class Block__Class implements Blockly.IASTNodeLocation  {
+ 
++            /**
++             * Added by spellsource. Stores the json representation of this block.
++             */
++            json: any
++
++            /**
++             * Added by spellsource. Used by art blocks to store whether they've been used on cards or not.
++             */
++            used?: boolean
++
++            /**
++             * Added by spellsource. Used to TODO
++             */
++            message?: string
++
+             /**
+              * Class for one block.
+              * Not normally called directly, workspace.newBlock() is preferred.
+@@ -2219,7 +2260,7 @@ declare module Blockly {
+      * A mapping of block type names to block prototype objects.
+      * @type {!Object.<string,Object>}
+      */
+-    var Blocks: { [key: string]: Object };
++    var Blocks: { [key: string]: Partial<Block> };
+ }
+ 
+ 
+@@ -15585,7 +15626,7 @@ declare module Blockly {
+              *     no item exists.
+              * @public
+              */
+-            getToolboxItemById(id: string): Blockly.IToolboxItem;
++            getToolboxItemById<T extends Blockly.IToolboxItem>(id: string): T;
+     
+             /**
+              * Gets the width of the toolbox.

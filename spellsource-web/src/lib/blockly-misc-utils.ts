@@ -1,4 +1,4 @@
-import Blockly from 'blockly'
+import Blockly, {Block, BlockSvg} from 'blockly'
 import JsonConversionUtils from './json-conversion-utils'
 import {has, isArray} from 'lodash'
 import recursiveOmitBy from 'recursive-omit-by'
@@ -9,13 +9,13 @@ import blocklyAdditions from '!!raw-loader!./block-additions.css'
 
 export default class BlocklyMiscUtils {
 
-  static toHappyFormatting(string) {
+  static toHappyFormatting(string: string) {
     return string.split('_')
       .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
       .join(' ')
   }
 
-  static addBlock(block) {
+  static addBlock(block: Partial<Block>) {
     Blockly.Blocks[block.type] = {
       init: function () {
         this.jsonInit(block)
@@ -38,7 +38,7 @@ export default class BlocklyMiscUtils {
   }
 
   //initializes the json specified shadow blocks of a block on the workspace
-  static manuallyAddShadowBlocks(thisBlock, block) {
+  static manuallyAddShadowBlocks(thisBlock: Block, block: Block) {
     for (let i = 0; i < 10; i++) {
       if (!!block['args' + i.toString()]) {
         for (let j = 0; j < 10; j++) {
@@ -84,13 +84,14 @@ export default class BlocklyMiscUtils {
       let shadowBlock = thisBlock.workspace.newBlock('Property_SHADOW')
       shadowBlock.setShadow(true)
       thisBlock.nextConnection.connect(shadowBlock.previousConnection)
-      if (!!shadowBlock.initSvg) {
-        shadowBlock.initSvg()
+      if ("initSvg" in shadowBlock) {
+        (shadowBlock as BlockSvg).initSvg()
       }
     }
   }
 
-  static inputNameToBlockType(inputName) {
+  // TODO typescript science from CardProps ?
+  static inputNameToBlockType(inputName: string) {
     if (inputName.includes('.')) {
       inputName = inputName.split('.').slice(-1)[0]
     }
@@ -276,6 +277,8 @@ export default class BlocklyMiscUtils {
   }
 
   static initHeroClassColors(data) {
+
+
     if (!Blockly.textColor) {
       Blockly.textColor = {
         'Rarity_COMMON': '#000000'

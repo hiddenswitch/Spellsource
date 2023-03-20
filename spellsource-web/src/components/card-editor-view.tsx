@@ -1,12 +1,13 @@
 import {Button, Form} from "react-bootstrap";
-import * as styles from './card-editor-view.module.css'
+import styles from './card-editor-view.module.scss'
 import Blockly from "blockly";
 import AceEditor from "react-ace";
 import React, {useRef, useState} from "react";
 import CardEditorWorkspace from "./card-editor-workspace";
 import useComponentWillMount from "../hooks/use-component-will-mount";
+import {CardProps} from "./card-display";
 
-const CardEditorView = (props) => {
+const CardEditorView = (props: {defaultCard?: CardProps}) => {
 
   const [code, setCode] = useState(``)
   const [query, setQuery] = useState(``)
@@ -32,13 +33,11 @@ const CardEditorView = (props) => {
   const showJSCheck = useRef(null)
   const showJSLabel = useRef(null)
 
-  const blocklyEdior = useRef(null)
+  const blocklyEditor = useRef(null)
 
   const [realCode, setRealCode] = useState(``)
 
-  const workspace = () => {
-    return blocklyEdior.current.workspace
-  }
+  const workspace = blocklyEditor.current?.workspace;
 
   const search = evt => {
     const query = evt.target.value
@@ -115,12 +114,12 @@ const CardEditorView = (props) => {
                          query={query}
                          defaultCard={props.defaultCard}
                          renderer={compactBlocks ? 'spellsource' : 'geras'}
-                         ref={blocklyEdior}
+                         ref={blocklyEditor}
     />
     <Form.Check className={styles.editorOption}>
       <Form.Check.Input defaultChecked={compactBlocks}
                         onChange={e => setCompactBlocks(!compactBlocks)}
-                        value={compactBlocks}
+                        value={"" + compactBlocks}
                         className={styles.editorCheck}
                         ref={compactBlocksCheck}
       />
@@ -129,7 +128,7 @@ const CardEditorView = (props) => {
     <Form.Check className={styles.editorOption}>
       <Form.Check.Input defaultChecked={showJSON}
                         onChange={e => setShowJSON(!showJSON)}
-                        value={showJSON}
+                        value={"" + showJSON}
                         className={styles.editorCheck}
                         ref={showJSONCheck}
       />
@@ -138,7 +137,7 @@ const CardEditorView = (props) => {
     <Form.Check className={styles.editorOption}>
       <Form.Check.Input defaultChecked={showJS}
                         onChange={e => setShowJS(!showJS)}
-                        value={showJS}
+                        value={"" + showJS}
                         className={styles.editorCheck}
                         ref={showJSCheck}
       />

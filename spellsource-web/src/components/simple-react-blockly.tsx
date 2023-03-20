@@ -1,7 +1,16 @@
 import React from 'react'
-import Blockly from 'blockly'
+import Blockly, {BlocklyOptions, Workspace, WorkspaceSvg} from 'blockly'
 
-export default class SimpleReactBlockly extends React.Component {
+interface SimpleReactBlocklyProps {
+  wrapperDivClassName: string
+  workspaceConfiguration: BlocklyOptions
+  workspaceDidChange: () => void
+}
+
+export default class SimpleReactBlockly extends React.Component<SimpleReactBlocklyProps> {
+  workspace: WorkspaceSvg
+  innerBlocklyDiv: HTMLDivElement
+
   render() {
     return(
       <div>

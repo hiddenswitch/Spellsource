@@ -1,5 +1,5 @@
 import React from 'react'
-import * as styles from './creative-layout.module.scss'
+import styles from './creative-layout.module.scss'
 import { Link } from 'gatsby'
 import harvard from '../assets/Harvard.png'
 import mit from '../assets/MIT.png'

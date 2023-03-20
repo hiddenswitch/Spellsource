@@ -2,7 +2,7 @@ import React from 'react'
 import Loadable from 'react-loadable'
 import Layout from '../components/card-editor-layout'
 import BlocklyMiscUtils from "../lib/blockly-misc-utils";
-import * as styles from '../templates/template-styles.module.scss';
+import styles from '../templates/template-styles.module.scss';
 
 const LoadableComponent = Loadable.Map({
   loader: {

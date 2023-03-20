@@ -231,8 +231,8 @@ export default class BlocklyModification {
         });
     }
 
-    const placeNewBlock = Blockly.Flyout.prototype.placeNewBlock_
-    Blockly.Flyout.prototype.placeNewBlock_ = function (oldBlock) {
+    const placeNewBlock = Blockly.Flyout.prototype["placeNewBlock_"]
+    Blockly.Flyout.prototype["placeNewBlock_"] = function (oldBlock) {
       let block = placeNewBlock.call(this, oldBlock)
       const removeComments = function (block) {
         block.setCommentText(null)
@@ -297,10 +297,10 @@ export default class BlocklyModification {
 
               let top = dummyWorkspace.getTopBlocks(false)[0]
 
-              let xml = Blockly.Xml.blockToDom(top, true);
+              let xml = Blockly.Xml.blockToDom(top, true) as Element;
               var xy = top.getRelativeToSurfaceXY();
-              xml.setAttribute('x', xy.x);
-              xml.setAttribute('y', xy.y);
+              xml.setAttribute('x', String(xy.x));
+              xml.setAttribute('y', String(xy.y));
 
               if (!!workspace.targetWorkspace) {
                 workspace = workspace.targetWorkspace
@@ -360,26 +360,26 @@ export default class BlocklyModification {
 
     Blockly.Tooltip.bindMouseEvents = function (element) {
       if (Blockly.Touch.TOUCH_ENABLED) {
-        element.mouseOverWrapper_ = Blockly.bindEvent_(element, 'touchstart', null,
-          Blockly.Tooltip.onMouseOver_);
-        element.mouseOutWrapper_ = Blockly.bindEvent_(element, 'touchend', null,
-          Blockly.Tooltip.onMouseOut_);
-        element.addEventListener('touchstart', Blockly.Tooltip.onMouseMove_, false);
+        element["mouseOverWrapper_"] = Blockly.bindEvent_(element, 'touchstart', null,
+          Blockly.Tooltip["onMouseOver_"]);
+        element["mouseOutWrapper_"] = Blockly.bindEvent_(element, 'touchend', null,
+          Blockly.Tooltip["onMouseOut_"]);
+        element.addEventListener('touchstart', Blockly.Tooltip["onMouseMove_"], false);
       } else {
-        element.mouseOverWrapper_ = Blockly.bindEvent_(element, 'mouseover', null,
-          Blockly.Tooltip.onMouseOver_);
-        element.mouseOutWrapper_ = Blockly.bindEvent_(element, 'mouseout', null,
-          Blockly.Tooltip.onMouseOut_);
-        element.addEventListener('mousemove', Blockly.Tooltip.onMouseMove_, false);
+        element["mouseOverWrapper_"] = Blockly.bindEvent_(element, 'mouseover', null,
+          Blockly.Tooltip["onMouseOver_"]);
+        element["mouseOutWrapper_"] = Blockly.bindEvent_(element, 'mouseout', null,
+          Blockly.Tooltip["onMouseOut_"]);
+        element.addEventListener('mousemove', Blockly.Tooltip["onMouseMove_"], false);
       }
     };
 
-    const show = Blockly.Tooltip.show_
-    Blockly.Tooltip.show_ = function() {
+    const show = Blockly.Tooltip["show_"]
+    Blockly.Tooltip["show_"] = function() {
       show.call(this)
       if (!!Blockly.Tooltip.DIV) {
-        if (!!Blockly.Tooltip.element_.tooltipColor) {
-          Blockly.Tooltip.DIV.style.backgroundColor = Blockly.Tooltip.element_.tooltipColor
+        if (!!Blockly.Tooltip["element_"].tooltipColor) {
+          Blockly.Tooltip.DIV.style.backgroundColor = Blockly.Tooltip["element_"].tooltipColor
           Blockly.Tooltip.DIV.style.color = '#ffffff'
         } else {
           Blockly.Tooltip.DIV.style.backgroundColor = '#ffffc7'

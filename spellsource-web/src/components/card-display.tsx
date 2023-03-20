@@ -1,5 +1,5 @@
 import React from 'react'
-import * as styles from './card-display.module.css'
+import styles from './card-display.module.scss'
 
 import backgroundLayer from '../card-images/layer-1.png'
 import whiteBanner from '../card-images/layer-3.png'
@@ -56,12 +56,18 @@ const defaultArt = {
   }
 }
 
-const toRgbaString = (v) => {
+const toRgbaString = (v: { r: number; g: number; b: number; a: any }) => {
   return `rgba(${v.r * 255}, ${v.g * 255}, ${v.b * 255}, ${v.a})`
 }
 
-function CardDisplay (props) {
-  let art = {}
+// TODO CardProps
+export type CardProps = any;
+
+// TODO CardArt
+export type CardArt = any;
+
+function CardDisplay (props: CardProps) {
+  let art: CardArt = {}
   defaultsDeep(art, props.art, defaultArt)
   art = {
     ...art,

@@ -1,5 +1,6 @@
 import Blockly from 'blockly'
 import BlocklyMiscUtils from './blockly-misc-utils'
+import ToolboxInfo = Blockly.utils.toolbox.ToolboxInfo;
 
 export default class BlocklyToolbox {
 
@@ -26,9 +27,9 @@ export default class BlocklyToolbox {
       xmlList.push(button);
 
       workspace.registerButtonCallback('CREATE_VARIABLE_STRING',
-        Blockly.VariablesDynamic.onCreateVariableButtonClick_String);
+        Blockly.VariablesDynamic["onCreateVariableButtonClick_String"]);
       workspace.registerButtonCallback('CREATE_VARIABLE_NUMBER',
-        Blockly.VariablesDynamic.onCreateVariableButtonClick_Number);
+        Blockly.VariablesDynamic["onCreateVariableButtonClick_Number"]);
       workspace.registerButtonCallback('CREATE_VARIABLE_ENTITY',
         () => {
           Blockly.Variables.createVariableButtonHandler(workspace,
@@ -48,7 +49,7 @@ export default class BlocklyToolbox {
    * @param results The current search results
    * @returns toolbox json
    */
-  static editorToolbox(results = []) {
+  static editorToolbox(results = []): any  {
     return {
       kind: 'categoryToolbox',
       contents: [
@@ -488,8 +489,8 @@ export default class BlocklyToolbox {
    * @param props The toolbox CUSTOM field, if it needs one
    * @returns category json
    */
-  static category(name, color, tooltip, contents, props = null) {
-    let category = {
+  static category(name, color, tooltip, contents, props = null): any { // TODO category type
+    let category: any = {
       kind: 'category',
       name: name,
       colour: color,

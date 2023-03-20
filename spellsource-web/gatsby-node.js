@@ -1,6 +1,6 @@
 const lodash = require(`lodash`)
 const path = require(`path`)
-const { resolveArt } = require('./src/lib/resolve-art')
+const { resolveArt } = require('./src/lib/resolve-art.ts')
 const { createFilePath } = require("gatsby-source-filesystem")
 
 exports.onCreateWebpackConfig = ({

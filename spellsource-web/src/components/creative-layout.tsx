@@ -3,7 +3,7 @@ import Header from './header'
 import Footer from './footer'
 import { useStaticQuery, graphql } from 'gatsby'
 import PostLink from './post-link'
-import * as styles from './creative-layout.module.scss'
+import styles from './creative-layout.module.scss'
 
 export default ({ children }) => {
 
