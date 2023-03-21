@@ -1,16 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react'
-
-import { Link, navigate } from 'gatsby'
 import { Form, FormControl, ListGroup } from 'react-bootstrap'
 import * as styles from './creative-layout.module.scss'
 
 import { useIndex } from '../hooks/use-index'
+import Link from 'next/link'
+import {useRouter} from "next/router";
 
 // Search component
 function Search (props) {
   const [query, setQuery] = useState(``)
   const [results, setResults] = useState([])
   const [searchListLeft, setSearchListLeft] = useState(0)
+
+  const router = useRouter();
 
   function updatePosition () {
     setSearchListLeft(inputBox.current.getBoundingClientRect().left)
@@ -33,10 +35,10 @@ function Search (props) {
         <ListGroup.Item className={styles.searchListGroupItem}>
           {results.map(page => (
             <ListGroup.Item className={styles.searchListGroupItem} key={page.id}>
-              <Link to={page.path}>{page.title}</Link>
+              <Link href={page.path}>{page.title}</Link>
             </ListGroup.Item>
           ))}
-          <ListGroup.Item className={styles.searchListGroupItem}><Link to={`/searchresults?query=${encoded}`}>
+          <ListGroup.Item className={styles.searchListGroupItem}><Link href={`/searchresults?query=${encoded}`}>
             See more...</Link></ListGroup.Item>
         </ListGroup.Item>
       )
@@ -53,7 +55,7 @@ function Search (props) {
   const navigateToSearchResults = event => {
     event.preventDefault()
     const encoded = encodeURI(query)
-    navigate(`../searchresults?query=${encoded}`)
+    router.push(`../searchresults?query=${encoded}`)
   }
 
   const search = evt => {

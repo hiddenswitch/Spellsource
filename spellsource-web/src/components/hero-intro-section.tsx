@@ -1,11 +1,11 @@
 import React, {CSSProperties} from 'react'
 import * as styles from './creative-layout.module.scss'
-import { Link } from 'gatsby'
-import harvard from '../assets/Harvard.png'
-import mit from '../assets/MIT.png'
-import mozilla from '../assets/Mozilla.png'
-import un from '../assets/UnitedNations.png'
-import unity from '../assets/Unity.png'
+import harvard from '../../public/static/assets/Harvard.png'
+import mit from '../../public/static/assets/MIT.png'
+import mozilla from '../../public/static/assets/Mozilla.png'
+import un from '../../public/static/assets/UnitedNations.png'
+import unity from '../../public/static/assets/Unity.png'
+import Link from 'next/link'
 
 function HeroIntroSection() {
   const title = "Let’s rethink game development"
@@ -61,7 +61,7 @@ const Button = ({title, route, buttonStyle}) => {
   };
 
   return (
-    <Link to={route} style={buttonStyle == 'light' ? light : dark}>{title}</Link>
+    <Link href={route} style={buttonStyle == 'light' ? light : dark}>{title}</Link>
   )
 }
 

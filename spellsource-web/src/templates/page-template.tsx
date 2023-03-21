@@ -1,5 +1,4 @@
 import React from 'react'
-import { graphql } from 'gatsby'
 import Layout from '../components/creative-layout'
 import * as styles from './template-styles.module.scss'
 

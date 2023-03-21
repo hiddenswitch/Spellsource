@@ -1,4 +1,4 @@
-import { graphql, useStaticQuery } from 'gatsby'
+
 
 export default function useBlocklyData () {
   return useStaticQuery(graphql`

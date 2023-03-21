@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { graphql, Link } from 'gatsby'
 import Layout from '../components/creative-layout'
 import CardDisplay from '../components/card-display'
 import * as styles from '../components/creative-layout.module.scss'
 import { useIndex } from '../hooks/use-index'
-import { Form, FormControl, ListGroup } from 'react-bootstrap'
+import { Form, FormControl } from 'react-bootstrap'
+import Link from 'next/link'
 
 export default function CollectionTemplate ({ data, pageContext }) {
   const cards = data.allCard.edges
@@ -41,7 +41,7 @@ export default function CollectionTemplate ({ data, pageContext }) {
           <div className={styles.collectionDiv}>
             {results.map(card => {
               return (
-                <Link to={card.path} key={card.id}>
+                <Link href={card.path} key={card.id}>
                   <CardDisplay name={card.title} baseManaCost={card.baseManaCost} description={card.rawMarkdownBody}
                                art={card.art}
                                baseAttack={card.baseAttack} baseHp={card.baseHp} type={card.type}/>
@@ -55,7 +55,7 @@ export default function CollectionTemplate ({ data, pageContext }) {
           {cards.map(edge => {
             const card = edge.node
             return (
-              <Link to={`/cards/${card.id}`} key={card.id}>
+              <Link href={`/cards/${card.id}`} key={card.id}>
                 <CardDisplay name={card.name} baseManaCost={card.baseManaCost} description={card.description}
                              art={card.art}
                              baseAttack={card.baseAttack} baseHp={card.baseHp} type={card.type}/>
@@ -71,12 +71,12 @@ export default function CollectionTemplate ({ data, pageContext }) {
         <nav style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
           <div>
             {!isFirst && (
-              <Link to={`/collection/${prevPage}`} rel="prev"> ← Previous Page </Link>
+              <Link href={`/collection/${prevPage}`} rel="prev"> ← Previous Page </Link>
             )}
           </div>
           <div style={{ justifySelf: 'flex-end' }}>
             {!isLast && (
-              <Link to={`/collection/${nextPage}`} rel="next"> Next Page → </Link>
+              <Link href={`/collection/${nextPage}`} rel="next"> Next Page → </Link>
             )}
           </div>
         </nav>

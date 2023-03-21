@@ -8,7 +8,7 @@ layout: wiki
 <p />
 
 ![The Lung
-Archipelago](../assets/sector-5.png "fig:The Lung Archipelago")
+Archipelago](public/static/assets/sector-5.png "fig:The Lung Archipelago")
 
 Greetings, [settler](/wiki/Humans "wikilink")! The world's greatest explorer,
 [Shun He](/wiki/Shun_He "wikilink"), leads an expedition to find the fabled
@@ -65,7 +65,7 @@ Landfall](/wiki/Vision_of_Landfall "wikilink").
 <details>
 <summary>Who will you main?</summary>
 
-![Champions](../assets/champions-resized.png)
+![Champions](public/static/assets/champions-resized.png)
 
 -   [Shun He](/wiki/Shun_He "wikilink"), the Grand Alchemist of the Lotus
     Empire.

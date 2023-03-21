@@ -1,4 +1,4 @@
-import React, {forwardRef, MutableRefObject, useEffect, useMemo, useState} from 'react'
+import React, {forwardRef, MutableRefObject, useEffect, useState} from 'react'
 import WorkspaceUtils from '../lib/workspace-utils'
 import * as styles from './card-editor-view.module.scss'
 import Blockly, {Toolbox, ToolboxCategory} from 'blockly'
@@ -14,7 +14,10 @@ import SpellsourceRenderer from '../lib/spellsource-renderer'
 import SpellsourceGenerator from '../lib/spellsource-generator'
 import SimpleReactBlockly from './simple-react-blockly'
 import BlocklyToolbox from '../lib/blockly-toolbox'
-import {CardProps} from "./card-display";
+import {GetStaticProps} from "next";
+import path from "path";
+import * as glob from "glob-promise";
+import fs from "fs";
 
 interface CardEditorWorkspaceProps {
   setJSON: React.Dispatch<React.SetStateAction<string>>

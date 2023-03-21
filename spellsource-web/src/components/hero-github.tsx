@@ -1,6 +1,6 @@
 import React from 'react'
 import * as styles from './creative-layout.module.scss'
-import githubLogo from '../assets/Github.png'
+import githubLogo from '../../public/static/assets/Github.png'
 
 function HeroGithub() {
   return (

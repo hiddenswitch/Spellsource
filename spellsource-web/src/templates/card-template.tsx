@@ -1,9 +1,9 @@
 import React from 'react'
-import { graphql, Link } from 'gatsby'
 import Layout from '../components/creative-layout'
 import CardDisplay from '../components/card-display'
 import BlocklyMiscUtils from '../lib/blockly-misc-utils'
 import * as styles from '../templates/template-styles.module.scss';
+import Link from 'next/link';
 
 export default function Template ({
   data, // this prop will be injected by the GraphQL query below.
@@ -32,7 +32,7 @@ export default function Template ({
         </div>
         <h3>{typeAndStats}</h3>
         <p>{description}</p>
-        <Link to={'/card-editor?card=' + card.id}>Open in Card Editor</Link>
+        <Link href={'/card-editor?card=' + card.id}>Open in Card Editor</Link>
       </div>
     </Layout>
   )

@@ -1,11 +1,10 @@
-import React, {cloneElement, FunctionComponent} from 'react'
+import React, { FunctionComponent} from 'react'
 import CardDisplay, {CardProps} from './card-display'
-import { Button } from 'react-bootstrap'
 import * as styles from './collection-card.module.scss'
 import useArtData from '../hooks/use-art-data'
 import BlocklyMiscUtils from '../lib/blockly-misc-utils'
-import { Link } from 'gatsby'
 import {DeepPartial} from "../lib/deep-partial";
+import Link from "next/link";
 
 interface CollectionCardProps {
   card: DeepPartial<CardProps>
@@ -36,7 +35,7 @@ const CollectionCard: FunctionComponent<CollectionCardProps> = (props) => {
       baseHp={card.baseHp}
       type={card.type}
     />
-    <Link to={'/card-editor?card=' + card.id}>Open in Card Editor</Link>
+    <Link href={'/card-editor?card=' + card.id}>Open in Card Editor</Link>
   </span>
 }
 

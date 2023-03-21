@@ -1,13 +1,10 @@
 import React, {ReactNode, useEffect, useRef, useState} from 'react'
-import { Link } from 'gatsby'
-import { StaticImage } from 'gatsby-plugin-image'
-import icon from '../assets/icon.png'
+import icon from '../../public/static/assets/icon.png'
 import * as styles from './creative-layout.module.scss'
 import Search from './search'
 import  {AiOutlineMenu} from "@react-icons/all-files/ai/AiOutlineMenu"
 import {AiOutlineClose} from "@react-icons/all-files/ai/AiOutlineClose"
-
-
+import Link from 'next/link'
 
 const Header = ({pages}: {pages?: any}) => {
   const headerDiv = useRef<HTMLDivElement>(null)
@@ -29,7 +26,7 @@ const Header = ({pages}: {pages?: any}) => {
   return <header>
       <div className={styles.navbarContainer} ref={headerDiv} onScroll={handleScroll}>
         <a key={'headerImage'}>
-          <Link to="/" style={{display: 'flex'}}><img src={icon} alt={'Icon'} style={{ width: 36, height: 36 }}/>
+          <Link href="/" style={{display: 'flex'}}><img src={icon} alt={'Icon'} style={{ width: 36, height: 36 }}/>
             <strong style={{color: '#000', paddingTop: '4px'}}>Spellsource</strong>
           </Link>
         </a>
@@ -44,7 +41,7 @@ const DesktopNavbar = ({pages}: {pages?: ReactNode}) => {
     <ul className={styles.desktopNavbar}>
       <li key={'javadocs'}><a href="/javadoc">Docs</a></li>
         {pages}
-      {/* <li key={'download'}><Link to="/download">Play Now</Link></li> */}
+      {/* <li key={'download'}><Link href="/download">Play Now</Link></li> */}
       <li key={'search'}><Search placeholder={'Search'}/></li>
     </ul>
   )
@@ -62,11 +59,11 @@ const MobileNavbar = ({pages}: {pages?: ReactNode}) => {
           <ul className={styles.mobileUl}>
             <li key={'javadocs'}><a href="/javadoc">Docs</a></li>
               {pages}
-            {/* <li key={'download'}><Link to="/download">Play Now</Link></li> */}
+            {/* <li key={'download'}><Link href="/download">Play Now</Link></li> */}
             <li key={'search'}><Search placeholder={'Search'}/></li>
           </ul>
         </div>}
-  </div>
+   </div>
   )
 }
 

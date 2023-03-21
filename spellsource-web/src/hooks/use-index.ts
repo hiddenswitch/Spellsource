@@ -1,6 +1,5 @@
 import { createContext, useContext } from 'react'
 
-import { graphql, useStaticQuery } from 'gatsby'
 import { Index } from 'elasticlunr'
 
 const IndexContext = createContext({index: undefined})

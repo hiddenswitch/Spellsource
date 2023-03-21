@@ -1,13 +1,13 @@
 import React from 'react'
-import { AnchorLink } from "gatsby-plugin-anchor-links"
 import Layout from '../components/creative-layout'
 import * as styles from '../components/creative-layout.module.scss'
 
-import android from '../assets/android-logo.png'
-import iOS from '../assets/iOS-logo.png'
-import firefox from '../assets/firefox-logo.png'
-import chrome from '../assets/chrome-logo.png'
-import playNow from '../assets/play-now.gif'
+import android from '../../public/static/assets/android-logo.png'
+import iOS from '../../public/static/assets/iOS-logo.png'
+import firefox from '../../public/static/assets/firefox-logo.png'
+import chrome from '../../public/static/assets/chrome-logo.png'
+import playNow from '../../public/static/assets/play-now.gif'
+import Link from "next/link";
 
 const Download = () => {
   return (
@@ -15,12 +15,12 @@ const Download = () => {
       <h2>Play Now</h2>
       <section style={{ textAlign: 'center' }}>
         <figure>
-          <AnchorLink to="/download#ios-users"><img src={iOS} alt="iOS" className={styles.smallLogo}  /></AnchorLink>
+          <Link href="/download#ios-users" ><img src={iOS} alt="iOS" className={styles.smallLogo}  /></Link>
           <figcaption>iPhone</figcaption>
         </figure>
 
         <figure>
-          <AnchorLink to="/download#android-users"><img src={android} alt="Android" className={styles.smallLogo}  /></AnchorLink>
+          <Link href="/download#android-users"><img src={android} alt="Android" className={styles.smallLogo}  /></Link>
           <figcaption>Android</figcaption>
         </figure>
 

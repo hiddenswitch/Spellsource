@@ -1,14 +1,12 @@
 import React from 'react'
-
 import * as styles from '../components/creative-layout.module.scss'
 import * as templateStyles from '../templates/template-styles.module.scss'
-import queryString from 'query-string'
 import Layout from '../components/creative-layout'
 import { ListGroup } from 'react-bootstrap'
-import { Link } from 'gatsby'
 import { useIndex } from '../hooks/use-index'
+import Link from 'next/link'
 
-const SearchResults = ({ location }) => {
+/*const SearchResults = ({ location }) => {
   let parsed = queryString.parse(decodeURI(location.search))
   const query = parsed.query
 
@@ -35,7 +33,7 @@ const SearchResults = ({ location }) => {
           <ListGroup variant="flush" className={styles.searchResults}>
             {results.map(page => (
               <ListGroup.Item className={styles.searchListGroupItem} key={page.id}>
-                <Link to={page.path}>{page.title}</Link>
+                <Link href={page.path}>{page.title}</Link>
                 <p>{page.excerpt}</p>
               </ListGroup.Item>
             ))}
@@ -46,4 +44,4 @@ const SearchResults = ({ location }) => {
   }
 }
 
-export default SearchResults
+export default SearchResults*/
