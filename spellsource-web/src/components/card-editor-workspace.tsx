@@ -1,4 +1,4 @@
-import React, {forwardRef, MutableRefObject, useEffect, useState} from 'react'
+import React, {forwardRef, MutableRefObject, useContext, useEffect, useState} from 'react'
 import WorkspaceUtils from '../lib/workspace-utils'
 import * as styles from './card-editor-view.module.scss'
 import Blockly, {Toolbox, ToolboxCategory} from 'blockly'
@@ -18,6 +18,7 @@ import {GetStaticProps} from "next";
 import path from "path";
 import * as glob from "glob-promise";
 import fs from "fs";
+import {BlocklyDataContext} from "../pages/card-editor";
 
 interface CardEditorWorkspaceProps {
   setJSON: React.Dispatch<React.SetStateAction<string>>
@@ -30,8 +31,8 @@ interface CardEditorWorkspaceProps {
 }
 
 const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blocklyEditor: MutableRefObject<SimpleReactBlockly>) => {
-  const data = useBlocklyData()
-  const [results, setResults] = useState([])
+  const data = useContext(BlocklyDataContext)
+  const [results, setResults] = useState<string[]>([])
   const index = useIndex()
 
   const mainWorkspace = () => blocklyEditor.current?.workspace
@@ -317,7 +318,7 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
     }
   }
 
-  const generateCard = (p) => {
+  const generateCard = (p: string) => {
     if (!p) {
       return
     }
@@ -332,18 +333,19 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
     } else if (p.includes('_')) {
       cardId = p
     } else {
-      for (let edge of data.allCard.edges) {
-        if (edge.node.name.toLowerCase() === p.toLowerCase()) {
-          cardId = edge.node.id
+      for (let node of data.allCards) {
+        if (node.name.toLowerCase() === p.toLowerCase()) {
+          cardId = node.id
+          card = node;
           break
         }
       }
     }
-    if (!!cardId) {
-      for (let edge of data.allJSON.edges) {
-        let node = edge.node
+
+    if (cardId && !card) {
+      for (let node of data.allCards) {
         if (node.name === cardId) {
-          card = JSON.parse(node.internal.content)
+          card = node;
         }
       }
     }
@@ -368,15 +370,15 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
     }
   }
 
-  const search = (query) => {
+  const search = (query: string) => {
+    console.log(index)
     setResults(index
         // Query the index with search string to get an [] of IDs
         .search(query, {expand: true}) // accept partial matches
         .map(({ref}) => index.documentStore.getDoc(ref))
         .filter(doc => {
           if (props.searchCatalogueBlocks) {
-            return doc.nodeType === 'Card' && doc.hasOwnProperty('baseManaCost')
-              && Blockly.heroClassColors.hasOwnProperty(doc.heroClass)
+            return doc.nodeType === 'Card' && "baseManaCost" in doc.node && doc.node.heroClass in Blockly.heroClassColors
           }
           if (props.searchArtBlocks) {
             return doc.nodeType === 'File' && !!Blockly.Blocks['Art_' + doc.title]
@@ -385,16 +387,12 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
         })
         .map(doc => {
           if (doc.nodeType === 'Card') {
-            return {
-              id: 'CatalogueCard_' + doc.id
-            }
+            return 'CatalogueCard_' + doc.id
           }
           if (doc.nodeType === 'File') {
-            return {
-              id: 'Art_' + doc.title
-            }
+            return 'Art_' + doc.title
           }
-          return doc
+          return doc.id
         })
         .slice(0, 20)
       // map over each ID and return full document

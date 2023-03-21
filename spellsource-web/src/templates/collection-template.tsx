@@ -102,6 +102,7 @@ export default function CollectionTemplate ({ data, pageContext }) {
   )
 }
 
+/*
 export const pageQuery = graphql`
   query ($skip: Int!, $limit: Int!) {
     allCard (limit: $limit, skip: $skip) {
@@ -153,4 +154,4 @@ export const pageQuery = graphql`
         }
       }
     }
-  }`
+  }`*/

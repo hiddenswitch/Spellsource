@@ -1,7 +1,9 @@
 
 
 export default function useBlocklyData () {
-  return useStaticQuery(graphql`
+  return {} as any;
+
+  /*return useStaticQuery(graphql`
   query {
     allBlock {
       edges {
@@ -94,7 +96,7 @@ export default function useBlocklyData () {
         }
       }
     }
-    allIcon: allFile(filter: {extension: {eq: "png"}, relativePath: {glob: "**assets/editor/**"}}) {
+    allIcon: allFile(filter: {extension: {eq: "png"}, relativePath: {glob: "**assets/editor/!**"}}) {
       edges {
         node {
           name
@@ -102,7 +104,7 @@ export default function useBlocklyData () {
         }
       }
     }
-    allArt: allFile(filter: {extension: {eq: "png"}, relativePath: {glob: "**card-images/art/**"}}) {
+    allArt: allFile(filter: {extension: {eq: "png"}, relativePath: {glob: "**card-images/art/!**"}}) {
       edges {
         node {
           name
@@ -116,5 +118,5 @@ export default function useBlocklyData () {
         }
       }
     }
-  }`)
+  }`)*/
 }

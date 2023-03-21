@@ -4,40 +4,46 @@ import Layout from '../components/card-editor-layout'
 import BlocklyMiscUtils from "../lib/blockly-misc-utils";
 import * as styles from '../templates/template-styles.module.scss';
 import {GetStaticPropsContext, InferGetStaticPropsType} from "next";
-import * as glob from "glob-promise";
 import path from "path";
-import probe from "probe-image-size";
-import fs from "fs";
+import {BlockDef} from "../lib/blocks";
+import {readAllImages, readAllJson} from "../lib/fs-utils";
+import {CardDef} from "../components/card-display";
+import {transformBlock, transformCard} from "../lib/json-transforms";
+import {keyBy} from "lodash";
 
-const getAllBlockJson = async () => {
-  const blockFiles = await glob.promise(path.join(process.cwd(), "src", "blocks", "*.json"));
-  return await Promise.all(blockFiles.map(file => fs.promises.readFile(file, {encoding: "utf8"})));
-}
+const getAllBlockJson = async () =>
+  (await readAllJson<BlockDef[]>(path.join("src", "blocks", "*.json")))
+    .flat(1)
+    .map(transformBlock)
 
-const getAllArt = async () => {
-  const staticPath = path.join(process.cwd(), "public", "static");
-  const artFiles = await glob.promise(path.join(staticPath, "card-images", "art", "**", "*.png"));
+const getAllArt = async () => readAllImages(path.join("card-images", "art", "**", "*.png"))
 
-  return await Promise.all(artFiles.map(async (artPath) => {
-    const {width, height} = await probe(fs.createReadStream(artPath));
-    return {
-      src: path.relative(artPath, staticPath),
-      width,
-      height
-    }
-  }))
-}
+const getAllIcons = async () => readAllImages(path.join("assets", "editor", "*.png"))
+
+const getAllCards = async () => [
+  ...await readAllJson<CardDef>(
+    path.join("..", "spellsource-cards-git", "src", "main", "resources", "cards", "**", "*.json"),
+    (json, file) => json.id ||= path.basename(file, ".json")
+  ),
+  ...await readAllJson<CardDef>(
+    path.join("..", "spellsource-game", "src", "main", "resources", "basecards", "standard", "**", "*.json"),
+    (json, file) => json.id ||= path.basename(file, ".json")
+  )
+].map(transformCard)
 
 export const getStaticProps = async (context: GetStaticPropsContext) => {
   const allBlocks = await getAllBlockJson();
+  const blocksByType = keyBy(allBlocks, block => block.type);
   const allArt = await getAllArt();
+  const allIcons = await getAllIcons();
+  const allCards = await getAllCards();
 
   return {
-    props: {allBlocks, allArt}
+    props: {allBlocks, allArt, allIcons, allCards, blocksByType}
   }
 }
 
-export const BlocklyDataContext = createContext<InferGetStaticPropsType<typeof getStaticProps> | null>(null)
+export const BlocklyDataContext = createContext({ready: false} as InferGetStaticPropsType<typeof getStaticProps> & { ready: boolean })
 
 const LoadableComponent = Loadable.Map({
   loader: {
@@ -61,7 +67,7 @@ const LoadableComponent = Loadable.Map({
 const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
 
   return <Layout>
-    <BlocklyDataContext.Provider value={props}>
+    <BlocklyDataContext.Provider value={{...props, ready: true}}>
       <div className={styles.cardEditorContainer}>
         <LoadableComponent/>
       </div>

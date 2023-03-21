@@ -18,6 +18,7 @@ import selkieShadow from '../../public/static/card-images/selkie-shadow.png'
 import {defaultsDeep} from 'lodash'
 import {CardDesc} from "../lib/spellsource-game";
 import {DeepPartial} from "../lib/deep-partial";
+import Image from "next/image";
 
 const defaultArt = {
   'primary': {
@@ -66,14 +67,14 @@ type FixCardDesc<T> = T extends object ? {
   [K in keyof T as K extends `${infer name}_` ? name : K]: K extends "unknownFields" ? never : FixCardDesc<T[K]>
 } : T
 
-export type CardProps = FixCardDesc<CardDesc>;
+export type CardDef = FixCardDesc<CardDesc>;
 
 type DeepReplace<T, V, N> = T extends object ? {
   [K in keyof T]: T[K] extends V ? N : DeepReplace<T[K], V, N>
 } : T;
 
-function CardDisplay(props: DeepPartial<CardProps>) {
-  let cardArt = defaultsDeep(props.art, defaultArt) as CardProps["art"] & typeof defaultArt
+function CardDisplay(props: DeepPartial<CardDef>) {
+  let cardArt = defaultsDeep(props.art, defaultArt) as CardDef["art"] & typeof defaultArt
   const art = {
     ...cardArt,
     body: {
@@ -108,7 +109,7 @@ function CardDisplay(props: DeepPartial<CardProps>) {
 
   return (
     <div className={styles.cardDisplayTemplate}>
-      <img src={backgroundLayer} className={styles.layerOne} alt='card'/>
+      <Image src={backgroundLayer} className={styles.layerOne} alt='card'/>
       <div className={styles.descriptionBox}>
         <p className={styles.description} style={{
           color: art.body.vertex,
@@ -136,16 +137,16 @@ function CardDisplay(props: DeepPartial<CardProps>) {
            style={{background: `linear-gradient(${art.secondary}, ${art.secondary}), url(${pedestalSecondary}) no-repeat`}}/>
       <div className={styles.pedestalShadow}
            style={{background: `linear-gradient(${art.shadow}, ${art.shadow}), url(${pedestalShadow}) no-repeat`}}/>
-      <img src={windowBackground} className={styles.windowBackground} alt=""/>
+      <Image src={windowBackground} className={styles.windowBackground} alt=""/>
       <div style={{display: checkTokens()}}>
-        <img src={baseAttack} className={styles.attackToken} alt=""/>
+        <Image src={baseAttack} className={styles.attackToken} alt=""/>
         <p className={styles.baseAttack}>{props.baseAttack}</p>
-        <img src={baseHp} className={styles.hpToken} alt=""/>
+        <Image src={baseHp} className={styles.hpToken} alt=""/>
         <p className={styles.baseHp}>{props.baseHp}</p>
       </div>
       <div className={styles.heroAndShadow}>
-        <img src={art.sprite.named} className={styles.hero} alt="hero"/>
-        <img src={art.sprite.shadow} className={styles.heroShadow} alt=""/>
+        <Image src={art.sprite.named} className={styles.hero} alt="hero"/>
+        <Image src={art.sprite.shadow} className={styles.heroShadow} alt=""/>
       </div>
     </div>
   )

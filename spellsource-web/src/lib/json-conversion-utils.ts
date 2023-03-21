@@ -1,7 +1,7 @@
 import Blockly, { isNumber } from 'blockly'
 import BlocklyMiscUtils from './blockly-misc-utils'
 import { isArray } from 'lodash'
-import {BlockJsonArg} from "./default-overrides";
+import {BlockArgDef} from "./blocks";
 
 export default class JsonConversionUtils {
   static classBlocksDictionary = {} //A dictionary mapping the 'class' argument a block uses to the block itself
@@ -1192,7 +1192,7 @@ export default class JsonConversionUtils {
           (prop === 'targetPlayer' || prop === 'sourcePlayer')) {
           shouldBeField = true
         }
-        let arg: BlockJsonArg = {
+        let arg: BlockArgDef = {
           name: prop
         }
         let newMessage = prop + ': %1'

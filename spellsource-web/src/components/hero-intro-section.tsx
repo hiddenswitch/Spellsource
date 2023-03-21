@@ -6,6 +6,7 @@ import mozilla from '../../public/static/assets/Mozilla.png'
 import un from '../../public/static/assets/UnitedNations.png'
 import unity from '../../public/static/assets/Unity.png'
 import Link from 'next/link'
+import Image from "next/image";
 
 function HeroIntroSection() {
   const title = "Let’s rethink game development"
@@ -14,7 +15,7 @@ function HeroIntroSection() {
   const logos = [mozilla, mit, harvard, un, unity];
   const images = logos.map(image => {
     console.log(image);
-    return <img key={image} src={image} className={styles.logos}/>
+    return <Image alt={""} key={image} src={image} className={styles.logos}/>
  });
 
   return (

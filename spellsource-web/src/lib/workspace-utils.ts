@@ -2,7 +2,6 @@ import Blockly, {isNumber, Xml} from 'blockly'
 import {extend, filter, find, fromPairs, isArray, isPlainObject, isEmpty, map, merge} from 'lodash'
 import format from 'string-format'
 import BlocklyMiscUtils from "./blockly-misc-utils";
-import {BlockJson} from "./default-overrides";
 
 export default class WorkspaceUtils {
   static BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = 'BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE'
@@ -61,7 +60,7 @@ export default class WorkspaceUtils {
         break
       case 'shadow':
       case 'block':
-        const obj: BlockJson = {}
+        const obj: any = {}
         if (!xml.hasChildNodes()) {
           return obj
         }

@@ -1,5 +1,4 @@
 import React from 'react'
-import { graphql } from 'gatsby'
 import Layout from '../components/creative-layout'
 import * as styles from './template-styles.module.scss'
 
@@ -18,6 +17,7 @@ export default function Template ({
   )
 }
 
+/*
 export const pageQuery = graphql`
   query($path: String!) {
     markdownRemark(frontmatter: { path: { eq: $path } }) {
@@ -28,4 +28,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`*/

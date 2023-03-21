@@ -5,6 +5,7 @@ import Search from './search'
 import  {AiOutlineMenu} from "@react-icons/all-files/ai/AiOutlineMenu"
 import {AiOutlineClose} from "@react-icons/all-files/ai/AiOutlineClose"
 import Link from 'next/link'
+import Image from "next/image";
 
 const Header = ({pages}: {pages?: any}) => {
   const headerDiv = useRef<HTMLDivElement>(null)
@@ -25,11 +26,10 @@ const Header = ({pages}: {pages?: any}) => {
 
   return <header>
       <div className={styles.navbarContainer} ref={headerDiv} onScroll={handleScroll}>
-        <a key={'headerImage'}>
-          <Link href="/" style={{display: 'flex'}}><img src={icon} alt={'Icon'} style={{ width: 36, height: 36 }}/>
+          <Link key={'headerImage'} href="/" style={{display: 'flex'}}>
+            <Image src={icon} alt={'Icon'} style={{ width: 36, height: 36 }}/>
             <strong style={{color: '#000', paddingTop: '4px'}}>Spellsource</strong>
           </Link>
-        </a>
         <DesktopNavbar pages={pages}/>
         <MobileNavbar pages={pages}/>
       </div>

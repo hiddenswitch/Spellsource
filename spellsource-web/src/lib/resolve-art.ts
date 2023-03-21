@@ -1,5 +1,6 @@
-const { defaultsDeep } = require('lodash/object')
-module.exports = {
+import { defaultsDeep } from 'lodash/object'
+
+/*module.exports = {
   resolveArt: function resolveArt (source, context) {
     if (source.type === 'CLASS') {
       return source.art
@@ -27,4 +28,4 @@ module.exports = {
     defaultsDeep(art, classCard.art)
     return art
   }
-}
+}*/

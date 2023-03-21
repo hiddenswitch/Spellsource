@@ -49,7 +49,7 @@ export default class BlocklyToolbox {
    * @param results The current search results
    * @returns toolbox json
    */
-  static editorToolbox(results = []): any  {
+  static editorToolbox(results: string[] = []): any  {
     return {
       kind: 'categoryToolbox',
       contents: [
@@ -427,10 +427,10 @@ export default class BlocklyToolbox {
    * Defined here so that the category can be easily updated for new search results
    * @returns category json
    */
-  static searchResultsCategory(results) {
+  static searchResultsCategory(results: string[]) {
     return this.category('Search Results', '#000000',
       "The relevant blocks from your search will appear here",
-      results.map(value => this.getBlock(value.id)), {toolboxitemid: 'Search Results'}
+      results.map(id => this.getBlock(id)), {toolboxitemid: 'Search Results'}
     )
   }
 
@@ -596,18 +596,17 @@ export default class BlocklyToolbox {
     return !block.endsWith('SHADOW') && (!block.match(/^.*_.*_.*/) || BlocklyMiscUtils.isSpellsourceBlock(block))
   }
 
-  static getBlock(type) {
-    let block = Blockly.Blocks[type]
+  static getBlock(type: string) {
     return {
+      type,
       kind: 'block',
-      type: type,
       contents: this.blockContents(type)
     }
   }
 
   //Turns our own json formatting for shadow blocks into the formatting
   //that's used for specifying toolbox categories (recursively)
-  static blockContents (type) {
+  static blockContents (type: string) {
     let block = Blockly.Blocks[type]
     let contents = []
     if (!!block && !!block.json) {

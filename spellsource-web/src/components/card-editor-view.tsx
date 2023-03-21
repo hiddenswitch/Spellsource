@@ -1,13 +1,12 @@
-import {Button, Form} from "react-bootstrap";
+import {Form} from "react-bootstrap";
 import * as styles from './card-editor-view.module.scss'
 import Blockly from "blockly";
 import AceEditor from "react-ace";
-import React, {useCallback, useMemo, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import CardEditorWorkspace from "./card-editor-workspace";
 import useComponentWillMount from "../hooks/use-component-will-mount";
-import {CardProps} from "./card-display";
 
-const CardEditorView = (props: {defaultCard?: boolean}) => {
+const CardEditorView = (props: { defaultCard?: boolean }) => {
 
   const [code, setCode] = useState(``)
   const [query, setQuery] = useState(``)
@@ -154,7 +153,7 @@ const CardEditorView = (props: {defaultCard?: boolean}) => {
         readOnly={true}
         value={code}
         editorProps={{$blockScrolling: true}}
-      /> )
+      />)
     }
     {
       showJS && (<AceEditor

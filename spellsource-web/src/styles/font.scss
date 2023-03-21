@@ -1,14 +1,14 @@
 @font-face {
   font-family: 'compasspromedium';
-  src: url('public/static/assets/compasspro-webfont.woff2') format('woff2'),
-  url('public/static/assets/compasspro-webfont.woff') format('woff');
+  src: url('/static/assets/compasspro-webfont.woff2') format('woff2'),
+  url('/static/assets/compasspro-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'trenco';
-  src: url('public/static/assets/trenco.ttf') format('truetype');
+  src: url('/static/assets/trenco.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }

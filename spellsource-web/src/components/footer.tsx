@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import * as styles from './creative-layout.module.scss'
 
-function Footer({pages}) {
+function Footer({pages}: {pages?: any}) {
   return <div className={styles.footer}>
     <a href="https://hiddenswitch.com/" style={{textDecoration:  'none'}}> 
       2022 HiddenSwitch, Inc

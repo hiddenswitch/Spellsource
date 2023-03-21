@@ -6,18 +6,19 @@
   "scripts": {
     "test": "jest",
     "postinstall": "patch-package",
-    "develop": "next dev"
+    "develop": "next dev",
+    "dev": "next dev"
   },
   "author": "Benjamin Berman",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@react-icons/all-files": "^4.1.0",
     "@react-spring/parallax": "^9.1.2",
-    "@types/probe-image-size": "^7.2.0",
     "acorn": "^8.2.4",
     "aseprite": "^0.3.0",
     "blockly": "^3.20200924.2",
     "canvas": "^2.11.0",
+    "elasticlunr": "^0.9.5",
     "enumify": "^2.0.0",
     "glob-promise": "^6.0.2",
     "gray-matter": "^4.0.3",
@@ -51,6 +52,9 @@
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-typescript": "^7.21.0",
     "@tomysmith/deep-partial": "^1.0.1",
+    "@types/elasticlunr": "^0.9.5",
+    "@types/lodash": "^4.14.191",
+    "@types/probe-image-size": "^7.2.0",
     "@types/jest": "^26.0.0",
     "@types/node": "^18.15.3",
     "@types/react": "^18.0.28",

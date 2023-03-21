@@ -8,6 +8,7 @@ import firefox from '../../public/static/assets/firefox-logo.png'
 import chrome from '../../public/static/assets/chrome-logo.png'
 import playNow from '../../public/static/assets/play-now.gif'
 import Link from "next/link";
+import Image from "next/image";
 
 const Download = () => {
   return (
@@ -15,7 +16,7 @@ const Download = () => {
       <h2>Play Now</h2>
       <section style={{ textAlign: 'center' }}>
         <figure>
-          <Link href="/download#ios-users" ><img src={iOS} alt="iOS" className={styles.smallLogo}  /></Link>
+          <Link href="/download#ios-users" ><Image src={iOS} alt="iOS" className={styles.smallLogo}  /></Link>
           <figcaption>iPhone</figcaption>
         </figure>
 
@@ -45,7 +46,7 @@ const Download = () => {
         </p>
         <br/>
         <div style={{ textAlign: 'center' }}>
-          <img src={playNow} className={styles.emphasisGif} alt="in-game gif"/>
+          <Image src={playNow} className={styles.emphasisGif} alt="in-game gif"/>
         </div>
       </section>
     </Layout>

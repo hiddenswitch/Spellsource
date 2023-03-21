@@ -1,16 +1,16 @@
 import Blockly, {Block, BlockSvg} from 'blockly'
 import JsonConversionUtils from './json-conversion-utils'
 import {has} from 'lodash'
-import recursiveOmitBy from 'recursive-omit-by'
 import {FieldLabelSerializableHidden} from '../components/field-label-serializable-hidden'
 import {FieldLabelPlural} from "../components/field-label-plural";
 import BlocklyModification from "./blockly-modification";
-import blocklyAdditions from '!!raw-loader!./block-additions.css'
-import {CardProps} from "../components/card-display";
+import {CardDef} from "../components/card-display";
+import {BlocklyDataContext} from "../pages/card-editor";
+import {ContextType} from "react";
 
 type DeepKeyOf<T> = T extends object ? keyof T | { [K in keyof T]: DeepKeyOf<T[K]> }[keyof T] : T extends unknown ? never : never;
 
-type CardInput = DeepKeyOf<CardProps>
+type CardInput = DeepKeyOf<CardDef>
 
 export default class BlocklyMiscUtils {
 
@@ -95,7 +95,6 @@ export default class BlocklyMiscUtils {
     }
   }
 
-  // TODO typescript science from CardProps ?
   static inputNameToBlockType(inputName: string) {
     if (inputName.includes('.')) {
       inputName = inputName.split('.').slice(-1)[0]
@@ -196,7 +195,7 @@ export default class BlocklyMiscUtils {
   }
 
   //make the message for a generated block for a catalogue/created card
-  static cardMessage(card: CardProps) {
+  static cardMessage(card: CardDef) {
     let ret = ''
     if (card.baseManaCost !== null && card.baseManaCost !== undefined) {
       ret = '(' + card.baseManaCost + ') '
@@ -210,7 +209,7 @@ export default class BlocklyMiscUtils {
     return ret
   }
 
-  static initBlocks(data) {
+  static initBlocks(data: ContextType<typeof BlocklyDataContext>) {
     try {
       Blockly.fieldRegistry.register('field_label_serializable_hidden', FieldLabelSerializableHidden)
       Blockly.fieldRegistry.register('field_label_plural', FieldLabelPlural)
@@ -221,12 +220,10 @@ export default class BlocklyMiscUtils {
 
 
     // All of our spells, triggers, entity reference enum values, etc.
-    data.allBlock.edges.forEach(edge => {
-      if (has(Blockly.Blocks, edge.node.type)) {
+    data.allBlocks.forEach(block => {
+      if (block.type in Blockly.Blocks) {
         return
       }
-
-      const block = recursiveOmitBy(edge.node, ({node}) => node === null)
 
       // Patch back in values from union type
       if (!!block.args) {
@@ -251,11 +248,10 @@ export default class BlocklyMiscUtils {
               delete arg.valueB
             }
 
-            if (!!data.allIcon && arg.type === 'field_image' && !!arg.src && !arg.src.includes('.')) {
-              for (let edge of data.allIcon.edges) {
-                let node = edge.node
-                if (node.name === arg.src) {
-                  arg.src = node.publicURL
+            if (!!data.allIcons && arg.type === 'field_image' && arg.src && !arg.src.includes('.')) {
+              for (let icon of data.allIcons) {
+                if (icon.name === arg.src) {
+                  arg.src = icon.src
                 }
               }
             }
@@ -281,9 +277,7 @@ export default class BlocklyMiscUtils {
     })
   }
 
-  static initHeroClassColors(data) {
-
-
+  static initHeroClassColors(data: ContextType<typeof BlocklyDataContext>) {
     if (!Blockly.textColor) {
       Blockly.textColor = {
         'Rarity_COMMON': '#000000'
@@ -297,8 +291,7 @@ export default class BlocklyMiscUtils {
      * first pass through the card catalogue to figure out all the collectible
      * hero classes and their colors
      */
-    data.allCard.edges.forEach(edge => {
-      let card = edge.node
+    data.allCards.forEach(card => {
       let type = 'HeroClass_' + card.heroClass
       if (has(Blockly.Blocks, type)) {
         return
@@ -331,19 +324,16 @@ export default class BlocklyMiscUtils {
     })
   }
 
-  static initCardBlocks(data) {
-    for (let edge of data.allJSON.edges) {
-      let node = edge.node
-      let json = node.internal.content
-      let card = JSON.parse(json)
+  static initCardBlocks(data: ContextType<typeof BlocklyDataContext>) {
+    for (let card of data.allCards) {
       if (!card.type || card.type === 'FORMAT' || !card.fileFormatVersion) {
         continue
       }
-      let type = 'CatalogueCard_' + node.name
+      let type = 'CatalogueCard_' + card.id
       if (has(Blockly.Blocks, type)) {
         return
       }
-      if (Blockly.heroClassColors.hasOwnProperty(card.heroClass)) { //this check if it's *really* collectible
+      if (card.heroClass in Blockly.heroClassColors) { //this check if it's *really* collectible
         let color = Blockly.heroClassColors[card.heroClass]
         let block = {
           'type': type,
@@ -351,9 +341,9 @@ export default class BlocklyMiscUtils {
           'message0': BlocklyMiscUtils.cardMessage(card),
           'output': 'Card',
           'colour': color,
-          'data': node.name,
+          'data': card.id,
           'comment': this.cardDescription(card),
-          'json': json
+          'json': card
         }
         BlocklyMiscUtils.addBlock(block)
       }
@@ -369,7 +359,7 @@ export default class BlocklyMiscUtils {
     }
   }
 
-  static cardDescription(card) {
+  static cardDescription(card: CardDef) {
     if (!card.description) {
       return null
     }
@@ -428,7 +418,28 @@ export default class BlocklyMiscUtils {
 
   static loadableInit(Blockly) {
     if (!Blockly.Css.injected_) {
-      Blockly.Css.register(blocklyAdditions
+      Blockly.Css.register(`
+.blocklyCommentTextarea {
+    color: black;
+    caret-color: black;
+    font-size: 12 pt;
+    background-color: lightgray;
+}
+
+.blocklyTooltipDiv {
+    opacity: 1;
+    font-size: 10 pt;
+}
+
+.blackText {
+    fill: #000 !important;
+}
+
+.blocklyHtmlTextAreaInput {
+    background-color: white !important;
+    color: black !important;
+}
+      `
         .replaceAll(',', '')
         .replaceAll('  ', '')
         .replaceAll('\n\n', '\n')
@@ -581,11 +592,10 @@ export default class BlocklyMiscUtils {
   }
 
 
-  static initArtBlcks(data) {
-    for (let edge of data.allArt.edges) {
-      let node = edge.node
-      let type = 'Art_' + node.name
-      if (has(Blockly.Blocks, type)) {
+  static initArtBlcks(data: ContextType<typeof BlocklyDataContext>) {
+    for (let art of data.allArt) {
+      let type = 'Art_' + art.name
+      if (type in Blockly.Blocks) {
         return
       }
       let block = {
@@ -594,26 +604,25 @@ export default class BlocklyMiscUtils {
         'args0': [
           {
             'type': 'field_image',
-            'width': node.childImageSharp.fluid.presentationWidth * 1.5,
-            'height': node.childImageSharp.fluid.presentationHeight * 1.5,
-            'src': node.childImageSharp.fluid.src
+            'width': art.width * 1.5,
+            'height': art.height * 1.5,
+            'src': art.src
           }
         ],
         'output': 'Art',
         'colour': '#A6A6A6',
-        'data': node.name,
-        'comment': node.name
+        'data': art.name,
+        'comment': art.name
       }
       BlocklyMiscUtils.addBlock(block)
     }
   }
 
-  static getArtURL(card, data) {
+  static getArtURL(card, data: ContextType<typeof BlocklyDataContext>) {
     if (!!card.art?.sprite?.named) {
-      for (let edge of data.allArt.edges) {
-        let node = edge.node
-        if (node.name === card.art.sprite.named) {
-          return node.childImageSharp.fluid.src
+      for (let art of data.allArt) {
+        if (art.name === card.art.sprite.named) {
+          return art.src
         }
       }
     }

@@ -1,0 +1,235 @@
+@charset "utf-8";
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:300,400,500,700&display=swap');
+@import "../styles/font";
+
+/**
+ * Style variables
+ */
+$base-font-family: 'Space Grotesk', sans-serif;
+$base-font-size: 22px !default;
+$font-size-footer: 16px;
+$mobile-font-size: 18px !default;
+$base-line-height: 1.2 !default;
+$container-width: 100% !default;
+$main-width: 700px !default;
+
+// From dark
+:root {
+  --base-color: #DBDBDB;
+  --primary-color: #A2FC8F;
+  --border: solid 2px #1B1B1B;
+  --selection-background: #DBDBDB;
+  --selection-text: #21215c;
+  --background-color: #f9f9f9;
+  --text-color: #1B1B1B;
+  --text-dark: #1B1B1B;
+  --text-light: #FCFCFC;
+  --hover-color: #2837FF;
+  --header-background-color: #ffffff;
+  --placeholder-color: var(--base-color);
+  --link-color: var(--base-color);
+  --code-color-1: #aaaaaa;
+  --code-color-2: #ffffcc;
+  --code-color-3: #F00000;
+  --code-color-4: #F0A0A0;
+  --code-color-5: #b38aff;
+  --code-color-6: #5ba711;
+  --code-color-7: #e4e477;
+  --code-color-8: #000080;
+  --code-color-9: #05ca05;
+  --code-color-10: #888888;
+  --code-color-11: #555555;
+  --code-color-12: #800080;
+  --code-color-13: #00d4d4;
+  --code-color-14: #00c1c1;
+  --code-color-15: #ed9d13;
+  --code-color-16: #1e90ff;
+  --code-color-17: #800000;
+  --code-color-18: #bbbbbb;
+}
+
+/**
+ * Global
+ */
+body {
+  box-sizing: border-box;
+  background-color: var(--background-color);
+  margin: 0 auto;
+  padding: 0;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  color: var(--text-color);
+  text-align: left;
+  line-height: $base-line-height !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0px;
+  font-weight: bold;
+  color: var(--text-dark);
+}
+
+@media screen and (max-width: 400px){
+  h1 {
+    font-size: 12vw !important;
+  }
+  h2 {
+    font-size: 6vw !important;
+  }
+  h3 {
+    font-size: 6vw !important;
+  }
+}
+
+h1 {
+  font-size: 64px;
+  padding-bottom: 20px;
+}
+
+h2 {
+  font-size: 40px;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 24px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+h4 {
+  font-size: 24px;
+  font-weight: 400;
+}
+
+h5 {
+  font-size: $base-font-size;
+}
+
+h6 {
+  font-size: 15px;
+}
+
+p, ul, ol {
+  color: var(--text-dark);
+}
+
+
+a:visited {
+  text-decoration: none;
+  color:var(--text-dark);
+}
+
+figure {
+  display: inline-block;
+  margin: 20px;
+  align-items: center;
+}
+
+figcaption {
+  text-align: center;
+}
+
+summary:hover {
+  color: var(--background-color);
+  background-color: var(--base-color);
+}
+
+section {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+/**
+ * Highlight/Markup
+ */
+::selection {
+  background: var(--selection-background);
+  color: var(--selection-text);
+}
+
+::-moz-selection {
+  background: var(--selection-background);
+  color: var(--selection-text);
+}
+
+
+/**
+ * Form
+ */
+input, select, textarea {
+  padding: 0;
+  margin: 0;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+  border: none;
+}
+
+input[type=text], select, textarea {
+  width: 100%;
+  resize: none;
+  background-color: var(--header-background-color);
+  color: var(--text-dark);
+  caret-color: var(--hover-color);
+  font-size: $base-font-size;
+  font-family: $base-font-family;
+  line-height: $base-line-height;
+}
+
+input, select, textarea, textarea::-webkit-input-placeholder {
+  text-indent: 0px;
+}
+
+::placeholder {
+  color: var(--placeholder-color);
+  opacity: 1;
+}
+
+
+
+:-ms-input-placeholder {
+  color: var(--placeholder-color);
+}
+
+::-ms-input-placeholder {
+  color: var(--placeholder-color);
+}
+
+input[type=submit] {
+  font-size: $base-font-size;
+  font-family: $base-font-family;
+  line-height: $base-line-height;
+  cursor: pointer;
+  color: var(--link-color);
+  background-color: var(--background-color);
+}
+
+input[type=submit]:hover {
+  color: var(--background-color);
+  background-color: var(--base-color);
+}
+
+*:focus {
+  outline: none;
+}
+
+textarea {
+  vertical-align: top;
+}
+
+pre {
+  background-color: var(--background-color);
+  border: none;
+  padding: 0;
+  margin: 0;
+  overflow: auto;
+  font-size: $base-font-size;
+  color: var(--text-dark);
+  line-height: 1.7 !important;
+  font-family: $base-font-family !important;
+}

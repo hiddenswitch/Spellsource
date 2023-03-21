@@ -2,15 +2,16 @@ import React from 'react'
 import * as styles from './creative-layout.module.scss'
 import playNow from '../../public/static/assets/play-now.gif'
 import cloud from '../../public/static/assets/transparent-cloud.png'
+import Image from "next/image";
 
 function HeroPlaySection() {
   return (
     <div className={`${styles.heroContainerAlt} ${styles.backgroundGradient2}`}>
-      <img src={cloud} style={{ top: '-10%', left: '8%' }} className={`${styles.cloud} ${styles.lcloud}`}/>
-      <img src={cloud} style={{ top: '0', right: '3%' }} className={`${styles.cloud} ${styles.mcloud}`}/>
-      <img src={cloud} style={{ bottom: '1%', right: '43%' }} className={`${styles.cloud} ${styles.mcloud}`}/>
-      <img src={cloud} style={{ bottom: '3%', right: '-5%' }} className={`${styles.cloud} ${styles.scloud}`}/>
-      <img src={cloud} style={{ top: '50%', left: '-11%' }} className={`${styles.cloud} ${styles.scloud}`}/>
+      <Image alt={"Cloud"} src={cloud} style={{ top: '-10%', left: '8%' }} className={`${styles.cloud} ${styles.lcloud}`}/>
+      <Image alt={"Cloud"} src={cloud} style={{ top: '0', right: '3%' }} className={`${styles.cloud} ${styles.mcloud}`}/>
+      <Image alt={"Cloud"} src={cloud} style={{ bottom: '1%', right: '43%' }} className={`${styles.cloud} ${styles.mcloud}`}/>
+      <Image alt={"Cloud"} src={cloud} style={{ bottom: '3%', right: '-5%' }} className={`${styles.cloud} ${styles.scloud}`}/>
+      <Image alt={"Cloud"} src={cloud} style={{ top: '50%', left: '-11%' }} className={`${styles.cloud} ${styles.scloud}`}/>
 
       <div className={styles.heroPlayContainer}>
       <h1 className={styles.heroSectionTitle}>Mobile Beta</h1>
@@ -24,7 +25,7 @@ function HeroPlaySection() {
       <h4 className={styles.playSectionBody}>For users on other browsers, go to our <a href="https://discord.gg/HmbESh2">Discord</a> and ask for the Steam key.</h4>
       </div>
       <div className={styles.heroImageContainer}>
-        <img src={playNow} className={styles.heroImage}/>
+        <Image alt={"Hero"} src={playNow} className={styles.heroImage}/>
       </div>
     </div>
   )

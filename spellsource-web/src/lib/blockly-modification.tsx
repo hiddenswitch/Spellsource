@@ -1,4 +1,4 @@
-import Blockly, {FieldLabel, Workspace} from "blockly";
+import Blockly, {BlockSvg, FieldLabel, Workspace} from "blockly";
 import {FieldLabelPlural} from "../components/field-label-plural";
 import {FieldLabelSerializableHidden} from "../components/field-label-serializable-hidden";
 import JsonConversionUtils from "./json-conversion-utils";
@@ -283,7 +283,7 @@ export default class BlocklyModification {
     const generateContextMenu = Blockly.BlockSvg.prototype.generateContextMenu
     Blockly.BlockSvg.prototype.generateContextMenu = function () {
       let menuOptions = generateContextMenu.call(this)
-      let block = this
+      let block = this as BlockSvg
       let workspace = block.workspace
       if (block.type.startsWith('CatalogueCard')) {
         menuOptions.push({
@@ -291,7 +291,7 @@ export default class BlocklyModification {
           enabled: true,
           callback: function () {
             if (!!block.json && !!block.json.json) {
-              let card = JSON.parse(block.json.json)
+              let card = block.json.json
               let dummyWorkspace = new Workspace()
               JsonConversionUtils.generateCard(dummyWorkspace, card)
 

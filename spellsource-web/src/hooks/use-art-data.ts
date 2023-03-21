@@ -1,9 +1,10 @@
 
 
 export default function useBlocklyData () {
-  return useStaticQuery(graphql`
+  return {} as any;
+  /*return useStaticQuery(graphql`
   query {
-    allArt: allFile(filter: {extension: {eq: "png"}, relativePath: {glob: "**card-images/art/**"}}) {
+    allArt: allFile(filter: {extension: {eq: "png"}, relativePath: {glob: "**card-images/art/!**"}}) {
       edges {
         node {
           name
@@ -17,5 +18,5 @@ export default function useBlocklyData () {
         }
       }
     }
-  }`)
+  }`)*/
 }

@@ -1,7 +1,6 @@
-// import { Enum } from 'enumify'
+import {  } from 'enumify'
 
 // TODO was this actually still in use ?
-
 /*
 export default class EnumExtended extends Enum {
   static toBlocklyArray () {
