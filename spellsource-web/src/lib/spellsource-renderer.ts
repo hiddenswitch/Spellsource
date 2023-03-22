@@ -1,5 +1,5 @@
 import Blockly from 'blockly'
-import BlocklyMiscUtils from "./blockly-misc-utils";
+import * as BlocklyMiscUtils from "./blockly-misc-utils";
 
 const SpellsourceRenderer = function (name) {
   SpellsourceRenderer["superClass_"].constructor.call(this, name)

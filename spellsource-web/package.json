@@ -53,10 +53,10 @@
     "@babel/preset-typescript": "^7.21.0",
     "@tomysmith/deep-partial": "^1.0.1",
     "@types/elasticlunr": "^0.9.5",
-    "@types/lodash": "^4.14.191",
-    "@types/probe-image-size": "^7.2.0",
     "@types/jest": "^26.0.0",
+    "@types/lodash": "^4.14.191",
     "@types/node": "^18.15.3",
+    "@types/probe-image-size": "^7.2.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "babel-jest": "^26.0.0",
@@ -67,6 +67,7 @@
     "prettier": "^2.8.4",
     "react-test-renderer": "^17.0.2",
     "standard": "^16.0.3",
+    "type-fest": "^3.6.1",
     "typed-scss-modules": "^7.1.0",
     "typescript": "^4.3.2"
   }

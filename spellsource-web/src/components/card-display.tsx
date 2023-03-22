@@ -2,16 +2,8 @@ import React from 'react'
 import * as styles from './card-display.module.scss'
 
 import backgroundLayer from '../../public/static/card-images/layer-1.png'
-import whiteBanner from '../../public/static/card-images/layer-3.png'
-import highlight from '../../public/static/card-images/layer-4.png'
-import shadow from '../../public/static/card-images/layer-5.png'
-import secondary from '../../public/static/card-images/layer-6.png'
 import baseAttack from '../../public/static/card-images/attack-token.png'
 import baseHp from '../../public/static/card-images/health-token.png'
-
-import pedestalPrimary from '../../public/static/card-images/pedestal-primary.png'
-import pedestalSecondary from '../../public/static/card-images/pedestal-secondary.png'
-import pedestalShadow from '../../public/static/card-images/pedestal-shadow.png'
 import windowBackground from '../../public/static/card-images/large-card-window-background.png'
 import selkie from '../../public/static/card-images/selkie.png'
 import selkieShadow from '../../public/static/card-images/selkie-shadow.png'
@@ -34,9 +26,9 @@ const defaultArt = {
     'a': 1.0
   },
   'shadow': {
-    'r': 0.207,
-    'g': 0.282,
-    'b': 0.466,
+    'r': 0.107,
+    'g': 0.182,
+    'b': 0.366,
     'a': 1.0
   },
   'highlight': {
@@ -115,7 +107,7 @@ function CardDisplay(props: DeepPartial<CardDef>) {
           color: art.body.vertex,
           textShadow: checkTextColor()
         }}>{props.description}</p>
-        <p className={styles.type}>{props.type}</p>
+        <p className={styles.type}>{props.race !== "NONE" ? props.race : ""}</p>
       </div>
       <p className={styles.baseManaCost}>{props.baseManaCost}</p>
       <p className={styles.name}
@@ -124,19 +116,21 @@ function CardDisplay(props: DeepPartial<CardDef>) {
            textShadow: checkTextColor()
          }}>{props.name}</p>
       <div className={styles.primary}
-           style={{background: `linear-gradient(${art.primary}, ${art.primary}), url(${whiteBanner}) no-repeat`}}/>
+           style={{background: `linear-gradient(${art.primary}, ${art.primary}) no-repeat`}}/>
       <div className={styles.highlight}
-           style={{background: `linear-gradient(${art.highlight}, ${art.highlight}), url(${highlight}) no-repeat`}}/>
+           style={{background: `linear-gradient(${art.highlight}, ${art.highlight}) no-repeat`}}/>
       <div className={styles.shadow}
-           style={{background: `linear-gradient(${art.shadow}, ${art.shadow}), url(${shadow}) no-repeat`}}/>
+           style={{background: `linear-gradient(${art.shadow}, ${art.shadow}) no-repeat`}}/>
       <div className={styles.secondary}
-           style={{background: `linear-gradient(${art.secondary}, ${art.secondary}), url(${secondary}) no-repeat`}}/>
-      <div className={styles.pedestalPrimary}
-           style={{background: `linear-gradient(${art.primary}, ${art.primary}), url(${pedestalPrimary}) no-repeat`}}/>
-      <div className={styles.pedestalSecondary}
-           style={{background: `linear-gradient(${art.secondary}, ${art.secondary}), url(${pedestalSecondary}) no-repeat`}}/>
-      <div className={styles.pedestalShadow}
-           style={{background: `linear-gradient(${art.shadow}, ${art.shadow}), url(${pedestalShadow}) no-repeat`}}/>
+           style={{background: `linear-gradient(${art.secondary}, ${art.secondary}) no-repeat`}}/>
+      {props.type === "MINION" && <>
+        <div className={styles.pedestalPrimary}
+             style={{background: `linear-gradient(${art.primary}, ${art.primary}) no-repeat`}}/>
+        <div className={styles.pedestalSecondary}
+             style={{background: `linear-gradient(${art.secondary}, ${art.secondary}) no-repeat`}}/>
+        <div className={styles.pedestalShadow}
+             style={{background: `linear-gradient(${art.shadow}, ${art.shadow}) no-repeat`}}/>
+      </>}
       <Image src={windowBackground} className={styles.windowBackground} alt=""/>
       <div style={{display: checkTokens()}}>
         <Image src={baseAttack} className={styles.attackToken} alt=""/>
@@ -145,8 +139,8 @@ function CardDisplay(props: DeepPartial<CardDef>) {
         <p className={styles.baseHp}>{props.baseHp}</p>
       </div>
       <div className={styles.heroAndShadow}>
-        <Image src={art.sprite.named} className={styles.hero} alt="hero"/>
-        <Image src={art.sprite.shadow} className={styles.heroShadow} alt=""/>
+        <img src={art.sprite.named} className={styles.hero} alt=" "/>
+        <img src={art.sprite.shadow} className={styles.heroShadow} alt=""/>
       </div>
     </div>
   )

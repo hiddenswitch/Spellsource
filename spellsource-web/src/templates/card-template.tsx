@@ -1,7 +1,7 @@
 import React from 'react'
 import Layout from '../components/creative-layout'
 import CardDisplay from '../components/card-display'
-import BlocklyMiscUtils from '../lib/blockly-misc-utils'
+import * as BlocklyMiscUtils from '../lib/blockly-misc-utils'
 import * as styles from '../templates/template-styles.module.scss';
 import Link from 'next/link';
 

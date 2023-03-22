@@ -5,7 +5,7 @@ import * as styles from './creative-layout.module.scss'
 export default ({ children }: {children?: ReactNode}) => {
   return <div className={styles.container}>
     <Header />
-    <main style={{width: 900}}>
+    <main>
       {children}
     </main>
     <br/>

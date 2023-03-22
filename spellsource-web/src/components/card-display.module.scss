@@ -116,23 +116,28 @@
 .name {
     position: absolute;
     z-index: 6;
-    font-size: 24px;
-    left: 2em;
-    top: 7px;
+    font-size: 30px;
+    left: 50px;
+    top: 0;
     max-width: 134px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin: 0;
+    font-family: 'trenco', monospace;
 }
 
 .baseManaCost {
     position: absolute;
-    left: 211px;
+    left: 216px;
     font-size: 40px;
     font-family: 'trenco', monospace;
     text-shadow: -1.5px 1.5px black;
     top: -3px;
     z-index: 7;
+    color: white;
+    margin: 0;
+    transform: translateX(-50%);
 }
 
 .baseAttack {
@@ -142,8 +147,10 @@
     z-index: 11;
     color: #CF596D;
     text-shadow: -1.5px 1.5px black;
-    left: 43px;
+    left: 48px;
     top: 257px;
+    margin: 0;
+    transform: translateX(-50%);
 }
 
 .baseHp {
@@ -153,8 +160,10 @@
     font-size: 40px;
     color: #A4E9C7;
     text-shadow: -1.5px 1.5px black;
-    left: 207px;
+    left: 212px;
     top: 257px;
+    margin: 0;
+    transform: translateX(-50%);
 }
 
 .description {
@@ -162,14 +171,17 @@
     font-size: 23px;
     line-height: 10px;
     font-family: 'trenco', monospace;
+    margin: 0;
 }
 
 .type {
     position: absolute;
-    font-size: 14px;
-    left: 50%;
+    font-size: 24px;
+    left: 63px;
     transform: translateX(-50%);
-    top: 45px;
+    top: 52px;
+    font-family: 'trenco', monospace;
+    margin: 0;
 }
 
 .description-box {
@@ -191,7 +203,7 @@
 .hero {
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scale(1.5);
     top: 8px;
     z-index: 8;
 }

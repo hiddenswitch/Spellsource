@@ -78,8 +78,6 @@ export const transformCard = (object: CardDef & { path?: string }) => {
   // Also set a path on the cards node which corresponds to its URL in the website
   object.path = '/cards/' + object.id
 
-  // TODO resolveArt ?
-
   return object;
 }
 

@@ -1,7 +1,7 @@
 import React, {createContext} from 'react'
 import Loadable from 'react-loadable'
 import Layout from '../components/card-editor-layout'
-import BlocklyMiscUtils from "../lib/blockly-misc-utils";
+import * as BlocklyMiscUtils from "../lib/blockly-misc-utils";
 import * as styles from '../templates/template-styles.module.scss';
 import {GetStaticPropsContext, InferGetStaticPropsType} from "next";
 import path from "path";
@@ -10,6 +10,7 @@ import {readAllImages, readAllJson} from "../lib/fs-utils";
 import {CardDef} from "../components/card-display";
 import {transformBlock, transformCard} from "../lib/json-transforms";
 import {keyBy} from "lodash";
+import deepmerge from "deepmerge";
 
 const getAllBlockJson = async () =>
   (await readAllJson<BlockDef[]>(path.join("src", "blocks", "*.json")))
@@ -37,9 +38,17 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
   const allArt = await getAllArt();
   const allIcons = await getAllIcons();
   const allCards = await getAllCards();
+  const cardsById = keyBy(allCards, card => card.id);
+
+  for (const card of allCards) {
+    const classCard = cardsById["class_" + card.heroClass];
+    if (classCard) {
+      card.art = deepmerge(classCard.art, card.art);
+    }
+  }
 
   return {
-    props: {allBlocks, allArt, allIcons, allCards, blocksByType}
+    props: {allBlocks, allArt, allIcons, allCards, blocksByType, cardsById}
   }
 }
 
