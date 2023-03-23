@@ -157,7 +157,7 @@ function autoDecoration() {
             addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_triggers')
             let anotherBlock = BlocklyMiscUtils.newBlock(workspace, 'Enchantment')
             anotherBlock.getInput('eventTrigger').connection.connect(bumpee.outputConnection)
-            if (anotherBlock.initSvg) {
+            if ("initSvg" in anotherBlock) {
               anotherBlock.initSvg()
             }
             addedBlock.getFirstStatementConnection().connect(anotherBlock.previousConnection)
@@ -557,9 +557,9 @@ function cardDisplay() {
       this.foreignObject_.previousElementSibling.remove()
       let card = JSON.parse(block.getCommentText()) as CardDef
 
-      if (!!card.art?.sprite?.named && !!block.artURL) {
+      /*if (!!card.art?.sprite?.named && !!block.artURL) {
         card.art.sprite.named = block.artURL
-      }
+      }*/
 
       if (card.heroClass) {
         const heroClassBlock = Blockly.Blocks["HeroClass_" + card.heroClass]

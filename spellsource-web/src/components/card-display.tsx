@@ -8,7 +8,7 @@ import windowBackground from '../../public/static/card-images/large-card-window-
 import selkie from '../../public/static/card-images/selkie.png'
 import selkieShadow from '../../public/static/card-images/selkie-shadow.png'
 import {defaultsDeep} from 'lodash'
-import {CardDesc} from "../lib/spellsource-game";
+import {CardDesc} from "../__generated__/spellsource-game";
 import {DeepPartial} from "../lib/deep-partial";
 import Image from "next/image";
 
@@ -139,7 +139,7 @@ function CardDisplay(props: DeepPartial<CardDef>) {
         <p className={styles.baseHp}>{props.baseHp}</p>
       </div>
       <div className={styles.heroAndShadow}>
-        <img src={art.sprite.named} className={styles.hero} alt=" "/>
+        <img src={"/api/art/" + art.sprite.named} className={styles.hero} alt=" "/>
         <img src={art.sprite.shadow} className={styles.heroShadow} alt=""/>
       </div>
     </div>

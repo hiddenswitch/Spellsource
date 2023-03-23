@@ -2,6 +2,7 @@ import * as glob from "glob-promise";
 import path from "path";
 import fs from "fs";
 import probe from "probe-image-size";
+import {ImageDef} from "../__generated__/client";
 
 /**
  * Parses the JSON for all matching files
@@ -18,13 +19,13 @@ export const readAllJson = async <T = any>(globPath: string, transform?: (json: 
   }));
 }
 
-export type ImageDef = {
+/*export type ImageDef = {
   src: string,
   width: number,
   height: number,
   name: string,
   id: string
-}
+}*/
 
 /**
  * Gets the src and width/height of all matching files

@@ -1,5 +1,8 @@
 package com.hiddenswitch.framework.tests.applications;
 
+import com.github.dockerjava.api.model.ExposedPort;
+import com.github.dockerjava.api.model.PortBinding;
+import com.github.dockerjava.api.model.Ports;
 import com.hiddenswitch.containers.*;
 import com.hiddenswitch.framework.Application;
 import com.hiddenswitch.framework.Environment;
@@ -25,7 +28,12 @@ public class StandaloneApplication extends Application {
 			.withReuse(true)
 			.withNetwork(Network.SHARED)
 			.withNetworkAliases(PGHOST)
-			.withExposedPorts(PGPORT);
+			.withExposedPorts(PGPORT)
+			.withCreateContainerCmdModifier(e -> {
+				if (System.getenv().getOrDefault("USE_FIXED_PORT", "false").equals("true")) {
+					e.getHostConfig().withPortBindings(new PortBinding(Ports.Binding.bindPort(PGPORT), new ExposedPort(PGPORT)));
+				}
+			});
 	public static KeycloakContainer KEYCLOAK = new KeycloakContainer()
 			.withReuse(true)
 			.dependsOn(POSTGRES)

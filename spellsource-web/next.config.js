@@ -18,6 +18,9 @@ const nextConfig = {
         }
       });
 
+    config.resolve.fallback = { fs: false, path: false };
+    config.experiments.topLevelAwait = true;
+
     return config;
   },
 }

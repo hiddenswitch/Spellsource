@@ -1,7 +1,7 @@
-import Blockly, {Block, BlockSvg, Connection, isNumber, Workspace} from 'blockly'
+import Blockly, {Block, BlockSvg, Connection, isNumber, Workspace, WorkspaceSvg} from 'blockly'
 import * as BlocklyMiscUtils from './blockly-misc-utils'
 import {isArray} from 'lodash'
-import {BlockArgDef} from "./blocks";
+import {BlockArgDef, BlockDef} from "./blocks";
 import { CardDef } from '../components/card-display';
 
 const classBlocksDictionary = {} //A dictionary mapping the 'class' argument a block uses to the block itself
@@ -19,7 +19,7 @@ const customBlocks = {}
  * either its output or 'class' argument
  * @param block The block to add
  */
-export function addBlockToMap(block: Block | BlockSvg) {
+export function addBlockToMap(block: BlockDef) {
   if (block.type.endsWith('SHADOW')) {
     return
   }
@@ -70,7 +70,7 @@ export function newBlock(workspace, type) {
  * @param card The card json to generate from
  * @returns The created starter block
  */
-export function generateCard(workspace: Workspace, card: CardDef) {
+export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef) {
   let type = card.type as string
   if (!!card.quest) {
     type = 'QUEST'
@@ -108,8 +108,8 @@ export function generateCard(workspace: Workspace, card: CardDef) {
     if (card.type === 'CLASS' && arg === 'heroClass') {
       block.getInput('heroClass').connection.targetBlock().setFieldValue(card.heroClass, 'text')
     } else if (card.type === 'HERO_POWER' && arg === 'spell') {
-      if (card.spell.class == 'HeroPowerSpell') {
-        handleArg(block.getInput('spell.spell').connection, card.spell.spell, 'spell.spell', workspace, card.spell)
+      if (card.spell["class"] == 'HeroPowerSpell') {
+        handleArg(block.getInput('spell.spell').connection, card.spell["spell"], 'spell.spell', workspace, card.spell)
       } else {
         handleArg(block.getInput('spell.spell').connection, card.spell, 'spell.spell', workspace, card.spell)
       }
@@ -235,15 +235,15 @@ export function generateCard(workspace: Workspace, card: CardDef) {
 
   if (!!card.manaCostModifier) {
     let costyBlock = null
-    if (card.manaCostModifier.class === 'ConditionalValueProvider' && card.manaCostModifier.ifFalse === 0) {
+    if (card.manaCostModifier["class"] === 'ConditionalValueProvider' && card.manaCostModifier["ifFalse"] === 0) {
       costyBlock = newBlock(workspace, 'Property_manaCostModifierConditional')
-      handleArg(costyBlock.getInput('manaCostModifier.condition').connection, card.manaCostModifier.condition,
+      handleArg(costyBlock.getInput('manaCostModifier.condition').connection, card.manaCostModifier["condition"],
         'condition', workspace, card)
-      if (typeof card.manaCostModifier.ifTrue === 'object') {
-        handleArg(costyBlock.getInput('manaCostModifier.ifTrue').connection, card.manaCostModifier.ifTrue,
+      if (typeof card.manaCostModifier["ifTrue"] === 'object') {
+        handleArg(costyBlock.getInput('manaCostModifier.ifTrue').connection, card.manaCostModifier["ifTrue"],
           'ifTrue', workspace, card)
       } else {
-        handleIntArg(costyBlock, costyBlock.json.args0[0].name, workspace, card.manaCostModifier.ifTrue)
+        handleIntArg(costyBlock, costyBlock.json.args0[0].name, workspace, card.manaCostModifier["ifTrue"])
       }
 
     } else {
@@ -302,7 +302,7 @@ export function generateCard(workspace: Workspace, card: CardDef) {
     lowestBlock = conditionBlock
   }
 
-  if ((card.collectible === false || card.collectible === 'FALSE') && type !== 'HERO') {
+  if ((card.collectible === false || String(card.collectible) === 'FALSE') && type !== 'HERO') {
     let uncollectibleBlock = newBlock(workspace, 'Property_uncollectible')
     uncollectibleBlock.previousConnection.connect(lowestBlock.nextConnection)
     if ("initSvg" in uncollectibleBlock) {
@@ -327,12 +327,12 @@ export function generateCard(workspace: Workspace, card: CardDef) {
         }
       }
     }
-    if (!!card.art.glow) {
+    if (!!card.art["glow"]) {
       let glowBlock = newBlock(workspace, 'Property_glow')
       glowBlock.previousConnection.connect(lowestBlock.nextConnection)
       let colorBlock = glowBlock.getInput('art.glow').connection.targetBlock()
       for (let i of ['r', 'g', 'b', 'a']) {
-        colorBlock.setFieldValue(Math.round(card.art.glow[i] * 255), i)
+        colorBlock.setFieldValue(Math.round(card.art["glow"][i] * 255), i)
       }
       if ("initSvg" in glowBlock) {
         glowBlock.initSvg()
@@ -359,7 +359,7 @@ export function generateCard(workspace: Workspace, card: CardDef) {
     lowestBlock = spriteBlock
   }
 
-  if (!!workspace.render) {
+  if ("render" in workspace) {
     workspace.render()
   }
 
@@ -498,6 +498,10 @@ export function enchantment(trigger, workspace, triggerBlock: Block | BlockSvg =
             }
           }
         }
+      }
+      if (!match) {
+        console.warn(`Failed to handle prop ${prop} on trigger`, trigger)
+        continue
       }
       let option = newBlock(workspace, match.type)
       if (trigger[prop] !== true) {
@@ -1135,19 +1139,19 @@ export function traverseJsonByArgName(name, json, parentJson) {
  *
  * Uses the shadow int block if it's already there,
  * or makes a nonshadow one if it isn't
- * @param newBlock The block that the int block should be connected to
+ * @param block The block that the int block should be connected to
  * @param inputArg The name of the int argument
  * @param workspace The workspace
  * @param int The number that should actually end up in the int block
  */
-export function handleIntArg(newBlock, inputArg, workspace, int) {
+export function handleIntArg(block: Block | BlockSvg, inputArg, workspace, int) {
   let valueBlock
-  if (!!newBlock.getInput(inputArg).connection.targetBlock()
-    && newBlock.getInput(inputArg).connection.targetBlock().type === 'ValueProvider_int') {
-    valueBlock = newBlock.getInput(inputArg).connection.targetBlock()
+  if (!!block.getInput(inputArg).connection.targetBlock()
+    && block.getInput(inputArg).connection.targetBlock().type === 'ValueProvider_int') {
+    valueBlock = block.getInput(inputArg).connection.targetBlock()
   } else {
     valueBlock = newBlock(workspace, 'ValueProvider_int')
-    newBlock.getInput(inputArg).connection.connect(valueBlock.outputConnection)
+    block.getInput(inputArg).connection.connect(valueBlock.outputConnection)
     if ("initSvg" in valueBlock) {
       valueBlock.initSvg()
     }
@@ -1666,7 +1670,7 @@ export function dropdownsList(block: Block | BlockSvg) {
  * @param block
  * @returns An array of the args
  */
-export function argsList(block: Block | BlockSvg) {
+export function argsList(block: BlockDef) {
   let argsList = []
   for (let i = 0; i < 10; i++) {
     if (!!block['args' + i.toString()]) {

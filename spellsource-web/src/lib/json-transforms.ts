@@ -1,5 +1,6 @@
 import {BlockDef} from "./blocks";
 import {CardDef} from "../components/card-display";
+import deepmerge from "deepmerge";
 
 const isString = str => typeof str === 'string';
 
@@ -79,6 +80,16 @@ export const transformCard = (object: CardDef & { path?: string }) => {
   object.path = '/cards/' + object.id
 
   return object;
+}
+
+export const fixArt = (cardsById: Record<string, CardDef>) => {
+
+  for (const card of Object.values(cardsById)) {
+    const classCard = cardsById["class_" + card.heroClass];
+    if (classCard) {
+      card.art = deepmerge(classCard.art, card.art);
+    }
+  }
 }
 
 export const transformCategory = (object) => {

@@ -7,6 +7,7 @@ import * as BlocklyModification from "./blockly-modification";
 import {CardDef} from "../components/card-display";
 import {BlocklyDataContext} from "../pages/card-editor";
 import {ContextType} from "react";
+import {BlockDef} from "./blocks";
 
 export function toHappyFormatting(string: string) {
   return string.split('_')
@@ -14,7 +15,7 @@ export function toHappyFormatting(string: string) {
     .join(' ')
 }
 
-export function addBlock(block: Partial<Block>) {
+export function addBlock(block: BlockDef) {
   Blockly.Blocks[block.type!] = {
     init: function () {
       this.jsonInit(block)
@@ -285,12 +286,12 @@ export function initHeroClassColors(data: ContextType<typeof BlocklyDataContext>
    * first pass through the card catalogue to figure out all the collectible
    * hero classes and their colors
    */
-  data.allCards.forEach(card => {
+  Object.values(data.cardsById).forEach(card => {
     let type = 'HeroClass_' + card.heroClass
     if (type in Blockly.Blocks) {
       return
     }
-    if (card.type === 'CLASS' && card.collectible) {
+    if (card.type === 'CLASS' && card.collectible !== false) {
       let color = Blockly.utils.colour.rgbToHex(
         card.art.primary.r * 255,
         card.art.primary.g * 255,
@@ -312,7 +313,7 @@ export function initHeroClassColors(data: ContextType<typeof BlocklyDataContext>
         Blockly.textColor[type] = Blockly.utils.colour.rgbToHex(
           card.art.body.vertex.r * 255,
           card.art.body.vertex.g * 255,
-          card.art.body.vertex.b * 255
+          card.art.body.vertex.b * 25
         )
       }
     }
@@ -320,12 +321,12 @@ export function initHeroClassColors(data: ContextType<typeof BlocklyDataContext>
 }
 
 export function initCardBlocks(data: ContextType<typeof BlocklyDataContext>) {
-  for (let card of data.allCards) {
-    if (!card.type || card.type === 'FORMAT' || !card.fileFormatVersion) {
+  for (let card of Object.values(data.cardsById)) {
+    if (!card.type || card.type === 'FORMAT') {
       continue
     }
     let type = 'CatalogueCard_' + card.id
-    if (has(Blockly.Blocks, type)) {
+    if (type in Blockly.Blocks) {
       return
     }
     if (card.heroClass in Blockly.heroClassColors) { //this check if it's *really* collectible
@@ -341,6 +342,8 @@ export function initCardBlocks(data: ContextType<typeof BlocklyDataContext>) {
         'json': card
       }
       addBlock(block)
+    } else {
+      console.warn(`${card.id} had invalid hero class`)
     }
 
 

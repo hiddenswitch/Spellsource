@@ -1,4 +1,4 @@
-import React, {createContext} from 'react'
+import React, {createContext, useMemo} from 'react'
 import Loadable from 'react-loadable'
 import Layout from '../components/card-editor-layout'
 import * as BlocklyMiscUtils from "../lib/blockly-misc-utils";
@@ -8,9 +8,9 @@ import path from "path";
 import {BlockDef} from "../lib/blocks";
 import {readAllImages, readAllJson} from "../lib/fs-utils";
 import {CardDef} from "../components/card-display";
-import {transformBlock, transformCard} from "../lib/json-transforms";
+import {fixArt, transformBlock, transformCard} from "../lib/json-transforms";
 import {keyBy} from "lodash";
-import deepmerge from "deepmerge";
+import {ImageDef, useGetAllArtQuery, useGetAllCardsQuery} from "../__generated__/client";
 
 const getAllBlockJson = async () =>
   (await readAllJson<BlockDef[]>(path.join("src", "blocks", "*.json")))
@@ -21,38 +21,29 @@ const getAllArt = async () => readAllImages(path.join("card-images", "art", "**"
 
 const getAllIcons = async () => readAllImages(path.join("assets", "editor", "*.png"))
 
-const getAllCards = async () => [
-  ...await readAllJson<CardDef>(
-    path.join("..", "spellsource-cards-git", "src", "main", "resources", "cards", "**", "*.json"),
-    (json, file) => json.id ||= path.basename(file, ".json")
-  ),
-  ...await readAllJson<CardDef>(
-    path.join("..", "spellsource-game", "src", "main", "resources", "basecards", "standard", "**", "*.json"),
-    (json, file) => json.id ||= path.basename(file, ".json")
-  )
-].map(transformCard)
+/*const getAllCards = async () => (await readAllJson<CardDef>(
+  path.join("..", "spellsource-game", "src", "main", "resources", "basecards", "standard", "**", "*.json"),
+  (json, file) => json.id ||= path.basename(file, ".json")
+)).map(transformCard)*/
 
 export const getStaticProps = async (context: GetStaticPropsContext) => {
   const allBlocks = await getAllBlockJson();
   const blocksByType = keyBy(allBlocks, block => block.type);
-  const allArt = await getAllArt();
+  // const allArt = await getAllArt();
   const allIcons = await getAllIcons();
-  const allCards = await getAllCards();
-  const cardsById = keyBy(allCards, card => card.id);
-
-  for (const card of allCards) {
-    const classCard = cardsById["class_" + card.heroClass];
-    if (classCard) {
-      card.art = deepmerge(classCard.art, card.art);
-    }
-  }
 
   return {
-    props: {allBlocks, allArt, allIcons, allCards, blocksByType, cardsById}
+    props: {allBlocks, allIcons, blocksByType}
   }
 }
 
-export const BlocklyDataContext = createContext({ready: false} as InferGetStaticPropsType<typeof getStaticProps> & { ready: boolean })
+export const BlocklyDataContext = createContext(
+  {ready: false} as InferGetStaticPropsType<typeof getStaticProps> & {
+    ready: boolean
+    cardsById: Record<string, CardDef>
+    allArt: ImageDef[]
+  }
+)
 
 const LoadableComponent = Loadable.Map({
   loader: {
@@ -63,7 +54,10 @@ const LoadableComponent = Loadable.Map({
   loading() {
     return (<span>Loading</span>)
   },
-  render(loaded) {
+  render(loaded, props: { dataReady: boolean }) {
+    if (!props.dataReady)
+      return (<span>Loading</span>)
+
     const Blockly = loaded.Blockly
     const CardEditorView = loaded.CardEditorView.default
 
@@ -74,11 +68,28 @@ const LoadableComponent = Loadable.Map({
 })
 
 const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const getAllCards = useGetAllCardsQuery();
+  const cardsById = useMemo(() => {
+    const cards = getAllCards.data?.allCards?.nodes ?? [];
+    const allCards = cards.map(card => ({
+      ...JSON.parse(card.cardScript ?? {}),
+      id: card.id,
+    }));
+    const cardsById = keyBy(allCards, card => card.id);
+    fixArt(cardsById);
+
+    return cardsById
+  }, [getAllCards.data]);
+
+  const getAllArt = useGetAllArtQuery();
+  const allArt = getAllArt.data?.allArt ?? [];
+
+  const ready = Object.values(cardsById).length > 0 && allArt.length > 0;
 
   return <Layout>
-    <BlocklyDataContext.Provider value={{...props, ready: true}}>
+    <BlocklyDataContext.Provider value={{...props, cardsById, allArt, ready}}>
       <div className={styles.cardEditorContainer}>
-        <LoadableComponent/>
+        <LoadableComponent dataReady={ready}/>
       </div>
     </BlocklyDataContext.Provider>
   </Layout>

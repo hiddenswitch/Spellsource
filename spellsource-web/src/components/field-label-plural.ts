@@ -1,5 +1,4 @@
 import { FieldLabel } from 'blockly'
-import * as JsonConversionUtils from "../lib/json-conversion-utils";
 
 export class FieldLabelPlural extends FieldLabel {
   constructor (opt_value?: string, opt_class?: string, opt_config?: Object) {

@@ -1,0 +1,7 @@
+fragment image on ImageDef {
+  id
+  name
+  height
+  width
+  src
+}

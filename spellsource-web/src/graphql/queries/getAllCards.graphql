@@ -1,0 +1,8 @@
+query getAllCards {
+  allCards {
+    nodes {
+      ...card
+    }
+    totalCount
+  }
+}

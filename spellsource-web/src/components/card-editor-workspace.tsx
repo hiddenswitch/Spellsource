@@ -8,17 +8,12 @@ import 'ace-builds/src-noconflict/theme-github'
 import {useIndex} from '../hooks/use-index'
 import * as JsonConversionUtils from '../lib/json-conversion-utils'
 import * as BlocklyMiscUtils from '../lib/blockly-misc-utils'
-import useComponentWillMount from '../hooks/use-component-will-mount'
-import useBlocklyData from '../hooks/use-blockly-data'
 import SpellsourceRenderer from '../lib/spellsource-renderer'
 import * as SpellsourceGenerator from '../lib/spellsource-generator'
 import SimpleReactBlockly from './simple-react-blockly'
 import * as BlocklyToolbox from '../lib/blockly-toolbox'
-import {GetStaticProps} from "next";
-import path from "path";
-import * as glob from "glob-promise";
-import fs from "fs";
 import {BlocklyDataContext} from "../pages/card-editor";
+import useComponentWillMount from '../hooks/use-component-will-mount'
 
 interface CardEditorWorkspaceProps {
   setJSON: React.Dispatch<React.SetStateAction<string>>
@@ -333,7 +328,7 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
     } else if (p.includes('_')) {
       cardId = p
     } else {
-      for (let node of data.allCards) {
+      for (let node of Object.values(data.cardsById)) {
         if (node.name.toLowerCase() === p.toLowerCase()) {
           cardId = node.id
           card = node;
@@ -343,7 +338,7 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
     }
 
     if (cardId && !card) {
-      for (let node of data.allCards) {
+      for (let node of Object.values(data.cardsById)) {
         if (node.name === cardId) {
           card = node;
         }
@@ -361,9 +356,9 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
     if (query.length === 0) {
       setResults([])
     }
-    toolbox().getToolboxItemById<ToolboxCategory>('Search Results')
+    toolbox()?.getToolboxItemById<ToolboxCategory>('Search Results')
       .updateFlyoutContents(BlocklyToolbox.searchResultsCategory(results))
-    toolbox().clearSelection()
+    toolbox()?.clearSelection()
     if (query.length > 0) {
       toolbox().selectItemByPosition(0)
       toolbox().refreshSelection()
@@ -371,7 +366,8 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
   }
 
   const search = (query: string) => {
-    console.log(index)
+    if (!index) return;
+
     setResults(index
         // Query the index with search string to get an [] of IDs
         .search(query, {expand: true}) // accept partial matches

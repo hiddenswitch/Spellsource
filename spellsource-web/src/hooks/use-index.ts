@@ -4,7 +4,7 @@ import elasticlunr, {Index} from 'elasticlunr'
 import {BlocklyDataContext} from "../pages/card-editor";
 import {BlockDef} from "../lib/blocks";
 import {CardDef} from "../components/card-display";
-import {ImageDef} from "../lib/fs-utils";
+import {ImageDef} from "../__generated__/client";
 
 export type SearchNode = BlockSearchNode | CardSearchNode | ArtSearchNode | MarkdownSearchNode
 interface ISearchNode {
@@ -35,7 +35,7 @@ interface MarkdownSearchNode extends ISearchNode {
 
 // returns index
 export const useIndex = () => {
-  const {allBlocks, allArt, allCards, blocksByType, ready} = useContext(BlocklyDataContext);
+  const {allBlocks, allArt, cardsById, blocksByType, ready} = useContext(BlocklyDataContext);
   const index = useRef<Index<SearchNode> | undefined>(undefined)
   if (!index.current && ready) {
     index.current = elasticlunr<SearchNode>(idx => {
@@ -63,7 +63,7 @@ export const useIndex = () => {
         })
       }
 
-      for (const card of allCards) {
+      for (const card of Object.values(cardsById)) {
         idx.addDoc({
           id: card.id,
           title: card.name || "",

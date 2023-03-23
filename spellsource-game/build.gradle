@@ -23,5 +23,5 @@ tasks.generateTypeScript {
     jsonLibrary = 'gson'
     classPatterns = ["net.demilich.metastone.game.cards.**"]
     outputKind = 'module'
-    outputFile = rootProject.project("spellsource-web").file("src/lib/spellsource-game.d.ts")
+    outputFile = rootProject.project("spellsource-web").file("src/__generated__/spellsource-game.d.ts")
 }
