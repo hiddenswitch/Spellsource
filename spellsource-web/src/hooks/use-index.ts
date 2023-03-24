@@ -11,6 +11,7 @@ interface ISearchNode {
   id: string
   title: string
   description: string
+  path: string
 }
 
 interface BlockSearchNode extends ISearchNode {
@@ -33,6 +34,15 @@ interface MarkdownSearchNode extends ISearchNode {
   node: string
 }
 
+export const cardSearchNode = (card: CardDef): CardSearchNode => ({
+  id: card.id,
+  title: card.name || "",
+  description: card.description || "",
+  nodeType: "Card",
+  node: card,
+  path: `/cards/${card.id}`
+});
+
 // returns index
 export const useIndex = () => {
   const {allBlocks, allArt, cardsById, blocksByType, ready} = useContext(BlocklyDataContext);
@@ -49,7 +59,8 @@ export const useIndex = () => {
           title: setupSearchMessage(block, blocksByType) ?? "",
           description: block.comment || "",
           nodeType: "Block",
-          node: block
+          node: block,
+          path: `/card-editor?block=${block.type}`
         })
       }
 
@@ -59,18 +70,13 @@ export const useIndex = () => {
           title: art.name,
           description: art.src,
           nodeType: "File",
-          node: art
+          node: art,
+          path: art.src
         })
       }
 
       for (const card of Object.values(cardsById)) {
-        idx.addDoc({
-          id: card.id,
-          title: card.name || "",
-          description: card.description || "",
-          nodeType: "Card",
-          node: card
-        })
+        idx.addDoc(cardSearchNode(card))
       }
     });
   }

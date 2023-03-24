@@ -11,18 +11,15 @@ import Image from "next/image";
 function HeroIntroSection() {
   const title = "Let’s rethink game development"
   const body = "Spellsource is a community-driven, open-source digital card game where every card is free. The Spellsource community has authored thousands of cards and continues to grow. Learn more about the game here."
-  
+
   const logos = [mozilla, mit, harvard, un, unity];
-  const images = logos.map(image => {
-    console.log(image);
-    return <Image alt={""} key={image} src={image} className={styles.logos}/>
- });
+  const images = logos.map((image, i) => <Image alt={""} key={i} src={image} className={styles.logos}/>);
 
   return (
     <div className={`${styles.heroContainer} ${styles.backgroundGradient1}`}>
       <div className={styles.heroTextContainer}>
-          <div className={styles.heroTitle}><h1>{title}</h1></div>
-          <div className={styles.heroBody}><h2>{body}</h2></div>
+        <div className={styles.heroTitle}><h1>{title}</h1></div>
+        <div className={styles.heroBody}><h2>{body}</h2></div>
       </div>
       <div className={styles.heroButtonsContainer}>
         <Button title='Play Now' buttonStyle='dark' route={'/download'}/>
@@ -35,7 +32,7 @@ function HeroIntroSection() {
 }
 
 const Button = ({title, route, buttonStyle}) => {
-  
+
   const light: CSSProperties = {
     color: '#1B1B1B',
     border: '2px solid #1B1B1B',
@@ -49,7 +46,7 @@ const Button = ({title, route, buttonStyle}) => {
   };
   const dark: CSSProperties = {
     color: '#fff',
-    backgroundColor: '#2837FF', 
+    backgroundColor: '#2837FF',
     border: '2px solid #2837FF',
     borderRadius: '12px',
     fontSize: '32px',

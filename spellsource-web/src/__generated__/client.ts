@@ -15,44 +15,133 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /**
+   * A signed eight-byte integer. The upper big integer values are greater than the
+   * max value for a JavaScript number. Therefore all big integers will be output as
+   * strings and not numbers.
+   */
   BigInt: any;
+  /** A location in a connection that can be used for resuming pagination. */
   Cursor: any;
+  /**
+   * A point in time as described by the [ISO
+   * 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
+   */
   Datetime: any;
+  /** A JavaScript object encoded in the JSON format as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
+};
+
+/** A filter to be used against BigInt fields. All fields are combined with a logical ‘and.’ */
+export type BigIntFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<Scalars['BigInt']>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<Scalars['BigInt']>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<Scalars['BigInt']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<Scalars['BigInt']>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<Scalars['BigInt']>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<Scalars['BigInt']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<Scalars['BigInt']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<Scalars['BigInt']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<Scalars['BigInt']>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<Scalars['BigInt']>>;
+};
+
+/** A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’ */
+export type BooleanFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<Scalars['Boolean']>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<Scalars['Boolean']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<Scalars['Boolean']>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<Scalars['Boolean']>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<Scalars['Boolean']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<Scalars['Boolean']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<Scalars['Boolean']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<Scalars['Boolean']>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<Scalars['Boolean']>>;
 };
 
 export type BotUser = Node & {
   __typename?: 'BotUser';
   id: Scalars['String'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
 };
 
+/** A condition to be used against `BotUser` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type BotUserCondition = {
+  /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['String']>;
 };
 
+/** A filter to be used against `BotUser` object types. All fields are combined with a logical ‘and.’ */
+export type BotUserFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<BotUserFilter>>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<BotUserFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<BotUserFilter>>;
+};
+
+/** An input for mutations affecting `BotUser` */
 export type BotUserInput = {
   id: Scalars['String'];
 };
 
+/** Represents an update to a `BotUser`. Fields that are set will be updated. */
 export type BotUserPatch = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+/** A connection to a list of `BotUser` values. */
 export type BotUsersConnection = {
   __typename?: 'BotUsersConnection';
+  /** A list of edges which contains the `BotUser` and cursor to aid in pagination. */
   edges: Array<BotUsersEdge>;
+  /** A list of `BotUser` objects. */
   nodes: Array<Maybe<BotUser>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  /** The count of *all* `BotUser` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
+/** A `BotUser` edge in the connection. */
 export type BotUsersEdge = {
   __typename?: 'BotUsersEdge';
+  /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
+  /** The `BotUser` at the end of the edge. */
   node?: Maybe<BotUser>;
 };
 
+/** Methods to use when ordering `BotUser`. */
 export const BotUsersOrderBy = {
   IdAsc: 'ID_ASC',
   IdDesc: 'ID_DESC',
@@ -66,11 +155,13 @@ export type Card = Node & {
   __typename?: 'Card';
   blocklyWorkspace?: Maybe<Scalars['String']>;
   cardScript?: Maybe<Scalars['JSON']>;
+  /** Reads and enables pagination through a set of `CardsInDeck`. */
   cardsInDecksByCardId: CardsInDecksConnection;
   createdAt: Scalars['Datetime'];
   createdBy: Scalars['String'];
   id: Scalars['String'];
   lastModified: Scalars['Datetime'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   uri?: Maybe<Scalars['String']>;
 };
@@ -80,22 +171,54 @@ export type CardCardsInDecksByCardIdArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<CardsInDeckCondition>;
+  filter?: InputMaybe<CardsInDeckFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<CardsInDecksOrderBy>>;
 };
 
+/** A condition to be used against `Card` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type CardCondition = {
+  /** Checks for equality with the object’s `blocklyWorkspace` field. */
   blocklyWorkspace?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `cardScript` field. */
   cardScript?: InputMaybe<Scalars['JSON']>;
+  /** Checks for equality with the object’s `createdAt` field. */
   createdAt?: InputMaybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `createdBy` field. */
   createdBy?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `lastModified` field. */
   lastModified?: InputMaybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `uri` field. */
   uri?: InputMaybe<Scalars['String']>;
 };
 
+/** A filter to be used against `Card` object types. All fields are combined with a logical ‘and.’ */
+export type CardFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<CardFilter>>;
+  /** Filter by the object’s `cardScript` field. */
+  cardScript?: InputMaybe<JsonFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: InputMaybe<DatetimeFilter>;
+  /** Filter by the object’s `createdBy` field. */
+  createdBy?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `lastModified` field. */
+  lastModified?: InputMaybe<DatetimeFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<CardFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<CardFilter>>;
+  /** Filter by the object’s `uri` field. */
+  uri?: InputMaybe<StringFilter>;
+};
+
+/** An input for mutations affecting `Card` */
 export type CardInput = {
   blocklyWorkspace?: InputMaybe<Scalars['String']>;
   cardScript?: InputMaybe<Scalars['JSON']>;
@@ -106,6 +229,7 @@ export type CardInput = {
   uri?: InputMaybe<Scalars['String']>;
 };
 
+/** Represents an update to a `Card`. Fields that are set will be updated. */
 export type CardPatch = {
   blocklyWorkspace?: InputMaybe<Scalars['String']>;
   cardScript?: InputMaybe<Scalars['JSON']>;
@@ -116,60 +240,111 @@ export type CardPatch = {
   uri?: InputMaybe<Scalars['String']>;
 };
 
+/** A connection to a list of `Card` values. */
 export type CardsConnection = {
   __typename?: 'CardsConnection';
+  /** A list of edges which contains the `Card` and cursor to aid in pagination. */
   edges: Array<CardsEdge>;
+  /** A list of `Card` objects. */
   nodes: Array<Maybe<Card>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  /** The count of *all* `Card` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
+/** A `Card` edge in the connection. */
 export type CardsEdge = {
   __typename?: 'CardsEdge';
+  /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Card` at the end of the edge. */
   node?: Maybe<Card>;
 };
 
 export type CardsInDeck = Node & {
   __typename?: 'CardsInDeck';
+  /** Reads a single `Card` that is related to this `CardsInDeck`. */
   cardByCardId?: Maybe<Card>;
+  /** cannot delete cards that are currently used in decks */
   cardId: Scalars['String'];
+  /** Reads a single `Deck` that is related to this `CardsInDeck`. */
   deckByDeckId?: Maybe<Deck>;
+  /** deleting a deck deletes all its card references */
   deckId: Scalars['String'];
   id: Scalars['BigInt'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
 };
 
+/**
+ * A condition to be used against `CardsInDeck` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ */
 export type CardsInDeckCondition = {
+  /** Checks for equality with the object’s `cardId` field. */
   cardId?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `deckId` field. */
   deckId?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['BigInt']>;
 };
 
+/** A filter to be used against `CardsInDeck` object types. All fields are combined with a logical ‘and.’ */
+export type CardsInDeckFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<CardsInDeckFilter>>;
+  /** Filter by the object’s `cardId` field. */
+  cardId?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `deckId` field. */
+  deckId?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<BigIntFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<CardsInDeckFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<CardsInDeckFilter>>;
+};
+
+/** An input for mutations affecting `CardsInDeck` */
 export type CardsInDeckInput = {
+  /** cannot delete cards that are currently used in decks */
   cardId: Scalars['String'];
+  /** deleting a deck deletes all its card references */
   deckId: Scalars['String'];
 };
 
+/** Represents an update to a `CardsInDeck`. Fields that are set will be updated. */
 export type CardsInDeckPatch = {
+  /** cannot delete cards that are currently used in decks */
   cardId?: InputMaybe<Scalars['String']>;
+  /** deleting a deck deletes all its card references */
   deckId?: InputMaybe<Scalars['String']>;
 };
 
+/** A connection to a list of `CardsInDeck` values. */
 export type CardsInDecksConnection = {
   __typename?: 'CardsInDecksConnection';
+  /** A list of edges which contains the `CardsInDeck` and cursor to aid in pagination. */
   edges: Array<CardsInDecksEdge>;
+  /** A list of `CardsInDeck` objects. */
   nodes: Array<Maybe<CardsInDeck>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  /** The count of *all* `CardsInDeck` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
+/** A `CardsInDeck` edge in the connection. */
 export type CardsInDecksEdge = {
   __typename?: 'CardsInDecksEdge';
+  /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
+  /** The `CardsInDeck` at the end of the edge. */
   node?: Maybe<CardsInDeck>;
 };
 
+/** Methods to use when ordering `CardsInDeck`. */
 export const CardsInDecksOrderBy = {
   CardIdAsc: 'CARD_ID_ASC',
   CardIdDesc: 'CARD_ID_DESC',
@@ -183,6 +358,7 @@ export const CardsInDecksOrderBy = {
 } as const;
 
 export type CardsInDecksOrderBy = typeof CardsInDecksOrderBy[keyof typeof CardsInDecksOrderBy];
+/** Methods to use when ordering `Card`. */
 export const CardsOrderBy = {
   BlocklyWorkspaceAsc: 'BLOCKLY_WORKSPACE_ASC',
   BlocklyWorkspaceDesc: 'BLOCKLY_WORKSPACE_DESC',
@@ -204,265 +380,505 @@ export const CardsOrderBy = {
 } as const;
 
 export type CardsOrderBy = typeof CardsOrderBy[keyof typeof CardsOrderBy];
+/** All input for the create `BotUser` mutation. */
 export type CreateBotUserInput = {
+  /** The `BotUser` to be created by this mutation. */
   botUser: BotUserInput;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
 };
 
+/** The output of our create `BotUser` mutation. */
 export type CreateBotUserPayload = {
   __typename?: 'CreateBotUserPayload';
+  /** The `BotUser` that was created by this mutation. */
   botUser?: Maybe<BotUser>;
+  /** An edge for our `BotUser`. May be used by Relay 1. */
   botUserEdge?: Maybe<BotUsersEdge>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our create `BotUser` mutation. */
 export type CreateBotUserPayloadBotUserEdgeArgs = {
   orderBy?: InputMaybe<Array<BotUsersOrderBy>>;
 };
 
+/** All input for the create `Card` mutation. */
 export type CreateCardInput = {
+  /** The `Card` to be created by this mutation. */
   card: CardInput;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
 };
 
+/** The output of our create `Card` mutation. */
 export type CreateCardPayload = {
   __typename?: 'CreateCardPayload';
+  /** The `Card` that was created by this mutation. */
   card?: Maybe<Card>;
+  /** An edge for our `Card`. May be used by Relay 1. */
   cardEdge?: Maybe<CardsEdge>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our create `Card` mutation. */
 export type CreateCardPayloadCardEdgeArgs = {
   orderBy?: InputMaybe<Array<CardsOrderBy>>;
 };
 
+/** All input for the create `CardsInDeck` mutation. */
 export type CreateCardsInDeckInput = {
+  /** The `CardsInDeck` to be created by this mutation. */
   cardsInDeck: CardsInDeckInput;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
 };
 
+/** The output of our create `CardsInDeck` mutation. */
 export type CreateCardsInDeckPayload = {
   __typename?: 'CreateCardsInDeckPayload';
+  /** Reads a single `Card` that is related to this `CardsInDeck`. */
   cardByCardId?: Maybe<Card>;
+  /** The `CardsInDeck` that was created by this mutation. */
   cardsInDeck?: Maybe<CardsInDeck>;
+  /** An edge for our `CardsInDeck`. May be used by Relay 1. */
   cardsInDeckEdge?: Maybe<CardsInDecksEdge>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `CardsInDeck`. */
   deckByDeckId?: Maybe<Deck>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our create `CardsInDeck` mutation. */
 export type CreateCardsInDeckPayloadCardsInDeckEdgeArgs = {
   orderBy?: InputMaybe<Array<CardsInDecksOrderBy>>;
 };
 
+/** All input for the create `Deck` mutation. */
 export type CreateDeckInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `Deck` to be created by this mutation. */
   deck: DeckInput;
 };
 
+/** The output of our create `Deck` mutation. */
 export type CreateDeckPayload = {
   __typename?: 'CreateDeckPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Deck` that was created by this mutation. */
   deck?: Maybe<Deck>;
+  /** An edge for our `Deck`. May be used by Relay 1. */
   deckEdge?: Maybe<DecksEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our create `Deck` mutation. */
 export type CreateDeckPayloadDeckEdgeArgs = {
   orderBy?: InputMaybe<Array<DecksOrderBy>>;
 };
 
+/** All input for the create `DeckPlayerAttributeTuple` mutation. */
 export type CreateDeckPlayerAttributeTupleInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `DeckPlayerAttributeTuple` to be created by this mutation. */
   deckPlayerAttributeTuple: DeckPlayerAttributeTupleInput;
 };
 
+/** The output of our create `DeckPlayerAttributeTuple` mutation. */
 export type CreateDeckPlayerAttributeTuplePayload = {
   __typename?: 'CreateDeckPlayerAttributeTuplePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `DeckPlayerAttributeTuple`. */
   deckByDeckId?: Maybe<Deck>;
+  /** The `DeckPlayerAttributeTuple` that was created by this mutation. */
   deckPlayerAttributeTuple?: Maybe<DeckPlayerAttributeTuple>;
+  /** An edge for our `DeckPlayerAttributeTuple`. May be used by Relay 1. */
   deckPlayerAttributeTupleEdge?: Maybe<DeckPlayerAttributeTuplesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our create `DeckPlayerAttributeTuple` mutation. */
 export type CreateDeckPlayerAttributeTuplePayloadDeckPlayerAttributeTupleEdgeArgs = {
   orderBy?: InputMaybe<Array<DeckPlayerAttributeTuplesOrderBy>>;
 };
 
+/** All input for the create `DeckShare` mutation. */
 export type CreateDeckShareInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `DeckShare` to be created by this mutation. */
   deckShare: DeckShareInput;
 };
 
+/** The output of our create `DeckShare` mutation. */
 export type CreateDeckSharePayload = {
   __typename?: 'CreateDeckSharePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `DeckShare`. */
   deckByDeckId?: Maybe<Deck>;
+  /** The `DeckShare` that was created by this mutation. */
   deckShare?: Maybe<DeckShare>;
+  /** An edge for our `DeckShare`. May be used by Relay 1. */
   deckShareEdge?: Maybe<DeckSharesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our create `DeckShare` mutation. */
 export type CreateDeckSharePayloadDeckShareEdgeArgs = {
   orderBy?: InputMaybe<Array<DeckSharesOrderBy>>;
 };
 
+/** All input for the create `Friend` mutation. */
 export type CreateFriendInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `Friend` to be created by this mutation. */
   friend: FriendInput;
 };
 
+/** The output of our create `Friend` mutation. */
 export type CreateFriendPayload = {
   __typename?: 'CreateFriendPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Friend` that was created by this mutation. */
   friend?: Maybe<Friend>;
+  /** An edge for our `Friend`. May be used by Relay 1. */
   friendEdge?: Maybe<FriendsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our create `Friend` mutation. */
 export type CreateFriendPayloadFriendEdgeArgs = {
   orderBy?: InputMaybe<Array<FriendsOrderBy>>;
 };
 
+/** All input for the create `Game` mutation. */
 export type CreateGameInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `Game` to be created by this mutation. */
   game: GameInput;
 };
 
+/** The output of our create `Game` mutation. */
 export type CreateGamePayload = {
   __typename?: 'CreateGamePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Game` that was created by this mutation. */
   game?: Maybe<Game>;
+  /** An edge for our `Game`. May be used by Relay 1. */
   gameEdge?: Maybe<GamesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our create `Game` mutation. */
 export type CreateGamePayloadGameEdgeArgs = {
   orderBy?: InputMaybe<Array<GamesOrderBy>>;
 };
 
+/** All input for the create `GameUser` mutation. */
 export type CreateGameUserInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `GameUser` to be created by this mutation. */
   gameUser: GameUserInput;
 };
 
+/** The output of our create `GameUser` mutation. */
 export type CreateGameUserPayload = {
   __typename?: 'CreateGameUserPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `GameUser`. */
   deckByDeckId?: Maybe<Deck>;
+  /** Reads a single `Game` that is related to this `GameUser`. */
   gameByGameId?: Maybe<Game>;
+  /** The `GameUser` that was created by this mutation. */
   gameUser?: Maybe<GameUser>;
+  /** An edge for our `GameUser`. May be used by Relay 1. */
   gameUserEdge?: Maybe<GameUsersEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our create `GameUser` mutation. */
 export type CreateGameUserPayloadGameUserEdgeArgs = {
   orderBy?: InputMaybe<Array<GameUsersOrderBy>>;
 };
 
+/** All input for the create `Guest` mutation. */
 export type CreateGuestInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `Guest` to be created by this mutation. */
   guest: GuestInput;
 };
 
+/** The output of our create `Guest` mutation. */
 export type CreateGuestPayload = {
   __typename?: 'CreateGuestPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Guest` that was created by this mutation. */
   guest?: Maybe<Guest>;
+  /** An edge for our `Guest`. May be used by Relay 1. */
   guestEdge?: Maybe<GuestsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our create `Guest` mutation. */
 export type CreateGuestPayloadGuestEdgeArgs = {
   orderBy?: InputMaybe<Array<GuestsOrderBy>>;
 };
 
+/** All input for the create `MatchmakingQueue` mutation. */
 export type CreateMatchmakingQueueInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `MatchmakingQueue` to be created by this mutation. */
   matchmakingQueue: MatchmakingQueueInput;
 };
 
+/** The output of our create `MatchmakingQueue` mutation. */
 export type CreateMatchmakingQueuePayload = {
   __typename?: 'CreateMatchmakingQueuePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** The `MatchmakingQueue` that was created by this mutation. */
   matchmakingQueue?: Maybe<MatchmakingQueue>;
+  /** An edge for our `MatchmakingQueue`. May be used by Relay 1. */
   matchmakingQueueEdge?: Maybe<MatchmakingQueuesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our create `MatchmakingQueue` mutation. */
 export type CreateMatchmakingQueuePayloadMatchmakingQueueEdgeArgs = {
   orderBy?: InputMaybe<Array<MatchmakingQueuesOrderBy>>;
 };
 
+/** All input for the create `MatchmakingTicket` mutation. */
 export type CreateMatchmakingTicketInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `MatchmakingTicket` to be created by this mutation. */
   matchmakingTicket: MatchmakingTicketInput;
 };
 
+/** The output of our create `MatchmakingTicket` mutation. */
 export type CreateMatchmakingTicketPayload = {
   __typename?: 'CreateMatchmakingTicketPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `MatchmakingTicket`. */
   deckByBotDeckId?: Maybe<Deck>;
+  /** Reads a single `Deck` that is related to this `MatchmakingTicket`. */
   deckByDeckId?: Maybe<Deck>;
+  /** Reads a single `MatchmakingQueue` that is related to this `MatchmakingTicket`. */
   matchmakingQueueByQueueId?: Maybe<MatchmakingQueue>;
+  /** The `MatchmakingTicket` that was created by this mutation. */
   matchmakingTicket?: Maybe<MatchmakingTicket>;
+  /** An edge for our `MatchmakingTicket`. May be used by Relay 1. */
   matchmakingTicketEdge?: Maybe<MatchmakingTicketsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our create `MatchmakingTicket` mutation. */
 export type CreateMatchmakingTicketPayloadMatchmakingTicketEdgeArgs = {
   orderBy?: InputMaybe<Array<MatchmakingTicketsOrderBy>>;
 };
 
+/** All input for the create `UserEntityAddon` mutation. */
 export type CreateUserEntityAddonInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `UserEntityAddon` to be created by this mutation. */
   userEntityAddon: UserEntityAddonInput;
 };
 
+/** The output of our create `UserEntityAddon` mutation. */
 export type CreateUserEntityAddonPayload = {
   __typename?: 'CreateUserEntityAddonPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
+  /** The `UserEntityAddon` that was created by this mutation. */
   userEntityAddon?: Maybe<UserEntityAddon>;
+  /** An edge for our `UserEntityAddon`. May be used by Relay 1. */
   userEntityAddonEdge?: Maybe<UserEntityAddonsEdge>;
 };
 
 
+/** The output of our create `UserEntityAddon` mutation. */
 export type CreateUserEntityAddonPayloadUserEntityAddonEdgeArgs = {
   orderBy?: InputMaybe<Array<UserEntityAddonsOrderBy>>;
 };
 
+/** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
+export type DatetimeFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<Scalars['Datetime']>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<Scalars['Datetime']>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<Scalars['Datetime']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<Scalars['Datetime']>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<Scalars['Datetime']>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<Scalars['Datetime']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<Scalars['Datetime']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<Scalars['Datetime']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<Scalars['Datetime']>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<Scalars['Datetime']>>;
+};
+
 export type Deck = Node & {
   __typename?: 'Deck';
+  /** Reads and enables pagination through a set of `CardsInDeck`. */
   cardsInDecksByDeckId: CardsInDecksConnection;
+  /** who created this deck originally */
   createdBy: Scalars['String'];
+  /** Reads and enables pagination through a set of `DeckPlayerAttributeTuple`. */
   deckPlayerAttributeTuplesByDeckId: DeckPlayerAttributeTuplesConnection;
+  /** Reads and enables pagination through a set of `DeckShare`. */
   deckSharesByDeckId: DeckSharesConnection;
   deckType: Scalars['Int'];
   format?: Maybe<Scalars['String']>;
+  /** Reads and enables pagination through a set of `GameUser`. */
   gameUsersByDeckId: GameUsersConnection;
   heroClass?: Maybe<Scalars['String']>;
   id: Scalars['String'];
+  /** premades always shared with all users by application logic */
   isPremade: Scalars['Boolean'];
+  /** who last edited this deck */
   lastEditedBy: Scalars['String'];
+  /** Reads and enables pagination through a set of `MatchmakingTicket`. */
   matchmakingTicketsByBotDeckId: MatchmakingTicketsConnection;
+  /** Reads and enables pagination through a set of `MatchmakingTicket`. */
   matchmakingTicketsByDeckId: MatchmakingTicketsConnection;
   name?: Maybe<Scalars['String']>;
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   permittedToDuplicate: Scalars['Boolean'];
   trashed: Scalars['Boolean'];
@@ -473,6 +889,7 @@ export type DeckCardsInDecksByDeckIdArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<CardsInDeckCondition>;
+  filter?: InputMaybe<CardsInDeckFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -484,6 +901,7 @@ export type DeckDeckPlayerAttributeTuplesByDeckIdArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<DeckPlayerAttributeTupleCondition>;
+  filter?: InputMaybe<DeckPlayerAttributeTupleFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -495,6 +913,7 @@ export type DeckDeckSharesByDeckIdArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<DeckShareCondition>;
+  filter?: InputMaybe<DeckShareFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -506,6 +925,7 @@ export type DeckGameUsersByDeckIdArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<GameUserCondition>;
+  filter?: InputMaybe<GameUserFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -517,6 +937,7 @@ export type DeckMatchmakingTicketsByBotDeckIdArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<MatchmakingTicketCondition>;
+  filter?: InputMaybe<MatchmakingTicketFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -528,45 +949,95 @@ export type DeckMatchmakingTicketsByDeckIdArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<MatchmakingTicketCondition>;
+  filter?: InputMaybe<MatchmakingTicketFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<MatchmakingTicketsOrderBy>>;
 };
 
+/** A condition to be used against `Deck` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type DeckCondition = {
+  /** Checks for equality with the object’s `createdBy` field. */
   createdBy?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `deckType` field. */
   deckType?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `format` field. */
   format?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `heroClass` field. */
   heroClass?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `isPremade` field. */
   isPremade?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `lastEditedBy` field. */
   lastEditedBy?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `name` field. */
   name?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `permittedToDuplicate` field. */
   permittedToDuplicate?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `trashed` field. */
   trashed?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** A filter to be used against `Deck` object types. All fields are combined with a logical ‘and.’ */
+export type DeckFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<DeckFilter>>;
+  /** Filter by the object’s `createdBy` field. */
+  createdBy?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `deckType` field. */
+  deckType?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `format` field. */
+  format?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `heroClass` field. */
+  heroClass?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `isPremade` field. */
+  isPremade?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `lastEditedBy` field. */
+  lastEditedBy?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `name` field. */
+  name?: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<DeckFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<DeckFilter>>;
+  /** Filter by the object’s `permittedToDuplicate` field. */
+  permittedToDuplicate?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `trashed` field. */
+  trashed?: InputMaybe<BooleanFilter>;
+};
+
+/** An input for mutations affecting `Deck` */
 export type DeckInput = {
+  /** who created this deck originally */
   createdBy: Scalars['String'];
   deckType: Scalars['Int'];
   format?: InputMaybe<Scalars['String']>;
   heroClass?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
+  /** premades always shared with all users by application logic */
   isPremade?: InputMaybe<Scalars['Boolean']>;
+  /** who last edited this deck */
   lastEditedBy: Scalars['String'];
   name?: InputMaybe<Scalars['String']>;
   permittedToDuplicate?: InputMaybe<Scalars['Boolean']>;
   trashed?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** Represents an update to a `Deck`. Fields that are set will be updated. */
 export type DeckPatch = {
+  /** who created this deck originally */
   createdBy?: InputMaybe<Scalars['String']>;
   deckType?: InputMaybe<Scalars['Int']>;
   format?: InputMaybe<Scalars['String']>;
   heroClass?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
+  /** premades always shared with all users by application logic */
   isPremade?: InputMaybe<Scalars['Boolean']>;
+  /** who last edited this deck */
   lastEditedBy?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   permittedToDuplicate?: InputMaybe<Scalars['Boolean']>;
@@ -576,46 +1047,85 @@ export type DeckPatch = {
 export type DeckPlayerAttributeTuple = Node & {
   __typename?: 'DeckPlayerAttributeTuple';
   attribute: Scalars['Int'];
+  /** Reads a single `Deck` that is related to this `DeckPlayerAttributeTuple`. */
   deckByDeckId?: Maybe<Deck>;
   deckId: Scalars['String'];
   id: Scalars['BigInt'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   stringValue?: Maybe<Scalars['String']>;
 };
 
+/**
+ * A condition to be used against `DeckPlayerAttributeTuple` object types. All
+ * fields are tested for equality and combined with a logical ‘and.’
+ */
 export type DeckPlayerAttributeTupleCondition = {
+  /** Checks for equality with the object’s `attribute` field. */
   attribute?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `deckId` field. */
   deckId?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['BigInt']>;
+  /** Checks for equality with the object’s `stringValue` field. */
   stringValue?: InputMaybe<Scalars['String']>;
 };
 
+/** A filter to be used against `DeckPlayerAttributeTuple` object types. All fields are combined with a logical ‘and.’ */
+export type DeckPlayerAttributeTupleFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<DeckPlayerAttributeTupleFilter>>;
+  /** Filter by the object’s `attribute` field. */
+  attribute?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `deckId` field. */
+  deckId?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<BigIntFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<DeckPlayerAttributeTupleFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<DeckPlayerAttributeTupleFilter>>;
+  /** Filter by the object’s `stringValue` field. */
+  stringValue?: InputMaybe<StringFilter>;
+};
+
+/** An input for mutations affecting `DeckPlayerAttributeTuple` */
 export type DeckPlayerAttributeTupleInput = {
   attribute: Scalars['Int'];
   deckId: Scalars['String'];
   stringValue?: InputMaybe<Scalars['String']>;
 };
 
+/** Represents an update to a `DeckPlayerAttributeTuple`. Fields that are set will be updated. */
 export type DeckPlayerAttributeTuplePatch = {
   attribute?: InputMaybe<Scalars['Int']>;
   deckId?: InputMaybe<Scalars['String']>;
   stringValue?: InputMaybe<Scalars['String']>;
 };
 
+/** A connection to a list of `DeckPlayerAttributeTuple` values. */
 export type DeckPlayerAttributeTuplesConnection = {
   __typename?: 'DeckPlayerAttributeTuplesConnection';
+  /** A list of edges which contains the `DeckPlayerAttributeTuple` and cursor to aid in pagination. */
   edges: Array<DeckPlayerAttributeTuplesEdge>;
+  /** A list of `DeckPlayerAttributeTuple` objects. */
   nodes: Array<Maybe<DeckPlayerAttributeTuple>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  /** The count of *all* `DeckPlayerAttributeTuple` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
+/** A `DeckPlayerAttributeTuple` edge in the connection. */
 export type DeckPlayerAttributeTuplesEdge = {
   __typename?: 'DeckPlayerAttributeTuplesEdge';
+  /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
+  /** The `DeckPlayerAttributeTuple` at the end of the edge. */
   node?: Maybe<DeckPlayerAttributeTuple>;
 };
 
+/** Methods to use when ordering `DeckPlayerAttributeTuple`. */
 export const DeckPlayerAttributeTuplesOrderBy = {
   AttributeAsc: 'ATTRIBUTE_ASC',
   AttributeDesc: 'ATTRIBUTE_DESC',
@@ -631,47 +1141,84 @@ export const DeckPlayerAttributeTuplesOrderBy = {
 } as const;
 
 export type DeckPlayerAttributeTuplesOrderBy = typeof DeckPlayerAttributeTuplesOrderBy[keyof typeof DeckPlayerAttributeTuplesOrderBy];
+/** indicates a deck shared to a player */
 export type DeckShare = Node & {
   __typename?: 'DeckShare';
+  /** Reads a single `Deck` that is related to this `DeckShare`. */
   deckByDeckId?: Maybe<Deck>;
   deckId: Scalars['String'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   shareRecipientId: Scalars['String'];
   trashedByRecipient: Scalars['Boolean'];
 };
 
+/**
+ * A condition to be used against `DeckShare` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ */
 export type DeckShareCondition = {
+  /** Checks for equality with the object’s `deckId` field. */
   deckId?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `shareRecipientId` field. */
   shareRecipientId?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `trashedByRecipient` field. */
   trashedByRecipient?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** A filter to be used against `DeckShare` object types. All fields are combined with a logical ‘and.’ */
+export type DeckShareFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<DeckShareFilter>>;
+  /** Filter by the object’s `deckId` field. */
+  deckId?: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<DeckShareFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<DeckShareFilter>>;
+  /** Filter by the object’s `shareRecipientId` field. */
+  shareRecipientId?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `trashedByRecipient` field. */
+  trashedByRecipient?: InputMaybe<BooleanFilter>;
+};
+
+/** An input for mutations affecting `DeckShare` */
 export type DeckShareInput = {
   deckId: Scalars['String'];
   shareRecipientId: Scalars['String'];
   trashedByRecipient?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** Represents an update to a `DeckShare`. Fields that are set will be updated. */
 export type DeckSharePatch = {
   deckId?: InputMaybe<Scalars['String']>;
   shareRecipientId?: InputMaybe<Scalars['String']>;
   trashedByRecipient?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** A connection to a list of `DeckShare` values. */
 export type DeckSharesConnection = {
   __typename?: 'DeckSharesConnection';
+  /** A list of edges which contains the `DeckShare` and cursor to aid in pagination. */
   edges: Array<DeckSharesEdge>;
+  /** A list of `DeckShare` objects. */
   nodes: Array<Maybe<DeckShare>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  /** The count of *all* `DeckShare` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
+/** A `DeckShare` edge in the connection. */
 export type DeckSharesEdge = {
   __typename?: 'DeckSharesEdge';
+  /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
+  /** The `DeckShare` at the end of the edge. */
   node?: Maybe<DeckShare>;
 };
 
+/** Methods to use when ordering `DeckShare`. */
 export const DeckSharesOrderBy = {
   DeckIdAsc: 'DECK_ID_ASC',
   DeckIdDesc: 'DECK_ID_DESC',
@@ -685,20 +1232,29 @@ export const DeckSharesOrderBy = {
 } as const;
 
 export type DeckSharesOrderBy = typeof DeckSharesOrderBy[keyof typeof DeckSharesOrderBy];
+/** A connection to a list of `Deck` values. */
 export type DecksConnection = {
   __typename?: 'DecksConnection';
+  /** A list of edges which contains the `Deck` and cursor to aid in pagination. */
   edges: Array<DecksEdge>;
+  /** A list of `Deck` objects. */
   nodes: Array<Maybe<Deck>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  /** The count of *all* `Deck` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
+/** A `Deck` edge in the connection. */
 export type DecksEdge = {
   __typename?: 'DecksEdge';
+  /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Deck` at the end of the edge. */
   node?: Maybe<Deck>;
 };
 
+/** Methods to use when ordering `Deck`. */
 export const DecksOrderBy = {
   CreatedByAsc: 'CREATED_BY_ASC',
   CreatedByDesc: 'CREATED_BY_DESC',
@@ -726,326 +1282,595 @@ export const DecksOrderBy = {
 } as const;
 
 export type DecksOrderBy = typeof DecksOrderBy[keyof typeof DecksOrderBy];
+/** All input for the `deleteBotUserById` mutation. */
 export type DeleteBotUserByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
 };
 
+/** All input for the `deleteBotUser` mutation. */
 export type DeleteBotUserInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `BotUser` to be deleted. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our delete `BotUser` mutation. */
 export type DeleteBotUserPayload = {
   __typename?: 'DeleteBotUserPayload';
+  /** The `BotUser` that was deleted by this mutation. */
   botUser?: Maybe<BotUser>;
+  /** An edge for our `BotUser`. May be used by Relay 1. */
   botUserEdge?: Maybe<BotUsersEdge>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
   deletedBotUserId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our delete `BotUser` mutation. */
 export type DeleteBotUserPayloadBotUserEdgeArgs = {
   orderBy?: InputMaybe<Array<BotUsersOrderBy>>;
 };
 
+/** All input for the `deleteCardById` mutation. */
 export type DeleteCardByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
 };
 
+/** All input for the `deleteCard` mutation. */
 export type DeleteCardInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Card` to be deleted. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our delete `Card` mutation. */
 export type DeleteCardPayload = {
   __typename?: 'DeleteCardPayload';
+  /** The `Card` that was deleted by this mutation. */
   card?: Maybe<Card>;
+  /** An edge for our `Card`. May be used by Relay 1. */
   cardEdge?: Maybe<CardsEdge>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
   deletedCardId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our delete `Card` mutation. */
 export type DeleteCardPayloadCardEdgeArgs = {
   orderBy?: InputMaybe<Array<CardsOrderBy>>;
 };
 
+/** All input for the `deleteCardsInDeckById` mutation. */
 export type DeleteCardsInDeckByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['BigInt'];
 };
 
+/** All input for the `deleteCardsInDeck` mutation. */
 export type DeleteCardsInDeckInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `CardsInDeck` to be deleted. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our delete `CardsInDeck` mutation. */
 export type DeleteCardsInDeckPayload = {
   __typename?: 'DeleteCardsInDeckPayload';
+  /** Reads a single `Card` that is related to this `CardsInDeck`. */
   cardByCardId?: Maybe<Card>;
+  /** The `CardsInDeck` that was deleted by this mutation. */
   cardsInDeck?: Maybe<CardsInDeck>;
+  /** An edge for our `CardsInDeck`. May be used by Relay 1. */
   cardsInDeckEdge?: Maybe<CardsInDecksEdge>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `CardsInDeck`. */
   deckByDeckId?: Maybe<Deck>;
   deletedCardsInDeckId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our delete `CardsInDeck` mutation. */
 export type DeleteCardsInDeckPayloadCardsInDeckEdgeArgs = {
   orderBy?: InputMaybe<Array<CardsInDecksOrderBy>>;
 };
 
+/** All input for the `deleteDeckById` mutation. */
 export type DeleteDeckByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
 };
 
+/** All input for the `deleteDeck` mutation. */
 export type DeleteDeckInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Deck` to be deleted. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our delete `Deck` mutation. */
 export type DeleteDeckPayload = {
   __typename?: 'DeleteDeckPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Deck` that was deleted by this mutation. */
   deck?: Maybe<Deck>;
+  /** An edge for our `Deck`. May be used by Relay 1. */
   deckEdge?: Maybe<DecksEdge>;
   deletedDeckId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our delete `Deck` mutation. */
 export type DeleteDeckPayloadDeckEdgeArgs = {
   orderBy?: InputMaybe<Array<DecksOrderBy>>;
 };
 
+/** All input for the `deleteDeckPlayerAttributeTupleById` mutation. */
 export type DeleteDeckPlayerAttributeTupleByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['BigInt'];
 };
 
+/** All input for the `deleteDeckPlayerAttributeTuple` mutation. */
 export type DeleteDeckPlayerAttributeTupleInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `DeckPlayerAttributeTuple` to be deleted. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our delete `DeckPlayerAttributeTuple` mutation. */
 export type DeleteDeckPlayerAttributeTuplePayload = {
   __typename?: 'DeleteDeckPlayerAttributeTuplePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `DeckPlayerAttributeTuple`. */
   deckByDeckId?: Maybe<Deck>;
+  /** The `DeckPlayerAttributeTuple` that was deleted by this mutation. */
   deckPlayerAttributeTuple?: Maybe<DeckPlayerAttributeTuple>;
+  /** An edge for our `DeckPlayerAttributeTuple`. May be used by Relay 1. */
   deckPlayerAttributeTupleEdge?: Maybe<DeckPlayerAttributeTuplesEdge>;
   deletedDeckPlayerAttributeTupleId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our delete `DeckPlayerAttributeTuple` mutation. */
 export type DeleteDeckPlayerAttributeTuplePayloadDeckPlayerAttributeTupleEdgeArgs = {
   orderBy?: InputMaybe<Array<DeckPlayerAttributeTuplesOrderBy>>;
 };
 
+/** All input for the `deleteDeckShareByDeckIdAndShareRecipientId` mutation. */
 export type DeleteDeckShareByDeckIdAndShareRecipientIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   deckId: Scalars['String'];
   shareRecipientId: Scalars['String'];
 };
 
+/** All input for the `deleteDeckShare` mutation. */
 export type DeleteDeckShareInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `DeckShare` to be deleted. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our delete `DeckShare` mutation. */
 export type DeleteDeckSharePayload = {
   __typename?: 'DeleteDeckSharePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `DeckShare`. */
   deckByDeckId?: Maybe<Deck>;
+  /** The `DeckShare` that was deleted by this mutation. */
   deckShare?: Maybe<DeckShare>;
+  /** An edge for our `DeckShare`. May be used by Relay 1. */
   deckShareEdge?: Maybe<DeckSharesEdge>;
   deletedDeckShareId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our delete `DeckShare` mutation. */
 export type DeleteDeckSharePayloadDeckShareEdgeArgs = {
   orderBy?: InputMaybe<Array<DeckSharesOrderBy>>;
 };
 
+/** All input for the `deleteFriendByIdAndFriend` mutation. */
 export type DeleteFriendByIdAndFriendInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   friend: Scalars['String'];
   id: Scalars['String'];
 };
 
+/** All input for the `deleteFriend` mutation. */
 export type DeleteFriendInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Friend` to be deleted. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our delete `Friend` mutation. */
 export type DeleteFriendPayload = {
   __typename?: 'DeleteFriendPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
   deletedFriendId?: Maybe<Scalars['ID']>;
+  /** The `Friend` that was deleted by this mutation. */
   friend?: Maybe<Friend>;
+  /** An edge for our `Friend`. May be used by Relay 1. */
   friendEdge?: Maybe<FriendsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our delete `Friend` mutation. */
 export type DeleteFriendPayloadFriendEdgeArgs = {
   orderBy?: InputMaybe<Array<FriendsOrderBy>>;
 };
 
+/** All input for the `deleteGameById` mutation. */
 export type DeleteGameByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['BigInt'];
 };
 
+/** All input for the `deleteGame` mutation. */
 export type DeleteGameInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Game` to be deleted. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our delete `Game` mutation. */
 export type DeleteGamePayload = {
   __typename?: 'DeleteGamePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
   deletedGameId?: Maybe<Scalars['ID']>;
+  /** The `Game` that was deleted by this mutation. */
   game?: Maybe<Game>;
+  /** An edge for our `Game`. May be used by Relay 1. */
   gameEdge?: Maybe<GamesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our delete `Game` mutation. */
 export type DeleteGamePayloadGameEdgeArgs = {
   orderBy?: InputMaybe<Array<GamesOrderBy>>;
 };
 
+/** All input for the `deleteGameUserByGameIdAndUserId` mutation. */
 export type DeleteGameUserByGameIdAndUserIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   gameId: Scalars['BigInt'];
   userId: Scalars['String'];
 };
 
+/** All input for the `deleteGameUser` mutation. */
 export type DeleteGameUserInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `GameUser` to be deleted. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our delete `GameUser` mutation. */
 export type DeleteGameUserPayload = {
   __typename?: 'DeleteGameUserPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `GameUser`. */
   deckByDeckId?: Maybe<Deck>;
   deletedGameUserId?: Maybe<Scalars['ID']>;
+  /** Reads a single `Game` that is related to this `GameUser`. */
   gameByGameId?: Maybe<Game>;
+  /** The `GameUser` that was deleted by this mutation. */
   gameUser?: Maybe<GameUser>;
+  /** An edge for our `GameUser`. May be used by Relay 1. */
   gameUserEdge?: Maybe<GameUsersEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our delete `GameUser` mutation. */
 export type DeleteGameUserPayloadGameUserEdgeArgs = {
   orderBy?: InputMaybe<Array<GameUsersOrderBy>>;
 };
 
+/** All input for the `deleteGuestById` mutation. */
 export type DeleteGuestByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['BigInt'];
 };
 
+/** All input for the `deleteGuest` mutation. */
 export type DeleteGuestInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Guest` to be deleted. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our delete `Guest` mutation. */
 export type DeleteGuestPayload = {
   __typename?: 'DeleteGuestPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
   deletedGuestId?: Maybe<Scalars['ID']>;
+  /** The `Guest` that was deleted by this mutation. */
   guest?: Maybe<Guest>;
+  /** An edge for our `Guest`. May be used by Relay 1. */
   guestEdge?: Maybe<GuestsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our delete `Guest` mutation. */
 export type DeleteGuestPayloadGuestEdgeArgs = {
   orderBy?: InputMaybe<Array<GuestsOrderBy>>;
 };
 
+/** All input for the `deleteMatchmakingQueueById` mutation. */
 export type DeleteMatchmakingQueueByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
 };
 
+/** All input for the `deleteMatchmakingQueue` mutation. */
 export type DeleteMatchmakingQueueInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `MatchmakingQueue` to be deleted. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our delete `MatchmakingQueue` mutation. */
 export type DeleteMatchmakingQueuePayload = {
   __typename?: 'DeleteMatchmakingQueuePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
   deletedMatchmakingQueueId?: Maybe<Scalars['ID']>;
+  /** The `MatchmakingQueue` that was deleted by this mutation. */
   matchmakingQueue?: Maybe<MatchmakingQueue>;
+  /** An edge for our `MatchmakingQueue`. May be used by Relay 1. */
   matchmakingQueueEdge?: Maybe<MatchmakingQueuesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our delete `MatchmakingQueue` mutation. */
 export type DeleteMatchmakingQueuePayloadMatchmakingQueueEdgeArgs = {
   orderBy?: InputMaybe<Array<MatchmakingQueuesOrderBy>>;
 };
 
+/** All input for the `deleteMatchmakingTicketByUserId` mutation. */
 export type DeleteMatchmakingTicketByUserIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   userId: Scalars['String'];
 };
 
+/** All input for the `deleteMatchmakingTicket` mutation. */
 export type DeleteMatchmakingTicketInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `MatchmakingTicket` to be deleted. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our delete `MatchmakingTicket` mutation. */
 export type DeleteMatchmakingTicketPayload = {
   __typename?: 'DeleteMatchmakingTicketPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `MatchmakingTicket`. */
   deckByBotDeckId?: Maybe<Deck>;
+  /** Reads a single `Deck` that is related to this `MatchmakingTicket`. */
   deckByDeckId?: Maybe<Deck>;
   deletedMatchmakingTicketId?: Maybe<Scalars['ID']>;
+  /** Reads a single `MatchmakingQueue` that is related to this `MatchmakingTicket`. */
   matchmakingQueueByQueueId?: Maybe<MatchmakingQueue>;
+  /** The `MatchmakingTicket` that was deleted by this mutation. */
   matchmakingTicket?: Maybe<MatchmakingTicket>;
+  /** An edge for our `MatchmakingTicket`. May be used by Relay 1. */
   matchmakingTicketEdge?: Maybe<MatchmakingTicketsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our delete `MatchmakingTicket` mutation. */
 export type DeleteMatchmakingTicketPayloadMatchmakingTicketEdgeArgs = {
   orderBy?: InputMaybe<Array<MatchmakingTicketsOrderBy>>;
 };
 
+/** All input for the `deleteUserEntityAddonById` mutation. */
 export type DeleteUserEntityAddonByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
 };
 
+/** All input for the `deleteUserEntityAddon` mutation. */
 export type DeleteUserEntityAddonInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `UserEntityAddon` to be deleted. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our delete `UserEntityAddon` mutation. */
 export type DeleteUserEntityAddonPayload = {
   __typename?: 'DeleteUserEntityAddonPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
   deletedUserEntityAddonId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
+  /** The `UserEntityAddon` that was deleted by this mutation. */
   userEntityAddon?: Maybe<UserEntityAddon>;
+  /** An edge for our `UserEntityAddon`. May be used by Relay 1. */
   userEntityAddonEdge?: Maybe<UserEntityAddonsEdge>;
 };
 
 
+/** The output of our delete `UserEntityAddon` mutation. */
 export type DeleteUserEntityAddonPayloadUserEntityAddonEdgeArgs = {
   orderBy?: InputMaybe<Array<UserEntityAddonsOrderBy>>;
 };
@@ -1055,41 +1880,73 @@ export type Friend = Node & {
   createdAt: Scalars['Datetime'];
   friend: Scalars['String'];
   id: Scalars['String'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
 };
 
+/** A condition to be used against `Friend` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type FriendCondition = {
+  /** Checks for equality with the object’s `createdAt` field. */
   createdAt?: InputMaybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `friend` field. */
   friend?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['String']>;
 };
 
+/** A filter to be used against `Friend` object types. All fields are combined with a logical ‘and.’ */
+export type FriendFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<FriendFilter>>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: InputMaybe<DatetimeFilter>;
+  /** Filter by the object’s `friend` field. */
+  friend?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<FriendFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<FriendFilter>>;
+};
+
+/** An input for mutations affecting `Friend` */
 export type FriendInput = {
   createdAt?: InputMaybe<Scalars['Datetime']>;
   friend: Scalars['String'];
   id: Scalars['String'];
 };
 
+/** Represents an update to a `Friend`. Fields that are set will be updated. */
 export type FriendPatch = {
   createdAt?: InputMaybe<Scalars['Datetime']>;
   friend?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
 };
 
+/** A connection to a list of `Friend` values. */
 export type FriendsConnection = {
   __typename?: 'FriendsConnection';
+  /** A list of edges which contains the `Friend` and cursor to aid in pagination. */
   edges: Array<FriendsEdge>;
+  /** A list of `Friend` objects. */
   nodes: Array<Maybe<Friend>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  /** The count of *all* `Friend` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
+/** A `Friend` edge in the connection. */
 export type FriendsEdge = {
   __typename?: 'FriendsEdge';
+  /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Friend` at the end of the edge. */
   node?: Maybe<Friend>;
 };
 
+/** Methods to use when ordering `Friend`. */
 export const FriendsOrderBy = {
   CreatedAtAsc: 'CREATED_AT_ASC',
   CreatedAtDesc: 'CREATED_AT_DESC',
@@ -1106,9 +1963,11 @@ export type FriendsOrderBy = typeof FriendsOrderBy[keyof typeof FriendsOrderBy];
 export type Game = Node & {
   __typename?: 'Game';
   createdAt: Scalars['Datetime'];
+  /** Reads and enables pagination through a set of `GameUser`. */
   gameUsersByGameId: GameUsersConnection;
   gitHash?: Maybe<Scalars['String']>;
   id: Scalars['BigInt'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   status: GameStateEnum;
   trace?: Maybe<Scalars['JSON']>;
@@ -1119,20 +1978,48 @@ export type GameGameUsersByGameIdArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<GameUserCondition>;
+  filter?: InputMaybe<GameUserFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<GameUsersOrderBy>>;
 };
 
+/** A condition to be used against `Game` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type GameCondition = {
+  /** Checks for equality with the object’s `createdAt` field. */
   createdAt?: InputMaybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `gitHash` field. */
   gitHash?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['BigInt']>;
+  /** Checks for equality with the object’s `status` field. */
   status?: InputMaybe<GameStateEnum>;
+  /** Checks for equality with the object’s `trace` field. */
   trace?: InputMaybe<Scalars['JSON']>;
 };
 
+/** A filter to be used against `Game` object types. All fields are combined with a logical ‘and.’ */
+export type GameFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<GameFilter>>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: InputMaybe<DatetimeFilter>;
+  /** Filter by the object’s `gitHash` field. */
+  gitHash?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<BigIntFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<GameFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<GameFilter>>;
+  /** Filter by the object’s `status` field. */
+  status?: InputMaybe<GameStateEnumFilter>;
+  /** Filter by the object’s `trace` field. */
+  trace?: InputMaybe<JsonFilter>;
+};
+
+/** An input for mutations affecting `Game` */
 export type GameInput = {
   createdAt?: InputMaybe<Scalars['Datetime']>;
   gitHash?: InputMaybe<Scalars['String']>;
@@ -1140,6 +2027,7 @@ export type GameInput = {
   trace?: InputMaybe<Scalars['JSON']>;
 };
 
+/** Represents an update to a `Game`. Fields that are set will be updated. */
 export type GamePatch = {
   createdAt?: InputMaybe<Scalars['Datetime']>;
   gitHash?: InputMaybe<Scalars['String']>;
@@ -1154,26 +2042,85 @@ export const GameStateEnum = {
 } as const;
 
 export type GameStateEnum = typeof GameStateEnum[keyof typeof GameStateEnum];
+/** A filter to be used against GameStateEnum fields. All fields are combined with a logical ‘and.’ */
+export type GameStateEnumFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<GameStateEnum>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<GameStateEnum>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<GameStateEnum>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<GameStateEnum>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<GameStateEnum>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<GameStateEnum>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<GameStateEnum>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<GameStateEnum>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<GameStateEnum>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<GameStateEnum>>;
+};
+
 export type GameUser = Node & {
   __typename?: 'GameUser';
+  /** Reads a single `Deck` that is related to this `GameUser`. */
   deckByDeckId?: Maybe<Deck>;
   deckId?: Maybe<Scalars['String']>;
+  /** Reads a single `Game` that is related to this `GameUser`. */
   gameByGameId?: Maybe<Game>;
   gameId: Scalars['BigInt'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   playerIndex?: Maybe<Scalars['Int']>;
   userId: Scalars['String'];
   victoryStatus: GameUserVictoryEnum;
 };
 
+/**
+ * A condition to be used against `GameUser` object types. All fields are tested
+ * for equality and combined with a logical ‘and.’
+ */
 export type GameUserCondition = {
+  /** Checks for equality with the object’s `deckId` field. */
   deckId?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `gameId` field. */
   gameId?: InputMaybe<Scalars['BigInt']>;
+  /** Checks for equality with the object’s `playerIndex` field. */
   playerIndex?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `userId` field. */
   userId?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `victoryStatus` field. */
   victoryStatus?: InputMaybe<GameUserVictoryEnum>;
 };
 
+/** A filter to be used against `GameUser` object types. All fields are combined with a logical ‘and.’ */
+export type GameUserFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<GameUserFilter>>;
+  /** Filter by the object’s `deckId` field. */
+  deckId?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `gameId` field. */
+  gameId?: InputMaybe<BigIntFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<GameUserFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<GameUserFilter>>;
+  /** Filter by the object’s `playerIndex` field. */
+  playerIndex?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `victoryStatus` field. */
+  victoryStatus?: InputMaybe<GameUserVictoryEnumFilter>;
+};
+
+/** An input for mutations affecting `GameUser` */
 export type GameUserInput = {
   deckId?: InputMaybe<Scalars['String']>;
   gameId: Scalars['BigInt'];
@@ -1182,6 +2129,7 @@ export type GameUserInput = {
   victoryStatus?: InputMaybe<GameUserVictoryEnum>;
 };
 
+/** Represents an update to a `GameUser`. Fields that are set will be updated. */
 export type GameUserPatch = {
   deckId?: InputMaybe<Scalars['String']>;
   gameId?: InputMaybe<Scalars['BigInt']>;
@@ -1199,20 +2147,55 @@ export const GameUserVictoryEnum = {
 } as const;
 
 export type GameUserVictoryEnum = typeof GameUserVictoryEnum[keyof typeof GameUserVictoryEnum];
+/** A filter to be used against GameUserVictoryEnum fields. All fields are combined with a logical ‘and.’ */
+export type GameUserVictoryEnumFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<GameUserVictoryEnum>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<GameUserVictoryEnum>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<GameUserVictoryEnum>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<GameUserVictoryEnum>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<GameUserVictoryEnum>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<GameUserVictoryEnum>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<GameUserVictoryEnum>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<GameUserVictoryEnum>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<GameUserVictoryEnum>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<GameUserVictoryEnum>>;
+};
+
+/** A connection to a list of `GameUser` values. */
 export type GameUsersConnection = {
   __typename?: 'GameUsersConnection';
+  /** A list of edges which contains the `GameUser` and cursor to aid in pagination. */
   edges: Array<GameUsersEdge>;
+  /** A list of `GameUser` objects. */
   nodes: Array<Maybe<GameUser>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  /** The count of *all* `GameUser` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
+/** A `GameUser` edge in the connection. */
 export type GameUsersEdge = {
   __typename?: 'GameUsersEdge';
+  /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
+  /** The `GameUser` at the end of the edge. */
   node?: Maybe<GameUser>;
 };
 
+/** Methods to use when ordering `GameUser`. */
 export const GameUsersOrderBy = {
   DeckIdAsc: 'DECK_ID_ASC',
   DeckIdDesc: 'DECK_ID_DESC',
@@ -1230,20 +2213,29 @@ export const GameUsersOrderBy = {
 } as const;
 
 export type GameUsersOrderBy = typeof GameUsersOrderBy[keyof typeof GameUsersOrderBy];
+/** A connection to a list of `Game` values. */
 export type GamesConnection = {
   __typename?: 'GamesConnection';
+  /** A list of edges which contains the `Game` and cursor to aid in pagination. */
   edges: Array<GamesEdge>;
+  /** A list of `Game` objects. */
   nodes: Array<Maybe<Game>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  /** The count of *all* `Game` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
+/** A `Game` edge in the connection. */
 export type GamesEdge = {
   __typename?: 'GamesEdge';
+  /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Game` at the end of the edge. */
   node?: Maybe<Game>;
 };
 
+/** Methods to use when ordering `Game`. */
 export const GamesOrderBy = {
   CreatedAtAsc: 'CREATED_AT_ASC',
   CreatedAtDesc: 'CREATED_AT_DESC',
@@ -1264,37 +2256,66 @@ export type GamesOrderBy = typeof GamesOrderBy[keyof typeof GamesOrderBy];
 export type Guest = Node & {
   __typename?: 'Guest';
   id: Scalars['BigInt'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   userId?: Maybe<Scalars['String']>;
 };
 
+/** A condition to be used against `Guest` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type GuestCondition = {
+  /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['BigInt']>;
+  /** Checks for equality with the object’s `userId` field. */
   userId?: InputMaybe<Scalars['String']>;
 };
 
+/** A filter to be used against `Guest` object types. All fields are combined with a logical ‘and.’ */
+export type GuestFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<GuestFilter>>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<BigIntFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<GuestFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<GuestFilter>>;
+  /** Filter by the object’s `userId` field. */
+  userId?: InputMaybe<StringFilter>;
+};
+
+/** An input for mutations affecting `Guest` */
 export type GuestInput = {
   userId?: InputMaybe<Scalars['String']>;
 };
 
+/** Represents an update to a `Guest`. Fields that are set will be updated. */
 export type GuestPatch = {
   userId?: InputMaybe<Scalars['String']>;
 };
 
+/** A connection to a list of `Guest` values. */
 export type GuestsConnection = {
   __typename?: 'GuestsConnection';
+  /** A list of edges which contains the `Guest` and cursor to aid in pagination. */
   edges: Array<GuestsEdge>;
+  /** A list of `Guest` objects. */
   nodes: Array<Maybe<Guest>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  /** The count of *all* `Guest` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
+/** A `Guest` edge in the connection. */
 export type GuestsEdge = {
   __typename?: 'GuestsEdge';
+  /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Guest` at the end of the edge. */
   node?: Maybe<Guest>;
 };
 
+/** Methods to use when ordering `Guest`. */
 export const GuestsOrderBy = {
   IdAsc: 'ID_ASC',
   IdDesc: 'ID_DESC',
@@ -1315,6 +2336,68 @@ export type ImageDef = {
   width: Scalars['Int'];
 };
 
+/** A filter to be used against Int fields. All fields are combined with a logical ‘and.’ */
+export type IntFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<Scalars['Int']>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<Scalars['Int']>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<Scalars['Int']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<Scalars['Int']>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<Scalars['Int']>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<Scalars['Int']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<Scalars['Int']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<Scalars['Int']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<Scalars['Int']>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<Scalars['Int']>>;
+};
+
+/** A filter to be used against JSON fields. All fields are combined with a logical ‘and.’ */
+export type JsonFilter = {
+  /** Contained by the specified JSON. */
+  containedBy?: InputMaybe<Scalars['JSON']>;
+  /** Contains the specified JSON. */
+  contains?: InputMaybe<Scalars['JSON']>;
+  /** Contains all of the specified keys. */
+  containsAllKeys?: InputMaybe<Array<Scalars['String']>>;
+  /** Contains any of the specified keys. */
+  containsAnyKeys?: InputMaybe<Array<Scalars['String']>>;
+  /** Contains the specified key. */
+  containsKey?: InputMaybe<Scalars['String']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<Scalars['JSON']>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<Scalars['JSON']>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<Scalars['JSON']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<Scalars['JSON']>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<Scalars['JSON']>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<Scalars['JSON']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<Scalars['JSON']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<Scalars['JSON']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<Scalars['JSON']>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<Scalars['JSON']>>;
+};
+
 export type MatchmakingQueue = Node & {
   __typename?: 'MatchmakingQueue';
   automaticallyClose: Scalars['Boolean'];
@@ -1323,8 +2406,10 @@ export type MatchmakingQueue = Node & {
   emptyLobbyTimeout: Scalars['BigInt'];
   id: Scalars['String'];
   lobbySize: Scalars['Int'];
+  /** Reads and enables pagination through a set of `MatchmakingTicket`. */
   matchmakingTicketsByQueueId: MatchmakingTicketsConnection;
   name: Scalars['String'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   once: Scalars['Boolean'];
   privateLobby: Scalars['Boolean'];
@@ -1338,27 +2423,79 @@ export type MatchmakingQueueMatchmakingTicketsByQueueIdArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<MatchmakingTicketCondition>;
+  filter?: InputMaybe<MatchmakingTicketFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<MatchmakingTicketsOrderBy>>;
 };
 
+/**
+ * A condition to be used against `MatchmakingQueue` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
 export type MatchmakingQueueCondition = {
+  /** Checks for equality with the object’s `automaticallyClose` field. */
   automaticallyClose?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `awaitingLobbyTimeout` field. */
   awaitingLobbyTimeout?: InputMaybe<Scalars['BigInt']>;
+  /** Checks for equality with the object’s `botOpponent` field. */
   botOpponent?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `emptyLobbyTimeout` field. */
   emptyLobbyTimeout?: InputMaybe<Scalars['BigInt']>;
+  /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `lobbySize` field. */
   lobbySize?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `name` field. */
   name?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `once` field. */
   once?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `privateLobby` field. */
   privateLobby?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `queueCreatedAt` field. */
   queueCreatedAt?: InputMaybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `startsAutomatically` field. */
   startsAutomatically?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `stillConnectedTimeout` field. */
   stillConnectedTimeout?: InputMaybe<Scalars['BigInt']>;
 };
 
+/** A filter to be used against `MatchmakingQueue` object types. All fields are combined with a logical ‘and.’ */
+export type MatchmakingQueueFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<MatchmakingQueueFilter>>;
+  /** Filter by the object’s `automaticallyClose` field. */
+  automaticallyClose?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `awaitingLobbyTimeout` field. */
+  awaitingLobbyTimeout?: InputMaybe<BigIntFilter>;
+  /** Filter by the object’s `botOpponent` field. */
+  botOpponent?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `emptyLobbyTimeout` field. */
+  emptyLobbyTimeout?: InputMaybe<BigIntFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `lobbySize` field. */
+  lobbySize?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `name` field. */
+  name?: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<MatchmakingQueueFilter>;
+  /** Filter by the object’s `once` field. */
+  once?: InputMaybe<BooleanFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<MatchmakingQueueFilter>>;
+  /** Filter by the object’s `privateLobby` field. */
+  privateLobby?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `queueCreatedAt` field. */
+  queueCreatedAt?: InputMaybe<DatetimeFilter>;
+  /** Filter by the object’s `startsAutomatically` field. */
+  startsAutomatically?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `stillConnectedTimeout` field. */
+  stillConnectedTimeout?: InputMaybe<BigIntFilter>;
+};
+
+/** An input for mutations affecting `MatchmakingQueue` */
 export type MatchmakingQueueInput = {
   automaticallyClose?: InputMaybe<Scalars['Boolean']>;
   awaitingLobbyTimeout?: InputMaybe<Scalars['BigInt']>;
@@ -1374,6 +2511,7 @@ export type MatchmakingQueueInput = {
   stillConnectedTimeout?: InputMaybe<Scalars['BigInt']>;
 };
 
+/** Represents an update to a `MatchmakingQueue`. Fields that are set will be updated. */
 export type MatchmakingQueuePatch = {
   automaticallyClose?: InputMaybe<Scalars['Boolean']>;
   awaitingLobbyTimeout?: InputMaybe<Scalars['BigInt']>;
@@ -1389,20 +2527,29 @@ export type MatchmakingQueuePatch = {
   stillConnectedTimeout?: InputMaybe<Scalars['BigInt']>;
 };
 
+/** A connection to a list of `MatchmakingQueue` values. */
 export type MatchmakingQueuesConnection = {
   __typename?: 'MatchmakingQueuesConnection';
+  /** A list of edges which contains the `MatchmakingQueue` and cursor to aid in pagination. */
   edges: Array<MatchmakingQueuesEdge>;
+  /** A list of `MatchmakingQueue` objects. */
   nodes: Array<Maybe<MatchmakingQueue>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  /** The count of *all* `MatchmakingQueue` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
+/** A `MatchmakingQueue` edge in the connection. */
 export type MatchmakingQueuesEdge = {
   __typename?: 'MatchmakingQueuesEdge';
+  /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
+  /** The `MatchmakingQueue` at the end of the edge. */
   node?: Maybe<MatchmakingQueue>;
 };
 
+/** Methods to use when ordering `MatchmakingQueue`. */
 export const MatchmakingQueuesOrderBy = {
   AutomaticallyCloseAsc: 'AUTOMATICALLY_CLOSE_ASC',
   AutomaticallyCloseDesc: 'AUTOMATICALLY_CLOSE_DESC',
@@ -1438,25 +2585,62 @@ export type MatchmakingTicket = Node & {
   __typename?: 'MatchmakingTicket';
   botDeckId?: Maybe<Scalars['String']>;
   createdAt: Scalars['Datetime'];
+  /** Reads a single `Deck` that is related to this `MatchmakingTicket`. */
   deckByBotDeckId?: Maybe<Deck>;
+  /** Reads a single `Deck` that is related to this `MatchmakingTicket`. */
   deckByDeckId?: Maybe<Deck>;
   deckId?: Maybe<Scalars['String']>;
+  /** Reads a single `MatchmakingQueue` that is related to this `MatchmakingTicket`. */
   matchmakingQueueByQueueId?: Maybe<MatchmakingQueue>;
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   queueId?: Maybe<Scalars['String']>;
   ticketId: Scalars['BigInt'];
   userId: Scalars['String'];
 };
 
+/**
+ * A condition to be used against `MatchmakingTicket` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
 export type MatchmakingTicketCondition = {
+  /** Checks for equality with the object’s `botDeckId` field. */
   botDeckId?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `createdAt` field. */
   createdAt?: InputMaybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `deckId` field. */
   deckId?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `queueId` field. */
   queueId?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `ticketId` field. */
   ticketId?: InputMaybe<Scalars['BigInt']>;
+  /** Checks for equality with the object’s `userId` field. */
   userId?: InputMaybe<Scalars['String']>;
 };
 
+/** A filter to be used against `MatchmakingTicket` object types. All fields are combined with a logical ‘and.’ */
+export type MatchmakingTicketFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<MatchmakingTicketFilter>>;
+  /** Filter by the object’s `botDeckId` field. */
+  botDeckId?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: InputMaybe<DatetimeFilter>;
+  /** Filter by the object’s `deckId` field. */
+  deckId?: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<MatchmakingTicketFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<MatchmakingTicketFilter>>;
+  /** Filter by the object’s `queueId` field. */
+  queueId?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `ticketId` field. */
+  ticketId?: InputMaybe<BigIntFilter>;
+  /** Filter by the object’s `userId` field. */
+  userId?: InputMaybe<StringFilter>;
+};
+
+/** An input for mutations affecting `MatchmakingTicket` */
 export type MatchmakingTicketInput = {
   botDeckId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['Datetime']>;
@@ -1465,6 +2649,7 @@ export type MatchmakingTicketInput = {
   userId: Scalars['String'];
 };
 
+/** Represents an update to a `MatchmakingTicket`. Fields that are set will be updated. */
 export type MatchmakingTicketPatch = {
   botDeckId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['Datetime']>;
@@ -1473,20 +2658,29 @@ export type MatchmakingTicketPatch = {
   userId?: InputMaybe<Scalars['String']>;
 };
 
+/** A connection to a list of `MatchmakingTicket` values. */
 export type MatchmakingTicketsConnection = {
   __typename?: 'MatchmakingTicketsConnection';
+  /** A list of edges which contains the `MatchmakingTicket` and cursor to aid in pagination. */
   edges: Array<MatchmakingTicketsEdge>;
+  /** A list of `MatchmakingTicket` objects. */
   nodes: Array<Maybe<MatchmakingTicket>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  /** The count of *all* `MatchmakingTicket` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
+/** A `MatchmakingTicket` edge in the connection. */
 export type MatchmakingTicketsEdge = {
   __typename?: 'MatchmakingTicketsEdge';
+  /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
+  /** The `MatchmakingTicket` at the end of the edge. */
   node?: Maybe<MatchmakingTicket>;
 };
 
+/** Methods to use when ordering `MatchmakingTicket`. */
 export const MatchmakingTicketsOrderBy = {
   BotDeckIdAsc: 'BOT_DECK_ID_ASC',
   BotDeckIdDesc: 'BOT_DECK_ID_DESC',
@@ -1506,456 +2700,627 @@ export const MatchmakingTicketsOrderBy = {
 } as const;
 
 export type MatchmakingTicketsOrderBy = typeof MatchmakingTicketsOrderBy[keyof typeof MatchmakingTicketsOrderBy];
+/** The root mutation type which contains root level fields which mutate data. */
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Creates a single `BotUser`. */
   createBotUser?: Maybe<CreateBotUserPayload>;
+  /** Creates a single `Card`. */
   createCard?: Maybe<CreateCardPayload>;
+  /** Creates a single `CardsInDeck`. */
   createCardsInDeck?: Maybe<CreateCardsInDeckPayload>;
+  /** Creates a single `Deck`. */
   createDeck?: Maybe<CreateDeckPayload>;
+  /** Creates a single `DeckPlayerAttributeTuple`. */
   createDeckPlayerAttributeTuple?: Maybe<CreateDeckPlayerAttributeTuplePayload>;
+  /** Creates a single `DeckShare`. */
   createDeckShare?: Maybe<CreateDeckSharePayload>;
+  /** Creates a single `Friend`. */
   createFriend?: Maybe<CreateFriendPayload>;
+  /** Creates a single `Game`. */
   createGame?: Maybe<CreateGamePayload>;
+  /** Creates a single `GameUser`. */
   createGameUser?: Maybe<CreateGameUserPayload>;
+  /** Creates a single `Guest`. */
   createGuest?: Maybe<CreateGuestPayload>;
+  /** Creates a single `MatchmakingQueue`. */
   createMatchmakingQueue?: Maybe<CreateMatchmakingQueuePayload>;
+  /** Creates a single `MatchmakingTicket`. */
   createMatchmakingTicket?: Maybe<CreateMatchmakingTicketPayload>;
+  /** Creates a single `UserEntityAddon`. */
   createUserEntityAddon?: Maybe<CreateUserEntityAddonPayload>;
+  /** Deletes a single `BotUser` using its globally unique id. */
   deleteBotUser?: Maybe<DeleteBotUserPayload>;
+  /** Deletes a single `BotUser` using a unique key. */
   deleteBotUserById?: Maybe<DeleteBotUserPayload>;
+  /** Deletes a single `Card` using its globally unique id. */
   deleteCard?: Maybe<DeleteCardPayload>;
+  /** Deletes a single `Card` using a unique key. */
   deleteCardById?: Maybe<DeleteCardPayload>;
+  /** Deletes a single `CardsInDeck` using its globally unique id. */
   deleteCardsInDeck?: Maybe<DeleteCardsInDeckPayload>;
+  /** Deletes a single `CardsInDeck` using a unique key. */
   deleteCardsInDeckById?: Maybe<DeleteCardsInDeckPayload>;
+  /** Deletes a single `Deck` using its globally unique id. */
   deleteDeck?: Maybe<DeleteDeckPayload>;
+  /** Deletes a single `Deck` using a unique key. */
   deleteDeckById?: Maybe<DeleteDeckPayload>;
+  /** Deletes a single `DeckPlayerAttributeTuple` using its globally unique id. */
   deleteDeckPlayerAttributeTuple?: Maybe<DeleteDeckPlayerAttributeTuplePayload>;
+  /** Deletes a single `DeckPlayerAttributeTuple` using a unique key. */
   deleteDeckPlayerAttributeTupleById?: Maybe<DeleteDeckPlayerAttributeTuplePayload>;
+  /** Deletes a single `DeckShare` using its globally unique id. */
   deleteDeckShare?: Maybe<DeleteDeckSharePayload>;
+  /** Deletes a single `DeckShare` using a unique key. */
   deleteDeckShareByDeckIdAndShareRecipientId?: Maybe<DeleteDeckSharePayload>;
+  /** Deletes a single `Friend` using its globally unique id. */
   deleteFriend?: Maybe<DeleteFriendPayload>;
+  /** Deletes a single `Friend` using a unique key. */
   deleteFriendByIdAndFriend?: Maybe<DeleteFriendPayload>;
+  /** Deletes a single `Game` using its globally unique id. */
   deleteGame?: Maybe<DeleteGamePayload>;
+  /** Deletes a single `Game` using a unique key. */
   deleteGameById?: Maybe<DeleteGamePayload>;
+  /** Deletes a single `GameUser` using its globally unique id. */
   deleteGameUser?: Maybe<DeleteGameUserPayload>;
+  /** Deletes a single `GameUser` using a unique key. */
   deleteGameUserByGameIdAndUserId?: Maybe<DeleteGameUserPayload>;
+  /** Deletes a single `Guest` using its globally unique id. */
   deleteGuest?: Maybe<DeleteGuestPayload>;
+  /** Deletes a single `Guest` using a unique key. */
   deleteGuestById?: Maybe<DeleteGuestPayload>;
+  /** Deletes a single `MatchmakingQueue` using its globally unique id. */
   deleteMatchmakingQueue?: Maybe<DeleteMatchmakingQueuePayload>;
+  /** Deletes a single `MatchmakingQueue` using a unique key. */
   deleteMatchmakingQueueById?: Maybe<DeleteMatchmakingQueuePayload>;
+  /** Deletes a single `MatchmakingTicket` using its globally unique id. */
   deleteMatchmakingTicket?: Maybe<DeleteMatchmakingTicketPayload>;
+  /** Deletes a single `MatchmakingTicket` using a unique key. */
   deleteMatchmakingTicketByUserId?: Maybe<DeleteMatchmakingTicketPayload>;
+  /** Deletes a single `UserEntityAddon` using its globally unique id. */
   deleteUserEntityAddon?: Maybe<DeleteUserEntityAddonPayload>;
+  /** Deletes a single `UserEntityAddon` using a unique key. */
   deleteUserEntityAddonById?: Maybe<DeleteUserEntityAddonPayload>;
+  /** Updates a single `BotUser` using its globally unique id and a patch. */
   updateBotUser?: Maybe<UpdateBotUserPayload>;
+  /** Updates a single `BotUser` using a unique key and a patch. */
   updateBotUserById?: Maybe<UpdateBotUserPayload>;
+  /** Updates a single `Card` using its globally unique id and a patch. */
   updateCard?: Maybe<UpdateCardPayload>;
+  /** Updates a single `Card` using a unique key and a patch. */
   updateCardById?: Maybe<UpdateCardPayload>;
+  /** Updates a single `CardsInDeck` using its globally unique id and a patch. */
   updateCardsInDeck?: Maybe<UpdateCardsInDeckPayload>;
+  /** Updates a single `CardsInDeck` using a unique key and a patch. */
   updateCardsInDeckById?: Maybe<UpdateCardsInDeckPayload>;
+  /** Updates a single `Deck` using its globally unique id and a patch. */
   updateDeck?: Maybe<UpdateDeckPayload>;
+  /** Updates a single `Deck` using a unique key and a patch. */
   updateDeckById?: Maybe<UpdateDeckPayload>;
+  /** Updates a single `DeckPlayerAttributeTuple` using its globally unique id and a patch. */
   updateDeckPlayerAttributeTuple?: Maybe<UpdateDeckPlayerAttributeTuplePayload>;
+  /** Updates a single `DeckPlayerAttributeTuple` using a unique key and a patch. */
   updateDeckPlayerAttributeTupleById?: Maybe<UpdateDeckPlayerAttributeTuplePayload>;
+  /** Updates a single `DeckShare` using its globally unique id and a patch. */
   updateDeckShare?: Maybe<UpdateDeckSharePayload>;
+  /** Updates a single `DeckShare` using a unique key and a patch. */
   updateDeckShareByDeckIdAndShareRecipientId?: Maybe<UpdateDeckSharePayload>;
+  /** Updates a single `Friend` using its globally unique id and a patch. */
   updateFriend?: Maybe<UpdateFriendPayload>;
+  /** Updates a single `Friend` using a unique key and a patch. */
   updateFriendByIdAndFriend?: Maybe<UpdateFriendPayload>;
+  /** Updates a single `Game` using its globally unique id and a patch. */
   updateGame?: Maybe<UpdateGamePayload>;
+  /** Updates a single `Game` using a unique key and a patch. */
   updateGameById?: Maybe<UpdateGamePayload>;
+  /** Updates a single `GameUser` using its globally unique id and a patch. */
   updateGameUser?: Maybe<UpdateGameUserPayload>;
+  /** Updates a single `GameUser` using a unique key and a patch. */
   updateGameUserByGameIdAndUserId?: Maybe<UpdateGameUserPayload>;
+  /** Updates a single `Guest` using its globally unique id and a patch. */
   updateGuest?: Maybe<UpdateGuestPayload>;
+  /** Updates a single `Guest` using a unique key and a patch. */
   updateGuestById?: Maybe<UpdateGuestPayload>;
+  /** Updates a single `MatchmakingQueue` using its globally unique id and a patch. */
   updateMatchmakingQueue?: Maybe<UpdateMatchmakingQueuePayload>;
+  /** Updates a single `MatchmakingQueue` using a unique key and a patch. */
   updateMatchmakingQueueById?: Maybe<UpdateMatchmakingQueuePayload>;
+  /** Updates a single `MatchmakingTicket` using its globally unique id and a patch. */
   updateMatchmakingTicket?: Maybe<UpdateMatchmakingTicketPayload>;
+  /** Updates a single `MatchmakingTicket` using a unique key and a patch. */
   updateMatchmakingTicketByUserId?: Maybe<UpdateMatchmakingTicketPayload>;
+  /** Updates a single `UserEntityAddon` using its globally unique id and a patch. */
   updateUserEntityAddon?: Maybe<UpdateUserEntityAddonPayload>;
+  /** Updates a single `UserEntityAddon` using a unique key and a patch. */
   updateUserEntityAddonById?: Maybe<UpdateUserEntityAddonPayload>;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateBotUserArgs = {
   input: CreateBotUserInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateCardArgs = {
   input: CreateCardInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateCardsInDeckArgs = {
   input: CreateCardsInDeckInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateDeckArgs = {
   input: CreateDeckInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateDeckPlayerAttributeTupleArgs = {
   input: CreateDeckPlayerAttributeTupleInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateDeckShareArgs = {
   input: CreateDeckShareInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateFriendArgs = {
   input: CreateFriendInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateGameArgs = {
   input: CreateGameInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateGameUserArgs = {
   input: CreateGameUserInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateGuestArgs = {
   input: CreateGuestInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateMatchmakingQueueArgs = {
   input: CreateMatchmakingQueueInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateMatchmakingTicketArgs = {
   input: CreateMatchmakingTicketInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateUserEntityAddonArgs = {
   input: CreateUserEntityAddonInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteBotUserArgs = {
   input: DeleteBotUserInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteBotUserByIdArgs = {
   input: DeleteBotUserByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteCardArgs = {
   input: DeleteCardInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteCardByIdArgs = {
   input: DeleteCardByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteCardsInDeckArgs = {
   input: DeleteCardsInDeckInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteCardsInDeckByIdArgs = {
   input: DeleteCardsInDeckByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteDeckArgs = {
   input: DeleteDeckInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteDeckByIdArgs = {
   input: DeleteDeckByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteDeckPlayerAttributeTupleArgs = {
   input: DeleteDeckPlayerAttributeTupleInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteDeckPlayerAttributeTupleByIdArgs = {
   input: DeleteDeckPlayerAttributeTupleByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteDeckShareArgs = {
   input: DeleteDeckShareInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteDeckShareByDeckIdAndShareRecipientIdArgs = {
   input: DeleteDeckShareByDeckIdAndShareRecipientIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteFriendArgs = {
   input: DeleteFriendInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteFriendByIdAndFriendArgs = {
   input: DeleteFriendByIdAndFriendInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGameArgs = {
   input: DeleteGameInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGameByIdArgs = {
   input: DeleteGameByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGameUserArgs = {
   input: DeleteGameUserInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGameUserByGameIdAndUserIdArgs = {
   input: DeleteGameUserByGameIdAndUserIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGuestArgs = {
   input: DeleteGuestInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGuestByIdArgs = {
   input: DeleteGuestByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteMatchmakingQueueArgs = {
   input: DeleteMatchmakingQueueInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteMatchmakingQueueByIdArgs = {
   input: DeleteMatchmakingQueueByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteMatchmakingTicketArgs = {
   input: DeleteMatchmakingTicketInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteMatchmakingTicketByUserIdArgs = {
   input: DeleteMatchmakingTicketByUserIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserEntityAddonArgs = {
   input: DeleteUserEntityAddonInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserEntityAddonByIdArgs = {
   input: DeleteUserEntityAddonByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateBotUserArgs = {
   input: UpdateBotUserInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateBotUserByIdArgs = {
   input: UpdateBotUserByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateCardArgs = {
   input: UpdateCardInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateCardByIdArgs = {
   input: UpdateCardByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateCardsInDeckArgs = {
   input: UpdateCardsInDeckInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateCardsInDeckByIdArgs = {
   input: UpdateCardsInDeckByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateDeckArgs = {
   input: UpdateDeckInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateDeckByIdArgs = {
   input: UpdateDeckByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateDeckPlayerAttributeTupleArgs = {
   input: UpdateDeckPlayerAttributeTupleInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateDeckPlayerAttributeTupleByIdArgs = {
   input: UpdateDeckPlayerAttributeTupleByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateDeckShareArgs = {
   input: UpdateDeckShareInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateDeckShareByDeckIdAndShareRecipientIdArgs = {
   input: UpdateDeckShareByDeckIdAndShareRecipientIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateFriendArgs = {
   input: UpdateFriendInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateFriendByIdAndFriendArgs = {
   input: UpdateFriendByIdAndFriendInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGameArgs = {
   input: UpdateGameInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGameByIdArgs = {
   input: UpdateGameByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGameUserArgs = {
   input: UpdateGameUserInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGameUserByGameIdAndUserIdArgs = {
   input: UpdateGameUserByGameIdAndUserIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGuestArgs = {
   input: UpdateGuestInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGuestByIdArgs = {
   input: UpdateGuestByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateMatchmakingQueueArgs = {
   input: UpdateMatchmakingQueueInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateMatchmakingQueueByIdArgs = {
   input: UpdateMatchmakingQueueByIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateMatchmakingTicketArgs = {
   input: UpdateMatchmakingTicketInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateMatchmakingTicketByUserIdArgs = {
   input: UpdateMatchmakingTicketByUserIdInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateUserEntityAddonArgs = {
   input: UpdateUserEntityAddonInput;
 };
 
 
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateUserEntityAddonByIdArgs = {
   input: UpdateUserEntityAddonByIdInput;
 };
 
+/** An object with a globally unique `ID`. */
 export type Node = {
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
 };
 
+/** Information about pagination in a connection. */
 export type PageInfo = {
   __typename?: 'PageInfo';
+  /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['Cursor']>;
+  /** When paginating forwards, are there more items? */
   hasNextPage: Scalars['Boolean'];
+  /** When paginating backwards, are there more items? */
   hasPreviousPage: Scalars['Boolean'];
+  /** When paginating backwards, the cursor to continue. */
   startCursor?: Maybe<Scalars['Cursor']>;
 };
 
 export type Query = Node & {
   __typename?: 'Query';
   allArt: Array<ImageDef>;
+  /** Reads and enables pagination through a set of `BotUser`. */
   allBotUsers?: Maybe<BotUsersConnection>;
+  /** Reads and enables pagination through a set of `Card`. */
   allCards?: Maybe<CardsConnection>;
+  /** Reads and enables pagination through a set of `CardsInDeck`. */
   allCardsInDecks?: Maybe<CardsInDecksConnection>;
+  /** Reads and enables pagination through a set of `DeckPlayerAttributeTuple`. */
   allDeckPlayerAttributeTuples?: Maybe<DeckPlayerAttributeTuplesConnection>;
+  /** Reads and enables pagination through a set of `DeckShare`. */
   allDeckShares?: Maybe<DeckSharesConnection>;
+  /** Reads and enables pagination through a set of `Deck`. */
   allDecks?: Maybe<DecksConnection>;
+  /** Reads and enables pagination through a set of `Friend`. */
   allFriends?: Maybe<FriendsConnection>;
+  /** Reads and enables pagination through a set of `GameUser`. */
   allGameUsers?: Maybe<GameUsersConnection>;
+  /** Reads and enables pagination through a set of `Game`. */
   allGames?: Maybe<GamesConnection>;
+  /** Reads and enables pagination through a set of `Guest`. */
   allGuests?: Maybe<GuestsConnection>;
+  /** Reads and enables pagination through a set of `MatchmakingQueue`. */
   allMatchmakingQueues?: Maybe<MatchmakingQueuesConnection>;
+  /** Reads and enables pagination through a set of `MatchmakingTicket`. */
   allMatchmakingTickets?: Maybe<MatchmakingTicketsConnection>;
+  /** Reads and enables pagination through a set of `UserEntityAddon`. */
   allUserEntityAddons?: Maybe<UserEntityAddonsConnection>;
   artById?: Maybe<ImageDef>;
+  /** Reads a single `BotUser` using its globally unique `ID`. */
   botUser?: Maybe<BotUser>;
   botUserById?: Maybe<BotUser>;
+  /** Reads a single `Card` using its globally unique `ID`. */
   card?: Maybe<Card>;
   cardById?: Maybe<Card>;
+  /** Reads a single `CardsInDeck` using its globally unique `ID`. */
   cardsInDeck?: Maybe<CardsInDeck>;
   cardsInDeckById?: Maybe<CardsInDeck>;
+  /** Reads a single `Deck` using its globally unique `ID`. */
   deck?: Maybe<Deck>;
   deckById?: Maybe<Deck>;
+  /** Reads a single `DeckPlayerAttributeTuple` using its globally unique `ID`. */
   deckPlayerAttributeTuple?: Maybe<DeckPlayerAttributeTuple>;
   deckPlayerAttributeTupleById?: Maybe<DeckPlayerAttributeTuple>;
+  /** Reads a single `DeckShare` using its globally unique `ID`. */
   deckShare?: Maybe<DeckShare>;
   deckShareByDeckIdAndShareRecipientId?: Maybe<DeckShare>;
+  /** Reads a single `Friend` using its globally unique `ID`. */
   friend?: Maybe<Friend>;
   friendByIdAndFriend?: Maybe<Friend>;
+  /** Reads a single `Game` using its globally unique `ID`. */
   game?: Maybe<Game>;
   gameById?: Maybe<Game>;
+  /** Reads a single `GameUser` using its globally unique `ID`. */
   gameUser?: Maybe<GameUser>;
   gameUserByGameIdAndUserId?: Maybe<GameUser>;
+  getUserId?: Maybe<Scalars['String']>;
+  /** Reads a single `Guest` using its globally unique `ID`. */
   guest?: Maybe<Guest>;
   guestById?: Maybe<Guest>;
+  /** Reads a single `MatchmakingQueue` using its globally unique `ID`. */
   matchmakingQueue?: Maybe<MatchmakingQueue>;
   matchmakingQueueById?: Maybe<MatchmakingQueue>;
+  /** Reads a single `MatchmakingTicket` using its globally unique `ID`. */
   matchmakingTicket?: Maybe<MatchmakingTicket>;
   matchmakingTicketByUserId?: Maybe<MatchmakingTicket>;
+  /** Fetches an object given its globally unique `ID`. */
   node?: Maybe<Node>;
+  /** The root query type must be a `Node` to work well with Relay 1 mutations. This just resolves to `query`. */
   nodeId: Scalars['ID'];
+  /**
+   * Exposes the root query type nested one level down. This is helpful for Relay 1
+   * which can only query top level fields if they are in a particular form.
+   */
   query: Query;
+  /** Reads a single `UserEntityAddon` using its globally unique `ID`. */
   userEntityAddon?: Maybe<UserEntityAddon>;
   userEntityAddonById?: Maybe<UserEntityAddon>;
 };
@@ -1965,6 +3330,7 @@ export type QueryAllBotUsersArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<BotUserCondition>;
+  filter?: InputMaybe<BotUserFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1976,6 +3342,7 @@ export type QueryAllCardsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<CardCondition>;
+  filter?: InputMaybe<CardFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1987,6 +3354,7 @@ export type QueryAllCardsInDecksArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<CardsInDeckCondition>;
+  filter?: InputMaybe<CardsInDeckFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1998,6 +3366,7 @@ export type QueryAllDeckPlayerAttributeTuplesArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<DeckPlayerAttributeTupleCondition>;
+  filter?: InputMaybe<DeckPlayerAttributeTupleFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2009,6 +3378,7 @@ export type QueryAllDeckSharesArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<DeckShareCondition>;
+  filter?: InputMaybe<DeckShareFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2020,6 +3390,7 @@ export type QueryAllDecksArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<DeckCondition>;
+  filter?: InputMaybe<DeckFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2031,6 +3402,7 @@ export type QueryAllFriendsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<FriendCondition>;
+  filter?: InputMaybe<FriendFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2042,6 +3414,7 @@ export type QueryAllGameUsersArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<GameUserCondition>;
+  filter?: InputMaybe<GameUserFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2053,6 +3426,7 @@ export type QueryAllGamesArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<GameCondition>;
+  filter?: InputMaybe<GameFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2064,6 +3438,7 @@ export type QueryAllGuestsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<GuestCondition>;
+  filter?: InputMaybe<GuestFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2075,6 +3450,7 @@ export type QueryAllMatchmakingQueuesArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<MatchmakingQueueCondition>;
+  filter?: InputMaybe<MatchmakingQueueFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2086,6 +3462,7 @@ export type QueryAllMatchmakingTicketsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<MatchmakingTicketCondition>;
+  filter?: InputMaybe<MatchmakingTicketFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2097,6 +3474,7 @@ export type QueryAllUserEntityAddonsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
   condition?: InputMaybe<UserEntityAddonCondition>;
+  filter?: InputMaybe<UserEntityAddonFilter>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2246,339 +3624,712 @@ export type QueryUserEntityAddonByIdArgs = {
   id: Scalars['String'];
 };
 
+/** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
+export type StringFilter = {
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<Scalars['String']>;
+  /** Not equal to the specified value, treating null like an ordinary value (case-insensitive). */
+  distinctFromInsensitive?: InputMaybe<Scalars['String']>;
+  /** Ends with the specified string (case-sensitive). */
+  endsWith?: InputMaybe<Scalars['String']>;
+  /** Ends with the specified string (case-insensitive). */
+  endsWithInsensitive?: InputMaybe<Scalars['String']>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<Scalars['String']>;
+  /** Equal to the specified value (case-insensitive). */
+  equalToInsensitive?: InputMaybe<Scalars['String']>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<Scalars['String']>;
+  /** Greater than the specified value (case-insensitive). */
+  greaterThanInsensitive?: InputMaybe<Scalars['String']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<Scalars['String']>;
+  /** Greater than or equal to the specified value (case-insensitive). */
+  greaterThanOrEqualToInsensitive?: InputMaybe<Scalars['String']>;
+  /** Included in the specified list. */
+  in?: InputMaybe<Array<Scalars['String']>>;
+  /** Included in the specified list (case-insensitive). */
+  inInsensitive?: InputMaybe<Array<Scalars['String']>>;
+  /** Contains the specified string (case-sensitive). */
+  includes?: InputMaybe<Scalars['String']>;
+  /** Contains the specified string (case-insensitive). */
+  includesInsensitive?: InputMaybe<Scalars['String']>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<Scalars['String']>;
+  /** Less than the specified value (case-insensitive). */
+  lessThanInsensitive?: InputMaybe<Scalars['String']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<Scalars['String']>;
+  /** Less than or equal to the specified value (case-insensitive). */
+  lessThanOrEqualToInsensitive?: InputMaybe<Scalars['String']>;
+  /** Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  like?: InputMaybe<Scalars['String']>;
+  /** Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  likeInsensitive?: InputMaybe<Scalars['String']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<Scalars['String']>;
+  /** Equal to the specified value, treating null like an ordinary value (case-insensitive). */
+  notDistinctFromInsensitive?: InputMaybe<Scalars['String']>;
+  /** Does not end with the specified string (case-sensitive). */
+  notEndsWith?: InputMaybe<Scalars['String']>;
+  /** Does not end with the specified string (case-insensitive). */
+  notEndsWithInsensitive?: InputMaybe<Scalars['String']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<Scalars['String']>;
+  /** Not equal to the specified value (case-insensitive). */
+  notEqualToInsensitive?: InputMaybe<Scalars['String']>;
+  /** Not included in the specified list. */
+  notIn?: InputMaybe<Array<Scalars['String']>>;
+  /** Not included in the specified list (case-insensitive). */
+  notInInsensitive?: InputMaybe<Array<Scalars['String']>>;
+  /** Does not contain the specified string (case-sensitive). */
+  notIncludes?: InputMaybe<Scalars['String']>;
+  /** Does not contain the specified string (case-insensitive). */
+  notIncludesInsensitive?: InputMaybe<Scalars['String']>;
+  /** Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  notLike?: InputMaybe<Scalars['String']>;
+  /** Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters. */
+  notLikeInsensitive?: InputMaybe<Scalars['String']>;
+  /** Does not start with the specified string (case-sensitive). */
+  notStartsWith?: InputMaybe<Scalars['String']>;
+  /** Does not start with the specified string (case-insensitive). */
+  notStartsWithInsensitive?: InputMaybe<Scalars['String']>;
+  /** Starts with the specified string (case-sensitive). */
+  startsWith?: InputMaybe<Scalars['String']>;
+  /** Starts with the specified string (case-insensitive). */
+  startsWithInsensitive?: InputMaybe<Scalars['String']>;
+};
+
+/** All input for the `updateBotUserById` mutation. */
 export type UpdateBotUserByIdInput = {
+  /** An object where the defined keys will be set on the `BotUser` being updated. */
   botUserPatch: BotUserPatch;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
 };
 
+/** All input for the `updateBotUser` mutation. */
 export type UpdateBotUserInput = {
+  /** An object where the defined keys will be set on the `BotUser` being updated. */
   botUserPatch: BotUserPatch;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `BotUser` to be updated. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our update `BotUser` mutation. */
 export type UpdateBotUserPayload = {
   __typename?: 'UpdateBotUserPayload';
+  /** The `BotUser` that was updated by this mutation. */
   botUser?: Maybe<BotUser>;
+  /** An edge for our `BotUser`. May be used by Relay 1. */
   botUserEdge?: Maybe<BotUsersEdge>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our update `BotUser` mutation. */
 export type UpdateBotUserPayloadBotUserEdgeArgs = {
   orderBy?: InputMaybe<Array<BotUsersOrderBy>>;
 };
 
+/** All input for the `updateCardById` mutation. */
 export type UpdateCardByIdInput = {
+  /** An object where the defined keys will be set on the `Card` being updated. */
   cardPatch: CardPatch;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
 };
 
+/** All input for the `updateCard` mutation. */
 export type UpdateCardInput = {
+  /** An object where the defined keys will be set on the `Card` being updated. */
   cardPatch: CardPatch;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Card` to be updated. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our update `Card` mutation. */
 export type UpdateCardPayload = {
   __typename?: 'UpdateCardPayload';
+  /** The `Card` that was updated by this mutation. */
   card?: Maybe<Card>;
+  /** An edge for our `Card`. May be used by Relay 1. */
   cardEdge?: Maybe<CardsEdge>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our update `Card` mutation. */
 export type UpdateCardPayloadCardEdgeArgs = {
   orderBy?: InputMaybe<Array<CardsOrderBy>>;
 };
 
+/** All input for the `updateCardsInDeckById` mutation. */
 export type UpdateCardsInDeckByIdInput = {
+  /** An object where the defined keys will be set on the `CardsInDeck` being updated. */
   cardsInDeckPatch: CardsInDeckPatch;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['BigInt'];
 };
 
+/** All input for the `updateCardsInDeck` mutation. */
 export type UpdateCardsInDeckInput = {
+  /** An object where the defined keys will be set on the `CardsInDeck` being updated. */
   cardsInDeckPatch: CardsInDeckPatch;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `CardsInDeck` to be updated. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our update `CardsInDeck` mutation. */
 export type UpdateCardsInDeckPayload = {
   __typename?: 'UpdateCardsInDeckPayload';
+  /** Reads a single `Card` that is related to this `CardsInDeck`. */
   cardByCardId?: Maybe<Card>;
+  /** The `CardsInDeck` that was updated by this mutation. */
   cardsInDeck?: Maybe<CardsInDeck>;
+  /** An edge for our `CardsInDeck`. May be used by Relay 1. */
   cardsInDeckEdge?: Maybe<CardsInDecksEdge>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `CardsInDeck`. */
   deckByDeckId?: Maybe<Deck>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our update `CardsInDeck` mutation. */
 export type UpdateCardsInDeckPayloadCardsInDeckEdgeArgs = {
   orderBy?: InputMaybe<Array<CardsInDecksOrderBy>>;
 };
 
+/** All input for the `updateDeckById` mutation. */
 export type UpdateDeckByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Deck` being updated. */
   deckPatch: DeckPatch;
   id: Scalars['String'];
 };
 
+/** All input for the `updateDeck` mutation. */
 export type UpdateDeckInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Deck` being updated. */
   deckPatch: DeckPatch;
+  /** The globally unique `ID` which will identify a single `Deck` to be updated. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our update `Deck` mutation. */
 export type UpdateDeckPayload = {
   __typename?: 'UpdateDeckPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Deck` that was updated by this mutation. */
   deck?: Maybe<Deck>;
+  /** An edge for our `Deck`. May be used by Relay 1. */
   deckEdge?: Maybe<DecksEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our update `Deck` mutation. */
 export type UpdateDeckPayloadDeckEdgeArgs = {
   orderBy?: InputMaybe<Array<DecksOrderBy>>;
 };
 
+/** All input for the `updateDeckPlayerAttributeTupleById` mutation. */
 export type UpdateDeckPlayerAttributeTupleByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `DeckPlayerAttributeTuple` being updated. */
   deckPlayerAttributeTuplePatch: DeckPlayerAttributeTuplePatch;
   id: Scalars['BigInt'];
 };
 
+/** All input for the `updateDeckPlayerAttributeTuple` mutation. */
 export type UpdateDeckPlayerAttributeTupleInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `DeckPlayerAttributeTuple` being updated. */
   deckPlayerAttributeTuplePatch: DeckPlayerAttributeTuplePatch;
+  /** The globally unique `ID` which will identify a single `DeckPlayerAttributeTuple` to be updated. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our update `DeckPlayerAttributeTuple` mutation. */
 export type UpdateDeckPlayerAttributeTuplePayload = {
   __typename?: 'UpdateDeckPlayerAttributeTuplePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `DeckPlayerAttributeTuple`. */
   deckByDeckId?: Maybe<Deck>;
+  /** The `DeckPlayerAttributeTuple` that was updated by this mutation. */
   deckPlayerAttributeTuple?: Maybe<DeckPlayerAttributeTuple>;
+  /** An edge for our `DeckPlayerAttributeTuple`. May be used by Relay 1. */
   deckPlayerAttributeTupleEdge?: Maybe<DeckPlayerAttributeTuplesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our update `DeckPlayerAttributeTuple` mutation. */
 export type UpdateDeckPlayerAttributeTuplePayloadDeckPlayerAttributeTupleEdgeArgs = {
   orderBy?: InputMaybe<Array<DeckPlayerAttributeTuplesOrderBy>>;
 };
 
+/** All input for the `updateDeckShareByDeckIdAndShareRecipientId` mutation. */
 export type UpdateDeckShareByDeckIdAndShareRecipientIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   deckId: Scalars['String'];
+  /** An object where the defined keys will be set on the `DeckShare` being updated. */
   deckSharePatch: DeckSharePatch;
   shareRecipientId: Scalars['String'];
 };
 
+/** All input for the `updateDeckShare` mutation. */
 export type UpdateDeckShareInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `DeckShare` being updated. */
   deckSharePatch: DeckSharePatch;
+  /** The globally unique `ID` which will identify a single `DeckShare` to be updated. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our update `DeckShare` mutation. */
 export type UpdateDeckSharePayload = {
   __typename?: 'UpdateDeckSharePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `DeckShare`. */
   deckByDeckId?: Maybe<Deck>;
+  /** The `DeckShare` that was updated by this mutation. */
   deckShare?: Maybe<DeckShare>;
+  /** An edge for our `DeckShare`. May be used by Relay 1. */
   deckShareEdge?: Maybe<DeckSharesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our update `DeckShare` mutation. */
 export type UpdateDeckSharePayloadDeckShareEdgeArgs = {
   orderBy?: InputMaybe<Array<DeckSharesOrderBy>>;
 };
 
+/** All input for the `updateFriendByIdAndFriend` mutation. */
 export type UpdateFriendByIdAndFriendInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   friend: Scalars['String'];
+  /** An object where the defined keys will be set on the `Friend` being updated. */
   friendPatch: FriendPatch;
   id: Scalars['String'];
 };
 
+/** All input for the `updateFriend` mutation. */
 export type UpdateFriendInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Friend` being updated. */
   friendPatch: FriendPatch;
+  /** The globally unique `ID` which will identify a single `Friend` to be updated. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our update `Friend` mutation. */
 export type UpdateFriendPayload = {
   __typename?: 'UpdateFriendPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Friend` that was updated by this mutation. */
   friend?: Maybe<Friend>;
+  /** An edge for our `Friend`. May be used by Relay 1. */
   friendEdge?: Maybe<FriendsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our update `Friend` mutation. */
 export type UpdateFriendPayloadFriendEdgeArgs = {
   orderBy?: InputMaybe<Array<FriendsOrderBy>>;
 };
 
+/** All input for the `updateGameById` mutation. */
 export type UpdateGameByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Game` being updated. */
   gamePatch: GamePatch;
   id: Scalars['BigInt'];
 };
 
+/** All input for the `updateGame` mutation. */
 export type UpdateGameInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Game` being updated. */
   gamePatch: GamePatch;
+  /** The globally unique `ID` which will identify a single `Game` to be updated. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our update `Game` mutation. */
 export type UpdateGamePayload = {
   __typename?: 'UpdateGamePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Game` that was updated by this mutation. */
   game?: Maybe<Game>;
+  /** An edge for our `Game`. May be used by Relay 1. */
   gameEdge?: Maybe<GamesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our update `Game` mutation. */
 export type UpdateGamePayloadGameEdgeArgs = {
   orderBy?: InputMaybe<Array<GamesOrderBy>>;
 };
 
+/** All input for the `updateGameUserByGameIdAndUserId` mutation. */
 export type UpdateGameUserByGameIdAndUserIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   gameId: Scalars['BigInt'];
+  /** An object where the defined keys will be set on the `GameUser` being updated. */
   gameUserPatch: GameUserPatch;
   userId: Scalars['String'];
 };
 
+/** All input for the `updateGameUser` mutation. */
 export type UpdateGameUserInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `GameUser` being updated. */
   gameUserPatch: GameUserPatch;
+  /** The globally unique `ID` which will identify a single `GameUser` to be updated. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our update `GameUser` mutation. */
 export type UpdateGameUserPayload = {
   __typename?: 'UpdateGameUserPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `GameUser`. */
   deckByDeckId?: Maybe<Deck>;
+  /** Reads a single `Game` that is related to this `GameUser`. */
   gameByGameId?: Maybe<Game>;
+  /** The `GameUser` that was updated by this mutation. */
   gameUser?: Maybe<GameUser>;
+  /** An edge for our `GameUser`. May be used by Relay 1. */
   gameUserEdge?: Maybe<GameUsersEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our update `GameUser` mutation. */
 export type UpdateGameUserPayloadGameUserEdgeArgs = {
   orderBy?: InputMaybe<Array<GameUsersOrderBy>>;
 };
 
+/** All input for the `updateGuestById` mutation. */
 export type UpdateGuestByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Guest` being updated. */
   guestPatch: GuestPatch;
   id: Scalars['BigInt'];
 };
 
+/** All input for the `updateGuest` mutation. */
 export type UpdateGuestInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Guest` being updated. */
   guestPatch: GuestPatch;
+  /** The globally unique `ID` which will identify a single `Guest` to be updated. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our update `Guest` mutation. */
 export type UpdateGuestPayload = {
   __typename?: 'UpdateGuestPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Guest` that was updated by this mutation. */
   guest?: Maybe<Guest>;
+  /** An edge for our `Guest`. May be used by Relay 1. */
   guestEdge?: Maybe<GuestsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our update `Guest` mutation. */
 export type UpdateGuestPayloadGuestEdgeArgs = {
   orderBy?: InputMaybe<Array<GuestsOrderBy>>;
 };
 
+/** All input for the `updateMatchmakingQueueById` mutation. */
 export type UpdateMatchmakingQueueByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
+  /** An object where the defined keys will be set on the `MatchmakingQueue` being updated. */
   matchmakingQueuePatch: MatchmakingQueuePatch;
 };
 
+/** All input for the `updateMatchmakingQueue` mutation. */
 export type UpdateMatchmakingQueueInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `MatchmakingQueue` being updated. */
   matchmakingQueuePatch: MatchmakingQueuePatch;
+  /** The globally unique `ID` which will identify a single `MatchmakingQueue` to be updated. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our update `MatchmakingQueue` mutation. */
 export type UpdateMatchmakingQueuePayload = {
   __typename?: 'UpdateMatchmakingQueuePayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** The `MatchmakingQueue` that was updated by this mutation. */
   matchmakingQueue?: Maybe<MatchmakingQueue>;
+  /** An edge for our `MatchmakingQueue`. May be used by Relay 1. */
   matchmakingQueueEdge?: Maybe<MatchmakingQueuesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our update `MatchmakingQueue` mutation. */
 export type UpdateMatchmakingQueuePayloadMatchmakingQueueEdgeArgs = {
   orderBy?: InputMaybe<Array<MatchmakingQueuesOrderBy>>;
 };
 
+/** All input for the `updateMatchmakingTicketByUserId` mutation. */
 export type UpdateMatchmakingTicketByUserIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `MatchmakingTicket` being updated. */
   matchmakingTicketPatch: MatchmakingTicketPatch;
   userId: Scalars['String'];
 };
 
+/** All input for the `updateMatchmakingTicket` mutation. */
 export type UpdateMatchmakingTicketInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `MatchmakingTicket` being updated. */
   matchmakingTicketPatch: MatchmakingTicketPatch;
+  /** The globally unique `ID` which will identify a single `MatchmakingTicket` to be updated. */
   nodeId: Scalars['ID'];
 };
 
+/** The output of our update `MatchmakingTicket` mutation. */
 export type UpdateMatchmakingTicketPayload = {
   __typename?: 'UpdateMatchmakingTicketPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `MatchmakingTicket`. */
   deckByBotDeckId?: Maybe<Deck>;
+  /** Reads a single `Deck` that is related to this `MatchmakingTicket`. */
   deckByDeckId?: Maybe<Deck>;
+  /** Reads a single `MatchmakingQueue` that is related to this `MatchmakingTicket`. */
   matchmakingQueueByQueueId?: Maybe<MatchmakingQueue>;
+  /** The `MatchmakingTicket` that was updated by this mutation. */
   matchmakingTicket?: Maybe<MatchmakingTicket>;
+  /** An edge for our `MatchmakingTicket`. May be used by Relay 1. */
   matchmakingTicketEdge?: Maybe<MatchmakingTicketsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
 };
 
 
+/** The output of our update `MatchmakingTicket` mutation. */
 export type UpdateMatchmakingTicketPayloadMatchmakingTicketEdgeArgs = {
   orderBy?: InputMaybe<Array<MatchmakingTicketsOrderBy>>;
 };
 
+/** All input for the `updateUserEntityAddonById` mutation. */
 export type UpdateUserEntityAddonByIdInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
+  /** An object where the defined keys will be set on the `UserEntityAddon` being updated. */
   userEntityAddonPatch: UserEntityAddonPatch;
 };
 
+/** All input for the `updateUserEntityAddon` mutation. */
 export type UpdateUserEntityAddonInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `UserEntityAddon` to be updated. */
   nodeId: Scalars['ID'];
+  /** An object where the defined keys will be set on the `UserEntityAddon` being updated. */
   userEntityAddonPatch: UserEntityAddonPatch;
 };
 
+/** The output of our update `UserEntityAddon` mutation. */
 export type UpdateUserEntityAddonPayload = {
   __typename?: 'UpdateUserEntityAddonPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
   clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
+  /** The `UserEntityAddon` that was updated by this mutation. */
   userEntityAddon?: Maybe<UserEntityAddon>;
+  /** An edge for our `UserEntityAddon`. May be used by Relay 1. */
   userEntityAddonEdge?: Maybe<UserEntityAddonsEdge>;
 };
 
 
+/** The output of our update `UserEntityAddon` mutation. */
 export type UpdateUserEntityAddonPayloadUserEntityAddonEdgeArgs = {
   orderBy?: InputMaybe<Array<UserEntityAddonsOrderBy>>;
 };
@@ -2587,18 +4338,46 @@ export type UserEntityAddon = Node & {
   __typename?: 'UserEntityAddon';
   id: Scalars['String'];
   migrated?: Maybe<Scalars['Boolean']>;
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
   privacyToken?: Maybe<Scalars['String']>;
   showPremadeDecks?: Maybe<Scalars['Boolean']>;
 };
 
+/**
+ * A condition to be used against `UserEntityAddon` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
 export type UserEntityAddonCondition = {
+  /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `migrated` field. */
   migrated?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `privacyToken` field. */
   privacyToken?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `showPremadeDecks` field. */
   showPremadeDecks?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** A filter to be used against `UserEntityAddon` object types. All fields are combined with a logical ‘and.’ */
+export type UserEntityAddonFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<UserEntityAddonFilter>>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `migrated` field. */
+  migrated?: InputMaybe<BooleanFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<UserEntityAddonFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<UserEntityAddonFilter>>;
+  /** Filter by the object’s `privacyToken` field. */
+  privacyToken?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `showPremadeDecks` field. */
+  showPremadeDecks?: InputMaybe<BooleanFilter>;
+};
+
+/** An input for mutations affecting `UserEntityAddon` */
 export type UserEntityAddonInput = {
   id: Scalars['String'];
   migrated?: InputMaybe<Scalars['Boolean']>;
@@ -2606,6 +4385,7 @@ export type UserEntityAddonInput = {
   showPremadeDecks?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** Represents an update to a `UserEntityAddon`. Fields that are set will be updated. */
 export type UserEntityAddonPatch = {
   id?: InputMaybe<Scalars['String']>;
   migrated?: InputMaybe<Scalars['Boolean']>;
@@ -2613,20 +4393,29 @@ export type UserEntityAddonPatch = {
   showPremadeDecks?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** A connection to a list of `UserEntityAddon` values. */
 export type UserEntityAddonsConnection = {
   __typename?: 'UserEntityAddonsConnection';
+  /** A list of edges which contains the `UserEntityAddon` and cursor to aid in pagination. */
   edges: Array<UserEntityAddonsEdge>;
+  /** A list of `UserEntityAddon` objects. */
   nodes: Array<Maybe<UserEntityAddon>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  /** The count of *all* `UserEntityAddon` you could get from the connection. */
   totalCount: Scalars['Int'];
 };
 
+/** A `UserEntityAddon` edge in the connection. */
 export type UserEntityAddonsEdge = {
   __typename?: 'UserEntityAddonsEdge';
+  /** A cursor for use in pagination. */
   cursor?: Maybe<Scalars['Cursor']>;
+  /** The `UserEntityAddon` at the end of the edge. */
   node?: Maybe<UserEntityAddon>;
 };
 
+/** Methods to use when ordering `UserEntityAddon`. */
 export const UserEntityAddonsOrderBy = {
   IdAsc: 'ID_ASC',
   IdDesc: 'ID_DESC',
@@ -2713,9 +4502,12 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   BigInt: ResolverTypeWrapper<Partial<Scalars['BigInt']>>;
+  BigIntFilter: ResolverTypeWrapper<Partial<BigIntFilter>>;
   Boolean: ResolverTypeWrapper<Partial<Scalars['Boolean']>>;
+  BooleanFilter: ResolverTypeWrapper<Partial<BooleanFilter>>;
   BotUser: ResolverTypeWrapper<Partial<BotUser>>;
   BotUserCondition: ResolverTypeWrapper<Partial<BotUserCondition>>;
+  BotUserFilter: ResolverTypeWrapper<Partial<BotUserFilter>>;
   BotUserInput: ResolverTypeWrapper<Partial<BotUserInput>>;
   BotUserPatch: ResolverTypeWrapper<Partial<BotUserPatch>>;
   BotUsersConnection: ResolverTypeWrapper<Partial<BotUsersConnection>>;
@@ -2723,12 +4515,14 @@ export type ResolversTypes = {
   BotUsersOrderBy: ResolverTypeWrapper<Partial<BotUsersOrderBy>>;
   Card: ResolverTypeWrapper<Partial<Card>>;
   CardCondition: ResolverTypeWrapper<Partial<CardCondition>>;
+  CardFilter: ResolverTypeWrapper<Partial<CardFilter>>;
   CardInput: ResolverTypeWrapper<Partial<CardInput>>;
   CardPatch: ResolverTypeWrapper<Partial<CardPatch>>;
   CardsConnection: ResolverTypeWrapper<Partial<CardsConnection>>;
   CardsEdge: ResolverTypeWrapper<Partial<CardsEdge>>;
   CardsInDeck: ResolverTypeWrapper<Partial<CardsInDeck>>;
   CardsInDeckCondition: ResolverTypeWrapper<Partial<CardsInDeckCondition>>;
+  CardsInDeckFilter: ResolverTypeWrapper<Partial<CardsInDeckFilter>>;
   CardsInDeckInput: ResolverTypeWrapper<Partial<CardsInDeckInput>>;
   CardsInDeckPatch: ResolverTypeWrapper<Partial<CardsInDeckPatch>>;
   CardsInDecksConnection: ResolverTypeWrapper<Partial<CardsInDecksConnection>>;
@@ -2763,12 +4557,15 @@ export type ResolversTypes = {
   CreateUserEntityAddonPayload: ResolverTypeWrapper<Partial<CreateUserEntityAddonPayload>>;
   Cursor: ResolverTypeWrapper<Partial<Scalars['Cursor']>>;
   Datetime: ResolverTypeWrapper<Partial<Scalars['Datetime']>>;
+  DatetimeFilter: ResolverTypeWrapper<Partial<DatetimeFilter>>;
   Deck: ResolverTypeWrapper<Partial<Deck>>;
   DeckCondition: ResolverTypeWrapper<Partial<DeckCondition>>;
+  DeckFilter: ResolverTypeWrapper<Partial<DeckFilter>>;
   DeckInput: ResolverTypeWrapper<Partial<DeckInput>>;
   DeckPatch: ResolverTypeWrapper<Partial<DeckPatch>>;
   DeckPlayerAttributeTuple: ResolverTypeWrapper<Partial<DeckPlayerAttributeTuple>>;
   DeckPlayerAttributeTupleCondition: ResolverTypeWrapper<Partial<DeckPlayerAttributeTupleCondition>>;
+  DeckPlayerAttributeTupleFilter: ResolverTypeWrapper<Partial<DeckPlayerAttributeTupleFilter>>;
   DeckPlayerAttributeTupleInput: ResolverTypeWrapper<Partial<DeckPlayerAttributeTupleInput>>;
   DeckPlayerAttributeTuplePatch: ResolverTypeWrapper<Partial<DeckPlayerAttributeTuplePatch>>;
   DeckPlayerAttributeTuplesConnection: ResolverTypeWrapper<Partial<DeckPlayerAttributeTuplesConnection>>;
@@ -2776,6 +4573,7 @@ export type ResolversTypes = {
   DeckPlayerAttributeTuplesOrderBy: ResolverTypeWrapper<Partial<DeckPlayerAttributeTuplesOrderBy>>;
   DeckShare: ResolverTypeWrapper<Partial<DeckShare>>;
   DeckShareCondition: ResolverTypeWrapper<Partial<DeckShareCondition>>;
+  DeckShareFilter: ResolverTypeWrapper<Partial<DeckShareFilter>>;
   DeckShareInput: ResolverTypeWrapper<Partial<DeckShareInput>>;
   DeckSharePatch: ResolverTypeWrapper<Partial<DeckSharePatch>>;
   DeckSharesConnection: ResolverTypeWrapper<Partial<DeckSharesConnection>>;
@@ -2825,6 +4623,7 @@ export type ResolversTypes = {
   DeleteUserEntityAddonPayload: ResolverTypeWrapper<Partial<DeleteUserEntityAddonPayload>>;
   Friend: ResolverTypeWrapper<Partial<Friend>>;
   FriendCondition: ResolverTypeWrapper<Partial<FriendCondition>>;
+  FriendFilter: ResolverTypeWrapper<Partial<FriendFilter>>;
   FriendInput: ResolverTypeWrapper<Partial<FriendInput>>;
   FriendPatch: ResolverTypeWrapper<Partial<FriendPatch>>;
   FriendsConnection: ResolverTypeWrapper<Partial<FriendsConnection>>;
@@ -2832,14 +4631,18 @@ export type ResolversTypes = {
   FriendsOrderBy: ResolverTypeWrapper<Partial<FriendsOrderBy>>;
   Game: ResolverTypeWrapper<Partial<Game>>;
   GameCondition: ResolverTypeWrapper<Partial<GameCondition>>;
+  GameFilter: ResolverTypeWrapper<Partial<GameFilter>>;
   GameInput: ResolverTypeWrapper<Partial<GameInput>>;
   GamePatch: ResolverTypeWrapper<Partial<GamePatch>>;
   GameStateEnum: ResolverTypeWrapper<Partial<GameStateEnum>>;
+  GameStateEnumFilter: ResolverTypeWrapper<Partial<GameStateEnumFilter>>;
   GameUser: ResolverTypeWrapper<Partial<GameUser>>;
   GameUserCondition: ResolverTypeWrapper<Partial<GameUserCondition>>;
+  GameUserFilter: ResolverTypeWrapper<Partial<GameUserFilter>>;
   GameUserInput: ResolverTypeWrapper<Partial<GameUserInput>>;
   GameUserPatch: ResolverTypeWrapper<Partial<GameUserPatch>>;
   GameUserVictoryEnum: ResolverTypeWrapper<Partial<GameUserVictoryEnum>>;
+  GameUserVictoryEnumFilter: ResolverTypeWrapper<Partial<GameUserVictoryEnumFilter>>;
   GameUsersConnection: ResolverTypeWrapper<Partial<GameUsersConnection>>;
   GameUsersEdge: ResolverTypeWrapper<Partial<GameUsersEdge>>;
   GameUsersOrderBy: ResolverTypeWrapper<Partial<GameUsersOrderBy>>;
@@ -2848,6 +4651,7 @@ export type ResolversTypes = {
   GamesOrderBy: ResolverTypeWrapper<Partial<GamesOrderBy>>;
   Guest: ResolverTypeWrapper<Partial<Guest>>;
   GuestCondition: ResolverTypeWrapper<Partial<GuestCondition>>;
+  GuestFilter: ResolverTypeWrapper<Partial<GuestFilter>>;
   GuestInput: ResolverTypeWrapper<Partial<GuestInput>>;
   GuestPatch: ResolverTypeWrapper<Partial<GuestPatch>>;
   GuestsConnection: ResolverTypeWrapper<Partial<GuestsConnection>>;
@@ -2856,9 +4660,12 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Partial<Scalars['ID']>>;
   ImageDef: ResolverTypeWrapper<Partial<ImageDef>>;
   Int: ResolverTypeWrapper<Partial<Scalars['Int']>>;
+  IntFilter: ResolverTypeWrapper<Partial<IntFilter>>;
   JSON: ResolverTypeWrapper<Partial<Scalars['JSON']>>;
+  JSONFilter: ResolverTypeWrapper<Partial<JsonFilter>>;
   MatchmakingQueue: ResolverTypeWrapper<Partial<MatchmakingQueue>>;
   MatchmakingQueueCondition: ResolverTypeWrapper<Partial<MatchmakingQueueCondition>>;
+  MatchmakingQueueFilter: ResolverTypeWrapper<Partial<MatchmakingQueueFilter>>;
   MatchmakingQueueInput: ResolverTypeWrapper<Partial<MatchmakingQueueInput>>;
   MatchmakingQueuePatch: ResolverTypeWrapper<Partial<MatchmakingQueuePatch>>;
   MatchmakingQueuesConnection: ResolverTypeWrapper<Partial<MatchmakingQueuesConnection>>;
@@ -2866,6 +4673,7 @@ export type ResolversTypes = {
   MatchmakingQueuesOrderBy: ResolverTypeWrapper<Partial<MatchmakingQueuesOrderBy>>;
   MatchmakingTicket: ResolverTypeWrapper<Partial<MatchmakingTicket>>;
   MatchmakingTicketCondition: ResolverTypeWrapper<Partial<MatchmakingTicketCondition>>;
+  MatchmakingTicketFilter: ResolverTypeWrapper<Partial<MatchmakingTicketFilter>>;
   MatchmakingTicketInput: ResolverTypeWrapper<Partial<MatchmakingTicketInput>>;
   MatchmakingTicketPatch: ResolverTypeWrapper<Partial<MatchmakingTicketPatch>>;
   MatchmakingTicketsConnection: ResolverTypeWrapper<Partial<MatchmakingTicketsConnection>>;
@@ -2876,6 +4684,7 @@ export type ResolversTypes = {
   PageInfo: ResolverTypeWrapper<Partial<PageInfo>>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Partial<Scalars['String']>>;
+  StringFilter: ResolverTypeWrapper<Partial<StringFilter>>;
   UpdateBotUserByIdInput: ResolverTypeWrapper<Partial<UpdateBotUserByIdInput>>;
   UpdateBotUserInput: ResolverTypeWrapper<Partial<UpdateBotUserInput>>;
   UpdateBotUserPayload: ResolverTypeWrapper<Partial<UpdateBotUserPayload>>;
@@ -2917,6 +4726,7 @@ export type ResolversTypes = {
   UpdateUserEntityAddonPayload: ResolverTypeWrapper<Partial<UpdateUserEntityAddonPayload>>;
   UserEntityAddon: ResolverTypeWrapper<Partial<UserEntityAddon>>;
   UserEntityAddonCondition: ResolverTypeWrapper<Partial<UserEntityAddonCondition>>;
+  UserEntityAddonFilter: ResolverTypeWrapper<Partial<UserEntityAddonFilter>>;
   UserEntityAddonInput: ResolverTypeWrapper<Partial<UserEntityAddonInput>>;
   UserEntityAddonPatch: ResolverTypeWrapper<Partial<UserEntityAddonPatch>>;
   UserEntityAddonsConnection: ResolverTypeWrapper<Partial<UserEntityAddonsConnection>>;
@@ -2927,21 +4737,26 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   BigInt: Partial<Scalars['BigInt']>;
+  BigIntFilter: Partial<BigIntFilter>;
   Boolean: Partial<Scalars['Boolean']>;
+  BooleanFilter: Partial<BooleanFilter>;
   BotUser: Partial<BotUser>;
   BotUserCondition: Partial<BotUserCondition>;
+  BotUserFilter: Partial<BotUserFilter>;
   BotUserInput: Partial<BotUserInput>;
   BotUserPatch: Partial<BotUserPatch>;
   BotUsersConnection: Partial<BotUsersConnection>;
   BotUsersEdge: Partial<BotUsersEdge>;
   Card: Partial<Card>;
   CardCondition: Partial<CardCondition>;
+  CardFilter: Partial<CardFilter>;
   CardInput: Partial<CardInput>;
   CardPatch: Partial<CardPatch>;
   CardsConnection: Partial<CardsConnection>;
   CardsEdge: Partial<CardsEdge>;
   CardsInDeck: Partial<CardsInDeck>;
   CardsInDeckCondition: Partial<CardsInDeckCondition>;
+  CardsInDeckFilter: Partial<CardsInDeckFilter>;
   CardsInDeckInput: Partial<CardsInDeckInput>;
   CardsInDeckPatch: Partial<CardsInDeckPatch>;
   CardsInDecksConnection: Partial<CardsInDecksConnection>;
@@ -2974,18 +4789,22 @@ export type ResolversParentTypes = {
   CreateUserEntityAddonPayload: Partial<CreateUserEntityAddonPayload>;
   Cursor: Partial<Scalars['Cursor']>;
   Datetime: Partial<Scalars['Datetime']>;
+  DatetimeFilter: Partial<DatetimeFilter>;
   Deck: Partial<Deck>;
   DeckCondition: Partial<DeckCondition>;
+  DeckFilter: Partial<DeckFilter>;
   DeckInput: Partial<DeckInput>;
   DeckPatch: Partial<DeckPatch>;
   DeckPlayerAttributeTuple: Partial<DeckPlayerAttributeTuple>;
   DeckPlayerAttributeTupleCondition: Partial<DeckPlayerAttributeTupleCondition>;
+  DeckPlayerAttributeTupleFilter: Partial<DeckPlayerAttributeTupleFilter>;
   DeckPlayerAttributeTupleInput: Partial<DeckPlayerAttributeTupleInput>;
   DeckPlayerAttributeTuplePatch: Partial<DeckPlayerAttributeTuplePatch>;
   DeckPlayerAttributeTuplesConnection: Partial<DeckPlayerAttributeTuplesConnection>;
   DeckPlayerAttributeTuplesEdge: Partial<DeckPlayerAttributeTuplesEdge>;
   DeckShare: Partial<DeckShare>;
   DeckShareCondition: Partial<DeckShareCondition>;
+  DeckShareFilter: Partial<DeckShareFilter>;
   DeckShareInput: Partial<DeckShareInput>;
   DeckSharePatch: Partial<DeckSharePatch>;
   DeckSharesConnection: Partial<DeckSharesConnection>;
@@ -3033,24 +4852,30 @@ export type ResolversParentTypes = {
   DeleteUserEntityAddonPayload: Partial<DeleteUserEntityAddonPayload>;
   Friend: Partial<Friend>;
   FriendCondition: Partial<FriendCondition>;
+  FriendFilter: Partial<FriendFilter>;
   FriendInput: Partial<FriendInput>;
   FriendPatch: Partial<FriendPatch>;
   FriendsConnection: Partial<FriendsConnection>;
   FriendsEdge: Partial<FriendsEdge>;
   Game: Partial<Game>;
   GameCondition: Partial<GameCondition>;
+  GameFilter: Partial<GameFilter>;
   GameInput: Partial<GameInput>;
   GamePatch: Partial<GamePatch>;
+  GameStateEnumFilter: Partial<GameStateEnumFilter>;
   GameUser: Partial<GameUser>;
   GameUserCondition: Partial<GameUserCondition>;
+  GameUserFilter: Partial<GameUserFilter>;
   GameUserInput: Partial<GameUserInput>;
   GameUserPatch: Partial<GameUserPatch>;
+  GameUserVictoryEnumFilter: Partial<GameUserVictoryEnumFilter>;
   GameUsersConnection: Partial<GameUsersConnection>;
   GameUsersEdge: Partial<GameUsersEdge>;
   GamesConnection: Partial<GamesConnection>;
   GamesEdge: Partial<GamesEdge>;
   Guest: Partial<Guest>;
   GuestCondition: Partial<GuestCondition>;
+  GuestFilter: Partial<GuestFilter>;
   GuestInput: Partial<GuestInput>;
   GuestPatch: Partial<GuestPatch>;
   GuestsConnection: Partial<GuestsConnection>;
@@ -3058,15 +4883,19 @@ export type ResolversParentTypes = {
   ID: Partial<Scalars['ID']>;
   ImageDef: Partial<ImageDef>;
   Int: Partial<Scalars['Int']>;
+  IntFilter: Partial<IntFilter>;
   JSON: Partial<Scalars['JSON']>;
+  JSONFilter: Partial<JsonFilter>;
   MatchmakingQueue: Partial<MatchmakingQueue>;
   MatchmakingQueueCondition: Partial<MatchmakingQueueCondition>;
+  MatchmakingQueueFilter: Partial<MatchmakingQueueFilter>;
   MatchmakingQueueInput: Partial<MatchmakingQueueInput>;
   MatchmakingQueuePatch: Partial<MatchmakingQueuePatch>;
   MatchmakingQueuesConnection: Partial<MatchmakingQueuesConnection>;
   MatchmakingQueuesEdge: Partial<MatchmakingQueuesEdge>;
   MatchmakingTicket: Partial<MatchmakingTicket>;
   MatchmakingTicketCondition: Partial<MatchmakingTicketCondition>;
+  MatchmakingTicketFilter: Partial<MatchmakingTicketFilter>;
   MatchmakingTicketInput: Partial<MatchmakingTicketInput>;
   MatchmakingTicketPatch: Partial<MatchmakingTicketPatch>;
   MatchmakingTicketsConnection: Partial<MatchmakingTicketsConnection>;
@@ -3076,6 +4905,7 @@ export type ResolversParentTypes = {
   PageInfo: Partial<PageInfo>;
   Query: {};
   String: Partial<Scalars['String']>;
+  StringFilter: Partial<StringFilter>;
   UpdateBotUserByIdInput: Partial<UpdateBotUserByIdInput>;
   UpdateBotUserInput: Partial<UpdateBotUserInput>;
   UpdateBotUserPayload: Partial<UpdateBotUserPayload>;
@@ -3117,6 +4947,7 @@ export type ResolversParentTypes = {
   UpdateUserEntityAddonPayload: Partial<UpdateUserEntityAddonPayload>;
   UserEntityAddon: Partial<UserEntityAddon>;
   UserEntityAddonCondition: Partial<UserEntityAddonCondition>;
+  UserEntityAddonFilter: Partial<UserEntityAddonFilter>;
   UserEntityAddonInput: Partial<UserEntityAddonInput>;
   UserEntityAddonPatch: Partial<UserEntityAddonPatch>;
   UserEntityAddonsConnection: Partial<UserEntityAddonsConnection>;
@@ -3809,6 +5640,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   gameById?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType, RequireFields<QueryGameByIdArgs, 'id'>>;
   gameUser?: Resolver<Maybe<ResolversTypes['GameUser']>, ParentType, ContextType, RequireFields<QueryGameUserArgs, 'nodeId'>>;
   gameUserByGameIdAndUserId?: Resolver<Maybe<ResolversTypes['GameUser']>, ParentType, ContextType, RequireFields<QueryGameUserByGameIdAndUserIdArgs, 'gameId' | 'userId'>>;
+  getUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   guest?: Resolver<Maybe<ResolversTypes['Guest']>, ParentType, ContextType, RequireFields<QueryGuestArgs, 'nodeId'>>;
   guestById?: Resolver<Maybe<ResolversTypes['Guest']>, ParentType, ContextType, RequireFields<QueryGuestByIdArgs, 'id'>>;
   matchmakingQueue?: Resolver<Maybe<ResolversTypes['MatchmakingQueue']>, ParentType, ContextType, RequireFields<QueryMatchmakingQueueArgs, 'nodeId'>>;
@@ -4077,6 +5909,15 @@ export type GetCardQueryVariables = Exact<{
 
 export type GetCardQuery = { __typename?: 'Query', cardById?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null } | null };
 
+export type GetPagedCardsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  filter?: InputMaybe<CardFilter>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetPagedCardsQuery = { __typename?: 'Query', allCards?: { __typename?: 'CardsConnection', nodes: Array<{ __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null } | null> } | null };
+
 export const CardFragmentDoc = gql`
     fragment card on Card {
   id
@@ -4235,3 +6076,42 @@ export function useGetCardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetCardQueryHookResult = ReturnType<typeof useGetCardQuery>;
 export type GetCardLazyQueryHookResult = ReturnType<typeof useGetCardLazyQuery>;
 export type GetCardQueryResult = Apollo.QueryResult<GetCardQuery, GetCardQueryVariables>;
+export const GetPagedCardsDocument = gql`
+    query getPagedCards($limit: Int!, $filter: CardFilter, $offset: Int) {
+  allCards(offset: $offset, filter: $filter, first: $limit) {
+    nodes {
+      ...card
+    }
+  }
+}
+    ${CardFragmentDoc}`;
+
+/**
+ * __useGetPagedCardsQuery__
+ *
+ * To run a query within a React component, call `useGetPagedCardsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPagedCardsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPagedCardsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      filter: // value for 'filter'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetPagedCardsQuery(baseOptions: Apollo.QueryHookOptions<GetPagedCardsQuery, GetPagedCardsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPagedCardsQuery, GetPagedCardsQueryVariables>(GetPagedCardsDocument, options);
+      }
+export function useGetPagedCardsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPagedCardsQuery, GetPagedCardsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPagedCardsQuery, GetPagedCardsQueryVariables>(GetPagedCardsDocument, options);
+        }
+export type GetPagedCardsQueryHookResult = ReturnType<typeof useGetPagedCardsQuery>;
+export type GetPagedCardsLazyQueryHookResult = ReturnType<typeof useGetPagedCardsLazyQuery>;
+export type GetPagedCardsQueryResult = Apollo.QueryResult<GetPagedCardsQuery, GetPagedCardsQueryVariables>;

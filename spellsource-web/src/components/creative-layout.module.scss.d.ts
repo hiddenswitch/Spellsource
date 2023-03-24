@@ -57,6 +57,7 @@ export const kr: string;
 export const kt: string;
 export const lcloud: string;
 export const lineno: string;
+export const loginButton: string;
 export const logos: string;
 export const m: string;
 export const mcloud: string;

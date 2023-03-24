@@ -9,11 +9,9 @@ import {BlocklyDataContext} from "../pages/card-editor";
 import {ContextType} from "react";
 import {BlockDef} from "./blocks";
 
-export function toHappyFormatting(string: string) {
-  return string.split('_')
-    .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
-    .join(' ')
-}
+export const toHappyFormatting = (string: string) => string.split('_')
+  .map(w => w[0].toUpperCase() + w.substring(1).toLowerCase())
+  .join(' ');
 
 export function addBlock(block: BlockDef) {
   Blockly.Blocks[block.type!] = {
@@ -196,7 +194,7 @@ export function cardMessage(card: CardDef) {
     ret = '(' + card.baseManaCost + ') '
   }
   if (card.type === 'MINION') {
-    ret += card.baseAttack + '/' + card.baseHp
+    ret += (card.baseAttack ?? 0) + '/' + (card.baseHp ?? 0)
   } else {
     ret += toHappyFormatting(card.type)
   }
@@ -479,7 +477,7 @@ export function pluralStuff(workspace) {
       if (arg.type === 'field_label_plural') {
         let shouldBePlural = null
         let connection
-        //on a plural field, 'src' is where it should look to to know whether it's plural or not
+        //on a plural field, 'src' is where it should look to know whether it's plural or not
         if (arg.src === 'OUTPUT') {
           connection = block.outputConnection
           if (!!block.outputConnection.targetBlock()) {

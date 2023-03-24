@@ -1,20 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Form, FormControl, ListGroup } from 'react-bootstrap'
+import React, {useEffect, useMemo, useRef, useState} from 'react'
+import {Form, FormControl, ListGroup} from 'react-bootstrap'
 import * as styles from './creative-layout.module.scss'
 
-import { useIndex } from '../hooks/use-index'
+import {cardSearchNode, SearchNode, useIndex} from '../hooks/use-index'
 import Link from 'next/link'
 import {useRouter} from "next/router";
+import {useDebounce} from "react-use";
+import {useGetPagedCardsLazyQuery} from "../__generated__/client";
 
 // Search component
-function Search (props) {
+function Search(props) {
   const [query, setQuery] = useState(``)
-  const [results, setResults] = useState([])
+  const [results, setResults] = useState([] as SearchNode[])
   const [searchListLeft, setSearchListLeft] = useState(0)
 
   const router = useRouter();
 
-  function updatePosition () {
+  function updatePosition() {
     setSearchListLeft(inputBox.current.getBoundingClientRect().left)
   }
 
@@ -28,7 +30,7 @@ function Search (props) {
 
   const index = useIndex()
 
-  const dropDownMenu = () => {
+  const dropDownMenu = useMemo(() => {
     const encoded = encodeURI(query)
     if (encoded.length !== 0) {
       return (
@@ -43,7 +45,7 @@ function Search (props) {
         </ListGroup.Item>
       )
     }
-  }
+  }, [query, results]);
 
   // update input value
   const updateQuery = event => {
@@ -59,7 +61,7 @@ function Search (props) {
   }
 
   const search = evt => {
-    const query = evt.target.value
+    /*const query = evt.target.value
     setQuery(query)
     setResults(index
       // Query the index with search string to get an [] of IDs
@@ -71,22 +73,46 @@ function Search (props) {
       })
       .slice(0, 5)
       // map over each ID and return full document
-    )
+    )*/
   }
+
+  const [getPagedCards] = useGetPagedCardsLazyQuery();
+
+  useDebounce(async () => {
+    if (!query) {
+      setResults([])
+      return;
+    }
+
+    const {data} = await getPagedCards({variables: {limit: 5, filter: {id: {includesInsensitive: query}}}});
+
+    setResults((data?.allCards?.nodes ?? []).map((node) => ({
+      ...cardSearchNode(JSON.parse(node.cardScript)),
+      id: node.id
+    })))
+  }, 500, [query]);
+
+  const [focused, setFocused] = useState(false);
 
   return (
     <div className={styles.inputBox}>
-      <Form ref={inputBox} onSubmit={e => navigateToSearchResults(e)}>
-        <FormControl type="text" placeholder={props.placeholder}
-                     value={query}
-                     onChange={e => {
-                       updateQuery(e)
-                       search(e)
-                     }}/>
+      <Form ref={inputBox} onSubmit={e => navigateToSearchResults(e)} onFocus={event => setFocused(true)}
+            onBlur={event => {
+              if (!event.currentTarget.contains(event.relatedTarget)) {
+                setFocused(false)
+              }
+            }}>
+        <FormControl type="text" placeholder={props.placeholder} value={query} onChange={e => {
+          updateQuery(e)
+          search(e)
+        }}
+        />
+        {focused && (
+          <ListGroup variant="flush" style={{left: searchListLeft}} className={styles.searchResults}>
+            {dropDownMenu}
+          </ListGroup>
+        )}
       </Form>
-      <ListGroup variant="flush" style={{ left: searchListLeft }} className={styles.searchResults}>
-        {dropDownMenu()}
-      </ListGroup>
     </div>
   )
 }

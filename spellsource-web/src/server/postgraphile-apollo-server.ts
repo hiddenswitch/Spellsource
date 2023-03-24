@@ -55,7 +55,7 @@ export const makeSchemaAndPlugin = async (
        * asynchronous callback in order to set up our context.
        */
       async didResolveOperation(requestContext: GraphQLRequestContextDidResolveOperation<Record<string, any>>) {
-        const { contextValue: graphqlContext, request: graphqlRequest } = requestContext;
+        const { contextValue: context, request: graphqlRequest } = requestContext;
 
         /*
          * Get access to the original HTTP request to determine the JWT and
@@ -63,7 +63,8 @@ export const makeSchemaAndPlugin = async (
          * is a subset of the original HTTP request according to the Apollo
          * Server typings, it only contains "headers"?)
          */
-        const { http: req } = graphqlRequest;
+        const { http } = graphqlRequest;
+        const req = {...http, context}
 
         /*
          * The below code implements similar logic to this area of
@@ -99,7 +100,7 @@ export const makeSchemaAndPlugin = async (
             (postgraphileContext) =>
               new Promise((releaseContext) => {
                 // Jesse, an Apollo Server developer, told me to do this 😜
-                Object.assign(graphqlContext, additionalGraphQLContextFromRequest, postgraphileContext);
+                Object.assign(context, additionalGraphQLContextFromRequest, postgraphileContext);
 
                 /*
                  * Don't resolve (don't release the pgClient on context) until
@@ -111,7 +112,7 @@ export const makeSchemaAndPlugin = async (
                 resolve();
               })
           ).catch((e) => {
-            console.error("Error occurred creating context!");
+            // console.error("Error occurred creating context!");
             console.error(e);
             // Release context
             if (finished) {

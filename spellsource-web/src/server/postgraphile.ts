@@ -1,26 +1,34 @@
 import {Pool} from 'pg';
-import {postgraphile} from "postgraphile";
-import {NextApiRequest, NextApiResponse} from "next";
+import {pgPort} from "../lib/config";
+import {PostGraphileOptions} from "postgraphile";
+import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 
 const pool = new Pool({
   user: "admin",
   password: "password",
   host: "localhost",
   database: "spellsource",
-  port: 5432,
+  port: pgPort,
 });
 
 export {pool as pgPool};
 
-export const postgraphileOptions = {
+export const postgraphileOptions: PostGraphileOptions = {
   // watchPg: true, // Need extension for this to work properly
-  graphiql: true,
-  enhanceGraphiql: true,
+  graphiql: false,
+  enhanceGraphiql: false,
   // externalUrlBase: "/api", // Don't use this since graphql route is incorrect w/ it
   graphqlRoute: "/api/graphql",
   graphiqlRoute: "/api/graphiql",
   retryOnInitFail: true,
-  exportGqlSchemaPath: "src/__generated__/schema.graphql"
+  exportGqlSchemaPath: "src/__generated__/schema.graphql",
   // retryOnInitFail is mainly so that going to /api/graphiql
   // doesn't crash entire app if config is incorrect. Fix config.
+  appendPlugins: [
+    ConnectionFilterPlugin
+  ],
+  pgSettings: (req: any) => ({
+    "role": "website",
+    "user.id": req.context.session?.token?.sub ?? "",
+  })
 }

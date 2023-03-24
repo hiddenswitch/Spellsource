@@ -46,7 +46,7 @@ const defaultArt = {
     }
   },
   'sprite': {
-    'named': selkie,
+    'named': "Selkie",
     'shadow': selkieShadow
   }
 }
@@ -139,8 +139,8 @@ function CardDisplay(props: DeepPartial<CardDef>) {
         <p className={styles.baseHp}>{props.baseHp}</p>
       </div>
       <div className={styles.heroAndShadow}>
-        <img src={"/api/art/" + art.sprite.named} className={styles.hero} alt=" "/>
-        <img src={art.sprite.shadow} className={styles.heroShadow} alt=""/>
+        <img src={"/api/art/" + String(art.sprite.named)} className={styles.hero} alt=" "/>
+        <img src={String(art.sprite.shadow)} className={styles.heroShadow} alt=""/>
       </div>
     </div>
   )

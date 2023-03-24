@@ -49,7 +49,6 @@ def localUsername = 'admin'
 def localPassword = 'password'
 def localDatabaseName = 'spellsource'
 def localPort = '5432'
-def useFixedPort = 'true'
 def mainClassNameConst = 'com.hiddenswitch.framework.EntryPoint'
 def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
 def jvmArgs = ['--enable-preview', '--add-opens', 'java.base/java.lang=ALL-UNNAMED']
@@ -183,8 +182,6 @@ run {
     classpath sourceSets.test.runtimeClasspath
     mainClass.set('com.hiddenswitch.framework.tests.applications.EntryPoint')
     jvmArgs.addAll(jvmArgs)
-
-    environment 'USE_FIXED_PORT', useFixedPort
 }
 
 artifacts {

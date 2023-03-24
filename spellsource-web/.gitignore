@@ -70,3 +70,4 @@ _site
 build/
 
 .next
+.env.local

@@ -3,6 +3,8 @@ import Header from './header'
 import Footer from './footer'
 import * as styles from './creative-layout.module.scss'
 import Link from "next/link";
+import {signIn, signOut} from "next-auth/react";
+import {AuthButton} from "./auth-button";
 
 export default ({ children }) => {
 
@@ -30,9 +32,10 @@ export default ({ children }) => {
     .map(edge => <li key={edge.node.id}><PostLink post={edge.node}/></li>)*/
 
   const pages = [
-    <li><Link href={"/wiki"}/>Wiki</li>,
-    <li><Link href={"/whats-new"}/>What's New</li>,
-    <li><Link href={"/credits"}/>Credits</li>,
+    <li key={0}><Link href={"/wiki"}>Wiki</Link></li>,
+    <li key={1}><Link href={"/whats-new"}>What's New</Link></li>,
+    <li key={2}><Link href={"/credits"}>Credits</Link></li>,
+    <li key={3}><AuthButton/></li>
   ]
 
   return <div className={styles.container}>

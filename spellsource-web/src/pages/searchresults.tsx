@@ -1,27 +1,47 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import * as styles from '../components/creative-layout.module.scss'
 import * as templateStyles from '../templates/template-styles.module.scss'
 import Layout from '../components/creative-layout'
-import { ListGroup } from 'react-bootstrap'
-import { useIndex } from '../hooks/use-index'
+import {ListGroup} from 'react-bootstrap'
 import Link from 'next/link'
+import {useRouter} from 'next/router'
+import {isArray} from "lodash";
+import {useGetPagedCardsQuery} from "../__generated__/client";
+import {cardSearchNode} from "../hooks/use-index";
+import CardDisplay from "../components/card-display";
 
-/*const SearchResults = ({ location }) => {
-  let parsed = queryString.parse(decodeURI(location.search))
-  const query = parsed.query
+const SearchResults = () => {
+  const router = useRouter();
+  const queryParam = router.query["query"]
+  const query = isArray(queryParam) ? queryParam.join("/") : queryParam;
 
-  let index = useIndex()
-  const results = index
-    .search(query, { expand: true })
-    .map(({ ref }) => index.documentStore.getDoc(ref))
-    .filter(doc => {
-      return doc.nodeType === 'Card' || doc.nodeType === 'MarkdownRemark'
-    })
+  console.log(query);
+
+  const [offset, setOffset] = useState(0);
+
+  const getPagedCards = useGetPagedCardsQuery({
+    variables: {
+      offset,
+      limit: 20,
+      filter: {id: {includesInsensitive: query}}
+    }
+  })
+
+
+  const results = (getPagedCards?.data?.allCards?.nodes ?? []).map((node) => ({
+    ...cardSearchNode(JSON.parse(node.cardScript)),
+    id: node.id
+  }));
+
+
+  useEffect(() => {
+    console.log(results)
+  }, [results])
 
   if (results.length === 0) {
     return (
       <Layout>
-        <p>Showing search results for ``{query}":</p>
+        <p>Showing search results for "{query}":</p>
         <p>Nothing found</p>
       </Layout>
     )
@@ -29,13 +49,10 @@ import Link from 'next/link'
     return (
       <Layout>
         <div className={templateStyles.templateContainer}>
-          <p>Showing search results for ``{query}":</p>
+          <p>Showing search results for "{query}":</p>
           <ListGroup variant="flush" className={styles.searchResults}>
             {results.map(page => (
-              <ListGroup.Item className={styles.searchListGroupItem} key={page.id}>
-                <Link href={page.path}>{page.title}</Link>
-                <p>{page.excerpt}</p>
-              </ListGroup.Item>
+              <CardDisplay key={page.id} {...page.node}/>
             ))}
           </ListGroup>
         </div>
@@ -44,4 +61,4 @@ import Link from 'next/link'
   }
 }
 
-export default SearchResults*/
+export default SearchResults

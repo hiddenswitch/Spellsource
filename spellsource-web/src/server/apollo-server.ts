@@ -6,7 +6,6 @@ import {printSchema} from "graphql";
 import fs from "fs";
 import {createArtSchema} from "./art";
 
-
 const path = postgraphileOptions.exportGqlSchemaPath;
 
 export const createApolloServer = async () => {
@@ -17,7 +16,7 @@ export const createApolloServer = async () => {
   const schema = stitchSchemas({subschemas: [postgraphile.schema, artSchema]})
 
   if (process.env.NODE_ENV !== "production" && path) {
-    const contents = printSchema(schema, {commentDescriptions: true});
+    const contents = printSchema(schema);
     await fs.promises.writeFile(path, contents);
     console.log(`Wrote schema to ${path}`);
   }
