@@ -54,6 +54,8 @@ h6:before { content: "######";  margin-right: 9px; }*/
   margin-left: auto;
   overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 // main {
@@ -174,7 +176,6 @@ h6:before { content: "######";  margin-right: 9px; }*/
 
   a:link {
     text-decoration: none;
-    font-weight: 200;
   }
 
   .search-list-group-item {
@@ -208,9 +209,11 @@ h6:before { content: "######";  margin-right: 9px; }*/
 }
 
 .input-box {
-  border: var(--border);
+  border: var(--border) !important;
+  border-radius: 0px !important;
   padding-left: 0.25em;
   padding-right: 0.25em;
+  font-size: 16px !important;
 }
 
 /**
@@ -792,4 +795,44 @@ figure.highlight {
 /* Name.Variable.Instance */
 .highlight .il {
   color: var(--code-color-14);
+}
+
+.collection {
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+}
+
+.collectionCardsSection {
+  flex: 3
+}
+
+.collectionDecksSection {
+  flex: 1
+}
+
+.collectionTopBar {
+  display: flex;
+  flex-direction: row;
+  padding: .5rem 1rem 0 1rem;
+  gap: 1rem;
+}
+
+.collectionCards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.collectionDeck {
+  border: black 2px;
+}
+
+.collectionCard {
+  margin: 1rem;
+}
+
+.hoverCardDisplay {
+  position: absolute;
+  z-index: 10;
 }

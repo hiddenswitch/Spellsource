@@ -1,14 +1,12 @@
-import React, {ReactNode} from 'react'
+import React from 'react'
 import Header from './header'
 import * as styles from './creative-layout.module.scss'
+import {pages} from './creative-layout';
 
-export default ({ children }: {children?: ReactNode}) => {
-  return <div className={styles.container}>
-    <Header />
-    <main>
-      {children}
-    </main>
-    <br/>
-    {/*<footer><p>Copyright © 2020 Hidden Switch</p></footer>*/}
+
+export default ({children}) => {
+  return <div className={styles.container} style={{height: "100vh"}}>
+    <Header pages={pages}/>
+    {children}
   </div>
 }

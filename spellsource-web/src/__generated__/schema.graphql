@@ -1395,10 +1395,12 @@ type Card implements Node {
     """
     filter: CardsInDeckFilter
   ): CardsInDecksConnection!
+  cost: Int
+  type: String
 }
 
 """
-A JavaScript object encoded in the JSON format as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
 scalar JSON
 
@@ -2573,6 +2575,12 @@ input CardFilter {
 
   """Filter by the object’s `lastModified` field."""
   lastModified: DatetimeFilter
+
+  """Filter by the object’s `cost` field."""
+  cost: IntFilter
+
+  """Filter by the object’s `type` field."""
+  type: StringFilter
 
   """Checks for all expressions in this list."""
   and: [CardFilter!]

@@ -5,7 +5,6 @@ import backgroundLayer from '../../public/static/card-images/layer-1.png'
 import baseAttack from '../../public/static/card-images/attack-token.png'
 import baseHp from '../../public/static/card-images/health-token.png'
 import windowBackground from '../../public/static/card-images/large-card-window-background.png'
-import selkie from '../../public/static/card-images/selkie.png'
 import selkieShadow from '../../public/static/card-images/selkie-shadow.png'
 import {defaultsDeep} from 'lodash'
 import {CardDesc} from "../__generated__/spellsource-game";
@@ -51,8 +50,8 @@ const defaultArt = {
   }
 }
 
-const toRgbaString = (v: { r: number; g: number; b: number; a: any }) => {
-  return `rgba(${v.r * 255}, ${v.g * 255}, ${v.b * 255}, ${v.a})`
+const toRgbaString = (v?: { r: number; g: number; b: number; a: any }) => {
+  return v ? `rgba(${v.r * 255}, ${v.g * 255}, ${v.b * 255}, ${v.a})` : undefined
 }
 
 type FixCardDesc<T> = T extends object ? {
@@ -66,12 +65,12 @@ type DeepReplace<T, V, N> = T extends object ? {
 } : T;
 
 function CardDisplay(props: DeepPartial<CardDef>) {
-  let cardArt = defaultsDeep(props.art, defaultArt) as CardDef["art"] & typeof defaultArt
+  let cardArt = defaultsDeep({}, props.art, defaultArt) as CardDef["art"] & typeof defaultArt
   const art = {
     ...cardArt,
     body: {
       ...cardArt.body,
-      vertex: toRgbaString(cardArt.body.vertex)
+      vertex: toRgbaString(cardArt.body?.vertex)
     },
     highlight: toRgbaString(cardArt.highlight),
     primary: toRgbaString(cardArt.primary),
@@ -84,11 +83,12 @@ function CardDisplay(props: DeepPartial<CardDef>) {
   }
 
   const checkTextColor = () => {
-    if (art.body.vertex === `rgba(0, 0, 0, 1)`) {
-      return (`none`)
-    } else {
-      return (`-2px 2px #21215c`)
-    }
+    return (`-2px 2px ${toRgbaString({
+      r: cardArt.body?.vertex?.r / 2,
+      g: cardArt.body?.vertex?.g / 2,
+      b: cardArt.body?.vertex?.b / 2,
+      a: .5
+    })}`)
   }
 
   const checkTokens = () => {
@@ -101,7 +101,7 @@ function CardDisplay(props: DeepPartial<CardDef>) {
 
   return (
     <div className={styles.cardDisplayTemplate}>
-      <Image src={backgroundLayer} className={styles.layerOne} alt='card'/>
+      <Image src={backgroundLayer} className={styles.layerOne} priority={true} alt='card'/>
       <div className={styles.descriptionBox}>
         <p className={styles.description} style={{
           color: art.body.vertex,
@@ -109,7 +109,7 @@ function CardDisplay(props: DeepPartial<CardDef>) {
         }}>{props.description}</p>
         <p className={styles.type}>{props.race !== "NONE" ? props.race : ""}</p>
       </div>
-      <p className={styles.baseManaCost}>{props.baseManaCost}</p>
+      <p className={styles.baseManaCost}>{props.baseManaCost || 0}</p>
       <p className={styles.name}
          style={{
            color: art.body.vertex,
@@ -134,13 +134,13 @@ function CardDisplay(props: DeepPartial<CardDef>) {
       <Image src={windowBackground} className={styles.windowBackground} alt=""/>
       <div style={{display: checkTokens()}}>
         <Image src={baseAttack} className={styles.attackToken} alt=""/>
-        <p className={styles.baseAttack}>{props.baseAttack}</p>
+        <p className={styles.baseAttack}>{props.baseAttack || 0}</p>
         <Image src={baseHp} className={styles.hpToken} alt=""/>
-        <p className={styles.baseHp}>{props.baseHp}</p>
+        <p className={styles.baseHp}>{props.baseHp || 0}</p>
       </div>
       <div className={styles.heroAndShadow}>
-        <img src={"/api/art/" + String(art.sprite.named)} className={styles.hero} alt=" "/>
-        <img src={String(art.sprite.shadow)} className={styles.heroShadow} alt=""/>
+        <img src={art.sprite.named["src"] || ("/api/art/" + art.sprite.named)} className={styles.hero} alt=" "/>
+        <img src={art.sprite.shadow["src"] || ("/api/art/" + art.sprite.shadow)} className={styles.heroShadow} alt=""/>
       </div>
     </div>
   )

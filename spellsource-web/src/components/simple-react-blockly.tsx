@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useRef} from 'react'
+import React from 'react'
 import Blockly, {BlocklyOptions, WorkspaceSvg} from 'blockly'
 
 interface SimpleReactBlocklyProps {
@@ -13,13 +13,12 @@ export default class SimpleReactBlockly extends React.Component<SimpleReactBlock
 
   render() {
     return (
-      <div>
-        <div ref={ele => this.innerBlocklyDiv = ele}
-             className={this.props.wrapperDivClassName}
-        />
-      </div>
+      <div ref={ele => this.innerBlocklyDiv = ele}
+           className={this.props.wrapperDivClassName}
+      />
     )
   }
+
   componentDidMount() {
     this.workspace = Blockly.inject(this.innerBlocklyDiv, this.props.workspaceConfiguration);
     this.workspace.addChangeListener(this.props.workspaceDidChange);

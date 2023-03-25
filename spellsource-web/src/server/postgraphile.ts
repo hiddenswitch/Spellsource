@@ -25,8 +25,9 @@ export const postgraphileOptions: PostGraphileOptions = {
   // retryOnInitFail is mainly so that going to /api/graphiql
   // doesn't crash entire app if config is incorrect. Fix config.
   appendPlugins: [
-    ConnectionFilterPlugin
+    ConnectionFilterPlugin,
   ],
+  dynamicJson: true,
   pgSettings: (req: any) => ({
     "role": "website",
     "user.id": req.context.session?.token?.sub ?? "",

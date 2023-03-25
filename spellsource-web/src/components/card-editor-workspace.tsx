@@ -16,11 +16,11 @@ import {BlocklyDataContext} from "../pages/card-editor";
 import useComponentWillMount from '../hooks/use-component-will-mount'
 
 interface CardEditorWorkspaceProps {
-  setJSON: React.Dispatch<React.SetStateAction<string>>
-  setJS: React.Dispatch<React.SetStateAction<string>>
+  setJSON?: React.Dispatch<React.SetStateAction<string>>
+  setJS?: React.Dispatch<React.SetStateAction<string>>
   searchCatalogueBlocks?: boolean;
   searchArtBlocks?: boolean;
-  query: string;
+  query?: string;
   defaultCard?: boolean;
   renderer?: string;
 }
@@ -339,7 +339,7 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
 
     if (cardId && !card) {
       for (let node of Object.values(data.cardsById)) {
-        if (node.name === cardId) {
+        if (node.id === cardId) {
           card = node;
         }
       }

@@ -8,7 +8,7 @@ import path from "path";
 import {BlockDef} from "../lib/blocks";
 import {readAllImages, readAllJson} from "../lib/fs-utils";
 import {CardDef} from "../components/card-display";
-import {fixArt, transformBlock, transformCard} from "../lib/json-transforms";
+import {fixArt, transformBlock} from "../lib/json-transforms";
 import {keyBy} from "lodash";
 import {ImageDef, useGetAllArtQuery, useGetAllCardsQuery} from "../__generated__/client";
 
@@ -72,7 +72,7 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const cardsById = useMemo(() => {
     const cards = getAllCards.data?.allCards?.nodes ?? [];
     const allCards = cards.map(card => ({
-      ...JSON.parse(card.cardScript ?? {}),
+      ...(card.cardScript ?? {}),
       id: card.id,
     }));
     const cardsById = keyBy(allCards, card => card.id);

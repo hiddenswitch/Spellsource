@@ -42,7 +42,7 @@ const Button = ({title, route, buttonStyle}) => {
     padding: '10px 22px',
     textAlign: 'center',
     textDecoration: 'none',
-    width: '195px'
+    width: '250px'
   };
   const dark: CSSProperties = {
     color: '#fff',
@@ -55,7 +55,7 @@ const Button = ({title, route, buttonStyle}) => {
     textAlign: 'center',
     textDecoration: 'none',
     marginRight: '30px',
-    width: '195px'
+    width: '250px'
   };
 
   return (

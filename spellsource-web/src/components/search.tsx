@@ -87,7 +87,7 @@ function Search(props) {
     const {data} = await getPagedCards({variables: {limit: 5, filter: {id: {includesInsensitive: query}}}});
 
     setResults((data?.allCards?.nodes ?? []).map((node) => ({
-      ...cardSearchNode(JSON.parse(node.cardScript)),
+      ...cardSearchNode(node.cardScript),
       id: node.id
     })))
   }, 500, [query]);
@@ -95,25 +95,24 @@ function Search(props) {
   const [focused, setFocused] = useState(false);
 
   return (
-    <div className={styles.inputBox}>
-      <Form ref={inputBox} onSubmit={e => navigateToSearchResults(e)} onFocus={event => setFocused(true)}
-            onBlur={event => {
-              if (!event.currentTarget.contains(event.relatedTarget)) {
-                setFocused(false)
-              }
-            }}>
-        <FormControl type="text" placeholder={props.placeholder} value={query} onChange={e => {
-          updateQuery(e)
-          search(e)
-        }}
-        />
-        {focused && (
-          <ListGroup variant="flush" style={{left: searchListLeft}} className={styles.searchResults}>
-            {dropDownMenu}
-          </ListGroup>
-        )}
-      </Form>
-    </div>
+    <Form ref={inputBox} onSubmit={e => navigateToSearchResults(e)}
+         onFocus={event => setFocused(true)}
+         onBlur={event => {
+           if (!event.currentTarget.contains(event.relatedTarget)) {
+             setFocused(false)
+           }
+         }}>
+      <FormControl className={styles.inputBox} type="text" placeholder={props.placeholder} value={query} onChange={e => {
+        updateQuery(e)
+        search(e)
+      }}
+      />
+      {focused && (
+        <ListGroup variant="flush" style={{left: searchListLeft}} className={styles.searchResults}>
+          {dropDownMenu}
+        </ListGroup>
+      )}
+    </Form>
   )
 }
 

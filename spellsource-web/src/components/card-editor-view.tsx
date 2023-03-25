@@ -1,6 +1,6 @@
 import {Form} from "react-bootstrap";
 import * as styles from './card-editor-view.module.scss'
-import Blockly from "blockly";
+import Blockly, {Toolbox, WorkspaceSvg} from "blockly";
 import AceEditor from "react-ace";
 import React, {useRef, useState} from "react";
 import CardEditorWorkspace from "./card-editor-workspace";
@@ -36,7 +36,7 @@ const CardEditorView = (props: { defaultCard?: boolean }) => {
 
   const [realCode, setRealCode] = useState(``)
 
-  const workspace = () => blocklyEditor.current?.workspace;
+  const workspace = () => blocklyEditor.current?.workspace as WorkspaceSvg;
 
   const search = evt => {
     const query = evt.target.value
@@ -70,6 +70,17 @@ const CardEditorView = (props: { defaultCard?: boolean }) => {
     }
   }
 
+  const onFocusSearch = () => {
+    if (query) {
+      const toolbox = workspace().getToolbox() as Toolbox;
+      toolbox.clearSelection()
+      if (query.length > 0) {
+        toolbox.selectItemByPosition(0)
+        toolbox.refreshSelection()
+      }
+    }
+  }
+
   useComponentWillMount(() => {
     addTooltip(catalogueBlocksCheck, catalogueBlocksTooltip)
     addTooltip(catalogueBlocksLabel, catalogueBlocksTooltip)
@@ -83,92 +94,105 @@ const CardEditorView = (props: { defaultCard?: boolean }) => {
     addTooltip(showJSLabel, showJSTooltip)
   })
 
-  return (<span>
-    <Form.Control type="text"
-                  placeholder={'Search blocks'}
-                  value={query}
-                  onChange={e => search(e)}
-                  className={styles.editorSearch}
+  return (<>
+    {/*<span>
+      <Form.Control type="text"
+                    placeholder={'Search blocks'}
+                    value={query}
+                    onChange={e => search(e)}
+                    className={styles.editorSearch}
+      />
+      <Form.Check className={styles.editorOption}>
+        <Form.Check.Input onChange={e => toggleCatalogueBlocks(e)}
+                          checked={searchCatalogueBlocks}
+                          className={styles.editorCheck}
+                          ref={catalogueBlocksCheck}
+        />
+        <Form.Check.Label ref={catalogueBlocksLabel}> Search Card Catalogue</Form.Check.Label>
+      </Form.Check>
+      <Form.Check className={styles.editorOption}>
+        <Form.Check.Input onChange={e => toggleArtBlocks(e)}
+                          checked={searchArtBlocks}
+                          className={styles.editorCheck}
+                          ref={artBlocksCheck}
+        />
+        <Form.Check.Label ref={artBlocksLabel}> Search Card Art</Form.Check.Label>
+      </Form.Check>
+    </span>*/}
+    <input
+      type="text"
+      placeholder={'Search blocks'}
+      value={query}
+      onChange={search}
+      className={styles.editorSearchNew}
+      onFocus={onFocusSearch}
     />
-    <Form.Check className={styles.editorOption}>
-      <Form.Check.Input onChange={e => toggleCatalogueBlocks(e)}
-                        checked={searchCatalogueBlocks}
-                        className={styles.editorCheck}
-                        ref={catalogueBlocksCheck}
-      />
-      <Form.Check.Label ref={catalogueBlocksLabel}> Search Card Catalogue</Form.Check.Label>
-    </Form.Check>
-    <Form.Check className={styles.editorOption}>
-      <Form.Check.Input onChange={e => toggleArtBlocks(e)}
-                        checked={searchArtBlocks}
-                        className={styles.editorCheck}
-                        ref={artBlocksCheck}
-      />
-      <Form.Check.Label ref={artBlocksLabel}> Search Card Art</Form.Check.Label>
-    </Form.Check>
-    <CardEditorWorkspace setJSON={setCode}
-                         setJS={setRealCode}
-                         searchCatalogueBlocks={searchCatalogueBlocks}
-                         searchArtBlocks={searchArtBlocks}
-                         query={query}
-                         defaultCard={props.defaultCard}
-                         renderer={compactBlocks ? 'spellsource' : 'geras'}
-                         ref={blocklyEditor}
+    <CardEditorWorkspace
+      setJSON={setCode}
+      setJS={setRealCode}
+      searchCatalogueBlocks={searchCatalogueBlocks}
+      searchArtBlocks={searchArtBlocks}
+      query={query}
+      defaultCard={props.defaultCard}
+      renderer={compactBlocks ? 'spellsource' : 'geras'}
+      ref={blocklyEditor}
     />
-    <Form.Check className={styles.editorOption}>
-      <Form.Check.Input defaultChecked={compactBlocks}
-                        onChange={e => setCompactBlocks(!compactBlocks)}
-                        value={"" + compactBlocks}
-                        className={styles.editorCheck}
-                        ref={compactBlocksCheck}
-      />
-      <Form.Check.Label ref={compactBlocksLabel}> Compact Blocks</Form.Check.Label>
-    </Form.Check>
-    <Form.Check className={styles.editorOption}>
-      <Form.Check.Input defaultChecked={showJSON}
-                        onChange={() => setShowJSON(!showJSON)}
-                        value={String(showJSON)}
-                        className={styles.editorCheck}
-                        ref={showJSONCheck}
-      />
-      <Form.Check.Label ref={showJSONLabel}> Show JSON</Form.Check.Label>
-    </Form.Check>
-    <Form.Check className={styles.editorOption}>
-      <Form.Check.Input defaultChecked={showJS}
-                        onChange={() => setShowJS(!showJS)}
-                        value={String(showJS)}
-                        className={styles.editorCheck}
-                        ref={showJSCheck}
-      />
-      <Form.Check.Label ref={showJSLabel}> Show JS</Form.Check.Label>
-    </Form.Check>
-    {
-      showJSON && (<AceEditor
-        width={'100%'}
-        mode="json"
-        theme="github"
-        setOptions={{
-          'wrap': true
-        }}
-        readOnly={true}
-        value={code}
-        editorProps={{$blockScrolling: true}}
-      />)
-    }
-    {
-      showJS && (<AceEditor
-        width={'100%'}
-        mode="javascript"
-        theme="github"
-        setOptions={{
-          'wrap': true
-        }}
-        readOnly={true}
-        value={realCode}
-        editorProps={{$blockScrolling: true}}
-      />)
-    }
-  </span>)
+    <span>
+      {/*<Form.Check className={styles.editorOption}>
+        <Form.Check.Input defaultChecked={compactBlocks}
+                          onChange={e => setCompactBlocks(!compactBlocks)}
+                          value={"" + compactBlocks}
+                          className={styles.editorCheck}
+                          ref={compactBlocksCheck}
+        />
+        <Form.Check.Label ref={compactBlocksLabel}> Compact Blocks</Form.Check.Label>
+      </Form.Check>
+      <Form.Check className={styles.editorOption}>
+        <Form.Check.Input defaultChecked={showJSON}
+                          onChange={() => setShowJSON(!showJSON)}
+                          value={String(showJSON)}
+                          className={styles.editorCheck}
+                          ref={showJSONCheck}
+        />
+        <Form.Check.Label ref={showJSONLabel}> Show JSON</Form.Check.Label>
+      </Form.Check>
+      <Form.Check className={styles.editorOption}>
+        <Form.Check.Input defaultChecked={showJS}
+                          onChange={() => setShowJS(!showJS)}
+                          value={String(showJS)}
+                          className={styles.editorCheck}
+                          ref={showJSCheck}
+        />
+        <Form.Check.Label ref={showJSLabel}> Show JS</Form.Check.Label>
+      </Form.Check>*/}
+      {
+        showJSON && (<AceEditor
+          width={'100%'}
+          mode="json"
+          theme="github"
+          setOptions={{
+            'wrap': true
+          }}
+          readOnly={true}
+          value={code}
+          editorProps={{$blockScrolling: true}}
+        />)
+      }
+      {
+        showJS && (<AceEditor
+          width={'100%'}
+          mode="javascript"
+          theme="github"
+          setOptions={{
+            'wrap': true
+          }}
+          readOnly={true}
+          value={realCode}
+          editorProps={{$blockScrolling: true}}
+        />)
+      }
+    </span>
+  </>)
 }
 
 export default CardEditorView

@@ -1,4 +1,4 @@
-import {makeExecutableSchema} from "graphql-tools";
+import {makeExecutableSchema} from "@graphql-tools/schema";
 import {gql} from "@apollo/client";
 import {readAllImages} from "../lib/fs-utils";
 import path from "path";
@@ -23,18 +23,18 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    artById: async (parent, args: QueryArtByIdArgs, context, info: GraphQLResolveInfo) => artById?.[args.id],
-    allArt: async (parent, args, context, info: GraphQLResolveInfo) => Object.values(artById)
+    artById: async (parent, args: QueryArtByIdArgs, context, info: GraphQLResolveInfo) => (await getAllArt())?.[args.id],
+    allArt: async (parent, args, context, info: GraphQLResolveInfo) => Object.values(await getAllArt())
   }
 }
 
-let artById: Record<string, ImageDef>;
+let artById: Promise<Record<string, ImageDef>>;
 
 export const getAllArt = async () => {
   if (!artById) {
     console.log("Reading art from disk")
-    const allArt = await readAllImages(path.join("card-images", "art", "**", "*.png"));
-    artById = keyBy(allArt, value => value.name);
+    artById = readAllImages(path.join("card-images", "art", "**", "*.png"))
+      .then(value => keyBy(value, value => value.name));
   }
 
   return artById;

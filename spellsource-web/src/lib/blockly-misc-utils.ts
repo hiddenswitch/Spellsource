@@ -616,7 +616,7 @@ export function initArtBlcks(data: ContextType<typeof BlocklyDataContext>) {
 
 export function getArtURL(card, data: ContextType<typeof BlocklyDataContext>) {
   if (!!card.art?.sprite?.named) {
-    for (let art of data.allArt) {
+    for (let art of data.allArt ?? []) {
       if (art.name === card.art.sprite.named) {
         return art.src
       }

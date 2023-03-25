@@ -21,7 +21,7 @@ const Download = () => {
         </figure>
 
         <figure>
-          <Link href="/download#android-users"><img src={android} alt="Android" className={styles.smallLogo}  /></Link>
+          <Link href="/download#android-users"><Image src={android} alt="Android" className={styles.smallLogo}  /></Link>
           <figcaption>Android</figcaption>
         </figure>
 

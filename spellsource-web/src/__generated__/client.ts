@@ -28,7 +28,7 @@ export type Scalars = {
    * 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
    */
   Datetime: any;
-  /** A JavaScript object encoded in the JSON format as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
 };
 
@@ -163,6 +163,7 @@ export type Card = Node & {
   lastModified: Scalars['Datetime'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
+  type?: Maybe<Scalars['String']>;
   uri?: Maybe<Scalars['String']>;
 };
 
@@ -214,6 +215,8 @@ export type CardFilter = {
   not?: InputMaybe<CardFilter>;
   /** Checks for any expressions in this list. */
   or?: InputMaybe<Array<CardFilter>>;
+  /** Filter by the object’s `type` field. */
+  type?: InputMaybe<StringFilter>;
   /** Filter by the object’s `uri` field. */
   uri?: InputMaybe<StringFilter>;
 };
@@ -4987,6 +4990,7 @@ export type CardResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   lastModified?: Resolver<ResolversTypes['Datetime'], ParentType, ContextType>;
   nodeId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   uri?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -5883,6 +5887,12 @@ export type Resolvers<ContextType = any> = {
 
 export type CardFragment = { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null };
 
+export type DeckFragment = { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null };
+
+export type DeckCardIdsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string } | null> } };
+
+export type DeckCardsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null } | null } | null> } };
+
 export type ImageFragment = { __typename?: 'ImageDef', id: string, name: string, height: number, width: number, src: string };
 
 export type GetAllArtQueryVariables = Exact<{ [key: string]: never; }>;
@@ -5909,6 +5919,20 @@ export type GetCardQueryVariables = Exact<{
 
 export type GetCardQuery = { __typename?: 'Query', cardById?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null } | null };
 
+export type GetDeckQueryVariables = Exact<{
+  deckId: Scalars['String'];
+}>;
+
+
+export type GetDeckQuery = { __typename?: 'Query', deckById?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null } | null } | null> } } | null };
+
+export type GetDecksQueryVariables = Exact<{
+  user: Scalars['String'];
+}>;
+
+
+export type GetDecksQuery = { __typename?: 'Query', allDecks?: { __typename?: 'DecksConnection', nodes: Array<{ __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null } | null> } | null, allDeckShares?: { __typename?: 'DeckSharesConnection', nodes: Array<{ __typename?: 'DeckShare', deckByDeckId?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null } | null } | null> } | null };
+
 export type GetPagedCardsQueryVariables = Exact<{
   limit: Scalars['Int'];
   filter?: InputMaybe<CardFilter>;
@@ -5916,8 +5940,27 @@ export type GetPagedCardsQueryVariables = Exact<{
 }>;
 
 
-export type GetPagedCardsQuery = { __typename?: 'Query', allCards?: { __typename?: 'CardsConnection', nodes: Array<{ __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null } | null> } | null };
+export type GetPagedCardsQuery = { __typename?: 'Query', allCards?: { __typename?: 'CardsConnection', totalCount: number, nodes: Array<{ __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null } | null> } | null };
 
+export const DeckFragmentDoc = gql`
+    fragment deck on Deck {
+  id
+  name
+  isPremade
+  createdBy
+  heroClass
+}
+    `;
+export const DeckCardIdsFragmentDoc = gql`
+    fragment deckCardIds on Deck {
+  cardsInDecksByDeckId {
+    nodes {
+      cardId
+    }
+    totalCount
+  }
+}
+    `;
 export const CardFragmentDoc = gql`
     fragment card on Card {
   id
@@ -5926,6 +5969,18 @@ export const CardFragmentDoc = gql`
   uri
 }
     `;
+export const DeckCardsFragmentDoc = gql`
+    fragment deckCards on Deck {
+  cardsInDecksByDeckId {
+    nodes {
+      cardByCardId {
+        ...card
+      }
+    }
+    totalCount
+  }
+}
+    ${CardFragmentDoc}`;
 export const ImageFragmentDoc = gql`
     fragment image on ImageDef {
   id
@@ -6076,12 +6131,94 @@ export function useGetCardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetCardQueryHookResult = ReturnType<typeof useGetCardQuery>;
 export type GetCardLazyQueryHookResult = ReturnType<typeof useGetCardLazyQuery>;
 export type GetCardQueryResult = Apollo.QueryResult<GetCardQuery, GetCardQueryVariables>;
+export const GetDeckDocument = gql`
+    query getDeck($deckId: String!) {
+  deckById(id: $deckId) {
+    ...deck
+    ...deckCards
+  }
+}
+    ${DeckFragmentDoc}
+${DeckCardsFragmentDoc}`;
+
+/**
+ * __useGetDeckQuery__
+ *
+ * To run a query within a React component, call `useGetDeckQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDeckQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDeckQuery({
+ *   variables: {
+ *      deckId: // value for 'deckId'
+ *   },
+ * });
+ */
+export function useGetDeckQuery(baseOptions: Apollo.QueryHookOptions<GetDeckQuery, GetDeckQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDeckQuery, GetDeckQueryVariables>(GetDeckDocument, options);
+      }
+export function useGetDeckLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDeckQuery, GetDeckQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDeckQuery, GetDeckQueryVariables>(GetDeckDocument, options);
+        }
+export type GetDeckQueryHookResult = ReturnType<typeof useGetDeckQuery>;
+export type GetDeckLazyQueryHookResult = ReturnType<typeof useGetDeckLazyQuery>;
+export type GetDeckQueryResult = Apollo.QueryResult<GetDeckQuery, GetDeckQueryVariables>;
+export const GetDecksDocument = gql`
+    query getDecks($user: String!) {
+  allDecks(condition: {trashed: false}) {
+    nodes {
+      ...deck
+    }
+  }
+  allDeckShares(condition: {shareRecipientId: $user, trashedByRecipient: false}) {
+    nodes {
+      deckByDeckId {
+        ...deck
+      }
+    }
+  }
+}
+    ${DeckFragmentDoc}`;
+
+/**
+ * __useGetDecksQuery__
+ *
+ * To run a query within a React component, call `useGetDecksQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDecksQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDecksQuery({
+ *   variables: {
+ *      user: // value for 'user'
+ *   },
+ * });
+ */
+export function useGetDecksQuery(baseOptions: Apollo.QueryHookOptions<GetDecksQuery, GetDecksQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDecksQuery, GetDecksQueryVariables>(GetDecksDocument, options);
+      }
+export function useGetDecksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDecksQuery, GetDecksQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDecksQuery, GetDecksQueryVariables>(GetDecksDocument, options);
+        }
+export type GetDecksQueryHookResult = ReturnType<typeof useGetDecksQuery>;
+export type GetDecksLazyQueryHookResult = ReturnType<typeof useGetDecksLazyQuery>;
+export type GetDecksQueryResult = Apollo.QueryResult<GetDecksQuery, GetDecksQueryVariables>;
 export const GetPagedCardsDocument = gql`
     query getPagedCards($limit: Int!, $filter: CardFilter, $offset: Int) {
   allCards(offset: $offset, filter: $filter, first: $limit) {
     nodes {
       ...card
     }
+    totalCount
   }
 }
     ${CardFragmentDoc}`;

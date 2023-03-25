@@ -83,7 +83,7 @@ export function editorToolbox(results: string[] = []): any {
       ),
 
       {
-        "kind": "sep"
+        kind: "sep"
       },
 
       category('Rarities', '#888888',
@@ -179,7 +179,7 @@ export function editorToolbox(results: string[] = []): any {
       ),
 
       {
-        "kind": "sep"
+        kind: "sep"
       },
 
       category('Spells', '260',
@@ -339,7 +339,7 @@ export function editorToolbox(results: string[] = []): any {
       ),
 
       {
-        "kind": "sep"
+        kind: "sep"
       },
 
       category('Custom', '-1',
@@ -381,7 +381,7 @@ export function editorToolbox(results: string[] = []): any {
             null, {custom: 'SPELLSOURCE_VARIABLES'}),
 
           {
-            "kind": "sep"
+            kind: "sep"
           },
 
           category('Logic', '210',

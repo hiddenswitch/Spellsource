@@ -21,6 +21,10 @@ export const createApolloServer = async () => {
     console.log(`Wrote schema to ${path}`);
   }
 
-  return new ApolloServer({schema, plugins: [postgraphile.plugin]});
+  return new ApolloServer({
+    schema,
+    plugins: [postgraphile.plugin],
+    introspection: process.env.NODE_ENV !== "production"
+  });
 }
 

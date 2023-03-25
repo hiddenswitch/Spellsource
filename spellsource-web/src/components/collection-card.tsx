@@ -15,15 +15,11 @@ const CollectionCard: FunctionComponent<CollectionCardProps> = (props) => {
 
   let card = props.card
 
-  let artURL = BlocklyMiscUtils.getArtURL(card, data)
 
   let art = {
     ...card.art
   }
-
-  if (artURL != null) {
-    art.sprite.named = artURL
-  }
+  art.sprite["src"] = BlocklyMiscUtils.getArtURL(card, data)
 
   return <span className={styles.span}>
     <CardDisplay

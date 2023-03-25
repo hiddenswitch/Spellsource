@@ -1,6 +1,6 @@
 .card-editor {
-    height: 600px;
     color: black;
+    height: 100%;
 }
 
 .editorOption {
@@ -19,6 +19,31 @@
     width: 40% !important;
     border-style: ridge;
     display: inline;
+}
+
+.editorSearchNew {
+    font-size: 20px !important;
+    position: absolute;
+    z-index: 1000;
+    width: 200px !important;
+    top: 20px;
+    right: 35px;
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+    background-color: rgba(1, 1, 1, .05) !important;
+}
+
+.editorSearchNew:hover {
+    background-color: rgba(1, 1, 1, .1) !important;
+}
+
+.editorSearchNew:focus {
+    background-color: rgba(1, 1, 1, .1) !important;
+}
+
+.editorSearchNew::placeholder {
+    color: var(--text-dark);
+    opacity: .5;
 }
 
 /* TODO needed still?

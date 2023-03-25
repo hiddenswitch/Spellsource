@@ -12,7 +12,7 @@ export default () => {
 
   const getCard = useGetCardQuery({variables: {id}});
   const cardRecord = getCard.data?.cardById;
-  const card = cardRecord ? JSON.parse(cardRecord.cardScript) : undefined;
+  const card = cardRecord?.cardScript ?? undefined;
 
   return <CardTemplate data={{card}}/>
 }

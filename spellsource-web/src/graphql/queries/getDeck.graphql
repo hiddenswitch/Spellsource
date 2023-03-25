@@ -1,0 +1,6 @@
+query getDeck($deckId: String!) {
+  deckById(id: $deckId) {
+    ...deck
+    ...deckCards
+  }
+}

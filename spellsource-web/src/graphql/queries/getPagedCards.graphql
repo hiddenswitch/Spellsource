@@ -3,5 +3,6 @@ query getPagedCards($limit: Int!, $filter: CardFilter, $offset: Int) {
     nodes {
       ...card
     }
+    totalCount
   }
 }

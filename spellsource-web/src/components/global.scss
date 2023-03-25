@@ -233,3 +233,17 @@ pre {
   line-height: 1.7 !important;
   font-family: $base-font-family !important;
 }
+
+.blocklyToolboxContents {
+  height: 100%;
+}
+
+.blocklyTreeRow {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  height: unset;
+}
+
+.blocklySepFill {
+  margin: auto;
+}

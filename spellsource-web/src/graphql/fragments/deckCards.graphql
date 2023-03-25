@@ -1,0 +1,10 @@
+fragment deckCards on Deck {
+  cardsInDecksByDeckId {
+    nodes {
+      cardByCardId {
+        ...card
+      }
+    }
+    totalCount
+  }
+}

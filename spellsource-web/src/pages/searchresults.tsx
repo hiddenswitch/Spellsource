@@ -29,7 +29,7 @@ const SearchResults = () => {
 
 
   const results = (getPagedCards?.data?.allCards?.nodes ?? []).map((node) => ({
-    ...cardSearchNode(JSON.parse(node.cardScript)),
+    ...cardSearchNode(node.cardScript),
     id: node.id
   }));
 

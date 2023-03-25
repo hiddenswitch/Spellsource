@@ -28,9 +28,9 @@ const Header = ({pages}: { pages?: any }) => {
 
   return <header>
     <div className={styles.navbarContainer} ref={headerDiv} onScroll={handleScroll}>
-      <Link key={'headerImage'} href="/" style={{display: 'flex'}}>
+      <Link key={'headerImage'} href="/" style={{display: 'flex', alignItems: "center"}}>
         <Image src={icon} alt={'Icon'} style={{width: 36, height: 36}}/>
-        <strong style={{color: '#000', paddingTop: '4px'}}>Spellsource</strong>
+        <strong style={{color: '#000'}}>Spellsource</strong>
       </Link>
       <DesktopNavbar pages={pages}/>
       <MobileNavbar pages={pages}/>

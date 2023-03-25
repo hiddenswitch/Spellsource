@@ -1,18 +1,19 @@
 import {AppProps} from "next/app";
 import "../components/global.scss"
-import {useState} from "react";
-import {createApolloClient} from "../lib/apollo";
-import {ApolloProvider} from "@apollo/client";
+import {ApolloClientProvider} from "../lib/apollo";
 import {SessionProvider} from "next-auth/react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Head from "next/head";
 
 export default ({Component, pageProps}: AppProps) => {
-  const [apolloClient] = useState(() => createApolloClient());
-
   return (
     <SessionProvider refetchInterval={5 * 60}>
-      <ApolloProvider client={apolloClient}>
+      <ApolloClientProvider>
+        <Head>
+          <link rel="shortcut icon" href="/static/assets/icon.png" />
+        </Head>
         <Component {...pageProps} />
-      </ApolloProvider>
+      </ApolloClientProvider>
     </SessionProvider>
   );
 };
