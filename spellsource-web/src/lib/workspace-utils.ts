@@ -8,6 +8,8 @@ const BLOCKLY_INT_ATTRIBUTE = 'BLOCKLY_INT_ATTRIBUTE'
 const BLOCKLY_ARRAY_ELEMENT = 'BLOCKLY_ARRAY_ELEMENT'
 const BLOCKLY_EXTEND_PREVIOUS = 'BLOCKLY_EXTEND_PREVIOUS'
 
+const isNumeric = str => !isNaN(str) && !isNaN(parseFloat(str));
+
 /**
  * Process a given piece of XML, returning a "CardScript" JSON token that corresponds to it.
  *
@@ -37,7 +39,7 @@ const BLOCKLY_EXTEND_PREVIOUS = 'BLOCKLY_EXTEND_PREVIOUS'
  * @param parent
  * @returns {{}|*|{}|[]}
  */
-export function xmlToCardScript(xml, prev = null, parent = null) {
+export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, parent = null) {
   let nextNode = null
   let next = null
   switch (xml.nodeName) {
@@ -63,26 +65,27 @@ export function xmlToCardScript(xml, prev = null, parent = null) {
       if (!xml.hasChildNodes()) {
         return obj
       }
-      const childNodes: Element[] = Array.from(xml.childNodes)
+      const childNodes = Array.from(xml.childNodes) as Element[]
       const length = childNodes.length
       for (let i = 0; i < length; i++) {
         const childNode = childNodes[i]
+        const name = childNode.attributes['name']?.value;
         switch (childNode.nodeName) {
           case '#text':
             // i.e. if childElementCount === 0
             if (length === 1) {
-              return xml.innerHTML
+              return (xml as Element).innerHTML
             }
             break
           case 'field':
-            obj[childNode.attributes['name'].value] = !isNaN(parseFloat(childNode.innerHTML)) ? +childNode.innerHTML : childNode.innerHTML
+            obj[name] = isNumeric(childNode.innerHTML) ? Number(childNode.innerHTML) : childNode.innerHTML
             break
           case 'statement':
           case 'value':
             if (childNode.firstElementChild.nodeName === 'shadow' && childNode.lastElementChild !== childNode.firstElementChild) {
-              obj[childNode.attributes['name'].value] = xmlToCardScript(childNode.lastElementChild, null, obj)
+              obj[name] = xmlToCardScript(childNode.lastElementChild, null, obj)
             } else {
-              obj[childNode.attributes['name'].value] = xmlToCardScript(childNode.firstElementChild, null, obj)
+              obj[name] = xmlToCardScript(childNode.firstElementChild, null, obj)
             }
             break
           case 'next':
@@ -158,7 +161,7 @@ export function xmlToCardScript(xml, prev = null, parent = null) {
               )
 
               const res = format(value, valuesObj)
-              retValue = !isNaN(res) ? +res : res
+              retValue = isNumeric(res) ? Number(res) : res
               break
           }
         }
@@ -207,7 +210,7 @@ function postProcessCardScript(cardScript) {
     delete cardScript.cardType
   }
 
-  if (!!cardScript.battlecry && !!cardScript.fileFormatVersion) {
+  if (!!cardScript.battlecry) {
     if (!cardScript.attributes) {
       cardScript.attributes = {}
     }
@@ -221,7 +224,7 @@ function postProcessCardScript(cardScript) {
     cardScript.attributes.DEATHRATTLES = true
   }
 
-  if (!!cardScript.fileFormatVersion && !!find(cardScript, {class: 'DiscoverSpell'})) {
+  if (find(cardScript, {class: 'DiscoverSpell'})) {
     if (!cardScript.attributes) {
       cardScript.attributes = {}
     }

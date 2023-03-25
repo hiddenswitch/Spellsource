@@ -234,6 +234,30 @@ pre {
   font-family: $base-font-family !important;
 }
 
+// Blockly
+
+.blocklyCommentTextarea {
+  color: black;
+  caret-color: black;
+  font-size: 12pt;
+  background-color: lightgray;
+}
+
+.blocklyTooltipDiv {
+  opacity: 1;
+  font-size: 10pt;
+}
+
+.blackText {
+  fill: #000 !important;
+}
+
+.blocklyHtmlTextAreaInput {
+  background-color: white !important;
+  color: black !important;
+}
+
+
 .blocklyToolboxContents {
   height: 100%;
 }

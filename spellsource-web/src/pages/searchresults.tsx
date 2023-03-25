@@ -3,10 +3,9 @@ import * as styles from '../components/creative-layout.module.scss'
 import * as templateStyles from '../templates/template-styles.module.scss'
 import Layout from '../components/creative-layout'
 import {ListGroup} from 'react-bootstrap'
-import Link from 'next/link'
 import {useRouter} from 'next/router'
 import {isArray} from "lodash";
-import {useGetPagedCardsQuery} from "../__generated__/client";
+import {useGetCardsQuery} from "../__generated__/client";
 import {cardSearchNode} from "../hooks/use-index";
 import CardDisplay from "../components/card-display";
 
@@ -19,7 +18,7 @@ const SearchResults = () => {
 
   const [offset, setOffset] = useState(0);
 
-  const getPagedCards = useGetPagedCardsQuery({
+  const getCards = useGetCardsQuery({
     variables: {
       offset,
       limit: 20,
@@ -28,7 +27,7 @@ const SearchResults = () => {
   })
 
 
-  const results = (getPagedCards?.data?.allCards?.nodes ?? []).map((node) => ({
+  const results = (getCards?.data?.allCards?.nodes ?? []).map((node) => ({
     ...cardSearchNode(node.cardScript),
     id: node.id
   }));

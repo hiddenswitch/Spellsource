@@ -4,7 +4,7 @@ import Blockly, {Toolbox, WorkspaceSvg} from "blockly";
 import AceEditor from "react-ace";
 import React, {useRef, useState} from "react";
 import CardEditorWorkspace from "./card-editor-workspace";
-import useComponentWillMount from "../hooks/use-component-will-mount";
+import useComponentDidMount from "../hooks/use-component-did-mount";
 
 const CardEditorView = (props: { defaultCard?: boolean }) => {
 
@@ -81,7 +81,7 @@ const CardEditorView = (props: { defaultCard?: boolean }) => {
     }
   }
 
-  useComponentWillMount(() => {
+  useComponentDidMount(() => {
     addTooltip(catalogueBlocksCheck, catalogueBlocksTooltip)
     addTooltip(catalogueBlocksLabel, catalogueBlocksTooltip)
     addTooltip(artBlocksCheck, artBlocksTooltip)

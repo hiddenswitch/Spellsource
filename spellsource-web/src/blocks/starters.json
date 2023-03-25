@@ -11,6 +11,11 @@
     "args0": [
       {
         "type": "field_label_serializable_hidden",
+        "name": "id",
+        "value": ""
+      },
+      {
+        "type": "field_label_serializable_hidden",
         "name": "type",
         "value": "MINION"
       },
@@ -46,12 +51,9 @@
         "shadow": {
           "type": "Property_text_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Name"
-            }
-          ]
+          "fields": {
+            "text": "Name"
+          }
         }
       }
     ],
@@ -82,12 +84,9 @@
         "shadow": {
           "type": "Property_multilinetext_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Description"
-            }
-          ]
+          "fields": {
+            "text": "Description"
+          }
         }
       }
     ],
@@ -135,6 +134,11 @@
     "args0": [
       {
         "type": "field_label_serializable_hidden",
+        "name": "id",
+        "value": ""
+      },
+      {
+        "type": "field_label_serializable_hidden",
         "name": "type",
         "value": "SPELL"
       },
@@ -170,12 +174,9 @@
         "shadow": {
           "type": "Property_text_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Name"
-            }
-          ]
+          "fields": {
+            "text": "Name"
+          }
         }
       }
     ],
@@ -206,12 +207,9 @@
         "shadow": {
           "type": "Property_multilinetext_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Description"
-            }
-          ]
+          "fields": {
+            "text": "Description"
+          }
         }
       }
     ],
@@ -251,6 +249,11 @@
     "args0": [
       {
         "type": "field_label_serializable_hidden",
+        "name": "id",
+        "value": ""
+      },
+      {
+        "type": "field_label_serializable_hidden",
         "name": "type",
         "value": "SPELL"
       },
@@ -286,12 +289,9 @@
         "shadow": {
           "type": "Property_text_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Name"
-            }
-          ]
+          "fields": {
+            "text": "Name"
+          }
         }
       }
     ],
@@ -322,12 +322,9 @@
         "shadow": {
           "type": "Property_multilinetext_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Description"
-            }
-          ]
+          "fields": {
+            "text": "Description"
+          }
         }
       }
     ],
@@ -367,6 +364,11 @@
     "args0": [
       {
         "type": "field_label_serializable_hidden",
+        "name": "id",
+        "value": ""
+      },
+      {
+        "type": "field_label_serializable_hidden",
         "name": "type",
         "value": "WEAPON"
       },
@@ -402,12 +404,9 @@
         "shadow": {
           "type": "Property_text_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Name"
-            }
-          ]
+          "fields": {
+            "text": "Name"
+          }
         }
       }
     ],
@@ -438,12 +437,9 @@
         "shadow": {
           "type": "Property_multilinetext_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Description"
-            }
-          ]
+          "fields": {
+            "text": "Description"
+          }
         }
       }
     ],
@@ -478,6 +474,11 @@
     "hat": "cap",
     "message0": "Quest Card%1%2%3%4",
     "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "id",
+        "value": ""
+      },
       {
         "type": "field_label_serializable_hidden",
         "name": "type",
@@ -515,12 +516,9 @@
         "shadow": {
           "type": "Property_text_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Name"
-            }
-          ]
+          "fields": {
+            "text": "Name"
+          }
         }
       }
     ],
@@ -551,12 +549,9 @@
         "shadow": {
           "type": "Property_multilinetext_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Description"
-            }
-          ]
+          "fields": {
+            "text": "Description"
+          }
         }
       }
     ],
@@ -583,8 +578,14 @@
         "type": "field_dropdown",
         "name": "countByValue",
         "options": [
-          ["Incremental", "FALSE"],
-          ["Count by Value", "TRUE"]
+          [
+            "Incremental",
+            "FALSE"
+          ],
+          [
+            "Count by Value",
+            "TRUE"
+          ]
         ]
       }
     ],
@@ -611,6 +612,11 @@
     "hat": "cap",
     "message0": "Skill Card",
     "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "id",
+        "value": ""
+      },
       {
         "type": "field_label_serializable_hidden",
         "name": "type",
@@ -653,12 +659,9 @@
         "shadow": {
           "type": "Property_text_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Name"
-            }
-          ]
+          "fields": {
+            "text": "Name"
+          }
         }
       }
     ],
@@ -690,12 +693,9 @@
         "shadow": {
           "type": "Property_multilinetext_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Description"
-            }
-          ]
+          "fields": {
+            "text": "Description"
+          }
         }
       }
     ],
@@ -733,6 +733,11 @@
     "hat": "cap",
     "message0": "Champion",
     "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "id",
+        "value": ""
+      },
       {
         "type": "field_label_serializable_hidden",
         "name": "type",
@@ -775,12 +780,9 @@
         "shadow": {
           "type": "Property_text_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Name"
-            }
-          ]
+          "fields": {
+            "text": "Name"
+          }
         }
       }
     ],
@@ -811,12 +813,9 @@
         "shadow": {
           "type": "Property_multilinetext_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Description"
-            }
-          ]
+          "fields": {
+            "text": "Description"
+          }
         }
       },
       {
@@ -840,6 +839,11 @@
     "hat": "cap",
     "message0": "Champion Card",
     "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "id",
+        "value": ""
+      },
       {
         "type": "field_label_serializable_hidden",
         "name": "type",
@@ -882,12 +886,9 @@
         "shadow": {
           "type": "Property_text_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Name"
-            }
-          ]
+          "fields": {
+            "text": "Name"
+          }
         }
       }
     ],
@@ -918,12 +919,9 @@
         "shadow": {
           "type": "Property_multilinetext_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Description"
-            }
-          ]
+          "fields": {
+            "text": "Description"
+          }
         }
       },
       {
@@ -957,6 +955,11 @@
     "args0": [
       {
         "type": "field_label_serializable_hidden",
+        "name": "id",
+        "value": ""
+      },
+      {
+        "type": "field_label_serializable_hidden",
         "name": "type",
         "value": "ENCHANTMENT"
       },
@@ -984,12 +987,9 @@
         "shadow": {
           "type": "Property_text_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Name"
-            }
-          ]
+          "fields": {
+            "text": "Name"
+          }
         }
       }
     ],
@@ -1020,12 +1020,9 @@
         "shadow": {
           "type": "Property_multilinetext_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Description"
-            }
-          ]
+          "fields": {
+            "text": "Description"
+          }
         }
       }
     ],
@@ -1041,6 +1038,11 @@
     "hat": "cap",
     "message0": "Class",
     "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "id",
+        "value": ""
+      },
       {
         "type": "field_label_serializable_hidden",
         "name": "type",
@@ -1070,12 +1072,9 @@
         "shadow": {
           "type": "Property_text_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Name"
-            }
-          ]
+          "fields": {
+            "text": "Name"
+          }
         }
       },
       {
@@ -1084,12 +1083,9 @@
         "shadow": {
           "type": "Property_text_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "COLOR"
-            }
-          ]
+          "fields": {
+            "text": "COLOR"
+          }
         }
       },
       {
@@ -1152,20 +1148,11 @@
         "shadow": {
           "type": "Property_color_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "r",
-              "valueI": "255"
-            },
-            {
-              "name": "g",
-              "valueI": "255"
-            },
-            {
-              "name": "b",
-              "valueI": "255"
-            }
-          ]
+          "fields": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+          }
         }
       }
     ],

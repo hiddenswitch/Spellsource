@@ -87,16 +87,18 @@ export const useIndex = () => {
 const setupSearchMessage = (block: BlockDef, blocksByType: Record<string, BlockDef>) => {
   const getTextForBlock = (node: BlockDef) => {
     let text = ''
-    for (let i = 0; i < node.messages.length; i++) {
-      let message = node.messages[i]
-      if (!!node.args && !!node.args[i] && !!node.args[i].args) {
-        let args = node.args[i].args
-        for (let j = 0; j < args.length; j++) {
-          let text = getTextForArg(args[j])
-          message = message.replace('%' + (j + 1).toString(), text)
+    if (node.messages) {
+      for (let i = 0; i < node.messages.length; i++) {
+        let message = node.messages[i]
+        if (!!node.args && !!node.args[i] && !!node.args[i].args) {
+          let args = node.args[i].args
+          for (let j = 0; j < args.length; j++) {
+            let text = getTextForArg(args[j])
+            message = message.replace('%' + (j + 1).toString(), text)
+          }
         }
+        text += message + ' '
       }
-      text += message + ' '
     }
     return text
   }

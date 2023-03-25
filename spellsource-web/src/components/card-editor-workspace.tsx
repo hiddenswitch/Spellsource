@@ -1,7 +1,7 @@
 import React, {forwardRef, MutableRefObject, useContext, useEffect, useState} from 'react'
 import * as WorkspaceUtils from '../lib/workspace-utils'
 import * as styles from './card-editor-view.module.scss'
-import Blockly, {Toolbox, ToolboxCategory} from 'blockly'
+import Blockly, {BlockSvg, Toolbox, ToolboxCategory, WorkspaceSvg} from 'blockly'
 import 'ace-builds/src-noconflict/mode-json'
 import 'ace-builds/src-noconflict/mode-xml'
 import 'ace-builds/src-noconflict/theme-github'
@@ -13,7 +13,12 @@ import * as SpellsourceGenerator from '../lib/spellsource-generator'
 import SimpleReactBlockly from './simple-react-blockly'
 import * as BlocklyToolbox from '../lib/blockly-toolbox'
 import {BlocklyDataContext} from "../pages/card-editor";
-import useComponentWillMount from '../hooks/use-component-will-mount'
+import useComponentDidMount from '../hooks/use-component-did-mount'
+import {useDeleteCardMutation, useGetCardLazyQuery, useUpsertCardMutation} from "../__generated__/client";
+import {CardDef} from './card-display'
+import {useSession} from "next-auth/react";
+import {useDebounce} from "react-use";
+import uniqueBy from "@popperjs/core/lib/utils/uniqueBy";
 
 interface CardEditorWorkspaceProps {
   setJSON?: React.Dispatch<React.SetStateAction<string>>
@@ -25,7 +30,108 @@ interface CardEditorWorkspaceProps {
   renderer?: string;
 }
 
+export type InitBlockOptions = {
+  onSave: (block: BlockSvg) => void
+  onDelete: (block: BlockSvg) => void
+}
+
+
+//Create a new WorkspaceHeroClass block
+const createClass = (card, blockType) => {
+  if (!!card && !!card.heroClass && card.type === 'CLASS') {
+    let color = Blockly.utils.colour.rgbToHex(
+      card.art.primary.r * 255,
+      card.art.primary.g * 255,
+      card.art.primary.b * 255
+    )
+    let message = card.name
+    let json = {
+      'type': blockType,
+      'message0': '%1',
+      'output': 'HeroClass',
+      'colour': color,
+      'args0': [
+        {
+          'type': 'field_label',
+          'name': 'message',
+          'text': message
+        }
+      ]
+    }
+    if (!!card.art.body?.vertex) {
+      Blockly.textColor[blockType] = Blockly.utils.colour.rgbToHex(
+        card.art.body.vertex.r * 255,
+        card.art.body.vertex.g * 255,
+        card.art.body.vertex.b * 255
+      )
+    }
+    Blockly.heroClassColors[card.heroClass] = color
+    return {
+      init: function () {
+        this.jsonInit(json)
+      },
+      data: card.heroClass,
+      json: json,
+      message: message
+    }
+  }
+}
+
+//Create a new WorkspaceCard block
+const createCard = (card: CardDef, blockType) => {
+  if (!!card && !!card.name && !!card.type) {
+    let cardId = card.id;
+
+    let color = '#888888'
+    if (!!card.heroClass) {
+      color = Blockly.heroClassColors[card.heroClass]
+    }
+    let message = BlocklyMiscUtils.cardMessage(card)
+    let json = {
+      'type': blockType,
+      'message0': '%1',
+      'output': 'Card',
+      'colour': color,
+      'args0': [
+        {
+          'type': 'field_label',
+          'name': 'message',
+          'text': message
+        }
+      ]
+    }
+    return {
+      init: function () {
+        this.jsonInit(json)
+      },
+      data: cardId,
+      json: json,
+      message: message
+    }
+  }
+}
+
+const createWorkspaceCard = (card: CardDef) => {
+  let type;
+  let created;
+
+  if (card.type === "CLASS") {
+    type = 'WorkspaceHeroClass_' + card.id;
+    created = createClass(card, type)
+  } else {
+    type = 'WorkspaceCard_' + card.id;
+    created = createCard(card, type)
+  }
+
+  const changed = !(type in Blockly.Blocks);
+  Blockly.Blocks[type] = created
+  Blockly.JavaScript[type] = () => '\'' + created.data + '\''
+  return {type, changed};
+}
+
 const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blocklyEditor: MutableRefObject<SimpleReactBlockly>) => {
+  const {data: session} = useSession();
+  const userId = session?.token?.sub ?? "";
   const data = useContext(BlocklyDataContext)
   const [results, setResults] = useState<string[]>([])
   const index = useIndex()
@@ -33,10 +139,47 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
   const mainWorkspace = () => blocklyEditor.current?.workspace
   const toolbox = () => mainWorkspace()?.getToolbox() as Toolbox;
 
+  const [allCardScript, setAllCardScript] = useState("");
+  const [upsertCard] = useUpsertCardMutation();
+  const [deleteCard] = useDeleteCardMutation();
+  const [getCard] = useGetCardLazyQuery()
+
+  const saveAll = async () => {
+    const workspace = mainWorkspace();
+    if (!userId || !workspace) {
+      return;
+    }
+
+    const blocks = workspace.getTopBlocks(true).filter(block => block.cardScript) as BlockSvg[];
+
+    await Promise.all(uniqueBy(blocks, block => block.getFieldValue("id")).map(onSave));
+    console.log("Workspace Saved");
+  }
+
+  useDebounce(saveAll, 5000, [allCardScript])
+
+  const onSave = async (block: BlockSvg) => {
+    const cardId = block.getFieldValue("id");
+    const cardScript = block.cardScript;
+    if (!cardId || !userId || !cardScript) return;
+    const dom = Blockly.Xml.blockToDom(block, true);
+    const blocklyWorkspace = Blockly.Xml.domToText(dom);
+
+    await upsertCard({variables: {cardId, card: {id: cardId, createdBy: userId, cardScript, blocklyWorkspace}}});
+  }
+
+  const onDelete = async (block: BlockSvg) => {
+    const cardId = block.getFieldValue("id");
+    block.dispose(true, true)
+    if (cardId) {
+      await deleteCard({variables: {cardId}})
+    }
+  }
+
   // Run once before the workspace has been created
-  useComponentWillMount(() => {
+  useComponentDidMount(() => {
     if (!Blockly.spellsourceInit) {
-      BlocklyMiscUtils.initBlocks(data)
+      BlocklyMiscUtils.initBlocks(data, {onSave, onDelete})
       BlocklyMiscUtils.initHeroClassColors(data)
       BlocklyMiscUtils.initArtBlcks(data)
       BlocklyMiscUtils.initCardBlocks(data)
@@ -67,6 +210,25 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
       generateCard(card)
     }
 
+
+    for (const myCard of data.myCards) {
+      createWorkspaceCard(myCard.cardScript);
+    }
+
+    for (const myCard of data.myCards) {
+      const dom = Blockly.Xml.textToDom(myCard.blocklyWorkspace);
+      dom.getElementsByTagName("comment")[0]?.setAttribute("pinned", "false");
+      Blockly.Xml.domToBlock(dom, mainWorkspace());
+    }
+
+    const listener = (evt,) => {
+      if (evt.key === "s" && (evt.metaKey || evt.ctrlKey)) {
+        evt.preventDefault();
+        saveAll();
+      }
+    }
+    document.addEventListener("keydown", listener)
+    return () => document.removeEventListener("keydown", listener)
   }, [])
 
   //When the query is updated, do some searching
@@ -82,7 +244,8 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
 
   //The default workspace changed event handler
   const onWorkspaceChanged = () => {
-    const cardScript = []//WorkspaceUtils.workspaceToCardScript(mainWorkspace)
+    const cardScript = [] as CardDef[]
+    //WorkspaceUtils.workspaceToCardScript(mainWorkspace)
     // Generate the blocks that correspond to the cards in the workspace
     if (!mainWorkspace().isDragging()) {
       let update = handleWorkspaceCards(mainWorkspace(), cardScript)
@@ -93,171 +256,36 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
 
       BlocklyMiscUtils.pluralStuff(mainWorkspace())
 
-      props.setJSON(JSON.stringify(cardScript, null, 2))
+      let json = JSON.stringify(cardScript, null, 2);
+      props.setJSON(json)
+      setAllCardScript(json);
     }
 
     props.setJS(Blockly.JavaScript.workspaceToCode(mainWorkspace()))
   }
 
-  //Create a new WorkspaceCard block
-  const createCard = (card, blockType, currentCards) => {
-    if (!!card && !!card.name && !!card.type) {
-      let cardId = chooseId(card, currentCards)
-
-      let color = '#888888'
-      if (!!card.heroClass) {
-        color = Blockly.heroClassColors[card.heroClass]
-      }
-      let message = BlocklyMiscUtils.cardMessage(card)
-      let json = {
-        'type': blockType,
-        'message0': '%1',
-        'output': 'Card',
-        'colour': color,
-        'args0': [
-          {
-            'type': 'field_label',
-            'name': 'message',
-            'text': message
-          }
-        ]
-      }
-      return {
-        init: function () {
-          this.jsonInit(json)
-        },
-        data: cardId,
-        json: json,
-        message: message
-      }
-    }
-  }
-
-  const chooseId = (card, currentCards) => {
-    let cardType = !!card.secret ? 'SECRET' : !!card.quest ? 'QUEST' : card.type
-    if (card.type === 'MINION' && card.collectible === false || card.collectible === 'FALSE') {
-      cardType = 'TOKEN'
-    }
-    let cardId = cardType.toLowerCase()
-      + '_'
-      + card.name
-        .toLowerCase()
-        .replaceAll(' ', '_')
-        .replaceAll(',', '')
-        .replaceAll('\'', '')
-
-    if (card.type === 'CLASS') {
-      cardId = 'class_' + card.heroClass.toLowerCase()
-        .replaceAll(' ', '_')
-        .replaceAll(',', '')
-        .replaceAll('\'', '')
-    }
-
-    const cardExists = (id) => {
-      if (!!Blockly.Blocks['CatalogueCard_' + id]) {
-        return true
-      }
-      for (card of currentCards) {
-        if (Blockly.Blocks[card].data === id) {
-          return true
-        }
-      }
-      return false
-    }
-
-    if (cardExists(cardId)) {
-      let i = 2
-      while (cardExists(cardId + i.toString())) {
-        i++
-      }
-      cardId += i.toString()
-    }
-    return cardId
-  }
-
-  //Create a new WorkspaceHeroClass block
-  const createClass = (card, blockType) => {
-    if (!!card && !!card.heroClass && card.type === 'CLASS') {
-      let color = Blockly.utils.colour.rgbToHex(
-        card.art.primary.r * 255,
-        card.art.primary.g * 255,
-        card.art.primary.b * 255
-      )
-      let message = card.name
-      let json = {
-        'type': blockType,
-        'message0': '%1',
-        'output': 'HeroClass',
-        'colour': color,
-        'args0': [
-          {
-            'type': 'field_label',
-            'name': 'message',
-            'text': message
-          }
-        ]
-      }
-      if (!!card.art.body?.vertex) {
-        Blockly.textColor[blockType] = Blockly.utils.colour.rgbToHex(
-          card.art.body.vertex.r * 255,
-          card.art.body.vertex.g * 255,
-          card.art.body.vertex.b * 255
-        )
-      }
-      Blockly.heroClassColors[card.heroClass] = color
-      return {
-        init: function () {
-          this.jsonInit(json)
-        },
-        data: card.heroClass,
-        json: json,
-        message: message
-      }
-    }
-  }
 
   //Managing the creation and deletion of WorkspaceCard and WorkspaceHeroClass blocks
-  const handleWorkspaceCards = (workspace, cardScript) => {
+  const handleWorkspaceCards = (workspace: WorkspaceSvg, cardScript: CardDef[]) => {
     let anythingChanged = false
 
-    let currentCards = []
-    for (let blocksKey in Blockly.Blocks) {
-      if (blocksKey.startsWith('WorkspaceCard') || blocksKey.startsWith('WorkspaceHeroClass')) {
-        currentCards.push(blocksKey)
-      }
-    }
+    let remainingCards = new Set(Object.keys(Blockly.Blocks)
+      .filter(blocksKey => blocksKey.startsWith('WorkspaceCard') || blocksKey.startsWith('WorkspaceHeroClass')));
+
     workspace.getTopBlocks(true)
       .filter(block => block.type.startsWith('Starter_'))
-      .forEach(block => {
-          let blockXml = Blockly.Xml.blockToDom(block, true)
-          let card = WorkspaceUtils.xmlToCardScript(blockXml)
+      .forEach((block: BlockSvg) => {
+          if (!block.getFieldValue("id")) {
+            block.setFieldValue(crypto.randomUUID(), "id");
+          }
+          const blockXml = Blockly.Xml.blockToDom(block, true)
+          const card = block.cardScript = WorkspaceUtils.xmlToCardScript(blockXml) as CardDef
           cardScript.push(card)
 
           //if it's a class card, make the class first to init the color
-          if (block.type === 'Starter_CLASS') {
-            let type = 'WorkspaceHeroClass_' + block.id
-            currentCards = currentCards.filter(value => value !== type)
-            if (!Blockly.Blocks[type]) {
-              anythingChanged = true
-            }
-            let createdClass = createClass(card, type)
-            Blockly.Blocks[type] = createdClass
-            Blockly.JavaScript[type] = function (block) {
-              return '\'' + createdClass.data + '\''
-            }
-          } else {
-            let blockType = 'WorkspaceCard_' + block.id
-            currentCards = currentCards.filter(value => value !== blockType)
-            if (!Blockly.Blocks[blockType]) {
-              anythingChanged = true
-            }
-            let createdCard = createCard(card, blockType, currentCards)
-            Blockly.Blocks[blockType] = createdCard
-            Blockly.JavaScript[blockType] = function (block) {
-              return '\'' + createdCard.data + '\''
-            }
-          }
-
+          const {type, changed} = createWorkspaceCard(card);
+          remainingCards.delete(type)
+          anythingChanged ||= changed;
 
           if (block.rendered) {
             let ogText = block.getCommentText()
@@ -267,17 +295,14 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
             block.commentModel.size.height = 324
             block.commentModel.pinned = true
 
-            block.artURL = BlocklyMiscUtils.getArtURL(card, data)
-
             if (block.getCommentIcon().isVisible() && block.getCommentText() !== ogText) {
-              block.getCommentIcon().disposeBubble_()
-              block.getCommentIcon().createBubble_()
+              block.getCommentIcon().updateText()
             }
           }
         }
       )
 
-    currentCards.forEach(card => {
+    remainingCards.forEach(card => {
       anythingChanged = true
       delete Blockly.Blocks[card]
     })
@@ -285,9 +310,8 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
     Blockly.Workspace.getAll().forEach(aWorkspace => {
       aWorkspace.getAllBlocks(true).forEach(block => {
         if (block.type.startsWith('WorkspaceCard') || block.type.startsWith('WorkspaceHeroClass')) {
-          let test = Blockly.Blocks
-          if (!!Blockly.Blocks[block.type]) {
-            refreshBlock(block)
+          if (block.type in Blockly.Blocks) {
+            BlocklyMiscUtils.refreshBlock(block as BlockSvg)
           } else {
             block.dispose(true)
           }
@@ -298,20 +322,6 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
     return anythingChanged
   }
 
-  const refreshBlock = (block) => {
-    block.data = Blockly.Blocks[block.type].data
-    block.setFieldValue(Blockly.Blocks[block.type].message, 'message')
-    block.setColour(Blockly.Blocks[block.type].json.colour)
-    if (block.render) {
-      let textElement = block.getSvgRoot().lastElementChild.firstElementChild
-      if (Blockly.textColor && Blockly.textColor[block.type]) {
-        textElement.style.fill = Blockly.textColor[block.type]
-      } else {
-        textElement.style.fill = '#fff'
-      }
-      block.render()
-    }
-  }
 
   const generateCard = (p: string) => {
     if (!p) {
@@ -338,18 +348,25 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
     }
 
     if (cardId && !card) {
-      for (let node of Object.values(data.cardsById)) {
-        if (node.id === cardId) {
-          card = node;
-        }
+      if (cardId in data.cardsById) {
+        card = data.cardsById[cardId];
+      } else {
+        getCard({variables: {id: cardId}}).then(value => {
+          const card = value.data?.cardById;
+          if (card) {
+            if (card.blocklyWorkspace) {
+
+            } else if (card.cardScript) {
+              JsonConversionUtils.generateCard(mainWorkspace(), card.cardScript)
+            }
+          }
+        })
       }
     }
 
-    if (!card) {
-      return
+    if (card) {
+      JsonConversionUtils.generateCard(mainWorkspace(), card)
     }
-
-    JsonConversionUtils.generateCard(mainWorkspace(), card)
   }
 
   const handleSearchResults = (query) => {

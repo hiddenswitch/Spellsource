@@ -1,7 +1,7 @@
 import {useSession} from "next-auth/react";
 import {useState} from "react";
 import {CardType} from "../__generated__/spellsource-game";
-import {useGetPagedCardsQuery} from "../__generated__/client";
+import {useGetCardsQuery} from "../__generated__/client";
 import CardDisplay, {CardDef} from "./card-display";
 import styles from "./creative-layout.module.scss";
 import { Button } from "react-bootstrap";
@@ -17,7 +17,7 @@ export default () => {
   const [offset, setOffset] = useState(0);
   const [cardType, setCardType] = useState(undefined as CardType | undefined)
 
-  const getCards = useGetPagedCardsQuery({
+  const getCards = useGetCardsQuery({
     variables: {
       limit,
       offset,

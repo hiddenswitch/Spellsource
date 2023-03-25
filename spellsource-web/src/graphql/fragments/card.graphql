@@ -3,4 +3,5 @@ fragment card on Card {
   createdBy
   cardScript
   uri
+  blocklyWorkspace
 }

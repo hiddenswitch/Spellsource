@@ -83,12 +83,9 @@
         "check": "ValueProviderDesc",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 0
-            }
-          ]
+          "fields": {
+            "int": 0
+          }
         }
       },
       {
@@ -97,12 +94,9 @@
         "check": "ValueProviderDesc",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 0
-            }
-          ]
+          "fields": {
+            "int": 0
+          }
         }
       }
     ],
@@ -320,12 +314,9 @@
         "check": "EntityReference",
         "shadow": {
           "type": "EntityReference_SHADOW",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 0
-            }
-          ]
+          "fields": {
+            "int": 0
+          }
         }
       },
       {

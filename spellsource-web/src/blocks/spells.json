@@ -232,12 +232,9 @@
         "name": "value",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 2
-            }
-          ]
+          "fields": {
+            "int": 2
+          }
         }
       },
       {
@@ -269,12 +266,9 @@
         "name": "value",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 2
-            }
-          ]
+          "fields": {
+            "int": 2
+          }
         }
       },
       {
@@ -481,12 +475,9 @@
         "name": "value",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 1
-            }
-          ]
+          "fields": {
+            "int": 1
+          }
         }
       }
     ],
@@ -601,7 +592,6 @@
     ],
     "comment": "Give a temporary attack and health buff to something"
   },
-
   {
     "type": "Spell_Buff8",
     "subcategory": "Buff",
@@ -1430,12 +1420,9 @@
         "name": "value",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 2
-            }
-          ]
+          "fields": {
+            "int": 2
+          }
         }
       },
       {
@@ -1466,12 +1453,9 @@
         "name": "value",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 1
-            }
-          ]
+          "fields": {
+            "int": 1
+          }
         }
       },
       {
@@ -1511,12 +1495,9 @@
         "name": "value",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 1
-            }
-          ]
+          "fields": {
+            "int": 1
+          }
         }
       },
       {
@@ -1548,12 +1529,9 @@
         "name": "value",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 1
-            }
-          ]
+          "fields": {
+            "int": 1
+          }
         }
       },
       {
@@ -2015,12 +1993,9 @@
         "name": "howMany",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 2
-            }
-          ]
+          "fields": {
+            "int": 2
+          }
         }
       }
     ],
@@ -2615,12 +2590,9 @@
         "name": "value",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 3
-            }
-          ]
+          "fields": {
+            "int": 3
+          }
         }
       },
       {
@@ -3106,12 +3078,9 @@
         "name": "howMany",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 3
-            }
-          ]
+          "fields": {
+            "int": 3
+          }
         }
       },
       {
@@ -3175,12 +3144,9 @@
         "name": "howMany",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 3
-            }
-          ]
+          "fields": {
+            "int": 3
+          }
         }
       },
       {
@@ -3239,12 +3205,9 @@
         "name": "howMany",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 3
-            }
-          ]
+          "fields": {
+            "int": 3
+          }
         }
       },
       {
@@ -3627,12 +3590,9 @@
         "name": "howMany",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 60
-            }
-          ]
+          "fields": {
+            "int": 60
+          }
         }
       }
     ],
@@ -3657,12 +3617,9 @@
         "name": "howMany",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 3
-            }
-          ]
+          "fields": {
+            "int": 3
+          }
         }
       },
       {
@@ -4410,12 +4367,9 @@
         "name": "howMany",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 2
-            }
-          ]
+          "fields": {
+            "int": 2
+          }
         }
       },
       {
@@ -4527,7 +4481,6 @@
         "text": "card/cards",
         "value": "card"
       }
-
     ],
     "comment": "To do something to the shuffled card(s), use the block \"the spell's output\""
   },
@@ -4905,12 +4858,9 @@
         "shadow": {
           "type": "Property_text_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Name"
-            }
-          ]
+          "fields": {
+            "text": "Name"
+          }
         }
       },
       {
@@ -4919,12 +4869,9 @@
         "shadow": {
           "type": "Property_text_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "text",
-              "valueS": "Description"
-            }
-          ]
+          "fields": {
+            "text": "Description"
+          }
         }
       },
       {
@@ -5102,12 +5049,9 @@
         "check": "ValueProviderDesc",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 99
-            }
-          ]
+          "fields": {
+            "int": 99
+          }
         }
       },
       {
@@ -5140,12 +5084,9 @@
         "name": "secondaryValue",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 0
-            }
-          ]
+          "fields": {
+            "int": 0
+          }
         }
       },
       {
@@ -5177,12 +5118,9 @@
         "check": "ValueProviderDesc",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 99
-            }
-          ]
+          "fields": {
+            "int": 99
+          }
         }
       },
       {
@@ -5215,12 +5153,9 @@
         "name": "secondaryValue",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 0
-            }
-          ]
+          "fields": {
+            "int": 0
+          }
         }
       },
       {

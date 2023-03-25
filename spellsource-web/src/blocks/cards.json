@@ -36,5 +36,24 @@
     "colour": "#888888",
     "message0": "the chosen card",
     "comment": "Used in the effects of Source spells"
+  },
+  {
+    "type": "Card_REFERENCE",
+    "output": "Card",
+    "colour": "#888888",
+    "message0": "%1%2",
+    "args0": [
+      {
+        "type": "field_label_serializable",
+        "name": "name",
+        "text": "the card name"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "id",
+        "text": "the card id"
+      }
+    ],
+    "data": "{id}"
   }
 ]

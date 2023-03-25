@@ -1,5 +1,10 @@
 import Blockly from 'blockly'
 import * as BlocklyMiscUtils from './blockly-misc-utils'
+import StaticCategoryInfo = Blockly.utils.toolbox.StaticCategoryInfo;
+import ToolboxInfo = Blockly.utils.toolbox.ToolboxInfo;
+import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo;
+import BlockInfo = Blockly.utils.toolbox.BlockInfo;
+import {isArray} from "lodash";
 
 
 /**
@@ -415,7 +420,7 @@ export function editorToolbox(results: string[] = []): any {
         ]
       )
     ]
-  }
+  } as ToolboxInfo
 }
 
 /**
@@ -467,11 +472,18 @@ export function cardsCategory() {
     "Blocks for referencing the cards you make in the workspace (use 'Search Card Catalogue' to reference existing cards)",
     [
       {
-        "kind": "label",
-        "text": "Blocks for your Workspace Cards will appear here"
+        kind: "label",
+        text: "Blocks for your Workspace Cards will appear here"
       },
-      ...contents('Card'),
-      ...contents('WorkspaceCard')
+      {
+        kind: "block",
+        type: "Card_REFERENCE",
+        fields: {
+          name: "Lol ok",
+          id: "minion_lol"
+        }
+      },
+      ...contents('Card')
     ], {toolboxitemid: 'Cards'}
   )
 }
@@ -485,7 +497,7 @@ export function cardsCategory() {
  * @param props The toolbox CUSTOM field, if it needs one
  * @returns category json
  */
-function category(name, color, tooltip, contents, props = null): any { // TODO category type
+function category(name, color, tooltip, contents, props = null): StaticCategoryInfo { // TODO category type
   let category: any = {
     kind: 'category',
     name: name,
@@ -510,7 +522,7 @@ function category(name, color, tooltip, contents, props = null): any { // TODO c
  * @returns [category json blocks]
  */
 function subContents(prefix, sub) {
-  let contents = []
+  let contents: Partial<ToolboxItemInfo>[] = []
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && block.startsWith(prefix)) {
       let subcategory = Blockly.Blocks[block].json?.subcategory
@@ -527,8 +539,8 @@ function subContents(prefix, sub) {
  * @param prefix The prefix to check from
  * @returns [category json blocks]
  */
-export function contents(prefix) {
-  let contents = []
+export function contents(prefix: string) {
+  let contents: Partial<ToolboxItemInfo>[] = []
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && (block.startsWith(prefix))) {
       contents.push(getBlock(block))
@@ -544,7 +556,7 @@ export function contents(prefix) {
  * @returns [category json blocks]
  */
 function exclusionContents(prefix, ...exclusions) {
-  let contents = []
+  let contents: Partial<ToolboxItemInfo>[] = []
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && block.startsWith(prefix) && !exclusions.includes(block)) {
       contents.push(getBlock(block))
@@ -560,7 +572,7 @@ function exclusionContents(prefix, ...exclusions) {
  * @returns [category json blocks]
  */
 function inclusionContents(prefix, ...inclusions) {
-  let contents = []
+  let contents: Partial<ToolboxItemInfo>[] = []
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && (block.startsWith(prefix) || inclusions.includes(block))) {
       contents.push(getBlock(block))
@@ -570,7 +582,7 @@ function inclusionContents(prefix, ...inclusions) {
 }
 
 function artContents(used) {
-  let contents = []
+  let contents: Partial<ToolboxItemInfo>[] = []
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && block.startsWith('Art_') &&
       (used === !!Blockly.Blocks[block].used || used === null)) {
@@ -589,20 +601,59 @@ function artContents(used) {
  * @returns boolean
  */
 function defaultTest(block) {
-  return !block.endsWith('SHADOW') && (!block.match(/^.*_.*_.*/) || BlocklyMiscUtils.isSpellsourceBlock(block))
+  return !block.endsWith('SHADOW') && (!block.match(/^.*_.*_.*/) || BlocklyMiscUtils.isSpellsourceBlock(block)) && !block.endsWith("_REFERENCE")
 }
 
-function getBlock(type: string) {
+function getBlock(type: string): Partial<BlockInfo> {
   return {
     type,
     kind: 'block',
-    contents: blockContents(type)
+    inputs: blockInputs(type)
   }
+}
+
+function blockInputs(type: string) {
+  let block = Blockly.Blocks[type]
+  let inputs = {} as Record<string, any>;
+
+  if (!block || !block.json) return inputs;
+
+  let json = block.json
+  for (let i = 0; i < 10; i++) {
+    if (!json['args' + i]) continue;
+    const args = json['args' + i];
+
+    for (let j = 0; j < 10; j++) {
+      const arg = args[j]
+      const name = arg?.name;
+      if (!name) continue;
+
+      if (arg.shadow) {
+        const input = inputs[name] ??= {} as any;
+        const shadow = input[arg.shadow.notActuallyShadow ? "block" : "shadow"] = {...arg.shadow};
+        if (arg.shadow.fields && isArray(arg.shadow.fields)) {
+          shadow.fields = {} as any;
+          for (let field of arg.shadow.fields) {
+            shadow.fields[field.name] = field.value ?? field.valueI ?? field.valueS ?? field.valueB;
+          }
+        }
+        shadow.inputs = blockInputs(shadow.type);
+      }
+
+      if (arg.block) {
+        const input = inputs[name] ??= {} as any;
+        input.block = arg.block;
+        input.block.inputs = blockInputs(input.block.type)
+      }
+    }
+  }
+
+  return inputs;
 }
 
 //Turns our own json formatting for shadow blocks into the formatting
 //that's used for specifying toolbox categories (recursively)
-function blockContents(type: string) {
+function blockContents(type: string): any {
   let block = Blockly.Blocks[type]
   let contents = []
   if (!!block && !!block.json) {
@@ -643,3 +694,10 @@ function blockContents(type: string) {
   return contents
 }
 
+function isIterable(input) {
+  if (input === null || input === undefined) {
+    return false
+  }
+
+  return typeof input[Symbol.iterator] === 'function'
+}

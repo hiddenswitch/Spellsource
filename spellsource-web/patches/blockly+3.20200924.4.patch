@@ -1,5 +1,5 @@
 diff --git a/node_modules/blockly/blockly.d.ts b/node_modules/blockly/blockly.d.ts
-index 06d6468..aa0cd54 100644
+index 06d6468..08afce3 100644
 --- a/node_modules/blockly/blockly.d.ts
 +++ b/node_modules/blockly/blockly.d.ts
 @@ -13,6 +13,35 @@ export = Blockly;
@@ -38,11 +38,10 @@ index 06d6468..aa0cd54 100644
    interface BlocklyOptions {
      toolbox?: HTMLElement | string;
      readOnly?: boolean;
-@@ -102,6 +131,21 @@ declare module Blockly {
-     /** Fake class which should be extended to avoid inheriting static properties */
+@@ -103,6 +132,31 @@ declare module Blockly {
      class Block__Class implements Blockly.IASTNodeLocation  {
  
-+            /**
+             /**
 +             * Added by spellsource. Stores the json representation of this block.
 +             */
 +            json?: any
@@ -53,14 +52,25 @@ index 06d6468..aa0cd54 100644
 +            used?: boolean
 +
 +            /**
-+             * Added by spellsource. Used to TODO
++             * Added by spellsource.
 +             */
 +            message?: string
 +
-             /**
++            /**
++             * Added by spellsource. The CardScript representation of this block, if it's a card
++             */
++            cardScript?: any;
++
++             /**
++              * Added by spellsource. The generated card id for this block, if it's a card
++              */
++             cardId: string
++
++             /**
               * Class for one block.
               * Not normally called directly, workspace.newBlock() is preferred.
-@@ -2219,7 +2263,7 @@ declare module Blockly {
+              * @param {!Blockly.Workspace} workspace The block's workspace.
+@@ -2219,7 +2273,7 @@ declare module Blockly {
       * A mapping of block type names to block prototype objects.
       * @type {!Object.<string,Object>}
       */
@@ -69,12 +79,12 @@ index 06d6468..aa0cd54 100644
  }
  
  
-@@ -15585,7 +15629,7 @@ declare module Blockly {
+@@ -15585,7 +15639,7 @@ declare module Blockly {
               *     no item exists.
               * @public
               */
 -            getToolboxItemById(id: string): Blockly.IToolboxItem;
 +            getToolboxItemById<T extends Blockly.IToolboxItem>(id: string): T;
-     
+ 
              /**
               * Gets the width of the toolbox.

@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 
-export default function useComponentWillMount (func) {
+export default function useComponentDidMount (func) {
   const willMount = useRef(true)
 
   if (willMount.current) {

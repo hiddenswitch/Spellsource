@@ -19,7 +19,6 @@ const CollectionCard: FunctionComponent<CollectionCardProps> = (props) => {
   let art = {
     ...card.art
   }
-  art.sprite["src"] = BlocklyMiscUtils.getArtURL(card, data)
 
   return <span className={styles.span}>
     <CardDisplay

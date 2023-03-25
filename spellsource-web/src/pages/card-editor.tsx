@@ -10,7 +10,8 @@ import {readAllImages, readAllJson} from "../lib/fs-utils";
 import {CardDef} from "../components/card-display";
 import {fixArt, transformBlock} from "../lib/json-transforms";
 import {keyBy} from "lodash";
-import {ImageDef, useGetAllArtQuery, useGetAllCardsQuery} from "../__generated__/client";
+import {Card, ImageDef, useGetAllArtQuery, useGetCardsQuery} from "../__generated__/client";
+import {useSession} from "next-auth/react";
 
 const getAllBlockJson = async () =>
   (await readAllJson<BlockDef[]>(path.join("src", "blocks", "*.json")))
@@ -42,6 +43,7 @@ export const BlocklyDataContext = createContext(
     ready: boolean
     cardsById: Record<string, CardDef>
     allArt: ImageDef[]
+    myCards: Partial<Card>[]
   }
 )
 
@@ -68,9 +70,12 @@ const LoadableComponent = Loadable.Map({
 })
 
 const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const getAllCards = useGetAllCardsQuery();
+  const {data: session} = useSession();
+  const userId = session?.token?.sub ?? "";
+
+  const getCards = useGetCardsQuery({variables: {filter: {or: [{type: {equalTo: "CLASS"}}, {createdBy: {equalTo: userId}}]}}});
   const cardsById = useMemo(() => {
-    const cards = getAllCards.data?.allCards?.nodes ?? [];
+    const cards = getCards.data?.allCards?.nodes ?? [];
     const allCards = cards.map(card => ({
       ...(card.cardScript ?? {}),
       id: card.id,
@@ -79,15 +84,19 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
     fixArt(cardsById);
 
     return cardsById
-  }, [getAllCards.data]);
+  }, [getCards.data]);
 
   const getAllArt = useGetAllArtQuery();
   const allArt = getAllArt.data?.allArt ?? [];
 
   const ready = Object.values(cardsById).length > 0 && allArt.length > 0;
 
+  const myCards = useMemo(
+    () => (getCards.data?.allCards?.nodes ?? []).filter(card => card.createdBy === userId && card.blocklyWorkspace),
+    [getCards.data])
+
   return <Layout>
-    <BlocklyDataContext.Provider value={{...props, cardsById, allArt, ready}}>
+    <BlocklyDataContext.Provider value={{...props, cardsById, allArt, ready, myCards}}>
       <div className={styles.cardEditorContainer}>
         <LoadableComponent dataReady={ready}/>
       </div>

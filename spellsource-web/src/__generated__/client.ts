@@ -157,6 +157,7 @@ export type Card = Node & {
   cardScript?: Maybe<Scalars['JSON']>;
   /** Reads and enables pagination through a set of `CardsInDeck`. */
   cardsInDecksByCardId: CardsInDecksConnection;
+  cost?: Maybe<Scalars['Int']>;
   createdAt: Scalars['Datetime'];
   createdBy: Scalars['String'];
   id: Scalars['String'];
@@ -203,6 +204,8 @@ export type CardFilter = {
   and?: InputMaybe<Array<CardFilter>>;
   /** Filter by the object’s `cardScript` field. */
   cardScript?: InputMaybe<JsonFilter>;
+  /** Filter by the object’s `cost` field. */
+  cost?: InputMaybe<IntFilter>;
   /** Filter by the object’s `createdAt` field. */
   createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `createdBy` field. */
@@ -2836,6 +2839,32 @@ export type Mutation = {
   updateUserEntityAddon?: Maybe<UpdateUserEntityAddonPayload>;
   /** Updates a single `UserEntityAddon` using a unique key and a patch. */
   updateUserEntityAddonById?: Maybe<UpdateUserEntityAddonPayload>;
+  /** Upserts a single `BotUser`. */
+  upsertBotUser?: Maybe<UpsertBotUserPayload>;
+  /** Upserts a single `Card`. */
+  upsertCard?: Maybe<UpsertCardPayload>;
+  /** Upserts a single `CardsInDeck`. */
+  upsertCardsInDeck?: Maybe<UpsertCardsInDeckPayload>;
+  /** Upserts a single `Deck`. */
+  upsertDeck?: Maybe<UpsertDeckPayload>;
+  /** Upserts a single `DeckPlayerAttributeTuple`. */
+  upsertDeckPlayerAttributeTuple?: Maybe<UpsertDeckPlayerAttributeTuplePayload>;
+  /** Upserts a single `DeckShare`. */
+  upsertDeckShare?: Maybe<UpsertDeckSharePayload>;
+  /** Upserts a single `Friend`. */
+  upsertFriend?: Maybe<UpsertFriendPayload>;
+  /** Upserts a single `Game`. */
+  upsertGame?: Maybe<UpsertGamePayload>;
+  /** Upserts a single `GameUser`. */
+  upsertGameUser?: Maybe<UpsertGameUserPayload>;
+  /** Upserts a single `Guest`. */
+  upsertGuest?: Maybe<UpsertGuestPayload>;
+  /** Upserts a single `MatchmakingQueue`. */
+  upsertMatchmakingQueue?: Maybe<UpsertMatchmakingQueuePayload>;
+  /** Upserts a single `MatchmakingTicket`. */
+  upsertMatchmakingTicket?: Maybe<UpsertMatchmakingTicketPayload>;
+  /** Upserts a single `UserEntityAddon`. */
+  upsertUserEntityAddon?: Maybe<UpsertUserEntityAddonPayload>;
 };
 
 
@@ -3226,6 +3255,97 @@ export type MutationUpdateUserEntityAddonArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateUserEntityAddonByIdArgs = {
   input: UpdateUserEntityAddonByIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertBotUserArgs = {
+  input: UpsertBotUserInput;
+  where?: InputMaybe<UpsertBotUserWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertCardArgs = {
+  input: UpsertCardInput;
+  where?: InputMaybe<UpsertCardWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertCardsInDeckArgs = {
+  input: UpsertCardsInDeckInput;
+  where?: InputMaybe<UpsertCardsInDeckWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertDeckArgs = {
+  input: UpsertDeckInput;
+  where?: InputMaybe<UpsertDeckWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertDeckPlayerAttributeTupleArgs = {
+  input: UpsertDeckPlayerAttributeTupleInput;
+  where?: InputMaybe<UpsertDeckPlayerAttributeTupleWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertDeckShareArgs = {
+  input: UpsertDeckShareInput;
+  where?: InputMaybe<UpsertDeckShareWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertFriendArgs = {
+  input: UpsertFriendInput;
+  where?: InputMaybe<UpsertFriendWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertGameArgs = {
+  input: UpsertGameInput;
+  where?: InputMaybe<UpsertGameWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertGameUserArgs = {
+  input: UpsertGameUserInput;
+  where?: InputMaybe<UpsertGameUserWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertGuestArgs = {
+  input: UpsertGuestInput;
+  where?: InputMaybe<UpsertGuestWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertMatchmakingQueueArgs = {
+  input: UpsertMatchmakingQueueInput;
+  where?: InputMaybe<UpsertMatchmakingQueueWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertMatchmakingTicketArgs = {
+  input: UpsertMatchmakingTicketInput;
+  where?: InputMaybe<UpsertMatchmakingTicketWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertUserEntityAddonArgs = {
+  input: UpsertUserEntityAddonInput;
+  where?: InputMaybe<UpsertUserEntityAddonWhere>;
 };
 
 /** An object with a globally unique `ID`. */
@@ -4337,6 +4457,443 @@ export type UpdateUserEntityAddonPayloadUserEntityAddonEdgeArgs = {
   orderBy?: InputMaybe<Array<UserEntityAddonsOrderBy>>;
 };
 
+/** All input for the upsert `BotUser` mutation. */
+export type UpsertBotUserInput = {
+  /** The `BotUser` to be upserted by this mutation. */
+  botUser: BotUserInput;
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our upsert `BotUser` mutation. */
+export type UpsertBotUserPayload = {
+  __typename?: 'UpsertBotUserPayload';
+  /** The `BotUser` that was upserted by this mutation. */
+  botUser?: Maybe<BotUser>;
+  /** An edge for our `BotUser`. May be used by Relay 1. */
+  botUserEdge?: Maybe<BotUsersEdge>;
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our upsert `BotUser` mutation. */
+export type UpsertBotUserPayloadBotUserEdgeArgs = {
+  orderBy?: InputMaybe<Array<BotUsersOrderBy>>;
+};
+
+/** Where conditions for the upsert `BotUser` mutation. */
+export type UpsertBotUserWhere = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+/** All input for the upsert `Card` mutation. */
+export type UpsertCardInput = {
+  /** The `Card` to be upserted by this mutation. */
+  card: CardInput;
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our upsert `Card` mutation. */
+export type UpsertCardPayload = {
+  __typename?: 'UpsertCardPayload';
+  /** The `Card` that was upserted by this mutation. */
+  card?: Maybe<Card>;
+  /** An edge for our `Card`. May be used by Relay 1. */
+  cardEdge?: Maybe<CardsEdge>;
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our upsert `Card` mutation. */
+export type UpsertCardPayloadCardEdgeArgs = {
+  orderBy?: InputMaybe<Array<CardsOrderBy>>;
+};
+
+/** Where conditions for the upsert `Card` mutation. */
+export type UpsertCardWhere = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+/** All input for the upsert `CardsInDeck` mutation. */
+export type UpsertCardsInDeckInput = {
+  /** The `CardsInDeck` to be upserted by this mutation. */
+  cardsInDeck: CardsInDeckInput;
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our upsert `CardsInDeck` mutation. */
+export type UpsertCardsInDeckPayload = {
+  __typename?: 'UpsertCardsInDeckPayload';
+  /** Reads a single `Card` that is related to this `CardsInDeck`. */
+  cardByCardId?: Maybe<Card>;
+  /** The `CardsInDeck` that was upserted by this mutation. */
+  cardsInDeck?: Maybe<CardsInDeck>;
+  /** An edge for our `CardsInDeck`. May be used by Relay 1. */
+  cardsInDeckEdge?: Maybe<CardsInDecksEdge>;
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `CardsInDeck`. */
+  deckByDeckId?: Maybe<Deck>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our upsert `CardsInDeck` mutation. */
+export type UpsertCardsInDeckPayloadCardsInDeckEdgeArgs = {
+  orderBy?: InputMaybe<Array<CardsInDecksOrderBy>>;
+};
+
+/** Where conditions for the upsert `CardsInDeck` mutation. */
+export type UpsertCardsInDeckWhere = {
+  id?: InputMaybe<Scalars['BigInt']>;
+};
+
+/** All input for the upsert `Deck` mutation. */
+export type UpsertDeckInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `Deck` to be upserted by this mutation. */
+  deck: DeckInput;
+};
+
+/** The output of our upsert `Deck` mutation. */
+export type UpsertDeckPayload = {
+  __typename?: 'UpsertDeckPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Deck` that was upserted by this mutation. */
+  deck?: Maybe<Deck>;
+  /** An edge for our `Deck`. May be used by Relay 1. */
+  deckEdge?: Maybe<DecksEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our upsert `Deck` mutation. */
+export type UpsertDeckPayloadDeckEdgeArgs = {
+  orderBy?: InputMaybe<Array<DecksOrderBy>>;
+};
+
+/** All input for the upsert `DeckPlayerAttributeTuple` mutation. */
+export type UpsertDeckPlayerAttributeTupleInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `DeckPlayerAttributeTuple` to be upserted by this mutation. */
+  deckPlayerAttributeTuple: DeckPlayerAttributeTupleInput;
+};
+
+/** The output of our upsert `DeckPlayerAttributeTuple` mutation. */
+export type UpsertDeckPlayerAttributeTuplePayload = {
+  __typename?: 'UpsertDeckPlayerAttributeTuplePayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `DeckPlayerAttributeTuple`. */
+  deckByDeckId?: Maybe<Deck>;
+  /** The `DeckPlayerAttributeTuple` that was upserted by this mutation. */
+  deckPlayerAttributeTuple?: Maybe<DeckPlayerAttributeTuple>;
+  /** An edge for our `DeckPlayerAttributeTuple`. May be used by Relay 1. */
+  deckPlayerAttributeTupleEdge?: Maybe<DeckPlayerAttributeTuplesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our upsert `DeckPlayerAttributeTuple` mutation. */
+export type UpsertDeckPlayerAttributeTuplePayloadDeckPlayerAttributeTupleEdgeArgs = {
+  orderBy?: InputMaybe<Array<DeckPlayerAttributeTuplesOrderBy>>;
+};
+
+/** Where conditions for the upsert `DeckPlayerAttributeTuple` mutation. */
+export type UpsertDeckPlayerAttributeTupleWhere = {
+  id?: InputMaybe<Scalars['BigInt']>;
+};
+
+/** All input for the upsert `DeckShare` mutation. */
+export type UpsertDeckShareInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `DeckShare` to be upserted by this mutation. */
+  deckShare: DeckShareInput;
+};
+
+/** The output of our upsert `DeckShare` mutation. */
+export type UpsertDeckSharePayload = {
+  __typename?: 'UpsertDeckSharePayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `DeckShare`. */
+  deckByDeckId?: Maybe<Deck>;
+  /** The `DeckShare` that was upserted by this mutation. */
+  deckShare?: Maybe<DeckShare>;
+  /** An edge for our `DeckShare`. May be used by Relay 1. */
+  deckShareEdge?: Maybe<DeckSharesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our upsert `DeckShare` mutation. */
+export type UpsertDeckSharePayloadDeckShareEdgeArgs = {
+  orderBy?: InputMaybe<Array<DeckSharesOrderBy>>;
+};
+
+/** Where conditions for the upsert `DeckShare` mutation. */
+export type UpsertDeckShareWhere = {
+  deckId?: InputMaybe<Scalars['String']>;
+  shareRecipientId?: InputMaybe<Scalars['String']>;
+};
+
+/** Where conditions for the upsert `Deck` mutation. */
+export type UpsertDeckWhere = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+/** All input for the upsert `Friend` mutation. */
+export type UpsertFriendInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `Friend` to be upserted by this mutation. */
+  friend: FriendInput;
+};
+
+/** The output of our upsert `Friend` mutation. */
+export type UpsertFriendPayload = {
+  __typename?: 'UpsertFriendPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Friend` that was upserted by this mutation. */
+  friend?: Maybe<Friend>;
+  /** An edge for our `Friend`. May be used by Relay 1. */
+  friendEdge?: Maybe<FriendsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our upsert `Friend` mutation. */
+export type UpsertFriendPayloadFriendEdgeArgs = {
+  orderBy?: InputMaybe<Array<FriendsOrderBy>>;
+};
+
+/** Where conditions for the upsert `Friend` mutation. */
+export type UpsertFriendWhere = {
+  friend?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+};
+
+/** All input for the upsert `Game` mutation. */
+export type UpsertGameInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `Game` to be upserted by this mutation. */
+  game: GameInput;
+};
+
+/** The output of our upsert `Game` mutation. */
+export type UpsertGamePayload = {
+  __typename?: 'UpsertGamePayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Game` that was upserted by this mutation. */
+  game?: Maybe<Game>;
+  /** An edge for our `Game`. May be used by Relay 1. */
+  gameEdge?: Maybe<GamesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our upsert `Game` mutation. */
+export type UpsertGamePayloadGameEdgeArgs = {
+  orderBy?: InputMaybe<Array<GamesOrderBy>>;
+};
+
+/** All input for the upsert `GameUser` mutation. */
+export type UpsertGameUserInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `GameUser` to be upserted by this mutation. */
+  gameUser: GameUserInput;
+};
+
+/** The output of our upsert `GameUser` mutation. */
+export type UpsertGameUserPayload = {
+  __typename?: 'UpsertGameUserPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `GameUser`. */
+  deckByDeckId?: Maybe<Deck>;
+  /** Reads a single `Game` that is related to this `GameUser`. */
+  gameByGameId?: Maybe<Game>;
+  /** The `GameUser` that was upserted by this mutation. */
+  gameUser?: Maybe<GameUser>;
+  /** An edge for our `GameUser`. May be used by Relay 1. */
+  gameUserEdge?: Maybe<GameUsersEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our upsert `GameUser` mutation. */
+export type UpsertGameUserPayloadGameUserEdgeArgs = {
+  orderBy?: InputMaybe<Array<GameUsersOrderBy>>;
+};
+
+/** Where conditions for the upsert `GameUser` mutation. */
+export type UpsertGameUserWhere = {
+  gameId?: InputMaybe<Scalars['BigInt']>;
+  userId?: InputMaybe<Scalars['String']>;
+};
+
+/** Where conditions for the upsert `Game` mutation. */
+export type UpsertGameWhere = {
+  id?: InputMaybe<Scalars['BigInt']>;
+};
+
+/** All input for the upsert `Guest` mutation. */
+export type UpsertGuestInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `Guest` to be upserted by this mutation. */
+  guest: GuestInput;
+};
+
+/** The output of our upsert `Guest` mutation. */
+export type UpsertGuestPayload = {
+  __typename?: 'UpsertGuestPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `Guest` that was upserted by this mutation. */
+  guest?: Maybe<Guest>;
+  /** An edge for our `Guest`. May be used by Relay 1. */
+  guestEdge?: Maybe<GuestsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our upsert `Guest` mutation. */
+export type UpsertGuestPayloadGuestEdgeArgs = {
+  orderBy?: InputMaybe<Array<GuestsOrderBy>>;
+};
+
+/** Where conditions for the upsert `Guest` mutation. */
+export type UpsertGuestWhere = {
+  id?: InputMaybe<Scalars['BigInt']>;
+};
+
+/** All input for the upsert `MatchmakingQueue` mutation. */
+export type UpsertMatchmakingQueueInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `MatchmakingQueue` to be upserted by this mutation. */
+  matchmakingQueue: MatchmakingQueueInput;
+};
+
+/** The output of our upsert `MatchmakingQueue` mutation. */
+export type UpsertMatchmakingQueuePayload = {
+  __typename?: 'UpsertMatchmakingQueuePayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `MatchmakingQueue` that was upserted by this mutation. */
+  matchmakingQueue?: Maybe<MatchmakingQueue>;
+  /** An edge for our `MatchmakingQueue`. May be used by Relay 1. */
+  matchmakingQueueEdge?: Maybe<MatchmakingQueuesEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our upsert `MatchmakingQueue` mutation. */
+export type UpsertMatchmakingQueuePayloadMatchmakingQueueEdgeArgs = {
+  orderBy?: InputMaybe<Array<MatchmakingQueuesOrderBy>>;
+};
+
+/** Where conditions for the upsert `MatchmakingQueue` mutation. */
+export type UpsertMatchmakingQueueWhere = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+/** All input for the upsert `MatchmakingTicket` mutation. */
+export type UpsertMatchmakingTicketInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `MatchmakingTicket` to be upserted by this mutation. */
+  matchmakingTicket: MatchmakingTicketInput;
+};
+
+/** The output of our upsert `MatchmakingTicket` mutation. */
+export type UpsertMatchmakingTicketPayload = {
+  __typename?: 'UpsertMatchmakingTicketPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Reads a single `Deck` that is related to this `MatchmakingTicket`. */
+  deckByBotDeckId?: Maybe<Deck>;
+  /** Reads a single `Deck` that is related to this `MatchmakingTicket`. */
+  deckByDeckId?: Maybe<Deck>;
+  /** Reads a single `MatchmakingQueue` that is related to this `MatchmakingTicket`. */
+  matchmakingQueueByQueueId?: Maybe<MatchmakingQueue>;
+  /** The `MatchmakingTicket` that was upserted by this mutation. */
+  matchmakingTicket?: Maybe<MatchmakingTicket>;
+  /** An edge for our `MatchmakingTicket`. May be used by Relay 1. */
+  matchmakingTicketEdge?: Maybe<MatchmakingTicketsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our upsert `MatchmakingTicket` mutation. */
+export type UpsertMatchmakingTicketPayloadMatchmakingTicketEdgeArgs = {
+  orderBy?: InputMaybe<Array<MatchmakingTicketsOrderBy>>;
+};
+
+/** Where conditions for the upsert `MatchmakingTicket` mutation. */
+export type UpsertMatchmakingTicketWhere = {
+  userId?: InputMaybe<Scalars['String']>;
+};
+
+/** All input for the upsert `UserEntityAddon` mutation. */
+export type UpsertUserEntityAddonInput = {
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `UserEntityAddon` to be upserted by this mutation. */
+  userEntityAddon: UserEntityAddonInput;
+};
+
+/** The output of our upsert `UserEntityAddon` mutation. */
+export type UpsertUserEntityAddonPayload = {
+  __typename?: 'UpsertUserEntityAddonPayload';
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  /** The `UserEntityAddon` that was upserted by this mutation. */
+  userEntityAddon?: Maybe<UserEntityAddon>;
+  /** An edge for our `UserEntityAddon`. May be used by Relay 1. */
+  userEntityAddonEdge?: Maybe<UserEntityAddonsEdge>;
+};
+
+
+/** The output of our upsert `UserEntityAddon` mutation. */
+export type UpsertUserEntityAddonPayloadUserEntityAddonEdgeArgs = {
+  orderBy?: InputMaybe<Array<UserEntityAddonsOrderBy>>;
+};
+
+/** Where conditions for the upsert `UserEntityAddon` mutation. */
+export type UpsertUserEntityAddonWhere = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
 export type UserEntityAddon = Node & {
   __typename?: 'UserEntityAddon';
   id: Scalars['String'];
@@ -4727,6 +5284,45 @@ export type ResolversTypes = {
   UpdateUserEntityAddonByIdInput: ResolverTypeWrapper<Partial<UpdateUserEntityAddonByIdInput>>;
   UpdateUserEntityAddonInput: ResolverTypeWrapper<Partial<UpdateUserEntityAddonInput>>;
   UpdateUserEntityAddonPayload: ResolverTypeWrapper<Partial<UpdateUserEntityAddonPayload>>;
+  UpsertBotUserInput: ResolverTypeWrapper<Partial<UpsertBotUserInput>>;
+  UpsertBotUserPayload: ResolverTypeWrapper<Partial<UpsertBotUserPayload>>;
+  UpsertBotUserWhere: ResolverTypeWrapper<Partial<UpsertBotUserWhere>>;
+  UpsertCardInput: ResolverTypeWrapper<Partial<UpsertCardInput>>;
+  UpsertCardPayload: ResolverTypeWrapper<Partial<UpsertCardPayload>>;
+  UpsertCardWhere: ResolverTypeWrapper<Partial<UpsertCardWhere>>;
+  UpsertCardsInDeckInput: ResolverTypeWrapper<Partial<UpsertCardsInDeckInput>>;
+  UpsertCardsInDeckPayload: ResolverTypeWrapper<Partial<UpsertCardsInDeckPayload>>;
+  UpsertCardsInDeckWhere: ResolverTypeWrapper<Partial<UpsertCardsInDeckWhere>>;
+  UpsertDeckInput: ResolverTypeWrapper<Partial<UpsertDeckInput>>;
+  UpsertDeckPayload: ResolverTypeWrapper<Partial<UpsertDeckPayload>>;
+  UpsertDeckPlayerAttributeTupleInput: ResolverTypeWrapper<Partial<UpsertDeckPlayerAttributeTupleInput>>;
+  UpsertDeckPlayerAttributeTuplePayload: ResolverTypeWrapper<Partial<UpsertDeckPlayerAttributeTuplePayload>>;
+  UpsertDeckPlayerAttributeTupleWhere: ResolverTypeWrapper<Partial<UpsertDeckPlayerAttributeTupleWhere>>;
+  UpsertDeckShareInput: ResolverTypeWrapper<Partial<UpsertDeckShareInput>>;
+  UpsertDeckSharePayload: ResolverTypeWrapper<Partial<UpsertDeckSharePayload>>;
+  UpsertDeckShareWhere: ResolverTypeWrapper<Partial<UpsertDeckShareWhere>>;
+  UpsertDeckWhere: ResolverTypeWrapper<Partial<UpsertDeckWhere>>;
+  UpsertFriendInput: ResolverTypeWrapper<Partial<UpsertFriendInput>>;
+  UpsertFriendPayload: ResolverTypeWrapper<Partial<UpsertFriendPayload>>;
+  UpsertFriendWhere: ResolverTypeWrapper<Partial<UpsertFriendWhere>>;
+  UpsertGameInput: ResolverTypeWrapper<Partial<UpsertGameInput>>;
+  UpsertGamePayload: ResolverTypeWrapper<Partial<UpsertGamePayload>>;
+  UpsertGameUserInput: ResolverTypeWrapper<Partial<UpsertGameUserInput>>;
+  UpsertGameUserPayload: ResolverTypeWrapper<Partial<UpsertGameUserPayload>>;
+  UpsertGameUserWhere: ResolverTypeWrapper<Partial<UpsertGameUserWhere>>;
+  UpsertGameWhere: ResolverTypeWrapper<Partial<UpsertGameWhere>>;
+  UpsertGuestInput: ResolverTypeWrapper<Partial<UpsertGuestInput>>;
+  UpsertGuestPayload: ResolverTypeWrapper<Partial<UpsertGuestPayload>>;
+  UpsertGuestWhere: ResolverTypeWrapper<Partial<UpsertGuestWhere>>;
+  UpsertMatchmakingQueueInput: ResolverTypeWrapper<Partial<UpsertMatchmakingQueueInput>>;
+  UpsertMatchmakingQueuePayload: ResolverTypeWrapper<Partial<UpsertMatchmakingQueuePayload>>;
+  UpsertMatchmakingQueueWhere: ResolverTypeWrapper<Partial<UpsertMatchmakingQueueWhere>>;
+  UpsertMatchmakingTicketInput: ResolverTypeWrapper<Partial<UpsertMatchmakingTicketInput>>;
+  UpsertMatchmakingTicketPayload: ResolverTypeWrapper<Partial<UpsertMatchmakingTicketPayload>>;
+  UpsertMatchmakingTicketWhere: ResolverTypeWrapper<Partial<UpsertMatchmakingTicketWhere>>;
+  UpsertUserEntityAddonInput: ResolverTypeWrapper<Partial<UpsertUserEntityAddonInput>>;
+  UpsertUserEntityAddonPayload: ResolverTypeWrapper<Partial<UpsertUserEntityAddonPayload>>;
+  UpsertUserEntityAddonWhere: ResolverTypeWrapper<Partial<UpsertUserEntityAddonWhere>>;
   UserEntityAddon: ResolverTypeWrapper<Partial<UserEntityAddon>>;
   UserEntityAddonCondition: ResolverTypeWrapper<Partial<UserEntityAddonCondition>>;
   UserEntityAddonFilter: ResolverTypeWrapper<Partial<UserEntityAddonFilter>>;
@@ -4948,6 +5544,45 @@ export type ResolversParentTypes = {
   UpdateUserEntityAddonByIdInput: Partial<UpdateUserEntityAddonByIdInput>;
   UpdateUserEntityAddonInput: Partial<UpdateUserEntityAddonInput>;
   UpdateUserEntityAddonPayload: Partial<UpdateUserEntityAddonPayload>;
+  UpsertBotUserInput: Partial<UpsertBotUserInput>;
+  UpsertBotUserPayload: Partial<UpsertBotUserPayload>;
+  UpsertBotUserWhere: Partial<UpsertBotUserWhere>;
+  UpsertCardInput: Partial<UpsertCardInput>;
+  UpsertCardPayload: Partial<UpsertCardPayload>;
+  UpsertCardWhere: Partial<UpsertCardWhere>;
+  UpsertCardsInDeckInput: Partial<UpsertCardsInDeckInput>;
+  UpsertCardsInDeckPayload: Partial<UpsertCardsInDeckPayload>;
+  UpsertCardsInDeckWhere: Partial<UpsertCardsInDeckWhere>;
+  UpsertDeckInput: Partial<UpsertDeckInput>;
+  UpsertDeckPayload: Partial<UpsertDeckPayload>;
+  UpsertDeckPlayerAttributeTupleInput: Partial<UpsertDeckPlayerAttributeTupleInput>;
+  UpsertDeckPlayerAttributeTuplePayload: Partial<UpsertDeckPlayerAttributeTuplePayload>;
+  UpsertDeckPlayerAttributeTupleWhere: Partial<UpsertDeckPlayerAttributeTupleWhere>;
+  UpsertDeckShareInput: Partial<UpsertDeckShareInput>;
+  UpsertDeckSharePayload: Partial<UpsertDeckSharePayload>;
+  UpsertDeckShareWhere: Partial<UpsertDeckShareWhere>;
+  UpsertDeckWhere: Partial<UpsertDeckWhere>;
+  UpsertFriendInput: Partial<UpsertFriendInput>;
+  UpsertFriendPayload: Partial<UpsertFriendPayload>;
+  UpsertFriendWhere: Partial<UpsertFriendWhere>;
+  UpsertGameInput: Partial<UpsertGameInput>;
+  UpsertGamePayload: Partial<UpsertGamePayload>;
+  UpsertGameUserInput: Partial<UpsertGameUserInput>;
+  UpsertGameUserPayload: Partial<UpsertGameUserPayload>;
+  UpsertGameUserWhere: Partial<UpsertGameUserWhere>;
+  UpsertGameWhere: Partial<UpsertGameWhere>;
+  UpsertGuestInput: Partial<UpsertGuestInput>;
+  UpsertGuestPayload: Partial<UpsertGuestPayload>;
+  UpsertGuestWhere: Partial<UpsertGuestWhere>;
+  UpsertMatchmakingQueueInput: Partial<UpsertMatchmakingQueueInput>;
+  UpsertMatchmakingQueuePayload: Partial<UpsertMatchmakingQueuePayload>;
+  UpsertMatchmakingQueueWhere: Partial<UpsertMatchmakingQueueWhere>;
+  UpsertMatchmakingTicketInput: Partial<UpsertMatchmakingTicketInput>;
+  UpsertMatchmakingTicketPayload: Partial<UpsertMatchmakingTicketPayload>;
+  UpsertMatchmakingTicketWhere: Partial<UpsertMatchmakingTicketWhere>;
+  UpsertUserEntityAddonInput: Partial<UpsertUserEntityAddonInput>;
+  UpsertUserEntityAddonPayload: Partial<UpsertUserEntityAddonPayload>;
+  UpsertUserEntityAddonWhere: Partial<UpsertUserEntityAddonWhere>;
   UserEntityAddon: Partial<UserEntityAddon>;
   UserEntityAddonCondition: Partial<UserEntityAddonCondition>;
   UserEntityAddonFilter: Partial<UserEntityAddonFilter>;
@@ -4985,6 +5620,7 @@ export type CardResolvers<ContextType = any, ParentType extends ResolversParentT
   blocklyWorkspace?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   cardScript?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   cardsInDecksByCardId?: Resolver<ResolversTypes['CardsInDecksConnection'], ParentType, ContextType, RequireFields<CardCardsInDecksByCardIdArgs, 'orderBy'>>;
+  cost?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Datetime'], ParentType, ContextType>;
   createdBy?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -5595,6 +6231,19 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateMatchmakingTicketByUserId?: Resolver<Maybe<ResolversTypes['UpdateMatchmakingTicketPayload']>, ParentType, ContextType, RequireFields<MutationUpdateMatchmakingTicketByUserIdArgs, 'input'>>;
   updateUserEntityAddon?: Resolver<Maybe<ResolversTypes['UpdateUserEntityAddonPayload']>, ParentType, ContextType, RequireFields<MutationUpdateUserEntityAddonArgs, 'input'>>;
   updateUserEntityAddonById?: Resolver<Maybe<ResolversTypes['UpdateUserEntityAddonPayload']>, ParentType, ContextType, RequireFields<MutationUpdateUserEntityAddonByIdArgs, 'input'>>;
+  upsertBotUser?: Resolver<Maybe<ResolversTypes['UpsertBotUserPayload']>, ParentType, ContextType, RequireFields<MutationUpsertBotUserArgs, 'input'>>;
+  upsertCard?: Resolver<Maybe<ResolversTypes['UpsertCardPayload']>, ParentType, ContextType, RequireFields<MutationUpsertCardArgs, 'input'>>;
+  upsertCardsInDeck?: Resolver<Maybe<ResolversTypes['UpsertCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationUpsertCardsInDeckArgs, 'input'>>;
+  upsertDeck?: Resolver<Maybe<ResolversTypes['UpsertDeckPayload']>, ParentType, ContextType, RequireFields<MutationUpsertDeckArgs, 'input'>>;
+  upsertDeckPlayerAttributeTuple?: Resolver<Maybe<ResolversTypes['UpsertDeckPlayerAttributeTuplePayload']>, ParentType, ContextType, RequireFields<MutationUpsertDeckPlayerAttributeTupleArgs, 'input'>>;
+  upsertDeckShare?: Resolver<Maybe<ResolversTypes['UpsertDeckSharePayload']>, ParentType, ContextType, RequireFields<MutationUpsertDeckShareArgs, 'input'>>;
+  upsertFriend?: Resolver<Maybe<ResolversTypes['UpsertFriendPayload']>, ParentType, ContextType, RequireFields<MutationUpsertFriendArgs, 'input'>>;
+  upsertGame?: Resolver<Maybe<ResolversTypes['UpsertGamePayload']>, ParentType, ContextType, RequireFields<MutationUpsertGameArgs, 'input'>>;
+  upsertGameUser?: Resolver<Maybe<ResolversTypes['UpsertGameUserPayload']>, ParentType, ContextType, RequireFields<MutationUpsertGameUserArgs, 'input'>>;
+  upsertGuest?: Resolver<Maybe<ResolversTypes['UpsertGuestPayload']>, ParentType, ContextType, RequireFields<MutationUpsertGuestArgs, 'input'>>;
+  upsertMatchmakingQueue?: Resolver<Maybe<ResolversTypes['UpsertMatchmakingQueuePayload']>, ParentType, ContextType, RequireFields<MutationUpsertMatchmakingQueueArgs, 'input'>>;
+  upsertMatchmakingTicket?: Resolver<Maybe<ResolversTypes['UpsertMatchmakingTicketPayload']>, ParentType, ContextType, RequireFields<MutationUpsertMatchmakingTicketArgs, 'input'>>;
+  upsertUserEntityAddon?: Resolver<Maybe<ResolversTypes['UpsertUserEntityAddonPayload']>, ParentType, ContextType, RequireFields<MutationUpsertUserEntityAddonArgs, 'input'>>;
 };
 
 export type NodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
@@ -5771,6 +6420,119 @@ export type UpdateUserEntityAddonPayloadResolvers<ContextType = any, ParentType 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UpsertBotUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertBotUserPayload'] = ResolversParentTypes['UpsertBotUserPayload']> = {
+  botUser?: Resolver<Maybe<ResolversTypes['BotUser']>, ParentType, ContextType>;
+  botUserEdge?: Resolver<Maybe<ResolversTypes['BotUsersEdge']>, ParentType, ContextType, RequireFields<UpsertBotUserPayloadBotUserEdgeArgs, 'orderBy'>>;
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpsertCardPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertCardPayload'] = ResolversParentTypes['UpsertCardPayload']> = {
+  card?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType>;
+  cardEdge?: Resolver<Maybe<ResolversTypes['CardsEdge']>, ParentType, ContextType, RequireFields<UpsertCardPayloadCardEdgeArgs, 'orderBy'>>;
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpsertCardsInDeckPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertCardsInDeckPayload'] = ResolversParentTypes['UpsertCardsInDeckPayload']> = {
+  cardByCardId?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType>;
+  cardsInDeck?: Resolver<Maybe<ResolversTypes['CardsInDeck']>, ParentType, ContextType>;
+  cardsInDeckEdge?: Resolver<Maybe<ResolversTypes['CardsInDecksEdge']>, ParentType, ContextType, RequireFields<UpsertCardsInDeckPayloadCardsInDeckEdgeArgs, 'orderBy'>>;
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  deckByDeckId?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpsertDeckPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertDeckPayload'] = ResolversParentTypes['UpsertDeckPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  deck?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
+  deckEdge?: Resolver<Maybe<ResolversTypes['DecksEdge']>, ParentType, ContextType, RequireFields<UpsertDeckPayloadDeckEdgeArgs, 'orderBy'>>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpsertDeckPlayerAttributeTuplePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertDeckPlayerAttributeTuplePayload'] = ResolversParentTypes['UpsertDeckPlayerAttributeTuplePayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  deckByDeckId?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
+  deckPlayerAttributeTuple?: Resolver<Maybe<ResolversTypes['DeckPlayerAttributeTuple']>, ParentType, ContextType>;
+  deckPlayerAttributeTupleEdge?: Resolver<Maybe<ResolversTypes['DeckPlayerAttributeTuplesEdge']>, ParentType, ContextType, RequireFields<UpsertDeckPlayerAttributeTuplePayloadDeckPlayerAttributeTupleEdgeArgs, 'orderBy'>>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpsertDeckSharePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertDeckSharePayload'] = ResolversParentTypes['UpsertDeckSharePayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  deckByDeckId?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
+  deckShare?: Resolver<Maybe<ResolversTypes['DeckShare']>, ParentType, ContextType>;
+  deckShareEdge?: Resolver<Maybe<ResolversTypes['DeckSharesEdge']>, ParentType, ContextType, RequireFields<UpsertDeckSharePayloadDeckShareEdgeArgs, 'orderBy'>>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpsertFriendPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertFriendPayload'] = ResolversParentTypes['UpsertFriendPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  friend?: Resolver<Maybe<ResolversTypes['Friend']>, ParentType, ContextType>;
+  friendEdge?: Resolver<Maybe<ResolversTypes['FriendsEdge']>, ParentType, ContextType, RequireFields<UpsertFriendPayloadFriendEdgeArgs, 'orderBy'>>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpsertGamePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertGamePayload'] = ResolversParentTypes['UpsertGamePayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  game?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType>;
+  gameEdge?: Resolver<Maybe<ResolversTypes['GamesEdge']>, ParentType, ContextType, RequireFields<UpsertGamePayloadGameEdgeArgs, 'orderBy'>>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpsertGameUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertGameUserPayload'] = ResolversParentTypes['UpsertGameUserPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  deckByDeckId?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
+  gameByGameId?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType>;
+  gameUser?: Resolver<Maybe<ResolversTypes['GameUser']>, ParentType, ContextType>;
+  gameUserEdge?: Resolver<Maybe<ResolversTypes['GameUsersEdge']>, ParentType, ContextType, RequireFields<UpsertGameUserPayloadGameUserEdgeArgs, 'orderBy'>>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpsertGuestPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertGuestPayload'] = ResolversParentTypes['UpsertGuestPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  guest?: Resolver<Maybe<ResolversTypes['Guest']>, ParentType, ContextType>;
+  guestEdge?: Resolver<Maybe<ResolversTypes['GuestsEdge']>, ParentType, ContextType, RequireFields<UpsertGuestPayloadGuestEdgeArgs, 'orderBy'>>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpsertMatchmakingQueuePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertMatchmakingQueuePayload'] = ResolversParentTypes['UpsertMatchmakingQueuePayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  matchmakingQueue?: Resolver<Maybe<ResolversTypes['MatchmakingQueue']>, ParentType, ContextType>;
+  matchmakingQueueEdge?: Resolver<Maybe<ResolversTypes['MatchmakingQueuesEdge']>, ParentType, ContextType, RequireFields<UpsertMatchmakingQueuePayloadMatchmakingQueueEdgeArgs, 'orderBy'>>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpsertMatchmakingTicketPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertMatchmakingTicketPayload'] = ResolversParentTypes['UpsertMatchmakingTicketPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  deckByBotDeckId?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
+  deckByDeckId?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
+  matchmakingQueueByQueueId?: Resolver<Maybe<ResolversTypes['MatchmakingQueue']>, ParentType, ContextType>;
+  matchmakingTicket?: Resolver<Maybe<ResolversTypes['MatchmakingTicket']>, ParentType, ContextType>;
+  matchmakingTicketEdge?: Resolver<Maybe<ResolversTypes['MatchmakingTicketsEdge']>, ParentType, ContextType, RequireFields<UpsertMatchmakingTicketPayloadMatchmakingTicketEdgeArgs, 'orderBy'>>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpsertUserEntityAddonPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertUserEntityAddonPayload'] = ResolversParentTypes['UpsertUserEntityAddonPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  userEntityAddon?: Resolver<Maybe<ResolversTypes['UserEntityAddon']>, ParentType, ContextType>;
+  userEntityAddonEdge?: Resolver<Maybe<ResolversTypes['UserEntityAddonsEdge']>, ParentType, ContextType, RequireFields<UpsertUserEntityAddonPayloadUserEntityAddonEdgeArgs, 'orderBy'>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UserEntityAddonResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserEntityAddon'] = ResolversParentTypes['UserEntityAddon']> = {
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   migrated?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -5879,31 +6641,54 @@ export type Resolvers<ContextType = any> = {
   UpdateMatchmakingQueuePayload?: UpdateMatchmakingQueuePayloadResolvers<ContextType>;
   UpdateMatchmakingTicketPayload?: UpdateMatchmakingTicketPayloadResolvers<ContextType>;
   UpdateUserEntityAddonPayload?: UpdateUserEntityAddonPayloadResolvers<ContextType>;
+  UpsertBotUserPayload?: UpsertBotUserPayloadResolvers<ContextType>;
+  UpsertCardPayload?: UpsertCardPayloadResolvers<ContextType>;
+  UpsertCardsInDeckPayload?: UpsertCardsInDeckPayloadResolvers<ContextType>;
+  UpsertDeckPayload?: UpsertDeckPayloadResolvers<ContextType>;
+  UpsertDeckPlayerAttributeTuplePayload?: UpsertDeckPlayerAttributeTuplePayloadResolvers<ContextType>;
+  UpsertDeckSharePayload?: UpsertDeckSharePayloadResolvers<ContextType>;
+  UpsertFriendPayload?: UpsertFriendPayloadResolvers<ContextType>;
+  UpsertGamePayload?: UpsertGamePayloadResolvers<ContextType>;
+  UpsertGameUserPayload?: UpsertGameUserPayloadResolvers<ContextType>;
+  UpsertGuestPayload?: UpsertGuestPayloadResolvers<ContextType>;
+  UpsertMatchmakingQueuePayload?: UpsertMatchmakingQueuePayloadResolvers<ContextType>;
+  UpsertMatchmakingTicketPayload?: UpsertMatchmakingTicketPayloadResolvers<ContextType>;
+  UpsertUserEntityAddonPayload?: UpsertUserEntityAddonPayloadResolvers<ContextType>;
   UserEntityAddon?: UserEntityAddonResolvers<ContextType>;
   UserEntityAddonsConnection?: UserEntityAddonsConnectionResolvers<ContextType>;
   UserEntityAddonsEdge?: UserEntityAddonsEdgeResolvers<ContextType>;
 };
 
 
-export type CardFragment = { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null };
+export type CardFragment = { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null };
 
 export type DeckFragment = { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null };
 
 export type DeckCardIdsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string } | null> } };
 
-export type DeckCardsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null } | null } | null> } };
+export type DeckCardsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null } | null> } };
 
 export type ImageFragment = { __typename?: 'ImageDef', id: string, name: string, height: number, width: number, src: string };
+
+export type DeleteCardMutationVariables = Exact<{
+  cardId: Scalars['String'];
+}>;
+
+
+export type DeleteCardMutation = { __typename?: 'Mutation', deleteCardById?: { __typename?: 'DeleteCardPayload', card?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null } | null };
+
+export type UpsertCardMutationVariables = Exact<{
+  cardId: Scalars['String'];
+  card: CardInput;
+}>;
+
+
+export type UpsertCardMutation = { __typename?: 'Mutation', upsertCard?: { __typename?: 'UpsertCardPayload', card?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null } | null };
 
 export type GetAllArtQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllArtQuery = { __typename?: 'Query', allArt: Array<{ __typename?: 'ImageDef', id: string, name: string, height: number, width: number, src: string }> };
-
-export type GetAllCardsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAllCardsQuery = { __typename?: 'Query', allCards?: { __typename?: 'CardsConnection', totalCount: number, nodes: Array<{ __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null } | null> } | null };
 
 export type GetArtQueryVariables = Exact<{
   id: Scalars['String'];
@@ -5917,14 +6702,23 @@ export type GetCardQueryVariables = Exact<{
 }>;
 
 
-export type GetCardQuery = { __typename?: 'Query', cardById?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null } | null };
+export type GetCardQuery = { __typename?: 'Query', cardById?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null };
+
+export type GetCardsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']>;
+  filter?: InputMaybe<CardFilter>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetCardsQuery = { __typename?: 'Query', allCards?: { __typename?: 'CardsConnection', totalCount: number, nodes: Array<{ __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null> } | null };
 
 export type GetDeckQueryVariables = Exact<{
   deckId: Scalars['String'];
 }>;
 
 
-export type GetDeckQuery = { __typename?: 'Query', deckById?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null } | null } | null> } } | null };
+export type GetDeckQuery = { __typename?: 'Query', deckById?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null } | null> } } | null };
 
 export type GetDecksQueryVariables = Exact<{
   user: Scalars['String'];
@@ -5932,15 +6726,6 @@ export type GetDecksQueryVariables = Exact<{
 
 
 export type GetDecksQuery = { __typename?: 'Query', allDecks?: { __typename?: 'DecksConnection', nodes: Array<{ __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null } | null> } | null, allDeckShares?: { __typename?: 'DeckSharesConnection', nodes: Array<{ __typename?: 'DeckShare', deckByDeckId?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null } | null } | null> } | null };
-
-export type GetPagedCardsQueryVariables = Exact<{
-  limit: Scalars['Int'];
-  filter?: InputMaybe<CardFilter>;
-  offset?: InputMaybe<Scalars['Int']>;
-}>;
-
-
-export type GetPagedCardsQuery = { __typename?: 'Query', allCards?: { __typename?: 'CardsConnection', totalCount: number, nodes: Array<{ __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null } | null> } | null };
 
 export const DeckFragmentDoc = gql`
     fragment deck on Deck {
@@ -5967,6 +6752,7 @@ export const CardFragmentDoc = gql`
   createdBy
   cardScript
   uri
+  blocklyWorkspace
 }
     `;
 export const DeckCardsFragmentDoc = gql`
@@ -5990,6 +6776,77 @@ export const ImageFragmentDoc = gql`
   src
 }
     `;
+export const DeleteCardDocument = gql`
+    mutation deleteCard($cardId: String!) {
+  deleteCardById(input: {id: $cardId}) {
+    card {
+      ...card
+    }
+  }
+}
+    ${CardFragmentDoc}`;
+export type DeleteCardMutationFn = Apollo.MutationFunction<DeleteCardMutation, DeleteCardMutationVariables>;
+
+/**
+ * __useDeleteCardMutation__
+ *
+ * To run a mutation, you first call `useDeleteCardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCardMutation, { data, loading, error }] = useDeleteCardMutation({
+ *   variables: {
+ *      cardId: // value for 'cardId'
+ *   },
+ * });
+ */
+export function useDeleteCardMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCardMutation, DeleteCardMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCardMutation, DeleteCardMutationVariables>(DeleteCardDocument, options);
+      }
+export type DeleteCardMutationHookResult = ReturnType<typeof useDeleteCardMutation>;
+export type DeleteCardMutationResult = Apollo.MutationResult<DeleteCardMutation>;
+export type DeleteCardMutationOptions = Apollo.BaseMutationOptions<DeleteCardMutation, DeleteCardMutationVariables>;
+export const UpsertCardDocument = gql`
+    mutation upsertCard($cardId: String!, $card: CardInput!) {
+  upsertCard(where: {id: $cardId}, input: {card: $card}) {
+    card {
+      ...card
+    }
+  }
+}
+    ${CardFragmentDoc}`;
+export type UpsertCardMutationFn = Apollo.MutationFunction<UpsertCardMutation, UpsertCardMutationVariables>;
+
+/**
+ * __useUpsertCardMutation__
+ *
+ * To run a mutation, you first call `useUpsertCardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpsertCardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [upsertCardMutation, { data, loading, error }] = useUpsertCardMutation({
+ *   variables: {
+ *      cardId: // value for 'cardId'
+ *      card: // value for 'card'
+ *   },
+ * });
+ */
+export function useUpsertCardMutation(baseOptions?: Apollo.MutationHookOptions<UpsertCardMutation, UpsertCardMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpsertCardMutation, UpsertCardMutationVariables>(UpsertCardDocument, options);
+      }
+export type UpsertCardMutationHookResult = ReturnType<typeof useUpsertCardMutation>;
+export type UpsertCardMutationResult = Apollo.MutationResult<UpsertCardMutation>;
+export type UpsertCardMutationOptions = Apollo.BaseMutationOptions<UpsertCardMutation, UpsertCardMutationVariables>;
 export const GetAllArtDocument = gql`
     query getAllArt {
   allArt {
@@ -6024,43 +6881,6 @@ export function useGetAllArtLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetAllArtQueryHookResult = ReturnType<typeof useGetAllArtQuery>;
 export type GetAllArtLazyQueryHookResult = ReturnType<typeof useGetAllArtLazyQuery>;
 export type GetAllArtQueryResult = Apollo.QueryResult<GetAllArtQuery, GetAllArtQueryVariables>;
-export const GetAllCardsDocument = gql`
-    query getAllCards {
-  allCards {
-    nodes {
-      ...card
-    }
-    totalCount
-  }
-}
-    ${CardFragmentDoc}`;
-
-/**
- * __useGetAllCardsQuery__
- *
- * To run a query within a React component, call `useGetAllCardsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllCardsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAllCardsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetAllCardsQuery(baseOptions?: Apollo.QueryHookOptions<GetAllCardsQuery, GetAllCardsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAllCardsQuery, GetAllCardsQueryVariables>(GetAllCardsDocument, options);
-      }
-export function useGetAllCardsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllCardsQuery, GetAllCardsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAllCardsQuery, GetAllCardsQueryVariables>(GetAllCardsDocument, options);
-        }
-export type GetAllCardsQueryHookResult = ReturnType<typeof useGetAllCardsQuery>;
-export type GetAllCardsLazyQueryHookResult = ReturnType<typeof useGetAllCardsLazyQuery>;
-export type GetAllCardsQueryResult = Apollo.QueryResult<GetAllCardsQuery, GetAllCardsQueryVariables>;
 export const GetArtDocument = gql`
     query getArt($id: String!) {
   artById(id: $id) {
@@ -6131,6 +6951,46 @@ export function useGetCardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetCardQueryHookResult = ReturnType<typeof useGetCardQuery>;
 export type GetCardLazyQueryHookResult = ReturnType<typeof useGetCardLazyQuery>;
 export type GetCardQueryResult = Apollo.QueryResult<GetCardQuery, GetCardQueryVariables>;
+export const GetCardsDocument = gql`
+    query getCards($limit: Int, $filter: CardFilter, $offset: Int) {
+  allCards(offset: $offset, filter: $filter, first: $limit) {
+    nodes {
+      ...card
+    }
+    totalCount
+  }
+}
+    ${CardFragmentDoc}`;
+
+/**
+ * __useGetCardsQuery__
+ *
+ * To run a query within a React component, call `useGetCardsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCardsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCardsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      filter: // value for 'filter'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetCardsQuery(baseOptions?: Apollo.QueryHookOptions<GetCardsQuery, GetCardsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCardsQuery, GetCardsQueryVariables>(GetCardsDocument, options);
+      }
+export function useGetCardsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCardsQuery, GetCardsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCardsQuery, GetCardsQueryVariables>(GetCardsDocument, options);
+        }
+export type GetCardsQueryHookResult = ReturnType<typeof useGetCardsQuery>;
+export type GetCardsLazyQueryHookResult = ReturnType<typeof useGetCardsLazyQuery>;
+export type GetCardsQueryResult = Apollo.QueryResult<GetCardsQuery, GetCardsQueryVariables>;
 export const GetDeckDocument = gql`
     query getDeck($deckId: String!) {
   deckById(id: $deckId) {
@@ -6212,43 +7072,3 @@ export function useGetDecksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetDecksQueryHookResult = ReturnType<typeof useGetDecksQuery>;
 export type GetDecksLazyQueryHookResult = ReturnType<typeof useGetDecksLazyQuery>;
 export type GetDecksQueryResult = Apollo.QueryResult<GetDecksQuery, GetDecksQueryVariables>;
-export const GetPagedCardsDocument = gql`
-    query getPagedCards($limit: Int!, $filter: CardFilter, $offset: Int) {
-  allCards(offset: $offset, filter: $filter, first: $limit) {
-    nodes {
-      ...card
-    }
-    totalCount
-  }
-}
-    ${CardFragmentDoc}`;
-
-/**
- * __useGetPagedCardsQuery__
- *
- * To run a query within a React component, call `useGetPagedCardsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPagedCardsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetPagedCardsQuery({
- *   variables: {
- *      limit: // value for 'limit'
- *      filter: // value for 'filter'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetPagedCardsQuery(baseOptions: Apollo.QueryHookOptions<GetPagedCardsQuery, GetPagedCardsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetPagedCardsQuery, GetPagedCardsQueryVariables>(GetPagedCardsDocument, options);
-      }
-export function useGetPagedCardsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPagedCardsQuery, GetPagedCardsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetPagedCardsQuery, GetPagedCardsQueryVariables>(GetPagedCardsDocument, options);
-        }
-export type GetPagedCardsQueryHookResult = ReturnType<typeof useGetPagedCardsQuery>;
-export type GetPagedCardsLazyQueryHookResult = ReturnType<typeof useGetPagedCardsLazyQuery>;
-export type GetPagedCardsQueryResult = Apollo.QueryResult<GetPagedCardsQuery, GetPagedCardsQueryVariables>;

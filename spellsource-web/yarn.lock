@@ -3464,9 +3464,9 @@ aws-sign2@~0.7.0:
   integrity sha512-08kcGqnYf/YmjoRhfxyu+CLxBjUtHLXLXX/vUfx9l2LYzG3c1m61nrpyFUZI6zeS+Li/wWMMidD9KgrqtGq3mA==
 
 aws4@^1.8.0:
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
-  integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.12.0.tgz#ce1c9d143389679e253b314241ea9aa5cec980d3"
+  integrity sha512-NmWvPnx0F1SfrQbYwOi7OeaNGokp9XhzNioJ/CSBs8Qa4vxug81mhJEAVZwxXuBmYB5KDRfMq/F3RR0BIU7sWg==
 
 babel-jest@^26.0.0, babel-jest@^26.6.3:
   version "26.6.3"
@@ -3687,12 +3687,12 @@ bl@^4.0.3, bl@^4.1.0:
     inherits "^2.0.4"
     readable-stream "^3.4.0"
 
-blockly@^3.20200924.2:
-  version "3.20200924.4"
-  resolved "https://registry.yarnpkg.com/blockly/-/blockly-3.20200924.4.tgz#bc79169e601e76451ecf29a3733af2a8a38f44fe"
-  integrity sha512-KDPVLJSguxwKXL6GVdVaYRINoxtojTsQ4lOhuWS9LkzyMhmQVZKMgFzlQum5rE5+hlhzj1BqqUQHe8JbfvL+dQ==
+blockly@7.20211209.4:
+  version "7.20211209.4"
+  resolved "https://registry.yarnpkg.com/blockly/-/blockly-7.20211209.4.tgz#ad6ebcaec9197e5a83706d6a63ff7fab248787ee"
+  integrity sha512-Oaf8hWCbqa4M15MPHJutQxWditoXBZfWf6o7zPHOFiRayoaWTQBW1BdvVgAD6eJIGQoyWaFtEoyz5aT18AvE8A==
   dependencies:
-    jsdom "^15.2.1"
+    jsdom "15.2.1"
 
 body-parser@1.20.1:
   version "1.20.1"
@@ -5425,10 +5425,15 @@ extract-files@^9.0.0:
   resolved "https://registry.yarnpkg.com/extract-files/-/extract-files-9.0.0.tgz#8a7744f2437f81f5ed3250ed9f1550de902fe54a"
   integrity sha512-CvdFfHkC95B4bBBk36hcEmvdR2awOdhhVUYH6S/zrVj3477zven/fJMYg7121h4T1xHZC+tetUpubpAhxwI7hQ==
 
-extsprintf@1.3.0, extsprintf@^1.2.0:
+extsprintf@1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.3.0.tgz#96918440e3041a7a414f8c52e3c574eb3c3e1e05"
   integrity sha512-11Ndz7Nv+mvAC1j0ktTa7fAb0vLyGGX+rMHNBYQviQDGU0Hw7lhctJANqbPhu9nV9/izT/IntTgZ7Im/9LJs9g==
+
+extsprintf@^1.2.0:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.1.tgz#8d172c064867f235c0c84a596806d279bf4bcc07"
+  integrity sha512-Wrk35e8ydCKDj/ArClo1VrPVmN8zph5V4AtHwIuHhvMXsKf73UT3BOD+azBIW+3wOJ4FhEH7zyaJCFvChjYvMA==
 
 fast-decode-uri-component@^1.0.1:
   version "1.0.1"
@@ -5921,7 +5926,7 @@ graphile-build-pg@4.13.0:
     lru-cache ">=4 <5"
     pg-sql2 "4.13.0"
 
-graphile-build@4.13.0:
+graphile-build@4, graphile-build@4.13.0:
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/graphile-build/-/graphile-build-4.13.0.tgz#9f6bfb67df4c1fc845cea0e4f35426c8d669f623"
   integrity sha512-KPBrHgRw5fury6l9WEQH6ys1UtnxrRrG+Ehnr68NvfNELp4T+QsekTSVFi5LWoJOaXvdYMqP2L8MFBRQP2vKsw==
@@ -7322,7 +7327,7 @@ jsbn@~0.1.0:
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
   integrity sha512-UVU9dibq2JcFWxQPA6KCqj5O42VOmAY3zQUfEKxU0KpTGXwNoCjkX1e13eHNvw/xPynt6pU0rZ1htjWTNTSXsg==
 
-jsdom@^15.2.1:
+jsdom@15.2.1:
   version "15.2.1"
   resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-15.2.1.tgz#d2feb1aef7183f86be521b8c6833ff5296d07ec5"
   integrity sha512-fAl1W0/7T2G5vURSyxBzrJ1LSdQn6Tr5UX/xD4PXDx/PDgwygedfW6El/KIj3xJ7FU61TTYnc/l/B7P49Eqt6g==
@@ -9170,6 +9175,13 @@ postgraphile-plugin-connection-filter@^2.3.0:
   dependencies:
     tslib "^2.3.0"
 
+postgraphile-upsert-plugin@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/postgraphile-upsert-plugin/-/postgraphile-upsert-plugin-3.2.2.tgz#0ed23abe59e60abdcc17b9c624d54dd312409e35"
+  integrity sha512-npZ5Kxx0CeEbko16hcKztXTjJOpen+JDxCuFmFFsR8PY3heEQT+zduRm8O73sErfTCJVPCz1mGH2rMGJn6YL8Q==
+  dependencies:
+    graphile-build "4"
+
 postgraphile@^4.13.0:
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/postgraphile/-/postgraphile-4.13.0.tgz#ed8cb05e6919e09d4a90bd8d9db6941eb3ce7690"
@@ -10079,12 +10091,12 @@ sade@^1.7.3:
   dependencies:
     mri "^1.1.0"
 
-safe-buffer@5.2.1, safe-buffer@~5.2.0:
+safe-buffer@5.2.1, safe-buffer@^5.1.2, safe-buffer@~5.2.0:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
 
-safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.2:
+safe-buffer@^5.0.1, safe-buffer@^5.1.0:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==

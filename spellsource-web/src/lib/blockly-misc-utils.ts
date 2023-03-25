@@ -1,6 +1,5 @@
 import Blockly, {Block, BlockSvg} from 'blockly'
 import * as JsonConversionUtils from './json-conversion-utils'
-import {has} from 'lodash'
 import {FieldLabelSerializableHidden} from '../components/field-label-serializable-hidden'
 import {FieldLabelPlural} from "../components/field-label-plural";
 import * as BlocklyModification from "./blockly-modification";
@@ -8,6 +7,7 @@ import {CardDef} from "../components/card-display";
 import {BlocklyDataContext} from "../pages/card-editor";
 import {ContextType} from "react";
 import {BlockDef} from "./blocks";
+import {InitBlockOptions} from "../components/card-editor-workspace";
 
 export const toHappyFormatting = (string: string) => string.split('_')
   .map(w => w[0].toUpperCase() + w.substring(1).toLowerCase())
@@ -44,7 +44,7 @@ export function manuallyAddShadowBlocks(thisBlock: Block, block: Block) {
         if (!!arg) {
           const shadow = arg.shadow
           if (!!shadow && !thisBlock.getInput(arg.name).connection.targetBlock()) {
-            let shadowBlock = JsonConversionUtils.newBlock(thisBlock.workspace, shadow.type)
+            let shadowBlock = newBlock(thisBlock.workspace, shadow.type)
             if (shadow.notActuallyShadow && !thisBlock.isShadow()) {
               if (shadow.type.endsWith('SHADOW')) {
                 shadowBlock.setMovable(false)
@@ -202,11 +202,11 @@ export function cardMessage(card: CardDef) {
   return ret
 }
 
-export function initBlocks(data: ContextType<typeof BlocklyDataContext>) {
+export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options: InitBlockOptions) {
   try {
     Blockly.fieldRegistry.register('field_label_serializable_hidden', FieldLabelSerializableHidden)
     Blockly.fieldRegistry.register('field_label_plural', FieldLabelPlural)
-    BlocklyModification.modifyAll()
+    BlocklyModification.modifyAll(options)
   } catch (e) {
     // already registered
   }
@@ -341,7 +341,7 @@ export function initCardBlocks(data: ContextType<typeof BlocklyDataContext>) {
       }
       addBlock(block)
     } else {
-      console.warn(`${card.id} had invalid hero class`)
+      // console.warn(`${card.id} had invalid hero class`)
     }
 
 
@@ -413,36 +413,6 @@ export function tertiaryColor(color) {
 }
 
 export function loadableInit(Blockly) {
-  if (!Blockly.Css.injected_) {
-    Blockly.Css.register(`
-.blocklyCommentTextarea {
-    color: black;
-    caret-color: black;
-    font-size: 12 pt;
-    background-color: lightgray;
-}
-
-.blocklyTooltipDiv {
-    opacity: 1;
-    font-size: 10 pt;
-}
-
-.blackText {
-    fill: #000 !important;
-}
-
-.blocklyHtmlTextAreaInput {
-    background-color: white !important;
-    color: black !important;
-}
-      `
-      .replaceAll(',', '')
-      .replaceAll('  ', '')
-      .replaceAll('\n\n', '\n')
-      .split('\n')
-    );
-  }
-
   setTimeout(() => {
     const all = Blockly.Workspace.getAll()
     for (let i = 0; i < all.length; i++) {
@@ -614,13 +584,18 @@ export function initArtBlcks(data: ContextType<typeof BlocklyDataContext>) {
   }
 }
 
-export function getArtURL(card, data: ContextType<typeof BlocklyDataContext>) {
-  if (!!card.art?.sprite?.named) {
-    for (let art of data.allArt ?? []) {
-      if (art.name === card.art.sprite.named) {
-        return art.src
-      }
+
+export const refreshBlock = (block: BlockSvg) => {
+  block.data = Blockly.Blocks[block.type].data
+  block.setFieldValue(Blockly.Blocks[block.type].message, 'message')
+  block.setColour(Blockly.Blocks[block.type].json.colour)
+  if (block.render) {
+    let textElement = block.getSvgRoot().lastElementChild.firstElementChild
+    if (Blockly.textColor && Blockly.textColor[block.type]) {
+      textElement.style.fill = Blockly.textColor[block.type]
+    } else {
+      textElement.style.fill = '#fff'
     }
+    block.render()
   }
-  return null
 }

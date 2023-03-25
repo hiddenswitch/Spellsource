@@ -6,7 +6,7 @@ import {cardSearchNode, SearchNode, useIndex} from '../hooks/use-index'
 import Link from 'next/link'
 import {useRouter} from "next/router";
 import {useDebounce} from "react-use";
-import {useGetPagedCardsLazyQuery} from "../__generated__/client";
+import {useGetCardsLazyQuery} from "../__generated__/client";
 
 // Search component
 function Search(props) {
@@ -76,7 +76,7 @@ function Search(props) {
     )*/
   }
 
-  const [getPagedCards] = useGetPagedCardsLazyQuery();
+  const [getCards] = useGetCardsLazyQuery();
 
   useDebounce(async () => {
     if (!query) {
@@ -84,7 +84,7 @@ function Search(props) {
       return;
     }
 
-    const {data} = await getPagedCards({variables: {limit: 5, filter: {id: {includesInsensitive: query}}}});
+    const {data} = await getCards({variables: {limit: 5, filter: {id: {includesInsensitive: query}}}});
 
     setResults((data?.allCards?.nodes ?? []).map((node) => ({
       ...cardSearchNode(node.cardScript),

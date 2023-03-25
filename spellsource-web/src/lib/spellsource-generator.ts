@@ -77,7 +77,7 @@ export function generateJavaScript() {
       Blockly.JavaScript[blocksKey] = function (block) {
         let xml = Blockly.Xml.blockToDom(block, true)
         let json = WorkspaceUtils.xmlToCardScript(xml)
-        let id = block.id
+        let id = block.getFieldValue("id")
         let cardId = Blockly.Blocks['WorkspaceCard_' + id]?.data
 
         json.id = cardId

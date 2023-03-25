@@ -1,4 +1,4 @@
-import Blockly, {BlockSvg, FieldLabel, Workspace} from "blockly";
+import Blockly, {BlockSvg, FieldLabel, Workspace, WorkspaceSvg} from "blockly";
 import {FieldLabelPlural} from "../components/field-label-plural";
 import {FieldLabelSerializableHidden} from "../components/field-label-serializable-hidden";
 import * as JsonConversionUtils from "./json-conversion-utils";
@@ -9,9 +9,13 @@ import CardDisplay, {CardDef} from '../components/card-display'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import deepmerge from "deepmerge";
+import {createRoot} from "react-dom/client";
+import {InitBlockOptions} from "../components/card-editor-workspace";
 
 
-export function modifyAll() {
+export function modifyAll(options: InitBlockOptions) {
+  // @ts-ignore
+  // noinspection JSConstantReassignment
   Blockly.HSV_SATURATION = .65
 
   for (let blocksKey in Blockly.Blocks) {
@@ -22,15 +26,15 @@ export function modifyAll() {
   }
 
   autoDecoration()
-  hoverComments()
+  // hoverComments()
   pluralSpacing()
-  contextMenu()
+  contextMenu(options)
   tooltips()
   blackText()
   colorfulColors()
   noToolboxZoom()
   multiline()
-  jsonShadows()
+  // jsonShadows()
   connections()
   categoryIndenting()
   cardDisplay()
@@ -281,10 +285,10 @@ function pluralSpacing() {
   }
 }
 
-function contextMenu() {
-  const generateContextMenu = Blockly.BlockSvg.prototype.generateContextMenu
-  Blockly.BlockSvg.prototype.generateContextMenu = function () {
-    let menuOptions = generateContextMenu.call(this)
+function contextMenu({onDelete}: InitBlockOptions) {
+  const generateContextMenu = Blockly.BlockSvg.prototype["generateContextMenu"]
+  Blockly.BlockSvg.prototype["generateContextMenu"] = function () {
+    let menuOptions = generateContextMenu.call(this) as Partial<Blockly.ContextMenuRegistry.ContextMenuOption>[]
     let block = this as BlockSvg
     let workspace = block.workspace
     if (block.type.startsWith('CatalogueCard')) {
@@ -327,12 +331,13 @@ function contextMenu() {
     }
 
     if (block.type.startsWith('Starter_')) {
+      menuOptions = menuOptions.filter(option => option.text !== "Remove Comment")
+
       menuOptions.push({
-        text: 'Save Card',
+        text: 'DELETE Card',
         enabled: true,
         callback: function () {
-          let xml = Blockly.Xml.blockToDom(block, true)
-          console.log(xml)
+          onDelete(block)
         }
       })
     }
@@ -360,7 +365,7 @@ function tooltips() {
     }
   }
 
-  Blockly.Tooltip.bindMouseEvents = function (element) {
+  /*Blockly.Tooltip.bindMouseEvents = function (element) {
     if (Blockly.Touch.TOUCH_ENABLED) {
       element["mouseOverWrapper_"] = Blockly.bindEvent_(element, 'touchstart', null,
         Blockly.Tooltip["onMouseOver_"]);
@@ -374,7 +379,7 @@ function tooltips() {
         Blockly.Tooltip["onMouseOut_"]);
       element.addEventListener('mousemove', Blockly.Tooltip["onMouseMove_"], false);
     }
-  };
+  };*/
 
   const show = Blockly.Tooltip["show_"]
   Blockly.Tooltip["show_"] = function () {
@@ -485,9 +490,36 @@ function multiline() {
 
     return text
   }
+
+  // Fix multiline texts having wrong width in toolbox
+  const updateSize = Blockly.FieldMultilineInput.prototype["updateSize_"];
+  Blockly.FieldMultilineInput.prototype["updateSize_"] = function() {
+    updateSize.call(this);
+
+    if (this.size_.width === 10) {
+      const fontSize = this.getConstants().FIELD_TEXT_FONTSIZE;
+      const fontWeight = this.getConstants().FIELD_TEXT_FONTWEIGHT;
+      const fontFamily = this.getConstants().FIELD_TEXT_FONTFAMILY;
+
+      const nodes = this.textGroup_.childNodes;
+      for (let i = 0; i < nodes.length; i++) {
+        const tspan = (nodes[i]);
+        const textWidth = Blockly.utils.dom.getFastTextWidth(tspan, fontSize, fontWeight, fontFamily);
+        if (textWidth > this.size_.width) {
+          this.size_.width = textWidth;
+        }
+      }
+      if (this.borderRect_) {
+        this.size_.width += this.getConstants().FIELD_BORDER_RECT_X_PADDING * 2;
+        this.borderRect_.setAttribute('width', this.size_.width);
+      }
+
+      this.positionBorderRect_();
+    }
+  }
 }
 
-function jsonShadows() {
+/*function jsonShadows() {
   const handleContents = (element, info) => {
     if (info['contents'] && isArray(info['contents']) && info['contents'].length > 0) {
       for (let content of info['contents']) {
@@ -519,7 +551,7 @@ function jsonShadows() {
     }
     return blockElement
   }
-}
+}*/
 
 function connections() {
   const setCheck = Blockly.Connection.prototype.setCheck
@@ -551,7 +583,7 @@ function cardDisplay() {
   Blockly.Comment.prototype["createBubble_"] = function () {
     createBubble.call(this)
 
-    let block = this.block_
+    let block = this.block_ as BlockSvg
     if (block.type.startsWith("Starter_")) {
       this.textarea_.remove()
       this.foreignObject_.previousElementSibling.remove()
@@ -567,9 +599,8 @@ function cardDisplay() {
         card.art = deepmerge(heroClass?.art || {}, card.art || {});
       }
 
-      ReactDOM.render(<CardDisplay {...card} />, this.foreignObject_.firstElementChild)
+      createRoot(this.foreignObject_.firstElementChild).render(<CardDisplay {...card} />);
     }
-
   }
 }
 

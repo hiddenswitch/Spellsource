@@ -2,6 +2,7 @@ import {Pool} from 'pg';
 import {pgPort} from "../lib/config";
 import {PostGraphileOptions} from "postgraphile";
 import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
+import {PgMutationUpsertPlugin} from "postgraphile-upsert-plugin";
 
 const pool = new Pool({
   user: "admin",
@@ -26,6 +27,7 @@ export const postgraphileOptions: PostGraphileOptions = {
   // doesn't crash entire app if config is incorrect. Fix config.
   appendPlugins: [
     ConnectionFilterPlugin,
+    PgMutationUpsertPlugin
   ],
   dynamicJson: true,
   pgSettings: (req: any) => ({

@@ -182,12 +182,9 @@
         "check": "ValueProviderDesc",
         "shadow": {
           "type": "ValueProvider_int",
-          "fields": [
-            {
-              "name": "int",
-              "valueI": 3
-            }
-          ]
+          "fields": {
+            "int": 3
+          }
         }
       }
     ]

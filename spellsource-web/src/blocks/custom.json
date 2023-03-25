@@ -12,15 +12,11 @@
       {
         "type": "input_value",
         "name": "class",
-        "shadow": {
+        "block": {
           "type": "Custom_class_SHADOW",
-          "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "class",
-              "valueS": "ExampleSpell"
-            }
-          ]
+          "fields": {
+            "class": "ExampleSpell"
+          }
         }
       }
     ],
@@ -55,12 +51,9 @@
         "shadow": {
           "type": "Custom_class_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "class",
-              "valueS": "ExampleValueProvider"
-            }
-          ]
+          "fields": {
+            "class": "ExampleValueProvider"
+          }
         }
       }
     ],
@@ -95,12 +88,9 @@
         "shadow": {
           "type": "Custom_class_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "class",
-              "valueS": "ExampleCondition"
-            }
-          ]
+          "fields": {
+            "class": "ExampleCondition"
+          }
         }
       }
     ],
@@ -135,12 +125,9 @@
         "shadow": {
           "type": "Custom_class_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "class",
-              "valueS": "ExampleFilter"
-            }
-          ]
+          "fields": {
+            "class": "ExampleFilter"
+          }
         }
       }
     ],
@@ -175,12 +162,9 @@
         "shadow": {
           "type": "Custom_class_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "class",
-              "valueS": "ExampleTrigger"
-            }
-          ]
+          "fields": {
+            "class": "ExampleTrigger"
+          }
         }
       }
     ],
@@ -215,12 +199,9 @@
         "shadow": {
           "type": "Custom_class_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "class",
-              "valueS": "ExampleSource"
-            }
-          ]
+          "fields": {
+            "class": "ExampleSource"
+          }
         }
       }
     ],
@@ -260,12 +241,9 @@
         "shadow": {
           "type": "Custom_class_SHADOW",
           "notActuallyShadow": true,
-          "fields": [
-            {
-              "name": "class",
-              "valueS": "ExampleAura"
-            }
-          ]
+          "fields": {
+            "class": "ExampleAura"
+          }
         }
       }
     ],
@@ -510,7 +488,6 @@
     ],
     "data": "BLOCKLY_EXTEND_PREVIOUS"
   },
-
   {
     "type": "CustomArg_Spells",
     "subcategory": "Arg",
@@ -599,7 +576,6 @@
     ],
     "data": "BLOCKLY_EXTEND_PREVIOUS"
   },
-
   {
     "type": "CustomArg_Conditions",
     "subcategory": "Arg",
@@ -660,7 +636,6 @@
     ],
     "data": "BLOCKLY_EXTEND_PREVIOUS"
   },
-
   {
     "type": "CustomArg_Filters",
     "subcategory": "Arg",
@@ -917,8 +892,14 @@
         "type": "field_dropdown",
         "name": "customValue",
         "options": [
-          ["TRUE", "TRUE"],
-          ["FALSE", "FALSE"]
+          [
+            "TRUE",
+            "TRUE"
+          ],
+          [
+            "FALSE",
+            "FALSE"
+          ]
         ]
       }
     ],

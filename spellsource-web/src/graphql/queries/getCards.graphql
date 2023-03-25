@@ -1,4 +1,4 @@
-query getPagedCards($limit: Int!, $filter: CardFilter, $offset: Int) {
+query getCards($limit: Int, $filter: CardFilter, $offset: Int) {
   allCards(offset: $offset, filter: $filter, first: $limit) {
     nodes {
       ...card
