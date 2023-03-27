@@ -1118,9 +1118,8 @@
         "type": "input_statement",
         "name": "cards",
         "check": "Cards",
-        "shadow": {
-          "type": "Card_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Card_I"
         }
       }
     ],
@@ -1158,9 +1157,8 @@
         "type": "input_statement",
         "name": "cards",
         "check": "Cards",
-        "shadow": {
-          "type": "Card_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Card_I"
         }
       }
     ],
@@ -1259,9 +1257,8 @@
         "type": "input_statement",
         "name": "cards",
         "check": "Cards",
-        "shadow": {
-          "type": "Card_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Card_I"
         }
       }
     ],
@@ -1286,9 +1283,8 @@
         "type": "input_statement",
         "name": "cards",
         "check": "Cards",
-        "shadow": {
-          "type": "Card_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Card_I"
         }
       }
     ],
@@ -1721,9 +1717,8 @@
         "type": "input_statement",
         "name": "cards",
         "check": "Cards",
-        "shadow": {
-          "type": "Card_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Card_I"
         }
       }
     ],
@@ -1923,9 +1918,8 @@
         "type": "input_statement",
         "name": "spells",
         "check": "Spells",
-        "shadow": {
-          "type": "Spell_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Spell_I"
         }
       }
     ],
@@ -1947,9 +1941,8 @@
         "type": "input_statement",
         "name": "spells",
         "check": "Spells",
-        "shadow": {
-          "type": "Spell_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Spell_I"
         }
       }
     ],
@@ -1982,9 +1975,8 @@
         "type": "input_statement",
         "name": "spells",
         "check": "Spells",
-        "shadow": {
-          "type": "Spell_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Spell_I"
         }
       },
       {
@@ -2632,9 +2624,8 @@
         "check": [
           "EnchantmentFake_SHADOW"
         ],
-        "shadow": {
-          "type": "EnchantmentFake_SHADOW",
-          "notActuallyShadow": true
+        "block": {
+          "type": "EnchantmentFake_SHADOW"
         }
       }
     ],
@@ -2666,9 +2657,8 @@
         "check": [
           "EnchantmentOptionsFake_SHADOW"
         ],
-        "shadow": {
-          "type": "EnchantmentOptionsFake_SHADOW",
-          "notActuallyShadow": true
+        "block": {
+          "type": "EnchantmentOptionsFake_SHADOW"
         }
       }
     ],
@@ -2733,9 +2723,8 @@
         "check": [
           "EnchantmentFake_SHADOW"
         ],
-        "shadow": {
-          "type": "EnchantmentFake_SHADOW",
-          "notActuallyShadow": true
+        "block": {
+          "type": "EnchantmentFake_SHADOW"
         }
       },
       {
@@ -2775,9 +2764,8 @@
         "check": [
           "EnchantmentOptionsFake_SHADOW"
         ],
-        "shadow": {
-          "type": "EnchantmentOptionsFake_SHADOW",
-          "notActuallyShadow": true
+        "block": {
+          "type": "EnchantmentOptionsFake_SHADOW"
         }
       },
       {
@@ -3170,9 +3158,8 @@
         "type": "input_statement",
         "name": "cards",
         "check": "Cards",
-        "shadow": {
-          "type": "Card_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Card_I"
         }
       },
       {
@@ -4803,9 +4790,8 @@
         "name": "spell1",
         "type": "input_value",
         "check": "SpellDesc",
-        "shadow": {
-          "type": "Spell_InvokeOption",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Spell_InvokeOption"
         }
       }
     ],
@@ -4814,9 +4800,8 @@
         "name": "spell2",
         "type": "input_value",
         "check": "SpellDesc",
-        "shadow": {
-          "type": "Spell_InvokeOption",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Spell_InvokeOption"
         }
       }
     ],
@@ -4847,17 +4832,15 @@
         "type": "input_value",
         "check": "ValueProviderDesc",
         "name": "mana",
-        "shadow": {
-          "type": "ValueProvider_int",
-          "notActuallyShadow": true
+        "block": {
+          "type": "ValueProvider_int"
         }
       },
       {
         "type": "input_value",
         "name": "name",
-        "shadow": {
+        "block": {
           "type": "Property_text_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Name"
           }
@@ -4866,9 +4849,8 @@
       {
         "type": "input_value",
         "name": "description",
-        "shadow": {
+        "block": {
           "type": "Property_text_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Description"
           }
@@ -5819,9 +5801,8 @@
         "check": [
           "EnchantmentOptionsFake_SHADOW"
         ],
-        "shadow": {
-          "type": "EnchantmentOptionsFake_SHADOW",
-          "notActuallyShadow": true
+        "block": {
+          "type": "EnchantmentOptionsFake_SHADOW"
         }
       }
     ],

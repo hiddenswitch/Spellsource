@@ -48,9 +48,8 @@
       {
         "type": "input_value",
         "name": "class",
-        "shadow": {
+        "block": {
           "type": "Custom_class_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "class": "ExampleValueProvider"
           }
@@ -85,9 +84,8 @@
       {
         "type": "input_value",
         "name": "class",
-        "shadow": {
+        "block": {
           "type": "Custom_class_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "class": "ExampleCondition"
           }
@@ -122,9 +120,8 @@
       {
         "type": "input_value",
         "name": "class",
-        "shadow": {
+        "block": {
           "type": "Custom_class_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "class": "ExampleFilter"
           }
@@ -159,9 +156,8 @@
       {
         "type": "input_value",
         "name": "class",
-        "shadow": {
+        "block": {
           "type": "Custom_class_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "class": "ExampleTrigger"
           }
@@ -196,9 +192,8 @@
       {
         "type": "input_value",
         "name": "class",
-        "shadow": {
+        "block": {
           "type": "Custom_class_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "class": "ExampleSource"
           }
@@ -238,9 +233,8 @@
       {
         "type": "input_value",
         "name": "class",
-        "shadow": {
+        "block": {
           "type": "Custom_class_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "class": "ExampleAura"
           }
@@ -396,9 +390,8 @@
         "type": "input_statement",
         "check": "Cards",
         "name": "customValue",
-        "shadow": {
-          "type": "Card_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Card_I"
         }
       }
     ],
@@ -512,9 +505,8 @@
         "type": "input_statement",
         "check": "Spells",
         "name": "customValue",
-        "shadow": {
-          "type": "Spell_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Spell_I"
         }
       }
     ],
@@ -600,9 +592,8 @@
         "type": "input_statement",
         "check": "Conditions",
         "name": "customValue",
-        "shadow": {
-          "type": "Condition_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Condition_I"
         }
       }
     ],
@@ -660,9 +651,8 @@
         "type": "input_statement",
         "check": "Filters",
         "name": "customValue",
-        "shadow": {
-          "type": "Filter_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Filter_I"
         }
       }
     ],

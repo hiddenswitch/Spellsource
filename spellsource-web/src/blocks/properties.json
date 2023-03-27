@@ -526,9 +526,8 @@
         "name": "art.glow",
         "type": "input_value",
         "check": "Color",
-        "shadow": {
-          "type": "Property_color_SHADOW",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Property_color_SHADOW"
         }
       }
     ],
@@ -554,9 +553,8 @@
         "check": [
           "Descriptions"
         ],
-        "shadow": {
-          "type": "Property_description",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Property_description"
         }
       }
     ],
@@ -606,9 +604,8 @@
         "check": [
           "Descriptions"
         ],
-        "shadow": {
-          "type": "Property_description",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Property_description"
         }
       }
     ],

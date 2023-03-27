@@ -124,9 +124,8 @@
         "type": "input_statement",
         "check": "Filters",
         "name": "filters",
-        "shadow": {
-          "type": "Filter_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Filter_I"
         }
       }
     ]
@@ -146,9 +145,8 @@
         "type": "input_statement",
         "check": "Filters",
         "name": "filters",
-        "shadow": {
-          "type": "Filter_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Filter_I"
         }
       }
     ]
@@ -616,9 +614,8 @@
         "type": "input_statement",
         "name": "cards",
         "check": "Cards",
-        "shadow": {
-          "type": "Card_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Card_I"
         }
       }
     ]

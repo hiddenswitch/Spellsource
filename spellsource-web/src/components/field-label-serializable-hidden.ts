@@ -20,4 +20,8 @@ export class FieldLabelSerializableHidden extends FieldLabelSerializable {
   getDisplayText_ () {
     return ''
   }
+
+  getText(): string {
+    return ''
+  }
 }

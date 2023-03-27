@@ -1,4 +1,4 @@
-import Blockly, {Block, BlockSvg} from 'blockly'
+import Blockly, {Block, BlockSvg, Toolbox, ToolboxCategory, WorkspaceSvg} from 'blockly'
 import * as JsonConversionUtils from './json-conversion-utils'
 import {FieldLabelSerializableHidden} from '../components/field-label-serializable-hidden'
 import {FieldLabelPlural} from "../components/field-label-plural";
@@ -8,10 +8,12 @@ import {BlocklyDataContext} from "../pages/card-editor";
 import {ContextType} from "react";
 import {BlockDef} from "./blocks";
 import {InitBlockOptions} from "../components/card-editor-workspace";
+import {Flyout} from "flyout_base";
 
 export const toHappyFormatting = (string: string) => string.split('_')
   .map(w => w[0].toUpperCase() + w.substring(1).toLowerCase())
-  .join(' ');
+  .join(' ')
+  .replace("Hero Power", "Skill");
 
 export function addBlock(block: BlockDef) {
   Blockly.Blocks[block.type!] = {
@@ -190,11 +192,13 @@ export function blockTypeToOuput(type) {
 //make the message for a generated block for a catalogue/created card
 export function cardMessage(card: CardDef) {
   let ret = ''
-  if (card.baseManaCost !== null && card.baseManaCost !== undefined) {
+  if (card.baseManaCost || card.baseManaCost === 0) {
     ret = '(' + card.baseManaCost + ') '
   }
   if (card.type === 'MINION') {
     ret += (card.baseAttack ?? 0) + '/' + (card.baseHp ?? 0)
+  } else if (card.type === "CLASS") {
+    return card.name;
   } else {
     ret += toHappyFormatting(card.type)
   }
@@ -271,12 +275,12 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options
 }
 
 export function initHeroClassColors(data: ContextType<typeof BlocklyDataContext>) {
-  if (!Blockly.textColor) {
-    Blockly.textColor = {
+  if (!Blockly["textColor"]) {
+    Blockly["textColor"] = {
       'Rarity_COMMON': '#000000'
     }
   }
-  Blockly.heroClassColors = {
+  Blockly["heroClassColors"] = {
     ANY: '#A6A6A6'
   }
 
@@ -284,20 +288,15 @@ export function initHeroClassColors(data: ContextType<typeof BlocklyDataContext>
    * first pass through the card catalogue to figure out all the collectible
    * hero classes and their colors
    */
-  Object.values(data.cardsById).forEach(card => {
+  Object.values(data.classes).forEach(card => {
     let type = 'HeroClass_' + card.heroClass
     if (type in Blockly.Blocks) {
       return
     }
     if (card.type === 'CLASS' && card.collectible !== false) {
-      let color = Blockly.utils.colour.rgbToHex(
-        card.art.primary.r * 255,
-        card.art.primary.g * 255,
-        card.art.primary.b * 255
-      )
+      const color = setupHeroClassColor(card);
 
-
-      Blockly.heroClassColors[card.heroClass] = color
+      // TODO change to HeroClass_Reference
       let block = {
         type,
         message0: card.name,
@@ -307,19 +306,39 @@ export function initHeroClassColors(data: ContextType<typeof BlocklyDataContext>
         json: card
       }
       addBlock(block)
-      if (!!card.art.body?.vertex) {
-        Blockly.textColor[type] = Blockly.utils.colour.rgbToHex(
-          card.art.body.vertex.r * 255,
-          card.art.body.vertex.g * 255,
-          card.art.body.vertex.b * 25
-        )
-      }
+    }
+  })
+
+  Object.values(data.myCards).forEach(value => {
+    const card = value.cardScript as CardDef;
+    if (card.type === "CLASS") {
+      setupHeroClassColor(card);
     }
   })
 }
 
-export function initCardBlocks(data: ContextType<typeof BlocklyDataContext>) {
-  for (let card of Object.values(data.cardsById)) {
+export function setupHeroClassColor(card: CardDef) {
+  if (card.art?.body?.vertex) {
+    Blockly["textColor"][card.heroClass] = Blockly.utils.colour.rgbToHex(
+      card.art.body.vertex.r * 255,
+      card.art.body.vertex.g * 255,
+      card.art.body.vertex.b * 25
+    )
+  }
+
+  if (card.art?.primary) {
+    return Blockly["heroClassColors"][card.heroClass] = Blockly.utils.colour.rgbToHex(
+      card.art.primary.r * 255,
+      card.art.primary.g * 255,
+      card.art.primary.b * 255
+    )
+  }
+
+  return "#888888";
+}
+
+/*export function initCardBlocks(data: ContextType<typeof BlocklyDataContext>) {
+  for (let card of Object.values(data.classes)) {
     if (!card.type || card.type === 'FORMAT') {
       continue
     }
@@ -327,8 +346,8 @@ export function initCardBlocks(data: ContextType<typeof BlocklyDataContext>) {
     if (type in Blockly.Blocks) {
       return
     }
-    if (card.heroClass in Blockly.heroClassColors) { //this check if it's *really* collectible
-      let color = Blockly.heroClassColors[card.heroClass]
+    if (card.heroClass in Blockly["heroClassColors"]) { //this check if it's *really* collectible
+      let color = Blockly["heroClassColors"][card.heroClass]
       let block = {
         'type': type,
         'args0': [],
@@ -353,7 +372,7 @@ export function initCardBlocks(data: ContextType<typeof BlocklyDataContext>) {
       }
     }
   }
-}
+}*/
 
 export function cardDescription(card: CardDef) {
   if (!card.description) {
@@ -404,13 +423,13 @@ export function colorToHex(colour) {
   }
 }
 
-export function secondaryColor(color) {
+/*export function secondaryColor(color) {
   return Blockly.blockRendering.ConstantProvider.prototype.generateSecondaryColour_(color)
 }
 
 export function tertiaryColor(color) {
   return Blockly.blockRendering.ConstantProvider.prototype.generateTertiaryColour_(color)
-}
+}*/
 
 export function loadableInit(Blockly) {
   setTimeout(() => {
@@ -523,9 +542,9 @@ export function isSpellsourceBlock(type) {
   return !!Blockly.Blocks[type]?.json?.type
 }
 
-export function searchToolbox(blockType, mainWorkspace) {
-  let toolbox = mainWorkspace.getToolbox()
-  let categories = toolbox.getToolboxItems().slice(1)
+export function searchToolbox(blockType, mainWorkspace: WorkspaceSvg) {
+  let toolbox = mainWorkspace.getToolbox() as Toolbox
+  let categories = toolbox.getToolboxItems().slice(1) as ToolboxCategory[]
 
   for (let category of categories) {
     if (category.getContents) {
@@ -537,12 +556,15 @@ export function searchToolbox(blockType, mainWorkspace) {
           }
           toolbox.setSelectedItem(category)
 
-          if (toolbox.getFlyout() && toolbox.getFlyout().getWorkspace()) {
-            let workspace = toolbox.getFlyout().getWorkspace()
+          const flyOut = toolbox.getFlyout() as Flyout;
+
+          let workspace: WorkspaceSvg;
+
+          if ((workspace = flyOut.getWorkspace())) {
             let totalHeight = 0
             for (let topBlock of workspace.getTopBlocks(true)) {
               if (topBlock.type === blockType) {
-                toolbox.getFlyout().scrollbar.set(totalHeight)
+                workspace.scrollbar.setY(totalHeight);
                 topBlock.addSelect()
               } else {
                 totalHeight += topBlock.height + 24
@@ -587,15 +609,28 @@ export function initArtBlcks(data: ContextType<typeof BlocklyDataContext>) {
 
 export const refreshBlock = (block: BlockSvg) => {
   block.data = Blockly.Blocks[block.type].data
-  block.setFieldValue(Blockly.Blocks[block.type].message, 'message')
-  block.setColour(Blockly.Blocks[block.type].json.colour)
+
+  if (block.getField("message")) {
+    block.setFieldValue(Blockly.Blocks[block.type].message, 'message')
+  }
+
+  if (block.type === "HeroClass_REFERENCE") {
+    const color = Blockly["heroClassColors"][block.getFieldValue("id")];
+    if (color && block.getColour() !== color) {
+      block.setColour(color);
+    }
+  }
+
   if (block.render) {
-    let textElement = block.getSvgRoot().lastElementChild.firstElementChild
-    if (Blockly.textColor && Blockly.textColor[block.type]) {
-      textElement.style.fill = Blockly.textColor[block.type]
+    let textElement = block.getSvgRoot().querySelector("text")
+    const typeTextColor = Blockly["textColor"]?.[block.type]
+    const idTextColor = Blockly["textColor"]?.[block.getFieldValue("id")]
+    const color = typeTextColor ?? idTextColor;
+    if (color) {
+      textElement.style.fill = color
     } else {
       textElement.style.fill = '#fff'
     }
-    block.render()
+    block.render(false)
   }
 }

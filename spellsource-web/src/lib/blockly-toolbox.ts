@@ -1,10 +1,12 @@
 import Blockly from 'blockly'
 import * as BlocklyMiscUtils from './blockly-misc-utils'
+import {isArray} from "lodash";
 import StaticCategoryInfo = Blockly.utils.toolbox.StaticCategoryInfo;
 import ToolboxInfo = Blockly.utils.toolbox.ToolboxInfo;
 import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo;
 import BlockInfo = Blockly.utils.toolbox.BlockInfo;
-import {isArray} from "lodash";
+import {ContextType} from "react";
+import {BlocklyDataContext} from "../pages/card-editor";
 
 
 /**
@@ -20,12 +22,12 @@ export function initCallbacks(workspace) {
     xmlList.push(button);
 
     button = document.createElement('button');
-    button.setAttribute('text', Blockly.Msg['NEW_STRING_VARIABLE']);
+    button.setAttribute('text', Blockly["Msg"]['NEW_STRING_VARIABLE']);
     button.setAttribute('callbackKey', 'CREATE_VARIABLE_STRING');
     xmlList.push(button);
 
     button = document.createElement('button');
-    button.setAttribute('text', Blockly.Msg['NEW_NUMBER_VARIABLE']);
+    button.setAttribute('text', Blockly["Msg"]['NEW_NUMBER_VARIABLE']);
     button.setAttribute('callbackKey', 'CREATE_VARIABLE_NUMBER');
     xmlList.push(button);
 
@@ -50,13 +52,16 @@ export function initCallbacks(workspace) {
 /**
  * Constructs the toolbox JSON for the card editor
  * @param results The current search results
+ * @param data
  * @returns toolbox json
  */
-export function editorToolbox(results: string[] = []): any {
+export function editorToolbox(results: string[] = [], data: ContextType<typeof BlocklyDataContext>): any {
   return {
     kind: 'categoryToolbox',
     contents: [
       searchResultsCategory(results),
+
+      myCardsCategory(data),
 
       {
         "kind": "sep"
@@ -96,9 +101,9 @@ export function editorToolbox(results: string[] = []): any {
         contents('Rarity')
       ),
 
-      classesCategory(),
+      classesCategory(data),
 
-      cardsCategory(),
+      cardsCategory(data),
 
       category('Targets', '30',
         "Blocks for the many different targets that effects can have",
@@ -423,6 +428,7 @@ export function editorToolbox(results: string[] = []): any {
   } as ToolboxInfo
 }
 
+
 /**
  * Specifically creates the JSON for the "Search Results" category.
  * Defined here so that the category can be easily updated for new search results
@@ -431,8 +437,21 @@ export function editorToolbox(results: string[] = []): any {
 export function searchResultsCategory(results: string[]) {
   return category('Search Results', '#000000',
     "The relevant blocks from your search will appear here",
-    results.map(id => getBlock(id)), {toolboxitemid: 'Search Results'}
+    results.length ? results.map(id => getBlock(id)) : [{kind: "label", text: "No Search Results"}], {toolboxitemid: 'Search Results'}
   )
+}
+
+export function myCardsCategory(data: ContextType<typeof BlocklyDataContext>) {
+  return category("My Cards", "#888888", "Your Saved Cards", [
+    {
+      kind: "label",
+      text: data.userId ? "Cards You've Created" : "Login to be able to save the cards you create"
+    },
+    ...data.myCards.map(card => ({
+      kind: "block",
+      blockxml: card.blocklyWorkspace
+    }))
+  ], {toolboxitemid: 'My Cards'})
 }
 
 /**
@@ -440,25 +459,36 @@ export function searchResultsCategory(results: string[]) {
  * Defined here so that the category can be easily updated for new WorkspaceHeroClasss
  * @returns category json
  */
-export function classesCategory() {
-  let workspaceHeroClasses = contents('WorkspaceHeroClass')
-  let content
-  if (workspaceHeroClasses.length > 0) {
-    content = [
-      ...workspaceHeroClasses,
-      {
-        "kind": "label",
-        "text": " "
-      },
-      ...contents('HeroClass')
-    ]
-  } else {
-    content = contents('HeroClass')
-  }
+export function classesCategory(data: ContextType<typeof BlocklyDataContext>) {
+  const classCards = data.myCards.filter(card => card.cardScript && card.cardScript.type === "CLASS") ?? [];
 
   return category('Classes', '#888888',
     "Blocks for the different playable champion classes",
-    content, {toolboxitemid: 'Classes'}
+    [
+      ...(classCards.length > 0 ? [
+        {
+          kind: "label",
+          text: "Your Classes"
+        },
+      ] : []),
+      ...(classCards.map(card => (
+        {
+          kind: "block",
+          type: "HeroClass_REFERENCE",
+          fields: {
+            id: card.id,
+            name: BlocklyMiscUtils.cardMessage(card.cardScript)
+          }
+        }
+      ))),
+      ...(classCards.length > 0 ? [
+        {
+          kind: "label",
+          text: "Other Classes"
+        },
+      ] : []),
+      ...contents('HeroClass')
+    ], {toolboxitemid: 'Classes'}
   )
 }
 
@@ -467,23 +497,26 @@ export function classesCategory() {
  * Defined here so that the category can be easily updated for new WorkspaceCards
  * @returns category json
  */
-export function cardsCategory() {
+export function cardsCategory(data: ContextType<typeof BlocklyDataContext>) {
+
   return category('Cards', '#888888',
     "Blocks for referencing the cards you make in the workspace (use 'Search Card Catalogue' to reference existing cards)",
     [
+      ...contents('Card'),
       {
         kind: "label",
-        text: "Blocks for your Workspace Cards will appear here"
+        text: "Blocks you can use for referencing your own cards"
       },
-      {
-        kind: "block",
-        type: "Card_REFERENCE",
-        fields: {
-          name: "Lol ok",
-          id: "minion_lol"
+      ...(data.myCards.filter(card => card.cardScript && card.cardScript.type !== "CLASS").map(card => (
+        {
+          kind: "block",
+          type: "Card_REFERENCE",
+          fields: {
+            id: card.id,
+            name: BlocklyMiscUtils.cardMessage(card.cardScript)
+          }
         }
-      },
-      ...contents('Card')
+      )) ?? [])
     ], {toolboxitemid: 'Cards'}
   )
 }

@@ -10,8 +10,9 @@ import {readAllImages, readAllJson} from "../lib/fs-utils";
 import {CardDef} from "../components/card-display";
 import {fixArt, transformBlock} from "../lib/json-transforms";
 import {keyBy} from "lodash";
-import {Card, ImageDef, useGetAllArtQuery, useGetCardsQuery} from "../__generated__/client";
+import {Card, GetCardsQuery, ImageDef, useGetAllArtQuery, useGetCardsQuery} from "../__generated__/client";
 import {useSession} from "next-auth/react";
+import {ApolloQueryResult} from "@apollo/client";
 
 const getAllBlockJson = async () =>
   (await readAllJson<BlockDef[]>(path.join("src", "blocks", "*.json")))
@@ -41,9 +42,11 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
 export const BlocklyDataContext = createContext(
   {ready: false} as InferGetStaticPropsType<typeof getStaticProps> & {
     ready: boolean
-    cardsById: Record<string, CardDef>
+    classes: Record<string, CardDef>
     allArt: ImageDef[]
     myCards: Partial<Card>[]
+    refreshMyCards: () => Promise<ApolloQueryResult<GetCardsQuery>>;
+    userId: string | null | undefined;
   }
 )
 
@@ -73,9 +76,23 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const {data: session} = useSession();
   const userId = session?.token?.sub ?? "";
 
-  const getCards = useGetCardsQuery({variables: {filter: {or: [{type: {equalTo: "CLASS"}}, {createdBy: {equalTo: userId}}]}}});
-  const cardsById = useMemo(() => {
-    const cards = getCards.data?.allCards?.nodes ?? [];
+  const getClasses = useGetCardsQuery({
+    variables: {
+      filter: {
+        type: { equalToInsensitive: "CLASS" },
+        createdBy: { notEqualToInsensitive: userId }
+      }
+    }
+  });
+  const getMyCards = useGetCardsQuery({
+    variables: {
+      filter: {
+        createdBy: { equalToInsensitive: userId }
+      }
+    }
+  });
+  const classes = useMemo(() => {
+    const cards = getClasses.data?.allCards?.nodes ?? [];
     const allCards = cards.map(card => ({
       ...(card.cardScript ?? {}),
       id: card.id,
@@ -84,19 +101,19 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
     fixArt(cardsById);
 
     return cardsById
-  }, [getCards.data]);
+  }, [getClasses.data]);
 
   const getAllArt = useGetAllArtQuery();
   const allArt = getAllArt.data?.allArt ?? [];
 
-  const ready = Object.values(cardsById).length > 0 && allArt.length > 0;
+  const ready = Object.values(classes).length > 0 && allArt.length > 0;
 
-  const myCards = useMemo(
-    () => (getCards.data?.allCards?.nodes ?? []).filter(card => card.createdBy === userId && card.blocklyWorkspace),
-    [getCards.data])
+  const myCards = useMemo(() => (getMyCards.data?.allCards?.nodes ?? []).filter(card => card.blocklyWorkspace), [getMyCards.data])
+
+  const refreshMyCards = getMyCards.refetch; // TODO get .reobserve working
 
   return <Layout>
-    <BlocklyDataContext.Provider value={{...props, cardsById, allArt, ready, myCards}}>
+    <BlocklyDataContext.Provider value={{...props, classes, allArt, ready, myCards, refreshMyCards, userId }}>
       <div className={styles.cardEditorContainer}>
         <LoadableComponent dataReady={ready}/>
       </div>

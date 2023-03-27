@@ -1,16 +1,16 @@
-import Blockly, {BlockSvg, FieldLabel, Workspace, WorkspaceSvg} from "blockly";
+import Blockly, {Block, BlockSvg, FieldLabel, Toolbox, Workspace} from "blockly";
 import {FieldLabelPlural} from "../components/field-label-plural";
 import {FieldLabelSerializableHidden} from "../components/field-label-serializable-hidden";
 import * as JsonConversionUtils from "./json-conversion-utils";
 import * as BlocklyMiscUtils from "./blockly-misc-utils";
 import * as DefaultOverrides from "./default-overrides";
-import {isArray} from 'lodash'
 import CardDisplay, {CardDef} from '../components/card-display'
 import React from 'react'
-import ReactDOM from 'react-dom'
 import deepmerge from "deepmerge";
 import {createRoot} from "react-dom/client";
 import {InitBlockOptions} from "../components/card-editor-workspace";
+import {ToolboxItem} from "toolbox/toolbox_item";
+import {xmlToCardScript} from "./workspace-utils";
 
 
 export function modifyAll(options: InitBlockOptions) {
@@ -38,6 +38,7 @@ export function modifyAll(options: InitBlockOptions) {
   connections()
   categoryIndenting()
   cardDisplay()
+  flyout()
 
   DefaultOverrides.overrideAll()
 }
@@ -313,14 +314,13 @@ function contextMenu({onDelete}: InitBlockOptions) {
             }
 
             workspace.paste(xml)
-            dummyWorkspace.dispose()
-            workspace.getToolbox().clearSelection()
-
+            dummyWorkspace.dispose();
+            (workspace.getToolbox() as Toolbox).clearSelection()
           }
         }
       })
     } else if (!block.workspace.targetWorkspace ||
-      block.workspace.targetWorkspace?.getToolbox()?.getSelectedItem()?.getId() === 'Search Results') {
+      ((block.workspace.targetWorkspace?.getToolbox() as Toolbox)?.getSelectedItem() as ToolboxItem)?.getId() === 'Search Results') {
       menuOptions.push({
         text: 'Show in Toolbox',
         enabled: true,
@@ -331,7 +331,19 @@ function contextMenu({onDelete}: InitBlockOptions) {
     }
 
     if (block.type.startsWith('Starter_')) {
-      menuOptions = menuOptions.filter(option => option.text !== "Remove Comment")
+      menuOptions = menuOptions.filter(option => option.text !== "Remove Comment" && option.text !== "Inline Inputs")
+
+      if (process.env.NODE_ENV !== "production") {
+        menuOptions.push({
+          text: 'Log CardScript',
+          enabled: true,
+          callback: function () {
+            const xml = Blockly.Xml.blockToDom(block, true);
+            const json = xmlToCardScript(xml);
+            console.log(json)
+          }
+        })
+      }
 
       menuOptions.push({
         text: 'DELETE Card',
@@ -349,10 +361,16 @@ function contextMenu({onDelete}: InitBlockOptions) {
 
 function tooltips() {
 
+  // @ts-ignore
+  // noinspection JSConstantReassignment
   Blockly.Tooltip.OFFSET_X = 10;
   if (Blockly.Touch.TOUCH_ENABLED) {
+    // @ts-ignore
+    // noinspection JSConstantReassignment
     Blockly.Tooltip.OFFSET_X = 50;
   }
+  // @ts-ignore
+  // noinspection JSConstantReassignment
   Blockly.Tooltip.OFFSET_Y = 0;
 
   const init = Blockly.ToolboxCategory.prototype.init
@@ -384,25 +402,28 @@ function tooltips() {
   const show = Blockly.Tooltip["show_"]
   Blockly.Tooltip["show_"] = function () {
     show.call(this)
-    if (!!Blockly.Tooltip.DIV) {
+    if (!!Blockly.Tooltip["DIV"]) {
       if (!!Blockly.Tooltip["element_"].tooltipColor) {
-        Blockly.Tooltip.DIV["style"].backgroundColor = Blockly.Tooltip["element_"].tooltipColor
-        Blockly.Tooltip.DIV["style"].color = '#ffffff'
+        Blockly.Tooltip["DIV"]["style"].backgroundColor = Blockly.Tooltip["element_"].tooltipColor
+        Blockly.Tooltip["DIV"]["style"].color = '#ffffff'
       } else {
-        Blockly.Tooltip.DIV["style"].backgroundColor = '#ffffc7'
-        Blockly.Tooltip.DIV["style"].color = '#000'
+        Blockly.Tooltip["DIV"]["style"].backgroundColor = '#ffffc7'
+        Blockly.Tooltip["DIV"]["style"].color = '#000'
       }
     }
   }
 }
 
 function blackText() {
-  const createTextElement = Blockly.Field.prototype.createTextElement_
-  Blockly.Field.prototype.createTextElement_ = function () {
+  const createTextElement = Blockly.Field.prototype["createTextElement_"]
+  Blockly.Field.prototype["createTextElement_"] = function () {
     createTextElement.call(this)
     let block = this.getSourceBlock()
-    if (Blockly.textColor && Blockly.textColor[block.type]) {
-      this.textElement_.style.fill = Blockly.textColor[block.type]
+    const typeTextColor = Blockly["textColor"]?.[block.type]
+    const idTextColor = Blockly["textColor"]?.[block.getFieldValue("id")]
+    const color = typeTextColor ?? idTextColor;
+    if (color && block.type.endsWith("_REFERENCE")) {
+      this.textElement_.style.fill = color
     }
   }
 }
@@ -435,8 +456,8 @@ function colorfulColors() {
 }
 
 function noToolboxZoom() {
-  const layout2 = Blockly.VerticalFlyout.prototype.layout_
-  Blockly.VerticalFlyout.prototype.layout_ = function (contents, gaps) {
+  const layout2 = Blockly.VerticalFlyout.prototype["layout_"]
+  Blockly.VerticalFlyout.prototype["layout_"] = function (contents, gaps) {
     if (!!this.targetWorkspace) {
       const reset = this.targetWorkspace.scale
       this.targetWorkspace.scale = 1.0
@@ -447,8 +468,8 @@ function noToolboxZoom() {
     }
   }
 
-  const reflowInternal2 = Blockly.VerticalFlyout.prototype.reflowInternal_
-  Blockly.VerticalFlyout.prototype.reflowInternal_ = function () {
+  const reflowInternal2 = Blockly.VerticalFlyout.prototype["reflowInternal_"]
+  Blockly.VerticalFlyout.prototype["reflowInternal_"] = function () {
     if (!!this.targetWorkspace) {
       const reset = this.targetWorkspace.scale
       this.targetWorkspace.scale = 1.0
@@ -461,7 +482,7 @@ function noToolboxZoom() {
 }
 
 function multiline() {
-  Blockly.FieldMultilineInput.prototype.getDisplayText_ = function () {
+  Blockly.FieldMultilineInput.prototype["getDisplayText_"] = function () {
     let value = this.value_
     if (!value) {
       // Prevent the field from disappearing if empty.
@@ -493,7 +514,7 @@ function multiline() {
 
   // Fix multiline texts having wrong width in toolbox
   const updateSize = Blockly.FieldMultilineInput.prototype["updateSize_"];
-  Blockly.FieldMultilineInput.prototype["updateSize_"] = function() {
+  Blockly.FieldMultilineInput.prototype["updateSize_"] = function () {
     updateSize.call(this);
 
     if (this.size_.width === 10) {
@@ -565,9 +586,9 @@ function connections() {
 }
 
 function categoryIndenting() {
-  const createRowContainer = Blockly.ToolboxCategory.prototype.createRowContainer_
+  const createRowContainer = Blockly.ToolboxCategory.prototype["createRowContainer_"]
 
-  Blockly.ToolboxCategory.prototype.createRowContainer_ = function () {
+  Blockly.ToolboxCategory.prototype["createRowContainer_"] = function () {
     const rowDiv = createRowContainer.call(this)
     let nestedPadding = Blockly.ToolboxCategory.nestedPadding * this.getLevel()
     rowDiv.style.paddingLeft = 0
@@ -604,3 +625,25 @@ function cardDisplay() {
   }
 }
 
+function flyout() {
+  const unCollapse = (block: Block) => {
+    if (!block) return;
+    block.setCollapsed(false);
+    block.inputList.forEach(input => {
+      let b;
+      if ((b = input.connection?.targetBlock())) {
+        unCollapse(b)
+      }
+    });
+    unCollapse(block.getNextBlock());
+  }
+
+  const createBlock = Blockly.Flyout.prototype.createBlock;
+  Blockly.Flyout.prototype.createBlock = function (originalBlock) {
+    const result: BlockSvg = createBlock.call(this, originalBlock);
+    if (result.type.startsWith("Starter_")) {
+      unCollapse(result);
+    }
+    return result;
+  }
+}

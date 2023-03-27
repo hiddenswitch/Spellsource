@@ -82,10 +82,10 @@ export const transformCard = (object: CardDef & { path?: string }) => {
   return object;
 }
 
-export const fixArt = (cardsById: Record<string, CardDef>) => {
+export const fixArt = (classes: Record<string, CardDef>) => {
 
-  for (const card of Object.values(cardsById)) {
-    const classCard = cardsById["class_" + card.heroClass];
+  for (const card of Object.values(classes)) {
+    const classCard = classes["class_" + card.heroClass];
     if (classCard) {
       card.art = deepmerge(classCard.art, card.art);
     }

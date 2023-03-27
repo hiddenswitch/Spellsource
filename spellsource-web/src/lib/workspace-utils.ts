@@ -1,4 +1,4 @@
-import {isNumber, Xml} from 'blockly'
+import {Xml} from 'blockly'
 import {extend, filter, find, fromPairs, isArray, isEmpty, isPlainObject, map, merge} from 'lodash'
 import format from 'string-format'
 import * as BlocklyMiscUtils from "./blockly-misc-utils";
@@ -8,7 +8,7 @@ const BLOCKLY_INT_ATTRIBUTE = 'BLOCKLY_INT_ATTRIBUTE'
 const BLOCKLY_ARRAY_ELEMENT = 'BLOCKLY_ARRAY_ELEMENT'
 const BLOCKLY_EXTEND_PREVIOUS = 'BLOCKLY_EXTEND_PREVIOUS'
 
-const isNumeric = str => !isNaN(str) && !isNaN(parseFloat(str));
+export const isNumeric = str => !isNaN(str) && !isNaN(parseFloat(str));
 
 /**
  * Process a given piece of XML, returning a "CardScript" JSON token that corresponds to it.
@@ -248,13 +248,12 @@ function postProcessCardScript(cardScript) {
     }
   }
 
-
   if (!!cardScript.aura && isArray(cardScript.aura)) {
     cardScript.aura = cardScript.aura[0]
   }
 
   for (let arg of ['r', 'g', 'b', 'a']) {
-    if (cardScript.hasOwnProperty(arg) && isNumber(cardScript[arg])) {
+    if (cardScript.hasOwnProperty(arg) && isNumeric(cardScript[arg])) {
       cardScript[arg] = Math.round(1000 * cardScript[arg] / 255) / 1000
     }
   }
@@ -264,6 +263,10 @@ function postProcessCardScript(cardScript) {
   }
   if (cardScript.class === 'NeverCondition') {
     cardScript.class = 'OrCondition'
+  }
+
+  if (cardScript.type === "CLASS" && cardScript.id && !cardScript.heroClass) {
+    cardScript.heroClass = cardScript.id;
   }
 
   return cardScript

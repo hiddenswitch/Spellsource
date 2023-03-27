@@ -283,9 +283,8 @@
         "type": "input_statement",
         "check": "Conditions",
         "name": "conditions",
-        "shadow": {
-          "type": "Condition_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Condition_I"
         }
       }
     ]
@@ -305,9 +304,8 @@
         "type": "input_statement",
         "check": "Conditions",
         "name": "conditions",
-        "shadow": {
-          "type": "Condition_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Condition_I"
         }
       }
     ]

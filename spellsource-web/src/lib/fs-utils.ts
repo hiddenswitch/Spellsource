@@ -13,6 +13,11 @@ export const readAllJson = async <T = any>(globPath: string, transform?: (json: 
   const files = await glob.promise(path.join(process.cwd(), globPath));
   return await Promise.all(files.map(async file => {
     const fileText = await fs.promises.readFile(file, {encoding: "utf8"});
+    try {
+      JSON.parse(fileText)
+    } catch (e) {
+      console.error(`failed to parse json ${file}`)
+    }
     const json = JSON.parse(fileText) as T;
     transform?.(json, file)
     return json;

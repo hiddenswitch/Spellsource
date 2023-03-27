@@ -1,8 +1,9 @@
-import Blockly, {Block, BlockSvg, Connection, isNumber, Workspace, WorkspaceSvg} from 'blockly'
+import Blockly, {Block, BlockSvg, Connection, Workspace, WorkspaceSvg} from 'blockly'
 import * as BlocklyMiscUtils from './blockly-misc-utils'
 import {isArray} from 'lodash'
 import {BlockArgDef, BlockDef} from "./blocks";
 import {CardDef} from '../components/card-display';
+import {isNumeric} from "./workspace-utils";
 
 const classBlocksDictionary = {} //A dictionary mapping the 'class' argument a block uses to the block itself
 const enumBlocksDictionary = {} //A dictionary mapping the enum value of the block to the block itself
@@ -203,7 +204,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
       let lowestConnection = attributesBlock.getFirstStatementConnection()
       for (let atr in card.attributes) {
         let attributeBlock
-        if (isNumber(card.attributes[atr])) {
+        if (isNumeric(card.attributes[atr])) {
           attributeBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes_int')
           attributeBlock.getField('value').setValue(card.attributes[atr])
         } else {
@@ -388,7 +389,7 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
     block.getInput(inputName).connection.connect(descBlock.outputConnection)
 
     if (!!dynamicDescription.value) {
-      if (isNumber(dynamicDescription.value)) {
+      if (isNumeric(dynamicDescription.value)) {
         handleIntArg(descBlock, 'value', workspace, dynamicDescription.value)
       } else {
         handleArg(descBlock.getInput('value').connection, dynamicDescription.value,
@@ -1170,7 +1171,7 @@ export function generateDummyBlock(json, inputName, parentJson) {
     consoleBlock = {
       type: type + '_' + json.toString(),
       data: json.toString(),
-      colour: isNumber(color) ? parseInt(color) : color,
+      colour: isNumeric(color) ? parseInt(color) : color,
       output: type,
       message0: BlocklyMiscUtils.toHappyFormatting(json.toString())
     }
@@ -1223,7 +1224,7 @@ export function generateDummyBlock(json, inputName, parentJson) {
       type: type + '_' + className.replace(type, ''),
       inputsInline: false,
       output: output,
-      colour: isNumber(color) ? parseInt(color) : color,
+      colour: isNumeric(color) ? parseInt(color) : color,
       message0: className + '%1',
       args0: [{
         type: 'field_label_serializable_hidden',
@@ -1309,7 +1310,7 @@ export function handleNoMatch(json, inputName, parentJson, workspace) {
       newArgBlock.setFieldValue(arg, 'customArg')
 
       if (!!newArgBlock.getInput('customValue')) {
-        if (isNumber(argValue)) {
+        if (isNumeric(argValue)) {
           handleIntArg(newArgBlock, 'customValue', workspace, argValue)
         } else if (isArray(argValue)) {
           if (arg === 'aura') {

@@ -44,18 +44,18 @@ const CardEditorView = (props: { defaultCard?: boolean }) => {
   }
 
   const toggleCatalogueBlocks = evt => {
-    setSearchCatalogueBlocks(!searchCatalogueBlocks)
-    setSearchArtBlocks(false)
-    workspace().getToolbox().clearSelection()
+    setSearchCatalogueBlocks(!searchCatalogueBlocks);
+    setSearchArtBlocks(false);
+    (workspace().getToolbox() as Toolbox).clearSelection();
     if (query.length > 0) {
       search({target: {value: query}})
     }
   }
 
   const toggleArtBlocks = evt => {
-    setSearchArtBlocks(!searchArtBlocks)
-    setSearchCatalogueBlocks(false)
-    workspace().getToolbox().clearSelection()
+    setSearchArtBlocks(!searchArtBlocks);
+    setSearchCatalogueBlocks(false);
+    (workspace().getToolbox() as Toolbox).clearSelection();
     if (query.length > 0) {
       search({target: {value: query}})
     }

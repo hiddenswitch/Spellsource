@@ -206,9 +206,8 @@
         "check": [
           "Source_I"
         ],
-        "shadow": {
-          "type": "Source_I",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Source_I"
         }
       }
     ],

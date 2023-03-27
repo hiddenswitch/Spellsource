@@ -48,9 +48,8 @@
       {
         "type": "input_value",
         "name": "name",
-        "shadow": {
+        "block": {
           "type": "Property_text_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Name"
           }
@@ -81,9 +80,8 @@
       {
         "type": "input_value",
         "name": "description",
-        "shadow": {
+        "block": {
           "type": "Property_multilinetext_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Description"
           }
@@ -171,9 +169,8 @@
       {
         "type": "input_value",
         "name": "name",
-        "shadow": {
+        "block": {
           "type": "Property_text_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Name"
           }
@@ -204,9 +201,8 @@
       {
         "type": "input_value",
         "name": "description",
-        "shadow": {
+        "block": {
           "type": "Property_multilinetext_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Description"
           }
@@ -286,9 +282,8 @@
       {
         "type": "input_value",
         "name": "name",
-        "shadow": {
+        "block": {
           "type": "Property_text_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Name"
           }
@@ -319,9 +314,8 @@
       {
         "type": "input_value",
         "name": "description",
-        "shadow": {
+        "block": {
           "type": "Property_multilinetext_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Description"
           }
@@ -401,9 +395,8 @@
       {
         "type": "input_value",
         "name": "name",
-        "shadow": {
+        "block": {
           "type": "Property_text_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Name"
           }
@@ -434,9 +427,8 @@
       {
         "type": "input_value",
         "name": "description",
-        "shadow": {
+        "block": {
           "type": "Property_multilinetext_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Description"
           }
@@ -513,9 +505,8 @@
       {
         "type": "input_value",
         "name": "name",
-        "shadow": {
+        "block": {
           "type": "Property_text_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Name"
           }
@@ -546,9 +537,8 @@
       {
         "type": "input_value",
         "name": "description",
-        "shadow": {
+        "block": {
           "type": "Property_multilinetext_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Description"
           }
@@ -656,9 +646,8 @@
       {
         "type": "input_value",
         "name": "name",
-        "shadow": {
+        "block": {
           "type": "Property_text_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Name"
           }
@@ -679,9 +668,8 @@
         "type": "input_value",
         "name": "rarity",
         "check": "Rarity",
-        "shadow": {
-          "type": "Rarity_FREE",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Rarity_FREE"
         }
       }
     ],
@@ -690,9 +678,8 @@
       {
         "type": "input_value",
         "name": "description",
-        "shadow": {
+        "block": {
           "type": "Property_multilinetext_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Description"
           }
@@ -777,9 +764,8 @@
       {
         "type": "input_value",
         "name": "name",
-        "shadow": {
+        "block": {
           "type": "Property_text_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Name"
           }
@@ -810,9 +796,8 @@
       {
         "type": "input_value",
         "name": "description",
-        "shadow": {
+        "block": {
           "type": "Property_multilinetext_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Description"
           }
@@ -883,9 +868,8 @@
       {
         "type": "input_value",
         "name": "name",
-        "shadow": {
+        "block": {
           "type": "Property_text_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Name"
           }
@@ -916,9 +900,8 @@
       {
         "type": "input_value",
         "name": "description",
-        "shadow": {
+        "block": {
           "type": "Property_multilinetext_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Description"
           }
@@ -984,9 +967,8 @@
       {
         "type": "input_value",
         "name": "name",
-        "shadow": {
+        "block": {
           "type": "Property_text_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Name"
           }
@@ -1017,9 +999,8 @@
       {
         "type": "input_value",
         "name": "description",
-        "shadow": {
+        "block": {
           "type": "Property_multilinetext_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Description"
           }
@@ -1064,38 +1045,22 @@
         "value": true
       }
     ],
-    "message1": "Name: %1 Rarity:%3 Class ID:%2 Hero:%4 Primary:%5 Secondary:%6 Shadow:%7 Highlight: %8 Text: %9",
+    "message1": "Name: %1 Champion:%3 Primary:%4 Secondary:%5 Shadow:%6 Highlight: %7 Text: %8",
     "args1": [
       {
         "type": "input_value",
         "name": "name",
-        "shadow": {
+        "block": {
           "type": "Property_text_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "text": "Name"
           }
         }
       },
       {
-        "type": "input_value",
-        "name": "heroClass",
-        "shadow": {
-          "type": "Property_text_SHADOW",
-          "notActuallyShadow": true,
-          "fields": {
-            "text": "COLOR"
-          }
-        }
-      },
-      {
-        "type": "input_value",
+        "type": "field_label_serializable_hidden",
         "name": "rarity",
-        "check": "Rarity",
-        "shadow": {
-          "type": "Rarity_FREE",
-          "notActuallyShadow": true
-        }
+        "value": "FREE"
       },
       {
         "name": "hero",
@@ -1109,45 +1074,40 @@
         "name": "art.primary",
         "type": "input_value",
         "check": "Color",
-        "shadow": {
-          "type": "Property_color_SHADOW",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Property_color_SHADOW"
         }
       },
       {
         "name": "art.secondary",
         "type": "input_value",
         "check": "Color",
-        "shadow": {
-          "type": "Property_color_SHADOW",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Property_color_SHADOW"
         }
       },
       {
         "name": "art.shadow",
         "type": "input_value",
         "check": "Color",
-        "shadow": {
-          "type": "Property_color_SHADOW",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Property_color_SHADOW"
         }
       },
       {
         "name": "art.highlight",
         "type": "input_value",
         "check": "Color",
-        "shadow": {
-          "type": "Property_color_SHADOW",
-          "notActuallyShadow": true
+        "block": {
+          "type": "Property_color_SHADOW"
         }
       },
       {
         "name": "art.body.vertex",
         "type": "input_value",
         "check": "Color",
-        "shadow": {
+        "block": {
           "type": "Property_color_SHADOW",
-          "notActuallyShadow": true,
           "fields": {
             "r": 255,
             "g": 255,

@@ -1,7 +1,7 @@
 create role website;
 
 grant usage on schema spellsource to website;
-grant select, insert, update on spellsource.cards to website;
+grant select, insert, update, delete on spellsource.cards to website;
 grant select, insert, update, delete on spellsource.decks to website;
 grant select on spellsource.deck_shares to website;
 grant select, update, insert, delete on spellsource.cards_in_deck to website;

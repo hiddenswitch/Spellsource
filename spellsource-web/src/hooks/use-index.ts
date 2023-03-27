@@ -45,7 +45,7 @@ export const cardSearchNode = (card: CardDef): CardSearchNode => ({
 
 // returns index
 export const useIndex = () => {
-  const {allBlocks, allArt, cardsById, blocksByType, ready} = useContext(BlocklyDataContext);
+  const {allBlocks, allArt, classes, blocksByType, ready} = useContext(BlocklyDataContext);
   const index = useRef<Index<SearchNode> | undefined>(undefined)
   if (!index.current && ready) {
     index.current = elasticlunr<SearchNode>(idx => {
@@ -75,7 +75,7 @@ export const useIndex = () => {
         })
       }
 
-      for (const card of Object.values(cardsById)) {
+      for (const card of Object.values(classes)) {
         idx.addDoc(cardSearchNode(card))
       }
     });
