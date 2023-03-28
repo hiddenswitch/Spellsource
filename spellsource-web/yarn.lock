@@ -1425,6 +1425,13 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@graphile-contrib/pg-omit-archived@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@graphile-contrib/pg-omit-archived/-/pg-omit-archived-3.2.1.tgz#10e4af462839d208aa603cc29c4cf886c26cd5da"
+  integrity sha512-vfx7fnwjoyBRKqW5e4+FuJiBydMurIyDVb5ajkByQ+zJ2h5TkY3sd36z0957eanpPEBNqdlu0dhS6oJGjS9vHQ==
+  dependencies:
+    graphile-utils "^4.5.6"
+
 "@graphile/lru@4.11.0":
   version "4.11.0"
   resolved "https://registry.yarnpkg.com/@graphile/lru/-/lru-4.11.0.tgz#dd805ee083063488796ec0eac5a8b50b21c076f9"
@@ -5941,7 +5948,7 @@ graphile-build@4, graphile-build@4.13.0:
     pluralize "^7.0.0"
     semver "^6.0.0"
 
-graphile-utils@^4.13.0:
+graphile-utils@^4.13.0, graphile-utils@^4.5.6:
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/graphile-utils/-/graphile-utils-4.13.0.tgz#f1181a83fd1db610881b9b632f4e2fd03283275e"
   integrity sha512-6nzlCNeJB1qV9AaPyJ/iHU+CDfs8jxpcmQ47Fmrgmp8r5VwKdL/uDt0LW8IuXu2VZrbM1GGyZ8rQtcdVmQYZ+g==

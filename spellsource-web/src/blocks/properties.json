@@ -1,5 +1,25 @@
 [
   {
+    "type": "Property_public",
+    "colour": "#A6A6A6",
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "Publicly Usable%1",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "public",
+        "value": true
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Makes a card not able to be put in decks or randomly generated."
+  },
+  {
     "type": "Property_sprite",
     "colour": "#A6A6A6",
     "previousStatement": [
@@ -489,7 +509,7 @@
       }
     ],
     "data": "BLOCKLY_EXTEND_PREVIOUS",
-    "comment": "Makes a card not appear in the card collection."
+    "comment": "Makes a card not able to be put in decks or randomly generated."
   },
   {
     "type": "Property_set",

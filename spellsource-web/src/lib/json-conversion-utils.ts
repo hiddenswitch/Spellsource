@@ -1173,7 +1173,7 @@ export function generateDummyBlock(json, inputName, parentJson) {
       data: json.toString(),
       colour: isNumeric(color) ? parseInt(color) : color,
       output: type,
-      message0: BlocklyMiscUtils.toHappyFormatting(json.toString())
+      message0: BlocklyMiscUtils.formatCurated(json.toString())
     }
   } else {
     let props = relevantProperties(json)
@@ -1201,7 +1201,7 @@ export function generateDummyBlock(json, inputName, parentJson) {
         } else {
           arg.type = 'field_label_serializable_hidden'
           arg.value = json[prop]
-          newMessage += '"' + BlocklyMiscUtils.toHappyFormatting(json[prop].toString()) + '"'
+          newMessage += '"' + BlocklyMiscUtils.formatCurated(json[prop].toString()) + '"'
         }
       } else {
         arg.type = 'input_value'

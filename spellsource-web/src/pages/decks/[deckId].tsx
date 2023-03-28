@@ -31,7 +31,7 @@ export default () => {
         <title>{deck?.name ?? "Spellsource Decks"}</title>
       </Head>
       <div ref={ref}>
-        <HoverCardDisplay/>
+        {/*<HoverCardDisplay/>*/}
         <div id={"Collection"} className={styles.collection}>
           <div id={"CardsList"} className={styles.collectionCardsSection}>
             <Collection/>

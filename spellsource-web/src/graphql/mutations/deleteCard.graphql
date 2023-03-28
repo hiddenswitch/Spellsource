@@ -1,5 +1,5 @@
 mutation deleteCard($cardId: String!) {
-  deleteCardById(input: {id: $cardId}) {
+  updateCardById(input: {id: $cardId, cardPatch: {isArchived: true}}) {
     card {
       ...card
     }

@@ -82,6 +82,11 @@ type Query implements Node {
     A filter to be used in determining which values should be returned by the collection.
     """
     filter: CardFilter
+
+    """
+    Indicates whether archived items should be included in the results or not.
+    """
+    includeArchived: IncludeArchivedOption = NO
   ): CardsConnection
 
   """Reads and enables pagination through a set of `CardsInDeck`."""
@@ -117,6 +122,74 @@ type Query implements Node {
     """
     filter: CardsInDeckFilter
   ): CardsInDecksConnection
+
+  """Reads and enables pagination through a set of `Class`."""
+  allClasses(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Class`."""
+    orderBy: [ClassesOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ClassCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: ClassFilter
+  ): ClassesConnection
+
+  """Reads and enables pagination through a set of `CollectionCard`."""
+  allCollectionCards(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `CollectionCard`."""
+    orderBy: [CollectionCardsOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: CollectionCardCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: CollectionCardFilter
+  ): CollectionCardsConnection
 
   """
   Reads and enables pagination through a set of `DeckPlayerAttributeTuple`.
@@ -1491,6 +1564,8 @@ type Card implements Node {
   cardScript: JSON
   createdAt: Datetime!
   lastModified: Datetime!
+  isArchived: Boolean!
+  isPrivate: Boolean!
 
   """Reads and enables pagination through a set of `CardsInDeck`."""
   cardsInDecksByCardId(
@@ -1525,6 +1600,7 @@ type Card implements Node {
     """
     filter: CardsInDeckFilter
   ): CardsInDecksConnection!
+  collectible: Boolean
   cost: Int
   type: String
 }
@@ -2654,6 +2730,10 @@ enum CardsOrderBy {
   CREATED_AT_DESC
   LAST_MODIFIED_ASC
   LAST_MODIFIED_DESC
+  IS_ARCHIVED_ASC
+  IS_ARCHIVED_DESC
+  IS_PRIVATE_ASC
+  IS_PRIVATE_DESC
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
 }
@@ -2682,6 +2762,12 @@ input CardCondition {
 
   """Checks for equality with the object’s `lastModified` field."""
   lastModified: Datetime
+
+  """Checks for equality with the object’s `isArchived` field."""
+  isArchived: Boolean
+
+  """Checks for equality with the object’s `isPrivate` field."""
+  isPrivate: Boolean
 }
 
 """
@@ -2705,6 +2791,15 @@ input CardFilter {
 
   """Filter by the object’s `lastModified` field."""
   lastModified: DatetimeFilter
+
+  """Filter by the object’s `isArchived` field."""
+  isArchived: BooleanFilter
+
+  """Filter by the object’s `isPrivate` field."""
+  isPrivate: BooleanFilter
+
+  """Filter by the object’s `collectible` field."""
+  collectible: BooleanFilter
 
   """Filter by the object’s `cost` field."""
   cost: IntFilter
@@ -2777,6 +2872,273 @@ input JSONFilter {
 
   """Contained by the specified JSON."""
   containedBy: JSON
+}
+
+"""
+Indicates whether archived items should be included in the results or not.
+"""
+enum IncludeArchivedOption {
+  """Exclude archived items."""
+  NO
+
+  """Include archived items."""
+  YES
+
+  """Only include archived items (i.e. exclude non-archived items)."""
+  EXCLUSIVELY
+
+  """
+  If there is a parent GraphQL record and it is archived then this is equivalent to YES, in all other cases this is equivalent to NO.
+  """
+  INHERIT
+}
+
+"""A connection to a list of `Class` values."""
+type ClassesConnection {
+  """A list of `Class` objects."""
+  nodes: [Class]!
+
+  """
+  A list of edges which contains the `Class` and cursor to aid in pagination.
+  """
+  edges: [ClassesEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Class` you could get from the connection."""
+  totalCount: Int!
+}
+
+type Class {
+  createdBy: String
+  class: String
+  isPrivate: Boolean
+  collectible: Boolean
+  cardScript: JSON
+  id: String
+  name: String
+}
+
+"""A `Class` edge in the connection."""
+type ClassesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Class` at the end of the edge."""
+  node: Class
+}
+
+"""Methods to use when ordering `Class`."""
+enum ClassesOrderBy {
+  NATURAL
+  CREATED_BY_ASC
+  CREATED_BY_DESC
+  CLASS_ASC
+  CLASS_DESC
+  IS_PRIVATE_ASC
+  IS_PRIVATE_DESC
+  COLLECTIBLE_ASC
+  COLLECTIBLE_DESC
+  CARD_SCRIPT_ASC
+  CARD_SCRIPT_DESC
+  ID_ASC
+  ID_DESC
+  NAME_ASC
+  NAME_DESC
+}
+
+"""
+A condition to be used against `Class` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input ClassCondition {
+  """Checks for equality with the object’s `createdBy` field."""
+  createdBy: String
+
+  """Checks for equality with the object’s `class` field."""
+  class: String
+
+  """Checks for equality with the object’s `isPrivate` field."""
+  isPrivate: Boolean
+
+  """Checks for equality with the object’s `collectible` field."""
+  collectible: Boolean
+
+  """Checks for equality with the object’s `cardScript` field."""
+  cardScript: JSON
+
+  """Checks for equality with the object’s `id` field."""
+  id: String
+
+  """Checks for equality with the object’s `name` field."""
+  name: String
+}
+
+"""
+A filter to be used against `Class` object types. All fields are combined with a logical ‘and.’
+"""
+input ClassFilter {
+  """Filter by the object’s `createdBy` field."""
+  createdBy: StringFilter
+
+  """Filter by the object’s `class` field."""
+  class: StringFilter
+
+  """Filter by the object’s `isPrivate` field."""
+  isPrivate: BooleanFilter
+
+  """Filter by the object’s `collectible` field."""
+  collectible: BooleanFilter
+
+  """Filter by the object’s `cardScript` field."""
+  cardScript: JSONFilter
+
+  """Filter by the object’s `id` field."""
+  id: StringFilter
+
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [ClassFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [ClassFilter!]
+
+  """Negates the expression."""
+  not: ClassFilter
+}
+
+"""A connection to a list of `CollectionCard` values."""
+type CollectionCardsConnection {
+  """A list of `CollectionCard` objects."""
+  nodes: [CollectionCard]!
+
+  """
+  A list of edges which contains the `CollectionCard` and cursor to aid in pagination.
+  """
+  edges: [CollectionCardsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `CollectionCard` you could get from the connection."""
+  totalCount: Int!
+}
+
+type CollectionCard {
+  id: String
+  createdBy: String
+  cardScript: JSON
+  blocklyWorkspace: String
+  type: String
+  class: String
+  cost: Int
+  collectible: Boolean
+  searchMessage: String
+}
+
+"""A `CollectionCard` edge in the connection."""
+type CollectionCardsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `CollectionCard` at the end of the edge."""
+  node: CollectionCard
+}
+
+"""Methods to use when ordering `CollectionCard`."""
+enum CollectionCardsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  CREATED_BY_ASC
+  CREATED_BY_DESC
+  CARD_SCRIPT_ASC
+  CARD_SCRIPT_DESC
+  BLOCKLY_WORKSPACE_ASC
+  BLOCKLY_WORKSPACE_DESC
+  TYPE_ASC
+  TYPE_DESC
+  CLASS_ASC
+  CLASS_DESC
+  COST_ASC
+  COST_DESC
+  COLLECTIBLE_ASC
+  COLLECTIBLE_DESC
+  SEARCH_MESSAGE_ASC
+  SEARCH_MESSAGE_DESC
+}
+
+"""
+A condition to be used against `CollectionCard` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input CollectionCardCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: String
+
+  """Checks for equality with the object’s `createdBy` field."""
+  createdBy: String
+
+  """Checks for equality with the object’s `cardScript` field."""
+  cardScript: JSON
+
+  """Checks for equality with the object’s `blocklyWorkspace` field."""
+  blocklyWorkspace: String
+
+  """Checks for equality with the object’s `type` field."""
+  type: String
+
+  """Checks for equality with the object’s `class` field."""
+  class: String
+
+  """Checks for equality with the object’s `cost` field."""
+  cost: Int
+
+  """Checks for equality with the object’s `collectible` field."""
+  collectible: Boolean
+
+  """Checks for equality with the object’s `searchMessage` field."""
+  searchMessage: String
+}
+
+"""
+A filter to be used against `CollectionCard` object types. All fields are combined with a logical ‘and.’
+"""
+input CollectionCardFilter {
+  """Filter by the object’s `id` field."""
+  id: StringFilter
+
+  """Filter by the object’s `createdBy` field."""
+  createdBy: StringFilter
+
+  """Filter by the object’s `cardScript` field."""
+  cardScript: JSONFilter
+
+  """Filter by the object’s `type` field."""
+  type: StringFilter
+
+  """Filter by the object’s `class` field."""
+  class: StringFilter
+
+  """Filter by the object’s `cost` field."""
+  cost: IntFilter
+
+  """Filter by the object’s `collectible` field."""
+  collectible: BooleanFilter
+
+  """Filter by the object’s `searchMessage` field."""
+  searchMessage: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [CollectionCardFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [CollectionCardFilter!]
+
+  """Negates the expression."""
+  not: CollectionCardFilter
 }
 
 """A connection to a list of `Deck` values."""
@@ -3541,6 +3903,8 @@ input CardInput {
   cardScript: JSON
   createdAt: Datetime
   lastModified: Datetime
+  isArchived: Boolean
+  isPrivate: Boolean
 }
 
 """The output of our create `CardsInDeck` mutation."""
@@ -4179,6 +4543,8 @@ input CardPatch {
   cardScript: JSON
   createdAt: Datetime
   lastModified: Datetime
+  isArchived: Boolean
+  isPrivate: Boolean
 }
 
 """All input for the `updateCardById` mutation."""

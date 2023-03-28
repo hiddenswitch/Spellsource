@@ -10,7 +10,7 @@ import {BlockDef} from "./blocks";
 import {InitBlockOptions} from "../components/card-editor-workspace";
 import {Flyout} from "flyout_base";
 
-export const toHappyFormatting = (string: string) => string.split('_')
+export const formatCurated = (string: string) => string.split('_')
   .map(w => w[0].toUpperCase() + w.substring(1).toLowerCase())
   .join(' ')
   .replace("Hero Power", "Skill");
@@ -200,7 +200,7 @@ export function cardMessage(card: CardDef) {
   } else if (card.type === "CLASS") {
     return card.name;
   } else {
-    ret += toHappyFormatting(card.type)
+    ret += formatCurated(card.type)
   }
   ret += ' "' + card.name + '"'
   return ret
@@ -385,7 +385,7 @@ export function cardDescription(card: CardDef) {
   }
   let desc = '"' + words[0]
   if (!!card.race) {
-    desc = toHappyFormatting(card.race) + ' ' + desc
+    desc = formatCurated(card.race) + ' ' + desc
   }
   let counter = desc.length
   for (let word of words.slice(1)) {

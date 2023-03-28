@@ -13,7 +13,7 @@ import SpellsourceRenderer from '../lib/spellsource-renderer'
 import * as SpellsourceGenerator from '../lib/spellsource-generator'
 import SimpleReactBlockly from './simple-react-blockly'
 import * as BlocklyToolbox from '../lib/blockly-toolbox'
-import {cardsCategory, classesCategory, myCardsCategory} from '../lib/blockly-toolbox'
+import {cardsCategory, classesCategory, myCardsCategory, myCardsForSetCategory} from '../lib/blockly-toolbox'
 import {BlocklyDataContext} from "../pages/card-editor";
 import useComponentDidMount from '../hooks/use-component-did-mount'
 import {useDeleteCardMutation, useGetCardLazyQuery, useUpsertCardMutation} from "../__generated__/client";
@@ -39,7 +39,7 @@ export type InitBlockOptions = {
 }
 
 //Managing the creation and deletion of WorkspaceCard and WorkspaceHeroClass blocks
-const handleWorkspaceCards = (workspace: WorkspaceSvg) => {
+const handleWorkspaceCards = (workspace: WorkspaceSvg, userId: string) => {
   const cardScript = {} as Record<string, CardDef>
 
   // Apply card ids and cardScript to all Starter_ blocks
@@ -47,8 +47,8 @@ const handleWorkspaceCards = (workspace: WorkspaceSvg) => {
   workspace.getTopBlocks(false)
     .filter(block => block.type.startsWith('Starter_'))
     .forEach((block: BlockSvg) => {
-        if (!block.getFieldValue("id")) {
-          block.setFieldValue(crypto.randomUUID(), "id");
+        if (!block.getFieldValue("id") || !block.getFieldValue("id").startsWith(userId)) {
+          block.setFieldValue(userId + "-" + block.id, "id");
         }
         const blockXml = Blockly.Xml.blockToDom(block, true)
         const card = block.cardScript = WorkspaceUtils.xmlToCardScript(blockXml) as CardDef
@@ -58,7 +58,7 @@ const handleWorkspaceCards = (workspace: WorkspaceSvg) => {
           BlocklyMiscUtils.setupHeroClassColor(card);
         }
 
-        if (block.rendered) {
+        /*if (block.rendered) {
           let ogText = block.getCommentText()
           block.setCommentText(JSON.stringify(card))
 
@@ -69,7 +69,7 @@ const handleWorkspaceCards = (workspace: WorkspaceSvg) => {
           if (block.getCommentIcon().isVisible() && block.getCommentText() !== ogText) {
             block.getCommentIcon().updateText()
           }
-        }
+        }*/
       }
     )
 
@@ -148,12 +148,22 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
 
     const blocklyWorkspace = Blockly.Xml.domToText(dom);
 
-    await upsertCard({variables: {cardId, card: {id: cardId, createdBy: userId, cardScript, blocklyWorkspace}}});
+    const isPrivate = !cardScript.public;
+    if (!isPrivate) {
+      delete cardScript.public;
+    }
+
+    await upsertCard({variables: {cardId, card: {id: cardId, createdBy: userId, cardScript, blocklyWorkspace, isPrivate}}});
   }
 
   const onDelete = async (block: BlockSvg) => {
     const cardId = block.getFieldValue("id");
     block.dispose(true, true)
+
+    for (let blockSvg of mainWorkspace().getTopBlocks(true).filter(block => block.getFieldValue("id") === cardId)) {
+      blockSvg.dispose(true, true)
+    }
+
     if (cardId) {
       await deleteCard({variables: {cardId}});
       await data.refreshMyCards();
@@ -161,14 +171,22 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
   }
 
   useEffect(() => {
-    const myCards = toolbox()?.getToolboxItemById("My Cards") as ToolboxCategory;
-    myCards?.updateFlyoutContents(myCardsCategory(data))
-
     const classes = toolbox()?.getToolboxItemById("Classes") as ToolboxCategory;
     classes?.updateFlyoutContents(classesCategory(data))
 
     const cards = toolbox()?.getToolboxItemById("Cards") as ToolboxCategory;
     cards?.updateFlyoutContents(cardsCategory(data))
+
+    const myCards = toolbox()?.getToolboxItemById("My Cards") as ToolboxCategory;
+    myCards?.updateFlyoutContents(myCardsCategory(data))
+
+    uniqueBy(data.myCards.map(card => card.cardScript.set), card => card.set).forEach(set => {
+      if (set === "CUSTOM") return;
+      const category = toolbox()?.getToolboxItemById(`My ${set} Cards`) as ToolboxCategory;
+      category?.updateFlyoutContents(myCardsForSetCategory(set, data))
+    })
+
+    // TODO visually remove set category if no more blocks in it
 
     mainWorkspace().refreshToolboxSelection()
     onWorkspaceChanged();
@@ -225,7 +243,7 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
   const onWorkspaceChanged = () => {
     if (mainWorkspace().isDragging()) return; // While dragging a block, it doesn't appear in the blocks list
 
-    const cardScript = handleWorkspaceCards(mainWorkspace())
+    const cardScript = handleWorkspaceCards(mainWorkspace(), data.userId || "guest")
     BlocklyMiscUtils.pluralStuff(mainWorkspace())
     let json = JSON.stringify(cardScript, null, 2);
     props.setJSON(json)
@@ -290,28 +308,28 @@ const CardEditorWorkspace = forwardRef((props: CardEditorWorkspaceProps, blockly
     if (!index) return;
 
     setResults(index
-        // Query the index with search string to get an [] of IDs
-        .search(query, {expand: true}) // accept partial matches
-        .map(({ref}) => index.documentStore.getDoc(ref))
-        .filter(doc => {
-          if (props.searchCatalogueBlocks) {
-            return doc.nodeType === 'Card' && "baseManaCost" in doc.node && doc.node.heroClass in Blockly["heroClassColors"]
-          }
-          if (props.searchArtBlocks) {
-            return doc.nodeType === 'File' && !!Blockly.Blocks['Art_' + doc.title]
-          }
-          return doc.nodeType === 'Block'
-        })
-        .map(doc => {
-          if (doc.nodeType === 'Card') {
-            return 'CatalogueCard_' + doc.id
-          }
-          if (doc.nodeType === 'File') {
-            return 'Art_' + doc.title
-          }
-          return doc.id
-        })
-        .slice(0, 20)
+      // Query the index with search string to get an [] of IDs
+      .search(query, {expand: true}) // accept partial matches
+      .map(({ref}) => index.documentStore.getDoc(ref))
+      .filter(doc => {
+        if (props.searchCatalogueBlocks) {
+          return doc.nodeType === 'Card' && "baseManaCost" in doc.node && doc.node.heroClass in Blockly["heroClassColors"]
+        }
+        if (props.searchArtBlocks) {
+          return doc.nodeType === 'File' && !!Blockly.Blocks['Art_' + doc.title]
+        }
+        return doc.nodeType === 'Block'
+      })
+      .map(doc => {
+        if (doc.nodeType === 'Card') {
+          return 'CatalogueCard_' + doc.id
+        }
+        if (doc.nodeType === 'File') {
+          return 'Art_' + doc.title
+        }
+        return doc.id
+      })
+      .slice(0, 20)
     )
   }
 

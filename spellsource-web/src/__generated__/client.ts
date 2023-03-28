@@ -157,10 +157,13 @@ export type Card = Node & {
   cardScript?: Maybe<Scalars['JSON']>;
   /** Reads and enables pagination through a set of `CardsInDeck`. */
   cardsInDecksByCardId: CardsInDecksConnection;
+  collectible?: Maybe<Scalars['Boolean']>;
   cost?: Maybe<Scalars['Int']>;
   createdAt: Scalars['Datetime'];
   createdBy: Scalars['String'];
   id: Scalars['String'];
+  isArchived: Scalars['Boolean'];
+  isPrivate: Scalars['Boolean'];
   lastModified: Scalars['Datetime'];
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   nodeId: Scalars['ID'];
@@ -192,6 +195,10 @@ export type CardCondition = {
   createdBy?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `isArchived` field. */
+  isArchived?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `isPrivate` field. */
+  isPrivate?: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `lastModified` field. */
   lastModified?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `uri` field. */
@@ -204,6 +211,8 @@ export type CardFilter = {
   and?: InputMaybe<Array<CardFilter>>;
   /** Filter by the object’s `cardScript` field. */
   cardScript?: InputMaybe<JsonFilter>;
+  /** Filter by the object’s `collectible` field. */
+  collectible?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `cost` field. */
   cost?: InputMaybe<IntFilter>;
   /** Filter by the object’s `createdAt` field. */
@@ -212,6 +221,10 @@ export type CardFilter = {
   createdBy?: InputMaybe<StringFilter>;
   /** Filter by the object’s `id` field. */
   id?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `isArchived` field. */
+  isArchived?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `isPrivate` field. */
+  isPrivate?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `lastModified` field. */
   lastModified?: InputMaybe<DatetimeFilter>;
   /** Negates the expression. */
@@ -231,6 +244,8 @@ export type CardInput = {
   createdAt?: InputMaybe<Scalars['Datetime']>;
   createdBy: Scalars['String'];
   id: Scalars['String'];
+  isArchived?: InputMaybe<Scalars['Boolean']>;
+  isPrivate?: InputMaybe<Scalars['Boolean']>;
   lastModified?: InputMaybe<Scalars['Datetime']>;
   uri?: InputMaybe<Scalars['String']>;
 };
@@ -242,6 +257,8 @@ export type CardPatch = {
   createdAt?: InputMaybe<Scalars['Datetime']>;
   createdBy?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
+  isArchived?: InputMaybe<Scalars['Boolean']>;
+  isPrivate?: InputMaybe<Scalars['Boolean']>;
   lastModified?: InputMaybe<Scalars['Datetime']>;
   uri?: InputMaybe<Scalars['String']>;
 };
@@ -376,6 +393,10 @@ export const CardsOrderBy = {
   CreatedByDesc: 'CREATED_BY_DESC',
   IdAsc: 'ID_ASC',
   IdDesc: 'ID_DESC',
+  IsArchivedAsc: 'IS_ARCHIVED_ASC',
+  IsArchivedDesc: 'IS_ARCHIVED_DESC',
+  IsPrivateAsc: 'IS_PRIVATE_ASC',
+  IsPrivateDesc: 'IS_PRIVATE_DESC',
   LastModifiedAsc: 'LAST_MODIFIED_ASC',
   LastModifiedDesc: 'LAST_MODIFIED_DESC',
   Natural: 'NATURAL',
@@ -386,6 +407,211 @@ export const CardsOrderBy = {
 } as const;
 
 export type CardsOrderBy = typeof CardsOrderBy[keyof typeof CardsOrderBy];
+export type Class = {
+  __typename?: 'Class';
+  cardScript?: Maybe<Scalars['JSON']>;
+  class?: Maybe<Scalars['String']>;
+  collectible?: Maybe<Scalars['Boolean']>;
+  createdBy?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  isPrivate?: Maybe<Scalars['Boolean']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+/** A condition to be used against `Class` object types. All fields are tested for equality and combined with a logical ‘and.’ */
+export type ClassCondition = {
+  /** Checks for equality with the object’s `cardScript` field. */
+  cardScript?: InputMaybe<Scalars['JSON']>;
+  /** Checks for equality with the object’s `class` field. */
+  class?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `collectible` field. */
+  collectible?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `createdBy` field. */
+  createdBy?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `id` field. */
+  id?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `isPrivate` field. */
+  isPrivate?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `name` field. */
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** A filter to be used against `Class` object types. All fields are combined with a logical ‘and.’ */
+export type ClassFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<ClassFilter>>;
+  /** Filter by the object’s `cardScript` field. */
+  cardScript?: InputMaybe<JsonFilter>;
+  /** Filter by the object’s `class` field. */
+  class?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `collectible` field. */
+  collectible?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `createdBy` field. */
+  createdBy?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `isPrivate` field. */
+  isPrivate?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `name` field. */
+  name?: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<ClassFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<ClassFilter>>;
+};
+
+/** A connection to a list of `Class` values. */
+export type ClassesConnection = {
+  __typename?: 'ClassesConnection';
+  /** A list of edges which contains the `Class` and cursor to aid in pagination. */
+  edges: Array<ClassesEdge>;
+  /** A list of `Class` objects. */
+  nodes: Array<Maybe<Class>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `Class` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `Class` edge in the connection. */
+export type ClassesEdge = {
+  __typename?: 'ClassesEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `Class` at the end of the edge. */
+  node?: Maybe<Class>;
+};
+
+/** Methods to use when ordering `Class`. */
+export const ClassesOrderBy = {
+  CardScriptAsc: 'CARD_SCRIPT_ASC',
+  CardScriptDesc: 'CARD_SCRIPT_DESC',
+  ClassAsc: 'CLASS_ASC',
+  ClassDesc: 'CLASS_DESC',
+  CollectibleAsc: 'COLLECTIBLE_ASC',
+  CollectibleDesc: 'COLLECTIBLE_DESC',
+  CreatedByAsc: 'CREATED_BY_ASC',
+  CreatedByDesc: 'CREATED_BY_DESC',
+  IdAsc: 'ID_ASC',
+  IdDesc: 'ID_DESC',
+  IsPrivateAsc: 'IS_PRIVATE_ASC',
+  IsPrivateDesc: 'IS_PRIVATE_DESC',
+  NameAsc: 'NAME_ASC',
+  NameDesc: 'NAME_DESC',
+  Natural: 'NATURAL'
+} as const;
+
+export type ClassesOrderBy = typeof ClassesOrderBy[keyof typeof ClassesOrderBy];
+export type CollectionCard = {
+  __typename?: 'CollectionCard';
+  blocklyWorkspace?: Maybe<Scalars['String']>;
+  cardScript?: Maybe<Scalars['JSON']>;
+  class?: Maybe<Scalars['String']>;
+  collectible?: Maybe<Scalars['Boolean']>;
+  cost?: Maybe<Scalars['Int']>;
+  createdBy?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  searchMessage?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
+/**
+ * A condition to be used against `CollectionCard` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type CollectionCardCondition = {
+  /** Checks for equality with the object’s `blocklyWorkspace` field. */
+  blocklyWorkspace?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `cardScript` field. */
+  cardScript?: InputMaybe<Scalars['JSON']>;
+  /** Checks for equality with the object’s `class` field. */
+  class?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `collectible` field. */
+  collectible?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `cost` field. */
+  cost?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdBy` field. */
+  createdBy?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `id` field. */
+  id?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `searchMessage` field. */
+  searchMessage?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `type` field. */
+  type?: InputMaybe<Scalars['String']>;
+};
+
+/** A filter to be used against `CollectionCard` object types. All fields are combined with a logical ‘and.’ */
+export type CollectionCardFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<CollectionCardFilter>>;
+  /** Filter by the object’s `cardScript` field. */
+  cardScript?: InputMaybe<JsonFilter>;
+  /** Filter by the object’s `class` field. */
+  class?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `collectible` field. */
+  collectible?: InputMaybe<BooleanFilter>;
+  /** Filter by the object’s `cost` field. */
+  cost?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `createdBy` field. */
+  createdBy?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `id` field. */
+  id?: InputMaybe<StringFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<CollectionCardFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<CollectionCardFilter>>;
+  /** Filter by the object’s `searchMessage` field. */
+  searchMessage?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `type` field. */
+  type?: InputMaybe<StringFilter>;
+};
+
+/** A connection to a list of `CollectionCard` values. */
+export type CollectionCardsConnection = {
+  __typename?: 'CollectionCardsConnection';
+  /** A list of edges which contains the `CollectionCard` and cursor to aid in pagination. */
+  edges: Array<CollectionCardsEdge>;
+  /** A list of `CollectionCard` objects. */
+  nodes: Array<Maybe<CollectionCard>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `CollectionCard` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `CollectionCard` edge in the connection. */
+export type CollectionCardsEdge = {
+  __typename?: 'CollectionCardsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `CollectionCard` at the end of the edge. */
+  node?: Maybe<CollectionCard>;
+};
+
+/** Methods to use when ordering `CollectionCard`. */
+export const CollectionCardsOrderBy = {
+  BlocklyWorkspaceAsc: 'BLOCKLY_WORKSPACE_ASC',
+  BlocklyWorkspaceDesc: 'BLOCKLY_WORKSPACE_DESC',
+  CardScriptAsc: 'CARD_SCRIPT_ASC',
+  CardScriptDesc: 'CARD_SCRIPT_DESC',
+  ClassAsc: 'CLASS_ASC',
+  ClassDesc: 'CLASS_DESC',
+  CollectibleAsc: 'COLLECTIBLE_ASC',
+  CollectibleDesc: 'COLLECTIBLE_DESC',
+  CostAsc: 'COST_ASC',
+  CostDesc: 'COST_DESC',
+  CreatedByAsc: 'CREATED_BY_ASC',
+  CreatedByDesc: 'CREATED_BY_DESC',
+  IdAsc: 'ID_ASC',
+  IdDesc: 'ID_DESC',
+  Natural: 'NATURAL',
+  SearchMessageAsc: 'SEARCH_MESSAGE_ASC',
+  SearchMessageDesc: 'SEARCH_MESSAGE_DESC',
+  TypeAsc: 'TYPE_ASC',
+  TypeDesc: 'TYPE_DESC'
+} as const;
+
+export type CollectionCardsOrderBy = typeof CollectionCardsOrderBy[keyof typeof CollectionCardsOrderBy];
 /** All input for the create `BotUser` mutation. */
 export type CreateBotUserInput = {
   /** The `BotUser` to be created by this mutation. */
@@ -2342,6 +2568,19 @@ export type ImageDef = {
   width: Scalars['Int'];
 };
 
+/** Indicates whether archived items should be included in the results or not. */
+export const IncludeArchivedOption = {
+  /** Only include archived items (i.e. exclude non-archived items). */
+  Exclusively: 'EXCLUSIVELY',
+  /** If there is a parent GraphQL record and it is archived then this is equivalent to YES, in all other cases this is equivalent to NO. */
+  Inherit: 'INHERIT',
+  /** Exclude archived items. */
+  No: 'NO',
+  /** Include archived items. */
+  Yes: 'YES'
+} as const;
+
+export type IncludeArchivedOption = typeof IncludeArchivedOption[keyof typeof IncludeArchivedOption];
 /** A filter to be used against Int fields. All fields are combined with a logical ‘and.’ */
 export type IntFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
@@ -3376,6 +3615,10 @@ export type Query = Node & {
   allCards?: Maybe<CardsConnection>;
   /** Reads and enables pagination through a set of `CardsInDeck`. */
   allCardsInDecks?: Maybe<CardsInDecksConnection>;
+  /** Reads and enables pagination through a set of `Class`. */
+  allClasses?: Maybe<ClassesConnection>;
+  /** Reads and enables pagination through a set of `CollectionCard`. */
+  allCollectionCards?: Maybe<CollectionCardsConnection>;
   /** Reads and enables pagination through a set of `DeckPlayerAttributeTuple`. */
   allDeckPlayerAttributeTuples?: Maybe<DeckPlayerAttributeTuplesConnection>;
   /** Reads and enables pagination through a set of `DeckShare`. */
@@ -3467,6 +3710,7 @@ export type QueryAllCardsArgs = {
   condition?: InputMaybe<CardCondition>;
   filter?: InputMaybe<CardFilter>;
   first?: InputMaybe<Scalars['Int']>;
+  includeArchived?: InputMaybe<IncludeArchivedOption>;
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<CardsOrderBy>>;
@@ -3482,6 +3726,30 @@ export type QueryAllCardsInDecksArgs = {
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<CardsInDecksOrderBy>>;
+};
+
+
+export type QueryAllClassesArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<ClassCondition>;
+  filter?: InputMaybe<ClassFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ClassesOrderBy>>;
+};
+
+
+export type QueryAllCollectionCardsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<CollectionCardCondition>;
+  filter?: InputMaybe<CollectionCardFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<CollectionCardsOrderBy>>;
 };
 
 
@@ -5089,6 +5357,18 @@ export type ResolversTypes = {
   CardsInDecksEdge: ResolverTypeWrapper<Partial<CardsInDecksEdge>>;
   CardsInDecksOrderBy: ResolverTypeWrapper<Partial<CardsInDecksOrderBy>>;
   CardsOrderBy: ResolverTypeWrapper<Partial<CardsOrderBy>>;
+  Class: ResolverTypeWrapper<Partial<Class>>;
+  ClassCondition: ResolverTypeWrapper<Partial<ClassCondition>>;
+  ClassFilter: ResolverTypeWrapper<Partial<ClassFilter>>;
+  ClassesConnection: ResolverTypeWrapper<Partial<ClassesConnection>>;
+  ClassesEdge: ResolverTypeWrapper<Partial<ClassesEdge>>;
+  ClassesOrderBy: ResolverTypeWrapper<Partial<ClassesOrderBy>>;
+  CollectionCard: ResolverTypeWrapper<Partial<CollectionCard>>;
+  CollectionCardCondition: ResolverTypeWrapper<Partial<CollectionCardCondition>>;
+  CollectionCardFilter: ResolverTypeWrapper<Partial<CollectionCardFilter>>;
+  CollectionCardsConnection: ResolverTypeWrapper<Partial<CollectionCardsConnection>>;
+  CollectionCardsEdge: ResolverTypeWrapper<Partial<CollectionCardsEdge>>;
+  CollectionCardsOrderBy: ResolverTypeWrapper<Partial<CollectionCardsOrderBy>>;
   CreateBotUserInput: ResolverTypeWrapper<Partial<CreateBotUserInput>>;
   CreateBotUserPayload: ResolverTypeWrapper<Partial<CreateBotUserPayload>>;
   CreateCardInput: ResolverTypeWrapper<Partial<CreateCardInput>>;
@@ -5219,6 +5499,7 @@ export type ResolversTypes = {
   GuestsOrderBy: ResolverTypeWrapper<Partial<GuestsOrderBy>>;
   ID: ResolverTypeWrapper<Partial<Scalars['ID']>>;
   ImageDef: ResolverTypeWrapper<Partial<ImageDef>>;
+  IncludeArchivedOption: ResolverTypeWrapper<Partial<IncludeArchivedOption>>;
   Int: ResolverTypeWrapper<Partial<Scalars['Int']>>;
   IntFilter: ResolverTypeWrapper<Partial<IntFilter>>;
   JSON: ResolverTypeWrapper<Partial<Scalars['JSON']>>;
@@ -5360,6 +5641,16 @@ export type ResolversParentTypes = {
   CardsInDeckPatch: Partial<CardsInDeckPatch>;
   CardsInDecksConnection: Partial<CardsInDecksConnection>;
   CardsInDecksEdge: Partial<CardsInDecksEdge>;
+  Class: Partial<Class>;
+  ClassCondition: Partial<ClassCondition>;
+  ClassFilter: Partial<ClassFilter>;
+  ClassesConnection: Partial<ClassesConnection>;
+  ClassesEdge: Partial<ClassesEdge>;
+  CollectionCard: Partial<CollectionCard>;
+  CollectionCardCondition: Partial<CollectionCardCondition>;
+  CollectionCardFilter: Partial<CollectionCardFilter>;
+  CollectionCardsConnection: Partial<CollectionCardsConnection>;
+  CollectionCardsEdge: Partial<CollectionCardsEdge>;
   CreateBotUserInput: Partial<CreateBotUserInput>;
   CreateBotUserPayload: Partial<CreateBotUserPayload>;
   CreateCardInput: Partial<CreateCardInput>;
@@ -5620,10 +5911,13 @@ export type CardResolvers<ContextType = any, ParentType extends ResolversParentT
   blocklyWorkspace?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   cardScript?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   cardsInDecksByCardId?: Resolver<ResolversTypes['CardsInDecksConnection'], ParentType, ContextType, RequireFields<CardCardsInDecksByCardIdArgs, 'orderBy'>>;
+  collectible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   cost?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Datetime'], ParentType, ContextType>;
   createdBy?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  isArchived?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isPrivate?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   lastModified?: Resolver<ResolversTypes['Datetime'], ParentType, ContextType>;
   nodeId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -5666,6 +5960,58 @@ export type CardsInDecksConnectionResolvers<ContextType = any, ParentType extend
 export type CardsInDecksEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['CardsInDecksEdge'] = ResolversParentTypes['CardsInDecksEdge']> = {
   cursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>;
   node?: Resolver<Maybe<ResolversTypes['CardsInDeck']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ClassResolvers<ContextType = any, ParentType extends ResolversParentTypes['Class'] = ResolversParentTypes['Class']> = {
+  cardScript?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  class?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  collectible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  createdBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isPrivate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ClassesConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['ClassesConnection'] = ResolversParentTypes['ClassesConnection']> = {
+  edges?: Resolver<Array<ResolversTypes['ClassesEdge']>, ParentType, ContextType>;
+  nodes?: Resolver<Array<Maybe<ResolversTypes['Class']>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ClassesEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['ClassesEdge'] = ResolversParentTypes['ClassesEdge']> = {
+  cursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>;
+  node?: Resolver<Maybe<ResolversTypes['Class']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CollectionCardResolvers<ContextType = any, ParentType extends ResolversParentTypes['CollectionCard'] = ResolversParentTypes['CollectionCard']> = {
+  blocklyWorkspace?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  cardScript?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  class?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  collectible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  cost?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  createdBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  searchMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CollectionCardsConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['CollectionCardsConnection'] = ResolversParentTypes['CollectionCardsConnection']> = {
+  edges?: Resolver<Array<ResolversTypes['CollectionCardsEdge']>, ParentType, ContextType>;
+  nodes?: Resolver<Array<Maybe<ResolversTypes['CollectionCard']>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CollectionCardsEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['CollectionCardsEdge'] = ResolversParentTypes['CollectionCardsEdge']> = {
+  cursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>;
+  node?: Resolver<Maybe<ResolversTypes['CollectionCard']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -6262,8 +6608,10 @@ export type PageInfoResolvers<ContextType = any, ParentType extends ResolversPar
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   allArt?: Resolver<Array<ResolversTypes['ImageDef']>, ParentType, ContextType>;
   allBotUsers?: Resolver<Maybe<ResolversTypes['BotUsersConnection']>, ParentType, ContextType, RequireFields<QueryAllBotUsersArgs, 'orderBy'>>;
-  allCards?: Resolver<Maybe<ResolversTypes['CardsConnection']>, ParentType, ContextType, RequireFields<QueryAllCardsArgs, 'orderBy'>>;
+  allCards?: Resolver<Maybe<ResolversTypes['CardsConnection']>, ParentType, ContextType, RequireFields<QueryAllCardsArgs, 'includeArchived' | 'orderBy'>>;
   allCardsInDecks?: Resolver<Maybe<ResolversTypes['CardsInDecksConnection']>, ParentType, ContextType, RequireFields<QueryAllCardsInDecksArgs, 'orderBy'>>;
+  allClasses?: Resolver<Maybe<ResolversTypes['ClassesConnection']>, ParentType, ContextType, RequireFields<QueryAllClassesArgs, 'orderBy'>>;
+  allCollectionCards?: Resolver<Maybe<ResolversTypes['CollectionCardsConnection']>, ParentType, ContextType, RequireFields<QueryAllCollectionCardsArgs, 'orderBy'>>;
   allDeckPlayerAttributeTuples?: Resolver<Maybe<ResolversTypes['DeckPlayerAttributeTuplesConnection']>, ParentType, ContextType, RequireFields<QueryAllDeckPlayerAttributeTuplesArgs, 'orderBy'>>;
   allDeckShares?: Resolver<Maybe<ResolversTypes['DeckSharesConnection']>, ParentType, ContextType, RequireFields<QueryAllDeckSharesArgs, 'orderBy'>>;
   allDecks?: Resolver<Maybe<ResolversTypes['DecksConnection']>, ParentType, ContextType, RequireFields<QueryAllDecksArgs, 'orderBy'>>;
@@ -6567,6 +6915,12 @@ export type Resolvers<ContextType = any> = {
   CardsInDeck?: CardsInDeckResolvers<ContextType>;
   CardsInDecksConnection?: CardsInDecksConnectionResolvers<ContextType>;
   CardsInDecksEdge?: CardsInDecksEdgeResolvers<ContextType>;
+  Class?: ClassResolvers<ContextType>;
+  ClassesConnection?: ClassesConnectionResolvers<ContextType>;
+  ClassesEdge?: ClassesEdgeResolvers<ContextType>;
+  CollectionCard?: CollectionCardResolvers<ContextType>;
+  CollectionCardsConnection?: CollectionCardsConnectionResolvers<ContextType>;
+  CollectionCardsEdge?: CollectionCardsEdgeResolvers<ContextType>;
   CreateBotUserPayload?: CreateBotUserPayloadResolvers<ContextType>;
   CreateCardPayload?: CreateCardPayloadResolvers<ContextType>;
   CreateCardsInDeckPayload?: CreateCardsInDeckPayloadResolvers<ContextType>;
@@ -6662,6 +7016,10 @@ export type Resolvers<ContextType = any> = {
 
 export type CardFragment = { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null };
 
+export type ClassFragment = { __typename?: 'Class', class?: string | null, collectible?: boolean | null, isPrivate?: boolean | null, cardScript?: any | null, id?: string | null, name?: string | null };
+
+export type CollectionCardFragment = { __typename?: 'CollectionCard', id?: string | null, createdBy?: string | null, cardScript?: any | null, blocklyWorkspace?: string | null, collectible?: boolean | null, cost?: number | null, type?: string | null };
+
 export type DeckFragment = { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null };
 
 export type DeckCardIdsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string } | null> } };
@@ -6675,7 +7033,7 @@ export type DeleteCardMutationVariables = Exact<{
 }>;
 
 
-export type DeleteCardMutation = { __typename?: 'Mutation', deleteCardById?: { __typename?: 'DeleteCardPayload', card?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null } | null };
+export type DeleteCardMutation = { __typename?: 'Mutation', updateCardById?: { __typename?: 'UpdateCardPayload', card?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null } | null };
 
 export type UpsertCardMutationVariables = Exact<{
   cardId: Scalars['String'];
@@ -6706,12 +7064,19 @@ export type GetCardQuery = { __typename?: 'Query', cardById?: { __typename?: 'Ca
 
 export type GetCardsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
-  filter?: InputMaybe<CardFilter>;
+  filter?: InputMaybe<CollectionCardFilter>;
   offset?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type GetCardsQuery = { __typename?: 'Query', allCards?: { __typename?: 'CardsConnection', totalCount: number, nodes: Array<{ __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null> } | null };
+export type GetCardsQuery = { __typename?: 'Query', allCollectionCards?: { __typename?: 'CollectionCardsConnection', totalCount: number, nodes: Array<{ __typename?: 'CollectionCard', id?: string | null, createdBy?: string | null, cardScript?: any | null, blocklyWorkspace?: string | null, collectible?: boolean | null, cost?: number | null, type?: string | null } | null> } | null };
+
+export type GetClassesQueryVariables = Exact<{
+  filter?: InputMaybe<ClassFilter>;
+}>;
+
+
+export type GetClassesQuery = { __typename?: 'Query', allClasses?: { __typename?: 'ClassesConnection', totalCount: number, nodes: Array<{ __typename?: 'Class', class?: string | null, collectible?: boolean | null, isPrivate?: boolean | null, cardScript?: any | null, id?: string | null, name?: string | null } | null> } | null };
 
 export type GetDeckQueryVariables = Exact<{
   deckId: Scalars['String'];
@@ -6727,6 +7092,27 @@ export type GetDecksQueryVariables = Exact<{
 
 export type GetDecksQuery = { __typename?: 'Query', allDecks?: { __typename?: 'DecksConnection', nodes: Array<{ __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null } | null> } | null, allDeckShares?: { __typename?: 'DeckSharesConnection', nodes: Array<{ __typename?: 'DeckShare', deckByDeckId?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null } | null } | null> } | null };
 
+export const ClassFragmentDoc = gql`
+    fragment class on Class {
+  class
+  collectible
+  isPrivate
+  cardScript
+  id
+  name
+}
+    `;
+export const CollectionCardFragmentDoc = gql`
+    fragment collectionCard on CollectionCard {
+  id
+  createdBy
+  cardScript
+  blocklyWorkspace
+  collectible
+  cost
+  type
+}
+    `;
 export const DeckFragmentDoc = gql`
     fragment deck on Deck {
   id
@@ -6778,7 +7164,7 @@ export const ImageFragmentDoc = gql`
     `;
 export const DeleteCardDocument = gql`
     mutation deleteCard($cardId: String!) {
-  deleteCardById(input: {id: $cardId}) {
+  updateCardById(input: {id: $cardId, cardPatch: {isArchived: true}}) {
     card {
       ...card
     }
@@ -6952,15 +7338,15 @@ export type GetCardQueryHookResult = ReturnType<typeof useGetCardQuery>;
 export type GetCardLazyQueryHookResult = ReturnType<typeof useGetCardLazyQuery>;
 export type GetCardQueryResult = Apollo.QueryResult<GetCardQuery, GetCardQueryVariables>;
 export const GetCardsDocument = gql`
-    query getCards($limit: Int, $filter: CardFilter, $offset: Int) {
-  allCards(offset: $offset, filter: $filter, first: $limit) {
+    query getCards($limit: Int, $filter: CollectionCardFilter, $offset: Int) {
+  allCollectionCards(offset: $offset, filter: $filter, first: $limit) {
     nodes {
-      ...card
+      ...collectionCard
     }
     totalCount
   }
 }
-    ${CardFragmentDoc}`;
+    ${CollectionCardFragmentDoc}`;
 
 /**
  * __useGetCardsQuery__
@@ -6991,6 +7377,44 @@ export function useGetCardsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetCardsQueryHookResult = ReturnType<typeof useGetCardsQuery>;
 export type GetCardsLazyQueryHookResult = ReturnType<typeof useGetCardsLazyQuery>;
 export type GetCardsQueryResult = Apollo.QueryResult<GetCardsQuery, GetCardsQueryVariables>;
+export const GetClassesDocument = gql`
+    query getClasses($filter: ClassFilter) {
+  allClasses(filter: $filter) {
+    nodes {
+      ...class
+    }
+    totalCount
+  }
+}
+    ${ClassFragmentDoc}`;
+
+/**
+ * __useGetClassesQuery__
+ *
+ * To run a query within a React component, call `useGetClassesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClassesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClassesQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useGetClassesQuery(baseOptions?: Apollo.QueryHookOptions<GetClassesQuery, GetClassesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetClassesQuery, GetClassesQueryVariables>(GetClassesDocument, options);
+      }
+export function useGetClassesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetClassesQuery, GetClassesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetClassesQuery, GetClassesQueryVariables>(GetClassesDocument, options);
+        }
+export type GetClassesQueryHookResult = ReturnType<typeof useGetClassesQuery>;
+export type GetClassesLazyQueryHookResult = ReturnType<typeof useGetClassesLazyQuery>;
+export type GetClassesQueryResult = Apollo.QueryResult<GetClassesQuery, GetClassesQueryVariables>;
 export const GetDeckDocument = gql`
     query getDeck($deckId: String!) {
   deckById(id: $deckId) {

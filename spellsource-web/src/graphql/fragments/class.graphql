@@ -1,0 +1,8 @@
+fragment class on Class {
+  class
+  collectible
+  isPrivate
+  cardScript
+  id
+  name
+}

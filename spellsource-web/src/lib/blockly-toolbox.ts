@@ -7,6 +7,7 @@ import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo;
 import BlockInfo = Blockly.utils.toolbox.BlockInfo;
 import {ContextType} from "react";
 import {BlocklyDataContext} from "../pages/card-editor";
+import {formatCurated} from "./blockly-misc-utils";
 
 
 /**
@@ -442,16 +443,39 @@ export function searchResultsCategory(results: string[]) {
 }
 
 export function myCardsCategory(data: ContextType<typeof BlocklyDataContext>) {
-  return category("My Cards", "#888888", "Your Saved Cards", [
+  const setOfSets = new Set([] as string[]);
+
+  for (const myCard of data.myCards) {
+    const set = myCard.cardScript.set;
+    if (set && set !== "CUSTOM") {
+      setOfSets.add(set);
+    }
+  }
+
+  return category("My Cards", "#888888", "Cards You've Created", [
     {
       kind: "label",
       text: data.userId ? "Cards You've Created" : "Login to be able to save the cards you create"
     },
-    ...data.myCards.map(card => ({
+    ...data.myCards.filter(card => card.cardScript.set === "CUSTOM").map(card => ({
       kind: "block",
       blockxml: card.blocklyWorkspace
-    }))
+    })),
+    ...([...setOfSets].map(set => myCardsForSetCategory(set, data)))
   ], {toolboxitemid: 'My Cards'})
+}
+
+export function myCardsForSetCategory(set: string, data: ContextType<typeof BlocklyDataContext>) {
+  return category(set, "#888888", `Cards You've Created in the "${set}" Set`, [
+    {
+      kind: "label",
+      text: `Cards You've Created in the "${set}" Set`
+    },
+    ...data.myCards.filter(card => card.cardScript.set === set).map(card => ({
+      kind: "block",
+      blockxml: card.blocklyWorkspace
+    })),
+  ], {toolboxitemid: `My ${set} Cards`})
 }
 
 /**

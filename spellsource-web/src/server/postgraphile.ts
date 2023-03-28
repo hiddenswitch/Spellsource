@@ -1,8 +1,9 @@
 import {Pool} from 'pg';
 import {pgPort} from "../lib/config";
 import {PostGraphileOptions} from "postgraphile";
-import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
+import PgConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 import {PgMutationUpsertPlugin} from "postgraphile-upsert-plugin";
+import PgOmitArchivedPlugin from "@graphile-contrib/pg-omit-archived";
 
 const pool = new Pool({
   user: "admin",
@@ -26,12 +27,16 @@ export const postgraphileOptions: PostGraphileOptions = {
   // retryOnInitFail is mainly so that going to /api/graphiql
   // doesn't crash entire app if config is incorrect. Fix config.
   appendPlugins: [
-    ConnectionFilterPlugin,
-    PgMutationUpsertPlugin
+    PgConnectionFilterPlugin,
+    PgMutationUpsertPlugin,
+    PgOmitArchivedPlugin
   ],
   dynamicJson: true,
   pgSettings: (req: any) => ({
     "role": "website",
     "user.id": req.context.session?.token?.sub ?? "",
-  })
+  }),
+  graphileBuildOptions: {
+    pgArchivedColumnName: "is_archived",
+  }
 }

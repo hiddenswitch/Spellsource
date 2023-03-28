@@ -37,7 +37,7 @@ export function modifyAll(options: InitBlockOptions) {
   // jsonShadows()
   connections()
   categoryIndenting()
-  cardDisplay()
+  // cardDisplay()
   flyout()
 
   DefaultOverrides.overrideAll()
@@ -620,7 +620,7 @@ function cardDisplay() {
         card.art = deepmerge(heroClass?.art || {}, card.art || {});
       }
 
-      createRoot(this.foreignObject_.firstElementChild).render(<CardDisplay {...card} />);
+      /*createRoot(this.foreignObject_.firstElementChild).render(<CardDisplay {...card} />);*/
     }
   }
 }
@@ -629,13 +629,7 @@ function flyout() {
   const unCollapse = (block: Block) => {
     if (!block) return;
     block.setCollapsed(false);
-    block.inputList.forEach(input => {
-      let b;
-      if ((b = input.connection?.targetBlock())) {
-        unCollapse(b)
-      }
-    });
-    unCollapse(block.getNextBlock());
+    block.getChildren(true).forEach(unCollapse)
   }
 
   const createBlock = Blockly.Flyout.prototype.createBlock;

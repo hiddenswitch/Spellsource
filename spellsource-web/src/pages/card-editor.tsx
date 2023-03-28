@@ -10,7 +10,15 @@ import {readAllImages, readAllJson} from "../lib/fs-utils";
 import {CardDef} from "../components/card-display";
 import {fixArt, transformBlock} from "../lib/json-transforms";
 import {keyBy} from "lodash";
-import {Card, GetCardsQuery, ImageDef, useGetAllArtQuery, useGetCardsQuery} from "../__generated__/client";
+import {
+  Card,
+  CollectionCard,
+  GetCardsQuery,
+  ImageDef,
+  useGetAllArtQuery,
+  useGetCardsQuery,
+  useGetClassesQuery
+} from "../__generated__/client";
 import {useSession} from "next-auth/react";
 import {ApolloQueryResult} from "@apollo/client";
 
@@ -44,7 +52,7 @@ export const BlocklyDataContext = createContext(
     ready: boolean
     classes: Record<string, CardDef>
     allArt: ImageDef[]
-    myCards: Partial<Card>[]
+    myCards: Partial<CollectionCard>[]
     refreshMyCards: () => Promise<ApolloQueryResult<GetCardsQuery>>;
     userId: string | null | undefined;
   }
@@ -76,23 +84,23 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const {data: session} = useSession();
   const userId = session?.token?.sub ?? "";
 
-  const getClasses = useGetCardsQuery({
+  const getClasses = useGetClassesQuery({
     variables: {
       filter: {
-        type: { equalToInsensitive: "CLASS" },
-        createdBy: { notEqualToInsensitive: userId }
+        createdBy: {notEqualToInsensitive: userId},
+        collectible: {equalTo: true}
       }
     }
   });
   const getMyCards = useGetCardsQuery({
     variables: {
       filter: {
-        createdBy: { equalToInsensitive: userId }
+        createdBy: {equalToInsensitive: userId}
       }
     }
   });
   const classes = useMemo(() => {
-    const cards = getClasses.data?.allCards?.nodes ?? [];
+    const cards = getClasses.data?.allClasses?.nodes ?? [];
     const allCards = cards.map(card => ({
       ...(card.cardScript ?? {}),
       id: card.id,
@@ -108,12 +116,12 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
 
   const ready = Object.values(classes).length > 0 && allArt.length > 0;
 
-  const myCards = useMemo(() => (getMyCards.data?.allCards?.nodes ?? []).filter(card => card.blocklyWorkspace), [getMyCards.data])
+  const myCards = useMemo(() => (getMyCards.data?.allCollectionCards?.nodes ?? []).filter(card => card.blocklyWorkspace), [getMyCards.data])
 
   const refreshMyCards = getMyCards.refetch; // TODO get .reobserve working
 
   return <Layout>
-    <BlocklyDataContext.Provider value={{...props, classes, allArt, ready, myCards, refreshMyCards, userId }}>
+    <BlocklyDataContext.Provider value={{...props, classes, allArt, ready, myCards, refreshMyCards, userId}}>
       <div className={styles.cardEditorContainer}>
         <LoadableComponent dataReady={ready}/>
       </div>
