@@ -6,4 +6,6 @@ fragment collectionCard on CollectionCard {
   collectible
   cost
   type
+  lastModified
+  createdBy
 }

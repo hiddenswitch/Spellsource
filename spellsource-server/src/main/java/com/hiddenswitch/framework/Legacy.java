@@ -98,8 +98,15 @@ public class Legacy {
 					var workingContext = new GameContext();
 
 					withConnection(connection -> new CardsDao(Environment.jooqAkaDaoConfiguration(), connection).findAll())
-							.map(cards -> cards.stream().map(card -> card.getCardScript().mapTo(CardDesc.class))
-									.filter(cd -> DeckFormat.spellsource().isInFormat(cd.getSet())
+							.map(cards -> cards.stream().map(card -> {
+										try {
+											return card.getCardScript().mapTo(CardDesc.class);
+										} catch (Throwable e) {
+											System.out.println("Failed to deserialize card " + card.getId());
+											return null;
+										}
+									})
+									.filter(cd -> cd != null && DeckFormat.spellsource().isInFormat(cd.getSet())
 											&& cd.getType() != CardType.GROUP)
 									.map(card -> {
 										var entity = ModelConversions.getEntity(workingContext, card.create(), 0);

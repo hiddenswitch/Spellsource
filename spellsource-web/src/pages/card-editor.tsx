@@ -5,7 +5,7 @@ import * as BlocklyMiscUtils from "../lib/blockly-misc-utils";
 import * as styles from '../templates/template-styles.module.scss';
 import {GetStaticPropsContext, InferGetStaticPropsType} from "next";
 import path from "path";
-import {BlockDef} from "../lib/blocks";
+import {BlockDef} from "../__generated__/blocks";
 import {readAllImages, readAllJson} from "../lib/fs-utils";
 import {CardDef} from "../components/card-display";
 import {fixArt, transformBlock} from "../lib/json-transforms";
@@ -21,6 +21,7 @@ import {
 } from "../__generated__/client";
 import {useSession} from "next-auth/react";
 import {ApolloQueryResult} from "@apollo/client";
+import Head from "next/head";
 
 const getAllBlockJson = async () =>
   (await readAllJson<BlockDef[]>(path.join("src", "blocks", "*.json")))
@@ -121,6 +122,9 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const refreshMyCards = getMyCards.refetch; // TODO get .reobserve working
 
   return <Layout>
+    <Head>
+      <title>Spellsource Card Editor</title>
+    </Head>
     <BlocklyDataContext.Provider value={{...props, classes, allArt, ready, myCards, refreshMyCards, userId}}>
       <div className={styles.cardEditorContainer}>
         <LoadableComponent dataReady={ready}/>

@@ -509,8 +509,11 @@ export type CollectionCard = {
   class?: Maybe<Scalars['String']>;
   collectible?: Maybe<Scalars['Boolean']>;
   cost?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
   createdBy?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
+  lastModified?: Maybe<Scalars['Datetime']>;
+  name?: Maybe<Scalars['String']>;
   searchMessage?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
 };
@@ -530,10 +533,16 @@ export type CollectionCardCondition = {
   collectible?: InputMaybe<Scalars['Boolean']>;
   /** Checks for equality with the object’s `cost` field. */
   cost?: InputMaybe<Scalars['Int']>;
+  /** Checks for equality with the object’s `createdAt` field. */
+  createdAt?: InputMaybe<Scalars['Datetime']>;
   /** Checks for equality with the object’s `createdBy` field. */
   createdBy?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `id` field. */
   id?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `lastModified` field. */
+  lastModified?: InputMaybe<Scalars['Datetime']>;
+  /** Checks for equality with the object’s `name` field. */
+  name?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `searchMessage` field. */
   searchMessage?: InputMaybe<Scalars['String']>;
   /** Checks for equality with the object’s `type` field. */
@@ -552,10 +561,16 @@ export type CollectionCardFilter = {
   collectible?: InputMaybe<BooleanFilter>;
   /** Filter by the object’s `cost` field. */
   cost?: InputMaybe<IntFilter>;
+  /** Filter by the object’s `createdAt` field. */
+  createdAt?: InputMaybe<DatetimeFilter>;
   /** Filter by the object’s `createdBy` field. */
   createdBy?: InputMaybe<StringFilter>;
   /** Filter by the object’s `id` field. */
   id?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `lastModified` field. */
+  lastModified?: InputMaybe<DatetimeFilter>;
+  /** Filter by the object’s `name` field. */
+  name?: InputMaybe<StringFilter>;
   /** Negates the expression. */
   not?: InputMaybe<CollectionCardFilter>;
   /** Checks for any expressions in this list. */
@@ -600,10 +615,16 @@ export const CollectionCardsOrderBy = {
   CollectibleDesc: 'COLLECTIBLE_DESC',
   CostAsc: 'COST_ASC',
   CostDesc: 'COST_DESC',
+  CreatedAtAsc: 'CREATED_AT_ASC',
+  CreatedAtDesc: 'CREATED_AT_DESC',
   CreatedByAsc: 'CREATED_BY_ASC',
   CreatedByDesc: 'CREATED_BY_DESC',
   IdAsc: 'ID_ASC',
   IdDesc: 'ID_DESC',
+  LastModifiedAsc: 'LAST_MODIFIED_ASC',
+  LastModifiedDesc: 'LAST_MODIFIED_DESC',
+  NameAsc: 'NAME_ASC',
+  NameDesc: 'NAME_DESC',
   Natural: 'NATURAL',
   SearchMessageAsc: 'SEARCH_MESSAGE_ASC',
   SearchMessageDesc: 'SEARCH_MESSAGE_DESC',
@@ -816,6 +837,40 @@ export type CreateDeckSharePayload = {
 /** The output of our create `DeckShare` mutation. */
 export type CreateDeckSharePayloadDeckShareEdgeArgs = {
   orderBy?: InputMaybe<Array<DeckSharesOrderBy>>;
+};
+
+/** All input for the `createDeckWithCards` mutation. */
+export type CreateDeckWithCardsInput = {
+  cardIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  classHero?: InputMaybe<Scalars['String']>;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  deckName?: InputMaybe<Scalars['String']>;
+  formatName?: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our `createDeckWithCards` mutation. */
+export type CreateDeckWithCardsPayload = {
+  __typename?: 'CreateDeckWithCardsPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  deck?: Maybe<Deck>;
+  /** An edge for our `Deck`. May be used by Relay 1. */
+  deckEdge?: Maybe<DecksEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our `createDeckWithCards` mutation. */
+export type CreateDeckWithCardsPayloadDeckEdgeArgs = {
+  orderBy?: InputMaybe<Array<DecksOrderBy>>;
 };
 
 /** All input for the create `Friend` mutation. */
@@ -2485,6 +2540,79 @@ export const GamesOrderBy = {
 } as const;
 
 export type GamesOrderBy = typeof GamesOrderBy[keyof typeof GamesOrderBy];
+/** All input for the `getClasses` mutation. */
+export type GetClassesInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our `getClasses` mutation. */
+export type GetClassesPayload = {
+  __typename?: 'GetClassesPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  results?: Maybe<Array<Maybe<GetClassesRecord>>>;
+};
+
+/** The return type of our `getClasses` mutation. */
+export type GetClassesRecord = {
+  __typename?: 'GetClassesRecord';
+  cardScript?: Maybe<Scalars['JSON']>;
+  class?: Maybe<Scalars['String']>;
+  collectible?: Maybe<Scalars['Boolean']>;
+  createdBy?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  isPrivate?: Maybe<Scalars['Boolean']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+/** All input for the `getCollectionCards` mutation. */
+export type GetCollectionCardsInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our `getCollectionCards` mutation. */
+export type GetCollectionCardsPayload = {
+  __typename?: 'GetCollectionCardsPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+  results?: Maybe<Array<Maybe<GetCollectionCardsRecord>>>;
+};
+
+/** The return type of our `getCollectionCards` mutation. */
+export type GetCollectionCardsRecord = {
+  __typename?: 'GetCollectionCardsRecord';
+  blocklyWorkspace?: Maybe<Scalars['String']>;
+  cardScript?: Maybe<Scalars['JSON']>;
+  class?: Maybe<Scalars['String']>;
+  collectible?: Maybe<Scalars['Boolean']>;
+  cost?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+  createdBy?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  lastModified?: Maybe<Scalars['Datetime']>;
+  name?: Maybe<Scalars['String']>;
+  searchMessage?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type Guest = Node & {
   __typename?: 'Guest';
   id: Scalars['BigInt'];
@@ -2960,6 +3088,7 @@ export type Mutation = {
   createDeckPlayerAttributeTuple?: Maybe<CreateDeckPlayerAttributeTuplePayload>;
   /** Creates a single `DeckShare`. */
   createDeckShare?: Maybe<CreateDeckSharePayload>;
+  createDeckWithCards?: Maybe<CreateDeckWithCardsPayload>;
   /** Creates a single `Friend`. */
   createFriend?: Maybe<CreateFriendPayload>;
   /** Creates a single `Game`. */
@@ -3026,6 +3155,9 @@ export type Mutation = {
   deleteUserEntityAddon?: Maybe<DeleteUserEntityAddonPayload>;
   /** Deletes a single `UserEntityAddon` using a unique key. */
   deleteUserEntityAddonById?: Maybe<DeleteUserEntityAddonPayload>;
+  getClasses?: Maybe<GetClassesPayload>;
+  getCollectionCards?: Maybe<GetCollectionCardsPayload>;
+  setCardsInDeck?: Maybe<SetCardsInDeckPayload>;
   /** Updates a single `BotUser` using its globally unique id and a patch. */
   updateBotUser?: Maybe<UpdateBotUserPayload>;
   /** Updates a single `BotUser` using a unique key and a patch. */
@@ -3140,6 +3272,12 @@ export type MutationCreateDeckPlayerAttributeTupleArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateDeckShareArgs = {
   input: CreateDeckShareInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateDeckWithCardsArgs = {
+  input: CreateDeckWithCardsInput;
 };
 
 
@@ -3338,6 +3476,24 @@ export type MutationDeleteUserEntityAddonArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteUserEntityAddonByIdArgs = {
   input: DeleteUserEntityAddonByIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationGetClassesArgs = {
+  input: GetClassesInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationGetCollectionCardsArgs = {
+  input: GetCollectionCardsInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationSetCardsInDeckArgs = {
+  input: SetCardsInDeckInput;
 };
 
 
@@ -4013,6 +4169,30 @@ export type QueryUserEntityAddonArgs = {
 
 export type QueryUserEntityAddonByIdArgs = {
   id: Scalars['String'];
+};
+
+/** All input for the `setCardsInDeck` mutation. */
+export type SetCardsInDeckInput = {
+  cardIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  deck?: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our `setCardsInDeck` mutation. */
+export type SetCardsInDeckPayload = {
+  __typename?: 'SetCardsInDeckPayload';
+  cardsInDecks?: Maybe<Array<Maybe<CardsInDeck>>>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
 };
 
 /** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
@@ -5381,6 +5561,8 @@ export type ResolversTypes = {
   CreateDeckPlayerAttributeTuplePayload: ResolverTypeWrapper<Partial<CreateDeckPlayerAttributeTuplePayload>>;
   CreateDeckShareInput: ResolverTypeWrapper<Partial<CreateDeckShareInput>>;
   CreateDeckSharePayload: ResolverTypeWrapper<Partial<CreateDeckSharePayload>>;
+  CreateDeckWithCardsInput: ResolverTypeWrapper<Partial<CreateDeckWithCardsInput>>;
+  CreateDeckWithCardsPayload: ResolverTypeWrapper<Partial<CreateDeckWithCardsPayload>>;
   CreateFriendInput: ResolverTypeWrapper<Partial<CreateFriendInput>>;
   CreateFriendPayload: ResolverTypeWrapper<Partial<CreateFriendPayload>>;
   CreateGameInput: ResolverTypeWrapper<Partial<CreateGameInput>>;
@@ -5489,6 +5671,12 @@ export type ResolversTypes = {
   GamesConnection: ResolverTypeWrapper<Partial<GamesConnection>>;
   GamesEdge: ResolverTypeWrapper<Partial<GamesEdge>>;
   GamesOrderBy: ResolverTypeWrapper<Partial<GamesOrderBy>>;
+  GetClassesInput: ResolverTypeWrapper<Partial<GetClassesInput>>;
+  GetClassesPayload: ResolverTypeWrapper<Partial<GetClassesPayload>>;
+  GetClassesRecord: ResolverTypeWrapper<Partial<GetClassesRecord>>;
+  GetCollectionCardsInput: ResolverTypeWrapper<Partial<GetCollectionCardsInput>>;
+  GetCollectionCardsPayload: ResolverTypeWrapper<Partial<GetCollectionCardsPayload>>;
+  GetCollectionCardsRecord: ResolverTypeWrapper<Partial<GetCollectionCardsRecord>>;
   Guest: ResolverTypeWrapper<Partial<Guest>>;
   GuestCondition: ResolverTypeWrapper<Partial<GuestCondition>>;
   GuestFilter: ResolverTypeWrapper<Partial<GuestFilter>>;
@@ -5524,6 +5712,8 @@ export type ResolversTypes = {
   Node: ResolversTypes['BotUser'] | ResolversTypes['Card'] | ResolversTypes['CardsInDeck'] | ResolversTypes['Deck'] | ResolversTypes['DeckPlayerAttributeTuple'] | ResolversTypes['DeckShare'] | ResolversTypes['Friend'] | ResolversTypes['Game'] | ResolversTypes['GameUser'] | ResolversTypes['Guest'] | ResolversTypes['MatchmakingQueue'] | ResolversTypes['MatchmakingTicket'] | ResolversTypes['Query'] | ResolversTypes['UserEntityAddon'];
   PageInfo: ResolverTypeWrapper<Partial<PageInfo>>;
   Query: ResolverTypeWrapper<{}>;
+  SetCardsInDeckInput: ResolverTypeWrapper<Partial<SetCardsInDeckInput>>;
+  SetCardsInDeckPayload: ResolverTypeWrapper<Partial<SetCardsInDeckPayload>>;
   String: ResolverTypeWrapper<Partial<Scalars['String']>>;
   StringFilter: ResolverTypeWrapper<Partial<StringFilter>>;
   UpdateBotUserByIdInput: ResolverTypeWrapper<Partial<UpdateBotUserByIdInput>>;
@@ -5663,6 +5853,8 @@ export type ResolversParentTypes = {
   CreateDeckPlayerAttributeTuplePayload: Partial<CreateDeckPlayerAttributeTuplePayload>;
   CreateDeckShareInput: Partial<CreateDeckShareInput>;
   CreateDeckSharePayload: Partial<CreateDeckSharePayload>;
+  CreateDeckWithCardsInput: Partial<CreateDeckWithCardsInput>;
+  CreateDeckWithCardsPayload: Partial<CreateDeckWithCardsPayload>;
   CreateFriendInput: Partial<CreateFriendInput>;
   CreateFriendPayload: Partial<CreateFriendPayload>;
   CreateGameInput: Partial<CreateGameInput>;
@@ -5763,6 +5955,12 @@ export type ResolversParentTypes = {
   GameUsersEdge: Partial<GameUsersEdge>;
   GamesConnection: Partial<GamesConnection>;
   GamesEdge: Partial<GamesEdge>;
+  GetClassesInput: Partial<GetClassesInput>;
+  GetClassesPayload: Partial<GetClassesPayload>;
+  GetClassesRecord: Partial<GetClassesRecord>;
+  GetCollectionCardsInput: Partial<GetCollectionCardsInput>;
+  GetCollectionCardsPayload: Partial<GetCollectionCardsPayload>;
+  GetCollectionCardsRecord: Partial<GetCollectionCardsRecord>;
   Guest: Partial<Guest>;
   GuestCondition: Partial<GuestCondition>;
   GuestFilter: Partial<GuestFilter>;
@@ -5794,6 +5992,8 @@ export type ResolversParentTypes = {
   Node: ResolversParentTypes['BotUser'] | ResolversParentTypes['Card'] | ResolversParentTypes['CardsInDeck'] | ResolversParentTypes['Deck'] | ResolversParentTypes['DeckPlayerAttributeTuple'] | ResolversParentTypes['DeckShare'] | ResolversParentTypes['Friend'] | ResolversParentTypes['Game'] | ResolversParentTypes['GameUser'] | ResolversParentTypes['Guest'] | ResolversParentTypes['MatchmakingQueue'] | ResolversParentTypes['MatchmakingTicket'] | ResolversParentTypes['Query'] | ResolversParentTypes['UserEntityAddon'];
   PageInfo: Partial<PageInfo>;
   Query: {};
+  SetCardsInDeckInput: Partial<SetCardsInDeckInput>;
+  SetCardsInDeckPayload: Partial<SetCardsInDeckPayload>;
   String: Partial<Scalars['String']>;
   StringFilter: Partial<StringFilter>;
   UpdateBotUserByIdInput: Partial<UpdateBotUserByIdInput>;
@@ -5994,8 +6194,11 @@ export type CollectionCardResolvers<ContextType = any, ParentType extends Resolv
   class?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   collectible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   cost?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['Datetime']>, ParentType, ContextType>;
   createdBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lastModified?: Resolver<Maybe<ResolversTypes['Datetime']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   searchMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -6063,6 +6266,14 @@ export type CreateDeckSharePayloadResolvers<ContextType = any, ParentType extend
   deckByDeckId?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
   deckShare?: Resolver<Maybe<ResolversTypes['DeckShare']>, ParentType, ContextType>;
   deckShareEdge?: Resolver<Maybe<ResolversTypes['DeckSharesEdge']>, ParentType, ContextType, RequireFields<CreateDeckSharePayloadDeckShareEdgeArgs, 'orderBy'>>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CreateDeckWithCardsPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateDeckWithCardsPayload'] = ResolversParentTypes['CreateDeckWithCardsPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  deck?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType>;
+  deckEdge?: Resolver<Maybe<ResolversTypes['DecksEdge']>, ParentType, ContextType, RequireFields<CreateDeckWithCardsPayloadDeckEdgeArgs, 'orderBy'>>;
   query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -6417,6 +6628,47 @@ export type GamesEdgeResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GetClassesPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetClassesPayload'] = ResolversParentTypes['GetClassesPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  results?: Resolver<Maybe<Array<Maybe<ResolversTypes['GetClassesRecord']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GetClassesRecordResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetClassesRecord'] = ResolversParentTypes['GetClassesRecord']> = {
+  cardScript?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  class?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  collectible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  createdBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isPrivate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GetCollectionCardsPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetCollectionCardsPayload'] = ResolversParentTypes['GetCollectionCardsPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  results?: Resolver<Maybe<Array<Maybe<ResolversTypes['GetCollectionCardsRecord']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GetCollectionCardsRecordResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetCollectionCardsRecord'] = ResolversParentTypes['GetCollectionCardsRecord']> = {
+  blocklyWorkspace?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  cardScript?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  class?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  collectible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  cost?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['Datetime']>, ParentType, ContextType>;
+  createdBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lastModified?: Resolver<Maybe<ResolversTypes['Datetime']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  searchMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GuestResolvers<ContextType = any, ParentType extends ResolversParentTypes['Guest'] = ResolversParentTypes['Guest']> = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   nodeId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -6518,6 +6770,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createDeck?: Resolver<Maybe<ResolversTypes['CreateDeckPayload']>, ParentType, ContextType, RequireFields<MutationCreateDeckArgs, 'input'>>;
   createDeckPlayerAttributeTuple?: Resolver<Maybe<ResolversTypes['CreateDeckPlayerAttributeTuplePayload']>, ParentType, ContextType, RequireFields<MutationCreateDeckPlayerAttributeTupleArgs, 'input'>>;
   createDeckShare?: Resolver<Maybe<ResolversTypes['CreateDeckSharePayload']>, ParentType, ContextType, RequireFields<MutationCreateDeckShareArgs, 'input'>>;
+  createDeckWithCards?: Resolver<Maybe<ResolversTypes['CreateDeckWithCardsPayload']>, ParentType, ContextType, RequireFields<MutationCreateDeckWithCardsArgs, 'input'>>;
   createFriend?: Resolver<Maybe<ResolversTypes['CreateFriendPayload']>, ParentType, ContextType, RequireFields<MutationCreateFriendArgs, 'input'>>;
   createGame?: Resolver<Maybe<ResolversTypes['CreateGamePayload']>, ParentType, ContextType, RequireFields<MutationCreateGameArgs, 'input'>>;
   createGameUser?: Resolver<Maybe<ResolversTypes['CreateGameUserPayload']>, ParentType, ContextType, RequireFields<MutationCreateGameUserArgs, 'input'>>;
@@ -6551,6 +6804,9 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteMatchmakingTicketByUserId?: Resolver<Maybe<ResolversTypes['DeleteMatchmakingTicketPayload']>, ParentType, ContextType, RequireFields<MutationDeleteMatchmakingTicketByUserIdArgs, 'input'>>;
   deleteUserEntityAddon?: Resolver<Maybe<ResolversTypes['DeleteUserEntityAddonPayload']>, ParentType, ContextType, RequireFields<MutationDeleteUserEntityAddonArgs, 'input'>>;
   deleteUserEntityAddonById?: Resolver<Maybe<ResolversTypes['DeleteUserEntityAddonPayload']>, ParentType, ContextType, RequireFields<MutationDeleteUserEntityAddonByIdArgs, 'input'>>;
+  getClasses?: Resolver<Maybe<ResolversTypes['GetClassesPayload']>, ParentType, ContextType, RequireFields<MutationGetClassesArgs, 'input'>>;
+  getCollectionCards?: Resolver<Maybe<ResolversTypes['GetCollectionCardsPayload']>, ParentType, ContextType, RequireFields<MutationGetCollectionCardsArgs, 'input'>>;
+  setCardsInDeck?: Resolver<Maybe<ResolversTypes['SetCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationSetCardsInDeckArgs, 'input'>>;
   updateBotUser?: Resolver<Maybe<ResolversTypes['UpdateBotUserPayload']>, ParentType, ContextType, RequireFields<MutationUpdateBotUserArgs, 'input'>>;
   updateBotUserById?: Resolver<Maybe<ResolversTypes['UpdateBotUserPayload']>, ParentType, ContextType, RequireFields<MutationUpdateBotUserByIdArgs, 'input'>>;
   updateCard?: Resolver<Maybe<ResolversTypes['UpdateCardPayload']>, ParentType, ContextType, RequireFields<MutationUpdateCardArgs, 'input'>>;
@@ -6653,6 +6909,13 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   query?: Resolver<ResolversTypes['Query'], ParentType, ContextType>;
   userEntityAddon?: Resolver<Maybe<ResolversTypes['UserEntityAddon']>, ParentType, ContextType, RequireFields<QueryUserEntityAddonArgs, 'nodeId'>>;
   userEntityAddonById?: Resolver<Maybe<ResolversTypes['UserEntityAddon']>, ParentType, ContextType, RequireFields<QueryUserEntityAddonByIdArgs, 'id'>>;
+};
+
+export type SetCardsInDeckPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['SetCardsInDeckPayload'] = ResolversParentTypes['SetCardsInDeckPayload']> = {
+  cardsInDecks?: Resolver<Maybe<Array<Maybe<ResolversTypes['CardsInDeck']>>>, ParentType, ContextType>;
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type UpdateBotUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateBotUserPayload'] = ResolversParentTypes['UpdateBotUserPayload']> = {
@@ -6927,6 +7190,7 @@ export type Resolvers<ContextType = any> = {
   CreateDeckPayload?: CreateDeckPayloadResolvers<ContextType>;
   CreateDeckPlayerAttributeTuplePayload?: CreateDeckPlayerAttributeTuplePayloadResolvers<ContextType>;
   CreateDeckSharePayload?: CreateDeckSharePayloadResolvers<ContextType>;
+  CreateDeckWithCardsPayload?: CreateDeckWithCardsPayloadResolvers<ContextType>;
   CreateFriendPayload?: CreateFriendPayloadResolvers<ContextType>;
   CreateGamePayload?: CreateGamePayloadResolvers<ContextType>;
   CreateGameUserPayload?: CreateGameUserPayloadResolvers<ContextType>;
@@ -6967,6 +7231,10 @@ export type Resolvers<ContextType = any> = {
   GameUsersEdge?: GameUsersEdgeResolvers<ContextType>;
   GamesConnection?: GamesConnectionResolvers<ContextType>;
   GamesEdge?: GamesEdgeResolvers<ContextType>;
+  GetClassesPayload?: GetClassesPayloadResolvers<ContextType>;
+  GetClassesRecord?: GetClassesRecordResolvers<ContextType>;
+  GetCollectionCardsPayload?: GetCollectionCardsPayloadResolvers<ContextType>;
+  GetCollectionCardsRecord?: GetCollectionCardsRecordResolvers<ContextType>;
   Guest?: GuestResolvers<ContextType>;
   GuestsConnection?: GuestsConnectionResolvers<ContextType>;
   GuestsEdge?: GuestsEdgeResolvers<ContextType>;
@@ -6982,6 +7250,7 @@ export type Resolvers<ContextType = any> = {
   Node?: NodeResolvers<ContextType>;
   PageInfo?: PageInfoResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  SetCardsInDeckPayload?: SetCardsInDeckPayloadResolvers<ContextType>;
   UpdateBotUserPayload?: UpdateBotUserPayloadResolvers<ContextType>;
   UpdateCardPayload?: UpdateCardPayloadResolvers<ContextType>;
   UpdateCardsInDeckPayload?: UpdateCardsInDeckPayloadResolvers<ContextType>;
@@ -7018,15 +7287,25 @@ export type CardFragment = { __typename?: 'Card', id: string, createdBy: string,
 
 export type ClassFragment = { __typename?: 'Class', class?: string | null, collectible?: boolean | null, isPrivate?: boolean | null, cardScript?: any | null, id?: string | null, name?: string | null };
 
-export type CollectionCardFragment = { __typename?: 'CollectionCard', id?: string | null, createdBy?: string | null, cardScript?: any | null, blocklyWorkspace?: string | null, collectible?: boolean | null, cost?: number | null, type?: string | null };
+export type CollectionCardFragment = { __typename?: 'CollectionCard', id?: string | null, createdBy?: string | null, cardScript?: any | null, blocklyWorkspace?: string | null, collectible?: boolean | null, cost?: number | null, type?: string | null, lastModified?: any | null };
 
-export type DeckFragment = { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null };
+export type DeckFragment = { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null };
 
 export type DeckCardIdsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string } | null> } };
 
-export type DeckCardsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null } | null> } };
+export type DeckCardsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null } | null> } };
 
 export type ImageFragment = { __typename?: 'ImageDef', id: string, name: string, height: number, width: number, src: string };
+
+export type CreateDeckMutationVariables = Exact<{
+  deckName: Scalars['String'];
+  heroClass: Scalars['String'];
+  cardIds?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  format: Scalars['String'];
+}>;
+
+
+export type CreateDeckMutation = { __typename?: 'Mutation', createDeckWithCards?: { __typename?: 'CreateDeckWithCardsPayload', deck?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null } | null> } } | null } | null };
 
 export type DeleteCardMutationVariables = Exact<{
   cardId: Scalars['String'];
@@ -7034,6 +7313,29 @@ export type DeleteCardMutationVariables = Exact<{
 
 
 export type DeleteCardMutation = { __typename?: 'Mutation', updateCardById?: { __typename?: 'UpdateCardPayload', card?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null } | null };
+
+export type DeleteDeckMutationVariables = Exact<{
+  deckId: Scalars['String'];
+}>;
+
+
+export type DeleteDeckMutation = { __typename?: 'Mutation', updateDeckById?: { __typename?: 'UpdateDeckPayload', deck?: { __typename?: 'Deck', trashed: boolean } | null } | null };
+
+export type RenameDeckMutationVariables = Exact<{
+  deckId: Scalars['String'];
+  deckName: Scalars['String'];
+}>;
+
+
+export type RenameDeckMutation = { __typename?: 'Mutation', updateDeckById?: { __typename?: 'UpdateDeckPayload', deck?: { __typename?: 'Deck', id: string, name?: string | null } | null } | null };
+
+export type SetCardsInDeckMutationVariables = Exact<{
+  deckId: Scalars['String'];
+  cardIds?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+}>;
+
+
+export type SetCardsInDeckMutation = { __typename?: 'Mutation', setCardsInDeck?: { __typename?: 'SetCardsInDeckPayload', cardsInDecks?: Array<{ __typename?: 'CardsInDeck', id: any, cardId: string } | null> | null } | null };
 
 export type UpsertCardMutationVariables = Exact<{
   cardId: Scalars['String'];
@@ -7066,10 +7368,11 @@ export type GetCardsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   filter?: InputMaybe<CollectionCardFilter>;
   offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<CollectionCardsOrderBy> | CollectionCardsOrderBy>;
 }>;
 
 
-export type GetCardsQuery = { __typename?: 'Query', allCollectionCards?: { __typename?: 'CollectionCardsConnection', totalCount: number, nodes: Array<{ __typename?: 'CollectionCard', id?: string | null, createdBy?: string | null, cardScript?: any | null, blocklyWorkspace?: string | null, collectible?: boolean | null, cost?: number | null, type?: string | null } | null> } | null };
+export type GetCardsQuery = { __typename?: 'Query', allCollectionCards?: { __typename?: 'CollectionCardsConnection', totalCount: number, nodes: Array<{ __typename?: 'CollectionCard', id?: string | null, createdBy?: string | null, cardScript?: any | null, blocklyWorkspace?: string | null, collectible?: boolean | null, cost?: number | null, type?: string | null, lastModified?: any | null } | null> } | null };
 
 export type GetClassesQueryVariables = Exact<{
   filter?: InputMaybe<ClassFilter>;
@@ -7083,14 +7386,14 @@ export type GetDeckQueryVariables = Exact<{
 }>;
 
 
-export type GetDeckQuery = { __typename?: 'Query', deckById?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null } | null> } } | null };
+export type GetDeckQuery = { __typename?: 'Query', deckById?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, uri?: string | null, blocklyWorkspace?: string | null } | null } | null> } } | null };
 
 export type GetDecksQueryVariables = Exact<{
-  user: Scalars['String'];
+  user?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetDecksQuery = { __typename?: 'Query', allDecks?: { __typename?: 'DecksConnection', nodes: Array<{ __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null } | null> } | null, allDeckShares?: { __typename?: 'DeckSharesConnection', nodes: Array<{ __typename?: 'DeckShare', deckByDeckId?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null } | null } | null> } | null };
+export type GetDecksQuery = { __typename?: 'Query', allDecks?: { __typename?: 'DecksConnection', nodes: Array<{ __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null } | null> } | null, allDeckShares?: { __typename?: 'DeckSharesConnection', nodes: Array<{ __typename?: 'DeckShare', deckByDeckId?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null } | null } | null> } | null };
 
 export const ClassFragmentDoc = gql`
     fragment class on Class {
@@ -7111,6 +7414,8 @@ export const CollectionCardFragmentDoc = gql`
   collectible
   cost
   type
+  lastModified
+  createdBy
 }
     `;
 export const DeckFragmentDoc = gql`
@@ -7120,6 +7425,7 @@ export const DeckFragmentDoc = gql`
   isPremade
   createdBy
   heroClass
+  format
 }
     `;
 export const DeckCardIdsFragmentDoc = gql`
@@ -7145,6 +7451,7 @@ export const DeckCardsFragmentDoc = gql`
     fragment deckCards on Deck {
   cardsInDecksByDeckId {
     nodes {
+      cardId
       cardByCardId {
         ...card
       }
@@ -7162,6 +7469,48 @@ export const ImageFragmentDoc = gql`
   src
 }
     `;
+export const CreateDeckDocument = gql`
+    mutation createDeck($deckName: String!, $heroClass: String!, $cardIds: [String!], $format: String!) {
+  createDeckWithCards(
+    input: {deckName: $deckName, classHero: $heroClass, cardIds: $cardIds, formatName: $format}
+  ) {
+    deck {
+      ...deck
+      ...deckCards
+    }
+  }
+}
+    ${DeckFragmentDoc}
+${DeckCardsFragmentDoc}`;
+export type CreateDeckMutationFn = Apollo.MutationFunction<CreateDeckMutation, CreateDeckMutationVariables>;
+
+/**
+ * __useCreateDeckMutation__
+ *
+ * To run a mutation, you first call `useCreateDeckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDeckMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDeckMutation, { data, loading, error }] = useCreateDeckMutation({
+ *   variables: {
+ *      deckName: // value for 'deckName'
+ *      heroClass: // value for 'heroClass'
+ *      cardIds: // value for 'cardIds'
+ *      format: // value for 'format'
+ *   },
+ * });
+ */
+export function useCreateDeckMutation(baseOptions?: Apollo.MutationHookOptions<CreateDeckMutation, CreateDeckMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateDeckMutation, CreateDeckMutationVariables>(CreateDeckDocument, options);
+      }
+export type CreateDeckMutationHookResult = ReturnType<typeof useCreateDeckMutation>;
+export type CreateDeckMutationResult = Apollo.MutationResult<CreateDeckMutation>;
+export type CreateDeckMutationOptions = Apollo.BaseMutationOptions<CreateDeckMutation, CreateDeckMutationVariables>;
 export const DeleteCardDocument = gql`
     mutation deleteCard($cardId: String!) {
   updateCardById(input: {id: $cardId, cardPatch: {isArchived: true}}) {
@@ -7197,6 +7546,115 @@ export function useDeleteCardMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeleteCardMutationHookResult = ReturnType<typeof useDeleteCardMutation>;
 export type DeleteCardMutationResult = Apollo.MutationResult<DeleteCardMutation>;
 export type DeleteCardMutationOptions = Apollo.BaseMutationOptions<DeleteCardMutation, DeleteCardMutationVariables>;
+export const DeleteDeckDocument = gql`
+    mutation deleteDeck($deckId: String!) {
+  updateDeckById(input: {id: $deckId, deckPatch: {trashed: true}}) {
+    deck {
+      trashed
+    }
+  }
+}
+    `;
+export type DeleteDeckMutationFn = Apollo.MutationFunction<DeleteDeckMutation, DeleteDeckMutationVariables>;
+
+/**
+ * __useDeleteDeckMutation__
+ *
+ * To run a mutation, you first call `useDeleteDeckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteDeckMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteDeckMutation, { data, loading, error }] = useDeleteDeckMutation({
+ *   variables: {
+ *      deckId: // value for 'deckId'
+ *   },
+ * });
+ */
+export function useDeleteDeckMutation(baseOptions?: Apollo.MutationHookOptions<DeleteDeckMutation, DeleteDeckMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteDeckMutation, DeleteDeckMutationVariables>(DeleteDeckDocument, options);
+      }
+export type DeleteDeckMutationHookResult = ReturnType<typeof useDeleteDeckMutation>;
+export type DeleteDeckMutationResult = Apollo.MutationResult<DeleteDeckMutation>;
+export type DeleteDeckMutationOptions = Apollo.BaseMutationOptions<DeleteDeckMutation, DeleteDeckMutationVariables>;
+export const RenameDeckDocument = gql`
+    mutation renameDeck($deckId: String!, $deckName: String!) {
+  updateDeckById(input: {id: $deckId, deckPatch: {name: $deckName}}) {
+    deck {
+      id
+      name
+    }
+  }
+}
+    `;
+export type RenameDeckMutationFn = Apollo.MutationFunction<RenameDeckMutation, RenameDeckMutationVariables>;
+
+/**
+ * __useRenameDeckMutation__
+ *
+ * To run a mutation, you first call `useRenameDeckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRenameDeckMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [renameDeckMutation, { data, loading, error }] = useRenameDeckMutation({
+ *   variables: {
+ *      deckId: // value for 'deckId'
+ *      deckName: // value for 'deckName'
+ *   },
+ * });
+ */
+export function useRenameDeckMutation(baseOptions?: Apollo.MutationHookOptions<RenameDeckMutation, RenameDeckMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RenameDeckMutation, RenameDeckMutationVariables>(RenameDeckDocument, options);
+      }
+export type RenameDeckMutationHookResult = ReturnType<typeof useRenameDeckMutation>;
+export type RenameDeckMutationResult = Apollo.MutationResult<RenameDeckMutation>;
+export type RenameDeckMutationOptions = Apollo.BaseMutationOptions<RenameDeckMutation, RenameDeckMutationVariables>;
+export const SetCardsInDeckDocument = gql`
+    mutation setCardsInDeck($deckId: String!, $cardIds: [String!]) {
+  setCardsInDeck(input: {deck: $deckId, cardIds: $cardIds}) {
+    cardsInDecks {
+      id
+      cardId
+    }
+  }
+}
+    `;
+export type SetCardsInDeckMutationFn = Apollo.MutationFunction<SetCardsInDeckMutation, SetCardsInDeckMutationVariables>;
+
+/**
+ * __useSetCardsInDeckMutation__
+ *
+ * To run a mutation, you first call `useSetCardsInDeckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetCardsInDeckMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setCardsInDeckMutation, { data, loading, error }] = useSetCardsInDeckMutation({
+ *   variables: {
+ *      deckId: // value for 'deckId'
+ *      cardIds: // value for 'cardIds'
+ *   },
+ * });
+ */
+export function useSetCardsInDeckMutation(baseOptions?: Apollo.MutationHookOptions<SetCardsInDeckMutation, SetCardsInDeckMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetCardsInDeckMutation, SetCardsInDeckMutationVariables>(SetCardsInDeckDocument, options);
+      }
+export type SetCardsInDeckMutationHookResult = ReturnType<typeof useSetCardsInDeckMutation>;
+export type SetCardsInDeckMutationResult = Apollo.MutationResult<SetCardsInDeckMutation>;
+export type SetCardsInDeckMutationOptions = Apollo.BaseMutationOptions<SetCardsInDeckMutation, SetCardsInDeckMutationVariables>;
 export const UpsertCardDocument = gql`
     mutation upsertCard($cardId: String!, $card: CardInput!) {
   upsertCard(where: {id: $cardId}, input: {card: $card}) {
@@ -7338,8 +7796,13 @@ export type GetCardQueryHookResult = ReturnType<typeof useGetCardQuery>;
 export type GetCardLazyQueryHookResult = ReturnType<typeof useGetCardLazyQuery>;
 export type GetCardQueryResult = Apollo.QueryResult<GetCardQuery, GetCardQueryVariables>;
 export const GetCardsDocument = gql`
-    query getCards($limit: Int, $filter: CollectionCardFilter, $offset: Int) {
-  allCollectionCards(offset: $offset, filter: $filter, first: $limit) {
+    query getCards($limit: Int, $filter: CollectionCardFilter, $offset: Int, $orderBy: [CollectionCardsOrderBy!]) {
+  allCollectionCards(
+    offset: $offset
+    filter: $filter
+    first: $limit
+    orderBy: $orderBy
+  ) {
     nodes {
       ...collectionCard
     }
@@ -7363,6 +7826,7 @@ export const GetCardsDocument = gql`
  *      limit: // value for 'limit'
  *      filter: // value for 'filter'
  *      offset: // value for 'offset'
+ *      orderBy: // value for 'orderBy'
  *   },
  * });
  */
@@ -7453,7 +7917,7 @@ export type GetDeckQueryHookResult = ReturnType<typeof useGetDeckQuery>;
 export type GetDeckLazyQueryHookResult = ReturnType<typeof useGetDeckLazyQuery>;
 export type GetDeckQueryResult = Apollo.QueryResult<GetDeckQuery, GetDeckQueryVariables>;
 export const GetDecksDocument = gql`
-    query getDecks($user: String!) {
+    query getDecks($user: String) {
   allDecks(condition: {trashed: false}) {
     nodes {
       ...deck
@@ -7485,7 +7949,7 @@ export const GetDecksDocument = gql`
  *   },
  * });
  */
-export function useGetDecksQuery(baseOptions: Apollo.QueryHookOptions<GetDecksQuery, GetDecksQueryVariables>) {
+export function useGetDecksQuery(baseOptions?: Apollo.QueryHookOptions<GetDecksQuery, GetDecksQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetDecksQuery, GetDecksQueryVariables>(GetDecksDocument, options);
       }

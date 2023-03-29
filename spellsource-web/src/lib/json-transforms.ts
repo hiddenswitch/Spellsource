@@ -1,4 +1,4 @@
-import {BlockDef} from "./blocks";
+import {BlockDef} from "../__generated__/blocks";
 import {CardDef} from "../components/card-display";
 import deepmerge from "deepmerge";
 

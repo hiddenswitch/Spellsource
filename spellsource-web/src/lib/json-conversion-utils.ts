@@ -1,7 +1,7 @@
 import Blockly, {Block, BlockSvg, Connection, Workspace, WorkspaceSvg} from 'blockly'
 import * as BlocklyMiscUtils from './blockly-misc-utils'
 import {isArray} from 'lodash'
-import {BlockArgDef, BlockDef} from "./blocks";
+import {BlockArgDef, BlockDef} from "../__generated__/blocks";
 import {CardDef} from '../components/card-display';
 import {isNumeric} from "./workspace-utils";
 

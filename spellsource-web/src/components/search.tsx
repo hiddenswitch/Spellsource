@@ -85,11 +85,6 @@ function Search(props) {
     }
 
     const {data} = await getCards({variables: {limit: 5, filter: {id: {includesInsensitive: query}}}});
-
-    setResults((data?.allCards?.nodes ?? []).map((node) => ({
-      ...cardSearchNode(node.cardScript),
-      id: node.id
-    })))
   }, 500, [query]);
 
   const [focused, setFocused] = useState(false);

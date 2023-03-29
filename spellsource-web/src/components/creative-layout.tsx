@@ -9,10 +9,24 @@ import Head from "next/head";
 
 
 export const pages = [
-  <li key={0}><Link href={"/wiki"}>Wiki</Link></li>,
-  <li key={1}><Link href={"/whats-new"}>What's New</Link></li>,
-  <li key={2}><Link href={"/credits"}>Credits</Link></li>,
-  <li key={3}><AuthButton/></li>
+  <li key={0}>
+    <Link href={"/collection"}>Collection</Link>
+  </li>,
+  <li key={0}>
+    <Link href={"/card-editor"}>Editor</Link>
+  </li>,
+  <li key={0}>
+    <Link href={"/wiki"}>Wiki</Link>
+  </li>,
+  <li key={1}>
+    <Link href={"/whats-new"}>What's New</Link>
+  </li>,
+  <li key={2}>
+    <Link href={"/credits"}>Credits</Link>
+  </li>,
+  <li key={3}>
+    <AuthButton />
+  </li>,
 ]
 
 export default ({ children }) => {

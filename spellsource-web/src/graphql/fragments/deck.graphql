@@ -4,4 +4,5 @@ fragment deck on Deck {
   isPremade
   createdBy
   heroClass
+  format
 }

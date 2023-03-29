@@ -1177,6 +1177,30 @@ type Mutation {
     """
     input: DeleteUserEntityAddonByIdInput!
   ): DeleteUserEntityAddonPayload
+  createDeckWithCards(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateDeckWithCardsInput!
+  ): CreateDeckWithCardsPayload
+  getClasses(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: GetClassesInput!
+  ): GetClassesPayload
+  getCollectionCards(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: GetCollectionCardsInput!
+  ): GetCollectionCardsPayload
+  setCardsInDeck(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: SetCardsInDeckInput!
+  ): SetCardsInDeckPayload
 
   """Upserts a single `BotUser`."""
   upsertBotUser(
@@ -3031,11 +3055,14 @@ type CollectionCard {
   createdBy: String
   cardScript: JSON
   blocklyWorkspace: String
+  name: String
   type: String
   class: String
   cost: Int
   collectible: Boolean
   searchMessage: String
+  lastModified: Datetime
+  createdAt: Datetime
 }
 
 """A `CollectionCard` edge in the connection."""
@@ -3058,6 +3085,8 @@ enum CollectionCardsOrderBy {
   CARD_SCRIPT_DESC
   BLOCKLY_WORKSPACE_ASC
   BLOCKLY_WORKSPACE_DESC
+  NAME_ASC
+  NAME_DESC
   TYPE_ASC
   TYPE_DESC
   CLASS_ASC
@@ -3068,6 +3097,10 @@ enum CollectionCardsOrderBy {
   COLLECTIBLE_DESC
   SEARCH_MESSAGE_ASC
   SEARCH_MESSAGE_DESC
+  LAST_MODIFIED_ASC
+  LAST_MODIFIED_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
 }
 
 """
@@ -3087,6 +3120,9 @@ input CollectionCardCondition {
   """Checks for equality with the object’s `blocklyWorkspace` field."""
   blocklyWorkspace: String
 
+  """Checks for equality with the object’s `name` field."""
+  name: String
+
   """Checks for equality with the object’s `type` field."""
   type: String
 
@@ -3101,6 +3137,12 @@ input CollectionCardCondition {
 
   """Checks for equality with the object’s `searchMessage` field."""
   searchMessage: String
+
+  """Checks for equality with the object’s `lastModified` field."""
+  lastModified: Datetime
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
 }
 
 """
@@ -3116,6 +3158,9 @@ input CollectionCardFilter {
   """Filter by the object’s `cardScript` field."""
   cardScript: JSONFilter
 
+  """Filter by the object’s `name` field."""
+  name: StringFilter
+
   """Filter by the object’s `type` field."""
   type: StringFilter
 
@@ -3130,6 +3175,12 @@ input CollectionCardFilter {
 
   """Filter by the object’s `searchMessage` field."""
   searchMessage: StringFilter
+
+  """Filter by the object’s `lastModified` field."""
+  lastModified: DatetimeFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
 
   """Checks for all expressions in this list."""
   and: [CollectionCardFilter!]
@@ -6006,6 +6057,141 @@ input DeleteUserEntityAddonByIdInput {
   """
   clientMutationId: String
   id: String!
+}
+
+"""The output of our `createDeckWithCards` mutation."""
+type CreateDeckWithCardsPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  deck: Deck
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Deck`. May be used by Relay 1."""
+  deckEdge(
+    """The method to use when ordering `Deck`."""
+    orderBy: [DecksOrderBy!] = [PRIMARY_KEY_ASC]
+  ): DecksEdge
+}
+
+"""All input for the `createDeckWithCards` mutation."""
+input CreateDeckWithCardsInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  deckName: String
+  classHero: String
+  formatName: String
+  cardIds: [String]
+}
+
+"""The output of our `getClasses` mutation."""
+type GetClassesPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  results: [GetClassesRecord]
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
+
+"""The return type of our `getClasses` mutation."""
+type GetClassesRecord {
+  createdBy: String
+  class: String
+  isPrivate: Boolean
+  collectible: Boolean
+  cardScript: JSON
+  id: String
+  name: String
+}
+
+"""All input for the `getClasses` mutation."""
+input GetClassesInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+}
+
+"""The output of our `getCollectionCards` mutation."""
+type GetCollectionCardsPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  results: [GetCollectionCardsRecord]
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
+
+"""The return type of our `getCollectionCards` mutation."""
+type GetCollectionCardsRecord {
+  id: String
+  createdBy: String
+  cardScript: JSON
+  blocklyWorkspace: String
+  name: String
+  type: String
+  class: String
+  cost: Int
+  collectible: Boolean
+  searchMessage: String
+  lastModified: Datetime
+  createdAt: Datetime
+}
+
+"""All input for the `getCollectionCards` mutation."""
+input GetCollectionCardsInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+}
+
+"""The output of our `setCardsInDeck` mutation."""
+type SetCardsInDeckPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  cardsInDecks: [CardsInDeck]
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
+
+"""All input for the `setCardsInDeck` mutation."""
+input SetCardsInDeckInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  deck: String
+  cardIds: [String]
 }
 
 """The output of our upsert `BotUser` mutation."""

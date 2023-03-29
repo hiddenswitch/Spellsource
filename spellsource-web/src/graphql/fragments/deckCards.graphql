@@ -1,6 +1,7 @@
 fragment deckCards on Deck {
   cardsInDecksByDeckId {
     nodes {
+      cardId
       cardByCardId {
         ...card
       }

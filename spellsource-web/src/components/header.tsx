@@ -6,8 +6,6 @@ import {AiOutlineMenu} from "@react-icons/all-files/ai/AiOutlineMenu"
 import {AiOutlineClose} from "@react-icons/all-files/ai/AiOutlineClose"
 import Link from 'next/link'
 import Image from "next/image";
-import {Button} from "react-bootstrap";
-import {signIn, signOut, useSession} from "next-auth/react";
 
 const Header = ({pages}: { pages?: any }) => {
   const headerDiv = useRef<HTMLDivElement>(null)
@@ -41,7 +39,7 @@ const Header = ({pages}: { pages?: any }) => {
 const DesktopNavbar = ({pages}: { pages?: ReactNode }) => {
   return (
     <ul className={styles.desktopNavbar}>
-      <li key={'search'}><Search placeholder={'Search'}/></li>
+      {/*<li key={'search'}><Search placeholder={'Search'}/></li>*/}
       <li key={'javadocs'}><a href="/javadoc">Docs</a></li>
       {pages}
       {/* <li key={'download'}><Link href="/download">Play Now</Link></li> */}
@@ -63,7 +61,7 @@ const MobileNavbar = ({pages}: { pages?: ReactNode }) => {
             setOpen(!open);
           }}/>
           <ul className={styles.mobileUl}>
-            <li key={'search'}><Search placeholder={'Search'}/></li>
+            {/*<li key={'search'}><Search placeholder={'Search'}/></li>*/}
             <li key={'javadocs'}><a href="/javadoc">Docs</a></li>
             {pages}
             {/* <li key={'download'}><Link href="/download">Play Now</Link></li> */}

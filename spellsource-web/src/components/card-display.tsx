@@ -50,7 +50,7 @@ const defaultArt = {
   }
 }
 
-const toRgbaString = (v?: { r: number; g: number; b: number; a: any }) => {
+export const toRgbaString = (v?: { r: number; g: number; b: number; a: any }) => {
   return v ? `rgba(${v.r * 255}, ${v.g * 255}, ${v.b * 255}, ${v.a})` : undefined
 }
 
