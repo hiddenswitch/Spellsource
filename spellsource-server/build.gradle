@@ -1,7 +1,6 @@
 buildscript {
     ext {
         vertxJooqVersion = '6.5.5'
-        flywayVersion = '6.5.5'
     }
     repositories {
         mavenLocal()
@@ -19,7 +18,7 @@ buildscript {
 
 plugins {
     id 'com.bmuschko.docker-remote-api' version '7.3.0'
-    id 'com.google.cloud.tools.jib' version '3.3.1'
+    id 'com.google.cloud.tools.jib' version '3.3.2'
     id "org.flywaydb.flyway" version "$flywayVersion"
     id 'com.github.johnrengelman.shadow' version "$shadowPluginVersion"
     id 'org.javamodularity.moduleplugin'
@@ -51,7 +50,6 @@ def localPassword = 'password'
 def localDatabaseName = 'spellsource'
 def mainClassNameConst = 'com.hiddenswitch.framework.EntryPoint'
 def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
-def createPostgresImage = tasks.getByPath(':spellsource-containers:createPostgresImage')
 def jvmArgs = ['--enable-preview', '--add-opens', 'java.base/java.lang=ALL-UNNAMED']
 
 application {
@@ -62,8 +60,6 @@ dependencies {
     implementation project(':spellsource-common')
     implementation project(':spellsource-game')
     implementation project(':spellsource-cards-git')
-    implementation 'io.vertx:vertx-async-await-incubator:1.0.0-SNAPSHOT'
-    implementation 'io.vertx:vertx-execute-blocking-incubator:1.0.0-SNAPSHOT'
     implementation "io.github.classgraph:classgraph:$classgraphVersion"
     implementation group: 'io.vertx', name: 'vertx-infinispan', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
@@ -155,12 +151,12 @@ dependencies {
     testImplementation 'org.jetbrains:annotations'
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
-    testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.1'
+    testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.2'
 }
 
 javadoc {
     def javadocOptions = options as CoreJavadocOptions
-    javadocOptions.addStringOption("source", "19")
+    javadocOptions.addStringOption("source", "20")
     javadocOptions.addBooleanOption("-enable-preview", true)
 }
 
@@ -181,7 +177,7 @@ shadowJar {
 run {
     group('spellsource')
     description("Starts the Spellsource server locally. Starts all dependencies using Docker (must be installed).")
-    dependsOn += [classes, testClasses, createPostgresImage]
+    dependsOn += [classes, testClasses]
     classpath sourceSets.test.runtimeClasspath
     mainClass.set('com.hiddenswitch.framework.tests.applications.EntryPoint')
     jvmArgs.addAll(jvmArgs)
@@ -208,11 +204,16 @@ task removeExistingPostgresContainer(type: DockerRemoveContainer, group: 'Spells
 }
 
 task createPostgresContainer(type: DockerCreateContainer, group: 'Spellsource Internal') {
-    dependsOn += [createPostgresImage, removeExistingPostgresContainer]
-    targetImageId createPostgresImage.imageId
+    dependsOn += [removeExistingPostgresContainer]
+    imageId.set("docker.io/postgres:13.11-bullseye")
     containerName.set('gradleSupabasePostgres')
     hostConfig.portBindings.set(['5432:5432'])
-    envVars.putAll(['POSTGRES_DB': localDatabaseName, 'POSTGRES_USER': localUsername, 'POSTGRES_PASSWORD': localPassword])
+    entrypoint.set(["/bin/bash", "-c", "mkdir -pv /docker-entrypoint-initdb.d/ && echo 'create schema if not exists keycloak;' > /docker-entrypoint-initdb.d/init.sql && docker-entrypoint.sh postgres"])
+    cmd.set([])
+    envVars.putAll([
+            'POSTGRES_DB': localDatabaseName,
+            'POSTGRES_USER': localUsername,
+            'POSTGRES_PASSWORD': localPassword])
     hostConfig.autoRemove.set(true)
 }
 
@@ -347,7 +348,6 @@ flywayMigrate.dependsOn += [startKeycloakContainer]
 
 test {
     group('spellsource')
-    dependsOn += [createPostgresImage]
     useJUnitPlatform()
     enableAssertions = false
     testLogging {
@@ -362,7 +362,7 @@ def spellsourceTags = ['latest', project.version.toString()]
 def spellsourceImage = 'ghcr.io/hiddenswitch/spellsource'
 jib {
     from {
-        image = "eclipse-temurin:19.0.1_10-jre"
+        image = "eclipse-temurin:20.0.1_9-jre-alpine"
     }
     to {
         image = spellsourceImage

@@ -135,7 +135,7 @@ subprojects {
                 }
 
                 if (details.requested.group == 'net.bytebuddy') {
-                    details.useVersion '1.12.14'
+                    details.useVersion '1.14.4'
                 }
 
                 if (details.requested.group == 'org.apache.httpcomponents' && details.requested.name == 'httpclient') {
@@ -197,6 +197,10 @@ subprojects {
 
                 if (details.requested.group == 'com.github.ben-manes.caffeine') {
                     details.useVersion '2.8.4'
+                }
+
+                if (details.requested.group == 'org.ow2.asm') {
+                    details.useVersion '9.4'
                 }
             }
         }

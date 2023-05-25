@@ -14,13 +14,6 @@ dependencies {
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonDatabindVersion"
 }
 
-task createPostgresImage(type: DockerBuildImage) {
-    dependsOn += [tasks.processResources]
-    inputDir.set(new File("$project.projectDir/src/main/resources/docker/postgres"))
-    quiet.set(true)
-    images.set(["doctorpangloss/postgres:latest"])
-}
-
 task createPythonImage(type: DockerBuildImage) {
     dependsOn += [tasks.processResources]
     inputDir.set(new File("$project.projectDir/src/main/resources/docker/pythonjava/"))
@@ -29,8 +22,6 @@ task createPythonImage(type: DockerBuildImage) {
 }
 
 compileJava {
-    // you won't really be able to use the postgres image unless you build it
-    dependsOn += [tasks.createPostgresImage]
     options.warnings = false
 }
 

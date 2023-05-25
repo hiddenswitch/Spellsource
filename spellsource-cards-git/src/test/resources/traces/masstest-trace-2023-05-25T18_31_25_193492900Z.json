@@ -1,0 +1,26 @@
+{
+  "seed" : -5415145616620973144,
+  "catalogueVersion" : 4,
+  "heroClasses" : [ "CANDY", "CANDY" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "spell_road_trip", "spell_darling_audience", "weapon_twirling_baton", "minion_talent_scout", "minion_arts_empress_kay", "minion_augmented_pixie", "minion_river_reveler", "spell_road_trip", "minion_inora_spellbound", "minion_blood_cultist", "minion_yaungol_guardian", "minion_rupi_the_giving", "minion_finale_architect", "spell_captivate", "minion_storm_giant", "minion_great_showman", "weapon_dancer's_torch", "spell_stage_dive", "minion_crystal_giant", "minion_infinite_futurist", "minion_timewalker_mistweaver", "minion_ringside_impresario", "weapon_twirling_baton", "spell_darling_audience", "minion_oni_entrapper", "minion_bungling_busker", "minion_savage_dancer", "spell_stage_dive", "minion_harbinger_of_hope", "minion_highmountain_primalist" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "weapon_dancer's_torch", "minion_sourcing_specialist", "spell_road_trip", "minion_the_diamond_sultan", "minion_kuroko_puppet", "minion_onis_eye", "minion_rupi_the_giving", "minion_bittertide_crab", "spell_living_firework", "minion_enhancing_shaman", "spell_fantastical_play", "minion_deep_borer", "spell_practice", "spell_chain_dance_new", "spell_star_performance", "minion_fel_manticore", "minion_pumpkin_abomination", "minion_savage_dancer", "minion_shedding_chameleon", "minion_tree_giant", "minion_verdant_dreams_dracomancer", "minion_mutamite_terror", "minion_smug_theorist", "spell_food_festival", "minion_spotlight_hog", "spell_warm_up", "minion_beholder_of_the_beginning", "minion_ringside_impresario", "spell_costume_draft", "spell_stage_fright" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "CORE", "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 20, 15, 22 ]
+  } ],
+  "actions" : [ 0, 0, 1, 2, 0, 0, 0, 1, 8, 2, 0, 2, 8, 1, 0, 1, 3, 0, 3, 2, 0, 1, 3, 4, 4, 1, 3, 0, 0 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

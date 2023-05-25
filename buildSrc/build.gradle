@@ -4,5 +4,5 @@ repositories {
 
 dependencies {
     localGroovy()
-    implementation 'com.github.mwiede:jsch:0.1.62'
+    implementation 'com.github.mwiede:jsch:0.2.8'
 }

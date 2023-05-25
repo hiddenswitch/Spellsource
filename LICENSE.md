@@ -1,6 +1,6 @@
 ### License Notes
 
-The `cards` and `game` project, as derivatives of `metastone`, are licensed GPLv2. The `net` project, as an original work, is licensed as "Affero GPLv3".
+The `spellsource-game` project, as a derivative of `metastone`, is licensed GPLv2. The rest of this project, as an original work, is licensed as "Affero GPLv3".
 
 This means that if you run your own local server, you must share the source to the server, even if you never distribute the server.
 

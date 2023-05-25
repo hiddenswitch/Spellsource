@@ -14,9 +14,8 @@ buildscript {
 }
 
 plugins {
-    id 'com.google.protobuf' version '0.8.18'
+    id 'com.google.protobuf' version '0.9.3'
     id 'java-library'
-    id 'idea'
 }
 
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)

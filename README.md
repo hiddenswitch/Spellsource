@@ -24,67 +24,9 @@ The server application starts in [EntryPoint](spellsource-server/src/main/java/c
 
 The client is private, please contact for access on the Discord.
 
-### Tasks
-
-```shell script
-$ ./gradlew tasks --group spellsource
-> Task :tasks
-
-------------------------------------------------------------
-Tasks runnable from root project 'spellsource'
-------------------------------------------------------------
-
-Spellsource tasks
------------------
-buildAndroid - Builds the Android version of the game using deploy.sh file and your local Unity version.
-buildIOS - Builds the Windows version of the game using deploy.sh file and your local Unity version.
-buildMacOS - Builds the macOS versions of the game using deploy.sh file and your local Unity version.
-buildWindows - Builds the Windows version of the game using deploy.sh file and your local Unity version.
-deploySpellsourceProd - Deploys Spellsource to production. Requires access to Spellsource secrets.
-distAndroid - Builds and uploads the Android project to Google Play
-distIOS - Builds and uploads to Testflight the iOS project
-distSteam - Uploads the macOS and Windows builds to Steam
-distWWW - Builds and deploys the website
-migrationsOrSqlChanged - Run whenever the schema as encoded in spellsource-server/src/main/resources/db/migration has changed - recreates the JOOQ DSL and dumps a ddl.sql file for autocompletion
-protosChanged - Run whenever the files in src/main/proto have been changed. Recreates the models and updates the client.
-run - Starts the Spellsource server locally. Starts all dependencies using Docker (must be installed).
-test - Runs the test suite.
-testLegacyMigration - Tests the migration from the legacy server to this current server 
-```
-
-### Cloning this repository
-
-You do not have access to the private submodules. Use the following commands to clone the repository:
-
-```shell
-git clone https://github.com/hiddenswitch/Spellsource.git
-cd Spellsource
-```
-
-This repository uses **Git Submodules**. This means, if you have the proper authorization, you'll be able to access all the source code using:
-
-##### Prerequisites
-
-Make sure `longpaths` is enabled on Windows. Run a `bash` or other command prompt **as administrator**, and then execute `git config --system core.longpaths true`.
-
-##### All platforms
-
-```shell
-git lfs install
-git clone --recurse-submodules git@github.com:hiddenswitch/Spellsource.git
-cd Spellsource
-git submodule update --init --recursive
-```
-
-Failures are normal if you do not have permissions to the repositories.
-
-If you have the permissions, you will need to add your SSH key to the private repositories, for both BitBucket and GitHub, to access all of them. Contact us on the Discord at the start of this document if you'd like to contribute to private work like the game client.
-
-You cannot use the GitHub Desktop app to download this repository.
-
 ### Getting started with Development on macOS
 
-Requirements: **Java 19 or later** and **Docker**. Check your current version of Java using `java --version`.
+Requirements: **Java 20 or later** and **Docker**. Check your current version of Java using `java --version`.
 
  1. Install dependencies:
     ```shell script
@@ -95,7 +37,7 @@ Requirements: **Java 19 or later** and **Docker**. Check your current version of
     # Docker. Look carefully at any messages brew tells you and do them
     brew cask install docker
     # Java (if required)
-    # Install openjdk 19 or higher
+    # Install openjdk 20 or higher
     brew install openjdk dotnet-sdk
     sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
     brew link --force openjdk
@@ -104,12 +46,14 @@ Requirements: **Java 19 or later** and **Docker**. Check your current version of
     ```shell script
     git clone https://github.com/hiddenswitch/Spellsource.git
     cd Spellsource
-    # If you have access to the client, this will succeed.
-    git submodule update --init --recursive unityclient/src/unity
     ```
  3. See Spellsource-specific tasks using `./gradlew tasks --group spellsource`.
  4. Run tests using `./gradlew test`
  5. Start a local server using `./gradlew run`
+
+### Getting started with Development on Windows
+
+Requirements: **Java 20 or later** and **Docker**. Check your current version of Java using `java --version`.
 
 ### Contributing Cards
 
@@ -155,23 +99,6 @@ Visit the [Steam partner's page](https://partner.steamgames.com/apps/builds/9871
 > I uploaded to TestFlight but the build isn't public yet.
 
 Make sure the Public group is [added here](https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1257566265/testflight?section=iosbuilds).
-
-> `./gradlew distSwarm` fails with the message of the form:
-
-```shell script
-#13 71.30 FAILURE: Build failed with an exception.
-#13 71.30 
-#13 71.30 * What went wrong:
-#13 71.30 Could not determine the dependencies of task ':net:shadowJar'.
-#13 71.30 > Could not resolve all dependencies for configuration ':net:runtimeClasspath'.
-#13 71.30    > Could not resolve project :vertx-redis-cluster.
-#13 71.30      Required by:
-#13 71.30          project :net
-#13 71.30       > Unable to find a matching configuration of project :subproject:
-#13 71.30           - None of the consumable configurations have attributes.
-```
-
-Make sure to add the sub project directory and any others that need to be visible to Docker to [.dockerignore](.dockerignore) in the form of `!directory/*`.
 
 > `./gradlew spellsource-server:run` hangs with error `Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out waiting for log output matching '.*waiting for connections on port.*'`
 

@@ -7,12 +7,12 @@ public class PostgresSupabaseContainer extends GenericContainer<PostgresSupabase
 	public static final int POSTGRESQL_PORT = 5432;
 
 	public PostgresSupabaseContainer(String username, String password, String databaseName) {
-		super("doctorpangloss/postgres:latest");
+		super("docker.io/postgres:13.11-bullseye");
 		withExposedPorts(POSTGRESQL_PORT);
 		withEnv("POSTGRES_DB", databaseName);
 		withEnv("POSTGRES_USER", username);
 		withEnv("POSTGRES_PASSWORD", password);
-		withCommand("postgres", "-c", "wal_level=logical");
+		withCommand("/bin/bash", "-c", "mkdir -pv /docker-entrypoint-initdb.d/ && echo 'create schema if not exists keycloak;' > /docker-entrypoint-initdb.d/init.sql && docker-entrypoint.sh postgres");
 	}
 
 	public String getHostAndPort() {

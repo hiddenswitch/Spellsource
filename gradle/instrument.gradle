@@ -1,16 +1,18 @@
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.compilerArgs += "--enable-preview"
 }
 
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
     jvmArgs += ['--enable-preview', '--add-opens=java.base/java.lang=ALL-UNNAMED']
 }
 
-tasks.withType(JavaExec) {
+tasks.withType(JavaExec).configureEach {
     jvmArgs += ['--enable-preview', '--add-opens=java.base/java.lang=ALL-UNNAMED']
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_19
-    targetCompatibility = JavaVersion.VERSION_19
+    sourceCompatibility = JavaVersion.VERSION_20
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(20)
+    }
 }

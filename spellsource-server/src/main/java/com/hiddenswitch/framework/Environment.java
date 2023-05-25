@@ -32,6 +32,7 @@ import io.vertx.sqlclient.RowSet;
 import io.vertx.sqlclient.SqlConnection;
 import io.vertx.tracing.opentracing.OpenTracingOptions;
 import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.output.MigrateResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.*;
@@ -245,7 +246,7 @@ public class Environment {
 		return redissonClients.get();
 	}
 
-	public static Future<Integer> migrate(String url, String username, String password) {
+	public static Future<MigrateResult> migrate(String url, String username, String password) {
 		return executeBlocking(() -> {
 			var flyway = Flyway.configure()
 					.group(true)
@@ -259,13 +260,13 @@ public class Environment {
 		});
 	}
 
-	public static Future<Integer> migrate(ServerConfiguration serverConfiguration) {
+	public static Future<MigrateResult> migrate(ServerConfiguration serverConfiguration) {
 		var pg = serverConfiguration.getPg();
 		return migrate("jdbc:postgresql://" + pg.getHost() + ":" + pg.getPort() + "/" + pg.getDatabase(), pg.getUser(), pg.getPassword());
 	}
 
 	public static Future<Integer> migrate() {
-		return Environment.migrate(getConfiguration());
+		return Environment.migrate(getConfiguration()).map(v -> v.migrationsExecuted);
 	}
 
 
