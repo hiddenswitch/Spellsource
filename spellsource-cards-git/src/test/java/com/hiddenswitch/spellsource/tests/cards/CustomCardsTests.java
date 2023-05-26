@@ -9,6 +9,7 @@ import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
@@ -3410,7 +3411,7 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testLittleHelper() {
-		CardList heroPowers = CardCatalogue.classpath().getAll().filtered(Card::isHeroPower);
+		CardList heroPowers = ClasspathCardCatalogue.CLASSPATH.getAll().filtered(Card::isHeroPower);
 		for (Card heroPower : heroPowers) {
 			runGym((context, player, opponent) -> {
 				SpellDesc spell = new SpellDesc(ChangeHeroPowerSpell.class);
@@ -4229,10 +4230,10 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testProperCardIds() {
-		CardCatalogue.classpath().getCardById("minion_jade_cloud_serpent");
-		CardCatalogue.classpath().getCardById("spell_honed_potion");
-		CardCatalogue.classpath().getCardById("token_bellowing_spirit");
-		CardCatalogue.classpath().getCardById("token_burning_spirit");
+		ClasspathCardCatalogue.CLASSPATH.getCardById("minion_jade_cloud_serpent");
+		ClasspathCardCatalogue.CLASSPATH.getCardById("spell_honed_potion");
+		ClasspathCardCatalogue.CLASSPATH.getCardById("token_bellowing_spirit");
+		ClasspathCardCatalogue.CLASSPATH.getCardById("token_burning_spirit");
 	}
 
 	@Test

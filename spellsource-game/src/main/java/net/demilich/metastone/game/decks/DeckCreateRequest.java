@@ -3,6 +3,7 @@ package net.demilich.metastone.game.decks;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
@@ -148,7 +149,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 				final String format = matcher.group("format");
 				try {
 					request.setFormat(format);
-					if (!CardCatalogue.classpath().formats().keySet().contains(format)) {
+                    if (!ClasspathCardCatalogue.CLASSPATH.formats().keySet().contains(format)) {
 						throw new IllegalArgumentException();
 					}
 				} catch (IllegalArgumentException ex) {
@@ -161,7 +162,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 			if (matcher.group("heroCard") != null) {
 				final String heroCard = matcher.group("heroCard");
 				try {
-					request.setHeroCardId(CardCatalogue.classpath().getCardByName(heroCard).getCardId());
+                    request.setHeroCardId(ClasspathCardCatalogue.CLASSPATH.getCardByName(heroCard).getCardId());
 				} catch (NullPointerException ex) {
 					errors.add(new NullPointerException(String.format("No hero card named %s could be found", heroCard)));
 				}
@@ -174,7 +175,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 				int count = Integer.parseInt(matcher.group("count"));
 				String cardId;
 				try {
-					cardId = CardCatalogue.classpath().getCardByName(cardName, request.getHeroClass()).getCardId();
+                    cardId = ClasspathCardCatalogue.CLASSPATH.getCardByName(cardName, request.getHeroClass()).getCardId();
 				} catch (NullPointerException ex) {
 					String message = String.format("Could not find a card named %s%s", cardName, request.getName() == null ? "" : " while reading deck list " + request.getName());
 					errors.add(new NullPointerException(message));
@@ -311,10 +312,10 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		GameDeck deck = new GameDeck(getHeroClass());
 		deck.setName(getName());
 		if (getHeroCardId() != null) {
-			deck.setHeroCard((Card) CardCatalogue.classpath().getCardById(getHeroCardId()));
+            deck.setHeroCard((Card) ClasspathCardCatalogue.CLASSPATH.getCardById(getHeroCardId()));
 		}
-		getCardIds().forEach(cardId -> deck.getCards().addCard(CardCatalogue.classpath().getCardById(cardId)));
-		deck.setFormat(CardCatalogue.classpath().getFormat(format));
+		getCardIds().forEach(cardId -> deck.getCards().addCard(ClasspathCardCatalogue.CLASSPATH.getCardById(cardId)));
+        deck.setFormat(ClasspathCardCatalogue.CLASSPATH.getFormat(format));
 		return deck;
 	}
 
@@ -334,8 +335,8 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	public boolean isValid() {
 		if (getName() == null
 				|| getHeroClass() == null) return false;
-		DeckFormat deckFormat = CardCatalogue.classpath().spellsource();
-		return CardCatalogue.classpath().getBaseClasses(deckFormat).contains(getHeroClass())
+        DeckFormat deckFormat = ClasspathCardCatalogue.CLASSPATH.spellsource();
+        return ClasspathCardCatalogue.CLASSPATH.getBaseClasses(deckFormat).contains(getHeroClass())
 				&& (getCardIds().size() + getInventoryIds().size()) == 30;
 	}
 

@@ -5,6 +5,7 @@ import net.demilich.metastone.game.behaviour.ChooseLastBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardZone;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
@@ -91,7 +92,7 @@ public class Player extends Entity implements Serializable {
 	 * @return A player specified with an {@link GameDeck#EMPTY} and a {@link ChooseLastBehaviour}.
 	 */
 	public static Player empty() {
-		return new Player(GameDeck.EMPTY, "Empty player", CardCatalogue.classpath());
+		return new Player(GameDeck.EMPTY, "Empty player", ClasspathCardCatalogue.CLASSPATH);
 	}
 
 	/**
@@ -103,7 +104,7 @@ public class Player extends Entity implements Serializable {
 	 * @return A new player instance with the specified settings and a {@link ChooseLastBehaviour}.
 	 */
 	public static Player forUser(String userId, int id, GameDeck deck) {
-		Player player = new Player(deck, "Player " + userId, CardCatalogue.classpath());
+		Player player = new Player(deck, "Player " + userId, ClasspathCardCatalogue.CLASSPATH);
 		player.setId(id);
 		player.setUserId(userId);
 		return player;

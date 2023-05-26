@@ -10,7 +10,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.tests.util.TestBase;
 import org.jetbrains.annotations.NotNull;
@@ -76,10 +76,10 @@ public class DecksTests extends FrameworkTestBase {
 				.compose(v -> {
 					var service = client.legacy();
 
-					return service.decksPut(DecksPutRequest.newBuilder()
+                    return service.decksPut(DecksPutRequest.newBuilder()
 							.setName("Test Deck 2")
 							.setHeroClass(HeroClass.TEST)
-							.setFormat(CardCatalogue.classpath().spellsource().getName()).build())
+							.setFormat(ClasspathCardCatalogue.CLASSPATH.spellsource().getName()).build())
 							.compose(decksPutResponse -> service.decksUpdate(DecksUpdateRequest.newBuilder()
 									.setDeckId(decksPutResponse.getCollection().getId())
 									.setUpdateCommand(DecksUpdateCommand.newBuilder()

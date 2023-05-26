@@ -4,7 +4,7 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.tests.util.TestBase;
 
@@ -33,7 +33,7 @@ public class ConversionHarness {
 
 	public static boolean assertCardReplaysTheSame(long[] seeds, String cardId, String replacementJson) {
 		synchronized (PROBE) {
-			var cardCatalogue = CardCatalogue.classpath();
+            var cardCatalogue = ClasspathCardCatalogue.CLASSPATH;
 			var originalCard = cardCatalogue.getCards().get(cardId);
 			var originalCardDesc = cardCatalogue.getRecords().get(cardId).getDesc();
 			try {

@@ -43,6 +43,6 @@ public class DraftContextTest {
 		});
 		assertEquals(context.getPublicState().getSelectedCards().size(), DraftLogic.ROUNDS);
 		assertEquals(context.getPublicState().getStatus(), DraftStatus.COMPLETE);
-		assertNotNull(context.getPublicState().createDeck(context.getCardCatalogue().classpath()));
+		assertNotNull(context.getPublicState().createDeck(context.getCardCatalogue()));
 	}
 }

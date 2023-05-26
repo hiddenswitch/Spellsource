@@ -4,6 +4,7 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 
 import java.util.function.Consumer;
 
@@ -26,7 +27,7 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 	private PublicDraftState publicState = new PublicDraftState();
 	private PrivateDraftState privateState = new PrivateDraftState();
 	private DraftBehaviour behaviour = new NullDraftBehaviour();
-	private CardCatalogue cardCatalogue = CardCatalogue.classpath();
+	private CardCatalogue cardCatalogue = ClasspathCardCatalogue.CLASSPATH;
 	private Handler<AsyncResult<DraftContext>> handleDone;
 
 	/**

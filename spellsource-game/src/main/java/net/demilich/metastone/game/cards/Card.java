@@ -7,6 +7,7 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -504,7 +505,7 @@ public class Card extends Entity implements HasChooseOneActions {
 			return desc;
 		}
 		// Prevents copying here
-		return CardCatalogue.classpath().getRecords().get(getAttributes().getOverrideCardId()).getDesc();
+		return ClasspathCardCatalogue.CLASSPATH.getRecords().get(getAttributes().getOverrideCardId()).getDesc();
 	}
 
 	/**

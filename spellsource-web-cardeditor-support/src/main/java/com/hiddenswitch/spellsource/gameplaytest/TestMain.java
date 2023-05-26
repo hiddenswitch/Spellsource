@@ -4,7 +4,7 @@ import io.vertx.core.json.Json;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
@@ -50,7 +50,7 @@ public class TestMain extends TestBase {
 
 	public static void addCard(String json) {
 		try {
-			CardCatalogue.classpath().addOrReplaceCard(json);
+            ClasspathCardCatalogue.CLASSPATH.addOrReplaceCard(json);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

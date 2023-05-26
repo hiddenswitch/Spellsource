@@ -14,6 +14,7 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.PlayGameLogicRandomBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -217,7 +218,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	private int turn;
 	private int actionsThisTurn;
 	private boolean ignoreEvents;
-	private CardCatalogue cardCatalogue = CardCatalogue.classpath();
+	private CardCatalogue cardCatalogue = ClasspathCardCatalogue.CLASSPATH;
 	private CardList tempCards = new CardArrayList();
 	private boolean didCallEndGame;
 
@@ -233,7 +234,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public GameContext() {
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
 		setLogic(new GameLogic());
-		setDeckFormat(CardCatalogue.classpath().all());
+		setDeckFormat(ClasspathCardCatalogue.CLASSPATH.all());
 		setPlayer1(new Player());
 		setPlayer2(new Player());
 	}
@@ -1616,7 +1617,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		GameContext context = new GameContext();
 		Behaviour[] behaviours = new Behaviour[]{behaviour1, behaviour2};
 		for (int i = 0; i < 2; i++) {
-			context.setPlayer(i, new Player(decks.get(i), "Player " + Integer.toString(i), CardCatalogue.classpath()));
+			context.setPlayer(i, new Player(decks.get(i), "Player " + Integer.toString(i), ClasspathCardCatalogue.CLASSPATH));
 			context.behaviours[i] = behaviours[i];
 		}
 		context.setDeckFormat(context.getCardCatalogue().getSmallestSupersetFormat(decks));

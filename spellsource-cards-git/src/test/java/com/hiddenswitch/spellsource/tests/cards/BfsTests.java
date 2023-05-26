@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.tests.cards;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDescArg;
 import net.demilich.metastone.game.cards.desc.HasEntrySet;
 import net.demilich.metastone.game.spells.*;
@@ -38,7 +39,7 @@ public class BfsTests {
 
 	@Test
 	public void testAccurateSummoningBattlecry() {
-		Card card = CardCatalogue.classpath().getCardById("minion_test_opener_summon");
+        Card card = ClasspathCardCatalogue.CLASSPATH.getCardById("minion_test_opener_summon");
 		Stream.Builder<HasEntrySet.BfsNode<Enum, Object>> bfs = card.getDesc().bfs();
 
 		boolean shouldMatch = bfs.build()
@@ -51,7 +52,7 @@ public class BfsTests {
 
 	@Test
 	public void testAccurateBfs() {
-		Card card = CardCatalogue.classpath().getCardById("minion_test_carddesc");
+        Card card = ClasspathCardCatalogue.CLASSPATH.getCardById("minion_test_carddesc");
 
 		List<HasEntrySet.BfsNode<Enum, Object>> nodes = card.getDesc().bfs().build().collect(Collectors.toList());
 

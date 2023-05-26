@@ -2,6 +2,7 @@ package net.demilich.metastone.game.decks;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 
@@ -133,7 +134,7 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 		if (format == null) {
 			// Retrieve the format that is implied by the cards inside this deck.
 			Set<String> cardSets = getCards().stream().map(Card::getCardSet).collect(Collectors.toSet());
-			return CardCatalogue.classpath().getSmallestSupersetFormat(cardSets);
+			return ClasspathCardCatalogue.CLASSPATH.getSmallestSupersetFormat(cardSets);
 		}
 
 		return format;

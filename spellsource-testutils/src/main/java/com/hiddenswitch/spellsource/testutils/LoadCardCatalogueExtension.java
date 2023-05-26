@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.testutils;
 
-import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 public class LoadCardCatalogueExtension implements ExtensionContext.Store.CloseableResource, BeforeAllCallback {
 	@Override
 	public void beforeAll(ExtensionContext context) throws Exception {
-		CardCatalogue.classpath().loadCardsFromPackage();
+		ClasspathCardCatalogue.CLASSPATH.loadCardsFromPackage();
 	}
 
 	@Override

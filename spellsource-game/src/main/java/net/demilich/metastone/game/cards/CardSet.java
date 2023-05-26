@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards;
 
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
 
 /**
@@ -50,7 +51,7 @@ public class CardSet {
 	public static final String GRAVEYARD = "GRAVEYARD";
 
 	public static boolean isHearthstoneSet(String set) {
-		DeckFormat wild = CardCatalogue.classpath().getFormat("Wild");
+		DeckFormat wild = ClasspathCardCatalogue.CLASSPATH.getFormat("Wild");
 		if (wild == null) {
 			return false;
 		}

@@ -4,6 +4,7 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.decks.validation.DeckValidator;
@@ -58,22 +59,22 @@ public final class RandomDeck extends GameDeck {
 
 	public static @NotNull GameDeck randomDeck(long seed) {
 		var random = new XORShiftRandom(seed);
-		DeckFormat deckFormat = CardCatalogue.classpath().spellsource();
-		var baseClasses = CardCatalogue.classpath().getBaseClasses(deckFormat);
+        DeckFormat deckFormat = ClasspathCardCatalogue.CLASSPATH.spellsource();
+        var baseClasses = ClasspathCardCatalogue.CLASSPATH.getBaseClasses(deckFormat);
 		var heroClass = baseClasses.get(random.nextInt(baseClasses.size()));
-		return new RandomDeck(random.getState(), heroClass, CardCatalogue.classpath().spellsource());
+        return new RandomDeck(random.getState(), heroClass, ClasspathCardCatalogue.CLASSPATH.spellsource());
 	}
 
 	private void populate(long seed, DeckFormat deckFormat) {
 		var random = new XORShiftRandom(seed);
 		DeckValidator deckValidator = new DefaultDeckValidator();
-		CardList classCards = CardCatalogue.classpath().query(deckFormat, card -> card.isCollectible()
+        CardList classCards = ClasspathCardCatalogue.CLASSPATH.query(deckFormat, card -> card.isCollectible()
 				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO_POWER)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.CLASS)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.FORMAT)
 				&& card.hasHeroClass(getHeroClass()));
-		CardList neutralCards = CardCatalogue.classpath().query(deckFormat, card -> card.isCollectible()
+        CardList neutralCards = ClasspathCardCatalogue.CLASSPATH.query(deckFormat, card -> card.isCollectible()
 				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO_POWER)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.CLASS)

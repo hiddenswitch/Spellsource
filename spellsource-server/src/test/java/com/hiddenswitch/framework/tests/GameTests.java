@@ -17,7 +17,7 @@ import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
-import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.decks.Deck;
 import org.junit.jupiter.api.Test;
 
@@ -84,7 +84,7 @@ public class GameTests extends FrameworkTestBase {
 							assertNotNull(gameDeck.getDeckId());
 							assertNotNull(gameDeck.getFormat());
 							assertNotNull(gameDeck.getHeroClass());
-							assertNotNull(gameDeck.getHeroCard(CardCatalogue.classpath()));
+                            assertNotNull(gameDeck.getHeroCard(ClasspathCardCatalogue.CLASSPATH));
 
 							// test creating the attributes
 							var playerAttributes = new AttributeMap();

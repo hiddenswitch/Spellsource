@@ -37,7 +37,7 @@ import io.vertx.core.streams.WriteStream;
 import io.vertx.sqlclient.Row;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.decks.GameDeck;
@@ -98,7 +98,7 @@ public class Legacy {
 
 					withConnection(connection -> new CardsDao(Environment.jooqAkaDaoConfiguration(), connection).findAll())
 							.map(cards -> cards.stream().map(card -> card.getCardScript().mapTo(CardDesc.class))
-									.filter(cd -> CardCatalogue.classpath().spellsource().isInFormat(cd.getSet())
+									.filter(cd -> ClasspathCardCatalogue.CLASSPATH.spellsource().isInFormat(cd.getSet())
 											&& cd.getType() != CardType.GROUP)
 									.map(card -> {
 										var entity = ModelConversions.getEntity(workingContext, card.create(), 0);
@@ -666,7 +666,7 @@ public class Legacy {
 	}
 
 	private static ValidationReportOrBuilder validateDeck(List<String> cardIds, String heroClass, String deckFormat) {
-		var deck = new GameDeck(CardCatalogue.classpath(), heroClass, cardIds);
+		var deck = new GameDeck(ClasspathCardCatalogue.CLASSPATH, heroClass, cardIds);
 		var validationReport = ValidationReport.newBuilder();
 		validationReport.setValid(true);
 

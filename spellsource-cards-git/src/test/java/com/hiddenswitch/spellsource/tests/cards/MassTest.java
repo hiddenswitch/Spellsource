@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.logic.Trace;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.parallel.Execution;
@@ -35,7 +35,7 @@ public class MassTest extends TestBase {
 	 */
 	@RepeatedTest(value = 10000)
 	public void testRandomMassPlay() {
-		GameContext context = TestBase.fromTwoRandomDecks(CardCatalogue.classpath().spellsource());
+        GameContext context = TestBase.fromTwoRandomDecks(ClasspathCardCatalogue.CLASSPATH.spellsource());
 		try {
 			assertTimeoutPreemptively(Duration.ofMillis(10000), () -> {
 						context.play();

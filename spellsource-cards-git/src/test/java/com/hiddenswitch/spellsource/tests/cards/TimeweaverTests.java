@@ -2,7 +2,7 @@ package com.hiddenswitch.spellsource.tests.cards;
 
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -92,7 +92,7 @@ public class TimeweaverTests extends TestBase {
 			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp());
 		}, GameDeck.EMPTY, GameDeck.EMPTY);
 
-		runGym((context, player, opponent) -> {
+        runGym((context, player, opponent) -> {
 			// We drew a card at the start of the turn
 			assertEquals(player.getDeck().size(), 1);
 			// The deck began with two cards. Determine which card was on top based on which one we drew
@@ -104,7 +104,7 @@ public class TimeweaverTests extends TestBase {
 			int blueIndex = drewBlack ? 0 : 1;
 			assertEquals(player.getDeck().get(blackIndex).getCardId(), "minion_black_test");
 			assertEquals(player.getDeck().get(blueIndex).getCardId(), "minion_blue_test");
-		}, new GameDeck(CardCatalogue.classpath(), HeroClass.ANY, Arrays.asList("minion_black_test", "minion_blue_test")), new GameDeck(CardCatalogue.classpath(), HeroClass.ANY, Arrays.asList("minion_black_test", "minion_blue_test")));
+		}, new GameDeck(ClasspathCardCatalogue.CLASSPATH, HeroClass.ANY, Arrays.asList("minion_black_test", "minion_blue_test")), new GameDeck(ClasspathCardCatalogue.CLASSPATH, HeroClass.ANY, Arrays.asList("minion_black_test", "minion_blue_test")));
 	}
 
 	@Test

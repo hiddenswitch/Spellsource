@@ -7,6 +7,7 @@ import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.vertx.core.json.DecodeException;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilterArg;
@@ -126,7 +127,7 @@ public class CardValidation {
 					if (SpellUtils.getSpecialCards().contains(card)) {
 						return;
 					}
-					CardCatalogue.classpath().getCardById(card);
+					ClasspathCardCatalogue.CLASSPATH.getCardById(card);
 				} else if (node.getKey().equals(SpellArg.CARDS) || node.getKey().equals(EntityFilterArg.CARDS)) {
 					if (node.getValue() instanceof String[]) {
 						var cards = (String[]) node.getValue();
@@ -134,7 +135,7 @@ public class CardValidation {
 							if (SpellUtils.getSpecialCards().contains(card)) {
 								continue;
 							}
-							CardCatalogue.classpath().getCardById(card);
+							ClasspathCardCatalogue.CLASSPATH.getCardById(card);
 						}
 					}
 				}

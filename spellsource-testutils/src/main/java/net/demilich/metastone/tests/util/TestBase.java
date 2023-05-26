@@ -11,8 +11,8 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
@@ -305,7 +305,7 @@ public class TestBase {
 
 	public static @NotNull
 	GameDeck randomDeck() {
-		return new RandomDeck(randomHeroCard(CardCatalogue.classpath().spellsource()), CardCatalogue.classpath().spellsource());
+		return new RandomDeck(randomHeroCard(ClasspathCardCatalogue.CLASSPATH.spellsource()), ClasspathCardCatalogue.CLASSPATH.spellsource());
 	}
 
 	/**
@@ -331,7 +331,7 @@ public class TestBase {
 	 * @return
 	 */
 	public static String randomHeroCard(DeckFormat deckFormat) {
-		List<String> baseHeroes = CardCatalogue.classpath().getBaseClasses(deckFormat);
+		List<String> baseHeroes = ClasspathCardCatalogue.CLASSPATH.getBaseClasses(deckFormat);
 		return baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
 	}
 
@@ -367,7 +367,7 @@ public class TestBase {
 				.withCardSets(defaultFormat.getCardSets());
 		// Remove the starting card
 		format.setSecondPlayerBonusCards(new String[0]);
-		GameContext context = new DebugContext(new Player(heroClass1, CardCatalogue.classpath()), new Player(heroClass2, CardCatalogue.classpath()), new GameLogic() {
+		GameContext context = new DebugContext(new Player(heroClass1, ClasspathCardCatalogue.CLASSPATH), new Player(heroClass2, ClasspathCardCatalogue.CLASSPATH), new GameLogic() {
 			@Override
 			public int determineBeginner(int... playerIds) {
 				return GameContext.PLAYER_1;
@@ -383,7 +383,7 @@ public class TestBase {
 	}
 
 	public static void runGym(GymConsumer consumer, GameDeck deck1, GameDeck deck2) {
-		GameContext context = new DebugContext(new Player(deck1, CardCatalogue.classpath()), new Player(deck2, CardCatalogue.classpath()), new GameLogic() {
+		GameContext context = new DebugContext(new Player(deck1, ClasspathCardCatalogue.CLASSPATH), new Player(deck2, ClasspathCardCatalogue.CLASSPATH), new GameLogic() {
 			@Override
 			public int determineBeginner(int... playerIds) {
 				return 0;
@@ -491,12 +491,12 @@ public class TestBase {
 	}
 
 	public DeckFormat getDefaultFormat() {
-		return CardCatalogue.classpath().all;
+		return ClasspathCardCatalogue.CLASSPATH.all;
 	}
 
 	public DebugContext createContext(String hero1, String hero2, boolean shouldInit, DeckFormat deckFormat) {
-		Player player1 = new Player(RandomDeck.randomDeck(hero1, deckFormat), "Player 1", CardCatalogue.classpath());
-		Player player2 = new Player(RandomDeck.randomDeck(hero2, deckFormat), "Player 2", CardCatalogue.classpath());
+		Player player1 = new Player(RandomDeck.randomDeck(hero1, deckFormat), "Player 1", ClasspathCardCatalogue.CLASSPATH);
+		Player player2 = new Player(RandomDeck.randomDeck(hero2, deckFormat), "Player 2", ClasspathCardCatalogue.CLASSPATH);
 
 		DebugContext context = new DebugContext(player1, player2, new GameLogic() {
 			@Override

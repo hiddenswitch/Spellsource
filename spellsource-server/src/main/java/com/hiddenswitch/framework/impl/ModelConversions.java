@@ -23,6 +23,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Actor;
@@ -111,12 +112,12 @@ public class ModelConversions {
 		try (var s1 = tracer.activateSpan(span)) {
 			// Set up the attributes
 			var cardId = cardRecord.getCardId();
-			if (!CardCatalogue.classpath().getCards().containsKey(cardId.toLowerCase())) {
+            if (!ClasspathCardCatalogue.CLASSPATH.getCards().containsKey(cardId.toLowerCase())) {
 				Tracing.error(new NullPointerException(cardId), span, true);
 				return null;
 			}
 
-			var cardById = CardCatalogue.classpath().getCardById(cardId);
+            var cardById = ClasspathCardCatalogue.CLASSPATH.getCardById(cardId);
 			var desc = cardById.getDesc().clone();
 
 			if (desc.getAttributes() == null) {
@@ -885,7 +886,7 @@ public class ModelConversions {
 						.setId(cr.getId())
 						.setDeckId(deckId), userId, deckId)).create())
 				.collect(Collectors.toCollection(CardArrayList::new)));
-		deck.setFormat(CardCatalogue.classpath().getFormat(deckCollection.getCollection().getFormat()));
+        deck.setFormat(ClasspathCardCatalogue.CLASSPATH.getFormat(deckCollection.getCollection().getFormat()));
 		deck.setHeroClass(deckCollection.getCollection().getHeroClass());
 		deck.setName(deckCollection.getCollection().getName());
 		return deck;

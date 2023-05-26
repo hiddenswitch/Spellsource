@@ -26,7 +26,7 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
@@ -130,7 +130,7 @@ public class ServerGameContext extends GameContext implements Server {
 			}, false);
 
 			// The deck format will be the smallest one that can contain all the cards in the decks.
-			setDeckFormat(CardCatalogue.classpath().getSmallestSupersetFormat(playerConfigurations
+			setDeckFormat(ClasspathCardCatalogue.CLASSPATH.getSmallestSupersetFormat(playerConfigurations
 					.stream()
 					.map(Configuration::getDeck)
 					// These must be game decks at this point

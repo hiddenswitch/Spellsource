@@ -15,7 +15,7 @@ import io.vertx.core.*;
 import io.vertx.core.eventbus.MessageConsumer;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
-import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.decks.CollectionDeck;
 import net.demilich.metastone.game.logic.GameStatus;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +46,7 @@ public class ClusteredGames extends AbstractVerticle {
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
 		// TODO: deal with this elsewhere
-		CardCatalogue.classpath().loadCardsFromPackage();
+		ClasspathCardCatalogue.CLASSPATH.loadCardsFromPackage();
 		CodecRegistration.register(ServerToClientMessage.getDefaultInstance())
 				.andRegister(ClientToServerMessage.getDefaultInstance());
 		var eb = Vertx.currentContext().owner().eventBus();

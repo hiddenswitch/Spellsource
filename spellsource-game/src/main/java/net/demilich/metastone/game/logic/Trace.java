@@ -3,7 +3,7 @@ package net.demilich.metastone.game.logic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
 import io.vertx.core.json.Json;
@@ -141,8 +141,8 @@ public class Trace implements Serializable, Cloneable {
 
 	public void restoreStartingStateTo(GameContext context) {
 		if (heroClasses != null && deckCardIds != null) {
-			context.setPlayer(0, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(0), deckCardIds.get(0).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 0", CardCatalogue.classpath()));
-			context.setPlayer(1, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(1), deckCardIds.get(1).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 1", CardCatalogue.classpath()));
+            context.setPlayer(0, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(0), deckCardIds.get(0).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 0", ClasspathCardCatalogue.CLASSPATH));
+            context.setPlayer(1, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(1), deckCardIds.get(1).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 1", ClasspathCardCatalogue.CLASSPATH));
 		} else if (heroClasses != null) {
 			context.setPlayer(0, new Player(heroClasses.get(0), context.getCardCatalogue()));
 			context.setPlayer(1, new Player(heroClasses.get(1), context.getCardCatalogue()));
