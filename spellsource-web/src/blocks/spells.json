@@ -1,0 +1,5850 @@
+[
+  {
+    "type": "Spell_I",
+    "subcategory": "Util",
+    "colour": 260,
+    "previousStatement": [
+      "Spells"
+    ],
+    "nextStatement": [
+      "Spells"
+    ],
+    "message0": "-%1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "i",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT",
+    "comment": "Used to make lists of Spells. (Remember you can always Duplicate with right-click)"
+  },
+  {
+    "type": "Spell_TargetPlayer",
+    "subcategory": "Util",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "(do) %2 as %1",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "input_value",
+        "check": "TargetPlayer",
+        "name": "targetPlayer",
+        "shadow": {
+          "type": "TargetPlayer_OPPONENT"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "SpellDesc",
+        "name": "super",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Used to do spell effects for/as the opponent instead of yourself"
+  },
+  {
+    "type": "Spell_BothPlayers",
+    "subcategory": "Util",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Both Players (do) %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BothPlayersSpell"
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Needed for nesting target players, e.g. 'Both players draw from their opponent's deck.'"
+  },
+  {
+    "type": "Spell_Damage1",
+    "subcategory": "Damage",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Deal %2 damage to %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DamageSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Simply deal some damage. Works for a single target or multiple targets. Factors in Spell Power if used in a Spell card."
+  },
+  {
+    "type": "Spell_Damage2",
+    "subcategory": "Damage",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Deal %2 damage to %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DamageSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "name": "ignoreSpellDamage",
+        "type": "field_label_serializable_hidden",
+        "value": true
+      }
+    ],
+    "messag1": "(Ignoring Spell Power)",
+    "args1": [],
+    "comment": "Like above, but won't factor in Spell Power if on a Spell card."
+  },
+  {
+    "type": "Spell_Heal",
+    "subcategory": "Damage",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Restore %2 health to %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "HealSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Simply do some healing. Works for a single target or multiple targets. Factors in healing amplifiers."
+  },
+  {
+    "type": "Spell_DrawCard1",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Draw.",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DrawCardSpell"
+      }
+    ],
+    "comment": "Draw 1 card from your deck."
+  },
+  {
+    "type": "Spell_DrawCard2",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Draw. Then, %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DrawCardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "SpellDesc",
+        "name": "spell",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "To do something to the card, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_DrawCard3",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Draw %2 %3",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DrawCardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 2
+          }
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "card/cards",
+        "value": "card"
+      }
+    ],
+    "comment": "Draw multiple cards from your deck."
+  },
+  {
+    "type": "Spell_DrawCard4",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "inputsInline": false,
+    "colour": 260,
+    "message0": "%1Draw %2 cards. Then, (do) %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DrawCardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 2
+          }
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "SpellDesc",
+        "name": "spell",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "To do something to the card(s), use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_DrawCard5",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1Draw %2 %4 that %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "FromDeckToHandSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "cardFilter",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        },
+        "src": "value"
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "card/cards",
+        "value": "card"
+      }
+    ],
+    "comment": "Draw some amount from cards in your deck that pass a given filter."
+  },
+  {
+    "type": "Spell_DrawCard6",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1Draw %2 %5 that %3 then (do) %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "FromDeckToHandSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "cardFilter",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        },
+        "src": "value"
+      },
+      {
+        "type": "input_value",
+        "name": "spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "card/cards",
+        "value": "card"
+      }
+    ],
+    "comment": "To do something to the card(s), use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_Buff2",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Give %2 Bonus Attack: %3 Bonus Health:%4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BuffSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "attackBonus",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "hpBonus",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ],
+    "comment": "Buff the attack and health of something."
+  },
+  {
+    "type": "Spell_Buff3",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1%2Gain",
+    "message1": "Bonus Attack: %1 Bonus Health:%2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BuffSpell"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "target",
+        "value": "SELF"
+      }
+    ],
+    "args1": [
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "attackBonus",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "hpBonus",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ],
+    "comment": "Buff the attack and health of the thing doing this spell."
+  },
+  {
+    "type": "Spell_Buff4",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Give %2 Bonus Attack AND Hp: %3",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BuffSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 1
+          }
+        }
+      }
+    ],
+    "comment": "Buffs the attack and health of something by the same amount"
+  },
+  {
+    "type": "Spell_Buff5",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Give %2 Bonus Attack: %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BuffSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "attackBonus",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ],
+    "comment": "Buff just the attack of something."
+  },
+  {
+    "type": "Spell_Buff6",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Give %2 Bonus Health:%3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BuffSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "hpBonus",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ],
+    "comment": "Buff just the health of something."
+  },
+  {
+    "type": "Spell_Buff7",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Give %2 Bonus Attack: %3 Bonus Health:%4 Reverting %5",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BuffSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "attackBonus",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "hpBonus",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "revertTrigger",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      }
+    ],
+    "comment": "Give a temporary attack and health buff to something"
+  },
+  {
+    "type": "Spell_Buff8",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Give %2 Bonus Attack: %3 Reverting %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BuffSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "attackBonus",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "revertTrigger",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      }
+    ],
+    "comment": "Give a temporary attack buff to something."
+  },
+  {
+    "type": "Spell_TemporaryAttack",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "inputsInline": false,
+    "colour": 260,
+    "message0": "%1Give %2",
+    "message1": "Bonus Attack: %1 this turn only",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TemporaryAttackSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "args1": [
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ],
+    "comment": "Give a specifically 1-turn only attack buff to something."
+  },
+  {
+    "type": "Spell_Conditional",
+    "subcategory": "Util",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1If %2then %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ConditionalSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "condition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Only do a spell effect if a condition is met."
+  },
+  {
+    "type": "Spell_Conditional2",
+    "subcategory": "Util",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "If %3 is true of %2 (do) %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ConditionalSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "condition",
+        "type": "input_value",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Do a spell effect if a condition is met for a specific target"
+  },
+  {
+    "type": "Spell_EitherOr",
+    "subcategory": "Util",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1If %2then %3Otherwise %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "EitherOrSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "condition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "spell1",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "spell2",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Do one spell effect if a condition is met, or another if it's not."
+  },
+  {
+    "type": "Spell_ConditionalEffect",
+    "subcategory": "Util",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1(do) %2 Then if %3 (do) %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ConditionalEffectSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "spell1",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "condition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "spell2",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Do a spell effect, then do another effect if a condition is now met."
+  },
+  {
+    "type": "Spell_Summon3",
+    "subcategory": "Summon",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1Summon %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "Card",
+        "name": "card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ],
+    "comment": "Summon the unit associated with a given card."
+  },
+  {
+    "type": "Spell_Summon1",
+    "subcategory": "Summon",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1Summon a copy of %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Summon a copy of an already existing unit (new unit owned my caster of spell)"
+  },
+  {
+    "type": "Spell_Summon8",
+    "subcategory": "Summon",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Summon %3 %4 of %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "copy/copies",
+        "value": "copies"
+      }
+    ],
+    "comment": "Summon multiple copies of an existing unit (new units owned my caster of spell)"
+  },
+  {
+    "type": "Spell_Summon4",
+    "subcategory": "Summon",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Summon a copy of %2 and then %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "To do something to the copy, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_Summon5",
+    "subcategory": "Summon",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1Summon %2 to the right of this%3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "Card",
+        "name": "card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "boardPositionRelative",
+        "value": "RIGHT"
+      }
+    ],
+    "comment": "Summon a unit directly to the right of the unit casting this spell."
+  },
+  {
+    "type": "Spell_Summon6",
+    "subcategory": "Summon",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1Summon a copy of %2 to the right of this%3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "boardPositionRelative",
+        "value": "RIGHT"
+      }
+    ],
+    "comment": "Summon a copy of a unit directly to the right of the unit casting this spell."
+  },
+  {
+    "type": "Spell_Summon7",
+    "subcategory": "Summon",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1Summon %2 to the left of this%3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "Card",
+        "name": "card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "boardPositionRelative",
+        "value": "LEFT"
+      }
+    ],
+    "comment": "Summon a unit directly to the left of the unit casting this spell."
+  },
+  {
+    "type": "Spell_Summon9",
+    "subcategory": "Summon",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Summon %2 %4 of %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": "Card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "copy/copies",
+        "value": "copy"
+      }
+    ],
+    "comment": "Summon multiple of the unit for a given card."
+  },
+  {
+    "type": "Spell_Summon14",
+    "subcategory": "Summon",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Summon %3 random from %4 that %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      },
+      {
+        "name": "cardFilter",
+        "type": "input_value",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "Source",
+        "name": "cardSource",
+        "shadow": {
+          "type": "Source_Unweighted"
+        }
+      }
+    ],
+    "comment": "Summon random units from a filtered source of possibilies."
+  },
+  {
+    "type": "Spell_Summon10",
+    "subcategory": "Summon",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Summon%1",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      }
+    ],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "cards",
+        "check": "Cards",
+        "block": {
+          "type": "Card_I"
+        }
+      }
+    ],
+    "comment": "Summon the specific units listed."
+  },
+  {
+    "type": "Spell_Summon11",
+    "subcategory": "Summon",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Summon %2 random from",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "randomTarget",
+        "value": true
+      }
+    ],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "cards",
+        "check": "Cards",
+        "block": {
+          "type": "Card_I"
+        }
+      }
+    ],
+    "comment": "Summon a number of random units from the ones listed."
+  },
+  {
+    "type": "Spell_Summon12",
+    "subcategory": "Summon",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Summon a copy of %2 to the left then %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "name": "boardPositionRelative",
+        "type": "field_label_serializable_hidden",
+        "value": "LEFT"
+      }
+    ],
+    "comment": "Summon a copy of a unit directly to the left of the unit casting this spell. To do something to the copy, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_Summon",
+    "subcategory": "Summon",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Summon a copy of %2 to the right then %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "name": "boardPositionRelative",
+        "type": "field_label_serializable_hidden",
+        "value": "RIGHT"
+      }
+    ],
+    "comment": "Summon a copy of a unit directly to the right of the unit casting this spell. To do something to the copy, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_ReceiveCards",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Receive%1",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReceiveCardSpell"
+      }
+    ],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "cards",
+        "check": "Cards",
+        "block": {
+          "type": "Card_I"
+        }
+      }
+    ],
+    "comment": "Add the given cards to your hand."
+  },
+  {
+    "type": "Spell_Summon2",
+    "subcategory": "Summon",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Summon%1",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      }
+    ],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "cards",
+        "check": "Cards",
+        "block": {
+          "type": "Card_I"
+        }
+      }
+    ],
+    "message2": "then %1",
+    "args2": [
+      {
+        "type": "input_value",
+        "check": "SpellDesc",
+        "name": "spell",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Summon the specific units. To do something to the summoned units, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_Summon13",
+    "subcategory": "Summon",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Summon %3 then (do) %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SummonSpell"
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": "Card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ],
+    "comment": "Summon a specific unit. To do something to the summoned unit, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_ReceiveCard",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1Receive %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReceiveCardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "Card",
+        "name": "card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ],
+    "comment": "Add the given card to your hand."
+  },
+  {
+    "type": "Spell_ReceiveCard1",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1Receive %2 and (do) %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReceiveCardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "Card",
+        "name": "card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "To do something to the card, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_ReceiveCard2",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1Receive %3 %4 of %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReceiveCardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "Card",
+        "name": "card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 2
+          }
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "copy/copies",
+        "value": "copies"
+      }
+    ],
+    "comment": "Add multiple of the same specific card to your hand."
+  },
+  {
+    "type": "Spell_ReceiveCard3",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Receive %2 random from %3 that %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReceiveCardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 1
+          }
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "Source",
+        "name": "cardSource",
+        "shadow": {
+          "type": "Source_Unweighted"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "FilterDesc",
+        "name": "cardFilter",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      }
+    ],
+    "comment": "Add multiple random cards from a specific filtered source."
+  },
+  {
+    "type": "Spell_ReceiveCard4",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Receive %2 random from %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReceiveCardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 1
+          }
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "Source",
+        "name": "cardSource",
+        "shadow": {
+          "type": "Source_Unweighted"
+        }
+      }
+    ],
+    "comment": "Add multiple random cards to your hand from an unfiltered source."
+  },
+  {
+    "type": "Spell_ReceiveCard5",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Receive %2 random from %3 that %4 then (do) %5",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReceiveCardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 1
+          }
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "Source",
+        "name": "cardSource",
+        "shadow": {
+          "type": "Source_Unweighted"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "FilterDesc",
+        "name": "cardFilter",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "SpellDesc",
+        "name": "spell",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "To do something to the cards, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_ReceiveCard6",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1Receive %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReceiveCardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Add a card to your hand that needs to be specified through the targeting system, e.g. \"your leftmost card\""
+  },
+  {
+    "type": "Spell_CopyCard",
+    "subcategory": "Draw",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1Receive a copy of %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CopyCardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Add the source card of a given target to your hand"
+  },
+  {
+    "type": "Spell_CopyCard2",
+    "subcategory": "Draw",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Receive a copy of %2 then (do) %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CopyCardSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "To do something to the card, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_CopyCard3",
+    "subcategory": "Draw",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Receive %2 %5 of %4 then (do) %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CopyCardSpell"
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": "Card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "copy/copies",
+        "value": "copy"
+      }
+    ],
+    "comment": "To do something to the card, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_ReceiveCard7",
+    "subcategory": "Draw",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Receive %3 random from",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReceiveCardSpell"
+      },
+      {
+        "name": "randomTarget",
+        "type": "field_label_serializable_hidden",
+        "value": true
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "cards",
+        "check": "Cards",
+        "block": {
+          "type": "Card_I"
+        }
+      }
+    ],
+    "comment": "Add multiple random cards to your hand from a specific list."
+  },
+  {
+    "type": "Spell_AdjacentEffect1",
+    "subcategory": "Util",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1(do) %2to %3and adjacent ones",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AdjacentEffectSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Do a spell effect on a unit and the ones right next to it"
+  },
+  {
+    "type": "Spell_AdjacentEffect",
+    "subcategory": "Util",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1(do) %2",
+    "message1": "to %1",
+    "message2": "and %1",
+    "message3": "to adjacent ones",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AdjacentEffectSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "spell1",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "args1": [
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "args2": [
+      {
+        "type": "input_value",
+        "name": "spell2",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Do one spell effect on a unit, and another on the units right next to it."
+  },
+  {
+    "type": "Spell_AdjacentEffect2",
+    "subcategory": "Util",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1(do) %2",
+    "message1": "to adjacent units",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AdjacentEffectSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "spell2",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Do a spell effect on the units adjacent to the unit doing this spell."
+  },
+  {
+    "type": "Spell_Destroy",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Destroy %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DestroySpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Spell_Silence",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Silence %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SilenceSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Spell_Meta1",
+    "subcategory": "Util",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "(do)%2 and%1%3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MetaSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "spell1",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "spell2",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Do two spell effects."
+  },
+  {
+    "type": "Spell_Meta2",
+    "subcategory": "Util",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "(do) %1%2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MetaSpell"
+      },
+      {
+        "type": "input_statement",
+        "name": "spells",
+        "check": "Spells",
+        "block": {
+          "type": "Spell_I"
+        }
+      }
+    ],
+    "comment": "Do multiple spell effects."
+  },
+  {
+    "type": "Spell_Meta3",
+    "subcategory": "Util",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "(do) %1%2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MetaSpell"
+      },
+      {
+        "type": "input_statement",
+        "name": "spells",
+        "check": "Spells",
+        "block": {
+          "type": "Spell_I"
+        }
+      }
+    ],
+    "message1": "targeting %1",
+    "args1": [
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Not recommended for use by creators. It's mainly here so the algorithm can generate certain older cards coded in the before times."
+  },
+  {
+    "type": "Spell_Meta4",
+    "subcategory": "Util",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "(do) %1%2 %3 times",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MetaSpell"
+      },
+      {
+        "type": "input_statement",
+        "name": "spells",
+        "check": "Spells",
+        "block": {
+          "type": "Spell_I"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "howMany",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 2
+          }
+        }
+      }
+    ],
+    "comment": "Do multiple spell effects multiple times"
+  },
+  {
+    "type": "Spell_SwapAttackAndHp",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Swap %2's attack and health",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SwapAttackAndHpSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Spell_SwapAttack",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Swap attack with %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SwapAttackSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Swap the attack of the thing doing this spell with the attack of something else"
+  },
+  {
+    "type": "Spell_SwapHp",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Swap health with %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SwapHpSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Swap the health of the thing doing this spell with the health of something else"
+  },
+  {
+    "type": "Spell_SwapHp2",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Swap the health of %3 with %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SwapHpSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "secondaryTarget",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Swap the health of two targets"
+  },
+  {
+    "type": "Spell_Armor",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1%2Gain %3 Armor",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "BuffSpell"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "target",
+        "value": "FRIENDLY_HERO"
+      },
+      {
+        "type": "input_value",
+        "name": "armorBonus",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Spell_AddAttribute",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Give %3 %2",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddAttributeSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "BoolAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_BOOL_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Apply a (true/false) Attribute to something."
+  },
+  {
+    "type": "Spell_AddAttribute1",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1%2Gain %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddAttributeSpell"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "target",
+        "value": "SELF"
+      },
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "BoolAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_BOOL_SHADOW"
+        }
+      }
+    ],
+    "comment": "Apply an attribute to the thing doing this spell."
+  },
+  {
+    "type": "Spell_AddAttribute2",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Give %2 %3 reverting %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddAttributeSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "BoolAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_BOOL_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "revertTrigger",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      }
+    ],
+    "comment": "Temporarily apply a (true/false) Attribute to something."
+  },
+  {
+    "type": "Spell_RemoveAttribute",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Take %2 from %3",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "RemoveAttributeSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "BoolAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_BOOL_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Take away a (true/false) Attribute from something, if it had it."
+  },
+  {
+    "type": "Spell_ModifyAttribute",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Change the %2 of %4 by %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ModifyAttributeSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "IntAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_INT_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Change the value of a (number) Attribute of something by a given amount."
+  },
+  {
+    "type": "Spell_ModifyAttribute2",
+    "subcategory": "Buff",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Increase the %2 of %3 by %4 reverting %5",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ModifyAttributeSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "IntAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_INT_SHADOW"
+        }
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "revertTrigger",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      }
+    ],
+    "comment": "Temporarily change the value of a (number) Attribute of something by a given amount."
+  },
+  {
+    "type": "Spell_SetAttribute",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Set the %2 of %4 to %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SetAttributeSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "attribute",
+        "check": [
+          "IntAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_INT_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Change the value of a (number) Attribute of something to a given amount."
+  },
+  {
+    "type": "Spell_SetAttack",
+    "subcategory": "Buff",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Set the base attack of %2 to %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SetAttackSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ],
+    "comment": "Change the base attack value of something to a given value (WON'T affect attack bonuses)."
+  },
+  {
+    "type": "Spell_SetAttack2",
+    "subcategory": "Buff",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Set the attack of %2 to %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SetAttackSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "name": "exclusive",
+        "type": "field_label_serializable_hidden",
+        "value": true
+      }
+    ],
+    "comment": "Change the attack value of something to a given value (WILL affect attack bonuses)"
+  },
+  {
+    "type": "Spell_SetHp",
+    "subcategory": "Buff",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Set the base health of %2 to %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SetHpSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ],
+    "comment": "Change the base health value of something to a given value (WON'T affect hp bonuses)"
+  },
+  {
+    "type": "Spell_SetHp2",
+    "subcategory": "Buff",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Set the health of %2 to %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SetHpSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "name": "exclusive",
+        "type": "field_label_serializable_hidden",
+        "value": true
+      }
+    ],
+    "comment": "Change the health value of something to a given value (WILL affect hp bonuses)"
+  },
+  {
+    "type": "Spell_Null",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Nothing",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "NullSpell"
+      }
+    ],
+    "comment": "Sometimes, you just don't got no nothing that needs not doing."
+  },
+  {
+    "type": "Spell_SHADOW",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Spell",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "NullSpell"
+      }
+    ]
+  },
+  {
+    "type": "Spell_MultiTarget",
+    "subcategory": "Util",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1(do) %2 to (up to) %3 random %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MultiTargetSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "SpellDesc",
+        "name": "spell",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 3
+          }
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Do a spell effect on multiple things at random."
+  },
+  {
+    "type": "Spell_AddEnchantment",
+    "subcategory": "Enchant",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Give %2 %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddEnchantmentSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_statement",
+        "name": "trigger",
+        "check": [
+          "EnchantmentFake_SHADOW"
+        ],
+        "block": {
+          "type": "EnchantmentFake_SHADOW"
+        }
+      }
+    ],
+    "comment": "Add an enchantment effect to something."
+  },
+  {
+    "type": "Spell_AddEnchantment2",
+    "subcategory": "Enchant",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Give %2 %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddEnchantmentSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_statement",
+        "name": "trigger",
+        "check": [
+          "EnchantmentOptionsFake_SHADOW"
+        ],
+        "block": {
+          "type": "EnchantmentOptionsFake_SHADOW"
+        }
+      }
+    ],
+    "commnt": "Add a more complicated Enchantment effect to something."
+  },
+  {
+    "type": "Spell_AddEnchantment3",
+    "subcategory": "Enchant",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Give %2 (the enchantment) %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddEnchantmentSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "card",
+        "check": [
+          "Card"
+        ],
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ],
+    "comment": "Add a named card Enchantment effect to something (Useful if you want to specifically remove the enchantment later)."
+  },
+  {
+    "type": "Spell_AddEnchantment4",
+    "subcategory": "Enchant",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Give %2 %3 reverting %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddEnchantmentSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_statement",
+        "name": "trigger",
+        "check": [
+          "EnchantmentFake_SHADOW"
+        ],
+        "block": {
+          "type": "EnchantmentFake_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "revertTrigger",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      }
+    ],
+    "comment": "Add a temporary Enchantment effect to something."
+  },
+  {
+    "type": "Spell_AddEnchantment5",
+    "subcategory": "Enchant",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Give %2 %3 reverting %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddEnchantmentSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_statement",
+        "name": "trigger",
+        "check": [
+          "EnchantmentOptionsFake_SHADOW"
+        ],
+        "block": {
+          "type": "EnchantmentOptionsFake_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "revertTrigger",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      }
+    ],
+    "comment": "Add a temporary, more complicated Enchantment effect to something."
+  },
+  {
+    "type": "Spell_AddAura",
+    "subcategory": "Enchant",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Give %2 %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddEnchantmentSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_statement",
+        "name": "aura",
+        "check": [
+          "Auras"
+        ],
+        "shadow": {
+          "type": "Aura_Single_SHADOW"
+        }
+      }
+    ],
+    "comment": "Add an Aura effect to something."
+  },
+  {
+    "type": "Spell_AddAura2",
+    "subcategory": "Enchant",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Give %2 %3 reverting %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddEnchantmentSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_statement",
+        "name": "aura",
+        "check": [
+          "Auras"
+        ],
+        "shadow": {
+          "type": "Aura_Single_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "revertTrigger",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      }
+    ],
+    "comment": "Add a temporary Aura effect to something."
+  },
+  {
+    "type": "Spell_RemoveEnchantment",
+    "subcategory": "Enchant",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Remove (enchantment) %3 from %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "RemoveEnchantmentSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "card",
+        "check": [
+          "Card"
+        ],
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ],
+    "comment": "Remove a specific named card Enchantment effect from something."
+  },
+  {
+    "type": "Spell_Transform",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Transform %2 into %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TransformMinionSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "Card",
+        "name": "card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ],
+    "comment": "Transform something into a fresh unit specific by the given card."
+  },
+  {
+    "type": "Spell_Transform2",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Transform %2 into %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TransformMinionSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "secondaryTarget",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Transform a unit into a fresh copy of another unit."
+  },
+  {
+    "type": "Spell_ReturnTargetToHand",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Return %2 to hand",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReturnTargetToHandSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Return a unit to its owner's hand."
+  },
+  {
+    "type": "Spell_ReturnTargetToHand2",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Return %2 to hand then %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReturnTargetToHandSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Return a unit to its owner's hand. To do something to the card, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_Stun",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1%2Stun %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddAttributeSpell"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "attribute",
+        "value": "FROZEN"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Spell_GainEmptyLun",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Gain %2 empty lun",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ModifyMaxManaSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ],
+    "comment": "Increase your maximum lun by an amount."
+  },
+  {
+    "type": "Spell_Discover",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Source %6 %7 from %2 %3 that %4 Effect: %5",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DiscoverSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "howMany",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 3
+          }
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "Source",
+        "name": "cardSource",
+        "shadow": {
+          "type": "Source_Collectible"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "cardFilter",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_Discover_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "time/times",
+        "value": "time"
+      }
+    ],
+    "comment": "Look at a few cards from a filtered source and do a spell effect based on the one chosen, often receiving it."
+  },
+  {
+    "type": "Spell_Discover2",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Source %3 %4 from %2",
+    "message1": "%1 Effect: %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DiscoverSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "howMany",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 3
+          }
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "time/times",
+        "value": "time"
+      }
+    ],
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "cards",
+        "check": "Cards",
+        "block": {
+          "type": "Card_I"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_Discover_SHADOW"
+        }
+      }
+    ],
+    "comment": "Look at a few cards from a specific list and do a spell effect based on the one chosen, often receiving it."
+  },
+  {
+    "type": "Spell_Discover3",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Source %6 %7 from %2 %3 that %4 as ORIGINALS, not copies.",
+    "message1": "Effect: %1",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DiscoverSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "howMany",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 3
+          }
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "Source",
+        "name": "cardSource",
+        "shadow": {
+          "type": "Source_Deck"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "cardFilter",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "exclusive",
+        "value": true
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "time/times",
+        "value": "time"
+      }
+    ],
+    "args1": [
+      {
+        "type": "input_value",
+        "name": "spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_ReceiveCard6"
+        }
+      }
+    ],
+    "comment": "Look at a few cards from a filtered source and do a spell effect using the actual cards themselves (use the block \"it\" in the spell instead of \"the chosen card\")"
+  },
+  {
+    "type": "Spell_Discover_SHADOW",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1Receive %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReceiveCardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "Card",
+        "name": "card",
+        "shadow": {
+          "type": "Card_IT"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Spell_CardCostModifier",
+    "subcategory": "Cost",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Give %2 the effect %3",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardCostModifierSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "CostModifierDesc",
+        "name": "cardCostModifier",
+        "shadow": {
+          "type": "CostModifier_SHADOW"
+        }
+      }
+    ],
+    "comment": "Use this for tricky cost modification. The other spells are simplifications of effects you could make with this."
+  },
+  {
+    "type": "Spell_CardCostModifier1",
+    "subcategory": "Cost",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1%4 the cost of %2 by/to %3%5%6",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardCostModifierSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "cardCostModifier.class",
+        "value": "CardCostModifier"
+      },
+      {
+        "type": "field_dropdown",
+        "name": "cardCostModifier.operation",
+        "options": [
+          [
+            "Reduce",
+            "SUBTRACT"
+          ],
+          [
+            "Increase",
+            "ADD"
+          ],
+          [
+            "Set",
+            "SET"
+          ]
+        ]
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "cardCostModifier.target",
+        "value": "SELF"
+      },
+      {
+        "type": "input_value",
+        "name": "cardCostModifier.value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ],
+    "comment": "Change the cost of a specific card."
+  },
+  {
+    "type": "Spell_CardCostModifier2",
+    "subcategory": "Cost",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "The next %2 %3 you %6 has cost %4 %5",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardCostModifierSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "cardCostModifier.requiredAttribute,cardCostModifier.expirationTrigger.requiredAttribute",
+        "check": [
+          "BoolAttribute",
+          "Attribute"
+        ],
+        "shadow": {
+          "type": "Attribute_BOOL_SHADOW"
+        }
+      },
+      {
+        "type": "field_dropdown",
+        "name": "cardCostModifier.cardType,cardCostModifier.expirationTrigger.cardType",
+        "options": [
+          [
+            "Card",
+            "ANY"
+          ],
+          [
+            "Minion",
+            "MINION"
+          ],
+          [
+            "Spell",
+            "SPELL"
+          ],
+          [
+            "Weapon",
+            "WEAPON"
+          ]
+        ]
+      },
+      {
+        "type": "field_dropdown",
+        "name": "cardCostModifier.operation",
+        "options": [
+          [
+            "reduced by",
+            "SUBTRACT"
+          ],
+          [
+            "increased by",
+            "ADD"
+          ],
+          [
+            "set to",
+            "SET"
+          ]
+        ]
+      },
+      {
+        "type": "input_value",
+        "name": "cardCostModifier.value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "field_dropdown",
+        "name": "cardCostModifier.class",
+        "options": [
+          [
+            "play",
+            "CardCostModifier"
+          ],
+          [
+            "play this turn",
+            "OneTurnCostModifier"
+          ]
+        ]
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "cardCostModifier.expirationTrigger.class",
+        "value": "CardPlayedTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "target",
+        "value": "FRIENDLY_PLAYER"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "cardCostModifier.expirationTrigger.targetPlayer",
+        "value": "SELF"
+      }
+    ],
+    "comment": "Change the cost of the next card you play that passes given filters."
+  },
+  {
+    "type": "Spell_CardCostModifier3",
+    "subcategory": "Cost",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "The next %2 you %5 has cost %3 %4",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CardCostModifierSpell"
+      },
+      {
+        "type": "input_value",
+        "name": "cardCostModifier.race,cardCostModifier.expirationTrigger.race",
+        "check": "Race",
+        "shadow": {
+          "type": "Race_SHADOW"
+        }
+      },
+      {
+        "type": "field_dropdown",
+        "name": "cardCostModifier.operation",
+        "options": [
+          [
+            "reduced by",
+            "SUBTRACT"
+          ],
+          [
+            "increased by",
+            "ADD"
+          ],
+          [
+            "set to",
+            "SET"
+          ]
+        ]
+      },
+      {
+        "type": "input_value",
+        "name": "cardCostModifier.value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "field_dropdown",
+        "name": "cardCostModifier.class",
+        "options": [
+          [
+            "play",
+            "CardCostModifier"
+          ],
+          [
+            "play this turn",
+            "OneTurnCostModifier"
+          ]
+        ]
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "cardCostModifier.expirationTrigger.class",
+        "value": "CardPlayedTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "target",
+        "value": "FRIENDLY_PLAYER"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "cardCostModifier.expirationTrigger.targetPlayer",
+        "value": "SELF"
+      }
+    ],
+    "comment": "Change the cost of the next card you play that's a certain tribe."
+  },
+  {
+    "type": "Spell_RecastWhile",
+    "subcategory": "Util",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1(do) %2 while %3 (max %4 times)",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "RecastWhileSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "SpellDesc",
+        "name": "spell",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "condition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "howMany",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 60
+          }
+        }
+      }
+    ],
+    "comment": "Do a spell effect, then repeat it while a given condition remains true."
+  },
+  {
+    "type": "Spell_Missiles",
+    "subcategory": "Damage",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Shoot %2 %5 at %3 that deal %4 damage each",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MissilesSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "howMany",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 3
+          }
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "howMany",
+        "text": "missile/missiles",
+        "value": "missiles"
+      }
+    ],
+    "comment": "Pew pew pew"
+  },
+  {
+    "type": "Spell_EquipWeapon",
+    "output": "SpellDesc",
+    "colour": 260,
+    "inputsInline": false,
+    "message0": "%1Equip %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "EquipWeaponSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "Card",
+        "name": "card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ],
+    "comment": "Equip the item specified by the given card."
+  },
+  {
+    "type": "Spell_Discard",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Discard",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DiscardSpell"
+      }
+    ],
+    "comment": "Discard a random card in your hand"
+  },
+  {
+    "type": "Spell_Discard3",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Discard %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DiscardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Discard a specifically targetted card, e.g. \"your leftmost card\"."
+  },
+  {
+    "type": "Spell_Discard1",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Discard %2 random %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DiscardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "card/cards",
+        "value": "card"
+      }
+    ],
+    "comment": "Discard multiple random cards from your hand."
+  },
+  {
+    "type": "Spell_Discard2",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Discard a card that %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DiscardSpell"
+      },
+      {
+        "name": "cardFilter",
+        "type": "input_value",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      }
+    ],
+    "comment": "Discard a random card in your hand that passes a given filter."
+  },
+  {
+    "type": "Spell_TargetToSourceSecondaryToTarget",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1(do) %2 targeting %3 treating %4 as the source",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TargetToSourceSecondaryToTargetSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "SpellDesc",
+        "name": "spell",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "secondaryTarget",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Do a spell effect as if it was something else doing it."
+  },
+  {
+    "type": "Spell_Fight",
+    "subcategory": "Attack",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Make %3 attack %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "FightSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "secondaryTarget",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Makes the target/targets attack another target or multiple other targets"
+  },
+  {
+    "type": "Spell_Fight2",
+    "subcategory": "Attack",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Make %3 attack %2 then %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "FightSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "secondaryTarget",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "To do something to the attacker, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_Fight3",
+    "subcategory": "Attack",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Make %4 attack %2 (doesn't use up an attack)",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "FightSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "exclusive",
+        "type": "field_label_serializable_hidden",
+        "value": true
+      },
+      {
+        "name": "secondaryTarget",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Use if you don't want the forced attack to count as its chosen attack this turn."
+  },
+  {
+    "type": "Spell_Recruit1",
+    "subcategory": "Summon",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1%2Summon a random unit from your hand",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "RecruitSpell"
+      },
+      {
+        "name": "cardLocation",
+        "type": "field_label_serializable_hidden",
+        "value": "HAND"
+      }
+    ]
+  },
+  {
+    "type": "Spell_Recruit2",
+    "subcategory": "Summon",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1%3Summon a unit from your hand then %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "RecruitSpell"
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "name": "cardLocation",
+        "type": "field_label_serializable_hidden",
+        "value": "HAND"
+      }
+    ],
+    "comment": "To do something to the unit, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_ForceDeathPhase",
+    "subcategory": "Util",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Force the death phase to happen now%1",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ForceDeathPhaseSpell"
+      }
+    ],
+    "comment": "By default, deaths don't happen until after your ENTIRE spell effect has resolved. Use this to make that happen at an earlier point as well."
+  },
+  {
+    "type": "Spell_ModifyDamage",
+    "subcategory": "Util",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1%2Set the event damage to %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ModifyDamageSpell"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "operation",
+        "value": "SET"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ],
+    "comment": "When used in an Enchantment with a damage based trigger, this changes the damage of the event."
+  },
+  {
+    "type": "Spell_ModifyDamage2",
+    "subcategory": "Util",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1Multiply the event damage by %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ModifyDamageSpell"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "operation",
+        "value": "MULTIPLY"
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ],
+    "comment": "When used in an Enchantment with a damage based trigger, this changes the damage of the event."
+  },
+  {
+    "type": "Spell_CastAfterSequence",
+    "subcategory": "Util",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "(do) %2 after the current sequence completes",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CastAfterSequenceSpell"
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Do a spell effect after all other spell effects going on right now have finished."
+  },
+  {
+    "type": "Spell_RefreshSkill",
+    "subcategory": "Mechanic",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Refresh your skill",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "RefreshHeroPowerSpell"
+      }
+    ],
+    "comment": "Makes your skill usable again if it was already used this turn."
+  },
+  {
+    "type": "Spell_CopyDeathrattle",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Copy the aftermath of %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CopyDeathrattleSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Copy the aftermath effect from something and give it to this"
+  },
+  {
+    "type": "Spell_CopyDeathrattle2",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Copy the aftermath of %2 onto %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CopyDeathrattleSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "secondaryTarget",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Copy the aftermath effect from something and give it to another thing"
+  },
+  {
+    "type": "Spell_PutDeckTop",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Put %3 of %2 on top of your deck",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "PutDeckTopSpell"
+      },
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": "Card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "howMany",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Spell_PutDeckTop2",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Put %3 of %2 on top of your deck %4 %5 down",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "PutDeckTopSpell"
+      },
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": "Card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "value",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "secondaryValue",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "secondaryValue",
+        "text": "card/cards",
+        "value": "card"
+      }
+    ],
+    "comment": "Put a card in your deck so that it's a certain number of cards down from the top."
+  },
+  {
+    "type": "Spell_custom.CopyMinion",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Copy %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "custom.CopyMinionSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "custom": "Turn the caster of the spell into an exact copy of a given unit"
+  },
+  {
+    "type": "Spell_RemoveCard",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Remove (the card) %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "RemoveCardSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Remove the targeted card from wherever it happens to be"
+  },
+  {
+    "type": "Spell_ShuffleToDeck",
+    "subcategory": "Shuffle",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Shuffle %3 %4 of %2 into your deck",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ShuffleToDeckSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "howMany",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "howMany",
+        "text": "copy/copies",
+        "value": "copy"
+      }
+    ],
+    "comment": "Shuffle copies of a targeted unit into your deck"
+  },
+  {
+    "type": "Spell_ShuffleToDeck2",
+    "subcategory": "Shuffle",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Shuffle a copy of %2 into your deck then %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ShuffleToDeckSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "To do something to the shuffled card, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_ShuffleToDeck3",
+    "subcategory": "Shuffle",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Shuffle %2 into your deck",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ShuffleToDeckSpell"
+      },
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": "Card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Spell_ShuffleToDeck4",
+    "subcategory": "Shuffle",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Shuffle %3 %4 of %2 into your deck",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ShuffleToDeckSpell"
+      },
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": "Card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "howMany",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 2
+          }
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "howMany",
+        "text": "copy/copies",
+        "value": "copy"
+      }
+    ],
+    "comment": "Shuffle multiple copies of the same card into your deck."
+  },
+  {
+    "type": "Spell_ShuffleToDeck45",
+    "subcategory": "Shuffle",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Shuffle %2 %5 from %4 that %3 into your deck",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ShuffleToDeckSpell"
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "name": "cardFilter",
+        "type": "input_value",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "Source",
+        "name": "cardSource",
+        "shadow": {
+          "type": "Source_Unweighted"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "card/cards",
+        "value": "card"
+      }
+    ],
+    "comment": "Shuffle some random cards from a filtered source into your deck."
+  },
+  {
+    "type": "Spell_ShuffleToDeck5",
+    "subcategory": "Shuffle",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Shuffle %2 %6 from %5 that %4 into your deck, then %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ShuffleToDeckSpell"
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "name": "cardFilter",
+        "type": "input_value",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "Source",
+        "name": "cardSource",
+        "shadow": {
+          "type": "Source_Unweighted"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "card/cards",
+        "value": "card"
+      }
+    ],
+    "comment": "To do something to the shuffled card(s), use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_ShuffleOriginalToDeck",
+    "subcategory": "Shuffle",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Shuffle (the original) %2 into your deck",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ShuffleOriginalToDeckSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Shuffles someting DIRECTLY into your deck, removing it from wherever it once was."
+  },
+  {
+    "type": "Spell_TransformToRandomMinion",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Transform %2 randomly from",
+    "message1": "units that %1",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TransformToRandomMinionSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "args1": [
+      {
+        "name": "cardFilter",
+        "type": "input_value",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      }
+    ],
+    "comment": "Transform a unit into something at random."
+  },
+  {
+    "type": "Spell_CastRepeatedly",
+    "subcategory": "Util",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "(do) %2 %3 times",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CastRepeatedlySpell"
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "name": "howMany",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ],
+    "comment": "Do a spell effect multiple times."
+  },
+  {
+    "type": "Spell_CastRepeatedly2",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "(do) %2 on (up to) %3 targets in %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CastRepeatedlySpell"
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "name": "howMany",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Perform the same spell effect multiple times on random targets from a group."
+  },
+  {
+    "type": "Spell_ChangeHeroPower",
+    "subcategory": "Mechanic",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Change your skill to %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ChangeHeroPowerSpell"
+      },
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": "Card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Spell_HeroPower",
+    "subcategory": "Mechanic",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "As a Skill, (do) %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "HeroPowerSpell"
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Tells the game that you want this spell effect to be handled as a Skill"
+  },
+  {
+    "type": "Spell_Supremacy",
+    "subcategory": "Mechanic",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "As a Supremacy, (do) %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SupremacySpell"
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Tells the game that you want this spell effect to be handled as a Supremacy"
+  },
+  {
+    "type": "Spell_Decay",
+    "subcategory": "Mechanic",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Decay %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DecaySpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Applies the 'Decay' mechanic to a target."
+  },
+  {
+    "type": "Spell_AddDeathrattle",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Give %2 Aftermath: %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddDeathrattleSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Apply a new aftermath effect to a target."
+  },
+  {
+    "type": "Spell_AddDeathrattle2",
+    "subcategory": "Enchant",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Give %2 the Aftermath %3 (enchantment card)",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddDeathrattleSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": "Card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ],
+    "comment": "Apply an Enchantment-card defined aftermath effect to a target."
+  },
+  {
+    "type": "Spell_Invoke",
+    "subcategory": "Mechanic",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Invoke",
+    "message1": "Default: %1",
+    "message2": "Option 1: %1",
+    "message3": "Option 2: %1",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "InvokeSpell"
+      }
+    ],
+    "args1": [
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "args2": [
+      {
+        "name": "spell1",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "block": {
+          "type": "Spell_InvokeOption"
+        }
+      }
+    ],
+    "args3": [
+      {
+        "name": "spell2",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "block": {
+          "type": "Spell_InvokeOption"
+        }
+      }
+    ],
+    "comment": "Block for creating Invoke effects"
+  },
+  {
+    "type": "Spell_InvokeOption",
+    "subcategory": "Mechanic",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Cost: %3 Name: %4 Text: %5 Condition: %6 Effect: %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "InvokeOptionSpell"
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "mana",
+        "block": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "name",
+        "block": {
+          "type": "Property_text_SHADOW",
+          "fields": {
+            "text": "Name"
+          }
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "description",
+        "block": {
+          "type": "Property_text_SHADOW",
+          "fields": {
+            "text": "Description"
+          }
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "condition",
+        "check": "ConditionDesc",
+        "shadow": {
+          "type": "Condition_SHADOW"
+        }
+      }
+    ],
+    "comment": "Helper block for creating Invoke effects"
+  },
+  {
+    "type": "Spell_QuickDraw",
+    "subcategory": "Mechanic",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "As a Quick Draw, (do) %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "QuickDrawSpell"
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Tells the game that you want this spell effect to be handled as a Quick Draw"
+  },
+  {
+    "type": "Spell_Roast",
+    "subcategory": "Mechanic",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Roast %2 %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "RoastSpell"
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "card/cards",
+        "value": "card"
+      }
+    ],
+    "comment": "'Roast' a number of cards off the top your deck"
+  },
+  {
+    "type": "Spell_Recruit3",
+    "subcategory": "Summon",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Summon %2 %5 from your hand that %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "RecruitSpell"
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "name": "cardFilter",
+        "type": "input_value",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        },
+        "src": "value"
+      },
+      {
+        "name": "cardLocation",
+        "type": "field_label_serializable_hidden",
+        "value": "HAND"
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "unit/units",
+        "value": "unit"
+      }
+    ],
+    "comment": "Summon units from your hand that pass a particular filter"
+  },
+  {
+    "type": "Spell_Recruit4",
+    "subcategory": "Summon",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Summon %2 %5 from your deck that %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "RecruitSpell"
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int"
+        }
+      },
+      {
+        "name": "cardFilter",
+        "type": "input_value",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        },
+        "src": "value"
+      },
+      {
+        "name": "cardLocation",
+        "type": "field_label_serializable_hidden",
+        "value": "DECK"
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "value",
+        "text": "unit/units",
+        "value": "unit"
+      }
+    ],
+    "comment": "Summon units from your deck that pass a particular filter"
+  },
+  {
+    "type": "Spell_QueryTarget",
+    "subcategory": "Util",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Query %3 sorted by %4 Skipping the first %6 %7 (do) %5 on up to %2 of them in order",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "QueryTargetSpell"
+      },
+      {
+        "name": "howMany",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 99
+          }
+        }
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "secondaryValue",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 0
+          }
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "secondaryValue",
+        "text": "target,/targets,",
+        "value": "target,"
+      }
+    ],
+    "comment": "A very complicated spell effect that can be very useful for some specific effects. It goes through a number of targets (potentially sorting them) and then does a spell effect on a specific subset of them in order."
+  },
+  {
+    "type": "Spell_QueryTarget2",
+    "subcategory": "Util",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Query %3 that %8 sorted by %4 Skipping the first %6 %7 (do) %5 on up to %2 of them in order",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "QueryTargetSpell"
+      },
+      {
+        "name": "howMany",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 99
+          }
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "Source",
+        "name": "cardSource",
+        "shadow": {
+          "type": "Source_Unweighted"
+        }
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "name": "secondaryValue",
+        "shadow": {
+          "type": "ValueProvider_int",
+          "fields": {
+            "int": 0
+          }
+        }
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "howMany",
+        "text": "target,/targets,",
+        "value": "target,"
+      },
+      {
+        "type": "input_value",
+        "name": "cardFilter",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      }
+    ],
+    "comment": "Same as above but with a filtered set of targets."
+  },
+  {
+    "type": "Spell_MindControl",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Take control of %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MindControlSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Steals a unit from your opponent's board and puts it on your board, unable to attack this turn. If there's no space, it gets destroyed."
+  },
+  {
+    "type": "Spell_GainMana",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Gain %2 Lun this turn only",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "GainManaSpell"
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Spell_ShuffleMinionToDeck",
+    "subcategory": "Shuffle",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Shuffle %2 into your deck",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ShuffleMinionToDeckSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Spell_ShuffleMinionToDeck2",
+    "subcategory": "Shuffle",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Shuffle %2 into your deck, then %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ShuffleMinionToDeckSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "To do something to the shuffled unit, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_CastCards",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Cast %3 on %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CastCardsSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": "Card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ],
+    "comment": "Does the effects of a (Spell) card on a given target."
+  },
+  {
+    "type": "Spell_CastCards2",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Cast (the card) %3 on %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CastCardsSpell"
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "secondaryTarget",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Does the effects of a Spell card (that need to be targeted as an entity) on a given target."
+  },
+  {
+    "type": "Spell_ReplaceCards",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Replace the cards in %2 with ones from %4 that %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReplaceCardsSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "name": "cardFilter",
+        "type": "input_value",
+        "check": "FilterDesc",
+        "shadow": {
+          "type": "Filter_SHADOW"
+        }
+      },
+      {
+        "name": "cardSource",
+        "type": "input_value",
+        "check": "Source",
+        "shadow": {
+          "type": "Source_SHADOW"
+        }
+      }
+    ],
+    "comment": "Replaces any cards targeted with random ones from a filtered source."
+  },
+  {
+    "type": "Spell_ReplaceCards2",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Replace the cards in %2 with %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReplaceCardsSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "name": "card",
+        "type": "input_value",
+        "check": "Card",
+        "shadow": {
+          "type": "Card_SHADOW"
+        }
+      }
+    ],
+    "comment": "Replaces all cards targeted with a specific other card."
+  },
+  {
+    "type": "Spell_Meta5",
+    "subcategory": "Util",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "(do) %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MetaSpell"
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Just pretend this block doesn't exist"
+  },
+  {
+    "type": "Spell_Duel",
+    "subcategory": "Attack",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Make each %3 attack a random other in %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DuelSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "name": "secondaryTarget",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Makes a target or targets attack a random other target or targets. Doesn't count as anybody's one chosen attack for a turn."
+  },
+  {
+    "type": "Spell_ReviveMinion",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Revive %2 then %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ReviveMinionSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "To do something to the revived unit, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_CopyHeroPower",
+    "subcategory": "Mechanic",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Copy the Skill of %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CopyHeroPower"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Spell_Roast2",
+    "subcategory": "Mechanic",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Roast a card, then %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "RoastSpell"
+      },
+      {
+        "name": "spell",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "To do something to the roasted card, use the block \"the spell's output\""
+  },
+  {
+    "type": "Spell_AdjacentDeathrattle",
+    "subcategory": "Util",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "[AFTERMATH](do) %3 on adjacent units",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "custom.AdjacentDeathrattleSpell"
+      },
+      {
+        "name": "target",
+        "type": "field_label_serializable_hidden",
+        "value": "SELF"
+      },
+      {
+        "name": "spell2",
+        "type": "input_value",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Due to some internal coding shenanigans, this block must be used to do things to adjacent units in an Aftermath"
+  },
+  {
+    "type": "Spell_ExcessDamage",
+    "subcategory": "Damage",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Deal %2 damage to %4 and any excess to %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ExcessDamageSpell"
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "name": "secondaryTarget",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Deals up to the exact amount of damage need to kill a target, then does any excess to a different target."
+  },
+  {
+    "type": "Spell_ExcessDamage2",
+    "subcategory": "Damage",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Deal the excess damage to %5 that you'd get from dealing %3 damage to %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "ExcessDamageSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "name": "exclusive",
+        "type": "field_label_serializable_hidden",
+        "value": true
+      },
+      {
+        "name": "secondaryTarget",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "This is a bit confusing, but to be clear: this only damages the first Target mentioned. The Value and second Target are just used in calculation; they don't get damaged by this. This is used to calculate excess damage for effects that weren't originally trying to care about excess damage."
+  },
+  {
+    "type": "Spell_RefreshAttacks",
+    "subcategory": "Attack",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Refresh the attacks of %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "RefreshAttacksSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "Allow something to attack again this turn."
+  },
+  {
+    "type": "Spell_Enrage",
+    "subcategory": "Mechanic",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Enrage %2 for %3 Attack",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "EnrageSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SELF"
+        }
+      },
+      {
+        "name": "attackBonus",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ],
+    "comment": "Buff or unbuffs a unit's attack as an Enrage effect"
+  },
+  {
+    "type": "Spell_SplashDamage",
+    "subcategory": "Damage",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Deal %2 splash damage to %3",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "SplashDamageSpell"
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "check": "EntityReference",
+        "name": "target",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      }
+    ],
+    "comment": "This is just like regular damage, except \"the event's source\" is treated as the one causing it."
+  },
+  {
+    "type": "Spell_DamageIgnoringArmor",
+    "subcategory": "Damage",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Deal %3 damage to %2 (ignoring armor)",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DamageIgnoringArmorSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_IT"
+        }
+      },
+      {
+        "name": "value",
+        "type": "input_value",
+        "check": "ValueProviderDesc",
+        "shadow": {
+          "type": "ValueProvider_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "Spell_PlayCardsRandomly",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Randomly play %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "PlayCardsRandomlySpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      }
+    ],
+    "comment": "Plays the card specified by the target entity with any necessary choices done randomly."
+  },
+  {
+    "type": "Spell_AddPact",
+    "subcategory": "Mechanic",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Add the Pact",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddPactSpell"
+      }
+    ],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "pact",
+        "check": [
+          "EnchantmentOptionsFake_SHADOW"
+        ],
+        "block": {
+          "type": "EnchantmentOptionsFake_SHADOW"
+        }
+      }
+    ],
+    "comment": "Creates and puts into play a Pact effect."
+  },
+  {
+    "type": "Spell_AddBattlecry",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Give %2 Opener: %3 then %4",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddBattlecrySpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "battlecry.targetSelection",
+        "check": "TargetSelection",
+        "shadow": {
+          "type": "TargetSelection_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "battlecry.spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        }
+      }
+    ],
+    "comment": "Gives a targeted card (probably in hand or deck) a new Opener effect."
+  }
+]

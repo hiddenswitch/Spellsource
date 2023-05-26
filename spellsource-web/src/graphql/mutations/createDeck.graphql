@@ -1,0 +1,8 @@
+mutation createDeck($deckName: String!, $heroClass: String!, $cardIds: [String!], $format: String!) {
+  createDeckWithCards(input: {deckName: $deckName, classHero: $heroClass, cardIds: $cardIds, formatName: $format }) {
+    deck {
+      ...deck
+      ...deckCards
+    }
+  }
+}

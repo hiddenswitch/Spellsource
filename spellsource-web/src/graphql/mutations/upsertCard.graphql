@@ -1,0 +1,7 @@
+mutation upsertCard($cardId: String!, $card: CardInput!) {
+  upsertCard(where: {id: $cardId}, input: {card: $card}) {
+    card {
+      ...card
+    }
+  }
+}

@@ -1,0 +1,32 @@
+schema:
+  - src/__generated__/schema.graphql
+config:
+  pluckConfig:
+    gqlMagicComment: __never__
+    globalGqlIdentifierName: gql
+    modules:
+      - name: '@apollo/client'
+        identifier: gql
+generates:
+  src/__generated__/client.ts:
+    documents:
+      - src/graphql/**/*.graphql
+    plugins:
+      - typescript
+      - typescript-resolvers
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      scalars:
+        DateTime: string
+        Duration: number
+        CalendarDate: string
+        ConstraintString: string
+        ConstraintNumber: number
+      reactApolloVersion: 3
+      withComponent: false
+      withHOC: false
+      withHooks: true
+      withMutationFn: true
+      enumsAsConst: true
+      defaultMapper: Partial<{T}>

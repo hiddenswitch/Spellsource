@@ -1,0 +1,26 @@
+diff --git a/node_modules/@apollo/server/dist/esm/errorNormalize.js b/node_modules/@apollo/server/dist/esm/errorNormalize.js
+index ce2520d..c021c67 100644
+--- a/node_modules/@apollo/server/dist/esm/errorNormalize.js
++++ b/node_modules/@apollo/server/dist/esm/errorNormalize.js
+@@ -41,7 +41,7 @@ export function normalizeAndFormatErrors(errors, options = {}) {
+         if (options.includeStacktraceInErrorResponses) {
+             extensions.stacktrace = graphqlError.stack?.split('\n');
+         }
+-        return { ...graphqlError.toJSON(), extensions };
++        return { ...graphqlError, extensions };
+     }
+ }
+ export function ensureError(maybeError) {
+diff --git a/node_modules/@apollo/server/src/errorNormalize.ts b/node_modules/@apollo/server/src/errorNormalize.ts
+index 3d921a6..dc6de29 100644
+--- a/node_modules/@apollo/server/src/errorNormalize.ts
++++ b/node_modules/@apollo/server/src/errorNormalize.ts
+@@ -81,7 +81,7 @@ export function normalizeAndFormatErrors(
+       extensions.stacktrace = graphqlError.stack?.split('\n');
+     }
+ 
+-    return { ...graphqlError.toJSON(), extensions };
++    return { ...graphqlError, extensions };
+   }
+ }
+ 

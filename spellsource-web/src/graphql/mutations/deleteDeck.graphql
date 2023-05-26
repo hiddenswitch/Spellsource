@@ -1,0 +1,7 @@
+mutation deleteDeck($deckId: String!) {
+  updateDeckById(input: {id: $deckId, deckPatch: {trashed: true}}) {
+    deck {
+      trashed
+    }
+  }
+}

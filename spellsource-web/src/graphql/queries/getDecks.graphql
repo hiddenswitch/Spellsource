@@ -1,0 +1,14 @@
+query getDecks($user: String) {
+  allDecks(condition: {trashed: false}) {
+    nodes {
+      ...deck
+    }
+  }
+  allDeckShares(condition: {shareRecipientId: $user, trashedByRecipient: false}) {
+    nodes {
+      deckByDeckId {
+        ...deck
+      }
+    }
+  }
+}

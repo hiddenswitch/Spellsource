@@ -48,6 +48,7 @@ def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def localUsername = 'admin'
 def localPassword = 'password'
 def localDatabaseName = 'spellsource'
+def localPort = '5432'
 def mainClassNameConst = 'com.hiddenswitch.framework.EntryPoint'
 def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
 def jvmArgs = ['--enable-preview', '--add-opens', 'java.base/java.lang=ALL-UNNAMED']
@@ -213,7 +214,7 @@ task createPostgresContainer(type: DockerCreateContainer, group: 'Spellsource In
     envVars.putAll([
             'POSTGRES_DB': localDatabaseName,
             'POSTGRES_USER': localUsername,
-            'POSTGRES_PASSWORD': localPassword])
+            'POSTGRES_PASSWORD': localPassword, 'POSTGRES_PORT': localPort])
     hostConfig.autoRemove.set(true)
 }
 
@@ -237,9 +238,10 @@ task createKeycloakContainer(type: DockerCreateContainer, group: 'Spellsource In
             'KEYCLOAK_ADMIN_PASSWORD': 'password',
             'KC_DB'                  : 'postgres',
             'KC_DB_URL_HOST'         : 'gradleSupabasePostgres',
-            'KC_DB_URL_DATABASE'     : 'spellsource',
-            'KC_DB_USERNAME'         : 'admin',
-            'KC_DB_PASSWORD'         : 'password',
+            'KC_DB_URL_PORT'         : localPort,
+            'KC_DB_URL_DATABASE'     : localDatabaseName,
+            'KC_DB_USERNAME'         : localUsername,
+            'KC_DB_PASSWORD'         : localPassword,
             'KC_DB_SCHEMA'           : 'keycloak',
             'KC_HOSTNAME_STRICT'     : 'false'
     ])
@@ -253,7 +255,7 @@ task startKeycloakContainer(type: DockerStartContainer, group: 'Spellsource Inte
     dependsOn += [createKeycloakContainer, startPostgresContainer]
     targetContainerId createKeycloakContainer.getContainerId()
     doLast {
-        sleep(12000)
+        sleep(30000)
     }
 }
 

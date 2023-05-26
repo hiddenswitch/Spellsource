@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id("cz.habarta.typescript-generator") version "3.1.1185"
 }
 
 apply from: '../gradle/instrument.gradle'
@@ -11,10 +12,17 @@ dependencies {
     api "io.vertx:vertx-core:$vertxVersion"
     implementation "io.github.classgraph:classgraph:$classgraphVersion"
 
-    
+
     api 'org.jetbrains:annotations'
     implementation "com.google.guava:guava:$guavaVersion"
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'commons-io:commons-io:2.11.0'
+}
+
+tasks.generateTypeScript {
+    jsonLibrary = 'gson'
+    classPatterns = ["net.demilich.metastone.game.cards.**"]
+    outputKind = 'module'
+    outputFile = rootProject.project("spellsource-web").file("src/__generated__/spellsource-game.d.ts")
 }

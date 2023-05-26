@@ -55,10 +55,6 @@ typings/
 # dotenv environment variable files
 .env*
 
-# gatsby files
-.cache/
-public
-
 # Mac files
 .DS_Store
 
@@ -72,3 +68,6 @@ _site
 .sass-cache/
 
 build/
+
+.next
+.env.local

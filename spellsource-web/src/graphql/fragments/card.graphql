@@ -1,0 +1,7 @@
+fragment card on Card {
+  id
+  createdBy
+  cardScript
+  uri
+  blocklyWorkspace
+}

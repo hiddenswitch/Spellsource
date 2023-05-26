@@ -1,0 +1,262 @@
+create role website;
+
+grant usage on schema spellsource to website;
+grant select, insert, update on spellsource.cards to website;
+grant select, insert, update on spellsource.decks to website;
+grant select on spellsource.deck_shares to website;
+grant select, update, insert, delete on spellsource.cards_in_deck to website;
+
+create or replace function spellsource.get_user_id() returns text as
+$$
+select current_setting('user.id', true)::text;
+$$ language sql stable;
+
+alter table spellsource.cards
+    add if not exists is_archived bool not null default false,
+    add if not exists is_private  bool not null default false,
+    alter is_private set default true;
+
+
+alter table spellsource.cards
+    enable row level security;
+drop policy if exists website_view on spellsource.cards;
+create policy website_view on spellsource.cards for select to website
+    using (created_by = spellsource.get_user_id() or not is_private);
+drop policy if exists website_insert on spellsource.cards;
+create policy website_insert on spellsource.cards for insert to website
+    with check (created_by = spellsource.get_user_id() and
+                starts_with(id, spellsource.get_user_id()) and
+                (starts_with(card_script ->> 'heroClass', spellsource.get_user_id()) or
+                 card_script ->> 'heroClass' = 'ANY'));
+drop policy if exists website_update on spellsource.cards;
+create policy website_update on spellsource.cards for update to website
+    using (created_by = spellsource.get_user_id() and starts_with(id, spellsource.get_user_id()))
+    with check (created_by = spellsource.get_user_id() and starts_with(id, spellsource.get_user_id()));
+
+create or replace function spellsource.can_see_deck(user_id text, deck spellsource.decks) returns boolean as
+$$
+begin
+    return deck.created_by = user_id
+        or deck.is_premade
+        or exists(select *
+                  from spellsource.deck_shares
+                  where deck_id = deck.id
+                    and share_recipient_id = spellsource.get_user_id()
+                    and not deck.trashed);
+end;
+$$ language plpgsql stable;
+
+
+alter table spellsource.decks
+    enable row level security;
+drop policy if exists website_view on spellsource.decks;
+create policy website_view on spellsource.decks for select to website
+    using (spellsource.can_see_deck(spellsource.get_user_id(), decks));
+drop policy if exists website_insert on spellsource.decks;
+create policy website_insert on spellsource.decks for insert to website
+    with check (created_by = spellsource.get_user_id());
+drop policy if exists website_update on spellsource.decks;
+create policy website_update on spellsource.decks for update to website
+    using (created_by = spellsource.get_user_id())
+    with check (created_by = spellsource.get_user_id() and last_edited_by = spellsource.get_user_id());
+
+
+alter table spellsource.deck_shares
+    enable row level security;
+drop policy if exists website_view on spellsource.deck_shares;
+create policy website_view on spellsource.deck_shares for select to website
+    using (share_recipient_id = spellsource.get_user_id());
+
+
+alter table spellsource.cards_in_deck
+    enable row level security;
+drop policy if exists website_view on spellsource.cards_in_deck;
+create policy website_view on spellsource.cards_in_deck for select to website
+    using (exists(select *
+                  from spellsource.decks
+                  where spellsource.can_see_deck(spellsource.get_user_id(), decks)));
+drop policy if exists website_insert on spellsource.cards_in_deck;
+create policy website_insert on spellsource.cards_in_deck for insert to website
+    with check (exists(select *
+                       from spellsource.decks
+                       where id = deck_id
+                         and created_by = spellsource.get_user_id()));
+drop policy if exists website_update on spellsource.cards_in_deck;
+create policy website_update on spellsource.cards_in_deck for update to website
+    using (exists(select *
+                  from spellsource.decks
+                  where id = deck_id
+                    and created_by = spellsource.get_user_id()))
+    with check (exists(select *
+                       from spellsource.decks
+                       where id = deck_id
+                         and created_by = spellsource.get_user_id()));
+drop policy if exists website_delete on spellsource.cards_in_deck;
+create policy website_delete on spellsource.cards_in_deck for delete to website
+    using (exists(select *
+                  from spellsource.decks
+                  where id = deck_id
+                    and created_by = spellsource.get_user_id()));
+
+-- Policies for public
+grant select on spellsource.decks to public;
+drop policy if exists public_view on spellsource.decks;
+create policy public_view on spellsource.decks for select to public using (is_premade);
+
+grant select on spellsource.cards to public;
+drop policy if exists public_view on spellsource.cards;
+create policy public_view on spellsource.cards for select to website
+    using (not is_private);
+
+
+create or replace function spellsource.cards_type(card spellsource.cards) returns text as
+$$
+begin
+    return card.card_script ->> 'type';
+end;
+$$ language plpgsql stable;
+
+create or replace function spellsource.cards_cost(card spellsource.cards) returns int as
+$$
+begin
+    return coalesce(card.card_script ->> 'baseManaCost', '0')::int;
+end;
+$$ language plpgsql stable;
+
+create or replace function spellsource.cards_collectible(card spellsource.cards) returns bool as
+$$
+begin
+    return coalesce(card.card_script ->> 'collectible', 'true')::bool;
+end;
+$$ language plpgsql stable;
+
+
+--- Making the view as a function so it respects RLS
+drop function if exists spellsource.get_classes();
+create function spellsource.get_classes()
+    returns table
+            (
+                created_by  varchar,
+                class       text,
+                is_private  bool,
+                collectible bool,
+                card_script jsonb,
+                id          text,
+                name        text
+            )
+    language sql
+    security invoker
+as
+$$
+select distinct created_by,
+                card_script ->> 'heroClass'                           as class,
+                is_private,
+                coalesce(card_script ->> 'collectible', 'true')::bool as collectible,
+                card_script,
+                id,
+                card_script ->> 'name'                                as name
+from spellsource.cards
+where card_script ->> 'type' = 'CLASS';
+$$;
+create or replace view spellsource.classes as
+select *
+from spellsource.get_classes();
+grant select on spellsource.classes to website;
+
+create or replace function spellsource.card_message(card spellsource.cards, cl spellsource.classes) returns text as
+$$
+begin
+    return coalesce(card.card_script ->> 'baseManaCost', '0') || ' ' || coalesce(card.card_script ->> 'name', '') ||
+           ' ' || cl.name || ' ' || coalesce(card.card_script ->> 'description', '') || ' ' ||
+           coalesce(card.card_script ->> 'race', '') || ' ' || coalesce(card.card_script ->> 'set', 'CUSTOM');
+end;
+$$ language plpgsql stable;
+
+
+--- Making the view as a function so it respects RLS
+drop function if exists spellsource.get_collection_cards() cascade;
+create or replace function spellsource.get_collection_cards()
+    returns table
+            (
+                id                text,
+                created_by        varchar,
+                card_script       jsonb,
+                blockly_workspace xml,
+                name              text,
+                type              text,
+                class             text,
+                cost              int,
+                collectible       bool,
+                search_message    text,
+                last_modified     timestamptz,
+                created_at        timestamptz
+            )
+    language sql
+    security invoker
+as
+$$
+select card.id,
+       card.created_by,
+       card.card_script,
+       card.blockly_workspace,
+       card.card_script ->> 'name'                                    as name,
+       card.card_script ->> 'type'                                    as type,
+       card.card_script ->> 'heroClass'                               as class,
+       coalesce(card.card_script ->> 'baseManaCost', '0')::int        as cost,
+       (coalesce(card.card_script ->> 'collectible', 'true')::bool and
+        (card.card_script ->> 'heroClass' = 'ANY' or cl.collectible)) as collectible,
+       spellsource.card_message(card, cl)                             as search_message,
+       last_modified,
+       created_at
+from spellsource.cards card
+         join spellsource.classes cl on card.card_script ->> 'heroClass' = cl.class
+where card.card_script ->> 'set' != 'TEST'
+  and not card.is_archived;
+$$;
+create or replace view spellsource.collection_cards as
+select *
+from spellsource.get_collection_cards();
+grant select on spellsource.collection_cards to website;
+
+
+create or replace function spellsource.set_cards_in_deck(deck text, card_ids text[]) returns setof spellsource.cards_in_deck as
+$$
+declare
+    card text;
+begin
+    delete from spellsource.cards_in_deck where deck_id = deck;
+
+    foreach card in array card_ids
+        loop
+            insert into spellsource.cards_in_deck (deck_id, card_id) values (deck, card);
+        end loop;
+
+    return query select * from spellsource.cards_in_deck where deck_id = deck;
+end
+$$ language plpgsql volatile;
+grant execute on function spellsource.set_cards_in_deck(text, text[]) to website;
+
+create or replace function spellsource.create_deck_with_cards(deck_name text, class_hero text, format_name text, card_ids text[]) returns spellsource.decks as
+$$
+declare
+    id_deck text;
+    card    text;
+    deck    spellsource.decks;
+begin
+    id_deck := gen_random_uuid();
+
+    insert into spellsource.decks (id, created_by, last_edited_by, name, hero_class, deck_type, format)
+    values (id_deck::text, spellsource.get_user_id(), spellsource.get_user_id(), deck_name, class_hero, 1, format_name)
+    returning * into deck;
+
+    if (card_ids is not null) then
+        foreach card in array card_ids
+            loop
+                insert into spellsource.cards_in_deck (deck_id, card_id) values (id_deck, card);
+            end loop;
+    end if;
+
+    return deck;
+end
+$$ language plpgsql volatile;
+grant execute on function spellsource.create_deck_with_cards(text, text, text, text[]) to website;

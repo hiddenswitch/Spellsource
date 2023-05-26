@@ -3,8 +3,8 @@ global.WebAssembly = global.WebAssembly || require("./src/lib/graal-compatibilit
 
 const remark = require("remark");
 const visit = require("unist-util-visit");
-const { resolveArt } = require("./src/lib/resolve-art");
-const { jsonTransformFileNode, jsonType } = require("./src/lib/json-transforms");
+const { resolveArt } = require("./src/lib/resolve-art.ts");
+const { jsonTransformFileNode, jsonType } = require("./src/lib/json-transforms.ts");
 
 module.exports = {
   siteMetadata: {
