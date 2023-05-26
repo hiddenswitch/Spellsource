@@ -272,7 +272,6 @@ public class CardCatalogue {
 	 */
 	@NotNull
 	public CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass, Attribute tag, boolean clone) {
-		loadCardsFromPackage();
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {
 
