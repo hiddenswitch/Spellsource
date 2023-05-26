@@ -3,7 +3,6 @@ package net.demilich.metastone.game.spells.trigger;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-;
 import net.demilich.metastone.game.events.TargetAcquisitionEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;

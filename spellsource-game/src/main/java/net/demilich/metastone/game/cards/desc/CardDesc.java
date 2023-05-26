@@ -398,10 +398,12 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * that were around for a particular release of the code should participate in a game trace's lookup of cards in the
 	 * {@link net.demilich.metastone.game.cards.CardCatalogue}, for example).
 	 */
+	@Deprecated
 	public int getFileFormatVersion() {
 		return fileFormatVersion;
 	}
 
+	@Deprecated
 	public void setFileFormatVersion(int fileFormatVersion) {
 		this.fileFormatVersion = fileFormatVersion;
 	}

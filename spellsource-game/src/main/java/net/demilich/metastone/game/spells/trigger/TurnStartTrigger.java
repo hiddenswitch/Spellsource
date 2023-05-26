@@ -2,7 +2,7 @@ package net.demilich.metastone.game.spells.trigger;
 
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import com.hiddenswitch.spellsource.rpc.Spellsource.GameEventTypeMessage.GameEventType;;
+import com.hiddenswitch.spellsource.rpc.Spellsource.GameEventTypeMessage.GameEventType;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;

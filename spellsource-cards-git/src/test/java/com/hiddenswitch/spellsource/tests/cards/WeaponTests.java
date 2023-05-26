@@ -15,7 +15,7 @@ public class WeaponTests extends TestBase {
 	@Test
 	public void testWeapon() {
 		runGym((context, player, opponent) -> {
-			Card weaponCard = CardCatalogue.getCardById("weapon_test_3_2");
+			Card weaponCard = context.getCardCatalogue().getCardById("weapon_test_3_2");
 
 			context.setActivePlayerId(player.getId());
 			context.getLogic().startTurn(player.getId());

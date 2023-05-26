@@ -2,7 +2,7 @@ package com.hiddenswitch.spellsource.tests.cards;
 
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -323,7 +323,7 @@ public class RingmasterTests extends TestBase {
 	public void testElenaDreamhaze() {
 		for (int i = 0; i < 20; i++) {
 			runGym((context, player, opponent) -> {
-				context.setDeckFormat(DeckFormat.all());
+				context.setDeckFormat(context.getCardCatalogue().all());
 				playCard(context, player, "minion_elena_dreamhaze");
 				assertNotNull(player.getAttribute(Attribute.SIGNATURE));
 				assertNotEquals(player.getAttribute(Attribute.SIGNATURE), "");

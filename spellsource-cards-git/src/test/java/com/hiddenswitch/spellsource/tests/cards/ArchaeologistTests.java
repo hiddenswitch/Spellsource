@@ -3,9 +3,7 @@ package com.hiddenswitch.spellsource.tests.cards;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.minions.Minion;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -17,9 +15,9 @@ public class ArchaeologistTests extends TestBase {
 	@Test
 	public void testArchivistKrag() {
 		runGym((context, player, opponent) -> {
-			Card lunstone1 = shuffleToDeck(context, player, DeckFormat.spellsource().getSecondPlayerBonusCards()[0]);
+			Card lunstone1 = shuffleToDeck(context, player, context.getCardCatalogue().spellsource().getSecondPlayerBonusCards()[0]);
 			lunstone1.setAttribute(Attribute.STARTED_IN_DECK);
-			Card lunstone2 = shuffleToDeck(context, player, DeckFormat.spellsource().getSecondPlayerBonusCards()[0]);
+			Card lunstone2 = shuffleToDeck(context, player, context.getCardCatalogue().spellsource().getSecondPlayerBonusCards()[0]);
 			player.setMana(9);
 			playCard(context, player, "minion_archivist_krag");
 			assertEquals(player.getMana(), 1, "played 1 lunstone");
@@ -30,13 +28,13 @@ public class ArchaeologistTests extends TestBase {
 	@Test
 	public void testSpiritFromLongPast() {
 		runGym((context, player, opponent) -> {
-			destroy(context, playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId()));
+			destroy(context, playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId()));
 			playCard(context, player, "minion_spirit_from_long_past");
 			assertEquals(3, player.getGraveyard().size(), "should contain two cards and the minion");
 			context.endTurn();
 			context.endTurn();
 			assertEquals(2, player.getGraveyard().size(), "should have drawn the 1/1 neutral out of the graveyard, but now the neutral will not be eligible to draw again");
-			assertEquals(CardCatalogue.getOneOneNeutralMinionCardId(), player.getHand().get(0).getCardId(), "should have drawn 1/1 neutral");
+			assertEquals(context.getCardCatalogue().getOneOneNeutralMinionCardId(), player.getHand().get(0).getCardId(), "should have drawn 1/1 neutral");
 			assertEquals(1, player.getHand().size(), "contains the one card");
 			context.endTurn();
 			context.endTurn();
@@ -47,7 +45,7 @@ public class ArchaeologistTests extends TestBase {
 	@Test
 	public void testGravedig() {
 		runGym((context, player, opponent) -> {
-			destroy(context, playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId()));
+			destroy(context, playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId()));
 			assertEquals(2, player.getGraveyard().size(), "should contain both the card and the minion");
 			overrideDiscover(context, player, discoverActions -> {
 				assertEquals(1, discoverActions.size());
@@ -55,7 +53,7 @@ public class ArchaeologistTests extends TestBase {
 			});
 			playCard(context, player, "spell_gravedig");
 			assertEquals(1, player.getHand().size());
-			assertEquals(CardCatalogue.getOneOneNeutralMinionCardId(), player.getHand().get(0).getCardId());
+			assertEquals(context.getCardCatalogue().getOneOneNeutralMinionCardId(), player.getHand().get(0).getCardId());
 		});
 	}
 

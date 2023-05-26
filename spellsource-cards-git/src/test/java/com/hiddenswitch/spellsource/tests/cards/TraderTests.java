@@ -44,7 +44,7 @@ public class TraderTests extends TestBase {
 			playCard(context, player, "spell_gold_coin");
 			Card discountPlatinum = receiveCard(context, player, "token_spell_platinum_coin");
 			assertEquals(discountPlatinum.getBaseManaCost() - 1, costOf(context, player, discountPlatinum), "should be discounted");
-			playCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			playCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			assertEquals(discountPlatinum.getBaseManaCost(), costOf(context, player, discountPlatinum), "playing card expires trigger");
 		});
 
@@ -62,7 +62,7 @@ public class TraderTests extends TestBase {
 	@Test
 	public void testRoheiTheBold() {
 		runGym((context, player, opponent) -> {
-			String[] cardIds = CardCatalogue.getCardById("spell_test_discover1").getDesc().getSpell().getCards();
+			String[] cardIds = context.getCardCatalogue().getCardById("spell_test_discover1").getDesc().getSpell().getCards();
 			String[] selected = new String[1];
 			overrideDiscover(context, player, discoverActions -> {
 				selected[0] = discoverActions.get(0).getCard().getCardId();
@@ -115,15 +115,15 @@ public class TraderTests extends TestBase {
 	@Test
 	public void testHoardingWhelp() {
 		runGym((context, player, opponent) -> {
-			Card shouldDraw1 = putOnTopOfDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
-			Card shouldDraw2 = putOnTopOfDeck(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			Card shouldDraw1 = putOnTopOfDeck(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
+			Card shouldDraw2 = putOnTopOfDeck(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			useHeroPower(context, player);
 			assertEquals(Zones.HAND, shouldDraw1.getZone());
 			assertEquals(Zones.HAND, shouldDraw2.getZone());
 		});
 		runGym((context, player, opponent) -> {
-			Card shouldDraw = putOnTopOfDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
-			Card shouldNotDraw = putOnTopOfDeck(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			Card shouldDraw = putOnTopOfDeck(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
+			Card shouldNotDraw = putOnTopOfDeck(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			Minion whelp = playMinionCard(context, player, "minion_hoarding_whelp");
 			useHeroPower(context, player);
 			assertEquals(Zones.DECK, shouldNotDraw.getZone());

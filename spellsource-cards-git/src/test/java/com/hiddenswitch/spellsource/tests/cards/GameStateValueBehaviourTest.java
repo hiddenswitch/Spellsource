@@ -7,8 +7,8 @@ import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.behaviour.PlayGameLogicRandomBehaviour;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -80,7 +80,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	public void testShouldNotHealEnemyChampion() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 9; i++) {
-				receiveCard(context, player, DeckFormat.spellsource().getSecondPlayerBonusCards()[0]);
+				receiveCard(context, player, context.getCardCatalogue().spellsource().getSecondPlayerBonusCards()[0]);
 			}
 			opponent.getHero().setHp(29);
 			GameStateValueBehaviour gsvb = new GameStateValueBehaviour()
@@ -382,7 +382,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 					"spell_clash").toGameDeck();
 			gameContext.setDeck(0, deck1);
 			gameContext.setDeck(1, deck2);
-			gameContext.setDeckFormat(DeckFormat.spellsource());
+			gameContext.setDeckFormat(gameContext.getCardCatalogue().spellsource());
 			// set a seed
 			gameContext.setLogic(new GameLogic(10101L));
 			gameContext.setBehaviour(1, new GameStateValueBehaviour().setParallel(false));

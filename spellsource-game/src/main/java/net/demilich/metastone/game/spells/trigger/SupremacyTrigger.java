@@ -3,7 +3,6 @@ package net.demilich.metastone.game.spells.trigger;
 import net.demilich.metastone.game.entities.Entity;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
-;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public final class SupremacyTrigger extends AfterPhysicalAttackTrigger {

@@ -15,7 +15,6 @@ import net.demilich.metastone.game.behaviour.PlayGameLogicRandomBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
@@ -218,6 +217,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	private int turn;
 	private int actionsThisTurn;
 	private boolean ignoreEvents;
+	private CardCatalogue cardCatalogue = CardCatalogue.classpath();
 	private CardList tempCards = new CardArrayList();
 	private boolean didCallEndGame;
 
@@ -233,7 +233,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public GameContext() {
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
 		setLogic(new GameLogic());
-		setDeckFormat(DeckFormat.all());
+		setDeckFormat(CardCatalogue.classpath().all());
 		setPlayer1(new Player());
 		setPlayer2(new Player());
 	}
@@ -299,7 +299,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public GameContext(String... heroClasses) {
 		this();
 		for (int i = 0; i < heroClasses.length; i++) {
-			getPlayer(i).setHero(HeroClass.getHeroCard(heroClasses[i]).hero());
+			getPlayer(i).setHero(getCardCatalogue().getHeroCard(heroClasses[i]).hero());
 		}
 	}
 
@@ -476,7 +476,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 				return tempCard.clone();
 			}
 		}
-		return CardCatalogue.getCardById(cardId);
+		return cardCatalogue.getCardById(cardId);
 	}
 
 	/**
@@ -834,7 +834,6 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	protected void startTrace() {
 		trace.setStartState(getGameState());
 		trace.setSeed(getLogic().getSeed());
-		trace.setCatalogueVersion(CardCatalogue.getVersion());
 	}
 
 	/**
@@ -1617,10 +1616,10 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		GameContext context = new GameContext();
 		Behaviour[] behaviours = new Behaviour[]{behaviour1, behaviour2};
 		for (int i = 0; i < 2; i++) {
-			context.setPlayer(i, new Player(decks.get(i), "Player " + Integer.toString(i)));
+			context.setPlayer(i, new Player(decks.get(i), "Player " + Integer.toString(i), CardCatalogue.classpath()));
 			context.behaviours[i] = behaviours[i];
 		}
-		context.setDeckFormat(DeckFormat.getSmallestSupersetFormat(decks));
+		context.setDeckFormat(context.getCardCatalogue().getSmallestSupersetFormat(decks));
 
 		return context;
 
@@ -1649,7 +1648,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                  <p>
 	 *                  Class: Color Hero Class (e.g., PRIEST) specified in {@link HeroClass}.
 	 *                  <p>
-	 *                  Format: Standard, Wild, Custom or others specified in {@link DeckFormat#formats()}.
+	 *                  Format: Standard, Wild, Custom or others specified in {@link CardCatalogue#formats()}.
 	 *                  <p>
 	 *                  1x Card Name
 	 *                  <p>
@@ -1662,60 +1661,11 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		return fromDecks(deckLists.stream().map(DeckCreateRequest::fromDeckList).map(DeckCreateRequest::toGameDeck).collect(toList()));
 	}
 
-	/**
-	 * Gets a game context that's ready to play from two deck lists encoded in the standard community format. Uses the
-	 * specified behaviours.
-	 *
-	 * @param deckLists  A Hearthstone deck string or a deck list of the format, with newlines:
-	 *                   <p>
-	 *                   Name: Deck Name
-	 *                   <p>
-	 *                   Class: Color Hero Class (e.g., PRIEST) specified in {@link HeroClass}.
-	 *                   <p>
-	 *                   Format: Standard, Wild, Custom or others specified in {@link DeckFormat#formats()}.
-	 *                   <p>
-	 *                   1x Card Name
-	 *                   <p>
-	 *                   2x Card Name
-	 * @param behaviour1 An implementation of {@link Behaviour} for player 1
-	 * @param behaviour2 An implementation of {@link Behaviour} for player 2
-	 * @return A game context
-	 */
-	public static GameContext fromDeckLists(List<String> deckLists, Behaviour behaviour1, Behaviour behaviour2) {
-		return fromDecks(deckLists.stream().map(DeckCreateRequest::fromDeckList).map(DeckCreateRequest::toGameDeck).collect(toList()), behaviour1, behaviour2);
-	}
-
-
-	/**
-	 * Creates a new game context with two random decks and random play behaviour.
-	 *
-	 * @return A game context
-	 * @see #play() to actually execute the game.
-	 */
-	public static GameContext fromTwoRandomDecks() {
-		return fromDecks(Arrays.asList(Deck.randomDeck(), Deck.randomDeck()));
-	}
-
-	public static GameContext fromTwoRandomDecks(long seed) {
-		var random = new XORShiftRandom(seed);
-		return fromDecks(random.nextLong(), Arrays.asList(Deck.randomDeck(random.nextLong()), Deck.randomDeck(random.nextLong())));
-	}
 
 	public static GameContext fromDecks(long seed, List<GameDeck> decks) {
 		var context = fromDecks(decks, new PlayGameLogicRandomBehaviour(), new PlayGameLogicRandomBehaviour());
 		context.setLogic(new GameLogic(seed));
 		return context;
-	}
-
-	/**
-	 * Creates a game with two random decks in the specified format.
-	 *
-	 * @param format
-	 * @return
-	 */
-	public static GameContext fromTwoRandomDecks(DeckFormat format) {
-		return fromDecks(Arrays.asList(Deck.randomDeck(format), Deck.randomDeck(format)))
-				.setDeckFormat(format);
 	}
 
 	/**
@@ -1894,7 +1844,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public void setDeck(int playerId, GameDeck deck) {
 		getPlayer(playerId).getDeck().clear();
 		getPlayer(playerId).getDeck().addAll(deck.getCardsCopy());
-		getPlayer(playerId).setHero(deck.getHeroCard().hero());
+		getPlayer(playerId).setHero(deck.getHeroCard(getCardCatalogue()).hero());
 	}
 
 	/**
@@ -2013,5 +1963,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	public void onNotificationDidFire(Notification event) {
+	}
+
+	public CardCatalogue getCardCatalogue() {
+		return cardCatalogue;
 	}
 }

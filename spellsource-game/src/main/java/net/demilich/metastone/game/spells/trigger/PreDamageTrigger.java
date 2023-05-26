@@ -4,7 +4,7 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.DamageTypeMessage.DamageType
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.AbstractDamageEvent;
 import net.demilich.metastone.game.events.GameEvent;
-import com.hiddenswitch.spellsource.rpc.Spellsource.GameEventTypeMessage.GameEventType;;
+import com.hiddenswitch.spellsource.rpc.Spellsource.GameEventTypeMessage.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class PreDamageTrigger extends EventTrigger {

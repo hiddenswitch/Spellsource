@@ -81,8 +81,8 @@ public class WitchDoctorTests extends TestBase {
 	public void testTheliaSilentdreamer() {
 		runGym((context, player, opponent) -> {
 			Minion thelia = playMinionCard(context, player, "minion_thelia_silentdreamer");
-			Minion shouldNotDouble = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
-			Minion shouldNotDouble2 = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion shouldNotDouble = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
+			Minion shouldNotDouble2 = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			playCard(context, player, "spell_test_cost_3_buff", thelia);
 			assertEquals(thelia.getAttack(), thelia.getBaseAttack() + 1, "thelia but less than 5, so should not double");
 			playCard(context, player, "spell_test_cost_6_buff", thelia);

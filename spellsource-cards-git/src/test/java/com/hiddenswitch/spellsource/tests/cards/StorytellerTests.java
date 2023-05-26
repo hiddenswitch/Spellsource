@@ -41,11 +41,11 @@ public class StorytellerTests extends TestBase {
 	@Test
 	public void testEngagingStory() {
 		runGym(((context, player, opponent) -> {
-			player.getDeck().addCard("spell_lunstone");
-			player.getDeck().addCard("spell_lunstone");
-			player.getDeck().addCard("spell_lunstone");
-			player.getDeck().addCard("spell_lunstone");
-			player.getDeck().addCard("spell_lunstone");
+			player.getDeck().addCard(context.getCardCatalogue(), "spell_lunstone");
+			player.getDeck().addCard(context.getCardCatalogue(), "spell_lunstone");
+			player.getDeck().addCard(context.getCardCatalogue(), "spell_lunstone");
+			player.getDeck().addCard(context.getCardCatalogue(), "spell_lunstone");
+			player.getDeck().addCard(context.getCardCatalogue(), "spell_lunstone");
 			playCard(context, player, "spell_engaging_story");
 			assertEquals(player.getHand().size(), 0);
 			context.endTurn();
@@ -279,8 +279,7 @@ public class StorytellerTests extends TestBase {
 	public void testOverflowingEnergy() {
 		runGym((context, player, opponent) -> {
 			Random random = new XORShiftRandom(101010L);
-			CardCatalogue.loadCardsFromPackage();
-			List<Card> cards = CardCatalogue.getAll().stream()
+			List<Card> cards = context.getCardCatalogue().getAll().stream()
 					.filter(card -> card.getBaseManaCost() > 0)
 					.filter(card -> card.getCardType().equals(CardType.SPELL))
 					.collect(Collectors.toList());
@@ -301,8 +300,7 @@ public class StorytellerTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			Random random = new Random();
-			CardCatalogue.loadCardsFromPackage();
-			List<Card> cards = CardCatalogue.getAll().stream()
+			List<Card> cards = context.getCardCatalogue().getAll().stream()
 					.filter(card -> card.getBaseManaCost() == 0)
 					.filter(card -> card.getCardType().equals(CardType.SPELL))
 					.collect(Collectors.toList());
@@ -423,9 +421,9 @@ public class StorytellerTests extends TestBase {
 		// Test if a minion attacks your champion during your turn
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			var attacker = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			var attacker = playMinionCard(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			context.endTurn();
-			var discounted = receiveCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			var discounted = receiveCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			assertEquals(1, costOf(context, player, discounted));
 			playCard(context, player, "secret_urgent_experiment");
 			assertEquals(1, costOf(context, player, discounted));

@@ -22,7 +22,7 @@ public class OniQueenTests extends TestBase {
 	@Test
 	public void testInsurgencyCaptainKrika() {
 		runGym((context, player, opponent) -> {
-			Minion target = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion target = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			playCard(context, player, "weapon_test_1_3");
 			player.getWeaponZone().get(0).setHp(4);
 			attack(context, player, player.getHero(), opponent.getHero());
@@ -55,17 +55,17 @@ public class OniQueenTests extends TestBase {
 	public void testThousandYearHatred() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			Minion shouldDestroy1 = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion shouldDestroy1 = playMinionCard(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			Minion shouldNotDestroy1 = playMinionCard(context, opponent, "minion_neutral_test");
 			Card shouldNotRemove1 = receiveCard(context, opponent, "minion_neutral_test");
-			Card shouldRemove1 = receiveCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			Card shouldRemove1 = receiveCard(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			context.endTurn();
-			Minion shouldDestroy2 = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion shouldDestroy2 = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			Minion shouldNotDestroy2 = playMinionCard(context, player, "minion_neutral_test");
 			Card shouldNotRemove2 = receiveCard(context, player, "minion_neutral_test");
-			Card shouldRemove3 = receiveCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
-			Card shouldNotRemove3 = putOnTopOfDeck(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
-			Card shouldNotRemove4 = putOnTopOfDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Card shouldRemove3 = receiveCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
+			Card shouldNotRemove3 = putOnTopOfDeck(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
+			Card shouldNotRemove4 = putOnTopOfDeck(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			playCard(context, player, "spell_thousand_year_hatred", shouldDestroy1);
 			assertTrue(shouldDestroy1.isDestroyed());
 			assertTrue(shouldDestroy2.isDestroyed());

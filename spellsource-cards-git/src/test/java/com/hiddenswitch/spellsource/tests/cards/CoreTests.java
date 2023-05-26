@@ -51,7 +51,7 @@ public class CoreTests extends TestBase {
 		});
 
 		runGym((context, player, opponent) -> {
-			Minion notDemon = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion notDemon = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			destroy(context, notDemon);
 			int hp = opponent.getHero().getHp();
 			playCard(context, player, "spell_yokai_fire", opponent.getHero());

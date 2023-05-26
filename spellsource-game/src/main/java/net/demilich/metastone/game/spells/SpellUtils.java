@@ -122,13 +122,13 @@ public class SpellUtils {
 			if (chooseOneOverride != ChooseOneOverride.NONE) {
 				switch (chooseOneOverride) {
 					case ALWAYS_FIRST:
-						action = card.playOptions()[0];
+						action = card.playOptions(context)[0];
 						break;
 					case ALWAYS_SECOND:
-						action = card.playOptions()[1];
+						action = card.playOptions(context)[1];
 						break;
 					case BOTH_COMBINED:
-						action = card.playBothOptions();
+						action = card.playBothOptions(context);
 						break;
 				}
 			} else {
@@ -139,10 +139,10 @@ public class SpellUtils {
 						logger.warn("playCardRandomly {} {}: A choose one card {} played from the hand does not contain a choice. Choosing randomly.",
 								context.getGameId(), source, card);
 					}
-					PlayCardAction[] options = card.playOptions();
+					PlayCardAction[] options = card.playOptions(context);
 					action = options[context.getLogic().random(options.length)];
 				} else if (card.getAttributes().containsKey(Attribute.CHOICE)) {
-					action = card.playOptions()[card.getAttributeValue(Attribute.CHOICE)];
+					action = card.playOptions(context)[card.getAttributeValue(Attribute.CHOICE)];
 				}
 			}
 		} else {

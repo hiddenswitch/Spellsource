@@ -504,7 +504,7 @@ public class Card extends Entity implements HasChooseOneActions {
 			return desc;
 		}
 		// Prevents copying here
-		return CardCatalogue.getRecords().get(getAttributes().getOverrideCardId()).getDesc();
+		return CardCatalogue.classpath().getRecords().get(getAttributes().getOverrideCardId()).getDesc();
 	}
 
 	/**
@@ -618,8 +618,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return The play options array of length 2
 	 */
 	@Override
-	@NotNull
-	public PlayCardAction[] playOptions() {
+	public PlayCardAction[] playOptions(GameContext context) {
 		switch (getCardType()) {
 			case HERO_POWER:
 			case CHOOSE_ONE:
@@ -632,7 +631,7 @@ public class Card extends Entity implements HasChooseOneActions {
 				PlayCardAction[] spellActions = new PlayCardAction[getChooseOneCardIds().length];
 				for (int i = 0; i < getChooseOneCardIds().length; i++) {
 					String cardId = getChooseOneCardIds()[i];
-					Card card = CardCatalogue.getCardById(cardId);
+					Card card = context.getCardCatalogue().getCardById(cardId);
 					PlayCardAction cardAction;
 
 					if (getCardType() == CardType.CHOOSE_ONE || getCardType() == CardType.SPELL) {
@@ -706,7 +705,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 */
 	@Override
 	@Nullable
-	public PlayCardAction playBothOptions() {
+	public PlayCardAction playBothOptions(GameContext context) {
 		if (getChooseBothCardId() == null &&
 				getDesc().getChooseBothBattlecry() == null) {
 			return null;
@@ -715,11 +714,11 @@ public class Card extends Entity implements HasChooseOneActions {
 		PlayCardAction action = null;
 		switch (getCardType()) {
 			case HERO_POWER:
-				action = new HeroPowerAction(CardCatalogue.getCardById(getChooseBothCardId()).getSpell(), this, getTargetSelection(), CardCatalogue.getCardById(getChooseBothCardId()));
+				action = new HeroPowerAction(context.getCardCatalogue().getCardById(getChooseBothCardId()).getSpell(), this, getTargetSelection(), context.getCardCatalogue().getCardById(getChooseBothCardId()));
 				break;
 			case CHOOSE_ONE:
 			case SPELL:
-				Card card = CardCatalogue.getCardById(getChooseBothCardId());
+				Card card = context.getCardCatalogue().getCardById(getChooseBothCardId());
 				action = new PlayChooseOneCardAction(card.getSpell(), this, getChooseBothCardId(), card.getTargetSelection());
 				break;
 			case WEAPON:
@@ -799,7 +798,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return The weapon card
 	 */
 	@JsonIgnore
-	public Card getWeapon() {
+	public Card getWeapon(GameContext context) {
 		if (getDesc().getBattlecry() == null) {
 			return null;
 		}
@@ -824,9 +823,8 @@ public class Card extends Entity implements HasChooseOneActions {
 			return null;
 		}
 
-		Card cardById = CardCatalogue.getCardById(cardId);
-		if (cardById == null
-				|| cardById.getCardType() != CardType.WEAPON) {
+		Card cardById = context.getCardCatalogue().getCardById(cardId);
+		if (cardById.getCardType() != CardType.WEAPON) {
 			return null;
 		}
 		return cardById;

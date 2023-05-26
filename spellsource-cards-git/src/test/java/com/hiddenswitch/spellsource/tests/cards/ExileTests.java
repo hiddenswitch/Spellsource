@@ -20,7 +20,7 @@ public class ExileTests extends TestBase {
 	public void testLineBreaker() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			Minion attacker = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion attacker = playMinionCard(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			context.endTurn();
 			context.endTurn();
 			attack(context, opponent, attacker, player.getHero());
@@ -33,7 +33,7 @@ public class ExileTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			Minion attacker = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion attacker = playMinionCard(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			context.endTurn();
 			context.endTurn();
 			attack(context, opponent, attacker, player.getHero());

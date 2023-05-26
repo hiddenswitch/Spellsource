@@ -15,8 +15,8 @@ import java.util.*;
 import static java.util.stream.Collectors.toList;
 
 /**
- * Implements a basic draft where the user is given a selection of champions from all {@link DeckFormat#spellsource()}
- * champions, and 30 rounds of 3-card choices pulled from a weighted selection of {@link DeckFormat#spellsource()}
+ * Implements a basic draft where the user is given a selection of champions from all {@link CardCatalogue#spellsource()}
+ * champions, and 30 rounds of 3-card choices pulled from a weighted selection of {@link CardCatalogue#spellsource()}
  * catalogue cards.
  */
 public class DraftLogic {
@@ -108,13 +108,14 @@ public class DraftLogic {
 	}
 
 	private List<String> createHeroChoices() {
-		return HeroClass.getBaseClasses(DeckFormat.spellsource());
+		DeckFormat deckFormat = context.get().getCardCatalogue().spellsource();
+		return context.get().getCardCatalogue().getBaseClasses(deckFormat);
 	}
 
 	/**
 	 * Creates the list of cards that will appear in the draft.
 	 * <p>
-	 * Uses the {@link DeckFormat#spellsource()} sets and sets {@link CardSet#SPELLSOURCE_BASIC} to be {@link
+	 * Uses the {@link CardCatalogue#spellsource()} sets and sets {@link CardSet#SPELLSOURCE_BASIC} to be {@link
 	 * #EXPANSION_ODDS_FACTOR} more likely to appear.
 	 *
 	 * @param hero
@@ -131,9 +132,9 @@ public class DraftLogic {
 		String latestExpansion = CardSet.SPELLSOURCE_BASIC;
 
 		Set<CardType> validCardTypes = new HashSet<>(Arrays.asList(CardType.values()));
-		Set<String> bannedCards = new HashSet<>(CardCatalogue.getBannedDraftCards());
+		Set<String> bannedCards = new HashSet<>(context.get().getCardCatalogue().getBannedDraftCards());
 
-		CardCatalogue.getAll().stream()
+		context.get().getCardCatalogue().getAll().stream()
 				.filter(Card::isQuest)
 				.map(Card::getCardId)
 				.forEach(bannedCards::add);
@@ -166,7 +167,7 @@ public class DraftLogic {
 				}
 
 				// Get neutral and hero cards
-				CardList classCards = CardCatalogue.query(format, c -> {
+				CardList classCards = context.get().getCardCatalogue().query(format, c -> {
 					return c.hasHeroClass(hero)
 							&& !bannedCards.contains(c.getCardId())
 							&& c.getRarity() == rarity
@@ -174,7 +175,7 @@ public class DraftLogic {
 							&& c.isCollectible();
 				});
 
-				CardList neutralCards = CardCatalogue.query(format, c -> {
+				CardList neutralCards = context.get().getCardCatalogue().query(format, c -> {
 					return c.hasHeroClass(HeroClass.ANY)
 							&& !bannedCards.contains(c.getCardId())
 							&& c.getRarity() == rarity

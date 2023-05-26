@@ -21,7 +21,7 @@ public class AllianceSpellTests extends TestBase {
 		Player warrior = context.getPlayer2();
 		warrior.setMana(10);
 
-		Card card = CardCatalogue.getCardById("minion_sourcing_specialist");
+		Card card = context.getCardCatalogue().getCardById("minion_sourcing_specialist");
 		card.setAttribute(Attribute.LAST_MINION_DESTROYED_CARD_ID, "minion_neutral_test");
 
 		playCard(context, mage, card);

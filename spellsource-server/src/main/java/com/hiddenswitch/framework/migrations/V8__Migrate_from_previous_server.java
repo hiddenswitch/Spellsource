@@ -2,11 +2,6 @@ package com.hiddenswitch.framework.migrations;
 
 import com.fasterxml.jackson.annotation.*;
 import com.google.common.base.CaseFormat;
-import com.google.common.collect.HashMultiset;
-import com.hiddenswitch.framework.Accounts;
-import com.hiddenswitch.framework.Environment;
-import com.hiddenswitch.framework.Legacy;
-import com.hiddenswitch.framework.schema.spellsource.tables.records.FriendsRecord;
 import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import io.opentracing.util.GlobalTracer;
@@ -14,7 +9,6 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.AuthProvider;
 import io.vertx.ext.auth.User;
@@ -26,13 +20,10 @@ import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.ParseUtils;
-import net.demilich.metastone.game.decks.DeckCreateRequest;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
 import org.jetbrains.annotations.Nullable;
-import org.jooq.InsertValuesStepN;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,17 +31,9 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static com.hiddenswitch.framework.schema.keycloak.Tables.USER_ENTITY;
-import static com.hiddenswitch.framework.schema.spellsource.Tables.FRIENDS;
-import static com.hiddenswitch.framework.schema.spellsource.Tables.USER_ENTITY_ADDONS;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
@@ -731,10 +714,10 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 			deck.setName(response.getCollectionRecord().getName());
 			String heroCardId = response.getCollectionRecord().getHeroCardId();
 			if (heroCardId != null) {
-				deck.setHeroCard(CardCatalogue.getCardById(heroCardId));
+				deck.setHeroCard(CardCatalogue.classpath().getCardById(heroCardId));
 			}
 
-			response.getInventoryRecords().stream().map(cardRecord -> CardCatalogue.getCardById(cardRecord.getCardId()))
+			response.getInventoryRecords().stream().map(cardRecord -> CardCatalogue.classpath().getCardById(cardRecord.getCardId()))
 					.forEach(deck.getCards()::addCard);
 
 			deck.setPlayerAttributes(response.getCollectionRecord().getPlayerEntityAttributes());
@@ -782,7 +765,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 			List<CardRecord> records = new ArrayList<>();
 
 			for (InventoryRecord cr : inventoryRecords) {
-				CardDesc record = CardCatalogue.getCardById(cr.getCardId()).getDesc();
+				CardDesc record = CardCatalogue.classpath().getCardById(cr.getCardId()).getDesc();
 
 				if (record == null) {
 					continue;

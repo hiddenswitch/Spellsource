@@ -6,16 +6,16 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.tests.util.TestBase;
 
 import java.util.Objects;
 import java.util.stream.LongStream;
 
 public class ConversionHarness {
 	static {
-		CardCatalogue.loadCardsFromPackage();
 	}
 
-	private static Object PROBE = new Object();
+	private static final Object PROBE = new Object();
 
 	protected static class Tuple {
 		GameContext context;
@@ -33,12 +33,13 @@ public class ConversionHarness {
 
 	public static boolean assertCardReplaysTheSame(long[] seeds, String cardId, String replacementJson) {
 		synchronized (PROBE) {
-			var originalCard = CardCatalogue.getCards().get(cardId);
-			var originalCardDesc = CardCatalogue.getRecords().get(cardId).getDesc();
+			var cardCatalogue = CardCatalogue.classpath();
+			var originalCard = cardCatalogue.getCards().get(cardId);
+			var originalCardDesc = cardCatalogue.getRecords().get(cardId).getDesc();
 			try {
 				return LongStream.of(seeds)
 						.mapToObj(seed -> {
-							GameContext context = GameContext.fromTwoRandomDecks(seed);
+							GameContext context = TestBase.fromTwoRandomDecks(seed);
 							ensureCardIsInDeck(context, cardId);
 							context.play();
 							return new Tuple(context, seed);
@@ -60,18 +61,18 @@ public class ConversionHarness {
 						.allMatch(tuple -> {
 							var desc = Json.decodeValue(replacementJson, CardDesc.class);
 							desc.setId(cardId);
-							CardCatalogue.getRecords().get(cardId).setDesc(desc);
-							CardCatalogue.getCards().replace(cardId, desc.create());
+							cardCatalogue.getRecords().get(cardId).setDesc(desc);
+							cardCatalogue.getCards().replace(cardId, desc.create());
 
-							GameContext reproduction = GameContext.fromTwoRandomDecks(tuple.seed);
+							GameContext reproduction = TestBase.fromTwoRandomDecks(tuple.seed);
 							ensureCardIsInDeck(reproduction, cardId);
 							reproduction.play();
 
 							return tuple.context.getTurn() == reproduction.getTurn();
 						});
 			} finally {
-				CardCatalogue.getCards().replace(cardId, originalCard);
-				CardCatalogue.getRecords().get(cardId).setDesc(originalCardDesc);
+				cardCatalogue.getCards().replace(cardId, originalCard);
+				cardCatalogue.getRecords().get(cardId).setDesc(originalCardDesc);
 			}
 		}
 	}
@@ -84,7 +85,7 @@ public class ConversionHarness {
 		}
 		for (var player : context.getPlayers()) {
 			for (var i = 0; i < 5; i++) {
-				player.getDeck().addCard(cardId);
+				player.getDeck().addCard(context.getCardCatalogue(), cardId);
 			}
 		}
 	}

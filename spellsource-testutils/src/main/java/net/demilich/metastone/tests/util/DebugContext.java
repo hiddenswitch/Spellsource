@@ -8,11 +8,15 @@ import net.demilich.metastone.game.logic.GameLogic;
 public class DebugContext extends GameContext {
 
 	public DebugContext(Player player1, Player player2, GameLogic logic, DeckFormat deckFormat) {
+		this(player1, player2, logic);
+		setDeckFormat(deckFormat);
+	}
+
+	public DebugContext(Player player1, Player player2, GameLogic logic) {
 		super();
 		setPlayer(0, player1);
 		setPlayer(1, player2);
 		setLogic(logic);
-		setDeckFormat(deckFormat);
 	}
 
 	@Override

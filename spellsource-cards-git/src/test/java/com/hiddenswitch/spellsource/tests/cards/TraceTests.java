@@ -8,7 +8,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import net.demilich.metastone.game.logic.Trace;
@@ -75,7 +74,6 @@ public class TraceTests extends TestBase {
 
 	@BeforeAll
 	public static void before() {
-		CardCatalogue.loadCardsFromPackage();
 	}
 
 	/**
@@ -98,7 +96,7 @@ public class TraceTests extends TestBase {
 	@RepeatedTest(1000)
 	public void testTraceRecordedCorrectlyAndGameIsDeterministic() {
 		assertTimeoutPreemptively(Duration.ofMillis(10000), () -> {
-			GameContext context1 = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
+			GameContext context1 = net.demilich.metastone.tests.util.TestBase.fromTwoRandomDecks(CardCatalogue.classpath().spellsource());
 			context1.play();
 			Trace trace = context1.getTrace().clone();
 			GameContext context2 = trace.replayContext(false, null);
@@ -151,7 +149,7 @@ public class TraceTests extends TestBase {
 	public void testDiagnoseTraces() {
 		Multiset<String> cards = ConcurrentHashMultiset.create();
 		IntStream.range(0, 10000).parallel().forEach(i -> {
-			GameContext context1 = GameContext.fromTwoRandomDecks(DeckFormat.spellsource());
+			GameContext context1 = net.demilich.metastone.tests.util.TestBase.fromTwoRandomDecks(CardCatalogue.classpath().spellsource());
 			context1.play();
 			Trace trace = context1.getTrace().clone();
 			GameContext context2 = trace.replayContext(false, null);

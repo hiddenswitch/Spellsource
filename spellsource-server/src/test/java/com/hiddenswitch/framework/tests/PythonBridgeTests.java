@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -101,7 +100,6 @@ public class PythonBridgeTests {
 
 	@Test
 	public void testSimulateMethod() throws InterruptedException {
-		CardCatalogue.loadCardsFromPackage();
 		var deckLists = Arrays.asList(DECK_1, DECK_2, DECK_3, DECK_4);
 		var n = 1;
 		var latch = new CountDownLatch(1);

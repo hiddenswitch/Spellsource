@@ -11,6 +11,7 @@ import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilterArg;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.tests.util.TestBase;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
@@ -28,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CardValidation {
 	static {
-		CardCatalogue.loadCardsFromPackage();
 	}
 
 	private static final CardParser CARD_PARSER = new CardParser();
@@ -76,7 +76,7 @@ public class CardValidation {
 			}
 
 			// Test glow does not cause crash when evaluated from hand
-			var testContext = GameContext.fromTwoRandomDecks();
+			var testContext = fromTwoRandomDecks();
 			testContext.init();
 			var card = record.getDesc().create();
 			testContext.getLogic().receiveCard(0, card);
@@ -116,7 +116,6 @@ public class CardValidation {
 	}
 
 	public static void validateCardReferences(File cardFile) throws IOException {
-		CardCatalogue.loadCardsFromPackage();
 		var resourceInputStream = new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile));
 
 		try {
@@ -127,7 +126,7 @@ public class CardValidation {
 					if (SpellUtils.getSpecialCards().contains(card)) {
 						return;
 					}
-					CardCatalogue.getCardById(card);
+					CardCatalogue.classpath().getCardById(card);
 				} else if (node.getKey().equals(SpellArg.CARDS) || node.getKey().equals(EntityFilterArg.CARDS)) {
 					if (node.getValue() instanceof String[]) {
 						var cards = (String[]) node.getValue();
@@ -135,7 +134,7 @@ public class CardValidation {
 							if (SpellUtils.getSpecialCards().contains(card)) {
 								continue;
 							}
-							CardCatalogue.getCardById(card);
+							CardCatalogue.classpath().getCardById(card);
 						}
 					}
 				}
@@ -145,5 +144,15 @@ public class CardValidation {
 		} catch (Exception ex) {
 			fail("Card " + cardFile.getAbsolutePath() + " references " + ex.getMessage() + " which cannot be found", ex);
 		}
+	}
+
+	/**
+	 * Creates a new game context with two random decks and random play behaviour.
+	 *
+	 * @return A game context
+	 * @see #play() to actually execute the game.
+	 */
+	public static GameContext fromTwoRandomDecks() {
+		return GameContext.fromDecks(Arrays.asList(TestBase.randomDeck(), TestBase.randomDeck()));
 	}
 }

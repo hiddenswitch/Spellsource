@@ -6,7 +6,6 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.events.GameEvent;
-;
 import net.demilich.metastone.game.events.KillEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;

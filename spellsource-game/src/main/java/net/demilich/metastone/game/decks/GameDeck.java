@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * A deck that contains cards, a name, a hero card, etc. that can be actually used to populate a player's deck in a
  * {@link net.demilich.metastone.game.GameContext}.
  * <p>
- * Create an instance of this class and add cards using {@link #getCards()}'s {@link CardList#addCard(String)} method.
+ * Create an instance of this class and add cards using {@link #getCards()}'s {@link CardList#addCard(CardCatalogue, String)} method.
  * Set the hero class using {@link #setHeroClass(String)}. Set the format using {@link #setFormat(DeckFormat)}. This
  * format should correspond to the one the {@link GameContext#getDeckFormat()} uses.
  */
@@ -45,10 +45,10 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 		this.heroClass = heroClass;
 	}
 
-	public GameDeck(String heroClass1, List<String> cardIds1) {
+	public GameDeck(CardCatalogue cardCatalogue, String heroClass1, List<String> cardIds1) {
 		this.heroClass = heroClass1;
 		for (String cardId : cardIds1) {
-			getCards().addCard(cardId);
+			getCards().addCard(cardCatalogue, cardId);
 		}
 	}
 
@@ -117,9 +117,10 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 		return builder.toString();
 	}
 
-	public Card getHeroCard() {
+	public Card getHeroCard(CardCatalogue cardCatalogue) {
 		if (heroCard == null) {
-			return HeroClass.getHeroCard(getHeroClass());
+			String heroClass1 = getHeroClass();
+			return cardCatalogue.getHeroCard(heroClass1);
 		}
 		return heroCard;
 	}
@@ -132,7 +133,7 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 		if (format == null) {
 			// Retrieve the format that is implied by the cards inside this deck.
 			Set<String> cardSets = getCards().stream().map(Card::getCardSet).collect(Collectors.toSet());
-			return DeckFormat.getSmallestSupersetFormat(cardSets);
+			return CardCatalogue.classpath().getSmallestSupersetFormat(cardSets);
 		}
 
 		return format;

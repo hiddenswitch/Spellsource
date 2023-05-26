@@ -11,11 +11,11 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class DraftContextTest {
 	@Test
 	public void testDraftComplete() throws CardParseException {
-		CardCatalogue.loadCardsFromPackage();
 
 		DraftContext context = new DraftContext()
 				.withBehaviour(new DraftBehaviour() {
@@ -43,5 +43,6 @@ public class DraftContextTest {
 		});
 		assertEquals(context.getPublicState().getSelectedCards().size(), DraftLogic.ROUNDS);
 		assertEquals(context.getPublicState().getStatus(), DraftStatus.COMPLETE);
+		assertNotNull(context.getPublicState().createDeck(context.getCardCatalogue().classpath()));
 	}
 }

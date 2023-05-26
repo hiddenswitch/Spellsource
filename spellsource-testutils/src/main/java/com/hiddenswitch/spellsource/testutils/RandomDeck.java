@@ -1,21 +1,25 @@
-package net.demilich.metastone.game.decks;
+package com.hiddenswitch.spellsource.testutils;
 
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.decks.validation.DeckValidator;
 import net.demilich.metastone.game.decks.validation.DefaultDeckValidator;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.XORShiftRandom;
+import net.demilich.metastone.tests.util.TestBase;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A deck that was randomly created.
  */
-final class RandomDeck extends GameDeck {
+public final class RandomDeck extends GameDeck {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -24,7 +28,7 @@ final class RandomDeck extends GameDeck {
 	 * @param heroClass  The hero class
 	 * @param deckFormat The format
 	 */
-	RandomDeck(String heroClass, DeckFormat deckFormat) {
+	public RandomDeck(String heroClass, DeckFormat deckFormat) {
 		this(ThreadLocalRandom.current().nextLong(), heroClass, deckFormat);
 	}
 
@@ -33,16 +37,43 @@ final class RandomDeck extends GameDeck {
 		populate(seed, deckFormat);
 	}
 
+	/**
+	 * Creates a random deck with the given hero class and deck format.
+	 * <p>
+	 * The random deck creation function tries to make a balance of 50% class cards and 50% neutrals.
+	 *
+	 * @param heroClass  A hero class that is a base class
+	 * @param deckFormat A deck format, like {@link CardCatalogue#spellsource()}.
+	 * @return
+	 */
+	public static @NotNull
+	GameDeck randomDeck(@NotNull String heroClass, @NotNull DeckFormat deckFormat) {
+		return new RandomDeck(heroClass, deckFormat);
+	}
+
+	public static @NotNull
+	GameDeck randomDeck(@NotNull DeckFormat deckFormat) {
+		return new RandomDeck(TestBase.randomHeroCard(deckFormat), deckFormat);
+	}
+
+	public static @NotNull GameDeck randomDeck(long seed) {
+		var random = new XORShiftRandom(seed);
+		DeckFormat deckFormat = CardCatalogue.classpath().spellsource();
+		var baseClasses = CardCatalogue.classpath().getBaseClasses(deckFormat);
+		var heroClass = baseClasses.get(random.nextInt(baseClasses.size()));
+		return new RandomDeck(random.getState(), heroClass, CardCatalogue.classpath().spellsource());
+	}
+
 	private void populate(long seed, DeckFormat deckFormat) {
 		var random = new XORShiftRandom(seed);
 		DeckValidator deckValidator = new DefaultDeckValidator();
-		CardList classCards = CardCatalogue.query(deckFormat, card -> card.isCollectible()
+		CardList classCards = CardCatalogue.classpath().query(deckFormat, card -> card.isCollectible()
 				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO_POWER)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.CLASS)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.FORMAT)
 				&& card.hasHeroClass(getHeroClass()));
-		CardList neutralCards = CardCatalogue.query(deckFormat, card -> card.isCollectible()
+		CardList neutralCards = CardCatalogue.classpath().query(deckFormat, card -> card.isCollectible()
 				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO_POWER)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.CLASS)

@@ -20,7 +20,7 @@ public final class UngoroPackRarityWeightedCardSource extends CatalogueSource {
 
 	@Override
 	protected CardList match(GameContext context, Entity source, Player player) {
-		return CardCatalogue
+		return context.getCardCatalogue()
 				.query(context.getDeckFormat()).stream()
 				.filter(c -> c.getCardSet() == "JOURNEY_TO_UNGORO")
 				.collect(Collectors.toCollection(CardArrayList::new));

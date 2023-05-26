@@ -3,13 +3,6 @@ package net.demilich.metastone.game.entities.heroes;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.decks.DeckFormat;
-import org.apache.commons.lang3.RandomUtils;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * All the hero classes, including special hero class specifiers, in Spellsource.
@@ -44,63 +37,6 @@ public class HeroClass {
 	public static final String CANDY = "CANDY";
 	public static final String PEACH = "PEACH";
 
-
-	/**
-	 * Retrieves the hero card for a specified hero class.
-	 *
-	 * @param heroClass The hero class
-	 * @return A hero card
-	 */
-	@NotNull
-	public static Card getHeroCard(String heroClass) {
-		return CardCatalogue.getHeroCard(heroClass);
-	}
-
-	/**
-	 * Retrieves the class card for a specified hero class.
-	 *
-	 * @param heroClass The hero class
-	 * @return A class card
-	 */
-	public static Card getClassCard(String heroClass) {
-		return CardCatalogue.getClassCards(DeckFormat.all()).stream()
-				.filter(card -> card.getHeroClass().equalsIgnoreCase(heroClass))
-				.findFirst().orElse(null);
-	}
-
-
-	/**
-	 * Gets all the classes (a list of strings) in the card catalogue.
-	 *
-	 * @param deckFormat
-	 * @return
-	 */
-	@NotNull
-	public static List<String> getBaseClasses(DeckFormat deckFormat) {
-		return CardCatalogue.getBaseClasses(deckFormat);
-	}
-
-	/**
-	 * Gets a list of cards that define a class (a champion, a color and additional description or key information).
-	 *
-	 * @param deckFormat
-	 * @return
-	 */
-	@NotNull
-	public static CardList getClassCards(DeckFormat deckFormat) {
-		return CardCatalogue.getClassCards(deckFormat);
-	}
-
-	/**
-	 * Retrieves a random hero in the specified {@code deckFormat}
-	 *
-	 * @param deckFormat
-	 * @return
-	 */
-	public static String random(DeckFormat deckFormat) {
-		List<String> baseHeroes = getBaseClasses(deckFormat);
-		return baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
-	}
 
 	/**
 	 * Checks if the specified card has the specified hero class, respecting a {@link HeroClass#SELF} and a {@link

@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.draft;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import net.demilich.metastone.game.cards.CardCatalogue;
 
 import java.util.function.Consumer;
 
@@ -25,6 +26,7 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 	private PublicDraftState publicState = new PublicDraftState();
 	private PrivateDraftState privateState = new PrivateDraftState();
 	private DraftBehaviour behaviour = new NullDraftBehaviour();
+	private CardCatalogue cardCatalogue = CardCatalogue.classpath();
 	private Handler<AsyncResult<DraftContext>> handleDone;
 
 	/**
@@ -61,6 +63,10 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 				done.handle(Future.succeededFuture(this));
 				break;
 		}
+	}
+
+	public CardCatalogue getCardCatalogue() {
+		return cardCatalogue;
 	}
 
 	protected void selectHero() {

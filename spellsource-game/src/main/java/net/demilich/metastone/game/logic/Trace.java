@@ -3,13 +3,13 @@ package net.demilich.metastone.game.logic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -117,8 +117,6 @@ public class Trace implements Serializable, Cloneable {
 	@JsonIgnore
 	public GameContext replayContext(boolean skipLastAction, @Nullable Consumer<GameContext> beforeRequestActionHandler) {
 		AtomicInteger nextAction = new AtomicInteger();
-		int originalCatalogueVersion = CardCatalogue.getVersion();
-		CardCatalogue.setVersion(getVersion());
 		GameContext gameContext = new GameContext();
 		restoreStartingStateTo(gameContext);
 
@@ -138,17 +136,16 @@ public class Trace implements Serializable, Cloneable {
 		} catch (CancellationException ex) {
 			// DO NOT REMOVE, resume throws cancellation on purpose.
 		}
-		CardCatalogue.setVersion(originalCatalogueVersion);
 		return gameContext;
 	}
 
 	public void restoreStartingStateTo(GameContext context) {
 		if (heroClasses != null && deckCardIds != null) {
-			context.setPlayer(0, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(0), deckCardIds.get(0).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 0"));
-			context.setPlayer(1, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(1), deckCardIds.get(1).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 1"));
+			context.setPlayer(0, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(0), deckCardIds.get(0).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 0", CardCatalogue.classpath()));
+			context.setPlayer(1, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(1), deckCardIds.get(1).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 1", CardCatalogue.classpath()));
 		} else if (heroClasses != null) {
-			context.setPlayer(0, new Player(heroClasses.get(0)));
-			context.setPlayer(1, new Player(heroClasses.get(1)));
+			context.setPlayer(0, new Player(heroClasses.get(0), context.getCardCatalogue()));
+			context.setPlayer(1, new Player(heroClasses.get(1), context.getCardCatalogue()));
 		} else {
 			context.setPlayer(0, new Player());
 			context.setPlayer(1, new Player());
@@ -164,7 +161,7 @@ public class Trace implements Serializable, Cloneable {
 		}
 		if (deckFormatName != null) {
 			if (deckFormatSets == null || deckFormatSets.size() == 0) {
-				deckFormat = DeckFormat.getFormat(deckFormatName);
+				deckFormat = context.getCardCatalogue().getFormat(deckFormatName);
 			} else {
 				deckFormat.setName(deckFormatName);
 			}

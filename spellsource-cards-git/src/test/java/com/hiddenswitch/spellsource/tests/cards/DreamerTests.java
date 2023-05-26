@@ -15,10 +15,10 @@ public class DreamerTests extends TestBase {
 	@Test
 	public void testCacklingSpinster() {
 		runGym((context, player, opponent) -> {
-			var shouldBeInDeck1 = receiveCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
-			var shouldBeInDeck2 = receiveCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
-			var shouldBeInHand1 = shuffleToDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
-			var shouldBeInHand2 = shuffleToDeck(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			var shouldBeInDeck1 = receiveCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
+			var shouldBeInDeck2 = receiveCard(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
+			var shouldBeInHand1 = shuffleToDeck(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
+			var shouldBeInHand2 = shuffleToDeck(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			playCard(context, player, "minion_cackling_spinster");
 			assertEquals(shouldBeInHand1, player.getHand().get(0));
 			assertEquals(shouldBeInDeck1, player.getDeck().get(0));

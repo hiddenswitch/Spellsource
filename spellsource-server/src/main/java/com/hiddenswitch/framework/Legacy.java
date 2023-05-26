@@ -40,7 +40,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
@@ -99,7 +98,7 @@ public class Legacy {
 
 					withConnection(connection -> new CardsDao(Environment.jooqAkaDaoConfiguration(), connection).findAll())
 							.map(cards -> cards.stream().map(card -> card.getCardScript().mapTo(CardDesc.class))
-									.filter(cd -> DeckFormat.spellsource().isInFormat(cd.getSet())
+									.filter(cd -> CardCatalogue.classpath().spellsource().isInFormat(cd.getSet())
 											&& cd.getType() != CardType.GROUP)
 									.map(card -> {
 										var entity = ModelConversions.getEntity(workingContext, card.create(), 0);
@@ -667,21 +666,22 @@ public class Legacy {
 	}
 
 	private static ValidationReportOrBuilder validateDeck(List<String> cardIds, String heroClass, String deckFormat) {
-		var deck = new GameDeck(heroClass, cardIds);
+		var deck = new GameDeck(CardCatalogue.classpath(), heroClass, cardIds);
 		var validationReport = ValidationReport.newBuilder();
 		validationReport.setValid(true);
 
+		// todo: needs valid format
 		var context = new GameContext();
-		var player1 = new Player(deck);
+		var player1 = new Player(deck, context.getCardCatalogue());
 		context.setPlayer1(player1);
-		context.setPlayer2(new Player(HeroClass.TEST));
-		context.setDeckFormat(DeckFormat.getFormat(deckFormat));
+		context.setPlayer2(new Player(HeroClass.TEST, context.getCardCatalogue()));
+		context.setDeckFormat(context.getCardCatalogue().getFormat(deckFormat));
 		if (context.getDeckFormat() == null) {
 			validationReport.setValid(false);
 			validationReport.addErrors("Invalid Format");
 			return validationReport;
 		}
-		var formatCard = CardCatalogue.getFormatCard(context.getDeckFormat().getName());
+		var formatCard = context.getCardCatalogue().getFormatCard(context.getDeckFormat().getName());
 		if (formatCard == null) {
 			validationReport.setValid(true);
 			return validationReport;
@@ -745,7 +745,6 @@ public class Legacy {
 	}
 
 	private static List<DeckCreateRequest> getPremadeDecksPrivate(Vertx ignored) {
-		CardCatalogue.loadCardsFromPackage();
 		List<String> deckLists;
 		try (ScanResult scanResult = new ClassGraph()
 				.acceptPaths("spellsource/decklists/current").scan()) {

@@ -21,7 +21,7 @@ public class WraithTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			var cardCount = GameLogic.MAX_HAND_CARDS - 1;
 			for (var i = 0; i < cardCount; i++) {
-				receiveCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+				receiveCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			}
 			Card selection = player.getHand().get(0);
 			overrideDiscover(context, player, discoverActions -> {
@@ -135,7 +135,7 @@ public class WraithTests extends TestBase {
 		}));
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			Minion target = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion target = playMinionCard(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			context.endTurn();
 			playMinionCard(context, player, "minion_dark_artist", target);
 			assertTrue(target.isDestroyed());
@@ -163,7 +163,7 @@ public class WraithTests extends TestBase {
 	public void testAutoCannibalism() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			playCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			playCard(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			context.endTurn();
 			Card autoCannibalism = receiveCard(context, player, "spell_auto_cannibalism");
 			assertTrue(context.getLogic().canPlayCard(player, autoCannibalism));

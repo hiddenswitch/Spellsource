@@ -22,8 +22,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-;
-
 /**
  * This is the base class of all effects that react to events in the game.
  * <p>

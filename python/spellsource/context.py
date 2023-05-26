@@ -105,8 +105,7 @@ class Context(contextlib.AbstractContextManager):
         self.CardCatalogue = self.cards.CardCatalogue
         self.PythonBridge = self.framework.PythonBridge
         self.ArrayList = self.util.ArrayList
-
-        self.CardCatalogue.loadCardsFromPackage()
+        self.CardCatalogue.classpath().loadCardsFromPackage()
         self.status = Context.STATUS_READY
 
     def root_namespace(self) -> JVMView:

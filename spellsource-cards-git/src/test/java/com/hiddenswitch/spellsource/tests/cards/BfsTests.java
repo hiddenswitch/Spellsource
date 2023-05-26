@@ -34,12 +34,11 @@ public class BfsTests {
 
 	@BeforeAll
 	public static void loadCards() {
-		CardCatalogue.loadCardsFromPackage();
 	}
 
 	@Test
 	public void testAccurateSummoningBattlecry() {
-		Card card = CardCatalogue.getCardById("minion_test_opener_summon");
+		Card card = CardCatalogue.classpath().getCardById("minion_test_opener_summon");
 		Stream.Builder<HasEntrySet.BfsNode<Enum, Object>> bfs = card.getDesc().bfs();
 
 		boolean shouldMatch = bfs.build()
@@ -52,7 +51,7 @@ public class BfsTests {
 
 	@Test
 	public void testAccurateBfs() {
-		Card card = CardCatalogue.getCardById("minion_test_carddesc");
+		Card card = CardCatalogue.classpath().getCardById("minion_test_carddesc");
 
 		List<HasEntrySet.BfsNode<Enum, Object>> nodes = card.getDesc().bfs().build().collect(Collectors.toList());
 

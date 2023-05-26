@@ -3,30 +3,20 @@ package com.hiddenswitch.framework.tests;
 import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
 import com.hiddenswitch.framework.Client;
-import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Legacy;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import com.hiddenswitch.spellsource.rpc.Spellsource.*;
-import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
-import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
-import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
-import com.hiddenswitch.spellsource.rpc.Spellsource.DamageTypeMessage.DamageType;
-import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
-import com.hiddenswitch.spellsource.rpc.Spellsource.GameEventTypeMessage.GameEventType;
-import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.ext.web.client.WebClient;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.tests.util.TestBase;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -89,7 +79,7 @@ public class DecksTests extends FrameworkTestBase {
 					return service.decksPut(DecksPutRequest.newBuilder()
 							.setName("Test Deck 2")
 							.setHeroClass(HeroClass.TEST)
-							.setFormat(DeckFormat.spellsource().getName()).build())
+							.setFormat(CardCatalogue.classpath().spellsource().getName()).build())
 							.compose(decksPutResponse -> service.decksUpdate(DecksUpdateRequest.newBuilder()
 									.setDeckId(decksPutResponse.getCollection().getId())
 									.setUpdateCommand(DecksUpdateCommand.newBuilder()
@@ -208,7 +198,7 @@ public class DecksTests extends FrameworkTestBase {
 	@NotNull
 	public static Future<DecksPutResponse> createRandomDeck(Client client) {
 		var service = client.legacy();
-		var randomDeck = Deck.randomDeck();
+		var randomDeck = TestBase.randomDeck();
 		return service.decksPut(DecksPutRequest.newBuilder()
 				.setName("Test Deck")
 				.setFormat(randomDeck.getFormat().getName())

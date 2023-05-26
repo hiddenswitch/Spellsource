@@ -1289,7 +1289,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			hero.setHeroClass(previousHero.getHeroClass());
 		}
 
-		var heroPower = CardCatalogue.getCardById(hero.getSourceCard().getDesc().getHeroPower());
+		var heroPower = context.getCardCatalogue().getCardById(hero.getSourceCard().getDesc().getHeroPower());
 		// Set hero power ID before events trigger to prevent issues
 		heroPower.setId(generateId());
 		heroPower.setOwner(hero.getOwner());

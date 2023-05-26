@@ -22,5 +22,5 @@ public enum EntityFilterArg {
 	TARGET_SELECTION,
 	AND_CONDITION,
 	SPELL,
-	ENTITY_TYPE;
+	ENTITY_TYPE
 }

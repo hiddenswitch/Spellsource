@@ -21,7 +21,7 @@ public class TargetingTests extends TestBase {
 	@Test
 	public void testTaunt() {
 		runGym((context, player, opponent) -> {
-			Card tauntCard = CardCatalogue.getCardById("minion_test_taunts");
+			Card tauntCard = context.getCardCatalogue().getCardById("minion_test_taunts");
 			context.getLogic().receiveCard(opponent.getId(), tauntCard);
 
 			Card attackerCard = receive(context, player, 1, 1, 0);

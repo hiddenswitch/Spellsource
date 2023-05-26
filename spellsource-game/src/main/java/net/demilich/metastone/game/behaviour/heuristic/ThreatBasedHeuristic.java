@@ -14,19 +14,11 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.cards.Attribute;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A heuristic that considers a linear combination of game state entities to determine the strength of a game state.
  */
 public class ThreatBasedHeuristic implements Heuristic, Serializable {
-
-	private static List<String> HARD_REMOVALS;
-
-	static {
-		HARD_REMOVALS = new ArrayList<>(CardCatalogue.getHardRemovalCardIds());
-	}
 
 	private static ThreatLevel calcuateThreatLevel(GameContext context, int playerId) {
 		int damageOnBoard = 0;
@@ -65,7 +57,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		return heroDamage;
 	}
 
-	private static boolean isHardRemoval(Card card) {
+	private static boolean isHardRemoval(CardCatalogue cardCatalogue, Card card) {
 		boolean isPoisonous = card.hasAttribute(Attribute.POISONOUS)
 				|| card.hasAttribute(Attribute.AURA_POISONOUS);
 		boolean destroySpell = false;
@@ -80,7 +72,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 			destroySpell |= DestroySpell.class.isAssignableFrom(spell.getDescClass())
 					|| spell.subSpells().stream().anyMatch(sd -> DestroySpell.class.isAssignableFrom(sd.getDescClass()));
 		}
-		return HARD_REMOVALS.contains(card.getCardId())
+		return cardCatalogue.getHardRemovalCardIds().contains(card.getCardId())
 				|| isPoisonous
 				|| destroySpell;
 	}
@@ -163,7 +155,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		score += player.getHero().getEffectiveHp() * weights.get(WeightedFeature.OWN_HP_FACTOR);
 		score += opponent.getHero().getEffectiveHp() * weights.get(WeightedFeature.OPPONENT_HP_FACTOR);
 		for (Card card : player.getHand()) {
-			if (isHardRemoval(card)) {
+			if (isHardRemoval(context.getCardCatalogue(), card)) {
 				score += weights.get(WeightedFeature.HARD_REMOVAL_VALUE);
 			}
 

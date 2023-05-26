@@ -52,9 +52,9 @@ public class PublicDraftState implements Serializable {
 	 *
 	 * @return A {@link GameDeck} instance (usable by a {@link net.demilich.metastone.game.GameContext}).
 	 */
-	public Deck createDeck() {
+	public Deck createDeck(CardCatalogue cardCatalogue) {
 		GameDeck deck = new GameDeck(this.getHeroClass());
-		this.getSelectedCards().forEach(c -> deck.getCards().addCard(CardCatalogue.getCardById(c)));
+		this.getSelectedCards().forEach(c -> deck.getCards().addCard(cardCatalogue.getCardById(c)));
 		return deck;
 	}
 

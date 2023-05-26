@@ -20,6 +20,6 @@ public class FormatCatalogueSource extends CardSource implements HasCardCreation
 
 	@Override
 	protected CardList match(GameContext context, Entity source, Player player) {
-		return CardCatalogue.query(DeckFormat.getFormat(getDesc().getString(CardSourceArg.FORMAT)));
+		return context.getCardCatalogue().query(context.getCardCatalogue().getFormat(getDesc().getString(CardSourceArg.FORMAT)));
 	}
 }

@@ -34,7 +34,6 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static net.demilich.metastone.tests.util.TestBase.receive;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doAnswer;
@@ -230,7 +229,7 @@ public class AdvancedMechanicTests extends TestBase {
 	@Test
 	public void testCardFilter() {
 		runGym((context, player, opponent) -> {
-			Card hasTaunt = CardCatalogue.getCardById("minion_test_taunts");
+			Card hasTaunt = context.getCardCatalogue().getCardById("minion_test_taunts");
 			EntityFilterDesc desc = new EntityFilterDesc(CardFilter.class);
 			desc.put(EntityFilterArg.CARD_TYPE, CardType.MINION);
 			desc.put(EntityFilterArg.ATTRIBUTE, Attribute.TAUNT);
@@ -261,7 +260,7 @@ public class AdvancedMechanicTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_shuffle_to_deck");
 			assertEquals(player.getDeck().size(), 9);
-			String[] cards = (String[]) CardCatalogue.getCardById("spell_shuffle_to_deck").getDesc().getSpell().get(SpellArg.CARDS);
+			String[] cards = (String[]) context.getCardCatalogue().getCardById("spell_shuffle_to_deck").getDesc().getSpell().get(SpellArg.CARDS);
 
 			for (int i = 0; i < cards.length; i++) {
 				if (!player.getDeck().get(i).getCardId().equals(cards[i])) {
@@ -393,7 +392,7 @@ public class AdvancedMechanicTests extends TestBase {
 			for (Card card : player.getHand().toList()) {
 				context.getLogic().removeCard(card);
 			}
-			Card wrath = CardCatalogue.getCardById("spell_test_choose_one");
+			Card wrath = context.getCardCatalogue().getCardById("spell_test_choose_one");
 			context.getLogic().receiveCard(player.getId(), wrath);
 			player.setMana(wrath.getBaseManaCost() + 1);
 			List<GameAction> validActions = context.getLogic().getValidActions(player.getId());
@@ -401,7 +400,7 @@ public class AdvancedMechanicTests extends TestBase {
 			// player should have 3 valid actions: two from 'Choose One' card and 1 'End Turn'
 			assertEquals(validActions.size(), 3);
 
-			GameAction playWrath = ((HasChooseOneActions) wrath).playOptions()[0];
+			GameAction playWrath = ((HasChooseOneActions) wrath).playOptions(context)[0];
 			playWrath.setTarget(getSingleMinion(opponent.getMinions()));
 			context.performAction(player.getId(), playWrath);
 
@@ -416,7 +415,7 @@ public class AdvancedMechanicTests extends TestBase {
 	public void testCopyCards() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 30; i++) {
-				shuffleToDeck(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+				shuffleToDeck(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			}
 
 			int cardsInHand = player.getHand().getCount();
@@ -597,14 +596,14 @@ public class AdvancedMechanicTests extends TestBase {
 			opponent.setMana(10);
 
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp());
-			Card damageSpell = CardCatalogue.getCardById("spell_test_spellpower");
+			Card damageSpell = context.getCardCatalogue().getCardById("spell_test_spellpower");
 			int expectedDamage = 5;
 			context.getLogic().receiveCard(player.getId(), damageSpell);
 
 			context.performAction(player.getId(), damageSpell.play());
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - expectedDamage);
 
-			Card spellPowerCard = CardCatalogue.getCardById("minion_test_spellpower");
+			Card spellPowerCard = context.getCardCatalogue().getCardById("minion_test_spellpower");
 			context.getLogic().receiveCard(player.getId(), spellPowerCard);
 			context.performAction(player.getId(), spellPowerCard.play());
 			damageSpell = damageSpell.getCopy();

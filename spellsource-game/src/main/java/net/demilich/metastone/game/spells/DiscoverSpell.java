@@ -330,8 +330,7 @@ public class DiscoverSpell extends Spell {
 		if (ReceiveCardSpell.class.isAssignableFrom(chosenSpellTemplate.getDescClass())) {
 			if (Objects.equals(otherSpellDesc.getDescClass(), NullSpell.class)
 					|| AbstractRemoveCardSpell.class.isAssignableFrom(otherSpellDesc.getDescClass())) {
-				;
-				otherSpell = SpellDesc.join(null, SpellUtils.getBonusesFromAura(context, player.getId(), DiscoverNotSelectedSpellBonusAura.class, source, target));
+                otherSpell = SpellDesc.join(null, SpellUtils.getBonusesFromAura(context, player.getId(), DiscoverNotSelectedSpellBonusAura.class, source, target));
 			} else {
 				otherSpell = SpellDesc.join(otherSpellDesc, ReceiveCardSpell.create());
 			}

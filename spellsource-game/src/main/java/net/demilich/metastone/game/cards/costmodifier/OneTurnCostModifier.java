@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.cards.costmodifier;
 
-;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 
 /**

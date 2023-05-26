@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.tests.cards;
 
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -103,7 +104,7 @@ public class TimeweaverTests extends TestBase {
 			int blueIndex = drewBlack ? 0 : 1;
 			assertEquals(player.getDeck().get(blackIndex).getCardId(), "minion_black_test");
 			assertEquals(player.getDeck().get(blueIndex).getCardId(), "minion_blue_test");
-		}, new GameDeck(HeroClass.ANY, Arrays.asList("minion_black_test", "minion_blue_test")), new GameDeck(HeroClass.ANY, Arrays.asList("minion_black_test", "minion_blue_test")));
+		}, new GameDeck(CardCatalogue.classpath(), HeroClass.ANY, Arrays.asList("minion_black_test", "minion_blue_test")), new GameDeck(CardCatalogue.classpath(), HeroClass.ANY, Arrays.asList("minion_black_test", "minion_blue_test")));
 	}
 
 	@Test

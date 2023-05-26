@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.spells.aura;
 
 import com.google.common.collect.ObjectArrays;
-;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;

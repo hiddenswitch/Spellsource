@@ -3,7 +3,6 @@ package net.demilich.metastone.game.spells.trigger;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameEvent;
-;
 import net.demilich.metastone.game.events.WeaponEquippedEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;

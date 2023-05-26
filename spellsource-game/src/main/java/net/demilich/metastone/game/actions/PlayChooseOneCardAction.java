@@ -33,7 +33,7 @@ public class PlayChooseOneCardAction extends PlayCardAction implements HasChoice
 
 	@Override
 	public boolean canBeExecutedOn(GameContext context, Player player, Entity entity) {
-		return CardCatalogue.getCardById(chosenCard).canBeCastOn(context, player, entity);
+		return context.getCardCatalogue().getCardById(chosenCard).canBeCastOn(context, player, entity);
 	}
 
 	@Override

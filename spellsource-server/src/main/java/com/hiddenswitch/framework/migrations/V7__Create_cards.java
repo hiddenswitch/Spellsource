@@ -12,7 +12,6 @@ import org.flywaydb.core.api.migration.Context;
 public class V7__Create_cards extends BaseJavaMigration {
 
 	static {
-		CardCatalogue.loadCardsFromPackage();
 	}
 
 	@Override

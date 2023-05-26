@@ -17,13 +17,12 @@ import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.Deck;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -85,7 +84,7 @@ public class GameTests extends FrameworkTestBase {
 							assertNotNull(gameDeck.getDeckId());
 							assertNotNull(gameDeck.getFormat());
 							assertNotNull(gameDeck.getHeroClass());
-							assertNotNull(gameDeck.getHeroCard());
+							assertNotNull(gameDeck.getHeroCard(CardCatalogue.classpath()));
 
 							// test creating the attributes
 							var playerAttributes = new AttributeMap();

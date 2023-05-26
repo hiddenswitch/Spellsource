@@ -46,7 +46,7 @@ public class ClusteredGames extends AbstractVerticle {
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
 		// TODO: deal with this elsewhere
-		CardCatalogue.loadCardsFromPackage();
+		CardCatalogue.classpath().loadCardsFromPackage();
 		CodecRegistration.register(ServerToClientMessage.getDefaultInstance())
 				.andRegister(ClientToServerMessage.getDefaultInstance());
 		var eb = Vertx.currentContext().owner().eventBus();

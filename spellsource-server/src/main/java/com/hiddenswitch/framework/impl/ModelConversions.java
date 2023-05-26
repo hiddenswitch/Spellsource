@@ -24,7 +24,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.HasCard;
@@ -112,12 +111,12 @@ public class ModelConversions {
 		try (var s1 = tracer.activateSpan(span)) {
 			// Set up the attributes
 			var cardId = cardRecord.getCardId();
-			if (!CardCatalogue.getCards().containsKey(cardId.toLowerCase())) {
+			if (!CardCatalogue.classpath().getCards().containsKey(cardId.toLowerCase())) {
 				Tracing.error(new NullPointerException(cardId), span, true);
 				return null;
 			}
 
-			var cardById = CardCatalogue.getCardById(cardId);
+			var cardById = CardCatalogue.classpath().getCardById(cardId);
 			var desc = cardById.getDesc().clone();
 
 			if (desc.getAttributes() == null) {
@@ -761,7 +760,7 @@ public class ModelConversions {
 		switch (card.getCardType()) {
 			case HERO:
 				// Retrieve the weapon attack
-				var weapon = card.getWeapon();
+				var weapon = card.getWeapon(workingContext);
 				if (weapon != null) {
 					entity.setAttack(Int32Value.of(weapon.getBaseDamage()));
 				}
@@ -886,7 +885,7 @@ public class ModelConversions {
 						.setId(cr.getId())
 						.setDeckId(deckId), userId, deckId)).create())
 				.collect(Collectors.toCollection(CardArrayList::new)));
-		deck.setFormat(DeckFormat.getFormat(deckCollection.getCollection().getFormat()));
+		deck.setFormat(CardCatalogue.classpath().getFormat(deckCollection.getCollection().getFormat()));
 		deck.setHeroClass(deckCollection.getCollection().getHeroClass());
 		deck.setName(deckCollection.getCollection().getName());
 		return deck;

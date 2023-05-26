@@ -5,7 +5,6 @@ import net.demilich.metastone.game.entities.Entity;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import net.demilich.metastone.game.events.AfterSpellCastedEvent;
 import net.demilich.metastone.game.events.GameEvent;
-;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 

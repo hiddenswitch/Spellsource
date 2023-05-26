@@ -136,8 +136,8 @@ public class VampireLordTests extends TestBase {
 	@Test
 	public void testCalamityBeckonsSpell() {
 		runGym((context, player, opponent) -> {
-			shuffleToDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
-			shuffleToDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			shuffleToDeck(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
+			shuffleToDeck(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			shuffleToDeck(context, player, "spell_lunstone");
 			playCard(context, player, "spell_calamity_beckons");
 			assertEquals(2, player.getMinions().size(), "summoned both destroyed things");
@@ -149,7 +149,7 @@ public class VampireLordTests extends TestBase {
 	public void testSeekerAshi() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_seeker_ashi");
-			var card = shuffleToDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			var card = shuffleToDeck(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			player.getHero().setAttack(1);
 			attack(context, player, player.getHero(), opponent.getHero());
 			assertEquals(Zones.HAND, card.getZone(), "drawn");
@@ -157,7 +157,7 @@ public class VampireLordTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_seeker_ashi");
-			var card = shuffleToDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			var card = shuffleToDeck(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			card.getAttributes().put(Attribute.BASE_MANA_COST, 2);
 			player.getHero().setAttack(1);
 			attack(context, player, player.getHero(), opponent.getHero());
@@ -198,7 +198,7 @@ public class VampireLordTests extends TestBase {
 			}
 
 			for (var i = 0; i < 4; i++) {
-				putOnTopOfDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+				putOnTopOfDeck(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			}
 
 			playCard(context, player, "spell_gravelords_gambit");
@@ -209,8 +209,8 @@ public class VampireLordTests extends TestBase {
 	@Test
 	public void testSoulscream() {
 		runGym((context, player, opponent) -> {
-			Card drawn = putOnTopOfDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
-			putOnTopOfDeck(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Card drawn = putOnTopOfDeck(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
+			putOnTopOfDeck(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			Minion target = playMinionCard(context, player, "minion_test_deathrattle");
 			destroy(context, target);
 			assertEquals(Zones.GRAVEYARD, target.getZone());
@@ -294,22 +294,22 @@ public class VampireLordTests extends TestBase {
 	@Test
 	public void testUnendingNightmare() {
 		runGym((context, player, opponent) -> {
-			Minion target = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion target = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			playCard(context, player, "spell_unending_nightmare", target);
 			context.endTurn();
 			assertEquals(opponent.getId(), context.getActivePlayerId(), "should be opponent's turn");
 			assertTrue(target.isDestroyed(), "should be destroyed");
 			assertEquals(1, player.getMinions().size(), "should have summoned replacement");
 			target = player.getMinions().get(0);
-			assertEquals(CardCatalogue.getOneOneNeutralMinionCardId(), target.getSourceCard().getCardId(), "should have resummoned");
-			assertEquals(1L, player.getGraveyard().stream().filter(c -> c.getEntityType() == EntityType.MINION && c.getSourceCard().getCardId().equals(CardCatalogue.getOneOneNeutralMinionCardId())).count(), "should only have been destroyed once so far");
+			assertEquals(context.getCardCatalogue().getOneOneNeutralMinionCardId(), target.getSourceCard().getCardId(), "should have resummoned");
+			assertEquals(1L, player.getGraveyard().stream().filter(c -> c.getEntityType() == EntityType.MINION && c.getSourceCard().getCardId().equals(context.getCardCatalogue().getOneOneNeutralMinionCardId())).count(), "should only have been destroyed once so far");
 			context.endTurn();
 			assertEquals(player.getId(), context.getActivePlayerId(), "should be player's turn");
 			context.endTurn();
 			target = player.getMinions().get(0);
-			assertEquals(2L, player.getGraveyard().stream().filter(c -> c.getEntityType() == EntityType.MINION && c.getSourceCard().getCardId().equals(CardCatalogue.getOneOneNeutralMinionCardId())).count(), "should be two destroyed minions now");
+			assertEquals(2L, player.getGraveyard().stream().filter(c -> c.getEntityType() == EntityType.MINION && c.getSourceCard().getCardId().equals(context.getCardCatalogue().getOneOneNeutralMinionCardId())).count(), "should be two destroyed minions now");
 			assertEquals(1, player.getMinions().size(), "should still just be one unending nightmare minion");
-			assertEquals(CardCatalogue.getOneOneNeutralMinionCardId(), target.getSourceCard().getCardId(), "should have resummoned");
+			assertEquals(context.getCardCatalogue().getOneOneNeutralMinionCardId(), target.getSourceCard().getCardId(), "should have resummoned");
 			assertEquals(opponent.getId(), context.getActivePlayerId(), "should be opponent's turn");
 		});
 	}
@@ -361,7 +361,7 @@ public class VampireLordTests extends TestBase {
 	@Test
 	public void testYaganLifetaker() {
 		runGym((context, player, opponent) -> {
-			Minion otherTarget = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion otherTarget = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			int heroHp = player.getHero().getHp();
 			Minion lifetaker = playMinionCard(context, player, "minion_yagan_lifetaker");
 			assertEquals(player.getHero().getHp(), heroHp / 2);
@@ -397,7 +397,7 @@ public class VampireLordTests extends TestBase {
 	@Test
 	public void testRendingCurseEternalSteedInteraction() {
 		runGym((context, player, opponent) -> {
-			Minion target = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion target = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			playMinionCard(context, player, "minion_eternal_steed");
 			playCard(context, player, "spell_rending_curse", target);
 			destroy(context, target);
@@ -439,7 +439,7 @@ public class VampireLordTests extends TestBase {
 			assertEquals(player.getHero().getHp(), hp - 2);
 			// Aura should not "double"
 			playCard(context, player, "weapon_test_aura");
-			Minion test = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion test = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			assertEquals(test.getAttack(), test.getBaseAttack() + 1);
 			// Trigger
 			playCard(context, player, "weapon_test_trigger");
@@ -452,9 +452,9 @@ public class VampireLordTests extends TestBase {
 	@Test
 	public void testSuddenConversion() {
 		runGym((context, player, opponent) -> {
-			Minion target1 = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
-			Minion target2 = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
-			Minion target3 = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion target1 = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
+			Minion target2 = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
+			Minion target3 = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			playCard(context, player, "spell_sudden_conversion", target2);
 			assertEquals(target2.getHp(), target1.getBaseHp() + target3.getBaseHp() + target2.getBaseHp());
 			assertTrue(target1.isDestroyed());
@@ -467,11 +467,11 @@ public class VampireLordTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_tiramashi");
 			context.endTurn();
-			Minion target = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion target = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			context.endTurn();
 			playCard(context, player, "spell_test_drain", target);
 			assertEquals(player.getHand().size(), 1);
-			assertEquals(player.getHand().get(0).getCardId(), CardCatalogue.getOneOneNeutralMinionCardId());
+			assertEquals(player.getHand().get(0).getCardId(), context.getCardCatalogue().getOneOneNeutralMinionCardId());
 		});
 	}
 
@@ -479,11 +479,11 @@ public class VampireLordTests extends TestBase {
 	public void testFinalFeast() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 5; i++) {
-				playCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+				playCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			}
 			context.endTurn();
 			for (int i = 0; i < 2; i++) {
-				playCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+				playCard(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			}
 			context.endTurn();
 			// Minion arrangement

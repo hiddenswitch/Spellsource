@@ -4,7 +4,6 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.io.Serializable;
@@ -64,12 +63,12 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	 * beginning of the name. The name is read until the end of the line. Names must be {@link #NAME_MAX_LENGTH}
 	 * characters long or fewer.</li>
 	 * <li><b>Class</b>: The color corresponding to the champion. Each champion has a color specified in the {@link
-	 * CardDesc#heroClass} field of a {@link CardType#CLASS}. You can find the appropriate, all-capitals color by
+	 * CardDesc#getHeroClass()} field of a {@link CardType#CLASS}. You can find the appropriate, all-capitals color by
 	 * searching for {@code CLASS} cards in the {@link CardCatalogue}.</li>
 	 * <li><b>Format</b>: A format consisting of a set of {@link net.demilich.metastone.game.cards.CardSet}
-	 * (strings) in the {@link DeckFormat#formats()} map.</li>
+	 * (strings) in the {@link CardCatalogue#formats()} map.</li>
 	 * <li>A list of cards. These are each in the form {@code number}, followed immediately by an {@code x} character,
-	 * followed by whitespace, followed by the case-sensitive card name in the {@link CardDesc#name} field. Whenever two
+	 * followed by whitespace, followed by the case-sensitive card name in the {@link CardDesc#getName()} field. Whenever two
 	 * cards share a name, the one that is collectible is preferred; otherwise, the chosen card is arbitrary and will
 	 * <b>not</b> produce a warning.</li>
 	 * </ul>
@@ -149,7 +148,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 				final String format = matcher.group("format");
 				try {
 					request.setFormat(format);
-					if (!DeckFormat.formats().keySet().contains(format)) {
+					if (!CardCatalogue.classpath().formats().keySet().contains(format)) {
 						throw new IllegalArgumentException();
 					}
 				} catch (IllegalArgumentException ex) {
@@ -162,7 +161,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 			if (matcher.group("heroCard") != null) {
 				final String heroCard = matcher.group("heroCard");
 				try {
-					request.setHeroCardId(CardCatalogue.getCardByName(heroCard).getCardId());
+					request.setHeroCardId(CardCatalogue.classpath().getCardByName(heroCard).getCardId());
 				} catch (NullPointerException ex) {
 					errors.add(new NullPointerException(String.format("No hero card named %s could be found", heroCard)));
 				}
@@ -175,7 +174,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 				int count = Integer.parseInt(matcher.group("count"));
 				String cardId;
 				try {
-					cardId = CardCatalogue.getCardByName(cardName, request.getHeroClass()).getCardId();
+					cardId = CardCatalogue.classpath().getCardByName(cardName, request.getHeroClass()).getCardId();
 				} catch (NullPointerException ex) {
 					String message = String.format("Could not find a card named %s%s", cardName, request.getName() == null ? "" : " while reading deck list " + request.getName());
 					errors.add(new NullPointerException(message));
@@ -312,10 +311,10 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		GameDeck deck = new GameDeck(getHeroClass());
 		deck.setName(getName());
 		if (getHeroCardId() != null) {
-			deck.setHeroCard((Card) CardCatalogue.getCardById(getHeroCardId()));
+			deck.setHeroCard((Card) CardCatalogue.classpath().getCardById(getHeroCardId()));
 		}
-		getCardIds().forEach(cardId -> deck.getCards().addCard(CardCatalogue.getCardById(cardId)));
-		deck.setFormat(DeckFormat.getFormat(format));
+		getCardIds().forEach(cardId -> deck.getCards().addCard(CardCatalogue.classpath().getCardById(cardId)));
+		deck.setFormat(CardCatalogue.classpath().getFormat(format));
 		return deck;
 	}
 
@@ -333,9 +332,10 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	}
 
 	public boolean isValid() {
-		return getName() != null
-				&& getHeroClass() != null
-				&& HeroClass.getBaseClasses(DeckFormat.spellsource()).contains(getHeroClass())
+		if (getName() == null
+				|| getHeroClass() == null) return false;
+		DeckFormat deckFormat = CardCatalogue.classpath().spellsource();
+		return CardCatalogue.classpath().getBaseClasses(deckFormat).contains(getHeroClass())
 				&& (getCardIds().size() + getInventoryIds().size()) == 30;
 	}
 

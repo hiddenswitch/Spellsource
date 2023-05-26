@@ -5,7 +5,6 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.conversiontest.ConversionHarness;
 import io.vertx.core.json.jackson.DatabindCodec;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.logic.GameLogic;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -36,11 +35,11 @@ public class ConversionTests {
 			"minion_bloodsoaked_construct");
 
 	public static Stream<String> getCardIds() {
-		CardCatalogue.loadCardsFromPackage();
-		return CardCatalogue.getCards().keySet().stream().filter(cardId -> {
-			var card = CardCatalogue.getCards().get(cardId);
+		var cardCatalogue = CardCatalogue.classpath();
+		return cardCatalogue.getCards().keySet().stream().filter(cardId -> {
+			var card = cardCatalogue.getCards().get(cardId);
 			var cardType = card.getCardType();
-			return DeckFormat.spellsource().isInFormat(card)
+			return cardCatalogue.spellsource().isInFormat(card)
 					&& !omitted.contains(cardId)
 					&& cardType != CardType.HERO_POWER
 					&& (GameLogic.isCardType(cardType, CardType.SPELL)
@@ -52,6 +51,6 @@ public class ConversionTests {
 	@ParameterizedTest()
 	@MethodSource("getCardIds")
 	public void testAllCardsReproduce(String cardId) throws JsonProcessingException {
-		assertTrue(ConversionHarness.assertCardReplaysTheSame(new long[]{1L, 2L}, cardId, DatabindCodec.mapper().writeValueAsString(CardCatalogue.getCards().get(cardId).getDesc())));
+		assertTrue(ConversionHarness.assertCardReplaysTheSame(new long[]{1L, 2L}, cardId, DatabindCodec.mapper().writeValueAsString(CardCatalogue.classpath().getCards().get(cardId).getDesc())));
 	}
 }

@@ -7,6 +7,7 @@ apply from: '../gradle/instrument.gradle'
 dependencies {
     api project(':spellsource-common')
     api project(':spellsource-protos')
+    implementation 'de.cronn:reflection-util:2.14.0'
     api "io.vertx:vertx-core:$vertxVersion"
     implementation "io.github.classgraph:classgraph:$classgraphVersion"
 

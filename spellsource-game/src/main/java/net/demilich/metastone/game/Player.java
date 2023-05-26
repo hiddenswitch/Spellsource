@@ -3,6 +3,7 @@ package net.demilich.metastone.game;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.ChooseLastBehaviour;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardZone;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
@@ -10,7 +11,6 @@ import net.demilich.metastone.game.entities.Entity;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.heroes.Hero;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -91,7 +91,7 @@ public class Player extends Entity implements Serializable {
 	 * @return A player specified with an {@link GameDeck#EMPTY} and a {@link ChooseLastBehaviour}.
 	 */
 	public static Player empty() {
-		return new Player(GameDeck.EMPTY, "Empty player");
+		return new Player(GameDeck.EMPTY, "Empty player", CardCatalogue.classpath());
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class Player extends Entity implements Serializable {
 	 * @return A new player instance with the specified settings and a {@link ChooseLastBehaviour}.
 	 */
 	public static Player forUser(String userId, int id, GameDeck deck) {
-		Player player = new Player(deck, "Player " + userId);
+		Player player = new Player(deck, "Player " + userId, CardCatalogue.classpath());
 		player.setId(id);
 		player.setUserId(userId);
 		return player;
@@ -164,22 +164,24 @@ public class Player extends Entity implements Serializable {
 	/**
 	 * Creates a player from the specified deck.
 	 *
-	 * @param deck The deck instance to use.
+	 * @param deck          The deck instance to use.
+	 * @param cardCatalogue
 	 */
-	public Player(GameDeck deck) {
-		this(deck, "New Player");
+	public Player(GameDeck deck, CardCatalogue cardCatalogue) {
+		this(deck, "New Player", cardCatalogue);
 	}
 
 	/**
 	 * Creates a player from the specified deck.
 	 *
-	 * @param deck The deck instance to use.
+	 * @param deck          The deck instance to use.
+	 * @param cardCatalogue
 	 */
 
-	public Player(GameDeck deck, String name) {
+	public Player(GameDeck deck, String name, CardCatalogue cardCatalogue) {
 		this();
 		this.deck = new CardZone(getId(), Zones.DECK, deck.getCardsCopy(), lookup);
-		this.setHero(deck.getHeroCard().hero());
+		this.setHero(deck.getHeroCard(cardCatalogue).hero());
 		this.setName(name);
 	}
 
@@ -187,10 +189,11 @@ public class Player extends Entity implements Serializable {
 	 * Creates a player with the hero card of the specified hero class
 	 *
 	 * @param heroClass
+	 * @param cardCatalogue
 	 */
-	public Player(String heroClass) {
+	public Player(String heroClass, CardCatalogue cardCatalogue) {
 		this();
-		this.setHero(HeroClass.getHeroCard(heroClass).hero());
+		this.setHero(cardCatalogue.getHeroCard(heroClass).hero());
 	}
 
 	/**

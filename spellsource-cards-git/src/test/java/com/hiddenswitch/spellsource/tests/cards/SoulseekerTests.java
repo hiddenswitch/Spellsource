@@ -69,7 +69,7 @@ public class SoulseekerTests extends TestBase {
 			final int i1 = i;
 			runGym((context, player, opponent) -> {
 				Collections.nCopies(i1, "minion_test_3_2")
-						.forEach(cid -> context.getLogic().shuffleToDeck(player, CardCatalogue.getCardById(cid)));
+						.forEach(cid -> context.getLogic().shuffleToDeck(player, context.getCardCatalogue().getCardById(cid)));
 
 				playCard(context, player, "spell_delve_into_memory");
 				assertEquals(player.getDeck().size(), 0);
@@ -305,7 +305,7 @@ public class SoulseekerTests extends TestBase {
 	public void testAncestralEffigy() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "secret_ancestral_effigy");
-			Minion target = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion target = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			context.endTurn();
 			Minion charger = playMinionCard(context, opponent, "minion_charge_test");
 			// Make sure we destroy the target. We could make it attack zero but that has all sorts of weird arcane rules.

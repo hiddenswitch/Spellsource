@@ -172,10 +172,10 @@ public class OtherworlderTests extends TestBase {
 	@Test
 	public void testBioweaponize() {
 		runGym((context, player, opponent) -> {
-			Minion source = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion source = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			playCard(context, player, "spell_bioweaponize", source);
 			context.endTurn();
-			Minion target = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion target = playMinionCard(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			int targetAttack = 10;
 			target.setAttack(targetAttack);
 			context.endTurn();
@@ -187,7 +187,7 @@ public class OtherworlderTests extends TestBase {
 			Minion parasite = playMinionCard(context, player, "minion_realm_parasite");
 			playCard(context, player, "spell_bioweaponize", parasite);
 			context.endTurn();
-			Minion target = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion target = playMinionCard(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			context.endTurn();
 			int targetAttack = 10;
 			target.setAttack(targetAttack);
@@ -200,7 +200,7 @@ public class OtherworlderTests extends TestBase {
 	public void testWitherdrake() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			Minion target = playMinionCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion target = playMinionCard(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			int targetAttack = 10;
 			target.setAttack(targetAttack);
 			target.setHp(2);

@@ -1,7 +1,6 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.decks.DeckFormat;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -15,10 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CardCatalogueTest {
 	@Test
 	public void testCardCatalogueLoads() {
-		CardCatalogue.loadCardsFromPackage();
 
-		Assertions.assertTrue(CardCatalogue.getAll().size() > 1000);
-		Assertions.assertTrue(CardCatalogue.getBaseClasses(DeckFormat.spellsource()).size() > 5);
+		Assertions.assertTrue(CardCatalogue.classpath().getAll().size() > 1000);
+		Assertions.assertTrue(CardCatalogue.classpath().getBaseClasses(CardCatalogue.classpath().spellsource()).size() > 5);
 	}
 
 	@Test
@@ -47,9 +45,9 @@ public class CardCatalogueTest {
 				"  \"set\": \"CUSTOM\",\n" +
 				"  \"fileFormatVersion\": 1\n" +
 				"}";
-		assertEquals("minion_exampler_test", CardCatalogue.addOrReplaceCard(json));
-		assertNotNull(CardCatalogue.getCardById("minion_exampler_test"));
-		CardCatalogue.removeCard("minion_exampler_test");
-		assertThrows(NullPointerException.class, () -> CardCatalogue.getCardById("minion_exampler_test"));
+		assertEquals("minion_exampler_test", CardCatalogue.classpath().addOrReplaceCard(json));
+		assertNotNull(CardCatalogue.classpath().getCardById("minion_exampler_test"));
+		CardCatalogue.classpath().removeCard("minion_exampler_test");
+		assertThrows(NullPointerException.class, () -> CardCatalogue.classpath().getCardById("minion_exampler_test"));
 	}
 }

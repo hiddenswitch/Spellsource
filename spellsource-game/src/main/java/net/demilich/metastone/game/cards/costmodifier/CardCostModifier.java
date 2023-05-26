@@ -34,8 +34,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-;
-
 /**
  * A card cost modifier.
  * <p>

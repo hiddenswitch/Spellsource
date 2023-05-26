@@ -14,15 +14,16 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
+import com.hiddenswitch.spellsource.testutils.RandomDeck;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -30,6 +31,7 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
+import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.function.ThrowingSupplier;
@@ -55,7 +57,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestBase {
 	static {
-		CardCatalogue.loadCardsFromPackage();
 	}
 
 	protected static Card playChooseOneCard(GameContext context, Player player, String baseCardId, String chosenCardId) {
@@ -64,7 +65,7 @@ public class TestBase {
 
 	protected static Card playChooseOneCard(GameContext context, Player player, String baseCardId, String chosenCardId, Entity target) {
 		Card baseCard = receiveCard(context, player, baseCardId);
-		int cost = CardCatalogue.getCardById(chosenCardId).getManaCost(context, player);
+		int cost = context.getCardCatalogue().getCardById(chosenCardId).getManaCost(context, player);
 		player.setMana(cost);
 		GameAction action = context.getValidActions()
 				.stream()
@@ -81,7 +82,7 @@ public class TestBase {
 	}
 
 	protected static <T extends Card> T putOnTopOfDeck(GameContext context, Player player, String cardId) {
-		@SuppressWarnings("unchecked") final T card = (T) CardCatalogue.getCardById(cardId);
+		@SuppressWarnings("unchecked") final T card = (T) context.getCardCatalogue().getCardById(cardId);
 		context.getLogic().insertIntoDeck(player, card, player.getDeck().size());
 		return card;
 	}
@@ -139,7 +140,7 @@ public class TestBase {
 		GameLogic spyLogic = mockingDetails.isSpy() ? context.getLogic() : Mockito.spy(context.getLogic());
 		context.setLogic(spyLogic);
 		Answer answer = invocation -> {
-			handle.set(CardCatalogue.getCardById(cardId));
+			handle.set(context.getCardCatalogue().getCardById(cardId));
 			if (!handle.stopped.get()) {
 				return handle.get();
 			} else {
@@ -222,7 +223,7 @@ public class TestBase {
 
 	public static <T extends Card> T receiveCard(GameContext context, Player player, String cardId) {
 		@SuppressWarnings("unchecked")
-		T card = (T) CardCatalogue.getCardById(cardId);
+		T card = (T) context.getCardCatalogue().getCardById(cardId);
 		context.getLogic().receiveCard(player.getId(), card);
 		return card;
 	}
@@ -234,7 +235,7 @@ public class TestBase {
 
 	public static <T extends Card> T shuffleToDeck(GameContext context, Player player, String cardId) {
 		@SuppressWarnings("unchecked")
-		T card = (T) CardCatalogue.getCardById(cardId);
+		T card = (T) context.getCardCatalogue().getCardById(cardId);
 		context.getLogic().shuffleToDeck(player, card);
 		return card;
 	}
@@ -302,6 +303,38 @@ public class TestBase {
 		return receiveCard(context, player, card.clone());
 	}
 
+	public static @NotNull
+	GameDeck randomDeck() {
+		return new RandomDeck(randomHeroCard(CardCatalogue.classpath().spellsource()), CardCatalogue.classpath().spellsource());
+	}
+
+	/**
+	 * Creates a game with two random decks in the specified format.
+	 *
+	 * @param format
+	 * @return
+	 */
+	public static GameContext fromTwoRandomDecks(DeckFormat format) {
+		return GameContext.fromDecks(Arrays.asList(RandomDeck.randomDeck(format), RandomDeck.randomDeck(format)))
+				.setDeckFormat(format);
+	}
+
+	public static GameContext fromTwoRandomDecks(long seed) {
+		var random = new XORShiftRandom(seed);
+		return GameContext.fromDecks(random.nextLong(), Arrays.asList(RandomDeck.randomDeck(random.nextLong()), RandomDeck.randomDeck(random.nextLong())));
+	}
+
+	/**
+	 * Retrieves a random hero in the specified {@code deckFormat}
+	 *
+	 * @param deckFormat
+	 * @return
+	 */
+	public static String randomHeroCard(DeckFormat deckFormat) {
+		List<String> baseHeroes = CardCatalogue.classpath().getBaseClasses(deckFormat);
+		return baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
+	}
+
 	@FunctionalInterface
 	public interface GymConsumer {
 		void run(GameContext context, Player player, Player opponent);
@@ -334,7 +367,7 @@ public class TestBase {
 				.withCardSets(defaultFormat.getCardSets());
 		// Remove the starting card
 		format.setSecondPlayerBonusCards(new String[0]);
-		GameContext context = new DebugContext(new Player(heroClass1), new Player(heroClass2), new GameLogic() {
+		GameContext context = new DebugContext(new Player(heroClass1, CardCatalogue.classpath()), new Player(heroClass2, CardCatalogue.classpath()), new GameLogic() {
 			@Override
 			public int determineBeginner(int... playerIds) {
 				return GameContext.PLAYER_1;
@@ -350,7 +383,7 @@ public class TestBase {
 	}
 
 	public static void runGym(GymConsumer consumer, GameDeck deck1, GameDeck deck2) {
-		GameContext context = new DebugContext(new Player(deck1), new Player(deck2), new GameLogic() {
+		GameContext context = new DebugContext(new Player(deck1, CardCatalogue.classpath()), new Player(deck2, CardCatalogue.classpath()), new GameLogic() {
 			@Override
 			public int determineBeginner(int... playerIds) {
 				return 0;
@@ -365,7 +398,8 @@ public class TestBase {
 			protected int getSecondPlayerBonusStarterCards() {
 				return 0;
 			}
-		}, DeckFormat.getSmallestSupersetFormat(deck1, deck2));
+		});
+		context.setDeckFormat(context.getCardCatalogue().getSmallestSupersetFormat(deck1, deck2));
 		context.setBehaviours(new Behaviour[]{new TestBehaviour(), new TestBehaviour()});
 		context.init();
 		consumer.run(context, context.getActivePlayer(), context.getOpponent(context.getActivePlayer()));
@@ -444,7 +478,6 @@ public class TestBase {
 
 	@BeforeAll
 	public static void loadCards() {
-		CardCatalogue.loadCardsFromPackage();
 	}
 
 	protected static void attack(GameContext context, Player player, Entity attacker, Entity target) {
@@ -458,12 +491,12 @@ public class TestBase {
 	}
 
 	public DeckFormat getDefaultFormat() {
-		return DeckFormat.getFormat("All");
+		return CardCatalogue.classpath().all;
 	}
 
 	public DebugContext createContext(String hero1, String hero2, boolean shouldInit, DeckFormat deckFormat) {
-		Player player1 = new Player(Deck.randomDeck(hero1, deckFormat), "Player 1");
-		Player player2 = new Player(Deck.randomDeck(hero2, deckFormat), "Player 2");
+		Player player1 = new Player(RandomDeck.randomDeck(hero1, deckFormat), "Player 1", CardCatalogue.classpath());
+		Player player2 = new Player(RandomDeck.randomDeck(hero2, deckFormat), "Player 2", CardCatalogue.classpath());
 
 		DebugContext context = new DebugContext(player1, player2, new GameLogic() {
 			@Override
@@ -517,7 +550,7 @@ public class TestBase {
 	}
 
 	protected static void playCard(GameContext context, Player player, String cardId) {
-		playCard(context, player, CardCatalogue.getCardById(cardId));
+		playCard(context, player, context.getCardCatalogue().getCardById(cardId));
 	}
 
 	protected static void playCard(GameContext context, Player player, Card card) {
@@ -541,7 +574,7 @@ public class TestBase {
 	}
 
 	protected static void playCard(GameContext context, Player player, String cardId, Entity target) {
-		playCard(context, player, CardCatalogue.getCardById(cardId), target);
+		playCard(context, player, context.getCardCatalogue().getCardById(cardId), target);
 	}
 
 	protected static void playCard(GameContext context, Player player, Card card, Entity target) {
@@ -561,11 +594,11 @@ public class TestBase {
 	}
 
 	protected static Minion playMinionCard(GameContext context, Player player, String minionCardId) {
-		return playMinionCard(context, player, CardCatalogue.getCardById(minionCardId));
+		return playMinionCard(context, player, context.getCardCatalogue().getCardById(minionCardId));
 	}
 
 	protected static Minion playMinionCard(GameContext context, Player player, int attack, int hp) {
-		Minion minion = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+		Minion minion = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 		minion.setAttack(attack);
 		minion.setBaseAttack(attack);
 		context.getLogic().setHpAndMaxHp(minion, hp);
@@ -593,7 +626,7 @@ public class TestBase {
 			throw new AssertionError(String.format("cannot PlayMinionCard on non-minion card %s", card));
 		}
 
-		PlayCardAction play = card.isChooseOne() ? card.playOptions()[0] : card.play();
+		PlayCardAction play = card.isChooseOne() ? card.playOptions(context)[0] : card.play();
 		context.performAction(player.getId(), play);
 		return getSummonedMinion(player.getMinions());
 	}

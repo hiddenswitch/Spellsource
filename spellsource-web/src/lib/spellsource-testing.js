@@ -1,7 +1,9 @@
+// todo: this has to use a real path
 Java.addToClasspath(`${__dirname}/../../build/libs/www-0.9.0-all.jar`)
 
 export default class SpellsourceTesting {
 
+  // todo: this will have to migrate to some kind of session or context, because it should retrieve the card text from sql
   static runGym(heroclass1 = null, heroclass2 = null) {
     const TestMain = Java.type('com.hiddenswitch.spellsource.gameplaytest.TestMain')
     return TestMain.runGym(heroclass1, heroclass2)

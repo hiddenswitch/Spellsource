@@ -21,7 +21,7 @@ public final class ExoticGoodsSpell extends DiscoverSpell {
 
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		var allCards = CardCatalogue.query(context.getDeckFormat(), null, null, null, null, false);
+		var allCards = context.getCardCatalogue().query(context.getDeckFormat(), null, null, null, null, false);
 		for (var i = 0; i < 3; i++) {
 			var count = 3;
 			var cards = new ArrayList<String>(count);

@@ -37,8 +37,8 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	 */
 	CardList addCard(@NotNull Card card);
 
-	default CardList addCard(String cardId) {
-		Card cardById = CardCatalogue.getCardById(cardId);
+	default CardList addCard(CardCatalogue cardCatalogue, String cardId) {
+		Card cardById = cardCatalogue.getCardById(cardId);
 		if (cardById == null) {
 			throw new NullPointerException(cardId);
 		}

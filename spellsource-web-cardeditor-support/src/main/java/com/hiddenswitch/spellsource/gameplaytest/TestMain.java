@@ -18,6 +18,10 @@ import net.demilich.metastone.tests.util.TestBase;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * This is used by the website to implement card editor based testing
+ */
+@SuppressWarnings("unused")
 public class TestMain extends TestBase {
 
 	public static GameContext runGym() {
@@ -46,7 +50,7 @@ public class TestMain extends TestBase {
 
 	public static void addCard(String json) {
 		try {
-			CardCatalogue.addOrReplaceCard(json);
+			CardCatalogue.classpath().addOrReplaceCard(json);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

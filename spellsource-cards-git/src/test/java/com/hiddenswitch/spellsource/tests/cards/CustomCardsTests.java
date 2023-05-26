@@ -42,7 +42,6 @@ import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -72,17 +71,17 @@ public class CustomCardsTests extends TestBase {
 		DebugContext context = createContext(HeroClass.TEST, HeroClass.TEST, false, new DeckFormat().withCardSets(CardSet.SPELLSOURCE_BASIC));
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
-			Stream.generate(CardCatalogue::getOneOneNeutralMinionCardId)
-					.map(CardCatalogue::getCardById)
+			Stream.generate(context.getCardCatalogue()::getOneOneNeutralMinionCardId)
+					.map(context.getCardCatalogue()::getCardById)
 					.limit(29)
 					.forEach(deck::addCard);
-			deck.addCard(CardCatalogue.getCardById("minion_vohkrovanis"));
+			deck.addCard(context.getCardCatalogue().getCardById("minion_vohkrovanis"));
 		});
 
 		context.init();
 		for (Player player : context.getPlayers()) {
-			assertTrue(player.getDeck().stream().noneMatch(c -> c.getCardId().equals(CardCatalogue.getOneOneNeutralMinionCardId())));
-			assertTrue(player.getHand().stream().noneMatch(c -> c.getCardId().equals(CardCatalogue.getOneOneNeutralMinionCardId())));
+			assertTrue(player.getDeck().stream().noneMatch(c -> c.getCardId().equals(context.getCardCatalogue().getOneOneNeutralMinionCardId())));
+			assertTrue(player.getHand().stream().noneMatch(c -> c.getCardId().equals(context.getCardCatalogue().getOneOneNeutralMinionCardId())));
 			assertTrue(player.getHand().size() >= GameLogic.STARTER_CARDS);
 		}
 	}
@@ -101,12 +100,12 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testSecretOfTwilightAffectedBySpellDamage() {
 		runGym((context, player, opponent) -> {
-			Minion spellDamage = playMinionCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Minion spellDamage = playMinionCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			spellDamage.modifyAttribute(Attribute.SPELL_DAMAGE, 1);
 			playCard(context, player, "secret_secret_of_twilight");
 			context.endTurn();
 			int opponentHp = opponent.getHero().getHp() + 1;
-			playCard(context, opponent, CardCatalogue.getOneOneNeutralMinionCardId());
+			playCard(context, opponent, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			int targetHp = 1;
 			if (opponent.getMinions().size() == 0) {
 				targetHp = 0;
@@ -737,7 +736,7 @@ public class CustomCardsTests extends TestBase {
 			Minion test = playMinionCard(context, player, "minion_neutral_test");
 			playCard(context, player, "spell_bodyswap", test);
 			assertEquals(test.getHp(), 30);
-			assertEquals(player.getHero().getHp(), CardCatalogue.getCardById("minion_neutral_test").getBaseHp() + 10);
+			assertEquals(player.getHero().getHp(), context.getCardCatalogue().getCardById("minion_neutral_test").getBaseHp() + 10);
 		});
 	}
 
@@ -963,7 +962,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(opponent.getDeck().size(), 1);
 			for (int i = 0; i < 4; i++) {
 				// Inserts to the bottom of the deck
-				context.getLogic().insertIntoDeck(opponent, CardCatalogue.getCardById("spell_test_gain_mana"), 0);
+				context.getLogic().insertIntoDeck(opponent, context.getCardCatalogue().getCardById("spell_test_gain_mana"), 0);
 			}
 			assertEquals(opponent.getDeck().size(), 5);
 			context.endTurn();
@@ -1010,7 +1009,7 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
 			Minion hit = playMinionCard(context, player, "minion_neutral_test");
-			hit.setHp(CardCatalogue.getCardById("weapon_heartpiercer").getDamage() + 2);
+			hit.setHp(context.getCardCatalogue().getCardById("weapon_heartpiercer").getDamage() + 2);
 			Minion notHit = playMinionCard(context, player, "minion_neutral_test");
 			context.endTurn();
 			playCard(context, player, "weapon_heartpiercer");
@@ -2960,9 +2959,9 @@ public class CustomCardsTests extends TestBase {
 			overrideRandomCard(context, "hero_nefarian");
 			playCard(context, player, "spell_a_new_challenger");
 			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_nefarian");
-			final String[] nefarianCards = (String[]) CardCatalogue.getCardById("hero_nefarian").getDesc()
+			final String[] nefarianCards = (String[]) context.getCardCatalogue().getCardById("hero_nefarian").getDesc()
 					.getBattlecry().getSpell().subSpells(0).get(1).get(SpellArg.CARDS);
-			final int drawnCards = (int) CardCatalogue.getCardById("hero_nefarian").getDesc()
+			final int drawnCards = (int) context.getCardCatalogue().getCardById("hero_nefarian").getDesc()
 					.getBattlecry().getSpell().subSpells(0).get(2).get(SpellArg.VALUE);
 			// Draws a card
 			assertEquals(player.getDeck().size(), nefarianCards.length - drawnCards);
@@ -3294,7 +3293,7 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testGiantDisappointment() {
 		runGym((context, player, opponent) -> {
-			Card card = CardCatalogue.getCardById("minion_giant_disappointment");
+			Card card = context.getCardCatalogue().getCardById("minion_giant_disappointment");
 			context.getLogic().receiveCard(player.getId(), card);
 			assertEquals(costOf(context, player, card), 8);
 		});
@@ -3411,7 +3410,7 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testLittleHelper() {
-		CardList heroPowers = CardCatalogue.getAll().filtered(Card::isHeroPower);
+		CardList heroPowers = CardCatalogue.classpath().getAll().filtered(Card::isHeroPower);
 		for (Card heroPower : heroPowers) {
 			runGym((context, player, opponent) -> {
 				SpellDesc spell = new SpellDesc(ChangeHeroPowerSpell.class);
@@ -4081,8 +4080,6 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testBloodyBlow() {
-		CardCatalogue.loadCardsFromPackage();
-		CardCatalogue.getCardById("spell_bloody_blow");
 		runGym((context, player, opponent) -> {
 			Minion minion1 = playMinionCard(context, opponent, "minion_test_3_2");
 			Minion minion2 = playMinionCard(context, opponent, "minion_test_3_2");
@@ -4232,11 +4229,10 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testProperCardIds() {
-		CardCatalogue.loadCardsFromPackage();
-		CardCatalogue.getCardById("minion_jade_cloud_serpent");
-		CardCatalogue.getCardById("spell_honed_potion");
-		CardCatalogue.getCardById("token_bellowing_spirit");
-		CardCatalogue.getCardById("token_burning_spirit");
+		CardCatalogue.classpath().getCardById("minion_jade_cloud_serpent");
+		CardCatalogue.classpath().getCardById("spell_honed_potion");
+		CardCatalogue.classpath().getCardById("token_bellowing_spirit");
+		CardCatalogue.classpath().getCardById("token_burning_spirit");
 	}
 
 	@Test
@@ -4407,7 +4403,7 @@ public class CustomCardsTests extends TestBase {
 	public void testGravekeeperGallows() {
 		runGym(((context, player, opponent) -> {
 			Minion grallows = playMinionCard(context, player, "minion_gravekeeper_grallows");
-			Card notWeapon = receiveCard(context, player, CardCatalogue.getOneOneNeutralMinionCardId());
+			Card notWeapon = receiveCard(context, player, context.getCardCatalogue().getOneOneNeutralMinionCardId());
 			Card weapon = receiveCard(context, player, "weapon_slapdagger");
 			destroy(context, grallows);
 			assertEquals(weapon.getDescription(), "Aftermath: Summon Grallows.");
@@ -5008,7 +5004,7 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testColrum() {
 		runGym((context, player, opponent) -> {
-			var faes = CardCatalogue.query(context.getDeckFormat(), card -> card.getRace().equals(Race.FAE));
+			var faes = context.getCardCatalogue().query(context.getDeckFormat(), card -> card.getRace().equals(Race.FAE));
 			faes.shuffle(context.getLogic().getRandom());
 			for (int i = 0; i < 5; i++) {
 				shuffleToDeck(context, player, faes.removeFirst().getCardId());

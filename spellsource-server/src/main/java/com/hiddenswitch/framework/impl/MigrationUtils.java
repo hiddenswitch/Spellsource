@@ -27,7 +27,7 @@ public class MigrationUtils {
 
 	public static int cardsChecksum() {
 		var checksum = Hashing.crc32().newHasher();
-		CardCatalogue.getRecords().values().stream()
+		CardCatalogue.classpath().getRecords().values().stream()
 				.sorted(Comparator.comparing(CardCatalogueRecord::getId))
 				.map(CardCatalogueRecord::getDesc)
 				.map(Json::encode)
@@ -38,7 +38,7 @@ public class MigrationUtils {
 	public static void cardsMigration(Context context) {
 		var dsl = DSL.using(context.getConnection(), SQLDialect.POSTGRES);
 		var ownerUserId = getSpellsourceUserId();
-		var insertAndUpdate = CardCatalogue.getRecords().values().stream().map(record -> {
+		var insertAndUpdate = CardCatalogue.classpath().getRecords().values().stream().map(record -> {
 			var now = OffsetDateTime.now();
 			var encoded = JsonObject.mapFrom(record.getDesc());
 			return dsl.insertInto(CARDS, CARDS.ID, CARDS.CREATED_BY, CARDS.CREATED_AT, CARDS.LAST_MODIFIED, CARDS.CARD_SCRIPT)

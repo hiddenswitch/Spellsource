@@ -6,14 +6,13 @@ import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * The sets that are available to build decks from and generate cards from.
  * <p>
  *
  * @see GameContext#getDeckFormat() for the property on the game context where the deck format is set
- * @see #getSmallestSupersetFormat(GameDeck...) to determine the smallest format that can be used for the specified
+ * @see CardCatalogue#getSmallestSupersetFormat(GameDeck...) to determine the smallest format that can be used for the specified
  * decks
  */
 public class DeckFormat implements Serializable {
@@ -22,101 +21,18 @@ public class DeckFormat implements Serializable {
 	private String[] secondPlayerBonusCards = new String[0];
 	private ConditionDesc validDeckCondition;
 
-	public static final String FORMAT_NAME_ALL = "All";
-	private static final DeckFormat ALL = new DeckFormat()
-			.withName(FORMAT_NAME_ALL);
-
-	public static void populateAll(List<String> sets) {
-		ALL.sets.clear();
-		for (String set : sets) {
-			ALL.addSet(set);
-		}
-	}
-
-
-	public static void populateFormats(CardList formatCards) {
-		CardCatalogue.FORMATS.put(FORMAT_NAME_ALL, ALL);
-		for (Card formatCard : formatCards) {
-			CardCatalogue.FORMATS.put(formatCard.getName(), new DeckFormat()
-					.setSecondPlayerBonusCards(formatCard.getDesc().getSecondPlayerBonusCards())
-					.setValidDeckCondition(formatCard.getDesc().getCondition())
-					.withName(formatCard.getName())
-					.withCardSets(formatCard.getCardSets()));
-		}
-	}
-
-	public static DeckFormat getFormat(String name) {
-		return CardCatalogue.FORMATS.get(name);
-	}
-
-	public static Map<String, DeckFormat> formats() {
-		return CardCatalogue.FORMATS;
-	}
-
-	public static DeckFormat getSmallestSupersetFormat(Set<String> requiredSets) {
-		DeckFormat smallestFormat = DeckFormat.getFormat(FORMAT_NAME_ALL);
-		int minExcess = smallestFormat.sets.size();
-
-		for (Map.Entry<String, DeckFormat> format : DeckFormat.formats().entrySet()) {
-			Set<String> formatSets = format.getValue().getCardSets();
-			if (!formatSets.containsAll(requiredSets)) {
-				continue;
-			}
-
-			int excess = formatSets.size() - requiredSets.size();
-			if (excess < minExcess) {
-				smallestFormat = format.getValue();
-				minExcess = excess;
-			}
-		}
-
-		return smallestFormat;
-	}
-
-	public static DeckFormat getSmallestSupersetFormat(List<GameDeck> deckPair) {
-		return deckPair.get(0).getFormat().equals(deckPair.get(1).getFormat())
-				? deckPair.get(0).getFormat()
-				: DeckFormat.getSmallestSupersetFormat(deckPair.stream().flatMap(deck -> deck.getCards().stream())
-				.map(Card::getCardSet).collect(Collectors.toSet()));
-	}
-
-	public static DeckFormat getSmallestSupersetFormat(GameDeck... decks) {
-		return getSmallestSupersetFormat(Arrays.asList(decks));
-	}
 
 	public DeckFormat() {
-		sets = new HashSet<>();
-	}
-
-	/**
-	 * The current {@code Spellsource} format containing all Spellsource sets.
-	 *
-	 * @return A format, or {@code null} if either Spellsource cards are not on your classpath or {@link
-	 * CardCatalogue#loadCardsFromPackage()} has not been called. OSGi-friendly.
-	 */
-	public static DeckFormat spellsource() {
-		var format = getFormat("Spellsource");
-		if (format == null) {
-			CardCatalogue.loadCardsFromPackage();
-		}
-		format = getFormat("Spellsource");
-		if (format == null) {
-			throw new NullPointerException("must load cards first with CardCatalogue.loadCardsFromPackage()");
-		}
-		return format;
-	}
-
-	public static DeckFormat all() {
-		return getFormat(FORMAT_NAME_ALL);
+		setSets(new HashSet<>());
 	}
 
 	public DeckFormat addSet(String cardSet) {
-		sets.add(cardSet);
+		getSets().add(cardSet);
 		return this;
 	}
 
 	public boolean isInFormat(Card card) {
-		if (sets.contains(card.getCardSet())) {
+		if (getSets().contains(card.getCardSet())) {
 			return true;
 		} else {
 			return false;
@@ -124,11 +40,11 @@ public class DeckFormat implements Serializable {
 	}
 
 	public boolean isInFormat(String set) {
-		return set != null && sets.contains(set);
+		return set != null && getSets().contains(set);
 	}
 
 	public Set<String> getCardSets() {
-		return sets;
+		return getSets();
 	}
 
 	public String getName() {
@@ -156,10 +72,6 @@ public class DeckFormat implements Serializable {
 			addSet(cardSet);
 		}
 		return this;
-	}
-
-	public static String latestHearthstoneExpansion() {
-		return "RISE_OF_SHADOWS";
 	}
 
 	@Override
@@ -191,6 +103,14 @@ public class DeckFormat implements Serializable {
 	public DeckFormat setValidDeckCondition(ConditionDesc validDeckCondition) {
 		this.validDeckCondition = validDeckCondition;
 		return this;
+	}
+
+	public Set<String> getSets() {
+		return sets;
+	}
+
+	public void setSets(Set<String> sets) {
+		this.sets = sets;
 	}
 }
 

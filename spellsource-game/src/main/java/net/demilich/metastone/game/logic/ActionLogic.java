@@ -117,17 +117,17 @@ public class ActionLogic implements Serializable {
 		ChooseOneOverride override = context.getLogic().getChooseOneAuraOverrides(player, card);
 		switch (override) {
 			case BOTH_COMBINED:
-				rollout(card.playBothOptions(), context, player, playCardActions);
+				rollout(card.playBothOptions(context), context, player, playCardActions);
 				break;
 			case ALWAYS_FIRST:
-				rollout(card.playOptions()[0], context, player, playCardActions);
+				rollout(card.playOptions(context)[0], context, player, playCardActions);
 				break;
 			case ALWAYS_SECOND:
-				rollout(card.playOptions()[1], context, player, playCardActions);
+				rollout(card.playOptions(context)[1], context, player, playCardActions);
 				break;
 			case NONE:
 			default:
-				for (PlayCardAction action : card.playOptions()) {
+				for (PlayCardAction action : card.playOptions(context)) {
 					rollout(action, context, player, playCardActions);
 				}
 				break;

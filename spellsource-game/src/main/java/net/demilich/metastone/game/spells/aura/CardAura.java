@@ -58,7 +58,7 @@ public class CardAura extends SpellAura {
 		var originalCardId = ((Card) target).getOriginalCardId();
 		// Reduce performance costs due to cloning
 		var originalCard = context.getTempCards().stream().filter(c -> c.getCardId().equals(originalCardId))
-				.findFirst().orElse(CardCatalogue.getCards().get(originalCardId));
+				.findFirst().orElse(context.getCardCatalogue().getCards().get(originalCardId));
 
 		// Testing with an entity filter or condition should not mutate the card, but it's not guaranteed.
 		if (getEntityFilter() != null && !getEntityFilter().matches(context, player, originalCard, source)) {

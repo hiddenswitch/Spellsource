@@ -2,7 +2,6 @@ package com.hiddenswitch.spellsource.tests.cards;
 
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
@@ -69,7 +68,7 @@ public class OverlordTests extends TestBase {
 
 	@Test
 	public void testCovensDebt() {
-		CardList crimsonCards = CardCatalogue.query(DeckFormat.spellsource(), "CRIMSON");
+		CardList crimsonCards = CardCatalogue.classpath().query(CardCatalogue.classpath().spellsource(), "CRIMSON");
 		crimsonCards.stream()
 				.filter(card -> card.getCardId().startsWith("pact_"))
 				.filter(card -> !card.getCardId().equals("pact_binding_nightmare")).forEach(pact -> {

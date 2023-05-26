@@ -8,7 +8,6 @@ import org.flywaydb.core.api.migration.Context;
 public class R__0001_Update_cards extends BaseJavaMigration {
 
 	static {
-		CardCatalogue.loadCardsFromPackage();
 	}
 
 	@Override
