@@ -3411,7 +3411,7 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testLittleHelper() {
-		CardList heroPowers = ClasspathCardCatalogue.CLASSPATH.getAll().filtered(Card::isHeroPower);
+		CardList heroPowers = ClasspathCardCatalogue.INSTANCE.getAll().filtered(Card::isHeroPower);
 		for (Card heroPower : heroPowers) {
 			runGym((context, player, opponent) -> {
 				SpellDesc spell = new SpellDesc(ChangeHeroPowerSpell.class);
@@ -4230,10 +4230,10 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testProperCardIds() {
-		ClasspathCardCatalogue.CLASSPATH.getCardById("minion_jade_cloud_serpent");
-		ClasspathCardCatalogue.CLASSPATH.getCardById("spell_honed_potion");
-		ClasspathCardCatalogue.CLASSPATH.getCardById("token_bellowing_spirit");
-		ClasspathCardCatalogue.CLASSPATH.getCardById("token_burning_spirit");
+		ClasspathCardCatalogue.INSTANCE.getCardById("minion_jade_cloud_serpent");
+		ClasspathCardCatalogue.INSTANCE.getCardById("spell_honed_potion");
+		ClasspathCardCatalogue.INSTANCE.getCardById("token_bellowing_spirit");
+		ClasspathCardCatalogue.INSTANCE.getCardById("token_burning_spirit");
 	}
 
 	@Test
@@ -5005,7 +5005,8 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testColrum() {
 		runGym((context, player, opponent) -> {
-			var faes = context.getCardCatalogue().query(context.getDeckFormat(), card -> card.getRace().equals(Race.FAE));
+			var cardCatalogue = (ClasspathCardCatalogue)context.getCardCatalogue();
+			var faes = cardCatalogue.query(context.getDeckFormat(), card -> card.getRace().equals(Race.FAE));
 			faes.shuffle(context.getLogic().getRandom());
 			for (int i = 0; i < 5; i++) {
 				shuffleToDeck(context, player, faes.removeFirst().getCardId());

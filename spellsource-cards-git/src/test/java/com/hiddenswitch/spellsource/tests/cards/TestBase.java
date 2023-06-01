@@ -9,7 +9,7 @@ public class TestBase extends net.demilich.metastone.tests.util.TestBase {
 
 	@Override
 	public DeckFormat getDefaultFormat() {
-        return ClasspathCardCatalogue.CLASSPATH.spellsource();
+        return ClasspathCardCatalogue.INSTANCE.spellsource();
 	}
 
 	@NotNull

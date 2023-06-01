@@ -17970,10 +17970,24 @@ namespace Spellsource.Proto {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string EditableCardId {
-          get { return idCase_ == IdOneofCase.EditableCardId ? (string) id_ : ""; }
+          get { return HasEditableCardId ? (string) id_ : ""; }
           set {
             id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
             idCase_ = IdOneofCase.EditableCardId;
+          }
+        }
+        /// <summary>Gets whether the "editableCardId" field is set</summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool HasEditableCardId {
+          get { return idCase_ == IdOneofCase.EditableCardId; }
+        }
+        /// <summary> Clears the value of the oneof if it's currently set to "editableCardId" </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void ClearEditableCardId() {
+          if (HasEditableCardId) {
+            ClearId();
           }
         }
 
@@ -17985,10 +17999,24 @@ namespace Spellsource.Proto {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string FriendId {
-          get { return idCase_ == IdOneofCase.FriendId ? (string) id_ : ""; }
+          get { return HasFriendId ? (string) id_ : ""; }
           set {
             id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
             idCase_ = IdOneofCase.FriendId;
+          }
+        }
+        /// <summary>Gets whether the "friendId" field is set</summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool HasFriendId {
+          get { return idCase_ == IdOneofCase.FriendId; }
+        }
+        /// <summary> Clears the value of the oneof if it's currently set to "friendId" </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void ClearFriendId() {
+          if (HasFriendId) {
+            ClearId();
           }
         }
 
@@ -18000,10 +18028,24 @@ namespace Spellsource.Proto {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string InviteId {
-          get { return idCase_ == IdOneofCase.InviteId ? (string) id_ : ""; }
+          get { return HasInviteId ? (string) id_ : ""; }
           set {
             id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
             idCase_ = IdOneofCase.InviteId;
+          }
+        }
+        /// <summary>Gets whether the "inviteId" field is set</summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool HasInviteId {
+          get { return idCase_ == IdOneofCase.InviteId; }
+        }
+        /// <summary> Clears the value of the oneof if it's currently set to "inviteId" </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void ClearInviteId() {
+          if (HasInviteId) {
+            ClearId();
           }
         }
 
@@ -18015,10 +18057,24 @@ namespace Spellsource.Proto {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string MatchId {
-          get { return idCase_ == IdOneofCase.MatchId ? (string) id_ : ""; }
+          get { return HasMatchId ? (string) id_ : ""; }
           set {
             id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
             idCase_ = IdOneofCase.MatchId;
+          }
+        }
+        /// <summary>Gets whether the "matchId" field is set</summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool HasMatchId {
+          get { return idCase_ == IdOneofCase.MatchId; }
+        }
+        /// <summary> Clears the value of the oneof if it's currently set to "matchId" </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void ClearMatchId() {
+          if (HasMatchId) {
+            ClearId();
           }
         }
 
@@ -18072,10 +18128,10 @@ namespace Spellsource.Proto {
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override int GetHashCode() {
           int hash = 1;
-          if (idCase_ == IdOneofCase.EditableCardId) hash ^= EditableCardId.GetHashCode();
-          if (idCase_ == IdOneofCase.FriendId) hash ^= FriendId.GetHashCode();
-          if (idCase_ == IdOneofCase.InviteId) hash ^= InviteId.GetHashCode();
-          if (idCase_ == IdOneofCase.MatchId) hash ^= MatchId.GetHashCode();
+          if (HasEditableCardId) hash ^= EditableCardId.GetHashCode();
+          if (HasFriendId) hash ^= FriendId.GetHashCode();
+          if (HasInviteId) hash ^= InviteId.GetHashCode();
+          if (HasMatchId) hash ^= MatchId.GetHashCode();
           hash ^= (int) idCase_;
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
@@ -18095,19 +18151,19 @@ namespace Spellsource.Proto {
         #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
           output.WriteRawMessage(this);
         #else
-          if (idCase_ == IdOneofCase.EditableCardId) {
+          if (HasEditableCardId) {
             output.WriteRawTag(10);
             output.WriteString(EditableCardId);
           }
-          if (idCase_ == IdOneofCase.FriendId) {
+          if (HasFriendId) {
             output.WriteRawTag(18);
             output.WriteString(FriendId);
           }
-          if (idCase_ == IdOneofCase.InviteId) {
+          if (HasInviteId) {
             output.WriteRawTag(26);
             output.WriteString(InviteId);
           }
-          if (idCase_ == IdOneofCase.MatchId) {
+          if (HasMatchId) {
             output.WriteRawTag(34);
             output.WriteString(MatchId);
           }
@@ -18121,19 +18177,19 @@ namespace Spellsource.Proto {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-          if (idCase_ == IdOneofCase.EditableCardId) {
+          if (HasEditableCardId) {
             output.WriteRawTag(10);
             output.WriteString(EditableCardId);
           }
-          if (idCase_ == IdOneofCase.FriendId) {
+          if (HasFriendId) {
             output.WriteRawTag(18);
             output.WriteString(FriendId);
           }
-          if (idCase_ == IdOneofCase.InviteId) {
+          if (HasInviteId) {
             output.WriteRawTag(26);
             output.WriteString(InviteId);
           }
-          if (idCase_ == IdOneofCase.MatchId) {
+          if (HasMatchId) {
             output.WriteRawTag(34);
             output.WriteString(MatchId);
           }
@@ -18147,16 +18203,16 @@ namespace Spellsource.Proto {
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public int CalculateSize() {
           int size = 0;
-          if (idCase_ == IdOneofCase.EditableCardId) {
+          if (HasEditableCardId) {
             size += 1 + pb::CodedOutputStream.ComputeStringSize(EditableCardId);
           }
-          if (idCase_ == IdOneofCase.FriendId) {
+          if (HasFriendId) {
             size += 1 + pb::CodedOutputStream.ComputeStringSize(FriendId);
           }
-          if (idCase_ == IdOneofCase.InviteId) {
+          if (HasInviteId) {
             size += 1 + pb::CodedOutputStream.ComputeStringSize(InviteId);
           }
-          if (idCase_ == IdOneofCase.MatchId) {
+          if (HasMatchId) {
             size += 1 + pb::CodedOutputStream.ComputeStringSize(MatchId);
           }
           if (_unknownFields != null) {

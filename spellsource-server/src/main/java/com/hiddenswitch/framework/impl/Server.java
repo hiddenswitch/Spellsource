@@ -39,16 +39,16 @@ public interface Server extends ClientConnectionHandler {
 	String getGameId();
 
 	/**
-	 * Gets the span context that corresponds to the lifetime of the game.
-	 *
-	 * @return
-	 */
-	SpanContext getSpanContext();
-
-	/**
 	 * Returns the number of milliseconds left in this turn, or {@code null} if there is no limit.
 	 *
 	 * @return
 	 */
 	Long getMillisRemaining();
+
+	/**
+	 * Checks if the game is over.
+	 *
+	 * @return {@code true} if the game is over.
+	 */
+	boolean isGameOver();
 }

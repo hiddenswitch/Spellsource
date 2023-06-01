@@ -127,7 +127,7 @@ public class CardValidation {
 					if (SpellUtils.getSpecialCards().contains(card)) {
 						return;
 					}
-					ClasspathCardCatalogue.CLASSPATH.getCardById(card);
+					ClasspathCardCatalogue.INSTANCE.getCardById(card);
 				} else if (node.getKey().equals(SpellArg.CARDS) || node.getKey().equals(EntityFilterArg.CARDS)) {
 					if (node.getValue() instanceof String[]) {
 						var cards = (String[]) node.getValue();
@@ -135,7 +135,7 @@ public class CardValidation {
 							if (SpellUtils.getSpecialCards().contains(card)) {
 								continue;
 							}
-							ClasspathCardCatalogue.CLASSPATH.getCardById(card);
+							ClasspathCardCatalogue.INSTANCE.getCardById(card);
 						}
 					}
 				}

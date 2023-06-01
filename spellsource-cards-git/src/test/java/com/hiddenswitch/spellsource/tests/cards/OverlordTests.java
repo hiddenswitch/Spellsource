@@ -68,7 +68,7 @@ public class OverlordTests extends TestBase {
 
 	@Test
 	public void testCovensDebt() {
-		CardList crimsonCards = ClasspathCardCatalogue.CLASSPATH.query(ClasspathCardCatalogue.CLASSPATH.spellsource(), "CRIMSON");
+		CardList crimsonCards = ClasspathCardCatalogue.INSTANCE.query(ClasspathCardCatalogue.INSTANCE.spellsource(), "CRIMSON");
 		crimsonCards.stream()
 				.filter(card -> card.getCardId().startsWith("pact_"))
 				.filter(card -> !card.getCardId().equals("pact_binding_nightmare")).forEach(pact -> {

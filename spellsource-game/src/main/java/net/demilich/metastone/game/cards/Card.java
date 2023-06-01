@@ -505,7 +505,7 @@ public class Card extends Entity implements HasChooseOneActions {
 			return desc;
 		}
 		// Prevents copying here
-		return ClasspathCardCatalogue.CLASSPATH.getRecords().get(getAttributes().getOverrideCardId()).getDesc();
+		return ClasspathCardCatalogue.INSTANCE.getRecords().get(getAttributes().getOverrideCardId()).getDesc();
 	}
 
 	/**

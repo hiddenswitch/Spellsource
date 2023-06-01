@@ -35,7 +35,7 @@ public class MassTest extends TestBase {
 	 */
 	@RepeatedTest(value = 10000)
 	public void testRandomMassPlay() {
-        GameContext context = TestBase.fromTwoRandomDecks(ClasspathCardCatalogue.CLASSPATH.spellsource());
+        GameContext context = TestBase.fromTwoRandomDecks(ClasspathCardCatalogue.INSTANCE.spellsource());
 		try {
 			assertTimeoutPreemptively(Duration.ofMillis(10000), () -> {
 						context.play();

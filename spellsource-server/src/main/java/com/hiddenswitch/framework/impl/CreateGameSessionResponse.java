@@ -5,8 +5,7 @@ import com.google.common.base.MoreObjects;
 import java.io.Serializable;
 import java.util.Objects;
 
-public final class CreateGameSessionResponse implements Serializable, DefaultClusterSerializable {
-	private static final long serialVersionUID = 1L;
+public final class CreateGameSessionResponse {
 
 	public String userId1;
 	public String userId2;

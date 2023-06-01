@@ -6,8 +6,8 @@ import io.vertx.core.Vertx;
 public class VertxScheduler implements Scheduler {
 	final Vertx vertx;
 
-	public VertxScheduler(Vertx vertx) {
-		this.vertx = vertx;
+	public VertxScheduler() {
+		this.vertx = Vertx.currentContext().owner();
 	}
 
 	@Override

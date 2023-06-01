@@ -7,6 +7,7 @@
         xsi:schemaLocation="http://ch.qos.logback/xml/ns/logback https://raw.githubusercontent.com/enricopulatzo/logback-XSD/master/src/main/xsd/logback.xsd">
     <import class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"/>
     <import class="ch.qos.logback.core.ConsoleAppender"/>
+    <import class="ch.qos.logback.classic.AsyncAppender"/>
 
     <appender name="STDOUT" class="ConsoleAppender">
         <encoder class="PatternLayoutEncoder">
@@ -14,10 +15,18 @@
         </encoder>
     </appender>
 
+    <appender name="ASYNC" class="AsyncAppender">
+        <appender-ref ref="STDOUT" />
+        <queueSize>500</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <neverBlock>true</neverBlock>
+    </appender>
+
     <root level="WARN">
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ASYNC"/>
     </root>
-    <logger name="com.hiddenswitch.framework" level="DEBUG"/>
+    <logger name="com.hiddenswitch.framework" level="TRACE"/>
+    <logger name="com.hiddenswitch.framework.impl.ClusteredGames" level="TRACE"/>
     <logger name="com.hiddenswitch.framework.impl.ClientMatchmakingService" level="DEBUG"/>
     <logger name="com.hiddenswitch.diagnostics" level="ALL"/>
     <logger name="net.demilich.metastone.game" level="WARN"/>

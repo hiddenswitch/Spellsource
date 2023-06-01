@@ -72,7 +72,7 @@ clean {
     delete csharpRootDir + '/Framework.Tests/obj'
 }
 
-task copyCsharpGrpc(type: Copy, group: 'build') {
+tasks.register('copyCsharpGrpc', Copy) {
     dependsOn += [":spellsource-protos:generateProto"]
     from("$project.buildDir/generated/source/proto/main/csharp") {
         include '**/*.cs'
@@ -83,7 +83,7 @@ task copyCsharpGrpc(type: Copy, group: 'build') {
     into(csharpRootDir + '/Framework/')
 }
 
-task dll(type: Exec, group: 'build') {
+tasks.register('dll', Exec) {
     dependsOn copyCsharpGrpc
     workingDir csharpRootDir
     outputs.dir("$project.buildDir/dlls")
@@ -95,7 +95,7 @@ task dll(type: Exec, group: 'build') {
     commandLine dotnetCmd + ['publish', '--output', "$project.buildDir/dlls"]
 }
 
-task testDll(type: Exec, group: 'verification') {
+tasks.register('testDll', Exec) {
     dependsOn dll
     inputs.files(csharpRootDir + '/Framework.Tests/**/*.cs', csharpRootDir + '/Framework.Tests/**/*.csproj')
     outputs.dir("$project.buildDir/nunit")
@@ -104,7 +104,7 @@ task testDll(type: Exec, group: 'verification') {
     commandLine dotnetCmd + ['test', '--results-directory', "$project.buildDir/nunit"]
 }
 
-task installDll(type: Copy) {
+tasks.register('installDll', Copy) {
     dependsOn dll
     inputs.dir("$project.buildDir/dlls")
     inputs.dir("$csharpRootDir/Framework/Plugins")
@@ -120,7 +120,7 @@ task installDll(type: Copy) {
     into(destination)
 }
 
-task protosChanged(group: 'Spellsource') {
+tasks.register('protosChanged') {
     description('Run whenever the files in src/main/proto have been changed. Recreates the models and updates the client.')
     dependsOn += [installDll, ':spellsource-protos:generateProto']
 }

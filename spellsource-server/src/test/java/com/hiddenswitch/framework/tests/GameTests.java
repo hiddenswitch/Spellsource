@@ -84,7 +84,7 @@ public class GameTests extends FrameworkTestBase {
 							assertNotNull(gameDeck.getDeckId());
 							assertNotNull(gameDeck.getFormat());
 							assertNotNull(gameDeck.getHeroClass());
-                            assertNotNull(gameDeck.getHeroCard(ClasspathCardCatalogue.CLASSPATH));
+                            assertNotNull(gameDeck.getHeroCard(ClasspathCardCatalogue.INSTANCE));
 
 							// test creating the attributes
 							var playerAttributes = new AttributeMap();

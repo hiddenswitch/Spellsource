@@ -50,7 +50,7 @@ public class TestMain extends TestBase {
 
 	public static void addCard(String json) {
 		try {
-            ClasspathCardCatalogue.CLASSPATH.addOrReplaceCard(json);
+            ClasspathCardCatalogue.INSTANCE.addOrReplaceCard(json);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

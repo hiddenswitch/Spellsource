@@ -79,7 +79,7 @@ public class DecksTests extends FrameworkTestBase {
                     return service.decksPut(DecksPutRequest.newBuilder()
 							.setName("Test Deck 2")
 							.setHeroClass(HeroClass.TEST)
-							.setFormat(ClasspathCardCatalogue.CLASSPATH.spellsource().getName()).build())
+							.setFormat(ClasspathCardCatalogue.INSTANCE.spellsource().getName()).build())
 							.compose(decksPutResponse -> service.decksUpdate(DecksUpdateRequest.newBuilder()
 									.setDeckId(decksPutResponse.getCollection().getId())
 									.setUpdateCommand(DecksUpdateCommand.newBuilder()

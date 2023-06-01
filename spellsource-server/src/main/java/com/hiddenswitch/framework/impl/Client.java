@@ -39,4 +39,10 @@ public interface Client extends ActionListener, GameEventListener, HasElapsableT
 	 * @param client
 	 */
 	void copyRequestsTo(Client client);
+
+	/**
+	 * Gets the scheduler for this client
+	 * @return a scheduler for the client's context
+	 */
+	Scheduler getScheduler();
 }

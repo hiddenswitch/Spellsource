@@ -18,7 +18,6 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.DamageTypeMessage.DamageType;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
-import io.opentracing.util.GlobalTracer;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -95,8 +94,8 @@ public class ModelConversions {
 	}
 
 	/**
-	 * Converts an inventory record into a {@link CardDesc}, that eventually gets turned into an {@link
-	 * net.demilich.metastone.game.cards.Card} in the game.
+	 * Converts an inventory record into a {@link CardDesc}, that eventually gets turned into an
+	 * {@link net.demilich.metastone.game.cards.Card} in the game.
 	 *
 	 * @param cardRecord The record from the database describing a card in a player's collection.
 	 * @param userId     The player to whom this card belongs.
@@ -104,45 +103,32 @@ public class ModelConversions {
 	 * @return A completed card description.
 	 */
 	public static CardDesc getDescriptionFromRecord(ICardsInDeck cardRecord, String userId, String deckId) {
-		var tracer = GlobalTracer.get();
-		var span = tracer.buildSpan("Logic/getDescriptionFromRecord")
-				.withTag("userId", userId)
-				.withTag("deckId", deckId)
-				.start();
-		try (var s1 = tracer.activateSpan(span)) {
-			// Set up the attributes
-			var cardId = cardRecord.getCardId();
-            if (!ClasspathCardCatalogue.CLASSPATH.getCards().containsKey(cardId.toLowerCase())) {
-				Tracing.error(new NullPointerException(cardId), span, true);
-				return null;
-			}
+		// Set up the attributes
+		var cardId = cardRecord.getCardId();
+		if (!ClasspathCardCatalogue.INSTANCE.getCards().containsKey(cardId.toLowerCase())) {
+			throw new NullPointerException(String.format("card not found cardId=%s", cardRecord.getCardId()));
+		}
 
-            var cardById = ClasspathCardCatalogue.CLASSPATH.getCardById(cardId);
-			var desc = cardById.getDesc().clone();
+		var cardById = ClasspathCardCatalogue.INSTANCE.getCardById(cardId);
+		var desc = cardById.getDesc().clone();
 
-			if (desc.getAttributes() == null) {
-				desc.setAttributes(new AttributeMap());
-			}
+		if (desc.getAttributes() == null) {
+			desc.setAttributes(new AttributeMap());
+		}
 
-			desc.getAttributes().put(Attribute.USER_ID, userId);
-			desc.getAttributes().put(Attribute.CARD_INVENTORY_ID, cardRecord.getId());
-			desc.getAttributes().put(Attribute.DECK_ID, deckId);
+		desc.getAttributes().put(Attribute.USER_ID, userId);
+		desc.getAttributes().put(Attribute.CARD_INVENTORY_ID, cardRecord.getId());
+		desc.getAttributes().put(Attribute.DECK_ID, deckId);
 //			desc.getAttributes().put(Attribute.DONOR_ID, cardRecord.getDonorUserId());
-			desc.getAttributes().put(Attribute.CHAMPION_ID, userId);
+		desc.getAttributes().put(Attribute.CHAMPION_ID, userId);
 //			desc.getAttributes().put(Attribute.COLLECTION_IDS, cardRecord.getCollectionIds());
 //			desc.getAttributes().put(Attribute.ALLIANCE_ID, cardRecord.getAllianceId());
-			desc.getAttributes().put(Attribute.ENTITY_INSTANCE_ID, UUID.randomUUID().toString());
+		desc.getAttributes().put(Attribute.ENTITY_INSTANCE_ID, UUID.randomUUID().toString());
 
-			// Collect the persistent attributes
+		// Collect the persistent attributes
 //			desc.getAttributes().putAll(cardRecord.getPersistentAttributes());
 
-			return desc;
-		} catch (Exception ex) {
-			Tracing.error(ex, span, true);
-			return null;
-		} finally {
-			span.finish();
-		}
+		return desc;
 	}
 
 	/**
@@ -820,8 +806,8 @@ public class ModelConversions {
 	}
 
 	/**
-	 * Uses information from enchantments like {@link net.demilich.metastone.game.spells.aura.BuffAura} and {@link
-	 * WhereverTheyAreEnchantment} to add the appropriate hand buff stats.
+	 * Uses information from enchantments like {@link net.demilich.metastone.game.spells.aura.BuffAura} and
+	 * {@link WhereverTheyAreEnchantment} to add the appropriate hand buff stats.
 	 *
 	 * @param context
 	 * @param playerId
@@ -886,7 +872,7 @@ public class ModelConversions {
 						.setId(cr.getId())
 						.setDeckId(deckId), userId, deckId)).create())
 				.collect(Collectors.toCollection(CardArrayList::new)));
-        deck.setFormat(ClasspathCardCatalogue.CLASSPATH.getFormat(deckCollection.getCollection().getFormat()));
+		deck.setFormat(ClasspathCardCatalogue.INSTANCE.getFormat(deckCollection.getCollection().getFormat()));
 		deck.setHeroClass(deckCollection.getCollection().getHeroClass());
 		deck.setName(deckCollection.getCollection().getName());
 		return deck;

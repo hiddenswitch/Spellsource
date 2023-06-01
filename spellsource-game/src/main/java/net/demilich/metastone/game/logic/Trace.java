@@ -141,8 +141,8 @@ public class Trace implements Serializable, Cloneable {
 
 	public void restoreStartingStateTo(GameContext context) {
 		if (heroClasses != null && deckCardIds != null) {
-            context.setPlayer(0, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(0), deckCardIds.get(0).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 0", ClasspathCardCatalogue.CLASSPATH));
-            context.setPlayer(1, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(1), deckCardIds.get(1).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 1", ClasspathCardCatalogue.CLASSPATH));
+            context.setPlayer(0, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(0), deckCardIds.get(0).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 0", ClasspathCardCatalogue.INSTANCE));
+            context.setPlayer(1, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(1), deckCardIds.get(1).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 1", ClasspathCardCatalogue.INSTANCE));
 		} else if (heroClasses != null) {
 			context.setPlayer(0, new Player(heroClasses.get(0), context.getCardCatalogue()));
 			context.setPlayer(1, new Player(heroClasses.get(1), context.getCardCatalogue()));

@@ -16,12 +16,12 @@ import io.opentracing.util.GlobalTracer;
 import io.vertx.core.Future;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.*;
-import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.Attribute;
@@ -44,6 +44,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -75,8 +76,8 @@ public class ServerGameContext extends GameContext implements Server {
 	private final transient Lock lock = new ReentrantLock();
 	private final transient Queue<Consumer<ServerGameContext>> onGameEndHandlers = new ConcurrentLinkedQueue<>();
 	private final transient Map<Integer, Promise<Client>> clientsReady = new ConcurrentHashMap<>();
-	private final transient List<Client> clients = new ArrayList<>();
-	private final transient List<Promise> registrationsReady = new ArrayList<>();
+	private final transient List<Client> clients = new CopyOnWriteArrayList<>();
+	private final transient List<Promise> registrationsReady = new CopyOnWriteArrayList<>();
 	private final transient Promise<Void> initialization = Promise.promise();
 	private final Context context;
 	private transient Long turnTimerId;
@@ -130,7 +131,7 @@ public class ServerGameContext extends GameContext implements Server {
 			}, false);
 
 			// The deck format will be the smallest one that can contain all the cards in the decks.
-			setDeckFormat(ClasspathCardCatalogue.CLASSPATH.getSmallestSupersetFormat(playerConfigurations
+			setDeckFormat(ClasspathCardCatalogue.INSTANCE.getSmallestSupersetFormat(playerConfigurations
 					.stream()
 					.map(Configuration::getDeck)
 					// These must be game decks at this point
@@ -168,7 +169,6 @@ public class ServerGameContext extends GameContext implements Server {
 				// When the game ends remove the fact that the user is in this game
 				addEndGameHandler(ctx -> await(inGameConsumer.unregister()));
 
-				Closeable closeableBehaviour = null;
 				// Bots simply forward their requests to a bot service provider, that executes the bot logic on a worker thread
 				if (configuration.isBot()) {
 					player.getAttributes().put(Attribute.AI_OPPONENT, true);
@@ -177,13 +177,6 @@ public class ServerGameContext extends GameContext implements Server {
 						public @Nullable GameAction requestAction(@NotNull GameContext context, @NotNull Player player, @NotNull List<GameAction> validActions) {
 							Future<GameAction> nextAction = execBlockingOnContext.apply(() -> super.requestAction(context, player, validActions));
 							return await(nextAction);
-						}
-
-						@Override
-						public void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Consumer<GameAction> callback) {
-							execBlockingOnContext.apply(() -> super.requestAction(context, player, validActions))
-									.onSuccess(callback::accept)
-									.onFailure(t -> callback.accept(null));
 						}
 					};
 
@@ -195,84 +188,114 @@ public class ServerGameContext extends GameContext implements Server {
 							.setThrowOnInvalidPlan(false);
 
 					setBehaviour(configuration.getPlayerId(), behaviour);
-					closeableBehaviour = Promise::complete;
 					// Does not have a client representing it
 				} else {
 					// Connect to the GRPC stream representing this user by connecting to its handler advertised on the event bus
-					var bus = Vertx.currentContext().owner().eventBus();
-					var consumer = fromClient(userId, bus);
-					consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
-					consumer.pause();
-					// By using a publisher, we do not require that there be a working connection while sending
-					var producer = fromServer(userId, bus);
+					var serverGameContext = this;
+					var userVerticle = new AbstractVerticle() {
+						@Override
+						public void start(Promise<Void> startPromise) throws Exception {
+							try {
+								var bus = Vertx.currentContext().owner().eventBus();
+								var consumer = bus.<Spellsource.ClientToServerMessage>consumer(getMessagesFromClientAddress(userId));
+								consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
+								// By using a publisher, we do not require that there be a working connection while sending
+								var producer = bus.<Spellsource.ServerToClientMessage>publisher(getMessagesFromServerAddress(userId));
 
-					Promise<Void> registration = Promise.promise();
-					consumer.completionHandler(registration);
-					registrationsReady.add(registration);
+								Promise<Void> registration = Promise.promise();
+								consumer.completionHandler(registration);
+								registrationsReady.add(registration);
 
-					// We'll want to unregister and close these when this instance is disposed
-					closeables.add(consumer::unregister);
-					closeables.add(producer::close);
+								// We'll want to unregister and close these when this instance is disposed
+//								closeables.add(consumer::unregister);
+//								closeables.add(producer::close);
 
-					// Create a client that handles game events and action/mulligan requests
-					LOGGER.trace("creating unity client behavior for user Id {}", userId);
-					var client = new UnityClientBehaviour(this,
-							new VertxScheduler(context.owner()),
-							consumer.bodyStream(),
-							producer,
-							userId,
-							configuration.getPlayerId(),
-							configuration.getNoActivityTimeout());
-					consumer.resume();
+								// Create a client that handles game events and action/mulligan requests
+								var client = new UnityClientBehaviour(serverGameContext,
+										new VertxScheduler(),
+										consumer.bodyStream(),
+										producer,
+										userId,
+										configuration.getPlayerId(),
+										configuration.getNoActivityTimeout());
+								// The client implements the behaviour interface since it is supposed to be able to respond to requestAction
+								// and mulligan calls
+								setBehaviour(configuration.getPlayerId(), client);
+								// However, unlike a behaviour, there can be multiple clients per player ID. This will facilitate spectating.
+								getClients().add(client);
+								// This future will be completed when FIRST_MESSAGE is received from the client. And the actual unity client
+								// will only be notified to send this message when the constructor finishes.
+								startPromise.complete();
+								closeables.add(client);
+							} catch (Throwable t) {
+								startPromise.fail(t);
+							}
+						}
 
-					// This client too needs to be closed
-					closeableBehaviour = client;
+						@Override
+						public void stop(Promise<Void> stopPromise) throws Exception {
+							stopPromise.complete();
+						}
+					};
 
-					// The client implements the behaviour interface since it is supposed to be able to respond to requestAction
-					// and mulligan calls
-					setBehaviour(configuration.getPlayerId(), client);
-					// However, unlike a behaviour, there can be multiple clients per player ID. This will facilitate spectating.
-					getClients().add(client);
-					// This future will be completed when FIRST_MESSAGE is received from the client. And the actual unity client
-					// will only be notified to send this message when the constructor finishes.
+					var vertx = Vertx.currentContext().owner();
+					// for now create a stub behavior
+					setBehaviour(configuration.getPlayerId(), new AbstractBehaviour() {
+						@Override
+						public String getName() {
+							return "(Unexpected)";
+						}
+
+						@Override
+						public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
+							throw new UnsupportedOperationException("unexpectedly requested mulligan from undeployed behavior");
+						}
+
+						@Override
+						public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
+							throw new UnsupportedOperationException("unexpectedly requested action from undeployed behavior");
+						}
+					});
+
+					vertx.deployVerticle(userVerticle)
+							.onSuccess(deploymentId -> closeables.add(completion -> {
+								// this may be getting closed elsewhere?
+								vertx.undeploy(deploymentId);
+								completion.complete();
+							}));
 					Promise<Client> fut = Promise.promise();
 					clientsReady.put(configuration.getPlayerId(), fut);
 				}
-				closeables.add(closeableBehaviour);
 			}
 		} finally {
 			span.finish();
 		}
 	}
 
-	public static MessageProducer<Spellsource.ServerToClientMessage> fromServer(String userId, EventBus bus) {
-		return bus.publisher(getMessagesFromServerAddress(userId));
-	}
-
-	public static MessageConsumer<Spellsource.ClientToServerMessage> fromClient(String userId, EventBus bus) {
-		return bus.consumer(getMessagesFromClientAddress(userId));
-	}
-
-	public static void subscribeGame(ReadStream<Spellsource.ClientToServerMessage> request, WriteStream<Spellsource.ServerToClientMessage> response) {
-		var context = (ContextInternal) Vertx.currentContext();
-		var eventBus = context.owner().eventBus();
+	public static MessageConsumer<Spellsource.ServerToClientMessage> subscribeGame(ReadStream<Spellsource.ClientToServerMessage> request, WriteStream<Spellsource.ServerToClientMessage> response) {
+		var context = Vertx.currentContext();
+		var vertx = context.owner();
+		var eventBus = vertx.eventBus();
 		var userId = Accounts.userId();
 
-		request.handler(msg -> clientToServer(eventBus, userId, msg));
-		var consumer = fromServer(eventBus, userId);
+		var publisher = eventBus.<Spellsource.ClientToServerMessage>publisher(getMessagesFromClientAddress(userId));
+		var firstMessage = new AtomicBoolean(true);
+		request.handler(msg -> {
+			// if this is the first message the user is sending over this connection, wait a short beat in order to allow
+			// clustered ervent busses to settle down
+			if (vertx.isClustered() && firstMessage.compareAndSet(true, false)) {
+				com.hiddenswitch.framework.Environment.sleep(2000)
+						.onComplete(v -> publisher.write(msg).onFailure(com.hiddenswitch.framework.Environment.onFailure()));
+			} else {
+				publisher.write(msg).onFailure(com.hiddenswitch.framework.Environment.onFailure());
+			}
+		});
+		var consumer = eventBus.<Spellsource.ServerToClientMessage>consumer(getMessagesFromServerAddress(userId));
+		consumer.pause();
 		consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
 		consumer.bodyStream().pipeTo(response);
-	}
-
-	public static void clientToServer(EventBus bus, String userId, Spellsource.ClientToServerMessage msg) {
-		if (msg.getMessageType() == Spellsource.MessageTypeMessage.MessageType.FIRST_MESSAGE) {
-			LOGGER.trace("did get first message, now publishing");
-		}
-		bus.publish(getMessagesFromClientAddress(userId), msg, new DeliveryOptions());
-	}
-
-	public static MessageConsumer<Spellsource.ServerToClientMessage> fromServer(EventBus bus, String userId) {
-		return bus.consumer(getMessagesFromServerAddress(userId));
+		consumer.completionHandler(v -> consumer.resume());
+		return consumer;
 	}
 
 	/**
@@ -427,9 +450,7 @@ public class ServerGameContext extends GameContext implements Server {
 				// Only two human players will get timers
 				timerLengthMillis = getLogic().getMulliganTimeMillis();
 				timerStartTimeMillis = System.currentTimeMillis();
-				var async = async();
-				mulliganTimerId = scheduler.setTimer(timerLengthMillis,
-						event -> async.run(v -> endMulligans(event)));
+				mulliganTimerId = scheduler.setTimer(timerLengthMillis, this::endMulligans);
 			} else {
 				LOGGER.trace("init {}: No mulligan timer set for game because all players are not human", getGameId());
 				timerLengthMillis = null;
@@ -586,50 +607,48 @@ public class ServerGameContext extends GameContext implements Server {
 	public void startTurn(int playerId) {
 		lock.lock();
 		try {
-			// Start the turn timer
-			if (turnTimerId != null) {
-				scheduler.cancelTimer(turnTimerId);
-				turnTimerId = null;
-			}
-
 			for (var behaviour : getBehaviours()) {
 				if (behaviour instanceof HasElapsableTurns) {
 					((HasElapsableTurns) behaviour).setElapsed(false);
 				}
 			}
 
-			if (getBehaviours().get(getNonActivePlayerId()).isHuman()) {
+			// cancel timers
+			if (turnTimerId != null) {
+				var didCancel = false;
+				for (var client : getClients()) {
+					didCancel |= client.getScheduler().cancelTimer(turnTimerId);
+				}
+
+				if (didCancel) {
+					turnTimerId = null;
+				} else {
+					LOGGER.error("unexpectedly could not cancel turn timer");
+				}
+			}
+
+			// set up the timer in all human games
+			// todo: make this configurable
+			if (getBehaviours().stream().allMatch(Behaviour::isHuman)) {
+				var client = getClient(playerId);
+				Objects.requireNonNull(client, "client unexpectedly null");
+
 				timerLengthMillis = (long) getTurnTimeForPlayer(getActivePlayerId());
 				timerStartTimeMillis = System.currentTimeMillis();
 
-				if (turnTimerId == null) {
-					turnTimerId = scheduler.setTimer(timerLengthMillis, ignored -> com.hiddenswitch.framework.Environment.fiber(() -> {
-						// Since executing the callback may itself trigger more action requests, we'll indicate to
-						// the NetworkDelegate (i.e., this ServerGameContext instance) that further
-						// networkRequestActions should be executed immediately.
-						HasElapsableTurns client = getClient(playerId);
-						if (client == null) {
-							// Simply end the turn, since there were no requests pending to begin with
-							endTurn();
-						} else {
-							client.elapseAwaitingRequests();
-						}
-						return (Void) null;
-					}));
-				} else {
-					LOGGER.warn("startTurn {}: Timer set twice!", getGameId());
+				var scheduler = client.getScheduler();
+				if (timerLengthMillis > 0) {
+					turnTimerId = scheduler.setTimer(timerLengthMillis, v -> client.elapseAwaitingRequests());
 				}
-
-
 			} else {
 				timerLengthMillis = null;
 				timerStartTimeMillis = null;
-				LOGGER.trace("startTurn {}: Not setting timer because opponent is not human.", getGameId());
 			}
+
 			super.startTurn(playerId);
 			var state = new GameState(this, TurnState.TURN_IN_PROGRESS);
-			for (var client : getClients()) {
-				client.onUpdate(state);
+			for (var updateClient : getClients()) {
+				updateClient.onUpdate(state);
 			}
 		} finally {
 			lock.unlock();
@@ -640,10 +659,11 @@ public class ServerGameContext extends GameContext implements Server {
 	public void endTurn() {
 		lock.lock();
 		try {
-			super.endTurn();
 			if (turnTimerId != null) {
 				scheduler.cancelTimer(turnTimerId);
+				turnTimerId = null;
 			}
+			super.endTurn();
 			for (var client : getClients()) {
 				client.onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
 			}
@@ -658,6 +678,7 @@ public class ServerGameContext extends GameContext implements Server {
 	 * @param ignored The ignored timer elapse result.
 	 */
 	private void endMulligans(long ignored) {
+		LOGGER.trace("did end mulligans early");
 		for (var client : getClients()) {
 			client.elapseAwaitingRequests();
 		}
@@ -816,6 +837,12 @@ public class ServerGameContext extends GameContext implements Server {
 		lock.lock();
 		try {
 			LOGGER.trace("endGame {}: calling end game", gameId);
+
+			if (turnTimerId != null) {
+				scheduler.cancelTimer(turnTimerId);
+				turnTimerId = null;
+			}
+
 			isRunning = false;
 			// Close the inbound messages from the client, they should be ignored by these client instances
 			// This way, a user doesn't accidentally trigger some other kind of processing that's only going to be interrupted
@@ -897,9 +924,9 @@ public class ServerGameContext extends GameContext implements Server {
 		try (var s1 = tracer.activateSpan(span)) {
 			var iter = closeables.iterator();
 			while (iter.hasNext()) {
+				var closeable = iter.next();
+				var promise = Promise.<Void>promise();
 				try {
-					var closeable = iter.next();
-					var promise = Promise.<Void>promise();
 					closeable.close(promise);
 					await(timeout(promise.future(), CLOSE_TIMEOUT_MILLIS));
 				} catch (Throwable any) {
@@ -929,7 +956,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	public void onConcede(Client sender) {
-		concede(sender.getPlayerId());
+		context.runOnContext(v -> concede(sender.getPlayerId()));
 	}
 
 	@Override
@@ -972,6 +999,11 @@ public class ServerGameContext extends GameContext implements Server {
 		return Math.max(0, timerLengthMillis - (System.currentTimeMillis() - timerStartTimeMillis));
 	}
 
+	@Override
+	public boolean isGameOver() {
+		return updateAndGetGameOver();
+	}
+
 	/**
 	 * Retrieves the deck using the player's {@link Player#getUserId()}
 	 *
@@ -997,38 +1029,40 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	public void onPlayerReconnected(Client client) {
-		lock.lock();
-		try {
-			// Update the client
-			var listIterator = getClients().listIterator();
-			while (listIterator.hasNext()) {
-				var iteratee = listIterator.next();
-				// we're only expecting to replace the client if a new one is actually made
-				// the lifecycle of the client isn't related to the lifecycle of the network connection
-				if (iteratee.getPlayerId() == client.getPlayerId() && client != iteratee) {
-					var promise = Promise.<Void>promise();
-					iteratee.copyRequestsTo(client);
-					iteratee.close(promise);
-					await(timeout(promise.future(), CLOSE_TIMEOUT_MILLIS));
-					closeables.remove(iteratee);
-					listIterator.set(client);
-					iteratee = client;
-					closeables.add(client);
+		context.runOnContext(v -> {
+			lock.lock();
+			try {
+				// Update the client
+				var listIterator = getClients().listIterator();
+				while (listIterator.hasNext()) {
+					var iteratee = listIterator.next();
+					// we're only expecting to replace the client if a new one is actually made
+					// the lifecycle of the client isn't related to the lifecycle of the network connection
+					if (iteratee.getPlayerId() == client.getPlayerId() && client != iteratee) {
+						var promise = Promise.<Void>promise();
+						iteratee.copyRequestsTo(client);
+						iteratee.close(promise);
+						await(timeout(promise.future(), CLOSE_TIMEOUT_MILLIS));
+						closeables.remove(iteratee);
+						listIterator.set(client);
+						iteratee = client;
+						closeables.add(client);
+					}
+					iteratee.onConnectionStarted(getActivePlayer());
 				}
-				iteratee.onConnectionStarted(getActivePlayer());
-			}
 
-			if (client instanceof Behaviour) {
-				// Update the behaviour
-				setBehaviour(client.getPlayerId(), (Behaviour) client);
-			}
+				if (client instanceof Behaviour) {
+					// Update the behaviour
+					setBehaviour(client.getPlayerId(), (Behaviour) client);
+				}
 
-			onPlayerReady(client);
-			// Only update the reconnecting client
-			client.onUpdate(getGameStateCopy());
-		} finally {
-			lock.unlock();
-		}
+				onPlayerReady(client);
+				// Only update the reconnecting client
+				client.onUpdate(getGameStateCopy());
+			} finally {
+				lock.unlock();
+			}
+		});
 	}
 
 	public List<Client> getClients() {
@@ -1080,9 +1114,6 @@ public class ServerGameContext extends GameContext implements Server {
 	 */
 
 	public Future<CompositeFuture> handlersReady() {
-		if (!isRunning()) {
-			throw new IllegalStateException("must call play(true)");
-		}
 		return all(registrationsReady.stream().map(Promise::future).toList());
 	}
 

@@ -1,6 +1,10 @@
 package com.hiddenswitch.framework;
 
 import com.google.common.base.Throwables;
+import com.google.common.collect.ConcurrentHashMultiset;
+import com.google.common.collect.Multiset;
+import com.google.common.collect.Multisets;
+import com.google.common.collect.Sets;
 import com.google.protobuf.Empty;
 import com.hiddenswitch.diagnostics.Tracing;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
@@ -14,10 +18,33 @@ import io.vertx.core.http.HttpServerOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.sqlclient.SqlClient;
 import org.redisson.api.redisnode.RedisNodes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class Diagnostics {
+	private final static Logger LOGGER = LoggerFactory.getLogger(Diagnostics.class);
+	private final static Multiset<String> MESSAGES = ConcurrentHashMultiset.create();
+
+	public static void expect(String message, int times) {
+		Environment.sleep(1000)
+				.onSuccess(v -> {
+					var removed = MESSAGES.remove(message, times);
+					if (removed != times) {
+						LOGGER.error("message {} not received, saw {} expected {}", message, removed, times);
+					}
+				});
+	}
+
+	public static void post(String message) {
+		MESSAGES.add(message);
+	}
+
+	public static void post(String message, int count) {
+		MESSAGES.add(message, count);
+	}
 
 	public static Future<Void> routes(Vertx vertx) {
 		var configuration = Environment.getConfiguration();

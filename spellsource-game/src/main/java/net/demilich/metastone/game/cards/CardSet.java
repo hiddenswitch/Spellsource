@@ -51,7 +51,7 @@ public class CardSet {
 	public static final String GRAVEYARD = "GRAVEYARD";
 
 	public static boolean isHearthstoneSet(String set) {
-		DeckFormat wild = ClasspathCardCatalogue.CLASSPATH.getFormat("Wild");
+		DeckFormat wild = ClasspathCardCatalogue.INSTANCE.getFormat("Wild");
 		if (wild == null) {
 			return false;
 		}

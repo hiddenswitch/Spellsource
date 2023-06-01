@@ -38,6 +38,7 @@ import com.bmuschko.gradle.docker.tasks.container.DockerCreateContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerRemoveContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerStartContainer
 import com.bmuschko.gradle.docker.tasks.container.DockerStopContainer
+import com.bmuschko.gradle.docker.tasks.image.DockerPullImage
 import io.github.jklingsporn.vertx.jooq.shared.postgres.JSONBToJsonObjectConverter
 import io.vertx.core.json.JsonObject
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -69,10 +70,10 @@ dependencies {
     implementation 'javax.activation:activation:1.1.1'
 
     // includes withCallCredentials fix
-    implementation("com.github.doctorpangloss.vertx-grpc-1:vertx-grpc-server:c4d99c22f6") {
+    implementation("com.github.doctorpangloss.vertx-grpc-1:vertx-grpc-server:0721a5bab2") {
         exclude group: 'io.vertx', module: 'vertx-core'
     }
-    implementation("com.github.doctorpangloss.vertx-grpc-1:vertx-grpc-client:c4d99c22f6") {
+    implementation("com.github.doctorpangloss.vertx-grpc-1:vertx-grpc-client:0721a5bab2") {
         exclude group: 'io.vertx', module: 'vertx-core'
     }
 
@@ -193,32 +194,40 @@ application {
 }
 
 
-task stopExistingPostgresContainer(type: DockerStopContainer, group: 'Spellsource Internal') {
+tasks.register('stopExistingPostgresContainer', DockerStopContainer) {
     containerId.set('gradleSupabasePostgres')
     onError({})
 }
 
-task removeExistingPostgresContainer(type: DockerRemoveContainer, group: 'Spellsource Internal') {
+tasks.register('removeExistingPostgresContainer', DockerRemoveContainer) {
     dependsOn stopExistingPostgresContainer
     containerId.set('gradleSupabasePostgres')
     onError({})
 }
 
-task createPostgresContainer(type: DockerCreateContainer, group: 'Spellsource Internal') {
-    dependsOn += [removeExistingPostgresContainer]
+tasks.register('pullPostgresImage', DockerPullImage) {
+    image.set("docker.io/postgres:13.11-bullseye")
+}
+
+tasks.register('pullKeycloakImage', DockerPullImage) {
+    image.set("quay.io/keycloak/keycloak:20.0")
+}
+
+tasks.register('createPostgresContainer', DockerCreateContainer) {
+    dependsOn += [removeExistingPostgresContainer, pullPostgresImage]
     imageId.set("docker.io/postgres:13.11-bullseye")
     containerName.set('gradleSupabasePostgres')
     hostConfig.portBindings.set(['5432:5432'])
     entrypoint.set(["/bin/bash", "-c", "mkdir -pv /docker-entrypoint-initdb.d/ && echo 'create schema if not exists keycloak;' > /docker-entrypoint-initdb.d/init.sql && docker-entrypoint.sh postgres"])
     cmd.set([])
     envVars.putAll([
-            'POSTGRES_DB': localDatabaseName,
-            'POSTGRES_USER': localUsername,
+            'POSTGRES_DB'      : localDatabaseName,
+            'POSTGRES_USER'    : localUsername,
             'POSTGRES_PASSWORD': localPassword, 'POSTGRES_PORT': localPort])
     hostConfig.autoRemove.set(true)
 }
 
-task startPostgresContainer(type: DockerStartContainer, group: 'Spellsource Internal') {
+tasks.register('startPostgresContainer', DockerStartContainer) {
     dependsOn createPostgresContainer
     targetContainerId createPostgresContainer.getContainerId()
     doLast {
@@ -226,12 +235,12 @@ task startPostgresContainer(type: DockerStartContainer, group: 'Spellsource Inte
     }
 }
 
-task stopPostgresContainer(type: DockerStopContainer, group: 'Spellsource Internal') {
+tasks.register('stopPostgresContainer', DockerStopContainer) {
     targetContainerId createPostgresContainer.getContainerId()
 }
 
-task createKeycloakContainer(type: DockerCreateContainer, group: 'Spellsource Internal') {
-    dependsOn += [createPostgresContainer]
+tasks.register('createKeycloakContainer', DockerCreateContainer) {
+    dependsOn += [createPostgresContainer, pullKeycloakImage]
     imageId.set("quay.io/keycloak/keycloak:20.0")
     envVars.putAll([
             'KEYCLOAK_ADMIN_USERNAME': "admin",
@@ -251,7 +260,7 @@ task createKeycloakContainer(type: DockerCreateContainer, group: 'Spellsource In
     hostConfig.links.set(['gradleSupabasePostgres:gradleSupabasePostgres'])
 }
 
-task startKeycloakContainer(type: DockerStartContainer, group: 'Spellsource Internal') {
+tasks.register('startKeycloakContainer', DockerStartContainer) {
     dependsOn += [createKeycloakContainer, startPostgresContainer]
     targetContainerId createKeycloakContainer.getContainerId()
     doLast {
@@ -259,11 +268,11 @@ task startKeycloakContainer(type: DockerStartContainer, group: 'Spellsource Inte
     }
 }
 
-task stopKeycloakContainer(type: DockerStopContainer, group: 'Spellsource Internal') {
+tasks.register('stopKeycloakContainer', DockerStopContainer) {
     targetContainerId createKeycloakContainer.getContainerId()
 }
 
-task jooqGenerate(group: 'Spellsource Internal') {
+tasks.register('jooqGenerate') {
     // Do all migrations first
     dependsOn flywayMigrate
     finalizedBy = [stopKeycloakContainer, stopPostgresContainer]
@@ -332,7 +341,7 @@ task jooqGenerate(group: 'Spellsource Internal') {
     }
 }
 
-task migrationsOrSqlChanged(group: 'Spellsource') {
+tasks.register('migrationsOrSqlChanged') {
     description("Run whenever the schema as encoded in $project.projectDir.name/src/main/resources/db/migration has changed - recreates the JOOQ DSL and dumps a ddl.sql file for autocompletion")
     dependsOn += [jooqGenerate]
 }
@@ -376,7 +385,7 @@ jib {
     }
 }
 
-task githubDockerPush {
+tasks.register('githubDockerPush') {
     dependsOn jibDockerBuild
     doLast {
         for (def image : spellsourceTags.collect { tag -> "$spellsourceImage:$tag" }) {

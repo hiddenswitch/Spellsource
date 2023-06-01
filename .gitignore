@@ -37,3 +37,4 @@ python/dist/
 .ipynb_checkpoints/
 dump/
 
+hs_err_pid*

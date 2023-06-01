@@ -37,8 +37,8 @@ Requirements: **Java 20 or later** and **Docker**. Check your current version of
     # Docker. Look carefully at any messages brew tells you and do them
     brew cask install docker
     # Java (if required)
-    # Install openjdk 20 or higher
-    brew install openjdk dotnet-sdk
+    # Install openjdk 20, dotnet 6.0 & gradle 8.1 or higher
+    brew install openjdk dotnet-sdk gradle
     sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
     brew link --force openjdk
     ```
@@ -54,6 +54,10 @@ Requirements: **Java 20 or later** and **Docker**. Check your current version of
 ### Getting started with Development on Windows
 
 Requirements: **Java 20 or later** and **Docker**. Check your current version of Java using `java --version`.
+
+ 1. Install dependencies:
+    ```shell
+    ```
 
 ### Contributing Cards
 

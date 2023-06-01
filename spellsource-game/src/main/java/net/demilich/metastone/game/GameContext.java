@@ -218,7 +218,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	private int turn;
 	private int actionsThisTurn;
 	private boolean ignoreEvents;
-	private CardCatalogue cardCatalogue = ClasspathCardCatalogue.CLASSPATH;
+	private CardCatalogue cardCatalogue = ClasspathCardCatalogue.INSTANCE;
 	private CardList tempCards = new CardArrayList();
 	private boolean didCallEndGame;
 
@@ -234,7 +234,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public GameContext() {
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
 		setLogic(new GameLogic());
-		setDeckFormat(ClasspathCardCatalogue.CLASSPATH.all());
+		setDeckFormat(ClasspathCardCatalogue.INSTANCE.all());
 		setPlayer1(new Player());
 		setPlayer2(new Player());
 	}
@@ -1617,7 +1617,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		GameContext context = new GameContext();
 		Behaviour[] behaviours = new Behaviour[]{behaviour1, behaviour2};
 		for (int i = 0; i < 2; i++) {
-			context.setPlayer(i, new Player(decks.get(i), "Player " + Integer.toString(i), ClasspathCardCatalogue.CLASSPATH));
+			context.setPlayer(i, new Player(decks.get(i), "Player " + Integer.toString(i), ClasspathCardCatalogue.INSTANCE));
 			context.behaviours[i] = behaviours[i];
 		}
 		context.setDeckFormat(context.getCardCatalogue().getSmallestSupersetFormat(decks));

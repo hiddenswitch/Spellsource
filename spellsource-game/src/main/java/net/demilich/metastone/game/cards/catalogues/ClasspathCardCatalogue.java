@@ -29,7 +29,7 @@ public final class ClasspathCardCatalogue extends ListCardCatalogue {
 	 *
 	 * @return all the classpath cards
 	 */
-	public static final ClasspathCardCatalogue CLASSPATH = new ClasspathCardCatalogue();
+	public static final ClasspathCardCatalogue INSTANCE = new ClasspathCardCatalogue();
 	private AtomicBoolean loaded = new AtomicBoolean();
 	private final ReentrantLock lock = new ReentrantLock();
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClasspathCardCatalogue.class);

@@ -14,7 +14,7 @@ public class ConversionHarnessTests {
 
 	@Test
 	public void testConversionHarness() {
-        var cardCatalogue = ClasspathCardCatalogue.CLASSPATH;
+        var cardCatalogue = ClasspathCardCatalogue.INSTANCE;
 		var desc = cardCatalogue.getCardById(cardCatalogue.getOneOneNeutralMinionCardId()).getDesc();
 		var json = Json.encodePrettily(desc);
 		assertTrue(ConversionHarness.assertCardReplaysTheSame(new long[]{1L}, cardCatalogue.getOneOneNeutralMinionCardId(), json), "json was " + json);

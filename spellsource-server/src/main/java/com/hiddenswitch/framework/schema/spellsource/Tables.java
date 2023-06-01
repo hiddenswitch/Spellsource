@@ -7,16 +7,28 @@ package com.hiddenswitch.framework.schema.spellsource;
 import com.hiddenswitch.framework.schema.spellsource.tables.BotUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Cards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
+import com.hiddenswitch.framework.schema.spellsource.tables.Classes;
+import com.hiddenswitch.framework.schema.spellsource.tables.CollectionCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckShares;
 import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
 import com.hiddenswitch.framework.schema.spellsource.tables.Friends;
 import com.hiddenswitch.framework.schema.spellsource.tables.GameUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Games;
+import com.hiddenswitch.framework.schema.spellsource.tables.GetClasses;
+import com.hiddenswitch.framework.schema.spellsource.tables.GetCollectionCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.Guests;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
+import com.hiddenswitch.framework.schema.spellsource.tables.SetCardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.UserEntityAddons;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.GetClassesRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.GetCollectionCardsRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.SetCardsInDeckRecord;
+
+import org.jooq.Configuration;
+import org.jooq.Field;
+import org.jooq.Result;
 
 
 /**
@@ -39,6 +51,16 @@ public class Tables {
      * The table <code>spellsource.cards_in_deck</code>.
      */
     public static final CardsInDeck CARDS_IN_DECK = CardsInDeck.CARDS_IN_DECK;
+
+    /**
+     * The table <code>spellsource.classes</code>.
+     */
+    public static final Classes CLASSES = Classes.CLASSES;
+
+    /**
+     * The table <code>spellsource.collection_cards</code>.
+     */
+    public static final CollectionCards COLLECTION_CARDS = CollectionCards.COLLECTION_CARDS;
 
     /**
      * The table <code>spellsource.deck_player_attribute_tuples</code>.
@@ -71,6 +93,52 @@ public class Tables {
     public static final Games GAMES = Games.GAMES;
 
     /**
+     * The table <code>spellsource.get_classes</code>.
+     */
+    public static final GetClasses GET_CLASSES = GetClasses.GET_CLASSES;
+
+    /**
+     * Call <code>spellsource.get_classes</code>.
+     */
+    public static Result<GetClassesRecord> GET_CLASSES(
+          Configuration configuration
+    ) {
+        return configuration.dsl().selectFrom(com.hiddenswitch.framework.schema.spellsource.tables.GetClasses.GET_CLASSES.call(
+        )).fetch();
+    }
+
+    /**
+     * Get <code>spellsource.get_classes</code> as a table.
+     */
+    public static GetClasses GET_CLASSES() {
+        return com.hiddenswitch.framework.schema.spellsource.tables.GetClasses.GET_CLASSES.call(
+        );
+    }
+
+    /**
+     * The table <code>spellsource.get_collection_cards</code>.
+     */
+    public static final GetCollectionCards GET_COLLECTION_CARDS = GetCollectionCards.GET_COLLECTION_CARDS;
+
+    /**
+     * Call <code>spellsource.get_collection_cards</code>.
+     */
+    public static Result<GetCollectionCardsRecord> GET_COLLECTION_CARDS(
+          Configuration configuration
+    ) {
+        return configuration.dsl().selectFrom(com.hiddenswitch.framework.schema.spellsource.tables.GetCollectionCards.GET_COLLECTION_CARDS.call(
+        )).fetch();
+    }
+
+    /**
+     * Get <code>spellsource.get_collection_cards</code> as a table.
+     */
+    public static GetCollectionCards GET_COLLECTION_CARDS() {
+        return com.hiddenswitch.framework.schema.spellsource.tables.GetCollectionCards.GET_COLLECTION_CARDS.call(
+        );
+    }
+
+    /**
      * The table <code>spellsource.guests</code>.
      */
     public static final Guests GUESTS = Guests.GUESTS;
@@ -84,6 +152,51 @@ public class Tables {
      * The table <code>spellsource.matchmaking_tickets</code>.
      */
     public static final MatchmakingTickets MATCHMAKING_TICKETS = MatchmakingTickets.MATCHMAKING_TICKETS;
+
+    /**
+     * The table <code>spellsource.set_cards_in_deck</code>.
+     */
+    public static final SetCardsInDeck SET_CARDS_IN_DECK = SetCardsInDeck.SET_CARDS_IN_DECK;
+
+    /**
+     * Call <code>spellsource.set_cards_in_deck</code>.
+     */
+    public static Result<SetCardsInDeckRecord> SET_CARDS_IN_DECK(
+          Configuration configuration
+        , String deck
+        , String[] cardIds
+    ) {
+        return configuration.dsl().selectFrom(com.hiddenswitch.framework.schema.spellsource.tables.SetCardsInDeck.SET_CARDS_IN_DECK.call(
+              deck
+            , cardIds
+        )).fetch();
+    }
+
+    /**
+     * Get <code>spellsource.set_cards_in_deck</code> as a table.
+     */
+    public static SetCardsInDeck SET_CARDS_IN_DECK(
+          String deck
+        , String[] cardIds
+    ) {
+        return com.hiddenswitch.framework.schema.spellsource.tables.SetCardsInDeck.SET_CARDS_IN_DECK.call(
+            deck,
+            cardIds
+        );
+    }
+
+    /**
+     * Get <code>spellsource.set_cards_in_deck</code> as a table.
+     */
+    public static SetCardsInDeck SET_CARDS_IN_DECK(
+          Field<String> deck
+        , Field<String[]> cardIds
+    ) {
+        return com.hiddenswitch.framework.schema.spellsource.tables.SetCardsInDeck.SET_CARDS_IN_DECK.call(
+            deck,
+            cardIds
+        );
+    }
 
     /**
      * The table <code>spellsource.user_entity_addons</code>.

@@ -714,10 +714,10 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 			deck.setName(response.getCollectionRecord().getName());
 			String heroCardId = response.getCollectionRecord().getHeroCardId();
 			if (heroCardId != null) {
-				deck.setHeroCard(ClasspathCardCatalogue.CLASSPATH.getCardById(heroCardId));
+				deck.setHeroCard(ClasspathCardCatalogue.INSTANCE.getCardById(heroCardId));
 			}
 
-			response.getInventoryRecords().stream().map(cardRecord -> ClasspathCardCatalogue.CLASSPATH.getCardById(cardRecord.getCardId()))
+			response.getInventoryRecords().stream().map(cardRecord -> ClasspathCardCatalogue.INSTANCE.getCardById(cardRecord.getCardId()))
 					.forEach(deck.getCards()::addCard);
 
 			deck.setPlayerAttributes(response.getCollectionRecord().getPlayerEntityAttributes());
@@ -765,7 +765,7 @@ public class V8__Migrate_from_previous_server extends BaseJavaMigration {
 			List<CardRecord> records = new ArrayList<>();
 
 			for (InventoryRecord cr : inventoryRecords) {
-				CardDesc record = ClasspathCardCatalogue.CLASSPATH.getCardById(cr.getCardId()).getDesc();
+				CardDesc record = ClasspathCardCatalogue.INSTANCE.getCardById(cr.getCardId()).getDesc();
 
 				if (record == null) {
 					continue;

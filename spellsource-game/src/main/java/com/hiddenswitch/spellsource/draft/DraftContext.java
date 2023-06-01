@@ -27,7 +27,7 @@ public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>
 	private PublicDraftState publicState = new PublicDraftState();
 	private PrivateDraftState privateState = new PrivateDraftState();
 	private DraftBehaviour behaviour = new NullDraftBehaviour();
-	private CardCatalogue cardCatalogue = ClasspathCardCatalogue.CLASSPATH;
+	private CardCatalogue cardCatalogue = ClasspathCardCatalogue.INSTANCE;
 	private Handler<AsyncResult<DraftContext>> handleDone;
 
 	/**

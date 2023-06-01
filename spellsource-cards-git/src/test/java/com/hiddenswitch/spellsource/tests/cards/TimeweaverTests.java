@@ -104,7 +104,7 @@ public class TimeweaverTests extends TestBase {
 			int blueIndex = drewBlack ? 0 : 1;
 			assertEquals(player.getDeck().get(blackIndex).getCardId(), "minion_black_test");
 			assertEquals(player.getDeck().get(blueIndex).getCardId(), "minion_blue_test");
-		}, new GameDeck(ClasspathCardCatalogue.CLASSPATH, HeroClass.ANY, Arrays.asList("minion_black_test", "minion_blue_test")), new GameDeck(ClasspathCardCatalogue.CLASSPATH, HeroClass.ANY, Arrays.asList("minion_black_test", "minion_blue_test")));
+		}, new GameDeck(ClasspathCardCatalogue.INSTANCE, HeroClass.ANY, Arrays.asList("minion_black_test", "minion_blue_test")), new GameDeck(ClasspathCardCatalogue.INSTANCE, HeroClass.ANY, Arrays.asList("minion_black_test", "minion_blue_test")));
 	}
 
 	@Test

@@ -34,14 +34,6 @@ public abstract class AbstractBehaviour implements Behaviour, Serializable {
 	}
 
 	@Override
-	public void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Consumer<GameAction> callback) {
-		GameAction action = requestAction(context, player, validActions);
-		if (callback != null) {
-			callback.accept(action);
-		}
-	}
-
-	@Override
 	public boolean isHuman() {
 		return false;
 	}

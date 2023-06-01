@@ -81,21 +81,6 @@ public interface Behaviour extends Cloneable {
 	}
 
 	/**
-	 * Requests an action from a player asynchronously.
-	 *
-	 * @param context      The game context where the choice is being made.
-	 * @param player       The player who is making the choice.
-	 * @param validActions The valid actions the player has to choose from.
-	 * @param callback     The callback whose argument is one of the {@code validActions} that correspond to the player's
-	 */
-	default void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Consumer<GameAction> callback) {
-		GameAction action = requestAction(context, player, validActions);
-		if (callback != null) {
-			callback.accept(action);
-		}
-	}
-
-	/**
 	 * Determines whether this behaviour's actions were determined by a human.
 	 *
 	 * @return {@code true} if the actions are determined by a human, {@code false} otherwise.

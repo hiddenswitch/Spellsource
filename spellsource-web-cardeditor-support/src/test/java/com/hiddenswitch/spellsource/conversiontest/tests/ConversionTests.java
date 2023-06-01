@@ -35,7 +35,7 @@ public class ConversionTests {
 			"minion_bloodsoaked_construct");
 
 	public static Stream<String> getCardIds() {
-		var cardCatalogue = ClasspathCardCatalogue.CLASSPATH;
+		var cardCatalogue = ClasspathCardCatalogue.INSTANCE;
 		return cardCatalogue.getCards().keySet().stream().filter(cardId -> {
 			var card = cardCatalogue.getCards().get(cardId);
 			var cardType = card.getCardType();
@@ -51,6 +51,6 @@ public class ConversionTests {
 	@ParameterizedTest()
 	@MethodSource("getCardIds")
 	public void testAllCardsReproduce(String cardId) throws JsonProcessingException {
-		assertTrue(ConversionHarness.assertCardReplaysTheSame(new long[]{1L, 2L}, cardId, DatabindCodec.mapper().writeValueAsString(ClasspathCardCatalogue.CLASSPATH.getCards().get(cardId).getDesc())));
+		assertTrue(ConversionHarness.assertCardReplaysTheSame(new long[]{1L, 2L}, cardId, DatabindCodec.mapper().writeValueAsString(ClasspathCardCatalogue.INSTANCE.getCards().get(cardId).getDesc())));
 	}
 }

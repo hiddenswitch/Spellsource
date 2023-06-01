@@ -167,21 +167,9 @@ public class DraftLogic {
 				}
 
 				// Get neutral and hero cards
-				CardList classCards = context.get().getCardCatalogue().query(format, c -> {
-					return c.hasHeroClass(hero)
-							&& !bannedCards.contains(c.getCardId())
-							&& c.getRarity() == rarity
-							&& validCardTypes.contains(c.getCardType())
-							&& c.isCollectible();
-				});
+				CardList classCards = context.get().getCardCatalogue().queryClassCards(format,hero,bannedCards,rarity,validCardTypes);
 
-				CardList neutralCards = context.get().getCardCatalogue().query(format, c -> {
-					return c.hasHeroClass(HeroClass.ANY)
-							&& !bannedCards.contains(c.getCardId())
-							&& c.getRarity() == rarity
-							&& validCardTypes.contains(c.getCardType())
-							&& c.isCollectible();
-				});
+				CardList neutralCards = context.get().getCardCatalogue().queryNeutrals(format,bannedCards,rarity,validCardTypes);
 
 				// Total five copies of the class cards and then the neutrals
 				CardList cards = classCards.clone()

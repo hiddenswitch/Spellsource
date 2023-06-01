@@ -26,7 +26,7 @@ namespace HiddenSwitch.Proto {
           string.Concat(
             "ChJoaWRkZW5zd2l0Y2gucHJvdG8SDGhpZGRlbnN3aXRjaBoeZ29vZ2xlL3By",
             "b3RvYnVmL3dyYXBwZXJzLnByb3RvGhtnb29nbGUvcHJvdG9idWYvZW1wdHku",
-            "cHJvdG8aEXNwZWxsc291cmNlLnByb3RvIt4QChNTZXJ2ZXJDb25maWd1cmF0",
+            "cHJvdG8aEXNwZWxsc291cmNlLnByb3RvIowRChNTZXJ2ZXJDb25maWd1cmF0",
             "aW9uEkMKAnBnGAEgASgLMjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3Vy",
             "YXRpb24uUG9zdGdyZXNDb25maWd1cmF0aW9uEkkKCGtleWNsb2FrGAIgASgL",
             "MjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRpb24uS2V5Y2xvYWtD",
@@ -72,51 +72,52 @@ namespace HiddenSwitch.Proto {
             "EhYKDnJlYWRpbmVzc1JvdXRlGAMgASgJEhQKDG1ldHJpY3NSb3V0ZRgEIAEo",
             "CRorChhSYXRlTGltaXRlckNvbmZpZ3VyYXRpb24SDwoHZW5hYmxlZBgBIAEo",
             "CBpMChNKYWVnZXJDb25maWd1cmF0aW9uEg8KB2VuYWJsZWQYASABKAgSEQoJ",
-            "YWdlbnRIb3N0GAIgASgJEhEKCWFnZW50UG9ydBgDIAEoBRo5ChJWZXJ0eENv",
+            "YWdlbnRIb3N0GAIgASgJEhEKCWFnZW50UG9ydBgDIAEoBRpnChJWZXJ0eENv",
             "bmZpZ3VyYXRpb24SIwobdXNlSW5maW5pc3BhbkNsdXN0ZXJNYW5hZ2VyGAEg",
-            "ASgISgQIBBAFIsEBChNDbGllbnRDb25maWd1cmF0aW9uEkkKCGFjY291bnRz",
-            "GAEgASgLMjcuaGlkZGVuc3dpdGNoLkNsaWVudENvbmZpZ3VyYXRpb24uQWNj",
-            "b3VudHNDb25maWd1cmF0aW9uGl8KFUFjY291bnRzQ29uZmlndXJhdGlvbhIg",
-            "ChhrZXljbG9ha1Jlc2V0UGFzc3dvcmRVcmwYASABKAkSJAoca2V5Y2xvYWtB",
-            "Y2NvdW50TWFuYWdlbWVudFVybBgCIAEoCSIoCg9HZXRDYXJkc1JlcXVlc3QS",
-            "FQoNSWZfTm9uZV9NYXRjaBgBIAEoCSKhAQoQR2V0Q2FyZHNSZXNwb25zZRI3",
-            "Cgdjb250ZW50GAEgASgLMiYuaGlkZGVuc3dpdGNoLkdldENhcmRzUmVzcG9u",
-            "c2UuQ29udGVudBIPCgd2ZXJzaW9uGAIgASgJEhAKCGNhY2hlZE9rGAMgASgI",
-            "GjEKB0NvbnRlbnQSJgoFY2FyZHMYASADKAsyFy5zcGVsbHNvdXJjZS5DYXJk",
-            "UmVjb3JkIjkKDExvZ2luUmVxdWVzdBIXCg91c2VybmFtZU9yRW1haWwYASAB",
-            "KAkSEAoIcGFzc3dvcmQYAiABKAkiZwoUQ3JlYXRlQWNjb3VudFJlcXVlc3QS",
-            "DQoFZW1haWwYASABKAkSEAoIdXNlcm5hbWUYAiABKAkSEAoIcGFzc3dvcmQY",
-            "AyABKAkSDQoFZGVja3MYBCABKAgSDQoFZ3Vlc3QYBSABKAgiLAoVQ2hhbmdl",
-            "UGFzc3dvcmRSZXF1ZXN0EhMKC25ld1Bhc3N3b3JkGAEgASgJIoIBChJMb2dp",
-            "bk9yQ3JlYXRlUmVwbHkSPgoTYWNjZXNzVG9rZW5SZXNwb25zZRgBIAEoCzIh",
-            "LmhpZGRlbnN3aXRjaC5BY2Nlc3NUb2tlblJlc3BvbnNlEiwKCnVzZXJFbnRp",
-            "dHkYAiABKAsyGC5oaWRkZW5zd2l0Y2guVXNlckVudGl0eSIkChNBY2Nlc3NU",
-            "b2tlblJlc3BvbnNlEg0KBXRva2VuGAEgASgJIk8KClVzZXJFbnRpdHkSCgoC",
-            "aWQYASABKAkSDQoFZW1haWwYAiABKAkSEAoIdXNlcm5hbWUYCiABKAkSFAoM",
-            "cHJpdmFjeVRva2VuGAsgASgJIiEKEkdldEFjY291bnRzUmVxdWVzdBILCgNp",
-            "ZHMYASADKAkiQgoQR2V0QWNjb3VudHNSZXBseRIuCgx1c2VyRW50aXRpZXMY",
-            "ASADKAsyGC5oaWRkZW5zd2l0Y2guVXNlckVudGl0eTLUAgoPVW5hdXRoZW50",
-            "aWNhdGVkElcKDUNyZWF0ZUFjY291bnQSIi5oaWRkZW5zd2l0Y2guQ3JlYXRl",
-            "QWNjb3VudFJlcXVlc3QaIC5oaWRkZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJl",
-            "cGx5IgASRwoFTG9naW4SGi5oaWRkZW5zd2l0Y2guTG9naW5SZXF1ZXN0GiAu",
-            "aGlkZGVuc3dpdGNoLkxvZ2luT3JDcmVhdGVSZXBseSIAEk4KC1ZlcmlmeVRv",
-            "a2VuEiEuaGlkZGVuc3dpdGNoLkFjY2Vzc1Rva2VuUmVzcG9uc2UaGi5nb29n",
-            "bGUucHJvdG9idWYuQm9vbFZhbHVlIgASTwoQR2V0Q29uZmlndXJhdGlvbhIW",
-            "Lmdvb2dsZS5wcm90b2J1Zi5FbXB0eRohLmhpZGRlbnN3aXRjaC5DbGllbnRD",
-            "b25maWd1cmF0aW9uIgAyYwoUVW5hdXRoZW50aWNhdGVkQ2FyZHMSSwoIR2V0",
-            "Q2FyZHMSHS5oaWRkZW5zd2l0Y2guR2V0Q2FyZHNSZXF1ZXN0Gh4uaGlkZGVu",
-            "c3dpdGNoLkdldENhcmRzUmVzcG9uc2UiADLPAgoIQWNjb3VudHMSRgoKR2V0",
-            "QWNjb3VudBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoeLmhpZGRlbnN3aXRj",
-            "aC5HZXRBY2NvdW50c1JlcGx5IgASUQoLR2V0QWNjb3VudHMSIC5oaWRkZW5z",
-            "d2l0Y2guR2V0QWNjb3VudHNSZXF1ZXN0Gh4uaGlkZGVuc3dpdGNoLkdldEFj",
-            "Y291bnRzUmVwbHkiABJZCg5DaGFuZ2VQYXNzd29yZBIjLmhpZGRlbnN3aXRj",
-            "aC5DaGFuZ2VQYXNzd29yZFJlcXVlc3QaIC5oaWRkZW5zd2l0Y2guTG9naW5P",
-            "ckNyZWF0ZVJlcGx5IgASTQoZUmVxdWVzdFBhc3N3b3JkUmVzZXRFbWFpbBIW",
-            "Lmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0",
-            "eSIAMkwKBUdhbWVzEkMKCUlzSW5NYXRjaBIWLmdvb2dsZS5wcm90b2J1Zi5F",
-            "bXB0eRocLmdvb2dsZS5wcm90b2J1Zi5TdHJpbmdWYWx1ZSIAQjcKHmNvbS5o",
-            "aWRkZW5zd2l0Y2guZnJhbWV3b3JrLnJwY1AAqgISSGlkZGVuU3dpdGNoLlBy",
-            "b3RvYgZwcm90bzM="));
+            "ASgIEhoKDWluZmluc3BhblBvcnQYAiABKAVIAIgBAUIQCg5faW5maW5zcGFu",
+            "UG9ydEoECAQQBSLBAQoTQ2xpZW50Q29uZmlndXJhdGlvbhJJCghhY2NvdW50",
+            "cxgBIAEoCzI3LmhpZGRlbnN3aXRjaC5DbGllbnRDb25maWd1cmF0aW9uLkFj",
+            "Y291bnRzQ29uZmlndXJhdGlvbhpfChVBY2NvdW50c0NvbmZpZ3VyYXRpb24S",
+            "IAoYa2V5Y2xvYWtSZXNldFBhc3N3b3JkVXJsGAEgASgJEiQKHGtleWNsb2Fr",
+            "QWNjb3VudE1hbmFnZW1lbnRVcmwYAiABKAkiKAoPR2V0Q2FyZHNSZXF1ZXN0",
+            "EhUKDUlmX05vbmVfTWF0Y2gYASABKAkioQEKEEdldENhcmRzUmVzcG9uc2US",
+            "NwoHY29udGVudBgBIAEoCzImLmhpZGRlbnN3aXRjaC5HZXRDYXJkc1Jlc3Bv",
+            "bnNlLkNvbnRlbnQSDwoHdmVyc2lvbhgCIAEoCRIQCghjYWNoZWRPaxgDIAEo",
+            "CBoxCgdDb250ZW50EiYKBWNhcmRzGAEgAygLMhcuc3BlbGxzb3VyY2UuQ2Fy",
+            "ZFJlY29yZCI5CgxMb2dpblJlcXVlc3QSFwoPdXNlcm5hbWVPckVtYWlsGAEg",
+            "ASgJEhAKCHBhc3N3b3JkGAIgASgJImcKFENyZWF0ZUFjY291bnRSZXF1ZXN0",
+            "Eg0KBWVtYWlsGAEgASgJEhAKCHVzZXJuYW1lGAIgASgJEhAKCHBhc3N3b3Jk",
+            "GAMgASgJEg0KBWRlY2tzGAQgASgIEg0KBWd1ZXN0GAUgASgIIiwKFUNoYW5n",
+            "ZVBhc3N3b3JkUmVxdWVzdBITCgtuZXdQYXNzd29yZBgBIAEoCSKCAQoSTG9n",
+            "aW5PckNyZWF0ZVJlcGx5Ej4KE2FjY2Vzc1Rva2VuUmVzcG9uc2UYASABKAsy",
+            "IS5oaWRkZW5zd2l0Y2guQWNjZXNzVG9rZW5SZXNwb25zZRIsCgp1c2VyRW50",
+            "aXR5GAIgASgLMhguaGlkZGVuc3dpdGNoLlVzZXJFbnRpdHkiJAoTQWNjZXNz",
+            "VG9rZW5SZXNwb25zZRINCgV0b2tlbhgBIAEoCSJPCgpVc2VyRW50aXR5EgoK",
+            "AmlkGAEgASgJEg0KBWVtYWlsGAIgASgJEhAKCHVzZXJuYW1lGAogASgJEhQK",
+            "DHByaXZhY3lUb2tlbhgLIAEoCSIhChJHZXRBY2NvdW50c1JlcXVlc3QSCwoD",
+            "aWRzGAEgAygJIkIKEEdldEFjY291bnRzUmVwbHkSLgoMdXNlckVudGl0aWVz",
+            "GAEgAygLMhguaGlkZGVuc3dpdGNoLlVzZXJFbnRpdHky1AIKD1VuYXV0aGVu",
+            "dGljYXRlZBJXCg1DcmVhdGVBY2NvdW50EiIuaGlkZGVuc3dpdGNoLkNyZWF0",
+            "ZUFjY291bnRSZXF1ZXN0GiAuaGlkZGVuc3dpdGNoLkxvZ2luT3JDcmVhdGVS",
+            "ZXBseSIAEkcKBUxvZ2luEhouaGlkZGVuc3dpdGNoLkxvZ2luUmVxdWVzdBog",
+            "LmhpZGRlbnN3aXRjaC5Mb2dpbk9yQ3JlYXRlUmVwbHkiABJOCgtWZXJpZnlU",
+            "b2tlbhIhLmhpZGRlbnN3aXRjaC5BY2Nlc3NUb2tlblJlc3BvbnNlGhouZ29v",
+            "Z2xlLnByb3RvYnVmLkJvb2xWYWx1ZSIAEk8KEEdldENvbmZpZ3VyYXRpb24S",
+            "Fi5nb29nbGUucHJvdG9idWYuRW1wdHkaIS5oaWRkZW5zd2l0Y2guQ2xpZW50",
+            "Q29uZmlndXJhdGlvbiIAMmMKFFVuYXV0aGVudGljYXRlZENhcmRzEksKCEdl",
+            "dENhcmRzEh0uaGlkZGVuc3dpdGNoLkdldENhcmRzUmVxdWVzdBoeLmhpZGRl",
+            "bnN3aXRjaC5HZXRDYXJkc1Jlc3BvbnNlIgAyzwIKCEFjY291bnRzEkYKCkdl",
+            "dEFjY291bnQSFi5nb29nbGUucHJvdG9idWYuRW1wdHkaHi5oaWRkZW5zd2l0",
+            "Y2guR2V0QWNjb3VudHNSZXBseSIAElEKC0dldEFjY291bnRzEiAuaGlkZGVu",
+            "c3dpdGNoLkdldEFjY291bnRzUmVxdWVzdBoeLmhpZGRlbnN3aXRjaC5HZXRB",
+            "Y2NvdW50c1JlcGx5IgASWQoOQ2hhbmdlUGFzc3dvcmQSIy5oaWRkZW5zd2l0",
+            "Y2guQ2hhbmdlUGFzc3dvcmRSZXF1ZXN0GiAuaGlkZGVuc3dpdGNoLkxvZ2lu",
+            "T3JDcmVhdGVSZXBseSIAEk0KGVJlcXVlc3RQYXNzd29yZFJlc2V0RW1haWwS",
+            "Fi5nb29nbGUucHJvdG9idWYuRW1wdHkaFi5nb29nbGUucHJvdG9idWYuRW1w",
+            "dHkiADJMCgVHYW1lcxJDCglJc0luTWF0Y2gSFi5nb29nbGUucHJvdG9idWYu",
+            "RW1wdHkaHC5nb29nbGUucHJvdG9idWYuU3RyaW5nVmFsdWUiAEI3Ch5jb20u",
+            "aGlkZGVuc3dpdGNoLmZyYW1ld29yay5ycGNQAKoCEkhpZGRlblN3aXRjaC5Q",
+            "cm90b2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, global::Spellsource.Proto.SpellsourceReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -131,7 +132,7 @@ namespace HiddenSwitch.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.MetricsConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.MetricsConfiguration.Parser, new[]{ "Port", "LivenessRoute", "ReadinessRoute", "MetricsRoute" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RateLimiterConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RateLimiterConfiguration.Parser, new[]{ "Enabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.JaegerConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.JaegerConfiguration.Parser, new[]{ "Enabled", "AgentHost", "AgentPort" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.VertxConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.VertxConfiguration.Parser, new[]{ "UseInfinispanClusterManager" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.VertxConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.VertxConfiguration.Parser, new[]{ "UseInfinispanClusterManager", "InfinspanPort" }, new[]{ "InfinspanPort" }, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ClientConfiguration), global::HiddenSwitch.Proto.ClientConfiguration.Parser, new[]{ "Accounts" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ClientConfiguration.Types.AccountsConfiguration), global::HiddenSwitch.Proto.ClientConfiguration.Types.AccountsConfiguration.Parser, new[]{ "KeycloakResetPasswordUrl", "KeycloakAccountManagementUrl" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsRequest), global::HiddenSwitch.Proto.GetCardsRequest.Parser, new[]{ "IfNoneMatch" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsResponse), global::HiddenSwitch.Proto.GetCardsResponse.Parser, new[]{ "Content", "Version", "CachedOk" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsResponse.Types.Content), global::HiddenSwitch.Proto.GetCardsResponse.Types.Content.Parser, new[]{ "Cards" }, null, null, null, null)}),
@@ -1717,10 +1718,24 @@ namespace HiddenSwitch.Proto {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public string Uri {
-          get { return connectionCase_ == ConnectionOneofCase.Uri ? (string) connection_ : ""; }
+          get { return HasUri ? (string) connection_ : ""; }
           set {
             connection_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
             connectionCase_ = ConnectionOneofCase.Uri;
+          }
+        }
+        /// <summary>Gets whether the "uri" field is set</summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool HasUri {
+          get { return connectionCase_ == ConnectionOneofCase.Uri; }
+        }
+        /// <summary> Clears the value of the oneof if it's currently set to "uri" </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void ClearUri() {
+          if (HasUri) {
+            ClearConnection();
           }
         }
 
@@ -1771,7 +1786,7 @@ namespace HiddenSwitch.Proto {
         public override int GetHashCode() {
           int hash = 1;
           if (connectionCase_ == ConnectionOneofCase.HostPortUser) hash ^= HostPortUser.GetHashCode();
-          if (connectionCase_ == ConnectionOneofCase.Uri) hash ^= Uri.GetHashCode();
+          if (HasUri) hash ^= Uri.GetHashCode();
           hash ^= (int) connectionCase_;
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
@@ -1795,7 +1810,7 @@ namespace HiddenSwitch.Proto {
             output.WriteRawTag(10);
             output.WriteMessage(HostPortUser);
           }
-          if (connectionCase_ == ConnectionOneofCase.Uri) {
+          if (HasUri) {
             output.WriteRawTag(18);
             output.WriteString(Uri);
           }
@@ -1813,7 +1828,7 @@ namespace HiddenSwitch.Proto {
             output.WriteRawTag(10);
             output.WriteMessage(HostPortUser);
           }
-          if (connectionCase_ == ConnectionOneofCase.Uri) {
+          if (HasUri) {
             output.WriteRawTag(18);
             output.WriteString(Uri);
           }
@@ -1830,7 +1845,7 @@ namespace HiddenSwitch.Proto {
           if (connectionCase_ == ConnectionOneofCase.HostPortUser) {
             size += 1 + pb::CodedOutputStream.ComputeMessageSize(HostPortUser);
           }
-          if (connectionCase_ == ConnectionOneofCase.Uri) {
+          if (HasUri) {
             size += 1 + pb::CodedOutputStream.ComputeStringSize(Uri);
           }
           if (_unknownFields != null) {
@@ -4090,6 +4105,7 @@ namespace HiddenSwitch.Proto {
       {
         private static readonly pb::MessageParser<VertxConfiguration> _parser = new pb::MessageParser<VertxConfiguration>(() => new VertxConfiguration());
         private pb::UnknownFieldSet _unknownFields;
+        private int _hasBits0;
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public static pb::MessageParser<VertxConfiguration> Parser { get { return _parser; } }
@@ -4117,7 +4133,9 @@ namespace HiddenSwitch.Proto {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public VertxConfiguration(VertxConfiguration other) : this() {
+          _hasBits0 = other._hasBits0;
           useInfinispanClusterManager_ = other.useInfinispanClusterManager_;
+          infinspanPort_ = other.infinspanPort_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -4139,6 +4157,33 @@ namespace HiddenSwitch.Proto {
           }
         }
 
+        /// <summary>Field number for the "infinspanPort" field.</summary>
+        public const int InfinspanPortFieldNumber = 2;
+        private readonly static int InfinspanPortDefaultValue = 0;
+
+        private int infinspanPort_;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int InfinspanPort {
+          get { if ((_hasBits0 & 1) != 0) { return infinspanPort_; } else { return InfinspanPortDefaultValue; } }
+          set {
+            _hasBits0 |= 1;
+            infinspanPort_ = value;
+          }
+        }
+        /// <summary>Gets whether the "infinspanPort" field is set</summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool HasInfinspanPort {
+          get { return (_hasBits0 & 1) != 0; }
+        }
+        /// <summary>Clears the value of the "infinspanPort" field</summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void ClearInfinspanPort() {
+          _hasBits0 &= ~1;
+        }
+
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
@@ -4155,6 +4200,7 @@ namespace HiddenSwitch.Proto {
             return true;
           }
           if (UseInfinispanClusterManager != other.UseInfinispanClusterManager) return false;
+          if (InfinspanPort != other.InfinspanPort) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -4163,6 +4209,7 @@ namespace HiddenSwitch.Proto {
         public override int GetHashCode() {
           int hash = 1;
           if (UseInfinispanClusterManager != false) hash ^= UseInfinispanClusterManager.GetHashCode();
+          if (HasInfinspanPort) hash ^= InfinspanPort.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -4185,6 +4232,10 @@ namespace HiddenSwitch.Proto {
             output.WriteRawTag(8);
             output.WriteBool(UseInfinispanClusterManager);
           }
+          if (HasInfinspanPort) {
+            output.WriteRawTag(16);
+            output.WriteInt32(InfinspanPort);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -4199,6 +4250,10 @@ namespace HiddenSwitch.Proto {
             output.WriteRawTag(8);
             output.WriteBool(UseInfinispanClusterManager);
           }
+          if (HasInfinspanPort) {
+            output.WriteRawTag(16);
+            output.WriteInt32(InfinspanPort);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(ref output);
           }
@@ -4211,6 +4266,9 @@ namespace HiddenSwitch.Proto {
           int size = 0;
           if (UseInfinispanClusterManager != false) {
             size += 1 + 1;
+          }
+          if (HasInfinspanPort) {
+            size += 1 + pb::CodedOutputStream.ComputeInt32Size(InfinspanPort);
           }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
@@ -4226,6 +4284,9 @@ namespace HiddenSwitch.Proto {
           }
           if (other.UseInfinispanClusterManager != false) {
             UseInfinispanClusterManager = other.UseInfinispanClusterManager;
+          }
+          if (other.HasInfinspanPort) {
+            InfinspanPort = other.InfinspanPort;
           }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
@@ -4246,6 +4307,10 @@ namespace HiddenSwitch.Proto {
                 UseInfinispanClusterManager = input.ReadBool();
                 break;
               }
+              case 16: {
+                InfinspanPort = input.ReadInt32();
+                break;
+              }
             }
           }
         #endif
@@ -4263,6 +4328,10 @@ namespace HiddenSwitch.Proto {
                 break;
               case 8: {
                 UseInfinispanClusterManager = input.ReadBool();
+                break;
+              }
+              case 16: {
+                InfinspanPort = input.ReadInt32();
                 break;
               }
             }

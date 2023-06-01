@@ -17,8 +17,7 @@ public class UncollectibleCatalogueSource extends CardSource implements HasCardC
 
 	@Override
 	protected CardList match(GameContext context, Entity source, Player player) {
-		return context.getCardCatalogue().query(context.getDeckFormat(), always -> true);
+		return context.getCardCatalogue().queryUncollectible(context.getDeckFormat());
 	}
-
 }
 

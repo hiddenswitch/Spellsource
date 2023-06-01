@@ -134,7 +134,7 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 		if (format == null) {
 			// Retrieve the format that is implied by the cards inside this deck.
 			Set<String> cardSets = getCards().stream().map(Card::getCardSet).collect(Collectors.toSet());
-			return ClasspathCardCatalogue.CLASSPATH.getSmallestSupersetFormat(cardSets);
+			return ClasspathCardCatalogue.INSTANCE.getSmallestSupersetFormat(cardSets);
 		}
 
 		return format;

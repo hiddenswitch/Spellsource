@@ -134,6 +134,37 @@ public class CardsDao extends AbstractReactiveVertxDAO<CardsRecord, com.hiddensw
                 return findManyByCondition(Cards.CARDS.LAST_MODIFIED.in(values),limit);
         }
 
+        /**
+     * Find records that have <code>is_archived IN (values)</code>
+     * asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByIsArchived(Collection<Boolean> values) {
+                return findManyByCondition(Cards.CARDS.IS_ARCHIVED.in(values));
+        }
+
+        /**
+     * Find records that have <code>is_archived IN (values)</code>
+     * asynchronously limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByIsArchived(Collection<Boolean> values, int limit) {
+                return findManyByCondition(Cards.CARDS.IS_ARCHIVED.in(values),limit);
+        }
+
+        /**
+     * Find records that have <code>is_private IN (values)</code> asynchronously
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByIsPrivate(Collection<Boolean> values) {
+                return findManyByCondition(Cards.CARDS.IS_PRIVATE.in(values));
+        }
+
+        /**
+     * Find records that have <code>is_private IN (values)</code> asynchronously
+     * limited by the given limit
+     */
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByIsPrivate(Collection<Boolean> values, int limit) {
+                return findManyByCondition(Cards.CARDS.IS_PRIVATE.in(values),limit);
+        }
+
         @Override
         public ReactiveClassicQueryExecutor<CardsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards,String> queryExecutor(){
                 return (ReactiveClassicQueryExecutor<CardsRecord,com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards,String>) super.queryExecutor();

@@ -25,6 +25,8 @@ public class RowMappers {
                         pojo.setCardScript(row.getJsonObject("card_script"));
                         pojo.setCreatedAt(row.getOffsetDateTime("created_at"));
                         pojo.setLastModified(row.getOffsetDateTime("last_modified"));
+                        pojo.setIsArchived(row.getBoolean("is_archived"));
+                        pojo.setIsPrivate(row.getBoolean("is_private"));
                         return pojo;
                 };
         }

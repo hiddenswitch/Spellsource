@@ -19,11 +19,11 @@ import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function7;
+import org.jooq.Function9;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row7;
+import org.jooq.Row9;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -91,6 +91,16 @@ public class Cards extends TableImpl<CardsRecord> {
      * The column <code>spellsource.cards.last_modified</code>.
      */
     public final TableField<CardsRecord, OffsetDateTime> LAST_MODIFIED = createField(DSL.name("last_modified"), SQLDataType.TIMESTAMPWITHTIMEZONE(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.TIMESTAMPWITHTIMEZONE)), this, "");
+
+    /**
+     * The column <code>spellsource.cards.is_archived</code>.
+     */
+    public final TableField<CardsRecord, Boolean> IS_ARCHIVED = createField(DSL.name("is_archived"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>spellsource.cards.is_private</code>.
+     */
+    public final TableField<CardsRecord, Boolean> IS_PRIVATE = createField(DSL.name("is_private"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("true", SQLDataType.BOOLEAN)), this, "");
 
     private Cards(Name alias, Table<CardsRecord> aliased) {
         this(alias, aliased, null);
@@ -193,18 +203,18 @@ public class Cards extends TableImpl<CardsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row7 type methods
+    // Row9 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row7<String, String, String, XML, JsonObject, OffsetDateTime, OffsetDateTime> fieldsRow() {
-        return (Row7) super.fieldsRow();
+    public Row9<String, String, String, XML, JsonObject, OffsetDateTime, OffsetDateTime, Boolean, Boolean> fieldsRow() {
+        return (Row9) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function7<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function9<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -212,7 +222,7 @@ public class Cards extends TableImpl<CardsRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function7<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

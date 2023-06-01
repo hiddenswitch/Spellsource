@@ -1,9 +1,7 @@
 package com.hiddenswitch.framework.impl;
 
 import java.lang.ref.WeakReference;
-import java.util.function.Consumer;
-
-import static com.hiddenswitch.framework.Environment.fiber;
+import java.util.function.Consumer;;
 
 /**
  * A timer for keeping track of a client's activity. Uses a {@link Scheduler} (typically implemented from vertx) for
@@ -31,10 +29,7 @@ public class ActivityMonitor {
 
 		cancel();
 
-		lastTimerId = scheduler.setTimer(noActivityTimeout, v -> fiber(() -> {
-			onTimeout.accept(this);
-			return (Void) null;
-		}));
+		lastTimerId = scheduler.setTimer(noActivityTimeout, v -> onTimeout.accept(this));
 	}
 
 	public void cancel() {

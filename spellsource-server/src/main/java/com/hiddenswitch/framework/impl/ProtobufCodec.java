@@ -19,7 +19,7 @@ public class ProtobufCodec<T extends Message> implements MessageCodec<T, T> {
 	@Override
 	public void encodeToWire(Buffer buffer, T t) {
 		try {
-			t.writeDelimitedTo(new VertxBufferOutputStream(buffer));
+			t.writeTo(new VertxBufferOutputStream(buffer));
 		} catch (IOException exception) {
 			throw new RuntimeException(exception);
 		}
@@ -30,7 +30,8 @@ public class ProtobufCodec<T extends Message> implements MessageCodec<T, T> {
 		try {
 			@SuppressWarnings("unchecked")
 			var parserForType = (Parser<T>) target.getParserForType();
-			return parserForType.parseDelimitedFrom(new VertxBufferInputStream(buffer.getBuffer(pos, buffer.length())));
+			T result = parserForType.parseFrom(buffer.getBytes(pos, buffer.length()));
+			return result;
 		} catch (InvalidProtocolBufferException e) {
 			throw new RuntimeException(e);
 		}

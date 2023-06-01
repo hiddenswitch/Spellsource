@@ -7,6 +7,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadFactory;
 import java.util.function.Consumer;
@@ -51,7 +52,7 @@ public class EventLoopScheduler implements Scheduler {
   }
 
   private final ThreadFactory threadFactory;
-  private final LinkedList<Runnable> tasks = new LinkedList<>();
+  private final ConcurrentLinkedDeque<Runnable> tasks = new ConcurrentLinkedDeque<>();
   private boolean flag;
 
   public EventLoopScheduler(EventLoop carrier) {

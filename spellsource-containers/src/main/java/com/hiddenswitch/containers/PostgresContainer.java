@@ -2,11 +2,11 @@ package com.hiddenswitch.containers;
 
 import org.testcontainers.containers.GenericContainer;
 
-public class PostgresSupabaseContainer extends GenericContainer<PostgresSupabaseContainer> {
+public class PostgresContainer extends GenericContainer<PostgresContainer> {
 
 	public static final int POSTGRESQL_PORT = 5432;
 
-	public PostgresSupabaseContainer(String username, String password, String databaseName) {
+	public PostgresContainer(String username, String password, String databaseName) {
 		super("docker.io/postgres:13.11-bullseye");
 		withExposedPorts(POSTGRESQL_PORT);
 		withEnv("POSTGRES_DB", databaseName);
@@ -16,6 +16,6 @@ public class PostgresSupabaseContainer extends GenericContainer<PostgresSupabase
 	}
 
 	public String getHostAndPort() {
-		return getHost() + ":" + getMappedPort(PostgresSupabaseContainer.POSTGRESQL_PORT);
+		return getHost() + ":" + getMappedPort(PostgresContainer.POSTGRESQL_PORT);
 	}
 }

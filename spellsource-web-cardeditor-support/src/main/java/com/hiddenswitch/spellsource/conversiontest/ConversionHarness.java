@@ -33,7 +33,7 @@ public class ConversionHarness {
 
 	public static boolean assertCardReplaysTheSame(long[] seeds, String cardId, String replacementJson) {
 		synchronized (PROBE) {
-            var cardCatalogue = ClasspathCardCatalogue.CLASSPATH;
+            var cardCatalogue = ClasspathCardCatalogue.INSTANCE;
 			var originalCard = cardCatalogue.getCards().get(cardId);
 			var originalCardDesc = cardCatalogue.getRecords().get(cardId).getDesc();
 			try {

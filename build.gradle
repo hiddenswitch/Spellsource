@@ -45,7 +45,7 @@ subprojects {
         }
     }
 
-    configurations.all {
+    configurations.configureEach {
         resolutionStrategy {
             preferProjectModules()
             failOnVersionConflict()
@@ -201,6 +201,10 @@ subprojects {
 
                 if (details.requested.group == 'org.ow2.asm') {
                     details.useVersion '9.4'
+                }
+
+                if (details.requested.group == 'org.infinispan') {
+                    details.useVersion '15.0.0.Dev01'
                 }
             }
         }

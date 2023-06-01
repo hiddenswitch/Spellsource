@@ -9,6 +9,7 @@ import io.vertx.core.json.Json;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.jetbrains.annotations.NotNull;
@@ -171,7 +172,6 @@ public class ListCardCatalogue implements CardCatalogue {
 		return result;
 	}
 
-	@Override
 	public void removeCard(String id) {
 		var res = records.remove(id);
 		cards.remove(id);
@@ -209,7 +209,6 @@ public class ListCardCatalogue implements CardCatalogue {
 		return baseClassesForFormat.get(deckFormat);
 	}
 
-	@Override
 	public CardList query(DeckFormat deckFormat, Predicate<Card> filter) {
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {
@@ -231,6 +230,30 @@ public class ListCardCatalogue implements CardCatalogue {
 	@Override
 	public Stream<Card> stream() {
 		return cards.values().stream();
+	}
+
+	@Override
+	public CardList queryClassCards(DeckFormat format, String hero, Set<String> bannedCards, Spellsource.RarityMessage.Rarity rarity, Set<Spellsource.CardTypeMessage.CardType> validCardTypes) {
+		return query(format, c ->
+				c.hasHeroClass(hero)
+						&& !bannedCards.contains(c.getCardId())
+						&& c.getRarity() == rarity
+						&& validCardTypes.contains(c.getCardType())
+						&& c.isCollectible());
+	}
+
+	@Override
+	public CardList queryNeutrals(DeckFormat format, Set<String> bannedCards, Spellsource.RarityMessage.Rarity rarity, Set<Spellsource.CardTypeMessage.CardType> validCardTypes) {
+		return query(format, c -> c.hasHeroClass(HeroClass.ANY)
+				&& !bannedCards.contains(c.getCardId())
+				&& c.getRarity() == rarity
+				&& validCardTypes.contains(c.getCardType())
+				&& c.isCollectible());
+	}
+
+	@Override
+	public CardList queryUncollectible(DeckFormat deckFormat) {
+		return query(deckFormat, always -> true);
 	}
 
 	/**

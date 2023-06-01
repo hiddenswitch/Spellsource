@@ -30,6 +30,8 @@ public class Cards implements VertxPojo, ICards {
     private JsonObject cardScript;
     private OffsetDateTime createdAt;
     private OffsetDateTime lastModified;
+    private Boolean isArchived;
+    private Boolean isPrivate;
 
     public Cards() {}
 
@@ -41,6 +43,8 @@ public class Cards implements VertxPojo, ICards {
         this.cardScript = value.getCardScript();
         this.createdAt = value.getCreatedAt();
         this.lastModified = value.getLastModified();
+        this.isArchived = value.getIsArchived();
+        this.isPrivate = value.getIsPrivate();
     }
 
     public Cards(
@@ -50,7 +54,9 @@ public class Cards implements VertxPojo, ICards {
         XML blocklyWorkspace,
         JsonObject cardScript,
         OffsetDateTime createdAt,
-        OffsetDateTime lastModified
+        OffsetDateTime lastModified,
+        Boolean isArchived,
+        Boolean isPrivate
     ) {
         this.id = id;
         this.createdBy = createdBy;
@@ -59,6 +65,8 @@ public class Cards implements VertxPojo, ICards {
         this.cardScript = cardScript;
         this.createdAt = createdAt;
         this.lastModified = lastModified;
+        this.isArchived = isArchived;
+        this.isPrivate = isPrivate;
     }
 
         public Cards(io.vertx.core.json.JsonObject json) {
@@ -185,6 +193,40 @@ public class Cards implements VertxPojo, ICards {
         return this;
     }
 
+    /**
+     * Getter for <code>spellsource.cards.is_archived</code>.
+     */
+    @Override
+    public Boolean getIsArchived() {
+        return this.isArchived;
+    }
+
+    /**
+     * Setter for <code>spellsource.cards.is_archived</code>.
+     */
+    @Override
+    public Cards setIsArchived(Boolean isArchived) {
+        this.isArchived = isArchived;
+        return this;
+    }
+
+    /**
+     * Getter for <code>spellsource.cards.is_private</code>.
+     */
+    @Override
+    public Boolean getIsPrivate() {
+        return this.isPrivate;
+    }
+
+    /**
+     * Setter for <code>spellsource.cards.is_private</code>.
+     */
+    @Override
+    public Cards setIsPrivate(Boolean isPrivate) {
+        this.isPrivate = isPrivate;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -236,6 +278,18 @@ public class Cards implements VertxPojo, ICards {
         }
         else if (!this.lastModified.equals(other.lastModified))
             return false;
+        if (this.isArchived == null) {
+            if (other.isArchived != null)
+                return false;
+        }
+        else if (!this.isArchived.equals(other.isArchived))
+            return false;
+        if (this.isPrivate == null) {
+            if (other.isPrivate != null)
+                return false;
+        }
+        else if (!this.isPrivate.equals(other.isPrivate))
+            return false;
         return true;
     }
 
@@ -250,6 +304,8 @@ public class Cards implements VertxPojo, ICards {
         result = prime * result + ((this.cardScript == null) ? 0 : this.cardScript.hashCode());
         result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
         result = prime * result + ((this.lastModified == null) ? 0 : this.lastModified.hashCode());
+        result = prime * result + ((this.isArchived == null) ? 0 : this.isArchived.hashCode());
+        result = prime * result + ((this.isPrivate == null) ? 0 : this.isPrivate.hashCode());
         return result;
     }
 
@@ -264,6 +320,8 @@ public class Cards implements VertxPojo, ICards {
         sb.append(", ").append(cardScript);
         sb.append(", ").append(createdAt);
         sb.append(", ").append(lastModified);
+        sb.append(", ").append(isArchived);
+        sb.append(", ").append(isPrivate);
 
         sb.append(")");
         return sb.toString();
@@ -282,6 +340,8 @@ public class Cards implements VertxPojo, ICards {
         setCardScript(from.getCardScript());
         setCreatedAt(from.getCreatedAt());
         setLastModified(from.getLastModified());
+        setIsArchived(from.getIsArchived());
+        setIsPrivate(from.getIsPrivate());
     }
 
     @Override

@@ -15,8 +15,8 @@ public class CardCatalogueTest {
 	@Test
 	public void testCardCatalogueLoads() {
 
-		Assertions.assertTrue(ClasspathCardCatalogue.CLASSPATH.getAll().size() > 1000);
-		Assertions.assertTrue(ClasspathCardCatalogue.CLASSPATH.getBaseClasses(ClasspathCardCatalogue.CLASSPATH.spellsource()).size() > 5);
+		Assertions.assertTrue(ClasspathCardCatalogue.INSTANCE.getAll().size() > 1000);
+		Assertions.assertTrue(ClasspathCardCatalogue.INSTANCE.getBaseClasses(ClasspathCardCatalogue.INSTANCE.spellsource()).size() > 5);
 	}
 
 	@Test
@@ -45,9 +45,9 @@ public class CardCatalogueTest {
 				"  \"set\": \"CUSTOM\",\n" +
 				"  \"fileFormatVersion\": 1\n" +
 				"}";
-		assertEquals("minion_exampler_test", ClasspathCardCatalogue.CLASSPATH.addOrReplaceCard(json));
-		assertNotNull(ClasspathCardCatalogue.CLASSPATH.getCardById("minion_exampler_test"));
-		ClasspathCardCatalogue.CLASSPATH.removeCard("minion_exampler_test");
-		assertThrows(NullPointerException.class, () -> ClasspathCardCatalogue.CLASSPATH.getCardById("minion_exampler_test"));
+		assertEquals("minion_exampler_test", ClasspathCardCatalogue.INSTANCE.addOrReplaceCard(json));
+		assertNotNull(ClasspathCardCatalogue.INSTANCE.getCardById("minion_exampler_test"));
+		ClasspathCardCatalogue.INSTANCE.removeCard("minion_exampler_test");
+		assertThrows(NullPointerException.class, () -> ClasspathCardCatalogue.INSTANCE.getCardById("minion_exampler_test"));
 	}
 }

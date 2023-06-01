@@ -5,6 +5,7 @@ import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Matchmaking;
 import com.hiddenswitch.framework.impl.ClusteredGames;
+import com.hiddenswitch.framework.rpc.Hiddenswitch;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.GameUsersDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.MatchmakingTicketsDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.GameUsers;
@@ -21,8 +22,6 @@ import io.vertx.core.streams.WriteStream;
 import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxTestContext;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -427,9 +426,20 @@ public class MatchmakingTests extends FrameworkTestBase {
 	@Test
 	@Timeout(value = 210, timeUnit = TimeUnit.SECONDS)
 	public void testManyClientsMatchmakeAcrossInstances(VertxTestContext testContext) {
-		var vertx = Vertx.vertx(Environment.vertxOptions());
-		var clientsToDeploy = CpuCoreSensor.availableProcessors() * 10;
-		var verticesToDeploy = clientsToDeploy / CpuCoreSensor.availableProcessors();
+		testManyClientsMatchmakeAcrossInstances(testContext,1);
+	}
+
+	@Test
+	@Timeout(value = 210, timeUnit = TimeUnit.SECONDS)
+	public void testManyClientsMatchmakeAcrossClusteredInstances(VertxTestContext testContext) {
+		testManyClientsMatchmakeAcrossInstances(testContext,2);
+	}
+
+	public void testManyClientsMatchmakeAcrossInstances(VertxTestContext testContext, int serverVertices) {
+		var configuration = Environment.getConfiguration();
+		// client configuration
+		var clientsToDeploy = 120;
+		var verticesToDeploy = (int) Math.ceil((double) clientsToDeploy / ((double) CpuCoreSensor.availableProcessors()));
 		// dedicated clients vertx
 		var queueIds = IntStream
 				.range(0, 1)
@@ -440,27 +450,59 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.mapToObj(i -> Vertx.vertx(new VertxOptions().setEventLoopPoolSize(CpuCoreSensor.availableProcessors())))
 				.toList();
 
-		// deploy queue runners
-		startGateway(vertx)
-				.compose(v -> all(queueIds
-						.stream()
-						.map(queueId -> {
-							var createQueue = Promise.<Closeable>promise();
-							vertx.runOnContext(v1 -> Matchmaking.createQueue(createMultiplayerQueue(queueId)).onComplete(createQueue));
-							return createQueue.future();
-						})
-						.collect(toList())))
-				// deploy verticles
-				.compose(v -> vertx.deployVerticle(Matchmaking.class, new DeploymentOptions()
-						.setInstances(1)))
-				.compose(v -> vertx.deployVerticle(ClusteredGames.class, new DeploymentOptions()
-						.setInstances(CpuCoreSensor.availableProcessors())))
+		System.setProperty("games.turnTimeMillis", "4000");
+		var originalPort = configuration.getGrpcConfiguration().getPort();
+		// server configuration
+		var vertexFuts = IntStream.range(0, serverVertices)
+				.mapToObj(i -> {
+					var configuration2 = Hiddenswitch.ServerConfiguration.newBuilder(Environment.getConfiguration());
+					// choose a random port
+					var infinispanPort = 0;
+					configuration2.setVertx(Hiddenswitch.ServerConfiguration.VertxConfiguration.newBuilder()
+							.setUseInfinispanClusterManager(serverVertices > 1)
+							.setInfinspanPort(infinispanPort)
+							.build());
+					Environment.setConfiguration(configuration2.build());
+					var options = Environment.vertxOptions();
+					var vertxFut = serverVertices > 1 ? Vertx.clusteredVertx(options) : Future.succeededFuture(Vertx.vertx(options));
+					// deploy queue runners
+					// noinspection rawtypes
+					return (Future)
+							vertxFut.compose(vertx ->
+									startGateway(vertx, originalPort + i)
+											.compose(v -> all(queueIds
+													.stream()
+													.map(queueId -> {
+														var createQueue = Promise.<Closeable>promise();
+														vertx.runOnContext(v1 -> Matchmaking.createQueue(createMultiplayerQueue(queueId)).onComplete(createQueue));
+														return createQueue.future();
+													})
+													.collect(toList())))
+											// deploy verticles
+											.compose(v -> vertx.deployVerticle(Matchmaking.class, new DeploymentOptions()
+													.setInstances(1)))
+											.compose(v -> vertx.deployVerticle(ClusteredGames.class, new DeploymentOptions()
+													.setInstances(CpuCoreSensor.availableProcessors())))
+											.map(vertx));
+				}).collect(toList());
+
+		CompositeFuture.join(vertexFuts)
+				.compose(vertices -> {
+					if (serverVertices <= 1) {
+						return Future.succeededFuture();
+					}
+					// assert they're actually clustered
+					testContext.verify(() -> {
+						assertEquals(serverVertices, ((VertxInternal) vertices.resultAt(0)).getClusterManager().getNodes().size());
+					});
+					return Future.succeededFuture();
+				})
 				// create clients
 				.compose(v1 -> all(IntStream
 						.range(0, clientsToDeploy)
 						.mapToObj(i -> {
 							var clientVertx = clientVertices.get(i % clientVertices.size());
-							var clientActor = new TestClientVerticle(queueIds.get(i % queueIds.size()));
+							var clientActor = new TestClientVerticle(queueIds.get(i % queueIds.size()), originalPort + (i % serverVertices));
 							return clientVertx.deployVerticle(clientActor).map(v -> clientActor.getClient());
 						})
 						.collect(toList())))
@@ -495,7 +537,13 @@ public class MatchmakingTests extends FrameworkTestBase {
 						clientVertx.close();
 					}
 				})
-				.onComplete(v -> vertx.close())
+				.onFailure(Environment.onFailure())
+				.onComplete(v -> {
+					for (var fut : vertexFuts) {
+						((Vertx) fut.result()).close();
+					}
+					System.getProperties().remove("games.turnTimeMillis");
+				})
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
@@ -530,12 +578,28 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.setStillConnectedTimeout(0L);
 	}
 
+	private static class ClientWithPort extends Client {
+		protected int port;
+
+		public ClientWithPort(Vertx vertx, int port) {
+			super(vertx);
+			this.port = port;
+		}
+
+		@Override
+		protected int port() {
+			return port;
+		}
+	}
+
 	private static class TestClientVerticle extends AbstractVerticle {
 		private final String queueId;
+		private final int port;
 		private Client client;
 
-		public TestClientVerticle(String queueId) {
+		public TestClientVerticle(String queueId, int port) {
 			this.queueId = queueId;
+			this.port = port;
 		}
 
 		public Client getClient() {
@@ -544,7 +608,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 
 		@Override
 		public void start(Promise<Void> startPromise) {
-			this.client = new Client(this.vertx);
+			this.client = new ClientWithPort(this.vertx, port);
 			client.createAndLogin()
 					.onSuccess(v -> LOGGER.debug("created login"))
 					.compose(v -> client.matchmake(queueId))

@@ -3,6 +3,7 @@ package com.hiddenswitch.framework.tests.impl;
 import com.hiddenswitch.framework.Gateway;
 import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
 import io.vertx.core.*;
+import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.junit5.VertxExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,15 +38,18 @@ public class FrameworkTestBase {
 			return;
 		}
 
-		exposeHostPorts(Gateway.grpcPort());
+		exposeHostPorts(Gateway.defaultGrpcPort());
 
 		Startables.deepStart(Stream.of(TOXIPROXY)).join();
-		toxicGrpcProxy = TOXIPROXY.getProxy("host.testcontainers.internal", Gateway.grpcPort());
+		toxicGrpcProxy = TOXIPROXY.getProxy("host.testcontainers.internal", Gateway.defaultGrpcPort());
 	}
 
-
 	protected Future<String> startGateway(Vertx vertx) {
-		return vertx.deployVerticle(Gateway.class, new DeploymentOptions().setInstances(Runtime.getRuntime().availableProcessors() * 2));
+		return startGateway(vertx, Gateway.defaultGrpcPort());
+	}
+
+	protected Future<String> startGateway(Vertx vertx, int port) {
+		return vertx.deployVerticle(() -> new Gateway(port), new DeploymentOptions().setInstances(CpuCoreSensor.availableProcessors() * 2));
 	}
 
 	public static class Checkpoint implements Future<Void> {

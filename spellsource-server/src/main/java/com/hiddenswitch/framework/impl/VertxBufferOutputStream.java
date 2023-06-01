@@ -10,14 +10,6 @@ import java.io.OutputStream;
 public class VertxBufferOutputStream extends OutputStream {
 	private final Buffer buffer;
 
-	public VertxBufferOutputStream() {
-		this(512);
-	}
-
-	public VertxBufferOutputStream(int initialSize) {
-		buffer = Buffer.buffer(initialSize);
-	}
-
 	public VertxBufferOutputStream(Buffer input) {
 		buffer = input;
 	}

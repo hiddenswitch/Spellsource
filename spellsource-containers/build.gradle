@@ -14,7 +14,7 @@ dependencies {
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonDatabindVersion"
 }
 
-task createPythonImage(type: DockerBuildImage) {
+tasks.register('createPythonImage', DockerBuildImage) {
     dependsOn += [tasks.processResources]
     inputDir.set(new File("$project.projectDir/src/main/resources/docker/pythonjava/"))
     quiet.set(true)

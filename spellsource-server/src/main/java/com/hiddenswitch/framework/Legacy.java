@@ -97,7 +97,9 @@ public class Legacy {
 					var workingContext = new GameContext();
 
 					withConnection(connection -> new CardsDao(Environment.jooqAkaDaoConfiguration(), connection).findAll())
-							.map(cards -> cards.stream().map(card -> {
+							.map(cards -> cards
+									.stream()
+									.map(card -> {
 										try {
 											return card.getCardScript().mapTo(CardDesc.class);
 										} catch (Throwable e) {
@@ -105,7 +107,7 @@ public class Legacy {
 											return null;
 										}
 									})
-									.filter(cd -> ClasspathCardCatalogue.CLASSPATH.spellsource().isInFormat(cd.getSet())
+									.filter(cd -> cd != null && ClasspathCardCatalogue.INSTANCE.spellsource().isInFormat(cd.getSet())
 											&& cd.getType() != CardType.GROUP)
 									.map(card -> {
 										var entity = ModelConversions.getEntity(workingContext, card.create(), 0);
@@ -165,7 +167,9 @@ public class Legacy {
 					@Override
 					public void subscribeGame(ReadStream<ClientToServerMessage> request, WriteStream<ServerToClientMessage> response) {
 						request.pause();
-						ServerGameContext.subscribeGame(request, response);
+						var consumer = ServerGameContext.subscribeGame(request, response);
+						request.endHandler(v -> consumer.unregister());
+						request.exceptionHandler(t -> consumer.unregister());
 						request.resume();
 					}
 
@@ -673,7 +677,7 @@ public class Legacy {
 	}
 
 	private static ValidationReportOrBuilder validateDeck(List<String> cardIds, String heroClass, String deckFormat) {
-		var deck = new GameDeck(ClasspathCardCatalogue.CLASSPATH, heroClass, cardIds);
+		var deck = new GameDeck(ClasspathCardCatalogue.INSTANCE, heroClass, cardIds);
 		var validationReport = ValidationReport.newBuilder();
 		validationReport.setValid(true);
 

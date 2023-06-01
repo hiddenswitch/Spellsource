@@ -92,7 +92,7 @@ public class Player extends Entity implements Serializable {
 	 * @return A player specified with an {@link GameDeck#EMPTY} and a {@link ChooseLastBehaviour}.
 	 */
 	public static Player empty() {
-		return new Player(GameDeck.EMPTY, "Empty player", ClasspathCardCatalogue.CLASSPATH);
+		return new Player(GameDeck.EMPTY, "Empty player", ClasspathCardCatalogue.INSTANCE);
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class Player extends Entity implements Serializable {
 	 * @return A new player instance with the specified settings and a {@link ChooseLastBehaviour}.
 	 */
 	public static Player forUser(String userId, int id, GameDeck deck) {
-		Player player = new Player(deck, "Player " + userId, ClasspathCardCatalogue.CLASSPATH);
+		Player player = new Player(deck, "Player " + userId, ClasspathCardCatalogue.INSTANCE);
 		player.setId(id);
 		player.setUserId(userId);
 		return player;

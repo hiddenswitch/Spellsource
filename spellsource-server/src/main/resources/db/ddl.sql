@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.6 (Debian 13.6-1.pgdg110+1)
+-- Dumped from database version 13.11 (Debian 13.11-1.pgdg110+1)
 -- Dumped by pg_dump version 15.1 (Debian 15.1-1.pgdg110+1)
 
 SET statement_timeout = 0;
@@ -83,6 +83,312 @@ ALTER TYPE spellsource.game_user_victory_enum OWNER TO admin;
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
+
+--
+-- Name: decks; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.decks (
+    id text NOT NULL,
+    created_by character varying NOT NULL,
+    last_edited_by character varying NOT NULL,
+    name character varying,
+    hero_class character varying,
+    trashed boolean DEFAULT false NOT NULL,
+    format text,
+    deck_type integer NOT NULL,
+    is_premade boolean DEFAULT false NOT NULL,
+    permitted_to_duplicate boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE spellsource.decks OWNER TO admin;
+
+--
+-- Name: COLUMN decks.created_by; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON COLUMN spellsource.decks.created_by IS 'who created this deck originally';
+
+
+--
+-- Name: COLUMN decks.last_edited_by; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON COLUMN spellsource.decks.last_edited_by IS 'who last edited this deck';
+
+
+--
+-- Name: COLUMN decks.is_premade; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON COLUMN spellsource.decks.is_premade IS 'premades always shared with all users by application logic';
+
+
+--
+-- Name: can_see_deck(text, spellsource.decks); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.can_see_deck(user_id text, deck spellsource.decks) RETURNS boolean
+    LANGUAGE plpgsql STABLE
+    AS $$
+begin
+    return deck.created_by = user_id
+        or deck.is_premade
+        or exists(select *
+                  from spellsource.deck_shares
+                  where deck_id = deck.id
+                    and share_recipient_id = spellsource.get_user_id()
+                    and not deck.trashed);
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.can_see_deck(user_id text, deck spellsource.decks) OWNER TO admin;
+
+--
+-- Name: get_classes(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.get_classes() RETURNS TABLE(created_by character varying, class text, is_private boolean, collectible boolean, card_script jsonb, id text, name text)
+    LANGUAGE sql
+    AS $$
+select distinct created_by,
+                card_script ->> 'heroClass'                           as class,
+                is_private,
+                coalesce(card_script ->> 'collectible', 'true')::bool as collectible,
+                card_script,
+                id,
+                card_script ->> 'name'                                as name
+from spellsource.cards
+where card_script ->> 'type' = 'CLASS';
+$$;
+
+
+ALTER FUNCTION spellsource.get_classes() OWNER TO admin;
+
+--
+-- Name: cards; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.cards (
+    id text NOT NULL,
+    created_by character varying NOT NULL,
+    uri text,
+    blockly_workspace xml,
+    card_script jsonb,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    last_modified timestamp with time zone DEFAULT now() NOT NULL,
+    is_archived boolean DEFAULT false NOT NULL,
+    is_private boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE spellsource.cards OWNER TO admin;
+
+--
+-- Name: classes; Type: VIEW; Schema: spellsource; Owner: admin
+--
+
+CREATE VIEW spellsource.classes AS
+ SELECT get_classes.created_by,
+    get_classes.class,
+    get_classes.is_private,
+    get_classes.collectible,
+    get_classes.card_script,
+    get_classes.id,
+    get_classes.name
+   FROM spellsource.get_classes() get_classes(created_by, class, is_private, collectible, card_script, id, name);
+
+
+ALTER TABLE spellsource.classes OWNER TO admin;
+
+--
+-- Name: card_message(spellsource.cards, spellsource.classes); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.card_message(card spellsource.cards, cl spellsource.classes) RETURNS text
+    LANGUAGE plpgsql STABLE
+    AS $$
+begin
+    return coalesce(card.card_script ->> 'baseManaCost', '0') || ' ' || coalesce(card.card_script ->> 'name', '') ||
+           ' ' || cl.name || ' ' || coalesce(card.card_script ->> 'description', '') || ' ' ||
+           coalesce(card.card_script ->> 'race', '') || ' ' || coalesce(card.card_script ->> 'set', 'CUSTOM');
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.card_message(card spellsource.cards, cl spellsource.classes) OWNER TO admin;
+
+--
+-- Name: cards_collectible(spellsource.cards); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.cards_collectible(card spellsource.cards) RETURNS boolean
+    LANGUAGE plpgsql STABLE
+    AS $$
+begin
+    return coalesce(card.card_script ->> 'collectible', 'true')::bool;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.cards_collectible(card spellsource.cards) OWNER TO admin;
+
+--
+-- Name: cards_cost(spellsource.cards); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.cards_cost(card spellsource.cards) RETURNS integer
+    LANGUAGE plpgsql STABLE
+    AS $$
+begin
+    return coalesce(card.card_script ->> 'baseManaCost', '0')::int;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.cards_cost(card spellsource.cards) OWNER TO admin;
+
+--
+-- Name: cards_type(spellsource.cards); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.cards_type(card spellsource.cards) RETURNS text
+    LANGUAGE plpgsql STABLE
+    AS $$
+begin
+    return card.card_script ->> 'type';
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.cards_type(card spellsource.cards) OWNER TO admin;
+
+--
+-- Name: create_deck_with_cards(text, text, text, text[]); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.create_deck_with_cards(deck_name text, class_hero text, format_name text, card_ids text[]) RETURNS spellsource.decks
+    LANGUAGE plpgsql
+    AS $$
+declare
+    id_deck text;
+    card    text;
+    deck    spellsource.decks;
+begin
+    id_deck := gen_random_uuid();
+
+    insert into spellsource.decks (id, created_by, last_edited_by, name, hero_class, deck_type, format)
+    values (id_deck::text, spellsource.get_user_id(), spellsource.get_user_id(), deck_name, class_hero, 1, format_name)
+    returning * into deck;
+
+    if (card_ids is not null) then
+        foreach card in array card_ids
+            loop
+                insert into spellsource.cards_in_deck (deck_id, card_id) values (id_deck, card);
+            end loop;
+    end if;
+
+    return deck;
+end
+$$;
+
+
+ALTER FUNCTION spellsource.create_deck_with_cards(deck_name text, class_hero text, format_name text, card_ids text[]) OWNER TO admin;
+
+--
+-- Name: get_collection_cards(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.get_collection_cards() RETURNS TABLE(id text, created_by character varying, card_script jsonb, blockly_workspace xml, name text, type text, class text, cost integer, collectible boolean, search_message text, last_modified timestamp with time zone, created_at timestamp with time zone)
+    LANGUAGE sql
+    AS $$
+select card.id,
+       card.created_by,
+       card.card_script,
+       card.blockly_workspace,
+       card.card_script ->> 'name'                                    as name,
+       card.card_script ->> 'type'                                    as type,
+       card.card_script ->> 'heroClass'                               as class,
+       coalesce(card.card_script ->> 'baseManaCost', '0')::int        as cost,
+       (coalesce(card.card_script ->> 'collectible', 'true')::bool and
+        (card.card_script ->> 'heroClass' = 'ANY' or cl.collectible)) as collectible,
+       spellsource.card_message(card, cl)                             as search_message,
+       last_modified,
+       created_at
+from spellsource.cards card
+         join spellsource.classes cl on card.card_script ->> 'heroClass' = cl.class
+where card.card_script ->> 'set' != 'TEST'
+  and not card.is_archived;
+$$;
+
+
+ALTER FUNCTION spellsource.get_collection_cards() OWNER TO admin;
+
+--
+-- Name: get_user_id(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.get_user_id() RETURNS text
+    LANGUAGE sql STABLE
+    AS $$
+select current_setting('user.id', true)::text;
+$$;
+
+
+ALTER FUNCTION spellsource.get_user_id() OWNER TO admin;
+
+--
+-- Name: cards_in_deck; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.cards_in_deck (
+    id bigint NOT NULL,
+    deck_id text NOT NULL,
+    card_id text NOT NULL
+);
+
+
+ALTER TABLE spellsource.cards_in_deck OWNER TO admin;
+
+--
+-- Name: COLUMN cards_in_deck.deck_id; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON COLUMN spellsource.cards_in_deck.deck_id IS 'deleting a deck deletes all its card references';
+
+
+--
+-- Name: COLUMN cards_in_deck.card_id; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON COLUMN spellsource.cards_in_deck.card_id IS 'cannot delete cards that are currently used in decks';
+
+
+--
+-- Name: set_cards_in_deck(text, text[]); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.set_cards_in_deck(deck text, card_ids text[]) RETURNS SETOF spellsource.cards_in_deck
+    LANGUAGE plpgsql
+    AS $$
+declare
+    card text;
+begin
+    delete from spellsource.cards_in_deck where deck_id = deck;
+
+    foreach card in array card_ids
+        loop
+            insert into spellsource.cards_in_deck (deck_id, card_id) values (deck, card);
+        end loop;
+
+    return query select * from spellsource.cards_in_deck where deck_id = deck;
+end
+$$;
+
+
+ALTER FUNCTION spellsource.set_cards_in_deck(deck text, card_ids text[]) OWNER TO admin;
 
 --
 -- Name: flyway_schema_history; Type: TABLE; Schema: hiddenswitch; Owner: admin
@@ -1544,50 +1850,6 @@ CREATE TABLE spellsource.bot_users (
 ALTER TABLE spellsource.bot_users OWNER TO admin;
 
 --
--- Name: cards; Type: TABLE; Schema: spellsource; Owner: admin
---
-
-CREATE TABLE spellsource.cards (
-    id text NOT NULL,
-    created_by character varying NOT NULL,
-    uri text,
-    blockly_workspace xml,
-    card_script jsonb,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    last_modified timestamp with time zone DEFAULT now() NOT NULL
-);
-
-
-ALTER TABLE spellsource.cards OWNER TO admin;
-
---
--- Name: cards_in_deck; Type: TABLE; Schema: spellsource; Owner: admin
---
-
-CREATE TABLE spellsource.cards_in_deck (
-    id bigint NOT NULL,
-    deck_id text NOT NULL,
-    card_id text NOT NULL
-);
-
-
-ALTER TABLE spellsource.cards_in_deck OWNER TO admin;
-
---
--- Name: COLUMN cards_in_deck.deck_id; Type: COMMENT; Schema: spellsource; Owner: admin
---
-
-COMMENT ON COLUMN spellsource.cards_in_deck.deck_id IS 'deleting a deck deletes all its card references';
-
-
---
--- Name: COLUMN cards_in_deck.card_id; Type: COMMENT; Schema: spellsource; Owner: admin
---
-
-COMMENT ON COLUMN spellsource.cards_in_deck.card_id IS 'cannot delete cards that are currently used in decks';
-
-
---
 -- Name: cards_in_deck_id_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
 --
 
@@ -1600,6 +1862,28 @@ ALTER TABLE spellsource.cards_in_deck ALTER COLUMN id ADD GENERATED ALWAYS AS ID
     CACHE 1
 );
 
+
+--
+-- Name: collection_cards; Type: VIEW; Schema: spellsource; Owner: admin
+--
+
+CREATE VIEW spellsource.collection_cards AS
+ SELECT get_collection_cards.id,
+    get_collection_cards.created_by,
+    get_collection_cards.card_script,
+    get_collection_cards.blockly_workspace,
+    get_collection_cards.name,
+    get_collection_cards.type,
+    get_collection_cards.class,
+    get_collection_cards.cost,
+    get_collection_cards.collectible,
+    get_collection_cards.search_message,
+    get_collection_cards.last_modified,
+    get_collection_cards.created_at
+   FROM spellsource.get_collection_cards() get_collection_cards(id, created_by, card_script, blockly_workspace, name, type, class, cost, collectible, search_message, last_modified, created_at);
+
+
+ALTER TABLE spellsource.collection_cards OWNER TO admin;
 
 --
 -- Name: deck_player_attribute_tuples; Type: TABLE; Schema: spellsource; Owner: admin
@@ -1647,47 +1931,6 @@ ALTER TABLE spellsource.deck_shares OWNER TO admin;
 --
 
 COMMENT ON TABLE spellsource.deck_shares IS 'indicates a deck shared to a player';
-
-
---
--- Name: decks; Type: TABLE; Schema: spellsource; Owner: admin
---
-
-CREATE TABLE spellsource.decks (
-    id text NOT NULL,
-    created_by character varying NOT NULL,
-    last_edited_by character varying NOT NULL,
-    name character varying,
-    hero_class character varying,
-    trashed boolean DEFAULT false NOT NULL,
-    format text,
-    deck_type integer NOT NULL,
-    is_premade boolean DEFAULT false NOT NULL,
-    permitted_to_duplicate boolean DEFAULT false NOT NULL
-);
-
-
-ALTER TABLE spellsource.decks OWNER TO admin;
-
---
--- Name: COLUMN decks.created_by; Type: COMMENT; Schema: spellsource; Owner: admin
---
-
-COMMENT ON COLUMN spellsource.decks.created_by IS 'who created this deck originally';
-
-
---
--- Name: COLUMN decks.last_edited_by; Type: COMMENT; Schema: spellsource; Owner: admin
---
-
-COMMENT ON COLUMN spellsource.decks.last_edited_by IS 'who last edited this deck';
-
-
---
--- Name: COLUMN decks.is_premade; Type: COMMENT; Schema: spellsource; Owner: admin
---
-
-COMMENT ON COLUMN spellsource.decks.is_premade IS 'premades always shared with all users by application logic';
 
 
 --
@@ -3409,6 +3652,13 @@ CREATE INDEX decks_trashed_idx ON spellsource.decks USING btree (trashed) WHERE 
 
 
 --
+-- Name: idx_card_script_type; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX idx_card_script_type ON spellsource.cards USING btree (((card_script ->> 'type'::text)));
+
+
+--
 -- Name: matchmaking_tickets_queue_id_idx; Type: INDEX; Schema: spellsource; Owner: admin
 --
 
@@ -4168,13 +4418,174 @@ ALTER TABLE ONLY spellsource.user_entity_addons
 
 
 --
--- Name: supabase_realtime; Type: PUBLICATION; Schema: -; Owner: admin
+-- Name: cards; Type: ROW SECURITY; Schema: spellsource; Owner: admin
 --
 
-CREATE PUBLICATION supabase_realtime FOR ALL TABLES WITH (publish = 'insert, update, delete, truncate');
+ALTER TABLE spellsource.cards ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: cards_in_deck; Type: ROW SECURITY; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.cards_in_deck ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: deck_shares; Type: ROW SECURITY; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.deck_shares ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: decks; Type: ROW SECURITY; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.decks ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: cards public_view; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY public_view ON spellsource.cards FOR SELECT TO website USING ((NOT is_private));
 
 
-ALTER PUBLICATION supabase_realtime OWNER TO admin;
+--
+-- Name: decks public_view; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY public_view ON spellsource.decks FOR SELECT USING (is_premade);
+
+
+--
+-- Name: cards_in_deck website_delete; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY website_delete ON spellsource.cards_in_deck FOR DELETE TO website USING ((EXISTS ( SELECT decks.id,
+    decks.created_by,
+    decks.last_edited_by,
+    decks.name,
+    decks.hero_class,
+    decks.trashed,
+    decks.format,
+    decks.deck_type,
+    decks.is_premade,
+    decks.permitted_to_duplicate
+   FROM spellsource.decks
+  WHERE ((decks.id = cards_in_deck.deck_id) AND ((decks.created_by)::text = spellsource.get_user_id())))));
+
+
+--
+-- Name: cards website_insert; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY website_insert ON spellsource.cards FOR INSERT TO website WITH CHECK ((((created_by)::text = spellsource.get_user_id()) AND starts_with(id, spellsource.get_user_id()) AND (starts_with((card_script ->> 'heroClass'::text), spellsource.get_user_id()) OR ((card_script ->> 'heroClass'::text) = 'ANY'::text))));
+
+
+--
+-- Name: cards_in_deck website_insert; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY website_insert ON spellsource.cards_in_deck FOR INSERT TO website WITH CHECK ((EXISTS ( SELECT decks.id,
+    decks.created_by,
+    decks.last_edited_by,
+    decks.name,
+    decks.hero_class,
+    decks.trashed,
+    decks.format,
+    decks.deck_type,
+    decks.is_premade,
+    decks.permitted_to_duplicate
+   FROM spellsource.decks
+  WHERE ((decks.id = cards_in_deck.deck_id) AND ((decks.created_by)::text = spellsource.get_user_id())))));
+
+
+--
+-- Name: decks website_insert; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY website_insert ON spellsource.decks FOR INSERT TO website WITH CHECK (((created_by)::text = spellsource.get_user_id()));
+
+
+--
+-- Name: cards website_update; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY website_update ON spellsource.cards FOR UPDATE TO website USING ((((created_by)::text = spellsource.get_user_id()) AND starts_with(id, spellsource.get_user_id()))) WITH CHECK ((((created_by)::text = spellsource.get_user_id()) AND starts_with(id, spellsource.get_user_id())));
+
+
+--
+-- Name: cards_in_deck website_update; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY website_update ON spellsource.cards_in_deck FOR UPDATE TO website USING ((EXISTS ( SELECT decks.id,
+    decks.created_by,
+    decks.last_edited_by,
+    decks.name,
+    decks.hero_class,
+    decks.trashed,
+    decks.format,
+    decks.deck_type,
+    decks.is_premade,
+    decks.permitted_to_duplicate
+   FROM spellsource.decks
+  WHERE ((decks.id = cards_in_deck.deck_id) AND ((decks.created_by)::text = spellsource.get_user_id()))))) WITH CHECK ((EXISTS ( SELECT decks.id,
+    decks.created_by,
+    decks.last_edited_by,
+    decks.name,
+    decks.hero_class,
+    decks.trashed,
+    decks.format,
+    decks.deck_type,
+    decks.is_premade,
+    decks.permitted_to_duplicate
+   FROM spellsource.decks
+  WHERE ((decks.id = cards_in_deck.deck_id) AND ((decks.created_by)::text = spellsource.get_user_id())))));
+
+
+--
+-- Name: decks website_update; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY website_update ON spellsource.decks FOR UPDATE TO website USING (((created_by)::text = spellsource.get_user_id())) WITH CHECK ((((created_by)::text = spellsource.get_user_id()) AND ((last_edited_by)::text = spellsource.get_user_id())));
+
+
+--
+-- Name: cards website_view; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY website_view ON spellsource.cards FOR SELECT TO website USING ((((created_by)::text = spellsource.get_user_id()) OR (NOT is_private)));
+
+
+--
+-- Name: cards_in_deck website_view; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY website_view ON spellsource.cards_in_deck FOR SELECT TO website USING ((EXISTS ( SELECT decks.id,
+    decks.created_by,
+    decks.last_edited_by,
+    decks.name,
+    decks.hero_class,
+    decks.trashed,
+    decks.format,
+    decks.deck_type,
+    decks.is_premade,
+    decks.permitted_to_duplicate
+   FROM spellsource.decks
+  WHERE spellsource.can_see_deck(spellsource.get_user_id(), decks.*))));
+
+
+--
+-- Name: deck_shares website_view; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY website_view ON spellsource.deck_shares FOR SELECT TO website USING ((share_recipient_id = spellsource.get_user_id()));
+
+
+--
+-- Name: decks website_view; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY website_view ON spellsource.decks FOR SELECT TO website USING (spellsource.can_see_deck(spellsource.get_user_id(), decks.*));
+
 
 --
 -- Name: SCHEMA public; Type: ACL; Schema: -; Owner: admin
@@ -4182,6 +4593,71 @@ ALTER PUBLICATION supabase_realtime OWNER TO admin;
 
 REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- Name: SCHEMA spellsource; Type: ACL; Schema: -; Owner: admin
+--
+
+GRANT USAGE ON SCHEMA spellsource TO website;
+
+
+--
+-- Name: TABLE decks; Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT SELECT,INSERT,UPDATE ON TABLE spellsource.decks TO website;
+GRANT SELECT ON TABLE spellsource.decks TO PUBLIC;
+
+
+--
+-- Name: TABLE cards; Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT SELECT,INSERT,UPDATE ON TABLE spellsource.cards TO website;
+GRANT SELECT ON TABLE spellsource.cards TO PUBLIC;
+
+
+--
+-- Name: TABLE classes; Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT SELECT ON TABLE spellsource.classes TO website;
+
+
+--
+-- Name: FUNCTION create_deck_with_cards(deck_name text, class_hero text, format_name text, card_ids text[]); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT ALL ON FUNCTION spellsource.create_deck_with_cards(deck_name text, class_hero text, format_name text, card_ids text[]) TO website;
+
+
+--
+-- Name: TABLE cards_in_deck; Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE spellsource.cards_in_deck TO website;
+
+
+--
+-- Name: FUNCTION set_cards_in_deck(deck text, card_ids text[]); Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT ALL ON FUNCTION spellsource.set_cards_in_deck(deck text, card_ids text[]) TO website;
+
+
+--
+-- Name: TABLE collection_cards; Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT SELECT ON TABLE spellsource.collection_cards TO website;
+
+
+--
+-- Name: TABLE deck_shares; Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT SELECT ON TABLE spellsource.deck_shares TO website;
 
 
 --

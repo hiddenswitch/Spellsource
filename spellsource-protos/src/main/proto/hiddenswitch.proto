@@ -87,6 +87,7 @@ message ServerConfiguration {
 
     message VertxConfiguration {
         bool useInfinispanClusterManager = 1;
+        optional int32 infinspanPort = 2;
     }
 
     PostgresConfiguration pg = 1;

@@ -8,37 +8,37 @@ def secretsPath = "${project(':spellsource-private').projectDir}/src/secrets"
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def isMacOs = Os.isFamily(Os.FAMILY_MAC)
 
-task buildMacOS(type: UnityTask, group: 'Spellsource') {
+tasks.register('buildMacOS', UnityTask) {
     description("Builds the macOS versions of the game using deploy.sh file and your local Unity version.")
     flags = '-m'
     outputDir = 'osx'
 }
 
-task buildWindows(type: UnityTask, group: 'Spellsource') {
+tasks.register('buildWindows', UnityTask) {
     description("Builds the Windows version of the game using deploy.sh file and your local Unity version.")
     flags = '-w'
     outputDir = 'win'
 }
 
-task buildIOS(type: UnityTask, group: 'Spellsource') {
+tasks.register('buildIOS', UnityTask) {
     description("Builds the Windows version of the game using deploy.sh file and your local Unity version.")
     flags = '-i'
     outputDir = 'ios'
 }
 
-task buildAndroid(type: UnityTask, group: 'Spellsource') {
+tasks.register('buildAndroid', UnityTask) {
     description("Builds the Android version of the game using deploy.sh file and your local Unity version.")
     flags = '-a'
     outputDir = 'android'
 }
 
-task buildWebGL(type: UnityTask, group: 'Spellsource Internal') {
+tasks.register('buildWebGL', UnityTask) {
     description("Builds the WebGL version of the game using deploy.sh file and your local Unity version.")
     flags = '-W'
     outputDir = 'webgl'
 }
 
-task distIOS(type: Exec, group: 'Spellsource') { t ->
+tasks.register('distIOS', Exec) { t ->
     description("Builds and uploads to Testflight the iOS project")
     dependsOn buildIOS
     workingDir "${project.projectDir}/src/unity"
@@ -50,7 +50,7 @@ task distIOS(type: Exec, group: 'Spellsource') { t ->
     commandLine commands
 }
 
-task distAndroid(type: Exec, group: 'Spellsource') { t ->
+tasks.register('distAndroid', Exec) { t ->
     description("Builds and uploads the Android project to Google Play")
     dependsOn buildAndroid
     workingDir "${project.projectDir}/src/unity"
@@ -65,7 +65,7 @@ task distAndroid(type: Exec, group: 'Spellsource') { t ->
     commandLine commands
 }
 
-task distSteam(group: 'Spellsource') {
+tasks.register('distSteam') {
     description("Uploads the macOS and Windows builds to Steam")
     dependsOn += [buildWindows, buildMacOS]
     def props = Utilities.propertiesOrEmpty("$secretsPath/task-dist-steam/task.properties")

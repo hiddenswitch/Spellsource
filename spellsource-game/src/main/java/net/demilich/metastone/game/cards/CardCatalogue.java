@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards;
 
+import com.hiddenswitch.spellsource.rpc.Spellsource;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
@@ -12,7 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -124,7 +124,6 @@ public interface CardCatalogue {
 	 *                              version. (Versions are only used for {@link net.demilich.metastone.game.logic.Trace}
 	 *                              objects.)
 	 */
-	@NotNull
 	Card getCardById(@NotNull String id);
 
 	/**
@@ -167,16 +166,6 @@ public interface CardCatalogue {
 	 */
 	@NotNull CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass, Attribute tag, boolean clone);
 
-
-
-
-	/**
-	 * Removes the specified card by ID from the catalogue.
-	 *
-	 * @param id
-	 */
-	void removeCard(String id);
-
 	Card getFormatCard(String name);
 
 	Card getHeroCard(String heroClass);
@@ -199,8 +188,11 @@ public interface CardCatalogue {
 	 */
 	List<String> getBaseClasses(DeckFormat deckFormat);
 
-	CardList query(DeckFormat deckFormat, Predicate<Card> filter);
-
-
 	Stream<Card> stream();
+
+	CardList queryClassCards(DeckFormat format, String hero, Set<String> bannedCards, Spellsource.RarityMessage.Rarity rarity, Set<Spellsource.CardTypeMessage.CardType> validCardTypes);
+
+	CardList queryNeutrals(DeckFormat format, Set<String> bannedCards, Spellsource.RarityMessage.Rarity rarity, Set<Spellsource.CardTypeMessage.CardType> validCardTypes);
+
+	CardList queryUncollectible(DeckFormat deckFormat);
 }

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 public class LoadCardCatalogueExtension implements ExtensionContext.Store.CloseableResource, BeforeAllCallback {
 	@Override
 	public void beforeAll(ExtensionContext context) throws Exception {
-		ClasspathCardCatalogue.CLASSPATH.loadCardsFromPackage();
+		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
 	}
 
 	@Override

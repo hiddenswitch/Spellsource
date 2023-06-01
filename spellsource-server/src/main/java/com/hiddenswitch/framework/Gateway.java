@@ -1,8 +1,6 @@
 package com.hiddenswitch.framework;
 
 import com.be_hase.grpc.micrometer.MicrometerServerInterceptor;
-import com.google.common.base.Strings;
-import com.google.common.collect.Streams;
 import com.netflix.concurrency.limits.grpc.server.ConcurrencyLimitServerInterceptor;
 import com.netflix.concurrency.limits.grpc.server.GrpcServerLimiterBuilder;
 import com.netflix.concurrency.limits.limit.Gradient2Limit;
@@ -13,7 +11,6 @@ import io.micrometer.core.instrument.Metrics;
 import io.opentracing.contrib.grpc.TracingServerInterceptor;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.core.*;
-import io.vertx.core.http.Http2Settings;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.grpc.VertxServer;
@@ -27,16 +24,20 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Gateway extends AbstractVerticle {
 	private static Logger LOGGER = LoggerFactory.getLogger(Gateway.class);
+	private final int port;
 	List<Closeable> closeables = new ArrayList<>();
 	private boolean useVertxNativeGrpcServer = false;
 
 	public Gateway() {
+		this(Environment.getConfiguration().getGrpcConfiguration().getPort());
+	}
+
+	public Gateway(int port) {
+		this.port = port;
 	}
 
 	public boolean useVertxNativeGrpcServer() {
@@ -48,7 +49,7 @@ public class Gateway extends AbstractVerticle {
 		return this;
 	}
 
-	public static int grpcPort() {
+	public static int defaultGrpcPort() {
 		return Environment.getConfiguration().getGrpcConfiguration().getPort();
 	}
 
@@ -64,7 +65,7 @@ public class Gateway extends AbstractVerticle {
 						Accounts.authenticatedService(),
 						Games.services())
 				.compose(services -> {
-					var server = useVertxNativeGrpcServer ? new VertxNativeGrpcServer(vertx, grpcPort()) : new NettyGrpcServer(vertx, grpcPort());
+					var server = useVertxNativeGrpcServer ? new VertxNativeGrpcServer(vertx, port) : new NettyGrpcServer(vertx, port);
 					var inited = server.init();
 
 
@@ -207,8 +208,11 @@ public class Gateway extends AbstractVerticle {
 		@Override
 		public Future<Void> init() {
 			this.server = GrpcServer.server(vertx);
-			this.httpServer = vertx.createHttpServer(new HttpServerOptions()
-					.setIdleTimeout(Integer.MAX_VALUE));
+			this.httpServer = vertx.createHttpServer((HttpServerOptions) new HttpServerOptions()
+					.setReadIdleTimeout(Integer.MAX_VALUE)
+					.setWriteIdleTimeout(Integer.MAX_VALUE)
+					.setIdleTimeout(Integer.MAX_VALUE)
+					.setTcpUserTimeout(Integer.MAX_VALUE));
 			return httpServer.requestHandler(server)
 					.listen(port)
 					.map((Void) null);

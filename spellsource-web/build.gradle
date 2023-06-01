@@ -10,6 +10,8 @@ def nodeBinary = isWindows ? "C:\\Program Files\\nodejs\\node.cmd" : (isMacOs ? 
 def npmBinary = isWindows ? "C:\\Program Files\\nodejs\\npm.cmd" : (isMacOs ? "/opt/homebrew/bin/npm" : "npm")
 def graalNpmPrefix = 'node_modules_graal'
 
+evaluationDependsOn(":spellsource-server")
+
 clean {
     delete 'public'
     delete '.cache'
@@ -23,7 +25,7 @@ static void configureGatsbyTaskSources(Task task) {
     task.outputs.dir('.cache')
 }
 
-task npmInstall(group: 'Spellsource Internal') {
+tasks.register('npmInstall') {
     inputs.file('package.json')
     inputs.file('package-lock.json')
     outputs.dir('./node_modules')
@@ -35,19 +37,9 @@ task npmInstall(group: 'Spellsource Internal') {
     }
 }
 
-task gatsbyBuild(group: 'Spellsource Internal', { t ->
-    dependsOn += [npmInstall]
-    configureGatsbyTaskSources(t)
-    outputs.dir('public')
-    doLast {
-        exec {
-            workingDir "$project.projectDir"
-            commandLine gatsbyBinary, 'build'
-        }
-    }
-})
+tasks.register('gatsbyBuild')
 
-task npmInstallGraal(group: 'Spellsource Internal') {
+tasks.register('npmInstallGraal') {
     // todo: check that we are executing as graal
     inputs.file('package.json')
     inputs.file('package-lock.json')
@@ -61,7 +53,7 @@ task npmInstallGraal(group: 'Spellsource Internal') {
     }
 }
 
-task testWithJava(group: 'Spellsource Internal') {
+tasks.register('testWithJava') {
     dependsOn += [spellsourceDepTask, npmInstallGraal]
     doLast {
         exec {
@@ -70,21 +62,21 @@ task testWithJava(group: 'Spellsource Internal') {
     }
 }
 
-task copyGameJavadoc(type: Copy, group: 'Spellsource Internal') {
+tasks.register('copyGameJavadoc', Copy) {
     description("Copies the game module's javadoc into the public directory of the website")
     dependsOn ':spellsource-game:javadoc'
     from tasks.getByPath(':spellsource-game:javadoc').outputs
     into './public/javadoc'
 }
 
-task copyNetJavadoc(type: Copy, group: 'Spellsource Internal') {
+tasks.register('copyNetJavadoc', Copy) {
     description("Copies the net module's javadoc into the public directory of the website")
     dependsOn ':spellsource-server:javadoc'
     from tasks.getByPath(':spellsource-server:javadoc').outputs
     into './public/netjavadoc'
 }
 
-task distWWW(type: Exec, group: 'Spellsource') {
+tasks.register('distWWW', Exec) {
     description("Builds and deploys the website")
     dependsOn += [gatsbyBuild, copyGameJavadoc, copyNetJavadoc]
     def commands = ['./bin/deploy.sh']

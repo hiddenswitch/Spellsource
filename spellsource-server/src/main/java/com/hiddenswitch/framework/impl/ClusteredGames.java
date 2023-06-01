@@ -46,7 +46,7 @@ public class ClusteredGames extends AbstractVerticle {
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
 		// TODO: deal with this elsewhere
-		ClasspathCardCatalogue.CLASSPATH.loadCardsFromPackage();
+		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
 		CodecRegistration.register(ServerToClientMessage.getDefaultInstance())
 				.andRegister(ClientToServerMessage.getDefaultInstance());
 		var eb = Vertx.currentContext().owner().eventBus();
@@ -79,7 +79,6 @@ public class ClusteredGames extends AbstractVerticle {
 			if (configuration.getDeck() instanceof CollectionDeck) {
 				deckCollectionFut = Legacy.getDeck(deckId, userId)
 						.compose(deckCollection -> {
-
 							// Create the deck and assign all the appropriate IDs to the cards
 							var deck = ModelConversions.getGameDeck(userId, deckCollection);
 
@@ -90,16 +89,14 @@ public class ClusteredGames extends AbstractVerticle {
 							for (var tuple : deckCollection.getCollection().getPlayerEntityAttributesList()) {
 								playerAttributes.put(Attribute.valueOf(tuple.getAttribute().name()), tuple.getStringValue());
 							}
-
+							LOGGER.trace("retrieved deck for userId {}", userId);
 							return Future.succeededFuture();
 						});
 			}
 
 			var configurationFut = deckCollectionFut
-					.compose(v -> Environment.withExecutor(queryExecutor -> queryExecutor.findOneRow(dsl -> {
-								return dsl.select(KEYCLOAK.USER_ENTITY.USERNAME).from(KEYCLOAK.USER_ENTITY)
-										.where(KEYCLOAK.USER_ENTITY.ID.eq(userId));
-							}))
+					.compose(v -> Environment.withExecutor(queryExecutor -> queryExecutor.findOneRow(dsl -> dsl.select(KEYCLOAK.USER_ENTITY.USERNAME).from(KEYCLOAK.USER_ENTITY)
+									.where(KEYCLOAK.USER_ENTITY.ID.eq(userId))))
 							.map(usernameRow -> usernameRow.getString(0))
 							.compose(username -> {
 								configuration.setName(username);
@@ -118,34 +115,48 @@ public class ClusteredGames extends AbstractVerticle {
 
 		return CompositeFuture.all(playerConfigurations)
 				.compose(v -> {
-					var context = new ServerGameContext(
-							request.getGameId(),
-							new VertxScheduler(Vertx.currentContext().owner()),
-							request.getConfigurations());
+					LOGGER.trace("loading player configurations for request {}", request);
+					var serverContextVerticle = new AbstractVerticle() {
+						private ServerGameContext serverGameContext;
 
-					// Deal with ending the game
-					context.addEndGameHandler(session -> {
-						GAMES_FINISHED.increment();
-						try {
-							var gameOverId = session.getGameId();
-							removeGameAndRecordReplay(gameOverId);
-						} catch (Throwable t) {
-							LOGGER.warn("could not record game because", t);
+						@Override
+						public void start(Promise<Void> startPromise) throws Exception {
+							this.serverGameContext = new ServerGameContext(
+									request.getGameId(),
+									new VertxScheduler(),
+									request.getConfigurations());
+
+							// Deal with ending the game
+							serverGameContext.addEndGameHandler(session -> {
+								GAMES_FINISHED.increment();
+								try {
+									var gameOverId = session.getGameId();
+									removeGameAndRecordReplay(gameOverId);
+								} catch (Throwable t) {
+									LOGGER.warn("could not record game because", t);
+								} finally {
+									vertx.undeploy(deploymentID());
+								}
+							});
+
+							contexts.put(request.getGameId(), serverGameContext);
+							// Plays the game context in its own fiber
+							serverGameContext
+									.handlersReady()
+									.onSuccess(v -> serverGameContext.play(true))
+									.map((Void) null)
+									.onComplete(startPromise);
 						}
-					});
-
-					var response = CreateGameSessionResponse.session(deploymentID(), context);
-					contexts.put(request.getGameId(), context);
-					// Plays the game context in its own fiber
-					context.play(true);
-					return context
-							.handlersReady()
-							.map(response);
-				}).compose(response -> {
+					};
+					return vertx.deployVerticle(serverContextVerticle)
+							.map(deploymentId -> CreateGameSessionResponse.session(deploymentID(), serverContextVerticle.serverGameContext));
+				})
+				.onFailure(Environment.onFailure())
+				.compose(response -> {
 					GAMES_CREATED.increment();
+					LOGGER.trace("handlers are ready for request {}", request);
 					return Future.succeededFuture(response);
 				});
-
 	}
 
 	/**
@@ -192,8 +203,7 @@ public class ClusteredGames extends AbstractVerticle {
 			return Future.succeededFuture();
 		}).recover(t -> {
 			if (gameContext.getStatus() == GameStatus.RUNNING) {
-				var async = Environment.async();
-				async.run(v -> gameContext.loseBothPlayers());
+				gameContext.loseBothPlayers();
 			}
 			return Future.succeededFuture(null);
 		}).onFailure(Environment.onFailure());

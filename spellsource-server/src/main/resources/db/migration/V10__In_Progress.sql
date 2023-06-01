@@ -260,3 +260,6 @@ begin
 end
 $$ language plpgsql volatile;
 grant execute on function spellsource.create_deck_with_cards(text, text, text, text[]) to website;
+
+--- adding indices for querying the card script efficiently
+create index idx_card_script_type on spellsource.cards ((card_script ->> 'type'));

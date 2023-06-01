@@ -21,6 +21,7 @@ import io.vertx.core.net.SocketAddress;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
+import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.grpc.client.GrpcClient;
 import io.vertx.grpc.client.GrpcClientChannel;
 import net.demilich.metastone.game.logic.XORShiftRandom;
@@ -39,7 +40,7 @@ import static io.vertx.core.CompositeFuture.all;
 import static io.vertx.core.CompositeFuture.any;
 
 public class Client implements AutoCloseable {
-	private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
+	private final Logger LOGGER = LoggerFactory.getLogger(Client.class);
 	protected final AtomicReference<GrpcClientChannel> managedChannel = new AtomicReference<>();
 	protected final Vertx vertx;
 	protected final WebClient webClient;
@@ -74,7 +75,9 @@ public class Client implements AutoCloseable {
 	}
 
 	public Client(Vertx vertx) {
-		this(vertx, WebClient.create(vertx));
+		this(vertx, WebClient.create(vertx, new WebClientOptions()
+				.setKeepAlive(true)
+				.setProtocolVersion(HttpVersion.HTTP_2)));
 	}
 
 	public Future<ServerToClientMessage> connectToGame() {
@@ -85,13 +88,14 @@ public class Client implements AutoCloseable {
 		reader.handler(promise::complete);
 		reader.exceptionHandler(promise::fail);
 
-		return writerFut.future().compose(writer -> {
-			writer.write(ClientToServerMessage.newBuilder()
-							.setMessageType(MessageTypeMessage.MessageType.FIRST_MESSAGE)
-							.build())
-					.onFailure(promise::tryFail);
-			return promise.future();
-		});
+		return writerFut.future()
+				.compose(writer -> {
+					writer.write(ClientToServerMessage.newBuilder()
+									.setMessageType(MessageTypeMessage.MessageType.FIRST_MESSAGE)
+									.build())
+							.onFailure(promise::tryFail);
+					return promise.future();
+				});
 	}
 
 	public Future<ServerToClientMessage> playUntilGameOver() {
@@ -133,7 +137,6 @@ public class Client implements AutoCloseable {
 					writer.write(ClientToServerMessage.newBuilder()
 									.setMessageType(MessageType.FIRST_MESSAGE)
 									.build())
-							.onSuccess(v -> LOGGER.trace("sent first message"))
 							.onFailure(gameOverPromise::tryFail);
 					return gameOverPromise
 							.future()
@@ -216,6 +219,7 @@ public class Client implements AutoCloseable {
 						.setPassword(password)
 						.setDecks(premadeDecks)
 						.build())
+				.onFailure(Environment.onFailure())
 				.onSuccess(this::handleCreateAccountReply);
 	}
 
@@ -299,7 +303,7 @@ public class Client implements AutoCloseable {
 	}
 
 	protected int port() {
-		return Gateway.grpcPort();
+		return Gateway.defaultGrpcPort();
 	}
 
 	@Override

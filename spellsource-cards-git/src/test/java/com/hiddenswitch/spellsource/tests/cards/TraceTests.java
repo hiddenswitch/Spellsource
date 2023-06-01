@@ -96,7 +96,7 @@ public class TraceTests extends TestBase {
 	@RepeatedTest(1000)
 	public void testTraceRecordedCorrectlyAndGameIsDeterministic() {
 		assertTimeoutPreemptively(Duration.ofMillis(10000), () -> {
-			GameContext context1 = net.demilich.metastone.tests.util.TestBase.fromTwoRandomDecks(ClasspathCardCatalogue.CLASSPATH.spellsource());
+			GameContext context1 = net.demilich.metastone.tests.util.TestBase.fromTwoRandomDecks(ClasspathCardCatalogue.INSTANCE.spellsource());
 			context1.play();
 			Trace trace = context1.getTrace().clone();
 			GameContext context2 = trace.replayContext(false, null);
@@ -149,7 +149,7 @@ public class TraceTests extends TestBase {
 	public void testDiagnoseTraces() {
 		Multiset<String> cards = ConcurrentHashMultiset.create();
 		IntStream.range(0, 10000).parallel().forEach(i -> {
-			GameContext context1 = net.demilich.metastone.tests.util.TestBase.fromTwoRandomDecks(ClasspathCardCatalogue.CLASSPATH.spellsource());
+			GameContext context1 = net.demilich.metastone.tests.util.TestBase.fromTwoRandomDecks(ClasspathCardCatalogue.INSTANCE.spellsource());
 			context1.play();
 			Trace trace = context1.getTrace().clone();
 			GameContext context2 = trace.replayContext(false, null);

@@ -5,6 +5,7 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Streams;
 import com.google.protobuf.Parser;
 import com.hiddenswitch.diagnostics.Tracing;
+import com.hiddenswitch.framework.impl.Clustered;
 import com.hiddenswitch.framework.impl.ModelConversions;
 import com.hiddenswitch.framework.impl.RedissonProtobufCodec;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
@@ -125,7 +126,7 @@ public class Environment {
 		}
 
 		var poolOptions = new PoolOptions()
-				.setMaxSize(Math.max(Runtime.getRuntime().availableProcessors(), 8));
+				.setMaxSize(Math.min(CpuCoreSensor.availableProcessors() * 2, 8));
 		return PgPool.pool(vertx, connectionOptions, poolOptions);
 	}
 
@@ -278,19 +279,9 @@ public class Environment {
 			tracingOptions = new OpenTracingOptions(Tracing.tracing());
 		}
 		if (configuration.hasVertx() && configuration.getVertx().getUseInfinispanClusterManager()) {
-			// related to configuring the cluster manager
-			System.getProperties().put("java.net.preferIPv4Stack", "true");
-			System.getProperties().put("jgroups.bind.address", "GLOBAL");
-			System.getProperties().put("jgroups.bind.port", "7800");
+			var port = configuration.getVertx().getInfinspanPort();
 			var isKubernetes = System.getenv().containsKey("KUBERNETES_SERVICE_HOST");
-			String config;
-			if (isKubernetes) {
-				config = "default-configs/default-jgroups-kubernetes.xml";
-			} else {
-				config = "default-configs/default-jgroups-udp.xml";
-			}
-			System.getProperties().put("vertx.jgroups.config", config);
-			clusterManager = new InfinispanClusterManager();
+			clusterManager = new InfinispanClusterManager(isKubernetes ? Clustered.infinispanClusterManagerKubernetes(port) : Clustered.infinispanClusterManagerUdp(port));
 		}
 		return new VertxOptions()
 				.setEventLoopPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))
@@ -466,6 +457,7 @@ public class Environment {
 						.build())
 				.setVertx(ServerConfiguration.VertxConfiguration.newBuilder()
 						.setUseInfinispanClusterManager(false)
+						.setInfinspanPort(7800)
 						.build())
 				.build();
 	}
@@ -548,16 +540,4 @@ public class Environment {
 		return prometheusRegistry;
 	}
 
-	public static <O> Future<O> fiber(Callable<O> method) {
-		var async = Environment.async();
-		var promise = Promise.<O>promise();
-		async.run(v -> {
-			try {
-				promise.complete(method.call());
-			} catch (Throwable t) {
-				promise.fail(t);
-			}
-		});
-		return promise.future();
-	}
 }

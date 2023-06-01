@@ -8,7 +8,7 @@ def sourceDir = "$project.projectDir.absolutePath/src/main/helm"
 def kubectlBinary = isWindows ? "$project.rootProject.projectDir.absolutePath/bin/kubectl.exe" : "kubectl"
 def privateProject = project(':spellsource-private')
 
-task deploySpellsourceProd(group: 'Spellsource') {
+tasks.register('deploySpellsourceProd') {
     description('Deploys Spellsource to production. Requires access to Spellsource secrets.')
     dependsOn ':spellsource-server:jib', ':spellsource-private:build', ':spellsource-containers:pushKeycloakClusteredImage'
     def taskPath = "${privateProject.projectDir}/src/secrets/"

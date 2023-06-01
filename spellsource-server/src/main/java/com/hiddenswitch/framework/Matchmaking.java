@@ -2,12 +2,14 @@ package com.hiddenswitch.framework;
 
 import com.google.common.collect.Lists;
 import com.hiddenswitch.framework.impl.ClientMatchmakingService;
+import com.hiddenswitch.framework.impl.CodecRegistration;
 import com.hiddenswitch.framework.impl.ConfigurationRequest;
 import com.hiddenswitch.framework.impl.CreateGameSessionResponse;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.MatchmakingQueuesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets;
+import com.hiddenswitch.spellsource.rpc.Spellsource;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutResponse;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutResponseUnityConnection;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
@@ -77,6 +79,7 @@ public class Matchmaking extends AbstractVerticle {
 
 	public void runServerQueue() {
 		LOGGER.trace("running");
+		CodecRegistration.register(ConfigurationRequest.class).andRegister(CreateGameSessionResponse.class);
 		var serverConfiguration = Environment.getConfiguration();
 		var scanFrequency = serverConfiguration.getMatchmaking().getScanFrequencyMillis();
 		var maxTickets = serverConfiguration.getMatchmaking().getMaxTicketsToProcess();
@@ -245,7 +248,7 @@ public class Matchmaking extends AbstractVerticle {
 
 	public static Future<Closeable> createQueue(MatchmakingQueues configuration) {
 		var matchmakingQueuesDao = new MatchmakingQueuesDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate());
-		return matchmakingQueuesDao.insert(configuration)
+		return matchmakingQueuesDao.insert(configuration, true)
 				.onSuccess(i -> LOGGER.debug("created queue {} ({})", configuration.getId(), i == 1))
 				.compose(ignored -> Future.succeededFuture(fut -> Matchmaking.deleteQueue(configuration.getId()).onComplete(fut)));
 	}

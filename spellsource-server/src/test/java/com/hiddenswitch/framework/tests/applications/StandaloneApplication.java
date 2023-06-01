@@ -1,8 +1,5 @@
 package com.hiddenswitch.framework.tests.applications;
 
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.PortBinding;
-import com.github.dockerjava.api.model.Ports;
 import com.hiddenswitch.containers.*;
 import com.hiddenswitch.framework.Application;
 import com.hiddenswitch.framework.Environment;
@@ -27,7 +24,7 @@ public class StandaloneApplication extends Application {
 	protected static final String PGPASSWORD = "password";
 	protected static final String PGHOST = "postgres";
 	protected static final int PGPORT = 5432;
-	protected static PostgresSupabaseContainer POSTGRES = new PostgresSupabaseContainer(PGUSER, PGPASSWORD, PGDATABASE)
+	protected static PostgresContainer POSTGRES = new PostgresContainer(PGUSER, PGPASSWORD, PGDATABASE)
 			.withReuse(true)
 			.withNetwork(Network.SHARED)
 			.withNetworkAliases(PGHOST)

@@ -90,6 +90,26 @@ public interface ICards extends VertxPojo, Serializable {
      */
     public OffsetDateTime getLastModified();
 
+    /**
+     * Setter for <code>spellsource.cards.is_archived</code>.
+     */
+    public ICards setIsArchived(Boolean value);
+
+    /**
+     * Getter for <code>spellsource.cards.is_archived</code>.
+     */
+    public Boolean getIsArchived();
+
+    /**
+     * Setter for <code>spellsource.cards.is_private</code>.
+     */
+    public ICards setIsPrivate(Boolean value);
+
+    /**
+     * Getter for <code>spellsource.cards.is_private</code>.
+     */
+    public Boolean getIsPrivate();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------
@@ -115,6 +135,8 @@ public interface ICards extends VertxPojo, Serializable {
                 setCardScript(com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().from(json.getJsonObject("card_script")));
                 setOrThrow(this::setCreatedAt,key -> {String s = json.getString(key); return s==null?null:java.time.OffsetDateTime.parse(s);},"created_at","java.time.OffsetDateTime");
                 setOrThrow(this::setLastModified,key -> {String s = json.getString(key); return s==null?null:java.time.OffsetDateTime.parse(s);},"last_modified","java.time.OffsetDateTime");
+                setOrThrow(this::setIsArchived,json::getBoolean,"is_archived","java.lang.Boolean");
+                setOrThrow(this::setIsPrivate,json::getBoolean,"is_private","java.lang.Boolean");
                 return this;
         }
 
@@ -129,6 +151,8 @@ public interface ICards extends VertxPojo, Serializable {
                 json.put("card_script",com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().to(getCardScript()));
                 json.put("created_at",getCreatedAt()==null?null:getCreatedAt().toString());
                 json.put("last_modified",getLastModified()==null?null:getLastModified().toString());
+                json.put("is_archived",getIsArchived());
+                json.put("is_private",getIsPrivate());
                 return json;
         }
 
