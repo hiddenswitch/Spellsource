@@ -135,6 +135,7 @@ public class ClusteredGames extends AbstractVerticle {
 								} catch (Throwable t) {
 									LOGGER.warn("could not record game because", t);
 								} finally {
+									// todo: this should really be the last end game handler
 									vertx.undeploy(deploymentID());
 								}
 							});

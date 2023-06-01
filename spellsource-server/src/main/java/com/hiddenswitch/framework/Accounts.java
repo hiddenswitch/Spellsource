@@ -18,21 +18,15 @@ import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc.UnauthenticatedVe
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc.UnauthenticatedVertxStub;
 import com.hiddenswitch.framework.schema.keycloak.tables.daos.UserEntityDao;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
-import com.hiddenswitch.framework.schema.spellsource.Spellsource;
-import com.hiddenswitch.framework.schema.spellsource.Tables;
 import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
-import com.lambdaworks.crypto.SCryptUtil;
 import io.grpc.*;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.shareddata.Shareable;
 import io.vertx.ext.auth.impl.jose.JWT;
 import io.vertx.ext.web.client.WebClient;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jetbrains.annotations.NotNull;
-import org.jooq.DSLContext;
 import org.keycloak.TokenVerifier;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -41,7 +35,6 @@ import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.common.VerificationException;
 import org.keycloak.common.enums.SslRequired;
 import org.keycloak.credential.hash.Pbkdf2Sha512PasswordHashProviderFactory;
-import org.keycloak.models.credential.PasswordCredentialModel;
 import org.keycloak.models.utils.ModelToRepresentation;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.idm.*;
@@ -57,12 +50,10 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.framework.Environment.query;
 import static com.hiddenswitch.framework.Environment.withDslContext;
-import static com.hiddenswitch.framework.schema.keycloak.Tables.USER_ENTITY;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.*;
 import static java.util.stream.Collectors.toMap;
 
@@ -201,7 +192,7 @@ public class Accounts {
 				if (accessToken == null) {
 					return Future.succeededFuture();
 				} else {
-					return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate())).findOneById(accessToken.getSubject());
+					return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient())).findOneById(accessToken.getSubject());
 				}
 			}
 		}
@@ -346,7 +337,7 @@ public class Accounts {
 							var token = TokenVerifier.create(accessTokenResponse.getToken(), AccessToken.class);
 							try {
 								var userId = token.getToken().getSubject();
-								var userEntityRes = (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate()))
+								var userEntityRes = (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient()))
 										.findOneById(userId);
 								return userEntityRes.map(userEntity -> new Object[]{accessTokenResponse, userEntity});
 							} catch (VerificationException e) {
@@ -411,7 +402,7 @@ public class Accounts {
 									realm.users().get(userId).resetPassword(getPasswordCredential(request.getNewPassword()));
 									return Future.succeededFuture();
 								}))
-								.compose(v -> (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate()).findOneById(userId)))
+								.compose(v -> (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient()).findOneById(userId)))
 								.map(userEntity -> LoginOrCreateReply.newBuilder()
 										.setUserEntity(toProto(userEntity))
 										.setAccessTokenResponse(AccessTokenResponse.newBuilder()
@@ -448,7 +439,7 @@ public class Accounts {
 									}
 
 									// TODO: Join with friends
-									return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate()))
+									return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient()))
 											.findManyByIds(request.getIdsList())
 											.map(users ->
 													GetAccountsReply.newBuilder()
@@ -529,7 +520,7 @@ public class Accounts {
 					});
 				})
 				.compose(userRepresentation -> {
-					var users = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate());
+					var users = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 					return users.findOneById(userRepresentation.getId());
 				})
 				.compose(userEntity -> {

@@ -22,7 +22,7 @@ public class EnvironmentTests extends FrameworkTestBase {
 		var vertx = Vertx.vertx();
 		var promise = Promise.<Void>promise();
 		vertx.runOnContext(v -> {
-			var pool = Environment.pgPoolAkaDaoDelegate();
+			var pool = Environment.sqlClient();
 			pool.close().onComplete(promise);
 		});
 		promise.future().compose(v -> vertx.close()).onComplete(vertxTestContext.succeedingThenComplete());
@@ -33,7 +33,7 @@ public class EnvironmentTests extends FrameworkTestBase {
 		var vertx = Vertx.vertx();
 		var promise = Promise.<Void>promise();
 		vertx.runOnContext(v -> {
-			var dao = new GamesDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate());
+			var dao = new GamesDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 			dao.insert(new Games()).map((Void) null).onComplete(promise);
 		});
 		promise.future().compose(v -> vertx.close()).onComplete(vertxTestContext.succeedingThenComplete());
@@ -44,7 +44,7 @@ public class EnvironmentTests extends FrameworkTestBase {
 		var vertx = Vertx.vertx();
 		var promise = Promise.<Void>promise();
 		vertx.runOnContext(v -> {
-			var dao = new GamesDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolForTransactionsAkaDaoDelegate());
+			var dao = new GamesDao(Environment.jooqAkaDaoConfiguration(), Environment.transactionPool());
 			var transaction = dao.queryExecutor().beginTransaction();
 			transaction.compose(res -> res.execute(dsl -> dsl.insertInto(GAMES).defaultValues()))
 					.compose(v1 -> transaction.result().commit())
@@ -59,7 +59,7 @@ public class EnvironmentTests extends FrameworkTestBase {
 		var vertx = Vertx.vertx();
 		var promise = Promise.<Void>promise();
 		vertx.runOnContext(v -> {
-			var dao = new GamesDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolForTransactionsAkaDaoDelegate());
+			var dao = new GamesDao(Environment.jooqAkaDaoConfiguration(), Environment.transactionPool());
 			var transaction = dao.queryExecutor().beginTransaction();
 			transaction.onSuccess(res -> res.execute(dsl -> dsl.insertInto(GAMES).defaultValues()))
 					.compose(v2 -> Environment.sleep(vertx, 8000L))
@@ -74,12 +74,12 @@ public class EnvironmentTests extends FrameworkTestBase {
 		var vertx = Vertx.vertx();
 		var promise = Promise.<Void>promise();
 		vertx.runOnContext(v -> {
-			var dao = new GamesDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate());
+			var dao = new GamesDao(Environment.jooqAkaDaoConfiguration(), Environment.transactionPool());
 			var transaction = dao.queryExecutor().beginTransaction();
 			transaction.onSuccess(res -> res.execute(dsl -> dsl.insertInto(GAMES).defaultValues()));
 		});
 		vertx.runOnContext(v -> {
-			var dao = new GamesDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate());
+			var dao = new GamesDao(Environment.jooqAkaDaoConfiguration(), Environment.transactionPool());
 			var transaction = dao.queryExecutor().beginTransaction();
 			transaction.onSuccess(res -> res.execute(dsl -> dsl.insertInto(GAMES).defaultValues()))
 					.compose(v2 -> Environment.sleep(vertx, 8000L))

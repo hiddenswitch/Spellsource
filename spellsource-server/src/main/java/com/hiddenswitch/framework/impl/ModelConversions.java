@@ -963,7 +963,7 @@ public class ModelConversions {
 			for (var i = 1; i < parts.length; i++) {
 				var key = parts[i];
 
-				// set the value if this is the last path item
+				// set the value if this is the last path message
 				if (i == parts.length - 1) {
 					var value = kv.getValue();
 					var parsedValue = new Object();

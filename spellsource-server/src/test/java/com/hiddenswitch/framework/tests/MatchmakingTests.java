@@ -248,7 +248,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 		var client = new Client(vertx);
 		var cancelled = checkpoint(1);
 		var queueId = UUID.randomUUID().toString();
-		var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate());
+		var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 
 		var matchmakingQueue = new Matchmaking() {
 			@Override
@@ -345,7 +345,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 				})
 				.onSuccess(v -> toxicGrpcProxy().setConnectionCut(true))
 				.compose(v -> {
-					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate());
+					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 					return ticketsDao.findOneById(client.getUserEntity().getId());
 				})
 				.onSuccess(ticket -> {
@@ -355,7 +355,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 				})
 				.compose(v -> Environment.sleep(vertx, 20001))
 				.compose(v -> {
-					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate());
+					var ticketsDao = new MatchmakingTicketsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 					return ticketsDao.findOneById(client.getUserEntity().getId());
 				})
 				.onSuccess(ticket -> {
@@ -510,7 +510,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 					LOGGER.debug("finished all the games");
 					var clients = clientsFut.<Client>list();
 					var userIds = clients.stream().map(client -> client.getUserEntity().getId()).sorted().toArray(String[]::new);
-					var gameUsersDao = new GameUsersDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate());
+					var gameUsersDao = new GameUsersDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 					return gameUsersDao.findManyByUserId(Arrays.asList(userIds))
 							.onSuccess(gameUsers -> {
 								testContext.verify(() -> {

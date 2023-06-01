@@ -28,15 +28,16 @@ import io.vertx.micrometer.VertxPrometheusOptions;
 import io.vertx.micrometer.backends.PrometheusBackendRegistry;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
-import io.vertx.sqlclient.PoolOptions;
-import io.vertx.sqlclient.RowSet;
-import io.vertx.sqlclient.SqlConnection;
+import io.vertx.pgclient.impl.PgPoolOptions;
+import io.vertx.sqlclient.*;
+import io.vertx.sqlclient.Row;
 import io.vertx.tracing.opentracing.OpenTracingOptions;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.output.MigrateResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.*;
+import org.jooq.Query;
 import org.jooq.impl.DefaultConfiguration;
 import org.redisson.Redisson;
 import org.redisson.api.RMapCacheAsync;
@@ -73,13 +74,13 @@ public class Environment {
 			.setPublishQuantiles(true));
 	private static final AtomicBoolean prometheusInited = new AtomicBoolean();
 	private static final AtomicReference<Configuration> jooqConfiguration = new AtomicReference<>();
-	private static final WeakVertxMap<PgPool> pgPools = new WeakVertxMap<>(Environment::pgPoolConstructor);
-	private static final WeakVertxMap<PgPool> pgPoolsForTransactions = new WeakVertxMap<>(Environment::pgPoolConstructor);
-	private static final WeakVertxMap<RedissonClient> redissonClients = new WeakVertxMap<>(Environment::redissonClientConstructor);
 	private static final WeakVertxMap<Async> asyncs = new WeakVertxMap<>(Environment::asyncConstructor);
 	private static final String CONFIGURATION_NAME_TOKEN = "spellsource";
-	private static ServerConfiguration programmaticConfiguration = ServerConfiguration.newBuilder().build();
 	private static final AtomicReference<ServerConfiguration> cachedConfiguration = new AtomicReference<>();
+	private static ServerConfiguration programmaticConfiguration = ServerConfiguration.newBuilder().build();
+	private static final WeakVertxMap<SqlClient> sqlClients = new WeakVertxMap<>(Environment::sharedClient);
+	private static final WeakVertxMap<Pool> transactionPools = new WeakVertxMap<>(Environment::sharedPool);
+	private static final WeakVertxMap<RedissonClient> redissonClients = new WeakVertxMap<>(Environment::redissonClientConstructor);
 
 	static {
 		// An opportunity to configure Vertx's JSON
@@ -99,7 +100,37 @@ public class Environment {
 		return new Async(vertx, true);
 	}
 
-	private static PgPool pgPoolConstructor(Vertx vertx) {
+	private static PgPool pool(Vertx vertx) {
+		var args = pgArgs();
+		return PgPool.pool(vertx, args.connectionOptions(), args.poolOptions());
+	}
+
+	private static PgPool sharedPool(Vertx vertx) {
+		var args = pgArgs();
+		var options = sharedOptions("sharedPools__",vertx,args.poolOptions());
+		return PgPool.pool(vertx, args.connectionOptions(), options);
+	}
+
+	private static SqlClient client(Vertx vertx) {
+		var args = pgArgs();
+		return PgPool.client(vertx, args.connectionOptions(), args.poolOptions());
+	}
+
+	private static PoolOptions sharedOptions(String prefix, Vertx vertx, PoolOptions options) {
+		return options
+				.setName(prefix + (vertx == null ? "null" : vertx.toString()))
+				.setShared(true)
+				.setEventLoopSize(CpuCoreSensor.availableProcessors());
+	}
+
+	private static SqlClient sharedClient(Vertx vertx) {
+		var args = pgArgs();
+		var options = sharedOptions("sharedClient__", vertx, args.poolOptions());
+		return PgPool.client(vertx, args.connectionOptions(), options);
+	}
+
+	@NotNull
+	private static PgArgs pgArgs() {
 		var connectionOptions = PgConnectOptions.fromEnv();
 		var cachedConfiguration = getConfiguration();
 		if (cachedConfiguration.hasPg()) {
@@ -126,8 +157,9 @@ public class Environment {
 		}
 
 		var poolOptions = new PoolOptions()
-				.setMaxSize(Math.min(CpuCoreSensor.availableProcessors() * 2, 8));
-		return PgPool.pool(vertx, connectionOptions, poolOptions);
+				.setMaxSize(Math.max(CpuCoreSensor.availableProcessors(), 8));
+		var args = new PgArgs(connectionOptions, poolOptions);
+		return args;
 	}
 
 	public static void metrics() {
@@ -138,12 +170,12 @@ public class Environment {
 		}
 	}
 
-	public static PgPool pgPoolAkaDaoDelegate() {
-		return pgPools.get();
+	public static SqlClient sqlClient() {
+		return sqlClients.get();
 	}
 
-	public static PgPool pgPoolForTransactionsAkaDaoDelegate() {
-		return pgPoolsForTransactions.get();
+	public static Pool transactionPool() {
+		return transactionPools.get();
 	}
 
 	public static Async async() {
@@ -159,17 +191,13 @@ public class Environment {
 	}
 
 	public static <T> Future<T> withExecutor(Function<ReactiveClassicGenericQueryExecutor, Future<T>> handler) {
-		return Environment.pgPoolAkaDaoDelegate()
-				.getConnection()
-				.compose(conn -> {
-					var executor = new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), conn);
-					return handler.apply(executor)
-							.onComplete(v -> conn.close());
-				});
+		var conn = Environment.sqlClient();
+		var executor = new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), conn);
+		return handler.apply(executor);
 	}
 
 	public static <T> Future<T> withConnection(Function<SqlConnection, Future<T>> handler) {
-		return Environment.pgPoolAkaDaoDelegate()
+		return Environment.transactionPool()
 				.getConnection()
 				.compose(conn -> handler.apply(conn)
 						.onComplete(v -> conn.close()));
@@ -194,7 +222,7 @@ public class Environment {
 			length += throwables[i].getStackTrace().length;
 		}
 		var newStack = new ArrayList<StackTraceElement>(length);
-		for (Throwable throwable : throwables) {
+		for (var throwable : throwables) {
 			var stack = throwable.getStackTrace();
 			for (var i = 0; i < stack.length; i++) {
 				if (stack[i].getClassName().startsWith("co.paralleluniverse.fibers.") ||
@@ -269,7 +297,6 @@ public class Environment {
 	public static Future<Integer> migrate() {
 		return Environment.migrate(getConfiguration()).map(v -> v.migrationsExecuted);
 	}
-
 
 	public static VertxOptions vertxOptions() {
 		var configuration = getConfiguration();
@@ -351,11 +378,6 @@ public class Environment {
 		return result.future();
 	}
 
-	public static void setConfiguration(ServerConfiguration configuration) {
-		cachedConfiguration.set(null);
-		programmaticConfiguration = configuration;
-	}
-
 	public static ServerConfiguration getConfiguration() {
 		return cachedConfiguration.updateAndGet(existing -> {
 			if (existing != null) {
@@ -363,7 +385,7 @@ public class Environment {
 			}
 
 			var defaultConfiguration = defaultConfiguration();
-			Stream<ServerConfiguration> filesConfiguration = fileConfigurations();
+			var filesConfiguration = fileConfigurations();
 			// todo: pods have weird environment variables, must test this more
 			// var environmentConfiguration = environmentConfiguration();
 			var configuration = Streams.concat(
@@ -374,6 +396,11 @@ public class Environment {
 			).reduce((s1, s2) -> s1.toBuilder().mergeFrom(s2).build());
 			return configuration.orElseThrow();
 		});
+	}
+
+	public static void setConfiguration(ServerConfiguration configuration) {
+		cachedConfiguration.set(null);
+		programmaticConfiguration = configuration;
 	}
 
 	@NotNull
@@ -538,6 +565,9 @@ public class Environment {
 
 	public static PrometheusBackendRegistry registry() {
 		return prometheusRegistry;
+	}
+
+	private record PgArgs(PgConnectOptions connectionOptions, PoolOptions poolOptions) {
 	}
 
 }

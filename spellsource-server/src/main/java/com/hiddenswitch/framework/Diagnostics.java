@@ -64,9 +64,8 @@ public class Diagnostics {
 
 					var protos = client.unauthenticated().getConfiguration(Empty.getDefaultInstance()).eventually(client::close);
 					var redis = Future.fromCompletionStage(Environment.redisson().getRedisNodes(RedisNodes.SINGLE).getInstance().pingAsync(200, TimeUnit.MILLISECONDS));
-					var sql = Environment.pgPoolAkaDaoDelegate().getConnection().compose(SqlClient::close);
 
-					CompositeFuture.all(redis, sql, protos)
+					CompositeFuture.all(redis, protos)
 							.onSuccess(v1 -> {
 								routingContext.end(Buffer.buffer("OK"));
 							})

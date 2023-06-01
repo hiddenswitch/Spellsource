@@ -395,7 +395,7 @@ public class Legacy {
 						Environment.async().run(v -> {
 							ReactiveClassicGenericQueryExecutor transaction = null;
 							try {
-								transaction = await(new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolForTransactionsAkaDaoDelegate()).beginTransaction());
+								transaction = await(new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), Environment.transactionPool()).beginTransaction());
 								var decksInserted = await(transaction
 										.execute(dsl -> {
 											// new deckId, deck fields...
@@ -576,7 +576,7 @@ public class Legacy {
 		var serverConfiguration = Environment.getConfiguration();
 		var cache = DECKS_CACHE.get();
 		var configuration = Environment.jooqAkaDaoConfiguration();
-		var delegate = Environment.pgPoolAkaDaoDelegate();
+		var delegate = Environment.sqlClient();
 		return Future.fromCompletionStage(cache.getAsync(deckId), Vertx.currentContext())
 				.compose(existing -> {
 					if (existing != null) {
@@ -717,7 +717,7 @@ public class Legacy {
 		}
 
 		var configuration = Environment.jooqAkaDaoConfiguration();
-		var delegate = Environment.pgPoolAkaDaoDelegate();
+		var delegate = Environment.sqlClient();
 		var decksDao = new DecksDao(configuration, delegate);
 		var deckId = UUID.randomUUID().toString();
 		return decksDao.insert(new Decks()

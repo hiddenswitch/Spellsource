@@ -9,7 +9,6 @@ import com.hiddenswitch.framework.schema.spellsource.tables.daos.MatchmakingQueu
 import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets;
-import com.hiddenswitch.spellsource.rpc.Spellsource;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutResponse;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutResponseUnityConnection;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
@@ -91,7 +90,7 @@ public class Matchmaking extends AbstractVerticle {
 				return;
 			}
 
-			var queryExecutor = new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolForTransactionsAkaDaoDelegate());
+			var queryExecutor = new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), Environment.transactionPool());
 			queryExecutor
 					.beginTransaction()
 					.compose(transaction -> {
@@ -231,7 +230,6 @@ public class Matchmaking extends AbstractVerticle {
 
 	public static Future<Void> deleteQueue(String queueId) {
 		LOGGER.trace("deleting queueId={}", queueId);
-		// setup transaction
 		return withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_QUEUES)
 				.where(MATCHMAKING_QUEUES.ID.eq(queueId)))
 				.compose(deleted -> {
@@ -247,10 +245,15 @@ public class Matchmaking extends AbstractVerticle {
 	}
 
 	public static Future<Closeable> createQueue(MatchmakingQueues configuration) {
-		var matchmakingQueuesDao = new MatchmakingQueuesDao(Environment.jooqAkaDaoConfiguration(), Environment.pgPoolAkaDaoDelegate());
+		var matchmakingQueuesDao = new MatchmakingQueuesDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 		return matchmakingQueuesDao.insert(configuration, true)
 				.onSuccess(i -> LOGGER.debug("created queue {} ({})", configuration.getId(), i == 1))
-				.compose(ignored -> Future.succeededFuture(fut -> Matchmaking.deleteQueue(configuration.getId()).onComplete(fut)));
+				.compose(ignored -> Future.succeededFuture(new Closeable() {
+					@Override
+					public void close(Promise<Void> completion) {
+						Matchmaking.deleteQueue(configuration.getId()).onComplete(completion);
+					}
+				}));
 	}
 
 	public static Future<Void> notifyGameReady(String userId, String gameId) {

@@ -84,7 +84,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	                            int playerId,
 	                            long noActivityTimeout) {
 		this.scheduler = scheduler;
-		this.writer = writer;
+		this.writer = new RetryMessageProducer<>(writer, 10, 1000);
 		this.userId = userId;
 		this.playerId = playerId;
 		this.server = server;

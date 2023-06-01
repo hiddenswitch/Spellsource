@@ -44,7 +44,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -161,7 +160,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 				// Register that the user is in this game
 				var inGameConsumer = registerInGame(gameId, userId);
-				closeables.add(inGameConsumer::unregister);
+				// Undeploying the verticle this is constructed in will automatically unregister the consumer
 				Promise<Void> inGameRegistration = Promise.promise();
 				inGameConsumer.completionHandler(inGameRegistration);
 				registrationsReady.add(inGameRegistration);
@@ -192,6 +191,8 @@ public class ServerGameContext extends GameContext implements Server {
 				} else {
 					// Connect to the GRPC stream representing this user by connecting to its handler advertised on the event bus
 					var serverGameContext = this;
+					// Improve robustness of the user's event bus handlers and interaction with the game context by giving it a
+					// distinct task queue from the game and/or other users.
 					var userVerticle = new AbstractVerticle() {
 						@Override
 						public void start(Promise<Void> startPromise) throws Exception {
@@ -201,14 +202,11 @@ public class ServerGameContext extends GameContext implements Server {
 								consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
 								// By using a publisher, we do not require that there be a working connection while sending
 								var producer = bus.<Spellsource.ServerToClientMessage>publisher(getMessagesFromServerAddress(userId));
+								// The event bus
 
 								Promise<Void> registration = Promise.promise();
 								consumer.completionHandler(registration);
 								registrationsReady.add(registration);
-
-								// We'll want to unregister and close these when this instance is disposed
-//								closeables.add(consumer::unregister);
-//								closeables.add(producer::close);
 
 								// Create a client that handles game events and action/mulligan requests
 								var client = new UnityClientBehaviour(serverGameContext,
@@ -257,8 +255,13 @@ public class ServerGameContext extends GameContext implements Server {
 						}
 					});
 
+					// todo: fix verticle loading
+					// The verticle takes time to deploy, which can interfere with the expectation that once a ServerGameContext
+					// is created, messages can be sent. handlersReady() should already be dealing with this, but it doesn't
+					// apparently, so the SubscribeGame method is configured to retry sending for now.
 					vertx.deployVerticle(userVerticle)
 							.onSuccess(deploymentId -> closeables.add(completion -> {
+								// todo: investigate why this undeploy can fail
 								// this may be getting closed elsewhere?
 								vertx.undeploy(deploymentId);
 								completion.complete();
@@ -278,18 +281,11 @@ public class ServerGameContext extends GameContext implements Server {
 		var eventBus = vertx.eventBus();
 		var userId = Accounts.userId();
 
-		var publisher = eventBus.<Spellsource.ClientToServerMessage>publisher(getMessagesFromClientAddress(userId));
-		var firstMessage = new AtomicBoolean(true);
-		request.handler(msg -> {
-			// if this is the first message the user is sending over this connection, wait a short beat in order to allow
-			// clustered ervent busses to settle down
-			if (vertx.isClustered() && firstMessage.compareAndSet(true, false)) {
-				com.hiddenswitch.framework.Environment.sleep(2000)
-						.onComplete(v -> publisher.write(msg).onFailure(com.hiddenswitch.framework.Environment.onFailure()));
-			} else {
-				publisher.write(msg).onFailure(com.hiddenswitch.framework.Environment.onFailure());
-			}
-		});
+		// Make the game subscription robust against a ServerGameContext not yet being ready to receive messages from this
+		// client. Messages are buffered and dequeued. A NO_HANDLERS exception indicates the ServerGameContext isn't ready
+		// yet. We retry, up to ten times, with a 1-second interval, to send, since most games are ready within 10s.
+		var publisher = new RetryMessageProducer<>(eventBus.<Spellsource.ClientToServerMessage>publisher(getMessagesFromClientAddress(userId)), 10, 1000);
+		request.handler(publisher::write);
 		var consumer = eventBus.<Spellsource.ServerToClientMessage>consumer(getMessagesFromServerAddress(userId));
 		consumer.pause();
 		consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
