@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Returns the base cards of the aftermaths triggered by the {@link CardSourceArg#TARGET_PLAYER}.
  */
-public class AftermathsCardSource extends CardSource {
+public class AftermathsCardSource extends CardSource implements HasCardCreationSideEffects {
 
 	public AftermathsCardSource(CardSourceDesc desc) {
 		super(desc);

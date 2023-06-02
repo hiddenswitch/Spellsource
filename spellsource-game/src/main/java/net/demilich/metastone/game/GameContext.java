@@ -195,6 +195,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class GameContext implements Cloneable, Serializable, Inventory, EntityZoneTable, Comparable<GameContext> {
 	private static Logger LOGGER = LoggerFactory.getLogger(GameContext.class);
+    protected transient static ThreadLocal<GameContext> currentContext = new ThreadLocal<>();
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
 	protected transient SpanContext spanContext;
@@ -285,7 +286,15 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		}
 	}
 
-	private void setTriggers(List<Trigger> triggers) {
+	/**
+	 * Gets the current game context.
+	 * @return a game context instance
+	 */
+	public static GameContext current() {
+		return currentContext.get();
+	}
+
+    private void setTriggers(List<Trigger> triggers) {
 		this.triggers = triggers;
 	}
 
@@ -350,6 +359,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Ends the game immediately.
 	 */
 	protected void endGame() {
+        currentContext.set(this);
 		updateAndGetGameOver();
 
 		// Don't do processing of end game effects more than once.
@@ -394,6 +404,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Ends the current player's turn immediately, setting the active player to their opponent.
 	 */
 	public void endTurn() {
+		currentContext.set(this);
 		LOGGER.trace("{} endTurn: Ending turn {}", getGameId(), getActivePlayer().getId());
 		getLogic().endTurn(getActivePlayerId());
 		setActivePlayerId(getLogic().getNextActivePlayerId());
@@ -786,6 +797,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * and start the game. {@link #resume()} will start the first turn.
 	 */
 	public void init() {
+        currentContext.set(this);
 		getLogic().contextReady();
 		startTrace();
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
@@ -798,6 +810,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param startingPlayerId
 	 */
 	public void init(int startingPlayerId) {
+        currentContext.set(this);
 		setActivePlayerId(startingPlayerId);
 		getEnvironment().put(Environment.STARTING_PLAYER, startingPlayerId);
 		LOGGER.trace("{} init: Initializing game with starting player {}", getGameId(), getActivePlayer().getUserId());
@@ -845,6 +858,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @see GameLogic#performGameAction(int, GameAction) for more about game actions.
 	 */
 	public void performAction(int playerId, GameAction gameAction) {
+        currentContext.set(this);
 		getLogic().performGameAction(playerId, gameAction);
 	}
 
@@ -898,6 +912,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * their turn.
 	 */
 	public boolean takeActionInTurn() {
+        currentContext.set(this);
 		Tracer tracer = GlobalTracer.get();
 		Span span = tracer.buildSpan("GameContext/takeActionInTurn")
 				.withTag("gameId", getGameId())
@@ -950,6 +965,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                                 that cannot be found.
 	 */
 	public Entity resolveSingleTarget(EntityReference targetKey) throws TargetNotFoundException {
+        currentContext.set(this);
 		return resolveSingleTarget(targetKey, true);
 	}
 
@@ -963,6 +979,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @throws TargetNotFoundException
 	 */
 	public Entity resolveSingleTarget(EntityReference targetKey, boolean rejectRemovedFromPlay) throws TargetNotFoundException {
+        currentContext.set(this);
 		if (targetKey == null || Objects.equals(targetKey, EntityReference.NONE)) {
 			return null;
 		}
@@ -989,6 +1006,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * resolution works.
 	 */
 	public List<Entity> resolveTarget(Player player, Entity source, EntityReference targetKey) {
+        currentContext.set(this);
 		List<Entity> entities = targetLogic.resolveTargetKey(this, player, source, targetKey);
 		if (entities == null) {
 			return null;
@@ -1073,6 +1091,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param playerId The player whose turn should be started.
 	 */
 	public void startTurn(int playerId) {
+        currentContext.set(this);
 		LOGGER.trace("{} startTurn: Starting turn {} for playerId={}", getGameId(), getTurn() + 1, playerId);
 		setTurn(getTurn() + 1);
 		getLogic().startTurn(playerId);
@@ -1264,6 +1283,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param playerId The player that should concede/lose
 	 */
 	public void concede(int playerId) {
+        currentContext.set(this);
 		// Make sure IDs are assigned before we try to repeatedly destroy hero
 		if (getEntities().anyMatch(e -> e.getId() == IdFactory.UNASSIGNED)) {
 			getLogic().initializePlayerAndMoveMulliganToSetAside(0, true);
@@ -1399,6 +1419,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Useful for implementing Monte Carlo Tree Search AI algorithms.
 	 */
 	public void resume() {
+        currentContext.set(this);
 		while (!updateAndGetGameOver()) {
 			startTurn(getActivePlayerId());
 			while (takeActionInTurn()) {
@@ -1969,4 +1990,30 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public CardCatalogue getCardCatalogue() {
 		return cardCatalogue;
 	}
+
+    /**
+     * Returns a card for the purposes of overriding a card. The {@code CardDesc} on the card has been cloned, in order
+     * to allow the overriding card to potentially modify / mutate the {@code CardDesc} without modifying the
+     * underlying card catalogue.
+     *
+     * @param overrideCardId the card ID to override
+     * @return a copy of a card where the {@code CardDesc} is copied, cached in temp cards
+     */
+    public Card getOverriddenCardById(String overrideCardId) {
+        Card target = null;
+        for (var card : getTempCards()) {
+            if (card.getCardId().equals(overrideCardId)) {
+                target = card;
+                break;
+            }
+        }
+
+        if (target == null) {
+            // creates a clone
+            target = getCardById(overrideCardId);
+            // deeply clone the card desc
+            target.setDesc(target.getDesc().clone());
+        }
+        return target;
+    }
 }

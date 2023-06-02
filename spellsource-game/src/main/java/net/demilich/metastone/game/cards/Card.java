@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
+import de.cronn.reflection.util.immutable.ImmutableProxy;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -180,9 +181,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	@Override
 	public Card clone() {
 		Card clone = (Card) super.clone();
-		/*clone.attributes = ((CardAttributeMap) this.attributes).clone();*/
 		clone.getAttributes().setCard(clone);
-		/*clone.setDesc(this.getDesc());*/
 		return clone;
 	}
 
@@ -505,7 +504,9 @@ public class Card extends Entity implements HasChooseOneActions {
 			return desc;
 		}
 		// Prevents copying here
-		return ClasspathCardCatalogue.INSTANCE.getRecords().get(getAttributes().getOverrideCardId()).getDesc();
+		var context = GameContext.current();
+		Objects.requireNonNull(context);
+		return context.getOverriddenCardById(getAttributes().getOverrideCardId()).getDesc();
 	}
 
 	/**

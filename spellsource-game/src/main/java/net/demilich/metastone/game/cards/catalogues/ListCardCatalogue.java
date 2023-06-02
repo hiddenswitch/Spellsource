@@ -165,6 +165,8 @@ public class ListCardCatalogue implements CardCatalogue {
 			}
 			if (clone) {
 				card = card.clone();
+			} else {
+				throw new UnsupportedOperationException("must clone");
 			}
 			result.addCard(card);
 		}

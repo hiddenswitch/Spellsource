@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  *
  * @see Entity#diedOnBattlefield()
  */
-public class GraveyardDiedMinionsSource extends CardSource {
+public class GraveyardDiedMinionsSource extends CardSource implements HasCardCreationSideEffects {
 
 	public GraveyardDiedMinionsSource(CardSourceDesc desc) {
 		super(desc);

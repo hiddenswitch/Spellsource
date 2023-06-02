@@ -109,7 +109,7 @@ import static net.demilich.metastone.game.cards.desc.HasEntrySet.link;
  * value providers, etc.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable, HasEntrySet<CardDescArg, Object>, AbstractEnchantmentDesc<Enchantment> {
+public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable, HasEntrySet<CardDescArg, Object>, AbstractEnchantmentDesc<Enchantment> {
 	private String id;
 	private String name;
 	private String heroPower;

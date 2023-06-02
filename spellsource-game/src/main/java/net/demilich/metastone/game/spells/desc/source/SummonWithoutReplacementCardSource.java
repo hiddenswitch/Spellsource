@@ -9,7 +9,7 @@ import net.demilich.metastone.game.entities.Entity;
 /**
  * Returns the list of source cards for the minions on the battlefield of the {@link CardSourceArg#TARGET_PLAYER}.
  */
-public final class SummonWithoutReplacementCardSource extends CardSource implements HasCardCreationSideEffects {
+public final class SummonWithoutReplacementCardSource extends CardSource {
 
 	public SummonWithoutReplacementCardSource(CardSourceDesc desc) {
 		super(desc);

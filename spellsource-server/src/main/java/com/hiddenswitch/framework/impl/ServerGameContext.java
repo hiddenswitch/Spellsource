@@ -688,6 +688,7 @@ public class ServerGameContext extends GameContext implements Server {
 				.start();
 		var scope = tracer.activateSpan(span);
 		try {
+			currentContext.set(this);
 			if (!isRunning()) {
 				endGame();
 			}
@@ -862,6 +863,7 @@ public class ServerGameContext extends GameContext implements Server {
 			// them.
 			Consumer<ServerGameContext> handler;
 
+			// todo: if these have gameplay side effects and access the context, we are SOL
 			while ((handler = onGameEndHandlers.poll()) != null) {
 				try {
 					handler.accept(this);
@@ -1098,6 +1100,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 	public void loseBothPlayers() {
 		try {
+			currentContext.set(this);
 			getLogic().loseBothPlayers();
 			endGame();
 		} finally {
