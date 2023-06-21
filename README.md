@@ -47,17 +47,9 @@ Requirements: **Java 20 or later** and **Docker**. Check your current version of
     git clone https://github.com/hiddenswitch/Spellsource.git
     cd Spellsource
     ```
- 3. See Spellsource-specific tasks using `./gradlew tasks --group spellsource`.
- 4. Run tests using `./gradlew test`
- 5. Start a local server using `./gradlew run`
-
-### Getting started with Development on Windows
-
-Requirements: **Java 20 or later** and **Docker**. Check your current version of Java using `java --version`.
-
- 1. Install dependencies:
-    ```shell
-    ```
+ 3. See Spellsource-specific tasks using `gradle tasks --group spellsource`.
+ 4. Run tests using `gradle test`
+ 5. Start a local server using `gradle run`
 
 ### Contributing Cards
 

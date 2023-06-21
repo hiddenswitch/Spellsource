@@ -38,6 +38,7 @@ public class MigrationUtils {
 	public static void cardsMigration(Context context) {
 		var dsl = DSL.using(context.getConnection(), SQLDialect.POSTGRES);
 		var ownerUserId = getSpellsourceUserId();
+		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
         var insertAndUpdate = ClasspathCardCatalogue.INSTANCE.getRecords().values().stream().map(record -> {
 			var now = OffsetDateTime.now();
 			var encoded = JsonObject.mapFrom(record.getDesc());
