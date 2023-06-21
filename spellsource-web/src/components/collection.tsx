@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react"
-import React, { FunctionComponent, useEffect, useState } from "react"
+import React, { FunctionComponent, useContext, useEffect, useState } from "react"
 import { CardType } from "../__generated__/spellsource-game"
-import { CollectionCardsOrderBy, useGetCardsQuery } from "../__generated__/client"
+import { CollectionCardFragment, CollectionCardsOrderBy, useGetCardsQuery } from "../__generated__/client"
 import { CardDef } from "./card-display"
 import { Button, Dropdown, Form, Table } from "react-bootstrap"
 import { formatCurated } from "../lib/blockly-misc-utils"
@@ -13,6 +13,8 @@ import { useParam, useParamArray, useParamBool, useParamInt } from "../lib/routi
 import { useRouter } from "next/router"
 import { useDebounce } from "react-use"
 import Link from "next/link"
+import { useDrag, useDrop } from "react-dnd"
+import { CardCache } from "../pages/collection"
 
 const ShowCardTypes: CardType[] = ["MINION", "SPELL", "WEAPON", "HERO", "HERO_POWER", "CLASS"]
 const DefaultShowCardTypes: CardType[] = ["MINION", "SPELL", "WEAPON"]
@@ -28,6 +30,58 @@ const orderings = {
   TYPE_ASC: "Type",
 } as Record<CollectionCardsOrderBy, string>
 
+export const textDecorationStyle = (heroClass: string, classColors: Record<string, string>) => ({
+  textDecorationLine: "underline",
+  textDecorationColor: heroClass in classColors ? classColors[heroClass] : "rgba(#888888)",
+})
+
+const CardRow: FunctionComponent<{
+  card: CollectionCardFragment
+  collection: CollectionProps
+}> = ({ card, collection }) => {
+  const cardScript = card.cardScript as CardDef
+
+  const { classes, setHeroClass, classColors, addToDeck } = collection
+
+  const [, dragRef, dragPreview] = useDrag({
+    type: "collection-card",
+    item: { id: cardScript.id },
+    canDrag: (monitor) => !!collection.addToDeck,
+  })
+
+  return (
+    <tr ref={dragRef} onClick={() => addToDeck?.(cardScript.id)} style={{ cursor: addToDeck ? "pointer" : "initial" }}>
+      <td>{cardScript.baseManaCost ?? 0}</td>
+      <td>{cardScript.name}</td>
+      <td
+        onClick={() => setHeroClass(cardScript.heroClass)}
+        style={{
+          cursor: "pointer",
+          ...textDecorationStyle(cardScript.heroClass, classColors),
+        }}
+      >
+        {classes[cardScript.heroClass] ?? "Any"}
+      </td>
+      <td>{formatCurated(cardScript.type)}</td>
+      <td>
+        {!cardScript.baseAttack && !cardScript.baseHp
+          ? "n/a"
+          : `${cardScript.baseAttack ?? 0}/${cardScript.baseHp ?? 0}`}
+      </td>
+      <td>{cardScript.description?.replaceAll(new RegExp("[$#\\[\\]]", "g"), "") ?? ""}</td>
+      <td>
+        {card.blocklyWorkspace ? (
+          <Link href={`/card-editor?card=${encodeURIComponent(card.id)}`} target={"_blank"}>
+            Edit
+          </Link>
+        ) : (
+          <></>
+        )}
+      </td>
+    </tr>
+  )
+}
+
 interface CollectionProps {
   classes: Record<string, string>
   classColors: Record<string, string>
@@ -36,25 +90,16 @@ interface CollectionProps {
   offset: number
   setOffset: (offset: number) => void
   mainHeroClass?: string
-  addToDeck?: (card: CardDef) => void
+  addToDeck?: (id: string) => void
+  removeFromDeck?: (id: string) => void
 }
 
-export const textDecorationStyle = (heroClass: string, classColors: Record<string, string>) => ({
-  textDecorationLine: "underline",
-  textDecorationColor: heroClass in classColors ? classColors[heroClass] : "rgba(#888888)",
-})
-
-const Collection: FunctionComponent<CollectionProps> = ({
-  classes,
-  classColors,
-  heroClass,
-  setHeroClass,
-  offset,
-  setOffset,
-  mainHeroClass,
-  addToDeck,
-}) => {
+const Collection: FunctionComponent<CollectionProps> = (props) => {
+  const { classes, classColors, heroClass, setHeroClass, offset, setOffset, mainHeroClass, addToDeck, removeFromDeck } =
+    props
   const { data: session, status } = useSession()
+
+  const cache = useContext(CardCache)
 
   const router = useRouter()
   const user = session?.token?.sub
@@ -83,6 +128,7 @@ const Collection: FunctionComponent<CollectionProps> = ({
         createdBy: ownOnly ? { equalTo: user ?? "" } : undefined,
       },
     },
+    onCompleted: (data) => data.allCollectionCards?.nodes?.forEach((node) => (cache[node.id] = node.cardScript)),
   })
   const cards = getCards?.data?.allCollectionCards?.nodes ?? getCards?.previousData?.allCollectionCards?.nodes ?? []
   const total =
@@ -99,8 +145,15 @@ const Collection: FunctionComponent<CollectionProps> = ({
 
   useEffect(changeOffset, [getCards.data])
 
+  const [, collectionDrop] = useDrop({
+    accept: ["deck-card"],
+    drop: (item) => {
+      removeFromDeck?.(item["id"])
+    },
+  })
+
   return (
-    <div>
+    <div ref={collectionDrop}>
       <div id={"Top Bar"} className={"d-flex flex-row flex-wrap gap-2 pt-2 ps-2 align-items-center"}>
         <Form
           onSubmit={(event) => {
@@ -249,44 +302,9 @@ const Collection: FunctionComponent<CollectionProps> = ({
             </tr>
           </thead>
           <tbody>
-            {cards.map((card) => {
-              const cardScript = card.cardScript as CardDef
-              return (
-                <tr
-                  key={card.id}
-                  onClick={() => addToDeck?.(cardScript)}
-                  style={{ cursor: addToDeck ? "pointer" : "initial" }}
-                >
-                  <td>{cardScript.baseManaCost ?? 0}</td>
-                  <td>{cardScript.name}</td>
-                  <td
-                    onClick={() => setHeroClass(cardScript.heroClass)}
-                    style={{
-                      cursor: "pointer",
-                      ...textDecorationStyle(cardScript.heroClass, classColors)
-                    }}
-                  >
-                    {classes[cardScript.heroClass] ?? "Any"}
-                  </td>
-                  <td>{formatCurated(cardScript.type)}</td>
-                  <td>
-                    {!cardScript.baseAttack && !cardScript.baseHp
-                      ? "n/a"
-                      : `${cardScript.baseAttack ?? 0}/${cardScript.baseHp ?? 0}`}
-                  </td>
-                  <td>{cardScript.description?.replaceAll(new RegExp("[$#\\[\\]]", "g"), "") ?? ""}</td>
-                  <td>
-                    {card.blocklyWorkspace ? (
-                      <Link href={`/card-editor?card=${encodeURIComponent(card.id)}`} target={"_blank"}>
-                        Edit
-                      </Link>
-                    ) : (
-                      <></>
-                    )}
-                  </td>
-                </tr>
-              )
-            })}
+            {cards.map((card) => (
+              <CardRow key={card.id} card={card} collection={props} />
+            ))}
           </tbody>
         </Table>
       </div>
