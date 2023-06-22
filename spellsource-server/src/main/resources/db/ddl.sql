@@ -147,6 +147,261 @@ $$;
 ALTER FUNCTION spellsource.can_see_deck(user_id text, deck spellsource.decks) OWNER TO admin;
 
 --
+-- Name: cards; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.cards (
+    id text NOT NULL,
+    created_by character varying NOT NULL,
+    uri text,
+    blockly_workspace xml,
+    card_script jsonb,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    last_modified timestamp with time zone DEFAULT now() NOT NULL,
+    is_archived boolean DEFAULT false NOT NULL,
+    is_private boolean DEFAULT true NOT NULL
+);
+
+
+ALTER TABLE spellsource.cards OWNER TO admin;
+
+--
+-- Name: card_catalogue_formats(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.card_catalogue_formats() RETURNS SETOF spellsource.cards
+    LANGUAGE plpgsql
+    AS $$
+begin
+    return query
+        select *
+        from spellsource.cards
+        where card_script ->> 'type' = 'FORMAT';
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.card_catalogue_formats() OWNER TO admin;
+
+--
+-- Name: card_catalogue_get_banned_draft_cards(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.card_catalogue_get_banned_draft_cards() RETURNS TABLE(card_id text)
+    LANGUAGE plpgsql
+    AS $$
+begin
+    return query
+        (select card_id
+         from spellsource.banned_draft_cards
+         union
+         select id
+         from spellsource.cards
+         where card_script -> 'draft' ->> 'banned' = 'true');
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.card_catalogue_get_banned_draft_cards() OWNER TO admin;
+
+--
+-- Name: card_catalogue_get_base_classes(text[]); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.card_catalogue_get_base_classes(sets text[]) RETURNS SETOF spellsource.cards
+    LANGUAGE plpgsql
+    AS $$
+begin
+    return query
+        select *
+        from spellsource.cards
+        where card_script ->> 'type' = 'CLASS'
+          and (card_script ->> 'set') = any (sets);
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.card_catalogue_get_base_classes(sets text[]) OWNER TO admin;
+
+--
+-- Name: card_catalogue_get_card_by_id(text); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.card_catalogue_get_card_by_id(card_id text) RETURNS SETOF spellsource.cards
+    LANGUAGE plpgsql
+    AS $$
+begin
+    return query
+        select *
+        from spellsource.cards
+        where id = card_id;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.card_catalogue_get_card_by_id(card_id text) OWNER TO admin;
+
+--
+-- Name: card_catalogue_get_card_by_name(text); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.card_catalogue_get_card_by_name(card_name text) RETURNS spellsource.cards
+    LANGUAGE plpgsql
+    AS $$
+declare
+    result_record spellsource.cards%rowtype;
+begin
+    select *
+    into result_record
+    from spellsource.cards
+    where card_script ->> 'name' = card_name
+    limit 1;
+
+    return result_record;
+exception
+    when NO_DATA_FOUND then
+        return null;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.card_catalogue_get_card_by_name(card_name text) OWNER TO admin;
+
+--
+-- Name: card_catalogue_get_card_by_name_and_class(text, text); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.card_catalogue_get_card_by_name_and_class(card_name text, hero_class text) RETURNS spellsource.cards
+    LANGUAGE plpgsql
+    AS $$
+declare
+    result_record spellsource.cards%rowtype;
+begin
+    select *
+    into result_record
+    from spellsource.cards
+    where card_script ->> 'name' = card_name
+      and card_script ->> 'heroClass' = hero_class
+    limit 1;
+
+    return result_record;
+exception
+    when NO_DATA_FOUND then
+        return null;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.card_catalogue_get_card_by_name_and_class(card_name text, hero_class text) OWNER TO admin;
+
+--
+-- Name: card_catalogue_get_class_cards(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.card_catalogue_get_class_cards() RETURNS SETOF spellsource.cards
+    LANGUAGE plpgsql
+    AS $$
+begin
+    return query
+        select *
+        from spellsource.cards
+        where card_script ->> 'type' = 'CLASS';
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.card_catalogue_get_class_cards() OWNER TO admin;
+
+--
+-- Name: card_catalogue_get_format(text); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.card_catalogue_get_format(card_name text) RETURNS SETOF spellsource.cards
+    LANGUAGE plpgsql
+    AS $$
+begin
+    return query
+        select *
+        from spellsource.cards
+        where card_script ->> 'type' = 'FORMAT'
+          and card_script ->> 'name' = card_name;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.card_catalogue_get_format(card_name text) OWNER TO admin;
+
+--
+-- Name: card_catalogue_get_hard_removal_cards(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.card_catalogue_get_hard_removal_cards() RETURNS TABLE(card_id text)
+    LANGUAGE plpgsql
+    AS $$
+begin
+    return query
+        (select card_id
+         from spellsource.hard_removal_cards
+         union
+         select id
+         from spellsource.cards
+         where card_script -> 'artificialIntelligence' ->> 'hardRemoval' = 'true');
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.card_catalogue_get_hard_removal_cards() OWNER TO admin;
+
+--
+-- Name: card_catalogue_get_hero_card(text); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.card_catalogue_get_hero_card(hero_class text) RETURNS spellsource.cards
+    LANGUAGE plpgsql
+    AS $$
+declare
+    result_record spellsource.cards%rowtype;
+begin
+    select *
+    into result_record
+    from spellsource.cards
+    where card_script ->> 'heroClass' = hero_class
+      and card_script ->> 'type' = 'HERO'
+    limit 1;
+
+    return result_record;
+exception
+    when NO_DATA_FOUND then
+        return null;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.card_catalogue_get_hero_card(hero_class text) OWNER TO admin;
+
+--
+-- Name: card_catalogue_query(text[], text, text, text, text); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.card_catalogue_query(sets text[], card_type text, rarity text, hero_class text, attribute text) RETURNS SETOF spellsource.cards
+    LANGUAGE plpgsql
+    AS $$
+begin
+    return query
+        select *
+        from spellsource.cards
+        where (sets is null or card_script ->> 'set' = any (sets))
+          and (card_type is null or card_script ->> 'type' = card_type)
+          and (rarity is null or card_script ->> 'rarity' = rarity)
+          and (hero_class is null or card_script ->> 'heroClass' = hero_class)
+          and (attribute is null or card_script -> 'attributes' ? attribute);
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.card_catalogue_query(sets text[], card_type text, rarity text, hero_class text, attribute text) OWNER TO admin;
+
+--
 -- Name: get_classes(); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -166,25 +421,6 @@ $$;
 
 
 ALTER FUNCTION spellsource.get_classes() OWNER TO admin;
-
---
--- Name: cards; Type: TABLE; Schema: spellsource; Owner: admin
---
-
-CREATE TABLE spellsource.cards (
-    id text NOT NULL,
-    created_by character varying NOT NULL,
-    uri text,
-    blockly_workspace xml,
-    card_script jsonb,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    last_modified timestamp with time zone DEFAULT now() NOT NULL,
-    is_archived boolean DEFAULT false NOT NULL,
-    is_private boolean DEFAULT true NOT NULL
-);
-
-
-ALTER TABLE spellsource.cards OWNER TO admin;
 
 --
 -- Name: classes; Type: VIEW; Schema: spellsource; Owner: admin
@@ -1839,6 +2075,17 @@ CREATE TABLE keycloak.web_origins (
 ALTER TABLE keycloak.web_origins OWNER TO admin;
 
 --
+-- Name: banned_draft_cards; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.banned_draft_cards (
+    card_id text NOT NULL
+);
+
+
+ALTER TABLE spellsource.banned_draft_cards OWNER TO admin;
+
+--
 -- Name: bot_users; Type: TABLE; Schema: spellsource; Owner: admin
 --
 
@@ -2015,6 +2262,17 @@ ALTER TABLE spellsource.guests ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY 
     CACHE 1
 );
 
+
+--
+-- Name: hard_removal_cards; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.hard_removal_cards (
+    card_id text NOT NULL
+);
+
+
+ALTER TABLE spellsource.hard_removal_cards OWNER TO admin;
 
 --
 -- Name: matchmaking_queues; Type: TABLE; Schema: spellsource; Owner: admin
@@ -3652,6 +3910,55 @@ CREATE INDEX decks_trashed_idx ON spellsource.decks USING btree (trashed) WHERE 
 
 
 --
+-- Name: idx_card_script_ai_hardremoval; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX idx_card_script_ai_hardremoval ON spellsource.cards USING btree ((((card_script -> 'artificialIntelligence'::text) ->> 'hardRemoval'::text)));
+
+
+--
+-- Name: idx_card_script_attributes; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX idx_card_script_attributes ON spellsource.cards USING gin (((card_script -> 'attributes'::text)));
+
+
+--
+-- Name: idx_card_script_draft_banned; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX idx_card_script_draft_banned ON spellsource.cards USING btree ((((card_script -> 'draft'::text) ->> 'banned'::text)));
+
+
+--
+-- Name: idx_card_script_heroclass; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX idx_card_script_heroclass ON spellsource.cards USING btree (((card_script ->> 'heroClass'::text)));
+
+
+--
+-- Name: idx_card_script_name; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX idx_card_script_name ON spellsource.cards USING btree (((card_script ->> 'name'::text)));
+
+
+--
+-- Name: idx_card_script_rarity; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX idx_card_script_rarity ON spellsource.cards USING btree (((card_script ->> 'rarity'::text)));
+
+
+--
+-- Name: idx_card_script_set; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX idx_card_script_set ON spellsource.cards USING btree (((card_script ->> 'set'::text)));
+
+
+--
 -- Name: idx_card_script_type; Type: INDEX; Schema: spellsource; Owner: admin
 --
 
@@ -4258,6 +4565,14 @@ ALTER TABLE ONLY keycloak.identity_provider_config
 
 
 --
+-- Name: banned_draft_cards banned_draft_cards_card_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.banned_draft_cards
+    ADD CONSTRAINT banned_draft_cards_card_id_fkey FOREIGN KEY (card_id) REFERENCES spellsource.cards(id);
+
+
+--
 -- Name: bot_users bot_users_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
@@ -4375,6 +4690,14 @@ ALTER TABLE ONLY spellsource.game_users
 
 ALTER TABLE ONLY spellsource.guests
     ADD CONSTRAINT guests_user_id_fkey FOREIGN KEY (user_id) REFERENCES keycloak.user_entity(id) ON DELETE CASCADE;
+
+
+--
+-- Name: hard_removal_cards hard_removal_cards_card_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.hard_removal_cards
+    ADD CONSTRAINT hard_removal_cards_card_id_fkey FOREIGN KEY (card_id) REFERENCES spellsource.cards(id);
 
 
 --

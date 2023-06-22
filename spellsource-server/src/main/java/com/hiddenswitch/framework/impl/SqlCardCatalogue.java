@@ -1,40 +1,42 @@
 package com.hiddenswitch.framework.impl;
 
+import com.google.common.collect.Iterables;
 import com.hiddenswitch.framework.Environment;
-import com.hiddenswitch.framework.migrations.V8__Migrate_from_previous_server;
-import com.hiddenswitch.framework.schema.spellsource.tables.daos.CardsDao;
+import com.hiddenswitch.framework.schema.spellsource.Routines;
+import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
-import io.vertx.await.Async;
-import io.vertx.sqlclient.SqlConnection;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jooq.JSONB;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.hiddenswitch.framework.schema.spellsource.Tables.CARDS;
 import static io.vertx.await.Async.await;
 import static org.jooq.impl.DSL.field;
 
+/**
+ * Retrieves card catalogue data from the SQL server.
+ * <p>
+ * For now, does not use caching.
+ */
 public class SqlCardCatalogue implements CardCatalogue {
 	@Override
 	public Map<String, DeckFormat> formats() {
-//		SqlConnection connection = null;
-//		try {
-//			connection = await(Environment.pgPoolAkaDaoDelegate().getConnection());
-//			var dao = new CardsDao(Environment.jooqAkaDaoConfiguration(), connection);
-//
-//			var formats = await(dao.findManyByCondition(field("card_script ->> 'type'").eq(Spellsource.CardTypeMessage.CardType.FORMAT.name())));
-//
-//		} finally {
-//			connection.close();
-//		}
-		return null;
+		var formats = await(Environment.callRoutine(RowMappers.getCardsMapper(), Routines.cardCatalogueFormats()));
+		return formats.stream().collect(Collectors.toMap(
+				format -> format.getCardScript().getString("name"),
+				format -> {
+					@SuppressWarnings("unchecked")
+					List<String> sets = format.getCardScript().getJsonArray("sets").getList();
+					return new DeckFormat()
+							.withName(format.getCardScript().getString("name"))
+							.withCardSets(sets);
+				}));
 	}
 
 	@Override
@@ -54,12 +56,12 @@ public class SqlCardCatalogue implements CardCatalogue {
 
 	@Override
 	public @NotNull CardList getAll() {
-		return null;
+		throw new UnsupportedOperationException("getAll");
 	}
 
 	@Override
 	public @NotNull Map<String, Card> getCards() {
-		return null;
+		throw new UnsupportedOperationException("getCards");
 	}
 
 	@Override
@@ -69,12 +71,12 @@ public class SqlCardCatalogue implements CardCatalogue {
 
 	@Override
 	public @NotNull Map<String, CardCatalogueRecord> getRecords() {
-		return null;
+		throw new UnsupportedOperationException("getRecords");
 	}
 
 	@Override
 	public @Nullable Card getCardByName(String name) {
-		return null;
+		throw new UnsupportedOperationException("getCardByName");
 	}
 
 	@Override

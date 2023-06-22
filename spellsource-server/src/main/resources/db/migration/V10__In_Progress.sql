@@ -262,4 +262,228 @@ $$ language plpgsql volatile;
 grant execute on function spellsource.create_deck_with_cards(text, text, text, text[]) to website;
 
 --- adding indices for querying the card script efficiently
-create index idx_card_script_type on spellsource.cards ((card_script ->> 'type'));
+create index idx_card_script_name
+    on spellsource.cards ((card_script ->> 'name'));
+
+create index idx_card_script_type
+    on spellsource.cards ((card_script ->> 'type'));
+
+create index idx_card_script_heroClass
+    on spellsource.cards ((card_script ->> 'heroClass'));
+
+create index idx_card_script_set
+    on spellsource.cards ((card_script ->> 'set'));
+
+create index idx_card_script_rarity
+    on spellsource.cards ((card_script ->> 'rarity'));
+
+create index idx_card_script_attributes
+    on spellsource.cards using gin ((card_script -> 'attributes'));
+
+create index idx_card_script_draft_banned
+    on spellsource.cards ((card_script -> 'draft' ->> 'banned'));
+
+create index idx_card_script_ai_hardRemoval
+    on spellsource.cards ((card_script -> 'artificialIntelligence' ->> 'hardRemoval'));
+
+
+--- formats()
+create or replace function spellsource.card_catalogue_formats() returns setof spellsource.cards as
+$$
+begin
+    return query
+        select *
+        from spellsource.cards
+        where card_script ->> 'type' = 'FORMAT';
+end;
+$$ language plpgsql volatile;
+
+--- getFormat(String name)
+create or replace function spellsource.card_catalogue_get_format(card_name text)
+    returns setof spellsource.cards as
+$$
+begin
+    return query
+        select *
+        from spellsource.cards
+        where card_script ->> 'type' = 'FORMAT'
+          and card_script ->> 'name' = card_name;
+end;
+$$ language plpgsql volatile;
+
+--- getBannedDraftCards()
+create table spellsource.banned_draft_cards
+(
+    card_id text not null,
+    foreign key (card_id) references spellsource.cards (id)
+);
+
+create or replace function spellsource.card_catalogue_get_banned_draft_cards()
+    returns table
+            (
+                card_id text
+            )
+as
+$$
+begin
+    return query
+        (select card_id
+         from spellsource.banned_draft_cards
+         union
+         select id
+         from spellsource.cards
+         where card_script -> 'draft' ->> 'banned' = 'true');
+end;
+$$ language plpgsql;
+
+
+--- getHardRemovalCardIds()
+create table spellsource.hard_removal_cards
+(
+    card_id text not null,
+    foreign key (card_id) references spellsource.cards (id)
+);
+
+create or replace function spellsource.card_catalogue_get_hard_removal_cards()
+    returns table
+            (
+                card_id text
+            )
+as
+$$
+begin
+    return query
+        (select card_id
+         from spellsource.hard_removal_cards
+         union
+         select id
+         from spellsource.cards
+         where card_script -> 'artificialIntelligence' ->> 'hardRemoval' = 'true');
+end;
+$$ language plpgsql;
+
+--- getCardById
+create or replace function spellsource.card_catalogue_get_card_by_id(card_id text)
+    returns setof spellsource.cards as
+$$
+begin
+    return query
+        select *
+        from spellsource.cards
+        where id = card_id;
+end;
+$$ language plpgsql;
+
+--- getCardByName(String name)
+create or replace function spellsource.card_catalogue_get_card_by_name(card_name text)
+    returns spellsource.cards as
+$$
+declare
+    result_record spellsource.cards%rowtype;
+begin
+    select *
+    into result_record
+    from spellsource.cards
+    where card_script ->> 'name' = card_name
+    limit 1;
+
+    return result_record;
+exception
+    when NO_DATA_FOUND then
+        return null;
+end;
+$$ language plpgsql;
+
+--- getCardByName(String name, String heroClass)
+create or replace function spellsource.card_catalogue_get_card_by_name_and_class(card_name text, hero_class text)
+    returns spellsource.cards as
+$$
+declare
+    result_record spellsource.cards%rowtype;
+begin
+    select *
+    into result_record
+    from spellsource.cards
+    where card_script ->> 'name' = card_name
+      and card_script ->> 'heroClass' = hero_class
+    limit 1;
+
+    return result_record;
+exception
+    when NO_DATA_FOUND then
+        return null;
+end;
+$$ language plpgsql;
+
+--- query
+create or replace function spellsource.card_catalogue_query(
+    sets text[],
+    card_type text,
+    rarity text,
+    hero_class text,
+    attribute text
+)
+    returns setof spellsource.cards as
+$$
+begin
+    return query
+        select *
+        from spellsource.cards
+        where (sets is null or card_script ->> 'set' = any (sets))
+          and (card_type is null or card_script ->> 'type' = card_type)
+          and (rarity is null or card_script ->> 'rarity' = rarity)
+          and (hero_class is null or card_script ->> 'heroClass' = hero_class)
+          and (attribute is null or card_script -> 'attributes' ? attribute);
+end;
+$$ language plpgsql;
+
+
+
+--- getHeroCard
+create or replace function spellsource.card_catalogue_get_hero_card(hero_class text)
+    returns spellsource.cards as
+$$
+declare
+    result_record spellsource.cards%rowtype;
+begin
+    select *
+    into result_record
+    from spellsource.cards
+    where card_script ->> 'heroClass' = hero_class
+      and card_script ->> 'type' = 'HERO'
+    limit 1;
+
+    return result_record;
+exception
+    when NO_DATA_FOUND then
+        return null;
+end;
+$$ language plpgsql;
+
+--- getClassCards
+create or replace function spellsource.card_catalogue_get_class_cards()
+    returns setof spellsource.cards as
+$$
+begin
+    return query
+        select *
+        from spellsource.cards
+        where card_script ->> 'type' = 'CLASS';
+end;
+$$ language plpgsql;
+
+-- getBaseClasses
+create or replace function spellsource.card_catalogue_get_base_classes(sets text[])
+    returns setof spellsource.cards as
+$$
+begin
+    return query
+        select *
+        from spellsource.cards
+        where card_script ->> 'type' = 'CLASS'
+          and (card_script ->> 'set') = any (sets);
+end;
+$$ language plpgsql;
+
+--- todo: implement draft queries. the draft logic may be entirely replaced by a sql function, where it will be easier to author
+--- todo: create corresponding views and grant execution privileges to the card builder for these catalogue queries

@@ -28,7 +28,6 @@ import io.vertx.micrometer.VertxPrometheusOptions;
 import io.vertx.micrometer.backends.PrometheusBackendRegistry;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
-import io.vertx.pgclient.impl.PgPoolOptions;
 import io.vertx.sqlclient.*;
 import io.vertx.sqlclient.Row;
 import io.vertx.tracing.opentracing.OpenTracingOptions;
@@ -38,6 +37,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.*;
 import org.jooq.Query;
+import org.jooq.Record;
+import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 import org.redisson.Redisson;
 import org.redisson.api.RMapCacheAsync;
@@ -54,10 +55,8 @@ import java.nio.file.FileSystems;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.Comparator;
-import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -65,6 +64,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static com.hiddenswitch.protos.Serialization.configureSerialization;
 
@@ -107,7 +107,7 @@ public class Environment {
 
 	private static PgPool sharedPool(Vertx vertx) {
 		var args = pgArgs();
-		var options = sharedOptions("sharedPools__",vertx,args.poolOptions());
+		var options = sharedOptions("sharedPools__", vertx, args.poolOptions());
 		return PgPool.pool(vertx, args.connectionOptions(), options);
 	}
 
@@ -194,6 +194,16 @@ public class Environment {
 		var conn = Environment.sqlClient();
 		var executor = new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), conn);
 		return handler.apply(executor);
+	}
+
+	public static <R extends Record, P> Future<List<P>> callRoutine(Function<Row, P> mapper, Table<R> called) {
+		var conn = Environment.sqlClient();
+		var executor = new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), conn);
+		return executor.executeAny(dsl -> dsl.select(DSL.asterisk()).from(called))
+				.map(res -> StreamSupport
+						.stream(res.spliterator(), false)
+						.map(mapper)
+						.toList());
 	}
 
 	public static <T> Future<T> withConnection(Function<SqlConnection, Future<T>> handler) {

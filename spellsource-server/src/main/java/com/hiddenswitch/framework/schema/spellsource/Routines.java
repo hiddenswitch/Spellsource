@@ -5,15 +5,34 @@ package com.hiddenswitch.framework.schema.spellsource;
 
 
 import com.hiddenswitch.framework.schema.spellsource.routines.CanSeeDeck;
+import com.hiddenswitch.framework.schema.spellsource.routines.CardCatalogueGetCardByName;
+import com.hiddenswitch.framework.schema.spellsource.routines.CardCatalogueGetCardByNameAndClass;
+import com.hiddenswitch.framework.schema.spellsource.routines.CardCatalogueGetHeroCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardMessage;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardsCollectible;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardsCost;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardsType;
 import com.hiddenswitch.framework.schema.spellsource.routines.CreateDeckWithCards;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetUserId;
+import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueFormats;
+import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBannedDraftCards;
+import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBaseClasses;
+import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetCardById;
+import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetClassCards;
+import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetFormat;
+import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetHardRemovalCards;
+import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueQuery;
 import com.hiddenswitch.framework.schema.spellsource.tables.GetClasses;
 import com.hiddenswitch.framework.schema.spellsource.tables.GetCollectionCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.SetCardsInDeck;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueFormatsRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetBannedDraftCardsRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetBaseClassesRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetCardByIdRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetClassCardsRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetFormatRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetHardRemovalCardsRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueQueryRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.ClassesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
@@ -72,6 +91,128 @@ public class Routines {
         CanSeeDeck f = new CanSeeDeck();
         f.setUserId(userId);
         f.setDeck(deck);
+
+        return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.card_catalogue_get_card_by_name</code>
+     */
+    public static CardsRecord cardCatalogueGetCardByName(
+          Configuration configuration
+        , String cardName
+    ) {
+        CardCatalogueGetCardByName f = new CardCatalogueGetCardByName();
+        f.setCardName(cardName);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_card_by_name</code> as a field.
+     */
+    public static Field<CardsRecord> cardCatalogueGetCardByName(
+          String cardName
+    ) {
+        CardCatalogueGetCardByName f = new CardCatalogueGetCardByName();
+        f.setCardName(cardName);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_card_by_name</code> as a field.
+     */
+    public static Field<CardsRecord> cardCatalogueGetCardByName(
+          Field<String> cardName
+    ) {
+        CardCatalogueGetCardByName f = new CardCatalogueGetCardByName();
+        f.setCardName(cardName);
+
+        return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.card_catalogue_get_card_by_name_and_class</code>
+     */
+    public static CardsRecord cardCatalogueGetCardByNameAndClass(
+          Configuration configuration
+        , String cardName
+        , String heroClass
+    ) {
+        CardCatalogueGetCardByNameAndClass f = new CardCatalogueGetCardByNameAndClass();
+        f.setCardName(cardName);
+        f.setHeroClass(heroClass);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_card_by_name_and_class</code> as
+     * a field.
+     */
+    public static Field<CardsRecord> cardCatalogueGetCardByNameAndClass(
+          String cardName
+        , String heroClass
+    ) {
+        CardCatalogueGetCardByNameAndClass f = new CardCatalogueGetCardByNameAndClass();
+        f.setCardName(cardName);
+        f.setHeroClass(heroClass);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_card_by_name_and_class</code> as
+     * a field.
+     */
+    public static Field<CardsRecord> cardCatalogueGetCardByNameAndClass(
+          Field<String> cardName
+        , Field<String> heroClass
+    ) {
+        CardCatalogueGetCardByNameAndClass f = new CardCatalogueGetCardByNameAndClass();
+        f.setCardName(cardName);
+        f.setHeroClass(heroClass);
+
+        return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.card_catalogue_get_hero_card</code>
+     */
+    public static CardsRecord cardCatalogueGetHeroCard(
+          Configuration configuration
+        , String heroClass
+    ) {
+        CardCatalogueGetHeroCard f = new CardCatalogueGetHeroCard();
+        f.setHeroClass(heroClass);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_hero_card</code> as a field.
+     */
+    public static Field<CardsRecord> cardCatalogueGetHeroCard(
+          String heroClass
+    ) {
+        CardCatalogueGetHeroCard f = new CardCatalogueGetHeroCard();
+        f.setHeroClass(heroClass);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_hero_card</code> as a field.
+     */
+    public static Field<CardsRecord> cardCatalogueGetHeroCard(
+          Field<String> heroClass
+    ) {
+        CardCatalogueGetHeroCard f = new CardCatalogueGetHeroCard();
+        f.setHeroClass(heroClass);
 
         return f.asField();
     }
@@ -309,6 +450,240 @@ public class Routines {
         GetUserId f = new GetUserId();
 
         return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.card_catalogue_formats</code>.
+     */
+    public static Result<CardCatalogueFormatsRecord> cardCatalogueFormats(
+          Configuration configuration
+    ) {
+        return configuration.dsl().selectFrom(com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueFormats.CARD_CATALOGUE_FORMATS.call(
+        )).fetch();
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_formats</code> as a table.
+     */
+    public static CardCatalogueFormats cardCatalogueFormats() {
+        return com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueFormats.CARD_CATALOGUE_FORMATS.call(
+        );
+    }
+
+    /**
+     * Call <code>spellsource.card_catalogue_get_banned_draft_cards</code>.
+     */
+    public static Result<CardCatalogueGetBannedDraftCardsRecord> cardCatalogueGetBannedDraftCards(
+          Configuration configuration
+    ) {
+        return configuration.dsl().selectFrom(com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBannedDraftCards.CARD_CATALOGUE_GET_BANNED_DRAFT_CARDS.call(
+        )).fetch();
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_banned_draft_cards</code> as a
+     * table.
+     */
+    public static CardCatalogueGetBannedDraftCards cardCatalogueGetBannedDraftCards() {
+        return com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBannedDraftCards.CARD_CATALOGUE_GET_BANNED_DRAFT_CARDS.call(
+        );
+    }
+
+    /**
+     * Call <code>spellsource.card_catalogue_get_base_classes</code>.
+     */
+    public static Result<CardCatalogueGetBaseClassesRecord> cardCatalogueGetBaseClasses(
+          Configuration configuration
+        , String[] sets
+    ) {
+        return configuration.dsl().selectFrom(com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBaseClasses.CARD_CATALOGUE_GET_BASE_CLASSES.call(
+              sets
+        )).fetch();
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_base_classes</code> as a table.
+     */
+    public static CardCatalogueGetBaseClasses cardCatalogueGetBaseClasses(
+          String[] sets
+    ) {
+        return com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBaseClasses.CARD_CATALOGUE_GET_BASE_CLASSES.call(
+            sets
+        );
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_base_classes</code> as a table.
+     */
+    public static CardCatalogueGetBaseClasses cardCatalogueGetBaseClasses(
+          Field<String[]> sets
+    ) {
+        return com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBaseClasses.CARD_CATALOGUE_GET_BASE_CLASSES.call(
+            sets
+        );
+    }
+
+    /**
+     * Call <code>spellsource.card_catalogue_get_card_by_id</code>.
+     */
+    public static Result<CardCatalogueGetCardByIdRecord> cardCatalogueGetCardById(
+          Configuration configuration
+        , String cardId
+    ) {
+        return configuration.dsl().selectFrom(com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetCardById.CARD_CATALOGUE_GET_CARD_BY_ID.call(
+              cardId
+        )).fetch();
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_card_by_id</code> as a table.
+     */
+    public static CardCatalogueGetCardById cardCatalogueGetCardById(
+          String cardId
+    ) {
+        return com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetCardById.CARD_CATALOGUE_GET_CARD_BY_ID.call(
+            cardId
+        );
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_card_by_id</code> as a table.
+     */
+    public static CardCatalogueGetCardById cardCatalogueGetCardById(
+          Field<String> cardId
+    ) {
+        return com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetCardById.CARD_CATALOGUE_GET_CARD_BY_ID.call(
+            cardId
+        );
+    }
+
+    /**
+     * Call <code>spellsource.card_catalogue_get_class_cards</code>.
+     */
+    public static Result<CardCatalogueGetClassCardsRecord> cardCatalogueGetClassCards(
+          Configuration configuration
+    ) {
+        return configuration.dsl().selectFrom(com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetClassCards.CARD_CATALOGUE_GET_CLASS_CARDS.call(
+        )).fetch();
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_class_cards</code> as a table.
+     */
+    public static CardCatalogueGetClassCards cardCatalogueGetClassCards() {
+        return com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetClassCards.CARD_CATALOGUE_GET_CLASS_CARDS.call(
+        );
+    }
+
+    /**
+     * Call <code>spellsource.card_catalogue_get_format</code>.
+     */
+    public static Result<CardCatalogueGetFormatRecord> cardCatalogueGetFormat(
+          Configuration configuration
+        , String cardName
+    ) {
+        return configuration.dsl().selectFrom(com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetFormat.CARD_CATALOGUE_GET_FORMAT.call(
+              cardName
+        )).fetch();
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_format</code> as a table.
+     */
+    public static CardCatalogueGetFormat cardCatalogueGetFormat(
+          String cardName
+    ) {
+        return com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetFormat.CARD_CATALOGUE_GET_FORMAT.call(
+            cardName
+        );
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_format</code> as a table.
+     */
+    public static CardCatalogueGetFormat cardCatalogueGetFormat(
+          Field<String> cardName
+    ) {
+        return com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetFormat.CARD_CATALOGUE_GET_FORMAT.call(
+            cardName
+        );
+    }
+
+    /**
+     * Call <code>spellsource.card_catalogue_get_hard_removal_cards</code>.
+     */
+    public static Result<CardCatalogueGetHardRemovalCardsRecord> cardCatalogueGetHardRemovalCards(
+          Configuration configuration
+    ) {
+        return configuration.dsl().selectFrom(com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetHardRemovalCards.CARD_CATALOGUE_GET_HARD_REMOVAL_CARDS.call(
+        )).fetch();
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_get_hard_removal_cards</code> as a
+     * table.
+     */
+    public static CardCatalogueGetHardRemovalCards cardCatalogueGetHardRemovalCards() {
+        return com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetHardRemovalCards.CARD_CATALOGUE_GET_HARD_REMOVAL_CARDS.call(
+        );
+    }
+
+    /**
+     * Call <code>spellsource.card_catalogue_query</code>.
+     */
+    public static Result<CardCatalogueQueryRecord> cardCatalogueQuery(
+          Configuration configuration
+        , String[] sets
+        , String cardType
+        , String rarity
+        , String heroClass
+        , String attribute
+    ) {
+        return configuration.dsl().selectFrom(com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueQuery.CARD_CATALOGUE_QUERY.call(
+              sets
+            , cardType
+            , rarity
+            , heroClass
+            , attribute
+        )).fetch();
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_query</code> as a table.
+     */
+    public static CardCatalogueQuery cardCatalogueQuery(
+          String[] sets
+        , String cardType
+        , String rarity
+        , String heroClass
+        , String attribute
+    ) {
+        return com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueQuery.CARD_CATALOGUE_QUERY.call(
+            sets,
+            cardType,
+            rarity,
+            heroClass,
+            attribute
+        );
+    }
+
+    /**
+     * Get <code>spellsource.card_catalogue_query</code> as a table.
+     */
+    public static CardCatalogueQuery cardCatalogueQuery(
+          Field<String[]> sets
+        , Field<String> cardType
+        , Field<String> rarity
+        , Field<String> heroClass
+        , Field<String> attribute
+    ) {
+        return com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueQuery.CARD_CATALOGUE_QUERY.call(
+            sets,
+            cardType,
+            rarity,
+            heroClass,
+            attribute
+        );
     }
 
     /**

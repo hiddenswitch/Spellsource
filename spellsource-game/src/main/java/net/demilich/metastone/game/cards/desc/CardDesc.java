@@ -167,6 +167,8 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	private ConditionDesc targetSelectionCondition;
 	private Spellsource.Art art;
 	private Spellsource.Tooltip[] tooltips;
+	private Spellsource.Draft draft;
+	private Spellsource.ArtificialIntelligence artificialIntelligence;
 	@JsonIgnore
 	private transient List<Condition> glowConditions;
 
@@ -1186,6 +1188,24 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 
 	public CardDesc setArt(Spellsource.Art art) {
 		this.art = art;
+		return this;
+	}
+
+	public Spellsource.Draft draft() {
+		return draft;
+	}
+
+	public CardDesc setDraft(Spellsource.Draft draft) {
+		this.draft = draft;
+		return this;
+	}
+
+	public Spellsource.ArtificialIntelligence artificialIntelligence() {
+		return artificialIntelligence;
+	}
+
+	public CardDesc setArtificialIntelligence(Spellsource.ArtificialIntelligence artificialIntelligence) {
+		this.artificialIntelligence = artificialIntelligence;
 		return this;
 	}
 }

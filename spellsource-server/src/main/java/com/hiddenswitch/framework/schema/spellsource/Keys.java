@@ -6,6 +6,7 @@ package com.hiddenswitch.framework.schema.spellsource;
 
 import com.hiddenswitch.framework.schema.keycloak.tables.UserEntity;
 import com.hiddenswitch.framework.schema.keycloak.tables.records.UserEntityRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.BannedDraftCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.BotUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Cards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
@@ -16,9 +17,11 @@ import com.hiddenswitch.framework.schema.spellsource.tables.Friends;
 import com.hiddenswitch.framework.schema.spellsource.tables.GameUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Games;
 import com.hiddenswitch.framework.schema.spellsource.tables.Guests;
+import com.hiddenswitch.framework.schema.spellsource.tables.HardRemovalCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
 import com.hiddenswitch.framework.schema.spellsource.tables.UserEntityAddons;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.BannedDraftCardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.BotUsersRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsInDeckRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsRecord;
@@ -29,6 +32,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.FriendsRecor
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GameUsersRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GamesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GuestsRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.HardRemovalCardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingQueuesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingTicketsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.UserEntityAddonsRecord;
@@ -69,6 +73,7 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final ForeignKey<BannedDraftCardsRecord, CardsRecord> BANNED_DRAFT_CARDS__BANNED_DRAFT_CARDS_CARD_ID_FKEY = Internal.createForeignKey(BannedDraftCards.BANNED_DRAFT_CARDS, DSL.name("banned_draft_cards_card_id_fkey"), new TableField[] { BannedDraftCards.BANNED_DRAFT_CARDS.CARD_ID }, Keys.CARDS_PKEY, new TableField[] { Cards.CARDS.ID }, true);
     public static final ForeignKey<BotUsersRecord, UserEntityRecord> BOT_USERS__BOT_USERS_ID_FKEY = Internal.createForeignKey(BotUsers.BOT_USERS, DSL.name("bot_users_id_fkey"), new TableField[] { BotUsers.BOT_USERS.ID }, com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, new TableField[] { UserEntity.USER_ENTITY.ID }, true);
     public static final ForeignKey<CardsRecord, UserEntityRecord> CARDS__CARDS_CREATED_BY_FKEY = Internal.createForeignKey(Cards.CARDS, DSL.name("cards_created_by_fkey"), new TableField[] { Cards.CARDS.CREATED_BY }, com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, new TableField[] { UserEntity.USER_ENTITY.ID }, true);
     public static final ForeignKey<CardsInDeckRecord, CardsRecord> CARDS_IN_DECK__CARDS_IN_DECK_CARD_ID_FKEY = Internal.createForeignKey(CardsInDeck.CARDS_IN_DECK, DSL.name("cards_in_deck_card_id_fkey"), new TableField[] { CardsInDeck.CARDS_IN_DECK.CARD_ID }, Keys.CARDS_PKEY, new TableField[] { Cards.CARDS.ID }, true);
@@ -84,6 +89,7 @@ public class Keys {
     public static final ForeignKey<GameUsersRecord, GamesRecord> GAME_USERS__GAME_USERS_GAME_ID_FKEY = Internal.createForeignKey(GameUsers.GAME_USERS, DSL.name("game_users_game_id_fkey"), new TableField[] { GameUsers.GAME_USERS.GAME_ID }, Keys.GAMES_PKEY, new TableField[] { Games.GAMES.ID }, true);
     public static final ForeignKey<GameUsersRecord, UserEntityRecord> GAME_USERS__GAME_USERS_USER_ID_FKEY = Internal.createForeignKey(GameUsers.GAME_USERS, DSL.name("game_users_user_id_fkey"), new TableField[] { GameUsers.GAME_USERS.USER_ID }, com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, new TableField[] { UserEntity.USER_ENTITY.ID }, true);
     public static final ForeignKey<GuestsRecord, UserEntityRecord> GUESTS__GUESTS_USER_ID_FKEY = Internal.createForeignKey(Guests.GUESTS, DSL.name("guests_user_id_fkey"), new TableField[] { Guests.GUESTS.USER_ID }, com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, new TableField[] { UserEntity.USER_ENTITY.ID }, true);
+    public static final ForeignKey<HardRemovalCardsRecord, CardsRecord> HARD_REMOVAL_CARDS__HARD_REMOVAL_CARDS_CARD_ID_FKEY = Internal.createForeignKey(HardRemovalCards.HARD_REMOVAL_CARDS, DSL.name("hard_removal_cards_card_id_fkey"), new TableField[] { HardRemovalCards.HARD_REMOVAL_CARDS.CARD_ID }, Keys.CARDS_PKEY, new TableField[] { Cards.CARDS.ID }, true);
     public static final ForeignKey<MatchmakingTicketsRecord, DecksRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_BOT_DECK_ID_FKEY = Internal.createForeignKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_bot_deck_id_fkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.BOT_DECK_ID }, Keys.DECKS_PKEY, new TableField[] { Decks.DECKS.ID }, true);
     public static final ForeignKey<MatchmakingTicketsRecord, DecksRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_DECK_ID_FKEY = Internal.createForeignKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_deck_id_fkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.DECK_ID }, Keys.DECKS_PKEY, new TableField[] { Decks.DECKS.ID }, true);
     public static final ForeignKey<MatchmakingTicketsRecord, MatchmakingQueuesRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_QUEUE_ID_FKEY = Internal.createForeignKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_queue_id_fkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.QUEUE_ID }, Keys.MATCHMAKING_QUEUES_PKEY, new TableField[] { MatchmakingQueues.MATCHMAKING_QUEUES.ID }, true);

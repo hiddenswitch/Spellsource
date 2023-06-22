@@ -302,6 +302,17 @@ message Art {
     Sprite spriteShadow = 12;
 }
 
+// This stores extra human-annotated data for the GameStateValueBehaviour bot
+message ArtificialIntelligence {
+    // when true, the bot will treat this card as hard removal
+    bool hardRemoval = 1;
+}
+
+// Stores extra human-annotated data for draft (Arena) mode
+message Draft {
+    bool banned = 1;
+}
+
 // A tuple of attribute, attribute-value.
 message AttributeValueTuple {
     PlayerEntityAttributesMessage.PlayerEntityAttributes attribute = 1;
