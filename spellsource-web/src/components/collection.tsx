@@ -175,7 +175,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
           </DropdownToggle>
           <DropdownMenu className={"d-flex flex-column gap-1"}>
             {limitOptions.map((value, i) => (
-              <DropdownItem key={i} as={Button} active={limit === value} onSelect={() => setLimit(value)}>
+              <DropdownItem key={i} as={Button} active={limit === value} onClick={() => setLimit(value)}>
                 {value}
               </DropdownItem>
             ))}
@@ -205,15 +205,15 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
                 key={"Allowed"}
                 as={Button}
                 active={heroClass === "ALLOWED"}
-                onSelect={() => setHeroClass("ALLOWED")}
+                onClick={() => setHeroClass("ALLOWED")}
               >
                 Allowed
               </DropdownItem>
             )}
-            <DropdownItem as={Button} type={"toggle"} active={!heroClass} onSelect={() => setHeroClass("")}>
+            <DropdownItem as={Button} type={"toggle"} active={!heroClass} onClick={() => setHeroClass("")}>
               All
             </DropdownItem>
-            <DropdownItem as={Button} type={"toggle"} active={heroClass === "ANY"} onSelect={() => setHeroClass("ANY")}>
+            <DropdownItem as={Button} type={"toggle"} active={heroClass === "ANY"} onClick={() => setHeroClass("ANY")}>
               Any
             </DropdownItem>
             {Object.entries(classes).map(([classId, className]) => (
@@ -221,7 +221,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
                 key={classId}
                 as={Button}
                 active={heroClass === classId}
-                onSelect={() => setHeroClass(classId)}
+                onClick={() => setHeroClass(classId)}
               >
                 {className}
               </DropdownItem>
@@ -235,7 +235,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
               key={"All"}
               as={Button}
               active={!ShowCardTypes.find((type) => !cardTypes.includes(type))}
-              onSelect={() =>
+              onClick={() =>
                 setCardTypes(
                   ShowCardTypes.find((type) => !cardTypes.includes(type)) ? ShowCardTypes : DefaultShowCardTypes
                 )
@@ -248,7 +248,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
                 key={cardType}
                 as={Button}
                 active={cardTypes.includes(cardType)}
-                onSelect={() =>
+                onClick={() =>
                   setCardTypes(
                     cardTypes.includes(cardType)
                       ? cardTypes.filter((type) => type !== cardType)
@@ -269,7 +269,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
                 key={order}
                 as={Button}
                 active={orderBy === order}
-                onSelect={() => setOrderBy(order as CollectionCardsOrderBy)}
+                onClick={() => setOrderBy(order as CollectionCardsOrderBy)}
               >
                 {name}
               </DropdownItem>

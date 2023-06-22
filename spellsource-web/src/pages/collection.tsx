@@ -6,11 +6,11 @@ import {
   useGetDeckQuery,
   useGetDecksQuery,
 } from "../__generated__/client"
-import React, { createContext, FunctionComponent, useEffect, useMemo, useRef } from "react"
+import React, { createContext, FunctionComponent, useEffect, useMemo, useRef, useState } from "react"
 import { useSession } from "next-auth/react"
 import Collection, { textDecorationStyle } from "../components/collection"
 import Head from "next/head"
-import { Button, Col, Dropdown, Row } from "react-bootstrap"
+import { Button, Col, Dropdown, Offcanvas, OffcanvasBody, OffcanvasHeader, Row } from "react-bootstrap"
 import { chain, keyBy } from "lodash"
 import { useRouter } from "next/router"
 import { CardDef, toRgbaString } from "../components/card-display"
@@ -23,6 +23,7 @@ import { useList } from "react-use"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { Deck } from "../components/deck"
+import cx from "classnames"
 
 // Makes the query state stick around
 export const getServerSideProps = async (context) => ({
@@ -141,6 +142,8 @@ export default () => {
     }
   }
 
+  const [show, setShow] = useState(false)
+
   return (
     <Layout>
       <Head>
@@ -162,60 +165,83 @@ export default () => {
                 removeFromDeck={myDeck ? removeCardFromDeck : undefined}
               />
             </Col>
-            <Col id={"DecksList"} xs={3} className={"d-none d-lg-block"}>
-              {selectedDeck ? (
-                <Deck
-                  user={user}
-                  deck={deck}
-                  myDeck={myDeck}
-                  cardIds={deckCards}
-                  cardActions={deckActions}
-                  getDecks={getDecks}
-                  getDeck={getDeck}
-                  classColors={classColors}
-                  setDeckId={setDeckId}
-                  realCards={realCards}
-                />
-              ) : (
-                <>
-                  {user && (
-                    <>
-                      <h3 className={"d-flex flex-row gap-3 align-items-baseline mb-0"}>
-                        Your Decks
-                        <Dropdown className={"ms-auto"}>
-                          <DropdownToggle>Create</DropdownToggle>
-                          <DropdownMenu>
-                            {Object.entries(classes).map(([heroClass, className]) => (
-                              <DropdownItem
-                                onSelect={async () => await createNewDeck(heroClass, className)}
-                                style={textDecorationStyle(heroClass, classColors)}
-                              >
-                                {className}
-                              </DropdownItem>
-                            ))}
-                          </DropdownMenu>
-                        </Dropdown>
-                      </h3>
-                      <ul className={"d-flex flex-column gap-3 mb-1"}>
+            <Col id={"DecksList"} xs={12} lg={3}>
+              <Offcanvas
+                responsive={"lg"}
+                show={show}
+                onHide={() => setShow(false)}
+                placement={"bottom"}
+                scroll={true}
+                backdrop={false}
+              >
+                <OffcanvasBody>
+                  {selectedDeck ? (
+                    <Deck
+                      user={user}
+                      deck={deck}
+                      myDeck={myDeck}
+                      cardIds={deckCards}
+                      cardActions={deckActions}
+                      getDecks={getDecks}
+                      getDeck={getDeck}
+                      classColors={classColors}
+                      setDeckId={setDeckId}
+                      realCards={realCards}
+                    />
+                  ) : (
+                    <div className={"w-100"}>
+                      {user && (
+                        <>
+                          <h3 className={"d-flex flex-row gap-3 align-items-baseline mb-0"}>
+                            Your Decks
+                            <Dropdown className={"ms-auto"}>
+                              <DropdownToggle>Create</DropdownToggle>
+                              <DropdownMenu>
+                                {Object.entries(classes).map(([heroClass, className]) => (
+                                  <DropdownItem
+                                    onClick={async () => await createNewDeck(heroClass, className)}
+                                    style={textDecorationStyle(heroClass, classColors)}
+                                  >
+                                    {className}
+                                  </DropdownItem>
+                                ))}
+                              </DropdownMenu>
+                            </Dropdown>
+                          </h3>
+                          <ul className={"d-flex flex-column gap-3 mb-1"}>
+                            {allDecks
+                              .filter((deck) => !deck.isPremade)
+                              .map((deck) => (
+                                <DeckEntry key={deck.id} deck={deck} />
+                              ))}
+                          </ul>
+                        </>
+                      )}
+                      <h3>Premade Decks</h3>
+                      <ul className={"d-flex flex-column gap-3"}>
                         {allDecks
-                          .filter((deck) => !deck.isPremade)
+                          .filter((deck) => deck.isPremade)
                           .map((deck) => (
                             <DeckEntry key={deck.id} deck={deck} />
                           ))}
                       </ul>
-                    </>
+                    </div>
                   )}
-                  <h3>Premade Decks</h3>
-                  <ul className={"d-flex flex-column gap-3"}>
-                    {allDecks
-                      .filter((deck) => deck.isPremade)
-                      .map((deck) => (
-                        <DeckEntry key={deck.id} deck={deck} />
-                      ))}
-                  </ul>
-                </>
-              )}
+                  <Button
+                    className={"position-absolute w-auto top-0 end-0 me-2"}
+                    style={{ transform: "translate(0%, -110%)" }}
+                    onClick={() => setShow(!show)}
+                  >
+                    {show ? "Close" : deckId ? "Deck" : "Decks"}
+                  </Button>
+                </OffcanvasBody>
+              </Offcanvas>
             </Col>
+            <div className={"fixed-bottom d-flex p-0"}>
+              <Button className={"d-lg-none ms-auto m-2"} onClick={() => setShow(!show)}>
+                {deckId ? "Deck" : "Decks"}
+              </Button>
+            </div>
           </Row>
         </CardCache.Provider>
       </DndProvider>

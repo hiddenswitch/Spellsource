@@ -86,7 +86,7 @@ export const Deck: FunctionComponent<DeckProps> = ({
     .map((value) => cache[value])
     .filter((value) => !!value)
     .groupBy((card) => card.id)
-    .sortBy((card) => card[0].baseManaCost ?? 0)
+    .sortBy(([card]) => [card.baseManaCost ?? 0, card.name])
     .value()
 
   const { set: setCards, clear: clearCards, removeAt: removeCard, push: addCardToDeck } = cardActions
@@ -108,27 +108,8 @@ export const Deck: FunctionComponent<DeckProps> = ({
       <h3 className={"d-flex flex-row gap-2 align-items-baseline flex-wrap"}>
         <span style={textDecorationStyle(deck?.heroClass, classColors)}>{deck?.name ?? "Your Decks"}</span>
         <span className={`ms-auto ${cardIds.length > 30 && "text-danger"}`}>{cardIds.length}/30</span>
-      </h3>
-      <ul className={"d-flex flex-column gap-2"}>
-        {groupedCards.map(([card, ...rest]) => (
-          <DeckCard
-            key={card.id}
-            cardDefs={rest}
-            card={card}
-            heroClass={deck?.heroClass}
-            myDeck={myDeck}
-            classColors={classColors}
-            onClick={() => {
-              const index = cardIds.findIndex((value) => value == card.id)
-              if (index >= 0) {
-                removeCard(index)
-              }
-            }}
-          />
-        ))}
-      </ul>
-      <div className={"d-flex flex-row gap-3 flex-wrap"}>
         <Button
+          className={"ms-auto"}
           variant={"secondary"}
           onClick={async () => {
             if (isEqual(cardIds, realCards) || confirm("Leave and discard changes?")) {
@@ -144,6 +125,8 @@ export const Deck: FunctionComponent<DeckProps> = ({
         >
           Back
         </Button>
+      </h3>
+      <div className={"d-flex flex-row gap-3 flex-wrap mb-3"}>
         {user && (
           <Button
             onClick={async () => {
@@ -234,6 +217,24 @@ export const Deck: FunctionComponent<DeckProps> = ({
           </>
         )}
       </div>
+      <ul className={"d-flex flex-column gap-2"}>
+        {groupedCards.map(([card, ...rest]) => (
+          <DeckCard
+            key={card.id}
+            cardDefs={rest}
+            card={card}
+            heroClass={deck?.heroClass}
+            myDeck={myDeck}
+            classColors={classColors}
+            onClick={() => {
+              const index = cardIds.findIndex((value) => value == card.id)
+              if (index >= 0) {
+                removeCard(index)
+              }
+            }}
+          />
+        ))}
+      </ul>
     </div>
   )
 }

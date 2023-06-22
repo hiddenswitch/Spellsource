@@ -757,6 +757,7 @@ public class Legacy {
 
 	private static List<DeckCreateRequest> getPremadeDecksPrivate(Vertx ignored) {
 		List<String> deckLists;
+		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
 		try (ScanResult scanResult = new ClassGraph()
 				.acceptPaths("spellsource/decklists/current").scan()) {
 			deckLists = scanResult
