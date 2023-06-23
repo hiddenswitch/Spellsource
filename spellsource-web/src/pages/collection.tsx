@@ -199,6 +199,7 @@ export default () => {
                               <DropdownMenu>
                                 {Object.entries(classes).map(([heroClass, className]) => (
                                   <DropdownItem
+                                    key={heroClass}
                                     onClick={async () => await createNewDeck(heroClass, className)}
                                     style={textDecorationStyle(heroClass, classColors)}
                                   >

@@ -1,13 +1,13 @@
-import {Form} from "react-bootstrap";
-import * as styles from './card-editor-view.module.scss'
-import Blockly, {Toolbox, WorkspaceSvg} from "blockly";
-import AceEditor from "react-ace";
-import React, {useRef, useState} from "react";
-import CardEditorWorkspace from "./card-editor-workspace";
-import useComponentDidMount from "../hooks/use-component-did-mount";
+import { Form } from "react-bootstrap"
+import * as styles from "./card-editor-view.module.scss"
+import Blockly, { Toolbox, WorkspaceSvg } from "blockly"
+import AceEditor from "react-ace"
+import React, { useRef, useState } from "react"
+import CardEditorWorkspace from "./card-editor-workspace"
+import useComponentDidMount from "../hooks/use-component-did-mount"
+import cx from "classnames"
 
 const CardEditorView = (props: { defaultCard?: boolean }) => {
-
   const [code, setCode] = useState(``)
   const [query, setQuery] = useState(``)
   const [searchCatalogueBlocks, setSearchCatalogueBlocks] = useState(false)
@@ -15,11 +15,11 @@ const CardEditorView = (props: { defaultCard?: boolean }) => {
   const [compactBlocks, setCompactBlocks] = useState(true)
   const [showJSON, setShowJSON] = useState(false)
   const [showJS, setShowJS] = useState(false)
-  const catalogueBlocksTooltip = 'Toggles whether to search the blocks for real cards from the catalogue'
-  const artBlocksTooltip = 'Toggles whether to search the blocks for card art'
-  const compactBlocksTooltip = 'Render the blocks compactly rather than as always full rectangles'
-  const showJSONTooltip = 'Show the JSON representation of the blocks in the workspace'
-  const showJSTooltip = 'Show the JS representation of the code in the workspace'
+  const catalogueBlocksTooltip = "Toggles whether to search the blocks for real cards from the catalogue"
+  const artBlocksTooltip = "Toggles whether to search the blocks for card art"
+  const compactBlocksTooltip = "Render the blocks compactly rather than as always full rectangles"
+  const showJSONTooltip = "Show the JSON representation of the blocks in the workspace"
+  const showJSTooltip = "Show the JS representation of the code in the workspace"
 
   const catalogueBlocksCheck = useRef(null)
   const catalogueBlocksLabel = useRef(null)
@@ -36,28 +36,28 @@ const CardEditorView = (props: { defaultCard?: boolean }) => {
 
   const [realCode, setRealCode] = useState(``)
 
-  const workspace = () => blocklyEditor.current?.workspace as WorkspaceSvg;
+  const workspace = () => blocklyEditor.current?.workspace as WorkspaceSvg
 
-  const search = evt => {
+  const search = (evt) => {
     const query = evt.target.value
     setQuery(query)
   }
 
-  const toggleCatalogueBlocks = evt => {
-    setSearchCatalogueBlocks(!searchCatalogueBlocks);
-    setSearchArtBlocks(false);
-    (workspace().getToolbox() as Toolbox).clearSelection();
+  const toggleCatalogueBlocks = (evt) => {
+    setSearchCatalogueBlocks(!searchCatalogueBlocks)
+    setSearchArtBlocks(false)
+    ;(workspace().getToolbox() as Toolbox).clearSelection()
     if (query.length > 0) {
-      search({target: {value: query}})
+      search({ target: { value: query } })
     }
   }
 
-  const toggleArtBlocks = evt => {
-    setSearchArtBlocks(!searchArtBlocks);
-    setSearchCatalogueBlocks(false);
-    (workspace().getToolbox() as Toolbox).clearSelection();
+  const toggleArtBlocks = (evt) => {
+    setSearchArtBlocks(!searchArtBlocks)
+    setSearchCatalogueBlocks(false)
+    ;(workspace().getToolbox() as Toolbox).clearSelection()
     if (query.length > 0) {
-      search({target: {value: query}})
+      search({ target: { value: query } })
     }
   }
 
@@ -72,7 +72,7 @@ const CardEditorView = (props: { defaultCard?: boolean }) => {
 
   const onFocusSearch = () => {
     if (query) {
-      const toolbox = workspace().getToolbox() as Toolbox;
+      const toolbox = workspace().getToolbox() as Toolbox
       toolbox.clearSelection()
       if (query.length > 0) {
         toolbox.selectItemByPosition(0)
@@ -94,14 +94,16 @@ const CardEditorView = (props: { defaultCard?: boolean }) => {
     addTooltip(showJSLabel, showJSTooltip)
   })
 
-  return (<>
-    {/*<span>
-      <Form.Control type="text"
-                    placeholder={'Search blocks'}
-                    value={query}
-                    onChange={e => search(e)}
-                    className={styles.editorSearch}
+  return (
+    <>
+      <Form.Control
+        type="text"
+        placeholder={"Search blocks"}
+        value={query}
+        onChange={(e) => search(e)}
+        className={cx(styles.editorSearch, "d-sm-none")}
       />
+      {/*<span>
       <Form.Check className={styles.editorOption}>
         <Form.Check.Input onChange={e => toggleCatalogueBlocks(e)}
                           checked={searchCatalogueBlocks}
@@ -119,26 +121,26 @@ const CardEditorView = (props: { defaultCard?: boolean }) => {
         <Form.Check.Label ref={artBlocksLabel}> Search Card Art</Form.Check.Label>
       </Form.Check>
     </span>*/}
-    <input
-      type="text"
-      placeholder={'Search blocks'}
-      value={query}
-      onChange={search}
-      className={styles.editorSearchNew}
-      onFocus={onFocusSearch}
-    />
-    <CardEditorWorkspace
-      setJSON={setCode}
-      setJS={setRealCode}
-      searchCatalogueBlocks={searchCatalogueBlocks}
-      searchArtBlocks={searchArtBlocks}
-      query={query}
-      defaultCard={props.defaultCard}
-      renderer={compactBlocks ? 'spellsource' : 'geras'}
-      ref={blocklyEditor}
-    />
-    <span>
-      {/*<Form.Check className={styles.editorOption}>
+      <input
+        type="text"
+        placeholder={"Search blocks"}
+        value={query}
+        onChange={search}
+        className={cx(styles.editorSearchNew, "d-none", "d-sm-block")}
+        onFocus={onFocusSearch}
+      />
+      <CardEditorWorkspace
+        setJSON={setCode}
+        setJS={setRealCode}
+        searchCatalogueBlocks={searchCatalogueBlocks}
+        searchArtBlocks={searchArtBlocks}
+        query={query}
+        defaultCard={props.defaultCard}
+        renderer={compactBlocks ? "spellsource" : "geras"}
+        ref={blocklyEditor}
+      />
+      <span>
+        {/*<Form.Check className={styles.editorOption}>
         <Form.Check.Input defaultChecked={compactBlocks}
                           onChange={e => setCompactBlocks(!compactBlocks)}
                           value={"" + compactBlocks}
@@ -165,34 +167,35 @@ const CardEditorView = (props: { defaultCard?: boolean }) => {
         />
         <Form.Check.Label ref={showJSLabel}> Show JS</Form.Check.Label>
       </Form.Check>*/}
-      {
-        showJSON && (<AceEditor
-          width={'100%'}
-          mode="json"
-          theme="github"
-          setOptions={{
-            'wrap': true
-          }}
-          readOnly={true}
-          value={code}
-          editorProps={{$blockScrolling: true}}
-        />)
-      }
-      {
-        showJS && (<AceEditor
-          width={'100%'}
-          mode="javascript"
-          theme="github"
-          setOptions={{
-            'wrap': true
-          }}
-          readOnly={true}
-          value={realCode}
-          editorProps={{$blockScrolling: true}}
-        />)
-      }
-    </span>
-  </>)
+        {showJSON && (
+          <AceEditor
+            width={"100%"}
+            mode="json"
+            theme="github"
+            setOptions={{
+              wrap: true,
+            }}
+            readOnly={true}
+            value={code}
+            editorProps={{ $blockScrolling: true }}
+          />
+        )}
+        {showJS && (
+          <AceEditor
+            width={"100%"}
+            mode="javascript"
+            theme="github"
+            setOptions={{
+              wrap: true,
+            }}
+            readOnly={true}
+            value={realCode}
+            editorProps={{ $blockScrolling: true }}
+          />
+        )}
+      </span>
+    </>
+  )
 }
 
 export default CardEditorView

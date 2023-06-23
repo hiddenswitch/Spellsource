@@ -16,9 +16,12 @@
 }
 
 .editorSearch {
-    width: 40% !important;
-    border-style: ridge;
     display: inline;
+    border-radius: 0;
+    border: 2px solid var(--text-dark);
+    border-top: none;
+    border-left: none;
+    border-right: none;
 }
 
 .editorSearchNew {

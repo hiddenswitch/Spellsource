@@ -69,7 +69,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-dark);
 }
 
-@media screen and (max-width: 400px){
+@media screen and (max-width: 400px) {
   h1 {
     font-size: 12vw !important;
   }
@@ -117,7 +117,7 @@ p, ul, ol {
 
 a:visited {
   text-decoration: none;
-  color:var(--text-dark);
+  color: var(--text-dark);
 }
 
 figure {
@@ -191,7 +191,6 @@ input, select, textarea, textarea::-webkit-input-placeholder {
 }
 
 
-
 :-ms-input-placeholder {
   color: var(--placeholder-color);
 }
@@ -258,9 +257,11 @@ pre {
 }
 
 
+/*
 .blocklyToolboxContents {
   height: 100%;
 }
+*/
 
 .blocklyTreeRow {
   padding-top: 5px;
@@ -278,4 +279,49 @@ pre {
 
 .offcanvas-end.offcanvas-toggling {
   width: auto !important;
+}
+
+
+@media (min-width: 576px) {
+  .blocklyTreeRow {
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .blocklyToolboxDiv {
+    max-height: 9rem !important;
+  }
+  
+  .blocklyTreeRow {
+    border-right: none !important;
+    border-left: none !important;
+    border-top: none !important;
+    padding-right: 2px;
+    padding-left: 2px;
+    padding-bottom: 0;
+    
+    /*border-width: 2px !important;
+    padding: 2px;*/
+  }
+
+  .blocklyToolboxCategory[aria-expanded=true] > .blocklyToolboxContents {
+    display: flex !important;
+    flex-direction: row;
+
+    left: 0;
+    right: 0;
+    width: 100vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .blocklyToolboxCategory > .blocklyToolboxContents > .blocklyToolboxCategory {
+  }
+}
+
+.blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {
+  margin: 0 !important;
 }

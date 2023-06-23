@@ -223,7 +223,7 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options
   }
 
   // All of our spells, triggers, entity reference enum values, etc.
-  data.allBlocks.forEach((block) => {
+  data.allBlocks?.forEach((block) => {
     if (block.type in Blockly.Blocks) {
       return
     }
@@ -295,7 +295,7 @@ export function initHeroClassColors(data: ContextType<typeof BlocklyDataContext>
    * hero classes and their colors
    */
   Object.values(data.classes).forEach((card) => {
-    setupHeroClassColor(card);
+    setupHeroClassColor(card)
   })
 
   Object.values(data.myCards).forEach((value) => {

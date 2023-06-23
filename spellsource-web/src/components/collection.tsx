@@ -173,12 +173,14 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
           <DropdownToggle variant={"light"} disabled={!getCards.data}>
             Per Page
           </DropdownToggle>
-          <DropdownMenu className={"d-flex flex-column gap-1"}>
-            {limitOptions.map((value, i) => (
-              <DropdownItem key={i} as={Button} active={limit === value} onClick={() => setLimit(value)}>
-                {value}
-              </DropdownItem>
-            ))}
+          <DropdownMenu>
+            <div className={"d-flex flex-column gap-1"}>
+              {limitOptions.map((value, i) => (
+                <DropdownItem key={i} as={Button} active={limit === value} onClick={() => setLimit(value)}>
+                  {value}
+                </DropdownItem>
+              ))}
+            </div>
           </DropdownMenu>
         </Dropdown>
         <Button disabled={!getCards.data || offset <= 0} variant={"secondary"} onClick={() => changeOffset(-limit)}>
@@ -199,81 +201,92 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
           <DropdownToggle style={{ minWidth: 100 }} disabled={!getCards.data}>
             {heroClass ? classes[heroClass] || formatCurated(heroClass) : "Hero Class"}
           </DropdownToggle>
-          <DropdownMenu className={"overflow-scroll d-flex flex-column gap-1"} style={{ maxHeight: "25rem" }}>
-            {mainHeroClass && (
-              <DropdownItem
-                key={"Allowed"}
-                as={Button}
-                active={heroClass === "ALLOWED"}
-                onClick={() => setHeroClass("ALLOWED")}
-              >
-                Allowed
+          <DropdownMenu>
+            <div className={"overflow-scroll d-flex flex-column gap-1"} style={{ maxHeight: "25rem" }}>
+              {mainHeroClass && (
+                <DropdownItem
+                  key={"Allowed"}
+                  as={Button}
+                  active={heroClass === "ALLOWED"}
+                  onClick={() => setHeroClass("ALLOWED")}
+                >
+                  Allowed
+                </DropdownItem>
+              )}
+              <DropdownItem as={Button} type={"toggle"} active={!heroClass} onClick={() => setHeroClass("")}>
+                All
               </DropdownItem>
-            )}
-            <DropdownItem as={Button} type={"toggle"} active={!heroClass} onClick={() => setHeroClass("")}>
-              All
-            </DropdownItem>
-            <DropdownItem as={Button} type={"toggle"} active={heroClass === "ANY"} onClick={() => setHeroClass("ANY")}>
-              Any
-            </DropdownItem>
-            {Object.entries(classes).map(([classId, className]) => (
               <DropdownItem
-                key={classId}
                 as={Button}
-                active={heroClass === classId}
-                onClick={() => setHeroClass(classId)}
+                type={"toggle"}
+                active={heroClass === "ANY"}
+                onClick={() => setHeroClass("ANY")}
               >
-                {className}
+                Any
               </DropdownItem>
-            ))}
+              {Object.entries(classes).map(([classId, className]) => (
+                <DropdownItem
+                  key={classId}
+                  as={Button}
+                  active={heroClass === classId}
+                  onClick={() => setHeroClass(classId)}
+                >
+                  {className}
+                </DropdownItem>
+              ))}
+            </div>
           </DropdownMenu>
         </Dropdown>
         <Dropdown>
           <DropdownToggle disabled={!getCards.data}>Card Types</DropdownToggle>
-          <DropdownMenu className={"d-flex flex-column gap-1"}>
-            <DropdownItem
-              key={"All"}
-              as={Button}
-              active={!ShowCardTypes.find((type) => !cardTypes.includes(type))}
-              onClick={() =>
-                setCardTypes(
-                  ShowCardTypes.find((type) => !cardTypes.includes(type)) ? ShowCardTypes : DefaultShowCardTypes
-                )
-              }
-            >
-              All
-            </DropdownItem>
-            {ShowCardTypes.map((cardType) => (
+          <DropdownMenu>
+            <div className={"d-flex flex-column gap-1"}>
               <DropdownItem
-                key={cardType}
+                key={"All"}
                 as={Button}
-                active={cardTypes.includes(cardType)}
+                active={!ShowCardTypes.find((type) => !cardTypes.includes(type))}
                 onClick={() =>
                   setCardTypes(
-                    cardTypes.includes(cardType)
-                      ? cardTypes.filter((type) => type !== cardType)
-                      : [...cardTypes, cardType]
+                    ShowCardTypes.find((type) => !cardTypes.includes(type)) ? ShowCardTypes : DefaultShowCardTypes
                   )
                 }
               >
-                {formatCurated(cardType)}
+                All
               </DropdownItem>
-            ))}
+              {ShowCardTypes.map((cardType) => (
+                <DropdownItem
+                  key={cardType}
+                  as={Button}
+                  active={cardTypes.includes(cardType)}
+                  onClick={() =>
+                    setCardTypes(
+                      cardTypes.includes(cardType)
+                        ? cardTypes.filter((type) => type !== cardType)
+                        : [...cardTypes, cardType]
+                    )
+                  }
+                >
+                  {formatCurated(cardType)}
+                </DropdownItem>
+              ))}
+            </div>
           </DropdownMenu>
         </Dropdown>
         <Dropdown>
           <DropdownToggle disabled={!getCards.data}>Order By</DropdownToggle>
-          <DropdownMenu className={"d-flex flex-column gap-1"}>
-            {Object.entries(orderings).map(([order, name]) => (
-              <DropdownItem
-                key={order}
-                as={Button}
-                active={orderBy === order}
-                onClick={() => setOrderBy(order as CollectionCardsOrderBy)}
-              >
-                {name}
-              </DropdownItem>
-            ))}
+          <DropdownMenu>
+            <div className={"d-flex flex-column gap-1"}>
+              {Object.entries(orderings).map(([order, name]) => (
+                <DropdownItem
+                  key={order}
+                  as={Button}
+                  active={orderBy === order}
+                  onClick={() => setOrderBy(order as CollectionCardsOrderBy)}
+                >
+                  {name}
+                </DropdownItem>
+              ))}
+            </div>
           </DropdownMenu>
         </Dropdown>
         <Button

@@ -1,22 +1,20 @@
-import Blockly, {Block, BlockSvg, FieldLabel, Toolbox, Workspace} from "blockly";
-import {FieldLabelPlural} from "../components/field-label-plural";
-import {FieldLabelSerializableHidden} from "../components/field-label-serializable-hidden";
-import * as JsonConversionUtils from "./json-conversion-utils";
-import * as BlocklyMiscUtils from "./blockly-misc-utils";
-import * as DefaultOverrides from "./default-overrides";
-import CardDisplay, {CardDef} from '../components/card-display'
-import React from 'react'
-import deepmerge from "deepmerge";
-import {createRoot} from "react-dom/client";
-import {InitBlockOptions} from "../components/card-editor-workspace";
-import {ToolboxItem} from "toolbox/toolbox_item";
-import {xmlToCardScript} from "./workspace-utils";
-
+import Blockly, { Block, BlockSvg, FieldLabel, Toolbox, ToolboxCategory, Workspace } from "blockly"
+import { FieldLabelPlural } from "../components/field-label-plural"
+import { FieldLabelSerializableHidden } from "../components/field-label-serializable-hidden"
+import * as JsonConversionUtils from "./json-conversion-utils"
+import * as BlocklyMiscUtils from "./blockly-misc-utils"
+import * as DefaultOverrides from "./default-overrides"
+import { CardDef } from "../components/card-display"
+import React from "react"
+import deepmerge from "deepmerge"
+import { InitBlockOptions } from "../components/card-editor-workspace"
+import { ToolboxItem } from "toolbox/toolbox_item"
+import { xmlToCardScript } from "./workspace-utils"
 
 export function modifyAll(options: InitBlockOptions) {
   // @ts-ignore
   // noinspection JSConstantReassignment
-  Blockly.HSV_SATURATION = .65
+  Blockly.HSV_SATURATION = 0.65
 
   for (let blocksKey in Blockly.Blocks) {
     let block = Blockly.Blocks[blocksKey]
@@ -39,6 +37,7 @@ export function modifyAll(options: InitBlockOptions) {
   categoryIndenting()
   // cardDisplay()
   flyout()
+  categoryBorder()
 
   DefaultOverrides.overrideAll()
 }
@@ -46,17 +45,17 @@ export function modifyAll(options: InitBlockOptions) {
 function autoDecoration() {
   Blockly.BlockSvg.prototype.bumpNeighbours = function () {
     if (!this.workspace) {
-      return  // Deleted block.
+      return // Deleted block.
     }
     if (this.workspace.isDragging()) {
-      return  // Don't bump blocks during a drag.
+      return // Don't bump blocks during a drag.
     }
-    var rootBlock = this.getRootBlock();
+    var rootBlock = this.getRootBlock()
     if (rootBlock.isInFlyout) {
-      return  // Don't move blocks around in a flyout.
+      return // Don't move blocks around in a flyout.
     }
     // Loop through every connection on this block.
-    var myConnections = this.getConnections_(false);
+    var myConnections = this.getConnections_(false)
     for (var i = 0, connection; (connection = myConnections[i]); i++) {
       if (autoDecorate(this, connection)) {
         return
@@ -66,11 +65,9 @@ function autoDecoration() {
         connection.targetBlock().bumpNeighbours()
       }
 
-      var neighbours = connection.neighbours(Blockly.SNAP_RADIUS);
-
+      var neighbours = connection.neighbours(Blockly.SNAP_RADIUS)
 
       for (var j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
-
         // If both connections are connected, that's probably fine.  But if
         // either one of them is unconnected, then there could be confusion.
         if (!connection.isConnected() || !otherConnection.isConnected()) {
@@ -85,108 +82,130 @@ function autoDecoration() {
         }
       }
     }
-  };
+  }
 
   const autoDecorate = function (bumpee, connection) {
-    if (connection.type === Blockly.NEXT_STATEMENT || bumpee.type.endsWith('SHADOW')) {
+    if (connection.type === Blockly.NEXT_STATEMENT || bumpee.type.endsWith("SHADOW")) {
       return false
     }
     let workspace = bumpee.workspace
-    let nexts = workspace.connectionDBList[Blockly.NEXT_STATEMENT];
+    let nexts = workspace.connectionDBList[Blockly.NEXT_STATEMENT]
     let neighbours = nexts.getNeighbours(connection, Blockly.SNAP_RADIUS)
 
     for (var j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
-      if ((!connection.isConnected() || connection.targetBlock().isShadow())
-        && (!otherConnection.isConnected() || otherConnection.targetBlock().isShadow())
-        && otherConnection.type === Blockly.NEXT_STATEMENT) {
+      if (
+        (!connection.isConnected() || connection.targetBlock().isShadow()) &&
+        (!otherConnection.isConnected() || otherConnection.targetBlock().isShadow()) &&
+        otherConnection.type === Blockly.NEXT_STATEMENT
+      ) {
         let bumper = otherConnection.getSourceBlock()
         let addedBlock
         if (!otherConnection.getCheck()) {
           continue
         }
 
-        if (otherConnection.getCheck().includes('Properties')) {
-          if (bumpee.type.startsWith('Aura_')) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_auras')
+        if (otherConnection.getCheck().includes("Properties")) {
+          if (bumpee.type.startsWith("Aura_")) {
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_auras")
             addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection)
-          } else if (bumpee.type.startsWith('Spell')) {
-            if (bumper.getInput('description')?.connection
-              .targetBlock()?.getFieldValue('text')?.toLowerCase().includes('aftermath')) {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_aftermath')
-              addedBlock.getInput('deathrattle').connection.connect(bumpee.outputConnection)
+          } else if (bumpee.type.startsWith("Spell")) {
+            if (
+              bumper
+                .getInput("description")
+                ?.connection.targetBlock()
+                ?.getFieldValue("text")
+                ?.toLowerCase()
+                .includes("aftermath")
+            ) {
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_aftermath")
+              addedBlock.getInput("deathrattle").connection.connect(bumpee.outputConnection)
             } else {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_opener1')
-              addedBlock.getInput('battlecry.spell').connection.connect(bumpee.outputConnection)
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener1")
+              addedBlock.getInput("battlecry.spell").connection.connect(bumpee.outputConnection)
             }
-          } else if (bumpee.type.startsWith('TargetSelection')) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_opener1')
-            addedBlock.getInput('battlecry.targetSelection').connection.connect(bumpee.outputConnection)
-          } else if (bumpee.type.startsWith('ValueProvider')) {
-            if (bumper.getInput('description')?.connection
-              .targetBlock()?.getFieldValue('text')?.toLowerCase().includes('if')) {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_cost_modifier_conditional')
-              addedBlock.getInput('manaCostModifier.ifTrue').connection.connect(bumpee.outputConnection)
+          } else if (bumpee.type.startsWith("TargetSelection")) {
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener1")
+            addedBlock.getInput("battlecry.targetSelection").connection.connect(bumpee.outputConnection)
+          } else if (bumpee.type.startsWith("ValueProvider")) {
+            if (
+              bumper
+                .getInput("description")
+                ?.connection.targetBlock()
+                ?.getFieldValue("text")
+                ?.toLowerCase()
+                .includes("if")
+            ) {
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_cost_modifier_conditional")
+              addedBlock.getInput("manaCostModifier.ifTrue").connection.connect(bumpee.outputConnection)
             } else {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_cost_modifier')
-              addedBlock.getInput('manaCostModifier').connection.connect(bumpee.outputConnection)
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_cost_modifier")
+              addedBlock.getInput("manaCostModifier").connection.connect(bumpee.outputConnection)
             }
-          } else if (bumpee.type.startsWith('Condition')) {
-            if (bumper.getInput('description')?.connection
-              .targetBlock()?.getFieldValue('text')?.toLowerCase().includes('opener')) {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_opener2')
-              addedBlock.getInput('battlecry.condition').connection.connect(bumpee.outputConnection)
+          } else if (bumpee.type.startsWith("Condition")) {
+            if (
+              bumper
+                .getInput("description")
+                ?.connection.targetBlock()
+                ?.getFieldValue("text")
+                ?.toLowerCase()
+                .includes("opener")
+            ) {
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener2")
+              addedBlock.getInput("battlecry.condition").connection.connect(bumpee.outputConnection)
             } else {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_condition')
-              addedBlock.getInput('condition').connection.connect(bumpee.outputConnection)
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_condition")
+              addedBlock.getInput("condition").connection.connect(bumpee.outputConnection)
             }
-          } else if (bumpee.type.startsWith('Property_attributes_')) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes')
+          } else if (bumpee.type.startsWith("Property_attributes_")) {
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes")
             addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection)
-          } else if (bumpee.type.startsWith('Attribute')) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes')
+          } else if (bumpee.type.startsWith("Attribute")) {
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes")
             let anotherBlock
-            if (bumpee.json?.output === 'IntAttribute') {
-              anotherBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes_int')
+            if (bumpee.json?.output === "IntAttribute") {
+              anotherBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_int")
             } else {
-              anotherBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes_boolean')
+              anotherBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_boolean")
             }
-            anotherBlock.getInput('attribute').connection.connect(bumpee.outputConnection)
+            anotherBlock.getInput("attribute").connection.connect(bumpee.outputConnection)
             if (anotherBlock.initSvg) {
               anotherBlock.initSvg()
             }
             addedBlock.getFirstStatementConnection().connect(anotherBlock.previousConnection)
-          } else if (bumpee.type.startsWith('Enchantment')) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_triggers')
+          } else if (bumpee.type.startsWith("Enchantment")) {
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_triggers")
             addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection)
-          } else if (bumpee.type.startsWith('Trigger')) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_triggers')
-            let anotherBlock = BlocklyMiscUtils.newBlock(workspace, 'Enchantment')
-            anotherBlock.getInput('eventTrigger').connection.connect(bumpee.outputConnection)
+          } else if (bumpee.type.startsWith("Trigger")) {
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_triggers")
+            let anotherBlock = BlocklyMiscUtils.newBlock(workspace, "Enchantment")
+            anotherBlock.getInput("eventTrigger").connection.connect(bumpee.outputConnection)
             if ("initSvg" in anotherBlock) {
               anotherBlock.initSvg()
             }
             addedBlock.getFirstStatementConnection().connect(anotherBlock.previousConnection)
-          } else if (bumpee.type.startsWith('Art_')) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_sprite')
-            addedBlock.getInput('art.sprite.named').connection.connect(bumpee.outputConnection)
+          } else if (bumpee.type.startsWith("Art_")) {
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_sprite")
+            addedBlock.getInput("art.sprite.named").connection.connect(bumpee.outputConnection)
           } else {
             continue
           }
-        } else if (otherConnection.getCheck().includes('Property_attributes') && bumpee.type.startsWith('Attribute_')) {
-          if (bumpee.json?.output === 'IntAttribute') {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes_int')
+        } else if (otherConnection.getCheck().includes("Property_attributes") && bumpee.type.startsWith("Attribute_")) {
+          if (bumpee.json?.output === "IntAttribute") {
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_int")
           } else {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes_boolean')
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_boolean")
           }
-          addedBlock.getInput('attribute').connection.connect(bumpee.outputConnection)
-        } else if (((otherConnection.getCheck().includes('Spells') && bumpee.type.startsWith('Spell_'))
-            || (otherConnection.getCheck().includes('Cards') && bumpee.type.startsWith('Card_'))
-            || (otherConnection.getCheck().includes('Conditions') && bumpee.type.startsWith('Condition_'))
-            || (otherConnection.getCheck().includes('Sources') && bumpee.type.startsWith('Source_'))
-            || (otherConnection.getCheck().includes('Filters') && bumpee.type.startsWith('Filter_')))
-          && !bumpee.type.endsWith('I')) {
-          addedBlock = BlocklyMiscUtils.newBlock(workspace, bumpee.type.split('_')[0] + '_I')
-          addedBlock.getInput('i').connection.connect(bumpee.outputConnection)
+          addedBlock.getInput("attribute").connection.connect(bumpee.outputConnection)
+        } else if (
+          ((otherConnection.getCheck().includes("Spells") && bumpee.type.startsWith("Spell_")) ||
+            (otherConnection.getCheck().includes("Cards") && bumpee.type.startsWith("Card_")) ||
+            (otherConnection.getCheck().includes("Conditions") && bumpee.type.startsWith("Condition_")) ||
+            (otherConnection.getCheck().includes("Sources") && bumpee.type.startsWith("Source_")) ||
+            (otherConnection.getCheck().includes("Filters") && bumpee.type.startsWith("Filter_"))) &&
+          !bumpee.type.endsWith("I")
+        ) {
+          addedBlock = BlocklyMiscUtils.newBlock(workspace, bumpee.type.split("_")[0] + "_I")
+          addedBlock.getInput("i").connection.connect(bumpee.outputConnection)
         } else {
           continue
         }
@@ -207,35 +226,30 @@ function autoDecoration() {
 }
 
 function hoverComments() {
-  const createIcon = Blockly.Icon.prototype.createIcon;
+  const createIcon = Blockly.Icon.prototype.createIcon
   Blockly.Icon.prototype.createIcon = function () {
     createIcon.call(this)
-    Blockly.bindEvent_(
-      this.iconGroup_, 'mouseenter', this, () => {
-        if (this.block_.isInFlyout) {
-          if (this.isVisible()) {
-            return
-          }
-          Blockly.Events.fire(
-            new Blockly.Events.Ui(this.block_, 'commentOpen', false, true));
-          this.model_.pinned = true;
-          this.createNonEditableBubble_();
+    Blockly.bindEvent_(this.iconGroup_, "mouseenter", this, () => {
+      if (this.block_.isInFlyout) {
+        if (this.isVisible()) {
+          return
         }
-      });
+        Blockly.Events.fire(new Blockly.Events.Ui(this.block_, "commentOpen", false, true))
+        this.model_.pinned = true
+        this.createNonEditableBubble_()
+      }
+    })
 
-
-    Blockly.bindEvent_(
-      this.iconGroup_, 'mouseleave', this, () => {
-        if (this.block_.isInFlyout) {
-          if (!this.isVisible()) {
-            return
-          }
-          Blockly.Events.fire(
-            new Blockly.Events.Ui(this.block_, 'commentOpen', true, false));
-          this.model_.pinned = false;
-          this.disposeBubble_();
+    Blockly.bindEvent_(this.iconGroup_, "mouseleave", this, () => {
+      if (this.block_.isInFlyout) {
+        if (!this.isVisible()) {
+          return
         }
-      });
+        Blockly.Events.fire(new Blockly.Events.Ui(this.block_, "commentOpen", true, false))
+        this.model_.pinned = false
+        this.disposeBubble_()
+      }
+    })
   }
 
   const placeNewBlock = Blockly.Flyout.prototype["placeNewBlock_"]
@@ -257,44 +271,61 @@ function pluralSpacing() {
   Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function (prev, next) {
     // Spacing between two fields of the same editability.
 
-    if (prev && Blockly.blockRendering.Types.isField(prev) &&
-      next && Blockly.blockRendering.Types.isField(next) &&
+    if (
+      prev &&
+      Blockly.blockRendering.Types.isField(prev) &&
+      next &&
+      Blockly.blockRendering.Types.isField(next) &&
       prev.isEditable === next.isEditable &&
-      (prev.field instanceof FieldLabelPlural && !(next.field instanceof FieldLabelPlural))) {
+      prev.field instanceof FieldLabelPlural &&
+      !(next.field instanceof FieldLabelPlural)
+    ) {
       return this.constants_.MEDIUM_PADDING
     }
-    if (prev && Blockly.blockRendering.Types.isField(prev) &&
-      prev.field instanceof FieldLabelPlural && prev.field.value_ === ' ') {
+    if (
+      prev &&
+      Blockly.blockRendering.Types.isField(prev) &&
+      prev.field instanceof FieldLabelPlural &&
+      prev.field.value_ === " "
+    ) {
       return 0
     }
-    if (next && Blockly.blockRendering.Types.isField(next) &&
+    if (
+      next &&
+      Blockly.blockRendering.Types.isField(next) &&
       next.field instanceof FieldLabelPlural &&
-      (next.field.value_ === ' ' || next.field.value_ === 's')) {
+      (next.field.value_ === " " || next.field.value_ === "s")
+    ) {
       if (prev?.field instanceof FieldLabel) {
         return 0
       }
       return 3
     }
-    if (prev && Blockly.blockRendering.Types.isField(prev) &&
-      next && Blockly.blockRendering.Types.isField(next) &&
+    if (
+      prev &&
+      Blockly.blockRendering.Types.isField(prev) &&
+      next &&
+      Blockly.blockRendering.Types.isField(next) &&
       prev.isEditable === next.isEditable &&
-      (!(prev.field instanceof FieldLabelPlural) && next.field instanceof FieldLabelPlural)
-      && !(prev.field instanceof FieldLabelSerializableHidden)) {
+      !(prev.field instanceof FieldLabelPlural) &&
+      next.field instanceof FieldLabelPlural &&
+      !(prev.field instanceof FieldLabelSerializableHidden)
+    ) {
       return this.constants_.MEDIUM_PADDING
     }
     return getInRowSpacing.call(this, prev, next)
   }
 }
 
-function contextMenu({onDelete}: InitBlockOptions) {
+function contextMenu({ onDelete }: InitBlockOptions) {
   const generateContextMenu = Blockly.BlockSvg.prototype["generateContextMenu"]
   Blockly.BlockSvg.prototype["generateContextMenu"] = function () {
     let menuOptions = generateContextMenu.call(this) as Partial<Blockly.ContextMenuRegistry.ContextMenuOption>[]
     let block = this as BlockSvg
     let workspace = block.workspace
-    if (block.type.startsWith('CatalogueCard')) {
+    if (block.type.startsWith("CatalogueCard")) {
       menuOptions.push({
-        text: 'Import CardScript',
+        text: "Import CardScript",
         enabled: true,
         callback: function () {
           if (!!block.json && !!block.json.json) {
@@ -304,80 +335,81 @@ function contextMenu({onDelete}: InitBlockOptions) {
 
             let top = dummyWorkspace.getTopBlocks(false)[0]
 
-            let xml = Blockly.Xml.blockToDom(top, true) as Element;
-            var xy = top.getRelativeToSurfaceXY();
-            xml.setAttribute('x', String(xy.x));
-            xml.setAttribute('y', String(xy.y));
+            let xml = Blockly.Xml.blockToDom(top, true) as Element
+            var xy = top.getRelativeToSurfaceXY()
+            xml.setAttribute("x", String(xy.x))
+            xml.setAttribute("y", String(xy.y))
 
             if (!!workspace.targetWorkspace) {
               workspace = workspace.targetWorkspace
             }
 
             workspace.paste(xml)
-            dummyWorkspace.dispose();
-            (workspace.getToolbox() as Toolbox).clearSelection()
+            dummyWorkspace.dispose()
+            ;(workspace.getToolbox() as Toolbox).clearSelection()
           }
-        }
+        },
       })
-    } else if (!block.workspace.targetWorkspace ||
-      ((block.workspace.targetWorkspace?.getToolbox() as Toolbox)?.getSelectedItem() as ToolboxItem)?.getId() === 'Search Results') {
+    } else if (
+      !block.workspace.targetWorkspace ||
+      ((block.workspace.targetWorkspace?.getToolbox() as Toolbox)?.getSelectedItem() as ToolboxItem)?.getId() ===
+        "Search Results"
+    ) {
       menuOptions.push({
-        text: 'Show in Toolbox',
+        text: "Show in Toolbox",
         enabled: true,
         callback: function () {
           BlocklyMiscUtils.searchToolbox(block.type, block.workspace.targetWorkspace || block.workspace)
-        }
+        },
       })
     }
 
-    if (block.type.startsWith('Starter_')) {
-      menuOptions = menuOptions.filter(option => option.text !== "Remove Comment" && option.text !== "Inline Inputs")
+    if (block.type.startsWith("Starter_")) {
+      menuOptions = menuOptions.filter((option) => option.text !== "Remove Comment" && option.text !== "Inline Inputs")
 
       if (process.env.NODE_ENV !== "production") {
         menuOptions.push({
-          text: 'Log CardScript',
+          text: "Log CardScript",
           enabled: true,
           callback: function () {
-            const xml = Blockly.Xml.blockToDom(block, true);
-            const json = xmlToCardScript(xml);
+            const xml = Blockly.Xml.blockToDom(block, true)
+            const json = xmlToCardScript(xml)
             console.log(json)
-          }
+          },
         })
       }
 
       menuOptions.push({
-        text: 'DELETE Card',
+        text: "DELETE Card",
         enabled: true,
         callback: function () {
           onDelete(block)
-        }
+        },
       })
     }
 
-    return menuOptions.filter(option => option.enabled)
+    return menuOptions.filter((option) => option.enabled)
   }
-
 }
 
 function tooltips() {
-
   // @ts-ignore
   // noinspection JSConstantReassignment
-  Blockly.Tooltip.OFFSET_X = 10;
+  Blockly.Tooltip.OFFSET_X = 10
   if (Blockly.Touch.TOUCH_ENABLED) {
     // @ts-ignore
     // noinspection JSConstantReassignment
-    Blockly.Tooltip.OFFSET_X = 50;
+    Blockly.Tooltip.OFFSET_X = 50
   }
   // @ts-ignore
   // noinspection JSConstantReassignment
-  Blockly.Tooltip.OFFSET_Y = 0;
+  Blockly.Tooltip.OFFSET_Y = 0
 
   const init = Blockly.ToolboxCategory.prototype.init
   Blockly.ToolboxCategory.prototype.init = function () {
     init.call(this)
-    if (this.toolboxItemDef_['tooltip']) {
-      this.rowDiv_.tooltip = this.toolboxItemDef_['tooltip']
+    if (this.toolboxItemDef_["tooltip"]) {
+      this.rowDiv_.tooltip = this.toolboxItemDef_["tooltip"]
       this.rowDiv_.tooltipColor = this.colour_
       Blockly.Tooltip.bindMouseEvents(this.rowDiv_)
     }
@@ -405,10 +437,10 @@ function tooltips() {
     if (!!Blockly.Tooltip["DIV"]) {
       if (!!Blockly.Tooltip["element_"].tooltipColor) {
         Blockly.Tooltip["DIV"]["style"].backgroundColor = Blockly.Tooltip["element_"].tooltipColor
-        Blockly.Tooltip["DIV"]["style"].color = '#ffffff'
+        Blockly.Tooltip["DIV"]["style"].color = "#ffffff"
       } else {
-        Blockly.Tooltip["DIV"]["style"].backgroundColor = '#ffffc7'
-        Blockly.Tooltip["DIV"]["style"].color = '#000'
+        Blockly.Tooltip["DIV"]["style"].backgroundColor = "#ffffc7"
+        Blockly.Tooltip["DIV"]["style"].color = "#000"
       }
     }
   }
@@ -421,7 +453,7 @@ function blackText() {
     let block = this.getSourceBlock()
     const typeTextColor = Blockly["textColor"]?.[block.type]
     const idTextColor = Blockly["textColor"]?.[block.getFieldValue("id")]
-    const color = typeTextColor ?? idTextColor;
+    const color = typeTextColor ?? idTextColor
     if (color && block.type.endsWith("_REFERENCE")) {
       this.textElement_.style.fill = color
     }
@@ -435,21 +467,20 @@ function colorfulColors() {
     let source = this.sourceBlock_
     if (!!source && !!Blockly.Blocks[source.type].json) {
       let json = Blockly.Blocks[source.type].json
-      if (json.output === 'Color') {
-        let r = source.getFieldValue('r')
-        let g = source.getFieldValue('g')
-        let b = source.getFieldValue('b')
+      if (json.output === "Color") {
+        let r = source.getFieldValue("r")
+        let g = source.getFieldValue("g")
+        let b = source.getFieldValue("b")
         let color = Blockly.utils.colour.rgbToHex(r, g, b)
         source.setColour(color)
       }
     }
-    if (source?.type === 'variables_get' || source?.type == 'variables_get_dynamic') {
+    if (source?.type === "variables_get" || source?.type == "variables_get_dynamic") {
       let type = this.variable_?.type
-      if (type === 'EntityReference') {
+      if (type === "EntityReference") {
         source.setColour(30)
       } else {
-        source.setColour(source?.type === 'variables_get' ? "#a53a6f"
-          : "#a53a93")
+        source.setColour(source?.type === "variables_get" ? "#a53a6f" : "#a53a93")
       }
     }
   }
@@ -490,15 +521,15 @@ function multiline() {
     }
 
     if (value.length < this.maxDisplayLength) {
-      return value.replaceAll(/\s/g, Blockly.Field.NBSP);
+      return value.replaceAll(/\s/g, Blockly.Field.NBSP)
     }
 
-    let text = ''
-    let words = value.replaceAll('\n', '').split(' ')
+    let text = ""
+    let words = value.replaceAll("\n", "").split(" ")
     let i = 0
     for (let wordsKey of words) {
       if (i + wordsKey.length + 1 > this.maxDisplayLength) {
-        text += '\n'
+        text += "\n"
         text += wordsKey
         text += Blockly.Field.NBSP
         i = 0
@@ -513,29 +544,29 @@ function multiline() {
   }
 
   // Fix multiline texts having wrong width in toolbox
-  const updateSize = Blockly.FieldMultilineInput.prototype["updateSize_"];
+  const updateSize = Blockly.FieldMultilineInput.prototype["updateSize_"]
   Blockly.FieldMultilineInput.prototype["updateSize_"] = function () {
-    updateSize.call(this);
+    updateSize.call(this)
 
     if (this.size_.width === 10) {
-      const fontSize = this.getConstants().FIELD_TEXT_FONTSIZE;
-      const fontWeight = this.getConstants().FIELD_TEXT_FONTWEIGHT;
-      const fontFamily = this.getConstants().FIELD_TEXT_FONTFAMILY;
+      const fontSize = this.getConstants().FIELD_TEXT_FONTSIZE
+      const fontWeight = this.getConstants().FIELD_TEXT_FONTWEIGHT
+      const fontFamily = this.getConstants().FIELD_TEXT_FONTFAMILY
 
-      const nodes = this.textGroup_.childNodes;
+      const nodes = this.textGroup_.childNodes
       for (let i = 0; i < nodes.length; i++) {
-        const tspan = (nodes[i]);
-        const textWidth = Blockly.utils.dom.getFastTextWidth(tspan, fontSize, fontWeight, fontFamily);
+        const tspan = nodes[i]
+        const textWidth = Blockly.utils.dom.getFastTextWidth(tspan, fontSize, fontWeight, fontFamily)
         if (textWidth > this.size_.width) {
-          this.size_.width = textWidth;
+          this.size_.width = textWidth
         }
       }
       if (this.borderRect_) {
-        this.size_.width += this.getConstants().FIELD_BORDER_RECT_X_PADDING * 2;
-        this.borderRect_.setAttribute('width', this.size_.width);
+        this.size_.width += this.getConstants().FIELD_BORDER_RECT_X_PADDING * 2
+        this.borderRect_.setAttribute("width", this.size_.width)
       }
 
-      this.positionBorderRect_();
+      this.positionBorderRect_()
     }
   }
 }
@@ -578,10 +609,10 @@ function connections() {
   const setCheck = Blockly.Connection.prototype.setCheck
   Blockly.Connection.prototype.setCheck = function (check) {
     const ret = setCheck.call(this, check)
-    if (check === 'Boolean') {
-      this.check_.push('ConditionDesc')
+    if (check === "Boolean") {
+      this.check_.push("ConditionDesc")
     }
-    return ret;
+    return ret
   }
 }
 
@@ -616,8 +647,8 @@ function cardDisplay() {
 
       if (card.heroClass) {
         const heroClassBlock = Blockly.Blocks["HeroClass_" + card.heroClass]
-        const heroClass = heroClassBlock?.json?.json;
-        card.art = deepmerge(heroClass?.art || {}, card.art || {});
+        const heroClass = heroClassBlock?.json?.json
+        card.art = deepmerge(heroClass?.art || {}, card.art || {})
       }
 
       /*createRoot(this.foreignObject_.firstElementChild).render(<CardDisplay {...card} />);*/
@@ -627,17 +658,26 @@ function cardDisplay() {
 
 function flyout() {
   const unCollapse = (block: Block) => {
-    if (!block) return;
-    block.setCollapsed(false);
+    if (!block) return
+    block.setCollapsed(false)
     block.getChildren(true).forEach(unCollapse)
   }
 
-  const createBlock = Blockly.Flyout.prototype.createBlock;
+  const createBlock = Blockly.Flyout.prototype.createBlock
   Blockly.Flyout.prototype.createBlock = function (originalBlock) {
-    const result: BlockSvg = createBlock.call(this, originalBlock);
+    const result: BlockSvg = createBlock.call(this, originalBlock)
     if (result.type.startsWith("Starter_")) {
-      unCollapse(result);
+      unCollapse(result)
     }
-    return result;
+    return result
+  }
+}
+
+function categoryBorder() {
+  const addColourBorder = ToolboxCategory.prototype["addColourBorder_"]
+
+  ToolboxCategory.prototype["addColourBorder_"] = function (colour) {
+    const style = this.rowDiv_.style
+    style.border = ToolboxCategory.borderWidth + "px solid " + (colour || "#ddd")
   }
 }

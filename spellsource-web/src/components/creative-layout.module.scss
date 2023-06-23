@@ -160,6 +160,9 @@ h6:before { content: "######";  margin-right: 9px; }*/
   align-items: center;
   background-color: var(--header-background-color);
   border: 2px solid var(--text-dark);
+  border-top: none;
+  border-left: none;
+  border-right: none;
 
   .search-results {
     background-color: var(--header-background-color);

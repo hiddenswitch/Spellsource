@@ -11,7 +11,7 @@ import * as BlocklyMiscUtils from "../lib/blockly-misc-utils"
 import { refreshBlock } from "../lib/blockly-misc-utils"
 import SpellsourceRenderer from "../lib/spellsource-renderer"
 import * as SpellsourceGenerator from "../lib/spellsource-generator"
-import SimpleReactBlockly from "./simple-react-blockly"
+import SimpleReactBlockly, { SimpleReactBlocklyRef } from "./simple-react-blockly"
 import * as BlocklyToolbox from "../lib/blockly-toolbox"
 import { cardsCategory, classesCategory, myCardsCategory, myCardsForSetCategory } from "../lib/blockly-toolbox"
 import { BlocklyDataContext } from "../pages/card-editor"
@@ -22,6 +22,9 @@ import { useSession } from "next-auth/react"
 import { useDebounce } from "react-use"
 import uniqueBy from "@popperjs/core/lib/utils/uniqueBy"
 import javascript from "blockly/javascript"
+import { useBootstrapBreakpoints, useBootstrapMinBreakpoint } from "react-bootstrap/ThemeProvider"
+import useBreakpoint from "@restart/hooks/useBreakpoint"
+import { useEffectOnce } from "../hooks/use-effect-once"
 
 interface CardEditorWorkspaceProps {
   setJSON?: React.Dispatch<React.SetStateAction<string>>
@@ -95,7 +98,7 @@ const handleWorkspaceCards = (workspace: WorkspaceSvg, userId: string) => {
 }
 
 const CardEditorWorkspace = forwardRef(
-  (props: CardEditorWorkspaceProps, blocklyEditor: MutableRefObject<SimpleReactBlockly>) => {
+  (props: CardEditorWorkspaceProps, blocklyEditor: MutableRefObject<SimpleReactBlocklyRef>) => {
     const { data: session } = useSession()
     const userId = session?.token?.sub ?? ""
     const data = useContext(BlocklyDataContext)
@@ -217,7 +220,7 @@ const CardEditorWorkspace = forwardRef(
     })
 
     // Run once after the workspace has been created
-    useEffect(() => {
+    useEffectOnce(() => {
       mainWorkspace().getTheme().setStartHats(true)
 
       BlocklyToolbox.initCallbacks(mainWorkspace())
@@ -238,7 +241,7 @@ const CardEditorWorkspace = forwardRef(
       }
       document.addEventListener("keydown", listener)
       return () => document.removeEventListener("keydown", listener)
-    }, [])
+    })
 
     //When the query is updated, do some searching
     useEffect(() => {
@@ -276,7 +279,7 @@ const CardEditorWorkspace = forwardRef(
         card = JSON.parse(p)
       } else if (p.includes("www")) {
         cardId = p.split("cards/")[1]
-      } else if (p.includes("_")) {
+      } else if (p.includes("_") || p.includes("-")) {
         cardId = p
       }
 
@@ -352,6 +355,8 @@ const CardEditorWorkspace = forwardRef(
       )
     }
 
+    const sm = useBreakpoint("sm", "up")
+
     return (
       <SimpleReactBlockly
         workspaceDidChange={onWorkspaceChanged}
@@ -367,6 +372,8 @@ const CardEditorWorkspace = forwardRef(
           move: {
             wheel: true,
           },
+          horizontalLayout: !sm,
+          toolboxPosition: sm ? "start" : "end",
           renderer: props.renderer || "spellsource",
           toolbox: BlocklyToolbox.editorToolbox(results, data),
         }}
