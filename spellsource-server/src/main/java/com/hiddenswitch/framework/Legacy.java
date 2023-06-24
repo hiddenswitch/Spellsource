@@ -577,6 +577,7 @@ public class Legacy {
 		var cache = DECKS_CACHE.get();
 		var configuration = Environment.jooqAkaDaoConfiguration();
 		var delegate = Environment.sqlClient();
+		// todo: invalidate cache when the deck is modified elsewhere, like the website
 		return Future.fromCompletionStage(cache.getAsync(deckId), Vertx.currentContext())
 				.compose(existing -> {
 					if (existing != null) {

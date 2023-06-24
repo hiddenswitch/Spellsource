@@ -73,6 +73,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 					|| spell.subSpells().stream().anyMatch(sd -> DestroySpell.class.isAssignableFrom(sd.getDescClass()));
 		}
 		return cardCatalogue.getHardRemovalCardIds().contains(card.getCardId())
+				|| (card.getDesc().artificialIntelligence() != null && card.getDesc().artificialIntelligence().getHardRemoval())
 				|| isPoisonous
 				|| destroySpell;
 	}

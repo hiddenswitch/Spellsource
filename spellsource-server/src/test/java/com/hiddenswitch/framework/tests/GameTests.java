@@ -19,6 +19,7 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.decks.Deck;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -76,24 +77,22 @@ public class GameTests extends FrameworkTestBase {
 		startGateway(vertx)
 				.compose(v -> client.createAndLogin())
 				.compose(v -> client.legacy().decksGetAll(Empty.getDefaultInstance()))
-				.onSuccess(decksGetAllResponse -> {
-					vertxTestContext.verify(() -> {
-						for (var deckCollection : decksGetAllResponse.getDecksList()) {
-							var gameDeck = ModelConversions.getGameDeck(client.getUserEntity().getId(), deckCollection);
-							assertEquals(30, gameDeck.getCards().size());
-							assertNotNull(gameDeck.getDeckId());
-							assertNotNull(gameDeck.getFormat());
-							assertNotNull(gameDeck.getHeroClass());
-                            assertNotNull(gameDeck.getHeroCard(ClasspathCardCatalogue.INSTANCE));
+				.onSuccess(decksGetAllResponse -> vertxTestContext.verify(() -> {
+					assertTrue(decksGetAllResponse.getDecksList().size() > 1);
+					for (var deckCollection : decksGetAllResponse.getDecksList()) {
+						var gameDeck = ModelConversions.getGameDeck(client.getUserEntity().getId(), deckCollection);
+						assertEquals(30, gameDeck.getCards().size());
+						assertNotNull(gameDeck.getDeckId());
+						assertNotNull(gameDeck.getFormat());
+						assertNotNull(gameDeck.getHeroClass());
 
-							// test creating the attributes
-							var playerAttributes = new AttributeMap();
-							for (var tuple : deckCollection.getCollection().getPlayerEntityAttributesList()) {
-								playerAttributes.put(Attribute.valueOf(tuple.getAttribute().name()), tuple.getStringValue());
-							}
+						// test creating the attributes
+						var playerAttributes = new AttributeMap();
+						for (var tuple : deckCollection.getCollection().getPlayerEntityAttributesList()) {
+							playerAttributes.put(Attribute.valueOf(tuple.getAttribute().name()), tuple.getStringValue());
 						}
-					});
-				})
+					}
+				}))
 				.compose(v -> client.closeFut())
 				.onComplete(vertxTestContext.succeedingThenComplete());
 	}

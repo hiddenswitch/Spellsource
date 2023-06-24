@@ -31,6 +31,7 @@ public class Gateway extends AbstractVerticle {
 	private final int port;
 	List<Closeable> closeables = new ArrayList<>();
 	private boolean useVertxNativeGrpcServer = false;
+	private Matchmaking.Services matchmaking;
 
 	public Gateway() {
 		this(Environment.getConfiguration().getGrpcConfiguration().getPort());
@@ -57,10 +58,11 @@ public class Gateway extends AbstractVerticle {
 	public void start(Promise<Void> startPromise) throws Exception {
 		var configuration = Environment.getConfiguration();
 
+		this.matchmaking = Matchmaking.services();
 		CompositeFuture.all(
 						Legacy.services(),
 						Legacy.unauthenticatedCards(),
-						Matchmaking.services(),
+						matchmaking.serviceDefinitionFuture(),
 						Accounts.unauthenticatedService(),
 						Accounts.authenticatedService(),
 						Games.services())
@@ -111,6 +113,7 @@ public class Gateway extends AbstractVerticle {
 					}
 
 					server.bind(ProtoReflectionService.newInstance().bindService());
+					closeables.add(matchmaking.clientMatchmakingService());
 					closeables.add(server);
 					return inited.compose(v -> server.start());
 				})
@@ -165,6 +168,7 @@ public class Gateway extends AbstractVerticle {
 			var nettyServerBuilder = builder.nettyBuilder();
 			var configuration = Environment.getConfiguration();
 			nettyServerBuilder
+//					.withOption(ChannelOption.ALLOCATOR, VertxByteBufAllocator.UNPOOLED_ALLOCATOR)
 					.maxConnectionIdle(Long.MAX_VALUE, TimeUnit.NANOSECONDS)
 					.maxConnectionAge(29, TimeUnit.DAYS)
 					.keepAliveTime(configuration.getGrpcConfiguration().getServerKeepAliveTimeMillis(), TimeUnit.MILLISECONDS)

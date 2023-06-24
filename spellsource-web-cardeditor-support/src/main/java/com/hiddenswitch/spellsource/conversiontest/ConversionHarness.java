@@ -4,6 +4,7 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.tests.util.TestBase;
@@ -33,7 +34,7 @@ public class ConversionHarness {
 
 	public static boolean assertCardReplaysTheSame(long[] seeds, String cardId, String replacementJson) {
 		synchronized (PROBE) {
-            var cardCatalogue = ClasspathCardCatalogue.INSTANCE;
+			var cardCatalogue = ClasspathCardCatalogue.INSTANCE;
 			var originalCard = cardCatalogue.getCards().get(cardId);
 			var originalCardDesc = cardCatalogue.getRecords().get(cardId).getDesc();
 			try {
@@ -61,7 +62,7 @@ public class ConversionHarness {
 						.allMatch(tuple -> {
 							var desc = Json.decodeValue(replacementJson, CardDesc.class);
 							desc.setId(cardId);
-							cardCatalogue.getRecords().get(cardId).setDesc(desc);
+							cardCatalogue.getRecords().put(cardId, new CardCatalogueRecord(cardId, desc));
 							cardCatalogue.getCards().replace(cardId, desc.create());
 
 							GameContext reproduction = TestBase.fromTwoRandomDecks(tuple.seed);
@@ -72,7 +73,7 @@ public class ConversionHarness {
 						});
 			} finally {
 				cardCatalogue.getCards().replace(cardId, originalCard);
-				cardCatalogue.getRecords().get(cardId).setDesc(originalCardDesc);
+				cardCatalogue.getRecords().put(cardId, new CardCatalogueRecord(cardId, originalCardDesc));;
 			}
 		}
 	}

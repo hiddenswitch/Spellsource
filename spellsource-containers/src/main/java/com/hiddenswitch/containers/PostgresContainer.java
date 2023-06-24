@@ -12,7 +12,8 @@ public class PostgresContainer extends GenericContainer<PostgresContainer> {
 		withEnv("POSTGRES_DB", databaseName);
 		withEnv("POSTGRES_USER", username);
 		withEnv("POSTGRES_PASSWORD", password);
-		withCommand("/bin/bash", "-c", "mkdir -pv /docker-entrypoint-initdb.d/ && echo 'create schema if not exists keycloak;' > /docker-entrypoint-initdb.d/init.sql && docker-entrypoint.sh postgres");
+		withEnv("POSTGRES_MAX_CONNECTIONS", "24000");
+		withCommand("/bin/bash", "-c", "mkdir -pv /docker-entrypoint-initdb.d/ && echo 'create schema if not exists keycloak;' > /docker-entrypoint-initdb.d/init.sql && docker-entrypoint.sh postgres -c max_connections=24000");
 	}
 
 	public String getHostAndPort() {

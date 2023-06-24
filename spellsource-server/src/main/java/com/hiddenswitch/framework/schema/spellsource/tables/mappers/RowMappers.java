@@ -7,6 +7,14 @@ public class RowMappers {
 
         private RowMappers(){}
 
+        public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.BannedDraftCards> getBannedDraftCardsMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.spellsource.tables.pojos.BannedDraftCards pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.BannedDraftCards();
+                        pojo.setCardId(row.getString("card_id"));
+                        return pojo;
+                };
+        }
+
         public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers> getBotUsersMapper() {
                 return row -> {
                         com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.BotUsers();
@@ -118,6 +126,14 @@ public class RowMappers {
                         com.hiddenswitch.framework.schema.spellsource.tables.pojos.Guests pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.Guests();
                         pojo.setId(row.getLong("id"));
                         pojo.setUserId(row.getString("user_id"));
+                        return pojo;
+                };
+        }
+
+        public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.HardRemovalCards> getHardRemovalCardsMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.spellsource.tables.pojos.HardRemovalCards pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.HardRemovalCards();
+                        pojo.setCardId(row.getString("card_id"));
                         return pojo;
                 };
         }

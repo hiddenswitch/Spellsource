@@ -79,7 +79,7 @@ public class DraftLogic {
 		}
 
 		requireDraftStatus(DraftStatus.NOT_STARTED);
-		getContext().getPublicState().setHeroClassChoices(createHeroChoices());
+		getContext().getPublicState().setHeroClassChoices(createHeroChoices().stream().toList());
 		getContext().getPublicState().setStatus(DraftStatus.SELECT_HERO);
 		notifyPublicStateChanged();
 	}
@@ -107,7 +107,7 @@ public class DraftLogic {
 		}
 	}
 
-	private List<String> createHeroChoices() {
+	private Collection<String> createHeroChoices() {
 		DeckFormat deckFormat = context.get().getCardCatalogue().spellsource();
 		return context.get().getCardCatalogue().getBaseClasses(deckFormat);
 	}

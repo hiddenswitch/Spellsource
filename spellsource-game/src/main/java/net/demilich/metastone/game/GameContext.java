@@ -75,8 +75,8 @@ import static java.util.stream.Collectors.toList;
  * }
  * </pre>
  * <p>
- * This will start a game between two opponents that try to play a little smarter, using the Spellsource agent {@link
- * net.demilich.metastone.game.behaviour.GameStateValueBehaviour}. It will also use a pair of decks to do it.
+ * This will start a game between two opponents that try to play a little smarter, using the Spellsource agent
+ * {@link net.demilich.metastone.game.behaviour.GameStateValueBehaviour}. It will also use a pair of decks to do it.
  * <pre>
  * {@code
  * GameContext context = new GameContext();
@@ -88,9 +88,9 @@ import static java.util.stream.Collectors.toList;
  * }
  * </pre>
  * <p>
- * The most important part of the game state is encoded inside the fields of the {@link Player} object in {@link
- * #getPlayers()}, like {@link Player#getMinions()}. The actions taken by the players are delegated to the {@link
- * Behaviour} objects in {@link #getBehaviours()}.
+ * The most important part of the game state is encoded inside the fields of the {@link Player} object in
+ * {@link #getPlayers()}, like {@link Player#getMinions()}. The actions taken by the players are delegated to the
+ * {@link Behaviour} objects in {@link #getBehaviours()}.
  * <p>
  * Game state is composed of a variety of fields that live inside the context. These fields are:
  * <ul>
@@ -185,8 +185,8 @@ import static java.util.stream.Collectors.toList;
  * sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
  * {@link Behaviour#requestAction(GameContext, Player, List)}.
  * @see PlayRandomBehaviour for an example behaviour that just makes random decisions when requested.
- * @see GameLogic for the class that actually implements the Spellsource game rules. This class requires a {@link
- * GameContext} because it manipulates the state stored in it.
+ * @see GameLogic for the class that actually implements the Spellsource game rules. This class requires a
+ * {@link GameContext} because it manipulates the state stored in it.
  * @see GameState for a class that encapsulates all of the state of a game of Spellsource.
  * @see #getGameState() to access and modify the game state.
  * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.
@@ -195,7 +195,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class GameContext implements Cloneable, Serializable, Inventory, EntityZoneTable, Comparable<GameContext> {
 	private static Logger LOGGER = LoggerFactory.getLogger(GameContext.class);
-    protected transient static ThreadLocal<GameContext> currentContext = new ThreadLocal<>();
+	protected transient static ThreadLocal<GameContext> currentContext = new ThreadLocal<>();
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
 	protected transient SpanContext spanContext;
@@ -229,8 +229,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	/**
 	 * Creates a game context with two empty players and two {@link PlayRandomBehaviour} behaviours.
 	 * <p>
-	 * Hero cards are not given to the players. Thus, this is not enough typically to mutate and run a game. Use {@link
-	 * #GameContext(String...)} to create a game initialized with the specified hero classes.
+	 * Hero cards are not given to the players. Thus, this is not enough typically to mutate and run a game. Use
+	 * {@link #GameContext(String...)} to create a game initialized with the specified hero classes.
 	 */
 	public GameContext() {
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
@@ -288,13 +288,14 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 	/**
 	 * Gets the current game context.
+	 *
 	 * @return a game context instance
 	 */
 	public static GameContext current() {
 		return currentContext.get();
 	}
 
-    private void setTriggers(List<Trigger> triggers) {
+	private void setTriggers(List<Trigger> triggers) {
 		this.triggers = triggers;
 	}
 
@@ -324,8 +325,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	/**
-	 * Adds a temporary card. A temporary card is a card that exists only in this instance and not in the {@link
-	 * CardCatalogue}.
+	 * Adds a temporary card. A temporary card is a card that exists only in this instance and not in the
+	 * {@link CardCatalogue}.
 	 *
 	 * @param card The card to add, typically made with code.
 	 */
@@ -359,7 +360,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Ends the game immediately.
 	 */
 	protected void endGame() {
-        currentContext.set(this);
+		currentContext.set(this);
 		updateAndGetGameOver();
 
 		// Don't do processing of end game effects more than once.
@@ -603,8 +604,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	/**
-	 * Gets the {@link Actor} entities geometrically opposite of the given {@code minionReference} on the {@link
-	 * Zones#BATTLEFIELD}.
+	 * Gets the {@link Actor} entities geometrically opposite of the given {@code minionReference} on the
+	 * {@link Zones#BATTLEFIELD}.
 	 *
 	 * @param minionReference The minion from whose perspective we will consider "opposite."
 	 * @return The list of {@link Actor} (typically one or two) that are geometrically opposite from the minion referenced
@@ -797,7 +798,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * and start the game. {@link #resume()} will start the first turn.
 	 */
 	public void init() {
-        currentContext.set(this);
+		currentContext.set(this);
 		getLogic().contextReady();
 		startTrace();
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
@@ -810,7 +811,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param startingPlayerId
 	 */
 	public void init(int startingPlayerId) {
-        currentContext.set(this);
+		currentContext.set(this);
 		setActivePlayerId(startingPlayerId);
 		getEnvironment().put(Environment.STARTING_PLAYER, startingPlayerId);
 		LOGGER.trace("{} init: Initializing game with starting player {}", getGameId(), getActivePlayer().getUserId());
@@ -858,7 +859,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @see GameLogic#performGameAction(int, GameAction) for more about game actions.
 	 */
 	public void performAction(int playerId, GameAction gameAction) {
-        currentContext.set(this);
+		currentContext.set(this);
 		getLogic().performGameAction(playerId, gameAction);
 	}
 
@@ -905,14 +906,14 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Requests an action from a player and takes it in the turn.
 	 * <p>
 	 * This method will call {@link Behaviour#requestAction(GameContext, Player, List)} to get an action from the
-	 * currently active player. It then calls {@link #performAction(int, GameAction)} with the returned {@link
-	 * GameAction}.
+	 * currently active player. It then calls {@link #performAction(int, GameAction)} with the returned
+	 * {@link GameAction}.
 	 *
 	 * @return {@code false} if the player selected an {@link EndTurnAction}, indicating the player would like to end
 	 * their turn.
 	 */
 	public boolean takeActionInTurn() {
-        currentContext.set(this);
+		currentContext.set(this);
 		Tracer tracer = GlobalTracer.get();
 		Span span = tracer.buildSpan("GameContext/takeActionInTurn")
 				.withTag("gameId", getGameId())
@@ -965,13 +966,13 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                                 that cannot be found.
 	 */
 	public Entity resolveSingleTarget(EntityReference targetKey) throws TargetNotFoundException {
-        currentContext.set(this);
+		currentContext.set(this);
 		return resolveSingleTarget(targetKey, true);
 	}
 
 	/**
-	 * Resolves a single target given the specification, even if the specification is a {@link
-	 * EntityReference#isTargetGroup()}
+	 * Resolves a single target given the specification, even if the specification is a
+	 * {@link EntityReference#isTargetGroup()}
 	 *
 	 * @param targetKey
 	 * @param rejectRemovedFromPlay
@@ -979,7 +980,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @throws TargetNotFoundException
 	 */
 	public Entity resolveSingleTarget(EntityReference targetKey, boolean rejectRemovedFromPlay) throws TargetNotFoundException {
-        currentContext.set(this);
+		currentContext.set(this);
 		if (targetKey == null || Objects.equals(targetKey, EntityReference.NONE)) {
 			return null;
 		}
@@ -995,8 +996,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	/**
-	 * Interprets {@link EntityReference} that specifies a group of {@link Entity} objects, like {@link
-	 * EntityReference#ALL_MINIONS}.
+	 * Interprets {@link EntityReference} that specifies a group of {@link Entity} objects, like
+	 * {@link EntityReference#ALL_MINIONS}.
 	 *
 	 * @param player    The player from whose point of view this method interprets the {@link EntityReference}.
 	 * @param source    The entity from whose point of view this method interprets the {@link EntityReference}.
@@ -1006,7 +1007,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * resolution works.
 	 */
 	public List<Entity> resolveTarget(Player player, Entity source, EntityReference targetKey) {
-        currentContext.set(this);
+		currentContext.set(this);
 		List<Entity> entities = targetLogic.resolveTargetKey(this, player, source, targetKey);
 		if (entities == null) {
 			return null;
@@ -1091,7 +1092,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param playerId The player whose turn should be started.
 	 */
 	public void startTurn(int playerId) {
-        currentContext.set(this);
+		currentContext.set(this);
 		LOGGER.trace("{} startTurn: Starting turn {} for playerId={}", getGameId(), getTurn() + 1, playerId);
 		setTurn(getTurn() + 1);
 		getLogic().startTurn(playerId);
@@ -1283,7 +1284,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param playerId The player that should concede/lose
 	 */
 	public void concede(int playerId) {
-        currentContext.set(this);
+		currentContext.set(this);
 		// Make sure IDs are assigned before we try to repeatedly destroy hero
 		if (getEntities().anyMatch(e -> e.getId() == IdFactory.UNASSIGNED)) {
 			getLogic().initializePlayerAndMoveMulliganToSetAside(0, true);
@@ -1419,7 +1420,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Useful for implementing Monte Carlo Tree Search AI algorithms.
 	 */
 	public void resume() {
-        currentContext.set(this);
+		currentContext.set(this);
 		while (!updateAndGetGameOver()) {
 			startTurn(getActivePlayerId());
 			while (takeActionInTurn()) {
@@ -1476,8 +1477,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * <p>
 	 * This call will be blocking regardless of using it in a parallel fashion.
 	 *
-	 * @param decks           Decks to run the match with. At least one is required if {@code includeMirrors} is {@code
-	 *                        true}, otherwise at least two.
+	 * @param decks           Decks to run the match with. At least one is required if {@code includeMirrors} is
+	 *                        {@code true}, otherwise at least two.
 	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
 	 *                        corresponds to an AI to use for this player.
 	 *                        <p>
@@ -1503,13 +1504,13 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * When more than two decks are specified, the players will have their statistics merged with multiple decks.
 	 *
 	 * @param decks                        Decks to run the match with. At least two are required.
-	 * @param player1                      A {@link Supplier} (function which returns a new instance) of a {@link
-	 *                                     Behaviour} that corresponds to an AI to use for this player.
+	 * @param player1                      A {@link Supplier} (function which returns a new instance) of a
+	 *                                     {@link Behaviour} that corresponds to an AI to use for this player.
 	 *                                     <p>
 	 *                                     For example, use the argument {@code GameStateValueBehaviour::new} to specify
 	 *                                     that the first player's AI should be a game state value behaviour.
-	 * @param player2                      A {@link Supplier} (function which returns a new instance) of a {@link
-	 *                                     Behaviour} that corresponds to an AI to use for this player.
+	 * @param player2                      A {@link Supplier} (function which returns a new instance) of a
+	 *                                     {@link Behaviour} that corresponds to an AI to use for this player.
 	 * @param gamesPerMatchup              The number of games per matchup to play. The number of matchups total can be
 	 *                                     calculated with {@link #simulationCount(int, int, boolean)}.
 	 * @param useJavaParallel              When {@code true}, uses the Java Streams Parallel interface to parallelize this
@@ -1532,37 +1533,37 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		}
 
 		return deckStream.map(decksPair -> {
-			GameContext newGame = GameContext.fromDecks(Arrays.asList(decksPair));
-			newGame.behaviours[0] = player1.get();
-			newGame.behaviours[1] = player2.get();
-			if (mutateConstructedGameContext != null) {
-				mutateConstructedGameContext.accept(newGame);
-			}
-			SimulationResult innerResult = new SimulationResult(1);
+					GameContext newGame = GameContext.fromDecks(Arrays.asList(decksPair));
+					newGame.behaviours[0] = player1.get();
+					newGame.behaviours[1] = player2.get();
+					if (mutateConstructedGameContext != null) {
+						mutateConstructedGameContext.accept(newGame);
+					}
+					SimulationResult innerResult = new SimulationResult(1);
 
-			try {
-				if (matchCounter != null) {
-					matchCounter.incrementAndGet();
-				}
+					try {
+						if (matchCounter != null) {
+							matchCounter.incrementAndGet();
+						}
 
-				newGame.init();
-				if (afterGameContextInit != null) {
-					afterGameContextInit.accept(newGame);
-				}
-				newGame.resume();
+						newGame.init();
+						if (afterGameContextInit != null) {
+							afterGameContextInit.accept(newGame);
+						}
+						newGame.resume();
 
-				innerResult.getPlayer1Stats().merge(newGame.getPlayer1().getStatistics());
-				innerResult.getPlayer2Stats().merge(newGame.getPlayer2().getStatistics());
-				innerResult.calculateMetaStatistics();
-			} catch (Throwable any) {
-				innerResult.setExceptionCount(innerResult.getExceptionCount() + 1);
-				return innerResult;
-			} finally {
-				newGame.close();
-			}
+						innerResult.getPlayer1Stats().merge(newGame.getPlayer1().getStatistics());
+						innerResult.getPlayer2Stats().merge(newGame.getPlayer2().getStatistics());
+						innerResult.calculateMetaStatistics();
+					} catch (Throwable any) {
+						innerResult.setExceptionCount(innerResult.getExceptionCount() + 1);
+						return innerResult;
+					} finally {
+						newGame.close();
+					}
 
-			return innerResult;
-		})
+					return innerResult;
+				})
 				.filter(Objects::nonNull)
 				.reduce(SimulationResult::merge).orElseThrow(NullPointerException::new);
 	}
@@ -1987,33 +1988,60 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public void onNotificationDidFire(Notification event) {
 	}
 
+	/**
+	 * Gets the card catalogue associated with this context.
+	 * <p>
+	 * Permits spells and effects to look up cards in many places, like a SQL database, the classpath or the file system.
+	 *
+	 * @return a card catalogue
+	 */
 	public CardCatalogue getCardCatalogue() {
 		return cardCatalogue;
 	}
 
-    /**
-     * Returns a card for the purposes of overriding a card. The {@code CardDesc} on the card has been cloned, in order
-     * to allow the overriding card to potentially modify / mutate the {@code CardDesc} without modifying the
-     * underlying card catalogue.
-     *
-     * @param overrideCardId the card ID to override
-     * @return a copy of a card where the {@code CardDesc} is copied, cached in temp cards
-     */
-    public Card getOverriddenCardById(String overrideCardId) {
-        Card target = null;
-        for (var card : getTempCards()) {
-            if (card.getCardId().equals(overrideCardId)) {
-                target = card;
-                break;
-            }
-        }
+	/**
+	 * Sets the card catalogue.
+	 * <p>
+	 * If there is a pre-exiting format on this game context, this method will also look up the deck format and change it
+	 * if it exists in the new catalogue.
+	 *
+	 * @param cardCatalogue the card catalogue to use
+	 * @return this game context
+	 */
+	public GameContext setCardCatalogue(CardCatalogue cardCatalogue) {
+		this.cardCatalogue = cardCatalogue;
+		if (deckFormat != null) {
+			var format = cardCatalogue.getFormat(deckFormat.getName());
+			if (format != null) {
+				setDeckFormat(format);
+			}
+		}
+		return this;
+	}
 
-        if (target == null) {
-            // creates a clone
-            target = getCardById(overrideCardId);
-            // deeply clone the card desc
-            target.setDesc(target.getDesc().clone());
-        }
-        return target;
-    }
+	/**
+	 * Returns a card for the purposes of overriding a card. The {@code CardDesc} on the card has been cloned, in order to
+	 * allow the overriding card to potentially modify / mutate the {@code CardDesc} without modifying the underlying card
+	 * catalogue.
+	 *
+	 * @param overrideCardId the card ID to override
+	 * @return a copy of a card where the {@code CardDesc} is copied, cached in temp cards
+	 */
+	public Card getOverriddenCardById(String overrideCardId) {
+		Card target = null;
+		for (var card : getTempCards()) {
+			if (card.getCardId().equals(overrideCardId)) {
+				target = card;
+				break;
+			}
+		}
+
+		if (target == null) {
+			// creates a clone
+			target = getCardById(overrideCardId);
+			// deeply clone the card desc
+			target.setDesc(target.getDesc().clone());
+		}
+		return target;
+	}
 }

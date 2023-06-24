@@ -42,8 +42,6 @@ public class ClientMatchmakingService extends VertxMatchmakingGrpc.MatchmakingVe
 	private final Set<Session> sessions = new HashSet<>();
 
 	public ClientMatchmakingService() {
-		var contextInternal = (ContextInternal) Vertx.currentContext();
-		contextInternal.addCloseHook(this);
 	}
 
 	@Override

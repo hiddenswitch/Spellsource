@@ -1,6 +1,7 @@
 package com.hiddenswitch.framework.impl;
 
 import com.google.protobuf.Message;
+import io.vertx.await.Async;
 import io.vertx.core.Vertx;
 
 import java.util.Set;
@@ -21,7 +22,7 @@ public class CodecRegistration {
 	}
 
 	public <T> CodecRegistration andRegister(Class<T> target) {
-		lock.lock();
+		Async.lock(lock);
 		try {
 			var objects = registrations.get();
 			if (objects.contains(target)) {
@@ -36,7 +37,7 @@ public class CodecRegistration {
 	}
 
 	public <T> CodecRegistration andRegister(Message target) {
-		lock.lock();
+		Async.lock(lock);
 		try {
 			var objects = registrations.get();
 			if (objects.contains(target)) {

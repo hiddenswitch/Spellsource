@@ -15,14 +15,15 @@ import io.vertx.core.*;
 import io.vertx.core.eventbus.MessageConsumer;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
-import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.decks.CollectionDeck;
 import net.demilich.metastone.game.logic.GameStatus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.hiddenswitch.framework.schema.keycloak.Keycloak.KEYCLOAK;
@@ -39,22 +40,33 @@ public class ClusteredGames extends AbstractVerticle {
 			.baseUnit(BaseUnits.EVENTS)
 			.register(globalRegistry);
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClusteredGames.class);
-	private Map<String, ServerGameContext> contexts = new ConcurrentHashMap<>();
+	private final Map<String, ServerGameContext> contexts = new ConcurrentHashMap<>();
 	private MessageConsumer<?> registration;
+	private final SqlCachedCardCatalogue cardCatalogue = new SqlCachedCardCatalogue();
 
 
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
-		// TODO: deal with this elsewhere
-		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
 		CodecRegistration.register(ServerToClientMessage.getDefaultInstance())
 				.andRegister(ClientToServerMessage.getDefaultInstance());
 		var eb = Vertx.currentContext().owner().eventBus();
 		registration = eb.<ConfigurationRequest>consumer(Games.GAMES_CREATE_GAME_SESSION, request ->
 				createGameSession(request.body()).onSuccess(request::reply).onFailure(t -> request.fail(-1, t.getMessage())));
 
+		var registrationFut = Promise.<Void>promise();
+		cardCatalogue.invalidateAllAndRefreshOnce()
+				.compose(v -> cardCatalogue.subscribe())
+				.compose(v -> registrationFut.future())
+				.onComplete(startPromise);
+
 		// should we wait for registration to finish?
-		registration.completionHandler(v -> startPromise.complete());
+		registration.completionHandler(v -> {
+			if (v.succeeded()) {
+				registrationFut.complete();
+			} else if (v.failed()) {
+				registrationFut.fail(v.cause());
+			}
+		});
 	}
 
 	public Future<CreateGameSessionResponse> createGameSession(ConfigurationRequest request) {
@@ -120,11 +132,12 @@ public class ClusteredGames extends AbstractVerticle {
 						private ServerGameContext serverGameContext;
 
 						@Override
-						public void start(Promise<Void> startPromise) throws Exception {
+						public void start(Promise<Void> startPromise) {
 							this.serverGameContext = new ServerGameContext(
 									request.getGameId(),
 									new VertxScheduler(),
-									request.getConfigurations());
+									request.getConfigurations(),
+									cardCatalogue);
 
 							// Deal with ending the game
 							serverGameContext.addEndGameHandler(session -> {
@@ -136,7 +149,9 @@ public class ClusteredGames extends AbstractVerticle {
 									LOGGER.warn("could not record game because", t);
 								} finally {
 									// todo: this should really be the last end game handler
-									vertx.undeploy(deploymentID());
+									if (vertx.deploymentIDs().contains(deploymentID())) {
+										vertx.runOnContext(v -> vertx.undeploy(deploymentID()));
+									}
 								}
 							});
 
@@ -147,6 +162,14 @@ public class ClusteredGames extends AbstractVerticle {
 									.onSuccess(v -> serverGameContext.play(true))
 									.map((Void) null)
 									.onComplete(startPromise);
+						}
+
+						@Override
+						public void stop() {
+							var thread = serverGameContext.getThread();
+							if (thread != null && thread.isAlive() && !thread.isInterrupted() && !serverGameContext.isGameOver()) {
+								thread.interrupt();
+							}
 						}
 					};
 					return vertx.deployVerticle(serverContextVerticle)

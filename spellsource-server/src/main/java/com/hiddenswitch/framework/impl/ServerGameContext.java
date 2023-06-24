@@ -8,14 +8,17 @@ import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Legacy;
 import com.hiddenswitch.framework.schema.spellsource.Tables;
 import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
+import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import io.opentracing.log.Fields;
 import io.opentracing.propagation.Format;
 import io.opentracing.util.GlobalTracer;
+import io.vertx.await.Async;
 import io.vertx.core.Future;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.*;
+import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import net.demilich.metastone.game.GameContext;
@@ -26,6 +29,7 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
@@ -81,8 +85,6 @@ public class ServerGameContext extends GameContext implements Server {
 	private final Context context;
 	private transient Long turnTimerId;
 	private final List<Configuration> playerConfigurations = new ArrayList<>();
-	private final List<Closeable> closeables = new ArrayList<>();
-	private final Lock closeablesLock = new ReentrantLock();
 	private final String gameId;
 	private final Deque<Trigger> gameTriggers = new ConcurrentLinkedDeque<>();
 	private final Scheduler scheduler;
@@ -100,8 +102,11 @@ public class ServerGameContext extends GameContext implements Server {
 	 * @param scheduler            The {@link Scheduler} instance to use for scheduling game events.
 	 * @param playerConfigurations The information about the players who will be connecting / playing this game context
 	 */
-	public ServerGameContext(@NotNull String gameId, @NotNull Scheduler scheduler, @NotNull List<Configuration> playerConfigurations) {
+	public ServerGameContext(@NotNull String gameId, @NotNull Scheduler scheduler, @NotNull List<Configuration> playerConfigurations, CardCatalogue cardCatalogue) {
 		super();
+		if (cardCatalogue != null) {
+			setCardCatalogue(cardCatalogue);
+		}
 		var tracer = GlobalTracer.get();
 		var spanBuilder = tracer.buildSpan("ServerGameContext/init")
 				.withTag("gameId", gameId);
@@ -130,7 +135,7 @@ public class ServerGameContext extends GameContext implements Server {
 			}, false);
 
 			// The deck format will be the smallest one that can contain all the cards in the decks.
-			setDeckFormat(ClasspathCardCatalogue.INSTANCE.getSmallestSupersetFormat(playerConfigurations
+			setDeckFormat(getCardCatalogue().getSmallestSupersetFormat(playerConfigurations
 					.stream()
 					.map(Configuration::getDeck)
 					// These must be game decks at this point
@@ -194,45 +199,42 @@ public class ServerGameContext extends GameContext implements Server {
 					// Improve robustness of the user's event bus handlers and interaction with the game context by giving it a
 					// distinct task queue from the game and/or other users.
 					var userVerticle = new AbstractVerticle() {
-						@Override
-						public void start(Promise<Void> startPromise) throws Exception {
-							try {
-								var bus = Vertx.currentContext().owner().eventBus();
-								var consumer = bus.<Spellsource.ClientToServerMessage>consumer(getMessagesFromClientAddress(userId));
-								consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
-								// By using a publisher, we do not require that there be a working connection while sending
-								var producer = bus.<Spellsource.ServerToClientMessage>publisher(getMessagesFromServerAddress(userId));
-								// The event bus
+						private UnityClientBehaviour client;
+						private MessageProducer<Spellsource.ServerToClientMessage> producer;
+						private MessageConsumer<Spellsource.ClientToServerMessage> consumer;
 
-								Promise<Void> registration = Promise.promise();
-								consumer.completionHandler(registration);
-								registrationsReady.add(registration);
+						public void start() {
+							var bus = Vertx.currentContext().owner().eventBus();
+							this.consumer = bus.<Spellsource.ClientToServerMessage>consumer(getMessagesFromClientAddress(userId));
+							consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
+							// By using a publisher, we do not require that there be a working connection while sending
+							this.producer = bus.<Spellsource.ServerToClientMessage>publisher(getMessagesFromServerAddress(userId));
+							// The event bus
 
-								// Create a client that handles game events and action/mulligan requests
-								var client = new UnityClientBehaviour(serverGameContext,
-										new VertxScheduler(),
-										consumer.bodyStream(),
-										producer,
-										userId,
-										configuration.getPlayerId(),
-										configuration.getNoActivityTimeout());
-								// The client implements the behaviour interface since it is supposed to be able to respond to requestAction
-								// and mulligan calls
-								setBehaviour(configuration.getPlayerId(), client);
-								// However, unlike a behaviour, there can be multiple clients per player ID. This will facilitate spectating.
-								getClients().add(client);
-								// This future will be completed when FIRST_MESSAGE is received from the client. And the actual unity client
-								// will only be notified to send this message when the constructor finishes.
-								startPromise.complete();
-								closeables.add(client);
-							} catch (Throwable t) {
-								startPromise.fail(t);
-							}
+							Promise<Void> registration = Promise.promise();
+							consumer.completionHandler(registration);
+							registrationsReady.add(registration);
+
+							// Create a client that handles game events and action/mulligan requests
+							this.client = new UnityClientBehaviour(serverGameContext,
+									new VertxScheduler(),
+									consumer.bodyStream(),
+									producer,
+									userId,
+									configuration.getPlayerId(),
+									configuration.getNoActivityTimeout());
+							// The client implements the behaviour interface since it is supposed to be able to respond to requestAction
+							// and mulligan calls
+							setBehaviour(configuration.getPlayerId(), client);
+							// However, unlike a behaviour, there can be multiple clients per player ID. This will facilitate spectating.
+							getClients().add(client);
 						}
 
 						@Override
-						public void stop(Promise<Void> stopPromise) throws Exception {
-							stopPromise.complete();
+						public void stop() {
+							client.close(Promise.promise());
+							consumer.unregister();
+							producer.close();
 						}
 					};
 
@@ -259,13 +261,7 @@ public class ServerGameContext extends GameContext implements Server {
 					// The verticle takes time to deploy, which can interfere with the expectation that once a ServerGameContext
 					// is created, messages can be sent. handlersReady() should already be dealing with this, but it doesn't
 					// apparently, so the SubscribeGame method is configured to retry sending for now.
-					vertx.deployVerticle(userVerticle)
-							.onSuccess(deploymentId -> closeables.add(completion -> {
-								// todo: investigate why this undeploy can fail
-								// this may be getting closed elsewhere?
-								vertx.undeploy(deploymentId);
-								completion.complete();
-							}));
+					vertx.deployVerticle(userVerticle);
 					Promise<Client> fut = Promise.promise();
 					clientsReady.put(configuration.getPlayerId(), fut);
 				}
@@ -535,6 +531,10 @@ public class ServerGameContext extends GameContext implements Server {
 			async.run(v -> {
 				var thread = Thread.currentThread();
 				setThread(thread);
+				if (!thread.isVirtual()) {
+					throw new IllegalStateException("should be running on virtual thread loop context");
+				}
+
 				thread.setUncaughtExceptionHandler((t, e) -> {
 					if (context.exceptionHandler() != null) {
 						context.exceptionHandler().handle(e);
@@ -601,7 +601,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	public void startTurn(int playerId) {
-		lock.lock();
+		Async.lock(lock);
 		try {
 			for (var behaviour : getBehaviours()) {
 				if (behaviour instanceof HasElapsableTurns) {
@@ -653,7 +653,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	public void endTurn() {
-		lock.lock();
+		Async.lock(lock);
 		try {
 			if (turnTimerId != null) {
 				scheduler.cancelTimer(turnTimerId);
@@ -802,7 +802,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	public void concede(int playerId) {
-		lock.lock();
+		Async.lock(lock);
 		try {
 			// TODO: Make sure we don't have to do anything special here
 			super.concede(playerId);
@@ -831,7 +831,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Override
 	protected void endGame() {
-		lock.lock();
+		Async.lock(lock);
 		try {
 			LOGGER.trace("endGame {}: calling end game", gameId);
 
@@ -917,26 +917,9 @@ public class ServerGameContext extends GameContext implements Server {
 				.asChildOf(getSpanContext())
 				.withTag("gameId", getGameId())
 				.start();
-
-		closeablesLock.lock();
-		try (var s1 = tracer.activateSpan(span)) {
-			var iter = closeables.iterator();
-			while (iter.hasNext()) {
-				var closeable = iter.next();
-				var promise = Promise.<Void>promise();
-				try {
-					closeable.close(promise);
-					await(timeout(promise.future(), CLOSE_TIMEOUT_MILLIS));
-				} catch (Throwable any) {
-					Tracing.error(any, span, false);
-				} finally {
-					iter.remove();
-				}
-			}
-			LOGGER.trace("dispose {}: closers closed", gameId);
+		try {
 			super.close();
 		} finally {
-			closeablesLock.unlock();
 			span.finish();
 		}
 	}
@@ -1028,7 +1011,7 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	public void onPlayerReconnected(Client client) {
 		context.runOnContext(v -> {
-			lock.lock();
+			Async.lock(lock);
 			try {
 				// Update the client
 				var listIterator = getClients().listIterator();
@@ -1041,10 +1024,8 @@ public class ServerGameContext extends GameContext implements Server {
 						iteratee.copyRequestsTo(client);
 						iteratee.close(promise);
 						await(timeout(promise.future(), CLOSE_TIMEOUT_MILLIS));
-						closeables.remove(iteratee);
 						listIterator.set(client);
 						iteratee = client;
-						closeables.add(client);
 					}
 					iteratee.onConnectionStarted(getActivePlayer());
 				}

@@ -331,7 +331,7 @@ public class TestBase {
 	 * @return
 	 */
 	public static String randomHeroCard(DeckFormat deckFormat) {
-		List<String> baseHeroes = ClasspathCardCatalogue.INSTANCE.getBaseClasses(deckFormat);
+		List<String> baseHeroes = new ArrayList<>(ClasspathCardCatalogue.INSTANCE.getBaseClasses(deckFormat));
 		return baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
 	}
 

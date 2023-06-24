@@ -5,16 +5,9 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 import java.io.Serializable;
 
 /**
- * A record that stores a card's ID, JSON representation and {@link CardDesc}.
+ * A record that stores a card's ID and {@link CardDesc}.
  */
-public class CardCatalogueRecord implements Serializable {
-	private String id;
-	private CardDesc desc;
-
-	public CardCatalogueRecord(String id, CardDesc desc) {
-		this.id = id;
-		this.desc = desc;
-	}
+public record CardCatalogueRecord(String id, CardDesc desc) {
 
 	/**
 	 * An ID that corresponds to the file name, less the {@code .json} extension.
@@ -25,15 +18,7 @@ public class CardCatalogueRecord implements Serializable {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public CardDesc getDesc() {
 		return desc;
-	}
-
-	public void setDesc(CardDesc desc) {
-		this.desc = desc;
 	}
 }

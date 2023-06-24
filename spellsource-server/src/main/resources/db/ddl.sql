@@ -402,6 +402,28 @@ $$;
 ALTER FUNCTION spellsource.card_catalogue_query(sets text[], card_type text, rarity text, hero_class text, attribute text) OWNER TO admin;
 
 --
+-- Name: card_change_notify_event(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.card_change_notify_event() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+declare
+    payload json;
+begin
+    payload := json_build_object(
+            '__table', tg_table_name,
+            'id', new.id
+        );
+    perform pg_notify('spellsource_cards_changes_v0', payload::text);
+    return new;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.card_change_notify_event() OWNER TO admin;
+
+--
 -- Name: get_classes(); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -3190,6 +3212,14 @@ ALTER TABLE ONLY keycloak.user_entity
 
 
 --
+-- Name: banned_draft_cards banned_draft_cards_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.banned_draft_cards
+    ADD CONSTRAINT banned_draft_cards_pkey PRIMARY KEY (card_id);
+
+
+--
 -- Name: bot_users bot_users_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
@@ -3267,6 +3297,14 @@ ALTER TABLE ONLY spellsource.games
 
 ALTER TABLE ONLY spellsource.guests
     ADD CONSTRAINT guests_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hard_removal_cards hard_removal_cards_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.hard_removal_cards
+    ADD CONSTRAINT hard_removal_cards_pkey PRIMARY KEY (card_id);
 
 
 --
@@ -3970,6 +4008,13 @@ CREATE INDEX idx_card_script_type ON spellsource.cards USING btree (((card_scrip
 --
 
 CREATE INDEX matchmaking_tickets_queue_id_idx ON spellsource.matchmaking_tickets USING btree (queue_id);
+
+
+--
+-- Name: cards card_changes_trigger; Type: TRIGGER; Schema: spellsource; Owner: admin
+--
+
+CREATE TRIGGER card_changes_trigger AFTER INSERT OR DELETE OR UPDATE ON spellsource.cards FOR EACH ROW EXECUTE FUNCTION spellsource.card_change_notify_event();
 
 
 --

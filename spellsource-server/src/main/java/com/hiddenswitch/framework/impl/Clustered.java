@@ -4,6 +4,7 @@ import io.vertx.core.VertxOptions;
 import io.vertx.ext.cluster.infinispan.InfinispanClusterManager;
 import org.infinispan.commons.util.FileLookup;
 import org.infinispan.commons.util.FileLookupFactory;
+import org.infinispan.configuration.cache.StorageType;
 import org.infinispan.configuration.parsing.ConfigurationBuilderHolder;
 import org.infinispan.configuration.parsing.ParserRegistry;
 import org.infinispan.manager.DefaultCacheManager;
@@ -77,10 +78,9 @@ public interface Clustered {
 
 		if (fileLookup.lookupFileLocation(configPath, ctccl) != null) {
 			log.warn("Forcing JGroups config to '" + configPath + "'");
-			builderHolder.getGlobalConfigurationBuilder().transport().defaultTransport()
-					.removeProperty(JGroupsTransport.CHANNEL_CONFIGURATOR)
-					.addProperty(JGroupsTransport.CONFIGURATION_FILE, configPath);
+			builderHolder.getGlobalConfigurationBuilder().transport().defaultTransport().removeProperty(JGroupsTransport.CHANNEL_CONFIGURATOR).addProperty(JGroupsTransport.CONFIGURATION_FILE, configPath);
 		}
+//		builderHolder.getDefaultConfigurationBuilder().memory().storage(StorageType.OFF_HEAP).maxSize("2GB");
 
 		return new DefaultCacheManager(builderHolder, true);
 	}

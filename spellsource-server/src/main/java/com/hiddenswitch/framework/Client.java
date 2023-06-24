@@ -39,13 +39,13 @@ import java.util.concurrent.atomic.AtomicReference;
 import static io.vertx.core.CompositeFuture.all;
 import static io.vertx.core.CompositeFuture.any;
 
-public class Client implements AutoCloseable {
+public class Client {
 	private final Logger LOGGER = LoggerFactory.getLogger(Client.class);
 	protected final AtomicReference<GrpcClientChannel> managedChannel = new AtomicReference<>();
 	protected final Vertx vertx;
 	protected final WebClient webClient;
 	protected final String keycloakPath;
-	private String loginUri;
+	private final String loginUri;
 	private AccessTokenResponse accessToken;
 	private UserEntity userEntity;
 	private String username;
@@ -53,7 +53,7 @@ public class Client implements AutoCloseable {
 	private String password;
 	private Promise<MatchmakingQueuePutResponse> matchmakingResponseFut;
 	private Promise<Void> matchmakingEndedFut;
-	private XORShiftRandom random = new XORShiftRandom(System.nanoTime());
+	private final XORShiftRandom random = new XORShiftRandom(System.nanoTime());
 	private GrpcClient grpcClient;
 
 	public Client(Vertx vertx, WebClient webClient, String keycloakPath) {
@@ -140,7 +140,7 @@ public class Client implements AutoCloseable {
 							.onFailure(gameOverPromise::tryFail);
 					return gameOverPromise
 							.future()
-							.onComplete(v -> writer.end());
+							.eventually(v -> writer.end());
 				});
 	}
 
@@ -306,7 +306,6 @@ public class Client implements AutoCloseable {
 		return Gateway.defaultGrpcPort();
 	}
 
-	@Override
 	public void close() {
 		if (grpcClient != null) {
 			grpcClient.close();

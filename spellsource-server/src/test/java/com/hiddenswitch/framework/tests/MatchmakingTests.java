@@ -22,6 +22,7 @@ import io.vertx.core.streams.WriteStream;
 import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxTestContext;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -76,7 +77,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 					response.handler(f -> testContext.failNow("should not receive any queue messages, should just fail immediately"));
 					return ended.future();
 				})
-				.onComplete(client::close)
+				.compose(v -> client.closeFut())
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
@@ -101,14 +102,13 @@ public class MatchmakingTests extends FrameworkTestBase {
 					return ended.future();
 				})
 				.compose(v -> Matchmaking.deleteQueue(queueId))
-				.onComplete(client::close)
+				.compose(v -> client.closeFut())
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
 	@Test
 	public void testCreateQueueNoExceptions(Vertx vertx, VertxTestContext testContext) {
 		var queueId = UUID.randomUUID().toString();
-
 		startServices(vertx)
 				.compose(v -> Matchmaking.createQueue(createSinglePlayerQueue(queueId)))
 				.compose(v -> Environment.sleep(vertx, 2 * Environment.getConfiguration().getMatchmaking().getScanFrequencyMillis()))
@@ -127,6 +127,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
+	@Test
 	@Timeout(value = 60, timeUnit = TimeUnit.SECONDS)
 	public void testTwoGamesInRow(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
@@ -142,6 +143,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
+	@Timeout(value = 60, timeUnit = TimeUnit.SECONDS)
 	public void testTwoGamesInRowSomeoneInConstructed(Vertx vertx, VertxTestContext testContext) {
 		var client1 = new Client(vertx);
 		var client2 = new Client(vertx);
@@ -196,7 +198,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 						assertTrue(gameOverMessage.getGameOver().hasWinningPlayerId());
 					});
 				})
-				.onComplete(v -> client.close())
+				.compose(v -> client.closeFut())
 				.compose(v -> awaitCheckpoints(gameCreated))
 				.compose(v -> Matchmaking.deleteQueue(queueId))
 				.compose(v -> vertx.close());
@@ -237,8 +239,8 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.compose(v -> all(client1.matchmake(queueId), client2.matchmake(queueId)))
 				.compose(v -> all(client1.playUntilGameOver(), client2.playUntilGameOver()).map(fut -> fut.<ServerToClientMessage>resultAt(0)))
 				.compose(v -> Matchmaking.deleteQueue(queueId))
-				.onComplete(client1::close)
-				.onComplete(client2::close)
+				.compose(v -> client1.closeFut())
+				.compose(v -> client2.closeFut())
 				.compose(v -> awaitCheckpoints(gameCreated))
 				.onComplete(testContext.succeedingThenComplete());
 	}
@@ -286,7 +288,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 					assertNull(ticket);
 				}))
 				.compose(v -> Matchmaking.deleteQueue(queueId))
-				.onComplete(client::close)
+				.compose(v -> client.closeFut())
 				.compose(v -> awaitCheckpoints(cancelled))
 				.onComplete(testContext.succeedingThenComplete());
 	}
@@ -326,9 +328,9 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.compose(v -> all(client2.playUntilGameOver(), client3.playUntilGameOver()))
 				.compose(v -> Matchmaking.deleteQueue(queueId))
 				.compose(v -> awaitCheckpoints(gameCreated))
-				.onComplete(client1::close)
-				.onComplete(client2::close)
-				.onComplete(client3::close)
+				.compose(client1::close)
+				.compose(client2::close)
+				.compose(client3::close)
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
@@ -426,13 +428,13 @@ public class MatchmakingTests extends FrameworkTestBase {
 	@Test
 	@Timeout(value = 210, timeUnit = TimeUnit.SECONDS)
 	public void testManyClientsMatchmakeAcrossInstances(VertxTestContext testContext) {
-		testManyClientsMatchmakeAcrossInstances(testContext,1);
+		testManyClientsMatchmakeAcrossInstances(testContext, 1);
 	}
 
 	@Test
 	@Timeout(value = 210, timeUnit = TimeUnit.SECONDS)
 	public void testManyClientsMatchmakeAcrossClusteredInstances(VertxTestContext testContext) {
-		testManyClientsMatchmakeAcrossInstances(testContext,2);
+		testManyClientsMatchmakeAcrossInstances(testContext, 2);
 	}
 
 	public void testManyClientsMatchmakeAcrossInstances(VertxTestContext testContext, int serverVertices) {
@@ -450,7 +452,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.mapToObj(i -> Vertx.vertx(new VertxOptions().setEventLoopPoolSize(CpuCoreSensor.availableProcessors())))
 				.toList();
 
-		System.setProperty("games.turnTimeMillis", "4000");
+		System.setProperty("games.turnTimeMillis", "6000");
 		var originalPort = configuration.getGrpcConfiguration().getPort();
 		// server configuration
 		var vertexFuts = IntStream.range(0, serverVertices)

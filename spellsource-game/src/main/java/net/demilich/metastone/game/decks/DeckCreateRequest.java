@@ -16,12 +16,12 @@ import java.util.regex.Pattern;
  * Represents a request to create a game with the specified deck list.
  * <p>
  * A deck list can be specified in a community format using {@link #fromDeckList(String)} and converted to a deck usable
- * by the engine using {@link #toGameDeck()}. Alternatively, the hero class and card IDs can be specified using {@link
- * #fromCardIds(String, String...)}.
+ * by the engine using {@link #toGameDeck()}. Alternatively, the hero class and card IDs can be specified using
+ * {@link #fromCardIds(String, String...)}.
  *
  * @see #fromDeckList(String) to learn more about the format for deck lists.
  * @see net.demilich.metastone.game.GameContext#fromDeckLists(List) to create a game context directly from community
- * 		deck lists.
+ * deck lists.
  */
 public class DeckCreateRequest implements Serializable, Cloneable {
 	/**
@@ -76,7 +76,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	 *
 	 * @param deckList A community format deck list
 	 * @return A request on which {@link DeckCreateRequest#toGameDeck()} can be called to get an actual deck, or which can
-	 * 		be passed to certain network services to create decks for users.
+	 * be passed to certain network services to create decks for users.
 	 * @throws DeckListParsingException that contains a list of more detailed exceptions as to why the deck failed to
 	 *                                  parse or any other errors related to it. This ensures you will see all the errors
 	 *                                  related to deck list parsing, not just one error.
@@ -149,7 +149,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 				final String format = matcher.group("format");
 				try {
 					request.setFormat(format);
-                    if (!ClasspathCardCatalogue.INSTANCE.formats().keySet().contains(format)) {
+					if (!ClasspathCardCatalogue.INSTANCE.formats().keySet().contains(format)) {
 						throw new IllegalArgumentException();
 					}
 				} catch (IllegalArgumentException ex) {
@@ -162,7 +162,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 			if (matcher.group("heroCard") != null) {
 				final String heroCard = matcher.group("heroCard");
 				try {
-                    request.setHeroCardId(ClasspathCardCatalogue.INSTANCE.getCardByName(heroCard).getCardId());
+					request.setHeroCardId(ClasspathCardCatalogue.INSTANCE.getCardByName(heroCard).getCardId());
 				} catch (NullPointerException ex) {
 					errors.add(new NullPointerException(String.format("No hero card named %s could be found", heroCard)));
 				}
@@ -175,7 +175,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 				int count = Integer.parseInt(matcher.group("count"));
 				String cardId;
 				try {
-                    cardId = ClasspathCardCatalogue.INSTANCE.getCardByName(cardName, request.getHeroClass()).getCardId();
+					cardId = ClasspathCardCatalogue.INSTANCE.getCardByName(cardName, request.getHeroClass()).getCardId();
 				} catch (NullPointerException ex) {
 					String message = String.format("Could not find a card named %s%s", cardName, request.getName() == null ? "" : " while reading deck list " + request.getName());
 					errors.add(new NullPointerException(message));
@@ -209,12 +209,14 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 
 	public static DeckCreateRequest fromCardIds(String heroClass, String... cardIds) {
 		return new DeckCreateRequest()
+				.withFormat("Spellsource")
 				.withCardIds(Arrays.asList(cardIds))
 				.withHeroClass(heroClass);
 	}
 
 	public static DeckCreateRequest fromCardIds(String heroClass, List<String> cardIds) {
 		return new DeckCreateRequest()
+				.withFormat("Spellsource")
 				.withCardIds(cardIds)
 				.withHeroClass(heroClass);
 	}
@@ -312,10 +314,10 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		GameDeck deck = new GameDeck(getHeroClass());
 		deck.setName(getName());
 		if (getHeroCardId() != null) {
-            deck.setHeroCard((Card) ClasspathCardCatalogue.INSTANCE.getCardById(getHeroCardId()));
+			deck.setHeroCard(ClasspathCardCatalogue.INSTANCE.getCardById(getHeroCardId()));
 		}
 		getCardIds().forEach(cardId -> deck.getCards().addCard(ClasspathCardCatalogue.INSTANCE.getCardById(cardId)));
-        deck.setFormat(ClasspathCardCatalogue.INSTANCE.getFormat(format));
+		deck.setFormat(ClasspathCardCatalogue.INSTANCE.getFormat(format));
 		return deck;
 	}
 
@@ -335,8 +337,8 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	public boolean isValid() {
 		if (getName() == null
 				|| getHeroClass() == null) return false;
-        DeckFormat deckFormat = ClasspathCardCatalogue.INSTANCE.spellsource();
-        return ClasspathCardCatalogue.INSTANCE.getBaseClasses(deckFormat).contains(getHeroClass())
+		DeckFormat deckFormat = ClasspathCardCatalogue.INSTANCE.spellsource();
+		return ClasspathCardCatalogue.INSTANCE.getBaseClasses(deckFormat).contains(getHeroClass())
 				&& (getCardIds().size() + getInventoryIds().size()) == 30;
 	}
 

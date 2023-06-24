@@ -13,9 +13,8 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.*;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.GameEventTypeMessage.GameEventType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MessageTypeMessage.MessageType;
-import io.vertx.core.Closeable;
-import io.vertx.core.Future;
-import io.vertx.core.Promise;
+import io.vertx.await.Async;
+import io.vertx.core.*;
 import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
@@ -161,12 +160,12 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 */
 	@Override
 	public void elapseAwaitingRequests() {
-		requestsLock.lock();
+		Async.lock(requestsLock);
 		elapsed = true;
 		try {
 			// Prevent concurrent modification by locking access to this iterator
 			GameplayRequest request;
-			LOGGER.debug("elapsing {} requests", getRequests().size());
+			LOGGER.warn("elapsing {} requests", getRequests().size());
 			while ((request = requests.poll()) != null) {
 				if (request.getType() == GameplayRequestType.ACTION) {
 					@SuppressWarnings("unchecked")
@@ -185,7 +184,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 
 	private GameplayRequest getMulliganRequest() {
-		requestsLock.lock();
+		Async.lock(requestsLock);
 		try {
 			for (var request : getRequests()) {
 				if (request.getType() == GameplayRequestType.MULLIGAN) {
@@ -200,7 +199,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 
 	private GameplayRequest getRequest(String messageId) {
-		requestsLock.lock();
+		Async.lock(requestsLock);
 		try {
 			for (var request : getRequests()) {
 				if (request.getCallbackId().equals(messageId)) {
@@ -221,7 +220,10 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	protected void handleWebSocketMessage(ClientToServerMessage message) {
 		if (inboundMessagesClosed) {
-			Tracing.error(new IllegalStateException("inbound messages closed"));
+			var exceptionHandler = Vertx.currentContext().owner().exceptionHandler();
+			if (exceptionHandler != null) {
+				exceptionHandler.handle(new IllegalStateException("inbound messaged closed"));
+			}
 			return;
 		}
 
@@ -285,7 +287,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 
 	public void retryRequests() {
-		requestsLock.lock();
+		Async.lock(requestsLock);
 		try {
 			for (var request : getRequests()) {
 				switch (request.getType()) {
@@ -318,7 +320,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	public void mulliganAsync(GameContext context, Player player, List<Card> cards, Consumer<List<Card>> next) {
 		var id = Integer.toString(callbackIdCounter.getAndIncrement());
-		requestsLock.lock();
+		Async.lock(requestsLock);
 		try {
 			getRequests().add(new GameplayRequest()
 					.setCallbackId(id)
@@ -342,7 +344,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 */
 
 	public void onMulliganReceived(List<Integer> discardedCardIndices) {
-		requestsLock.lock();
+		Async.lock(requestsLock);
 		try {
 			var request = getMulliganRequest();
 			if (request == null) {
@@ -377,7 +379,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 		var promise = Promise.<GameAction>promise();
-		requestsLock.lock();
+		Async.lock(requestsLock);
 		try {
 			var id = Integer.toString(callbackIdCounter.getAndIncrement());
 			Consumer<GameAction> completer = promise::tryComplete;
@@ -462,7 +464,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			return;
 		}
 
-		requestsLock.lock();
+		Async.lock(requestsLock);
 		try {
 			var action = request.getActions().get(actionIndex);
 
@@ -802,7 +804,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	public void copyRequestsTo(Client client) {
 		var targetClient = (UnityClientBehaviour) client;
 		var willAdd = new ArrayList<GameplayRequest>();
-		requestsLock.lock();
+		Async.lock(requestsLock);
 		try {
 			outer:
 			for (var request : requests) {
@@ -820,7 +822,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			requestsLock.unlock();
 		}
 
-		targetClient.requestsLock.lock();
+		Async.lock(targetClient.requestsLock);
 		try {
 			targetClient.requests.addAll(willAdd);
 		} finally {

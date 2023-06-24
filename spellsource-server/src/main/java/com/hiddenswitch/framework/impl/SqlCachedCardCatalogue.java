@@ -1,0 +1,240 @@
+package com.hiddenswitch.framework.impl;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.hiddenswitch.framework.Environment;
+import com.hiddenswitch.framework.schema.spellsource.tables.daos.CardsDao;
+import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards;
+import com.hiddenswitch.spellsource.rpc.Spellsource;
+import io.vertx.await.Async;
+import io.vertx.await.impl.VirtualThreadContext;
+import io.vertx.core.*;
+import io.vertx.core.impl.ContextInternal;
+import io.vertx.core.json.jackson.DatabindCodec;
+import io.vertx.pgclient.pubsub.PgSubscriber;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogueRecord;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.catalogues.ListCardCatalogue;
+import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.decks.DeckFormat;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+import static io.vertx.await.Async.await;
+
+public class SqlCachedCardCatalogue extends ListCardCatalogue implements Closeable {
+	public static final String SPELLSOURCE_CARDS_CHANGES_CHANNEL_FROM_DDL = "spellsource_cards_changes_v0";
+	Deque<String> invalidated = new ConcurrentLinkedDeque<>();
+	Lock lock = new ReentrantLock();
+	List<Closeable> resources = new ArrayList<>();
+	WeakVertxMap<PgSubscriber> subscribers = new WeakVertxMap<>(vertx -> PgSubscriber.subscriber(vertx, Environment.pgArgs().connectionOptions()));
+	private PgSubscriber subscriber;
+	AtomicBoolean refreshed = new AtomicBoolean();
+
+	public Future<Void> invalidateAllAndRefreshOnce() {
+		if (refreshed.compareAndSet(false, true)) {
+			if (cards.isEmpty()) {
+				return invalidateAllAndRefresh();
+			}
+		}
+		return Future.succeededFuture();
+	}
+
+	public Future<Void> invalidateAllAndRefresh() {
+		var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+		return cardsDao.findAll()
+				.compose(cardDbRecords -> {
+					Async.lock(lock);
+					try {
+						invalidated.clear();
+						clear();
+						loadFromCardDbRecords(cardDbRecords);
+						return Future.succeededFuture();
+					} catch (Throwable t) {
+						return Future.failedFuture(t);
+					} finally {
+						lock.unlock();
+					}
+				}).mapEmpty();
+	}
+
+	public void invalidateAll() {
+		invalidated.addAll(cards.keySet());
+	}
+
+	public Future<Void> subscribe() {
+		if (subscriber != null) {
+			return Future.succeededFuture();
+		}
+
+		// todo: pool these connections
+		this.subscriber = subscribers.get();
+		var context = Vertx.currentContext();
+		subscriber
+				.channel(SPELLSOURCE_CARDS_CHANGES_CHANNEL_FROM_DDL)
+				.handler(payload -> context.runOnContext(v -> {
+					try {
+						var decoded = DatabindCodec.mapper().readValue(payload, SpellsourceCardChangesChannelNotification.class);
+						invalidate(decoded.id());
+					} catch (JsonProcessingException e) {
+						throw new RuntimeException(e);
+					}
+				}));
+
+		resources.add(subscriber::close);
+		return subscriber.connect();
+	}
+
+	private void loadFromCardDbRecords(List<Cards> cardDbRecords) {
+		var cardDescs = cardDbRecords.stream().map(card -> card.getCardScript().put("id", card.getId()).mapTo(CardDesc.class)).toList();
+		loadCards(cardDescs);
+	}
+
+	public void invalidate(String cardId) {
+		invalidated.add(cardId);
+	}
+
+	@Override
+	public @NotNull CardList query(DeckFormat deckFormat, Spellsource.CardTypeMessage.CardType cardType, Spellsource.RarityMessage.Rarity rarity, String heroClass, Attribute tag, boolean clone) {
+		refreshInvalid();
+		return super.query(deckFormat, cardType, rarity, heroClass, tag, clone);
+	}
+
+	@Override
+	public @NotNull CardList getAll() {
+		refreshInvalid();
+		return super.getAll();
+	}
+
+	@Override
+	public @NotNull Card getCardById(@NotNull String id) {
+		refreshInvalid();
+		return super.getCardById(id);
+	}
+
+	@Override
+	public @Nullable Card getCardByName(String name) {
+		refreshInvalid();
+		return super.getCardByName(name);
+	}
+
+	@Override
+	public @NotNull Card getCardByName(String name, String heroClass) {
+		refreshInvalid();
+		return super.getCardByName(name, heroClass);
+	}
+
+	@Override
+	public @NotNull Map<String, Card> getCards() {
+		refreshInvalid();
+		return super.getCards();
+	}
+
+	@Override
+	public DeckFormat getFormat(String name) {
+		refreshInvalid();
+		return super.getFormat(name);
+	}
+
+	@Override
+	public @NotNull Map<String, CardCatalogueRecord> getRecords() {
+		refreshInvalid();
+		return super.getRecords();
+	}
+
+	@Override
+	public Card getHeroCard(String heroClass) {
+		refreshInvalid();
+		return super.getHeroCard(heroClass);
+	}
+
+	@Override
+	public Card getFormatCard(String name) {
+		refreshInvalid();
+		return super.getFormatCard(name);
+	}
+
+	@Override
+	public CardList getClassCards(DeckFormat format) {
+		refreshInvalid();
+		return super.getClassCards(format);
+	}
+
+	@Override
+	public List<String> getBaseClasses(DeckFormat deckFormat) {
+		refreshInvalid();
+		return super.getBaseClasses(deckFormat);
+	}
+
+	@Override
+	public CardList queryClassCards(DeckFormat format, String hero, Set<String> bannedCards, Spellsource.RarityMessage.Rarity rarity, Set<Spellsource.CardTypeMessage.CardType> validCardTypes) {
+		refreshInvalid();
+		return super.queryClassCards(format, hero, bannedCards, rarity, validCardTypes);
+	}
+
+	@Override
+	public CardList queryNeutrals(DeckFormat format, Set<String> bannedCards, Spellsource.RarityMessage.Rarity rarity, Set<Spellsource.CardTypeMessage.CardType> validCardTypes) {
+		refreshInvalid();
+		return super.queryNeutrals(format, bannedCards, rarity, validCardTypes);
+	}
+
+	@Override
+	public CardList queryUncollectible(DeckFormat deckFormat) {
+		refreshInvalid();
+		return super.queryUncollectible(deckFormat);
+	}
+
+	private void refreshInvalid() {
+		String invalid;
+		Set<String> toFetch = null;
+		while ((invalid = invalidated.pollFirst()) != null) {
+			if (toFetch == null) {
+				toFetch = new HashSet<>();
+			}
+			toFetch.add(invalid);
+		}
+		if (toFetch != null && !toFetch.isEmpty()) {
+			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+			if (Vertx.currentContext() != null && ((ContextInternal) Vertx.currentContext()).unwrap() instanceof VirtualThreadContext) {
+				var cardDbRecords = await(cardsDao.findManyByIds(toFetch));
+				Async.lock(lock);
+				try {
+					loadFromCardDbRecords(cardDbRecords);
+				} finally {
+					lock.unlock();
+				}
+			} else {
+				cardsDao.findManyByIds(toFetch)
+						.onSuccess(cardDbRecords -> {
+							Async.lock(lock);
+							try {
+								loadFromCardDbRecords(cardDbRecords);
+							} finally {
+								lock.unlock();
+							}
+						});
+			}
+
+
+		}
+	}
+
+	@Override
+	public void close(Promise<Void> completion) {
+		CompositeFuture.all(resources.stream().map(c -> {
+			var promise = Promise.<Void>promise();
+			c.close(promise);
+			return (Future) promise.future();
+		}).toList()).map((Void) null).onComplete(completion);
+	}
+
+	record SpellsourceCardChangesChannelNotification(String __table, String id) {
+	}
+}

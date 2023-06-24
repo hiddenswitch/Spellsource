@@ -55,6 +55,7 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<BannedDraftCardsRecord> BANNED_DRAFT_CARDS_PKEY = Internal.createUniqueKey(BannedDraftCards.BANNED_DRAFT_CARDS, DSL.name("banned_draft_cards_pkey"), new TableField[] { BannedDraftCards.BANNED_DRAFT_CARDS.CARD_ID }, true);
     public static final UniqueKey<BotUsersRecord> BOT_USERS_PKEY = Internal.createUniqueKey(BotUsers.BOT_USERS, DSL.name("bot_users_pkey"), new TableField[] { BotUsers.BOT_USERS.ID }, true);
     public static final UniqueKey<CardsRecord> CARDS_PKEY = Internal.createUniqueKey(Cards.CARDS, DSL.name("cards_pkey"), new TableField[] { Cards.CARDS.ID }, true);
     public static final UniqueKey<CardsInDeckRecord> CARDS_IN_DECK_PKEY = Internal.createUniqueKey(CardsInDeck.CARDS_IN_DECK, DSL.name("cards_in_deck_pkey"), new TableField[] { CardsInDeck.CARDS_IN_DECK.ID }, true);
@@ -65,6 +66,7 @@ public class Keys {
     public static final UniqueKey<GameUsersRecord> GAME_USERS_PKEY = Internal.createUniqueKey(GameUsers.GAME_USERS, DSL.name("game_users_pkey"), new TableField[] { GameUsers.GAME_USERS.GAME_ID, GameUsers.GAME_USERS.USER_ID }, true);
     public static final UniqueKey<GamesRecord> GAMES_PKEY = Internal.createUniqueKey(Games.GAMES, DSL.name("games_pkey"), new TableField[] { Games.GAMES.ID }, true);
     public static final UniqueKey<GuestsRecord> GUESTS_PKEY = Internal.createUniqueKey(Guests.GUESTS, DSL.name("guests_pkey"), new TableField[] { Guests.GUESTS.ID }, true);
+    public static final UniqueKey<HardRemovalCardsRecord> HARD_REMOVAL_CARDS_PKEY = Internal.createUniqueKey(HardRemovalCards.HARD_REMOVAL_CARDS, DSL.name("hard_removal_cards_pkey"), new TableField[] { HardRemovalCards.HARD_REMOVAL_CARDS.CARD_ID }, true);
     public static final UniqueKey<MatchmakingQueuesRecord> MATCHMAKING_QUEUES_PKEY = Internal.createUniqueKey(MatchmakingQueues.MATCHMAKING_QUEUES, DSL.name("matchmaking_queues_pkey"), new TableField[] { MatchmakingQueues.MATCHMAKING_QUEUES.ID }, true);
     public static final UniqueKey<MatchmakingTicketsRecord> MATCHMAKING_TICKETS_PKEY = Internal.createUniqueKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_pkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.USER_ID }, true);
     public static final UniqueKey<UserEntityAddonsRecord> USER_ENTITY_ADDONS_PKEY = Internal.createUniqueKey(UserEntityAddons.USER_ENTITY_ADDONS, DSL.name("user_entity_addons_pkey"), new TableField[] { UserEntityAddons.USER_ENTITY_ADDONS.ID }, true);

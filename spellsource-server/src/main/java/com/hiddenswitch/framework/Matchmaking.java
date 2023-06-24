@@ -63,10 +63,14 @@ public class Matchmaking extends AbstractVerticle {
 		startPromise.complete();
 	}
 
-	public static Future<ServerServiceDefinition> services() {
+	public record Services(Future<ServerServiceDefinition> serviceDefinitionFuture,
+	                       ClientMatchmakingService clientMatchmakingService) {
+	}
+
+	public static Services services() {
 		var matchmakingService = new ClientMatchmakingService();
-		return Future.succeededFuture(matchmakingService)
-				.compose(Accounts::requiresAuthorization);
+		return new Services(Future.succeededFuture(matchmakingService)
+				.compose(Accounts::requiresAuthorization), matchmakingService);
 	}
 
 	public static Future<Void> writeGameId(WriteStream<MatchmakingQueuePutResponse> response, String gameId) {

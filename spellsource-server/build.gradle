@@ -361,6 +361,7 @@ test {
     group('spellsource')
     useJUnitPlatform()
     enableAssertions = false
+    maxHeapSize = '4096m'
     testLogging {
         showExceptions true
         exceptionFormat "full"

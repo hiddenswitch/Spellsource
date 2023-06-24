@@ -9,10 +9,7 @@ import net.demilich.metastone.game.decks.GameDeck;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -82,6 +79,7 @@ public interface CardCatalogue {
 
 	Map<String, DeckFormat> formats();
 
+	@Nullable
 	DeckFormat getFormat(String name);
 
 	Set<String> getBannedDraftCards();
@@ -124,7 +122,7 @@ public interface CardCatalogue {
 	 *                              version. (Versions are only used for {@link net.demilich.metastone.game.logic.Trace}
 	 *                              objects.)
 	 */
-	Card getCardById(@NotNull String id);
+	@NotNull Card getCardById(@NotNull String id);
 
 	/**
 	 * Gets all the {@link CardCatalogueRecord} objects specified in the {@code cards} module.
@@ -135,22 +133,23 @@ public interface CardCatalogue {
 
 	@Nullable Card getCardByName(String name);
 
+	@NotNull
 	Card getCardByName(String name, String heroClass);
 
 	default CardList query(DeckFormat deckFormat) {
-		return query(deckFormat, (CardType) null, (Rarity) null, (String) null, (Attribute) null, true);
+		return query(deckFormat, null, null, null, null, true);
 	}
 
 	default CardList query(DeckFormat deckFormat, CardType cardType) {
-		return query(deckFormat, cardType, (Rarity) null, (String) null, (Attribute) null, true);
+		return query(deckFormat, cardType, null, null, null, true);
 	}
 
 	default CardList query(DeckFormat deckFormat, String heroClass) {
-		return query(deckFormat, (CardType) null, (Rarity) null, heroClass, (Attribute) null, true);
+		return query(deckFormat, null, null, heroClass, null, true);
 	}
 
 	default CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, String heroClass) {
-		return query(deckFormat, cardType, rarity, heroClass, (Attribute) null, true);
+		return query(deckFormat, cardType, rarity, heroClass, null, true);
 	}
 
 	/**
@@ -186,7 +185,7 @@ public interface CardCatalogue {
 	 * @param deckFormat
 	 * @return
 	 */
-	List<String> getBaseClasses(DeckFormat deckFormat);
+	Collection<String> getBaseClasses(DeckFormat deckFormat);
 
 	Stream<Card> stream();
 

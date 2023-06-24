@@ -12,8 +12,8 @@ import java.util.*;
  * <p>
  *
  * @see GameContext#getDeckFormat() for the property on the game context where the deck format is set
- * @see CardCatalogue#getSmallestSupersetFormat(GameDeck...) to determine the smallest format that can be used for the specified
- * decks
+ * @see CardCatalogue#getSmallestSupersetFormat(GameDeck...) to determine the smallest format that can be used for the
+ * specified decks
  */
 public class DeckFormat implements Serializable {
 	private String name = "";
@@ -77,14 +77,16 @@ public class DeckFormat implements Serializable {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof DeckFormat)) return false;
+		if (o == null || getClass() != o.getClass()) return false;
 		DeckFormat that = (DeckFormat) o;
-		return name.equals(that.name);
+		return Objects.equals(name, that.name) && Objects.equals(sets, that.sets) && Arrays.equals(secondPlayerBonusCards, that.secondPlayerBonusCards) && Objects.equals(validDeckCondition, that.validDeckCondition);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name);
+		int result = Objects.hash(name, sets, validDeckCondition);
+		result = 31 * result + Arrays.hashCode(secondPlayerBonusCards);
+		return result;
 	}
 
 	public String[] getSecondPlayerBonusCards() {

@@ -130,7 +130,7 @@ public class Environment {
 	}
 
 	@NotNull
-	private static PgArgs pgArgs() {
+	public static PgArgs pgArgs() {
 		var connectionOptions = PgConnectOptions.fromEnv();
 		var cachedConfiguration = getConfiguration();
 		if (cachedConfiguration.hasPg()) {
@@ -157,7 +157,7 @@ public class Environment {
 		}
 
 		var poolOptions = new PoolOptions()
-				.setMaxSize(Math.max(CpuCoreSensor.availableProcessors(), 8));
+				.setMaxSize(Math.min(CpuCoreSensor.availableProcessors(), 8));
 		var args = new PgArgs(connectionOptions, poolOptions);
 		return args;
 	}
@@ -577,7 +577,7 @@ public class Environment {
 		return prometheusRegistry;
 	}
 
-	private record PgArgs(PgConnectOptions connectionOptions, PoolOptions poolOptions) {
+	public record PgArgs(PgConnectOptions connectionOptions, PoolOptions poolOptions) {
 	}
 
 }

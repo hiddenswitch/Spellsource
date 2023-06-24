@@ -7,7 +7,7 @@
   "description": "Cast every Soar spell in your hand. If there are none, receive one.",
   "spell": {
     "class": "MetaSpell",
-    "spell": {
+    "spells": [{
       "class": "EitherOrSpell",
       "condition": {
         "class": "HoldsCardCondition",
@@ -35,7 +35,7 @@
         "card": "spell_soar",
         "targetPlayer": "SELF"
       }
-    }
+    }]
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

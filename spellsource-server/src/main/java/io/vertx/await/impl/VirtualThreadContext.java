@@ -28,13 +28,13 @@ public class VirtualThreadContext extends ContextBase {
 
   public static VirtualThreadContext create(Vertx vertx, EventLoop nettyEventLoop, Scheduler scheduler) {
     VertxImpl _vertx = (VertxImpl) vertx;
-    return new VirtualThreadContext(_vertx, nettyEventLoop, _vertx.getInternalWorkerPool(), _vertx.getWorkerPool(), scheduler, null, _vertx.closeFuture(), null);
+    return new VirtualThreadContext(_vertx, nettyEventLoop, _vertx.getInternalWorkerPool(), _vertx.getWorkerPool(), scheduler, null, _vertx.closeFuture(), Thread.currentThread().getContextClassLoader());
   }
 
   private final Scheduler scheduler;
   private final ThreadLocal<Boolean> inThread = new ThreadLocal<>();
 
-  VirtualThreadContext(VertxInternal vertx,
+  public VirtualThreadContext(VertxInternal vertx,
                        EventLoop eventLoop,
                        WorkerPool internalBlockingPool,
                        WorkerPool workerPool,

@@ -59,22 +59,22 @@ public final class RandomDeck extends GameDeck {
 
 	public static @NotNull GameDeck randomDeck(long seed) {
 		var random = new XORShiftRandom(seed);
-        DeckFormat deckFormat = ClasspathCardCatalogue.INSTANCE.spellsource();
-        var baseClasses = ClasspathCardCatalogue.INSTANCE.getBaseClasses(deckFormat);
+		DeckFormat deckFormat = ClasspathCardCatalogue.INSTANCE.spellsource();
+		var baseClasses = ClasspathCardCatalogue.INSTANCE.getBaseClasses(deckFormat);
 		var heroClass = baseClasses.get(random.nextInt(baseClasses.size()));
-        return new RandomDeck(random.getState(), heroClass, ClasspathCardCatalogue.INSTANCE.spellsource());
+		return new RandomDeck(random.getState(), heroClass, ClasspathCardCatalogue.INSTANCE.spellsource());
 	}
 
 	private void populate(long seed, DeckFormat deckFormat) {
 		var random = new XORShiftRandom(seed);
 		DeckValidator deckValidator = new DefaultDeckValidator();
-        CardList classCards = ClasspathCardCatalogue.INSTANCE.query(deckFormat, card -> card.isCollectible()
+		CardList classCards = ClasspathCardCatalogue.INSTANCE.query(deckFormat, card -> card.isCollectible()
 				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO_POWER)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.CLASS)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.FORMAT)
 				&& card.hasHeroClass(getHeroClass()));
-        CardList neutralCards = ClasspathCardCatalogue.INSTANCE.query(deckFormat, card -> card.isCollectible()
+		CardList neutralCards = ClasspathCardCatalogue.INSTANCE.query(deckFormat, card -> card.isCollectible()
 				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.HERO_POWER)
 				&& !GameLogic.isCardType(card.getCardType(), CardType.CLASS)

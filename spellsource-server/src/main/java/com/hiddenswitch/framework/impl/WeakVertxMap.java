@@ -1,5 +1,6 @@
 package com.hiddenswitch.framework.impl;
 
+import io.vertx.await.Async;
 import io.vertx.core.Vertx;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +22,7 @@ public class WeakVertxMap<T> {
 	}
 
 	public T get() {
-		lock.lock();
+		Async.lock(lock);
 		try {
 			if (Vertx.currentContext() == null) {
 				return reference.updateAndGet(existing -> {

@@ -548,6 +548,7 @@ public class Accounts {
 			client.httpEngine(engine);
 		}*/
 		var config = Environment.getConfiguration();
+
 		return KeycloakBuilder.builder()
 				.serverUrl(config.getKeycloak().getAuthUrl())
 				.realm("master")

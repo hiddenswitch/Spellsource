@@ -25,13 +25,13 @@ public class Tracing {
 		tracing();
 	}
 
-	public synchronized static Tracer tracing() {
+	public static Tracer tracing() {
 		// calls static constructor as a side effect
 		GlobalTracer.registerIfAbsent(() -> initialize("spellsource"));
 		return GlobalTracer.get();
 	}
 
-	public static synchronized Tracer tracing(Vertx vertx) {
+	public static Tracer tracing(Vertx vertx) {
 		tracing();
 		vertx.exceptionHandler(Tracing::error);
 		try {

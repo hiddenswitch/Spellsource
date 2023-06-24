@@ -5,6 +5,7 @@ import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
 import io.vertx.core.*;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.junit5.VertxExtension;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.ToxiproxyContainer;
@@ -14,6 +15,7 @@ import org.testcontainers.utility.DockerImageName;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -23,6 +25,10 @@ import static org.testcontainers.Testcontainers.exposeHostPorts;
 @ExtendWith({VertxExtension.class})
 @Testcontainers
 public class FrameworkTestBase {
+	@AfterEach
+	public void delay() throws InterruptedException {
+		TimeUnit.SECONDS.sleep(1);
+	}
 
 	protected static ToxiproxyContainer TOXIPROXY = new ToxiproxyContainer(DockerImageName.parse("ghcr.io/shopify/toxiproxy:latest").asCompatibleSubstituteFor("shopify/toxiproxy"));
 

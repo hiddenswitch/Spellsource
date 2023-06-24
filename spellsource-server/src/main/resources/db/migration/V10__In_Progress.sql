@@ -314,7 +314,7 @@ $$ language plpgsql volatile;
 --- getBannedDraftCards()
 create table spellsource.banned_draft_cards
 (
-    card_id text not null,
+    card_id text not null unique primary key,
     foreign key (card_id) references spellsource.cards (id)
 );
 
@@ -340,7 +340,7 @@ $$ language plpgsql;
 --- getHardRemovalCardIds()
 create table spellsource.hard_removal_cards
 (
-    card_id text not null,
+    card_id text not null unique primary key,
     foreign key (card_id) references spellsource.cards (id)
 );
 
@@ -484,6 +484,27 @@ begin
           and (card_script ->> 'set') = any (sets);
 end;
 $$ language plpgsql;
+
+--- whenever one of the cards change, this will be fired for the purposes of invalidating caches
+create or replace function spellsource.card_change_notify_event() returns trigger as
+$$
+declare
+    payload json;
+begin
+    payload := json_build_object(
+            '__table', tg_table_name,
+            'id', new.id
+        );
+    perform pg_notify('spellsource_cards_changes_v0', payload::text);
+    return new;
+end;
+$$ language plpgsql;
+
+create trigger card_changes_trigger
+    after insert or update or delete
+    on spellsource.cards
+    for each row
+execute procedure spellsource.card_change_notify_event();
 
 --- todo: implement draft queries. the draft logic may be entirely replaced by a sql function, where it will be easier to author
 --- todo: create corresponding views and grant execution privileges to the card builder for these catalogue queries

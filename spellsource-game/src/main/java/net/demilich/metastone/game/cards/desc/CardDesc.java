@@ -54,8 +54,8 @@ import static net.demilich.metastone.game.cards.desc.HasEntrySet.link;
  * All types of cards are encoded as a {@link CardDesc}; spells, secrets, hero cards, hero powers, minions, etc. This
  * class should only store the data related to the card, not card functionality itself.
  * <p>
- * Each of the fields in this class correspond exactly to the fields in a {@code .json} file located in the {@code
- * cards} directory. A card JSON looks like:
+ * Each of the fields in this class correspond exactly to the fields in a {@code .json} file located in the
+ * {@code cards} directory. A card JSON looks like:
  *
  * <pre>
  *           {
@@ -317,8 +317,8 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	 * The set this card belongs to. Unless the card's author designed this card in the context of a greater set, use
 	 * {@link CardSet#CUSTOM} for community cards.
 	 * <p>
-	 * Eventually, a set will be immutable and represent a particular release or expansion, while a {@link
-	 * net.demilich.metastone.game.decks.DeckFormat} will represent a certain set of rules of play.
+	 * Eventually, a set will be immutable and represent a particular release or expansion, while a
+	 * {@link net.demilich.metastone.game.decks.DeckFormat} will represent a certain set of rules of play.
 	 */
 	public String getSet() {
 		if (getSets() != null && getSets().length > 0) {
@@ -505,16 +505,18 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	/**
-	 * Indicates an {@link Enchantment} that is active as soon as the game begins (just after {@link
-	 * GameLogic#handleMulligan(Player, boolean, List)}, in the {@link GameLogic#startGameForPlayer(Player)} phase.
+	 * Indicates an {@link Enchantment} that is active as soon as the game begins (just after
+	 * {@link GameLogic#handleMulligan(Player, boolean, List)}, in the {@link GameLogic#startGameForPlayer(Player)}
+	 * phase.
 	 * <p>
 	 * Note that the {@link net.demilich.metastone.game.events.GameStartEvent} is raised twice, once for each player, so
-	 * your {@link EventTriggerDesc} should specify a {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#TARGET_PLAYER}.
+	 * your {@link EventTriggerDesc} should specify a
+	 * {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#TARGET_PLAYER}.
 	 * <p>
 	 * For example, consider the text, "Passive: You draw an extra card at the start of every turn." A passive is
-	 * implemented as a game trigger, and typically it puts another enchantment into play. Observe that the {@link
-	 * net.demilich.metastone.game.spells.trigger.GameStartTrigger} is used to do something when the game starts, while
-	 * the actual effect is implemented by a different enchantment:
+	 * implemented as a game trigger, and typically it puts another enchantment into play. Observe that the
+	 * {@link net.demilich.metastone.game.spells.trigger.GameStartTrigger} is used to do something when the game starts,
+	 * while the actual effect is implemented by a different enchantment:
 	 * <pre>
 	 *     "gameTriggers": [{
 	 *         "eventTrigger": {
@@ -593,8 +595,8 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	 * <p>
 	 * Battlecries are always executed whenever the {@link Card} is played from the hand.
 	 * <p>
-	 * In order to be counted as a "Battlecry" minion, the card's {@link CardDesc#attributes} must contain a {@link
-	 * Attribute#BATTLECRY} key with {@code true}.
+	 * In order to be counted as a "Battlecry" minion, the card's {@link CardDesc#attributes} must contain a
+	 * {@link Attribute#BATTLECRY} key with {@code true}.
 	 *
 	 * @see OpenerDesc for more about battlecries.
 	 */
@@ -675,10 +677,10 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	 * }
 	 * </pre>
 	 * Observe that this aura, an {@link net.demilich.metastone.game.spells.aura.AttributeAura}, has a condition to
-	 * indicate when the specified attribute should or should not be present on the target ({@link
-	 * net.demilich.metastone.game.targeting.EntityReference#SELF}). Also observe that the attribute is prefixed with
-	 * {@code AURA_} indicating that, as opposed to an effect that is applied once (e.g {@link Attribute#CANNOT_ATTACK}),
-	 * it is an "aura" effect, and it won't be removed by a silence.
+	 * indicate when the specified attribute should or should not be present on the target
+	 * ({@link net.demilich.metastone.game.targeting.EntityReference#SELF}). Also observe that the attribute is prefixed
+	 * with {@code AURA_} indicating that, as opposed to an effect that is applied once (e.g
+	 * {@link Attribute#CANNOT_ATTACK}), it is an "aura" effect, and it won't be removed by a silence.
 	 *
 	 * @see net.demilich.metastone.game.spells.aura.Aura for more about auras.
 	 */
@@ -749,9 +751,9 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	 * Whenever a {@link CardType#MINION} has choose one battlecries, the player will be given an option of which
 	 * battlecry will be played for the minion.
 	 * <p>
-	 * Typically, choose one battlecries that put a "different" minion into play will be implemented using a {@link
-	 * net.demilich.metastone.game.spells.TransformMinionSpell}. In this common situation, the client will render the
-	 * choice card as the {@link SpellArg#CARD} argument of the spell, i.e., the minion the base minion will transform
+	 * Typically, choose one battlecries that put a "different" minion into play will be implemented using a
+	 * {@link net.demilich.metastone.game.spells.TransformMinionSpell}. In this common situation, the client will render
+	 * the choice card as the {@link SpellArg#CARD} argument of the spell, i.e., the minion the base minion will transform
 	 * into.
 	 * <p>
 	 * The {@link SpellArg#CARD} specified by the transform spell should not be {@link #collectible}.
@@ -792,8 +794,8 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	/**
-	 * Indicates the spell card that will be cast when Fandral Staghelm is in play, if this is a {@link
-	 * CardType#CHOOSE_ONE} card.
+	 * Indicates the spell card that will be cast when Fandral Staghelm is in play, if this is a
+	 * {@link CardType#CHOOSE_ONE} card.
 	 */
 	public String getChooseBothCardId() {
 		return chooseBothCardId;
@@ -804,8 +806,8 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	/**
-	 * Indicates the amount of damage this {@link CardType#WEAPON} will deal (add to the attack of the equipping {@link
-	 * Hero}).
+	 * Indicates the amount of damage this {@link CardType#WEAPON} will deal (add to the attack of the equipping
+	 * {@link Hero}).
 	 */
 	public int getDamage() {
 		return damage;
@@ -897,8 +899,8 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	/**
-	 * Indicates the spell that this {@link CardType#SPELL} or {@link CardType#HERO_POWER} should cast when {@link
-	 * Card#play()}.
+	 * Indicates the spell that this {@link CardType#SPELL} or {@link CardType#HERO_POWER} should cast when
+	 * {@link Card#play()}.
 	 * <p>
 	 * For {@link CardType#SPELL} that contain a {@link #secret} or {@link #quest} field set, this spell is cast when the
 	 * secret or quest is activated.
@@ -912,8 +914,8 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	}
 
 	/**
-	 * The {@link net.demilich.metastone.game.spells.desc.condition.Condition} that must be met in order for this {@link
-	 * CardType#SPELL} to be playable.
+	 * The {@link net.demilich.metastone.game.spells.desc.condition.Condition} that must be met in order for this
+	 * {@link CardType#SPELL} to be playable.
 	 */
 	public ConditionDesc getCondition() {
 		return condition;
@@ -976,8 +978,8 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	/**
 	 * Specifies tooltips for this card.
 	 * <p>
-	 * If {@link Spellsource.Tooltip#getKeywordsList()} is written on a card's tooltip, the game will make the tooltip appear wherever the
-	 * keyword appears in any card's {@link #getDescription()}.
+	 * If {@link Spellsource.Tooltip#getKeywordsList()} is written on a card's tooltip, the game will make the tooltip
+	 * appear wherever the keyword appears in any card's {@link #getDescription()}.
 	 */
 	public Spellsource.Tooltip[] getTooltips() {
 		return tooltips;
@@ -1000,44 +1002,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	 */
 	@JsonIgnore
 	public Set<Map.Entry<CardDescArg, Object>> entrySet() {
-		@SuppressWarnings("unchecked")
-		Set<Map.Entry<CardDescArg, Object>> entries = Sets.newHashSet(
-				immutableEntry(CardDescArg.ID, getId()),
-				immutableEntry(CardDescArg.NAME, getName()),
-				immutableEntry(CardDescArg.DESCRIPTION, getDescription()),
-				immutableEntry(CardDescArg.LEGACY, getLegacy()),
-				immutableEntry(CardDescArg.TYPE, getType()),
-				immutableEntry(CardDescArg.HERO_CLASS, getHeroClass()),
-				immutableEntry(CardDescArg.HERO_CLASSES, getHeroClasses()),
-				immutableEntry(CardDescArg.RARITY, getRarity()),
-				immutableEntry(CardDescArg.SETS, link(getSet(), getSets(), String.class)),
-				immutableEntry(CardDescArg.BASE_MANA_COST, getBaseManaCost()),
-				immutableEntry(CardDescArg.COLLECTIBLE, isCollectible()),
-				immutableEntry(CardDescArg.ATTRIBUTES, getAttributes()),
-				immutableEntry(CardDescArg.MANA_COST_MODIFIER, getManaCostModifier()),
-				immutableEntry(CardDescArg.PASSIVE_TRIGGERS, link(getPassiveTrigger(), getPassiveTriggers(), EnchantmentDesc.class)),
-				immutableEntry(CardDescArg.DECK_TRIGGERS, link(getDeckTrigger(), getDeckTriggers(), EnchantmentDesc.class)),
-				immutableEntry(CardDescArg.GAME_TRIGGERS, link(null, getGameTriggers(), EnchantmentDesc.class)),
-				immutableEntry(CardDescArg.BATTLECRY, getBattlecry()),
-				immutableEntry(CardDescArg.DEATHRATTLE, getDeathrattle()),
-				immutableEntry(CardDescArg.TRIGGERS, link(getTrigger(), getTriggers(), EnchantmentDesc.class)),
-				immutableEntry(CardDescArg.AURAS, getAuras()),
-				immutableEntry(CardDescArg.BASE_ATTACK, getBaseAttack()),
-				immutableEntry(CardDescArg.BASE_HP, getBaseHp()),
-				immutableEntry(CardDescArg.DAMAGE, getDamage()),
-				immutableEntry(CardDescArg.DURABILITY, getDurability()),
-				immutableEntry(CardDescArg.TARGET_SELECTION, getTargetSelection()),
-				immutableEntry(CardDescArg.GROUP, getGroup()),
-				immutableEntry(CardDescArg.SPELL, getSpell()),
-				immutableEntry(CardDescArg.CONDITION, getCondition()),
-				immutableEntry(CardDescArg.SECRET, getSecret()),
-				immutableEntry(CardDescArg.COUNT_UNTIL_CAST, getCountUntilCast()),
-				immutableEntry(CardDescArg.COUNT_BY_VALUE, isCountByValue()),
-				immutableEntry(CardDescArg.QUEST, getQuest()),
-				immutableEntry(CardDescArg.DYNAMIC_DESCRIPTION, getDynamicDescription()),
-				immutableEntry(CardDescArg.TARGET_SELECTION_OVERRIDE, getTargetSelectionOverride()),
-				immutableEntry(CardDescArg.TARGET_SELECTION_CONDITION, getTargetSelectionCondition())
-		);
+		@SuppressWarnings("unchecked") Set<Map.Entry<CardDescArg, Object>> entries = Sets.newHashSet(immutableEntry(CardDescArg.ID, getId()), immutableEntry(CardDescArg.NAME, getName()), immutableEntry(CardDescArg.DESCRIPTION, getDescription()), immutableEntry(CardDescArg.LEGACY, getLegacy()), immutableEntry(CardDescArg.TYPE, getType()), immutableEntry(CardDescArg.HERO_CLASS, getHeroClass()), immutableEntry(CardDescArg.HERO_CLASSES, getHeroClasses()), immutableEntry(CardDescArg.RARITY, getRarity()), immutableEntry(CardDescArg.SETS, link(getSet(), getSets(), String.class)), immutableEntry(CardDescArg.BASE_MANA_COST, getBaseManaCost()), immutableEntry(CardDescArg.COLLECTIBLE, isCollectible()), immutableEntry(CardDescArg.ATTRIBUTES, getAttributes()), immutableEntry(CardDescArg.MANA_COST_MODIFIER, getManaCostModifier()), immutableEntry(CardDescArg.PASSIVE_TRIGGERS, link(getPassiveTrigger(), getPassiveTriggers(), EnchantmentDesc.class)), immutableEntry(CardDescArg.DECK_TRIGGERS, link(getDeckTrigger(), getDeckTriggers(), EnchantmentDesc.class)), immutableEntry(CardDescArg.GAME_TRIGGERS, link(null, getGameTriggers(), EnchantmentDesc.class)), immutableEntry(CardDescArg.BATTLECRY, getBattlecry()), immutableEntry(CardDescArg.DEATHRATTLE, getDeathrattle()), immutableEntry(CardDescArg.TRIGGERS, link(getTrigger(), getTriggers(), EnchantmentDesc.class)), immutableEntry(CardDescArg.AURAS, getAuras()), immutableEntry(CardDescArg.BASE_ATTACK, getBaseAttack()), immutableEntry(CardDescArg.BASE_HP, getBaseHp()), immutableEntry(CardDescArg.DAMAGE, getDamage()), immutableEntry(CardDescArg.DURABILITY, getDurability()), immutableEntry(CardDescArg.TARGET_SELECTION, getTargetSelection()), immutableEntry(CardDescArg.GROUP, getGroup()), immutableEntry(CardDescArg.SPELL, getSpell()), immutableEntry(CardDescArg.CONDITION, getCondition()), immutableEntry(CardDescArg.SECRET, getSecret()), immutableEntry(CardDescArg.COUNT_UNTIL_CAST, getCountUntilCast()), immutableEntry(CardDescArg.COUNT_BY_VALUE, isCountByValue()), immutableEntry(CardDescArg.QUEST, getQuest()), immutableEntry(CardDescArg.DYNAMIC_DESCRIPTION, getDynamicDescription()), immutableEntry(CardDescArg.TARGET_SELECTION_OVERRIDE, getTargetSelectionOverride()), immutableEntry(CardDescArg.TARGET_SELECTION_CONDITION, getTargetSelectionCondition()));
 		return entries;
 	}
 
@@ -1056,33 +1021,28 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	@JsonIgnore
 	public Stream<Condition> getGlowConditions() {
 		if (glowConditions == null) {
-			glowConditions = bfs()
-					.build()
-					.filter(node -> {
-						if (node.getDepth() >= 3) {
-							return false;
-						}
+			glowConditions = bfs().build().filter(node -> {
+				if (node.getDepth() >= 3) {
+					return false;
+				}
 
-						if (node.getParent() == null || (!(node.getParent().getValue() instanceof OpenerDesc)
-								&& !(node.getParent().getValue() instanceof CardDesc))) {
-							return false;
-						}
+				if (node.getParent() == null || (!(node.getParent().getValue() instanceof OpenerDesc) && !(node.getParent().getValue() instanceof CardDesc))) {
+					return false;
+				}
 
-						if (node.getValue() instanceof Condition || node.getValue() instanceof ConditionDesc) {
-							return true;
-						}
-						return false;
-					})
-					.map(node -> {
-						var conditionObj = node.getValue();
-						if (conditionObj instanceof ConditionDesc) {
-							return ((ConditionDesc) conditionObj).create();
-						} else if (conditionObj instanceof Condition) {
-							return (Condition) conditionObj;
-						}
-						return null;
-					}).filter(Objects::nonNull)
-					.collect(toList());
+				if (node.getValue() instanceof Condition || node.getValue() instanceof ConditionDesc) {
+					return true;
+				}
+				return false;
+			}).map(node -> {
+				var conditionObj = node.getValue();
+				if (conditionObj instanceof ConditionDesc) {
+					return ((ConditionDesc) conditionObj).create();
+				} else if (conditionObj instanceof Condition) {
+					return (Condition) conditionObj;
+				}
+				return null;
+			}).filter(Objects::nonNull).collect(toList());
 		}
 		return glowConditions.stream();
 	}
@@ -1090,17 +1050,16 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	/**
 	 * Indicates whether, based on the code written on this card, this card ever reveals itself.
 	 *
-	 * @return {@code true} if any spell written on the card is a {@link net.demilich.metastone.game.spells.RevealCardSpell}
-	 * with target {@link net.demilich.metastone.game.targeting.EntityReference#SELF}
+	 * @return {@code true} if any spell written on the card is a
+	 * {@link net.demilich.metastone.game.spells.RevealCardSpell} with target
+	 * {@link net.demilich.metastone.game.targeting.EntityReference#SELF}
 	 */
 	public boolean revealsSelf() {
 		return bfs().build().anyMatch(node -> {
 			Object val = node.getValue();
 			if (val instanceof SpellDesc) {
 				SpellDesc spell = (SpellDesc) val;
-				return RevealCardSpell.class.isAssignableFrom(spell.getDescClass())
-						&& spell.getTarget() != null
-						&& spell.getTarget().equals(EntityReference.SELF);
+				return RevealCardSpell.class.isAssignableFrom(spell.getDescClass()) && spell.getTarget() != null && spell.getTarget().equals(EntityReference.SELF);
 			}
 			return false;
 		});
@@ -1157,19 +1116,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 
 	@JsonIgnore
 	public Stream<AbstractEnchantmentDesc<?>> getEnchantmentDescs() {
-		Stream<AbstractEnchantmentDesc<?>> concat = Streams.concat(
-				Stream.ofNullable(this.getDeathrattle()),
-				Stream.ofNullable(this.getBattlecry()),
-				Stream.ofNullable(this.getTrigger()),
-				Stream.ofNullable(this.getDeckTrigger()),
-				Stream.ofNullable(this.getPassiveTrigger()),
-				Stream.ofNullable(this.getAura()),
-				Stream.ofNullable(this.getCardCostModifier()),
-				Stream.of(this.getTriggers()),
-				Stream.of(this.getAuras()),
-				Stream.of(this.getPassiveTriggers()),
-				Stream.of(this.getDeckTriggers()),
-				Stream.of(this.getGameTriggers()));
+		Stream<AbstractEnchantmentDesc<?>> concat = Streams.concat(Stream.ofNullable(this.getDeathrattle()), Stream.ofNullable(this.getBattlecry()), Stream.ofNullable(this.getTrigger()), Stream.ofNullable(this.getDeckTrigger()), Stream.ofNullable(this.getPassiveTrigger()), Stream.ofNullable(this.getAura()), Stream.ofNullable(this.getCardCostModifier()), Stream.of(this.getTriggers()), Stream.of(this.getAuras()), Stream.of(this.getPassiveTriggers()), Stream.of(this.getDeckTriggers()), Stream.of(this.getGameTriggers()));
 		if (getType() == CardType.ENCHANTMENT) {
 			concat = Streams.concat(Stream.ofNullable(this), concat);
 		}
@@ -1207,5 +1154,32 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	public CardDesc setArtificialIntelligence(Spellsource.ArtificialIntelligence artificialIntelligence) {
 		this.artificialIntelligence = artificialIntelligence;
 		return this;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		CardDesc cardDesc = (CardDesc) o;
+		return baseManaCost == cardDesc.baseManaCost && baseAttack == cardDesc.baseAttack && baseHp == cardDesc.baseHp && damage == cardDesc.damage && durability == cardDesc.durability && countUntilCast == cardDesc.countUntilCast && countByValue == cardDesc.countByValue && collectible == cardDesc.collectible && fileFormatVersion == cardDesc.fileFormatVersion && Objects.equals(id, cardDesc.id) && Objects.equals(name, cardDesc.name) && Objects.equals(heroPower, cardDesc.heroPower) && type == cardDesc.type && Objects.equals(heroClass, cardDesc.heroClass) && Arrays.equals(heroClasses, cardDesc.heroClasses) && rarity == cardDesc.rarity && Objects.equals(race, cardDesc.race) && Objects.equals(description, cardDesc.description) && targetSelection == cardDesc.targetSelection && Objects.equals(secret, cardDesc.secret) && Objects.equals(quest, cardDesc.quest) && Objects.equals(battlecry, cardDesc.battlecry) && Objects.equals(deathrattle, cardDesc.deathrattle) && Objects.equals(trigger, cardDesc.trigger) && Arrays.equals(triggers, cardDesc.triggers) && Objects.equals(aura, cardDesc.aura) && Arrays.equals(auras, cardDesc.auras) && Objects.equals(cardCostModifier, cardDesc.cardCostModifier) && Arrays.equals(chooseOneBattlecries, cardDesc.chooseOneBattlecries) && Objects.equals(chooseBothBattlecry, cardDesc.chooseBothBattlecry) && Arrays.equals(chooseOneCardIds, cardDesc.chooseOneCardIds) && Objects.equals(chooseBothCardId, cardDesc.chooseBothCardId) && Objects.equals(onEquip, cardDesc.onEquip) && Objects.equals(onUnequip, cardDesc.onUnequip) && Objects.equals(spell, cardDesc.spell) && Objects.equals(condition, cardDesc.condition) && Arrays.equals(group, cardDesc.group) && Objects.equals(passiveTrigger, cardDesc.passiveTrigger) && Arrays.equals(passiveTriggers, cardDesc.passiveTriggers) && Objects.equals(deckTrigger, cardDesc.deckTrigger) && Arrays.equals(deckTriggers, cardDesc.deckTriggers) && Arrays.equals(gameTriggers, cardDesc.gameTriggers) && Objects.equals(manaCostModifier, cardDesc.manaCostModifier) && Objects.equals(attributes, cardDesc.attributes) && Objects.equals(author, cardDesc.author) && Objects.equals(flavor, cardDesc.flavor) && Objects.equals(wiki, cardDesc.wiki) && Objects.equals(set, cardDesc.set) && Arrays.equals(sets, cardDesc.sets) && Arrays.equals(dynamicDescription, cardDesc.dynamicDescription) && Objects.equals(legacy, cardDesc.legacy) && Objects.equals(hero, cardDesc.hero) && Arrays.equals(secondPlayerBonusCards, cardDesc.secondPlayerBonusCards) && targetSelectionOverride == cardDesc.targetSelectionOverride && Objects.equals(targetSelectionCondition, cardDesc.targetSelectionCondition) && Objects.equals(art, cardDesc.art) && Arrays.equals(tooltips, cardDesc.tooltips) && Objects.equals(draft, cardDesc.draft) && Objects.equals(artificialIntelligence, cardDesc.artificialIntelligence) && Objects.equals(glowConditions, cardDesc.glowConditions);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = Objects.hash(id, name, heroPower, baseManaCost, type, heroClass, baseAttack, baseHp, damage, durability, rarity, race, description, targetSelection, secret, quest, countUntilCast, countByValue, battlecry, deathrattle, trigger, aura, cardCostModifier, chooseBothBattlecry, chooseBothCardId, onEquip, onUnequip, spell, condition, passiveTrigger, deckTrigger, manaCostModifier, attributes, author, flavor, wiki, collectible, set, fileFormatVersion, legacy, hero, targetSelectionOverride, targetSelectionCondition, art, draft, artificialIntelligence, glowConditions);
+		result = 31 * result + Arrays.hashCode(heroClasses);
+		result = 31 * result + Arrays.hashCode(triggers);
+		result = 31 * result + Arrays.hashCode(auras);
+		result = 31 * result + Arrays.hashCode(chooseOneBattlecries);
+		result = 31 * result + Arrays.hashCode(chooseOneCardIds);
+		result = 31 * result + Arrays.hashCode(group);
+		result = 31 * result + Arrays.hashCode(passiveTriggers);
+		result = 31 * result + Arrays.hashCode(deckTriggers);
+		result = 31 * result + Arrays.hashCode(gameTriggers);
+		result = 31 * result + Arrays.hashCode(sets);
+		result = 31 * result + Arrays.hashCode(dynamicDescription);
+		result = 31 * result + Arrays.hashCode(secondPlayerBonusCards);
+		result = 31 * result + Arrays.hashCode(tooltips);
+		return result;
 	}
 }
