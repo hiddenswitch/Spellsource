@@ -5,10 +5,10 @@ layout: wiki
 ---
 
   
-![Vohlok](Dragovian_Volhok_Concept_Art.jpg "fig:Vohlok")
-![Fassnu](Fassnu_Warrior.jpg "fig:Fassnu")
-![Jerbrod](Jerbrod_Martial_Warrior.png "fig:Jerbrod")
-![Bogovey](Bogovey.jpg "fig:Bogovey") Dragovians are the dominant race
+![Vohlok](/static/wiki/Dragovian_Volhok_Concept_Art.jpg "fig:Vohlok")
+![Fassnu](/static/wiki/Fassnu_Warrior.jpg "fig:Fassnu")
+![Jerbrod](/static/wiki/Jerbrod_Martial_Warrior.png "fig:Jerbrod")
+![Bogovey](/static/wiki/Bogovey.jpg "fig:Bogovey") Dragovians are the dominant race
 of the [Lung Islands](/wiki/Moromah_Island "wikilink"). Appearing more
 humanoid than traditional dragons, they are superior spell-casters and
 have a strong warrior culture that is nonetheless disappearing. Think of

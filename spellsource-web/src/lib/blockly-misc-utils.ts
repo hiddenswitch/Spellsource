@@ -10,9 +10,9 @@ import { BlockDef } from "../__generated__/blocks"
 import { InitBlockOptions } from "../components/card-editor-workspace"
 import { Flyout } from "flyout_base"
 
-export const formatCurated = (string: string) =>
+export const toTitleCaseCorrected = (string: string) =>
   string
-    .split("_")
+    .split(/[_ ]/)
     .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())
     .join(" ")
     .replace("Hero Power", "Skill")
@@ -21,7 +21,8 @@ export const formatCurated = (string: string) =>
     .replace("Hero", "Champion")
 
 export function addBlock(block: BlockDef) {
-  Blockly.Blocks[block.type!] = {
+  JsonConversionUtils.addBlockToMap(block)
+  return (Blockly.Blocks[block.type!] = {
     init: function () {
       this.jsonInit(block)
       if (!!block.data) {
@@ -38,8 +39,7 @@ export function addBlock(block: BlockDef) {
       }
     },
     json: block,
-  }
-  JsonConversionUtils.addBlockToMap(block)
+  })
 }
 
 //initializes the json specified shadow blocks of a block on the workspace
@@ -207,7 +207,7 @@ export function cardMessage(card: CardDef) {
   } else if (card.type === "CLASS") {
     return card.name
   } else {
-    ret += formatCurated(card.type)
+    ret += toTitleCaseCorrected(card.type)
   }
   ret += ' "' + card.name + '"'
   return ret
@@ -374,7 +374,7 @@ export function cardDescription(card: CardDef) {
   }
   let desc = '"' + words[0]
   if (!!card.race) {
-    desc = formatCurated(card.race) + " " + desc
+    desc = toTitleCaseCorrected(card.race) + " " + desc
   }
   let counter = desc.length
   for (let word of words.slice(1)) {
@@ -583,7 +583,7 @@ export function initArtBlcks(data: ContextType<typeof BlocklyDataContext>) {
     if (type in Blockly.Blocks) {
       return
     }
-    let block = {
+    const block = addBlock({
       type: type,
       message0: "%1",
       args0: [
@@ -598,8 +598,9 @@ export function initArtBlcks(data: ContextType<typeof BlocklyDataContext>) {
       colour: "#A6A6A6",
       data: art.name,
       comment: art.name,
-    }
-    addBlock(block)
+    } as BlockDef)
+
+    block["art"] = art
   }
 }
 

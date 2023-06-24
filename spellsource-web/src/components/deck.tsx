@@ -86,10 +86,13 @@ export const Deck: FunctionComponent<DeckProps> = ({
     .map((value) => cache[value])
     .filter((value) => !!value)
     .groupBy((card) => card.id)
-    .sortBy(([card]) => [card.baseManaCost ?? 0, card.name])
+    .sortBy(
+      ([card]) => card.baseManaCost ?? 0,
+      ([card]) => card.name
+    )
     .value()
 
-  const { set: setCards, clear: clearCards, removeAt: removeCard, push: addCardToDeck } = cardActions
+  const { set: setCards, removeAt: removeCard, push: addCardToDeck } = cardActions
 
   const [setCardsInDeck] = useSetCardsInDeckMutation()
   const [deleteDeck] = useDeleteDeckMutation()

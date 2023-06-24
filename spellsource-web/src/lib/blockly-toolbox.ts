@@ -1,13 +1,14 @@
 import Blockly from "blockly"
 import * as BlocklyMiscUtils from "./blockly-misc-utils"
-import { isArray } from "lodash"
 import { ContextType } from "react"
 import { BlocklyDataContext } from "../pages/card-editor"
 import { CardDef } from "../components/card-display"
+import { ImageDef } from "../__generated__/client"
 import StaticCategoryInfo = Blockly.utils.toolbox.StaticCategoryInfo
 import ToolboxInfo = Blockly.utils.toolbox.ToolboxInfo
 import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo
 import BlockInfo = Blockly.utils.toolbox.BlockInfo
+import { toTitleCaseCorrected } from "./blockly-misc-utils"
 
 /**
  * Initializes the necessary callbacks for the Variables tab's CUSTOM dynamic-ness
@@ -82,9 +83,10 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
       ),
 
       category("Card Art", "#888888", "Blocks representing the art that your card can have", [
-        category("Unused", "#888888", "Art that hasn't yet been used by a card", artContents(false)),
+        /*category("Unused", "#888888", "Art that hasn't yet been used by a card", artContents(false)),
         category("Used", "#888888", "Art that's been used by cards already", artContents(true)),
-        category("All", "#888888", "All available art", artContents(null)),
+        category("All", "#888888", "All available art", artContents(null)),*/
+        ...artCategories(),
       ]),
 
       {
@@ -458,7 +460,7 @@ export function classesCategory(data: ContextType<typeof BlocklyDataContext>) {
   const myCards =
     data.myCards.map((value) => value.cardScript as CardDef).filter((card) => card && card.type === "CLASS") ?? []
 
-  const classCards = Object.values(data.classes).filter(card => card.collectible !== false)
+  const classCards = Object.values(data.classes).filter((card) => card.collectible !== false)
 
   return category(
     "Classes",
@@ -637,6 +639,26 @@ function artContents(used) {
   return contents
 }
 
+function artCategories() {
+  const categoryContents: Record<string, Partial<ToolboxItemInfo>[]> = {}
+
+  for (let block in Blockly.Blocks) {
+    if (defaultTest(block) && block.startsWith("Art_") && Blockly.Blocks[block]["art"]) {
+      const art = Blockly.Blocks[block]["art"] as ImageDef
+
+      const folder = art.src.split("/").at(-2)
+
+      const name = toTitleCaseCorrected(folder)
+
+      categoryContents[name] ??= []
+
+      categoryContents[name].push(getBlock(block))
+    }
+  }
+
+  return Object.entries(categoryContents).map(([name, contents]) => category(name, "#888888", name + " Art", contents))
+}
+
 /**
  * All blocks that appear in the toolbox should pass this, which means:
  *  - Their type doesn't end in shadow
@@ -685,7 +707,7 @@ function blockInputs(type: string) {
 
       if (arg.block) {
         const input = (inputs[name] ??= {} as any)
-        input.block = {...arg.block}
+        input.block = { ...arg.block }
         input.block.inputs = blockInputs(input.block.type)
       }
     }

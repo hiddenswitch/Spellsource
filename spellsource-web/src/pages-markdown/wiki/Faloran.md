@@ -5,7 +5,7 @@ layout: wiki
 ---
 
 ![Faloran](Faloran Humanoid.png "fig:Faloran Humanoid")
-![Faloran](Faloran Fox.png "fig:Faloran Fox") 
+![Faloran](/static/wiki/Faloran%20Fox.png "fig:Faloran Fox") 
 
 
 Faloran is a

@@ -4,7 +4,7 @@ path: /wiki/Bogovey
 layout: wiki
 ---
 
-![Bogovey](Bogovey.jpg "fig:Bogovey")
+![Bogovey](/static/wiki/Bogovey.jpg "fig:Bogovey")
 
 The Bogovey are a clan of [Dragonvians](/wiki/Dragovians "wikilink"), the dominant dragon-race of the Lun Islands. Dragovians are like Elves in traditional fantasy -- they are brilliant architects and fighters, but also arrogant and conservative. Bogovey are the outcasts of Dragovian society. They are rebellious, independent, and ruthless. And because of a crime committed far in the past, they cannot fly and are cursed to live underground. Think of them as Dark Elves.
 

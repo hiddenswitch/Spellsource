@@ -4,9 +4,9 @@ path: /wiki/Hengeyokai
 layout: wiki
 ---
 
-![Tanuki Hengeyokai](Tanuki_Hengeyokai.png "fig:Tanuki Hengeyokai")
-![Kitsune Hengeyokai](Kitsune_Hengeyokai.jpg "fig:Kitsune Hengeyokai")
-![Sanu Hengeyokai](Sanu_Hengeyokai.jpg "fig:Sanu Hengeyokai") 
+![Tanuki Hengeyokai](/static/wiki/Tanuki_Hengeyokai.png "fig:Tanuki Hengeyokai")
+![Kitsune Hengeyokai](/static/wiki/Kitsune_Hengeyokai.jpg "fig:Kitsune Hengeyokai")
+![Sanu Hengeyokai](/static/wiki/Sanu_Hengeyokai.jpg "fig:Sanu Hengeyokai") 
 
 The Hengeyokai are shape-shifting animals who can take either an animal or
 hybrid form. In their animal form, they are indistinguishable from
@@ -25,7 +25,7 @@ language. They can also converse with Humans and Dragovians, as they
 adapt quickly to their surroundings and are semi-magical beings. They
 are usually named after their physical appearance or character traits.
 
-![Hengeyokai Guard](Hengeyokai Guard.png "fig:Hengeyokai Guard") 
+![Hengeyokai Guard](/static/wiki/Hengeyokai%20Guard.png "fig:Hengeyokai Guard") 
 
 ### Society and Customs
 
@@ -42,7 +42,7 @@ instance, a cat hengeyokai will be a strict carnivore, while a sparrow
 hengeyokai will only eat seeds and grain.
 
 
-![Hengeyokai Hunter](Hengeyokai Hunter.png "fig:Hengeyokai Hunter") 
+![Hengeyokai Hunter](/static/wiki/Hengeyokai%20Hunter.png "fig:Hengeyokai Hunter") 
 
 ### Sub-Races and Personality
 

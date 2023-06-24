@@ -31,15 +31,18 @@ export default forwardRef<SimpleReactBlocklyRef, SimpleReactBlocklyProps>((props
     }
   }, [])
 
+  // Handle layout changes
   useEffect(() => {
     if (ref && typeof ref !== "function") {
       const workspace = ref.current.workspace
       const xml = Blockly.Xml.workspaceToDom(workspace, false)
+      const scale = workspace.getScale()
       workspace.dispose()
 
       const newWorkspace = Blockly.inject(innerBlocklyDiv.current, props.workspaceConfiguration)
       newWorkspace.addChangeListener(props.workspaceDidChange)
       Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, newWorkspace)
+      newWorkspace.setScale(scale)
 
       ref.current = { workspace: newWorkspace, innerBlocklyDiv: innerBlocklyDiv.current }
     }

@@ -4,7 +4,7 @@ import { CardType } from "../__generated__/spellsource-game"
 import { CollectionCardFragment, CollectionCardsOrderBy, useGetCardsQuery } from "../__generated__/client"
 import { CardDef } from "./card-display"
 import { Button, Dropdown, Form, Table } from "react-bootstrap"
-import { formatCurated } from "../lib/blockly-misc-utils"
+import { toTitleCaseCorrected } from "../lib/blockly-misc-utils"
 import { clamp } from "lodash"
 import DropdownToggle from "react-bootstrap/DropdownToggle"
 import DropdownItem from "react-bootstrap/DropdownItem"
@@ -62,7 +62,7 @@ const CardRow: FunctionComponent<{
       >
         {classes[cardScript.heroClass] ?? "Any"}
       </td>
-      <td>{formatCurated(cardScript.type)}</td>
+      <td>{toTitleCaseCorrected(cardScript.type)}</td>
       <td>
         {!cardScript.baseAttack && !cardScript.baseHp
           ? "n/a"
@@ -199,7 +199,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
         <div className={"w-100 d-none d-lg-block"} />
         <Dropdown>
           <DropdownToggle style={{ minWidth: 100 }} disabled={!getCards.data}>
-            {heroClass ? classes[heroClass] || formatCurated(heroClass) : "Hero Class"}
+            {heroClass ? classes[heroClass] || toTitleCaseCorrected(heroClass) : "Hero Class"}
           </DropdownToggle>
           <DropdownMenu>
             <div className={"overflow-scroll d-flex flex-column gap-1"} style={{ maxHeight: "25rem" }}>
@@ -266,7 +266,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
                     )
                   }
                 >
-                  {formatCurated(cardType)}
+                  {toTitleCaseCorrected(cardType)}
                 </DropdownItem>
               ))}
             </div>

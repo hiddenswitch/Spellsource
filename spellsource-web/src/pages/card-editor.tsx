@@ -23,6 +23,7 @@ import { useSession } from "next-auth/react"
 import { ApolloQueryResult } from "@apollo/client"
 import Head from "next/head"
 import CardEditorView from "../components/card-editor-view"
+import { Spinner } from "react-bootstrap"
 
 const getAllBlockJson = async () =>
   (await readAllJson<BlockDef[]>(path.join("src", "blocks", "*.json"))).flat(1).map(transformBlock)
@@ -54,27 +55,6 @@ export const BlocklyDataContext = createContext({ ready: false } as InferGetStat
   myCards: Partial<CollectionCard>[]
   refreshMyCards: () => Promise<ApolloQueryResult<GetCardsQuery>>
   userId: string | null | undefined
-})
-
-const LoadableComponent = Loadable.Map({
-  loader: {
-    Blockly: () => import("blockly"),
-    CardEditorView: () => import("../components/card-editor-view"),
-  },
-  delay: 300,
-  loading() {
-    return <span>Loading</span>
-  },
-  render(loaded, props: { dataReady: boolean }) {
-    if (!props.dataReady) return <span>Loading</span>
-
-    const Blockly = loaded.Blockly
-    const CardEditorView = loaded.CardEditorView.default
-
-    BlocklyMiscUtils.loadableInit(Blockly)
-
-    return <CardEditorView defaultCard={false} />
-  },
 })
 
 const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -127,8 +107,13 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
       </Head>
       <BlocklyDataContext.Provider value={{ ...props, classes, allArt, ready, myCards, refreshMyCards, userId }}>
         <div className={styles.cardEditorContainer}>
-          <LoadableComponent dataReady={ready} />
-          {/*{ready ? <CardEditorView defaultCard={false} /> : <span>Loading</span>}*/}
+          {ready ? (
+            <CardEditorView defaultCard={false} />
+          ) : (
+            <div className={"h-100 w-100 d-flex"}>
+              <Spinner variant={"placeholder"} className={"m-auto"} />
+            </div>
+          )}
         </div>
       </BlocklyDataContext.Provider>
     </Layout>

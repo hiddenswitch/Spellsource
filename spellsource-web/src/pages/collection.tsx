@@ -151,7 +151,7 @@ export default () => {
       </Head>
       <DndProvider backend={HTML5Backend}>
         <CardCache.Provider value={cache}>
-          <Row id={"Collection"} className={"pe-lg-2"}>
+          <Row id={"Collection"} className={"pe-lg-2 mt-2"}>
             <Col id={"CardsList"} xs={12} lg={9}>
               <Collection
                 classes={classes}

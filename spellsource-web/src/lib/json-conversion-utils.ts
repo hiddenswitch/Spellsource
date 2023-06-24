@@ -1,9 +1,9 @@
-import Blockly, {Block, BlockSvg, Connection, Workspace, WorkspaceSvg} from 'blockly'
-import * as BlocklyMiscUtils from './blockly-misc-utils'
-import {isArray} from 'lodash'
-import {BlockArgDef, BlockDef} from "../__generated__/blocks";
-import {CardDef} from '../components/card-display';
-import {isNumeric} from "./workspace-utils";
+import Blockly, { Block, BlockSvg, Connection, Workspace, WorkspaceSvg } from "blockly"
+import * as BlocklyMiscUtils from "./blockly-misc-utils"
+import { isArray } from "lodash"
+import { BlockArgDef, BlockDef } from "../__generated__/blocks"
+import { CardDef } from "../components/card-display"
+import { isNumeric } from "./workspace-utils"
 
 const classBlocksDictionary = {} //A dictionary mapping the 'class' argument a block uses to the block itself
 const enumBlocksDictionary = {} //A dictionary mapping the enum value of the block to the block itself
@@ -21,10 +21,10 @@ const customBlocks = {}
  * @param block The block to add
  */
 export function addBlockToMap(block: BlockDef) {
-  if (block.type.endsWith('SHADOW')) {
+  if (block.type.endsWith("SHADOW")) {
     return
   }
-  let list = argsList(block).filter(arg => arg.type !== 'field_image')
+  let list = argsList(block).filter((arg) => arg.type !== "field_image")
   if (list.length > 0) {
     let className = null
 
@@ -33,7 +33,7 @@ export function addBlockToMap(block: BlockDef) {
         continue
       }
       allArgNames.add(arg.name)
-      if (arg.name.endsWith('class')) {
+      if (arg.name.endsWith("class")) {
         className = arg.value
         break
       }
@@ -50,7 +50,6 @@ export function addBlockToMap(block: BlockDef) {
     }
     enumBlocksDictionary[block.data].push(block)
   }
-
 }
 
 /**
@@ -62,16 +61,15 @@ export function addBlockToMap(block: BlockDef) {
 export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef) {
   let type = card.type as string
   if (!!card.quest) {
-    type = 'QUEST'
+    type = "QUEST"
   } else if (!!card.secret) {
-    type = 'SECRET'
-  } else if (type === 'HERO' && !card.attributes.hasOwnProperty('HP')) {
-    type = 'HERO2'
+    type = "SECRET"
+  } else if (type === "HERO" && !card.attributes.hasOwnProperty("HP")) {
+    type = "HERO2"
   }
-  let block = BlocklyMiscUtils.newBlock(workspace, 'Starter_' + type)
-  let args = ['baseManaCost', 'name', 'baseAttack', 'baseHp', 'description', 'countUntilCast',
-    'damage', 'durability']
-  args.forEach(arg => {
+  let block = BlocklyMiscUtils.newBlock(workspace, "Starter_" + type)
+  let args = ["baseManaCost", "name", "baseAttack", "baseHp", "description", "countUntilCast", "damage", "durability"]
+  args.forEach((arg) => {
     if (!!card[arg] && !!block.getField(arg)) {
       block.setFieldValue(card[arg], arg)
     }
@@ -81,73 +79,91 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     block.initSvg()
   }
   if (!!card.attributes && !!card.attributes.HP) {
-    block.setFieldValue(card.attributes.HP, 'attributes.HP,attributes.MAX_HP')
+    block.setFieldValue(card.attributes.HP, "attributes.HP,attributes.MAX_HP")
   }
 
-  if (!!block.getInput('name')) {
-    block.getInput('name').connection.targetBlock().setFieldValue(card.name, 'text')
+  if (!!block.getInput("name")) {
+    block.getInput("name").connection.targetBlock().setFieldValue(card.name, "text")
   }
-  if (!!block.getInput('description')) {
-    block.getInput('description').connection.targetBlock().setFieldValue(card.description, 'text')
+  if (!!block.getInput("description")) {
+    block.getInput("description").connection.targetBlock().setFieldValue(card.description, "text")
   }
 
   let lowestBlock = block
 
-  for (let arg of ['heroClass', 'rarity', 'spell', 'targetSelection', 'secret', 'quest', 'heroPower', 'hero']) {
-    if (card.type === 'CLASS' && arg === 'heroClass') {
-      block.getInput('heroClass').connection.targetBlock().setFieldValue(card.heroClass, 'text')
-    } else if (card.type === 'HERO_POWER' && arg === 'spell') {
-      if (card.spell["class"] == 'HeroPowerSpell') {
-        handleArg(block.getInput('spell.spell').connection, card.spell["spell"], 'spell.spell', workspace, card.spell)
+  for (let arg of ["heroClass", "rarity", "spell", "targetSelection", "secret", "quest", "heroPower", "hero"]) {
+    if (card.type === "CLASS" && arg === "heroClass") {
+      block.getInput("heroClass").connection.targetBlock().setFieldValue(card.heroClass, "text")
+    } else if (card.type === "HERO_POWER" && arg === "spell") {
+      if (card.spell["class"] == "HeroPowerSpell") {
+        handleArg(block.getInput("spell.spell").connection, card.spell["spell"], "spell.spell", workspace, card.spell)
       } else {
-        handleArg(block.getInput('spell.spell').connection, card.spell, 'spell.spell', workspace, card.spell)
+        handleArg(block.getInput("spell.spell").connection, card.spell, "spell.spell", workspace, card.spell)
       }
     } else if (card.hasOwnProperty(arg) && !!block.getInput(arg)) {
       simpleHandleArg(block, arg, card, workspace)
     }
   }
 
-  if (!!card.race && card.type === 'MINION') {
-    simpleHandleArg(block, 'race', card, workspace)
+  if (!!card.race && card.type === "MINION") {
+    simpleHandleArg(block, "race", card, workspace)
   }
 
-  if (!!card.countByValue && (String(card.countByValue) === 'TRUE' || card.countByValue === true)) {
-    block.setFieldValue('TRUE', 'countByValue')
+  if (!!card.countByValue && (String(card.countByValue) === "TRUE" || card.countByValue === true)) {
+    block.setFieldValue("TRUE", "countByValue")
   }
 
   if (!!card.battlecry) {
     let openerBlock
     if (!!card.battlecry.condition) {
-      openerBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_opener2')
+      openerBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener2")
     } else {
-      openerBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_opener1')
+      openerBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener1")
     }
     lowestBlock.nextConnection.connect(openerBlock.previousConnection)
     if ("initSvg" in openerBlock) {
       openerBlock.initSvg()
     }
 
-    handleArg(openerBlock.getInput('battlecry.targetSelection').connection, card.battlecry.targetSelection, 'battlecry.targetSelection', workspace, card.battlecry)
-    handleArg(openerBlock.getInput('battlecry.spell').connection, card.battlecry.spell, 'battlecry.spell', workspace, card.battlecry)
+    handleArg(
+      openerBlock.getInput("battlecry.targetSelection").connection,
+      card.battlecry.targetSelection,
+      "battlecry.targetSelection",
+      workspace,
+      card.battlecry
+    )
+    handleArg(
+      openerBlock.getInput("battlecry.spell").connection,
+      card.battlecry.spell,
+      "battlecry.spell",
+      workspace,
+      card.battlecry
+    )
 
     if (!!card.battlecry.condition) {
-      handleArg(openerBlock.getInput('battlecry.condition').connection, card.battlecry.condition, 'battlecry.condition', workspace, card.battlecry)
+      handleArg(
+        openerBlock.getInput("battlecry.condition").connection,
+        card.battlecry.condition,
+        "battlecry.condition",
+        workspace,
+        card.battlecry
+      )
     }
     lowestBlock = openerBlock
   }
 
   if (!!card.deathrattle) {
-    let aftermathBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_aftermath')
+    let aftermathBlock = BlocklyMiscUtils.newBlock(workspace, "Property_aftermath")
     lowestBlock.nextConnection.connect(aftermathBlock.previousConnection)
     if ("initSvg" in aftermathBlock) {
       aftermathBlock.initSvg()
     }
-    simpleHandleArg(aftermathBlock, 'deathrattle', card, workspace)
+    simpleHandleArg(aftermathBlock, "deathrattle", card, workspace)
     lowestBlock = aftermathBlock
   }
 
   const triggers = (trigger, property) => {
-    if (!!card[trigger + 's'] || !!card[trigger]) {
+    if (!!card[trigger + "s"] || !!card[trigger]) {
       let triggersBlock = BlocklyMiscUtils.newBlock(workspace, property)
       lowestBlock.nextConnection.connect(triggersBlock.previousConnection)
       if ("initSvg" in triggersBlock) {
@@ -157,7 +173,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
       if (!!card[trigger]) {
         triggers = [card[trigger]]
       } else {
-        triggers = card[trigger + 's']
+        triggers = card[trigger + "s"]
       }
       let lowestConnection = triggersBlock.getFirstStatementConnection()
       for (let trigger of triggers) {
@@ -171,13 +187,13 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
       lowestBlock = triggersBlock
     }
   }
-  triggers('trigger', 'Property_triggers')
-  triggers('passiveTrigger', 'Property_triggers2')
-  triggers('deckTrigger', 'Property_triggers3')
-  triggers('gameTrigger', 'Property_triggers4')
+  triggers("trigger", "Property_triggers")
+  triggers("passiveTrigger", "Property_triggers2")
+  triggers("deckTrigger", "Property_triggers3")
+  triggers("gameTrigger", "Property_triggers4")
 
   if (!!card.auras || !!card.aura) {
-    let aurasBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_auras')
+    let aurasBlock = BlocklyMiscUtils.newBlock(workspace, "Property_auras")
     lowestBlock.nextConnection.connect(aurasBlock.previousConnection)
     if ("initSvg" in aurasBlock) {
       aurasBlock.initSvg()
@@ -191,12 +207,12 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     delete card.attributes.BATTLECRY
     delete card.attributes.DEATHRATTLES
     delete card.attributes.DISCOVER
-    if (card.type === 'HERO') {
+    if (card.type === "HERO") {
       delete card.attributes.HP
       delete card.attributes.MAX_HP
     }
     if (Object.values(card.attributes).length > 0) {
-      let attributesBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes')
+      let attributesBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes")
       lowestBlock.nextConnection.connect(attributesBlock.previousConnection)
       if ("initSvg" in attributesBlock) {
         attributesBlock.initSvg()
@@ -205,12 +221,12 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
       for (let atr in card.attributes) {
         let attributeBlock
         if (isNumeric(card.attributes[atr])) {
-          attributeBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes_int')
-          attributeBlock.getField('value').setValue(card.attributes[atr])
+          attributeBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_int")
+          attributeBlock.getField("value").setValue(card.attributes[atr])
         } else {
-          attributeBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_attributes_boolean')
+          attributeBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_boolean")
         }
-        handleArg(attributeBlock.getInput('attribute').connection, atr, 'attribute', workspace, card.attributes)
+        handleArg(attributeBlock.getInput("attribute").connection, atr, "attribute", workspace, card.attributes)
         if ("initSvg" in attributeBlock) {
           attributeBlock.initSvg()
         }
@@ -224,21 +240,35 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
 
   if (!!card.manaCostModifier) {
     let costyBlock = null
-    if (card.manaCostModifier["class"] === 'ConditionalValueProvider' && card.manaCostModifier["ifFalse"] === 0) {
-      costyBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_manaCostModifierConditional')
-      handleArg(costyBlock.getInput('manaCostModifier.condition').connection, card.manaCostModifier["condition"],
-        'condition', workspace, card)
-      if (typeof card.manaCostModifier["ifTrue"] === 'object') {
-        handleArg(costyBlock.getInput('manaCostModifier.ifTrue').connection, card.manaCostModifier["ifTrue"],
-          'ifTrue', workspace, card)
+    if (card.manaCostModifier["class"] === "ConditionalValueProvider" && card.manaCostModifier["ifFalse"] === 0) {
+      costyBlock = BlocklyMiscUtils.newBlock(workspace, "Property_manaCostModifierConditional")
+      handleArg(
+        costyBlock.getInput("manaCostModifier.condition").connection,
+        card.manaCostModifier["condition"],
+        "condition",
+        workspace,
+        card
+      )
+      if (typeof card.manaCostModifier["ifTrue"] === "object") {
+        handleArg(
+          costyBlock.getInput("manaCostModifier.ifTrue").connection,
+          card.manaCostModifier["ifTrue"],
+          "ifTrue",
+          workspace,
+          card
+        )
       } else {
         handleIntArg(costyBlock, costyBlock.json.args0[0].name, workspace, card.manaCostModifier["ifTrue"])
       }
-
     } else {
-      costyBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_manaCostModifier')
-      handleArg(costyBlock.getInput('manaCostModifier').connection, card.manaCostModifier,
-        'manaCostModifier', workspace, card)
+      costyBlock = BlocklyMiscUtils.newBlock(workspace, "Property_manaCostModifier")
+      handleArg(
+        costyBlock.getInput("manaCostModifier").connection,
+        card.manaCostModifier,
+        "manaCostModifier",
+        workspace,
+        card
+      )
     }
     lowestBlock.nextConnection.connect(costyBlock.previousConnection)
     if ("initSvg" in costyBlock) {
@@ -248,7 +278,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   }
 
   if (!!card.cardCostModifier) {
-    let costyBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_cardCostModifier')
+    let costyBlock = BlocklyMiscUtils.newBlock(workspace, "Property_cardCostModifier")
     lowestBlock.nextConnection.connect(costyBlock.previousConnection)
     if ("initSvg" in costyBlock) {
       costyBlock.initSvg()
@@ -260,9 +290,9 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   }
 
   if (!!card.dynamicDescription) {
-    let descriptionsBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_descriptions')
+    let descriptionsBlock = BlocklyMiscUtils.newBlock(workspace, "Property_descriptions")
 
-    dynamicDescription(workspace, descriptionsBlock.getFirstStatementConnection(), card.dynamicDescription, 'i')
+    dynamicDescription(workspace, descriptionsBlock.getFirstStatementConnection(), card.dynamicDescription, "i")
 
     descriptionsBlock.previousConnection.connect(lowestBlock.nextConnection)
     if ("initSvg" in descriptionsBlock) {
@@ -271,9 +301,9 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     lowestBlock = descriptionsBlock
   }
 
-  if (card.set !== 'CUSTOM') {
-    let setBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_set')
-    setBlock.setFieldValue(card.set, 'set')
+  if (card.set !== "CUSTOM") {
+    let setBlock = BlocklyMiscUtils.newBlock(workspace, "Property_set")
+    setBlock.setFieldValue(card.set, "set")
     setBlock.previousConnection.connect(lowestBlock.nextConnection)
     if ("initSvg" in setBlock) {
       setBlock.initSvg()
@@ -282,8 +312,8 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   }
 
   if (!!card.condition) {
-    let conditionBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_condition')
-    simpleHandleArg(conditionBlock, 'condition', card, workspace)
+    let conditionBlock = BlocklyMiscUtils.newBlock(workspace, "Property_condition")
+    simpleHandleArg(conditionBlock, "condition", card, workspace)
     conditionBlock.previousConnection.connect(lowestBlock.nextConnection)
     if ("initSvg" in conditionBlock) {
       conditionBlock.initSvg()
@@ -291,8 +321,8 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     lowestBlock = conditionBlock
   }
 
-  if ((card.collectible === false || String(card.collectible) === 'FALSE') && type !== 'HERO') {
-    let uncollectibleBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_uncollectible')
+  if ((card.collectible === false || String(card.collectible) === "FALSE") && type !== "HERO") {
+    let uncollectibleBlock = BlocklyMiscUtils.newBlock(workspace, "Property_uncollectible")
     uncollectibleBlock.previousConnection.connect(lowestBlock.nextConnection)
     if ("initSvg" in uncollectibleBlock) {
       uncollectibleBlock.initSvg()
@@ -301,9 +331,9 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   }
 
   if (!!card.art) {
-    for (let path of ['art.primary', 'art.secondary', 'art.shadow', 'art.highlight', 'art.body.vertex']) {
+    for (let path of ["art.primary", "art.secondary", "art.shadow", "art.highlight", "art.body.vertex"]) {
       let json = card
-      for (let arg of path.split('.')) {
+      for (let arg of path.split(".")) {
         if (!!json) {
           json = json[arg]
         }
@@ -311,16 +341,16 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
 
       if (!!json && !!block.getInput(path)) {
         let colorBlock = block.getInput(path).connection.targetBlock()
-        for (let i of ['r', 'g', 'b', 'a']) {
+        for (let i of ["r", "g", "b", "a"]) {
           colorBlock.setFieldValue(Math.round(json[i] * 255), i)
         }
       }
     }
     if (!!card.art["glow"]) {
-      let glowBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_glow')
+      let glowBlock = BlocklyMiscUtils.newBlock(workspace, "Property_glow")
       glowBlock.previousConnection.connect(lowestBlock.nextConnection)
-      let colorBlock = glowBlock.getInput('art.glow').connection.targetBlock()
-      for (let i of ['r', 'g', 'b', 'a']) {
+      let colorBlock = glowBlock.getInput("art.glow").connection.targetBlock()
+      for (let i of ["r", "g", "b", "a"]) {
         colorBlock.setFieldValue(Math.round(card.art["glow"][i] * 255), i)
       }
       if ("initSvg" in glowBlock) {
@@ -331,12 +361,12 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   }
 
   if (!!card.art?.sprite?.named) {
-    let spriteBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_sprite')
+    let spriteBlock = BlocklyMiscUtils.newBlock(workspace, "Property_sprite")
     spriteBlock.previousConnection.connect(lowestBlock.nextConnection)
 
-    if (!!Blockly.Blocks['Art_' + card.art.sprite.named]) {
-      let artBlock = BlocklyMiscUtils.newBlock(workspace, 'Art_' + card.art.sprite.named)
-      spriteBlock.getInput('art.sprite.named').connection.connect(artBlock.outputConnection)
+    if (!!Blockly.Blocks["Art_" + card.art.sprite.named]) {
+      let artBlock = BlocklyMiscUtils.newBlock(workspace, "Art_" + card.art.sprite.named)
+      spriteBlock.getInput("art.sprite.named").connection.connect(artBlock.outputConnection)
       if ("initSvg" in artBlock) {
         artBlock.initSvg()
       }
@@ -367,20 +397,20 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
   for (let dynamicDescription of descriptions) {
     let block = connection.targetBlock() as Block | BlockSvg
     if (!block) {
-      block = BlocklyMiscUtils.newBlock(workspace, 'Property_description')
+      block = BlocklyMiscUtils.newBlock(workspace, "Property_description")
       connection.connect(block.previousConnection)
       if ("initSvg" in block) {
         block.initSvg()
       }
     }
-    if (typeof dynamicDescription === 'string') {
+    if (typeof dynamicDescription === "string") {
       dynamicDescription = {
-        class: 'StringDescription',
-        string: dynamicDescription
+        class: "StringDescription",
+        string: dynamicDescription,
       }
     }
 
-    let descBlock = BlocklyMiscUtils.newBlock(workspace, 'Property_' + dynamicDescription.class)
+    let descBlock = BlocklyMiscUtils.newBlock(workspace, "Property_" + dynamicDescription.class)
 
     if (descBlock === null) {
       continue
@@ -390,28 +420,48 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
 
     if (!!dynamicDescription.value) {
       if (isNumeric(dynamicDescription.value)) {
-        handleIntArg(descBlock, 'value', workspace, dynamicDescription.value)
+        handleIntArg(descBlock, "value", workspace, dynamicDescription.value)
       } else {
-        handleArg(descBlock.getInput('value').connection, dynamicDescription.value,
-          'value', workspace, dynamicDescription)
+        handleArg(
+          descBlock.getInput("value").connection,
+          dynamicDescription.value,
+          "value",
+          workspace,
+          dynamicDescription
+        )
       }
     }
     if (!!dynamicDescription.condition) {
-      handleArg(descBlock.getInput('condition').connection, dynamicDescription.condition,
-        'condition', workspace, dynamicDescription)
+      handleArg(
+        descBlock.getInput("condition").connection,
+        dynamicDescription.condition,
+        "condition",
+        workspace,
+        dynamicDescription
+      )
     }
     if (!!dynamicDescription.string) {
-      descBlock.setFieldValue(dynamicDescription.string, 'string')
+      descBlock.setFieldValue(dynamicDescription.string, "string")
     }
-    if (dynamicDescription.hasOwnProperty('description1')) {
-      dynamicDescription(workspace, block.getInput(inputName).connection, [dynamicDescription.description1], 'description1')
+    if (dynamicDescription.hasOwnProperty("description1")) {
+      dynamicDescription(
+        workspace,
+        block.getInput(inputName).connection,
+        [dynamicDescription.description1],
+        "description1"
+      )
     }
-    if (dynamicDescription.hasOwnProperty('description2')) {
-      dynamicDescription(workspace, block.getInput(inputName).connection, [dynamicDescription.description2], 'description2')
+    if (dynamicDescription.hasOwnProperty("description2")) {
+      dynamicDescription(
+        workspace,
+        block.getInput(inputName).connection,
+        [dynamicDescription.description2],
+        "description2"
+      )
     }
 
     if (!!dynamicDescription.descriptions) {
-      dynamicDescription(workspace, descBlock.getFirstStatementConnection(), dynamicDescription.descriptions, 'i')
+      dynamicDescription(workspace, descBlock.getFirstStatementConnection(), dynamicDescription.descriptions, "i")
     }
 
     block.getInput(inputName).connection.connect(descBlock.outputConnection)
@@ -466,21 +516,21 @@ export function enchantment(trigger, workspace, triggerBlock: Block | BlockSvg =
   let props = relevantProperties(trigger)
   if (!enchantmentNeedsOptions(trigger, props)) {
     if (!triggerBlock) {
-      triggerBlock = BlocklyMiscUtils.newBlock(workspace, 'Enchantment')
+      triggerBlock = BlocklyMiscUtils.newBlock(workspace, "Enchantment")
     }
   } else {
     if (!triggerBlock) {
-      triggerBlock = BlocklyMiscUtils.newBlock(workspace, 'EnchantmentOptions')
+      triggerBlock = BlocklyMiscUtils.newBlock(workspace, "EnchantmentOptions")
     }
     let lowestOptionConnection = triggerBlock.getFirstStatementConnection()
     for (let prop of props) {
-      if (prop === 'spell' || prop === 'eventTrigger') {
+      if (prop === "spell" || prop === "eventTrigger") {
         continue
       }
       let match = null
       for (let blockType in Blockly.Blocks) {
         let block = Blockly.Blocks[blockType].json
-        if (block?.type?.startsWith('EnchantmentOption')) {
+        if (block?.type?.startsWith("EnchantmentOption")) {
           for (let arg of argsList(block)) {
             if (arg.name === prop) {
               match = block
@@ -503,8 +553,8 @@ export function enchantment(trigger, workspace, triggerBlock: Block | BlockSvg =
       lowestOptionConnection = lowestOptionConnection.targetBlock().nextConnection
     }
   }
-  handleArg(triggerBlock.getInput('spell').connection, trigger.spell, 'spell', workspace, trigger)
-  handleArg(triggerBlock.getInput('eventTrigger').connection, trigger.eventTrigger, 'eventTrigger', workspace, trigger)
+  handleArg(triggerBlock.getInput("spell").connection, trigger.spell, "spell", workspace, trigger)
+  handleArg(triggerBlock.getInput("eventTrigger").connection, trigger.eventTrigger, "eventTrigger", workspace, trigger)
 
   return triggerBlock
 }
@@ -518,11 +568,11 @@ export function enchantment(trigger, workspace, triggerBlock: Block | BlockSvg =
  * @returns {boolean}
  */
 export function costModifierNeedsOptions(costModifier, props) {
-  if (costModifier.class === 'OneTurnCostModifier') {
+  if (costModifier.class === "OneTurnCostModifier") {
     return true
   }
   for (let prop of props) {
-    if (!!Blockly.Blocks['CostModifierOption_' + prop]) {
+    if (!!Blockly.Blocks["CostModifierOption_" + prop]) {
       return true
     }
   }
@@ -540,11 +590,11 @@ export function costModifierNeedsOptions(costModifier, props) {
  */
 export function costModifier(costyBlock: Block | BlockSvg, costModifier, workspace) {
   costModifier = mutateJson(costModifier)
-  if (typeof costModifier.value !== 'object' && costModifier.value < 0) {
-    if (costModifier.operation === 'SUBTRACT') {
-      costModifier.operation = 'ADD'
+  if (typeof costModifier.value !== "object" && costModifier.value < 0) {
+    if (costModifier.operation === "SUBTRACT") {
+      costModifier.operation = "ADD"
     } else {
-      costModifier.operation = 'SUBTRACT'
+      costModifier.operation = "SUBTRACT"
     }
     costModifier.value *= -1
   }
@@ -552,16 +602,16 @@ export function costModifier(costyBlock: Block | BlockSvg, costModifier, workspa
   let costModifierBlock
   let lowestOptionConnection
   if (!costModifierNeedsOptions(costModifier, props)) {
-    costModifierBlock = BlocklyMiscUtils.newBlock(workspace, 'CostModifier')
+    costModifierBlock = BlocklyMiscUtils.newBlock(workspace, "CostModifier")
   } else {
-    costModifierBlock = BlocklyMiscUtils.newBlock(workspace, 'CostModifierOptions')
+    costModifierBlock = BlocklyMiscUtils.newBlock(workspace, "CostModifierOptions")
     lowestOptionConnection = costModifierBlock.getFirstStatementConnection()
     for (let prop of props) {
-      if (prop === 'value' || prop === 'operation' || prop === 'target' || prop === 'filter') {
+      if (prop === "value" || prop === "operation" || prop === "target" || prop === "filter") {
         continue
       }
-      let option = BlocklyMiscUtils.newBlock(workspace, 'CostModifierOption_' + prop)
-      handleInputs(Blockly.Blocks['CostModifierOption_' + prop].json, costModifier, option, workspace, null)
+      let option = BlocklyMiscUtils.newBlock(workspace, "CostModifierOption_" + prop)
+      handleInputs(Blockly.Blocks["CostModifierOption_" + prop].json, costModifier, option, workspace, null)
       if ("initSvg" in option) {
         option.initSvg()
       }
@@ -569,30 +619,30 @@ export function costModifier(costyBlock: Block | BlockSvg, costModifier, workspa
       lowestOptionConnection = lowestOptionConnection.targetBlock().nextConnection
     }
   }
-  if (costModifier.class === 'OneTurnCostModifier') {
-    let option = BlocklyMiscUtils.newBlock(workspace, 'CostModifierOption_oneTurn')
+  if (costModifier.class === "OneTurnCostModifier") {
+    let option = BlocklyMiscUtils.newBlock(workspace, "CostModifierOption_oneTurn")
     if ("initSvg" in option) {
       option.initSvg()
     }
     lowestOptionConnection.connect(option.previousConnection)
   }
-  if (typeof costModifier.value !== 'object') {
-    handleIntArg(costModifierBlock, 'value', workspace, costModifier.value)
+  if (typeof costModifier.value !== "object") {
+    handleIntArg(costModifierBlock, "value", workspace, costModifier.value)
   } else {
-    simpleHandleArg(costModifierBlock, 'value', costModifier, workspace)
+    simpleHandleArg(costModifierBlock, "value", costModifier, workspace)
   }
   if (!!costModifier.target) {
-    simpleHandleArg(costModifierBlock, 'target', costModifier, workspace)
+    simpleHandleArg(costModifierBlock, "target", costModifier, workspace)
   }
   if (!!costModifier.operation) {
-    costModifierBlock.setFieldValue(costModifier.operation, 'operation')
+    costModifierBlock.setFieldValue(costModifier.operation, "operation")
   }
 
   if (costModifierBlock.initSvg) {
     costModifierBlock.initSvg()
   }
 
-  costyBlock.getInput('cardCostModifier').connection.connect(costModifierBlock.outputConnection)
+  costyBlock.getInput("cardCostModifier").connection.connect(costModifierBlock.outputConnection)
 }
 
 /**
@@ -611,11 +661,11 @@ export function auras(block: Block | BlockSvg, json, workspace) {
   if (!!json.aura) {
     auras = [json.aura]
   } else {
-    auras = json['auras']
+    auras = json["auras"]
   }
   let lowestConnection = block.getFirstStatementConnection()
   for (let aura of auras) {
-    handleArg(lowestConnection, aura, 'aura', workspace, aura, true)
+    handleArg(lowestConnection, aura, "aura", workspace, aura, true)
     lowestConnection = lowestConnection.targetBlock().nextConnection
   }
 }
@@ -641,49 +691,50 @@ export function auras(block: Block | BlockSvg, json, workspace) {
 export function getMatch(json, inputName, parentJson) {
   let matches = null
   let bestMatch = null
-  if (typeof json !== 'object') { //just looking for the correct block with the data of the json string
+  if (typeof json !== "object") {
+    //just looking for the correct block with the data of the json string
     let lookingForType = BlocklyMiscUtils.inputNameToBlockType(inputName)
-    if (inputName === 'attribute') {
-      json = json.toString().replace('AURA_', '')
+    if (inputName === "attribute") {
+      json = json.toString().replace("AURA_", "")
     }
     matches = enumBlocksDictionary[json]
     if (!matches || matches.length === 0) {
       return
     }
     for (let match of matches) {
-      if (!lookingForType || match.type.startsWith(lookingForType)
-        || match.type.startsWith('CatalogueCard')) {
+      if (!lookingForType || match.type.startsWith(lookingForType) || match.type.startsWith("CatalogueCard")) {
         return match
       }
     }
-  } else if (!!json.class) { //need to find the block that represents that class
+  } else if (!!json.class) {
+    //need to find the block that represents that class
     let className = json.class
-    if (className === 'AddEnchantmentSpell' && !!json.trigger) {
+    if (className === "AddEnchantmentSpell" && !!json.trigger) {
       if (enchantmentNeedsOptions(json.trigger, relevantProperties(json.trigger))) {
         if (!!json.revertTrigger) {
-          return Blockly.Blocks['Spell_AddEnchantment5'].json
+          return Blockly.Blocks["Spell_AddEnchantment5"].json
         } else {
-          return Blockly.Blocks['Spell_AddEnchantment2'].json
+          return Blockly.Blocks["Spell_AddEnchantment2"].json
         }
       } else {
         if (!!json.revertTrigger) {
-          return Blockly.Blocks['Spell_AddEnchantment4'].json
+          return Blockly.Blocks["Spell_AddEnchantment4"].json
         } else {
-          return Blockly.Blocks['Spell_AddEnchantment'].json
+          return Blockly.Blocks["Spell_AddEnchantment"].json
         }
       }
     }
-    if (className === 'AddPactSpell') {
-      return Blockly.Blocks['Spell_AddPact'].json
+    if (className === "AddPactSpell") {
+      return Blockly.Blocks["Spell_AddPact"].json
     }
-    if (className === 'CardCostModifierSpell') {
-      return Blockly.Blocks['Spell_CardCostModifier'].json
+    if (className === "CardCostModifierSpell") {
+      return Blockly.Blocks["Spell_CardCostModifier"].json
     }
-    if (className.endsWith('CostModifier')) {
+    if (className.endsWith("CostModifier")) {
       if (costModifierNeedsOptions(json, relevantProperties(json))) {
-        return Blockly.Blocks['CostModifierOptions'].json
+        return Blockly.Blocks["CostModifierOptions"].json
       } else {
-        return Blockly.Blocks['CostModifier'].json
+        return Blockly.Blocks["CostModifier"].json
       }
     }
     matches = classBlocksDictionary[className]
@@ -692,60 +743,66 @@ export function getMatch(json, inputName, parentJson) {
     }
     let relevantProps = relevantProperties(json)
     let goodMatches = []
-    for (let match of matches) { //for each possible match
+    for (let match of matches) {
+      //for each possible match
       let hasAllProps = true
-      for (let property of relevantProps) { //check the json's relevant properties
-        if ((relevantProps.includes('target') || match.output === 'SpellDesc') && property === 'filter') {
+      for (let property of relevantProps) {
+        //check the json's relevant properties
+        if ((relevantProps.includes("target") || match.output === "SpellDesc") && property === "filter") {
           continue
         }
-        if ((className.endsWith('Spell')
-          || className.endsWith('ValueProvider')
-          || className.endsWith('Source')
-        ) && property === 'targetPlayer') {
+        if (
+          (className.endsWith("Spell") || className.endsWith("ValueProvider") || className.endsWith("Source")) &&
+          property === "targetPlayer"
+        ) {
           continue
         }
-        if (className.endsWith('Trigger')) {
-          if (json.targetPlayer === 'BOTH' && property === 'targetPlayer') {
+        if (className.endsWith("Trigger")) {
+          if (json.targetPlayer === "BOTH" && property === "targetPlayer") {
             continue
           }
-          if (property === 'race' || property === 'requiredAttribute') {
+          if (property === "race" || property === "requiredAttribute") {
             continue
           }
         }
 
         let hasThisProp = false
-        for (let arg of argsList(match)) { //see if the match has a corresponding prop
-          if (arg.type === 'field_label_plural') {
+        for (let arg of argsList(match)) {
+          //see if the match has a corresponding prop
+          if (arg.type === "field_label_plural") {
             continue
           }
-          if (arg.name.split('.')[0] === property) { //just a surface level check, not traversing nested args
-            if (arg.type === 'field_label_serializable_hidden') {
-              if ((arg.value === 'TRUE' ? true : arg.value) === json[property]) {
+          if (arg.name.split(".")[0] === property) {
+            //just a surface level check, not traversing nested args
+            if (arg.type === "field_label_serializable_hidden") {
+              if ((arg.value === "TRUE" ? true : arg.value) === json[property]) {
                 hasThisProp = true
               }
             } else {
               hasThisProp = true
             }
           }
-
         }
-        if (!hasThisProp) { //if it doesn't, it's not good enough
+        if (!hasThisProp) {
+          //if it doesn't, it's not good enough
           hasAllProps = false
           break
         }
       }
-      if (hasAllProps) { //if it covers all the json's properties, it's good enough
+      if (hasAllProps) {
+        //if it covers all the json's properties, it's good enough
         goodMatches.push(match)
       }
     }
     let bestScore = 0
-    for (let goodMatch of goodMatches) { //choose the one with the highest number of correct properties
+    for (let goodMatch of goodMatches) {
+      //choose the one with the highest number of correct properties
       let bestScore = null
       for (let goodMatch of matches) {
         let argList = argsList(goodMatch)
         let hasOneNormalArg = argList.length === 0
         for (let arg of argList) {
-          if (!arg.name.includes('.') && !arg.name.includes('super')) {
+          if (!arg.name.includes(".") && !arg.name.includes("super")) {
             hasOneNormalArg = true
           }
         }
@@ -754,14 +811,14 @@ export function getMatch(json, inputName, parentJson) {
         }
         let score = 0
         for (let arg of argList) {
-          if (arg.type === 'field_label_plural') {
+          if (arg.type === "field_label_plural") {
             continue
           }
           let delta = 0
           let property = traverseJsonByArgName(arg.name, json, parentJson)
           if (property !== null && property !== undefined) {
-            if (arg.type === 'field_label_serializable_hidden') {
-              if ((arg.value === 'TRUE' ? true : arg.value) === property) {
+            if (arg.type === "field_label_serializable_hidden") {
+              if ((arg.value === "TRUE" ? true : arg.value) === property) {
                 delta = 2
               } else {
                 delta = -5 // an unchangeable field on the block is wrong... not a good look
@@ -770,12 +827,12 @@ export function getMatch(json, inputName, parentJson) {
               delta = 2 //if it's an input, we assume the correct block can be put here
             }
           } else {
-            if (arg.type === 'field_label_serializable_hidden') {
+            if (arg.type === "field_label_serializable_hidden") {
               delta = -5
             } else {
               //it's kinda bad to straight up not have the property
-              if (arg.name === 'targetPlayer' || arg.name === 'value') {
-                delta = -.5
+              if (arg.name === "targetPlayer" || arg.name === "value") {
+                delta = -0.5
               } else {
                 delta = -1
               }
@@ -809,8 +866,8 @@ export function getMatch(json, inputName, parentJson) {
 export function handleArg(connection, json, inputName, workspace, parentJson, statement = false) {
   json = mutateJson(json)
 
-  if (!!connection.targetBlock() && connection.targetBlock().type === 'Property_text_SHADOW') {
-    connection.targetBlock().setFieldValue(json, 'text')
+  if (!!connection.targetBlock() && connection.targetBlock().type === "Property_text_SHADOW") {
+    connection.targetBlock().setFieldValue(json, "text")
     return
   }
 
@@ -827,7 +884,7 @@ export function handleArg(connection, json, inputName, workspace, parentJson, st
 
      */
     if (errorOnCustom) {
-      throw Error('Couldn\'t generate without custom blocks')
+      throw Error("Couldn't generate without custom blocks")
     }
     block = handleNoMatch(json, inputName, parentJson, workspace)
   } else if (!!connection.targetBlock() && connection.targetBlock().type === bestMatch.type) {
@@ -863,7 +920,10 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
   //now handle each dropdown on the new block (assumes stuff will just work)
   for (let dropdown of dropdownsList(bestMatch)) {
     let jsonElement = json[dropdown.name]
-    if (!jsonElement && (dropdown.name.includes('.') || dropdown.name.includes('super') || dropdown.name.includes(','))) {
+    if (
+      !jsonElement &&
+      (dropdown.name.includes(".") || dropdown.name.includes("super") || dropdown.name.includes(","))
+    ) {
       jsonElement = traverseJsonByArgName(dropdown.name, json, parentJson)
     }
 
@@ -879,15 +939,17 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
     let name = inputArg.name
     let argName = name
     let jsonElement = json[name]
-    if (!jsonElement && (name.includes('.') || name.includes('super') || name.includes(','))) {
+    if (!jsonElement && (name.includes(".") || name.includes("super") || name.includes(","))) {
       jsonElement = traverseJsonByArgName(name, json, parentJson)
-      name = name.split('.').slice(-1)[0]
+      name = name.split(".").slice(-1)[0]
     }
 
     if (jsonElement === null || jsonElement === undefined) {
-      if (block.getInput(name)?.connection.targetBlock()?.type === 'EntityReference_SHADOW'
-        || block.getInput(name)?.connection.targetBlock()?.type === 'EntityReference_IT') {
-        let it = BlocklyMiscUtils.newBlock(workspace, 'EntityReference_IT')
+      if (
+        block.getInput(name)?.connection.targetBlock()?.type === "EntityReference_SHADOW" ||
+        block.getInput(name)?.connection.targetBlock()?.type === "EntityReference_IT"
+      ) {
+        let it = BlocklyMiscUtils.newBlock(workspace, "EntityReference_IT")
         block.getInput(name).connection.connect(it.outputConnection)
         if ("initSvg" in it) {
           it.initSvg()
@@ -897,19 +959,20 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
     }
 
     //if the json has a corresponding argument
-    if (typeof jsonElement !== 'object' && BlocklyMiscUtils.inputNameToBlockType(name) === 'ValueProvider') {
+    if (typeof jsonElement !== "object" && BlocklyMiscUtils.inputNameToBlockType(name) === "ValueProvider") {
       //integer block stuff
       handleIntArg(block, inputArg.name, workspace, jsonElement)
-    } else if (name === 'spells' || name === 'conditions'
-      || name === 'filters' || name === 'cards') { //arrays of things stuff
+    } else if (name === "spells" || name === "conditions" || name === "filters" || name === "cards") {
+      //arrays of things stuff
       handleArrayArg(jsonElement, block, workspace, name)
-    } else if (name === 'trigger' || name === 'pact') {
+    } else if (name === "trigger" || name === "pact") {
       enchantment(json[name], workspace, block.getFirstStatementConnection().targetBlock())
-    } else if (name === 'aura') {
+    } else if (name === "aura") {
       auras(block, json, workspace)
-    } else if (name === 'cardCostModifier') {
+    } else if (name === "cardCostModifier") {
       costModifier(block, json.cardCostModifier, workspace)
-    } else { //default recursion case
+    } else {
+      //default recursion case
       handleArg(block.getInput(argName).connection, jsonElement, name, workspace, json)
     }
   }
@@ -918,25 +981,25 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
 export function handleArrayArg(jsonElement, block: Block | BlockSvg, workspace, name) {
   let thingArray = jsonElement
   let lowestBlock = block.getFirstStatementConnection().targetBlock()
-  handleArg(lowestBlock.getInput('i').connection, thingArray[0], name.slice(0, -1), workspace, thingArray)
+  handleArg(lowestBlock.getInput("i").connection, thingArray[0], name.slice(0, -1), workspace, thingArray)
   for (let i = 1; i < thingArray.length; i++) {
     let thingI
     switch (name) {
-      case 'conditions':
-        thingI = BlocklyMiscUtils.newBlock(workspace, 'Condition_I')
+      case "conditions":
+        thingI = BlocklyMiscUtils.newBlock(workspace, "Condition_I")
         break
-      case 'filters':
-      case 'cardFilters':
-        thingI = BlocklyMiscUtils.newBlock(workspace, 'Filter_I')
+      case "filters":
+      case "cardFilters":
+        thingI = BlocklyMiscUtils.newBlock(workspace, "Filter_I")
         break
-      case 'cards':
-        thingI = BlocklyMiscUtils.newBlock(workspace, 'Card_I')
+      case "cards":
+        thingI = BlocklyMiscUtils.newBlock(workspace, "Card_I")
         break
       default:
-        thingI = BlocklyMiscUtils.newBlock(workspace, 'Spell_I')
+        thingI = BlocklyMiscUtils.newBlock(workspace, "Spell_I")
         break
     }
-    handleArg(thingI.getInput('i').connection, thingArray[i], name.slice(0, -1), workspace, thingArray)
+    handleArg(thingI.getInput("i").connection, thingArray[i], name.slice(0, -1), workspace, thingArray)
     lowestBlock.nextConnection.connect(thingI.previousConnection)
     if ("initSvg" in thingI) {
       thingI.initSvg()
@@ -962,7 +1025,7 @@ export function handleArrayArg(jsonElement, block: Block | BlockSvg, workspace, 
  * @returns The eventual outermost block
  */
 export function wrapperBlocks(block, json, inputName, workspace, parentJson, connection, bestMatch) {
-  const wrap = (blockType, inputName = 'super') => {
+  const wrap = (blockType, inputName = "super") => {
     let newOuterBlock = BlocklyMiscUtils.newBlock(workspace, blockType)
     newOuterBlock.getInput(inputName).connection.connect(outerBlock.outputConnection)
     if ("initSvg" in newOuterBlock) {
@@ -972,100 +1035,140 @@ export function wrapperBlocks(block, json, inputName, workspace, parentJson, con
   }
   let outerBlock = block
 
-  if (!!json.targetPlayer && !!bestMatch && (json.targetPlayer !== 'SELF' || json.class === 'ReturnTargetToHandSpell') &&
-    (bestMatch.output === 'ValueProviderDesc' || bestMatch.output === 'SpellDesc' || bestMatch.output === 'Source')) {
+  if (
+    !!json.targetPlayer &&
+    !!bestMatch &&
+    (json.targetPlayer !== "SELF" || json.class === "ReturnTargetToHandSpell") &&
+    (bestMatch.output === "ValueProviderDesc" || bestMatch.output === "SpellDesc" || bestMatch.output === "Source")
+  ) {
     switch (bestMatch.output) {
-      case 'ValueProviderDesc':
-        wrap('ValueProvider_targetPlayer')
+      case "ValueProviderDesc":
+        wrap("ValueProvider_targetPlayer")
         break
-      case 'Source':
-        wrap('Source_targetPlayer')
+      case "Source":
+        wrap("Source_targetPlayer")
         break
       default:
-        wrap('Spell_TargetPlayer')
+        wrap("Spell_TargetPlayer")
         break
     }
-    simpleHandleArg(outerBlock, 'targetPlayer', json, workspace)
+    simpleHandleArg(outerBlock, "targetPlayer", json, workspace)
   }
 
-  if (inputName === 'target' && !!parentJson.target && !!parentJson.filter
-    && !getInputEndsWith(connection.getSourceBlock(), 'filter')
-    && !connection.getSourceBlock().getInput('filter')) {
-    wrap('EntityReference_FILTER')
-    handleArg(outerBlock.getInput('super.filter').connection, parentJson.filter, 'filter', workspace, json)
+  if (
+    inputName === "target" &&
+    !!parentJson.target &&
+    !!parentJson.filter &&
+    !getInputEndsWith(connection.getSourceBlock(), "filter") &&
+    !connection.getSourceBlock().getInput("filter")
+  ) {
+    wrap("EntityReference_FILTER")
+    handleArg(outerBlock.getInput("super.filter").connection, parentJson.filter, "filter", workspace, json)
   }
 
-  if (!!json.invert && !!bestMatch
-    && !argsList(bestMatch).map(arg => arg.name.split('.').slice(-1)[0]).includes('invert')) {
-    if (json.class.endsWith('Filter')) {
-      wrap('Filter_NOT')
-    } else if (json.class.endsWith('Condition')) {
-      wrap('Condition_NOT')
+  if (
+    !!json.invert &&
+    !!bestMatch &&
+    !argsList(bestMatch)
+      .map((arg) => arg.name.split(".").slice(-1)[0])
+      .includes("invert")
+  ) {
+    if (json.class.endsWith("Filter")) {
+      wrap("Filter_NOT")
+    } else if (json.class.endsWith("Condition")) {
+      wrap("Condition_NOT")
     }
   }
 
-  if (!!json.class && json.class.endsWith('Trigger')) {
+  if (!!json.class && json.class.endsWith("Trigger")) {
     if (!!json.fireCondition) {
-      wrap('Trigger_FireCondition')
-      simpleHandleArg(outerBlock, 'fireCondition', json, workspace)
+      wrap("Trigger_FireCondition")
+      simpleHandleArg(outerBlock, "fireCondition", json, workspace)
     }
     if (!!json.queueCondition) {
-      wrap('Trigger_QueueCondition')
-      simpleHandleArg(outerBlock, 'queueCondition', json, workspace)
+      wrap("Trigger_QueueCondition")
+      simpleHandleArg(outerBlock, "queueCondition", json, workspace)
     }
     if (!!json.race) {
-      wrap('Trigger_Race')
-      simpleHandleArg(outerBlock, 'race', json, workspace)
+      wrap("Trigger_Race")
+      simpleHandleArg(outerBlock, "race", json, workspace)
     }
     if (!!json.requiredAttribute) {
-      let match = getMatch(json.requiredAttribute, 'attribute', json)
-      wrap('Trigger_Attribute')
-      simpleHandleArg(outerBlock, 'requiredAttribute', json, workspace)
+      let match = getMatch(json.requiredAttribute, "attribute", json)
+      wrap("Trigger_Attribute")
+      simpleHandleArg(outerBlock, "requiredAttribute", json, workspace)
     }
   }
 
-  if (inputName.endsWith('targetSelection') && !!parentJson.targetSelectionCondition
-    && !!parentJson.targetSelectionOverride) {
-    wrap('TargetSelection_OVERRIDE')
-    handleArg(outerBlock.getInput('super.targetSelectionCondition').connection, parentJson.targetSelectionCondition, 'targetSelectionCondition', workspace, parentJson)
-    handleArg(outerBlock.getInput('super.targetSelectionOverride').connection, parentJson.targetSelectionOverride, 'targetSelectionOverride', workspace, parentJson)
+  if (
+    inputName.endsWith("targetSelection") &&
+    !!parentJson.targetSelectionCondition &&
+    !!parentJson.targetSelectionOverride
+  ) {
+    wrap("TargetSelection_OVERRIDE")
+    handleArg(
+      outerBlock.getInput("super.targetSelectionCondition").connection,
+      parentJson.targetSelectionCondition,
+      "targetSelectionCondition",
+      workspace,
+      parentJson
+    )
+    handleArg(
+      outerBlock.getInput("super.targetSelectionOverride").connection,
+      parentJson.targetSelectionOverride,
+      "targetSelectionOverride",
+      workspace,
+      parentJson
+    )
   }
 
-  if (inputName.endsWith('targetSelection') && !!parentJson.spell && !!parentJson.spell.filter
-    && json !== 'NONE') {
-    if (parentJson.spell.filter.class === 'RaceFilter') {
-      wrap('TargetSelection_RACE')
-      handleArg(outerBlock.getInput('super.spell.filter.race').connection, parentJson.spell.filter.race, 'race', workspace, parentJson.spell.filter)
+  if (inputName.endsWith("targetSelection") && !!parentJson.spell && !!parentJson.spell.filter && json !== "NONE") {
+    if (parentJson.spell.filter.class === "RaceFilter") {
+      wrap("TargetSelection_RACE")
+      handleArg(
+        outerBlock.getInput("super.spell.filter.race").connection,
+        parentJson.spell.filter.race,
+        "race",
+        workspace,
+        parentJson.spell.filter
+      )
     } else {
-      wrap('TargetSelection_FILTER')
-      handleArg(outerBlock.getInput('super.spell.filter').connection, parentJson.spell.filter, 'filter', workspace, parentJson.spell)
+      wrap("TargetSelection_FILTER")
+      handleArg(
+        outerBlock.getInput("super.spell.filter").connection,
+        parentJson.spell.filter,
+        "filter",
+        workspace,
+        parentJson.spell
+      )
     }
   }
 
-  if (inputName === 'target' && parentJson.randomTarget === true) { //handles the randomTarget arg
-    wrap('EntityReference_RANDOM')
+  if (inputName === "target" && parentJson.randomTarget === true) {
+    //handles the randomTarget arg
+    wrap("EntityReference_RANDOM")
   }
 
   if (!!json.multiplier) {
-    wrap('ValueProvider_multiplier')
-    if (typeof json.multiplier !== 'object') {
-      handleIntArg(outerBlock, 'multiplier', workspace, json.multiplier)
+    wrap("ValueProvider_multiplier")
+    if (typeof json.multiplier !== "object") {
+      handleIntArg(outerBlock, "multiplier", workspace, json.multiplier)
     } else {
-      simpleHandleArg(outerBlock, 'multiplier', json, workspace)
+      simpleHandleArg(outerBlock, "multiplier", json, workspace)
     }
   }
 
   if (!!json.offset) {
-    wrap('ValueProvider_offset')
-    if (typeof json.offset !== 'object') {
-      handleIntArg(outerBlock, 'offset', workspace, json.offset)
+    wrap("ValueProvider_offset")
+    if (typeof json.offset !== "object") {
+      handleIntArg(outerBlock, "offset", workspace, json.offset)
     } else {
-      simpleHandleArg(outerBlock, 'offset', json, workspace)
+      simpleHandleArg(outerBlock, "offset", json, workspace)
     }
   }
 
   if (!!json.distinct) {
-    wrap('Source_distinct')
+    wrap("Source_distinct")
   }
 
   return outerBlock
@@ -1099,8 +1202,8 @@ export function traverseJsonByArgName(name, json, parentJson) {
   if (!name || !json) {
     return undefined
   }
-  if (name.includes(',')) {
-    let names = name.split(',')
+  if (name.includes(",")) {
+    let names = name.split(",")
     for (let name of names) {
       let elem = traverseJsonByArgName(name, json, parentJson)
       if (elem !== undefined) {
@@ -1109,13 +1212,13 @@ export function traverseJsonByArgName(name, json, parentJson) {
     }
     return undefined
   } else {
-    let i = name.indexOf('.')
+    let i = name.indexOf(".")
     if (i <= 0) {
       return json[name]
     }
     let start = name.substring(0, i)
     let rest = name.substring(i + 1)
-    if (start === 'super' && !!parentJson) {
+    if (start === "super" && !!parentJson) {
       return traverseJsonByArgName(rest, parentJson, null)
     } else {
       return traverseJsonByArgName(rest, json[start], json)
@@ -1135,17 +1238,19 @@ export function traverseJsonByArgName(name, json, parentJson) {
  */
 export function handleIntArg(block: Block | BlockSvg, inputArg, workspace, int) {
   let valueBlock
-  if (!!block.getInput(inputArg).connection.targetBlock()
-    && block.getInput(inputArg).connection.targetBlock().type === 'ValueProvider_int') {
+  if (
+    !!block.getInput(inputArg).connection.targetBlock() &&
+    block.getInput(inputArg).connection.targetBlock().type === "ValueProvider_int"
+  ) {
     valueBlock = block.getInput(inputArg).connection.targetBlock()
   } else {
-    valueBlock = BlocklyMiscUtils.newBlock(workspace, 'ValueProvider_int')
+    valueBlock = BlocklyMiscUtils.newBlock(workspace, "ValueProvider_int")
     block.getInput(inputArg).connection.connect(valueBlock.outputConnection)
     if ("initSvg" in valueBlock) {
       valueBlock.initSvg()
     }
   }
-  valueBlock.setFieldValue(int, 'int')
+  valueBlock.setFieldValue(int, "int")
 }
 
 /**
@@ -1163,17 +1268,17 @@ export function handleIntArg(block: Block | BlockSvg, inputArg, workspace, int) 
  * @returns The block it generated
  * */
 export function generateDummyBlock(json, inputName, parentJson) {
-  inputName = inputName.split('.').slice(-1)[0]
+  inputName = inputName.split(".").slice(-1)[0]
   let type = BlocklyMiscUtils.inputNameToBlockType(inputName)
   let consoleBlock
-  if (typeof json !== 'object') {
+  if (typeof json !== "object") {
     let color = blockTypeColors[type]
     consoleBlock = {
-      type: type + '_' + json.toString(),
+      type: type + "_" + json.toString(),
       data: json.toString(),
       colour: isNumeric(color) ? parseInt(color) : color,
       output: type,
-      message0: BlocklyMiscUtils.formatCurated(json.toString())
+      message0: BlocklyMiscUtils.toTitleCaseCorrected(json.toString()),
     }
   } else {
     let props = relevantProperties(json)
@@ -1182,36 +1287,40 @@ export function generateDummyBlock(json, inputName, parentJson) {
     let args = []
     for (let prop of props) {
       let shouldBeField = !BlocklyMiscUtils.inputNameToBlockType(prop)
-      if (!!json.class && json.class.endsWith('Trigger') &&
-        (prop === 'targetPlayer' || prop === 'sourcePlayer')) {
+      if (!!json.class && json.class.endsWith("Trigger") && (prop === "targetPlayer" || prop === "sourcePlayer")) {
         shouldBeField = true
       }
       let arg: BlockArgDef = {
-        name: prop
+        name: prop,
       }
-      let newMessage = prop + ': %1'
+      let newMessage = prop + ": %1"
       if (shouldBeField) {
-        if (prop === 'operation') {
-          if (dropdownsList(Blockly.Blocks['ValueProvider_Algebraic'].json)[0]
-            .options.map(arr => arr[1]).includes(json[prop])) {
-            arg = dropdownsList(Blockly.Blocks['ValueProvider_Algebraic'].json)[0]
+        if (prop === "operation") {
+          if (
+            dropdownsList(Blockly.Blocks["ValueProvider_Algebraic"].json)[0]
+              .options.map((arr) => arr[1])
+              .includes(json[prop])
+          ) {
+            arg = dropdownsList(Blockly.Blocks["ValueProvider_Algebraic"].json)[0]
           } else {
-            arg = dropdownsList(Blockly.Blocks['Condition_Comparison'].json)[0]
+            arg = dropdownsList(Blockly.Blocks["Condition_Comparison"].json)[0]
           }
         } else {
-          arg.type = 'field_label_serializable_hidden'
+          arg.type = "field_label_serializable_hidden"
           arg.value = json[prop]
-          newMessage += '"' + BlocklyMiscUtils.formatCurated(json[prop].toString()) + '"'
+          newMessage += '"' + BlocklyMiscUtils.toTitleCaseCorrected(json[prop].toString()) + '"'
         }
       } else {
-        arg.type = 'input_value'
-        arg.check = (prop === 'attribute' ? (!!parentJson.value ? 'Int' : 'Bool') : '')
-          + BlocklyMiscUtils.blockTypeToOuput(BlocklyMiscUtils.inputNameToBlockType(prop))
+        arg.type = "input_value"
+        arg.check =
+          (prop === "attribute" ? (!!parentJson.value ? "Int" : "Bool") : "") +
+          BlocklyMiscUtils.blockTypeToOuput(BlocklyMiscUtils.inputNameToBlockType(prop))
         arg.shadow = {
-          type: prop === 'target' ? 'EntityReference_IT' :
-            BlocklyMiscUtils.inputNameToBlockType(prop) +
-            (prop === 'attribute' ? (!!parentJson.value ? '_INT_SHADOW' : '_BOOL_SHADOW')
-              : '_SHADOW')
+          type:
+            prop === "target"
+              ? "EntityReference_IT"
+              : BlocklyMiscUtils.inputNameToBlockType(prop) +
+                (prop === "attribute" ? (!!parentJson.value ? "_INT_SHADOW" : "_BOOL_SHADOW") : "_SHADOW"),
         }
       }
       messages.push(newMessage)
@@ -1221,35 +1330,35 @@ export function generateDummyBlock(json, inputName, parentJson) {
     let output = BlocklyMiscUtils.blockTypeToOuput(type)
     let color = blockTypeColors[output]
     consoleBlock = {
-      type: type + '_' + className.replace(type, ''),
+      type: type + "_" + className.replace(type, ""),
       inputsInline: false,
       output: output,
       colour: isNumeric(color) ? parseInt(color) : color,
-      message0: className + '%1',
-      args0: [{
-        type: 'field_label_serializable_hidden',
-        name: 'class',
-        value: className
-      }]
+      message0: className + "%1",
+      args0: [
+        {
+          type: "field_label_serializable_hidden",
+          name: "class",
+          value: className,
+        },
+      ],
     }
-    if (type === 'Aura') {
+    if (type === "Aura") {
       delete consoleBlock.output
-      consoleBlock.previousStatement = ['Auras']
-      consoleBlock.nextStatement = ['Auras']
+      consoleBlock.previousStatement = ["Auras"]
+      consoleBlock.nextStatement = ["Auras"]
     }
     for (let j = 1; j <= messages.length; j++) {
       //block['message' + j.toString()] = messages[j - 1]
       //block['args' + j.toString()] = [args[j - 1]]
 
-      consoleBlock.message0 += ' ' + messages[j - 1].replace('%1', '%' + (j + 1).toString())
+      consoleBlock.message0 += " " + messages[j - 1].replace("%1", "%" + (j + 1).toString())
       consoleBlock.args0.push(args[j - 1])
     }
-
   }
 
-  console.log('Had to create new block ' + consoleBlock.type)
-  console.log(JSON.stringify(consoleBlock, null, 2).toString()
-    .replace('"colour": "(\\d+)"', '"colour": $1'))
+  console.log("Had to create new block " + consoleBlock.type)
+  console.log(JSON.stringify(consoleBlock, null, 2).toString().replace('"colour": "(\\d+)"', '"colour": $1'))
 
   let blok = JSON.stringify(consoleBlock, null, 2)
   //blok = consoleBlock.type
@@ -1274,17 +1383,20 @@ export function generateDummyBlock(json, inputName, parentJson) {
  * @returns {Blockly.Block}
  */
 export function handleNoMatch(json, inputName, parentJson, workspace) {
-  inputName = inputName.split('.').slice(-1)[0]
+  inputName = inputName.split(".").slice(-1)[0]
   let type = BlocklyMiscUtils.inputNameToBlockType(inputName)
-  let block = BlocklyMiscUtils.newBlock(workspace, 'Custom' + type)
-  if (typeof json !== 'object') {
-    block.setFieldValue(json, 'value')
+  let block = BlocklyMiscUtils.newBlock(workspace, "Custom" + type)
+  if (typeof json !== "object") {
+    block.setFieldValue(json, "value")
   } else if (!!json.class) {
-    block.getInput('class').connection.targetBlock().setFieldValue(json.class, 'class')
+    block.getInput("class").connection.targetBlock().setFieldValue(json.class, "class")
     let lowestConnection = block.getFirstStatementConnection()
 
     for (let arg in json) {
-      if (arg === 'class' || (arg === 'filter' && !!parentJson.targetSelection && parentJson.targetSelection !== 'NONE')) {
+      if (
+        arg === "class" ||
+        (arg === "filter" && !!parentJson.targetSelection && parentJson.targetSelection !== "NONE")
+      ) {
         continue
       }
 
@@ -1293,37 +1405,36 @@ export function handleNoMatch(json, inputName, parentJson, workspace) {
       let argValue = json[arg]
       if (!blockType) {
         if (argValue === true || argValue === false) {
-          blockType = 'Boolean'
+          blockType = "Boolean"
           argValue = argValue.toString().toUpperCase()
         } else if (isArray(argValue)) {
-          blockType = BlocklyMiscUtils.inputNameToBlockType(arg.slice(0, -1)) + 's'
+          blockType = BlocklyMiscUtils.inputNameToBlockType(arg.slice(0, -1)) + "s"
         } else {
-          blockType = 'text'
+          blockType = "text"
         }
       }
-      let newArgBlock = BlocklyMiscUtils.newBlock(workspace, 'CustomArg_' + blockType)
+      let newArgBlock = BlocklyMiscUtils.newBlock(workspace, "CustomArg_" + blockType)
       newArgBlock.previousConnection.connect(lowestConnection)
       lowestConnection = newArgBlock.nextConnection
       if ("initSvg" in newArgBlock) {
         newArgBlock.initSvg()
       }
-      newArgBlock.setFieldValue(arg, 'customArg')
+      newArgBlock.setFieldValue(arg, "customArg")
 
-      if (!!newArgBlock.getInput('customValue')) {
+      if (!!newArgBlock.getInput("customValue")) {
         if (isNumeric(argValue)) {
-          handleIntArg(newArgBlock, 'customValue', workspace, argValue)
+          handleIntArg(newArgBlock, "customValue", workspace, argValue)
         } else if (isArray(argValue)) {
-          if (arg === 'aura') {
+          if (arg === "aura") {
             auras(newArgBlock, json, workspace)
           } else {
             handleArrayArg(argValue, newArgBlock, workspace, arg)
           }
         } else {
-          handleArg(newArgBlock.getInput('customValue').connection, argValue, arg,
-            workspace, parentJson)
+          handleArg(newArgBlock.getInput("customValue").connection, argValue, arg, workspace, parentJson)
         }
       } else {
-        newArgBlock.setFieldValue(argValue, 'customValue')
+        newArgBlock.setFieldValue(argValue, "customValue")
       }
     }
   }
@@ -1338,10 +1449,15 @@ export function handleNoMatch(json, inputName, parentJson, workspace) {
 export function relevantProperties(json) {
   let relevantProperties = []
   for (let property in json) {
-    if ((property === 'randomTarget' && !!json.target) || property === 'class'
-      || property === 'fireCondition' || property === 'queueCondition'
-      || property === 'invert' || property === 'offset' || property === 'multiplier'
-      || property === 'distinct'
+    if (
+      (property === "randomTarget" && !!json.target) ||
+      property === "class" ||
+      property === "fireCondition" ||
+      property === "queueCondition" ||
+      property === "invert" ||
+      property === "offset" ||
+      property === "multiplier" ||
+      property === "distinct"
     ) {
       continue //these ones can be handled by other blocks
     }
@@ -1359,140 +1475,154 @@ export function relevantProperties(json) {
  * @returns The mutated json
  */
 export function mutateJson(json) {
-  if ((json === null || json === undefined)) {
-    json = 'NONE'
+  if (json === null || json === undefined) {
+    json = "NONE"
   }
-  if (typeof json !== 'object') {
+  if (typeof json !== "object") {
     return json
   }
   let className = json.class
   let props = relevantProperties(json)
 
   //the 'has' operation can be implied in many cases
-  if (className.endsWith('Filter') || className.endsWith('Condition')) {
-    if (props.includes('attribute') && props.includes('operation')
-      && !props.includes('value') && json.operation === 'HAS') {
+  if (className.endsWith("Filter") || className.endsWith("Condition")) {
+    if (
+      props.includes("attribute") &&
+      props.includes("operation") &&
+      !props.includes("value") &&
+      json.operation === "HAS"
+    ) {
       delete json.operation
       props = relevantProperties(json)
     }
   }
 
-  if (className === 'AndCondition' && (!json.conditions || json.conditions?.length === 0)) {
+  if (className === "AndCondition" && (!json.conditions || json.conditions?.length === 0)) {
     delete json.conditions
-    json.class = 'AlwaysCondition'
+    json.class = "AlwaysCondition"
   }
 
-  if (className === 'OrCondition' && (!json.conditions || json.conditions?.length === 0)) {
+  if (className === "OrCondition" && (!json.conditions || json.conditions?.length === 0)) {
     delete json.conditions
-    json.class = 'NeverCondition'
+    json.class = "NeverCondition"
   }
 
-  if (className === 'CardFilter') {
-    if (props.length === 1) { //cardfilters for just a race can be race filters
-      if (props[0] === 'race') {
+  if (className === "CardFilter") {
+    if (props.length === 1) {
+      //cardfilters for just a race can be race filters
+      if (props[0] === "race") {
         return {
-          class: 'RaceFilter',
+          class: "RaceFilter",
           race: json.race,
-          invert: json.invert
+          invert: json.invert,
         }
       }
-      if (props[0] === 'attribute') {
+      if (props[0] === "attribute") {
         return {
-          class: 'AttributeFilter',
+          class: "AttributeFilter",
           attribute: json.attribute,
-          invert: json.invert
+          invert: json.invert,
         }
       }
-    } else if (!(props.length === 2 && props.includes('attribute') && (props.includes('value') || props.includes('operation')))
-      && !(props.length === 3 && props.includes('attribute') && props.includes('operation') && props.includes('value'))
-    ) { //cardfilters with many different properties need to be split up to a big and filter
+    } else if (
+      !(
+        props.length === 2 &&
+        props.includes("attribute") &&
+        (props.includes("value") || props.includes("operation"))
+      ) &&
+      !(props.length === 3 && props.includes("attribute") && props.includes("operation") && props.includes("value"))
+    ) {
+      //cardfilters with many different properties need to be split up to a big and filter
       let filters = []
       if (!!json.race) {
         filters.push({
-          class: 'RaceFilter',
-          race: json.race
+          class: "RaceFilter",
+          race: json.race,
         })
       }
       if (!!json.cardType) {
         filters.push({
-          class: 'CardFilter',
-          cardType: json.cardType
+          class: "CardFilter",
+          cardType: json.cardType,
         })
       }
       if (!!json.attribute) {
-        if (!json.value && (!json.operation || json.operation === 'HAS') && !!enumBlocksDictionary[json.attribute]) {
-          if ((enumBlocksDictionary[json.attribute][0].output === 'BoolAttribute')) {
+        if (!json.value && (!json.operation || json.operation === "HAS") && !!enumBlocksDictionary[json.attribute]) {
+          if (enumBlocksDictionary[json.attribute][0].output === "BoolAttribute") {
             filters.push({
-              class: 'AttributeFilter',
-              attribute: json.attribute
+              class: "AttributeFilter",
+              attribute: json.attribute,
             })
           } else {
             filters.push({
-              class: 'AttributeFilter',
+              class: "AttributeFilter",
               attribute: json.attribute,
-              operation: 'GREATER_OR_EQUAL',
-              value: 1
+              operation: "GREATER_OR_EQUAL",
+              value: 1,
             })
           }
         } else {
           filters.push({
-            class: 'AttributeFilter',
+            class: "AttributeFilter",
             attribute: json.attribute,
             operation: json.operation,
-            value: json.value
+            value: json.value,
           })
         }
       }
-      if (json.hasOwnProperty('manaCost')) {
+      if (json.hasOwnProperty("manaCost")) {
         filters.push({
-          class: 'CardFilter',
-          manaCost: json.manaCost
+          class: "CardFilter",
+          manaCost: json.manaCost,
         })
       }
       if (!!json.heroClass) {
         filters.push({
-          class: 'CardFilter',
-          heroClass: json.heroClass
+          class: "CardFilter",
+          heroClass: json.heroClass,
         })
       }
       if (!!json.rarity) {
         filters.push({
-          class: 'CardFilter',
-          rarity: json.rarity
+          class: "CardFilter",
+          rarity: json.rarity,
         })
       }
       return {
-        class: 'AndFilter',
+        class: "AndFilter",
         filters: filters,
-        invert: json.invert
+        invert: json.invert,
       }
     }
   }
 
   //would be redundant to add this functionality separately
-  if (className === 'MinionCountCondition') {
+  if (className === "MinionCountCondition") {
     json = {
-      class: 'ComparisonCondition',
+      class: "ComparisonCondition",
       value1: {
-        class: 'EntityCountValueProvider',
-        target: json.targetPlayer === 'OPPONENT' ? 'ENEMY_MINIONS'
-          : json.targetPlayer === 'BOTH' ? 'ALL_MINIONS'
-            : 'FRIENDLY_MINIONS'
+        class: "EntityCountValueProvider",
+        target:
+          json.targetPlayer === "OPPONENT"
+            ? "ENEMY_MINIONS"
+            : json.targetPlayer === "BOTH"
+            ? "ALL_MINIONS"
+            : "FRIENDLY_MINIONS",
       },
       operation: json.operation,
-      value2: json.value
+      value2: json.value,
     }
   }
-  if (className === 'CardCountCondition') {
+  if (className === "CardCountCondition") {
     json = {
-      class: 'ComparisonCondition',
+      class: "ComparisonCondition",
       value1: {
-        class: 'CardCountValueProvider',
+        class: "CardCountValueProvider",
         targetPlayer: json.targetPlayer,
-        cardFilter: !!json.filter ? json.filter : json.cardFilter
+        cardFilter: !!json.filter ? json.filter : json.cardFilter,
       },
       operation: json.operation,
-      value2: json.value
+      value2: json.value,
     }
   }
   /*if (className === 'DeckContainsCondition') {
@@ -1529,10 +1659,10 @@ export function mutateJson(json) {
   }*/
 
   //some auras specify extra triggers unnecessarily
-  if (className.endsWith('Aura') && !!json.triggers) {
+  if (className.endsWith("Aura") && !!json.triggers) {
     let triggersDontMatter = true
     for (let trigger of json.triggers) {
-      if (trigger.class !== 'WillEndSequenceTrigger') {
+      if (trigger.class !== "WillEndSequenceTrigger") {
         triggersDontMatter = false
       }
     }
@@ -1542,21 +1672,21 @@ export function mutateJson(json) {
   }
 
   //in spells, the targetPlayer of 'self' is always redundant
-  if ((json.targetPlayer === 'SELF' && json.class.endsWith('Spell')
-      && json.class !== 'ReturnTargetToHandSpell')
+  if (
+    (json.targetPlayer === "SELF" && json.class.endsWith("Spell") && json.class !== "ReturnTargetToHandSpell") ||
     //in triggers, it's 'both'
-    || (json.targetPlayer === 'BOTH' && json.class.endsWith('Trigger'))) {
+    (json.targetPlayer === "BOTH" && json.class.endsWith("Trigger"))
+  ) {
     delete json.targetPlayer
   }
 
   //for certain triggers the Source Player and Target Player are just the same
-  if ((className === 'MinionSummonedTrigger' || className === 'MinionPlayedTrigger')
-    && !!json.sourcePlayer) {
+  if ((className === "MinionSummonedTrigger" || className === "MinionPlayedTrigger") && !!json.sourcePlayer) {
     json.targetPlayer = json.sourcePlayer
     delete json.sourcePlayer
   }
 
-  if (className === 'TemporaryAttackSpell' && !!json.attackBonus) {
+  if (className === "TemporaryAttackSpell" && !!json.attackBonus) {
     if (!json.value) {
       json.value = 0
     }
@@ -1564,49 +1694,48 @@ export function mutateJson(json) {
     delete json.attackBonus
   }
 
-  if (json.sourcePlayer === 'BOTH') {
+  if (json.sourcePlayer === "BOTH") {
     delete json.sourcePlayer
   }
 
-  if (className === 'ReduceValueProvider' && json.attribute) {
+  if (className === "ReduceValueProvider" && json.attribute) {
     json.value1 = {
-      class: 'AttributeValueProvider',
-      attribute: json.attribute
+      class: "AttributeValueProvider",
+      attribute: json.attribute,
     }
     delete json.attribute
   }
 
-  if (className === 'DiscoverSpell' && !json.cards && !json.cardSource) {
+  if (className === "DiscoverSpell" && !json.cards && !json.cardSource) {
     json.cardSource = {
-      class: 'CatalogueSource'
+      class: "CatalogueSource",
     }
   }
 
-  if (className === 'AlgebraicValueProvider' && json.operation === 'NEGATE'
-    && !json.hasOwnProperty('value2')) {
-    json.operation = 'MULTIPLY'
+  if (className === "AlgebraicValueProvider" && json.operation === "NEGATE" && !json.hasOwnProperty("value2")) {
+    json.operation = "MULTIPLY"
     json.value2 = -1
   }
 
-  if (className === 'RecruitSpell' && !json.cardLocation) {
-    json.cardLocation = 'DECK'
+  if (className === "RecruitSpell" && !json.cardLocation) {
+    json.cardLocation = "DECK"
   }
 
-  if (className.endsWith('Modifier') && !json.target) {
-    json.target = 'FRIENDLY_HAND'
+  if (className.endsWith("Modifier") && !json.target) {
+    json.target = "FRIENDLY_HAND"
   }
 
-  if (className.endsWith('Aura') && !!json.triggers && json.triggers.length === 1) {
+  if (className.endsWith("Aura") && !!json.triggers && json.triggers.length === 1) {
     json.trigger = json.triggers[0]
     delete json.triggers
   }
 
   //functionality is the same
-  if (className === 'CloneMinionSpell') {
-    json.class = 'SummonSpell'
+  if (className === "CloneMinionSpell") {
+    json.class = "SummonSpell"
   }
-  if (className === 'InspireTrigger') {
-    json.class = 'HeroPowerUsedTrigger'
+  if (className === "InspireTrigger") {
+    json.class = "HeroPowerUsedTrigger"
   }
 
   return json
@@ -1621,10 +1750,10 @@ export function mutateJson(json) {
 export function inputsList(block) {
   let inputsList = []
   for (let i = 0; i < 10; i++) {
-    if (!!block['args' + i.toString()]) {
+    if (!!block["args" + i.toString()]) {
       for (let j = 0; j < 10; j++) {
-        const arg = block['args' + i.toString()][j]
-        if (!!arg && arg.type.includes('input')) {
+        const arg = block["args" + i.toString()][j]
+        if (!!arg && arg.type.includes("input")) {
           inputsList.push(arg)
         }
       }
@@ -1642,10 +1771,10 @@ export function inputsList(block) {
 export function dropdownsList(block: Block | BlockSvg) {
   let inputsList = []
   for (let i = 0; i < 10; i++) {
-    if (!!block['args' + i.toString()]) {
+    if (!!block["args" + i.toString()]) {
       for (let j = 0; j < 10; j++) {
-        const arg = block['args' + i.toString()][j]
-        if (!!arg && arg.type.includes('dropdown')) {
+        const arg = block["args" + i.toString()][j]
+        if (!!arg && arg.type.includes("dropdown")) {
           inputsList.push(arg)
         }
       }
@@ -1662,9 +1791,9 @@ export function dropdownsList(block: Block | BlockSvg) {
 export function argsList(block: BlockDef) {
   let argsList = []
   for (let i = 0; i < 10; i++) {
-    if (!!block['args' + i.toString()]) {
+    if (!!block["args" + i.toString()]) {
       for (let j = 0; j < 10; j++) {
-        const arg = block['args' + i.toString()][j]
+        const arg = block["args" + i.toString()][j]
         if (!!arg) {
           argsList.push(arg)
         }

@@ -1,6 +1,6 @@
 @charset "utf-8";
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:300,400,500,700&display=swap');
-@import "../styles/font";
+@import "styles/font";
 
 /**
  * Style variables
@@ -93,7 +93,7 @@ h2 {
 
 h3 {
   font-size: 24px;
-  padding-top: 10px;
+  // padding-top: 10px;
   padding-bottom: 10px;
 }
 
@@ -176,7 +176,7 @@ input[type=text], select, textarea {
   background-color: var(--header-background-color);
   color: var(--text-dark);
   caret-color: var(--hover-color);
-  font-size: $base-font-size;
+  /*font-size: $base-font-size;*/
   font-family: $base-font-family;
   line-height: $base-line-height;
 }
@@ -281,6 +281,10 @@ pre {
   width: auto !important;
 }
 
+.markdown img {
+  margin-bottom: 1rem;
+}
+
 
 @media (min-width: 576px) {
   .blocklyTreeRow {
@@ -288,13 +292,38 @@ pre {
     border-top: none !important;
     border-bottom: none !important;
   }
+
+  .markdown img {
+    max-width: 300px;
+    position: relative;
+    float: right;
+    margin-left: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .markdown img {
+    max-width: 350px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .markdown img {
+    max-width: 450px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .markdown img {
+    max-width: 500px;
+  }
 }
 
 @media (max-width: 576px) {
   .blocklyToolboxDiv {
-    max-height: 9rem !important;
+    max-height: 105px !important;
   }
-  
+
   .blocklyTreeRow {
     border-right: none !important;
     border-left: none !important;
@@ -302,7 +331,7 @@ pre {
     padding-right: 2px;
     padding-left: 2px;
     padding-bottom: 0;
-    
+
     /*border-width: 2px !important;
     padding: 2px;*/
   }
@@ -320,8 +349,23 @@ pre {
 
   .blocklyToolboxCategory > .blocklyToolboxContents > .blocklyToolboxCategory {
   }
+
+  .markdown img {
+    max-width: 90vw;
+  }
 }
 
 .blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {
   margin: 0 !important;
+}
+
+.markdown img {
+}
+
+details {
+  margin-bottom: 10px;
+}
+
+summary {
+  margin-bottom: 10px;
 }

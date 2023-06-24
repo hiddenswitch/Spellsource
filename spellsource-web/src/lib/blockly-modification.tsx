@@ -1,4 +1,14 @@
-import Blockly, { Block, BlockSvg, FieldLabel, Toolbox, ToolboxCategory, Workspace } from "blockly"
+import Blockly, {
+  Block,
+  BlockSvg,
+  CollapsibleToolboxCategory,
+  FieldLabel,
+  Toolbox,
+  ToolboxCategory,
+  utils,
+  Workspace,
+  WorkspaceSvg,
+} from "blockly"
 import { FieldLabelPlural } from "../components/field-label-plural"
 import { FieldLabelSerializableHidden } from "../components/field-label-serializable-hidden"
 import * as JsonConversionUtils from "./json-conversion-utils"
@@ -37,7 +47,7 @@ export function modifyAll(options: InitBlockOptions) {
   categoryIndenting()
   // cardDisplay()
   flyout()
-  categoryBorder()
+  mobileCategories()
 
   DefaultOverrides.overrideAll()
 }
@@ -487,13 +497,40 @@ function colorfulColors() {
 }
 
 function noToolboxZoom() {
+  const layout = Blockly.HorizontalFlyout.prototype["layout_"]
+  Blockly.HorizontalFlyout.prototype["layout_"] = function (contents, gaps) {
+    const workspace = this.targetWorkspace as WorkspaceSvg
+    if (workspace) {
+      const reset = workspace.scale
+      workspace.scale = workspace.options.zoomOptions.startScale
+      layout.call(this, contents, gaps)
+      workspace.scale = reset
+    } else {
+      layout.call(this, contents, gaps)
+    }
+  }
+
+  const reflowInternal = Blockly.HorizontalFlyout.prototype["reflowInternal_"]
+  Blockly.HorizontalFlyout.prototype["reflowInternal_"] = function () {
+    const workspace = this.targetWorkspace as WorkspaceSvg
+    if (workspace) {
+      const reset = workspace.scale
+      workspace.scale = workspace.options.zoomOptions.startScale
+      reflowInternal.call(this)
+      workspace.scale = reset
+    } else {
+      reflowInternal.call(this)
+    }
+  }
+
   const layout2 = Blockly.VerticalFlyout.prototype["layout_"]
   Blockly.VerticalFlyout.prototype["layout_"] = function (contents, gaps) {
-    if (!!this.targetWorkspace) {
-      const reset = this.targetWorkspace.scale
-      this.targetWorkspace.scale = 1.0
+    const workspace = this.targetWorkspace as WorkspaceSvg
+    if (workspace) {
+      const reset = workspace.scale
+      workspace.scale = workspace.options.zoomOptions.startScale
       layout2.call(this, contents, gaps)
-      this.targetWorkspace.scale = reset
+      workspace.scale = reset
     } else {
       layout2.call(this, contents, gaps)
     }
@@ -501,11 +538,12 @@ function noToolboxZoom() {
 
   const reflowInternal2 = Blockly.VerticalFlyout.prototype["reflowInternal_"]
   Blockly.VerticalFlyout.prototype["reflowInternal_"] = function () {
-    if (!!this.targetWorkspace) {
-      const reset = this.targetWorkspace.scale
-      this.targetWorkspace.scale = 1.0
+    const workspace = this.targetWorkspace as WorkspaceSvg
+    if (workspace) {
+      const reset = workspace.scale
+      workspace.scale = workspace.options.zoomOptions.startScale
       reflowInternal2.call(this)
-      this.targetWorkspace.scale = reset
+      workspace.scale = reset
     } else {
       reflowInternal2.call(this)
     }
@@ -673,11 +711,21 @@ function flyout() {
   }
 }
 
-function categoryBorder() {
+function mobileCategories() {
   const addColourBorder = ToolboxCategory.prototype["addColourBorder_"]
 
   ToolboxCategory.prototype["addColourBorder_"] = function (colour) {
     const style = this.rowDiv_.style
     style.border = ToolboxCategory.borderWidth + "px solid " + (colour || "#ddd")
+  }
+
+  const setExpanded = CollapsibleToolboxCategory.prototype.setExpanded
+  CollapsibleToolboxCategory.prototype.setExpanded = function (isExpanded) {
+    setExpanded.call(this, isExpanded)
+
+    const category = this as CollapsibleToolboxCategory
+    const toolbox = category["parentToolbox_"] as Toolbox
+    const htmlDiv = toolbox.HtmlDiv
+    utils.style.scrollIntoContainerView(category.getDiv(), htmlDiv, !isExpanded)
   }
 }

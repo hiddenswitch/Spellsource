@@ -3,9 +3,9 @@ import Header from "./header"
 import Footer from "./footer"
 import * as styles from "./creative-layout.module.scss"
 import Link from "next/link"
-import { signIn, signOut } from "next-auth/react"
 import { AuthButton } from "./auth-button"
 import Head from "next/head"
+import { use100vh } from "react-div-100vh"
 
 export const pages = [
   <li key={0}>
@@ -29,13 +29,15 @@ export const pages = [
 ]
 
 export default ({ children }) => {
+  const height = use100vh() ?? 1000
+
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={{ minHeight: height }}>
       <Head>
         <title>Spellsource</title>
       </Head>
       <Header pages={pages} />
-      {children}
+      <div className={"flex-grow-1"}>{children}</div>
       <Footer pages={pages} />
     </div>
   )

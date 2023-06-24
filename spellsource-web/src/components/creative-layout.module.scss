@@ -130,7 +130,7 @@ h6:before { content: "######";  margin-right: 9px; }*/
   justify-content: center;
   align-items: center;
   position: absolute;
-  z-index: 12;
+  z-index: 120;
   background-color: var(--header-background-color);
   top: 60px;
   left: 0;
@@ -153,16 +153,19 @@ h6:before { content: "######";  margin-right: 9px; }*/
   flex-shrink: 1;
 }
 
-.navbarContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  background-color: var(--header-background-color);
+.navbarHeader {
   border: 2px solid var(--text-dark);
   border-top: none;
   border-left: none;
   border-right: none;
+}
+
+.navbarContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--header-background-color);
 
   .search-results {
     background-color: var(--header-background-color);
@@ -336,7 +339,7 @@ h6:before { content: "######";  margin-right: 9px; }*/
   position: absolute;
   max-width: 90%;
   width: auto;
-  height: auto;
+  /*height: auto;*/
 }
 
 /**
@@ -450,12 +453,10 @@ h6:before { content: "######";  margin-right: 9px; }*/
   flex-direction: row;
   flex-wrap: wrap-reverse;
   justify-content: space-between;
-  min-height: 100px;
+  padding: 25px 0;
   align-items: center;
   background-color: var(--text-light);
   font-size: $font-size-footer;
-  border: 2px solid var(--text-dark);
-  padding: 15px 5%;
   text-decoration: none;
 
   strong {
@@ -487,6 +488,10 @@ h6:before { content: "######";  margin-right: 9px; }*/
     text-decoration: none;
     color: var(--text-dark);
   }
+}
+
+.navbarFooter {
+  border-top: 2px solid var(--text-dark);
 }
 
 /**

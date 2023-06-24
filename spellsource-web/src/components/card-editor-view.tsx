@@ -1,7 +1,6 @@
 import { Form } from "react-bootstrap"
 import * as styles from "./card-editor-view.module.scss"
 import Blockly, { Toolbox, WorkspaceSvg } from "blockly"
-import AceEditor from "react-ace"
 import React, { useRef, useState } from "react"
 import CardEditorWorkspace from "./card-editor-workspace"
 import useComponentDidMount from "../hooks/use-component-did-mount"
@@ -167,7 +166,7 @@ const CardEditorView = (props: { defaultCard?: boolean }) => {
         />
         <Form.Check.Label ref={showJSLabel}> Show JS</Form.Check.Label>
       </Form.Check>*/}
-        {showJSON && (
+        {/*{showJSON && (
           <AceEditor
             width={"100%"}
             mode="json"
@@ -192,7 +191,7 @@ const CardEditorView = (props: { defaultCard?: boolean }) => {
             value={realCode}
             editorProps={{ $blockScrolling: true }}
           />
-        )}
+        )}*/}
       </span>
     </>
   )

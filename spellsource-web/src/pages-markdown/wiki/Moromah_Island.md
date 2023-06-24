@@ -5,7 +5,7 @@ layout: wiki
 ---
 
 ![The Island of Moromah and Known
-Locations](Map_of_the_Island_of_Moromah.jpg "fig:The Island of Moromah and Known Locations")
+Locations](/static/wiki/Map_of_the_Island_of_Moromah.jpg "fig:The Island of Moromah and Known Locations")
 Moromah Island is the largest island of the [Lung
 archipelago](/wiki/Lung_archipelago "wikilink"), consisting of this main
 island and the surrounding unexplored islets. It is located far

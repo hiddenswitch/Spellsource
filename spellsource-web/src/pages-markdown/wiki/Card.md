@@ -9,7 +9,7 @@ Card Types
 
 ![Example of Otherworlder minion, permanent, and spell cards (going from
 left to
-right).\|alt=\|212x212px](Cards_example.png "fig:Example of Otherworlder minion, permanent, and spell cards (going from left to right).|alt=|212x212px")There
+right).\|alt=\|212x212px](/static/wiki/Cards_example.png "fig:Example of Otherworlder minion, permanent, and spell cards (going from left to right).|alt=|212x212px")There
 are a many types of cards that you can utilize in your quest to achieve
 victory!
 
@@ -66,7 +66,7 @@ Below you can find more information about the classes in the game.
 
 ### Rarities
 
-<img src="Rarities.png" title="fig:An example of the cards with different rarities. (Going from left to right, Free, Common, Rare, Epic, Legendary)" width="409" height="409" alt="An example of the cards with different rarities. (Going from left to right, Free, Common, Rare, Epic, Legendary)" />
+<img src="/static/wiki/Rarities.png" title="fig:An example of the cards with different rarities. (Going from left to right, Free, Common, Rare, Epic, Legendary)" width="409" height="409" alt="An example of the cards with different rarities. (Going from left to right, Free, Common, Rare, Epic, Legendary)" />
 In Spellsource, cards can have 5 different rarities, in the game,
 indicated by a small gem below the mana cost. Below is the list of card
 rarities.

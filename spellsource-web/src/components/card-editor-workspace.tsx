@@ -2,9 +2,6 @@ import React, { forwardRef, MutableRefObject, useContext, useEffect, useState } 
 import * as WorkspaceUtils from "../lib/workspace-utils"
 import * as styles from "./card-editor-view.module.scss"
 import Blockly, { BlockSvg, Toolbox, ToolboxCategory, WorkspaceSvg } from "blockly"
-import "ace-builds/src-noconflict/mode-json"
-import "ace-builds/src-noconflict/mode-xml"
-import "ace-builds/src-noconflict/theme-github"
 import { useIndex } from "../hooks/use-index"
 import * as JsonConversionUtils from "../lib/json-conversion-utils"
 import * as BlocklyMiscUtils from "../lib/blockly-misc-utils"
@@ -20,11 +17,10 @@ import { useDeleteCardMutation, useGetCardLazyQuery, useUpsertCardMutation } fro
 import { CardDef } from "./card-display"
 import { useSession } from "next-auth/react"
 import { useDebounce } from "react-use"
-import uniqueBy from "@popperjs/core/lib/utils/uniqueBy"
 import javascript from "blockly/javascript"
-import { useBootstrapBreakpoints, useBootstrapMinBreakpoint } from "react-bootstrap/ThemeProvider"
 import useBreakpoint from "@restart/hooks/useBreakpoint"
 import { useEffectOnce } from "../hooks/use-effect-once"
+import { uniqBy } from "lodash"
 
 interface CardEditorWorkspaceProps {
   setJSON?: React.Dispatch<React.SetStateAction<string>>
@@ -122,7 +118,7 @@ const CardEditorWorkspace = forwardRef(
 
       const blocks = workspace.getTopBlocks(true).filter((block) => block.cardScript) as BlockSvg[]
 
-      await Promise.all(uniqueBy(blocks, (block) => block.getFieldValue("id")).map(onSave))
+      await Promise.all(uniqBy(blocks, (block) => block.getFieldValue("id")).map(onSave))
       console.log("Workspace Saved")
 
       await data.refreshMyCards()
@@ -192,7 +188,7 @@ const CardEditorWorkspace = forwardRef(
       const myCards = toolbox()?.getToolboxItemById("My Cards") as ToolboxCategory
       myCards?.updateFlyoutContents(myCardsCategory(data))
 
-      uniqueBy(
+      uniqBy(
         data.myCards.map((card) => card.cardScript.set),
         (card) => card.set
       ).forEach((set) => {
@@ -355,7 +351,7 @@ const CardEditorWorkspace = forwardRef(
       )
     }
 
-    const sm = useBreakpoint("sm", "up")
+    const xs = !useBreakpoint("sm", "up")
 
     return (
       <SimpleReactBlockly
@@ -368,12 +364,13 @@ const CardEditorWorkspace = forwardRef(
             minScale: 0.5,
             maxScale: 2.0,
             pinch: true,
+            startScale: xs ? 0.75 : 1,
           },
           move: {
             wheel: true,
           },
-          horizontalLayout: !sm,
-          toolboxPosition: sm ? "start" : "end",
+          oneBasedIndex: false,
+          horizontalLayout: xs,
           renderer: props.renderer || "spellsource",
           toolbox: BlocklyToolbox.editorToolbox(results, data),
         }}

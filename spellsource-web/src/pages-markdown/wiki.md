@@ -1,14 +1,13 @@
 ---
 title: Wiki
 header: true
-path: /wiki/Main_Page
+path: /wiki
 layout: wiki
 ---
 ### Your journey begins here...
 <p />
 
-![The Lung
-Archipelago](public/static/assets/sector-5.png "fig:The Lung Archipelago")
+![The Lung Archipelago](/static/assets/sector-5.png "fig:The Lung Archipelago")
 
 Greetings, [settler](/wiki/Humans "wikilink")! The world's greatest explorer,
 [Shun He](/wiki/Shun_He "wikilink"), leads an expedition to find the fabled
@@ -65,7 +64,7 @@ Landfall](/wiki/Vision_of_Landfall "wikilink").
 <details>
 <summary>Who will you main?</summary>
 
-![Champions](public/static/assets/champions-resized.png)
+![Champions](/static/assets/champions-resized.png)
 
 -   [Shun He](/wiki/Shun_He "wikilink"), the Grand Alchemist of the Lotus
     Empire.
@@ -96,7 +95,7 @@ Landfall](/wiki/Vision_of_Landfall "wikilink").
 -   [Fae](/wiki/Fae "wikilink"): Earlier human "settlers" of the islands, they
     are imbued with natural magic and come in blue (sea) and green
     (land) varieties. They are nomadic and live in small tribes.
-    
+
 </details>
 
 ### How To Play

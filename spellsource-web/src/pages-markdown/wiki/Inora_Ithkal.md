@@ -4,7 +4,7 @@ path: /wiki/Inora_Ithkal
 layout: wiki
 ---
 
-![Inora Ithkal](Inora.png "fig:Inora Ithkal") Inora Ithkal is a
+![Inora Ithkal](/static/wiki/Inora.png "fig:Inora Ithkal") Inora Ithkal is a
 Healer of the [Fae](/wiki/Fae "wikilink") of the Land.
 
 ### Biography

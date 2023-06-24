@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 public final class ClasspathCardCatalogue extends ListCardCatalogue {
 	/**
 	 * Gets the card catalogue corresponding to the classpath.
-	 *
-	 * @return all the classpath cards
 	 */
 	public static final ClasspathCardCatalogue INSTANCE = new ClasspathCardCatalogue();
 	private AtomicBoolean loaded = new AtomicBoolean();

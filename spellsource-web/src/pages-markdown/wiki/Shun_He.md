@@ -5,7 +5,7 @@ layout: wiki
 ---
 
 ![Shun He, Grand Alchemist of the Lotus
-Empire](Shun He Rev.png "fig:Shun He, Grand Alchemist of the Lotus Empire")
+Empire](/static/wiki/Shun%20He%20Rev.png "fig:Shun He, Grand Alchemist of the Lotus Empire")
 Shun He is the Grand Alchemist of the [Lotus
 Empire](/wiki/Lotus_Empire "wikilink"), a blind monk and leader of the
 [Human](/wiki/Humans "wikilink") settlers.

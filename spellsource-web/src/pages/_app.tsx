@@ -1,5 +1,5 @@
 import { AppProps } from "next/app"
-import "../components/global.scss"
+import "../global.scss"
 import { ApolloClientProvider } from "../lib/apollo"
 import { SessionProvider } from "next-auth/react"
 import "bootstrap/dist/css/bootstrap.min.css"

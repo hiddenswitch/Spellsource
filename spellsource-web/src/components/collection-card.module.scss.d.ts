@@ -1,1 +1,1 @@
-export const span: string;
+export const span: string

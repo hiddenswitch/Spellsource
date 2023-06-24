@@ -23,7 +23,7 @@ life before they do the same to you!
 
 ![An example of a mulligan. In this example, we are keeping the middle
 card, and sending the other two cards back into the
-deck.](Mulligan.png "fig:An example of a mulligan. In this example, we are keeping the middle card, and sending the other two cards back into the deck.")
+deck.](/static/wiki/Mulligan.png "fig:An example of a mulligan. In this example, we are keeping the middle card, and sending the other two cards back into the deck.")
 As stated earlier, both players will begin with 30 HP. Both players will
 also begin with no Lun. We will return to this in the following section.
 One player will randomly be selected to move first, and the other
@@ -37,7 +37,7 @@ both players have finished their mulligan, Player 2 will receive a
 [Lunstone](/wiki/Lunstone "wikilink"). At this point, the game will begin!
 ![This is an example of a player's hand and Lun count. In this case, the
 player has 7 Lun crystals total, but only 1 available left to use this
-turn.](Hand_and_Lun.png "fig:This is an example of a player's hand and Lun count. In this case, the player has 7 Lun crystals total, but only 1 available left to use this turn.")
+turn.](/static/wiki/Hand_and_Lun.png "fig:This is an example of a player's hand and Lun count. In this case, the player has 7 Lun crystals total, but only 1 available left to use this turn.")
 
 #### The Board
 
@@ -72,7 +72,7 @@ Each player has multiple different zones to utilize.
 left to right). The skill is highlighted, meaning that it still can be
 used this turn, and the highlight around our champion means that it can
 still attack this
-turn.](Screen_Shot_2019-08-01_at_10.34.06_AM.png "fig:Here we can see the player's weapon, skill, and champion (going from left to right). The skill is highlighted, meaning that it still can be used this turn, and the highlight around our champion means that it can still attack this turn.")
+turn.](/static/wiki/Screen_Shot_2019-08-01_at_10.34.06_AM.png "fig:Here we can see the player's weapon, skill, and champion (going from left to right). The skill is highlighted, meaning that it still can be used this turn, and the highlight around our champion means that it can still attack this turn.")
 
 #### Each Turn
 
@@ -83,7 +83,7 @@ player's turn, which will do so at this time. ![Here we can see both
 players' minions on the board. In this case, the player has 4 minions
 out, but the opponent only has 1. The white border around a card
 indicates that it can still attack this
-turn.](Minions.png "fig:Here we can see both players' minions on the board. In this case, the player has 4 minions out, but the opponent only has 1. The white border around a card indicates that it can still attack this turn.")
+turn.](/static/wiki/Minions.png "fig:Here we can see both players' minions on the board. In this case, the player has 4 minions out, but the opponent only has 1. The white border around a card indicates that it can still attack this turn.")
 Now, the player may make their turn! Every card has a number in the top
 right corner. That is its Lun cost. In order to play that card, you will
 need to use that much of your Lun in reserve. In addition to playing
