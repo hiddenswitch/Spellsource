@@ -6,7 +6,6 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.UndeclaredThrowableException;
-import java.util.LinkedList;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadFactory;
@@ -42,7 +41,7 @@ public class EventLoopScheduler implements Scheduler {
   private static ThreadFactory threadFactory(Executor carrier) {
     try {
       Thread.Builder.OfVirtual ov = (Thread.Builder.OfVirtual) virtualThreadFactory.invokeExact(carrier);
-      ov.name("vert.x-virtual-thread");
+//      ov.name("vert.x-virtual-thread-%d".formatted(virtualThreadCounter.getAndIncrement()));
       return ov.factory();
     } catch (RuntimeException | Error e) {
       throw e;

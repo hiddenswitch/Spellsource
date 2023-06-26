@@ -27,7 +27,7 @@ import static org.testcontainers.Testcontainers.exposeHostPorts;
 public class FrameworkTestBase {
 	@AfterEach
 	public void delay() throws InterruptedException {
-		TimeUnit.SECONDS.sleep(1);
+		TimeUnit.SECONDS.sleep(3);
 	}
 
 	protected static ToxiproxyContainer TOXIPROXY = new ToxiproxyContainer(DockerImageName.parse("ghcr.io/shopify/toxiproxy:latest").asCompatibleSubstituteFor("shopify/toxiproxy"));

@@ -80,7 +80,7 @@ public interface Clustered {
 			log.warn("Forcing JGroups config to '" + configPath + "'");
 			builderHolder.getGlobalConfigurationBuilder().transport().defaultTransport().removeProperty(JGroupsTransport.CHANNEL_CONFIGURATOR).addProperty(JGroupsTransport.CONFIGURATION_FILE, configPath);
 		}
-//		builderHolder.getDefaultConfigurationBuilder().memory().storage(StorageType.OFF_HEAP).maxSize("2GB");
+		builderHolder.getDefaultConfigurationBuilder().memory().storage(StorageType.OFF_HEAP).maxSize("2GB");
 
 		return new DefaultCacheManager(builderHolder, true);
 	}

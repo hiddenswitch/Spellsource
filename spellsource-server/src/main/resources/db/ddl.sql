@@ -524,6 +524,42 @@ $$;
 ALTER FUNCTION spellsource.cards_type(card spellsource.cards) OWNER TO admin;
 
 --
+-- Name: clustered_games_update_game_and_users(text, text, bigint, json); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.clustered_games_update_game_and_users(p_user_id_winner text, p_user_id_loser text, p_game_id bigint, p_trace json) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+begin
+    -- equivalent of the first jooq update query
+    update game_users
+    set victory_status = 'WON'::spellsource.game_user_victory_enum
+    where user_id = p_user_id_winner
+      and game_id = p_game_id;
+
+    -- equivalent of the second jooq update query
+    update game_users
+    set victory_status = 'LOST'::spellsource.game_user_victory_enum
+    where user_id = p_user_id_loser
+      and game_id = p_game_id;
+
+    -- equivalent of the third jooq update query
+    update games
+    set status = 'FINISHED'::spellsource.game_state_enum,
+        trace  = p_trace
+    where id = p_game_id;
+
+    return true;
+exception
+    when others then
+        return false;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.clustered_games_update_game_and_users(p_user_id_winner text, p_user_id_loser text, p_game_id bigint, p_trace json) OWNER TO admin;
+
+--
 -- Name: create_deck_with_cards(text, text, text, text[]); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 

@@ -11,6 +11,8 @@ import io.vertx.core.*;
 import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.json.jackson.DatabindCodec;
 import io.vertx.pgclient.pubsub.PgSubscriber;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
@@ -24,45 +26,42 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import static io.vertx.await.Async.await;
 
-public class SqlCachedCardCatalogue extends ListCardCatalogue implements Closeable {
+public class SqlCachedCardCatalogue extends ListCardCatalogue {
 	public static final String SPELLSOURCE_CARDS_CHANGES_CHANNEL_FROM_DDL = "spellsource_cards_changes_v0";
 	Deque<String> invalidated = new ConcurrentLinkedDeque<>();
-	Lock lock = new ReentrantLock();
-	List<Closeable> resources = new ArrayList<>();
 	WeakVertxMap<PgSubscriber> subscribers = new WeakVertxMap<>(vertx -> PgSubscriber.subscriber(vertx, Environment.pgArgs().connectionOptions()));
 	private PgSubscriber subscriber;
-	AtomicBoolean refreshed = new AtomicBoolean();
 
 	public Future<Void> invalidateAllAndRefreshOnce() {
-		if (refreshed.compareAndSet(false, true)) {
+		Async.lock(lock.writeLock());
+		try {
 			if (cards.isEmpty()) {
-				return invalidateAllAndRefresh();
+				invalidateAllAndRefresh();
 			}
+		} finally {
+			lock.writeLock().unlock();
 		}
+
 		return Future.succeededFuture();
 	}
 
-	public Future<Void> invalidateAllAndRefresh() {
-		var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
-		return cardsDao.findAll()
-				.compose(cardDbRecords -> {
-					Async.lock(lock);
-					try {
-						invalidated.clear();
-						clear();
-						loadFromCardDbRecords(cardDbRecords);
-						return Future.succeededFuture();
-					} catch (Throwable t) {
-						return Future.failedFuture(t);
-					} finally {
-						lock.unlock();
-					}
-				}).mapEmpty();
+	public void invalidateAllAndRefresh() {
+		if (!Thread.currentThread().isVirtual()) {
+			throw new IllegalStateException("must run in virtual");
+		}
+		Async.lock(lock.writeLock());
+		try {
+			invalidated.clear();
+			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+			var cardDbRecords = await(cardsDao.findAll());
+			clear();
+			loadFromCardDbRecords(cardDbRecords);
+		} finally {
+			lock.writeLock().unlock();
+		}
 	}
 
 	public void invalidateAll() {
@@ -77,18 +76,15 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue implements Closeab
 		// todo: pool these connections
 		this.subscriber = subscribers.get();
 		var context = Vertx.currentContext();
-		subscriber
-				.channel(SPELLSOURCE_CARDS_CHANGES_CHANNEL_FROM_DDL)
-				.handler(payload -> context.runOnContext(v -> {
-					try {
-						var decoded = DatabindCodec.mapper().readValue(payload, SpellsourceCardChangesChannelNotification.class);
-						invalidate(decoded.id());
-					} catch (JsonProcessingException e) {
-						throw new RuntimeException(e);
-					}
-				}));
+		subscriber.channel(SPELLSOURCE_CARDS_CHANGES_CHANNEL_FROM_DDL).handler(payload -> context.runOnContext(v -> {
+			try {
+				var decoded = DatabindCodec.mapper().readValue(payload, SpellsourceCardChangesChannelNotification.class);
+				invalidate(decoded.id());
+			} catch (JsonProcessingException e) {
+				throw new RuntimeException(e);
+			}
+		}));
 
-		resources.add(subscriber::close);
 		return subscriber.connect();
 	}
 
@@ -103,20 +99,26 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue implements Closeab
 
 	@Override
 	public @NotNull CardList query(DeckFormat deckFormat, Spellsource.CardTypeMessage.CardType cardType, Spellsource.RarityMessage.Rarity rarity, String heroClass, Attribute tag, boolean clone) {
+
 		refreshInvalid();
 		return super.query(deckFormat, cardType, rarity, heroClass, tag, clone);
+
 	}
 
 	@Override
 	public @NotNull CardList getAll() {
+
 		refreshInvalid();
 		return super.getAll();
+
 	}
 
 	@Override
 	public @NotNull Card getCardById(@NotNull String id) {
+
 		refreshInvalid();
 		return super.getCardById(id);
+
 	}
 
 	@Override
@@ -192,6 +194,11 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue implements Closeab
 	}
 
 	private void refreshInvalid() {
+		// if we're currently a bot, never refresh
+		var gameContext = GameContext.current();
+		if (gameContext != null && !gameContext.getBehaviours().get(gameContext.getActivePlayerId()).isHuman() && GameStateValueBehaviour.isInBotSimulation()) {
+			return;
+		}
 		String invalid;
 		Set<String> toFetch = null;
 		while ((invalid = invalidated.pollFirst()) != null) {
@@ -204,35 +211,23 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue implements Closeab
 			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 			if (Vertx.currentContext() != null && ((ContextInternal) Vertx.currentContext()).unwrap() instanceof VirtualThreadContext) {
 				var cardDbRecords = await(cardsDao.findManyByIds(toFetch));
-				Async.lock(lock);
+				Async.lock(lock.writeLock());
 				try {
 					loadFromCardDbRecords(cardDbRecords);
 				} finally {
-					lock.unlock();
+					lock.writeLock().unlock();
 				}
 			} else {
-				cardsDao.findManyByIds(toFetch)
-						.onSuccess(cardDbRecords -> {
-							Async.lock(lock);
-							try {
-								loadFromCardDbRecords(cardDbRecords);
-							} finally {
-								lock.unlock();
-							}
-						});
+				cardsDao.findManyByIds(toFetch).onSuccess(cardDbRecords -> {
+					Async.lock(lock.writeLock());
+					try {
+						loadFromCardDbRecords(cardDbRecords);
+					} finally {
+						lock.writeLock().unlock();
+					}
+				});
 			}
-
-
 		}
-	}
-
-	@Override
-	public void close(Promise<Void> completion) {
-		CompositeFuture.all(resources.stream().map(c -> {
-			var promise = Promise.<Void>promise();
-			c.close(promise);
-			return (Future) promise.future();
-		}).toList()).map((Void) null).onComplete(completion);
 	}
 
 	record SpellsourceCardChangesChannelNotification(String __table, String id) {

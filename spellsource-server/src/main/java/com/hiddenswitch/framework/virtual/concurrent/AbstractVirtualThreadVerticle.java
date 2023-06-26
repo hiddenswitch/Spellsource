@@ -14,10 +14,11 @@ public abstract class AbstractVirtualThreadVerticle extends AbstractVerticle {
 	@Override
 	public final void init(Vertx vertx1, Context context1) {
 		super.init(vertx1, context1);
+
 		var context = (ContextInternal) context1;
 		var scheduler = new EventLoopScheduler(context.nettyEventLoop());
 		var vertx = (VertxInternal) vertx1;
-		this.context = new VirtualThreadContext(vertx, context.nettyEventLoop(), vertx.getInternalWorkerPool(), vertx.getWorkerPool(), scheduler, context.getDeployment(), vertx.closeFuture(), Thread.currentThread().getContextClassLoader());
+		this.context = new VirtualThreadContext(vertx, context.nettyEventLoop(), vertx.getInternalWorkerPool(), vertx.getWorkerPool(), scheduler, context.getDeployment(), context.closeFuture(), Thread.currentThread().getContextClassLoader());
 	}
 
 	@Override
@@ -30,32 +31,34 @@ public abstract class AbstractVirtualThreadVerticle extends AbstractVerticle {
 
 	@Override
 	public final void start(Promise<Void> startPromise) throws Exception {
+		var startingContext = Vertx.currentContext();
 		context.runOnContext(v -> {
 			try {
-				virtualStart();
-				startPromise.complete();
+				startVirtual();
+				startingContext.runOnContext(v2 -> startPromise.complete());
 			} catch (Throwable t) {
-				startPromise.fail(t);
+				startingContext.runOnContext(v2 -> startPromise.fail(t));
 			}
 		});
 	}
 
 	@Override
 	public final void stop(Promise<Void> stopPromise) throws Exception {
+		var stoppingContext = Vertx.currentContext();
 		context.runOnContext(v -> {
 			try {
-				virtualStop();
-				stopPromise.complete();
+				stopVirtual();
+				stoppingContext.runOnContext(v2 -> stopPromise.complete());
 			} catch (Throwable t) {
-				stopPromise.fail(t);
+				stoppingContext.runOnContext(v2 -> stopPromise.fail(t));
 			}
 		});
 	}
 
-	public void virtualStart() throws Exception {
+	public void startVirtual() throws Exception {
 	}
 
-	public void virtualStop() throws Exception {
+	public void stopVirtual() throws Exception {
 	}
 
 }

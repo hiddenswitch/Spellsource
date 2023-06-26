@@ -12,7 +12,6 @@ import io.vertx.core.Vertx;
 import io.vertx.core.impl.ContextInternal;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 import java.util.concurrent.locks.Lock;
 
 public class Async {

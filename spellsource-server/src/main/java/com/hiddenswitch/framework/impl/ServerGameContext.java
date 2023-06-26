@@ -11,14 +11,17 @@ import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.binder.BaseUnits;
 import io.opentracing.log.Fields;
 import io.opentracing.propagation.Format;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.await.Async;
 import io.vertx.core.Future;
 import io.vertx.core.*;
-import io.vertx.core.eventbus.*;
-import io.vertx.core.impl.ContextInternal;
+import io.vertx.core.eventbus.Message;
+import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import net.demilich.metastone.game.GameContext;
@@ -29,8 +32,8 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
@@ -56,6 +59,7 @@ import java.util.function.Function;
 
 import static com.hiddenswitch.framework.Environment.*;
 import static com.hiddenswitch.framework.Games.ADDRESS_IS_IN_GAME;
+import static io.micrometer.core.instrument.Metrics.globalRegistry;
 import static io.vertx.await.Async.await;
 import static io.vertx.core.CompositeFuture.all;
 import static java.util.stream.Collectors.toList;
@@ -72,17 +76,23 @@ import static java.util.stream.Collectors.toList;
 public class ServerGameContext extends GameContext implements Server {
 	private static final long CLOSE_TIMEOUT_MILLIS = 4000L;
 	private static final long REGISTRATION_TIMEOUT = 4000L;
+	private static final Counter GAMES_FINISHED = Counter.builder("games.finished")
+			.description("The number of games finished.")
+			.baseUnit(BaseUnits.EVENTS)
+			.register(globalRegistry);
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServerGameContext.class);
 	public static final String WRITER_ADDRESS_PREFIX = "games:writer:";
 	public static final String READER_ADDRESS_PREFIX = "games:reader:";
 
 	private final transient Lock lock = new ReentrantLock();
-	private final transient Queue<Consumer<ServerGameContext>> onGameEndHandlers = new ConcurrentLinkedQueue<>();
 	private final transient Map<Integer, Promise<Client>> clientsReady = new ConcurrentHashMap<>();
 	private final transient List<Client> clients = new CopyOnWriteArrayList<>();
 	private final transient List<Promise> registrationsReady = new CopyOnWriteArrayList<>();
 	private final transient Promise<Void> initialization = Promise.promise();
 	private final Context context;
+	private final List<MessageConsumer<String>> inGameConsumers = new ArrayList<>();
+	private final ClusteredGames cluster;
+	private final AbstractVirtualThreadVerticle verticle;
 	private transient Long turnTimerId;
 	private final List<Configuration> playerConfigurations = new ArrayList<>();
 	private final String gameId;
@@ -101,9 +111,13 @@ public class ServerGameContext extends GameContext implements Server {
 	 * @param gameId               The game ID that corresponds to this game context.
 	 * @param scheduler            The {@link Scheduler} instance to use for scheduling game events.
 	 * @param playerConfigurations The information about the players who will be connecting / playing this game context
+	 * @param clusteredGames
+	 * @param verticle
 	 */
-	public ServerGameContext(@NotNull String gameId, @NotNull Scheduler scheduler, @NotNull List<Configuration> playerConfigurations, CardCatalogue cardCatalogue) {
+	public ServerGameContext(@NotNull String gameId, @NotNull Scheduler scheduler, @NotNull List<Configuration> playerConfigurations, CardCatalogue cardCatalogue, ClusteredGames cluster, AbstractVirtualThreadVerticle verticle) {
 		super();
+		this.cluster = cluster;
+		this.verticle = verticle;
 		if (cardCatalogue != null) {
 			setCardCatalogue(cardCatalogue);
 		}
@@ -171,7 +185,7 @@ public class ServerGameContext extends GameContext implements Server {
 				registrationsReady.add(inGameRegistration);
 
 				// When the game ends remove the fact that the user is in this game
-				addEndGameHandler(ctx -> await(inGameConsumer.unregister()));
+				this.inGameConsumers.add(inGameConsumer);
 
 				// Bots simply forward their requests to a bot service provider, that executes the bot logic on a worker thread
 				if (configuration.isBot()) {
@@ -198,12 +212,12 @@ public class ServerGameContext extends GameContext implements Server {
 					var serverGameContext = this;
 					// Improve robustness of the user's event bus handlers and interaction with the game context by giving it a
 					// distinct task queue from the game and/or other users.
-					var userVerticle = new AbstractVerticle() {
+					var userVerticle = new AbstractVirtualThreadVerticle() {
 						private UnityClientBehaviour client;
 						private MessageProducer<Spellsource.ServerToClientMessage> producer;
 						private MessageConsumer<Spellsource.ClientToServerMessage> consumer;
 
-						public void start() {
+						public void startVirtual() {
 							var bus = Vertx.currentContext().owner().eventBus();
 							this.consumer = bus.<Spellsource.ClientToServerMessage>consumer(getMessagesFromClientAddress(userId));
 							consumer.setMaxBufferedMessages(Integer.MAX_VALUE);
@@ -231,10 +245,10 @@ public class ServerGameContext extends GameContext implements Server {
 						}
 
 						@Override
-						public void stop() {
+						public void stopVirtual() {
 							client.close(Promise.promise());
-							consumer.unregister();
-							producer.close();
+							await(consumer.unregister());
+							await(producer.close());
 						}
 					};
 
@@ -527,8 +541,7 @@ public class ServerGameContext extends GameContext implements Server {
 			if (getThread() != null) {
 				throw new UnsupportedOperationException("Cannot play with a fork twice!");
 			}
-			var async = async();
-			async.run(v -> {
+			context.runOnContext(v -> {
 				var thread = Thread.currentThread();
 				setThread(thread);
 				if (!thread.isVirtual()) {
@@ -859,31 +872,21 @@ public class ServerGameContext extends GameContext implements Server {
 			super.endGame();
 			LOGGER.trace("endGame {}: called super.endGame", gameId);
 
-			// No end of game handler should be called more than once, so we're removing them one-by-one as we're processing
-			// them.
-			Consumer<ServerGameContext> handler;
-
-			// todo: if these have gameplay side effects and access the context, we are SOL
-			while ((handler = onGameEndHandlers.poll()) != null) {
-				try {
-					handler.accept(this);
-				} catch (Throwable t) {
-					LOGGER.warn("onGameEndHandler threw", t);
-				}
+			for (var consumer : inGameConsumers) {
+				consumer.unregister();
 			}
 
 			LOGGER.trace("endGame {}: endGameHandlers run", gameId);
 
-			// Now that the game is over, we have to stop processing the game event loop. We'll check that we're not in the
-			// loop right now. If we are, we don't need to interrupt ourselves. Conceding, server shutdown and other lifecycle
-			// issues will result, eventually, in calling end game outside this game's event loop. In that case, we'll
-			// interrupt the event loop. Can the event loop itself be in the middle of calling endGame? In that case, the lock
-			// prevents two endGames from being processed simultaneously, along with other important mutating events, like
-			// other callbacks that may be processing player modifications to the game.
-			if (getThread() != null && !Thread.currentThread().equals(getThread())) {
-				getThread().interrupt();
-				LOGGER.trace("endGame {}: interrupted fiber", gameId);
-				setThread(null);
+			try {
+				this.cluster.removeGameAndRecordReplay(this.gameId);
+			} catch (Throwable t) {
+				LOGGER.warn("could not record game because", t);
+			} finally {
+				// todo: this should really be the last end game handler
+				if (verticle.getVertx().deploymentIDs().contains(verticle.deploymentID())) {
+					verticle.getVertx().undeploy(verticle.deploymentID()).onFailure(com.hiddenswitch.framework.Environment.onFailure());
+				}
 			}
 		} finally {
 			close();
@@ -899,15 +902,6 @@ public class ServerGameContext extends GameContext implements Server {
 	 */
 	private List<String> getUserIds() {
 		return getPlayerConfigurations().stream().map(Configuration::getUserId).collect(toList());
-	}
-
-	/**
-	 * Adds a handler for when the game ends, for any reason.
-	 *
-	 * @param handler
-	 */
-	public void addEndGameHandler(Consumer<ServerGameContext> handler) {
-		onGameEndHandlers.add(handler);
 	}
 
 	@Override

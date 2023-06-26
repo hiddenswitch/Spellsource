@@ -12,6 +12,7 @@ import com.hiddenswitch.framework.schema.spellsource.routines.CardMessage;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardsCollectible;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardsCost;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardsType;
+import com.hiddenswitch.framework.schema.spellsource.routines.ClusteredGamesUpdateGameAndUsers;
 import com.hiddenswitch.framework.schema.spellsource.routines.CreateDeckWithCards;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetUserId;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueFormats;
@@ -42,6 +43,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.SetCardsInDe
 
 import org.jooq.Configuration;
 import org.jooq.Field;
+import org.jooq.JSON;
 import org.jooq.Result;
 
 
@@ -371,6 +373,64 @@ public class Routines {
     ) {
         CardsType f = new CardsType();
         f.setCard(card);
+
+        return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.clustered_games_update_game_and_users</code>
+     */
+    public static Boolean clusteredGamesUpdateGameAndUsers(
+          Configuration configuration
+        , String pUserIdWinner
+        , String pUserIdLoser
+        , Long pGameId
+        , JSON pTrace
+    ) {
+        ClusteredGamesUpdateGameAndUsers f = new ClusteredGamesUpdateGameAndUsers();
+        f.setPUserIdWinner(pUserIdWinner);
+        f.setPUserIdLoser(pUserIdLoser);
+        f.setPGameId(pGameId);
+        f.setPTrace(pTrace);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.clustered_games_update_game_and_users</code> as a
+     * field.
+     */
+    public static Field<Boolean> clusteredGamesUpdateGameAndUsers(
+          String pUserIdWinner
+        , String pUserIdLoser
+        , Long pGameId
+        , JSON pTrace
+    ) {
+        ClusteredGamesUpdateGameAndUsers f = new ClusteredGamesUpdateGameAndUsers();
+        f.setPUserIdWinner(pUserIdWinner);
+        f.setPUserIdLoser(pUserIdLoser);
+        f.setPGameId(pGameId);
+        f.setPTrace(pTrace);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.clustered_games_update_game_and_users</code> as a
+     * field.
+     */
+    public static Field<Boolean> clusteredGamesUpdateGameAndUsers(
+          Field<String> pUserIdWinner
+        , Field<String> pUserIdLoser
+        , Field<Long> pGameId
+        , Field<JSON> pTrace
+    ) {
+        ClusteredGamesUpdateGameAndUsers f = new ClusteredGamesUpdateGameAndUsers();
+        f.setPUserIdWinner(pUserIdWinner);
+        f.setPUserIdLoser(pUserIdLoser);
+        f.setPGameId(pGameId);
+        f.setPTrace(pTrace);
 
         return f.asField();
     }

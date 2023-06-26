@@ -3,7 +3,6 @@ package com.hiddenswitch.framework.impl;
 import com.google.common.base.Throwables;
 import com.google.protobuf.Int32Value;
 import com.hiddenswitch.diagnostics.Tracing;
-import com.hiddenswitch.framework.Diagnostics;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.rpc.Spellsource;

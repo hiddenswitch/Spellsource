@@ -506,5 +506,41 @@ create trigger card_changes_trigger
     for each row
 execute procedure spellsource.card_change_notify_event();
 
+--- helps record replays
+create or replace function spellsource.clustered_games_update_game_and_users(
+    p_user_id_winner text,
+    p_user_id_loser text,
+    p_game_id bigint,
+    p_trace json
+)
+    returns boolean as
+$$
+begin
+    -- equivalent of the first jooq update query
+    update game_users
+    set victory_status = 'WON'::spellsource.game_user_victory_enum
+    where user_id = p_user_id_winner
+      and game_id = p_game_id;
+
+    -- equivalent of the second jooq update query
+    update game_users
+    set victory_status = 'LOST'::spellsource.game_user_victory_enum
+    where user_id = p_user_id_loser
+      and game_id = p_game_id;
+
+    -- equivalent of the third jooq update query
+    update games
+    set status = 'FINISHED'::spellsource.game_state_enum,
+        trace  = p_trace
+    where id = p_game_id;
+
+    return true;
+exception
+    when others then
+        return false;
+end;
+$$ language plpgsql;
+
+
 --- todo: implement draft queries. the draft logic may be entirely replaced by a sql function, where it will be easier to author
 --- todo: create corresponding views and grant execution privileges to the card builder for these catalogue queries

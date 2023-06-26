@@ -5,7 +5,6 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import com.hiddenswitch.diagnostics.Tracing;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.core.Vertx;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -40,6 +39,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -54,9 +54,9 @@ import static java.util.stream.Collectors.toList;
  * literature using the Greek letter Pi.
  * <p>
  * Policies take as inputs a list of actions, like "Friendly hero attacks opposing hero," and the current state of the
- * game, in this case all the data available in {@link GameContext}, and returns an action as an output. {@link
- * #requestAction(GameContext, Player, List)} corresponds to this AI's policy; when implementing an idea, especially
- * from the literature, start with {@link #requestAction(GameContext, Player, List)}.
+ * game, in this case all the data available in {@link GameContext}, and returns an action as an output.
+ * {@link #requestAction(GameContext, Player, List)} corresponds to this AI's policy; when implementing an idea,
+ * especially from the literature, start with {@link #requestAction(GameContext, Player, List)}.
  * <p>
  * In this AI, {@link #requestAction(GameContext, Player, List)} tries each action available to take and scoring the
  * outcome. The score, in this case, depends on the game state. The action that leads to the highest score is the action
@@ -101,6 +101,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	public static final int DEFAULT_TIMEOUT = 11800;
 	public static final int DEFAULT_LETHAL_TIMEOUT = 15000;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GameStateValueBehaviour.class);
+	private static final ThreadLocal<AtomicLong> DEPTH = InheritableThreadLocal.withInitial(AtomicLong::new);
 
 	protected Heuristic heuristic;
 	protected FeatureVector featureVector;
@@ -213,10 +214,11 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	/**
 	 * A strict plan is a cache of a computed path (sequence of actions) to a gamestate stored as the actions themselves.
 	 * <p>
-	 * Whenever you call {@link #requestAction(GameContext, Player, List)}, the instance of {@link
-	 * GameStateValueBehaviour} evaluates sequences of actions of length maximum {@link #getMaxDepth()}, and scores the
-	 * value of the <b>last</b> game state (i.e. the game state you arrive at after performing that sequence of actions).
-	 * But the {@link #requestAction(GameContext, Player, List)} method returns the <b>first</b> action in that sequence.
+	 * Whenever you call {@link #requestAction(GameContext, Player, List)}, the instance of
+	 * {@link GameStateValueBehaviour} evaluates sequences of actions of length maximum {@link #getMaxDepth()}, and scores
+	 * the value of the <b>last</b> game state (i.e. the game state you arrive at after performing that sequence of
+	 * actions). But the {@link #requestAction(GameContext, Player, List)} method returns the <b>first</b> action in that
+	 * sequence.
 	 * <p>
 	 * Clearly, the sequence of best actions isn't going to change before and after you take the {@link GameAction} that
 	 * was returned by the first call to {@link #requestAction(GameContext, Player, List)}. This {@link Deque} stores the
@@ -226,15 +228,15 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * <p>
 	 * Since game states are reproducible, and this behaviour "cheats" (it knows what the random seed is), there should be
 	 * an exact match between the {@link Deque#peekFirst()}'d {@link GameAction} in this plan and a game action returned
-	 * by {@link GameContext#getValidActions()}  until the plan has been exhausted (i.e. the plan is {@link
-	 * Deque#isEmpty()} {@code == true}).
+	 * by {@link GameContext#getValidActions()}  until the plan has been exhausted (i.e. the plan is
+	 * {@link Deque#isEmpty()} {@code == true}).
 	 * <p>
 	 * Because the API of a {@link GameContext} does not guarantee that a {@link GameAction} has no references to the
 	 * {@link GameContext} or its objects, this class also implements a {@link #getIndexPlan()}, which uses integers to
 	 * represent an index into {@link GameContext#getValidActions()}.
 	 * <p>
-	 * For example, this code will "follow the plan" that was computed as a side effect of running {@link
-	 * #requestAction(GameContext, Player, List)}.
+	 * For example, this code will "follow the plan" that was computed as a side effect of running
+	 * {@link #requestAction(GameContext, Player, List)}.
 	 * <pre>
 	 * {@code
 	 * while (!getStrictPlan().isEmpty()) {
@@ -792,136 +794,142 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 *                     state that {@link #requestAction(GameContext, Player, List)} was called with.
 	 */
 	protected void evaluate(Deque<Node> contextStack, int playerId, Node node, GameAction action, int depth) {
-		// Clone out the context because we're not going to mutate the node's context.
-		var mutateContext = getClone(node.context);
+		try {
+			DEPTH.get().incrementAndGet();
 
-		preProcess(playerId, mutateContext);
+			// Clone out the context because we're not going to mutate the node's context.
+			var mutateContext = getClone(node.context);
 
-		// Start: Infrastructure to support intermediate called to requestAction that come as a consequence of calling
-		// action.
-		Deque<IntermediateNode> intermediateNodes = new ArrayDeque<>();
-		var guard = new AtomicBoolean();
+			preProcess(playerId, mutateContext);
 
-		// Model the opponent as a random player.
-		mutateContext.setBehaviour(playerId == 0 ? 1 : 0, new PlayRandomBehaviour());
-		mutateContext.setBehaviour(playerId, new RequestActionFunction((context1, player1, validActions1) -> {
-			if (isInterrupted() || intermediateNodes.size() > getMaxDepth()) {
-				intermediateNodes.clear();
-				if (throwsExceptions()) {
-					throw new RuntimeException("interrupted");
-				}
-				return exceptionActionChoice(Optional.empty(), validActions1);
-			}
+			// Start: Infrastructure to support intermediate called to requestAction that come as a consequence of calling
+			// action.
+			Deque<IntermediateNode> intermediateNodes = new ArrayDeque<>();
+			var guard = new AtomicBoolean();
 
-			// This is a guard function that detects if intermediate game actions, like discovers or battlecries, are created
-			// while processing the edge we got from the parameters of the expandAndAppend call. If we reach this code, we
-			// have to process intermediate nodes separately. We'll queue the first batch here, and then throw away the result
-			// of the actual action we choose. We must use the guard, because a single performGameAction could call this
-			// RequestActionFunction multiple times, but we only want to queue up the first intermediate actions.
-			if (guard.compareAndSet(false, true)) {
-				for (var i = 0; i < validActions1.size(); i++) {
-					intermediateNodes.add(new IntermediateNode(i));
-				}
-			}
-
-			// Will now mutate the context in an unneeded branch.
-			return validActions1.get(0);
-		}));
-
-		if (isInterrupted()) {
-			// Bail out here if possible, does not queue new nodes.
-			return;
-		}
-
-		mutateContext.performAction(playerId, action);
-
-		// Check if there are intermediates pending
-		if (intermediateNodes.isEmpty()) {
-			var computeAction = new Node(mutateContext, node, depth + 1, action);
-			// Push the new node
-			if (action.getActionType() == ActionType.END_TURN) {
-				contextStack.addLast(computeAction);
-			} else {
-				// Depth first!
-				contextStack.addFirst(computeAction);
-			}
-			return;
-		}
-
-		// The intermediate node processing branch
-		while (intermediateNodes.size() > 0) {
-			if (isInterrupted()) {
-				return;
-			}
-
-			var intermediateNode = intermediateNodes.pollFirst();
-			if (intermediateNode == null) {
-				throw new UnsupportedOperationException("should not queue null nodes.");
-			}
-
-			// Process each intermediate, which may queue more of them. Create a request action function that returns the
-			// specified intermediate game action and also queues more intermediates if they are made.
-			var intermediateMutateContext = getClone(node.context);
-			preProcess(playerId, intermediateMutateContext);
-
-			var queueSize = intermediateNodes.size();
-			var choices = intermediateNode.choices;
-			var counter = new AtomicInteger(0);
-			var intermediateGuard = new AtomicBoolean();
-			intermediateMutateContext.setBehaviour(playerId, new RequestActionFunction((context, player, validActions) -> {
-				if (isInterrupted()) {
+			// Model the opponent as a random player.
+			mutateContext.setBehaviour(playerId == 0 ? 1 : 0, new PlayRandomBehaviour());
+			mutateContext.setBehaviour(playerId, new RequestActionFunction((context1, player1, validActions1) -> {
+				if (isInterrupted() || intermediateNodes.size() > getMaxDepth()) {
 					intermediateNodes.clear();
 					if (throwsExceptions()) {
 						throw new RuntimeException("interrupted");
 					}
-					return exceptionActionChoice(Optional.empty(), validActions);
+					return exceptionActionChoice(Optional.empty(), validActions1);
 				}
 
-				// Make choices until we've exhausted the actions that were specified by this intermediate node.
-				var choiceIndex = counter.getAndIncrement();
-				if (choiceIndex >= choices.length) {
-					// We are queuing more intermediate nodes, mark this intermediate node as having queued more intermediates and
-					// this evaluation as having expanded.
-					if (intermediateGuard.compareAndSet(false, true)) {
-						for (var i = 0; i < validActions.size(); i++) {
-							var newChoices = Arrays.copyOf(choices, choices.length + 1);
-							newChoices[newChoices.length - 1] = i;
-							intermediateNodes.add(new IntermediateNode(newChoices));
-						}
+				// This is a guard function that detects if intermediate game actions, like discovers or battlecries, are created
+				// while processing the edge we got from the parameters of the expandAndAppend call. If we reach this code, we
+				// have to process intermediate nodes separately. We'll queue the first batch here, and then throw away the result
+				// of the actual action we choose. We must use the guard, because a single performGameAction could call this
+				// RequestActionFunction multiple times, but we only want to queue up the first intermediate actions.
+				if (guard.compareAndSet(false, true)) {
+					for (var i = 0; i < validActions1.size(); i++) {
+						intermediateNodes.add(new IntermediateNode(i));
 					}
-					// We can throw this route away.
-					return validActions.get(0);
-				} else {
-					return validActions.get(choices[choiceIndex]);
 				}
+
+				// Will now mutate the context in an unneeded branch.
+				return validActions1.get(0);
 			}));
 
 			if (isInterrupted()) {
+				// Bail out here if possible, does not queue new nodes.
 				return;
 			}
 
-			intermediateMutateContext.performAction(playerId, action);
+			mutateContext.performAction(playerId, action);
 
-			if (isInterrupted()) {
+			// Check if there are intermediates pending
+			if (intermediateNodes.isEmpty()) {
+				var computeAction = new Node(mutateContext, node, depth + 1, action);
+				// Push the new node
+				if (action.getActionType() == ActionType.END_TURN) {
+					contextStack.addLast(computeAction);
+				} else {
+					// Depth first!
+					contextStack.addFirst(computeAction);
+				}
 				return;
 			}
 
-			// Check if processing this intermediate queued more intermediates.
-			if (intermediateNodes.size() > queueSize) {
-				// We can toss this result away, we'll have to process again.
-				continue;
-			}
-			// If it didn't, then the intermediate is the last intermediate on a path from real node to real node. Queue a
-			// real node onto the context stack. Reconstruct the path by following the predecessors of the intermediates until
-			// we reach a real node.
+			// The intermediate node processing branch
+			while (intermediateNodes.size() > 0) {
+				if (isInterrupted()) {
+					return;
+				}
 
-			var actions = new GameAction[1 + choices.length];
-			actions[0] = action;
-			for (var i = 0; i < choices.length; i++) {
-				actions[i + 1] = new IntermediateAction(choices[i]);
-			}
+				var intermediateNode = intermediateNodes.pollFirst();
+				if (intermediateNode == null) {
+					throw new UnsupportedOperationException("should not queue null nodes.");
+				}
 
-			contextStack.add(new Node(intermediateMutateContext, node, depth + 1, actions));
+				// Process each intermediate, which may queue more of them. Create a request action function that returns the
+				// specified intermediate game action and also queues more intermediates if they are made.
+				var intermediateMutateContext = getClone(node.context);
+				preProcess(playerId, intermediateMutateContext);
+
+				var queueSize = intermediateNodes.size();
+				var choices = intermediateNode.choices;
+				var counter = new AtomicInteger(0);
+				var intermediateGuard = new AtomicBoolean();
+				intermediateMutateContext.setBehaviour(playerId, new RequestActionFunction((context, player, validActions) -> {
+					if (isInterrupted()) {
+						intermediateNodes.clear();
+						if (throwsExceptions()) {
+							throw new RuntimeException("interrupted");
+						}
+						return exceptionActionChoice(Optional.empty(), validActions);
+					}
+
+					// Make choices until we've exhausted the actions that were specified by this intermediate node.
+					var choiceIndex = counter.getAndIncrement();
+					if (choiceIndex >= choices.length) {
+						// We are queuing more intermediate nodes, mark this intermediate node as having queued more intermediates and
+						// this evaluation as having expanded.
+						if (intermediateGuard.compareAndSet(false, true)) {
+							for (var i = 0; i < validActions.size(); i++) {
+								var newChoices = Arrays.copyOf(choices, choices.length + 1);
+								newChoices[newChoices.length - 1] = i;
+								intermediateNodes.add(new IntermediateNode(newChoices));
+							}
+						}
+						// We can throw this route away.
+						return validActions.get(0);
+					} else {
+						return validActions.get(choices[choiceIndex]);
+					}
+				}));
+
+				if (isInterrupted()) {
+					return;
+				}
+
+				intermediateMutateContext.performAction(playerId, action);
+
+				if (isInterrupted()) {
+					return;
+				}
+
+				// Check if processing this intermediate queued more intermediates.
+				if (intermediateNodes.size() > queueSize) {
+					// We can toss this result away, we'll have to process again.
+					continue;
+				}
+				// If it didn't, then the intermediate is the last intermediate on a path from real node to real node. Queue a
+				// real node onto the context stack. Reconstruct the path by following the predecessors of the intermediates until
+				// we reach a real node.
+
+				var actions = new GameAction[1 + choices.length];
+				actions[0] = action;
+				for (var i = 0; i < choices.length; i++) {
+					actions[i + 1] = new IntermediateAction(choices[i]);
+				}
+
+				contextStack.add(new Node(intermediateMutateContext, node, depth + 1, actions));
+			}
+		} finally {
+			DEPTH.get().decrementAndGet();
 		}
 	}
 
@@ -989,8 +997,8 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * towards a previously-computed highest-scoring game state. It is essentially a cache of a prior computation of the
 	 * best possible {@link #getMaxDepth()} number of actions.
 	 * <p>
-	 * For example, this code will "follow the plan" that was computed as a side effect of running {@link
-	 * #requestAction(GameContext, Player, List)}.
+	 * For example, this code will "follow the plan" that was computed as a side effect of running
+	 * {@link #requestAction(GameContext, Player, List)}.
 	 * <pre>
 	 * {@code
 	 * while (!getIndexPlan().isEmpty()) {
@@ -1007,10 +1015,10 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	}
 
 	/**
-	 * Just below the maximum amount of time in milliseconds the bot will spend <b>per call</b> to {@link
-	 * #requestAction(GameContext, Player, List)} to determine its sequence of actions. This time tends to be amortized
-	 * over {@link #getMaxDepth()}-length action sequences, because this behaviour caches the calculation of a complete
-	 * sequence.
+	 * Just below the maximum amount of time in milliseconds the bot will spend <b>per call</b> to
+	 * {@link #requestAction(GameContext, Player, List)} to determine its sequence of actions. This time tends to be
+	 * amortized over {@link #getMaxDepth()}-length action sequences, because this behaviour caches the calculation of a
+	 * complete sequence.
 	 *
 	 * @return The time to spend per request, in milliseconds
 	 */
@@ -1158,8 +1166,8 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	}
 
 	/**
-	 * Records a call to {@link System#currentTimeMillis()} at the start of a call to {@link
-	 * GameStateValueBehaviour#requestAction(GameContext, Player, List)}.
+	 * Records a call to {@link System#currentTimeMillis()} at the start of a call to
+	 * {@link GameStateValueBehaviour#requestAction(GameContext, Player, List)}.
 	 *
 	 * @return
 	 */
@@ -1444,5 +1452,15 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			LOGGER.error("observeLethal:\n", runtimeException);
 			return false;
 		}
+	}
+
+	/**
+	 * Uses a thread local variable to keep track of whether or not the caller is currently in a bot's simulated context.
+	 *
+	 * @return {@code true} if {@link GameStateValueBehaviour#evaluate(Deque, int, Node, GameAction, int)} is currently in
+	 * the callstack.
+	 */
+	public static boolean isInBotSimulation() {
+		return !DEPTH.get().compareAndSet(0, 0);
 	}
 }

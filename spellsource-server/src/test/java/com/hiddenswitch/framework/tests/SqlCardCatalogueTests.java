@@ -24,7 +24,7 @@ public class SqlCardCatalogueTests extends FrameworkTestBase {
 				.compose(v -> {
 					var verticle = new AbstractVirtualThreadVerticle() {
 						@Override
-						public void virtualStart() throws Exception {
+						public void startVirtual() throws Exception {
 							var catalogue = new SqlCardCatalogue();
 							handler.handle(catalogue);
 						}
@@ -39,9 +39,9 @@ public class SqlCardCatalogueTests extends FrameworkTestBase {
 				.compose(v -> {
 					var verticle = new AbstractVirtualThreadVerticle() {
 						@Override
-						public void virtualStart() throws Exception {
+						public void startVirtual() throws Exception {
 							var catalogue = new SqlCachedCardCatalogue();
-							await(catalogue.invalidateAllAndRefresh());
+							catalogue.invalidateAllAndRefresh();
 							await(catalogue.subscribe());
 							vertxTestContext.verify(() -> handler.handle(catalogue));
 						}

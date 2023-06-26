@@ -38,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jooq.*;
 import org.jooq.Query;
 import org.jooq.Record;
+import org.jooq.conf.ParamType;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 import org.redisson.Redisson;
@@ -204,6 +205,20 @@ public class Environment {
 						.stream(res.spliterator(), false)
 						.map(mapper)
 						.toList());
+	}
+
+	public static <R> Future<R> callRoutine(Field<R> called) {
+		var conn = Environment.sqlClient();
+		var config = Environment.jooqAkaDaoConfiguration();
+		var dsl = config.dsl().select(called);
+		var namedSql = dsl.getSQL(ParamType.INLINED);
+		return conn.query(namedSql)
+				.execute()
+				.map(res -> StreamSupport
+						.stream(res.spliterator(), false)
+						.findFirst()
+						.map(row -> row.get(called.getType(), 0))
+						.orElseThrow());
 	}
 
 	public static <T> Future<T> withConnection(Function<SqlConnection, Future<T>> handler) {

@@ -117,6 +117,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 	}
 
 	@Test
+	@Timeout(value = 30, timeUnit = TimeUnit.SECONDS)
 	public void testQuickPlay(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
 		startServices(vertx)

@@ -4,14 +4,17 @@ import com.google.common.collect.Sets;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Legacy;
-import com.hiddenswitch.framework.schema.spellsource.Tables;
-import com.hiddenswitch.framework.schema.spellsource.enums.GameStateEnum;
-import com.hiddenswitch.framework.schema.spellsource.enums.GameUserVictoryEnum;
+import com.hiddenswitch.framework.schema.spellsource.Routines;
+import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ClientToServerMessage;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ServerToClientMessage;
+import io.github.jklingsporn.vertx.jooq.shared.postgres.JSONToJsonObjectConverter;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.binder.BaseUnits;
-import io.vertx.core.*;
+import io.vertx.core.CompositeFuture;
+import io.vertx.core.Future;
+import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.MessageConsumer;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
@@ -27,16 +30,12 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.hiddenswitch.framework.schema.keycloak.Keycloak.KEYCLOAK;
-import static com.hiddenswitch.framework.schema.spellsource.Tables.GAME_USERS;
 import static io.micrometer.core.instrument.Metrics.globalRegistry;
+import static io.vertx.await.Async.await;
 
-public class ClusteredGames extends AbstractVerticle {
+public class ClusteredGames extends AbstractVirtualThreadVerticle {
 	private static final Counter GAMES_CREATED = Counter.builder("games.created")
 			.description("The number of games created.")
-			.baseUnit(BaseUnits.EVENTS)
-			.register(globalRegistry);
-	private static final Counter GAMES_FINISHED = Counter.builder("games.finished")
-			.description("The number of games finished.")
 			.baseUnit(BaseUnits.EVENTS)
 			.register(globalRegistry);
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClusteredGames.class);
@@ -46,7 +45,7 @@ public class ClusteredGames extends AbstractVerticle {
 
 
 	@Override
-	public void start(Promise<Void> startPromise) throws Exception {
+	public void startVirtual() throws Exception {
 		CodecRegistration.register(ServerToClientMessage.getDefaultInstance())
 				.andRegister(ClientToServerMessage.getDefaultInstance());
 		var eb = Vertx.currentContext().owner().eventBus();
@@ -54,10 +53,8 @@ public class ClusteredGames extends AbstractVerticle {
 				createGameSession(request.body()).onSuccess(request::reply).onFailure(t -> request.fail(-1, t.getMessage())));
 
 		var registrationFut = Promise.<Void>promise();
-		cardCatalogue.invalidateAllAndRefreshOnce()
-				.compose(v -> cardCatalogue.subscribe())
-				.compose(v -> registrationFut.future())
-				.onComplete(startPromise);
+		await(cardCatalogue.invalidateAllAndRefreshOnce());
+		await(cardCatalogue.subscribe());
 
 		// should we wait for registration to finish?
 		registration.completionHandler(v -> {
@@ -67,6 +64,8 @@ public class ClusteredGames extends AbstractVerticle {
 				registrationFut.fail(v.cause());
 			}
 		});
+
+		await(registrationFut.future());
 	}
 
 	public Future<CreateGameSessionResponse> createGameSession(ConfigurationRequest request) {
@@ -128,44 +127,27 @@ public class ClusteredGames extends AbstractVerticle {
 		return CompositeFuture.all(playerConfigurations)
 				.compose(v -> {
 					LOGGER.trace("loading player configurations for request {}", request);
-					var serverContextVerticle = new AbstractVerticle() {
+					var serverContextVerticle = new AbstractVirtualThreadVerticle() {
 						private ServerGameContext serverGameContext;
 
 						@Override
-						public void start(Promise<Void> startPromise) {
+						public void startVirtual() {
 							this.serverGameContext = new ServerGameContext(
 									request.getGameId(),
 									new VertxScheduler(),
 									request.getConfigurations(),
-									cardCatalogue);
-
-							// Deal with ending the game
-							serverGameContext.addEndGameHandler(session -> {
-								GAMES_FINISHED.increment();
-								try {
-									var gameOverId = session.getGameId();
-									removeGameAndRecordReplay(gameOverId);
-								} catch (Throwable t) {
-									LOGGER.warn("could not record game because", t);
-								} finally {
-									// todo: this should really be the last end game handler
-									if (vertx.deploymentIDs().contains(deploymentID())) {
-										vertx.runOnContext(v -> vertx.undeploy(deploymentID()));
-									}
-								}
-							});
+									cardCatalogue,
+									ClusteredGames.this,
+									this);
 
 							contexts.put(request.getGameId(), serverGameContext);
 							// Plays the game context in its own fiber
-							serverGameContext
-									.handlersReady()
-									.onSuccess(v -> serverGameContext.play(true))
-									.map((Void) null)
-									.onComplete(startPromise);
+							await(serverGameContext.handlersReady());
+							serverGameContext.play(true);
 						}
 
 						@Override
-						public void stop() {
+						public void stopVirtual() {
 							var thread = serverGameContext.getThread();
 							if (thread != null && thread.isAlive() && !thread.isInterrupted() && !serverGameContext.isGameOver()) {
 								thread.interrupt();
@@ -190,7 +172,7 @@ public class ClusteredGames extends AbstractVerticle {
 	 *
 	 * @param gameId
 	 */
-	private Future<Void> removeGameAndRecordReplay(@NotNull String gameId) {
+	public void removeGameAndRecordReplay(@NotNull String gameId) {
 		Objects.requireNonNull(gameId);
 		if (!Thread.currentThread().isVirtual()) {
 			throw new UnsupportedOperationException("expected to be in virtual thread");
@@ -199,45 +181,32 @@ public class ClusteredGames extends AbstractVerticle {
 		var gameIdLong = Long.parseLong(gameId);
 		var gameContext = contexts.remove(gameId);
 		if (gameContext == null) {
-			return Future.succeededFuture();
+			return;
 		}
 
-		return Environment.withExecutor(executor -> {
-			gameContext.updateAndGetGameOver();
-			String winner = null;
-			if (gameContext.getWinner() != null && gameContext.getWinner().getUserId() != null) {
-				winner = gameContext.getWinner().getUserId();
-			}
-			// Save the wins/losses
-			if (winner != null) {
-				var userIdWinner = winner;
-				var userIdLoser = gameContext.getOpponent(gameContext.getWinner()).getUserId();
-				return CompositeFuture.all(
-						executor.execute(dsl -> dsl.update(GAME_USERS)
-								.set(GAME_USERS.VICTORY_STATUS, GameUserVictoryEnum.WON)
-								.where(GAME_USERS.USER_ID.eq(userIdWinner), GAME_USERS.GAME_ID.eq(gameIdLong))),
-						executor.execute(dsl -> dsl.update(GAME_USERS)
-								.set(GAME_USERS.VICTORY_STATUS, GameUserVictoryEnum.LOST)
-								.where(GAME_USERS.USER_ID.eq(userIdLoser), GAME_USERS.GAME_ID.eq(gameIdLong))),
-						executor.execute(dsl -> dsl.update(Tables.GAMES)
-								.set(Tables.GAMES.STATUS, GameStateEnum.FINISHED)
-								.set(Tables.GAMES.TRACE, gameContext.getTrace().toJson())
-								.where(Tables.GAMES.ID.eq(gameIdLong)))).map((Void) null);
-			}
-			return Future.succeededFuture();
-		}).recover(t -> {
-			if (gameContext.getStatus() == GameStatus.RUNNING) {
-				gameContext.loseBothPlayers();
-			}
-			return Future.succeededFuture(null);
-		}).onFailure(Environment.onFailure());
+		gameContext.updateAndGetGameOver();
+		String winner = null;
+		if (gameContext.getWinner() != null && gameContext.getWinner().getUserId() != null) {
+			winner = gameContext.getWinner().getUserId();
+		}
+		// Save the wins/losses
+		if (winner != null) {
+			var userIdLoser = gameContext.getOpponent(gameContext.getWinner()).getUserId();
+
+			var pTrace = JSONToJsonObjectConverter.getInstance().to(gameContext.getTrace().toJson());
+			await(Environment.callRoutine(Routines.clusteredGamesUpdateGameAndUsers(winner, userIdLoser, gameIdLong, pTrace)));
+		}
+
+		if (gameContext.getStatus() == GameStatus.RUNNING) {
+			gameContext.loseBothPlayers();
+		}
+
 	}
 
 	@Override
-	public void stop(Promise<Void> stopPromise) {
+	public void stopVirtual() {
 		var keys = Sets.newCopyOnWriteArraySet(contexts.keySet());
 		LOGGER.trace("stop: Stopping the ClusteredGames, hosting contexts: {}", keys.stream().map(String::toString).reduce((s1, s2) -> s1 + ", " + s2).orElseGet(() -> "none"));
-		var async = Environment.async();
 
 		for (var context : contexts.values()) {
 			if (context.isRunning()) {
@@ -246,21 +215,16 @@ public class ClusteredGames extends AbstractVerticle {
 		}
 
 		registration.unregister();
-
-		async.run(v -> {
-			try {
-				for (var gameId : keys) {
-					Objects.requireNonNull(gameId);
-					removeGameAndRecordReplay(gameId);
-				}
-			} finally {
-				if (!contexts.isEmpty()) {
-					LOGGER.warn("failed to close all contexts");
-				}
-				stopPromise.complete();
+		try {
+			for (var gameId : keys) {
+				Objects.requireNonNull(gameId);
+				removeGameAndRecordReplay(gameId);
 			}
-		});
-
+		} finally {
+			if (!contexts.isEmpty()) {
+				LOGGER.warn("failed to close all contexts");
+			}
+		}
 		LOGGER.trace("stop: Unregistered");
 	}
 }

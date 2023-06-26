@@ -4,7 +4,6 @@ import io.vertx.await.Async;
 import io.vertx.core.Vertx;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicReference;
