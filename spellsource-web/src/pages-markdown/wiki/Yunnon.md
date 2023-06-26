@@ -5,7 +5,8 @@ layout: wiki
 ---
 
 For most of its history, Yunnon was a landlocked desert backwater constantly warred over by bloodthirsty Khans.
-Thirty years before [Shun He](/wiki/Shun_He "wikilink")'s discovery of the Lun Islands (30 BD), a Khan named Goyan united all the tribes and went on a conquering rampage.
+Thirty years before [Shun He](/wiki/Shun_He "wikilink")'s discovery of the Lun Islands (30 BD), a Khan named Goyan
+united all the tribes and went on a conquering rampage.
 Kingdom after kingdom fell before his armies of horse archers across the plains.
 At its height, the Yunnon empire covered millions of miles and ruled over millions of people.
 Its power had no bounds… until it hit the Great Wall of the Lotus Empire.
@@ -20,14 +21,16 @@ Its Great Wall was more to keep people in than keep armies out.
 
 But Goyan was arrogant.
 He charged his advisor and alchemist, Shun Loa, with breaching the Great Wall.
-Over the course of his travels, Loa had heard of a substance that -- in high enough concentrations -- could trigger a huge explosion.
+Over the course of his travels, Loa had heard of a substance that -- in high enough concentrations -- could trigger a
+huge explosion.
 So he collected it across Yunnon's vast holdings and managed to build a bomb.
 This was the first (human) recorded use of [Lun](/wiki/Lun "wikilink") as a weapon.
 
 And it was devastatingly effective.
 
 The wall was breached, and Goyan's horse armies streamed through.
-They burned and pillaged every imperial village they rode through, hoping the shock of their brutality would bring the Lotus Empire to its knees and hasten its surrender.
+They burned and pillaged every imperial village they rode through, hoping the shock of their brutality would bring the
+Lotus Empire to its knees and hasten its surrender.
 
 In fact, this had the opposite effect.
 The Yunnonite assault shocked the great families of Lotus Empire into action and they put aside their differences.

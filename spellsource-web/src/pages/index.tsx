@@ -1,10 +1,10 @@
-import React from 'react'
-import Layout from '../components/creative-layout'
+import React from "react";
+import Layout from "../components/creative-layout";
 
-import HeroIntroSection from '../components/hero-intro-section'
-import HeroLogoSection from '../components/hero-logo-section'
-import HeroPlaySection from '../components/hero-play-section'
-import HeroGithub from '../components/hero-github'
+import HeroIntroSection from "../components/hero-intro-section";
+import HeroLogoSection from "../components/hero-logo-section";
+import HeroPlaySection from "../components/hero-play-section";
+import HeroGithub from "../components/hero-github";
 
 const Index = () => {
   return (
@@ -14,7 +14,7 @@ const Index = () => {
       <HeroPlaySection />
       <HeroGithub />
     </Layout>
-  )
-}
+  );
+};
 
-export default Index
+export default Index;

@@ -1,19 +1,19 @@
-import Blockly, { Block, BlockSvg, Connection, Workspace, WorkspaceSvg } from "blockly"
-import * as BlocklyMiscUtils from "./blockly-misc-utils"
-import { isArray } from "lodash"
-import { BlockArgDef, BlockDef } from "../__generated__/blocks"
-import { CardDef } from "../components/card-display"
-import { isNumeric } from "./workspace-utils"
+import Blockly, { Block, BlockSvg, Connection, Workspace, WorkspaceSvg } from "blockly";
+import * as BlocklyMiscUtils from "./blockly-misc-utils";
+import { isArray } from "lodash";
+import { BlockArgDef, BlockDef } from "../__generated__/blocks";
+import { CardDef } from "../components/card-display";
+import { isNumeric } from "./workspace-utils";
 
-const classBlocksDictionary = {} //A dictionary mapping the 'class' argument a block uses to the block itself
-const enumBlocksDictionary = {} //A dictionary mapping the enum value of the block to the block itself
-const allArgNames = new Set<string>() //Every different possible arg name that appears on blocks, (for searching)
+const classBlocksDictionary = {}; //A dictionary mapping the 'class' argument a block uses to the block itself
+const enumBlocksDictionary = {}; //A dictionary mapping the enum value of the block to the block itself
+const allArgNames = new Set<string>(); //Every different possible arg name that appears on blocks, (for searching)
 
-export const blockTypeColors = {}
+export const blockTypeColors = {};
 
-export const errorOnCustom = false
+export const errorOnCustom = false;
 
-const customBlocks = {}
+const customBlocks = {};
 
 /**
  * Creates a reference for the block's json that's easily accessible by
@@ -22,33 +22,33 @@ const customBlocks = {}
  */
 export function addBlockToMap(block: BlockDef) {
   if (block.type.endsWith("SHADOW")) {
-    return
+    return;
   }
-  let list = argsList(block).filter((arg) => arg.type !== "field_image")
+  let list = argsList(block).filter((arg) => arg.type !== "field_image");
   if (list.length > 0) {
-    let className = null
+    let className = null;
 
     for (let arg of list) {
       if (!arg.name) {
-        continue
+        continue;
       }
-      allArgNames.add(arg.name)
+      allArgNames.add(arg.name);
       if (arg.name.endsWith("class")) {
-        className = arg.value
-        break
+        className = arg.value;
+        break;
       }
     }
     if (!!className) {
       if (!classBlocksDictionary[className]) {
-        classBlocksDictionary[className] = []
+        classBlocksDictionary[className] = [];
       }
-      classBlocksDictionary[className].push(block)
+      classBlocksDictionary[className].push(block);
     }
   } else {
     if (!enumBlocksDictionary[block.data]) {
-      enumBlocksDictionary[block.data] = []
+      enumBlocksDictionary[block.data] = [];
     }
-    enumBlocksDictionary[block.data].push(block)
+    enumBlocksDictionary[block.data].push(block);
   }
 }
 
@@ -59,70 +59,70 @@ export function addBlockToMap(block: BlockDef) {
  * @returns The created starter block
  */
 export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef) {
-  let type = card.type as string
+  let type = card.type as string;
   if (!!card.quest) {
-    type = "QUEST"
+    type = "QUEST";
   } else if (!!card.secret) {
-    type = "SECRET"
+    type = "SECRET";
   } else if (type === "HERO" && !card.attributes.hasOwnProperty("HP")) {
-    type = "HERO2"
+    type = "HERO2";
   }
-  let block = BlocklyMiscUtils.newBlock(workspace, "Starter_" + type)
-  let args = ["baseManaCost", "name", "baseAttack", "baseHp", "description", "countUntilCast", "damage", "durability"]
+  let block = BlocklyMiscUtils.newBlock(workspace, "Starter_" + type);
+  let args = ["baseManaCost", "name", "baseAttack", "baseHp", "description", "countUntilCast", "damage", "durability"];
   args.forEach((arg) => {
     if (!!card[arg] && !!block.getField(arg)) {
-      block.setFieldValue(card[arg], arg)
+      block.setFieldValue(card[arg], arg);
     }
-  })
+  });
 
   if ("initSvg" in block) {
-    block.initSvg()
+    block.initSvg();
   }
   if (!!card.attributes && !!card.attributes.HP) {
-    block.setFieldValue(card.attributes.HP, "attributes.HP,attributes.MAX_HP")
+    block.setFieldValue(card.attributes.HP, "attributes.HP,attributes.MAX_HP");
   }
 
   if (!!block.getInput("name")) {
-    block.getInput("name").connection.targetBlock().setFieldValue(card.name, "text")
+    block.getInput("name").connection.targetBlock().setFieldValue(card.name, "text");
   }
   if (!!block.getInput("description")) {
-    block.getInput("description").connection.targetBlock().setFieldValue(card.description, "text")
+    block.getInput("description").connection.targetBlock().setFieldValue(card.description, "text");
   }
 
-  let lowestBlock = block
+  let lowestBlock = block;
 
   for (let arg of ["heroClass", "rarity", "spell", "targetSelection", "secret", "quest", "heroPower", "hero"]) {
     if (card.type === "CLASS" && arg === "heroClass") {
-      block.getInput("heroClass").connection.targetBlock().setFieldValue(card.heroClass, "text")
+      block.getInput("heroClass").connection.targetBlock().setFieldValue(card.heroClass, "text");
     } else if (card.type === "HERO_POWER" && arg === "spell") {
       if (card.spell["class"] == "HeroPowerSpell") {
-        handleArg(block.getInput("spell.spell").connection, card.spell["spell"], "spell.spell", workspace, card.spell)
+        handleArg(block.getInput("spell.spell").connection, card.spell["spell"], "spell.spell", workspace, card.spell);
       } else {
-        handleArg(block.getInput("spell.spell").connection, card.spell, "spell.spell", workspace, card.spell)
+        handleArg(block.getInput("spell.spell").connection, card.spell, "spell.spell", workspace, card.spell);
       }
     } else if (card.hasOwnProperty(arg) && !!block.getInput(arg)) {
-      simpleHandleArg(block, arg, card, workspace)
+      simpleHandleArg(block, arg, card, workspace);
     }
   }
 
   if (!!card.race && card.type === "MINION") {
-    simpleHandleArg(block, "race", card, workspace)
+    simpleHandleArg(block, "race", card, workspace);
   }
 
   if (!!card.countByValue && (String(card.countByValue) === "TRUE" || card.countByValue === true)) {
-    block.setFieldValue("TRUE", "countByValue")
+    block.setFieldValue("TRUE", "countByValue");
   }
 
   if (!!card.battlecry) {
-    let openerBlock
+    let openerBlock;
     if (!!card.battlecry.condition) {
-      openerBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener2")
+      openerBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener2");
     } else {
-      openerBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener1")
+      openerBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener1");
     }
-    lowestBlock.nextConnection.connect(openerBlock.previousConnection)
+    lowestBlock.nextConnection.connect(openerBlock.previousConnection);
     if ("initSvg" in openerBlock) {
-      openerBlock.initSvg()
+      openerBlock.initSvg();
     }
 
     handleArg(
@@ -131,14 +131,14 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
       "battlecry.targetSelection",
       workspace,
       card.battlecry
-    )
+    );
     handleArg(
       openerBlock.getInput("battlecry.spell").connection,
       card.battlecry.spell,
       "battlecry.spell",
       workspace,
       card.battlecry
-    )
+    );
 
     if (!!card.battlecry.condition) {
       handleArg(
@@ -147,108 +147,108 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
         "battlecry.condition",
         workspace,
         card.battlecry
-      )
+      );
     }
-    lowestBlock = openerBlock
+    lowestBlock = openerBlock;
   }
 
   if (!!card.deathrattle) {
-    let aftermathBlock = BlocklyMiscUtils.newBlock(workspace, "Property_aftermath")
-    lowestBlock.nextConnection.connect(aftermathBlock.previousConnection)
+    let aftermathBlock = BlocklyMiscUtils.newBlock(workspace, "Property_aftermath");
+    lowestBlock.nextConnection.connect(aftermathBlock.previousConnection);
     if ("initSvg" in aftermathBlock) {
-      aftermathBlock.initSvg()
+      aftermathBlock.initSvg();
     }
-    simpleHandleArg(aftermathBlock, "deathrattle", card, workspace)
-    lowestBlock = aftermathBlock
+    simpleHandleArg(aftermathBlock, "deathrattle", card, workspace);
+    lowestBlock = aftermathBlock;
   }
 
   const triggers = (trigger, property) => {
     if (!!card[trigger + "s"] || !!card[trigger]) {
-      let triggersBlock = BlocklyMiscUtils.newBlock(workspace, property)
-      lowestBlock.nextConnection.connect(triggersBlock.previousConnection)
+      let triggersBlock = BlocklyMiscUtils.newBlock(workspace, property);
+      lowestBlock.nextConnection.connect(triggersBlock.previousConnection);
       if ("initSvg" in triggersBlock) {
-        triggersBlock.initSvg()
+        triggersBlock.initSvg();
       }
-      let triggers
+      let triggers;
       if (!!card[trigger]) {
-        triggers = [card[trigger]]
+        triggers = [card[trigger]];
       } else {
-        triggers = card[trigger + "s"]
+        triggers = card[trigger + "s"];
       }
-      let lowestConnection = triggersBlock.getFirstStatementConnection()
+      let lowestConnection = triggersBlock.getFirstStatementConnection();
       for (let trigger of triggers) {
-        let triggerBlock = enchantment(trigger, workspace)
-        lowestConnection.connect(triggerBlock.previousConnection)
-        lowestConnection = triggerBlock.nextConnection
+        let triggerBlock = enchantment(trigger, workspace);
+        lowestConnection.connect(triggerBlock.previousConnection);
+        lowestConnection = triggerBlock.nextConnection;
         if ("initSvg" in triggerBlock) {
-          triggerBlock.initSvg()
+          triggerBlock.initSvg();
         }
       }
-      lowestBlock = triggersBlock
+      lowestBlock = triggersBlock;
     }
-  }
-  triggers("trigger", "Property_triggers")
-  triggers("passiveTrigger", "Property_triggers2")
-  triggers("deckTrigger", "Property_triggers3")
-  triggers("gameTrigger", "Property_triggers4")
+  };
+  triggers("trigger", "Property_triggers");
+  triggers("passiveTrigger", "Property_triggers2");
+  triggers("deckTrigger", "Property_triggers3");
+  triggers("gameTrigger", "Property_triggers4");
 
   if (!!card.auras || !!card.aura) {
-    let aurasBlock = BlocklyMiscUtils.newBlock(workspace, "Property_auras")
-    lowestBlock.nextConnection.connect(aurasBlock.previousConnection)
+    let aurasBlock = BlocklyMiscUtils.newBlock(workspace, "Property_auras");
+    lowestBlock.nextConnection.connect(aurasBlock.previousConnection);
     if ("initSvg" in aurasBlock) {
-      aurasBlock.initSvg()
+      aurasBlock.initSvg();
     }
-    auras(aurasBlock, card, workspace)
-    lowestBlock = aurasBlock
+    auras(aurasBlock, card, workspace);
+    lowestBlock = aurasBlock;
   }
 
   if (!!card.attributes) {
-    delete card.attributes.SPELLSOURCE_NAME
-    delete card.attributes.BATTLECRY
-    delete card.attributes.DEATHRATTLES
-    delete card.attributes.DISCOVER
+    delete card.attributes.SPELLSOURCE_NAME;
+    delete card.attributes.BATTLECRY;
+    delete card.attributes.DEATHRATTLES;
+    delete card.attributes.DISCOVER;
     if (card.type === "HERO") {
-      delete card.attributes.HP
-      delete card.attributes.MAX_HP
+      delete card.attributes.HP;
+      delete card.attributes.MAX_HP;
     }
     if (Object.values(card.attributes).length > 0) {
-      let attributesBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes")
-      lowestBlock.nextConnection.connect(attributesBlock.previousConnection)
+      let attributesBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes");
+      lowestBlock.nextConnection.connect(attributesBlock.previousConnection);
       if ("initSvg" in attributesBlock) {
-        attributesBlock.initSvg()
+        attributesBlock.initSvg();
       }
-      let lowestConnection = attributesBlock.getFirstStatementConnection()
+      let lowestConnection = attributesBlock.getFirstStatementConnection();
       for (let atr in card.attributes) {
-        let attributeBlock
+        let attributeBlock;
         if (isNumeric(card.attributes[atr])) {
-          attributeBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_int")
-          attributeBlock.getField("value").setValue(card.attributes[atr])
+          attributeBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_int");
+          attributeBlock.getField("value").setValue(card.attributes[atr]);
         } else {
-          attributeBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_boolean")
+          attributeBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_boolean");
         }
-        handleArg(attributeBlock.getInput("attribute").connection, atr, "attribute", workspace, card.attributes)
+        handleArg(attributeBlock.getInput("attribute").connection, atr, "attribute", workspace, card.attributes);
         if ("initSvg" in attributeBlock) {
-          attributeBlock.initSvg()
+          attributeBlock.initSvg();
         }
-        lowestConnection.connect(attributeBlock.previousConnection)
-        lowestConnection = attributeBlock.nextConnection
+        lowestConnection.connect(attributeBlock.previousConnection);
+        lowestConnection = attributeBlock.nextConnection;
       }
 
-      lowestBlock = attributesBlock
+      lowestBlock = attributesBlock;
     }
   }
 
   if (!!card.manaCostModifier) {
-    let costyBlock = null
+    let costyBlock = null;
     if (card.manaCostModifier["class"] === "ConditionalValueProvider" && card.manaCostModifier["ifFalse"] === 0) {
-      costyBlock = BlocklyMiscUtils.newBlock(workspace, "Property_manaCostModifierConditional")
+      costyBlock = BlocklyMiscUtils.newBlock(workspace, "Property_manaCostModifierConditional");
       handleArg(
         costyBlock.getInput("manaCostModifier.condition").connection,
         card.manaCostModifier["condition"],
         "condition",
         workspace,
         card
-      )
+      );
       if (typeof card.manaCostModifier["ifTrue"] === "object") {
         handleArg(
           costyBlock.getInput("manaCostModifier.ifTrue").connection,
@@ -256,133 +256,133 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
           "ifTrue",
           workspace,
           card
-        )
+        );
       } else {
-        handleIntArg(costyBlock, costyBlock.json.args0[0].name, workspace, card.manaCostModifier["ifTrue"])
+        handleIntArg(costyBlock, costyBlock.json.args0[0].name, workspace, card.manaCostModifier["ifTrue"]);
       }
     } else {
-      costyBlock = BlocklyMiscUtils.newBlock(workspace, "Property_manaCostModifier")
+      costyBlock = BlocklyMiscUtils.newBlock(workspace, "Property_manaCostModifier");
       handleArg(
         costyBlock.getInput("manaCostModifier").connection,
         card.manaCostModifier,
         "manaCostModifier",
         workspace,
         card
-      )
+      );
     }
-    lowestBlock.nextConnection.connect(costyBlock.previousConnection)
+    lowestBlock.nextConnection.connect(costyBlock.previousConnection);
     if ("initSvg" in costyBlock) {
-      costyBlock.initSvg()
+      costyBlock.initSvg();
     }
-    lowestBlock = costyBlock
+    lowestBlock = costyBlock;
   }
 
   if (!!card.cardCostModifier) {
-    let costyBlock = BlocklyMiscUtils.newBlock(workspace, "Property_cardCostModifier")
-    lowestBlock.nextConnection.connect(costyBlock.previousConnection)
+    let costyBlock = BlocklyMiscUtils.newBlock(workspace, "Property_cardCostModifier");
+    lowestBlock.nextConnection.connect(costyBlock.previousConnection);
     if ("initSvg" in costyBlock) {
-      costyBlock.initSvg()
+      costyBlock.initSvg();
     }
 
-    costModifier(costyBlock, card.cardCostModifier, workspace)
+    costModifier(costyBlock, card.cardCostModifier, workspace);
 
-    lowestBlock = costyBlock
+    lowestBlock = costyBlock;
   }
 
   if (!!card.dynamicDescription) {
-    let descriptionsBlock = BlocklyMiscUtils.newBlock(workspace, "Property_descriptions")
+    let descriptionsBlock = BlocklyMiscUtils.newBlock(workspace, "Property_descriptions");
 
-    dynamicDescription(workspace, descriptionsBlock.getFirstStatementConnection(), card.dynamicDescription, "i")
+    dynamicDescription(workspace, descriptionsBlock.getFirstStatementConnection(), card.dynamicDescription, "i");
 
-    descriptionsBlock.previousConnection.connect(lowestBlock.nextConnection)
+    descriptionsBlock.previousConnection.connect(lowestBlock.nextConnection);
     if ("initSvg" in descriptionsBlock) {
-      descriptionsBlock.initSvg()
+      descriptionsBlock.initSvg();
     }
-    lowestBlock = descriptionsBlock
+    lowestBlock = descriptionsBlock;
   }
 
   if (card.set !== "CUSTOM") {
-    let setBlock = BlocklyMiscUtils.newBlock(workspace, "Property_set")
-    setBlock.setFieldValue(card.set, "set")
-    setBlock.previousConnection.connect(lowestBlock.nextConnection)
+    let setBlock = BlocklyMiscUtils.newBlock(workspace, "Property_set");
+    setBlock.setFieldValue(card.set, "set");
+    setBlock.previousConnection.connect(lowestBlock.nextConnection);
     if ("initSvg" in setBlock) {
-      setBlock.initSvg()
+      setBlock.initSvg();
     }
-    lowestBlock = setBlock
+    lowestBlock = setBlock;
   }
 
   if (!!card.condition) {
-    let conditionBlock = BlocklyMiscUtils.newBlock(workspace, "Property_condition")
-    simpleHandleArg(conditionBlock, "condition", card, workspace)
-    conditionBlock.previousConnection.connect(lowestBlock.nextConnection)
+    let conditionBlock = BlocklyMiscUtils.newBlock(workspace, "Property_condition");
+    simpleHandleArg(conditionBlock, "condition", card, workspace);
+    conditionBlock.previousConnection.connect(lowestBlock.nextConnection);
     if ("initSvg" in conditionBlock) {
-      conditionBlock.initSvg()
+      conditionBlock.initSvg();
     }
-    lowestBlock = conditionBlock
+    lowestBlock = conditionBlock;
   }
 
   if ((card.collectible === false || String(card.collectible) === "FALSE") && type !== "HERO") {
-    let uncollectibleBlock = BlocklyMiscUtils.newBlock(workspace, "Property_uncollectible")
-    uncollectibleBlock.previousConnection.connect(lowestBlock.nextConnection)
+    let uncollectibleBlock = BlocklyMiscUtils.newBlock(workspace, "Property_uncollectible");
+    uncollectibleBlock.previousConnection.connect(lowestBlock.nextConnection);
     if ("initSvg" in uncollectibleBlock) {
-      uncollectibleBlock.initSvg()
+      uncollectibleBlock.initSvg();
     }
-    lowestBlock = uncollectibleBlock
+    lowestBlock = uncollectibleBlock;
   }
 
   if (!!card.art) {
     for (let path of ["art.primary", "art.secondary", "art.shadow", "art.highlight", "art.body.vertex"]) {
-      let json = card
+      let json = card;
       for (let arg of path.split(".")) {
         if (!!json) {
-          json = json[arg]
+          json = json[arg];
         }
       }
 
       if (!!json && !!block.getInput(path)) {
-        let colorBlock = block.getInput(path).connection.targetBlock()
+        let colorBlock = block.getInput(path).connection.targetBlock();
         for (let i of ["r", "g", "b", "a"]) {
-          colorBlock.setFieldValue(Math.round(json[i] * 255), i)
+          colorBlock.setFieldValue(Math.round(json[i] * 255), i);
         }
       }
     }
     if (!!card.art["glow"]) {
-      let glowBlock = BlocklyMiscUtils.newBlock(workspace, "Property_glow")
-      glowBlock.previousConnection.connect(lowestBlock.nextConnection)
-      let colorBlock = glowBlock.getInput("art.glow").connection.targetBlock()
+      let glowBlock = BlocklyMiscUtils.newBlock(workspace, "Property_glow");
+      glowBlock.previousConnection.connect(lowestBlock.nextConnection);
+      let colorBlock = glowBlock.getInput("art.glow").connection.targetBlock();
       for (let i of ["r", "g", "b", "a"]) {
-        colorBlock.setFieldValue(Math.round(card.art["glow"][i] * 255), i)
+        colorBlock.setFieldValue(Math.round(card.art["glow"][i] * 255), i);
       }
       if ("initSvg" in glowBlock) {
-        glowBlock.initSvg()
+        glowBlock.initSvg();
       }
-      lowestBlock = glowBlock
+      lowestBlock = glowBlock;
     }
   }
 
   if (!!card.art?.sprite?.named) {
-    let spriteBlock = BlocklyMiscUtils.newBlock(workspace, "Property_sprite")
-    spriteBlock.previousConnection.connect(lowestBlock.nextConnection)
+    let spriteBlock = BlocklyMiscUtils.newBlock(workspace, "Property_sprite");
+    spriteBlock.previousConnection.connect(lowestBlock.nextConnection);
 
     if (!!Blockly.Blocks["Art_" + card.art.sprite.named]) {
-      let artBlock = BlocklyMiscUtils.newBlock(workspace, "Art_" + card.art.sprite.named)
-      spriteBlock.getInput("art.sprite.named").connection.connect(artBlock.outputConnection)
+      let artBlock = BlocklyMiscUtils.newBlock(workspace, "Art_" + card.art.sprite.named);
+      spriteBlock.getInput("art.sprite.named").connection.connect(artBlock.outputConnection);
       if ("initSvg" in artBlock) {
-        artBlock.initSvg()
+        artBlock.initSvg();
       }
     }
 
     if ("initSvg" in spriteBlock) {
-      spriteBlock.initSvg()
+      spriteBlock.initSvg();
     }
-    lowestBlock = spriteBlock
+    lowestBlock = spriteBlock;
   }
 
   if ("render" in workspace) {
-    workspace.render()
+    workspace.render();
   }
 
-  return block
+  return block;
 }
 
 /**
@@ -395,32 +395,32 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
  */
 export function dynamicDescription(workspace: Workspace, connection: Connection, descriptions, inputName) {
   for (let dynamicDescription of descriptions) {
-    let block = connection.targetBlock() as Block | BlockSvg
+    let block = connection.targetBlock() as Block | BlockSvg;
     if (!block) {
-      block = BlocklyMiscUtils.newBlock(workspace, "Property_description")
-      connection.connect(block.previousConnection)
+      block = BlocklyMiscUtils.newBlock(workspace, "Property_description");
+      connection.connect(block.previousConnection);
       if ("initSvg" in block) {
-        block.initSvg()
+        block.initSvg();
       }
     }
     if (typeof dynamicDescription === "string") {
       dynamicDescription = {
         class: "StringDescription",
         string: dynamicDescription,
-      }
+      };
     }
 
-    let descBlock = BlocklyMiscUtils.newBlock(workspace, "Property_" + dynamicDescription.class)
+    let descBlock = BlocklyMiscUtils.newBlock(workspace, "Property_" + dynamicDescription.class);
 
     if (descBlock === null) {
-      continue
+      continue;
     }
 
-    block.getInput(inputName).connection.connect(descBlock.outputConnection)
+    block.getInput(inputName).connection.connect(descBlock.outputConnection);
 
     if (!!dynamicDescription.value) {
       if (isNumeric(dynamicDescription.value)) {
-        handleIntArg(descBlock, "value", workspace, dynamicDescription.value)
+        handleIntArg(descBlock, "value", workspace, dynamicDescription.value);
       } else {
         handleArg(
           descBlock.getInput("value").connection,
@@ -428,7 +428,7 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
           "value",
           workspace,
           dynamicDescription
-        )
+        );
       }
     }
     if (!!dynamicDescription.condition) {
@@ -438,10 +438,10 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
         "condition",
         workspace,
         dynamicDescription
-      )
+      );
     }
     if (!!dynamicDescription.string) {
-      descBlock.setFieldValue(dynamicDescription.string, "string")
+      descBlock.setFieldValue(dynamicDescription.string, "string");
     }
     if (dynamicDescription.hasOwnProperty("description1")) {
       dynamicDescription(
@@ -449,7 +449,7 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
         block.getInput(inputName).connection,
         [dynamicDescription.description1],
         "description1"
-      )
+      );
     }
     if (dynamicDescription.hasOwnProperty("description2")) {
       dynamicDescription(
@@ -457,17 +457,17 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
         block.getInput(inputName).connection,
         [dynamicDescription.description2],
         "description2"
-      )
+      );
     }
 
     if (!!dynamicDescription.descriptions) {
-      dynamicDescription(workspace, descBlock.getFirstStatementConnection(), dynamicDescription.descriptions, "i")
+      dynamicDescription(workspace, descBlock.getFirstStatementConnection(), dynamicDescription.descriptions, "i");
     }
 
-    block.getInput(inputName).connection.connect(descBlock.outputConnection)
-    connection = block.nextConnection
+    block.getInput(inputName).connection.connect(descBlock.outputConnection);
+    connection = block.nextConnection;
     if ("initSvg" in descBlock) {
-      descBlock.initSvg()
+      descBlock.initSvg();
     }
   }
 }
@@ -480,14 +480,14 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
  */
 export function getInputEndsWith(block, inputName) {
   for (let name of allArgNames) {
-    let input = block.getInput(name)
+    let input = block.getInput(name);
     if (!!input) {
       if (name.endsWith(inputName)) {
-        return input
+        return input;
       }
     }
   }
-  return null
+  return null;
 }
 
 /**
@@ -499,7 +499,7 @@ export function getInputEndsWith(block, inputName) {
  * @returns {boolean}
  */
 export function enchantmentNeedsOptions(trigger, props) {
-  return !(props.length === 2 && !!trigger.eventTrigger && !!trigger.spell)
+  return !(props.length === 2 && !!trigger.eventTrigger && !!trigger.spell);
 }
 
 /**
@@ -513,50 +513,50 @@ export function enchantmentNeedsOptions(trigger, props) {
  * @returns The created block
  */
 export function enchantment(trigger, workspace, triggerBlock: Block | BlockSvg = null) {
-  let props = relevantProperties(trigger)
+  let props = relevantProperties(trigger);
   if (!enchantmentNeedsOptions(trigger, props)) {
     if (!triggerBlock) {
-      triggerBlock = BlocklyMiscUtils.newBlock(workspace, "Enchantment")
+      triggerBlock = BlocklyMiscUtils.newBlock(workspace, "Enchantment");
     }
   } else {
     if (!triggerBlock) {
-      triggerBlock = BlocklyMiscUtils.newBlock(workspace, "EnchantmentOptions")
+      triggerBlock = BlocklyMiscUtils.newBlock(workspace, "EnchantmentOptions");
     }
-    let lowestOptionConnection = triggerBlock.getFirstStatementConnection()
+    let lowestOptionConnection = triggerBlock.getFirstStatementConnection();
     for (let prop of props) {
       if (prop === "spell" || prop === "eventTrigger") {
-        continue
+        continue;
       }
-      let match = null
+      let match = null;
       for (let blockType in Blockly.Blocks) {
-        let block = Blockly.Blocks[blockType].json
+        let block = Blockly.Blocks[blockType].json;
         if (block?.type?.startsWith("EnchantmentOption")) {
           for (let arg of argsList(block)) {
             if (arg.name === prop) {
-              match = block
+              match = block;
             }
           }
         }
       }
       if (!match) {
-        console.warn(`Failed to handle prop ${prop} on trigger`, trigger)
-        continue
+        console.warn(`Failed to handle prop ${prop} on trigger`, trigger);
+        continue;
       }
-      let option = BlocklyMiscUtils.newBlock(workspace, match.type)
+      let option = BlocklyMiscUtils.newBlock(workspace, match.type);
       if (trigger[prop] !== true) {
-        option.setFieldValue(trigger[prop], prop)
+        option.setFieldValue(trigger[prop], prop);
       }
       if ("initSvg" in option) {
-        option.initSvg()
+        option.initSvg();
       }
-      lowestOptionConnection.connect(option.previousConnection)
-      lowestOptionConnection = lowestOptionConnection.targetBlock().nextConnection
+      lowestOptionConnection.connect(option.previousConnection);
+      lowestOptionConnection = lowestOptionConnection.targetBlock().nextConnection;
     }
   }
-  handleArg(triggerBlock.getInput("spell").connection, trigger.spell, "spell", workspace, trigger)
-  handleArg(triggerBlock.getInput("eventTrigger").connection, trigger.eventTrigger, "eventTrigger", workspace, trigger)
+  handleArg(triggerBlock.getInput("spell").connection, trigger.spell, "spell", workspace, trigger);
+  handleArg(triggerBlock.getInput("eventTrigger").connection, trigger.eventTrigger, "eventTrigger", workspace, trigger);
 
-  return triggerBlock
+  return triggerBlock;
 }
 
 /**
@@ -569,14 +569,14 @@ export function enchantment(trigger, workspace, triggerBlock: Block | BlockSvg =
  */
 export function costModifierNeedsOptions(costModifier, props) {
   if (costModifier.class === "OneTurnCostModifier") {
-    return true
+    return true;
   }
   for (let prop of props) {
     if (!!Blockly.Blocks["CostModifierOption_" + prop]) {
-      return true
+      return true;
     }
   }
-  return false
+  return false;
 }
 
 /**
@@ -589,60 +589,60 @@ export function costModifierNeedsOptions(costModifier, props) {
  * @returns The created block
  */
 export function costModifier(costyBlock: Block | BlockSvg, costModifier, workspace) {
-  costModifier = mutateJson(costModifier)
+  costModifier = mutateJson(costModifier);
   if (typeof costModifier.value !== "object" && costModifier.value < 0) {
     if (costModifier.operation === "SUBTRACT") {
-      costModifier.operation = "ADD"
+      costModifier.operation = "ADD";
     } else {
-      costModifier.operation = "SUBTRACT"
+      costModifier.operation = "SUBTRACT";
     }
-    costModifier.value *= -1
+    costModifier.value *= -1;
   }
-  let props = relevantProperties(costModifier)
-  let costModifierBlock
-  let lowestOptionConnection
+  let props = relevantProperties(costModifier);
+  let costModifierBlock;
+  let lowestOptionConnection;
   if (!costModifierNeedsOptions(costModifier, props)) {
-    costModifierBlock = BlocklyMiscUtils.newBlock(workspace, "CostModifier")
+    costModifierBlock = BlocklyMiscUtils.newBlock(workspace, "CostModifier");
   } else {
-    costModifierBlock = BlocklyMiscUtils.newBlock(workspace, "CostModifierOptions")
-    lowestOptionConnection = costModifierBlock.getFirstStatementConnection()
+    costModifierBlock = BlocklyMiscUtils.newBlock(workspace, "CostModifierOptions");
+    lowestOptionConnection = costModifierBlock.getFirstStatementConnection();
     for (let prop of props) {
       if (prop === "value" || prop === "operation" || prop === "target" || prop === "filter") {
-        continue
+        continue;
       }
-      let option = BlocklyMiscUtils.newBlock(workspace, "CostModifierOption_" + prop)
-      handleInputs(Blockly.Blocks["CostModifierOption_" + prop].json, costModifier, option, workspace, null)
+      let option = BlocklyMiscUtils.newBlock(workspace, "CostModifierOption_" + prop);
+      handleInputs(Blockly.Blocks["CostModifierOption_" + prop].json, costModifier, option, workspace, null);
       if ("initSvg" in option) {
-        option.initSvg()
+        option.initSvg();
       }
-      lowestOptionConnection.connect(option.previousConnection)
-      lowestOptionConnection = lowestOptionConnection.targetBlock().nextConnection
+      lowestOptionConnection.connect(option.previousConnection);
+      lowestOptionConnection = lowestOptionConnection.targetBlock().nextConnection;
     }
   }
   if (costModifier.class === "OneTurnCostModifier") {
-    let option = BlocklyMiscUtils.newBlock(workspace, "CostModifierOption_oneTurn")
+    let option = BlocklyMiscUtils.newBlock(workspace, "CostModifierOption_oneTurn");
     if ("initSvg" in option) {
-      option.initSvg()
+      option.initSvg();
     }
-    lowestOptionConnection.connect(option.previousConnection)
+    lowestOptionConnection.connect(option.previousConnection);
   }
   if (typeof costModifier.value !== "object") {
-    handleIntArg(costModifierBlock, "value", workspace, costModifier.value)
+    handleIntArg(costModifierBlock, "value", workspace, costModifier.value);
   } else {
-    simpleHandleArg(costModifierBlock, "value", costModifier, workspace)
+    simpleHandleArg(costModifierBlock, "value", costModifier, workspace);
   }
   if (!!costModifier.target) {
-    simpleHandleArg(costModifierBlock, "target", costModifier, workspace)
+    simpleHandleArg(costModifierBlock, "target", costModifier, workspace);
   }
   if (!!costModifier.operation) {
-    costModifierBlock.setFieldValue(costModifier.operation, "operation")
+    costModifierBlock.setFieldValue(costModifier.operation, "operation");
   }
 
   if (costModifierBlock.initSvg) {
-    costModifierBlock.initSvg()
+    costModifierBlock.initSvg();
   }
 
-  costyBlock.getInput("cardCostModifier").connection.connect(costModifierBlock.outputConnection)
+  costyBlock.getInput("cardCostModifier").connection.connect(costModifierBlock.outputConnection);
 }
 
 /**
@@ -657,16 +657,16 @@ export function costModifier(costyBlock: Block | BlockSvg, costModifier, workspa
  * @param workspace The workspace
  */
 export function auras(block: Block | BlockSvg, json, workspace) {
-  let auras
+  let auras;
   if (!!json.aura) {
-    auras = [json.aura]
+    auras = [json.aura];
   } else {
-    auras = json["auras"]
+    auras = json["auras"];
   }
-  let lowestConnection = block.getFirstStatementConnection()
+  let lowestConnection = block.getFirstStatementConnection();
   for (let aura of auras) {
-    handleArg(lowestConnection, aura, "aura", workspace, aura, true)
-    lowestConnection = lowestConnection.targetBlock().nextConnection
+    handleArg(lowestConnection, aura, "aura", workspace, aura, true);
+    lowestConnection = lowestConnection.targetBlock().nextConnection;
   }
 }
 
@@ -689,169 +689,169 @@ export function auras(block: Block | BlockSvg, json, workspace) {
  * @returns The Block that's the best match (its JSON definition), or null if no good matches
  */
 export function getMatch(json, inputName, parentJson) {
-  let matches = null
-  let bestMatch = null
+  let matches = null;
+  let bestMatch = null;
   if (typeof json !== "object") {
     //just looking for the correct block with the data of the json string
-    let lookingForType = BlocklyMiscUtils.inputNameToBlockType(inputName)
+    let lookingForType = BlocklyMiscUtils.inputNameToBlockType(inputName);
     if (inputName === "attribute") {
-      json = json.toString().replace("AURA_", "")
+      json = json.toString().replace("AURA_", "");
     }
-    matches = enumBlocksDictionary[json]
+    matches = enumBlocksDictionary[json];
     if (!matches || matches.length === 0) {
-      return
+      return;
     }
     for (let match of matches) {
       if (!lookingForType || match.type.startsWith(lookingForType) || match.type.startsWith("CatalogueCard")) {
-        return match
+        return match;
       }
     }
   } else if (!!json.class) {
     //need to find the block that represents that class
-    let className = json.class
+    let className = json.class;
     if (className === "AddEnchantmentSpell" && !!json.trigger) {
       if (enchantmentNeedsOptions(json.trigger, relevantProperties(json.trigger))) {
         if (!!json.revertTrigger) {
-          return Blockly.Blocks["Spell_AddEnchantment5"].json
+          return Blockly.Blocks["Spell_AddEnchantment5"].json;
         } else {
-          return Blockly.Blocks["Spell_AddEnchantment2"].json
+          return Blockly.Blocks["Spell_AddEnchantment2"].json;
         }
       } else {
         if (!!json.revertTrigger) {
-          return Blockly.Blocks["Spell_AddEnchantment4"].json
+          return Blockly.Blocks["Spell_AddEnchantment4"].json;
         } else {
-          return Blockly.Blocks["Spell_AddEnchantment"].json
+          return Blockly.Blocks["Spell_AddEnchantment"].json;
         }
       }
     }
     if (className === "AddPactSpell") {
-      return Blockly.Blocks["Spell_AddPact"].json
+      return Blockly.Blocks["Spell_AddPact"].json;
     }
     if (className === "CardCostModifierSpell") {
-      return Blockly.Blocks["Spell_CardCostModifier"].json
+      return Blockly.Blocks["Spell_CardCostModifier"].json;
     }
     if (className.endsWith("CostModifier")) {
       if (costModifierNeedsOptions(json, relevantProperties(json))) {
-        return Blockly.Blocks["CostModifierOptions"].json
+        return Blockly.Blocks["CostModifierOptions"].json;
       } else {
-        return Blockly.Blocks["CostModifier"].json
+        return Blockly.Blocks["CostModifier"].json;
       }
     }
-    matches = classBlocksDictionary[className]
+    matches = classBlocksDictionary[className];
     if (!matches || matches.length === 0) {
-      return
+      return;
     }
-    let relevantProps = relevantProperties(json)
-    let goodMatches = []
+    let relevantProps = relevantProperties(json);
+    let goodMatches = [];
     for (let match of matches) {
       //for each possible match
-      let hasAllProps = true
+      let hasAllProps = true;
       for (let property of relevantProps) {
         //check the json's relevant properties
         if ((relevantProps.includes("target") || match.output === "SpellDesc") && property === "filter") {
-          continue
+          continue;
         }
         if (
           (className.endsWith("Spell") || className.endsWith("ValueProvider") || className.endsWith("Source")) &&
           property === "targetPlayer"
         ) {
-          continue
+          continue;
         }
         if (className.endsWith("Trigger")) {
           if (json.targetPlayer === "BOTH" && property === "targetPlayer") {
-            continue
+            continue;
           }
           if (property === "race" || property === "requiredAttribute") {
-            continue
+            continue;
           }
         }
 
-        let hasThisProp = false
+        let hasThisProp = false;
         for (let arg of argsList(match)) {
           //see if the match has a corresponding prop
           if (arg.type === "field_label_plural") {
-            continue
+            continue;
           }
           if (arg.name.split(".")[0] === property) {
             //just a surface level check, not traversing nested args
             if (arg.type === "field_label_serializable_hidden") {
               if ((arg.value === "TRUE" ? true : arg.value) === json[property]) {
-                hasThisProp = true
+                hasThisProp = true;
               }
             } else {
-              hasThisProp = true
+              hasThisProp = true;
             }
           }
         }
         if (!hasThisProp) {
           //if it doesn't, it's not good enough
-          hasAllProps = false
-          break
+          hasAllProps = false;
+          break;
         }
       }
       if (hasAllProps) {
         //if it covers all the json's properties, it's good enough
-        goodMatches.push(match)
+        goodMatches.push(match);
       }
     }
-    let bestScore = 0
+    let bestScore = 0;
     for (let goodMatch of goodMatches) {
       //choose the one with the highest number of correct properties
-      let bestScore = null
+      let bestScore = null;
       for (let goodMatch of matches) {
-        let argList = argsList(goodMatch)
-        let hasOneNormalArg = argList.length === 0
+        let argList = argsList(goodMatch);
+        let hasOneNormalArg = argList.length === 0;
         for (let arg of argList) {
           if (!arg.name.includes(".") && !arg.name.includes("super")) {
-            hasOneNormalArg = true
+            hasOneNormalArg = true;
           }
         }
         if (!hasOneNormalArg) {
-          continue
+          continue;
         }
-        let score = 0
+        let score = 0;
         for (let arg of argList) {
           if (arg.type === "field_label_plural") {
-            continue
+            continue;
           }
-          let delta = 0
-          let property = traverseJsonByArgName(arg.name, json, parentJson)
+          let delta = 0;
+          let property = traverseJsonByArgName(arg.name, json, parentJson);
           if (property !== null && property !== undefined) {
             if (arg.type === "field_label_serializable_hidden") {
               if ((arg.value === "TRUE" ? true : arg.value) === property) {
-                delta = 2
+                delta = 2;
               } else {
-                delta = -5 // an unchangeable field on the block is wrong... not a good look
+                delta = -5; // an unchangeable field on the block is wrong... not a good look
               }
             } else {
-              delta = 2 //if it's an input, we assume the correct block can be put here
+              delta = 2; //if it's an input, we assume the correct block can be put here
             }
           } else {
             if (arg.type === "field_label_serializable_hidden") {
-              delta = -5
+              delta = -5;
             } else {
               //it's kinda bad to straight up not have the property
               if (arg.name === "targetPlayer" || arg.name === "value") {
-                delta = -0.5
+                delta = -0.5;
               } else {
-                delta = -1
+                delta = -1;
               }
             }
           }
-          score += delta
+          score += delta;
         }
         if (score > bestScore || (score >= bestScore && bestMatch?.type.localeCompare(goodMatch.type) > 0)) {
           //for tied scores, do the one that comes alphabetically first
           //e.g. choosing ExampleSpell1 instead of ExampleSpell2
-          bestMatch = goodMatch
-          bestScore = score
+          bestMatch = goodMatch;
+          bestScore = score;
         }
       }
     }
   } else {
     //what the heck could it even be if it doesn't have a class?
   }
-  return bestMatch
+  return bestMatch;
 }
 
 /**
@@ -864,15 +864,15 @@ export function getMatch(json, inputName, parentJson) {
  * @param statement Whether we're connected a statement rather than an input
  */
 export function handleArg(connection, json, inputName, workspace, parentJson, statement = false) {
-  json = mutateJson(json)
+  json = mutateJson(json);
 
   if (!!connection.targetBlock() && connection.targetBlock().type === "Property_text_SHADOW") {
-    connection.targetBlock().setFieldValue(json, "text")
-    return
+    connection.targetBlock().setFieldValue(json, "text");
+    return;
   }
 
-  let bestMatch = getMatch(json, inputName, parentJson)
-  let block
+  let bestMatch = getMatch(json, inputName, parentJson);
+  let block;
   if (!bestMatch) {
     /*
     try {
@@ -884,64 +884,64 @@ export function handleArg(connection, json, inputName, workspace, parentJson, st
 
      */
     if (errorOnCustom) {
-      throw Error("Couldn't generate without custom blocks")
+      throw Error("Couldn't generate without custom blocks");
     }
-    block = handleNoMatch(json, inputName, parentJson, workspace)
+    block = handleNoMatch(json, inputName, parentJson, workspace);
   } else if (!!connection.targetBlock() && connection.targetBlock().type === bestMatch.type) {
     if (!connection.targetBlock().isShadow()) {
-      block = connection.targetBlock()
-      connection.disconnect()
+      block = connection.targetBlock();
+      connection.disconnect();
       //just simpler to disconnect it and then reconnect it
     }
   }
   if (!block) {
-    block = BlocklyMiscUtils.newBlock(workspace, bestMatch.type)
+    block = BlocklyMiscUtils.newBlock(workspace, bestMatch.type);
   }
   if ("initSvg" in block) {
-    block.initSvg()
+    block.initSvg();
   }
 
-  let outerBlock = wrapperBlocks(block, json, inputName, workspace, parentJson, connection, bestMatch)
+  let outerBlock = wrapperBlocks(block, json, inputName, workspace, parentJson, connection, bestMatch);
 
   if (statement) {
-    connection.connect(outerBlock.previousConnection)
+    connection.connect(outerBlock.previousConnection);
   } else {
-    connection.connect(outerBlock.outputConnection)
+    connection.connect(outerBlock.outputConnection);
   }
 
   if (!bestMatch) {
-    return //args already taken care of by handleNoMatch
+    return; //args already taken care of by handleNoMatch
   }
 
-  handleInputs(bestMatch, json, block, workspace, parentJson)
+  handleInputs(bestMatch, json, block, workspace, parentJson);
 }
 
 export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace, parentJson) {
   //now handle each dropdown on the new block (assumes stuff will just work)
   for (let dropdown of dropdownsList(bestMatch)) {
-    let jsonElement = json[dropdown.name]
+    let jsonElement = json[dropdown.name];
     if (
       !jsonElement &&
       (dropdown.name.includes(".") || dropdown.name.includes("super") || dropdown.name.includes(","))
     ) {
-      jsonElement = traverseJsonByArgName(dropdown.name, json, parentJson)
+      jsonElement = traverseJsonByArgName(dropdown.name, json, parentJson);
     }
 
     if (!jsonElement) {
-      continue
+      continue;
     }
 
-    block.setFieldValue(jsonElement, dropdown.name)
+    block.setFieldValue(jsonElement, dropdown.name);
   }
 
   //now handle each input on the new block
   for (let inputArg of inputsList(bestMatch)) {
-    let name = inputArg.name
-    let argName = name
-    let jsonElement = json[name]
+    let name = inputArg.name;
+    let argName = name;
+    let jsonElement = json[name];
     if (!jsonElement && (name.includes(".") || name.includes("super") || name.includes(","))) {
-      jsonElement = traverseJsonByArgName(name, json, parentJson)
-      name = name.split(".").slice(-1)[0]
+      jsonElement = traverseJsonByArgName(name, json, parentJson);
+      name = name.split(".").slice(-1)[0];
     }
 
     if (jsonElement === null || jsonElement === undefined) {
@@ -949,62 +949,62 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
         block.getInput(name)?.connection.targetBlock()?.type === "EntityReference_SHADOW" ||
         block.getInput(name)?.connection.targetBlock()?.type === "EntityReference_IT"
       ) {
-        let it = BlocklyMiscUtils.newBlock(workspace, "EntityReference_IT")
-        block.getInput(name).connection.connect(it.outputConnection)
+        let it = BlocklyMiscUtils.newBlock(workspace, "EntityReference_IT");
+        block.getInput(name).connection.connect(it.outputConnection);
         if ("initSvg" in it) {
-          it.initSvg()
+          it.initSvg();
         }
       }
-      continue
+      continue;
     }
 
     //if the json has a corresponding argument
     if (typeof jsonElement !== "object" && BlocklyMiscUtils.inputNameToBlockType(name) === "ValueProvider") {
       //integer block stuff
-      handleIntArg(block, inputArg.name, workspace, jsonElement)
+      handleIntArg(block, inputArg.name, workspace, jsonElement);
     } else if (name === "spells" || name === "conditions" || name === "filters" || name === "cards") {
       //arrays of things stuff
-      handleArrayArg(jsonElement, block, workspace, name)
+      handleArrayArg(jsonElement, block, workspace, name);
     } else if (name === "trigger" || name === "pact") {
-      enchantment(json[name], workspace, block.getFirstStatementConnection().targetBlock())
+      enchantment(json[name], workspace, block.getFirstStatementConnection().targetBlock());
     } else if (name === "aura") {
-      auras(block, json, workspace)
+      auras(block, json, workspace);
     } else if (name === "cardCostModifier") {
-      costModifier(block, json.cardCostModifier, workspace)
+      costModifier(block, json.cardCostModifier, workspace);
     } else {
       //default recursion case
-      handleArg(block.getInput(argName).connection, jsonElement, name, workspace, json)
+      handleArg(block.getInput(argName).connection, jsonElement, name, workspace, json);
     }
   }
 }
 
 export function handleArrayArg(jsonElement, block: Block | BlockSvg, workspace, name) {
-  let thingArray = jsonElement
-  let lowestBlock = block.getFirstStatementConnection().targetBlock()
-  handleArg(lowestBlock.getInput("i").connection, thingArray[0], name.slice(0, -1), workspace, thingArray)
+  let thingArray = jsonElement;
+  let lowestBlock = block.getFirstStatementConnection().targetBlock();
+  handleArg(lowestBlock.getInput("i").connection, thingArray[0], name.slice(0, -1), workspace, thingArray);
   for (let i = 1; i < thingArray.length; i++) {
-    let thingI
+    let thingI;
     switch (name) {
       case "conditions":
-        thingI = BlocklyMiscUtils.newBlock(workspace, "Condition_I")
-        break
+        thingI = BlocklyMiscUtils.newBlock(workspace, "Condition_I");
+        break;
       case "filters":
       case "cardFilters":
-        thingI = BlocklyMiscUtils.newBlock(workspace, "Filter_I")
-        break
+        thingI = BlocklyMiscUtils.newBlock(workspace, "Filter_I");
+        break;
       case "cards":
-        thingI = BlocklyMiscUtils.newBlock(workspace, "Card_I")
-        break
+        thingI = BlocklyMiscUtils.newBlock(workspace, "Card_I");
+        break;
       default:
-        thingI = BlocklyMiscUtils.newBlock(workspace, "Spell_I")
-        break
+        thingI = BlocklyMiscUtils.newBlock(workspace, "Spell_I");
+        break;
     }
-    handleArg(thingI.getInput("i").connection, thingArray[i], name.slice(0, -1), workspace, thingArray)
-    lowestBlock.nextConnection.connect(thingI.previousConnection)
+    handleArg(thingI.getInput("i").connection, thingArray[i], name.slice(0, -1), workspace, thingArray);
+    lowestBlock.nextConnection.connect(thingI.previousConnection);
     if ("initSvg" in thingI) {
-      thingI.initSvg()
+      thingI.initSvg();
     }
-    lowestBlock = thingI
+    lowestBlock = thingI;
   }
 }
 
@@ -1026,14 +1026,14 @@ export function handleArrayArg(jsonElement, block: Block | BlockSvg, workspace, 
  */
 export function wrapperBlocks(block, json, inputName, workspace, parentJson, connection, bestMatch) {
   const wrap = (blockType, inputName = "super") => {
-    let newOuterBlock = BlocklyMiscUtils.newBlock(workspace, blockType)
-    newOuterBlock.getInput(inputName).connection.connect(outerBlock.outputConnection)
+    let newOuterBlock = BlocklyMiscUtils.newBlock(workspace, blockType);
+    newOuterBlock.getInput(inputName).connection.connect(outerBlock.outputConnection);
     if ("initSvg" in newOuterBlock) {
-      newOuterBlock.initSvg()
+      newOuterBlock.initSvg();
     }
-    outerBlock = newOuterBlock
-  }
-  let outerBlock = block
+    outerBlock = newOuterBlock;
+  };
+  let outerBlock = block;
 
   if (
     !!json.targetPlayer &&
@@ -1043,16 +1043,16 @@ export function wrapperBlocks(block, json, inputName, workspace, parentJson, con
   ) {
     switch (bestMatch.output) {
       case "ValueProviderDesc":
-        wrap("ValueProvider_targetPlayer")
-        break
+        wrap("ValueProvider_targetPlayer");
+        break;
       case "Source":
-        wrap("Source_targetPlayer")
-        break
+        wrap("Source_targetPlayer");
+        break;
       default:
-        wrap("Spell_TargetPlayer")
-        break
+        wrap("Spell_TargetPlayer");
+        break;
     }
-    simpleHandleArg(outerBlock, "targetPlayer", json, workspace)
+    simpleHandleArg(outerBlock, "targetPlayer", json, workspace);
   }
 
   if (
@@ -1062,8 +1062,8 @@ export function wrapperBlocks(block, json, inputName, workspace, parentJson, con
     !getInputEndsWith(connection.getSourceBlock(), "filter") &&
     !connection.getSourceBlock().getInput("filter")
   ) {
-    wrap("EntityReference_FILTER")
-    handleArg(outerBlock.getInput("super.filter").connection, parentJson.filter, "filter", workspace, json)
+    wrap("EntityReference_FILTER");
+    handleArg(outerBlock.getInput("super.filter").connection, parentJson.filter, "filter", workspace, json);
   }
 
   if (
@@ -1074,29 +1074,29 @@ export function wrapperBlocks(block, json, inputName, workspace, parentJson, con
       .includes("invert")
   ) {
     if (json.class.endsWith("Filter")) {
-      wrap("Filter_NOT")
+      wrap("Filter_NOT");
     } else if (json.class.endsWith("Condition")) {
-      wrap("Condition_NOT")
+      wrap("Condition_NOT");
     }
   }
 
   if (!!json.class && json.class.endsWith("Trigger")) {
     if (!!json.fireCondition) {
-      wrap("Trigger_FireCondition")
-      simpleHandleArg(outerBlock, "fireCondition", json, workspace)
+      wrap("Trigger_FireCondition");
+      simpleHandleArg(outerBlock, "fireCondition", json, workspace);
     }
     if (!!json.queueCondition) {
-      wrap("Trigger_QueueCondition")
-      simpleHandleArg(outerBlock, "queueCondition", json, workspace)
+      wrap("Trigger_QueueCondition");
+      simpleHandleArg(outerBlock, "queueCondition", json, workspace);
     }
     if (!!json.race) {
-      wrap("Trigger_Race")
-      simpleHandleArg(outerBlock, "race", json, workspace)
+      wrap("Trigger_Race");
+      simpleHandleArg(outerBlock, "race", json, workspace);
     }
     if (!!json.requiredAttribute) {
-      let match = getMatch(json.requiredAttribute, "attribute", json)
-      wrap("Trigger_Attribute")
-      simpleHandleArg(outerBlock, "requiredAttribute", json, workspace)
+      let match = getMatch(json.requiredAttribute, "attribute", json);
+      wrap("Trigger_Attribute");
+      simpleHandleArg(outerBlock, "requiredAttribute", json, workspace);
     }
   }
 
@@ -1105,73 +1105,73 @@ export function wrapperBlocks(block, json, inputName, workspace, parentJson, con
     !!parentJson.targetSelectionCondition &&
     !!parentJson.targetSelectionOverride
   ) {
-    wrap("TargetSelection_OVERRIDE")
+    wrap("TargetSelection_OVERRIDE");
     handleArg(
       outerBlock.getInput("super.targetSelectionCondition").connection,
       parentJson.targetSelectionCondition,
       "targetSelectionCondition",
       workspace,
       parentJson
-    )
+    );
     handleArg(
       outerBlock.getInput("super.targetSelectionOverride").connection,
       parentJson.targetSelectionOverride,
       "targetSelectionOverride",
       workspace,
       parentJson
-    )
+    );
   }
 
   if (inputName.endsWith("targetSelection") && !!parentJson.spell && !!parentJson.spell.filter && json !== "NONE") {
     if (parentJson.spell.filter.class === "RaceFilter") {
-      wrap("TargetSelection_RACE")
+      wrap("TargetSelection_RACE");
       handleArg(
         outerBlock.getInput("super.spell.filter.race").connection,
         parentJson.spell.filter.race,
         "race",
         workspace,
         parentJson.spell.filter
-      )
+      );
     } else {
-      wrap("TargetSelection_FILTER")
+      wrap("TargetSelection_FILTER");
       handleArg(
         outerBlock.getInput("super.spell.filter").connection,
         parentJson.spell.filter,
         "filter",
         workspace,
         parentJson.spell
-      )
+      );
     }
   }
 
   if (inputName === "target" && parentJson.randomTarget === true) {
     //handles the randomTarget arg
-    wrap("EntityReference_RANDOM")
+    wrap("EntityReference_RANDOM");
   }
 
   if (!!json.multiplier) {
-    wrap("ValueProvider_multiplier")
+    wrap("ValueProvider_multiplier");
     if (typeof json.multiplier !== "object") {
-      handleIntArg(outerBlock, "multiplier", workspace, json.multiplier)
+      handleIntArg(outerBlock, "multiplier", workspace, json.multiplier);
     } else {
-      simpleHandleArg(outerBlock, "multiplier", json, workspace)
+      simpleHandleArg(outerBlock, "multiplier", json, workspace);
     }
   }
 
   if (!!json.offset) {
-    wrap("ValueProvider_offset")
+    wrap("ValueProvider_offset");
     if (typeof json.offset !== "object") {
-      handleIntArg(outerBlock, "offset", workspace, json.offset)
+      handleIntArg(outerBlock, "offset", workspace, json.offset);
     } else {
-      simpleHandleArg(outerBlock, "offset", json, workspace)
+      simpleHandleArg(outerBlock, "offset", json, workspace);
     }
   }
 
   if (!!json.distinct) {
-    wrap("Source_distinct")
+    wrap("Source_distinct");
   }
 
-  return outerBlock
+  return outerBlock;
 }
 
 /**
@@ -1184,7 +1184,7 @@ export function wrapperBlocks(block, json, inputName, workspace, parentJson, con
  * @returns The block that handleArg returns
  */
 export function simpleHandleArg(block, inputName, json, workspace) {
-  return handleArg(block.getInput(inputName).connection, json[inputName], inputName, workspace, json)
+  return handleArg(block.getInput(inputName).connection, json[inputName], inputName, workspace, json);
 }
 
 /**
@@ -1200,28 +1200,28 @@ export function simpleHandleArg(block, inputName, json, workspace) {
  */
 export function traverseJsonByArgName(name, json, parentJson) {
   if (!name || !json) {
-    return undefined
+    return undefined;
   }
   if (name.includes(",")) {
-    let names = name.split(",")
+    let names = name.split(",");
     for (let name of names) {
-      let elem = traverseJsonByArgName(name, json, parentJson)
+      let elem = traverseJsonByArgName(name, json, parentJson);
       if (elem !== undefined) {
-        return elem
+        return elem;
       }
     }
-    return undefined
+    return undefined;
   } else {
-    let i = name.indexOf(".")
+    let i = name.indexOf(".");
     if (i <= 0) {
-      return json[name]
+      return json[name];
     }
-    let start = name.substring(0, i)
-    let rest = name.substring(i + 1)
+    let start = name.substring(0, i);
+    let rest = name.substring(i + 1);
     if (start === "super" && !!parentJson) {
-      return traverseJsonByArgName(rest, parentJson, null)
+      return traverseJsonByArgName(rest, parentJson, null);
     } else {
-      return traverseJsonByArgName(rest, json[start], json)
+      return traverseJsonByArgName(rest, json[start], json);
     }
   }
 }
@@ -1237,20 +1237,20 @@ export function traverseJsonByArgName(name, json, parentJson) {
  * @param int The number that should actually end up in the int block
  */
 export function handleIntArg(block: Block | BlockSvg, inputArg, workspace, int) {
-  let valueBlock
+  let valueBlock;
   if (
     !!block.getInput(inputArg).connection.targetBlock() &&
     block.getInput(inputArg).connection.targetBlock().type === "ValueProvider_int"
   ) {
-    valueBlock = block.getInput(inputArg).connection.targetBlock()
+    valueBlock = block.getInput(inputArg).connection.targetBlock();
   } else {
-    valueBlock = BlocklyMiscUtils.newBlock(workspace, "ValueProvider_int")
-    block.getInput(inputArg).connection.connect(valueBlock.outputConnection)
+    valueBlock = BlocklyMiscUtils.newBlock(workspace, "ValueProvider_int");
+    block.getInput(inputArg).connection.connect(valueBlock.outputConnection);
     if ("initSvg" in valueBlock) {
-      valueBlock.initSvg()
+      valueBlock.initSvg();
     }
   }
-  valueBlock.setFieldValue(int, "int")
+  valueBlock.setFieldValue(int, "int");
 }
 
 /**
@@ -1268,32 +1268,32 @@ export function handleIntArg(block: Block | BlockSvg, inputArg, workspace, int) 
  * @returns The block it generated
  * */
 export function generateDummyBlock(json, inputName, parentJson) {
-  inputName = inputName.split(".").slice(-1)[0]
-  let type = BlocklyMiscUtils.inputNameToBlockType(inputName)
-  let consoleBlock
+  inputName = inputName.split(".").slice(-1)[0];
+  let type = BlocklyMiscUtils.inputNameToBlockType(inputName);
+  let consoleBlock;
   if (typeof json !== "object") {
-    let color = blockTypeColors[type]
+    let color = blockTypeColors[type];
     consoleBlock = {
       type: type + "_" + json.toString(),
       data: json.toString(),
       colour: isNumeric(color) ? parseInt(color) : color,
       output: type,
       message0: BlocklyMiscUtils.toTitleCaseCorrected(json.toString()),
-    }
+    };
   } else {
-    let props = relevantProperties(json)
-    let className = json.class
-    let messages = []
-    let args = []
+    let props = relevantProperties(json);
+    let className = json.class;
+    let messages = [];
+    let args = [];
     for (let prop of props) {
-      let shouldBeField = !BlocklyMiscUtils.inputNameToBlockType(prop)
+      let shouldBeField = !BlocklyMiscUtils.inputNameToBlockType(prop);
       if (!!json.class && json.class.endsWith("Trigger") && (prop === "targetPlayer" || prop === "sourcePlayer")) {
-        shouldBeField = true
+        shouldBeField = true;
       }
       let arg: BlockArgDef = {
         name: prop,
-      }
-      let newMessage = prop + ": %1"
+      };
+      let newMessage = prop + ": %1";
       if (shouldBeField) {
         if (prop === "operation") {
           if (
@@ -1301,34 +1301,34 @@ export function generateDummyBlock(json, inputName, parentJson) {
               .options.map((arr) => arr[1])
               .includes(json[prop])
           ) {
-            arg = dropdownsList(Blockly.Blocks["ValueProvider_Algebraic"].json)[0]
+            arg = dropdownsList(Blockly.Blocks["ValueProvider_Algebraic"].json)[0];
           } else {
-            arg = dropdownsList(Blockly.Blocks["Condition_Comparison"].json)[0]
+            arg = dropdownsList(Blockly.Blocks["Condition_Comparison"].json)[0];
           }
         } else {
-          arg.type = "field_label_serializable_hidden"
-          arg.value = json[prop]
-          newMessage += '"' + BlocklyMiscUtils.toTitleCaseCorrected(json[prop].toString()) + '"'
+          arg.type = "field_label_serializable_hidden";
+          arg.value = json[prop];
+          newMessage += '"' + BlocklyMiscUtils.toTitleCaseCorrected(json[prop].toString()) + '"';
         }
       } else {
-        arg.type = "input_value"
+        arg.type = "input_value";
         arg.check =
           (prop === "attribute" ? (!!parentJson.value ? "Int" : "Bool") : "") +
-          BlocklyMiscUtils.blockTypeToOuput(BlocklyMiscUtils.inputNameToBlockType(prop))
+          BlocklyMiscUtils.blockTypeToOuput(BlocklyMiscUtils.inputNameToBlockType(prop));
         arg.shadow = {
           type:
             prop === "target"
               ? "EntityReference_IT"
               : BlocklyMiscUtils.inputNameToBlockType(prop) +
                 (prop === "attribute" ? (!!parentJson.value ? "_INT_SHADOW" : "_BOOL_SHADOW") : "_SHADOW"),
-        }
+        };
       }
-      messages.push(newMessage)
-      args.push(arg)
+      messages.push(newMessage);
+      args.push(arg);
     }
 
-    let output = BlocklyMiscUtils.blockTypeToOuput(type)
-    let color = blockTypeColors[output]
+    let output = BlocklyMiscUtils.blockTypeToOuput(type);
+    let color = blockTypeColors[output];
     consoleBlock = {
       type: type + "_" + className.replace(type, ""),
       inputsInline: false,
@@ -1342,32 +1342,32 @@ export function generateDummyBlock(json, inputName, parentJson) {
           value: className,
         },
       ],
-    }
+    };
     if (type === "Aura") {
-      delete consoleBlock.output
-      consoleBlock.previousStatement = ["Auras"]
-      consoleBlock.nextStatement = ["Auras"]
+      delete consoleBlock.output;
+      consoleBlock.previousStatement = ["Auras"];
+      consoleBlock.nextStatement = ["Auras"];
     }
     for (let j = 1; j <= messages.length; j++) {
       //block['message' + j.toString()] = messages[j - 1]
       //block['args' + j.toString()] = [args[j - 1]]
 
-      consoleBlock.message0 += " " + messages[j - 1].replace("%1", "%" + (j + 1).toString())
-      consoleBlock.args0.push(args[j - 1])
+      consoleBlock.message0 += " " + messages[j - 1].replace("%1", "%" + (j + 1).toString());
+      consoleBlock.args0.push(args[j - 1]);
     }
   }
 
-  console.log("Had to create new block " + consoleBlock.type)
-  console.log(JSON.stringify(consoleBlock, null, 2).toString().replace('"colour": "(\\d+)"', '"colour": $1'))
+  console.log("Had to create new block " + consoleBlock.type);
+  console.log(JSON.stringify(consoleBlock, null, 2).toString().replace('"colour": "(\\d+)"', '"colour": $1'));
 
-  let blok = JSON.stringify(consoleBlock, null, 2)
+  let blok = JSON.stringify(consoleBlock, null, 2);
   //blok = consoleBlock.type
   if (!customBlocks[blok]) {
-    customBlocks[blok] = 0
+    customBlocks[blok] = 0;
   }
-  customBlocks[blok]++
+  customBlocks[blok]++;
 
-  return consoleBlock
+  return consoleBlock;
 }
 
 /**
@@ -1383,62 +1383,62 @@ export function generateDummyBlock(json, inputName, parentJson) {
  * @returns {Blockly.Block}
  */
 export function handleNoMatch(json, inputName, parentJson, workspace) {
-  inputName = inputName.split(".").slice(-1)[0]
-  let type = BlocklyMiscUtils.inputNameToBlockType(inputName)
-  let block = BlocklyMiscUtils.newBlock(workspace, "Custom" + type)
+  inputName = inputName.split(".").slice(-1)[0];
+  let type = BlocklyMiscUtils.inputNameToBlockType(inputName);
+  let block = BlocklyMiscUtils.newBlock(workspace, "Custom" + type);
   if (typeof json !== "object") {
-    block.setFieldValue(json, "value")
+    block.setFieldValue(json, "value");
   } else if (!!json.class) {
-    block.getInput("class").connection.targetBlock().setFieldValue(json.class, "class")
-    let lowestConnection = block.getFirstStatementConnection()
+    block.getInput("class").connection.targetBlock().setFieldValue(json.class, "class");
+    let lowestConnection = block.getFirstStatementConnection();
 
     for (let arg in json) {
       if (
         arg === "class" ||
         (arg === "filter" && !!parentJson.targetSelection && parentJson.targetSelection !== "NONE")
       ) {
-        continue
+        continue;
       }
 
-      let blockType = BlocklyMiscUtils.inputNameToBlockType(arg)
+      let blockType = BlocklyMiscUtils.inputNameToBlockType(arg);
 
-      let argValue = json[arg]
+      let argValue = json[arg];
       if (!blockType) {
         if (argValue === true || argValue === false) {
-          blockType = "Boolean"
-          argValue = argValue.toString().toUpperCase()
+          blockType = "Boolean";
+          argValue = argValue.toString().toUpperCase();
         } else if (isArray(argValue)) {
-          blockType = BlocklyMiscUtils.inputNameToBlockType(arg.slice(0, -1)) + "s"
+          blockType = BlocklyMiscUtils.inputNameToBlockType(arg.slice(0, -1)) + "s";
         } else {
-          blockType = "text"
+          blockType = "text";
         }
       }
-      let newArgBlock = BlocklyMiscUtils.newBlock(workspace, "CustomArg_" + blockType)
-      newArgBlock.previousConnection.connect(lowestConnection)
-      lowestConnection = newArgBlock.nextConnection
+      let newArgBlock = BlocklyMiscUtils.newBlock(workspace, "CustomArg_" + blockType);
+      newArgBlock.previousConnection.connect(lowestConnection);
+      lowestConnection = newArgBlock.nextConnection;
       if ("initSvg" in newArgBlock) {
-        newArgBlock.initSvg()
+        newArgBlock.initSvg();
       }
-      newArgBlock.setFieldValue(arg, "customArg")
+      newArgBlock.setFieldValue(arg, "customArg");
 
       if (!!newArgBlock.getInput("customValue")) {
         if (isNumeric(argValue)) {
-          handleIntArg(newArgBlock, "customValue", workspace, argValue)
+          handleIntArg(newArgBlock, "customValue", workspace, argValue);
         } else if (isArray(argValue)) {
           if (arg === "aura") {
-            auras(newArgBlock, json, workspace)
+            auras(newArgBlock, json, workspace);
           } else {
-            handleArrayArg(argValue, newArgBlock, workspace, arg)
+            handleArrayArg(argValue, newArgBlock, workspace, arg);
           }
         } else {
-          handleArg(newArgBlock.getInput("customValue").connection, argValue, arg, workspace, parentJson)
+          handleArg(newArgBlock.getInput("customValue").connection, argValue, arg, workspace, parentJson);
         }
       } else {
-        newArgBlock.setFieldValue(argValue, "customValue")
+        newArgBlock.setFieldValue(argValue, "customValue");
       }
     }
   }
-  return block
+  return block;
 }
 
 /**
@@ -1447,7 +1447,7 @@ export function handleNoMatch(json, inputName, parentJson, workspace) {
  * @returns array of the relevant properties (strings)
  */
 export function relevantProperties(json) {
-  let relevantProperties = []
+  let relevantProperties = [];
   for (let property in json) {
     if (
       (property === "randomTarget" && !!json.target) ||
@@ -1459,13 +1459,13 @@ export function relevantProperties(json) {
       property === "multiplier" ||
       property === "distinct"
     ) {
-      continue //these ones can be handled by other blocks
+      continue; //these ones can be handled by other blocks
     }
     if (json[property] !== null && json[property] !== undefined) {
-      relevantProperties.push(property)
+      relevantProperties.push(property);
     }
   }
-  return relevantProperties
+  return relevantProperties;
 }
 
 /**
@@ -1476,13 +1476,13 @@ export function relevantProperties(json) {
  */
 export function mutateJson(json) {
   if (json === null || json === undefined) {
-    json = "NONE"
+    json = "NONE";
   }
   if (typeof json !== "object") {
-    return json
+    return json;
   }
-  let className = json.class
-  let props = relevantProperties(json)
+  let className = json.class;
+  let props = relevantProperties(json);
 
   //the 'has' operation can be implied in many cases
   if (className.endsWith("Filter") || className.endsWith("Condition")) {
@@ -1492,19 +1492,19 @@ export function mutateJson(json) {
       !props.includes("value") &&
       json.operation === "HAS"
     ) {
-      delete json.operation
-      props = relevantProperties(json)
+      delete json.operation;
+      props = relevantProperties(json);
     }
   }
 
   if (className === "AndCondition" && (!json.conditions || json.conditions?.length === 0)) {
-    delete json.conditions
-    json.class = "AlwaysCondition"
+    delete json.conditions;
+    json.class = "AlwaysCondition";
   }
 
   if (className === "OrCondition" && (!json.conditions || json.conditions?.length === 0)) {
-    delete json.conditions
-    json.class = "NeverCondition"
+    delete json.conditions;
+    json.class = "NeverCondition";
   }
 
   if (className === "CardFilter") {
@@ -1515,14 +1515,14 @@ export function mutateJson(json) {
           class: "RaceFilter",
           race: json.race,
           invert: json.invert,
-        }
+        };
       }
       if (props[0] === "attribute") {
         return {
           class: "AttributeFilter",
           attribute: json.attribute,
           invert: json.invert,
-        }
+        };
       }
     } else if (
       !(
@@ -1533,18 +1533,18 @@ export function mutateJson(json) {
       !(props.length === 3 && props.includes("attribute") && props.includes("operation") && props.includes("value"))
     ) {
       //cardfilters with many different properties need to be split up to a big and filter
-      let filters = []
+      let filters = [];
       if (!!json.race) {
         filters.push({
           class: "RaceFilter",
           race: json.race,
-        })
+        });
       }
       if (!!json.cardType) {
         filters.push({
           class: "CardFilter",
           cardType: json.cardType,
-        })
+        });
       }
       if (!!json.attribute) {
         if (!json.value && (!json.operation || json.operation === "HAS") && !!enumBlocksDictionary[json.attribute]) {
@@ -1552,14 +1552,14 @@ export function mutateJson(json) {
             filters.push({
               class: "AttributeFilter",
               attribute: json.attribute,
-            })
+            });
           } else {
             filters.push({
               class: "AttributeFilter",
               attribute: json.attribute,
               operation: "GREATER_OR_EQUAL",
               value: 1,
-            })
+            });
           }
         } else {
           filters.push({
@@ -1567,32 +1567,32 @@ export function mutateJson(json) {
             attribute: json.attribute,
             operation: json.operation,
             value: json.value,
-          })
+          });
         }
       }
       if (json.hasOwnProperty("manaCost")) {
         filters.push({
           class: "CardFilter",
           manaCost: json.manaCost,
-        })
+        });
       }
       if (!!json.heroClass) {
         filters.push({
           class: "CardFilter",
           heroClass: json.heroClass,
-        })
+        });
       }
       if (!!json.rarity) {
         filters.push({
           class: "CardFilter",
           rarity: json.rarity,
-        })
+        });
       }
       return {
         class: "AndFilter",
         filters: filters,
         invert: json.invert,
-      }
+      };
     }
   }
 
@@ -1611,7 +1611,7 @@ export function mutateJson(json) {
       },
       operation: json.operation,
       value2: json.value,
-    }
+    };
   }
   if (className === "CardCountCondition") {
     json = {
@@ -1623,7 +1623,7 @@ export function mutateJson(json) {
       },
       operation: json.operation,
       value2: json.value,
-    }
+    };
   }
   /*if (className === 'DeckContainsCondition') {
     if (!!json.card) {
@@ -1660,14 +1660,14 @@ export function mutateJson(json) {
 
   //some auras specify extra triggers unnecessarily
   if (className.endsWith("Aura") && !!json.triggers) {
-    let triggersDontMatter = true
+    let triggersDontMatter = true;
     for (let trigger of json.triggers) {
       if (trigger.class !== "WillEndSequenceTrigger") {
-        triggersDontMatter = false
+        triggersDontMatter = false;
       }
     }
     if (triggersDontMatter) {
-      delete json.triggers
+      delete json.triggers;
     }
   }
 
@@ -1677,68 +1677,68 @@ export function mutateJson(json) {
     //in triggers, it's 'both'
     (json.targetPlayer === "BOTH" && json.class.endsWith("Trigger"))
   ) {
-    delete json.targetPlayer
+    delete json.targetPlayer;
   }
 
   //for certain triggers the Source Player and Target Player are just the same
   if ((className === "MinionSummonedTrigger" || className === "MinionPlayedTrigger") && !!json.sourcePlayer) {
-    json.targetPlayer = json.sourcePlayer
-    delete json.sourcePlayer
+    json.targetPlayer = json.sourcePlayer;
+    delete json.sourcePlayer;
   }
 
   if (className === "TemporaryAttackSpell" && !!json.attackBonus) {
     if (!json.value) {
-      json.value = 0
+      json.value = 0;
     }
-    json.value += json.attackBonus
-    delete json.attackBonus
+    json.value += json.attackBonus;
+    delete json.attackBonus;
   }
 
   if (json.sourcePlayer === "BOTH") {
-    delete json.sourcePlayer
+    delete json.sourcePlayer;
   }
 
   if (className === "ReduceValueProvider" && json.attribute) {
     json.value1 = {
       class: "AttributeValueProvider",
       attribute: json.attribute,
-    }
-    delete json.attribute
+    };
+    delete json.attribute;
   }
 
   if (className === "DiscoverSpell" && !json.cards && !json.cardSource) {
     json.cardSource = {
       class: "CatalogueSource",
-    }
+    };
   }
 
   if (className === "AlgebraicValueProvider" && json.operation === "NEGATE" && !json.hasOwnProperty("value2")) {
-    json.operation = "MULTIPLY"
-    json.value2 = -1
+    json.operation = "MULTIPLY";
+    json.value2 = -1;
   }
 
   if (className === "RecruitSpell" && !json.cardLocation) {
-    json.cardLocation = "DECK"
+    json.cardLocation = "DECK";
   }
 
   if (className.endsWith("Modifier") && !json.target) {
-    json.target = "FRIENDLY_HAND"
+    json.target = "FRIENDLY_HAND";
   }
 
   if (className.endsWith("Aura") && !!json.triggers && json.triggers.length === 1) {
-    json.trigger = json.triggers[0]
-    delete json.triggers
+    json.trigger = json.triggers[0];
+    delete json.triggers;
   }
 
   //functionality is the same
   if (className === "CloneMinionSpell") {
-    json.class = "SummonSpell"
+    json.class = "SummonSpell";
   }
   if (className === "InspireTrigger") {
-    json.class = "HeroPowerUsedTrigger"
+    json.class = "HeroPowerUsedTrigger";
   }
 
-  return json
+  return json;
 }
 
 /**
@@ -1748,18 +1748,18 @@ export function mutateJson(json) {
  * @returns An array of the input args
  */
 export function inputsList(block) {
-  let inputsList = []
+  let inputsList = [];
   for (let i = 0; i < 10; i++) {
     if (!!block["args" + i.toString()]) {
       for (let j = 0; j < 10; j++) {
-        const arg = block["args" + i.toString()][j]
+        const arg = block["args" + i.toString()][j];
         if (!!arg && arg.type.includes("input")) {
-          inputsList.push(arg)
+          inputsList.push(arg);
         }
       }
     }
   }
-  return inputsList
+  return inputsList;
 }
 
 /**
@@ -1769,18 +1769,18 @@ export function inputsList(block) {
  * @returns An array of the dropdown args
  */
 export function dropdownsList(block: Block | BlockSvg) {
-  let inputsList = []
+  let inputsList = [];
   for (let i = 0; i < 10; i++) {
     if (!!block["args" + i.toString()]) {
       for (let j = 0; j < 10; j++) {
-        const arg = block["args" + i.toString()][j]
+        const arg = block["args" + i.toString()][j];
         if (!!arg && arg.type.includes("dropdown")) {
-          inputsList.push(arg)
+          inputsList.push(arg);
         }
       }
     }
   }
-  return inputsList
+  return inputsList;
 }
 
 /**
@@ -1789,16 +1789,16 @@ export function dropdownsList(block: Block | BlockSvg) {
  * @returns An array of the args
  */
 export function argsList(block: BlockDef) {
-  let argsList = []
+  let argsList = [];
   for (let i = 0; i < 10; i++) {
     if (!!block["args" + i.toString()]) {
       for (let j = 0; j < 10; j++) {
-        const arg = block["args" + i.toString()][j]
+        const arg = block["args" + i.toString()][j];
         if (!!arg) {
-          argsList.push(arg)
+          argsList.push(arg);
         }
       }
     }
   }
-  return argsList
+  return argsList;
 }

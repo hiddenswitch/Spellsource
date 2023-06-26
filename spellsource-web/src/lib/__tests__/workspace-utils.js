@@ -1,21 +1,21 @@
-import WorkspaceUtils from '../workspace-utils'
+import WorkspaceUtils from "../workspace-utils";
 
-function expectConversion (str, json) {
-  const parser = new DOMParser()
+function expectConversion(str, json) {
+  const parser = new DOMParser();
 
-  const xml = parser.parseFromString(str, 'text/xml')
+  const xml = parser.parseFromString(str, "text/xml");
 
-  expect(WorkspaceUtils.xmlToCardScript(xml)).toEqual(json)
+  expect(WorkspaceUtils.xmlToCardScript(xml)).toEqual(json);
 }
 
-describe('WorkspaceUtils', () => {
-  it('converts correctly', () => {
+describe("WorkspaceUtils", () => {
+  it("converts correctly", () => {
     const json = {
-      'name': 'Name',
-      'baseManaCost': 4,
-      'description': 'Description',
-      'spell': { 'class': 'DamageSpell', 'value': 4, 'target': 'ENEMY_MINIONS' }
-    }
+      name: "Name",
+      baseManaCost: 4,
+      description: "Description",
+      spell: { class: "DamageSpell", value: 4, target: "ENEMY_MINIONS" },
+    };
     const xml = `<xml>
     <block type="CardDesc_SPELL" id="zvVTaR5UEE1iMnWZ7-+K" x="65" y="40">
         <field name="name">Name</field>
@@ -37,40 +37,40 @@ describe('WorkspaceUtils', () => {
                 </value>
             </block>
         </value>
-    </block></xml>`
+    </block></xml>`;
 
-    expectConversion(xml, json)
-  })
+    expectConversion(xml, json);
+  });
 
-  it('converts correctly', () => {
+  it("converts correctly", () => {
     const json = {
-      'type': 'MINION',
-      'set': 'CUSTOM',
-      'fileFormatVersion': 1,
-      'name': 'test',
-      'baseAttack': 0,
-      'baseHp': 0,
-      'baseManaCost': 0,
-      'description': 'description',
-      'rarity': 'COMMON',
-      'battlecry': {
-        'condition': {
-          'class': 'ComparisonCondition',
-          'operation': 'GREATER_OR_EQUAL',
-          'value1': {
-            'class': 'CardCountValueProvider',
-            'targetPlayer': 'SELF'
+      type: "MINION",
+      set: "CUSTOM",
+      fileFormatVersion: 1,
+      name: "test",
+      baseAttack: 0,
+      baseHp: 0,
+      baseManaCost: 0,
+      description: "description",
+      rarity: "COMMON",
+      battlecry: {
+        condition: {
+          class: "ComparisonCondition",
+          operation: "GREATER_OR_EQUAL",
+          value1: {
+            class: "CardCountValueProvider",
+            targetPlayer: "SELF",
           },
-          'value2': 3
+          value2: 3,
         },
-        'targetSelection': 'NONE',
-        'spell': {
-          'class': 'DamageSpell',
-          'target': 'ENEMY_MINIONS',
-          'value': 2
-        }
-      }
-    }
+        targetSelection: "NONE",
+        spell: {
+          class: "DamageSpell",
+          target: "ENEMY_MINIONS",
+          value: 2,
+        },
+      },
+    };
     const xml = `<xml>
     <block type="CardDesc_MINION" id="icQZwG,}r{X_J%.DODjA" x="-112" y="148">
         <field name="type">MINION</field>
@@ -135,8 +135,8 @@ describe('WorkspaceUtils', () => {
     </block></next>
     </block>
     
-</xml>`
+</xml>`;
 
-    expectConversion(xml, json)
-  })
-})
+    expectConversion(xml, json);
+  });
+});

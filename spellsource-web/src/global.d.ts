@@ -1,22 +1,22 @@
 // Stop imports yelling
 declare module "*.png" {
-  const value: any;
+  const value: any
   export = value;
 }
 declare module "*.gif" {
-  const value: any;
+  const value: any
   export = value;
 }
 
 declare global {
   interface Element {
-    style: CSSStyleDeclaration
-    innerText: string
+    style: CSSStyleDeclaration;
+    innerText: string;
   }
 }
 
-import {User} from "next-auth";
-import {JWT} from "next-auth/jwt";
+import { User } from "next-auth";
+import { JWT } from "next-auth/jwt";
 
 declare module "next-auth/jwt" {
   interface JWT {

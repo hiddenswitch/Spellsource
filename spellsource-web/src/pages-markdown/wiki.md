@@ -4,7 +4,9 @@ header: true
 path: /wiki
 layout: wiki
 ---
+
 ### Your journey begins here...
+
 <p />
 
 ![The Lung Archipelago](/static/assets/sector-5.png "fig:The Lung Archipelago")
@@ -26,6 +28,7 @@ races—[Fae](/wiki/Fae "wikilink"), the plucky
 [Oni](/wiki/Oni "wikilink")—to pick up arms. Which side will you choose?
 
 ### Setting
+
 <details>
     <summary>Where Spellsource takes place.</summary>
 
@@ -46,6 +49,7 @@ location of the largest city on the island,
 </details>
 
 ### Conflict
+
 <details>
 <summary>The power struggle that started it all.</summary>
 
@@ -61,44 +65,47 @@ Landfall](/wiki/Vision_of_Landfall "wikilink").
 </details>
 
 ### Heroes
+
 <details>
 <summary>Who will you main?</summary>
 
 ![Champions](/static/assets/champions-resized.png)
 
--   [Shun He](/wiki/Shun_He "wikilink"), the Grand Alchemist of the Lotus
-    Empire.
--   [Princess Briila](/wiki/Princess_Briila "wikilink"), the Former High
-    Priestess.
--   [Faloran](/wiki/Faloran "wikilink"), the Ninja.
--   [Inora Ithkal](/wiki/Inora_Ithkal "wikilink"), the Healer.
--   [Paucha](/wiki/Paucha "wikilink"), the Goddess of Madness.
+- [Shun He](/wiki/Shun_He "wikilink"), the Grand Alchemist of the Lotus
+  Empire.
+- [Princess Briila](/wiki/Princess_Briila "wikilink"), the Former High
+  Priestess.
+- [Faloran](/wiki/Faloran "wikilink"), the Ninja.
+- [Inora Ithkal](/wiki/Inora_Ithkal "wikilink"), the Healer.
+- [Paucha](/wiki/Paucha "wikilink"), the Goddess of Madness.
 
 </details>
 
 ### Inhabitants
+
 <details>
 <summary>Who will you meet?</summary>
 
--   [Dragovians](/wiki/Dragovians "wikilink"): Dominant race of the islands,
-    their gargantuan ancestors (think dragon meets dinosaur) built
-    temples and cities before mysteriously disappearing.
--   [Humans](/wiki/Humans "wikilink"): The dominant race in the outside world,
-    they are led by an eccentric and ruthless explorer to the Lung
-    islands in hope of finding the source of all magic.
--   [Hengeyokai](/wiki/Hengeyokai "wikilink"): Intelligent shapeshifting
-    animals. They can shapeshift from a full animal form to a bipedal
-    humanoid animal form at will. They can also speak to animals.
--   [Oni](/wiki/Oni "wikilink"): An ogre-like race of demons. They were meant
-    to guard the threshold between the material world and the spirit,
-    but then some escaped to our world and settled.
--   [Fae](/wiki/Fae "wikilink"): Earlier human "settlers" of the islands, they
-    are imbued with natural magic and come in blue (sea) and green
-    (land) varieties. They are nomadic and live in small tribes.
+- [Dragovians](/wiki/Dragovians "wikilink"): Dominant race of the islands,
+  their gargantuan ancestors (think dragon meets dinosaur) built
+  temples and cities before mysteriously disappearing.
+- [Humans](/wiki/Humans "wikilink"): The dominant race in the outside world,
+  they are led by an eccentric and ruthless explorer to the Lung
+  islands in hope of finding the source of all magic.
+- [Hengeyokai](/wiki/Hengeyokai "wikilink"): Intelligent shapeshifting
+  animals. They can shapeshift from a full animal form to a bipedal
+  humanoid animal form at will. They can also speak to animals.
+- [Oni](/wiki/Oni "wikilink"): An ogre-like race of demons. They were meant
+  to guard the threshold between the material world and the spirit,
+  but then some escaped to our world and settled.
+- [Fae](/wiki/Fae "wikilink"): Earlier human "settlers" of the islands, they
+  are imbued with natural magic and come in blue (sea) and green
+  (land) varieties. They are nomadic and live in small tribes.
 
 </details>
 
 ### How To Play
+
 <details>
 <summary>Click for instructions.</summary>
 
@@ -106,15 +113,20 @@ Landfall](/wiki/Vision_of_Landfall "wikilink").
 
 Players combat each other using cards in a one-versus-one matchup until one of the player's champions is destroyed.
 
-Each player starts the match by choosing which cards to discard from their initial hand (the Mulligan). Then, one of the two players takes his first turn, while the other receives a bonus Mana card called the coin.
+Each player starts the match by choosing which cards to discard from their initial hand (the Mulligan). Then, one of the
+two players takes his first turn, while the other receives a bonus Mana card called the coin.
 
 At the start of each turn, players gain 1 mana, up to 10. This mana is spent playing cards.
 
-Some cards can put minions on the board. Minions have an attack value (the lower left number) and a health (the lower right number). At the start of the next turn, minions can attack opposing minions or the opposing hero, dealing and taking damage. Minions whose health goes below zero are destroyed.
+Some cards can put minions on the board. Minions have an attack value (the lower left number) and a health (the lower
+right number). At the start of the next turn, minions can attack opposing minions or the opposing hero, dealing and
+taking damage. Minions whose health goes below zero are destroyed.
 
-Some minions and spells accept targets when they are played. For a minion, this is typically part of an "Opener," or action played from the hand.
+Some minions and spells accept targets when they are played. For a minion, this is typically part of an "Opener," or
+action played from the hand.
 
-Text comes "into play" as soon as both players see it. This is typically on the battlefield, or the two rows (yours and your opponent's) of minions, the champions, the weapons they have equipped, and the Skill.
+Text comes "into play" as soon as both players see it. This is typically on the battlefield, or the two rows (yours and
+your opponent's) of minions, the champions, the weapons they have equipped, and the Skill.
 
 The weapon is a bonus item that grants your champion the ability to attack.
 

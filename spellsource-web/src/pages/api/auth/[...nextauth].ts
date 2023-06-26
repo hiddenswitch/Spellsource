@@ -1,35 +1,35 @@
-import NextAuth, {getServerSession, NextAuthOptions} from "next-auth";
+import NextAuth, { getServerSession, NextAuthOptions } from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
-import {JWT} from "next-auth/jwt";
-import {clientId, clientSecret, issuer} from "../../../lib/config";
-import {NextApiRequest, NextApiResponse} from "next";
+import { JWT } from "next-auth/jwt";
+import { clientId, clientSecret, issuer } from "../../../lib/config";
+import { NextApiRequest, NextApiResponse } from "next";
 
 const NextOptions: NextAuthOptions = {
   secret: "secret",
   session: {
-    strategy: "jwt"
+    strategy: "jwt",
   },
   providers: [
     KeycloakProvider({
       clientId,
       clientSecret,
       issuer,
-    })
+    }),
   ],
   events: {
-    signOut: async ({token}) => {
-      await fetch(`${issuer}/protocol/openid-connect/logout?client_id=${clientId}&id_token_hint=${token.idToken}`)
-    }
+    signOut: async ({ token }) => {
+      await fetch(`${issuer}/protocol/openid-connect/logout?client_id=${clientId}&id_token_hint=${token.idToken}`);
+    },
   },
   callbacks: {
     // include the token as part of the session, for purposes like getting the sub
-    session: async ({session, token, user}) => {
+    session: async ({ session, token, user }) => {
       if (token) {
         session.token = token;
       }
       return session;
     },
-    jwt: async ({token, user, account}) => {
+    jwt: async ({ token, user, account }) => {
       // initial sign in, add the account properties to the token, as account will be undefined in every subsequent call
       if (account && user) {
         return {
@@ -56,21 +56,17 @@ const NextOptions: NextAuthOptions = {
       return token;
     },
   },
-}
+};
 
 export default NextAuth(NextOptions);
 
 const emptyResponse = {
-  getHeader: () => {
-  },
-  setHeader: () => {
-  },
-  setCookie: () => {
-  }
-} as unknown as NextApiResponse
+  getHeader: () => {},
+  setHeader: () => {},
+  setCookie: () => {},
+} as unknown as NextApiResponse;
 
-export const getSessionDirect = async (req: NextApiRequest) => getServerSession(req, emptyResponse, NextOptions)
-
+export const getSessionDirect = async (req: NextApiRequest) => getServerSession(req, emptyResponse, NextOptions);
 
 // This has to be written manually still as NextAuth doesn't yet have full OIDC support,
 // but just the broader OATH2 standard which doesn't standardize token refreshing

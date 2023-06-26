@@ -1,8 +1,8 @@
-import * as glob from "glob-promise";
-import path from "path";
-import fs from "fs";
-import probe from "probe-image-size";
-import {ImageDef} from "../__generated__/client";
+import * as glob from "glob-promise"
+import path from "path"
+import fs from "fs"
+import probe from "probe-image-size"
+import { ImageDef } from "../__generated__/client"
 
 /**
  * Parses the JSON for all matching files
@@ -11,18 +11,20 @@ import {ImageDef} from "../__generated__/client";
  */
 export const readAllJson = async <T = any>(globPath: string, transform?: (json: T, file: string) => void) => {
   const files = await glob.promise(path.join(process.cwd(), globPath));
-  return await Promise.all(files.map(async file => {
-    const fileText = await fs.promises.readFile(file, {encoding: "utf8"});
-    try {
-      JSON.parse(fileText)
-    } catch (e) {
-      console.error(`failed to parse json ${file}`)
-    }
-    const json = JSON.parse(fileText) as T;
-    transform?.(json, file)
-    return json;
-  }));
-}
+  return await Promise.all(
+    files.map(async (file) => {
+      const fileText = await fs.promises.readFile(file, { encoding: "utf8" });
+      try {
+        JSON.parse(fileText);
+      } catch (e) {
+        console.error(`failed to parse json ${file}`);
+      }
+      const json = JSON.parse(fileText) as T;
+      transform?.(json, file);
+      return json;
+    })
+  );
+};
 
 /*export type ImageDef = {
   src: string,
@@ -40,14 +42,16 @@ export const readAllImages = async (globPath: string) => {
   const publicPath = path.join(process.cwd(), "public");
   const artFiles = await glob.promise(path.join(publicPath, "static", globPath));
 
-  return await Promise.all(artFiles.map(async (artPath) => {
-    const {width, height} = await probe(fs.createReadStream(artPath));
-    return {
-      src: path.relative(publicPath, artPath).replaceAll(path.sep, "/"),
-      width,
-      height,
-      name: path.basename(artPath, ".png"),
-      id: path.basename(artPath, ".png"),
-    } as ImageDef
-  }))
-}
+  return await Promise.all(
+    artFiles.map(async (artPath) => {
+      const { width, height } = await probe(fs.createReadStream(artPath));
+      return {
+        src: path.relative(publicPath, artPath).replaceAll(path.sep, "/"),
+        width,
+        height,
+        name: path.basename(artPath, ".png"),
+        id: path.basename(artPath, ".png"),
+      } as ImageDef;
+    })
+  );
+};

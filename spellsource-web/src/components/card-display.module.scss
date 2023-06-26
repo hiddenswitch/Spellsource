@@ -2,216 +2,216 @@
 @import "../styles/font.scss";
 
 .card-display-template {
-    position: relative;
-    image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: crisp-edges;
-    width: 256px;
-    height: 310px;
+  position: relative;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  width: 256px;
+  height: 310px;
 }
 
 .layer-one {
-    position: absolute;
-    z-index: 2;
+  position: absolute;
+  z-index: 2;
 }
 
 .primary {
-    width: 148px;
-    height: 40px;
-    z-index: 3;
-    left: 38px;
-    top: 2px;
-    position: absolute;
-    mask-image: url('/static/card-images/layer-3.png');
-    -webkit-mask-image: url('/static/card-images/layer-3.png');
+  width: 148px;
+  height: 40px;
+  z-index: 3;
+  left: 38px;
+  top: 2px;
+  position: absolute;
+  mask-image: url('/static/card-images/layer-3.png');
+  -webkit-mask-image: url('/static/card-images/layer-3.png');
 }
 
 .highlight {
-    width: 250px;
-    height: 270px;
-    position: absolute;
-    z-index: 4;
-    left: 2px;
-    top: 10px;
-    mask-image: url('/static/card-images/layer-4.png');
-    -webkit-mask-image: url('/static/card-images/layer-4.png');
+  width: 250px;
+  height: 270px;
+  position: absolute;
+  z-index: 4;
+  left: 2px;
+  top: 10px;
+  mask-image: url('/static/card-images/layer-4.png');
+  -webkit-mask-image: url('/static/card-images/layer-4.png');
 }
 
 .shadow {
-    width: 178px;
-    height: 250px;
-    position: absolute;
-    z-index: 5;
-    left: 41.6px;
-    top: 45.8px;
-    mask-image: url('/static/card-images/layer-5.png');
-    -webkit-mask-image: url('/static/card-images/layer-5.png');
+  width: 178px;
+  height: 250px;
+  position: absolute;
+  z-index: 5;
+  left: 41.6px;
+  top: 45.8px;
+  mask-image: url('/static/card-images/layer-5.png');
+  -webkit-mask-image: url('/static/card-images/layer-5.png');
 }
 
 .secondary {
-    width: 176px;
-    height: 248px;
-    position: absolute;
-    z-index: 6;
-    left: 44px;
-    top: 45.8px;
-    mask-image: url('/static/card-images/layer-6.png');
-    -webkit-mask-image: url('/static/card-images/layer-6.png');
+  width: 176px;
+  height: 248px;
+  position: absolute;
+  z-index: 6;
+  left: 44px;
+  top: 45.8px;
+  mask-image: url('/static/card-images/layer-6.png');
+  -webkit-mask-image: url('/static/card-images/layer-6.png');
 }
 
 .pedestal-primary {
-    position: absolute;
-    z-index: 1;
-    width: 96px;
-    height: 48px;
-    left: 84px;
-    top: 145.7px;
-    mask-image: url('/static/card-images/pedestal-primary.png');
-    -webkit-mask-image: url('/static/card-images/pedestal-primary.png');
+  position: absolute;
+  z-index: 1;
+  width: 96px;
+  height: 48px;
+  left: 84px;
+  top: 145.7px;
+  mask-image: url('/static/card-images/pedestal-primary.png');
+  -webkit-mask-image: url('/static/card-images/pedestal-primary.png');
 }
 
 .pedestal-secondary {
-    position: absolute;
-    z-index: 1;
-    width: 128px;
-    height: 66px;
-    left: 68px;
-    top: 137.6px;
-    mask-image: url('/static/card-images/pedestal-secondary.png');
-    -webkit-mask-image: url('/static/card-images/pedestal-secondary.png');
+  position: absolute;
+  z-index: 1;
+  width: 128px;
+  height: 66px;
+  left: 68px;
+  top: 137.6px;
+  mask-image: url('/static/card-images/pedestal-secondary.png');
+  -webkit-mask-image: url('/static/card-images/pedestal-secondary.png');
 }
 
 .pedestal-shadow {
-    position: absolute;
-    z-index: 1;
-    width: 128px;
-    height: 34px;
-    left: 68px;
-    top: 170.8px;
-    mask-image: url('/static/card-images/pedestal-shadow.png');
-    -webkit-mask-image: url('/static/card-images/pedestal-shadow.png');
+  position: absolute;
+  z-index: 1;
+  width: 128px;
+  height: 34px;
+  left: 68px;
+  top: 170.8px;
+  mask-image: url('/static/card-images/pedestal-shadow.png');
+  -webkit-mask-image: url('/static/card-images/pedestal-shadow.png');
 }
 
 .window-background {
-    position: absolute;
-    left: 66px;
-    top: 64px;
-    z-index: 0;
+  position: absolute;
+  left: 66px;
+  top: 64px;
+  z-index: 0;
 }
 
 .attackToken {
-    position: absolute;
-    z-index: 10;
-    top: 260px;
-    left: 22px;
+  position: absolute;
+  z-index: 10;
+  top: 260px;
+  left: 22px;
 }
 
 .hpToken {
-    position: absolute;
-    z-index: 10;
-    top: 264px;
-    left: 190px;
+  position: absolute;
+  z-index: 10;
+  top: 264px;
+  left: 190px;
 }
 
 .name {
-    position: absolute;
-    z-index: 6;
-    font-size: 30px;
-    left: 50px;
-    top: 0;
-    max-width: 134px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 0;
-    font-family: 'trenco', monospace;
+  position: absolute;
+  z-index: 6;
+  font-size: 30px;
+  left: 50px;
+  top: 0;
+  max-width: 134px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  font-family: 'trenco', monospace;
 }
 
 .baseManaCost {
-    position: absolute;
-    left: 216px;
-    font-size: 40px;
-    font-family: 'trenco', monospace;
-    text-shadow: -1.5px 1.5px black;
-    top: -3px;
-    z-index: 7;
-    color: white;
-    margin: 0;
-    transform: translateX(-50%);
+  position: absolute;
+  left: 216px;
+  font-size: 40px;
+  font-family: 'trenco', monospace;
+  text-shadow: -1.5px 1.5px black;
+  top: -3px;
+  z-index: 7;
+  color: white;
+  margin: 0;
+  transform: translateX(-50%);
 }
 
 .baseAttack {
-    position: absolute;
-    font-family: 'trenco', monospace;
-    font-size: 40px;
-    z-index: 11;
-    color: #CF596D;
-    text-shadow: -1.5px 1.5px black;
-    left: 48px;
-    top: 257px;
-    margin: 0;
-    transform: translateX(-50%);
+  position: absolute;
+  font-family: 'trenco', monospace;
+  font-size: 40px;
+  z-index: 11;
+  color: #CF596D;
+  text-shadow: -1.5px 1.5px black;
+  left: 48px;
+  top: 257px;
+  margin: 0;
+  transform: translateX(-50%);
 }
 
 .baseHp {
-    position: absolute;
-    font-family: 'trenco', monospace;
-    z-index: 11;
-    font-size: 40px;
-    color: #A4E9C7;
-    text-shadow: -1.5px 1.5px black;
-    left: 212px;
-    top: 257px;
-    margin: 0;
-    transform: translateX(-50%);
+  position: absolute;
+  font-family: 'trenco', monospace;
+  z-index: 11;
+  font-size: 40px;
+  color: #A4E9C7;
+  text-shadow: -1.5px 1.5px black;
+  left: 212px;
+  top: 257px;
+  margin: 0;
+  transform: translateX(-50%);
 }
 
 .description {
-    position: absolute;
-    font-size: 23px;
-    line-height: 10px;
-    font-family: 'trenco', monospace;
-    margin: 0;
+  position: absolute;
+  font-size: 23px;
+  line-height: 10px;
+  font-family: 'trenco', monospace;
+  margin: 0;
 }
 
 .type {
-    position: absolute;
-    font-size: 24px;
-    left: 63px;
-    transform: translateX(-50%);
-    top: 52px;
-    font-family: 'trenco', monospace;
-    margin: 0;
+  position: absolute;
+  font-size: 24px;
+  left: 63px;
+  transform: translateX(-50%);
+  top: 52px;
+  font-family: 'trenco', monospace;
+  margin: 0;
 }
 
 .description-box {
-    position: absolute;
-    left: 68px;
-    top: 210px;
-    z-index: 7;
-    width: 138px;
-    height: 80px;
+  position: absolute;
+  left: 68px;
+  top: 210px;
+  z-index: 7;
+  width: 138px;
+  height: 80px;
 }
 
 .hero-and-shadow {
-    position: absolute;
-    left: 99px;
-    top: 92px;
-    width: 64px;
+  position: absolute;
+  left: 99px;
+  top: 92px;
+  width: 64px;
 }
 
 .hero {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%) scale(1.5);
-    top: 8px;
-    z-index: 8;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) scale(1.5);
+  top: 8px;
+  z-index: 8;
 }
 
 .heroShadow {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 68px;
-    z-index: 7;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 68px;
+  z-index: 7;
 }

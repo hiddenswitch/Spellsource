@@ -1,5 +1,5 @@
-import type {NextApiRequest, NextApiResponse} from "next";
-import {baseUrl, clientId, issuer} from "../../../lib/config";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { baseUrl, clientId, issuer } from "../../../lib/config";
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
   res.redirect(

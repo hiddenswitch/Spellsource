@@ -1,14 +1,14 @@
-import {Xml} from 'blockly'
-import {extend, filter, find, fromPairs, isArray, isEmpty, isPlainObject, map, merge} from 'lodash'
-import format from 'string-format'
+import { Xml } from "blockly";
+import { extend, filter, find, fromPairs, isArray, isEmpty, isPlainObject, map, merge } from "lodash";
+import format from "string-format";
 import * as BlocklyMiscUtils from "./blockly-misc-utils";
 
-const BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = 'BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE'
-const BLOCKLY_INT_ATTRIBUTE = 'BLOCKLY_INT_ATTRIBUTE'
-const BLOCKLY_ARRAY_ELEMENT = 'BLOCKLY_ARRAY_ELEMENT'
-const BLOCKLY_EXTEND_PREVIOUS = 'BLOCKLY_EXTEND_PREVIOUS'
+const BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = "BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE";
+const BLOCKLY_INT_ATTRIBUTE = "BLOCKLY_INT_ATTRIBUTE";
+const BLOCKLY_ARRAY_ELEMENT = "BLOCKLY_ARRAY_ELEMENT";
+const BLOCKLY_EXTEND_PREVIOUS = "BLOCKLY_EXTEND_PREVIOUS";
 
-export const isNumeric = str => !isNaN(str) && !isNaN(parseFloat(str));
+export const isNumeric = (str) => !isNaN(str) && !isNaN(parseFloat(str));
 
 /**
  * Process a given piece of XML, returning a "CardScript" JSON token that corresponds to it.
@@ -40,138 +40,142 @@ export const isNumeric = str => !isNaN(str) && !isNaN(parseFloat(str));
  * @returns {{}|*|{}|[]}
  */
 export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, parent = null) {
-  let nextNode = null
-  let next = null
+  let nextNode = null;
+  let next = null;
   switch (xml.nodeName) {
-    case '#document':
+    case "#document":
       if (!!xml.firstElementChild) {
-        return xmlToCardScript(xml.firstElementChild)
+        return xmlToCardScript(xml.firstElementChild);
       }
-      break
-    case 'xml':
+      break;
+    case "xml":
       if (!!xml.firstElementChild) {
-        const elementNodes = filter(Array.from(xml.childNodes) as Element[], cn => {
-          return cn.nodeType === Node.ELEMENT_NODE && BlocklyMiscUtils.isSpellsourceBlock(cn.getAttribute('type'))
-        })
+        const elementNodes = filter(Array.from(xml.childNodes) as Element[], (cn) => {
+          return cn.nodeType === Node.ELEMENT_NODE && BlocklyMiscUtils.isSpellsourceBlock(cn.getAttribute("type"));
+        });
         if (elementNodes.length === 1) {
-          return xmlToCardScript(elementNodes[0])
+          return xmlToCardScript(elementNodes[0]);
         }
-        return map(elementNodes, cn => xmlToCardScript(cn))
+        return map(elementNodes, (cn) => xmlToCardScript(cn));
       }
-      break
-    case 'shadow':
-    case 'block':
-      const obj: any = {}
+      break;
+    case "shadow":
+    case "block":
+      const obj: any = {};
       if (!xml.hasChildNodes()) {
-        return obj
+        return obj;
       }
-      const childNodes = Array.from(xml.childNodes) as Element[]
-      const length = childNodes.length
+      const childNodes = Array.from(xml.childNodes) as Element[];
+      const length = childNodes.length;
       for (let i = 0; i < length; i++) {
-        const childNode = childNodes[i]
-        const name = childNode.attributes['name']?.value;
+        const childNode = childNodes[i];
+        const name = childNode.attributes["name"]?.value;
         switch (childNode.nodeName) {
-          case '#text':
+          case "#text":
             // i.e. if childElementCount === 0
             if (length === 1) {
-              return (xml as Element).innerHTML
+              return (xml as Element).innerHTML;
             }
-            break
-          case 'field':
-            obj[name] = isNumeric(childNode.innerHTML) ? Number(childNode.innerHTML) : childNode.innerHTML
-            break
-          case 'statement':
-          case 'value':
-            if (childNode.firstElementChild.nodeName === 'shadow' && childNode.lastElementChild !== childNode.firstElementChild) {
-              obj[name] = xmlToCardScript(childNode.lastElementChild, null, obj)
+            break;
+          case "field":
+            obj[name] = isNumeric(childNode.innerHTML) ? Number(childNode.innerHTML) : childNode.innerHTML;
+            break;
+          case "statement":
+          case "value":
+            if (
+              childNode.firstElementChild.nodeName === "shadow" &&
+              childNode.lastElementChild !== childNode.firstElementChild
+            ) {
+              obj[name] = xmlToCardScript(childNode.lastElementChild, null, obj);
             } else {
-              obj[name] = xmlToCardScript(childNode.firstElementChild, null, obj)
+              obj[name] = xmlToCardScript(childNode.firstElementChild, null, obj);
             }
-            break
-          case 'next':
-            if (!!childNode.firstElementChild && childNode.firstElementChild.nodeName === 'block') {
-              nextNode = childNode.firstElementChild
+            break;
+          case "next":
+            if (!!childNode.firstElementChild && childNode.firstElementChild.nodeName === "block") {
+              nextNode = childNode.firstElementChild;
             }
-            break
+            break;
         }
       }
 
       if (!!nextNode) {
-        next = xmlToCardScript(nextNode, obj)
+        next = xmlToCardScript(nextNode, obj);
       }
 
-      const hasData = find(childNodes, cn => cn.nodeName === 'data')
+      const hasData = find(childNodes, (cn) => cn.nodeName === "data");
       if (hasData) {
-        const values = hasData.innerHTML.split(',')
-        let retValue = null
+        const values = hasData.innerHTML.split(",");
+        let retValue = null;
         for (let i = 0; i < values.length; i++) {
-          const value = values[i]
+          const value = values[i];
           switch (value) {
             case BLOCKLY_EXTEND_PREVIOUS:
-              if (obj.customArg !== null && obj.customArg !== undefined
-                && obj.customValue !== null && obj.customValue !== undefined) {
-                obj[obj.customArg] = obj.customValue
-                delete obj.customArg
-                delete obj.customValue
+              if (
+                obj.customArg !== null &&
+                obj.customArg !== undefined &&
+                obj.customValue !== null &&
+                obj.customValue !== undefined
+              ) {
+                obj[obj.customArg] = obj.customValue;
+                delete obj.customArg;
+                delete obj.customValue;
               }
               if (!!prev) {
-                merge(prev, obj)
+                merge(prev, obj);
               }
-              retValue = obj
-              break
+              retValue = obj;
+              break;
             case BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE:
               if (!obj.attribute) {
-                return {}
+                return {};
               }
-              const boolAttribute = {[obj.attribute]: true}
+              const boolAttribute = { [obj.attribute]: true };
               if (!!next) {
-                extend(boolAttribute, next)
+                extend(boolAttribute, next);
               }
-              retValue = boolAttribute
-              break
+              retValue = boolAttribute;
+              break;
             case BLOCKLY_INT_ATTRIBUTE:
               if (!obj.attribute) {
-                return {}
+                return {};
               }
-              const intAttribute = {[obj.attribute]: obj.value}
+              const intAttribute = { [obj.attribute]: obj.value };
               if (!!next) {
-                extend(intAttribute, next)
+                extend(intAttribute, next);
               }
-              retValue = intAttribute
-              break
+              retValue = intAttribute;
+              break;
             case BLOCKLY_ARRAY_ELEMENT:
               // Handle every array statement on this block
-              retValue = [obj]
+              retValue = [obj];
               if (!!obj.i) {
-                retValue = [obj.i]
+                retValue = [obj.i];
               }
               if (!!next) {
                 if (isArray(next)) {
-                  retValue = retValue.concat(next)
+                  retValue = retValue.concat(next);
                 } else {
-                  retValue = retValue.concat([next])
+                  retValue = retValue.concat([next]);
                 }
               }
-              break
+              break;
             default:
-              const allValues = filter(childNodes, cn =>
-                cn.nodeName === 'field')
-              const valuesObj = fromPairs(map(allValues, cn =>
-                [cn.attributes['name'].value, cn.innerHTML])
-              )
+              const allValues = filter(childNodes, (cn) => cn.nodeName === "field");
+              const valuesObj = fromPairs(map(allValues, (cn) => [cn.attributes["name"].value, cn.innerHTML]));
 
-              const res = format(value, valuesObj)
-              retValue = isNumeric(res) ? Number(res) : res
-              break
+              const res = format(value, valuesObj);
+              retValue = isNumeric(res) ? Number(res) : res;
+              break;
           }
         }
         if (retValue !== null) {
-          return postProcessCardScript(retValue)
+          return postProcessCardScript(retValue);
         }
       }
-      return postProcessCardScript(obj)
+      return postProcessCardScript(obj);
     default:
-      throw new Error('invalid block type to pass here: ' + xml.nodeName)
+      throw new Error("invalid block type to pass here: " + xml.nodeName);
   }
 }
 
@@ -192,84 +196,87 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
 function postProcessCardScript(cardScript) {
   if (isArray(cardScript)) {
     for (const cardScriptElement of cardScript) {
-      postProcessCardScript(cardScriptElement)
+      postProcessCardScript(cardScriptElement);
     }
-    return cardScript
+    return cardScript;
   }
-  rearrangeInputValues(cardScript)
-  if (!!cardScript.card && !(typeof cardScript.card === 'string')) {
-    delete cardScript.card
+  rearrangeInputValues(cardScript);
+  if (!!cardScript.card && !(typeof cardScript.card === "string")) {
+    delete cardScript.card;
   }
-  if (cardScript.target === 'IT') {
-    delete cardScript.target
+  if (cardScript.target === "IT") {
+    delete cardScript.target;
   }
-  if (cardScript.secondaryTarget === 'IT') {
-    delete cardScript.secondaryTarget
+  if (cardScript.secondaryTarget === "IT") {
+    delete cardScript.secondaryTarget;
   }
-  if (cardScript.cardType === 'ANY') {
-    delete cardScript.cardType
+  if (cardScript.cardType === "ANY") {
+    delete cardScript.cardType;
   }
 
   if (!!cardScript.battlecry) {
     if (!cardScript.attributes) {
-      cardScript.attributes = {}
+      cardScript.attributes = {};
     }
-    cardScript.attributes.BATTLECRY = true
+    cardScript.attributes.BATTLECRY = true;
   }
 
   if (!!cardScript.deathrattle) {
     if (!cardScript.attributes) {
-      cardScript.attributes = {}
+      cardScript.attributes = {};
     }
-    cardScript.attributes.DEATHRATTLES = true
+    cardScript.attributes.DEATHRATTLES = true;
   }
 
-  if (find(cardScript, {class: 'DiscoverSpell'})) {
+  if (find(cardScript, { class: "DiscoverSpell" })) {
     if (!cardScript.attributes) {
-      cardScript.attributes = {}
+      cardScript.attributes = {};
     }
-    cardScript.attributes.DISCOVER = true
+    cardScript.attributes.DISCOVER = true;
   }
 
-  if (!!cardScript.class && cardScript.class.endsWith('Aura')) {
-    if (!!cardScript.attribute && !cardScript.attribute.startsWith('AURA_')
-      && !cardScript.attribute.startsWith('RESERVED')) {
-      cardScript.attribute = 'AURA_' + cardScript.attribute
+  if (!!cardScript.class && cardScript.class.endsWith("Aura")) {
+    if (
+      !!cardScript.attribute &&
+      !cardScript.attribute.startsWith("AURA_") &&
+      !cardScript.attribute.startsWith("RESERVED")
+    ) {
+      cardScript.attribute = "AURA_" + cardScript.attribute;
     }
 
     if (!!cardScript.trigger) {
-      cardScript.triggers = [cardScript.trigger]
-      delete cardScript.trigger
+      cardScript.triggers = [cardScript.trigger];
+      delete cardScript.trigger;
     }
   } else {
     if (!!cardScript.triggers && cardScript.triggers.length === 1) {
-      cardScript.trigger = cardScript.triggers[0]
-      delete cardScript.triggers
+      cardScript.trigger = cardScript.triggers[0];
+      delete cardScript.triggers;
     }
   }
 
   if (!!cardScript.aura && isArray(cardScript.aura)) {
-    cardScript.aura = cardScript.aura[0]
+    cardScript.aura = cardScript.aura[0];
   }
 
-  for (let arg of ['r', 'g', 'b', 'a']) {
+  for (let arg of ["r", "g", "b", "a"]) {
     if (cardScript.hasOwnProperty(arg) && isNumeric(cardScript[arg])) {
-      cardScript[arg] = Math.round(1000 * cardScript[arg] / 255) / 1000
+      cardScript[arg] = Math.round((1000 * cardScript[arg]) / 255) / 1000;
     }
   }
 
-  if (cardScript.class === 'AlwaysCondition') {
-    cardScript.class = 'AndCondition'
+  if (cardScript.class === "AlwaysCondition") {
+    cardScript.class = "AndCondition";
   }
-  if (cardScript.class === 'NeverCondition') {
-    cardScript.class = 'OrCondition'
+  if (cardScript.class === "NeverCondition") {
+    cardScript.class = "OrCondition";
   }
 
   if (cardScript.type === "CLASS" && cardScript.id && !cardScript.heroClass) {
     cardScript.heroClass = cardScript.id;
   }
 
-  return cardScript
+  return cardScript;
 }
 
 /**
@@ -333,18 +340,18 @@ function postProcessCardScript(cardScript) {
  * @param cardScript
  */
 function rearrangeInputValues(cardScript) {
-  if (typeof cardScript === 'string') {
-    return
+  if (typeof cardScript === "string") {
+    return;
   }
 
   //first, split up any args with ','
   for (const cardScriptKey in cardScript) {
-    if (cardScriptKey.includes(',')) {
-      let newKeys = cardScriptKey.split(',')
+    if (cardScriptKey.includes(",")) {
+      let newKeys = cardScriptKey.split(",");
       for (const key of newKeys) {
-        cardScript[key] = cardScript[cardScriptKey]
+        cardScript[key] = cardScript[cardScriptKey];
       }
-      delete cardScript[cardScriptKey]
+      delete cardScript[cardScriptKey];
     }
   }
 
@@ -353,31 +360,33 @@ function rearrangeInputValues(cardScript) {
     if (cardScript.propertyIsEnumerable(cardScriptKey)) {
       //first time go through all the ones that definitely won't override what we're working with
       for (const cardScriptElementKey in cardScript[cardScriptKey]) {
-        if (cardScriptElementKey.startsWith('super.')) {
-          let newKey = cardScriptElementKey.substring(cardScriptElementKey.indexOf('.') + 1)
-          if (cardScriptKey.includes('.')) {
-            let correctPrefix = cardScriptKey.split('.').slice(0, -1).join('.')
-            cardScript[correctPrefix + '.' + newKey] = cardScript[cardScriptKey][cardScriptElementKey]
-          } else if (cardScriptKey === 'super') {
-            cardScript[cardScriptElementKey] = cardScript[cardScriptKey][cardScriptElementKey]
+        if (cardScriptElementKey.startsWith("super.")) {
+          let newKey = cardScriptElementKey.substring(cardScriptElementKey.indexOf(".") + 1);
+          if (cardScriptKey.includes(".")) {
+            let correctPrefix = cardScriptKey.split(".").slice(0, -1).join(".");
+            cardScript[correctPrefix + "." + newKey] = cardScript[cardScriptKey][cardScriptElementKey];
+          } else if (cardScriptKey === "super") {
+            cardScript[cardScriptElementKey] = cardScript[cardScriptKey][cardScriptElementKey];
           } else {
-            cardScript[newKey] = cardScript[cardScriptKey][cardScriptElementKey]
+            cardScript[newKey] = cardScript[cardScriptKey][cardScriptElementKey];
           }
-          delete cardScript[cardScriptKey][cardScriptElementKey]
+          delete cardScript[cardScriptKey][cardScriptElementKey];
         }
       }
       //then do the last one that might override what we're working with
-      if (!!cardScript[cardScriptKey]['super']
-        && typeof cardScript[cardScriptKey]['super'] === 'string') {
-        cardScript[cardScriptKey] = cardScript[cardScriptKey]['super']
-      } else if (!!cardScript['super'] && cardScript.propertyIsEnumerable('super')
-        && typeof cardScript['super'] !== 'string') {
-        let andWhenEveryonesSuper = !!cardScript.super.super
-        merge(cardScript, cardScript['super'])
+      if (!!cardScript[cardScriptKey]["super"] && typeof cardScript[cardScriptKey]["super"] === "string") {
+        cardScript[cardScriptKey] = cardScript[cardScriptKey]["super"];
+      } else if (
+        !!cardScript["super"] &&
+        cardScript.propertyIsEnumerable("super") &&
+        typeof cardScript["super"] !== "string"
+      ) {
+        let andWhenEveryonesSuper = !!cardScript.super.super;
+        merge(cardScript, cardScript["super"]);
         if (andWhenEveryonesSuper) {
           //no one will be
         } else {
-          delete cardScript['super']
+          delete cardScript["super"];
         }
       }
     }
@@ -385,31 +394,31 @@ function rearrangeInputValues(cardScript) {
 
   //go through the keys here to bring down any *.*
   for (const cardScriptKey in cardScript) {
-    if (!cardScriptKey.startsWith('super') && cardScriptKey.includes('.')) {
-      let newKey = cardScriptKey.substring(0, cardScriptKey.indexOf('.'))
-      let newKey2 = cardScriptKey.substring(cardScriptKey.indexOf('.') + 1)
+    if (!cardScriptKey.startsWith("super") && cardScriptKey.includes(".")) {
+      let newKey = cardScriptKey.substring(0, cardScriptKey.indexOf("."));
+      let newKey2 = cardScriptKey.substring(cardScriptKey.indexOf(".") + 1);
       if (!cardScript.hasOwnProperty(newKey)) {
-        cardScript[newKey] = {}
+        cardScript[newKey] = {};
       }
       if (cardScript.propertyIsEnumerable(newKey)) {
-        cardScript[newKey][newKey2] = cardScript[cardScriptKey]
-        delete cardScript[cardScriptKey]
-        postProcessCardScript(cardScript[newKey])
+        cardScript[newKey][newKey2] = cardScript[cardScriptKey];
+        delete cardScript[cardScriptKey];
+        postProcessCardScript(cardScript[newKey]);
       }
     }
 
     //gotta do this because it seems like the original block -> xml conversion hates booleans
-    if (cardScript[cardScriptKey] === 'TRUE') {
-      cardScript[cardScriptKey] = true
+    if (cardScript[cardScriptKey] === "TRUE") {
+      cardScript[cardScriptKey] = true;
     }
-    if (cardScript[cardScriptKey] === 'FALSE') {
-      cardScript[cardScriptKey] = false
+    if (cardScript[cardScriptKey] === "FALSE") {
+      cardScript[cardScriptKey] = false;
     }
     if (isPlainObject(cardScript[cardScriptKey]) && isEmpty(cardScript[cardScriptKey])) {
-      delete cardScript[cardScriptKey]
+      delete cardScript[cardScriptKey];
     }
-    if (cardScript[cardScriptKey] === 'SHADOW') {
-      delete cardScript[cardScriptKey]
+    if (cardScript[cardScriptKey] === "SHADOW") {
+      delete cardScript[cardScriptKey];
     }
   }
 }

@@ -4,8 +4,8 @@ path: /wiki/Fae
 layout: wiki
 ---
 
-![Land Fae](/static/wiki/Spirit_Folk_of_the_Forest_(Land).jpg "fig:Land Fae") 
-![Sea Fae](/static/wiki/Spirit_Folk_of_the_Sea.png "fig:Sea Fae") 
+![Land Fae](/static/wiki/Spirit_Folk_of_the_Forest_(Land).jpg "fig:Land Fae")
+![Sea Fae](/static/wiki/Spirit_Folk_of_the_Sea.png "fig:Sea Fae")
 
 They are the first
 inhabitants of the [Lung Islands](/wiki/Moromah_Island "wikilink"), the
@@ -23,14 +23,14 @@ events: for instance, they can communicate with animals and each other
 using [Passed Vision](/wiki/Passed_Vision "wikilink"), or use the [five
 elements](/wiki/Five_Elements "wikilink") to cast spells.
 
-![Fae Minion](/static/wiki/FaeMinion.png "fig:Fae Minion") 
+![Fae Minion](/static/wiki/FaeMinion.png "fig:Fae Minion")
 
 ### Tribes
 
--   [The land Fae](/wiki/Land_Fae "wikilink") have green, yellow and brown
-    skin tones. They live in the forest and in trees. They are
-    vegetarian.
--   [The sea Fae](/wiki/Sea_Fae "wikilink") have green and blue skin tones.
-    They can breathe under water and live in rivers and in the sea. Some
-    of them have fins, scales and tails when they're in the water. They
-    are pescatarian.
+- [The land Fae](/wiki/Land_Fae "wikilink") have green, yellow and brown
+  skin tones. They live in the forest and in trees. They are
+  vegetarian.
+- [The sea Fae](/wiki/Sea_Fae "wikilink") have green and blue skin tones.
+  They can breathe under water and live in rivers and in the sea. Some
+  of them have fins, scales and tails when they're in the water. They
+  are pescatarian.

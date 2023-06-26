@@ -4,7 +4,7 @@ path: /wiki/Oni
 layout: wiki
 ---
 
-![Red and Blue Oni](/static/wiki/Red_and_Blue_Oni.jpg "fig:Red and Blue Oni") 
+![Red and Blue Oni](/static/wiki/Red_and_Blue_Oni.jpg "fig:Red and Blue Oni")
 ![Oni Minion](/static/wiki/Oni%20Minion.png "fig:Oni Minion")
 
 A long time ago, the [Vohlok](/wiki/Vohlok "wikilink")

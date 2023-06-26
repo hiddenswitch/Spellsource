@@ -27,11 +27,11 @@ card, but can contain up to 2 copies of any other card.
 
 ### Quick Tips
 
--   It is generally advised to have 2 copies of a card in your deck if
-    possible, since this will make your deck far more consistent.
--   Try to have a reasonable balance of Lun costs in your deck. You want
-    to be sure you have cards to play early in the game as well as
-    strong cards that can dominate a game later on!
--   Try to build your deck around a theme or specific strategy. Do you
-    have a Legendary card that your really really like? Let that be the
-    start of you deck!
+- It is generally advised to have 2 copies of a card in your deck if
+  possible, since this will make your deck far more consistent.
+- Try to have a reasonable balance of Lun costs in your deck. You want
+  to be sure you have cards to play early in the game as well as
+  strong cards that can dominate a game later on!
+- Try to build your deck around a theme or specific strategy. Do you
+  have a Legendary card that your really really like? Let that be the
+  start of you deck!

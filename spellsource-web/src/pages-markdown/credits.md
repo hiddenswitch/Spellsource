@@ -7,7 +7,8 @@ header: true
 
 ## Community
 
-Please visit the [Contributors page](https://github.com/hiddenswitch/Spellsource/graphs/contributors) for a complete list of code and card contributors.
+Please visit the [Contributors page](https://github.com/hiddenswitch/Spellsource/graphs/contributors) for a complete
+list of code and card contributors.
 
 ## Hidden Switch
 
@@ -20,7 +21,7 @@ Benjamin Berman
 Sen Chang  
 James Gale  
 Samuel Markowitz  
-Madelyn Torres  
+Madelyn Torres
 
 ### Art
 
@@ -47,11 +48,11 @@ Aniq Kassam
 Kevin Slavin  
 Tomer Weller  
 Miguel Perez  
-Emilia Lazer-Walker   
+Emilia Lazer-Walker
 
 ## MIT
 
-Jinane Abounadi  
+Jinane Abounadi
 
 ## PlayLabs
 

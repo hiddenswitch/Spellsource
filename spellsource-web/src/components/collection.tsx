@@ -1,25 +1,25 @@
-import { useSession } from "next-auth/react"
-import React, { FunctionComponent, useContext, useEffect, useState } from "react"
-import { CardType } from "../__generated__/spellsource-game"
-import { CollectionCardFragment, CollectionCardsOrderBy, useGetCardsQuery } from "../__generated__/client"
-import { CardDef } from "./card-display"
-import { Button, Dropdown, Form, Table } from "react-bootstrap"
-import { toTitleCaseCorrected } from "../lib/blockly-misc-utils"
-import { clamp } from "lodash"
-import DropdownToggle from "react-bootstrap/DropdownToggle"
-import DropdownItem from "react-bootstrap/DropdownItem"
-import DropdownMenu from "react-bootstrap/DropdownMenu"
-import { useParam, useParamArray, useParamBool, useParamInt } from "../lib/routing"
-import { useRouter } from "next/router"
-import { useDebounce } from "react-use"
-import Link from "next/link"
-import { useDrag, useDrop } from "react-dnd"
-import { CardCache } from "../pages/collection"
+import { useSession } from "next-auth/react";
+import React, { FunctionComponent, useContext, useEffect, useState } from "react";
+import { CardType } from "../__generated__/spellsource-game";
+import { CollectionCardFragment, CollectionCardsOrderBy, useGetCardsQuery } from "../__generated__/client";
+import { CardDef } from "./card-display";
+import { Button, Dropdown, Form, Table } from "react-bootstrap";
+import { toTitleCaseCorrected } from "../lib/blockly-misc-utils";
+import { clamp } from "lodash";
+import DropdownToggle from "react-bootstrap/DropdownToggle";
+import DropdownItem from "react-bootstrap/DropdownItem";
+import DropdownMenu from "react-bootstrap/DropdownMenu";
+import { useParam, useParamArray, useParamBool, useParamInt } from "../lib/routing";
+import { useRouter } from "next/router";
+import { useDebounce } from "react-use";
+import Link from "next/link";
+import { useDrag, useDrop } from "react-dnd";
+import { CardCache } from "../pages/collection";
 
-const ShowCardTypes: CardType[] = ["MINION", "SPELL", "WEAPON", "HERO", "HERO_POWER", "CLASS"]
-const DefaultShowCardTypes: CardType[] = ["MINION", "SPELL", "WEAPON"]
-const defaultLimit = 25
-const limitOptions = [25, 50, 100]
+const ShowCardTypes: CardType[] = ["MINION", "SPELL", "WEAPON", "HERO", "HERO_POWER", "CLASS"];
+const DefaultShowCardTypes: CardType[] = ["MINION", "SPELL", "WEAPON"];
+const defaultLimit = 25;
+const limitOptions = [25, 50, 100];
 
 const orderings = {
   COST_ASC: "Lowest Cost",
@@ -28,26 +28,26 @@ const orderings = {
   NAME_DESC: "Name Z-A",
   LAST_MODIFIED_DESC: "Recently Changed",
   TYPE_ASC: "Type",
-} as Record<CollectionCardsOrderBy, string>
+} as Record<CollectionCardsOrderBy, string>;
 
 export const textDecorationStyle = (heroClass: string, classColors: Record<string, string>) => ({
   textDecorationLine: "underline",
   textDecorationColor: heroClass in classColors ? classColors[heroClass] : "rgba(#888888)",
-})
+});
 
 const CardRow: FunctionComponent<{
-  card: CollectionCardFragment
-  collection: CollectionProps
+  card: CollectionCardFragment;
+  collection: CollectionProps;
 }> = ({ card, collection }) => {
-  const cardScript = card.cardScript as CardDef
+  const cardScript = card.cardScript as CardDef;
 
-  const { classes, setHeroClass, classColors, addToDeck } = collection
+  const { classes, setHeroClass, classColors, addToDeck } = collection;
 
   const [, dragRef, dragPreview] = useDrag({
     type: "collection-card",
     item: { id: cardScript.id },
     canDrag: (monitor) => !!collection.addToDeck,
-  })
+  });
 
   return (
     <tr ref={dragRef} onClick={() => addToDeck?.(cardScript.id)} style={{ cursor: addToDeck ? "pointer" : "initial" }}>
@@ -79,41 +79,41 @@ const CardRow: FunctionComponent<{
         )}
       </td>
     </tr>
-  )
-}
+  );
+};
 
 interface CollectionProps {
-  classes: Record<string, string>
-  classColors: Record<string, string>
-  heroClass: string
-  setHeroClass: (heroClass: string) => void
-  offset: number
-  setOffset: (offset: number) => void
-  mainHeroClass?: string
-  addToDeck?: (id: string) => void
-  removeFromDeck?: (id: string) => void
+  classes: Record<string, string>;
+  classColors: Record<string, string>;
+  heroClass: string;
+  setHeroClass: (heroClass: string) => void;
+  offset: number;
+  setOffset: (offset: number) => void;
+  mainHeroClass?: string;
+  addToDeck?: (id: string) => void;
+  removeFromDeck?: (id: string) => void;
 }
 
 const Collection: FunctionComponent<CollectionProps> = (props) => {
   const { classes, classColors, heroClass, setHeroClass, offset, setOffset, mainHeroClass, addToDeck, removeFromDeck } =
-    props
-  const { data: session, status } = useSession()
+    props;
+  const { data: session, status } = useSession();
 
-  const cache = useContext(CardCache)
+  const cache = useContext(CardCache);
 
-  const router = useRouter()
-  const user = session?.token?.sub
+  const router = useRouter();
+  const user = session?.token?.sub;
 
-  const [search, setSearch] = useParam(router, "search")
-  const [cardTypes, setCardTypes] = useParamArray<CardType>(router, "cardType", DefaultShowCardTypes)
-  const [orderBy, setOrderBy] = useParam<CollectionCardsOrderBy>(router, "orderBy", "COST_ASC")
-  const [uncollectible, setUncollectible] = useParamBool(router, "uncollectible", false)
-  const [ownOnly, setOwnOnly] = useParamBool(router, "ownOnly", false)
-  const [limit, setLimit] = useParamInt(router, "limit", defaultLimit)
+  const [search, setSearch] = useParam(router, "search");
+  const [cardTypes, setCardTypes] = useParamArray<CardType>(router, "cardType", DefaultShowCardTypes);
+  const [orderBy, setOrderBy] = useParam<CollectionCardsOrderBy>(router, "orderBy", "COST_ASC");
+  const [uncollectible, setUncollectible] = useParamBool(router, "uncollectible", false);
+  const [ownOnly, setOwnOnly] = useParamBool(router, "ownOnly", false);
+  const [limit, setLimit] = useParamInt(router, "limit", defaultLimit);
 
-  const [searchVisual, setSearchVisual] = useState(search)
+  const [searchVisual, setSearchVisual] = useState(search);
 
-  const [_, cancelDebounce] = useDebounce(() => setSearch(searchVisual), 500, [searchVisual])
+  const [_, cancelDebounce] = useDebounce(() => setSearch(searchVisual), 500, [searchVisual]);
 
   const getCards = useGetCardsQuery({
     variables: {
@@ -129,37 +129,37 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
       },
     },
     onCompleted: (data) => data.allCollectionCards?.nodes?.forEach((node) => (cache[node.id] = node.cardScript)),
-  })
-  const cards = getCards?.data?.allCollectionCards?.nodes ?? getCards?.previousData?.allCollectionCards?.nodes ?? []
+  });
+  const cards = getCards?.data?.allCollectionCards?.nodes ?? getCards?.previousData?.allCollectionCards?.nodes ?? [];
   const total =
-    getCards?.data?.allCollectionCards?.totalCount ?? getCards?.previousData?.allCollectionCards?.totalCount ?? 0
+    getCards?.data?.allCollectionCards?.totalCount ?? getCards?.previousData?.allCollectionCards?.totalCount ?? 0;
 
-  const showing = Math.min(limit, cards.length)
+  const showing = Math.min(limit, cards.length);
 
   const changeOffset = (delta: number = 0) => {
     if (getCards.data) {
-      const newOffset = clamp(offset + delta, 0, total - limit)
-      setOffset(newOffset)
+      const newOffset = clamp(offset + delta, 0, total - limit);
+      setOffset(newOffset);
     }
-  }
+  };
 
-  useEffect(changeOffset, [getCards.data])
+  useEffect(changeOffset, [getCards.data]);
 
   const [, collectionDrop] = useDrop({
     accept: ["deck-card"],
     drop: (item) => {
-      removeFromDeck?.(item["id"])
+      removeFromDeck?.(item["id"]);
     },
-  })
+  });
 
   return (
     <div ref={collectionDrop}>
       <div id={"Top Bar"} className={"d-flex flex-row flex-wrap gap-2 pt-2 ps-2 align-items-center"}>
         <Form
           onSubmit={(event) => {
-            event.preventDefault()
-            cancelDebounce()
-            setSearch(searchVisual)
+            event.preventDefault();
+            cancelDebounce();
+            setSearch(searchVisual);
           }}
           className={"me-lg-auto"}
         >
@@ -322,7 +322,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
         </Table>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Collection
+export default Collection;

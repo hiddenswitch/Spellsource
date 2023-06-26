@@ -8,74 +8,74 @@ import Blockly, {
   utils,
   Workspace,
   WorkspaceSvg,
-} from "blockly"
-import { FieldLabelPlural } from "../components/field-label-plural"
-import { FieldLabelSerializableHidden } from "../components/field-label-serializable-hidden"
-import * as JsonConversionUtils from "./json-conversion-utils"
-import * as BlocklyMiscUtils from "./blockly-misc-utils"
-import * as DefaultOverrides from "./default-overrides"
-import { CardDef } from "../components/card-display"
-import React from "react"
-import deepmerge from "deepmerge"
-import { InitBlockOptions } from "../components/card-editor-workspace"
-import { ToolboxItem } from "toolbox/toolbox_item"
-import { xmlToCardScript } from "./workspace-utils"
+} from "blockly";
+import { FieldLabelPlural } from "../components/field-label-plural";
+import { FieldLabelSerializableHidden } from "../components/field-label-serializable-hidden";
+import * as JsonConversionUtils from "./json-conversion-utils";
+import * as BlocklyMiscUtils from "./blockly-misc-utils";
+import * as DefaultOverrides from "./default-overrides";
+import { CardDef } from "../components/card-display";
+import React from "react";
+import deepmerge from "deepmerge";
+import { InitBlockOptions } from "../components/card-editor-workspace";
+import { ToolboxItem } from "toolbox/toolbox_item";
+import { xmlToCardScript } from "./workspace-utils";
 
 export function modifyAll(options: InitBlockOptions) {
   // @ts-ignore
   // noinspection JSConstantReassignment
-  Blockly.HSV_SATURATION = 0.65
+  Blockly.HSV_SATURATION = 0.65;
 
   for (let blocksKey in Blockly.Blocks) {
-    let block = Blockly.Blocks[blocksKey]
+    let block = Blockly.Blocks[blocksKey];
     if (!block.init) {
-      delete Blockly.Blocks[blocksKey]
+      delete Blockly.Blocks[blocksKey];
     }
   }
 
-  autoDecoration()
+  autoDecoration();
   // hoverComments()
-  pluralSpacing()
-  contextMenu(options)
-  tooltips()
-  blackText()
-  colorfulColors()
-  noToolboxZoom()
-  multiline()
+  pluralSpacing();
+  contextMenu(options);
+  tooltips();
+  blackText();
+  colorfulColors();
+  noToolboxZoom();
+  multiline();
   // jsonShadows()
-  connections()
-  categoryIndenting()
+  connections();
+  categoryIndenting();
   // cardDisplay()
-  flyout()
-  mobileCategories()
+  flyout();
+  mobileCategories();
 
-  DefaultOverrides.overrideAll()
+  DefaultOverrides.overrideAll();
 }
 
 function autoDecoration() {
   Blockly.BlockSvg.prototype.bumpNeighbours = function () {
     if (!this.workspace) {
-      return // Deleted block.
+      return; // Deleted block.
     }
     if (this.workspace.isDragging()) {
-      return // Don't bump blocks during a drag.
+      return; // Don't bump blocks during a drag.
     }
-    var rootBlock = this.getRootBlock()
+    var rootBlock = this.getRootBlock();
     if (rootBlock.isInFlyout) {
-      return // Don't move blocks around in a flyout.
+      return; // Don't move blocks around in a flyout.
     }
     // Loop through every connection on this block.
-    var myConnections = this.getConnections_(false)
+    var myConnections = this.getConnections_(false);
     for (var i = 0, connection; (connection = myConnections[i]); i++) {
       if (autoDecorate(this, connection)) {
-        return
+        return;
       }
       // Spider down from this block bumping all sub-blocks.
       if (connection.isConnected() && connection.isSuperior()) {
-        connection.targetBlock().bumpNeighbours()
+        connection.targetBlock().bumpNeighbours();
       }
 
-      var neighbours = connection.neighbours(Blockly.SNAP_RADIUS)
+      var neighbours = connection.neighbours(Blockly.SNAP_RADIUS);
 
       for (var j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
         // If both connections are connected, that's probably fine.  But if
@@ -84,23 +84,23 @@ function autoDecoration() {
           if (otherConnection.getSourceBlock().getRootBlock() !== rootBlock) {
             // Always bump the inferior block.
             if (connection.isSuperior()) {
-              otherConnection.bumpAwayFrom(connection)
+              otherConnection.bumpAwayFrom(connection);
             } else {
-              connection.bumpAwayFrom(otherConnection)
+              connection.bumpAwayFrom(otherConnection);
             }
           }
         }
       }
     }
-  }
+  };
 
   const autoDecorate = function (bumpee, connection) {
     if (connection.type === Blockly.NEXT_STATEMENT || bumpee.type.endsWith("SHADOW")) {
-      return false
+      return false;
     }
-    let workspace = bumpee.workspace
-    let nexts = workspace.connectionDBList[Blockly.NEXT_STATEMENT]
-    let neighbours = nexts.getNeighbours(connection, Blockly.SNAP_RADIUS)
+    let workspace = bumpee.workspace;
+    let nexts = workspace.connectionDBList[Blockly.NEXT_STATEMENT];
+    let neighbours = nexts.getNeighbours(connection, Blockly.SNAP_RADIUS);
 
     for (var j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
       if (
@@ -108,16 +108,16 @@ function autoDecoration() {
         (!otherConnection.isConnected() || otherConnection.targetBlock().isShadow()) &&
         otherConnection.type === Blockly.NEXT_STATEMENT
       ) {
-        let bumper = otherConnection.getSourceBlock()
-        let addedBlock
+        let bumper = otherConnection.getSourceBlock();
+        let addedBlock;
         if (!otherConnection.getCheck()) {
-          continue
+          continue;
         }
 
         if (otherConnection.getCheck().includes("Properties")) {
           if (bumpee.type.startsWith("Aura_")) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_auras")
-            addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection)
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_auras");
+            addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection);
           } else if (bumpee.type.startsWith("Spell")) {
             if (
               bumper
@@ -127,15 +127,15 @@ function autoDecoration() {
                 ?.toLowerCase()
                 .includes("aftermath")
             ) {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_aftermath")
-              addedBlock.getInput("deathrattle").connection.connect(bumpee.outputConnection)
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_aftermath");
+              addedBlock.getInput("deathrattle").connection.connect(bumpee.outputConnection);
             } else {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener1")
-              addedBlock.getInput("battlecry.spell").connection.connect(bumpee.outputConnection)
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener1");
+              addedBlock.getInput("battlecry.spell").connection.connect(bumpee.outputConnection);
             }
           } else if (bumpee.type.startsWith("TargetSelection")) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener1")
-            addedBlock.getInput("battlecry.targetSelection").connection.connect(bumpee.outputConnection)
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener1");
+            addedBlock.getInput("battlecry.targetSelection").connection.connect(bumpee.outputConnection);
           } else if (bumpee.type.startsWith("ValueProvider")) {
             if (
               bumper
@@ -145,11 +145,11 @@ function autoDecoration() {
                 ?.toLowerCase()
                 .includes("if")
             ) {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_cost_modifier_conditional")
-              addedBlock.getInput("manaCostModifier.ifTrue").connection.connect(bumpee.outputConnection)
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_cost_modifier_conditional");
+              addedBlock.getInput("manaCostModifier.ifTrue").connection.connect(bumpee.outputConnection);
             } else {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_cost_modifier")
-              addedBlock.getInput("manaCostModifier").connection.connect(bumpee.outputConnection)
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_cost_modifier");
+              addedBlock.getInput("manaCostModifier").connection.connect(bumpee.outputConnection);
             }
           } else if (bumpee.type.startsWith("Condition")) {
             if (
@@ -160,52 +160,52 @@ function autoDecoration() {
                 ?.toLowerCase()
                 .includes("opener")
             ) {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener2")
-              addedBlock.getInput("battlecry.condition").connection.connect(bumpee.outputConnection)
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener2");
+              addedBlock.getInput("battlecry.condition").connection.connect(bumpee.outputConnection);
             } else {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_condition")
-              addedBlock.getInput("condition").connection.connect(bumpee.outputConnection)
+              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_condition");
+              addedBlock.getInput("condition").connection.connect(bumpee.outputConnection);
             }
           } else if (bumpee.type.startsWith("Property_attributes_")) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes")
-            addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection)
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes");
+            addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection);
           } else if (bumpee.type.startsWith("Attribute")) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes")
-            let anotherBlock
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes");
+            let anotherBlock;
             if (bumpee.json?.output === "IntAttribute") {
-              anotherBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_int")
+              anotherBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_int");
             } else {
-              anotherBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_boolean")
+              anotherBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_boolean");
             }
-            anotherBlock.getInput("attribute").connection.connect(bumpee.outputConnection)
+            anotherBlock.getInput("attribute").connection.connect(bumpee.outputConnection);
             if (anotherBlock.initSvg) {
-              anotherBlock.initSvg()
+              anotherBlock.initSvg();
             }
-            addedBlock.getFirstStatementConnection().connect(anotherBlock.previousConnection)
+            addedBlock.getFirstStatementConnection().connect(anotherBlock.previousConnection);
           } else if (bumpee.type.startsWith("Enchantment")) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_triggers")
-            addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection)
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_triggers");
+            addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection);
           } else if (bumpee.type.startsWith("Trigger")) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_triggers")
-            let anotherBlock = BlocklyMiscUtils.newBlock(workspace, "Enchantment")
-            anotherBlock.getInput("eventTrigger").connection.connect(bumpee.outputConnection)
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_triggers");
+            let anotherBlock = BlocklyMiscUtils.newBlock(workspace, "Enchantment");
+            anotherBlock.getInput("eventTrigger").connection.connect(bumpee.outputConnection);
             if ("initSvg" in anotherBlock) {
-              anotherBlock.initSvg()
+              anotherBlock.initSvg();
             }
-            addedBlock.getFirstStatementConnection().connect(anotherBlock.previousConnection)
+            addedBlock.getFirstStatementConnection().connect(anotherBlock.previousConnection);
           } else if (bumpee.type.startsWith("Art_")) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_sprite")
-            addedBlock.getInput("art.sprite.named").connection.connect(bumpee.outputConnection)
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_sprite");
+            addedBlock.getInput("art.sprite.named").connection.connect(bumpee.outputConnection);
           } else {
-            continue
+            continue;
           }
         } else if (otherConnection.getCheck().includes("Property_attributes") && bumpee.type.startsWith("Attribute_")) {
           if (bumpee.json?.output === "IntAttribute") {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_int")
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_int");
           } else {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_boolean")
+            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_boolean");
           }
-          addedBlock.getInput("attribute").connection.connect(bumpee.outputConnection)
+          addedBlock.getInput("attribute").connection.connect(bumpee.outputConnection);
         } else if (
           ((otherConnection.getCheck().includes("Spells") && bumpee.type.startsWith("Spell_")) ||
             (otherConnection.getCheck().includes("Cards") && bumpee.type.startsWith("Card_")) ||
@@ -214,70 +214,70 @@ function autoDecoration() {
             (otherConnection.getCheck().includes("Filters") && bumpee.type.startsWith("Filter_"))) &&
           !bumpee.type.endsWith("I")
         ) {
-          addedBlock = BlocklyMiscUtils.newBlock(workspace, bumpee.type.split("_")[0] + "_I")
-          addedBlock.getInput("i").connection.connect(bumpee.outputConnection)
+          addedBlock = BlocklyMiscUtils.newBlock(workspace, bumpee.type.split("_")[0] + "_I");
+          addedBlock.getInput("i").connection.connect(bumpee.outputConnection);
         } else {
-          continue
+          continue;
         }
 
         if (!!addedBlock) {
-          otherConnection.connect(addedBlock.previousConnection)
+          otherConnection.connect(addedBlock.previousConnection);
           if (addedBlock.initSvg) {
-            addedBlock.initSvg()
-            workspace.render()
+            addedBlock.initSvg();
+            workspace.render();
           }
-          return true
+          return true;
         }
       }
     }
 
-    return false
-  }
+    return false;
+  };
 }
 
 function hoverComments() {
-  const createIcon = Blockly.Icon.prototype.createIcon
+  const createIcon = Blockly.Icon.prototype.createIcon;
   Blockly.Icon.prototype.createIcon = function () {
-    createIcon.call(this)
+    createIcon.call(this);
     Blockly.bindEvent_(this.iconGroup_, "mouseenter", this, () => {
       if (this.block_.isInFlyout) {
         if (this.isVisible()) {
-          return
+          return;
         }
-        Blockly.Events.fire(new Blockly.Events.Ui(this.block_, "commentOpen", false, true))
-        this.model_.pinned = true
-        this.createNonEditableBubble_()
+        Blockly.Events.fire(new Blockly.Events.Ui(this.block_, "commentOpen", false, true));
+        this.model_.pinned = true;
+        this.createNonEditableBubble_();
       }
-    })
+    });
 
     Blockly.bindEvent_(this.iconGroup_, "mouseleave", this, () => {
       if (this.block_.isInFlyout) {
         if (!this.isVisible()) {
-          return
+          return;
         }
-        Blockly.Events.fire(new Blockly.Events.Ui(this.block_, "commentOpen", true, false))
-        this.model_.pinned = false
-        this.disposeBubble_()
+        Blockly.Events.fire(new Blockly.Events.Ui(this.block_, "commentOpen", true, false));
+        this.model_.pinned = false;
+        this.disposeBubble_();
       }
-    })
-  }
+    });
+  };
 
-  const placeNewBlock = Blockly.Flyout.prototype["placeNewBlock_"]
+  const placeNewBlock = Blockly.Flyout.prototype["placeNewBlock_"];
   Blockly.Flyout.prototype["placeNewBlock_"] = function (oldBlock) {
-    let block = placeNewBlock.call(this, oldBlock)
+    let block = placeNewBlock.call(this, oldBlock);
     const removeComments = function (block) {
-      block.setCommentText(null)
+      block.setCommentText(null);
       for (let childBlock of block.childBlocks_) {
-        removeComments(childBlock)
+        removeComments(childBlock);
       }
-    }
-    removeComments(block)
-    return block
-  }
+    };
+    removeComments(block);
+    return block;
+  };
 }
 
 function pluralSpacing() {
-  const getInRowSpacing = Blockly.geras.RenderInfo.prototype.getInRowSpacing_
+  const getInRowSpacing = Blockly.geras.RenderInfo.prototype.getInRowSpacing_;
   Blockly.geras.RenderInfo.prototype.getInRowSpacing_ = function (prev, next) {
     // Spacing between two fields of the same editability.
 
@@ -290,7 +290,7 @@ function pluralSpacing() {
       prev.field instanceof FieldLabelPlural &&
       !(next.field instanceof FieldLabelPlural)
     ) {
-      return this.constants_.MEDIUM_PADDING
+      return this.constants_.MEDIUM_PADDING;
     }
     if (
       prev &&
@@ -298,7 +298,7 @@ function pluralSpacing() {
       prev.field instanceof FieldLabelPlural &&
       prev.field.value_ === " "
     ) {
-      return 0
+      return 0;
     }
     if (
       next &&
@@ -307,9 +307,9 @@ function pluralSpacing() {
       (next.field.value_ === " " || next.field.value_ === "s")
     ) {
       if (prev?.field instanceof FieldLabel) {
-        return 0
+        return 0;
       }
-      return 3
+      return 3;
     }
     if (
       prev &&
@@ -321,45 +321,45 @@ function pluralSpacing() {
       next.field instanceof FieldLabelPlural &&
       !(prev.field instanceof FieldLabelSerializableHidden)
     ) {
-      return this.constants_.MEDIUM_PADDING
+      return this.constants_.MEDIUM_PADDING;
     }
-    return getInRowSpacing.call(this, prev, next)
-  }
+    return getInRowSpacing.call(this, prev, next);
+  };
 }
 
 function contextMenu({ onDelete }: InitBlockOptions) {
-  const generateContextMenu = Blockly.BlockSvg.prototype["generateContextMenu"]
+  const generateContextMenu = Blockly.BlockSvg.prototype["generateContextMenu"];
   Blockly.BlockSvg.prototype["generateContextMenu"] = function () {
-    let menuOptions = generateContextMenu.call(this) as Partial<Blockly.ContextMenuRegistry.ContextMenuOption>[]
-    let block = this as BlockSvg
-    let workspace = block.workspace
+    let menuOptions = generateContextMenu.call(this) as Partial<Blockly.ContextMenuRegistry.ContextMenuOption>[];
+    let block = this as BlockSvg;
+    let workspace = block.workspace;
     if (block.type.startsWith("CatalogueCard")) {
       menuOptions.push({
         text: "Import CardScript",
         enabled: true,
         callback: function () {
           if (!!block.json && !!block.json.json) {
-            let card = block.json.json
-            let dummyWorkspace = new Workspace()
-            JsonConversionUtils.generateCard(dummyWorkspace, card)
+            let card = block.json.json;
+            let dummyWorkspace = new Workspace();
+            JsonConversionUtils.generateCard(dummyWorkspace, card);
 
-            let top = dummyWorkspace.getTopBlocks(false)[0]
+            let top = dummyWorkspace.getTopBlocks(false)[0];
 
-            let xml = Blockly.Xml.blockToDom(top, true) as Element
-            var xy = top.getRelativeToSurfaceXY()
-            xml.setAttribute("x", String(xy.x))
-            xml.setAttribute("y", String(xy.y))
+            let xml = Blockly.Xml.blockToDom(top, true) as Element;
+            var xy = top.getRelativeToSurfaceXY();
+            xml.setAttribute("x", String(xy.x));
+            xml.setAttribute("y", String(xy.y));
 
             if (!!workspace.targetWorkspace) {
-              workspace = workspace.targetWorkspace
+              workspace = workspace.targetWorkspace;
             }
 
-            workspace.paste(xml)
-            dummyWorkspace.dispose()
-            ;(workspace.getToolbox() as Toolbox).clearSelection()
+            workspace.paste(xml);
+            dummyWorkspace.dispose();
+            (workspace.getToolbox() as Toolbox).clearSelection();
           }
         },
-      })
+      });
     } else if (
       !block.workspace.targetWorkspace ||
       ((block.workspace.targetWorkspace?.getToolbox() as Toolbox)?.getSelectedItem() as ToolboxItem)?.getId() ===
@@ -369,61 +369,61 @@ function contextMenu({ onDelete }: InitBlockOptions) {
         text: "Show in Toolbox",
         enabled: true,
         callback: function () {
-          BlocklyMiscUtils.searchToolbox(block.type, block.workspace.targetWorkspace || block.workspace)
+          BlocklyMiscUtils.searchToolbox(block.type, block.workspace.targetWorkspace || block.workspace);
         },
-      })
+      });
     }
 
     if (block.type.startsWith("Starter_")) {
-      menuOptions = menuOptions.filter((option) => option.text !== "Remove Comment" && option.text !== "Inline Inputs")
+      menuOptions = menuOptions.filter((option) => option.text !== "Remove Comment" && option.text !== "Inline Inputs");
 
       if (process.env.NODE_ENV !== "production") {
         menuOptions.push({
           text: "Log CardScript",
           enabled: true,
           callback: function () {
-            const xml = Blockly.Xml.blockToDom(block, true)
-            const json = xmlToCardScript(xml)
-            console.log(json)
+            const xml = Blockly.Xml.blockToDom(block, true);
+            const json = xmlToCardScript(xml);
+            console.log(json);
           },
-        })
+        });
       }
 
       menuOptions.push({
         text: "DELETE Card",
         enabled: true,
         callback: function () {
-          onDelete(block)
+          onDelete(block);
         },
-      })
+      });
     }
 
-    return menuOptions.filter((option) => option.enabled)
-  }
+    return menuOptions.filter((option) => option.enabled);
+  };
 }
 
 function tooltips() {
   // @ts-ignore
   // noinspection JSConstantReassignment
-  Blockly.Tooltip.OFFSET_X = 10
+  Blockly.Tooltip.OFFSET_X = 10;
   if (Blockly.Touch.TOUCH_ENABLED) {
     // @ts-ignore
     // noinspection JSConstantReassignment
-    Blockly.Tooltip.OFFSET_X = 50
+    Blockly.Tooltip.OFFSET_X = 50;
   }
   // @ts-ignore
   // noinspection JSConstantReassignment
-  Blockly.Tooltip.OFFSET_Y = 0
+  Blockly.Tooltip.OFFSET_Y = 0;
 
-  const init = Blockly.ToolboxCategory.prototype.init
+  const init = Blockly.ToolboxCategory.prototype.init;
   Blockly.ToolboxCategory.prototype.init = function () {
-    init.call(this)
+    init.call(this);
     if (this.toolboxItemDef_["tooltip"]) {
-      this.rowDiv_.tooltip = this.toolboxItemDef_["tooltip"]
-      this.rowDiv_.tooltipColor = this.colour_
-      Blockly.Tooltip.bindMouseEvents(this.rowDiv_)
+      this.rowDiv_.tooltip = this.toolboxItemDef_["tooltip"];
+      this.rowDiv_.tooltipColor = this.colour_;
+      Blockly.Tooltip.bindMouseEvents(this.rowDiv_);
     }
-  }
+  };
 
   /*Blockly.Tooltip.bindMouseEvents = function (element) {
     if (Blockly.Touch.TOUCH_ENABLED) {
@@ -441,172 +441,172 @@ function tooltips() {
     }
   };*/
 
-  const show = Blockly.Tooltip["show_"]
+  const show = Blockly.Tooltip["show_"];
   Blockly.Tooltip["show_"] = function () {
-    show.call(this)
+    show.call(this);
     if (!!Blockly.Tooltip["DIV"]) {
       if (!!Blockly.Tooltip["element_"].tooltipColor) {
-        Blockly.Tooltip["DIV"]["style"].backgroundColor = Blockly.Tooltip["element_"].tooltipColor
-        Blockly.Tooltip["DIV"]["style"].color = "#ffffff"
+        Blockly.Tooltip["DIV"]["style"].backgroundColor = Blockly.Tooltip["element_"].tooltipColor;
+        Blockly.Tooltip["DIV"]["style"].color = "#ffffff";
       } else {
-        Blockly.Tooltip["DIV"]["style"].backgroundColor = "#ffffc7"
-        Blockly.Tooltip["DIV"]["style"].color = "#000"
+        Blockly.Tooltip["DIV"]["style"].backgroundColor = "#ffffc7";
+        Blockly.Tooltip["DIV"]["style"].color = "#000";
       }
     }
-  }
+  };
 }
 
 function blackText() {
-  const createTextElement = Blockly.Field.prototype["createTextElement_"]
+  const createTextElement = Blockly.Field.prototype["createTextElement_"];
   Blockly.Field.prototype["createTextElement_"] = function () {
-    createTextElement.call(this)
-    let block = this.getSourceBlock()
-    const typeTextColor = Blockly["textColor"]?.[block.type]
-    const idTextColor = Blockly["textColor"]?.[block.getFieldValue("id")]
-    const color = typeTextColor ?? idTextColor
+    createTextElement.call(this);
+    let block = this.getSourceBlock();
+    const typeTextColor = Blockly["textColor"]?.[block.type];
+    const idTextColor = Blockly["textColor"]?.[block.getFieldValue("id")];
+    const color = typeTextColor ?? idTextColor;
     if (color && block.type.endsWith("_REFERENCE")) {
-      this.textElement_.style.fill = color
+      this.textElement_.style.fill = color;
     }
-  }
+  };
 }
 
 function colorfulColors() {
-  let defaultFunction = Blockly.Field.prototype.setValue
+  let defaultFunction = Blockly.Field.prototype.setValue;
   Blockly.Field.prototype.setValue = function (newValue) {
-    defaultFunction.call(this, newValue)
-    let source = this.sourceBlock_
+    defaultFunction.call(this, newValue);
+    let source = this.sourceBlock_;
     if (!!source && !!Blockly.Blocks[source.type].json) {
-      let json = Blockly.Blocks[source.type].json
+      let json = Blockly.Blocks[source.type].json;
       if (json.output === "Color") {
-        let r = source.getFieldValue("r")
-        let g = source.getFieldValue("g")
-        let b = source.getFieldValue("b")
-        let color = Blockly.utils.colour.rgbToHex(r, g, b)
-        source.setColour(color)
+        let r = source.getFieldValue("r");
+        let g = source.getFieldValue("g");
+        let b = source.getFieldValue("b");
+        let color = Blockly.utils.colour.rgbToHex(r, g, b);
+        source.setColour(color);
       }
     }
     if (source?.type === "variables_get" || source?.type == "variables_get_dynamic") {
-      let type = this.variable_?.type
+      let type = this.variable_?.type;
       if (type === "EntityReference") {
-        source.setColour(30)
+        source.setColour(30);
       } else {
-        source.setColour(source?.type === "variables_get" ? "#a53a6f" : "#a53a93")
+        source.setColour(source?.type === "variables_get" ? "#a53a6f" : "#a53a93");
       }
     }
-  }
+  };
 }
 
 function noToolboxZoom() {
-  const layout = Blockly.HorizontalFlyout.prototype["layout_"]
+  const layout = Blockly.HorizontalFlyout.prototype["layout_"];
   Blockly.HorizontalFlyout.prototype["layout_"] = function (contents, gaps) {
-    const workspace = this.targetWorkspace as WorkspaceSvg
+    const workspace = this.targetWorkspace as WorkspaceSvg;
     if (workspace) {
-      const reset = workspace.scale
-      workspace.scale = workspace.options.zoomOptions.startScale
-      layout.call(this, contents, gaps)
-      workspace.scale = reset
+      const reset = workspace.scale;
+      workspace.scale = workspace.options.zoomOptions.startScale;
+      layout.call(this, contents, gaps);
+      workspace.scale = reset;
     } else {
-      layout.call(this, contents, gaps)
+      layout.call(this, contents, gaps);
     }
-  }
+  };
 
-  const reflowInternal = Blockly.HorizontalFlyout.prototype["reflowInternal_"]
+  const reflowInternal = Blockly.HorizontalFlyout.prototype["reflowInternal_"];
   Blockly.HorizontalFlyout.prototype["reflowInternal_"] = function () {
-    const workspace = this.targetWorkspace as WorkspaceSvg
+    const workspace = this.targetWorkspace as WorkspaceSvg;
     if (workspace) {
-      const reset = workspace.scale
-      workspace.scale = workspace.options.zoomOptions.startScale
-      reflowInternal.call(this)
-      workspace.scale = reset
+      const reset = workspace.scale;
+      workspace.scale = workspace.options.zoomOptions.startScale;
+      reflowInternal.call(this);
+      workspace.scale = reset;
     } else {
-      reflowInternal.call(this)
+      reflowInternal.call(this);
     }
-  }
+  };
 
-  const layout2 = Blockly.VerticalFlyout.prototype["layout_"]
+  const layout2 = Blockly.VerticalFlyout.prototype["layout_"];
   Blockly.VerticalFlyout.prototype["layout_"] = function (contents, gaps) {
-    const workspace = this.targetWorkspace as WorkspaceSvg
+    const workspace = this.targetWorkspace as WorkspaceSvg;
     if (workspace) {
-      const reset = workspace.scale
-      workspace.scale = workspace.options.zoomOptions.startScale
-      layout2.call(this, contents, gaps)
-      workspace.scale = reset
+      const reset = workspace.scale;
+      workspace.scale = workspace.options.zoomOptions.startScale;
+      layout2.call(this, contents, gaps);
+      workspace.scale = reset;
     } else {
-      layout2.call(this, contents, gaps)
+      layout2.call(this, contents, gaps);
     }
-  }
+  };
 
-  const reflowInternal2 = Blockly.VerticalFlyout.prototype["reflowInternal_"]
+  const reflowInternal2 = Blockly.VerticalFlyout.prototype["reflowInternal_"];
   Blockly.VerticalFlyout.prototype["reflowInternal_"] = function () {
-    const workspace = this.targetWorkspace as WorkspaceSvg
+    const workspace = this.targetWorkspace as WorkspaceSvg;
     if (workspace) {
-      const reset = workspace.scale
-      workspace.scale = workspace.options.zoomOptions.startScale
-      reflowInternal2.call(this)
-      workspace.scale = reset
+      const reset = workspace.scale;
+      workspace.scale = workspace.options.zoomOptions.startScale;
+      reflowInternal2.call(this);
+      workspace.scale = reset;
     } else {
-      reflowInternal2.call(this)
+      reflowInternal2.call(this);
     }
-  }
+  };
 }
 
 function multiline() {
   Blockly.FieldMultilineInput.prototype["getDisplayText_"] = function () {
-    let value = this.value_
+    let value = this.value_;
     if (!value) {
       // Prevent the field from disappearing if empty.
-      return Blockly.Field.NBSP
+      return Blockly.Field.NBSP;
     }
 
     if (value.length < this.maxDisplayLength) {
-      return value.replaceAll(/\s/g, Blockly.Field.NBSP)
+      return value.replaceAll(/\s/g, Blockly.Field.NBSP);
     }
 
-    let text = ""
-    let words = value.replaceAll("\n", "").split(" ")
-    let i = 0
+    let text = "";
+    let words = value.replaceAll("\n", "").split(" ");
+    let i = 0;
     for (let wordsKey of words) {
       if (i + wordsKey.length + 1 > this.maxDisplayLength) {
-        text += "\n"
-        text += wordsKey
-        text += Blockly.Field.NBSP
-        i = 0
+        text += "\n";
+        text += wordsKey;
+        text += Blockly.Field.NBSP;
+        i = 0;
       } else {
-        text += wordsKey
-        text += Blockly.Field.NBSP
+        text += wordsKey;
+        text += Blockly.Field.NBSP;
       }
-      i += wordsKey.length + 1
+      i += wordsKey.length + 1;
     }
 
-    return text
-  }
+    return text;
+  };
 
   // Fix multiline texts having wrong width in toolbox
-  const updateSize = Blockly.FieldMultilineInput.prototype["updateSize_"]
+  const updateSize = Blockly.FieldMultilineInput.prototype["updateSize_"];
   Blockly.FieldMultilineInput.prototype["updateSize_"] = function () {
-    updateSize.call(this)
+    updateSize.call(this);
 
     if (this.size_.width === 10) {
-      const fontSize = this.getConstants().FIELD_TEXT_FONTSIZE
-      const fontWeight = this.getConstants().FIELD_TEXT_FONTWEIGHT
-      const fontFamily = this.getConstants().FIELD_TEXT_FONTFAMILY
+      const fontSize = this.getConstants().FIELD_TEXT_FONTSIZE;
+      const fontWeight = this.getConstants().FIELD_TEXT_FONTWEIGHT;
+      const fontFamily = this.getConstants().FIELD_TEXT_FONTFAMILY;
 
-      const nodes = this.textGroup_.childNodes
+      const nodes = this.textGroup_.childNodes;
       for (let i = 0; i < nodes.length; i++) {
-        const tspan = nodes[i]
-        const textWidth = Blockly.utils.dom.getFastTextWidth(tspan, fontSize, fontWeight, fontFamily)
+        const tspan = nodes[i];
+        const textWidth = Blockly.utils.dom.getFastTextWidth(tspan, fontSize, fontWeight, fontFamily);
         if (textWidth > this.size_.width) {
-          this.size_.width = textWidth
+          this.size_.width = textWidth;
         }
       }
       if (this.borderRect_) {
-        this.size_.width += this.getConstants().FIELD_BORDER_RECT_X_PADDING * 2
-        this.borderRect_.setAttribute("width", this.size_.width)
+        this.size_.width += this.getConstants().FIELD_BORDER_RECT_X_PADDING * 2;
+        this.borderRect_.setAttribute("width", this.size_.width);
       }
 
-      this.positionBorderRect_()
+      this.positionBorderRect_();
     }
-  }
+  };
 }
 
 /*function jsonShadows() {
@@ -644,88 +644,88 @@ function multiline() {
 }*/
 
 function connections() {
-  const setCheck = Blockly.Connection.prototype.setCheck
+  const setCheck = Blockly.Connection.prototype.setCheck;
   Blockly.Connection.prototype.setCheck = function (check) {
-    const ret = setCheck.call(this, check)
+    const ret = setCheck.call(this, check);
     if (check === "Boolean") {
-      this.check_.push("ConditionDesc")
+      this.check_.push("ConditionDesc");
     }
-    return ret
-  }
+    return ret;
+  };
 }
 
 function categoryIndenting() {
-  const createRowContainer = Blockly.ToolboxCategory.prototype["createRowContainer_"]
+  const createRowContainer = Blockly.ToolboxCategory.prototype["createRowContainer_"];
 
   Blockly.ToolboxCategory.prototype["createRowContainer_"] = function () {
-    const rowDiv = createRowContainer.call(this)
-    let nestedPadding = Blockly.ToolboxCategory.nestedPadding * this.getLevel()
-    rowDiv.style.paddingLeft = 0
-    rowDiv.style.marginLeft = (nestedPadding / 2).toFixed(0) + "px"
+    const rowDiv = createRowContainer.call(this);
+    let nestedPadding = Blockly.ToolboxCategory.nestedPadding * this.getLevel();
+    rowDiv.style.paddingLeft = 0;
+    rowDiv.style.marginLeft = (nestedPadding / 2).toFixed(0) + "px";
 
-    return rowDiv
-  }
+    return rowDiv;
+  };
 }
 
 function cardDisplay() {
-  const createBubble = Blockly.Comment.prototype["createBubble_"]
+  const createBubble = Blockly.Comment.prototype["createBubble_"];
 
   Blockly.Comment.prototype["createBubble_"] = function () {
-    createBubble.call(this)
+    createBubble.call(this);
 
-    let block = this.block_ as BlockSvg
+    let block = this.block_ as BlockSvg;
     if (block.type.startsWith("Starter_")) {
-      this.textarea_.remove()
-      this.foreignObject_.previousElementSibling.remove()
-      let card = JSON.parse(block.getCommentText()) as CardDef
+      this.textarea_.remove();
+      this.foreignObject_.previousElementSibling.remove();
+      let card = JSON.parse(block.getCommentText()) as CardDef;
 
       /*if (!!card.art?.sprite?.named && !!block.artURL) {
         card.art.sprite.named = block.artURL
       }*/
 
       if (card.heroClass) {
-        const heroClassBlock = Blockly.Blocks["HeroClass_" + card.heroClass]
-        const heroClass = heroClassBlock?.json?.json
-        card.art = deepmerge(heroClass?.art || {}, card.art || {})
+        const heroClassBlock = Blockly.Blocks["HeroClass_" + card.heroClass];
+        const heroClass = heroClassBlock?.json?.json;
+        card.art = deepmerge(heroClass?.art || {}, card.art || {});
       }
 
       /*createRoot(this.foreignObject_.firstElementChild).render(<CardDisplay {...card} />);*/
     }
-  }
+  };
 }
 
 function flyout() {
   const unCollapse = (block: Block) => {
-    if (!block) return
-    block.setCollapsed(false)
-    block.getChildren(true).forEach(unCollapse)
-  }
+    if (!block) return;
+    block.setCollapsed(false);
+    block.getChildren(true).forEach(unCollapse);
+  };
 
-  const createBlock = Blockly.Flyout.prototype.createBlock
+  const createBlock = Blockly.Flyout.prototype.createBlock;
   Blockly.Flyout.prototype.createBlock = function (originalBlock) {
-    const result: BlockSvg = createBlock.call(this, originalBlock)
+    const result: BlockSvg = createBlock.call(this, originalBlock);
     if (result.type.startsWith("Starter_")) {
-      unCollapse(result)
+      unCollapse(result);
     }
-    return result
-  }
+    return result;
+  };
 }
 
 function mobileCategories() {
-  const addColourBorder = ToolboxCategory.prototype["addColourBorder_"]
+  const addColourBorder = ToolboxCategory.prototype["addColourBorder_"];
 
   ToolboxCategory.prototype["addColourBorder_"] = function (colour) {
-    const style = this.rowDiv_.style
-    style.border = ToolboxCategory.borderWidth + "px solid " + (colour || "#ddd")
-  }
+    const style = this.rowDiv_.style;
+    style.border = ToolboxCategory.borderWidth + "px solid " + (colour || "#ddd");
+  };
 
-  const setExpanded = CollapsibleToolboxCategory.prototype.setExpanded
+  const setExpanded = CollapsibleToolboxCategory.prototype.setExpanded;
   CollapsibleToolboxCategory.prototype.setExpanded = function (isExpanded) {
-    setExpanded.call(this, isExpanded)
+    setExpanded.call(this, isExpanded);
 
-    const category = this as CollapsibleToolboxCategory
-    const toolbox = category["parentToolbox_"] as Toolbox
-    const htmlDiv = toolbox.HtmlDiv
-    utils.style.scrollIntoContainerView(category.getDiv(), htmlDiv, !isExpanded)
-  }
+    const category = this as CollapsibleToolboxCategory;
+    const toolbox = category["parentToolbox_"] as Toolbox;
+    const htmlDiv = toolbox.HtmlDiv;
+    utils.style.scrollIntoContainerView(category.getDiv(), htmlDiv, !isExpanded);
+  };
 }

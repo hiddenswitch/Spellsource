@@ -19,6 +19,7 @@ standard format, both players will have decks of 30 cards and begin with
 life before they do the same to you!
 
 ### Play of the Game
+
 #### Beginning the Game
 
 ![An example of a mulligan. In this example, we are keeping the middle
@@ -43,30 +44,30 @@ turn.](/static/wiki/Hand_and_Lun.png "fig:This is an example of a player's hand 
 
 Each player has multiple different zones to utilize.
 
--   **Deck Zone:** Every turn, they will draw cards from here if able.
--   **Hand Zone:** This is group of cards that a player can play during
-    their turn. A player can have at most 10 cards in their hand. If a
-    player tries to draw a card with a full hand, the drawn card will be
-    removed from play.
--   **Permanents Zone:** This zone contains all of a player's minions
-    and permanents currently in play. Minions located here are able to
-    attack and be attacked. Often having a strong board means having
-    good minions here! A player can have at most 7 cards in their
-    permanent zone. If this zone is full, its owner cannot play any more
-    minions or permanents.
--   **Weapon Zone:** Each player can have one weapon equipped at any
-    given time. On the owner's turn, the weapon is considered active,
-    and gives the champion extra attack damage, which is useful for
-    maintaining control of the board. If a weapon is played when another
-    weapon is already in this zone, the new weapon replaces the old one
-    in this zone.
--   **Champion Zone:** This is where the player's champion resides. You
-    can also see the remaining health and armor in this zone. In rare
-    cases, a card can replace the old champion with a new one with a new
-    Skill as well.
--   **Skill Zone:** A skill is an ability unique to every champion. They
-    can be used once per turn and cost 2 Lun to use. While often not
-    extremely powerful, their reusability makes them vital in any match.
+- **Deck Zone:** Every turn, they will draw cards from here if able.
+- **Hand Zone:** This is group of cards that a player can play during
+  their turn. A player can have at most 10 cards in their hand. If a
+  player tries to draw a card with a full hand, the drawn card will be
+  removed from play.
+- **Permanents Zone:** This zone contains all of a player's minions
+  and permanents currently in play. Minions located here are able to
+  attack and be attacked. Often having a strong board means having
+  good minions here! A player can have at most 7 cards in their
+  permanent zone. If this zone is full, its owner cannot play any more
+  minions or permanents.
+- **Weapon Zone:** Each player can have one weapon equipped at any
+  given time. On the owner's turn, the weapon is considered active,
+  and gives the champion extra attack damage, which is useful for
+  maintaining control of the board. If a weapon is played when another
+  weapon is already in this zone, the new weapon replaces the old one
+  in this zone.
+- **Champion Zone:** This is where the player's champion resides. You
+  can also see the remaining health and armor in this zone. In rare
+  cases, a card can replace the old champion with a new one with a new
+  Skill as well.
+- **Skill Zone:** A skill is an ability unique to every champion. They
+  can be used once per turn and cost 2 Lun to use. While often not
+  extremely powerful, their reusability makes them vital in any match.
 
 ![Here we can see the player's weapon, skill, and champion (going from
 left to right). The skill is highlighted, meaning that it still can be

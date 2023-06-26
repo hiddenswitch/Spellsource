@@ -1,29 +1,28 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react"
-import icon from "../../public/static/assets/icon.png"
-import * as styles from "./creative-layout.module.scss"
-import Search from "./search"
-import { AiOutlineMenu } from "@react-icons/all-files/ai/AiOutlineMenu"
-import { AiOutlineClose } from "@react-icons/all-files/ai/AiOutlineClose"
-import Link from "next/link"
-import Image from "next/image"
-import { Container } from "react-bootstrap"
+import React, { ReactNode, useEffect, useRef, useState } from "react";
+import icon from "../../public/static/assets/icon.png";
+import * as styles from "./creative-layout.module.scss";
+import { AiOutlineMenu } from "@react-icons/all-files/ai/AiOutlineMenu";
+import { AiOutlineClose } from "@react-icons/all-files/ai/AiOutlineClose";
+import Link from "next/link";
+import Image from "next/image";
+import { Container } from "react-bootstrap";
 
 const Header = ({ pages }: { pages?: any }) => {
-  const headerDiv = useRef<HTMLDivElement>(null)
+  const headerDiv = useRef<HTMLDivElement>(null);
 
   const handleScroll = () => {
-    sessionStorage.setItem("scrollPosition", headerDiv.current!.scrollLeft + "")
-  }
+    sessionStorage.setItem("scrollPosition", headerDiv.current!.scrollLeft + "");
+  };
 
   const keepHorizontalScroll = () => {
     if (sessionStorage.getItem("scrollPosition") !== null) {
-      headerDiv.current!.scrollLeft = parseFloat(sessionStorage.getItem("scrollPosition")!)
+      headerDiv.current!.scrollLeft = parseFloat(sessionStorage.getItem("scrollPosition")!);
     }
-  }
+  };
 
   useEffect(() => {
-    keepHorizontalScroll()
-  }, [])
+    keepHorizontalScroll();
+  }, []);
 
   return (
     <header className={styles.navbarHeader}>
@@ -36,8 +35,8 @@ const Header = ({ pages }: { pages?: any }) => {
         <MobileNavbar pages={pages} />
       </Container>
     </header>
-  )
-}
+  );
+};
 
 const DesktopNavbar = ({ pages }: { pages?: ReactNode }) => {
   return (
@@ -49,11 +48,11 @@ const DesktopNavbar = ({ pages }: { pages?: ReactNode }) => {
       {pages}
       {/* <li key={'download'}><Link href="/download">Play Now</Link></li> */}
     </ul>
-  )
-}
+  );
+};
 
 const MobileNavbar = ({ pages }: { pages?: ReactNode }) => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <div className={styles.mobileNavbar}>
@@ -62,7 +61,7 @@ const MobileNavbar = ({ pages }: { pages?: ReactNode }) => {
           color="#000"
           size={32}
           onClick={() => {
-            setOpen(!open)
+            setOpen(!open);
           }}
         />
       ) : (
@@ -71,7 +70,7 @@ const MobileNavbar = ({ pages }: { pages?: ReactNode }) => {
             color="#000"
             size={32}
             onClick={() => {
-              setOpen(!open)
+              setOpen(!open);
             }}
           />
           <ul className={styles.mobileUl}>
@@ -85,7 +84,7 @@ const MobileNavbar = ({ pages }: { pages?: ReactNode }) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

@@ -1,20 +1,17 @@
-import React from 'react'
-import Layout from '../components/creative-layout'
-import * as styles from './template-styles.module.scss'
+import React from "react";
+import Layout from "../components/creative-layout";
+import * as styles from "./template-styles.module.scss";
 
-export default function Template ({
+export default function Template({
   data, // this prop will be injected by the GraphQL query below.
 }) {
-  const { markdownRemark } = data // data.markdownRemark holds your post data
-  const { html } = markdownRemark
+  const { markdownRemark } = data; // data.markdownRemark holds your post data
+  const { html } = markdownRemark;
   return (
     <Layout>
-      <div
-        className={styles.templateContainer}
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      <div className={styles.templateContainer} dangerouslySetInnerHTML={{ __html: html }} />
     </Layout>
-  )
+  );
 }
 
 /*

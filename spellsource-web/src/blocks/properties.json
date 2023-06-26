@@ -200,7 +200,6 @@
     "data": "BLOCKLY_EXTEND_PREVIOUS",
     "comment": "Makes a unit or item have an effect when they are destroyed."
   },
-
   {
     "type": "Property_auras",
     "colour": 230,

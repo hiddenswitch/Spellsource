@@ -5,8 +5,7 @@ layout: wiki
 ---
 
 ![Faloran](Faloran Humanoid.png "fig:Faloran Humanoid")
-![Faloran](/static/wiki/Faloran%20Fox.png "fig:Faloran Fox") 
-
+![Faloran](/static/wiki/Faloran%20Fox.png "fig:Faloran Fox")
 
 Faloran is a
 [Hengeyokai](/wiki/Hengeyokai "wikilink") [Kitsune](Kitsune "wikilink") (Fox)

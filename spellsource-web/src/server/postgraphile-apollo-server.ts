@@ -1,7 +1,7 @@
 import { Pool } from "pg";
-import { PostGraphileOptions, createPostGraphileSchema, withPostGraphileContext } from "postgraphile";
-import {ApolloServerPlugin, BaseContext} from "@apollo/server";
-import {GraphQLRequestContextDidResolveOperation} from "@apollo/server/src/externalTypes";
+import { createPostGraphileSchema, PostGraphileOptions, withPostGraphileContext } from "postgraphile";
+import { ApolloServerPlugin } from "@apollo/server";
+import { GraphQLRequestContextDidResolveOperation } from "@apollo/server/src/externalTypes";
 
 const authorizationBearerRex = /^\s*bearer\s+([a-z0-9\-._~+/]+=*)\s*$/i;
 
@@ -64,7 +64,7 @@ export const makeSchemaAndPlugin = async (
          * Server typings, it only contains "headers"?)
          */
         const { http } = graphqlRequest;
-        const req = {...http, context}
+        const req = { ...http, context };
 
         /*
          * The below code implements similar logic to this area of

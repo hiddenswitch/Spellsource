@@ -1,9 +1,9 @@
-import { Pool } from "pg"
-import { pgPort } from "../lib/config"
-import { PostGraphileOptions } from "postgraphile"
-import PgConnectionFilterPlugin from "postgraphile-plugin-connection-filter"
-import { PgMutationUpsertPlugin } from "postgraphile-upsert-plugin"
-import PgOmitArchivedPlugin from "@graphile-contrib/pg-omit-archived"
+import { Pool } from "pg";
+import { pgPort } from "../lib/config";
+import { PostGraphileOptions } from "postgraphile";
+import PgConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
+import { PgMutationUpsertPlugin } from "postgraphile-upsert-plugin";
+import PgOmitArchivedPlugin from "@graphile-contrib/pg-omit-archived";
 
 const pool = new Pool({
   user: "admin",
@@ -11,9 +11,9 @@ const pool = new Pool({
   host: "localhost",
   database: "spellsource",
   port: pgPort,
-})
+});
 
-export { pool as pgPool }
+export { pool as pgPool };
 
 export const postgraphileOptions: PostGraphileOptions = {
   // watchPg: true, // Need extension for this to work properly
@@ -35,4 +35,4 @@ export const postgraphileOptions: PostGraphileOptions = {
   graphileBuildOptions: {
     pgArchivedColumnName: "is_archived",
   },
-}
+};

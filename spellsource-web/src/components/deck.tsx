@@ -1,47 +1,47 @@
-import React, { FunctionComponent, useContext } from "react"
-import { chain, isEqual } from "lodash"
-import { textDecorationStyle } from "./collection"
-import { Button } from "react-bootstrap"
-import { useDrag, useDrop } from "react-dnd"
+import React, { FunctionComponent, useContext } from "react";
+import { chain, isEqual } from "lodash";
+import { textDecorationStyle } from "./collection";
+import { Button } from "react-bootstrap";
+import { useDrag, useDrop } from "react-dnd";
 import {
   useCreateDeckMutation,
   useDeleteDeckMutation,
   useRenameDeckMutation,
   useSetCardsInDeckMutation,
-} from "../__generated__/client"
-import { ListActions } from "react-use/lib/useList"
-import { useRouter } from "next/router"
-import { CardCache } from "../pages/collection"
-import { CardDef } from "./card-display"
+} from "../__generated__/client";
+import { ListActions } from "react-use/lib/useList";
+import { useRouter } from "next/router";
+import { CardCache } from "../pages/collection";
+import { CardDef } from "./card-display";
 
 interface DeckProps {
-  deck
-  user?: string
-  myDeck: boolean
-  cardIds: string[]
-  classColors
-  cardActions: ListActions<string>
-  getDeck
-  getDecks
-  setDeckId
-  realCards
+  deck;
+  user?: string;
+  myDeck: boolean;
+  cardIds: string[];
+  classColors;
+  cardActions: ListActions<string>;
+  getDeck;
+  getDecks;
+  setDeckId;
+  realCards;
 }
 
 function DeckCard(props: {
-  cardDefs: CardDef[]
-  card: CardDef
-  heroClass: any
-  myDeck: boolean
-  classColors: any
-  onClick: () => void
+  cardDefs: CardDef[];
+  card: CardDef;
+  heroClass: any;
+  myDeck: boolean;
+  classColors: any;
+  onClick: () => void;
 }) {
-  const { card, myDeck } = props
+  const { card, myDeck } = props;
 
   const [, dragRef] = useDrag({
     type: "deck-card",
     item: { id: card.id },
     canDrag: () => myDeck,
-  })
+  });
 
   return (
     <li className={"d-flex flex-row align-items-baseline"}>
@@ -63,7 +63,7 @@ function DeckCard(props: {
         ({props.card.baseManaCost ?? 0}) {props.card.name}
       </Button>
     </li>
-  )
+  );
 }
 
 export const Deck: FunctionComponent<DeckProps> = ({
@@ -78,9 +78,9 @@ export const Deck: FunctionComponent<DeckProps> = ({
   setDeckId,
   realCards,
 }) => {
-  const router = useRouter()
+  const router = useRouter();
 
-  const cache = useContext(CardCache)
+  const cache = useContext(CardCache);
 
   const groupedCards = chain(cardIds)
     .map((value) => cache[value])
@@ -90,21 +90,21 @@ export const Deck: FunctionComponent<DeckProps> = ({
       ([card]) => card.baseManaCost ?? 0,
       ([card]) => card.name
     )
-    .value()
+    .value();
 
-  const { set: setCards, removeAt: removeCard, push: addCardToDeck } = cardActions
+  const { set: setCards, removeAt: removeCard, push: addCardToDeck } = cardActions;
 
-  const [setCardsInDeck] = useSetCardsInDeckMutation()
-  const [deleteDeck] = useDeleteDeckMutation()
-  const [renameDeck] = useRenameDeckMutation()
-  const [createDeck] = useCreateDeckMutation()
+  const [setCardsInDeck] = useSetCardsInDeckMutation();
+  const [deleteDeck] = useDeleteDeckMutation();
+  const [renameDeck] = useRenameDeckMutation();
+  const [createDeck] = useCreateDeckMutation();
 
   const [, deckDrop] = useDrop({
     accept: ["collection-card"],
     drop: (item) => {
-      addCardToDeck(item["id"])
+      addCardToDeck(item["id"]);
     },
-  })
+  });
 
   return (
     <div ref={deckDrop}>
@@ -122,7 +122,7 @@ export const Deck: FunctionComponent<DeckProps> = ({
                   deckId: undefined,
                   heroClass: undefined,
                 },
-              })
+              });
             }
           }}
         >
@@ -133,7 +133,7 @@ export const Deck: FunctionComponent<DeckProps> = ({
         {user && (
           <Button
             onClick={async () => {
-              const deckName = prompt("New Deck Name", deck.name) || "Duplicate of " + deck.name
+              const deckName = prompt("New Deck Name", deck.name) || "Duplicate of " + deck.name;
 
               const { data } = await createDeck({
                 variables: {
@@ -142,11 +142,11 @@ export const Deck: FunctionComponent<DeckProps> = ({
                   cardIds: deck.cardsInDecksByDeckId.nodes.map((value) => value.cardId),
                   format: deck.format,
                 },
-              })
-              const newDeckId = data?.createDeckWithCards?.deck?.id
+              });
+              const newDeckId = data?.createDeckWithCards?.deck?.id;
               if (newDeckId) {
-                await getDecks.refetch()
-                await setDeckId(newDeckId)
+                await getDecks.refetch();
+                await setDeckId(newDeckId);
               }
             }}
           >
@@ -158,17 +158,17 @@ export const Deck: FunctionComponent<DeckProps> = ({
             <Button
               variant={"light"}
               onClick={async () => {
-                let newName = prompt("New Deck Name")
-                if (!newName) return
+                let newName = prompt("New Deck Name");
+                if (!newName) return;
 
                 const { data } = await renameDeck({
                   variables: {
                     deckId: deck.id,
                     deckName: newName,
                   },
-                })
+                });
                 if (data.updateDeckById?.deck?.name) {
-                  await getDecks.refetch()
+                  await getDecks.refetch();
                 }
               }}
             >
@@ -189,9 +189,9 @@ export const Deck: FunctionComponent<DeckProps> = ({
                     cardIds,
                     deckId: deck.id,
                   },
-                })
+                });
                 if (data?.setCardsInDeck?.cardsInDecks) {
-                  await getDeck.refetch()
+                  await getDeck.refetch();
                 }
               }}
             >
@@ -200,18 +200,18 @@ export const Deck: FunctionComponent<DeckProps> = ({
             <Button
               variant={"danger"}
               onClick={async () => {
-                if (!confirm(`Are you sure you want to delete "${deck.name}"?`)) return
+                if (!confirm(`Are you sure you want to delete "${deck.name}"?`)) return;
 
-                const { data } = await deleteDeck({ variables: { deckId: deck.id } })
+                const { data } = await deleteDeck({ variables: { deckId: deck.id } });
                 if (data.updateDeckById?.deck?.trashed) {
-                  await getDecks.refetch()
+                  await getDecks.refetch();
                   await router.replace({
                     query: {
                       ...router.query,
                       deckId: undefined,
                       heroClass: undefined,
                     },
-                  })
+                  });
                 }
               }}
             >
@@ -230,14 +230,14 @@ export const Deck: FunctionComponent<DeckProps> = ({
             myDeck={myDeck}
             classColors={classColors}
             onClick={() => {
-              const index = cardIds.findIndex((value) => value == card.id)
+              const index = cardIds.findIndex((value) => value == card.id);
               if (index >= 0) {
-                removeCard(index)
+                removeCard(index);
               }
             }}
           />
         ))}
       </ul>
     </div>
-  )
-}
+  );
+};

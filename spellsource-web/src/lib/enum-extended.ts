@@ -1,5 +1,3 @@
-import { Enumify  } from 'enumify'
-
 // TODO actually still in use ?
 /*
 export default class EnumExtended extends Enum {

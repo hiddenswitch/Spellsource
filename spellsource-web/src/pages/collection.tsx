@@ -10,7 +10,7 @@ import React, { createContext, FunctionComponent, useEffect, useMemo, useRef, us
 import { useSession } from "next-auth/react"
 import Collection, { textDecorationStyle } from "../components/collection"
 import Head from "next/head"
-import { Button, Col, Dropdown, Offcanvas, OffcanvasBody, OffcanvasHeader, Row } from "react-bootstrap"
+import { Button, Col, Dropdown, Offcanvas, OffcanvasBody, Row } from "react-bootstrap"
 import { chain, keyBy } from "lodash"
 import { useRouter } from "next/router"
 import { CardDef, toRgbaString } from "../components/card-display"
@@ -23,28 +23,27 @@ import { useList } from "react-use"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { Deck } from "../components/deck"
-import cx from "classnames"
 
 // Makes the query state stick around
 export const getServerSideProps = async (context) => ({
   props: {},
-})
+});
 
-export const CardCache = createContext<Record<string, CardDef>>({})
+export const CardCache = createContext<Record<string, CardDef>>({});
 
 export default () => {
-  const { data: session } = useSession()
-  const user = session?.token?.sub
+  const { data: session } = useSession();
+  const user = session?.token?.sub;
 
-  const cacheRef = useRef<Record<string, CardDef>>({})
-  const cache = cacheRef.current
+  const cacheRef = useRef<Record<string, CardDef>>({});
+  const cache = cacheRef.current;
 
-  const router = useRouter()
-  const [offset, setOffset] = useParamInt(router, "offset")
-  const [deckId, setDeckId] = useParam(router, "deckId")
-  const [heroClass, setHeroClass] = useParam(router, "heroClass")
+  const router = useRouter();
+  const [offset, setOffset] = useParamInt(router, "offset");
+  const [deckId, setDeckId] = useParam(router, "deckId");
+  const [heroClass, setHeroClass] = useParam(router, "heroClass");
 
-  const getClasses = useGetClassesQuery({ variables: { filter: { collectible: { equalTo: true } } } })
+  const getClasses = useGetClassesQuery({ variables: { filter: { collectible: { equalTo: true } } } });
   const classes = useMemo(
     () =>
       chain(getClasses.data?.allClasses?.nodes ?? [])
@@ -53,7 +52,7 @@ export default () => {
         .mapValues((card) => (card.cardScript as CardDef).name)
         .value(),
     [getClasses.data]
-  )
+  );
   const classColors = useMemo(
     () =>
       chain(getClasses.data?.allClasses?.nodes ?? [])
@@ -62,7 +61,7 @@ export default () => {
         .mapValues((card) => toRgbaString((card.cardScript as CardDef).art?.primary))
         .value(),
     [getClasses.data]
-  )
+  );
   const textColors = useMemo(
     () =>
       chain(getClasses.data?.allClasses?.nodes ?? [])
@@ -71,15 +70,15 @@ export default () => {
         .mapValues((card) => toRgbaString((card.cardScript as CardDef).art?.body?.vertex))
         .value(),
     [getClasses.data]
-  )
+  );
 
-  const getDecks = useGetDecksQuery({ variables: { user } })
+  const getDecks = useGetDecksQuery({ variables: { user } });
   const allDecks = [
     ...(getDecks.data?.allDecks?.nodes ?? []),
     ...(getDecks.data?.allDeckShares?.nodes?.map((node) => node.deckByDeckId) ?? []),
-  ]
-  const decksById = useMemo(() => keyBy(allDecks, (value) => value.id), [allDecks])
-  const selectedDeck = decksById[deckId]
+  ];
+  const decksById = useMemo(() => keyBy(allDecks, (value) => value.id), [allDecks]);
+  const selectedDeck = decksById[deckId];
 
   const DeckEntry: FunctionComponent<{ deck: DeckFragment }> = ({ deck }) => (
     <li className={"d-flex flex-row align-items-baseline gap-2"}>
@@ -93,7 +92,7 @@ export default () => {
         </Button>
       </Link>
     </li>
-  )
+  );
 
   const getDeck = useGetDeckQuery({
     variables: { deckId },
@@ -101,23 +100,23 @@ export default () => {
       data.deckById?.cardsInDecksByDeckId?.nodes?.forEach(
         (node) => (cache[node.cardId] = node.cardByCardId.cardScript)
       ),
-  })
-  const deck = getDeck?.data?.deckById ?? getDeck?.previousData?.deckById
+  });
+  const deck = getDeck?.data?.deckById ?? getDeck?.previousData?.deckById;
 
-  const realCards = useMemo(() => deck?.cardsInDecksByDeckId?.nodes?.map((node) => node.cardId) ?? [], [deck])
+  const realCards = useMemo(() => deck?.cardsInDecksByDeckId?.nodes?.map((node) => node.cardId) ?? [], [deck]);
 
-  const [deckCards, deckActions] = useList([] as string[])
+  const [deckCards, deckActions] = useList([] as string[]);
 
-  const { set: setCards, clear: clearCards, removeAt: removeCard, push: addCardToDeck } = deckActions
-  const removeCardFromDeck = (id: string) => removeCard(deckCards.findIndex((card) => card === id))
+  const { set: setCards, clear: clearCards, removeAt: removeCard, push: addCardToDeck } = deckActions;
+  const removeCardFromDeck = (id: string) => removeCard(deckCards.findIndex((card) => card === id));
 
   useEffect(() => {
-    setCards([...realCards])
-  }, [realCards])
+    setCards([...realCards]);
+  }, [realCards]);
 
-  const myDeck = deck && user && deck.createdBy === user
+  const myDeck = deck && user && deck.createdBy === user;
 
-  const [createDeck] = useCreateDeckMutation()
+  const [createDeck] = useCreateDeckMutation();
 
   const createNewDeck = async (heroClass: string, className: string) => {
     const { data } = await createDeck({
@@ -127,22 +126,22 @@ export default () => {
         format: "Spellsource",
         cardIds: [],
       },
-    })
+    });
 
-    const newDeckId = data?.createDeckWithCards?.deck?.id
+    const newDeckId = data?.createDeckWithCards?.deck?.id;
     if (newDeckId) {
-      await getDecks.refetch()
+      await getDecks.refetch();
       await router.replace({
         query: {
           ...router.query,
           deckId: newDeckId,
           heroClass: "ALLOWED",
         },
-      })
+      });
     }
-  }
+  };
 
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(false);
 
   return (
     <Layout>
@@ -247,5 +246,5 @@ export default () => {
         </CardCache.Provider>
       </DndProvider>
     </Layout>
-  )
-}
+  );
+};

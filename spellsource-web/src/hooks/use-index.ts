@@ -1,12 +1,13 @@
-import {useContext, useRef} from 'react'
+import { useContext, useRef } from "react";
 
-import elasticlunr, {Index} from 'elasticlunr'
-import {BlocklyDataContext} from "../pages/card-editor";
-import {BlockDef} from "../__generated__/blocks";
-import {CardDef} from "../components/card-display";
-import {ImageDef} from "../__generated__/client";
+import elasticlunr, { Index } from "elasticlunr";
+import { BlocklyDataContext } from "../pages/card-editor";
+import { BlockDef } from "../__generated__/blocks";
+import { CardDef } from "../components/card-display";
+import { ImageDef } from "../__generated__/client";
 
-export type SearchNode = BlockSearchNode | CardSearchNode | ArtSearchNode | MarkdownSearchNode
+export type SearchNode = BlockSearchNode | CardSearchNode | ArtSearchNode | MarkdownSearchNode;
+
 interface ISearchNode {
   id: string
   title: string
@@ -40,27 +41,27 @@ export const cardSearchNode = (card: CardDef): CardSearchNode => ({
   description: card.description || "",
   nodeType: "Card",
   node: card,
-  path: `/cards/${card.id}`
-});
+  path: `/cards/${card.id}`,
+})
 
 // returns index
 export const useIndex = () => {
-  const {allBlocks, allArt, classes, blocksByType, ready} = useContext(BlocklyDataContext);
+  const { allBlocks, allArt, classes, blocksByType, ready } = useContext(BlocklyDataContext)
   const index = useRef<Index<SearchNode> | undefined>(undefined)
   if (!index.current && ready) {
     index.current = elasticlunr<SearchNode>(idx => {
-      idx.setRef("id");
-      idx.addField("title");
+      idx.setRef("id")
+      idx.addField("title")
       idx.addField("description")
 
       for (const block of allBlocks) {
         idx.addDoc({
-          id: block.type ,
+          id: block.type,
           title: setupSearchMessage(block, blocksByType) ?? "",
           description: block.comment || "",
           nodeType: "Block",
           node: block,
-          path: `/card-editor?block=${block.type}`
+          path: `/card-editor?block=${block.type}`,
         })
       }
 
@@ -71,14 +72,14 @@ export const useIndex = () => {
           description: art.src,
           nodeType: "File",
           node: art,
-          path: art.src
+          path: art.src,
         })
       }
 
       for (const card of Object.values(classes)) {
         idx.addDoc(cardSearchNode(card))
       }
-    });
+    })
   }
 
   return index.current
@@ -86,7 +87,7 @@ export const useIndex = () => {
 
 const setupSearchMessage = (block: BlockDef, blocksByType: Record<string, BlockDef>) => {
   const getTextForBlock = (node: BlockDef) => {
-    let text = ''
+    let text = ""
     if (node.messages) {
       for (let i = 0; i < node.messages.length; i++) {
         let message = node.messages[i]
@@ -94,10 +95,10 @@ const setupSearchMessage = (block: BlockDef, blocksByType: Record<string, BlockD
           let args = node.args[i].args
           for (let j = 0; j < args.length; j++) {
             let text = getTextForArg(args[j])
-            message = message.replace('%' + (j + 1).toString(), text)
+            message = message.replace("%" + (j + 1).toString(), text)
           }
         }
-        text += message + ' '
+        text += message + " "
       }
     }
     return text
@@ -108,19 +109,19 @@ const setupSearchMessage = (block: BlockDef, blocksByType: Record<string, BlockD
       return getTextForBlock(blocksByType[arg.shadow.type])
     }
     if (!!arg.options) {
-      let text = ''
+      let text = ""
       for (let option of arg.options) {
-        text += option[0] + ' '
+        text += option[0] + " "
       }
       return text
     }
-    if (arg.type === 'field_label_plural') {
+    if (arg.type === "field_label_plural") {
       return arg.value
     }
-    return ''
+    return ""
   }
 
-  return getTextForBlock(block).replace(/\s+/g, ' ').trim()
+  return getTextForBlock(block).replace(/\s+/g, " ").trim()
 }
 
 

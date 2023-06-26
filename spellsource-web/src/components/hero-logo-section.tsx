@@ -1,8 +1,8 @@
-import React from "react"
-import * as styles from "./creative-layout.module.scss"
-import spellsourceLogo from "../../public/static/assets/spellsource.png"
-import cloud from "../../public/static/assets/transparent-cloud.png"
-import Image from "next/image"
+import React from "react";
+import * as styles from "./creative-layout.module.scss";
+import spellsourceLogo from "../../public/static/assets/spellsource.png";
+import cloud from "../../public/static/assets/transparent-cloud.png";
+import Image from "next/image";
 
 function HeroLogoSection() {
   return (
@@ -33,7 +33,7 @@ function HeroLogoSection() {
         className={`${styles.cloud} ${styles.scloud}`}
       />
     </div>
-  )
+  );
 }
 
-export default HeroLogoSection
+export default HeroLogoSection;

@@ -9,18 +9,19 @@ Card Types
 
 ![Example of Otherworlder minion, permanent, and spell cards (going from
 left to
-right).\|alt=\|212x212px](/static/wiki/Cards_example.png "fig:Example of Otherworlder minion, permanent, and spell cards (going from left to right).|alt=|212x212px")There
+right).\|alt=\|212x212px](/static/wiki/Cards_example.png "fig:Example of Otherworlder minion, permanent, and spell cards (going from left to right).|alt=|212x212px")
+There
 are a many types of cards that you can utilize in your quest to achieve
 victory!
 
--   **Minion Cards** have attack printed on the bottom left corner and
-    health on the bottom right corner.
--   **Weapon Cards** have their attack printed on the bottom left corner
-    and their durability printed on the bottom right.
--   **Spell Cards** have no general numerical attributes aside from
-    their mana costs. Their effects are printed on the body of the card.
--   **Permanent Cards** also have no other general numerical attribute.
-    Their effects are again, printed on the body of the card.
+- **Minion Cards** have attack printed on the bottom left corner and
+  health on the bottom right corner.
+- **Weapon Cards** have their attack printed on the bottom left corner
+  and their durability printed on the bottom right.
+- **Spell Cards** have no general numerical attributes aside from
+  their mana costs. Their effects are printed on the body of the card.
+- **Permanent Cards** also have no other general numerical attribute.
+  Their effects are again, printed on the body of the card.
 
 All of these cards feature text on the body of the text, which details
 abilities that the card has. These can vary from one time effects, to
@@ -46,21 +47,21 @@ Below you can find more information about the classes in the game.
 
 <div style="column-count:3;-moz-column-count:3;-webkit-column-count:3">
 
--   Archaeologist
--   Baron
--   Chef
--   Dragoon
--   Monk
--   Musician
--   Occultist
--   Otherworlder
--   Outlaw
--   Soulseeker
--   Storyteller
--   Summoner
--   Timeweaver
--   Vermancer
--   Witch Doctor
+- Archaeologist
+- Baron
+- Chef
+- Dragoon
+- Monk
+- Musician
+- Occultist
+- Otherworlder
+- Outlaw
+- Soulseeker
+- Storyteller
+- Summoner
+- Timeweaver
+- Vermancer
+- Witch Doctor
 
 </div>
 
@@ -71,11 +72,11 @@ In Spellsource, cards can have 5 different rarities, in the game,
 indicated by a small gem below the mana cost. Below is the list of card
 rarities.
 
--   Free
--   Common
--   Rare
--   Epic
--   Legendary
+- Free
+- Common
+- Rare
+- Epic
+- Legendary
 
 Rarities often correspond to the strength of a card. Free cards are more
 fundamental and simple, making them more commonly useful, but without

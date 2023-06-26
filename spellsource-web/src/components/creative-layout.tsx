@@ -1,11 +1,11 @@
-import React from "react"
-import Header from "./header"
-import Footer from "./footer"
-import * as styles from "./creative-layout.module.scss"
-import Link from "next/link"
-import { AuthButton } from "./auth-button"
-import Head from "next/head"
-import { use100vh } from "react-div-100vh"
+import React from "react";
+import Header from "./header";
+import Footer from "./footer";
+import * as styles from "./creative-layout.module.scss";
+import Link from "next/link";
+import { AuthButton } from "./auth-button";
+import Head from "next/head";
+import { use100vh } from "react-div-100vh";
 
 export const pages = [
   <li key={0}>
@@ -26,10 +26,10 @@ export const pages = [
   <li key={5}>
     <AuthButton />
   </li>,
-]
+];
 
 export default ({ children }) => {
-  const height = use100vh() ?? 1000
+  const height = use100vh() ?? 1000;
 
   return (
     <div className={styles.container} style={{ minHeight: height }}>
@@ -40,5 +40,5 @@ export default ({ children }) => {
       <div className={"flex-grow-1"}>{children}</div>
       <Footer pages={pages} />
     </div>
-  )
-}
+  );
+};

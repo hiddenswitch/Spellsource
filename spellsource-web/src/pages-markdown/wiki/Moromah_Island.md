@@ -24,29 +24,29 @@ Forest](/wiki/Yokai_Forest "wikilink").
 
 ### Cities
 
--   [Pearl Colony](/wiki/Pearl_Colony "wikilink"), a small encampment of human
-    settlers from Shun He's expedition, located at the river delta of
-    the Lungrath river spilling out into Dragon Bay.
--   [Atumjun](/wiki/Atumjun "wikilink"), the capitol of the
-    [Vohlok](/wiki/Vohlok "wikilink") state, built into Mount Moromah.
--   [Lotsashun](/wiki/Lotsashun "wikilink"), the capitol of the
-    [Fassnu](/wiki/Fassnu "wikilink") state, in the territory west of the
-    Vohlok in the Sot Mountains.
--   [Gramlot](/wiki/Gramlot "wikilink"), the capitol of the
-    [Jerbrod](/wiki/Jerbrod "wikilink"), in the territory east of Vohlok on
-    the cliffs of the Eastern Sot.
--   [The Fire Gate](/wiki/The_Fire_Gate "wikilink"), a cave entrance ringed by
-    perpetual flame maintained by [Vohlok](/wiki/Vohlok "wikilink") magic. It
-    is an entrance to the subterranean colonies of the
-    [Bogovey](/wiki/Bogovey "wikilink") below the Sot Mountains, located north
-    of Mount Moromah.
--   The [Demongate](/wiki/Demongate "wikilink"), a piece of mega-architecture
-    shaped like a horned square gateway, connects the original home of
-    the [Oni](/wiki/Oni "wikilink") to a salt flat on the island across a
-    narrow sea from [Krah](/wiki/Krah "wikilink").
--   [Shigaraki](/wiki/Shigaraki "wikilink"), the capitol of the ruling [Tanuki
-    tribe](/wiki/Tanuki_tribe "wikilink") of
-    [Hengeyokai](/wiki/Hengeyokai "wikilink"), located in the Yokai forest
-    along the Lungrath river.
+- [Pearl Colony](/wiki/Pearl_Colony "wikilink"), a small encampment of human
+  settlers from Shun He's expedition, located at the river delta of
+  the Lungrath river spilling out into Dragon Bay.
+- [Atumjun](/wiki/Atumjun "wikilink"), the capitol of the
+  [Vohlok](/wiki/Vohlok "wikilink") state, built into Mount Moromah.
+- [Lotsashun](/wiki/Lotsashun "wikilink"), the capitol of the
+  [Fassnu](/wiki/Fassnu "wikilink") state, in the territory west of the
+  Vohlok in the Sot Mountains.
+- [Gramlot](/wiki/Gramlot "wikilink"), the capitol of the
+  [Jerbrod](/wiki/Jerbrod "wikilink"), in the territory east of Vohlok on
+  the cliffs of the Eastern Sot.
+- [The Fire Gate](/wiki/The_Fire_Gate "wikilink"), a cave entrance ringed by
+  perpetual flame maintained by [Vohlok](/wiki/Vohlok "wikilink") magic. It
+  is an entrance to the subterranean colonies of the
+  [Bogovey](/wiki/Bogovey "wikilink") below the Sot Mountains, located north
+  of Mount Moromah.
+- The [Demongate](/wiki/Demongate "wikilink"), a piece of mega-architecture
+  shaped like a horned square gateway, connects the original home of
+  the [Oni](/wiki/Oni "wikilink") to a salt flat on the island across a
+  narrow sea from [Krah](/wiki/Krah "wikilink").
+- [Shigaraki](/wiki/Shigaraki "wikilink"), the capitol of the ruling [Tanuki
+  tribe](/wiki/Tanuki_tribe "wikilink") of
+  [Hengeyokai](/wiki/Hengeyokai "wikilink"), located in the Yokai forest
+  along the Lungrath river.
 
   

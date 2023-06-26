@@ -1,6 +1,6 @@
-import {NextApiRequest, NextApiResponse} from "next";
-import {isArray} from "lodash";
-import {getAllArt} from "../../../server/art";
+import { NextApiRequest, NextApiResponse } from "next";
+import { isArray } from "lodash";
+import { getAllArt } from "../../../server/art";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const nameParam = req.query["name"];
@@ -9,9 +9,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const artById = await getAllArt();
 
   if (name in artById) {
-    res.redirect("/" + artById[name].src)
+    res.redirect("/" + artById[name].src);
   } else {
     res.statusCode = 404;
     res.end();
   }
-}
+};

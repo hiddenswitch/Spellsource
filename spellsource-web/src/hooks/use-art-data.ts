@@ -1,6 +1,4 @@
-
-
-export default function useBlocklyData () {
+export default function useBlocklyData() {
   return {} as any;
   /*return useStaticQuery(graphql`
   query {

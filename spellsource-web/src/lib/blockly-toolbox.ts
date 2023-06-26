@@ -1,14 +1,14 @@
-import Blockly from "blockly"
-import * as BlocklyMiscUtils from "./blockly-misc-utils"
-import { ContextType } from "react"
-import { BlocklyDataContext } from "../pages/card-editor"
-import { CardDef } from "../components/card-display"
-import { ImageDef } from "../__generated__/client"
-import StaticCategoryInfo = Blockly.utils.toolbox.StaticCategoryInfo
+import Blockly from "blockly";
+import * as BlocklyMiscUtils from "./blockly-misc-utils";
+import { toTitleCaseCorrected } from "./blockly-misc-utils";
+import { ContextType } from "react";
+import { BlocklyDataContext } from "../pages/card-editor";
+import { CardDef } from "../components/card-display";
+import { ImageDef } from "../__generated__/client";
+import StaticCategoryInfo = Blockly.utils.toolbox.StaticCategoryInfo;
 import ToolboxInfo = Blockly.utils.toolbox.ToolboxInfo
 import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo
 import BlockInfo = Blockly.utils.toolbox.BlockInfo
-import { toTitleCaseCorrected } from "./blockly-misc-utils"
 
 /**
  * Initializes the necessary callbacks for the Variables tab's CUSTOM dynamic-ness
@@ -16,38 +16,38 @@ import { toTitleCaseCorrected } from "./blockly-misc-utils"
  */
 export function initCallbacks(workspace) {
   workspace.registerToolboxCategoryCallback("SPELLSOURCE_VARIABLES", (workspace) => {
-    var xmlList = []
-    var button = document.createElement("button")
-    button.setAttribute("text", "Create entity variable...")
-    button.setAttribute("callbackKey", "CREATE_VARIABLE_ENTITY")
-    xmlList.push(button)
+    var xmlList = [];
+    var button = document.createElement("button");
+    button.setAttribute("text", "Create entity variable...");
+    button.setAttribute("callbackKey", "CREATE_VARIABLE_ENTITY");
+    xmlList.push(button);
 
-    button = document.createElement("button")
-    button.setAttribute("text", Blockly["Msg"]["NEW_STRING_VARIABLE"])
-    button.setAttribute("callbackKey", "CREATE_VARIABLE_STRING")
-    xmlList.push(button)
+    button = document.createElement("button");
+    button.setAttribute("text", Blockly["Msg"]["NEW_STRING_VARIABLE"]);
+    button.setAttribute("callbackKey", "CREATE_VARIABLE_STRING");
+    xmlList.push(button);
 
-    button = document.createElement("button")
-    button.setAttribute("text", Blockly["Msg"]["NEW_NUMBER_VARIABLE"])
-    button.setAttribute("callbackKey", "CREATE_VARIABLE_NUMBER")
-    xmlList.push(button)
+    button = document.createElement("button");
+    button.setAttribute("text", Blockly["Msg"]["NEW_NUMBER_VARIABLE"]);
+    button.setAttribute("callbackKey", "CREATE_VARIABLE_NUMBER");
+    xmlList.push(button);
 
     workspace.registerButtonCallback(
       "CREATE_VARIABLE_STRING",
       Blockly.VariablesDynamic["onCreateVariableButtonClick_String"]
-    )
+    );
     workspace.registerButtonCallback(
       "CREATE_VARIABLE_NUMBER",
       Blockly.VariablesDynamic["onCreateVariableButtonClick_Number"]
-    )
+    );
     workspace.registerButtonCallback("CREATE_VARIABLE_ENTITY", () => {
-      Blockly.Variables.createVariableButtonHandler(workspace, undefined, "EntityReference")
-    })
+      Blockly.Variables.createVariableButtonHandler(workspace, undefined, "EntityReference");
+    });
 
-    var blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace)
-    xmlList = xmlList.concat(blockList)
-    return xmlList
-  })
+    var blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace);
+    xmlList = xmlList.concat(blockList);
+    return xmlList;
+  });
 }
 
 /**
@@ -374,7 +374,7 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
           */
       ]),
     ],
-  } as ToolboxInfo
+  } as ToolboxInfo;
 }
 
 /**
@@ -396,16 +396,16 @@ export function searchResultsCategory(results: string[]) {
           },
         ],
     { toolboxitemid: "Search Results" }
-  )
+  );
 }
 
 export function myCardsCategory(data: ContextType<typeof BlocklyDataContext>) {
-  const setOfSets = new Set([] as string[])
+  const setOfSets = new Set([] as string[]);
 
   for (const myCard of data.myCards) {
-    const set = myCard.cardScript.set
+    const set = myCard.cardScript.set;
     if (set && set !== "CUSTOM") {
-      setOfSets.add(set)
+      setOfSets.add(set);
     }
   }
 
@@ -427,7 +427,7 @@ export function myCardsCategory(data: ContextType<typeof BlocklyDataContext>) {
       ...[...setOfSets].map((set) => myCardsForSetCategory(set, data)),
     ],
     { toolboxitemid: "My Cards" }
-  )
+  );
 }
 
 export function myCardsForSetCategory(set: string, data: ContextType<typeof BlocklyDataContext>) {
@@ -448,7 +448,7 @@ export function myCardsForSetCategory(set: string, data: ContextType<typeof Bloc
         })),
     ],
     { toolboxitemid: `My ${set} Cards` }
-  )
+  );
 }
 
 /**
@@ -458,9 +458,9 @@ export function myCardsForSetCategory(set: string, data: ContextType<typeof Bloc
  */
 export function classesCategory(data: ContextType<typeof BlocklyDataContext>) {
   const myCards =
-    data.myCards.map((value) => value.cardScript as CardDef).filter((card) => card && card.type === "CLASS") ?? []
+    data.myCards.map((value) => value.cardScript as CardDef).filter((card) => card && card.type === "CLASS") ?? [];
 
-  const classCards = Object.values(data.classes).filter((card) => card.collectible !== false)
+  const classCards = Object.values(data.classes).filter((card) => card.collectible !== false);
 
   return category(
     "Classes",
@@ -502,7 +502,7 @@ export function classesCategory(data: ContextType<typeof BlocklyDataContext>) {
       })),
     ],
     { toolboxitemid: "Classes" }
-  )
+  );
 }
 
 /**
@@ -533,7 +533,7 @@ export function cardsCategory(data: ContextType<typeof BlocklyDataContext>) {
         })) ?? []),
     ],
     { toolboxitemid: "Cards" }
-  )
+  );
 }
 
 /**
@@ -551,16 +551,16 @@ function category(name, color, tooltip, contents, props = null): StaticCategoryI
     name: name,
     colour: color,
     tooltip: tooltip,
-  }
+  };
   if (contents?.length) {
-    category.contents = contents
+    category.contents = contents;
   }
   if (!!props) {
     for (let propsKey in props) {
-      category[propsKey] = props[propsKey]
+      category[propsKey] = props[propsKey];
     }
   }
-  return category
+  return category;
 }
 
 /**
@@ -570,16 +570,16 @@ function category(name, color, tooltip, contents, props = null): StaticCategoryI
  * @returns [category json blocks]
  */
 function subContents(prefix, sub) {
-  let contents: Partial<ToolboxItemInfo>[] = []
+  let contents: Partial<ToolboxItemInfo>[] = [];
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && block.startsWith(prefix)) {
-      let subcategory = Blockly.Blocks[block].json?.subcategory
+      let subcategory = Blockly.Blocks[block].json?.subcategory;
       if ((!subcategory && sub === "Misc") || subcategory?.includes(sub)) {
-        contents.push(getBlock(block))
+        contents.push(getBlock(block));
       }
     }
   }
-  return contents
+  return contents;
 }
 
 /**
@@ -588,13 +588,13 @@ function subContents(prefix, sub) {
  * @returns [category json blocks]
  */
 export function contents(prefix: string) {
-  let contents: Partial<ToolboxItemInfo>[] = []
+  let contents: Partial<ToolboxItemInfo>[] = [];
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && block.startsWith(prefix)) {
-      contents.push(getBlock(block))
+      contents.push(getBlock(block));
     }
   }
-  return contents
+  return contents;
 }
 
 /**
@@ -604,13 +604,13 @@ export function contents(prefix: string) {
  * @returns [category json blocks]
  */
 function exclusionContents(prefix, ...exclusions) {
-  let contents: Partial<ToolboxItemInfo>[] = []
+  let contents: Partial<ToolboxItemInfo>[] = [];
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && block.startsWith(prefix) && !exclusions.includes(block)) {
-      contents.push(getBlock(block))
+      contents.push(getBlock(block));
     }
   }
-  return contents
+  return contents;
 }
 
 /**
@@ -620,43 +620,43 @@ function exclusionContents(prefix, ...exclusions) {
  * @returns [category json blocks]
  */
 function inclusionContents(prefix, ...inclusions) {
-  let contents: Partial<ToolboxItemInfo>[] = []
+  let contents: Partial<ToolboxItemInfo>[] = [];
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && (block.startsWith(prefix) || inclusions.includes(block))) {
-      contents.push(getBlock(block))
+      contents.push(getBlock(block));
     }
   }
-  return contents
+  return contents;
 }
 
 function artContents(used) {
-  let contents: Partial<ToolboxItemInfo>[] = []
+  let contents: Partial<ToolboxItemInfo>[] = [];
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && block.startsWith("Art_") && (used === !!Blockly.Blocks[block].used || used === null)) {
-      contents.push(getBlock(block))
+      contents.push(getBlock(block));
     }
   }
-  return contents
+  return contents;
 }
 
 function artCategories() {
-  const categoryContents: Record<string, Partial<ToolboxItemInfo>[]> = {}
+  const categoryContents: Record<string, Partial<ToolboxItemInfo>[]> = {};
 
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && block.startsWith("Art_") && Blockly.Blocks[block]["art"]) {
-      const art = Blockly.Blocks[block]["art"] as ImageDef
+      const art = Blockly.Blocks[block]["art"] as ImageDef;
 
-      const folder = art.src.split("/").at(-2)
+      const folder = art.src.split("/").at(-2);
 
-      const name = toTitleCaseCorrected(folder)
+      const name = toTitleCaseCorrected(folder);
 
-      categoryContents[name] ??= []
+      categoryContents[name] ??= [];
 
-      categoryContents[name].push(getBlock(block))
+      categoryContents[name].push(getBlock(block));
     }
   }
 
-  return Object.entries(categoryContents).map(([name, contents]) => category(name, "#888888", name + " Art", contents))
+  return Object.entries(categoryContents).map(([name, contents]) => category(name, "#888888", name + " Art", contents));
 }
 
 /**
@@ -672,7 +672,7 @@ function defaultTest(block) {
     !block.endsWith("SHADOW") &&
     (!block.match(/^.*_.*_.*/) || BlocklyMiscUtils.isSpellsourceBlock(block)) &&
     !block.endsWith("_REFERENCE")
-  )
+  );
 }
 
 function getBlock(type: string): Partial<BlockInfo> {
@@ -680,38 +680,38 @@ function getBlock(type: string): Partial<BlockInfo> {
     type,
     kind: "block",
     inputs: blockInputs(type),
-  }
+  };
 }
 
 function blockInputs(type: string) {
-  let block = Blockly.Blocks[type]
-  let inputs = {} as Record<string, any>
+  let block = Blockly.Blocks[type];
+  let inputs = {} as Record<string, any>;
 
-  if (!block || !block.json) return inputs
+  if (!block || !block.json) return inputs;
 
-  let json = block.json
+  let json = block.json;
   for (let i = 0; i < 10; i++) {
-    if (!json["args" + i]) continue
-    const args = json["args" + i]
+    if (!json["args" + i]) continue;
+    const args = json["args" + i];
 
     for (let j = 0; j < 10; j++) {
-      const arg = args[j]
-      const name = arg?.name
-      if (!name) continue
+      const arg = args[j];
+      const name = arg?.name;
+      if (!name) continue;
 
       if (arg.shadow) {
-        const input = (inputs[name] ??= {} as any)
-        input.shadow = { ...arg.shadow }
-        input.shadow.inputs = blockInputs(input.shadow.type)
+        const input = (inputs[name] ??= {} as any);
+        input.shadow = { ...arg.shadow };
+        input.shadow.inputs = blockInputs(input.shadow.type);
       }
 
       if (arg.block) {
-        const input = (inputs[name] ??= {} as any)
-        input.block = { ...arg.block }
-        input.block.inputs = blockInputs(input.block.type)
+        const input = (inputs[name] ??= {} as any);
+        input.block = { ...arg.block };
+        input.block.inputs = blockInputs(input.block.type);
       }
     }
   }
 
-  return inputs
+  return inputs;
 }

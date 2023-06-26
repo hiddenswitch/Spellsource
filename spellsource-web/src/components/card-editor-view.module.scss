@@ -1,52 +1,52 @@
 .card-editor {
-    color: black;
-    height: 100%;
+  color: black;
+  height: 100%;
 }
 
 .editorOption {
-    border-style: ridge;
-    display: inline;
-    padding: 2px 2px 3px 1px;
+  border-style: ridge;
+  display: inline;
+  padding: 2px 2px 3px 1px;
 }
 
 .editorCheck {
-    height: 15px;
-    width: 15px;
-    -webkit-appearance: checkbox;
+  height: 15px;
+  width: 15px;
+  -webkit-appearance: checkbox;
 }
 
 .editorSearch {
-    display: inline;
-    border-radius: 0;
-    border: 2px solid var(--text-dark);
-    border-top: none;
-    border-left: none;
-    border-right: none;
+  display: inline;
+  border-radius: 0;
+  border: 2px solid var(--text-dark);
+  border-top: none;
+  border-left: none;
+  border-right: none;
 }
 
 .editorSearchNew {
-    font-size: 20px !important;
-    position: absolute;
-    z-index: 1000;
-    width: 200px !important;
-    top: 20px;
-    right: 35px;
-    padding: 5px 10px 5px 10px;
-    border-radius: 10px;
-    background-color: rgba(1, 1, 1, .05) !important;
+  font-size: 20px !important;
+  position: absolute;
+  z-index: 1000;
+  width: 200px !important;
+  top: 20px;
+  right: 35px;
+  padding: 5px 10px 5px 10px;
+  border-radius: 10px;
+  background-color: rgba(1, 1, 1, .05) !important;
 }
 
 .editorSearchNew:hover {
-    background-color: rgba(1, 1, 1, .1) !important;
+  background-color: rgba(1, 1, 1, .1) !important;
 }
 
 .editorSearchNew:focus {
-    background-color: rgba(1, 1, 1, .1) !important;
+  background-color: rgba(1, 1, 1, .1) !important;
 }
 
 .editorSearchNew::placeholder {
-    color: var(--text-dark);
-    opacity: .5;
+  color: var(--text-dark);
+  opacity: .5;
 }
 
 /* TODO needed still?

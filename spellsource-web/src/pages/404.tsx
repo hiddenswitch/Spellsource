@@ -1,7 +1,7 @@
-import Link from "next/link"
-import React from "react"
-import Layout from "../components/creative-layout"
-import { Container } from "react-bootstrap"
+import Link from "next/link";
+import React from "react";
+import Layout from "../components/creative-layout";
+import { Container } from "react-bootstrap";
 
 export default () => (
   <Layout>
@@ -18,4 +18,4 @@ export default () => (
       </p>
     </Container>
   </Layout>
-)
+);

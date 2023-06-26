@@ -4,7 +4,7 @@ path: /wiki/Dragovians
 layout: wiki
 ---
 
-  
+
 ![Vohlok](/static/wiki/Dragovian_Volhok_Concept_Art.jpg "fig:Vohlok")
 ![Fassnu](/static/wiki/Fassnu_Warrior.jpg "fig:Fassnu")
 ![Jerbrod](/static/wiki/Jerbrod_Martial_Warrior.png "fig:Jerbrod")
@@ -32,17 +32,17 @@ Each of the four major clans—[Vohlok](/wiki/Vohlok "wikilink"),
 [Fassnu](/wiki/Fassnu "wikilink"), [Jerbrod](Jerbrod "wikilink"), and
 [Bogovey](/wiki/Bogovey "wikilink")—have different characteristics.
 
--   The **Vohlok**, known for their learned warrior monks, have their
-    seat at the foot of Mount Moromah. Their traditional roles as the
-    guardians of the emperor and their proximity to the source of magic
-    make them powerful spell casters.
--   The **Fassnu** are ruthless samurai with limited flying. They are
-    stouter in appearance with massive jaws like upright crocodiles.
--   Living primarily in the city of [Gramlot](/wiki/Gramlot "wikilink"), the
-    **Jerbord** are supreme fishers, fliers, and traders. They are the
-    most social dragovians and resemble pterodactyls.
--   Finally, the **Bogovey** are heretics from the Vohlok Clan whose
-    wings have been cut off. They live underground.
+- The **Vohlok**, known for their learned warrior monks, have their
+  seat at the foot of Mount Moromah. Their traditional roles as the
+  guardians of the emperor and their proximity to the source of magic
+  make them powerful spell casters.
+- The **Fassnu** are ruthless samurai with limited flying. They are
+  stouter in appearance with massive jaws like upright crocodiles.
+- Living primarily in the city of [Gramlot](/wiki/Gramlot "wikilink"), the
+  **Jerbord** are supreme fishers, fliers, and traders. They are the
+  most social dragovians and resemble pterodactyls.
+- Finally, the **Bogovey** are heretics from the Vohlok Clan whose
+  wings have been cut off. They live underground.
 
 Obligate carnivores, Dragovians fish and hunt for food, which keeps
 their population small or dwindling. Their cities are great stone aeries

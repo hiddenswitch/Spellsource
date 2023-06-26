@@ -26,10 +26,11 @@ exponentially loses its volume.
 Lun isn't a substance that's fully understand yet by anyone, and
 the different peoples of the world have different theories on what Lun *really* is.
 
-Humans that take notice of magic generally think the same thing that [Shun He](/wiki/Shun_He "wikilink") thought for most of his life&mdash;that Lun comes from the air.
+Humans that take notice of magic generally think the same thing that [Shun He](/wiki/Shun_He "wikilink") thought for
+most of his life&mdash;that Lun comes from the air.
 However, Shun's experiences on Moromah island are leading him to change his views.
 
-The ruling clan of the  enforce the view
+The ruling clan of the enforce the view
 that Lun is the promethean gift of their emperor, the giant dragon slumbering inside
 Mount Moromah.
 
@@ -41,7 +42,9 @@ mountain and uses it to dominate the other clans. As keepers of the Emperor's te
 they follow strict traditions when it comes to magic and prevent any further
 investigation.
 
-The Bogovey clan was exiled from the rest of the Dragovians for questioning this orthodoxy. They believe they know the true nature of Lun. It comes from underground, and deep below the demongate on Krah, you can find the highest… and most dangerous concentrations of Lun.
+The Bogovey clan was exiled from the rest of the Dragovians for questioning this orthodoxy. They believe they know the
+true nature of Lun. It comes from underground, and deep below the demongate on Krah, you can find the highest… and most
+dangerous concentrations of Lun.
 
 The animals and spirits of the world don't think very much about Lun, besides
 just seeing it as a substance that's pretty much everywhere.

@@ -5,32 +5,32 @@ export default class SpellsourceTesting {
 
   // todo: this will have to migrate to some kind of session or context, because it should retrieve the card text from sql
   static runGym(heroclass1 = null, heroclass2 = null) {
-    const TestMain = Java.type('com.hiddenswitch.spellsource.gameplaytest.TestMain')
+    const TestMain = Java.type("com.hiddenswitch.spellsource.gameplaytest.TestMain")
     return TestMain.runGym(heroclass1, heroclass2)
   }
 
   static addCard(json) {
-    const TestMain = Java.type('com.hiddenswitch.spellsource.gameplaytest.TestMain')
+    const TestMain = Java.type("com.hiddenswitch.spellsource.gameplaytest.TestMain")
     return TestMain.addCard(json)
   }
 
   static spell(json, context, source = null, target = null) {
-    const TestMain = Java.type('com.hiddenswitch.spellsource.gameplaytest.TestMain')
+    const TestMain = Java.type("com.hiddenswitch.spellsource.gameplaytest.TestMain")
     TestMain.spellEffect(json, context, source, target)
   }
 
   static condition(json, context, source = null, target = null) {
-    const TestMain = Java.type('com.hiddenswitch.spellsource.gameplaytest.TestMain')
+    const TestMain = Java.type("com.hiddenswitch.spellsource.gameplaytest.TestMain")
     return TestMain.evalCondition(json, context, source, target)
   }
 
   static value(json, context, source = null, target = null) {
-    const TestMain = Java.type('com.hiddenswitch.spellsource.gameplaytest.TestMain')
+    const TestMain = Java.type("com.hiddenswitch.spellsource.gameplaytest.TestMain")
     return TestMain.evalValue(json, context, source, target)
   }
 
-  static target(entityReference, context, player=null, source = null) {
-    const TestMain = Java.type('com.hiddenswitch.spellsource.gameplaytest.TestMain')
+  static target(entityReference, context, player = null, source = null) {
+    const TestMain = Java.type("com.hiddenswitch.spellsource.gameplaytest.TestMain")
     if (player) {
       player = TestMain.player(player, context)
     }
@@ -38,7 +38,7 @@ export default class SpellsourceTesting {
   }
 
   static playCard(context, player, card, target = null) {
-    const TestMain = Java.type('com.hiddenswitch.spellsource.gameplaytest.TestMain')
+    const TestMain = Java.type("com.hiddenswitch.spellsource.gameplaytest.TestMain")
     if (player) {
       player = TestMain.player(player, context)
     }
@@ -62,7 +62,7 @@ export default class SpellsourceTesting {
   }
 
   static playMinion(context, player, card, target = null) {
-    const TestMain = Java.type('com.hiddenswitch.spellsource.gameplaytest.TestMain')
+    const TestMain = Java.type("com.hiddenswitch.spellsource.gameplaytest.TestMain")
     if (player) {
       player = TestMain.player(player, context)
     }
@@ -86,7 +86,7 @@ export default class SpellsourceTesting {
   }
 
   static receiveCard(context, player, cardid) {
-    const TestMain = Java.type('com.hiddenswitch.spellsource.gameplaytest.TestMain')
+    const TestMain = Java.type("com.hiddenswitch.spellsource.gameplaytest.TestMain")
     if (player) {
       player = TestMain.player(player, context)
     }

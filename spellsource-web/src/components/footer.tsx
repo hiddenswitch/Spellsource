@@ -1,7 +1,7 @@
-import Link from "next/link"
-import React from "react"
-import * as styles from "./creative-layout.module.scss"
-import { Container } from "react-bootstrap"
+import Link from "next/link";
+import React from "react";
+import * as styles from "./creative-layout.module.scss";
+import { Container } from "react-bootstrap";
 
 function Footer({ pages }: { pages?: any }) {
   return (
@@ -17,7 +17,7 @@ function Footer({ pages }: { pages?: any }) {
         </span>
       </Container>
     </div>
-  )
+  );
 }
 
-export default Footer
+export default Footer;

@@ -148,7 +148,9 @@
         "type": "field_variable",
         "name": "variable",
         "variable": "minion",
-        "variableTypes": ["EntityReference"],
+        "variableTypes": [
+          "EntityReference"
+        ],
         "defaultType": "EntityReference"
       }
     ]
@@ -188,7 +190,9 @@
         "type": "field_variable",
         "name": "variable",
         "variable": "card",
-        "variableTypes": ["EntityReference"],
+        "variableTypes": [
+          "EntityReference"
+        ],
         "defaultType": "EntityReference"
       }
     ]
