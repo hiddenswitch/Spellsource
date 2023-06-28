@@ -1489,6 +1489,12 @@ type Mutation {
     """
     input: PublishCardInput!
   ): PublishCardPayload
+  publishGitCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: PublishGitCardInput!
+  ): PublishGitCardPayload
   refreshCurrentCards(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -7414,6 +7420,39 @@ input PublishCardInput {
   """
   clientMutationId: String
   cardId: String
+}
+
+"""The output of our `publishGitCard` mutation."""
+type PublishGitCardPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  card: Card
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Card`. May be used by Relay 1."""
+  cardEdge(
+    """The method to use when ordering `Card`."""
+    orderBy: [CardsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): CardsEdge
+}
+
+"""All input for the `publishGitCard` mutation."""
+input PublishGitCardInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  cardId: String
+  json: JSON
+  creator: String
 }
 
 """The output of our `refreshCurrentCards` mutation."""

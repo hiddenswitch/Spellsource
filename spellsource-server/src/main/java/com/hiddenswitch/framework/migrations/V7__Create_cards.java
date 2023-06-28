@@ -1,9 +1,17 @@
 package com.hiddenswitch.framework.migrations;
 
 import com.hiddenswitch.framework.impl.MigrationUtils;
-import net.demilich.metastone.game.cards.CardCatalogue;
+import io.vertx.core.json.JsonObject;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
+
+import java.time.OffsetDateTime;
+import java.util.stream.Collectors;
+
+import static com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS;
 
 /**
  * Run this migration twice - once now, so that the legacy server migration executes correctly, and again in a repeating
@@ -21,6 +29,15 @@ public class V7__Create_cards extends BaseJavaMigration {
 
 	@Override
 	public void migrate(Context context) throws Exception {
-		MigrationUtils.cardsMigration(context); // TODO what to do about catch 22 with jooq
+		var dsl = DSL.using(context.getConnection(), SQLDialect.POSTGRES);
+		var ownerUserId = MigrationUtils.getSpellsourceUserId();
+		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
+		var insertAndUpdate = ClasspathCardCatalogue.INSTANCE.getRecords().values().stream().map(record -> {
+			var now = OffsetDateTime.now();
+			var encoded = JsonObject.mapFrom(record.getDesc());
+			return dsl.insertInto(CARDS, CARDS.ID, CARDS.CREATED_BY, CARDS.CREATED_AT, CARDS.LAST_MODIFIED, CARDS.CARD_SCRIPT)
+					.values(record.getId(), ownerUserId, now, now, encoded);
+		}).collect(Collectors.toList());
+		dsl.batch(insertAndUpdate).execute();
 	}
 }

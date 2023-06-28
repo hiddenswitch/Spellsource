@@ -19,6 +19,7 @@ import com.hiddenswitch.framework.schema.spellsource.routines.CreateDeckWithCard
 import com.hiddenswitch.framework.schema.spellsource.routines.GetLatestCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetUserId;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishCard;
+import com.hiddenswitch.framework.schema.spellsource.routines.PublishGitCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.RefreshCurrentCards;
 import com.hiddenswitch.framework.schema.spellsource.routines.SaveCard;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueFormats;
@@ -651,6 +652,56 @@ public class Routines {
     ) {
         PublishCard f = new PublishCard();
         f.setCardId(cardId);
+
+        return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.publish_git_card</code>
+     */
+    public static CardsRecord publishGitCard(
+          Configuration configuration
+        , String cardId
+        , JsonObject json
+        , String creator
+    ) {
+        PublishGitCard f = new PublishGitCard();
+        f.setCardId(cardId);
+        f.setJson(json);
+        f.setCreator(creator);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.publish_git_card</code> as a field.
+     */
+    public static Field<CardsRecord> publishGitCard(
+          String cardId
+        , JsonObject json
+        , String creator
+    ) {
+        PublishGitCard f = new PublishGitCard();
+        f.setCardId(cardId);
+        f.setJson(json);
+        f.setCreator(creator);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.publish_git_card</code> as a field.
+     */
+    public static Field<CardsRecord> publishGitCard(
+          Field<String> cardId
+        , Field<JsonObject> json
+        , Field<String> creator
+    ) {
+        PublishGitCard f = new PublishGitCard();
+        f.setCardId(cardId);
+        f.setJson(json);
+        f.setCreator(creator);
 
         return f.asField();
     }

@@ -235,10 +235,10 @@ begin
     card := spellsource.get_latest_card(card_id, false);
 
     if (card is null) then
-        -- TODO handle publishing git cards that have never been saved
-        return 0;
+        raise exception 'Trying to publish card % that has never been saved', card_id;
     end if;
 
+    -- create the new published card; triggers will handle side effects
     insert into spellsource.cards (id, created_by, blockly_workspace, card_script, created_at, is_published)
     values (card.id, card.created_by, card.blockly_workspace, card.card_script, card.created_at, true)
     returning succession into result;
@@ -249,12 +249,41 @@ begin
 end;
 $$ language plpgsql volatile;
 
+-- Publish a card from git, or don't if it's already up to date
+create or replace function spellsource.publish_git_card(card_id text, json jsonb, creator varchar) returns spellsource.cards as
+$$
+declare
+    card         spellsource.cards;
+    created_time timestamptz;
+begin
+    created_time := now();
+    
+    select * from spellsource.cards where id = card_id and is_published and not is_archived into card;
+
+    if (not (card is null)) then
+        if (card.card_script @> json and json @> card.card_script) then
+            -- no changes needed
+            return card;
+        end if;
+
+        created_time := card.created_at;
+    end if;
+
+    -- create the new published card; triggers will handle side effects
+    insert into spellsource.cards (id, created_by, card_script, created_at, is_published)
+    values (card_id, creator, json, created_time, true)
+    returning * into card;
+    
+    return card;
+end;
+$$ language plpgsql volatile;
+
 create or replace function spellsource.before_card_published() returns trigger as
 $$
 declare
 begin
     update spellsource.cards set is_archived = true where id = new.id and is_published;
-    
+
     return new;
 end;
 $$ language plpgsql;
@@ -449,7 +478,7 @@ create index if not exists idx_card_id_succession
     on spellsource.cards (id, succession);
 
 create unique index spellsource_cards_unique_id on spellsource.cards (id)
-where is_published and not is_archived;
+    where is_published and not is_archived;
 
 --- formats()
 create or replace function spellsource.card_catalogue_formats() returns setof spellsource.cards as

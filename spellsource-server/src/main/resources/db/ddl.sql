@@ -114,7 +114,7 @@ CREATE FUNCTION spellsource.before_card_published() RETURNS trigger
 declare
 begin
     update spellsource.cards set is_archived = true where id = new.id and is_published;
-    
+
     return new;
 end;
 $$;
@@ -753,10 +753,10 @@ begin
     card := spellsource.get_latest_card(card_id, false);
 
     if (card is null) then
-        -- TODO handle publishing git cards that have never been saved
-        return 0;
+        raise exception 'Trying to publish card % that has never been saved', card_id;
     end if;
 
+    -- create the new published card; triggers will handle side effects
     insert into spellsource.cards (id, created_by, blockly_workspace, card_script, created_at, is_published)
     values (card.id, card.created_by, card.blockly_workspace, card.card_script, card.created_at, true)
     returning succession into result;
@@ -769,6 +769,40 @@ $$;
 
 
 ALTER FUNCTION spellsource.publish_card(card_id text) OWNER TO admin;
+
+--
+-- Name: publish_git_card(text, jsonb, character varying); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.publish_git_card(card_id text, json jsonb, creator character varying) RETURNS spellsource.cards
+    LANGUAGE plpgsql
+    AS $$
+declare
+    card         spellsource.cards;
+    created_time timestamptz;
+begin
+    select * from spellsource.cards where id = card_id and is_published and not is_archived into card;
+
+    created_time := now();
+    if (card is not null) then
+        if (card.card_script @> json and json @> card.card_script) then
+            -- no changes needed
+            return card;
+        end if;
+
+        created_time := card.created_at;
+    end if;
+
+    -- create the new published card; triggers will handle side effects
+    insert into spellsource.cards (id, created_by, card_script, created_at, is_published)
+    values (card_id, creator, json, created_time, true) into card;
+    
+    return card;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.publish_git_card(card_id text, json jsonb, creator character varying) OWNER TO admin;
 
 --
 -- Name: refresh_current_cards(); Type: FUNCTION; Schema: spellsource; Owner: admin

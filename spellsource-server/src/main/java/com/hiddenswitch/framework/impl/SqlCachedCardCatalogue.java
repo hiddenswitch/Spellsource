@@ -57,7 +57,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		try {
 			invalidated.clear();
 			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
-			var cardDbRecords = await(cardsDao.findAll());
+			var cardDbRecords = await(cardsDao.findManyByCondition(CARDS.IS_PUBLISHED.eq(true).and(CARDS.IS_ARCHIVED.eq(false))));
 			clear();
 			loadFromCardDbRecords(cardDbRecords);
 		} finally {
