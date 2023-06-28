@@ -122,7 +122,11 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
       orderBy: orderBy ? [orderBy as CollectionCardsOrderBy, "COST_ASC", "NAME_ASC"] : ["COST_ASC", "NAME_ASC"],
       filter: {
         type: { in: [...cardTypes] },
-        class: heroClass ? (mainHeroClass ? { in: [mainHeroClass, "ANY"] } : { equalTo: heroClass }) : undefined,
+        class: heroClass
+          ? mainHeroClass && heroClass === "ALLOWED"
+            ? { in: [mainHeroClass, "ANY"] }
+            : { equalTo: heroClass }
+          : undefined,
         searchMessage: search ? { includesInsensitive: search.trim() } : undefined,
         collectible: { equalTo: !uncollectible },
         createdBy: ownOnly ? { equalTo: user ?? "" } : undefined,

@@ -257,7 +257,7 @@ declare
     created_time timestamptz;
 begin
     created_time := now();
-    
+
     select * from spellsource.cards where id = card_id and is_published and not is_archived into card;
 
     if (not (card is null)) then
@@ -273,7 +273,7 @@ begin
     insert into spellsource.cards (id, created_by, card_script, created_at, is_published)
     values (card_id, creator, json, created_time, true)
     returning * into card;
-    
+
     return card;
 end;
 $$ language plpgsql volatile;
@@ -340,7 +340,9 @@ select distinct created_by,
                 id,
                 card_script ->> 'name'                                as name
 from spellsource.cards
-where card_script ->> 'type' = 'CLASS';
+where card_script ->> 'type' = 'CLASS'
+  and is_published
+  and not is_archived;
 $$;
 create or replace view spellsource.classes as
 select *
@@ -477,7 +479,7 @@ create index if not exists idx_card_id
 create index if not exists idx_card_id_succession
     on spellsource.cards (id, succession);
 
-create unique index spellsource_cards_unique_id on spellsource.cards (id)
+create unique index if not exists spellsource_cards_unique_id on spellsource.cards (id)
     where is_published and not is_archived;
 
 --- formats()
@@ -487,7 +489,9 @@ begin
     return query
         select *
         from spellsource.cards
-        where card_script ->> 'type' = 'FORMAT';
+        where card_script ->> 'type' = 'FORMAT'
+          and is_published
+          and not is_archived;
 end;
 $$ language plpgsql volatile;
 
@@ -500,7 +504,9 @@ begin
         select *
         from spellsource.cards
         where card_script ->> 'type' = 'FORMAT'
-          and card_script ->> 'name' = card_name;
+          and card_script ->> 'name' = card_name
+          and is_published
+          and not is_archived;
 end;
 $$ language plpgsql volatile;
 
@@ -524,7 +530,9 @@ begin
          union
          select id
          from spellsource.cards
-         where card_script -> 'draft' ->> 'banned' = 'true');
+         where card_script -> 'draft' ->> 'banned' = 'true'
+           and is_published
+           and not is_archived);
 end;
 $$ language plpgsql;
 
@@ -549,7 +557,9 @@ begin
          union
          select id
          from spellsource.cards
-         where card_script -> 'artificialIntelligence' ->> 'hardRemoval' = 'true');
+         where card_script -> 'artificialIntelligence' ->> 'hardRemoval' = 'true'
+           and is_published
+           and not is_archived);
 end;
 $$ language plpgsql;
 
@@ -561,7 +571,9 @@ begin
     return query
         select *
         from spellsource.cards
-        where id = card_id;
+        where id = card_id
+          and is_published
+          and not is_archived;
 end;
 $$ language plpgsql;
 
@@ -576,6 +588,8 @@ begin
     into result_record
     from spellsource.cards
     where card_script ->> 'name' = card_name
+      and is_published
+      and not is_archived
     limit 1;
 
     return result_record;
@@ -597,6 +611,8 @@ begin
     from spellsource.cards
     where card_script ->> 'name' = card_name
       and card_script ->> 'heroClass' = hero_class
+      and is_published
+      and not is_archived
     limit 1;
 
     return result_record;
@@ -624,7 +640,9 @@ begin
           and (card_type is null or card_script ->> 'type' = card_type)
           and (rarity is null or card_script ->> 'rarity' = rarity)
           and (hero_class is null or card_script ->> 'heroClass' = hero_class)
-          and (attribute is null or card_script -> 'attributes' ? attribute);
+          and (attribute is null or card_script -> 'attributes' ? attribute)
+          and is_published
+          and not is_archived;
 end;
 $$ language plpgsql;
 
@@ -642,6 +660,8 @@ begin
     from spellsource.cards
     where card_script ->> 'heroClass' = hero_class
       and card_script ->> 'type' = 'HERO'
+      and is_published
+      and not is_archived
     limit 1;
 
     return result_record;
@@ -659,7 +679,9 @@ begin
     return query
         select *
         from spellsource.cards
-        where card_script ->> 'type' = 'CLASS';
+        where card_script ->> 'type' = 'CLASS'
+          and is_published
+          and not is_archived;
 end;
 $$ language plpgsql;
 
@@ -672,7 +694,9 @@ begin
         select *
         from spellsource.cards
         where card_script ->> 'type' = 'CLASS'
-          and (card_script ->> 'set') = any (sets);
+          and (card_script ->> 'set') = any (sets)
+          and is_published
+          and not is_archived;
 end;
 $$ language plpgsql;
 
@@ -691,6 +715,7 @@ begin
 end;
 $$ language plpgsql;
 
+drop trigger if exists card_changes_trigger on spellsource.cards;
 create trigger card_changes_trigger
     after insert or update or delete
     on spellsource.cards
@@ -735,7 +760,3 @@ $$ language plpgsql;
 
 --- todo: implement draft queries. the draft logic may be entirely replaced by a sql function, where it will be easier to author
 --- todo: create corresponding views and grant execution privileges to the card builder for these catalogue queries
-
-select *
-from spellsource.cards
-where is_published = false;
