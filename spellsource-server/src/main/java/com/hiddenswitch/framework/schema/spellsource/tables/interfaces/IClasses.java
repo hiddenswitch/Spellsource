@@ -38,14 +38,14 @@ public interface IClasses extends VertxPojo, Serializable {
     public String getClass_();
 
     /**
-     * Setter for <code>spellsource.classes.is_private</code>.
+     * Setter for <code>spellsource.classes.is_published</code>.
      */
-    public IClasses setIsPrivate(Boolean value);
+    public IClasses setIsPublished(Boolean value);
 
     /**
-     * Getter for <code>spellsource.classes.is_private</code>.
+     * Getter for <code>spellsource.classes.is_published</code>.
      */
-    public Boolean getIsPrivate();
+    public Boolean getIsPublished();
 
     /**
      * Setter for <code>spellsource.classes.collectible</code>.
@@ -107,7 +107,7 @@ public interface IClasses extends VertxPojo, Serializable {
         public default IClasses fromJson(io.vertx.core.json.JsonObject json) {
                 setOrThrow(this::setCreatedBy,json::getString,"created_by","java.lang.String");
                 setOrThrow(this::setClass_,json::getString,"class","java.lang.String");
-                setOrThrow(this::setIsPrivate,json::getBoolean,"is_private","java.lang.Boolean");
+                setOrThrow(this::setIsPublished,json::getBoolean,"is_published","java.lang.Boolean");
                 setOrThrow(this::setCollectible,json::getBoolean,"collectible","java.lang.Boolean");
                 setCardScript(com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().from(json.getJsonObject("card_script")));
                 setOrThrow(this::setId,json::getString,"id","java.lang.String");
@@ -121,7 +121,7 @@ public interface IClasses extends VertxPojo, Serializable {
                 io.vertx.core.json.JsonObject json = new io.vertx.core.json.JsonObject();
                 json.put("created_by",getCreatedBy());
                 json.put("class",getClass_());
-                json.put("is_private",getIsPrivate());
+                json.put("is_published",getIsPublished());
                 json.put("collectible",getCollectible());
                 json.put("card_script",com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().to(getCardScript()));
                 json.put("id",getId());

@@ -1,5 +1,6 @@
 import Blockly from "blockly";
 import * as BlocklyMiscUtils from "./blockly-misc-utils";
+import { Row } from "renderers/measurables/row";
 
 const SpellsourceRenderer = function (name) {
   SpellsourceRenderer["superClass_"].constructor.call(this, name);
@@ -61,8 +62,10 @@ SpellsourceRenderInfo.prototype.alignRowElements_ = function () {
 
 const spellsourceAlignRowElements = function () {
   const Types = Blockly.blockRendering.Types;
-  //align statement rows normally and align input rows to nearest 10 pixels
-  for (let i = 0, row; (row = this.rows[i]); i++) {
+  let maxWidth = 0;
+
+  // align statement rows normally and align input rows to nearest 10 pixels
+  for (let i = 0, row: Row; (row = this.rows[i]); i++) {
     if (row.hasStatement) {
       this.alignStatementRow_(row);
     }
@@ -81,8 +84,24 @@ const spellsourceAlignRowElements = function () {
       this.addAlignmentPadding_(row, missingSpace);
     }
   }
-  //spacer/top/bottom rows take on the width of their adjacent non-spacer row
-  for (let i = 0, row; (row = this.rows[i]); i++) {
+
+  // rows with no inputs/statements still have full width
+  for (let i = 0, row: Row; (row = this.rows[i]); i++) {
+    if (row.hasDummyInput && !row.hasStatement && !row.hasInlineInput && !row.hasExternalInput) {
+      const currentWidth = row.width;
+      const desiredWidth = this.getDesiredRowWidth_(row);
+      const missingSpace = desiredWidth - currentWidth;
+      if (missingSpace > 0) {
+        this.addAlignmentPadding_(row, missingSpace);
+      }
+      if (Types.isTopOrBottomRow(row)) {
+        row.widthWithConnectedBlocks = row.width;
+      }
+    }
+  }
+
+  // spacer/top/bottom rows take on the width of their adjacent non-spacer row
+  for (let i = 0, row: Row; (row = this.rows[i]); i++) {
     if (Types.isSpacer(row) || Types.isTopOrBottomRow(row)) {
       let currentWidth = row.width;
       let desiredWidth = 0;
@@ -113,4 +132,4 @@ const spellsourceAlignRowElements = function () {
   }
 };
 
-export default SpellsourceRenderer
+export default SpellsourceRenderer;

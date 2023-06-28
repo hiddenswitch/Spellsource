@@ -21,6 +21,6 @@ public class V7__Create_cards extends BaseJavaMigration {
 
 	@Override
 	public void migrate(Context context) throws Exception {
-		MigrationUtils.cardsMigration(context);
+		MigrationUtils.cardsMigration(context); // TODO what to do about catch 22 with jooq
 	}
 }

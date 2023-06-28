@@ -109,14 +109,26 @@ public interface ICardCatalogueGetFormat extends VertxPojo, Serializable {
     public Boolean getIsArchived();
 
     /**
-     * Setter for <code>spellsource.card_catalogue_get_format.is_private</code>.
+     * Setter for
+     * <code>spellsource.card_catalogue_get_format.is_published</code>.
      */
-    public ICardCatalogueGetFormat setIsPrivate(Boolean value);
+    public ICardCatalogueGetFormat setIsPublished(Boolean value);
 
     /**
-     * Getter for <code>spellsource.card_catalogue_get_format.is_private</code>.
+     * Getter for
+     * <code>spellsource.card_catalogue_get_format.is_published</code>.
      */
-    public Boolean getIsPrivate();
+    public Boolean getIsPublished();
+
+    /**
+     * Setter for <code>spellsource.card_catalogue_get_format.succession</code>.
+     */
+    public ICardCatalogueGetFormat setSuccession(Long value);
+
+    /**
+     * Getter for <code>spellsource.card_catalogue_get_format.succession</code>.
+     */
+    public Long getSuccession();
 
     // -------------------------------------------------------------------------
     // FROM and INTO
@@ -144,7 +156,8 @@ public interface ICardCatalogueGetFormat extends VertxPojo, Serializable {
                 setOrThrow(this::setCreatedAt,key -> {String s = json.getString(key); return s==null?null:java.time.OffsetDateTime.parse(s);},"created_at","java.time.OffsetDateTime");
                 setOrThrow(this::setLastModified,key -> {String s = json.getString(key); return s==null?null:java.time.OffsetDateTime.parse(s);},"last_modified","java.time.OffsetDateTime");
                 setOrThrow(this::setIsArchived,json::getBoolean,"is_archived","java.lang.Boolean");
-                setOrThrow(this::setIsPrivate,json::getBoolean,"is_private","java.lang.Boolean");
+                setOrThrow(this::setIsPublished,json::getBoolean,"is_published","java.lang.Boolean");
+                setOrThrow(this::setSuccession,json::getLong,"succession","java.lang.Long");
                 return this;
         }
 
@@ -160,7 +173,8 @@ public interface ICardCatalogueGetFormat extends VertxPojo, Serializable {
                 json.put("created_at",getCreatedAt()==null?null:getCreatedAt().toString());
                 json.put("last_modified",getLastModified()==null?null:getLastModified().toString());
                 json.put("is_archived",getIsArchived());
-                json.put("is_private",getIsPrivate());
+                json.put("is_published",getIsPublished());
+                json.put("succession",getSuccession());
                 return json;
         }
 

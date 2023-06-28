@@ -4,6 +4,7 @@
 package com.hiddenswitch.framework.schema.spellsource;
 
 
+import com.hiddenswitch.framework.schema.spellsource.routines.ArchiveCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.CanSeeDeck;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardCatalogueGetCardByName;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardCatalogueGetCardByNameAndClass;
@@ -11,10 +12,15 @@ import com.hiddenswitch.framework.schema.spellsource.routines.CardCatalogueGetHe
 import com.hiddenswitch.framework.schema.spellsource.routines.CardMessage;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardsCollectible;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardsCost;
+import com.hiddenswitch.framework.schema.spellsource.routines.CardsInDeckCardByCardId;
 import com.hiddenswitch.framework.schema.spellsource.routines.CardsType;
 import com.hiddenswitch.framework.schema.spellsource.routines.ClusteredGamesUpdateGameAndUsers;
 import com.hiddenswitch.framework.schema.spellsource.routines.CreateDeckWithCards;
+import com.hiddenswitch.framework.schema.spellsource.routines.GetLatestCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetUserId;
+import com.hiddenswitch.framework.schema.spellsource.routines.PublishCard;
+import com.hiddenswitch.framework.schema.spellsource.routines.RefreshCurrentCards;
+import com.hiddenswitch.framework.schema.spellsource.routines.SaveCard;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueFormats;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBannedDraftCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBaseClasses;
@@ -34,6 +40,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogu
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetFormatRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetHardRemovalCardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueQueryRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsInDeckRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.ClassesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
@@ -41,10 +48,13 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.GetClassesRe
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GetCollectionCardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.SetCardsInDeckRecord;
 
+import io.vertx.core.json.JsonObject;
+
 import org.jooq.Configuration;
 import org.jooq.Field;
 import org.jooq.JSON;
 import org.jooq.Result;
+import org.jooq.XML;
 
 
 /**
@@ -52,6 +62,19 @@ import org.jooq.Result;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Routines {
+
+    /**
+     * Call <code>spellsource.archive_card</code>
+     */
+    public static void archiveCard(
+          Configuration configuration
+        , String cardId
+    ) {
+        ArchiveCard p = new ArchiveCard();
+        p.setCardId(cardId);
+
+        p.execute(configuration);
+    }
 
     /**
      * Call <code>spellsource.can_see_deck</code>
@@ -340,6 +363,44 @@ public class Routines {
     }
 
     /**
+     * Call <code>spellsource.cards_in_deck_card_by_card_id</code>
+     */
+    public static CardsRecord cardsInDeckCardByCardId(
+          Configuration configuration
+        , CardsInDeckRecord cardsInDeck
+    ) {
+        CardsInDeckCardByCardId f = new CardsInDeckCardByCardId();
+        f.setCardsInDeck(cardsInDeck);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.cards_in_deck_card_by_card_id</code> as a field.
+     */
+    public static Field<CardsRecord> cardsInDeckCardByCardId(
+          CardsInDeckRecord cardsInDeck
+    ) {
+        CardsInDeckCardByCardId f = new CardsInDeckCardByCardId();
+        f.setCardsInDeck(cardsInDeck);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.cards_in_deck_card_by_card_id</code> as a field.
+     */
+    public static Field<CardsRecord> cardsInDeckCardByCardId(
+          Field<CardsInDeckRecord> cardsInDeck
+    ) {
+        CardsInDeckCardByCardId f = new CardsInDeckCardByCardId();
+        f.setCardsInDeck(cardsInDeck);
+
+        return f.asField();
+    }
+
+    /**
      * Call <code>spellsource.cards_type</code>
      */
     public static String cardsType(
@@ -492,6 +553,50 @@ public class Routines {
     }
 
     /**
+     * Call <code>spellsource.get_latest_card</code>
+     */
+    public static CardsRecord getLatestCard(
+          Configuration configuration
+        , String cardId
+        , Boolean published
+    ) {
+        GetLatestCard f = new GetLatestCard();
+        f.setCardId(cardId);
+        f.setPublished(published);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.get_latest_card</code> as a field.
+     */
+    public static Field<CardsRecord> getLatestCard(
+          String cardId
+        , Boolean published
+    ) {
+        GetLatestCard f = new GetLatestCard();
+        f.setCardId(cardId);
+        f.setPublished(published);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.get_latest_card</code> as a field.
+     */
+    public static Field<CardsRecord> getLatestCard(
+          Field<String> cardId
+        , Field<Boolean> published
+    ) {
+        GetLatestCard f = new GetLatestCard();
+        f.setCardId(cardId);
+        f.setPublished(published);
+
+        return f.asField();
+    }
+
+    /**
      * Call <code>spellsource.get_user_id</code>
      */
     public static String getUserId(
@@ -508,6 +613,105 @@ public class Routines {
      */
     public static Field<String> getUserId() {
         GetUserId f = new GetUserId();
+
+        return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.publish_card</code>
+     */
+    public static Long publishCard(
+          Configuration configuration
+        , String cardId
+    ) {
+        PublishCard f = new PublishCard();
+        f.setCardId(cardId);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.publish_card</code> as a field.
+     */
+    public static Field<Long> publishCard(
+          String cardId
+    ) {
+        PublishCard f = new PublishCard();
+        f.setCardId(cardId);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.publish_card</code> as a field.
+     */
+    public static Field<Long> publishCard(
+          Field<String> cardId
+    ) {
+        PublishCard f = new PublishCard();
+        f.setCardId(cardId);
+
+        return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.refresh_current_cards</code>
+     */
+    public static void refreshCurrentCards(
+          Configuration configuration
+    ) {
+        RefreshCurrentCards p = new RefreshCurrentCards();
+
+        p.execute(configuration);
+    }
+
+    /**
+     * Call <code>spellsource.save_card</code>
+     */
+    public static CardsRecord saveCard(
+          Configuration configuration
+        , String cardId
+        , XML workspace
+        , JsonObject json
+    ) {
+        SaveCard f = new SaveCard();
+        f.setCardId(cardId);
+        f.setWorkspace(workspace);
+        f.setJson(json);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.save_card</code> as a field.
+     */
+    public static Field<CardsRecord> saveCard(
+          String cardId
+        , XML workspace
+        , JsonObject json
+    ) {
+        SaveCard f = new SaveCard();
+        f.setCardId(cardId);
+        f.setWorkspace(workspace);
+        f.setJson(json);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.save_card</code> as a field.
+     */
+    public static Field<CardsRecord> saveCard(
+          Field<String> cardId
+        , Field<XML> workspace
+        , Field<JsonObject> json
+    ) {
+        SaveCard f = new SaveCard();
+        f.setCardId(cardId);
+        f.setWorkspace(workspace);
+        f.setJson(json);
 
         return f.asField();
     }

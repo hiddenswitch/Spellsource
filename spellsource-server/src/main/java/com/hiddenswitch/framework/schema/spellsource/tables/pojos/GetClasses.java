@@ -21,7 +21,7 @@ public class GetClasses implements VertxPojo, IGetClasses {
 
     private String createdBy;
     private String class_;
-    private Boolean isPrivate;
+    private Boolean isPublished;
     private Boolean collectible;
     private JsonObject cardScript;
     private String id;
@@ -32,7 +32,7 @@ public class GetClasses implements VertxPojo, IGetClasses {
     public GetClasses(IGetClasses value) {
         this.createdBy = value.getCreatedBy();
         this.class_ = value.getClass_();
-        this.isPrivate = value.getIsPrivate();
+        this.isPublished = value.getIsPublished();
         this.collectible = value.getCollectible();
         this.cardScript = value.getCardScript();
         this.id = value.getId();
@@ -42,7 +42,7 @@ public class GetClasses implements VertxPojo, IGetClasses {
     public GetClasses(
         String createdBy,
         String class_,
-        Boolean isPrivate,
+        Boolean isPublished,
         Boolean collectible,
         JsonObject cardScript,
         String id,
@@ -50,7 +50,7 @@ public class GetClasses implements VertxPojo, IGetClasses {
     ) {
         this.createdBy = createdBy;
         this.class_ = class_;
-        this.isPrivate = isPrivate;
+        this.isPublished = isPublished;
         this.collectible = collectible;
         this.cardScript = cardScript;
         this.id = id;
@@ -97,19 +97,19 @@ public class GetClasses implements VertxPojo, IGetClasses {
     }
 
     /**
-     * Getter for <code>spellsource.get_classes.is_private</code>.
+     * Getter for <code>spellsource.get_classes.is_published</code>.
      */
     @Override
-    public Boolean getIsPrivate() {
-        return this.isPrivate;
+    public Boolean getIsPublished() {
+        return this.isPublished;
     }
 
     /**
-     * Setter for <code>spellsource.get_classes.is_private</code>.
+     * Setter for <code>spellsource.get_classes.is_published</code>.
      */
     @Override
-    public GetClasses setIsPrivate(Boolean isPrivate) {
-        this.isPrivate = isPrivate;
+    public GetClasses setIsPublished(Boolean isPublished) {
+        this.isPublished = isPublished;
         return this;
     }
 
@@ -202,11 +202,11 @@ public class GetClasses implements VertxPojo, IGetClasses {
         }
         else if (!this.class_.equals(other.class_))
             return false;
-        if (this.isPrivate == null) {
-            if (other.isPrivate != null)
+        if (this.isPublished == null) {
+            if (other.isPublished != null)
                 return false;
         }
-        else if (!this.isPrivate.equals(other.isPrivate))
+        else if (!this.isPublished.equals(other.isPublished))
             return false;
         if (this.collectible == null) {
             if (other.collectible != null)
@@ -241,7 +241,7 @@ public class GetClasses implements VertxPojo, IGetClasses {
         int result = 1;
         result = prime * result + ((this.createdBy == null) ? 0 : this.createdBy.hashCode());
         result = prime * result + ((this.class_ == null) ? 0 : this.class_.hashCode());
-        result = prime * result + ((this.isPrivate == null) ? 0 : this.isPrivate.hashCode());
+        result = prime * result + ((this.isPublished == null) ? 0 : this.isPublished.hashCode());
         result = prime * result + ((this.collectible == null) ? 0 : this.collectible.hashCode());
         result = prime * result + ((this.cardScript == null) ? 0 : this.cardScript.hashCode());
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
@@ -255,7 +255,7 @@ public class GetClasses implements VertxPojo, IGetClasses {
 
         sb.append(createdBy);
         sb.append(", ").append(class_);
-        sb.append(", ").append(isPrivate);
+        sb.append(", ").append(isPublished);
         sb.append(", ").append(collectible);
         sb.append(", ").append(cardScript);
         sb.append(", ").append(id);
@@ -273,7 +273,7 @@ public class GetClasses implements VertxPojo, IGetClasses {
     public void from(IGetClasses from) {
         setCreatedBy(from.getCreatedBy());
         setClass_(from.getClass_());
-        setIsPrivate(from.getIsPrivate());
+        setIsPublished(from.getIsPublished());
         setCollectible(from.getCollectible());
         setCardScript(from.getCardScript());
         setId(from.getId());

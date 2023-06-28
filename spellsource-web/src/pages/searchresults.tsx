@@ -5,9 +5,9 @@ import Layout from "../components/creative-layout";
 import { ListGroup } from "react-bootstrap";
 import { useRouter } from "next/router";
 import { isArray } from "lodash";
-import { useGetCardsQuery } from "../__generated__/client";
 import { cardSearchNode } from "../hooks/use-index";
 import CardDisplay from "../components/card-display";
+import { useGetCollectionCardsQuery } from "../__generated__/client";
 
 const SearchResults = () => {
   const router = useRouter();
@@ -18,7 +18,7 @@ const SearchResults = () => {
 
   const [offset, setOffset] = useState(0);
 
-  const getCards = useGetCardsQuery({
+  const getCards = useGetCollectionCardsQuery({
     variables: {
       offset,
       limit: 20,
@@ -26,7 +26,7 @@ const SearchResults = () => {
     },
   });
 
-  const results = (getCards?.data?.allCards?.nodes ?? []).map((node) => ({
+  const results = (getCards?.data?.allCollectionCards?.nodes ?? []).map((node) => ({
     ...cardSearchNode(node.cardScript),
     id: node.id,
   }));
@@ -58,4 +58,4 @@ const SearchResults = () => {
   }
 };
 
-export default SearchResults
+export default SearchResults;

@@ -7,7 +7,8 @@ import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import io.vertx.await.Async;
 import io.vertx.await.impl.VirtualThreadContext;
-import io.vertx.core.*;
+import io.vertx.core.Future;
+import io.vertx.core.Vertx;
 import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.json.jackson.DatabindCodec;
 import io.vertx.pgclient.pubsub.PgSubscriber;
@@ -25,8 +26,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS;
 import static io.vertx.await.Async.await;
 
 public class SqlCachedCardCatalogue extends ListCardCatalogue {
@@ -210,7 +211,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		if (toFetch != null && !toFetch.isEmpty()) {
 			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 			if (Vertx.currentContext() != null && ((ContextInternal) Vertx.currentContext()).unwrap() instanceof VirtualThreadContext) {
-				var cardDbRecords = await(cardsDao.findManyByIds(toFetch));
+				var cardDbRecords = await(cardsDao.findManyById(toFetch));
 				Async.lock(lock.writeLock());
 				try {
 					loadFromCardDbRecords(cardDbRecords);
@@ -218,7 +219,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 					lock.writeLock().unlock();
 				}
 			} else {
-				cardsDao.findManyByIds(toFetch).onSuccess(cardDbRecords -> {
+				cardsDao.findManyById(toFetch).onSuccess(cardDbRecords -> {
 					Async.lock(lock.writeLock());
 					try {
 						loadFromCardDbRecords(cardDbRecords);

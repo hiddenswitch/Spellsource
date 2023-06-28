@@ -1,0 +1,67 @@
+[
+  {
+    "type": "ArtGen_Factory",
+    "colour": "#888888",
+    "nextStatement": [],
+    "hat": "cap",
+    "message0": "Art Factory",
+    "args0": [],
+    "message1": "Keywords",
+    "args1": [],
+    "message2": "%1",
+    "args2": [
+      {
+        "type": "input_statement",
+        "name": "keywords",
+        "check": [
+          "ArtGen_keyword"
+        ],
+        "shadow": {
+          "type": "ArtGen_keyword_SHADOW"
+        }
+      }
+    ],
+    "message3": "Create %1",
+    "args3": [
+      {
+        "type": "field_button",
+        "name": "button",
+        "text": "Click Me",
+        "function": "test"
+      }
+    ],
+    "message4": "%1",
+    "args4": [
+      {
+        "type": "field_progress_bar",
+        "name": "progress",
+        "progress": 0.5,
+        "width": 120
+      }
+    ]
+  },
+  {
+    "type": "ArtGen_keywords_medieval",
+    "colour": "#888888",
+    "previousStatement": [
+      "ArtGen_keyword"
+    ],
+    "nextStatement": [
+      "ArtGen_keyword"
+    ],
+    "message0": "Medieval",
+    "data": "medieval"
+  },
+  {
+    "type": "ArtGen_keyword_SHADOW",
+    "colour": "#888888",
+    "message0": "Keywords",
+    "previousStatement": [
+      "ArtGen_keyword"
+    ],
+    "nextStatement": [
+      "ArtGen_keyword"
+    ],
+    "comment": "Add keywords to your art"
+  }
+]

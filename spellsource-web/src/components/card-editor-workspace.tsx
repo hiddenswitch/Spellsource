@@ -13,7 +13,12 @@ import * as BlocklyToolbox from "../lib/blockly-toolbox";
 import { cardsCategory, classesCategory, myCardsCategory, myCardsForSetCategory } from "../lib/blockly-toolbox";
 import { BlocklyDataContext } from "../pages/card-editor";
 import useComponentDidMount from "../hooks/use-component-did-mount";
-import { useDeleteCardMutation, useGetCardLazyQuery, useUpsertCardMutation } from "../__generated__/client";
+import {
+  useDeleteCardMutation,
+  useGetCardLazyQuery,
+  usePublishCardMutation,
+  useSaveCardMutation,
+} from "../__generated__/client";
 import { CardDef } from "./card-display";
 import { useSession } from "next-auth/react";
 import { useDebounce } from "react-use";
@@ -35,6 +40,7 @@ interface CardEditorWorkspaceProps {
 export type InitBlockOptions = {
   onSave: (block: BlockSvg) => void;
   onDelete: (block: BlockSvg) => void;
+  onPublish: (block: BlockSvg) => void;
 };
 
 //Managing the creation and deletion of WorkspaceCard and WorkspaceHeroClass blocks
@@ -106,8 +112,9 @@ const CardEditorWorkspace = forwardRef(
 
     const [json, setJson] = useState("{}");
     const [allCardScript, setAllCardScript] = useState({} as Record<string, CardDef>);
-    const [upsertCard] = useUpsertCardMutation();
+    const [saveCard] = useSaveCardMutation();
     const [deleteCard] = useDeleteCardMutation();
+    const [publishCard] = usePublishCardMutation();
     const [getCard] = useGetCardLazyQuery();
 
     const saveAll = async () => {
@@ -130,6 +137,7 @@ const CardEditorWorkspace = forwardRef(
       const cardId = block.getFieldValue("id");
       const cardScript = block.cardScript;
       if (!cardId || !userId || !cardScript) return;
+
       const dom = Blockly.Xml.blockToDom(block, true) as Element;
       const comment = dom.getElementsByTagName("comment")[0];
       if (comment) {
@@ -154,10 +162,11 @@ const CardEditorWorkspace = forwardRef(
         delete cardScript.public;
       }
 
-      await upsertCard({
+      await saveCard({
         variables: {
           cardId,
-          card: { id: cardId, createdBy: userId, cardScript, blocklyWorkspace, isPrivate },
+          cardScript,
+          blocklyWorkspace,
         },
       });
     };
@@ -176,6 +185,12 @@ const CardEditorWorkspace = forwardRef(
         await deleteCard({ variables: { cardId } });
         await data.refreshMyCards();
       }
+    };
+
+    const onPublish = async (block: BlockSvg) => {
+      const cardId = block.getFieldValue("id");
+      await onSave(block);
+      await publishCard({ variables: { cardId } });
     };
 
     useEffect(() => {
@@ -206,7 +221,7 @@ const CardEditorWorkspace = forwardRef(
     // Run once before the workspace has been created
     useComponentDidMount(() => {
       if (!Blockly["spellsourceInit"]) {
-        BlocklyMiscUtils.initBlocks(data, { onSave, onDelete });
+        BlocklyMiscUtils.initBlocks(data, { onSave, onDelete, onPublish });
         BlocklyMiscUtils.initHeroClassColors(data);
         BlocklyMiscUtils.initArtBlcks(data);
         Blockly.blockRendering.register("spellsource", SpellsourceRenderer);
@@ -284,7 +299,7 @@ const CardEditorWorkspace = forwardRef(
           card = data.classes[cardId];
         } else {
           getCard({ variables: { id: cardId } }).then((value) => {
-            const card = value.data?.cardById;
+            const card = value.data?.getLatestCard;
             if (card) {
               if (card.blocklyWorkspace) {
                 const dom = Blockly.Xml.textToDom(card.blocklyWorkspace);

@@ -18,6 +18,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.Cards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.Classes;
 import com.hiddenswitch.framework.schema.spellsource.tables.CollectionCards;
+import com.hiddenswitch.framework.schema.spellsource.tables.CurrentCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckShares;
 import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
@@ -358,6 +359,11 @@ public class Tables {
      * The table <code>spellsource.collection_cards</code>.
      */
     public static final CollectionCards COLLECTION_CARDS = CollectionCards.COLLECTION_CARDS;
+
+    /**
+     * The table <code>spellsource.current_cards</code>.
+     */
+    public static final CurrentCards CURRENT_CARDS = CurrentCards.CURRENT_CARDS;
 
     /**
      * The table <code>spellsource.deck_player_attribute_tuples</code>.

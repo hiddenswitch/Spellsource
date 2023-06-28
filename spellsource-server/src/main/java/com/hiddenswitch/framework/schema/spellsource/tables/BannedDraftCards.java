@@ -8,8 +8,6 @@ import com.hiddenswitch.framework.schema.spellsource.Keys;
 import com.hiddenswitch.framework.schema.spellsource.Spellsource;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.BannedDraftCardsRecord;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Function;
 
 import org.jooq.Field;
@@ -99,23 +97,6 @@ public class BannedDraftCards extends TableImpl<BannedDraftCardsRecord> {
     @Override
     public UniqueKey<BannedDraftCardsRecord> getPrimaryKey() {
         return Keys.BANNED_DRAFT_CARDS_PKEY;
-    }
-
-    @Override
-    public List<ForeignKey<BannedDraftCardsRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.BANNED_DRAFT_CARDS__BANNED_DRAFT_CARDS_CARD_ID_FKEY);
-    }
-
-    private transient Cards _cards;
-
-    /**
-     * Get the implicit join path to the <code>spellsource.cards</code> table.
-     */
-    public Cards cards() {
-        if (_cards == null)
-            _cards = new Cards(this, Keys.BANNED_DRAFT_CARDS__BANNED_DRAFT_CARDS_CARD_ID_FKEY);
-
-        return _cards;
     }
 
     @Override

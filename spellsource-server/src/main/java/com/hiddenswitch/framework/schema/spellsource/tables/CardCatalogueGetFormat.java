@@ -14,10 +14,10 @@ import java.time.OffsetDateTime;
 import java.util.function.Function;
 
 import org.jooq.Field;
-import org.jooq.Function9;
+import org.jooq.Function10;
 import org.jooq.Name;
 import org.jooq.Records;
-import org.jooq.Row9;
+import org.jooq.Row10;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -96,9 +96,15 @@ public class CardCatalogueGetFormat extends TableImpl<CardCatalogueGetFormatReco
     public final TableField<CardCatalogueGetFormatRecord, Boolean> IS_ARCHIVED = createField(DSL.name("is_archived"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * The column <code>spellsource.card_catalogue_get_format.is_private</code>.
+     * The column
+     * <code>spellsource.card_catalogue_get_format.is_published</code>.
      */
-    public final TableField<CardCatalogueGetFormatRecord, Boolean> IS_PRIVATE = createField(DSL.name("is_private"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("true", SQLDataType.BOOLEAN)), this, "");
+    public final TableField<CardCatalogueGetFormatRecord, Boolean> IS_PUBLISHED = createField(DSL.name("is_published"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>spellsource.card_catalogue_get_format.succession</code>.
+     */
+    public final TableField<CardCatalogueGetFormatRecord, Long> SUCCESSION = createField(DSL.name("succession"), SQLDataType.BIGINT.nullable(false), this, "");
 
     private CardCatalogueGetFormat(Name alias, Table<CardCatalogueGetFormatRecord> aliased) {
         this(alias, aliased, new Field[] {
@@ -179,12 +185,12 @@ public class CardCatalogueGetFormat extends TableImpl<CardCatalogueGetFormatReco
     }
 
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row10 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<String, String, String, XML, JsonObject, OffsetDateTime, OffsetDateTime, Boolean, Boolean> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row10<String, String, String, XML, JsonObject, OffsetDateTime, OffsetDateTime, Boolean, Boolean, Long> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 
     /**
@@ -216,7 +222,7 @@ public class CardCatalogueGetFormat extends TableImpl<CardCatalogueGetFormatReco
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function9<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function10<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? super Long, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -224,7 +230,7 @@ public class CardCatalogueGetFormat extends TableImpl<CardCatalogueGetFormatReco
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? super Long, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

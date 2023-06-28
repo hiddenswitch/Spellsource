@@ -114,15 +114,27 @@ public interface ICardCatalogueGetBaseClasses extends VertxPojo, Serializable {
 
     /**
      * Setter for
-     * <code>spellsource.card_catalogue_get_base_classes.is_private</code>.
+     * <code>spellsource.card_catalogue_get_base_classes.is_published</code>.
      */
-    public ICardCatalogueGetBaseClasses setIsPrivate(Boolean value);
+    public ICardCatalogueGetBaseClasses setIsPublished(Boolean value);
 
     /**
      * Getter for
-     * <code>spellsource.card_catalogue_get_base_classes.is_private</code>.
+     * <code>spellsource.card_catalogue_get_base_classes.is_published</code>.
      */
-    public Boolean getIsPrivate();
+    public Boolean getIsPublished();
+
+    /**
+     * Setter for
+     * <code>spellsource.card_catalogue_get_base_classes.succession</code>.
+     */
+    public ICardCatalogueGetBaseClasses setSuccession(Long value);
+
+    /**
+     * Getter for
+     * <code>spellsource.card_catalogue_get_base_classes.succession</code>.
+     */
+    public Long getSuccession();
 
     // -------------------------------------------------------------------------
     // FROM and INTO
@@ -150,7 +162,8 @@ public interface ICardCatalogueGetBaseClasses extends VertxPojo, Serializable {
                 setOrThrow(this::setCreatedAt,key -> {String s = json.getString(key); return s==null?null:java.time.OffsetDateTime.parse(s);},"created_at","java.time.OffsetDateTime");
                 setOrThrow(this::setLastModified,key -> {String s = json.getString(key); return s==null?null:java.time.OffsetDateTime.parse(s);},"last_modified","java.time.OffsetDateTime");
                 setOrThrow(this::setIsArchived,json::getBoolean,"is_archived","java.lang.Boolean");
-                setOrThrow(this::setIsPrivate,json::getBoolean,"is_private","java.lang.Boolean");
+                setOrThrow(this::setIsPublished,json::getBoolean,"is_published","java.lang.Boolean");
+                setOrThrow(this::setSuccession,json::getLong,"succession","java.lang.Long");
                 return this;
         }
 
@@ -166,7 +179,8 @@ public interface ICardCatalogueGetBaseClasses extends VertxPojo, Serializable {
                 json.put("created_at",getCreatedAt()==null?null:getCreatedAt().toString());
                 json.put("last_modified",getLastModified()==null?null:getLastModified().toString());
                 json.put("is_archived",getIsArchived());
-                json.put("is_private",getIsPrivate());
+                json.put("is_published",getIsPublished());
+                json.put("succession",getSuccession());
                 return json;
         }
 

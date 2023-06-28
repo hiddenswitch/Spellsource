@@ -1,7 +1,7 @@
 fragment class on Class {
   class
   collectible
-  isPrivate
+  isPublished
   cardScript
   id
   name

@@ -31,7 +31,8 @@ public class CardCatalogueFormats implements VertxPojo, ICardCatalogueFormats {
     private OffsetDateTime createdAt;
     private OffsetDateTime lastModified;
     private Boolean isArchived;
-    private Boolean isPrivate;
+    private Boolean isPublished;
+    private Long succession;
 
     public CardCatalogueFormats() {}
 
@@ -44,7 +45,8 @@ public class CardCatalogueFormats implements VertxPojo, ICardCatalogueFormats {
         this.createdAt = value.getCreatedAt();
         this.lastModified = value.getLastModified();
         this.isArchived = value.getIsArchived();
-        this.isPrivate = value.getIsPrivate();
+        this.isPublished = value.getIsPublished();
+        this.succession = value.getSuccession();
     }
 
     public CardCatalogueFormats(
@@ -56,7 +58,8 @@ public class CardCatalogueFormats implements VertxPojo, ICardCatalogueFormats {
         OffsetDateTime createdAt,
         OffsetDateTime lastModified,
         Boolean isArchived,
-        Boolean isPrivate
+        Boolean isPublished,
+        Long succession
     ) {
         this.id = id;
         this.createdBy = createdBy;
@@ -66,7 +69,8 @@ public class CardCatalogueFormats implements VertxPojo, ICardCatalogueFormats {
         this.createdAt = createdAt;
         this.lastModified = lastModified;
         this.isArchived = isArchived;
-        this.isPrivate = isPrivate;
+        this.isPublished = isPublished;
+        this.succession = succession;
     }
 
         public CardCatalogueFormats(io.vertx.core.json.JsonObject json) {
@@ -213,19 +217,36 @@ public class CardCatalogueFormats implements VertxPojo, ICardCatalogueFormats {
     }
 
     /**
-     * Getter for <code>spellsource.card_catalogue_formats.is_private</code>.
+     * Getter for <code>spellsource.card_catalogue_formats.is_published</code>.
      */
     @Override
-    public Boolean getIsPrivate() {
-        return this.isPrivate;
+    public Boolean getIsPublished() {
+        return this.isPublished;
     }
 
     /**
-     * Setter for <code>spellsource.card_catalogue_formats.is_private</code>.
+     * Setter for <code>spellsource.card_catalogue_formats.is_published</code>.
      */
     @Override
-    public CardCatalogueFormats setIsPrivate(Boolean isPrivate) {
-        this.isPrivate = isPrivate;
+    public CardCatalogueFormats setIsPublished(Boolean isPublished) {
+        this.isPublished = isPublished;
+        return this;
+    }
+
+    /**
+     * Getter for <code>spellsource.card_catalogue_formats.succession</code>.
+     */
+    @Override
+    public Long getSuccession() {
+        return this.succession;
+    }
+
+    /**
+     * Setter for <code>spellsource.card_catalogue_formats.succession</code>.
+     */
+    @Override
+    public CardCatalogueFormats setSuccession(Long succession) {
+        this.succession = succession;
         return this;
     }
 
@@ -286,11 +307,17 @@ public class CardCatalogueFormats implements VertxPojo, ICardCatalogueFormats {
         }
         else if (!this.isArchived.equals(other.isArchived))
             return false;
-        if (this.isPrivate == null) {
-            if (other.isPrivate != null)
+        if (this.isPublished == null) {
+            if (other.isPublished != null)
                 return false;
         }
-        else if (!this.isPrivate.equals(other.isPrivate))
+        else if (!this.isPublished.equals(other.isPublished))
+            return false;
+        if (this.succession == null) {
+            if (other.succession != null)
+                return false;
+        }
+        else if (!this.succession.equals(other.succession))
             return false;
         return true;
     }
@@ -307,7 +334,8 @@ public class CardCatalogueFormats implements VertxPojo, ICardCatalogueFormats {
         result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
         result = prime * result + ((this.lastModified == null) ? 0 : this.lastModified.hashCode());
         result = prime * result + ((this.isArchived == null) ? 0 : this.isArchived.hashCode());
-        result = prime * result + ((this.isPrivate == null) ? 0 : this.isPrivate.hashCode());
+        result = prime * result + ((this.isPublished == null) ? 0 : this.isPublished.hashCode());
+        result = prime * result + ((this.succession == null) ? 0 : this.succession.hashCode());
         return result;
     }
 
@@ -323,7 +351,8 @@ public class CardCatalogueFormats implements VertxPojo, ICardCatalogueFormats {
         sb.append(", ").append(createdAt);
         sb.append(", ").append(lastModified);
         sb.append(", ").append(isArchived);
-        sb.append(", ").append(isPrivate);
+        sb.append(", ").append(isPublished);
+        sb.append(", ").append(succession);
 
         sb.append(")");
         return sb.toString();
@@ -343,7 +372,8 @@ public class CardCatalogueFormats implements VertxPojo, ICardCatalogueFormats {
         setCreatedAt(from.getCreatedAt());
         setLastModified(from.getLastModified());
         setIsArchived(from.getIsArchived());
-        setIsPrivate(from.getIsPrivate());
+        setIsPublished(from.getIsPublished());
+        setSuccession(from.getSuccession());
     }
 
     @Override

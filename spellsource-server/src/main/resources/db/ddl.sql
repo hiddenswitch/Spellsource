@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 13.11 (Debian 13.11-1.pgdg110+1)
--- Dumped by pg_dump version 15.1 (Debian 15.1-1.pgdg110+1)
+-- Dumped by pg_dump version 13.11
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -33,15 +33,6 @@ CREATE SCHEMA keycloak;
 
 
 ALTER SCHEMA keycloak OWNER TO admin;
-
---
--- Name: public; Type: SCHEMA; Schema: -; Owner: admin
---
-
--- *not* creating schema, since initdb creates it
-
-
-ALTER SCHEMA public OWNER TO admin;
 
 --
 -- Name: spellsource; Type: SCHEMA; Schema: -; Owner: admin
@@ -79,6 +70,57 @@ CREATE TYPE spellsource.game_user_victory_enum AS ENUM (
 
 
 ALTER TYPE spellsource.game_user_victory_enum OWNER TO admin;
+
+--
+-- Name: after_card_published(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.after_card_published() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+declare
+begin
+    execute spellsource.refresh_current_cards();
+
+    return new;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.after_card_published() OWNER TO admin;
+
+--
+-- Name: archive_card(text); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.archive_card(card_id text) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+begin
+    update spellsource.cards set is_archived = true where id = card_id and is_published = false;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.archive_card(card_id text) OWNER TO admin;
+
+--
+-- Name: before_card_published(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.before_card_published() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+declare
+begin
+    update spellsource.cards set is_archived = true where id = new.id and is_published;
+    
+    return new;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.before_card_published() OWNER TO admin;
 
 SET default_tablespace = '';
 
@@ -159,7 +201,8 @@ CREATE TABLE spellsource.cards (
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     last_modified timestamp with time zone DEFAULT now() NOT NULL,
     is_archived boolean DEFAULT false NOT NULL,
-    is_private boolean DEFAULT true NOT NULL
+    is_published boolean DEFAULT false NOT NULL,
+    succession bigint NOT NULL
 );
 
 
@@ -427,12 +470,12 @@ ALTER FUNCTION spellsource.card_change_notify_event() OWNER TO admin;
 -- Name: get_classes(); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
-CREATE FUNCTION spellsource.get_classes() RETURNS TABLE(created_by character varying, class text, is_private boolean, collectible boolean, card_script jsonb, id text, name text)
+CREATE FUNCTION spellsource.get_classes() RETURNS TABLE(created_by character varying, class text, is_published boolean, collectible boolean, card_script jsonb, id text, name text)
     LANGUAGE sql
     AS $$
 select distinct created_by,
                 card_script ->> 'heroClass'                           as class,
-                is_private,
+                is_published,
                 coalesce(card_script ->> 'collectible', 'true')::bool as collectible,
                 card_script,
                 id,
@@ -451,12 +494,12 @@ ALTER FUNCTION spellsource.get_classes() OWNER TO admin;
 CREATE VIEW spellsource.classes AS
  SELECT get_classes.created_by,
     get_classes.class,
-    get_classes.is_private,
+    get_classes.is_published,
     get_classes.collectible,
     get_classes.card_script,
     get_classes.id,
     get_classes.name
-   FROM spellsource.get_classes() get_classes(created_by, class, is_private, collectible, card_script, id, name);
+   FROM spellsource.get_classes() get_classes(created_by, class, is_published, collectible, card_script, id, name);
 
 
 ALTER TABLE spellsource.classes OWNER TO admin;
@@ -507,6 +550,48 @@ $$;
 
 
 ALTER FUNCTION spellsource.cards_cost(card spellsource.cards) OWNER TO admin;
+
+--
+-- Name: cards_in_deck; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.cards_in_deck (
+    id bigint NOT NULL,
+    deck_id text NOT NULL,
+    card_id text NOT NULL
+);
+
+
+ALTER TABLE spellsource.cards_in_deck OWNER TO admin;
+
+--
+-- Name: COLUMN cards_in_deck.deck_id; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON COLUMN spellsource.cards_in_deck.deck_id IS 'deleting a deck deletes all its card references';
+
+
+--
+-- Name: COLUMN cards_in_deck.card_id; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON COLUMN spellsource.cards_in_deck.card_id IS 'cannot delete cards that are currently used in decks';
+
+
+--
+-- Name: cards_in_deck_card_by_card_id(spellsource.cards_in_deck); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.cards_in_deck_card_by_card_id(cards_in_deck spellsource.cards_in_deck) RETURNS spellsource.cards
+    LANGUAGE plpgsql STABLE
+    AS $$
+begin
+    return spellsource.get_latest_card(cards_in_deck.card_id, true);
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.cards_in_deck_card_by_card_id(cards_in_deck spellsource.cards_in_deck) OWNER TO admin;
 
 --
 -- Name: cards_type(spellsource.cards); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -608,17 +693,37 @@ select card.id,
        coalesce(card.card_script ->> 'baseManaCost', '0')::int        as cost,
        (coalesce(card.card_script ->> 'collectible', 'true')::bool and
         (card.card_script ->> 'heroClass' = 'ANY' or cl.collectible)) as collectible,
-       spellsource.card_message(card, cl)                             as search_message,
+       spellsource.card_message(card::spellsource.cards, cl)          as search_message,
        last_modified,
        created_at
 from spellsource.cards card
          join spellsource.classes cl on card.card_script ->> 'heroClass' = cl.class
 where card.card_script ->> 'set' != 'TEST'
-  and not card.is_archived;
+  and not card.is_archived
+  and card.is_published;
 $$;
 
 
 ALTER FUNCTION spellsource.get_collection_cards() OWNER TO admin;
+
+--
+-- Name: get_latest_card(text, boolean); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.get_latest_card(card_id text, published boolean) RETURNS spellsource.cards
+    LANGUAGE sql STABLE
+    AS $_$
+select *
+from spellsource.cards
+where id = $1
+  and is_published = $2
+  and not is_archived
+order by succession desc
+limit 1
+$_$;
+
+
+ALTER FUNCTION spellsource.get_latest_card(card_id text, published boolean) OWNER TO admin;
 
 --
 -- Name: get_user_id(); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -634,31 +739,82 @@ $$;
 ALTER FUNCTION spellsource.get_user_id() OWNER TO admin;
 
 --
--- Name: cards_in_deck; Type: TABLE; Schema: spellsource; Owner: admin
+-- Name: publish_card(text); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
-CREATE TABLE spellsource.cards_in_deck (
-    id bigint NOT NULL,
-    deck_id text NOT NULL,
-    card_id text NOT NULL
-);
+CREATE FUNCTION spellsource.publish_card(card_id text) RETURNS bigint
+    LANGUAGE plpgsql
+    AS $$
+declare
+    card   spellsource.cards;
+    result bigint;
+begin
+    -- assumes that save has already been called
+    card := spellsource.get_latest_card(card_id, false);
+
+    if (card is null) then
+        -- TODO handle publishing git cards that have never been saved
+        return 0;
+    end if;
+
+    insert into spellsource.cards (id, created_by, blockly_workspace, card_script, created_at, is_published)
+    values (card.id, card.created_by, card.blockly_workspace, card.card_script, card.created_at, true)
+    returning succession into result;
+
+    -- TODO update decks?
+
+    return result;
+end;
+$$;
 
 
-ALTER TABLE spellsource.cards_in_deck OWNER TO admin;
+ALTER FUNCTION spellsource.publish_card(card_id text) OWNER TO admin;
 
 --
--- Name: COLUMN cards_in_deck.deck_id; Type: COMMENT; Schema: spellsource; Owner: admin
+-- Name: refresh_current_cards(); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
-COMMENT ON COLUMN spellsource.cards_in_deck.deck_id IS 'deleting a deck deletes all its card references';
+CREATE FUNCTION spellsource.refresh_current_cards() RETURNS void
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $$
+begin
+    refresh materialized view spellsource.current_cards;
+end
+$$;
 
+
+ALTER FUNCTION spellsource.refresh_current_cards() OWNER TO admin;
 
 --
--- Name: COLUMN cards_in_deck.card_id; Type: COMMENT; Schema: spellsource; Owner: admin
+-- Name: save_card(text, xml, jsonb); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
-COMMENT ON COLUMN spellsource.cards_in_deck.card_id IS 'cannot delete cards that are currently used in decks';
+CREATE FUNCTION spellsource.save_card(card_id text, workspace xml, json jsonb) RETURNS spellsource.cards
+    LANGUAGE plpgsql
+    AS $$
+declare
+    card spellsource.cards;
+begin
+    card := spellsource.get_latest_card(card_id, false);
 
+    if (card is null) then
+        insert into spellsource.cards (id, created_by, blockly_workspace, card_script)
+        values (card_id, spellsource.get_user_id(), workspace, json)
+        returning * into card;
+    else
+        update spellsource.cards
+        set blockly_workspace = workspace,
+            card_script       = json,
+            last_modified     = now()
+        where cards.succession = card.succession;
+    end if;
+
+    return card;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.save_card(card_id text, workspace xml, json jsonb) OWNER TO admin;
 
 --
 -- Name: set_cards_in_deck(text, text[]); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -2169,6 +2325,20 @@ ALTER TABLE spellsource.cards_in_deck ALTER COLUMN id ADD GENERATED ALWAYS AS ID
 
 
 --
+-- Name: cards_succession_seq; Type: SEQUENCE; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.cards ALTER COLUMN succession ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME spellsource.cards_succession_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: collection_cards; Type: VIEW; Schema: spellsource; Owner: admin
 --
 
@@ -2189,6 +2359,32 @@ CREATE VIEW spellsource.collection_cards AS
 
 
 ALTER TABLE spellsource.collection_cards OWNER TO admin;
+
+--
+-- Name: current_cards; Type: MATERIALIZED VIEW; Schema: spellsource; Owner: admin
+--
+
+CREATE MATERIALIZED VIEW spellsource.current_cards AS
+ SELECT c.id,
+    c.created_by,
+    c.uri,
+    c.blockly_workspace,
+    c.card_script,
+    c.created_at,
+    c.last_modified,
+    c.is_archived,
+    c.is_published,
+    c.succession
+   FROM (spellsource.cards c
+     JOIN ( SELECT cards.id,
+            max(cards.succession) AS max_succession
+           FROM spellsource.cards
+          WHERE (cards.is_published AND (NOT cards.is_archived))
+          GROUP BY cards.id) m ON (((c.id = m.id) AND (c.succession = m.max_succession))))
+  WITH NO DATA;
+
+
+ALTER TABLE spellsource.current_cards OWNER TO admin;
 
 --
 -- Name: deck_player_attribute_tuples; Type: TABLE; Schema: spellsource; Owner: admin
@@ -3276,7 +3472,7 @@ ALTER TABLE ONLY spellsource.cards_in_deck
 --
 
 ALTER TABLE ONLY spellsource.cards
-    ADD CONSTRAINT cards_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT cards_pkey PRIMARY KEY (succession);
 
 
 --
@@ -3984,6 +4180,20 @@ CREATE INDEX decks_trashed_idx ON spellsource.decks USING btree (trashed) WHERE 
 
 
 --
+-- Name: idx_card_id; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX idx_card_id ON spellsource.cards USING btree (id);
+
+
+--
+-- Name: idx_card_id_succession; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX idx_card_id_succession ON spellsource.cards USING btree (id, succession);
+
+
+--
 -- Name: idx_card_script_ai_hardremoval; Type: INDEX; Schema: spellsource; Owner: admin
 --
 
@@ -4044,6 +4254,27 @@ CREATE INDEX idx_card_script_type ON spellsource.cards USING btree (((card_scrip
 --
 
 CREATE INDEX matchmaking_tickets_queue_id_idx ON spellsource.matchmaking_tickets USING btree (queue_id);
+
+
+--
+-- Name: spellsource_cards_unique_id; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE UNIQUE INDEX spellsource_cards_unique_id ON spellsource.cards USING btree (id) WHERE (is_published AND (NOT is_archived));
+
+
+--
+-- Name: cards after_card_published; Type: TRIGGER; Schema: spellsource; Owner: admin
+--
+
+CREATE TRIGGER after_card_published BEFORE INSERT OR UPDATE ON spellsource.cards FOR EACH ROW WHEN ((new.is_published AND (NOT new.is_archived))) EXECUTE FUNCTION spellsource.after_card_published();
+
+
+--
+-- Name: cards before_card_published; Type: TRIGGER; Schema: spellsource; Owner: admin
+--
+
+CREATE TRIGGER before_card_published BEFORE INSERT OR UPDATE ON spellsource.cards FOR EACH ROW WHEN ((new.is_published AND (NOT new.is_archived))) EXECUTE FUNCTION spellsource.before_card_published();
 
 
 --
@@ -4646,14 +4877,6 @@ ALTER TABLE ONLY keycloak.identity_provider_config
 
 
 --
--- Name: banned_draft_cards banned_draft_cards_card_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
---
-
-ALTER TABLE ONLY spellsource.banned_draft_cards
-    ADD CONSTRAINT banned_draft_cards_card_id_fkey FOREIGN KEY (card_id) REFERENCES spellsource.cards(id);
-
-
---
 -- Name: bot_users bot_users_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
@@ -4667,14 +4890,6 @@ ALTER TABLE ONLY spellsource.bot_users
 
 ALTER TABLE ONLY spellsource.cards
     ADD CONSTRAINT cards_created_by_fkey FOREIGN KEY (created_by) REFERENCES keycloak.user_entity(id);
-
-
---
--- Name: cards_in_deck cards_in_deck_card_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
---
-
-ALTER TABLE ONLY spellsource.cards_in_deck
-    ADD CONSTRAINT cards_in_deck_card_id_fkey FOREIGN KEY (card_id) REFERENCES spellsource.cards(id) ON DELETE CASCADE;
 
 
 --
@@ -4774,14 +4989,6 @@ ALTER TABLE ONLY spellsource.guests
 
 
 --
--- Name: hard_removal_cards hard_removal_cards_card_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
---
-
-ALTER TABLE ONLY spellsource.hard_removal_cards
-    ADD CONSTRAINT hard_removal_cards_card_id_fkey FOREIGN KEY (card_id) REFERENCES spellsource.cards(id);
-
-
---
 -- Name: matchmaking_tickets matchmaking_tickets_bot_deck_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
@@ -4849,7 +5056,7 @@ ALTER TABLE spellsource.decks ENABLE ROW LEVEL SECURITY;
 -- Name: cards public_view; Type: POLICY; Schema: spellsource; Owner: admin
 --
 
-CREATE POLICY public_view ON spellsource.cards FOR SELECT TO website USING ((NOT is_private));
+CREATE POLICY public_view ON spellsource.cards FOR SELECT TO website USING (is_published);
 
 
 --
@@ -4956,7 +5163,7 @@ CREATE POLICY website_update ON spellsource.decks FOR UPDATE TO website USING ((
 -- Name: cards website_view; Type: POLICY; Schema: spellsource; Owner: admin
 --
 
-CREATE POLICY website_view ON spellsource.cards FOR SELECT TO website USING ((((created_by)::text = spellsource.get_user_id()) OR (NOT is_private)));
+CREATE POLICY website_view ON spellsource.cards FOR SELECT TO website USING ((((created_by)::text = spellsource.get_user_id()) OR is_published));
 
 
 --
@@ -4992,14 +5199,6 @@ CREATE POLICY website_view ON spellsource.decks FOR SELECT TO website USING (spe
 
 
 --
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: admin
---
-
-REVOKE USAGE ON SCHEMA public FROM PUBLIC;
-GRANT ALL ON SCHEMA public TO PUBLIC;
-
-
---
 -- Name: SCHEMA spellsource; Type: ACL; Schema: -; Owner: admin
 --
 
@@ -5030,6 +5229,13 @@ GRANT SELECT ON TABLE spellsource.classes TO website;
 
 
 --
+-- Name: TABLE cards_in_deck; Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE spellsource.cards_in_deck TO website;
+
+
+--
 -- Name: FUNCTION create_deck_with_cards(deck_name text, class_hero text, format_name text, card_ids text[]); Type: ACL; Schema: spellsource; Owner: admin
 --
 
@@ -5037,10 +5243,10 @@ GRANT ALL ON FUNCTION spellsource.create_deck_with_cards(deck_name text, class_h
 
 
 --
--- Name: TABLE cards_in_deck; Type: ACL; Schema: spellsource; Owner: admin
+-- Name: FUNCTION refresh_current_cards(); Type: ACL; Schema: spellsource; Owner: admin
 --
 
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE spellsource.cards_in_deck TO website;
+GRANT ALL ON FUNCTION spellsource.refresh_current_cards() TO website;
 
 
 --

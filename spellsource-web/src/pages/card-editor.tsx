@@ -9,6 +9,7 @@ import { CardDef } from "../components/card-display";
 import { fixArt, transformBlock } from "../lib/json-transforms";
 import { keyBy } from "lodash";
 import {
+  Card,
   CollectionCard,
   GetCardsQuery,
   ImageDef,
@@ -49,7 +50,7 @@ export const BlocklyDataContext = createContext({ ready: false } as InferGetStat
   ready: boolean;
   classes: Record<string, CardDef>;
   allArt: ImageDef[];
-  myCards: Partial<CollectionCard>[];
+  myCards: Partial<Card>[];
   refreshMyCards: () => Promise<ApolloQueryResult<GetCardsQuery>>;
   userId: string | null | undefined;
 });
@@ -69,7 +70,7 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const getMyCards = useGetCardsQuery({
     variables: {
       filter: {
-        createdBy: { equalToInsensitive: userId },
+        isPublished: { equalTo: false },
       },
     },
   });
@@ -91,7 +92,7 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const ready = Object.values(classes).length > 0 && allArt.length > 0 && typeof window !== "undefined";
 
   const myCards = useMemo(
-    () => (getMyCards.data?.allCollectionCards?.nodes ?? []).filter((card) => card.blocklyWorkspace),
+    () => (getMyCards.data?.allCards?.nodes ?? []).filter((card) => card.blocklyWorkspace),
     [getMyCards.data]
   );
 

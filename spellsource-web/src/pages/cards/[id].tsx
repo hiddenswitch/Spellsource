@@ -9,7 +9,7 @@ export default () => {
   const id = isArray(idParam) ? idParam.join("_") : idParam;
 
   const getCard = useGetCardQuery({ variables: { id } });
-  const cardRecord = getCard.data?.cardById;
+  const cardRecord = getCard.data?.getLatestCard;
   const card = cardRecord?.cardScript ?? undefined;
 
   return <CardTemplate data={{ card }} />;

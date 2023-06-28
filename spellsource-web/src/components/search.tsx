@@ -1,12 +1,12 @@
-import React, { useEffect, useMemo, useRef, useState } from "react"
-import { Form, FormControl, ListGroup } from "react-bootstrap"
-import * as styles from "./creative-layout.module.scss"
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Form, FormControl, ListGroup } from "react-bootstrap";
+import * as styles from "./creative-layout.module.scss";
 
-import { SearchNode, useIndex } from "../hooks/use-index"
-import Link from "next/link"
-import { useRouter } from "next/router"
-import { useDebounce } from "react-use"
-import { useGetCardsLazyQuery } from "../__generated__/client"
+import { SearchNode, useIndex } from "../hooks/use-index";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useDebounce } from "react-use";
+import { useGetCardsLazyQuery, useGetCollectionCardsLazyQuery } from "../__generated__/client";
 
 // Search component
 function Search(props) {
@@ -77,7 +77,7 @@ function Search(props) {
     )*/
   };
 
-  const [getCards] = useGetCardsLazyQuery();
+  const [getCards] = useGetCollectionCardsLazyQuery();
 
   useDebounce(
     async () => {
@@ -124,4 +124,4 @@ function Search(props) {
   );
 }
 
-export default Search
+export default Search;

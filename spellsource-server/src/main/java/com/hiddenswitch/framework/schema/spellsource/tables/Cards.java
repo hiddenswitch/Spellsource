@@ -5,6 +5,7 @@ package com.hiddenswitch.framework.schema.spellsource.tables;
 
 
 import com.hiddenswitch.framework.schema.keycloak.tables.UserEntity;
+import com.hiddenswitch.framework.schema.spellsource.Indexes;
 import com.hiddenswitch.framework.schema.spellsource.Keys;
 import com.hiddenswitch.framework.schema.spellsource.Spellsource;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsRecord;
@@ -19,11 +20,13 @@ import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function9;
+import org.jooq.Function10;
+import org.jooq.Identity;
+import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row9;
+import org.jooq.Row10;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -98,9 +101,14 @@ public class Cards extends TableImpl<CardsRecord> {
     public final TableField<CardsRecord, Boolean> IS_ARCHIVED = createField(DSL.name("is_archived"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
-     * The column <code>spellsource.cards.is_private</code>.
+     * The column <code>spellsource.cards.is_published</code>.
      */
-    public final TableField<CardsRecord, Boolean> IS_PRIVATE = createField(DSL.name("is_private"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("true", SQLDataType.BOOLEAN)), this, "");
+    public final TableField<CardsRecord, Boolean> IS_PUBLISHED = createField(DSL.name("is_published"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>spellsource.cards.succession</code>.
+     */
+    public final TableField<CardsRecord, Long> SUCCESSION = createField(DSL.name("succession"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     private Cards(Name alias, Table<CardsRecord> aliased) {
         this(alias, aliased, null);
@@ -138,6 +146,16 @@ public class Cards extends TableImpl<CardsRecord> {
     @Override
     public Schema getSchema() {
         return aliased() ? null : Spellsource.SPELLSOURCE;
+    }
+
+    @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.IDX_CARD_ID, Indexes.IDX_CARD_ID_SUCCESSION, Indexes.SPELLSOURCE_CARDS_UNIQUE_ID);
+    }
+
+    @Override
+    public Identity<CardsRecord, Long> getIdentity() {
+        return (Identity<CardsRecord, Long>) super.getIdentity();
     }
 
     @Override
@@ -203,18 +221,18 @@ public class Cards extends TableImpl<CardsRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row10 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<String, String, String, XML, JsonObject, OffsetDateTime, OffsetDateTime, Boolean, Boolean> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row10<String, String, String, XML, JsonObject, OffsetDateTime, OffsetDateTime, Boolean, Boolean, Long> fieldsRow() {
+        return (Row10) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function9<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function10<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? super Long, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -222,7 +240,7 @@ public class Cards extends TableImpl<CardsRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? super Long, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

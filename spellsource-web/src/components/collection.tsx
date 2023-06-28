@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import React, { FunctionComponent, useContext, useEffect, useState } from "react";
 import { CardType } from "../__generated__/spellsource-game";
-import { CollectionCardFragment, CollectionCardsOrderBy, useGetCardsQuery } from "../__generated__/client";
+import { CollectionCardFragment, CollectionCardsOrderBy, useGetCollectionCardsQuery } from "../__generated__/client";
 import { CardDef } from "./card-display";
 import { Button, Dropdown, Form, Table } from "react-bootstrap";
 import { toTitleCaseCorrected } from "../lib/blockly-misc-utils";
@@ -115,7 +115,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
 
   const [_, cancelDebounce] = useDebounce(() => setSearch(searchVisual), 500, [searchVisual]);
 
-  const getCards = useGetCardsQuery({
+  const getCards = useGetCollectionCardsQuery({
     variables: {
       limit,
       offset,
@@ -298,7 +298,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
           {uncollectible ? "Uncollectible" : "Collectible"}
         </Button>
         <Button disabled={!getCards.data} variant={"light"} active={!!ownOnly} onClick={() => setOwnOnly(!ownOnly)}>
-          {ownOnly ? "Your Cards" : "Public Cards"}
+          {ownOnly ? "Your Cards" : "All Cards"}
         </Button>
       </div>
       <div className={"w-100 overflow-scroll mt-2"}>

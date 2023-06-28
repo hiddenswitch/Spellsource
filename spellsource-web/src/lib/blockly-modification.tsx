@@ -327,7 +327,7 @@ function pluralSpacing() {
   };
 }
 
-function contextMenu({ onDelete }: InitBlockOptions) {
+function contextMenu({ onDelete, onPublish }: InitBlockOptions) {
   const generateContextMenu = Blockly.BlockSvg.prototype["generateContextMenu"];
   Blockly.BlockSvg.prototype["generateContextMenu"] = function () {
     let menuOptions = generateContextMenu.call(this) as Partial<Blockly.ContextMenuRegistry.ContextMenuOption>[];
@@ -389,13 +389,23 @@ function contextMenu({ onDelete }: InitBlockOptions) {
         });
       }
 
-      menuOptions.push({
-        text: "DELETE Card",
-        enabled: true,
-        callback: function () {
-          onDelete(block);
-        },
-      });
+      if (block.isInFlyout) {
+        menuOptions.push({
+          text: "DELETE Card",
+          enabled: true,
+          callback: function () {
+            onDelete(block);
+          },
+        });
+      } else {
+        menuOptions.push({
+          text: "Publish Card",
+          enabled: true,
+          callback: function () {
+            onPublish(block);
+          },
+        });
+      }
     }
 
     return menuOptions.filter((option) => option.enabled);

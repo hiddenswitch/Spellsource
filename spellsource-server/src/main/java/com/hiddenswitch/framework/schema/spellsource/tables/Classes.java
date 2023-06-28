@@ -61,9 +61,9 @@ public class Classes extends TableImpl<ClassesRecord> {
     public final TableField<ClassesRecord, String> CLASS = createField(DSL.name("class"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>spellsource.classes.is_private</code>.
+     * The column <code>spellsource.classes.is_published</code>.
      */
-    public final TableField<ClassesRecord, Boolean> IS_PRIVATE = createField(DSL.name("is_private"), SQLDataType.BOOLEAN, this, "");
+    public final TableField<ClassesRecord, Boolean> IS_PUBLISHED = createField(DSL.name("is_published"), SQLDataType.BOOLEAN, this, "");
 
     /**
      * The column <code>spellsource.classes.collectible</code>.
@@ -93,12 +93,12 @@ public class Classes extends TableImpl<ClassesRecord> {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
         create view "classes" as  SELECT get_classes.created_by,
          get_classes.class,
-         get_classes.is_private,
+         get_classes.is_published,
          get_classes.collectible,
          get_classes.card_script,
          get_classes.id,
          get_classes.name
-        FROM spellsource.get_classes() get_classes(created_by, class, is_private, collectible, card_script, id, name);
+        FROM spellsource.get_classes() get_classes(created_by, class, is_published, collectible, card_script, id, name);
         """));
     }
 

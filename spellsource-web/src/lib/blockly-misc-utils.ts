@@ -9,6 +9,8 @@ import { ContextType } from "react";
 import { BlockDef } from "../__generated__/blocks";
 import { InitBlockOptions } from "../components/card-editor-workspace";
 import { Flyout } from "flyout_base";
+import { FieldButton } from "../components/field-button";
+import { FieldProgressBar } from "../components/field-progress-bar";
 
 export const toTitleCaseCorrected = (string: string) =>
   string
@@ -217,6 +219,12 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options
   try {
     Blockly.fieldRegistry.register("field_label_serializable_hidden", FieldLabelSerializableHidden);
     Blockly.fieldRegistry.register("field_label_plural", FieldLabelPlural);
+    Blockly.fieldRegistry.register("field_button", FieldButton);
+    Blockly.fieldRegistry.register("field_progress_bar", FieldProgressBar);
+    FieldButton.OnClicks["test"] = (field) => {
+      const progressBar = field.getSourceBlock().getField("progress") as FieldProgressBar;
+      progressBar.setProgress(Math.random());
+    };
     BlocklyModification.modifyAll(options);
   } catch (e) {
     // already registered

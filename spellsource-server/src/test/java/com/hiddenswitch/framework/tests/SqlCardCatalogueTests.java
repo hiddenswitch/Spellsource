@@ -3,6 +3,7 @@ package com.hiddenswitch.framework.tests;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.impl.SqlCachedCardCatalogue;
 import com.hiddenswitch.framework.impl.SqlCardCatalogue;
+import com.hiddenswitch.framework.schema.spellsource.routines.GetLatestCard;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.CardsDao;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
@@ -11,6 +12,7 @@ import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import org.jooq.impl.DSL;
 import org.junit.jupiter.api.Test;
 
 import static io.vertx.await.Async.await;

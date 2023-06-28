@@ -60,19 +60,19 @@ public class ClassesRecord extends TableRecordImpl<ClassesRecord> implements Ver
     }
 
     /**
-     * Setter for <code>spellsource.classes.is_private</code>.
+     * Setter for <code>spellsource.classes.is_published</code>.
      */
     @Override
-    public ClassesRecord setIsPrivate(Boolean value) {
+    public ClassesRecord setIsPublished(Boolean value) {
         set(2, value);
         return this;
     }
 
     /**
-     * Getter for <code>spellsource.classes.is_private</code>.
+     * Getter for <code>spellsource.classes.is_published</code>.
      */
     @Override
-    public Boolean getIsPrivate() {
+    public Boolean getIsPublished() {
         return (Boolean) get(2);
     }
 
@@ -170,7 +170,7 @@ public class ClassesRecord extends TableRecordImpl<ClassesRecord> implements Ver
 
     @Override
     public Field<Boolean> field3() {
-        return Classes.CLASSES.IS_PRIVATE;
+        return Classes.CLASSES.IS_PUBLISHED;
     }
 
     @Override
@@ -205,7 +205,7 @@ public class ClassesRecord extends TableRecordImpl<ClassesRecord> implements Ver
 
     @Override
     public Boolean component3() {
-        return getIsPrivate();
+        return getIsPublished();
     }
 
     @Override
@@ -240,7 +240,7 @@ public class ClassesRecord extends TableRecordImpl<ClassesRecord> implements Ver
 
     @Override
     public Boolean value3() {
-        return getIsPrivate();
+        return getIsPublished();
     }
 
     @Override
@@ -277,7 +277,7 @@ public class ClassesRecord extends TableRecordImpl<ClassesRecord> implements Ver
 
     @Override
     public ClassesRecord value3(Boolean value) {
-        setIsPrivate(value);
+        setIsPublished(value);
         return this;
     }
 
@@ -325,7 +325,7 @@ public class ClassesRecord extends TableRecordImpl<ClassesRecord> implements Ver
     public void from(IClasses from) {
         setCreatedBy(from.getCreatedBy());
         setClass_(from.getClass_());
-        setIsPrivate(from.getIsPrivate());
+        setIsPublished(from.getIsPublished());
         setCollectible(from.getCollectible());
         setCardScript(from.getCardScript());
         setId(from.getId());
@@ -352,12 +352,12 @@ public class ClassesRecord extends TableRecordImpl<ClassesRecord> implements Ver
     /**
      * Create a detached, initialised ClassesRecord
      */
-    public ClassesRecord(String createdBy, String class_, Boolean isPrivate, Boolean collectible, JsonObject cardScript, String id, String name) {
+    public ClassesRecord(String createdBy, String class_, Boolean isPublished, Boolean collectible, JsonObject cardScript, String id, String name) {
         super(Classes.CLASSES);
 
         setCreatedBy(createdBy);
         setClass_(class_);
-        setIsPrivate(isPrivate);
+        setIsPublished(isPublished);
         setCollectible(collectible);
         setCardScript(cardScript);
         setId(id);
@@ -373,7 +373,7 @@ public class ClassesRecord extends TableRecordImpl<ClassesRecord> implements Ver
         if (value != null) {
             setCreatedBy(value.getCreatedBy());
             setClass_(value.getClass_());
-            setIsPrivate(value.getIsPrivate());
+            setIsPublished(value.getIsPublished());
             setCollectible(value.getCollectible());
             setCardScript(value.getCardScript());
             setId(value.getId());

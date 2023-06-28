@@ -1,7 +1,7 @@
-query getCards($limit: Int, $filter: CollectionCardFilter, $offset: Int, $orderBy: [CollectionCardsOrderBy!]) {
-  allCollectionCards(offset: $offset, filter: $filter, first: $limit, orderBy: $orderBy) {
+query getCards($limit: Int, $filter: CardFilter, $offset: Int, $orderBy: [CardsOrderBy!]) {
+  allCards(offset: $offset, filter: $filter, first: $limit, orderBy: $orderBy) {
     nodes {
-      ...collectionCard
+      ...card
     }
     totalCount
   }

@@ -31,7 +31,8 @@ public class CardCatalogueGetBaseClasses implements VertxPojo, ICardCatalogueGet
     private OffsetDateTime createdAt;
     private OffsetDateTime lastModified;
     private Boolean isArchived;
-    private Boolean isPrivate;
+    private Boolean isPublished;
+    private Long succession;
 
     public CardCatalogueGetBaseClasses() {}
 
@@ -44,7 +45,8 @@ public class CardCatalogueGetBaseClasses implements VertxPojo, ICardCatalogueGet
         this.createdAt = value.getCreatedAt();
         this.lastModified = value.getLastModified();
         this.isArchived = value.getIsArchived();
-        this.isPrivate = value.getIsPrivate();
+        this.isPublished = value.getIsPublished();
+        this.succession = value.getSuccession();
     }
 
     public CardCatalogueGetBaseClasses(
@@ -56,7 +58,8 @@ public class CardCatalogueGetBaseClasses implements VertxPojo, ICardCatalogueGet
         OffsetDateTime createdAt,
         OffsetDateTime lastModified,
         Boolean isArchived,
-        Boolean isPrivate
+        Boolean isPublished,
+        Long succession
     ) {
         this.id = id;
         this.createdBy = createdBy;
@@ -66,7 +69,8 @@ public class CardCatalogueGetBaseClasses implements VertxPojo, ICardCatalogueGet
         this.createdAt = createdAt;
         this.lastModified = lastModified;
         this.isArchived = isArchived;
-        this.isPrivate = isPrivate;
+        this.isPublished = isPublished;
+        this.succession = succession;
     }
 
         public CardCatalogueGetBaseClasses(io.vertx.core.json.JsonObject json) {
@@ -224,20 +228,39 @@ public class CardCatalogueGetBaseClasses implements VertxPojo, ICardCatalogueGet
 
     /**
      * Getter for
-     * <code>spellsource.card_catalogue_get_base_classes.is_private</code>.
+     * <code>spellsource.card_catalogue_get_base_classes.is_published</code>.
      */
     @Override
-    public Boolean getIsPrivate() {
-        return this.isPrivate;
+    public Boolean getIsPublished() {
+        return this.isPublished;
     }
 
     /**
      * Setter for
-     * <code>spellsource.card_catalogue_get_base_classes.is_private</code>.
+     * <code>spellsource.card_catalogue_get_base_classes.is_published</code>.
      */
     @Override
-    public CardCatalogueGetBaseClasses setIsPrivate(Boolean isPrivate) {
-        this.isPrivate = isPrivate;
+    public CardCatalogueGetBaseClasses setIsPublished(Boolean isPublished) {
+        this.isPublished = isPublished;
+        return this;
+    }
+
+    /**
+     * Getter for
+     * <code>spellsource.card_catalogue_get_base_classes.succession</code>.
+     */
+    @Override
+    public Long getSuccession() {
+        return this.succession;
+    }
+
+    /**
+     * Setter for
+     * <code>spellsource.card_catalogue_get_base_classes.succession</code>.
+     */
+    @Override
+    public CardCatalogueGetBaseClasses setSuccession(Long succession) {
+        this.succession = succession;
         return this;
     }
 
@@ -298,11 +321,17 @@ public class CardCatalogueGetBaseClasses implements VertxPojo, ICardCatalogueGet
         }
         else if (!this.isArchived.equals(other.isArchived))
             return false;
-        if (this.isPrivate == null) {
-            if (other.isPrivate != null)
+        if (this.isPublished == null) {
+            if (other.isPublished != null)
                 return false;
         }
-        else if (!this.isPrivate.equals(other.isPrivate))
+        else if (!this.isPublished.equals(other.isPublished))
+            return false;
+        if (this.succession == null) {
+            if (other.succession != null)
+                return false;
+        }
+        else if (!this.succession.equals(other.succession))
             return false;
         return true;
     }
@@ -319,7 +348,8 @@ public class CardCatalogueGetBaseClasses implements VertxPojo, ICardCatalogueGet
         result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
         result = prime * result + ((this.lastModified == null) ? 0 : this.lastModified.hashCode());
         result = prime * result + ((this.isArchived == null) ? 0 : this.isArchived.hashCode());
-        result = prime * result + ((this.isPrivate == null) ? 0 : this.isPrivate.hashCode());
+        result = prime * result + ((this.isPublished == null) ? 0 : this.isPublished.hashCode());
+        result = prime * result + ((this.succession == null) ? 0 : this.succession.hashCode());
         return result;
     }
 
@@ -335,7 +365,8 @@ public class CardCatalogueGetBaseClasses implements VertxPojo, ICardCatalogueGet
         sb.append(", ").append(createdAt);
         sb.append(", ").append(lastModified);
         sb.append(", ").append(isArchived);
-        sb.append(", ").append(isPrivate);
+        sb.append(", ").append(isPublished);
+        sb.append(", ").append(succession);
 
         sb.append(")");
         return sb.toString();
@@ -355,7 +386,8 @@ public class CardCatalogueGetBaseClasses implements VertxPojo, ICardCatalogueGet
         setCreatedAt(from.getCreatedAt());
         setLastModified(from.getLastModified());
         setIsArchived(from.getIsArchived());
-        setIsPrivate(from.getIsPrivate());
+        setIsPublished(from.getIsPublished());
+        setSuccession(from.getSuccession());
     }
 
     @Override

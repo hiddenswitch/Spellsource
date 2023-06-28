@@ -6,9 +6,9 @@ import { BlocklyDataContext } from "../pages/card-editor";
 import { CardDef } from "../components/card-display";
 import { ImageDef } from "../__generated__/client";
 import StaticCategoryInfo = Blockly.utils.toolbox.StaticCategoryInfo;
-import ToolboxInfo = Blockly.utils.toolbox.ToolboxInfo
-import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo
-import BlockInfo = Blockly.utils.toolbox.BlockInfo
+import ToolboxInfo = Blockly.utils.toolbox.ToolboxInfo;
+import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo;
+import BlockInfo = Blockly.utils.toolbox.BlockInfo;
 
 /**
  * Initializes the necessary callbacks for the Variables tab's CUSTOM dynamic-ness
@@ -86,13 +86,20 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
         /*category("Unused", "#888888", "Art that hasn't yet been used by a card", artContents(false)),
         category("Used", "#888888", "Art that's been used by cards already", artContents(true)),
         category("All", "#888888", "All available art", artContents(null)),*/
+        category("Create your Own", "#888888", "Use AI to create your own card art", [
+          ...(data.userId ? contents("ArtGen") : []),
+          {
+            kind: "label",
+            text: data.userId ? "Art You've Created" : "Login to be able to generate your own art",
+          },
+          // TODO cached art from db
+        ]),
         ...artCategories(),
       ]),
 
       {
         kind: "sep",
       },
-
       category("Rarities", "#888888", "Blocks for the different Rarities that cards can have", contents("Rarity")),
 
       classesCategory(data),
@@ -366,7 +373,7 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
             "Test",
             simpleContents('text')
           ),
-
+  
           category('Lists', '260',
             "Test",
             simpleContents('list')

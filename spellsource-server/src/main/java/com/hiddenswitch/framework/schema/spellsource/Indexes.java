@@ -4,6 +4,7 @@
 package com.hiddenswitch.framework.schema.spellsource;
 
 
+import com.hiddenswitch.framework.schema.spellsource.tables.Cards;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckShares;
 import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
@@ -28,5 +29,8 @@ public class Indexes {
     public static final Index DECKS_CREATED_BY_IDX = Internal.createIndex(DSL.name("decks_created_by_idx"), Decks.DECKS, new OrderField[] { Decks.DECKS.CREATED_BY }, false);
     public static final Index DECKS_IS_PREMADE_IDX = Internal.createIndex(DSL.name("decks_is_premade_idx"), Decks.DECKS, new OrderField[] { Decks.DECKS.IS_PREMADE }, false);
     public static final Index DECKS_TRASHED_IDX = Internal.createIndex(DSL.name("decks_trashed_idx"), Decks.DECKS, new OrderField[] { Decks.DECKS.TRASHED }, false);
+    public static final Index IDX_CARD_ID = Internal.createIndex(DSL.name("idx_card_id"), Cards.CARDS, new OrderField[] { Cards.CARDS.ID }, false);
+    public static final Index IDX_CARD_ID_SUCCESSION = Internal.createIndex(DSL.name("idx_card_id_succession"), Cards.CARDS, new OrderField[] { Cards.CARDS.ID, Cards.CARDS.SUCCESSION }, false);
     public static final Index MATCHMAKING_TICKETS_QUEUE_ID_IDX = Internal.createIndex(DSL.name("matchmaking_tickets_queue_id_idx"), MatchmakingTickets.MATCHMAKING_TICKETS, new OrderField[] { MatchmakingTickets.MATCHMAKING_TICKETS.QUEUE_ID }, false);
+    public static final Index SPELLSOURCE_CARDS_UNIQUE_ID = Internal.createIndex(DSL.name("spellsource_cards_unique_id"), Cards.CARDS, new OrderField[] { Cards.CARDS.ID }, true);
 }

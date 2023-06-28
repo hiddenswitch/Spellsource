@@ -59,9 +59,9 @@ public class GetClasses extends TableImpl<GetClassesRecord> {
     public final TableField<GetClassesRecord, String> CLASS = createField(DSL.name("class"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>spellsource.get_classes.is_private</code>.
+     * The column <code>spellsource.get_classes.is_published</code>.
      */
-    public final TableField<GetClassesRecord, Boolean> IS_PRIVATE = createField(DSL.name("is_private"), SQLDataType.BOOLEAN, this, "");
+    public final TableField<GetClassesRecord, Boolean> IS_PUBLISHED = createField(DSL.name("is_published"), SQLDataType.BOOLEAN, this, "");
 
     /**
      * The column <code>spellsource.get_classes.collectible</code>.
