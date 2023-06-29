@@ -30,6 +30,7 @@
     <logger name="com.hiddenswitch.framework.impl.ClientMatchmakingService" level="WARN"/>
     <logger name="com.hiddenswitch.diagnostics" level="ALL"/>
     <logger name="net.demilich.metastone.game" level="WARN"/>
+    <logger name="io.vertx.ext.auth.jwt" level="ERROR"/>
     <logger name="io.grpc.netty" level="WARN"/>
     <logger name="io.netty" level="WARN"/>
     <logger name="io.jaegertracing" level="OFF"/>

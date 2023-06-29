@@ -12,6 +12,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.impl.ContextInternal;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Lock;
 
 public class Async {
@@ -79,7 +80,11 @@ public class Async {
 	public static <T> T await(CompletableFuture<T> future) {
 		VirtualThreadContext ctx = virtualThreadContextNullable();
 		if (ctx == null) {
-			throw new IllegalStateException("not on virtual thread context");
+			try {
+				return future.get();
+			} catch (InterruptedException | ExecutionException e) {
+				throw new RuntimeException(e);
+			}
 		}
 		return ctx.await(future);
 	}

@@ -7,12 +7,11 @@ import com.hiddenswitch.framework.Accounts;
 import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Matchmaking;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
-import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpc;
+import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpcServer;
 import io.micrometer.core.instrument.LongTaskTimer;
 import io.micrometer.core.instrument.Metrics;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.MessageConsumer;
-import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +27,7 @@ import static com.hiddenswitch.framework.Matchmaking.*;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.MATCHMAKING_TICKETS;
 import static io.vertx.core.CompositeFuture.join;
 
-public class ClientMatchmakingService extends VertxMatchmakingGrpc.MatchmakingVertxImplBase implements Closeable {
+public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpcServer.MatchmakingApi {
 	private final static LongTaskTimer MATCHMAKING_TICKETS_DURATION = LongTaskTimer
 			.builder("spellsource_matchmaking_tickets_duration")
 			.minimumExpectedValue(Duration.ofMillis(5))

@@ -36,30 +36,22 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 	WeakVertxMap<PgSubscriber> subscribers = new WeakVertxMap<>(vertx -> PgSubscriber.subscriber(vertx, Environment.pgArgs().connectionOptions()));
 	private PgSubscriber subscriber;
 
-	public Future<Void> invalidateAllAndRefreshOnce() {
-		Async.lock(lock.writeLock());
-		try {
-			if (cards.isEmpty()) {
-				invalidateAllAndRefresh();
-			}
-		} finally {
-			lock.writeLock().unlock();
-		}
-
-		return Future.succeededFuture();
-	}
-
 	public void invalidateAllAndRefresh() {
 		if (!Thread.currentThread().isVirtual()) {
 			throw new IllegalStateException("must run in virtual");
 		}
+
 		Async.lock(lock.writeLock());
 		try {
 			invalidated.clear();
 			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
-			var cardDbRecords = await(cardsDao.findManyByCondition(CARDS.IS_PUBLISHED.eq(true).and(CARDS.IS_ARCHIVED.eq(false))));
-			clear();
-			loadFromCardDbRecords(cardDbRecords);
+			try {
+				var cardDbRecords = await(cardsDao.findManyByCondition(CARDS.IS_PUBLISHED.eq(true).and(CARDS.IS_ARCHIVED.eq(false))));
+				clear();
+				loadFromCardDbRecords(cardDbRecords);
+			} catch (Throwable t) {
+				throw t;
+			}
 		} finally {
 			lock.writeLock().unlock();
 		}

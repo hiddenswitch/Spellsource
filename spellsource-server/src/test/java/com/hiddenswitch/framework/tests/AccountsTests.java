@@ -4,12 +4,14 @@ import com.google.common.base.Strings;
 import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.*;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
-import com.hiddenswitch.framework.rpc.VertxAccountsGrpc;
+import com.hiddenswitch.framework.rpc.VertxAccountsGrpcClient;
 import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
+import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
+import io.vertx.core.http.RequestOptions;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Disabled;
@@ -23,6 +25,7 @@ import java.util.Collections;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static io.vertx.await.Async.await;
 import static java.util.stream.Collectors.toMap;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -68,19 +71,22 @@ public class AccountsTests extends FrameworkTestBase {
 	@ParameterizedTest
 	@ValueSource(booleans = {true, false})
 	public void testCreateUserCheckPremadeDecks(boolean premade, Vertx vertx, VertxTestContext testContext) {
-		var client = new Client(vertx);
-		var userId = UUID.randomUUID().toString();
-		startGateway(vertx)
-				.compose(v -> client.createAndLogin(userId, userId + "@hiddenswitch.com", "password", premade))
-				.compose(v -> client.legacy().decksGetAll(Empty.getDefaultInstance()))
-				.compose(decksGetAllResponse -> {
-					testContext.verify(() -> {
-						assertEquals(premade ? Legacy.getPremadeDecks().size() : 0, decksGetAllResponse.getDecksCount(), "premade decks count");
-					});
-					return Future.succeededFuture(decksGetAllResponse);
-				})
-				.onComplete(testContext.succeedingThenComplete());
+		await(startGateway(vertx));
 
+		var verticle = new AbstractVirtualThreadVerticle() {
+			@Override
+			public void startVirtual() throws Exception {
+				var client = new Client(vertx);
+				var userId = UUID.randomUUID().toString();
+				await(client.createAndLogin(userId, userId + "@hiddenswitch.com", "password", premade));
+				var decksGetAllResponse = await(client.legacy().decksGetAll(Empty.getDefaultInstance()));
+				testContext.verify(() -> {
+					assertEquals(premade ? Legacy.getPremadeDecks().size() : 0, decksGetAllResponse.getDecksCount(), "premade decks count");
+				});
+			}
+		};
+		await(vertx.deployVerticle(verticle));
+		testContext.completeNow();
 	}
 
 	@Test
@@ -134,7 +140,7 @@ public class AccountsTests extends FrameworkTestBase {
 				.compose(v -> Accounts.createUser("other@hiddenswitch.com", "username4", "password"))
 				.compose(otherUser -> client.createAndLogin("testusername3", "email1@hiddenswitch.com", "password")
 						.compose(myAccountReply -> {
-							var stub = VertxAccountsGrpc.newVertxStub(client.channel()).withCallCredentials(client.credentials());
+							var stub = new VertxAccountsGrpcClient(client.client().setRequestOptions(new RequestOptions().setHeaders(client.credentials())), client.address());
 							var otherId = otherUser.getId();
 							var myAccount = myAccountReply.getUserEntity();
 							return stub.getAccounts(GetAccountsRequest.newBuilder()
@@ -208,7 +214,7 @@ public class AccountsTests extends FrameworkTestBase {
 
 		// Create an account programmatically
 		startGateway(vertx)
-				.compose(v -> Accounts.get())
+				.compose(v -> Accounts.realm())
 				.compose(hiddenswitch -> Environment.executeBlocking(() -> hiddenswitch.users().create(testUser)))
 				.compose(ignored -> {
 					var url = StandaloneApplication.KEYCLOAK.getAuthServerUrl() + "/realms/hiddenswitch/protocol/openid-connect/token";

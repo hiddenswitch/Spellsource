@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        maven { url "file://${rootDir}/mavenRepository" }
         mavenCentral()
     }
 }
@@ -19,6 +20,7 @@ allprojects {
 
 subprojects {
     repositories {
+        maven { url "file://${rootDir}/mavenRepository" }
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }

@@ -53,7 +53,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 				createGameSession(request.body()).onSuccess(request::reply).onFailure(t -> request.fail(-1, t.getMessage())));
 
 		var registrationFut = Promise.<Void>promise();
-		await(cardCatalogue.invalidateAllAndRefreshOnce());
+		cardCatalogue.invalidateAllAndRefresh();
 		await(cardCatalogue.subscribe());
 
 		// should we wait for registration to finish?

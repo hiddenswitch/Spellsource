@@ -18,7 +18,7 @@ public class V5__Create_package_cards_owner extends BaseJavaMigration {
 	@Override
 	public void migrate(Context context) throws Exception {
 		var userEntity = Accounts.createUser("noreply@hiddenswitch.com", "Spellsource", UUID.randomUUID().toString()).toCompletionStage().toCompletableFuture().join();
-		var realm = Accounts.get().toCompletionStage().toCompletableFuture().join();
+		var realm = Accounts.realm().toCompletionStage().toCompletableFuture().join();
 		var userRepresentation = new UserRepresentation();
 		userRepresentation.setEnabled(false);
 		realm.users().get(userEntity.getId()).disableCredentialType(Collections.singletonList(CredentialRepresentation.PASSWORD));

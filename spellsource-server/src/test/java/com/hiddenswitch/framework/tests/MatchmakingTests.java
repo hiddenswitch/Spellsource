@@ -66,15 +66,19 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.compose(decks -> {
 					var matchmaking = client.matchmaking();
 					var commandsFut = Promise.<WriteStream<MatchmakingQueuePutRequest>>promise();
-					var response = matchmaking.enqueue(commandsFut::complete);
+					var responseFut = matchmaking.enqueue(commandsFut::complete);
 					var ended = Promise.<Void>promise();
-					response.endHandler(ended::complete);
+					responseFut.onSuccess(response->{
+						response.endHandler(ended::complete);
+						response.handler(f -> testContext.failNow("should not receive any queue messages, should just fail immediately"));
+					});
+					responseFut.onFailure(testContext::failNow);
+
 					commandsFut.future().compose(commands -> commands.write(MatchmakingQueuePutRequest.newBuilder()
 							.setQueueId("nonexistent queue")
 							.setDeckId(decks.getDecks(0).getCollection().getId())
 							.build()));
 					// silently closes
-					response.handler(f -> testContext.failNow("should not receive any queue messages, should just fail immediately"));
 					return ended.future();
 				})
 				.compose(v -> client.closeFut())
@@ -91,10 +95,13 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.compose(ignored -> {
 					var matchmaking = client.matchmaking();
 					var commandsFut = Promise.<WriteStream<MatchmakingQueuePutRequest>>promise();
-					var response = matchmaking.enqueue(commandsFut::complete);
+					var responseFut = matchmaking.enqueue(commandsFut::complete);
 					var ended = Promise.<Void>promise();
-					response.endHandler(ended::complete);
-					response.handler(f -> testContext.failNow("should not receive any queue messages, should just fail immediately"));
+					responseFut.onSuccess(response->{
+						response.endHandler(ended::complete);
+						response.handler(f -> testContext.failNow("should not receive any queue messages, should just fail immediately"));
+					});
+					responseFut.onFailure(testContext::failNow);
 					commandsFut.future().compose(commands -> commands.write(MatchmakingQueuePutRequest.newBuilder()
 							.setQueueId(queueId)
 							.setDeckId("1")

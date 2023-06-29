@@ -1,29 +1,33 @@
 package com.hiddenswitch.framework;
 
-import com.avast.grpc.jwt.server.JwtServerInterceptor;
-import com.avast.grpc.jwt.server.JwtTokenParser;
-import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;
+import com.hiddenswitch.framework.impl.BindAll;
 import com.hiddenswitch.framework.impl.WeakVertxMap;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.ClientConfiguration.AccountsConfiguration;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity.Builder;
-import com.hiddenswitch.framework.rpc.VertxAccountsGrpc.AccountsVertxImplBase;
-import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc.UnauthenticatedVertxImplBase;
-import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc.UnauthenticatedVertxStub;
+import com.hiddenswitch.framework.rpc.VertxAccountsGrpcServer.AccountsApi;
+import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpcServer.UnauthenticatedApi;
 import com.hiddenswitch.framework.schema.keycloak.tables.daos.UserEntityDao;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
 import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
-import io.grpc.*;
+import com.hiddenswitch.framework.virtual.VirtualThreadRoutingContextHandler;
+import io.grpc.Status;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.ext.auth.impl.jose.JWT;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.auth.JWTOptions;
+import io.vertx.ext.auth.PubSecKeyOptions;
+import io.vertx.ext.auth.User;
+import io.vertx.ext.auth.authentication.TokenCredentials;
+import io.vertx.ext.auth.jwt.JWTAuth;
+import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import io.vertx.ext.web.client.WebClient;
+import io.vertx.ext.web.codec.BodyCodec;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -43,27 +47,23 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.NotFoundException;
 import java.net.URI;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.framework.Environment.query;
 import static com.hiddenswitch.framework.Environment.withDslContext;
-import static com.hiddenswitch.framework.schema.spellsource.Tables.*;
+import static com.hiddenswitch.framework.schema.spellsource.Tables.GUESTS;
+import static com.hiddenswitch.framework.schema.spellsource.Tables.USER_ENTITY_ADDONS;
+import static io.vertx.await.Async.await;
 import static java.util.stream.Collectors.toMap;
 
 /**
- * Implements the account services from {@link AccountsVertxImplBase} against Keycloak, the open source Java identity
- * management application.
+ * Implements the account services from {@link AccountsApi} against Keycloak, the open source Java identity management
+ * application.
  * <p>
  * In the server, a {@link Keycloak} instance is used to create and manage user accounts.
  * <p>
- * The client creates an account with {@link UnauthenticatedVertxStub#createAccount(CreateAccountRequest)}. The access
+ * The client creates an account with {@link com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpcClient}. The access
  * token returned by the reply, {@link LoginOrCreateReply#getAccessTokenResponse()}'s
  * {@link AccessTokenResponse#getToken()}
  * <p>
@@ -73,93 +73,10 @@ import static java.util.stream.Collectors.toMap;
  * application.
  */
 public class Accounts {
-	private static final Logger LOGGER = LoggerFactory.getLogger(Accounts.class);
 	protected static final String KEYCLOAK_LOGIN_PATH = "/realms/hiddenswitch/protocol/openid-connect/token";
 	protected static final String KEYCLOAK_FORGOT_PASSWORD_PATH = "/realms/hiddenswitch/login-actions/reset-credentials";
-	private static final String RSA = "RSA";
+	private static final Logger LOGGER = LoggerFactory.getLogger(Accounts.class);
 	private static final WeakVertxMap<Keycloak> keycloakReference = new WeakVertxMap<>(Accounts::keycloakConstructor);
-	private static final WeakVertxMap<PublicKeyJwtServerInterceptor> interceptor = new WeakVertxMap<>(Accounts::authorizationInterceptorConstructor);
-	private static final AsyncLoadingCache<String, PublicKey> keys = Caffeine.newBuilder()
-			.buildAsync((key, executor) -> get().toCompletionStage().thenCompose(realm -> {
-				var keys = realm.keys().getKeyMetadata().getKeys();
-				var keyBase64 = keys.stream().filter(x -> x.getKid().equals(key)).findFirst();
-				if (keyBase64.isEmpty()) {
-					return CompletableFuture.completedFuture(EmptyPublicKey.INSTANCE);
-				}
-				var keyBytes = Base64.getDecoder().decode(keyBase64.get().getPublicKey());
-				var encodedKeySpec = new X509EncodedKeySpec(keyBytes);
-				try {
-					var factory = KeyFactory.getInstance(RSA);
-					return CompletableFuture.completedFuture(factory.generatePublic(encodedKeySpec));
-				} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-					return CompletableFuture.failedFuture(new RuntimeException(e));
-				}
-			}).toCompletableFuture());
-
-	private static PublicKeyJwtServerInterceptor authorizationInterceptorConstructor(Vertx vertx) {
-		return new PublicKeyJwtServerInterceptor(accessToken -> {
-			var kid = getKid(accessToken);
-			if (kid == null) {
-				final var inToken = accessToken;
-				return CompletableFuture.failedFuture(new IllegalArgumentException("access token could not be parsed for kid") {
-					public final String accessToken = inToken;
-				});
-			}
-
-			return keys.get(kid)
-					.thenCompose(publicKey -> verify(accessToken, publicKey));
-		});
-	}
-
-	private static String getKid(String accessToken) {
-		try {
-			var parsed = JWT.parse(accessToken);
-			return parsed.getJsonObject("header").getString("kid");
-		} catch (Throwable t) {
-			return null;
-		}
-	}
-
-	/**
-	 * Verifies that a Java Web Token was signed by the supplied public key.
-	 * <p>
-	 * Uses Keycloak's model of an access token, {@link AccessToken}.
-	 *
-	 * @param jwt The token
-	 * @param pk  the public key
-	 * @return The decoded {@link AccessToken}
-	 */
-	@NotNull
-	public static CompletableFuture<AccessToken> verify(String jwt, PublicKey pk) {
-		try {
-			Objects.requireNonNull(pk, "public key is null");
-			if (Objects.equals(pk, EmptyPublicKey.INSTANCE)) {
-				return CompletableFuture.completedFuture(null);
-			}
-
-			var verified = TokenVerifier.create(jwt, AccessToken.class);
-			verified.publicKey(pk);
-			verified.verify();
-			return CompletableFuture.completedFuture(verified.getToken());
-		} catch (Throwable t) {
-			return CompletableFuture.failedFuture(t);
-		}
-	}
-
-	private static class PublicKeyJwtServerInterceptor extends JwtServerInterceptor<AccessToken> {
-		public PublicKeyJwtServerInterceptor(JwtTokenParser<AccessToken> tokenParser) {
-			super(tokenParser);
-		}
-	}
-
-	/**
-	 * A GRPC {@link ServerInterceptor} that authorizes requests.
-	 *
-	 * @return an interceptor
-	 */
-	public static Future<ServerInterceptor> authorizationInterceptor() {
-		return Future.succeededFuture(interceptor.get());
-	}
 
 	/**
 	 * Gets the user associated with the GRPC context currently being executed.
@@ -183,23 +100,16 @@ public class Accounts {
 	 * @see #userId() when the user ID will suffice
 	 */
 	public static Future<UserEntity> user() {
-		// are we in a grpc context?
-		var interceptor = Accounts.interceptor.get();
-		if (interceptor != null) {
-			var accessTokenContextKey = interceptor.AccessTokenContextKey;
-			if (accessTokenContextKey != null) {
-				var accessToken = accessTokenContextKey.get();
-				if (accessToken == null) {
-					return Future.succeededFuture();
-				} else {
-					return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient())).findOneById(accessToken.getSubject());
-				}
-			}
+		try {
+			var userId = Accounts.userId();
+			var dao = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+			var record = await(dao.findOneById(userId));
+			return Future.succeededFuture(record);
+		} catch (Throwable t) {
+			return Future.failedFuture(t);
 		}
-
-		// For now we do not support getting the context any other way
-		return Future.failedFuture("no context");
 	}
+
 
 	/**
 	 * Retrieves the user ID in a GRPC context.
@@ -222,35 +132,29 @@ public class Accounts {
 	 * @return a user ID, or {@code null} if no token was retrieved
 	 */
 	public static String userId() {
-		var interceptor = Accounts.interceptor.get();
-		if (interceptor != null) {
-			var accessTokenContextKey = interceptor.AccessTokenContextKey;
-			if (accessTokenContextKey != null) {
-				var accessToken = accessTokenContextKey.get();
-				if (accessToken == null) {
-					return null;
-				} else {
-					return accessToken.getSubject();
-				}
-			}
+		var user = VirtualThreadRoutingContextHandler.current().user();
+		if (user == null) {
+			return null;
 		}
-		return null;
+
+		return user.subject();
 	}
 
 	/**
-	 * Creates a {@link UnauthenticatedVertxImplBase} implementation that handles account creation and logins over GRPC.
+	 * Creates a {@link UnauthenticatedApi} implementation that handles account creation and logins over GRPC.
 	 * <p>
 	 * Eventually, the client will be ported to use native OAuth2 account creation provided by Keycloak.
 	 *
-	 * @return a {@link BindableService} for a {@link io.vertx.grpc.VertxServerBuilder#addService(BindableService)} call.
+	 * @return a {@link BindAll} to apply to a {@link io.vertx.grpc.server.GrpcServer}
 	 */
-	public static Future<BindableService> unauthenticatedService() {
+	public static BindAll<UnauthenticatedApi> unauthenticatedService() {
 		var context = Vertx.currentContext();
 		Objects.requireNonNull(context, "context");
 
 		var webClient = WebClient.create(context.owner());
 
-		return Future.succeededFuture(new UnauthenticatedVertxImplBase() {
+		return new UnauthenticatedApi() {
+			private final JWTAuth auth = JWTAuth.create(Vertx.currentContext().owner(), Accounts.jwtAuthOptions());
 
 			private LoginOrCreateReply handleAccessTokenUserEntityTuple(Object[] tuple) {
 				var accessTokenResponse = (org.keycloak.representations.AccessTokenResponse) tuple[0];
@@ -297,7 +201,7 @@ public class Accounts {
 
 					final var finalEmail = email;
 					final var finalPassword = password;
-					createUserEntity = get()
+					createUserEntity = realm()
 							.compose(realm -> Environment.executeBlocking(() -> realm.users().search(request.getUsername(), true)))
 							.compose(existingUsers -> {
 								if (!existingUsers.isEmpty()) {
@@ -350,19 +254,9 @@ public class Accounts {
 
 			@Override
 			public Future<BoolValue> verifyToken(AccessTokenResponse request) {
-				var context = Vertx.currentContext();
-				var kid = getKid(request.getToken());
-				if (kid == null) {
-					return Future.succeededFuture(BoolValue.of(false));
-				}
-
-				return Future.fromCompletionStage(keys.get(kid))
-						.compose(pk -> {
-							if (Objects.equals(pk, EmptyPublicKey.INSTANCE)) {
-								return Future.succeededFuture(BoolValue.of(false));
-							}
-							return Future.fromCompletionStage(verify(request.getToken(), pk).minimalCompletionStage(), context).map(BoolValue.of(true));
-						})
+				return auth.authenticate(new TokenCredentials()
+								.setToken(request.getToken()))
+						.map(user -> BoolValue.of(user != null))
 						.recover(t -> Future.succeededFuture(BoolValue.of(false)));
 			}
 
@@ -377,87 +271,86 @@ public class Accounts {
 								.build())
 						.build());
 			}
-		});
+		}::bindAll;
 	}
 
 	/**
-	 * Creates a {@link AccountsVertxImplBase} instance that handles account services for users that have logged in.
+	 * Creates a {@link AccountsApi} instance that handles account services for users that have logged in.
 	 *
-	 * @return a service for {@link io.vertx.grpc.VertxServerBuilder#addService(ServerServiceDefinition)}
+	 * @return a service for {@link io.vertx.grpc.server.GrpcServer}
 	 */
-	public static Future<ServerServiceDefinition> authenticatedService() {
+	public static BindAll<AccountsApi> authenticatedService() {
 		// Does not require vertx blocking service because it makes no blocking calls
-		return Future.succeededFuture(new AccountsVertxImplBase() {
+		return new AccountsApi() {
 
-					@Override
-					public Future<LoginOrCreateReply> changePassword(ChangePasswordRequest request) {
-						var userId = Accounts.userId();
-						// for now we don't invalidate and refresh the old token
-						var token = Accounts.token();
-						if (token == null) {
-							return Future.failedFuture("must log in with old password first");
-						}
-						return get()
-								.compose(realm -> Environment.executeBlocking(() -> {
-									realm.users().get(userId).resetPassword(getPasswordCredential(request.getNewPassword()));
-									return Future.succeededFuture();
-								}))
-								.compose(v -> (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient()).findOneById(userId)))
-								.map(userEntity -> LoginOrCreateReply.newBuilder()
-										.setUserEntity(toProto(userEntity))
-										.setAccessTokenResponse(AccessTokenResponse.newBuilder()
-												.setToken(token)
-												.build()).build())
-								.recover(Environment.onGrpcFailure());
-					}
+			@Override
+			public Future<LoginOrCreateReply> changePassword(ChangePasswordRequest request) {
+				var userId = Accounts.userId();
+				// for now we don't invalidate and refresh the old token
+				var token = Accounts.token();
+				if (token == null) {
+					return Future.failedFuture("must log in with old password first");
+				}
+				return realm()
+						.compose(realm -> Environment.executeBlocking(() -> {
+							realm.users().get(userId).resetPassword(getPasswordCredential(request.getNewPassword()));
+							return Future.succeededFuture();
+						}))
+						.compose(v -> (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient()).findOneById(userId)))
+						.map(userEntity -> LoginOrCreateReply.newBuilder()
+								.setUserEntity(toProto(userEntity))
+								.setAccessTokenResponse(AccessTokenResponse.newBuilder()
+										.setToken(token)
+										.build()).build())
+						.recover(Environment.onGrpcFailure());
+			}
 
-					@Override
-					public Future<GetAccountsReply> getAccount(Empty request) {
-						return user()
-								.compose(thisUser -> {
-									if (thisUser == null) {
-										return Future.failedFuture("must log in");
-									}
+			@Override
+			public Future<GetAccountsReply> getAccount(Empty request) {
+				return user()
+						.compose(thisUser -> {
+							if (thisUser == null) {
+								return Future.failedFuture("must log in");
+							}
 
-									return Future.succeededFuture(GetAccountsReply.newBuilder().addUserEntities(
-											com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity.newBuilder()
-													.setUsername(thisUser.getUsername())
-													.setEmail(thisUser.getEmail())
-													.setId(thisUser.getId())
-													.build()
-									).build());
-								})
-								.recover(Environment.onGrpcFailure());
-					}
+							return Future.succeededFuture(GetAccountsReply.newBuilder().addUserEntities(
+									com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity.newBuilder()
+											.setUsername(thisUser.getUsername())
+											.setEmail(thisUser.getEmail())
+											.setId(thisUser.getId())
+											.build()
+							).build());
+						})
+						.recover(Environment.onGrpcFailure());
+			}
 
-					@Override
-					public Future<GetAccountsReply> getAccounts(GetAccountsRequest request) {
-						return user()
-								.compose(thisUser -> {
-									if (thisUser == null) {
-										return Future.failedFuture("must log in");
-									}
+			@Override
+			public Future<GetAccountsReply> getAccounts(GetAccountsRequest request) {
+				return user()
+						.compose(thisUser -> {
+							if (thisUser == null) {
+								return Future.failedFuture("must log in");
+							}
 
-									// TODO: Join with friends
-									return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient()))
-											.findManyByIds(request.getIdsList())
-											.map(users ->
-													GetAccountsReply.newBuilder()
-															.addAllUserEntities(users.stream().map(ue -> {
-																var build = com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity.newBuilder()
-																		.setUsername(ue.getUsername())
-																		.setId(ue.getId());
+							// TODO: Join with friends
+							return (new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient()))
+									.findManyByIds(request.getIdsList())
+									.map(users ->
+											GetAccountsReply.newBuilder()
+													.addAllUserEntities(users.stream().map(ue -> {
+														var build = com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity.newBuilder()
+																.setUsername(ue.getUsername())
+																.setId(ue.getId());
 
-																if (ue.getId().equals(thisUser.getId())) {
-																	build.setEmail(ue.getEmail());
-																}
-																return build.build();
-															}).collect(Collectors.toList())).build());
-								})
-								.recover(Environment.onGrpcFailure());
-					}
-				})
-				.compose(Accounts::requiresAuthorization);
+														if (ue.getId().equals(thisUser.getId())) {
+															build.setEmail(ue.getEmail());
+														}
+														return build.build();
+													}).collect(Collectors.toList())).build());
+						})
+						.recover(Environment.onGrpcFailure());
+			}
+		}::bindAll;
 	}
 
 	private static Builder toProto(UserEntity userEntity) {
@@ -469,31 +362,21 @@ public class Accounts {
 
 	private static String token() {
 		// from JwtServerInterceptor
-		return (String) Context.key("AccessToken").get();
+		var user = VirtualThreadRoutingContextHandler.current().user();
+		if (user == null) {
+			return null;
+		}
+		// from User.fromToken
+		return user.get("access_token");
 	}
 
-	public static Future<ServerServiceDefinition> requiresAuthorization(BindableService service) {
-		return Accounts.authorizationInterceptor().map(interceptor -> ServerInterceptors.intercept(service, interceptor));
-	}
-
-	public static Future<ServerServiceDefinition> requiresAuthorization(ServerServiceDefinition service) {
-		return Accounts.authorizationInterceptor().map(interceptor -> ServerInterceptors.intercept(service, interceptor));
-	}
-
-	public static Future<Keycloak> admin() {
-		return Future.succeededFuture(keycloakReference.get());
-	}
-
-	public static Future<RealmResource> get() {
-		return Environment.executeBlocking(() -> {
-					var realmId = Environment.getConfiguration().getKeycloak().getRealmId();
-					return keycloakReference.get().realm(realmId);
-				})
-				.onFailure(Environment.onFailure());
+	public static Future<RealmResource> realm() {
+		var realmId = Environment.getConfiguration().getKeycloak().getRealmId();
+		return Future.succeededFuture(keycloakReference.get().realm(realmId));
 	}
 
 	public static Future<UserEntity> createUser(String email, String username, String password) {
-		return get()
+		return realm()
 				.compose(realm -> {
 					var user = new UserRepresentation();
 					user.setEmail(email);
@@ -561,7 +444,7 @@ public class Accounts {
 	}
 
 	public static Future<UserResource> disableUser(String userId) {
-		return Accounts.get()
+		return Accounts.realm()
 				.compose(realm -> Environment.executeBlocking(() -> {
 					var userRepresentation = new UserRepresentation();
 					userRepresentation.setEnabled(false);
@@ -644,25 +527,34 @@ public class Accounts {
 		return Environment.getConfiguration().getKeycloak().getAuthUrl();
 	}
 
-	public static class EmptyPublicKey implements PublicKey {
-		public static final EmptyPublicKey INSTANCE = new EmptyPublicKey();
+	public static JWTAuthOptions jwtAuthOptions() {
+		var issuer = keycloakAuthUrl();
+		var issuerUri = URI.create(issuer);
+		var jwksUri = URI.create(String.format("%s://%s:%d%s",
+				issuerUri.getScheme(), issuerUri.getHost(), issuerUri.getPort(), issuerUri.getPath() + "realms/hiddenswitch/protocol/openid-connect/certs"));
+		var vertx = Vertx.currentContext().owner();
+		var webClient = WebClient.create(vertx);
+		var response = await(webClient.get(jwksUri.getPort(), jwksUri.getHost(), jwksUri.getPath())
+				.as(BodyCodec.jsonObject())
+				.send());
 
-		private EmptyPublicKey() {
-		}
+		var jwksResponse = response.body();
+		var keys = jwksResponse.getJsonArray("keys");
 
-		@Override
-		public String getAlgorithm() {
-			return "";
-		}
+		// Configure JWT validation options
+		var jwtOptions = new JWTOptions();
+//		jwtOptions.setIssuer(issuer);
 
-		@Override
-		public String getFormat() {
-			return "";
-		}
+		// extract JWKS from keys array
+		var jwks = ((List<Object>) keys.getList()).stream()
+				.map(o -> new JsonObject((Map<String, Object>) o))
+				.collect(Collectors.toList());
+		// configure JWTAuth
+		var jwtAuthOptions = new JWTAuthOptions();
+		jwtAuthOptions.setJwks(jwks);
+		jwtAuthOptions.setJWTOptions(jwtOptions);
+		jwtAuthOptions.setPermissionsClaimKey("realm_access/roles");
 
-		@Override
-		public byte[] getEncoded() {
-			return new byte[0];
-		}
+		return jwtAuthOptions;
 	}
 }

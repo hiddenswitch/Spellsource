@@ -69,14 +69,6 @@ dependencies {
     implementation group: 'io.vertx', name: 'vertx-web', version: vertxVersion
     implementation 'javax.activation:activation:1.1.1'
 
-    // includes withCallCredentials fix
-    implementation("com.github.doctorpangloss.vertx-grpc-1:vertx-grpc-server:0721a5bab2") {
-        exclude group: 'io.vertx', module: 'vertx-core'
-    }
-    implementation("com.github.doctorpangloss.vertx-grpc-1:vertx-grpc-client:0721a5bab2") {
-        exclude group: 'io.vertx', module: 'vertx-core'
-    }
-
     // keycloak
     implementation 'net.openhft:zero-allocation-hashing:0.16'
     implementation platform("org.keycloak.bom:keycloak-bom-parent:$keycloakVersion")

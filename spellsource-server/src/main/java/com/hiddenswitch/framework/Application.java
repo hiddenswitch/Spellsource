@@ -46,7 +46,7 @@ public class Application {
 						return Future.succeededFuture();
 					})
 					.compose(v1 ->
-							all(vertx.deployVerticle(Gateway.class, new DeploymentOptions().setInstances(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))),
+							all(vertx.deployVerticle(Gateway::new, new DeploymentOptions().setInstances(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))),
 									vertx.deployVerticle(Matchmaking.class, new DeploymentOptions().setInstances(1)),
 									vertx.deployVerticle(ClusteredGames.class, new DeploymentOptions().setInstances(CpuCoreSensor.availableProcessors() * 2)),
 									broadcaster)

@@ -6,9 +6,8 @@ buildscript {
         grpcUnityArtifactsUrl = 'https://packages.grpc.io/archive/2020/11/adf6b33c3d0283dc4c3d70b1ad6f5fa01ca5b69a-ec34da51-aac4-4cc4-afde-1d74252db27c/csharp/grpc_unity_package.2.35.0-dev202011301311.zip'
     }
     repositories {
+        maven { url "file://${rootDir}/mavenRepository" }
         mavenLocal()
-        // for jooq from github
-        maven { url 'https://jitpack.io' }
         mavenCentral()
     }
 }
@@ -60,9 +59,10 @@ dependencies {
         exclude group: 'jakarta.xml.bind', module: '*'
         exclude group: 'jakarta.activation', module: '*'
     }
-    api(group: 'io.vertx', name: 'vertx-grpc', version: vertxVersion) {
-        exclude group: 'com.google.code.gson', module: 'gson'
-    }
+    // includes withCallCredentials fix
+    api("io.vertx:vertx-grpc-client:$vertxVersion")
+    api("io.vertx:vertx-grpc-jwt-auth:$vertxVersion")
+    api("io.vertx:vertx-grpc-server:$vertxVersion")
 }
 
 clean {
@@ -134,7 +134,7 @@ protobuf {
             artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
         }
         grpc_java_vertx {
-            artifact = "io.vertx:vertx-grpc-protoc-plugin:$vertxVersion"
+            artifact = "io.vertx:vertx-grpc-protoc-plugin2:$vertxVersion"
         }
         grpc_csharp {
             path = csharpGrpcPath

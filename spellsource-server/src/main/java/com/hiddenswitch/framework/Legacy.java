@@ -4,12 +4,10 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.ObjectArrays;
 import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
-import com.hiddenswitch.framework.impl.ModelConversions;
-import com.hiddenswitch.framework.impl.ServerGameContext;
-import com.hiddenswitch.framework.impl.WeakVertxMap;
+import com.hiddenswitch.framework.impl.*;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.GetCardsRequest;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.GetCardsResponse;
-import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpc;
+import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpcServer;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.CardsDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.DeckPlayerAttributeTuplesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.DeckSharesDao;
@@ -19,12 +17,10 @@ import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
 import com.hiddenswitch.spellsource.rpc.Spellsource.*;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
-import com.hiddenswitch.spellsource.rpc.VertxHiddenSwitchSpellsourceAPIServiceGrpc;
+import com.hiddenswitch.spellsource.rpc.VertxHiddenSwitchSpellsourceAPIServiceGrpcServer.HiddenSwitchSpellsourceAPIServiceApi;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
-import io.grpc.BindableService;
-import io.grpc.ServerServiceDefinition;
 import io.grpc.Status;
 import io.micrometer.core.instrument.LongTaskTimer;
 import io.micrometer.core.instrument.Metrics;
@@ -88,8 +84,8 @@ public class Legacy {
 			.description("the amount of time spent retrieving all the decks")
 			.register(Metrics.globalRegistry);
 
-	public static Future<BindableService> unauthenticatedCards() {
-		return Future.succeededFuture(new VertxUnauthenticatedCardsGrpc.UnauthenticatedCardsVertxImplBase() {
+	public static BindAll<VertxUnauthenticatedCardsGrpcServer.UnauthenticatedCardsApi> unauthenticatedCards(SqlCachedCardCatalogue cardCatalogue) {
+		return new VertxUnauthenticatedCardsGrpcServer.UnauthenticatedCardsApi() {
 			@Override
 			public Future<GetCardsResponse> getCards(GetCardsRequest request) {
 				// retrieve the hashcode from the migration schema for the cards
@@ -108,7 +104,7 @@ public class Legacy {
 											return null;
 										}
 									})
-									.filter(cd -> cd != null && ClasspathCardCatalogue.INSTANCE.spellsource().isInFormat(cd.getSet())
+									.filter(cd -> cd != null && cardCatalogue.spellsource().isInFormat(cd.getSet())
 											&& cd.getType() != CardType.GROUP)
 									.map(card -> {
 										var entity = ModelConversions.getEntity(workingContext, card.create(), 0);
@@ -159,284 +155,282 @@ public class Legacy {
 						})
 						.recover(Environment.onGrpcFailure());
 			}
-		});
+		}::bindAll;
 	}
 
-	public static Future<ServerServiceDefinition> services() {
-		return Future.succeededFuture(new VertxHiddenSwitchSpellsourceAPIServiceGrpc.HiddenSwitchSpellsourceAPIServiceVertxImplBase() {
+	public static BindAll<HiddenSwitchSpellsourceAPIServiceApi> services(SqlCachedCardCatalogue cardCatalogue) {
+		return new HiddenSwitchSpellsourceAPIServiceApi() {
+			@Override
+			public void subscribeGame(ReadStream<ClientToServerMessage> request, WriteStream<ServerToClientMessage> response) {
+				request.pause();
+				var consumer = ServerGameContext.subscribeGame(request, response);
+				request.endHandler(v -> consumer.unregister());
+				request.exceptionHandler(t -> consumer.unregister());
+				request.resume();
+			}
 
-					@Override
-					public void subscribeGame(ReadStream<ClientToServerMessage> request, WriteStream<ServerToClientMessage> response) {
-						request.pause();
-						var consumer = ServerGameContext.subscribeGame(request, response);
-						request.endHandler(v -> consumer.unregister());
-						request.exceptionHandler(t -> consumer.unregister());
-						request.resume();
-					}
-
-					@Override
-					public Future<Empty> decksDelete(DecksDeleteRequest request) {
-						var userId = Accounts.userId();
-						var deckId = request.getDeckId();
-						// first, try to trash the share if it exists
-						// otherwise, the if it's a premade deck and the trash record does not exist, insert a share record that is trashed
-						// otherwise, if we own the deck, trash the deck.
-						return withExecutor(queryExecutor -> queryExecutor.execute(dsl -> dsl.update(DECK_SHARES)
-										.set(DECK_SHARES.TRASHED_BY_RECIPIENT, true)
-										.where(DECK_SHARES.DECK_ID.eq(deckId), DECK_SHARES.SHARE_RECIPIENT_ID.eq(userId)))
-								.compose(updated -> {
-									if (updated != 0) {
-										return Future.succeededFuture();
-									}
-
-									return queryExecutor
-											.findOneRow(dsl -> dsl.select(DECKS.IS_PREMADE, DECKS.CREATED_BY).from(DECKS).where(DECKS.ID.eq(deckId)))
-											.compose(row -> {
-												if (row == null) {
-													return Future.failedFuture("deck not found");
-												}
-
-												var isPremade = row.getBoolean(DECKS.IS_PREMADE.getName());
-												var isOwner = Objects.equals(row.getString(DECKS.CREATED_BY.getName()), userId);
-												if (isPremade) {
-													// insert a stop sharing premade deck row
-													return queryExecutor.execute(dsl -> dsl.insertInto(DECK_SHARES)
-															.set(DECK_SHARES.newRecord()
-																	.setDeckId(deckId)
-																	.setShareRecipientId(userId)
-																	.setTrashedByRecipient(true)));
-												} else if (isOwner) {
-													return queryExecutor.execute(dsl -> dsl.update(DECKS).set(DECKS.TRASHED, true).where(DECKS.ID.eq(deckId), canEditDeckSql(userId)));
-												} else {
-													return Future.failedFuture("deck not owned by user or shared with user");
-												}
-											});
-								}).compose(v -> {
-									// invalidate cache
-									var cache = DECKS_CACHE.get();
-									return Future.fromCompletionStage(cache.fastRemoveAsync(deckId), Vertx.currentContext());
-								})
-								.map(Empty.getDefaultInstance())
-								.recover(Environment.onGrpcFailure()));
-					}
-
-					@Override
-					public Future<DecksGetResponse> decksGet(DecksGetRequest request) {
-						var deckId = request.getDeckId();
-						var userId = Accounts.userId();
-
-						return getDeck(deckId, userId).recover(Environment.onGrpcFailure());
-					}
-
-					@Override
-					public Future<DecksGetAllResponse> decksGetAll(Empty request) {
-						var userId = Accounts.userId();
-						return getAllDecks(userId).recover(Environment.onGrpcFailure());
-					}
-
-					@Override
-					public Future<DecksPutResponse> decksPut(DecksPutRequest request) {
-						var userId = Accounts.userId();
-
-						DeckCreateRequest createRequest;
-						if (!request.getDeckList().isEmpty()) {
-							createRequest = DeckCreateRequest.fromDeckList(request.getDeckList());
-						} else {
-							createRequest = new DeckCreateRequest()
-									.withName(request.getName())
-									.withFormat(request.getFormat())
-									.withCardIds(request.getCardIdsList())
-									.withHeroClass(request.getHeroClass());
-						}
-
-						return createDeck(userId, createRequest).recover(Environment.onGrpcFailure());
-					}
-
-					@Override
-					public Future<DecksGetResponse> decksUpdate(DecksUpdateRequest request) {
-						var configuration = Environment.jooqAkaDaoConfiguration();
-						var deckId = request.getDeckId();
-						var userId = Accounts.userId();
-						var updateCommand = request.getUpdateCommand();
-
-						if (deckId.isEmpty()) {
-							return Future.failedFuture(Status.INVALID_ARGUMENT
-									.withCause(new NullPointerException("deckId"))
-									.augmentDescription("You must specify a deckId")
-									.asRuntimeException());
-						}
-
-						if (!request.hasUpdateCommand()) {
-							return getDeck(deckId, userId);
-						}
-
-						var futs = new ArrayList<Future>();
-
-
-						// Assert that we have permissions to edit this deck
-						return withExecutor(queryExecutor -> queryExecutor.execute(dsl -> dsl
-										.select(DECKS.ID)
-										.from(DECKS)
-										.where(DECKS.ID.eq(deckId).and(canEditDeckSql(userId)))
-										.limit(1)
-								).compose(authedCount -> {
-									if (authedCount < 1) {
-										return Future.failedFuture(Status.PERMISSION_DENIED
-												.augmentDescription("You are not authorized to edit this deck because you are not its owner")
-												.asRuntimeException());
-									}
-
-									// Player entity attribute update
-									if (updateCommand.hasSetPlayerEntityAttribute()) {
-										var setAttributeCommand = updateCommand.getSetPlayerEntityAttribute();
-										switch (setAttributeCommand.getAttribute()) {
-											case SIGNATURE:
-												futs.add(queryExecutor.execute(dsl -> dsl.insertInto(DECK_PLAYER_ATTRIBUTE_TUPLES,
-														DECK_PLAYER_ATTRIBUTE_TUPLES.ATTRIBUTE,
-														DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID,
-														DECK_PLAYER_ATTRIBUTE_TUPLES.STRING_VALUE).values(
-														PlayerEntityAttributesMessage.PlayerEntityAttributes.SIGNATURE_VALUE,
-														deckId,
-														setAttributeCommand.getStringValue())));
-												break;
-											default:
-												break;
-										}
-									}
-
-									// Card records update
-									if (updateCommand.hasPushCardIds()) {
-										futs.add(queryExecutor.execute(dsl -> {
-											var insert = dsl.insertInto(CARDS_IN_DECK,
-													CARDS_IN_DECK.DECK_ID,
-													CARDS_IN_DECK.CARD_ID
-											);
-											for (var cardId : updateCommand.getPushCardIds().getEachList()) {
-												insert.values(deckId, cardId);
-											}
-											return insert;
-										}));
-									}
-
-									if (updateCommand.hasPushInventoryIds()) {
-										futs.add(Future.failedFuture(Status.UNIMPLEMENTED
-												.augmentDescription("Inventory IDs are now unique to each deck and cannot be shared among decks.")
-												.asRuntimeException()));
-									}
-
-									if (updateCommand.getSetInventoryIdsCount() > 0) {
-										futs.add(Future.failedFuture(Status.UNIMPLEMENTED
-												.augmentDescription("Inventory IDs are now unique to each deck and cannot be shared among decks.")
-												.asRuntimeException()));
-									}
-
-									if (updateCommand.getPullAllCardIdsCount() > 0) {
-										futs.addAll(updateCommand.getPullAllCardIdsList().stream()
-												.collect(groupingBy(Function.identity(), counting()))
-												.entrySet()
-												.stream()
-												.map(entry ->
-														queryExecutor.execute(dsl ->
-																dsl.deleteFrom(CARDS_IN_DECK)
-																		.where(CARDS_IN_DECK.DECK_ID.eq(deckId).and(CARDS_IN_DECK.CARD_ID.eq(entry.getKey())))
-																		.limit(entry.getValue().intValue())))
-												.toList());
-									}
-
-									if (updateCommand.getPullAllInventoryIdsCount() > 0) {
-										var deleteByIds = queryExecutor.execute(dsl -> dsl.deleteFrom(CARDS_IN_DECK).where(CARDS_IN_DECK.ID.in(updateCommand.getPullAllInventoryIdsList())));
-										futs.add(deleteByIds);
-									}
-
-									var setsHeroClass = !updateCommand.getSetHeroClass().isEmpty();
-									var setsName = !updateCommand.getSetName().isEmpty();
-
-									if (setsHeroClass || setsName) {
-										// Deck record update
-										futs.add(queryExecutor
-												.execute(dsl -> {
-													var update = (UpdateSetStep<DecksRecord>) dsl.update(DECKS);
-													if (setsHeroClass) {
-														update = update.set(DECKS.HERO_CLASS, updateCommand.getSetHeroClass());
-													}
-
-													if (setsName) {
-														update = update.set(DECKS.NAME, updateCommand.getSetName());
-													}
-
-													update = update.set(DECKS.LAST_EDITED_BY, userId);
-
-													return ((UpdateSetMoreStep<DecksRecord>) update)
-															.where(DECKS.ID.eq(deckId));
-												}));
-									}
-
-									if (futs.isEmpty()) {
-										return Future.succeededFuture();
-									}
-
-									return CompositeFuture.all(futs);
-								})
-								.compose(v -> {
-									// invalidate cache
-									var cache = DECKS_CACHE.get();
-									return Future.fromCompletionStage(cache.fastRemoveAsync(deckId), Vertx.currentContext());
-								})
-								.compose(v -> getDeck(deckId, userId))
-								.recover(Environment.onGrpcFailure()));
-					}
-
-					@Override
-					public Future<DecksGetResponse> duplicateDeck(StringValue request) {
-						var userId = Accounts.userId();
-						var deckId = request.getValue();
-						var newDeckId = UUID.randomUUID().toString();
-						var promise = Promise.<DecksGetResponse>promise();
-
-						Environment.async().run(v -> {
-							ReactiveClassicGenericQueryExecutor transaction = null;
-							try {
-								transaction = await(new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), Environment.transactionPool()).beginTransaction());
-								var decksInserted = await(transaction
-										.execute(dsl -> {
-											// new deckId, deck fields...
-											var newDeckIdAndOtherFields = ObjectArrays.concat(DSL.val(newDeckId), withoutFields(DECKS.fields(), DECKS.ID));
-											// replace owner ID
-											var ownerIdPos = Iterators.indexOf(Iterators.forArray(newDeckIdAndOtherFields), t -> t != null && Objects.equals(t.getName(), DECKS.CREATED_BY.getName()));
-											newDeckIdAndOtherFields[ownerIdPos] = DSL.val(userId);
-											// replace premade
-											var premadePos = Iterators.indexOf(Iterators.forArray(newDeckIdAndOtherFields), f -> Objects.equals(f, DECKS.IS_PREMADE));
-											newDeckIdAndOtherFields[premadePos] = DSL.val(false);
-											return dsl.insertInto(DECKS, DECKS.fields())
-													// retrieve fields from existing deck EXCEPT the ID, which we replaced
-													.select(DSL.using(SQLDialect.POSTGRES).select(newDeckIdAndOtherFields)
-															.from(DECKS)
-															// We can duplicate our own decks, decks that are permitted to duplicate by anyone or premade decks
-															.where(DECKS.ID.eq(deckId).and(canEditDeckSql(userId)
-																	.or(DECKS.PERMITTED_TO_DUPLICATE.eq(true))
-																	.or(DECKS.IS_PREMADE.eq(true)))));
-										}));
-
-								if (decksInserted != 1) {
-									throw Status.NOT_FOUND.asRuntimeException();
-								}
-
-								await(transaction.execute(dsl -> duplicateAllForeign(deckId, newDeckId, CARDS_IN_DECK.ID, CARDS_IN_DECK.DECK_ID)));
-								await(transaction.execute(dsl -> duplicateAllForeign(deckId, newDeckId, DECK_PLAYER_ATTRIBUTE_TUPLES.ID, DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID)));
-								await(transaction.commit());
-								transaction = null;
-								promise.complete(await(getDeck(newDeckId, userId)));
-							} catch (Throwable t) {
-								if (transaction != null) {
-									transaction.rollback();
-								}
-								promise.fail(t);
+			@Override
+			public Future<Empty> decksDelete(DecksDeleteRequest request) {
+				var userId = Accounts.userId();
+				var deckId = request.getDeckId();
+				// first, try to trash the share if it exists
+				// otherwise, the if it's a premade deck and the trash record does not exist, insert a share record that is trashed
+				// otherwise, if we own the deck, trash the deck.
+				return withExecutor(queryExecutor -> queryExecutor.execute(dsl -> dsl.update(DECK_SHARES)
+								.set(DECK_SHARES.TRASHED_BY_RECIPIENT, true)
+								.where(DECK_SHARES.DECK_ID.eq(deckId), DECK_SHARES.SHARE_RECIPIENT_ID.eq(userId)))
+						.compose(updated -> {
+							if (updated != 0) {
+								return Future.succeededFuture();
 							}
-						});
-						return promise.future();
+
+							return queryExecutor
+									.findOneRow(dsl -> dsl.select(DECKS.IS_PREMADE, DECKS.CREATED_BY).from(DECKS).where(DECKS.ID.eq(deckId)))
+									.compose(row -> {
+										if (row == null) {
+											return Future.failedFuture("deck not found");
+										}
+
+										var isPremade = row.getBoolean(DECKS.IS_PREMADE.getName());
+										var isOwner = Objects.equals(row.getString(DECKS.CREATED_BY.getName()), userId);
+										if (isPremade) {
+											// insert a stop sharing premade deck row
+											return queryExecutor.execute(dsl -> dsl.insertInto(DECK_SHARES)
+													.set(DECK_SHARES.newRecord()
+															.setDeckId(deckId)
+															.setShareRecipientId(userId)
+															.setTrashedByRecipient(true)));
+										} else if (isOwner) {
+											return queryExecutor.execute(dsl -> dsl.update(DECKS).set(DECKS.TRASHED, true).where(DECKS.ID.eq(deckId), canEditDeckSql(userId)));
+										} else {
+											return Future.failedFuture("deck not owned by user or shared with user");
+										}
+									});
+						}).compose(v -> {
+							// invalidate cache
+							var cache = DECKS_CACHE.get();
+							return Future.fromCompletionStage(cache.fastRemoveAsync(deckId), Vertx.currentContext());
+						})
+						.map(Empty.getDefaultInstance())
+						.recover(Environment.onGrpcFailure()));
+			}
+
+			@Override
+			public Future<DecksGetResponse> decksGet(DecksGetRequest request) {
+				var deckId = request.getDeckId();
+				var userId = Accounts.userId();
+
+				return getDeck(deckId, userId).recover(Environment.onGrpcFailure());
+			}
+
+			@Override
+			public Future<DecksGetAllResponse> decksGetAll(Empty request) {
+				var userId = Accounts.userId();
+				return getAllDecks(userId).recover(Environment.onGrpcFailure());
+			}
+
+			@Override
+			public Future<DecksPutResponse> decksPut(DecksPutRequest request) {
+				var userId = Accounts.userId();
+
+				DeckCreateRequest createRequest;
+				if (!request.getDeckList().isEmpty()) {
+					createRequest = DeckCreateRequest.fromDeckList(request.getDeckList());
+				} else {
+					createRequest = new DeckCreateRequest()
+							.withName(request.getName())
+							.withFormat(request.getFormat())
+							.withCardIds(request.getCardIdsList())
+							.withHeroClass(request.getHeroClass());
+				}
+
+				return createDeck(userId, createRequest).recover(Environment.onGrpcFailure());
+			}
+
+			@Override
+			public Future<DecksGetResponse> decksUpdate(DecksUpdateRequest request) {
+				var configuration = Environment.jooqAkaDaoConfiguration();
+				var deckId = request.getDeckId();
+				var userId = Accounts.userId();
+				var updateCommand = request.getUpdateCommand();
+
+				if (deckId.isEmpty()) {
+					return Future.failedFuture(Status.INVALID_ARGUMENT
+							.withCause(new NullPointerException("deckId"))
+							.augmentDescription("You must specify a deckId")
+							.asRuntimeException());
+				}
+
+				if (!request.hasUpdateCommand()) {
+					return getDeck(deckId, userId);
+				}
+
+				var futs = new ArrayList<Future>();
+
+
+				// Assert that we have permissions to edit this deck
+				return withExecutor(queryExecutor -> queryExecutor.execute(dsl -> dsl
+								.select(DECKS.ID)
+								.from(DECKS)
+								.where(DECKS.ID.eq(deckId).and(canEditDeckSql(userId)))
+								.limit(1)
+						).compose(authedCount -> {
+							if (authedCount < 1) {
+								return Future.failedFuture(Status.PERMISSION_DENIED
+										.augmentDescription("You are not authorized to edit this deck because you are not its owner")
+										.asRuntimeException());
+							}
+
+							// Player entity attribute update
+							if (updateCommand.hasSetPlayerEntityAttribute()) {
+								var setAttributeCommand = updateCommand.getSetPlayerEntityAttribute();
+								switch (setAttributeCommand.getAttribute()) {
+									case SIGNATURE:
+										futs.add(queryExecutor.execute(dsl -> dsl.insertInto(DECK_PLAYER_ATTRIBUTE_TUPLES,
+												DECK_PLAYER_ATTRIBUTE_TUPLES.ATTRIBUTE,
+												DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID,
+												DECK_PLAYER_ATTRIBUTE_TUPLES.STRING_VALUE).values(
+												PlayerEntityAttributesMessage.PlayerEntityAttributes.SIGNATURE_VALUE,
+												deckId,
+												setAttributeCommand.getStringValue())));
+										break;
+									default:
+										break;
+								}
+							}
+
+							// Card records update
+							if (updateCommand.hasPushCardIds()) {
+								futs.add(queryExecutor.execute(dsl -> {
+									var insert = dsl.insertInto(CARDS_IN_DECK,
+											CARDS_IN_DECK.DECK_ID,
+											CARDS_IN_DECK.CARD_ID
+									);
+									for (var cardId : updateCommand.getPushCardIds().getEachList()) {
+										insert.values(deckId, cardId);
+									}
+									return insert;
+								}));
+							}
+
+							if (updateCommand.hasPushInventoryIds()) {
+								futs.add(Future.failedFuture(Status.UNIMPLEMENTED
+										.augmentDescription("Inventory IDs are now unique to each deck and cannot be shared among decks.")
+										.asRuntimeException()));
+							}
+
+							if (updateCommand.getSetInventoryIdsCount() > 0) {
+								futs.add(Future.failedFuture(Status.UNIMPLEMENTED
+										.augmentDescription("Inventory IDs are now unique to each deck and cannot be shared among decks.")
+										.asRuntimeException()));
+							}
+
+							if (updateCommand.getPullAllCardIdsCount() > 0) {
+								futs.addAll(updateCommand.getPullAllCardIdsList().stream()
+										.collect(groupingBy(Function.identity(), counting()))
+										.entrySet()
+										.stream()
+										.map(entry ->
+												queryExecutor.execute(dsl ->
+														dsl.deleteFrom(CARDS_IN_DECK)
+																.where(CARDS_IN_DECK.DECK_ID.eq(deckId).and(CARDS_IN_DECK.CARD_ID.eq(entry.getKey())))
+																.limit(entry.getValue().intValue())))
+										.toList());
+							}
+
+							if (updateCommand.getPullAllInventoryIdsCount() > 0) {
+								var deleteByIds = queryExecutor.execute(dsl -> dsl.deleteFrom(CARDS_IN_DECK).where(CARDS_IN_DECK.ID.in(updateCommand.getPullAllInventoryIdsList())));
+								futs.add(deleteByIds);
+							}
+
+							var setsHeroClass = !updateCommand.getSetHeroClass().isEmpty();
+							var setsName = !updateCommand.getSetName().isEmpty();
+
+							if (setsHeroClass || setsName) {
+								// Deck record update
+								futs.add(queryExecutor
+										.execute(dsl -> {
+											var update = (UpdateSetStep<DecksRecord>) dsl.update(DECKS);
+											if (setsHeroClass) {
+												update = update.set(DECKS.HERO_CLASS, updateCommand.getSetHeroClass());
+											}
+
+											if (setsName) {
+												update = update.set(DECKS.NAME, updateCommand.getSetName());
+											}
+
+											update = update.set(DECKS.LAST_EDITED_BY, userId);
+
+											return ((UpdateSetMoreStep<DecksRecord>) update)
+													.where(DECKS.ID.eq(deckId));
+										}));
+							}
+
+							if (futs.isEmpty()) {
+								return Future.succeededFuture();
+							}
+
+							return CompositeFuture.all(futs);
+						})
+						.compose(v -> {
+							// invalidate cache
+							var cache = DECKS_CACHE.get();
+							return Future.fromCompletionStage(cache.fastRemoveAsync(deckId), Vertx.currentContext());
+						})
+						.compose(v -> getDeck(deckId, userId))
+						.recover(Environment.onGrpcFailure()));
+			}
+
+			@Override
+			public Future<DecksGetResponse> duplicateDeck(StringValue request) {
+				var userId = Accounts.userId();
+				var deckId = request.getValue();
+				var newDeckId = UUID.randomUUID().toString();
+				var promise = Promise.<DecksGetResponse>promise();
+
+				Environment.async().run(v -> {
+					ReactiveClassicGenericQueryExecutor transaction = null;
+					try {
+						transaction = await(new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), Environment.transactionPool()).beginTransaction());
+						var decksInserted = await(transaction
+								.execute(dsl -> {
+									// new deckId, deck fields...
+									var newDeckIdAndOtherFields = ObjectArrays.concat(DSL.val(newDeckId), withoutFields(DECKS.fields(), DECKS.ID));
+									// replace owner ID
+									var ownerIdPos = Iterators.indexOf(Iterators.forArray(newDeckIdAndOtherFields), t -> t != null && Objects.equals(t.getName(), DECKS.CREATED_BY.getName()));
+									newDeckIdAndOtherFields[ownerIdPos] = DSL.val(userId);
+									// replace premade
+									var premadePos = Iterators.indexOf(Iterators.forArray(newDeckIdAndOtherFields), f -> Objects.equals(f, DECKS.IS_PREMADE));
+									newDeckIdAndOtherFields[premadePos] = DSL.val(false);
+									return dsl.insertInto(DECKS, DECKS.fields())
+											// retrieve fields from existing deck EXCEPT the ID, which we replaced
+											.select(DSL.using(SQLDialect.POSTGRES).select(newDeckIdAndOtherFields)
+													.from(DECKS)
+													// We can duplicate our own decks, decks that are permitted to duplicate by anyone or premade decks
+													.where(DECKS.ID.eq(deckId).and(canEditDeckSql(userId)
+															.or(DECKS.PERMITTED_TO_DUPLICATE.eq(true))
+															.or(DECKS.IS_PREMADE.eq(true)))));
+								}));
+
+						if (decksInserted != 1) {
+							throw Status.NOT_FOUND.asRuntimeException();
+						}
+
+						await(transaction.execute(dsl -> duplicateAllForeign(deckId, newDeckId, CARDS_IN_DECK.ID, CARDS_IN_DECK.DECK_ID)));
+						await(transaction.execute(dsl -> duplicateAllForeign(deckId, newDeckId, DECK_PLAYER_ATTRIBUTE_TUPLES.ID, DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID)));
+						await(transaction.commit());
+						transaction = null;
+						promise.complete(await(getDeck(newDeckId, userId)));
+					} catch (Throwable t) {
+						if (transaction != null) {
+							transaction.rollback();
+						}
+						promise.fail(t);
 					}
-				})
-				.compose(Accounts::requiresAuthorization);
+				});
+				return promise.future();
+			}
+		}::bindAll;
 	}
 
 	public static Future<DecksGetAllResponse> getAllDecks(String userId) {

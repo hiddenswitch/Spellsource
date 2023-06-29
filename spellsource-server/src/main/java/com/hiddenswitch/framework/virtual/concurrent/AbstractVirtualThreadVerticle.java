@@ -11,6 +11,9 @@ import io.vertx.core.impl.VertxInternal;
 
 public abstract class AbstractVirtualThreadVerticle extends AbstractVerticle {
 
+	private Context startingContext;
+	private Context stoppingContext;
+
 	@Override
 	public final void init(Vertx vertx1, Context context1) {
 		super.init(vertx1, context1);
@@ -31,7 +34,7 @@ public abstract class AbstractVirtualThreadVerticle extends AbstractVerticle {
 
 	@Override
 	public final void start(Promise<Void> startPromise) throws Exception {
-		var startingContext = Vertx.currentContext();
+		this.startingContext = Vertx.currentContext();
 		context.runOnContext(v -> {
 			try {
 				startVirtual();
@@ -44,7 +47,7 @@ public abstract class AbstractVirtualThreadVerticle extends AbstractVerticle {
 
 	@Override
 	public final void stop(Promise<Void> stopPromise) throws Exception {
-		var stoppingContext = Vertx.currentContext();
+		this.stoppingContext = Vertx.currentContext();
 		context.runOnContext(v -> {
 			try {
 				stopVirtual();
@@ -61,4 +64,11 @@ public abstract class AbstractVirtualThreadVerticle extends AbstractVerticle {
 	public void stopVirtual() throws Exception {
 	}
 
+	protected Context startingContext() {
+		return startingContext;
+	}
+
+	protected Context stoppingContext() {
+		return stoppingContext;
+	}
 }

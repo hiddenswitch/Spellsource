@@ -1,29 +1,29 @@
 package com.hiddenswitch.framework;
 
-import com.avast.grpc.jwt.client.JwtCallCredentials;
 import com.google.protobuf.Empty;
+import com.hiddenswitch.framework.impl.GrpcClientWithOptions;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.CreateAccountRequest;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.LoginOrCreateReply;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.LoginOrCreateReplyOrBuilder;
-import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpc;
-import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpc;
+import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpcClient;
+import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpcClient;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
 import com.hiddenswitch.spellsource.rpc.Spellsource.*;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MessageTypeMessage.MessageType;
-import com.hiddenswitch.spellsource.rpc.VertxHiddenSwitchSpellsourceAPIServiceGrpc;
-import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpc;
-import io.grpc.*;
+import com.hiddenswitch.spellsource.rpc.VertxHiddenSwitchSpellsourceAPIServiceGrpcClient;
+import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpcClient;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.HttpVersion;
+import io.vertx.core.http.RequestOptions;
+import io.vertx.core.http.impl.headers.HeadersMultiMap;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.grpc.client.GrpcClient;
-import io.vertx.grpc.client.GrpcClientChannel;
 import net.demilich.metastone.game.logic.XORShiftRandom;
 import org.keycloak.representations.AccessTokenResponse;
 import org.slf4j.Logger;
@@ -36,16 +36,18 @@ import java.util.UUID;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static io.vertx.await.Async.await;
 import static io.vertx.core.CompositeFuture.all;
 import static io.vertx.core.CompositeFuture.any;
 
 public class Client {
-	private final Logger LOGGER = LoggerFactory.getLogger(Client.class);
-	protected final AtomicReference<GrpcClientChannel> managedChannel = new AtomicReference<>();
+	protected final AtomicReference<GrpcClientWithOptions> managedChannel = new AtomicReference<>();
 	protected final Vertx vertx;
 	protected final WebClient webClient;
 	protected final String keycloakPath;
+	private final Logger LOGGER = LoggerFactory.getLogger(Client.class);
 	private final String loginUri;
+	private final XORShiftRandom random = new XORShiftRandom(System.nanoTime());
 	private AccessTokenResponse accessToken;
 	private UserEntity userEntity;
 	private String username;
@@ -53,8 +55,6 @@ public class Client {
 	private String password;
 	private Promise<MatchmakingQueuePutResponse> matchmakingResponseFut;
 	private Promise<Void> matchmakingEndedFut;
-	private final XORShiftRandom random = new XORShiftRandom(System.nanoTime());
-	private GrpcClient grpcClient;
 
 	public Client(Vertx vertx, WebClient webClient, String keycloakPath) {
 		this.vertx = vertx;
@@ -83,10 +83,11 @@ public class Client {
 	public Future<ServerToClientMessage> connectToGame() {
 		var writerFut = Promise.<WriteStream<ClientToServerMessage>>promise();
 		var promise = Promise.<ServerToClientMessage>promise();
-		var reader = legacy().subscribeGame(writerFut::tryComplete);
+		var readerFut = legacy().subscribeGame(writerFut::tryComplete);
 
-		reader.handler(promise::complete);
-		reader.exceptionHandler(promise::fail);
+		readerFut.onSuccess(reader -> reader.handler(promise::complete));
+		readerFut.onSuccess(reader -> reader.exceptionHandler(promise::fail));
+		readerFut.onFailure(promise::fail);
 
 		return writerFut.future()
 				.compose(writer -> {
@@ -100,11 +101,11 @@ public class Client {
 
 	public Future<ServerToClientMessage> playUntilGameOver() {
 		var writerPromise = Promise.<WriteStream<ClientToServerMessage>>promise();
-		var reader = legacy().subscribeGame(writerPromise::tryComplete);
+		var readerFut = legacy().subscribeGame(writerPromise::tryComplete);
 		var writerFut = writerPromise.future();
 		var gameOverPromise = Promise.<ServerToClientMessage>promise();
 
-		reader.handler(message -> {
+		readerFut.onSuccess(reader -> reader.handler(message -> {
 			var writer = writerFut.result();
 			switch (message.getMessageType()) {
 				case ON_MULLIGAN:
@@ -127,9 +128,10 @@ public class Client {
 					gameOverPromise.complete(message);
 					break;
 			}
-		});
+		}));
 
-		reader.exceptionHandler(gameOverPromise::tryFail);
+		readerFut.onFailure(gameOverPromise::tryFail);
+		readerFut.onSuccess(reader -> reader.exceptionHandler(gameOverPromise::tryFail));
 
 		return writerFut
 				.compose(writer -> {
@@ -144,13 +146,13 @@ public class Client {
 				});
 	}
 
-	public Future<MatchmakingQueuePutResponse> matchmake(VertxMatchmakingGrpc.MatchmakingVertxStub matchmaking, String queueId, String deckId) {
+	public Future<MatchmakingQueuePutResponse> matchmake(VertxMatchmakingGrpcClient matchmaking, String queueId, String deckId) {
 		if (matchmakingResponseFut != null) {
 			throw new RuntimeException("already matchmaking");
 		}
 		LOGGER.trace("starting matchmaking for {}", userEntity.getId());
 		var matchmakingRequestsFut = Promise.<WriteStream<MatchmakingQueuePutRequest>>promise();
-		var matchmakingResponses = matchmaking.enqueue(matchmakingRequestsFut::complete);
+		var matchmakingResponsesFut = matchmaking.enqueue(matchmakingRequestsFut::complete);
 		var request = matchmakingRequestsFut.future()
 				.compose(matchmakingRequests -> {
 					LOGGER.trace("sent matchmaking put for {}", userEntity.getId());
@@ -160,8 +162,10 @@ public class Client {
 				});
 		matchmakingResponseFut = Promise.<MatchmakingQueuePutResponse>promise();
 		matchmakingEndedFut = Promise.<Void>promise();
-		matchmakingResponses.handler(matchmakingResponseFut::complete);
-		matchmakingResponses.endHandler(matchmakingEndedFut::complete);
+		matchmakingResponsesFut.onSuccess(matchmakingResponses -> {
+			matchmakingResponses.handler(matchmakingResponseFut::complete);
+			matchmakingResponses.endHandler(matchmakingEndedFut::complete);
+		});
 		var response = matchmakingResponseFut.future();
 		// deals with cancellation
 		response.onFailure(t -> {
@@ -189,7 +193,7 @@ public class Client {
 		return matchmake(matchmaking(), queueId);
 	}
 
-	public Future<MatchmakingQueuePutResponse> matchmake(VertxMatchmakingGrpc.MatchmakingVertxStub matchmaking, String queueId) {
+	public Future<MatchmakingQueuePutResponse> matchmake(VertxMatchmakingGrpcClient matchmaking, String queueId) {
 		var random = new Random();
 		return legacy()
 				.decksGetAll(Empty.getDefaultInstance())
@@ -212,7 +216,7 @@ public class Client {
 	}
 
 	public Future<LoginOrCreateReply> createAndLogin(String username, String email, String password, boolean premadeDecks) {
-		var stub = VertxUnauthenticatedGrpc.newVertxStub(channel());
+		var stub = new VertxUnauthenticatedGrpcClient(client(), address());
 		return stub.createAccount(CreateAccountRequest.newBuilder()
 						.setUsername(username)
 						.setEmail(email)
@@ -227,19 +231,17 @@ public class Client {
 		return createAndLogin(UUID.randomUUID().toString(), UUID.randomUUID().toString().replace("-", ".") + "@hiddenswitch.com", UUID.randomUUID().toString());
 	}
 
-	public CallCredentials credentials() {
+	public MultiMap credentials() {
 		if (getAccessToken() != null) {
-			return new JwtCallCredentials.Synchronous(() -> getAccessToken().getToken());
+			return HeadersMultiMap.httpHeaders().add("Authorization", "Bearer " + getAccessToken().getToken());
 		} else {
-			return new JwtCallCredentials.Asynchronous(() ->
-					login(email, password)
-							.onSuccess(this::handleLogin)
-							.map(AccessTokenResponse::getToken)
-							.recover(ignored -> createAndLogin(username, email, password)
-									.onSuccess(this::handleCreateAccountReply)
-									.map(response -> response.getAccessTokenResponse().getToken()))
-							.toCompletionStage()
-							.toCompletableFuture());
+			await(login(email, password)
+					.onSuccess(this::handleLogin)
+					.map(AccessTokenResponse::getToken)
+					.recover(ignored -> createAndLogin(username, email, password)
+							.onSuccess(this::handleCreateAccountReply)
+							.map(response -> response.getAccessTokenResponse().getToken())));
+			return credentials();
 		}
 	}
 
@@ -284,17 +286,16 @@ public class Client {
 		return userEntity;
 	}
 
-	public GrpcClientChannel channel() {
+	public GrpcClientWithOptions client() {
 		return managedChannel.updateAndGet(existing -> {
 			if (existing != null) {
 				return existing;
 			}
 
-			this.grpcClient = GrpcClient.client(vertx, new HttpClientOptions()
-					.setProtocolVersion(HttpVersion.HTTP_2)
-					.setHttp2ClearTextUpgrade(false)
-					.setSsl(false));
-			return new GrpcClientChannel(grpcClient, SocketAddress.inetSocketAddress(port(), host()));
+			return new GrpcClientWithOptions(new HttpClientOptions()
+								.setProtocolVersion(HttpVersion.HTTP_2)
+								.setHttp2ClearTextUpgrade(false)
+								.setSsl(false), vertx);
 		});
 	}
 
@@ -307,9 +308,8 @@ public class Client {
 	}
 
 	public void close() {
-		if (grpcClient != null) {
-			grpcClient.close();
-			grpcClient = null;
+		if (managedChannel.get() != null) {
+			managedChannel.get().close();
 		}
 	}
 
@@ -334,23 +334,12 @@ public class Client {
 		this.userEntity = userEntity;
 	}
 
-	public VertxHiddenSwitchSpellsourceAPIServiceGrpc.HiddenSwitchSpellsourceAPIServiceVertxStub legacy() {
-		return VertxHiddenSwitchSpellsourceAPIServiceGrpc.newVertxStub(channel())
-				.withCallCredentials(credentials());
+	public VertxHiddenSwitchSpellsourceAPIServiceGrpcClient legacy() {
+		return new VertxHiddenSwitchSpellsourceAPIServiceGrpcClient(client().setRequestOptions(new RequestOptions().setHeaders(credentials())), SocketAddress.inetSocketAddress(port(), host()));
 	}
 
-	public VertxMatchmakingGrpc.MatchmakingVertxStub matchmaking() {
-		return VertxMatchmakingGrpc.newVertxStub(channel())
-				.withInterceptors(new ClientInterceptor() {
-					@Override
-					public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
-						if (method.getFullMethodName().toLowerCase().contains("enqueue")) {
-							LOGGER.trace("did call enqueue for real");
-						}
-						return next.newCall(method, callOptions);
-					}
-				})
-				.withCallCredentials(credentials());
+	public VertxMatchmakingGrpcClient matchmaking() {
+		return new VertxMatchmakingGrpcClient(client().setRequestOptions(new RequestOptions().setHeaders(credentials())), address());
 	}
 
 	public Future<Void> close(Object ignored) {
@@ -369,11 +358,15 @@ public class Client {
 		close();
 	}
 
-	public VertxUnauthenticatedCardsGrpc.UnauthenticatedCardsVertxStub unauthenticatedCards() {
-		return VertxUnauthenticatedCardsGrpc.newVertxStub(channel());
+	public VertxUnauthenticatedCardsGrpcClient unauthenticatedCards() {
+		return new VertxUnauthenticatedCardsGrpcClient(client(), address());
 	}
 
-	public VertxUnauthenticatedGrpc.UnauthenticatedVertxStub unauthenticated() {
-		return VertxUnauthenticatedGrpc.newVertxStub(channel());
+	public VertxUnauthenticatedGrpcClient unauthenticated() {
+		return new VertxUnauthenticatedGrpcClient(client(), address());
+	}
+
+	public SocketAddress address() {
+		return SocketAddress.inetSocketAddress(port(), host());
 	}
 }

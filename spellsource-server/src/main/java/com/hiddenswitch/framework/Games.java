@@ -3,8 +3,7 @@ package com.hiddenswitch.framework;
 import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
 import com.hiddenswitch.framework.impl.*;
-import com.hiddenswitch.framework.rpc.VertxGamesGrpc;
-import io.grpc.ServerServiceDefinition;
+import com.hiddenswitch.framework.rpc.VertxGamesGrpcServer;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
@@ -13,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Comparator;
 
 
 /**
@@ -22,7 +21,6 @@ import java.util.*;
  * Various static methods convert game data into a format the Unity3D client can understand.
  */
 public class Games {
-	private static final Logger LOGGER = LoggerFactory.getLogger(Games.class);
 	public static final long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
 	public static final String GAMES = "games";
 	public static final Comparator<net.demilich.metastone.game.entities.Entity> ENTITY_NATURAL_ORDER = Comparator
@@ -30,6 +28,7 @@ public class Games {
 			.thenComparingInt(net.demilich.metastone.game.entities.Entity::getIndex);
 	public static final String GAMES_CREATE_GAME_SESSION = "games:createGameSession";
 	public static final String ADDRESS_IS_IN_GAME = "games:isInGame:";
+	private static final Logger LOGGER = LoggerFactory.getLogger(Games.class);
 
 	/**
 	 * Creates a match without entering a queue entry between two users.
@@ -73,8 +72,8 @@ public class Games {
 		return Long.parseLong(System.getProperties().getProperty("games.defaultNoActivityTimeout", Long.toString(Games.DEFAULT_NO_ACTIVITY_TIMEOUT)));
 	}
 
-	public static Future<ServerServiceDefinition> services() {
-		return Future.succeededFuture(new VertxGamesGrpc.GamesVertxImplBase() {
+	public static BindAll<VertxGamesGrpcServer.GamesApi> services() {
+		return new VertxGamesGrpcServer.GamesApi() {
 			@Override
 			public Future<StringValue> isInMatch(Empty request) {
 				var userId = Accounts.userId();
@@ -86,6 +85,6 @@ public class Games {
 								.setValue(res == null ? "" : res)
 								.build());
 			}
-		}).compose(Accounts::requiresAuthorization);
+		}::bindAll;
 	}
 }

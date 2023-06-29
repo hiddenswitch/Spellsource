@@ -1,18 +1,15 @@
 package com.hiddenswitch.framework;
 
 import com.google.common.collect.Lists;
-import com.hiddenswitch.framework.impl.ClientMatchmakingService;
-import com.hiddenswitch.framework.impl.CodecRegistration;
-import com.hiddenswitch.framework.impl.ConfigurationRequest;
-import com.hiddenswitch.framework.impl.CreateGameSessionResponse;
+import com.hiddenswitch.framework.impl.*;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.MatchmakingQueuesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutResponse;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutResponseUnityConnection;
+import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpcServer;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
-import io.grpc.ServerServiceDefinition;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Metrics;
 import io.micrometer.core.instrument.binder.BaseUnits;
@@ -35,20 +32,74 @@ import static java.util.stream.Collectors.toMap;
 import static org.jooq.impl.DSL.asterisk;
 
 public class Matchmaking extends AbstractVerticle {
+	public static final String MATCHMAKING_ENQUEUE = "matchmaking:enqueue:";
+	public static final String MATCHMAKING_QUEUE_CLOSED = "matchmaking:queue-closed:";
 	private static final Logger LOGGER = LoggerFactory.getLogger(Matchmaking.class);
 	private final static Counter TICKETS_TAKEN = Counter
 			.builder("matchmaking.tickets.taken")
 			.baseUnit(BaseUnits.ROWS)
 			.description("The number of tickets taken during this evaluation of the matchmaker.")
 			.register(Metrics.globalRegistry);
-
-	public static final String MATCHMAKING_ENQUEUE = "matchmaking:enqueue:";
-	public static final String MATCHMAKING_QUEUE_CLOSED = "matchmaking:queue-closed:";
 	private volatile boolean stopping;
 
 	public Matchmaking() {
 	}
 
+	public static Services services() {
+		var matchmakingService = new ClientMatchmakingService();
+		return new Services(matchmakingService::bindAll, matchmakingService);
+	}
+
+	public static Future<Void> writeGameId(WriteStream<MatchmakingQueuePutResponse> response, String gameId) {
+		var message = MatchmakingQueuePutResponse.newBuilder()
+				.setUnityConnection(MatchmakingQueuePutResponseUnityConnection.newBuilder()
+						.setGameId(gameId).build()).build();
+		return response.write(message);
+	}
+
+	public static Future<Void> deleteQueue(String queueId) {
+		LOGGER.trace("deleting queueId={}", queueId);
+		return withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_QUEUES)
+				.where(MATCHMAKING_QUEUES.ID.eq(queueId)))
+				.compose(deleted -> {
+					if (deleted == 0) {
+						return Future.failedFuture("no queue found to delete with ID " + queueId);
+					}
+
+					// send a message to all currently connected users awaiting this queue that the queue is closed
+					Vertx.currentContext().owner().eventBus().publish(MATCHMAKING_QUEUE_CLOSED + queueId, "closed");
+
+					return Future.succeededFuture();
+				});
+	}
+
+	public static Future<Closeable> createQueue(MatchmakingQueues configuration) {
+		var matchmakingQueuesDao = new MatchmakingQueuesDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+		return matchmakingQueuesDao.insert(configuration, true)
+				.onSuccess(i -> LOGGER.debug("created queue {} ({})", configuration.getId(), i == 1))
+				.compose(ignored -> Future.succeededFuture(new Closeable() {
+					@Override
+					public void close(Promise<Void> completion) {
+						Matchmaking.deleteQueue(configuration.getId()).onComplete(completion);
+					}
+				}));
+	}
+
+	public static Future<Void> notifyGameReady(String userId, String gameId) {
+		var address = MATCHMAKING_ENQUEUE + userId;
+		var vertx = Vertx.currentContext().owner();
+		var serverConfiguration = Environment.getConfiguration();
+		var smallTimeout = serverConfiguration.getMatchmaking().getScanFrequencyMillis();
+
+		// observe this is a request
+		// the request will only return once the matchmaking stream has been written to, accommodating drops if
+		// players close the client after a match has been made but before they have been notified
+		// the protocol is to send over the event bus the game ID to the queued player, wherever they are, and
+		// once the client has actually received the notification, reply to this event bus request
+		return vertx.eventBus().<String>request(address, gameId, new DeliveryOptions().setSendTimeout(smallTimeout))
+				.onFailure(Environment.onFailure("failed to notify game ready"))
+				.mapEmpty();
+	}
 
 	@Override
 	public void stop(Promise<Void> stopPromise) throws Exception {
@@ -61,23 +112,6 @@ public class Matchmaking extends AbstractVerticle {
 		runServerQueue();
 		// todo: await(started) ?
 		startPromise.complete();
-	}
-
-	public record Services(Future<ServerServiceDefinition> serviceDefinitionFuture,
-	                       ClientMatchmakingService clientMatchmakingService) {
-	}
-
-	public static Services services() {
-		var matchmakingService = new ClientMatchmakingService();
-		return new Services(Future.succeededFuture(matchmakingService)
-				.compose(Accounts::requiresAuthorization), matchmakingService);
-	}
-
-	public static Future<Void> writeGameId(WriteStream<MatchmakingQueuePutResponse> response, String gameId) {
-		var message = MatchmakingQueuePutResponse.newBuilder()
-				.setUnityConnection(MatchmakingQueuePutResponseUnityConnection.newBuilder()
-						.setGameId(gameId).build()).build();
-		return response.write(message);
 	}
 
 	public void runServerQueue() {
@@ -232,47 +266,7 @@ public class Matchmaking extends AbstractVerticle {
 				.map(CreateGameSessionResponse::getGameId);
 	}
 
-	public static Future<Void> deleteQueue(String queueId) {
-		LOGGER.trace("deleting queueId={}", queueId);
-		return withDslContext(dsl -> dsl.deleteFrom(MATCHMAKING_QUEUES)
-				.where(MATCHMAKING_QUEUES.ID.eq(queueId)))
-				.compose(deleted -> {
-					if (deleted == 0) {
-						return Future.failedFuture("no queue found to delete with ID " + queueId);
-					}
-
-					// send a message to all currently connected users awaiting this queue that the queue is closed
-					Vertx.currentContext().owner().eventBus().publish(MATCHMAKING_QUEUE_CLOSED + queueId, "closed");
-
-					return Future.succeededFuture();
-				});
-	}
-
-	public static Future<Closeable> createQueue(MatchmakingQueues configuration) {
-		var matchmakingQueuesDao = new MatchmakingQueuesDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
-		return matchmakingQueuesDao.insert(configuration, true)
-				.onSuccess(i -> LOGGER.debug("created queue {} ({})", configuration.getId(), i == 1))
-				.compose(ignored -> Future.succeededFuture(new Closeable() {
-					@Override
-					public void close(Promise<Void> completion) {
-						Matchmaking.deleteQueue(configuration.getId()).onComplete(completion);
-					}
-				}));
-	}
-
-	public static Future<Void> notifyGameReady(String userId, String gameId) {
-		var address = MATCHMAKING_ENQUEUE + userId;
-		var vertx = Vertx.currentContext().owner();
-		var serverConfiguration = Environment.getConfiguration();
-		var smallTimeout = serverConfiguration.getMatchmaking().getScanFrequencyMillis();
-
-		// observe this is a request
-		// the request will only return once the matchmaking stream has been written to, accommodating drops if
-		// players close the client after a match has been made but before they have been notified
-		// the protocol is to send over the event bus the game ID to the queued player, wherever they are, and
-		// once the client has actually received the notification, reply to this event bus request
-		return vertx.eventBus().<String>request(address, gameId, new DeliveryOptions().setSendTimeout(smallTimeout))
-				.onFailure(Environment.onFailure("failed to notify game ready"))
-				.mapEmpty();
+	public record Services(BindAll<VertxMatchmakingGrpcServer.MatchmakingApi> binder,
+	                       ClientMatchmakingService clientMatchmakingService) {
 	}
 }

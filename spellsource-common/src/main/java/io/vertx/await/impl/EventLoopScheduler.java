@@ -41,7 +41,7 @@ public class EventLoopScheduler implements Scheduler {
   private static ThreadFactory threadFactory(Executor carrier) {
     try {
       Thread.Builder.OfVirtual ov = (Thread.Builder.OfVirtual) virtualThreadFactory.invokeExact(carrier);
-//      ov.name("vert.x-virtual-thread-%d".formatted(virtualThreadCounter.getAndIncrement()));
+      ov.name("vert.x-virtual-thread");
       return ov.factory();
     } catch (RuntimeException | Error e) {
       throw e;

@@ -418,7 +418,6 @@ public class ListCardCatalogue implements CardCatalogue {
 	protected void updatedWith(Map<String, CardDesc> cardDescs) {
 		Async.lock(lock.writeLock());
 		try {
-			
 			var newCards = new ArrayList<Card>(cardDescs.size());
 			for (var desc : cardDescs.values()) {
 				// TODO more manual checks for whether a card is valid for play (references nonexistent cards / attributes / etc)
