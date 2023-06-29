@@ -91,7 +91,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 				deckCollectionFut = Legacy.getDeck(deckId, userId)
 						.compose(deckCollection -> {
 							// Create the deck and assign all the appropriate IDs to the cards
-							var deck = ModelConversions.getGameDeck(userId, deckCollection);
+							var deck = ModelConversions.getGameDeck(userId, deckCollection, cardCatalogue);
 
 							configuration.setDeck(deck);
 

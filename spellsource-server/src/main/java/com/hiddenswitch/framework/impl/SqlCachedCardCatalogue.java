@@ -209,6 +209,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 			toFetch.add(invalid);
 		}
 		if (toFetch != null && !toFetch.isEmpty()) {
+			System.out.println("Going to refetch " + toFetch);
 			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 			var getCards = cardsDao.findManyByCondition(CARDS.ID.in(toFetch).and(CARDS.IS_PUBLISHED.eq(true)).and(CARDS.IS_ARCHIVED.eq(false)));
 			if (Vertx.currentContext() != null && ((ContextInternal) Vertx.currentContext()).unwrap() instanceof VirtualThreadContext) {
@@ -218,6 +219,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 					loadFromCardDbRecords(cardDbRecords);
 				} finally {
 					lock.writeLock().unlock();
+					System.out.println("finished fetching 1");
 				}
 			} else {
 				getCards.onSuccess(cardDbRecords -> {
@@ -226,6 +228,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 						loadFromCardDbRecords(cardDbRecords);
 					} finally {
 						lock.writeLock().unlock();
+						System.out.println("finished fetching 2");
 					}
 				});
 			}

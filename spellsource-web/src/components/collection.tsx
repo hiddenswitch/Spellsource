@@ -157,7 +157,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
   });
 
   return (
-    <div ref={collectionDrop}>
+    <div ref={collectionDrop} className={"h-100"}>
       <div id={"Top Bar"} className={"d-flex flex-row flex-wrap gap-2 pt-2 ps-2 align-items-center"}>
         <Form
           onSubmit={(event) => {

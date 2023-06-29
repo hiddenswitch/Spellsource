@@ -37,7 +37,7 @@ export default ({ children }) => {
         <title>Spellsource</title>
       </Head>
       <Header pages={pages} />
-      <div className={"flex-grow-1"}>{children}</div>
+      <div className={"flex-grow-1 d-flex flex-column"}>{children}</div>
       <Footer pages={pages} />
     </div>
   );

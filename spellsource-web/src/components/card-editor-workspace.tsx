@@ -26,7 +26,7 @@ import javascript from "blockly/javascript";
 import useBreakpoint from "@restart/hooks/useBreakpoint";
 import { useEffectOnce } from "../hooks/use-effect-once";
 import { uniqBy } from "lodash";
-import { openFile } from "../lib/fs-utils";
+import { openFromFile } from "../lib/blockly-context-menu";
 
 interface CardEditorWorkspaceProps {
   setJSON?: React.Dispatch<React.SetStateAction<string>>;
@@ -54,9 +54,7 @@ const handleWorkspaceCards = (workspace: WorkspaceSvg, userId: string) => {
     .getTopBlocks(false)
     .filter((block) => block.type.startsWith("Starter_"))
     .forEach((block: BlockSvg) => {
-      if (!block.getFieldValue("id") || !block.getFieldValue("id").startsWith(userId)) {
-        block.setFieldValue(userId + "-" + block.id, "id");
-      }
+      block.setFieldValue(userId + "-" + block.id, "id");
       const blockXml = Blockly.Xml.blockToDom(block, true);
       const card = (block.cardScript = WorkspaceUtils.xmlToCardScript(blockXml) as CardDef);
       cardScript[card.id] = card;
@@ -139,7 +137,7 @@ const CardEditorWorkspace = forwardRef(
       const cardScript = block.cardScript;
       if (!cardId || !userId || !cardScript) return;
 
-      const dom = Blockly.Xml.blockToDom(block, true) as Element;
+      const dom = Blockly.Xml.blockToDom(block, false) as Element;
       const comment = dom.getElementsByTagName("comment")[0];
       if (comment) {
         dom.removeChild(comment);
@@ -253,22 +251,7 @@ const CardEditorWorkspace = forwardRef(
 
         if (evt.key === "o" && (evt.metaKey || evt.ctrlKey)) {
           evt.preventDefault();
-          openFile(".xml", (result) => {
-            const dom = Blockly.Xml.textToDom(result);
-
-            for (const nextBlock of dom.getElementsByTagName("block")) {
-              for (const childNode of nextBlock.childNodes) {
-                const tagName = (childNode as Element).tagName;
-                if (tagName !== "data" && tagName !== "field" && tagName !== "next") {
-                  nextBlock.setAttribute("collapsed", "false");
-                  break;
-                }
-              }
-            }
-
-            const block = Blockly.Xml.domToBlock(dom, mainWorkspace());
-            block.setCollapsed(false);
-          });
+          openFromFile.callback({ workspace: mainWorkspace(), block: undefined });
         }
       };
       document.addEventListener("keydown", listener);

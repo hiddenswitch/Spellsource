@@ -7,16 +7,17 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.google.protobuf.Int32Value;
 import com.google.protobuf.Message;
+import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.rpc.Hiddenswitch;
 import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.ICardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck;
-import com.hiddenswitch.diagnostics.Tracing;
-import com.hiddenswitch.spellsource.rpc.Spellsource.*;
-import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
+import com.hiddenswitch.spellsource.rpc.Spellsource.*;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.DamageTypeMessage.DamageType;
+import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
+import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -48,7 +49,6 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,14 +102,11 @@ public class ModelConversions {
 	 * @param deckId     The deck that the caller is requesting this description record for.
 	 * @return A completed card description.
 	 */
-	public static CardDesc getDescriptionFromRecord(ICardsInDeck cardRecord, String userId, String deckId) {
+	public static CardDesc getDescriptionFromRecord(ICardsInDeck cardRecord, String userId, String deckId, CardCatalogue cardCatalogue) {
 		// Set up the attributes
 		var cardId = cardRecord.getCardId();
-		if (!ClasspathCardCatalogue.INSTANCE.getCards().containsKey(cardId.toLowerCase())) {
-			throw new NullPointerException(String.format("card not found cardId=%s", cardRecord.getCardId()));
-		}
 
-		var cardById = ClasspathCardCatalogue.INSTANCE.getCardById(cardId);
+		var cardById = cardCatalogue.getCardById(cardId);
 		var desc = cardById.getDesc().clone();
 
 		if (desc.getAttributes() == null) {
@@ -182,7 +179,8 @@ public class ModelConversions {
 												.addAllTargetKeyToActions(kv.getValue().stream().map(ga -> TargetActionPair.newBuilder()
 														.setAction(ga.getId())
 														.setFriendlyBattlefieldIndex(friendlyMinions.stream().filter(m -> Objects.equals(m.getReference(), ga.getTargetReference())).map(Minion::getIndex).findFirst().orElse(friendlyMinions.size()))
-														.setTarget((ga.getTargetReference() == null || Objects.equals(ga.getTargetReference(), EntityReference.NONE)) ? -1 : ga.getTargetReference().getId()).build()
+														.setTarget((ga.getTargetReference() == null || Objects.equals(ga.getTargetReference(), EntityReference.NONE)) ? -1 :
+																ga.getTargetReference().getId()).build()
 												).collect(toList())).build());
 									} else if (kv.getKey().actionType == ActionType.DISCOVER) {
 										// Find the corresponding cards in the discover zone
@@ -210,7 +208,8 @@ public class ModelConversions {
 												.setActionType(kv.getKey().actionType)
 												.addAllTargetKeyToActions(kv.getValue().stream().map(ga -> TargetActionPair.newBuilder()
 														.setAction(ga.getId())
-														.setTarget((ga.getTargetReference() == null || Objects.equals(ga.getTargetReference(), EntityReference.NONE)) ? -1 : ga.getTargetReference().getId()).build()).collect(toList())).build());
+														.setTarget((ga.getTargetReference() == null || Objects.equals(ga.getTargetReference(), EntityReference.NONE)) ? -1 :
+																ga.getTargetReference().getId()).build()).collect(toList())).build());
 									}
 								})
 								.collect(toList())
@@ -456,7 +455,7 @@ public class ModelConversions {
 					return e.build();
 				})
 				// Don't include heroes that have already been added
-				.filter(e -> playerEntities.stream().noneMatch(v -> v.getId() == e.getId()))
+				.filter( e -> playerEntities.stream().noneMatch(v -> v.getId() == e.getId()))
 				.collect(toList());
 		entities.addAll(graveyardHeroes);
 
@@ -861,7 +860,7 @@ public class ModelConversions {
 	}
 
 	@NotNull
-	public static GameDeck getGameDeck(String userId, DecksGetResponse deckCollection) {
+	public static GameDeck getGameDeck(String userId, DecksGetResponse deckCollection, @NotNull CardCatalogue cardCatalogue) {
 		var deckId = deckCollection.getCollection().getId();
 		var deck = new GameDeck();
 		deck.setDeckId(deckCollection.getCollection().getId());
@@ -870,9 +869,9 @@ public class ModelConversions {
 				.map(cr -> Objects.requireNonNull(getDescriptionFromRecord(new CardsInDeck()
 						.setCardId(cr.getEntity().getCardId())
 						.setId(cr.getId())
-						.setDeckId(deckId), userId, deckId)).create())
+						.setDeckId(deckId), userId, deckId, cardCatalogue)).create())
 				.collect(Collectors.toCollection(CardArrayList::new)));
-		deck.setFormat(ClasspathCardCatalogue.INSTANCE.getFormat(deckCollection.getCollection().getFormat()));
+		deck.setFormat(cardCatalogue.getFormat(deckCollection.getCollection().getFormat()));
 		deck.setHeroClass(deckCollection.getCollection().getHeroClass());
 		deck.setName(deckCollection.getCollection().getName());
 		return deck;

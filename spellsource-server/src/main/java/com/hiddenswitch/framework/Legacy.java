@@ -639,7 +639,7 @@ public class Legacy {
 						var playerEntityAttributes = res.<List<DeckPlayerAttributeTuples>>resultAt(2);
 						var reply = DecksGetResponse.newBuilder();
 						var inventoryCollection = InventoryCollection.newBuilder();
-
+						
 						inventoryCollection.setId(deck.getId())
 								.setDeckType(InventoryCollection.InventoryCollectionDeckType.forNumber(deck.getDeckType()))
 								.setFormat(deck.getFormat())
@@ -648,7 +648,8 @@ public class Legacy {
 								.setType(InventoryCollection.InventoryCollectionType.DECK)
 								.setIsStandardDeck(deck.getIsPremade())
 								.setUserId(deck.getCreatedBy())
-								.setValidationReport((ValidationReport.Builder) validateDeck(cards.stream().map(row -> row.getString(CARDS_IN_DECK.CARD_ID.getName())).collect(toList()), deck.getHeroClass(), deck.getFormat()));
+								/*.setValidationReport((ValidationReport.Builder) validateDeck(cards.stream().map(row -> row.getString(CARDS_IN_DECK.CARD_ID.getName())).collect(toList()), deck.getHeroClass(), deck.getFormat()))*/;
+								// TODO bring back validation
 						var i = 0;
 						for (var cardRecordRow : cards) {
 							inventoryCollection.addInventory(CardRecord

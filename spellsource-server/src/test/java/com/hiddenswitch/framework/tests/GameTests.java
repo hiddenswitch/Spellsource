@@ -80,7 +80,7 @@ public class GameTests extends FrameworkTestBase {
 				.onSuccess(decksGetAllResponse -> vertxTestContext.verify(() -> {
 					assertTrue(decksGetAllResponse.getDecksList().size() > 1);
 					for (var deckCollection : decksGetAllResponse.getDecksList()) {
-						var gameDeck = ModelConversions.getGameDeck(client.getUserEntity().getId(), deckCollection);
+						var gameDeck = ModelConversions.getGameDeck(client.getUserEntity().getId(), deckCollection, ClasspathCardCatalogue.INSTANCE);
 						assertEquals(30, gameDeck.getCards().size());
 						assertNotNull(gameDeck.getDeckId());
 						assertNotNull(gameDeck.getFormat());

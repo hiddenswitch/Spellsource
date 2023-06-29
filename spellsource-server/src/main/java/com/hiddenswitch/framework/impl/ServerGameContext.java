@@ -990,7 +990,7 @@ public class ServerGameContext extends GameContext implements Server {
 	public GameDeck getDeck(Player player, String name) {
 		var allDecks = await(Legacy.getAllDecks(player.getUserId()));
 		var deck = allDecks.getDecksList().stream().filter(get -> get.getCollection().getName().equalsIgnoreCase(name)).findAny();
-		return deck.map(decksGetResponse -> ModelConversions.getGameDeck(player.getUserId(), decksGetResponse)).orElse(null);
+		return deck.map(decksGetResponse -> ModelConversions.getGameDeck(player.getUserId(), decksGetResponse, getCardCatalogue())).orElse(null);
 	}
 
 	@Override

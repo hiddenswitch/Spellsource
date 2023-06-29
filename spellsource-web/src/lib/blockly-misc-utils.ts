@@ -11,6 +11,7 @@ import { InitBlockOptions } from "../components/card-editor-workspace";
 import { Flyout } from "flyout_base";
 import { FieldButton } from "../components/field-button";
 import { FieldProgressBar } from "../components/field-progress-bar";
+import * as BlocklyContextMenu from "./blockly-context-menu";
 
 export const toTitleCaseCorrected = (string: string) =>
   string
@@ -222,11 +223,12 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options
     Blockly.fieldRegistry.register("field_label_plural", FieldLabelPlural);
     Blockly.fieldRegistry.register("field_button", FieldButton);
     Blockly.fieldRegistry.register("field_progress_bar", FieldProgressBar);
+    BlocklyContextMenu.registerAll(options);
     FieldButton.OnClicks["test"] = (field) => {
       const progressBar = field.getSourceBlock().getField("progress") as FieldProgressBar;
       progressBar.setProgress(Math.random());
     };
-    BlocklyModification.modifyAll(options);
+    BlocklyModification.modifyAll();
   } catch (e) {
     // already registered
   }
@@ -632,10 +634,12 @@ export const refreshBlock = (block: BlockSvg) => {
     const typeTextColor = Blockly["textColor"]?.[block.type];
     const idTextColor = Blockly["textColor"]?.[block.getFieldValue("id")];
     const color = typeTextColor ?? idTextColor;
-    if (color) {
-      textElement.style.fill = color;
-    } else {
-      textElement.style.fill = "#fff";
+    if (textElement) {
+      if (color) {
+        textElement.style.fill = color;
+      } else {
+        textElement.style.fill = "#fff";
+      }
     }
     block.render(false);
   }

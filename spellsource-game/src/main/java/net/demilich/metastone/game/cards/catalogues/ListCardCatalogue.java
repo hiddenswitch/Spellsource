@@ -3,8 +3,6 @@ package net.demilich.metastone.game.cards.catalogues;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import com.google.common.collect.Sets;
-import com.google.common.io.CharSource;
 import com.hiddenswitch.protos.Serialization;
 import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
@@ -15,24 +13,20 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
-import org.apache.commons.io.input.ReaderInputStream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
@@ -105,7 +99,7 @@ public class ListCardCatalogue implements CardCatalogue {
 	public @NotNull Card getCardById(@NotNull String id) {
 		Async.lock(lock.readLock());
 		try {
-			var card = cards.getOrDefault(id.toLowerCase(), null);
+			var card = cards.getOrDefault(id, null);
 			if (card != null) {
 				card = card.getCopy();
 			} else {
@@ -182,7 +176,9 @@ public class ListCardCatalogue implements CardCatalogue {
 					continue;
 				}
 				// per default, do not include hero powers, quests, classes, and formats
-				if (GameLogic.isCardType(card.getCardType(), Spellsource.CardTypeMessage.CardType.HERO_POWER) || card.isQuest() || (GameLogic.isCardType(card.getCardType(), Spellsource.CardTypeMessage.CardType.CLASS) && cardType != Spellsource.CardTypeMessage.CardType.CLASS) || (GameLogic.isCardType(card.getCardType(), Spellsource.CardTypeMessage.CardType.FORMAT) && cardType != Spellsource.CardTypeMessage.CardType.FORMAT)) {
+				if (GameLogic.isCardType(card.getCardType(), Spellsource.CardTypeMessage.CardType.HERO_POWER) || card.isQuest() || (GameLogic.isCardType(card.getCardType(),
+						Spellsource.CardTypeMessage.CardType.CLASS) && cardType != Spellsource.CardTypeMessage.CardType.CLASS) || (GameLogic.isCardType(card.getCardType(),
+						Spellsource.CardTypeMessage.CardType.FORMAT) && cardType != Spellsource.CardTypeMessage.CardType.FORMAT)) {
 					continue;
 				}
 				if (rarity != null && !GameLogic.isRarity(card.getRarity(), rarity)) {
@@ -316,7 +312,8 @@ public class ListCardCatalogue implements CardCatalogue {
 	public CardList queryNeutrals(DeckFormat format, Set<String> bannedCards, Spellsource.RarityMessage.Rarity rarity, Set<Spellsource.CardTypeMessage.CardType> validCardTypes) {
 		Async.lock(lock.readLock());
 		try {
-			return query(format, c -> c.hasHeroClass(HeroClass.ANY) && !bannedCards.contains(c.getCardId()) && c.getRarity() == rarity && validCardTypes.contains(c.getCardType()) && c.isCollectible());
+			return query(format,
+					c -> c.hasHeroClass(HeroClass.ANY) && !bannedCards.contains(c.getCardId()) && c.getRarity() == rarity && validCardTypes.contains(c.getCardType()) && c.isCollectible());
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -346,6 +343,7 @@ public class ListCardCatalogue implements CardCatalogue {
 			throw new NullPointerException("cardDesc.type");
 		}
 		if (cardDesc.getId() == null) {
+			// TODO new random id ?
 			cardDesc.setId(CaseFormat.LOWER_CAMEL.converterTo(CaseFormat.LOWER_UNDERSCORE).convert((cardDesc.getType().name().toLowerCase() + "" + cardDesc.getName()).replace(" ", "")));
 		}
 
@@ -420,10 +418,10 @@ public class ListCardCatalogue implements CardCatalogue {
 	protected void updatedWith(Map<String, CardDesc> cardDescs) {
 		Async.lock(lock.writeLock());
 		try {
-
-
+			
 			var newCards = new ArrayList<Card>(cardDescs.size());
 			for (var desc : cardDescs.values()) {
+				// TODO more manual checks for whether a card is valid for play (references nonexistent cards / attributes / etc)
 				var instance = desc.create();
 				newCards.add(instance);
 				cards.put(instance.getCardId(), instance);

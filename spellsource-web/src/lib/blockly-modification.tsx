@@ -6,23 +6,17 @@ import Blockly, {
   Toolbox,
   ToolboxCategory,
   utils,
-  Workspace,
   WorkspaceSvg,
 } from "blockly";
 import { FieldLabelPlural } from "../components/field-label-plural";
 import { FieldLabelSerializableHidden } from "../components/field-label-serializable-hidden";
-import * as JsonConversionUtils from "./json-conversion-utils";
 import * as BlocklyMiscUtils from "./blockly-misc-utils";
 import * as DefaultOverrides from "./default-overrides";
 import { CardDef } from "../components/card-display";
 import React from "react";
 import deepmerge from "deepmerge";
-import { InitBlockOptions } from "../components/card-editor-workspace";
-import { ToolboxItem } from "toolbox/toolbox_item";
-import { xmlToCardScript } from "./workspace-utils";
-import { saveFile } from "./fs-utils";
 
-export function modifyAll(options: InitBlockOptions) {
+export function modifyAll() {
   // @ts-ignore
   // noinspection JSConstantReassignment
   Blockly.HSV_SATURATION = 0.65;
@@ -37,9 +31,8 @@ export function modifyAll(options: InitBlockOptions) {
   autoDecoration();
   // hoverComments()
   pluralSpacing();
-  contextMenu(options);
   tooltips();
-  blackText();
+  textColor();
   colorfulColors();
   noToolboxZoom();
   multiline();
@@ -328,113 +321,6 @@ function pluralSpacing() {
   };
 }
 
-function contextMenu({ onDelete, onPublish }: InitBlockOptions) {
-  const generateContextMenu = Blockly.BlockSvg.prototype["generateContextMenu"];
-  Blockly.BlockSvg.prototype["generateContextMenu"] = function () {
-    let menuOptions = generateContextMenu.call(this) as Partial<Blockly.ContextMenuRegistry.ContextMenuOption>[];
-    let block = this as BlockSvg;
-    let workspace = block.workspace;
-    if (block.type.startsWith("CatalogueCard")) {
-      menuOptions.push({
-        text: "Import CardScript",
-        enabled: true,
-        callback: function () {
-          if (!!block.json && !!block.json.json) {
-            let card = block.json.json;
-            let dummyWorkspace = new Workspace();
-            JsonConversionUtils.generateCard(dummyWorkspace, card);
-
-            let top = dummyWorkspace.getTopBlocks(false)[0];
-
-            let xml = Blockly.Xml.blockToDom(top, true) as Element;
-            var xy = top.getRelativeToSurfaceXY();
-            xml.setAttribute("x", String(xy.x));
-            xml.setAttribute("y", String(xy.y));
-
-            if (!!workspace.targetWorkspace) {
-              workspace = workspace.targetWorkspace;
-            }
-
-            workspace.paste(xml);
-            dummyWorkspace.dispose();
-            (workspace.getToolbox() as Toolbox).clearSelection();
-          }
-        },
-      });
-    } else if (
-      !block.workspace.targetWorkspace ||
-      ((block.workspace.targetWorkspace?.getToolbox() as Toolbox)?.getSelectedItem() as ToolboxItem)?.getId() ===
-        "Search Results"
-    ) {
-      menuOptions.push({
-        text: "Show in Toolbox",
-        enabled: true,
-        callback: function () {
-          BlocklyMiscUtils.searchToolbox(block.type, block.workspace.targetWorkspace || block.workspace);
-        },
-      });
-    }
-
-    if (process.env.NODE_ENV !== "production") {
-      menuOptions.push({
-        text: "Save to File",
-        enabled: true,
-        callback: function () {
-          console.log(block);
-          const xml = Blockly.Xml.blockToDom(block, true);
-          console.log(xml);
-
-          // Serialize XML or DocumentFragment to string
-          const serializer = new XMLSerializer();
-          const xmlString = serializer.serializeToString(xml);
-
-          saveFile(
-            xmlString,
-            "application/xml",
-            (block.getInputTargetBlock("name")?.getFieldValue("text") || block.type) + ".xml"
-          );
-        },
-      });
-    }
-
-    if (block.type.startsWith("Starter_")) {
-      menuOptions = menuOptions.filter((option) => option.text !== "Remove Comment" && option.text !== "Inline Inputs");
-
-      if (process.env.NODE_ENV !== "production") {
-        menuOptions.push({
-          text: "Log CardScript",
-          enabled: true,
-          callback: function () {
-            const xml = Blockly.Xml.blockToDom(block, true);
-            const json = xmlToCardScript(xml);
-            console.log(json);
-          },
-        });
-      }
-
-      if (block.isInFlyout) {
-        menuOptions.push({
-          text: "DELETE Card",
-          enabled: true,
-          callback: function () {
-            onDelete(block);
-          },
-        });
-      } else {
-        menuOptions.push({
-          text: "Publish Card",
-          enabled: true,
-          callback: function () {
-            onPublish(block);
-          },
-        });
-      }
-    }
-
-    return menuOptions.filter((option) => option.enabled);
-  };
-}
-
 function tooltips() {
   // @ts-ignore
   // noinspection JSConstantReassignment
@@ -489,7 +375,7 @@ function tooltips() {
   };
 }
 
-function blackText() {
+function textColor() {
   const createTextElement = Blockly.Field.prototype["createTextElement_"];
   Blockly.Field.prototype["createTextElement_"] = function () {
     createTextElement.call(this);
@@ -642,40 +528,6 @@ function multiline() {
   };
 }
 
-/*function jsonShadows() {
-  const handleContents = (element, info) => {
-    if (info['contents'] && isArray(info['contents']) && info['contents'].length > 0) {
-      for (let content of info['contents']) {
-        let child = Blockly.utils.xml.createElement(content['kind'])
-        if (content['name']) {
-          child.setAttribute('name', content['name'])
-        }
-        if (content['value']) {
-          child.textContent = content['value']
-          child["innerText"] = content['value']
-        }
-        if (content['type']) {
-          child.setAttribute('type', content['type'])
-        }
-        if (content['contents']) {
-          handleContents(child, content)
-        }
-        element.appendChild(child)
-      }
-    }
-  }
-
-  const getBlockXml = Blockly.Flyout.prototype["getBlockXml_"]
-  Blockly.Flyout.prototype["getBlockXml_"] = function (blockInfo) {
-    const blockElement = getBlockXml.call(this, blockInfo)
-    if (!blockElement.contentsHandled) {
-      handleContents(blockElement, blockInfo)
-      blockElement.contentsHandled = true
-    }
-    return blockElement
-  }
-}*/
-
 function connections() {
   const setCheck = Blockly.Connection.prototype.setCheck;
   Blockly.Connection.prototype.setCheck = function (check) {
@@ -745,8 +597,6 @@ function flyout() {
 }
 
 function mobileCategories() {
-  const addColourBorder = ToolboxCategory.prototype["addColourBorder_"];
-
   ToolboxCategory.prototype["addColourBorder_"] = function (colour) {
     const style = this.rowDiv_.style;
     style.border = ToolboxCategory.borderWidth + "px solid " + (colour || "#ddd");

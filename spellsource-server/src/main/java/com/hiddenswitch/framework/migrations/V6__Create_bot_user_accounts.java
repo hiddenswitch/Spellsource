@@ -22,5 +22,12 @@ public class V6__Create_bot_user_accounts extends BaseJavaMigration {
 				.compose(userEntity -> Accounts.disableUser(userEntity.getId()).map(userEntity.getId()))
 				.compose(userId -> Future.fromCompletionStage(DSL.using(context.getConnection()).insertInto(Tables.BOT_USERS).set(Tables.BOT_USERS.ID, userId).executeAsync()))
 				.toCompletionStage().toCompletableFuture().join();
+
+		
+		Accounts.createUser("test@test.com", "test", "test")
+				.map(userEntity -> userEntity.setFirstName("Test"))
+				.map(userEntity -> userEntity.setLastName("Testson"))
+				.map(userEntity -> userEntity.setEnabled(true))
+				.toCompletionStage().toCompletableFuture().join();
 	}
 }

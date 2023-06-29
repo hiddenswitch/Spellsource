@@ -1,28 +1,28 @@
-import Layout from "../components/creative-layout"
+import Layout from "../components/creative-layout";
 import {
   DeckFragment,
   useCreateDeckMutation,
   useGetClassesQuery,
   useGetDeckQuery,
   useGetDecksQuery,
-} from "../__generated__/client"
-import React, { createContext, FunctionComponent, useEffect, useMemo, useRef, useState } from "react"
-import { useSession } from "next-auth/react"
-import Collection, { textDecorationStyle } from "../components/collection"
-import Head from "next/head"
-import { Button, Col, Dropdown, Offcanvas, OffcanvasBody, Row } from "react-bootstrap"
-import { chain, keyBy } from "lodash"
-import { useRouter } from "next/router"
-import { CardDef, toRgbaString } from "../components/card-display"
-import Link from "next/link"
-import { useParam, useParamInt } from "../lib/routing"
-import DropdownToggle from "react-bootstrap/DropdownToggle"
-import DropdownMenu from "react-bootstrap/DropdownMenu"
-import DropdownItem from "react-bootstrap/DropdownItem"
-import { useList } from "react-use"
-import { DndProvider } from "react-dnd"
-import { HTML5Backend } from "react-dnd-html5-backend"
-import { Deck } from "../components/deck"
+} from "../__generated__/client";
+import React, { createContext, FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
+import { useSession } from "next-auth/react";
+import Collection, { textDecorationStyle } from "../components/collection";
+import Head from "next/head";
+import { Button, Col, Dropdown, Offcanvas, OffcanvasBody, Row } from "react-bootstrap";
+import { chain, keyBy } from "lodash";
+import { useRouter } from "next/router";
+import { CardDef, toRgbaString } from "../components/card-display";
+import Link from "next/link";
+import { useParam, useParamInt } from "../lib/routing";
+import DropdownToggle from "react-bootstrap/DropdownToggle";
+import DropdownMenu from "react-bootstrap/DropdownMenu";
+import DropdownItem from "react-bootstrap/DropdownItem";
+import { useList } from "react-use";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { Deck } from "../components/deck";
 
 // Makes the query state stick around
 export const getServerSideProps = async (context) => ({
@@ -150,7 +150,7 @@ export default () => {
       </Head>
       <DndProvider backend={HTML5Backend}>
         <CardCache.Provider value={cache}>
-          <Row id={"Collection"} className={"pe-lg-2 mt-2"}>
+          <Row id={"Collection"} className={"pe-lg-2 mt-2 flex-grow-1"}>
             <Col id={"CardsList"} xs={12} lg={9}>
               <Collection
                 classes={classes}

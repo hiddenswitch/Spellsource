@@ -88,24 +88,26 @@ export const openFile = (accept: string, onOpen: (result: string) => void) => {
   input.type = "file";
   input.accept = accept;
   input.style.display = "none";
+  input.multiple = true;
 
   // Append it to the body
   document.body.appendChild(input);
 
   // This function will be called when the user selects a file
   input.onchange = (event: Event) => {
-    const file: File = (event.target as HTMLInputElement).files[0];
-    const reader: FileReader = new FileReader();
+    for (const file of (event.target as HTMLInputElement).files) {
+      const reader: FileReader = new FileReader();
 
-    reader.onload = (e: ProgressEvent<FileReader>) => {
-      // The file's text will be printed here
-      const result: string = e.target.result as string;
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        // The file's text will be printed here
+        const result: string = e.target.result as string;
 
-      onOpen(result);
-    };
+        onOpen(result);
+      };
 
-    // Read the file as text
-    reader.readAsText(file);
+      // Read the file as text
+      reader.readAsText(file);
+    }
   };
 
   // Simulate a click on the file input
