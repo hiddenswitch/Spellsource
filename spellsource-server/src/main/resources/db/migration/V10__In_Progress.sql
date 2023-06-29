@@ -35,18 +35,6 @@ alter table spellsource.cards_in_deck
     add column card bigint references spellsource.cards (succession);
 */
 
--- TODO using is_archived may mean we don't need to do any group by joining
-drop materialized view if exists spellsource.current_cards cascade;
-create materialized view spellsource.current_cards as
-select c.*
-from spellsource.cards c
-         join (select id, max(succession) as max_succession
-               from spellsource.cards
-               where is_published
-                 and not is_archived
-               group by id) m
-              on c.id = m.id and c.succession = m.max_succession;
-
 /*
 -- noinspection SqlWithoutWhere
 update spellsource.cards_in_deck
@@ -62,9 +50,7 @@ create policy website_view on spellsource.cards for select to website
 drop policy if exists website_insert on spellsource.cards;
 create policy website_insert on spellsource.cards for insert to website
     with check (created_by = spellsource.get_user_id() and
-                starts_with(id, spellsource.get_user_id()) and
-                (starts_with(card_script ->> 'heroClass', spellsource.get_user_id()) or
-                 card_script ->> 'heroClass' = 'ANY')); -- TODO specific hero classes that anyone can publish for?
+                starts_with(id, spellsource.get_user_id()));
 drop policy if exists website_update on spellsource.cards;
 create policy website_update on spellsource.cards for update to website
     using (created_by = spellsource.get_user_id() and starts_with(id, spellsource.get_user_id()))
@@ -215,16 +201,6 @@ begin
 end;
 $$ language plpgsql volatile;
 
-create or replace function spellsource.refresh_current_cards() returns void
-as
-$$
-begin
-    refresh materialized view spellsource.current_cards;
-end
-$$ language plpgsql security definer;
-
-grant execute on function spellsource.refresh_current_cards() to website;
-
 create or replace function spellsource.publish_card(card_id text) returns bigint as
 $$
 declare
@@ -295,25 +271,6 @@ create trigger before_card_published
     for each row
     when ( new.is_published and not new.is_archived )
 execute procedure spellsource.before_card_published();
-
-
-create or replace function spellsource.after_card_published() returns trigger as
-$$
-declare
-begin
-    execute spellsource.refresh_current_cards();
-
-    return new;
-end;
-$$ language plpgsql;
-
-drop trigger if exists after_card_published on spellsource.cards;
-create trigger after_card_published
-    before insert or update
-    on spellsource.cards
-    for each row
-    when ( new.is_published and not new.is_archived )
-execute procedure spellsource.after_card_published();
 
 --- Making the view as a function so it respects RLS
 drop function if exists spellsource.get_classes() cascade;
@@ -388,7 +345,7 @@ select card.id,
        card.card_script ->> 'name'                                    as name,
        card.card_script ->> 'type'                                    as type,
        card.card_script ->> 'heroClass'                               as class,
-       coalesce(card.card_script ->> 'baseManaCost', '0')::int        as cost,
+       coalesce(nullif(card.card_script ->> 'baseManaCost', ''), '0')::int        as cost,
        (coalesce(card.card_script ->> 'collectible', 'true')::bool and
         (card.card_script ->> 'heroClass' = 'ANY' or cl.collectible)) as collectible,
        spellsource.card_message(card::spellsource.cards, cl)          as search_message,
@@ -397,14 +354,13 @@ select card.id,
 from spellsource.cards card
          join spellsource.classes cl on card.card_script ->> 'heroClass' = cl.class
 where card.card_script ->> 'set' != 'TEST'
-  and not card.is_archived
-  and card.is_published;
+  and card.is_published
+  and not card.is_archived;
 $$;
 create or replace view spellsource.collection_cards as
 select *
 from spellsource.get_collection_cards();
 grant select on spellsource.collection_cards to website;
-
 
 create or replace function spellsource.set_cards_in_deck(deck text, card_ids text[]) returns setof spellsource.cards_in_deck as
 $$
@@ -760,3 +716,5 @@ $$ language plpgsql;
 
 --- todo: implement draft queries. the draft logic may be entirely replaced by a sql function, where it will be easier to author
 --- todo: create corresponding views and grant execution privileges to the card builder for these catalogue queries
+
+select * from spellsource.cards where id = '8bcc477d-b2d9-4293-9bf5-dd8a3beddb7d-J`44N56Z{vG~n]~1VC[b';

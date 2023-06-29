@@ -225,45 +225,6 @@ type Query implements Node {
     filter: CollectionCardFilter
   ): CollectionCardsConnection
 
-  """Reads and enables pagination through a set of `CurrentCard`."""
-  allCurrentCards(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `CurrentCard`."""
-    orderBy: [CurrentCardsOrderBy!] = [NATURAL]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: CurrentCardCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: CurrentCardFilter
-
-    """
-    Indicates whether archived items should be included in the results or not.
-    """
-    includeArchived: IncludeArchivedOption = NO
-  ): CurrentCardsConnection
-
   """
   Reads and enables pagination through a set of `DeckPlayerAttributeTuple`.
   """
@@ -1495,12 +1456,6 @@ type Mutation {
     """
     input: PublishGitCardInput!
   ): PublishGitCardPayload
-  refreshCurrentCards(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: RefreshCurrentCardsInput!
-  ): RefreshCurrentCardsPayload
   saveCard(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -3566,147 +3521,6 @@ input CollectionCardFilter {
 
   """Negates the expression."""
   not: CollectionCardFilter
-}
-
-"""A connection to a list of `CurrentCard` values."""
-type CurrentCardsConnection {
-  """A list of `CurrentCard` objects."""
-  nodes: [CurrentCard]!
-
-  """
-  A list of edges which contains the `CurrentCard` and cursor to aid in pagination.
-  """
-  edges: [CurrentCardsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `CurrentCard` you could get from the connection."""
-  totalCount: Int!
-}
-
-type CurrentCard {
-  id: String
-  createdBy: String
-  uri: String
-  blocklyWorkspace: String
-  cardScript: JSON
-  createdAt: Datetime
-  lastModified: Datetime
-  isArchived: Boolean
-  isPublished: Boolean
-  succession: BigInt
-}
-
-"""A `CurrentCard` edge in the connection."""
-type CurrentCardsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `CurrentCard` at the end of the edge."""
-  node: CurrentCard
-}
-
-"""Methods to use when ordering `CurrentCard`."""
-enum CurrentCardsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  CREATED_BY_ASC
-  CREATED_BY_DESC
-  URI_ASC
-  URI_DESC
-  BLOCKLY_WORKSPACE_ASC
-  BLOCKLY_WORKSPACE_DESC
-  CARD_SCRIPT_ASC
-  CARD_SCRIPT_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  LAST_MODIFIED_ASC
-  LAST_MODIFIED_DESC
-  IS_ARCHIVED_ASC
-  IS_ARCHIVED_DESC
-  IS_PUBLISHED_ASC
-  IS_PUBLISHED_DESC
-  SUCCESSION_ASC
-  SUCCESSION_DESC
-}
-
-"""
-A condition to be used against `CurrentCard` object types. All fields are tested
-for equality and combined with a logical ‘and.’
-"""
-input CurrentCardCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: String
-
-  """Checks for equality with the object’s `createdBy` field."""
-  createdBy: String
-
-  """Checks for equality with the object’s `uri` field."""
-  uri: String
-
-  """Checks for equality with the object’s `blocklyWorkspace` field."""
-  blocklyWorkspace: String
-
-  """Checks for equality with the object’s `cardScript` field."""
-  cardScript: JSON
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-
-  """Checks for equality with the object’s `lastModified` field."""
-  lastModified: Datetime
-
-  """Checks for equality with the object’s `isArchived` field."""
-  isArchived: Boolean
-
-  """Checks for equality with the object’s `isPublished` field."""
-  isPublished: Boolean
-
-  """Checks for equality with the object’s `succession` field."""
-  succession: BigInt
-}
-
-"""
-A filter to be used against `CurrentCard` object types. All fields are combined with a logical ‘and.’
-"""
-input CurrentCardFilter {
-  """Filter by the object’s `id` field."""
-  id: StringFilter
-
-  """Filter by the object’s `createdBy` field."""
-  createdBy: StringFilter
-
-  """Filter by the object’s `uri` field."""
-  uri: StringFilter
-
-  """Filter by the object’s `cardScript` field."""
-  cardScript: JSONFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Filter by the object’s `lastModified` field."""
-  lastModified: DatetimeFilter
-
-  """Filter by the object’s `isArchived` field."""
-  isArchived: BooleanFilter
-
-  """Filter by the object’s `isPublished` field."""
-  isPublished: BooleanFilter
-
-  """Filter by the object’s `succession` field."""
-  succession: BigIntFilter
-
-  """Checks for all expressions in this list."""
-  and: [CurrentCardFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [CurrentCardFilter!]
-
-  """Negates the expression."""
-  not: CurrentCardFilter
 }
 
 """A connection to a list of `Deck` values."""
@@ -7453,29 +7267,6 @@ input PublishGitCardInput {
   cardId: String
   json: JSON
   creator: String
-}
-
-"""The output of our `refreshCurrentCards` mutation."""
-type RefreshCurrentCardsPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `refreshCurrentCards` mutation."""
-input RefreshCurrentCardsInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
 }
 
 """The output of our `saveCard` mutation."""

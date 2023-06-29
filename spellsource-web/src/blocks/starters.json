@@ -625,7 +625,7 @@
       {
         "type": "field_label_serializable_hidden",
         "name": "collectible",
-        "value": true
+        "value": false
       },
       {
         "type": "field_label_serializable_hidden",

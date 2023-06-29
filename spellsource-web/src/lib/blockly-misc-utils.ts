@@ -41,6 +41,7 @@ export function addBlock(block: BlockDef) {
       }
     },
     json: block,
+    data: block.data,
   });
 }
 

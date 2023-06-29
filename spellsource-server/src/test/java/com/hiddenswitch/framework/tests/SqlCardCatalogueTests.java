@@ -3,7 +3,6 @@ package com.hiddenswitch.framework.tests;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.impl.SqlCachedCardCatalogue;
 import com.hiddenswitch.framework.impl.SqlCardCatalogue;
-import com.hiddenswitch.framework.schema.spellsource.routines.GetLatestCard;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.CardsDao;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
@@ -12,9 +11,9 @@ import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import org.jooq.impl.DSL;
 import org.junit.jupiter.api.Test;
 
+import static com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS;
 import static io.vertx.await.Async.await;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -70,7 +69,7 @@ public class SqlCardCatalogueTests extends FrameworkTestBase {
 			var beforeChangeCard = catalogue.getCardById(cardIdTested);
 			assertFalse(beforeChangeCard.getAttributes().containsKey(Attribute.RESERVED_BOOLEAN_1));
 			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
-			var beforeChangeCardJson = await(cardsDao.findOneById(cardIdTested));
+			var beforeChangeCardJson = await(cardsDao.findOneByCondition(CARDS.ID.eq(cardIdTested).and(CARDS.IS_PUBLISHED.eq(true)).and(CARDS.IS_ARCHIVED.eq(false))));
 			beforeChangeCardJson.getCardScript().getJsonObject("attributes").put("RESERVED_BOOLEAN_1", true);
 			await(cardsDao.update(beforeChangeCardJson));
 			var afterChangeCard = catalogue.getCardById(cardIdTested);

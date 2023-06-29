@@ -99,6 +99,7 @@ public class Legacy {
 					withConnection(connection -> new CardsDao(Environment.jooqAkaDaoConfiguration(), connection).findAll())
 							.map(cards -> cards
 									.stream()
+									.filter(card -> card.getIsPublished() && !card.getIsArchived())
 									.map(card -> {
 										try {
 											return card.getCardScript().mapTo(CardDesc.class);
@@ -626,7 +627,7 @@ public class Legacy {
 							.from(CARDS_IN_DECK)
 							.join(CARDS, JoinType.JOIN)
 							.on(CARDS_IN_DECK.CARD_ID.eq(CARDS.ID))
-							.where(CARDS_IN_DECK.DECK_ID.eq(deckId)))
+							.where(CARDS_IN_DECK.DECK_ID.eq(deckId)).and(CARDS.IS_PUBLISHED.eq(true)).and(CARDS.IS_ARCHIVED.eq(false)))
 					.onFailure(Environment.onFailure());
 			var decksFut = decks.findOneById(deckId);
 			var playerEntityAttributesFut = playerEntityAttributesDao.findManyByDeckId(Collections.singletonList(deckId));

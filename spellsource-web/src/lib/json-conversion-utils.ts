@@ -1743,7 +1743,7 @@ export function mutateJson(json) {
 
 /**
  * Returns a list of the all the arguments in a block's json
- * that are are input args
+ * that are input args
  * @param block
  * @returns An array of the input args
  */
@@ -1764,7 +1764,7 @@ export function inputsList(block) {
 
 /**
  * Returns a list of the all the arguments in a block's json
- * that are are dropdown args
+ * that are dropdown args
  * @param block
  * @returns An array of the dropdown args
  */

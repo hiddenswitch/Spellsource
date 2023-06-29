@@ -20,6 +20,7 @@ import deepmerge from "deepmerge";
 import { InitBlockOptions } from "../components/card-editor-workspace";
 import { ToolboxItem } from "toolbox/toolbox_item";
 import { xmlToCardScript } from "./workspace-utils";
+import { saveFile } from "./fs-utils";
 
 export function modifyAll(options: InitBlockOptions) {
   // @ts-ignore
@@ -370,6 +371,28 @@ function contextMenu({ onDelete, onPublish }: InitBlockOptions) {
         enabled: true,
         callback: function () {
           BlocklyMiscUtils.searchToolbox(block.type, block.workspace.targetWorkspace || block.workspace);
+        },
+      });
+    }
+
+    if (process.env.NODE_ENV !== "production") {
+      menuOptions.push({
+        text: "Save to File",
+        enabled: true,
+        callback: function () {
+          console.log(block);
+          const xml = Blockly.Xml.blockToDom(block, true);
+          console.log(xml);
+
+          // Serialize XML or DocumentFragment to string
+          const serializer = new XMLSerializer();
+          const xmlString = serializer.serializeToString(xml);
+
+          saveFile(
+            xmlString,
+            "application/xml",
+            (block.getInputTargetBlock("name")?.getFieldValue("text") || block.type) + ".xml"
+          );
         },
       });
     }

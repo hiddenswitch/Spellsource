@@ -243,7 +243,7 @@ export const BotUsersOrderBy = {
 } as const;
 
 export type BotUsersOrderBy = typeof BotUsersOrderBy[keyof typeof BotUsersOrderBy];
-export type Card = {
+export type Card = Node & {
   __typename?: 'Card';
   blocklyWorkspace?: Maybe<Scalars['String']>;
   cardScript?: Maybe<Scalars['JSON']>;
@@ -255,6 +255,8 @@ export type Card = {
   isArchived: Scalars['Boolean'];
   isPublished: Scalars['Boolean'];
   lastModified: Scalars['Datetime'];
+  /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
+  nodeId: Scalars['ID'];
   succession: Scalars['BigInt'];
   type?: Maybe<Scalars['String']>;
   uri?: Maybe<Scalars['String']>;
@@ -609,6 +611,19 @@ export type CardInput = {
   uri?: InputMaybe<Scalars['String']>;
 };
 
+/** Represents an update to a `Card`. Fields that are set will be updated. */
+export type CardPatch = {
+  blocklyWorkspace?: InputMaybe<Scalars['String']>;
+  cardScript?: InputMaybe<Scalars['JSON']>;
+  createdAt?: InputMaybe<Scalars['Datetime']>;
+  createdBy?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  isArchived?: InputMaybe<Scalars['Boolean']>;
+  isPublished?: InputMaybe<Scalars['Boolean']>;
+  lastModified?: InputMaybe<Scalars['Datetime']>;
+  uri?: InputMaybe<Scalars['String']>;
+};
+
 /** A connection to a list of `Card` values. */
 export type CardsConnection = {
   __typename?: 'CardsConnection';
@@ -745,6 +760,8 @@ export const CardsOrderBy = {
   LastModifiedAsc: 'LAST_MODIFIED_ASC',
   LastModifiedDesc: 'LAST_MODIFIED_DESC',
   Natural: 'NATURAL',
+  PrimaryKeyAsc: 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc: 'PRIMARY_KEY_DESC',
   SuccessionAsc: 'SUCCESSION_ASC',
   SuccessionDesc: 'SUCCESSION_DESC',
   UriAsc: 'URI_ASC',
@@ -2207,6 +2224,50 @@ export type DeleteBotUserPayload = {
 /** The output of our delete `BotUser` mutation. */
 export type DeleteBotUserPayloadBotUserEdgeArgs = {
   orderBy?: InputMaybe<Array<BotUsersOrderBy>>;
+};
+
+/** All input for the `deleteCardBySuccession` mutation. */
+export type DeleteCardBySuccessionInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  succession: Scalars['BigInt'];
+};
+
+/** All input for the `deleteCard` mutation. */
+export type DeleteCardInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Card` to be deleted. */
+  nodeId: Scalars['ID'];
+};
+
+/** The output of our delete `Card` mutation. */
+export type DeleteCardPayload = {
+  __typename?: 'DeleteCardPayload';
+  /** The `Card` that was deleted by this mutation. */
+  card?: Maybe<Card>;
+  /** An edge for our `Card`. May be used by Relay 1. */
+  cardEdge?: Maybe<CardsEdge>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  deletedCardId?: Maybe<Scalars['ID']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our delete `Card` mutation. */
+export type DeleteCardPayloadCardEdgeArgs = {
+  orderBy?: InputMaybe<Array<CardsOrderBy>>;
 };
 
 /** All input for the `deleteCardsInDeckById` mutation. */
@@ -3792,6 +3853,10 @@ export type Mutation = {
   deleteBotUser?: Maybe<DeleteBotUserPayload>;
   /** Deletes a single `BotUser` using a unique key. */
   deleteBotUserById?: Maybe<DeleteBotUserPayload>;
+  /** Deletes a single `Card` using its globally unique id. */
+  deleteCard?: Maybe<DeleteCardPayload>;
+  /** Deletes a single `Card` using a unique key. */
+  deleteCardBySuccession?: Maybe<DeleteCardPayload>;
   /** Deletes a single `CardsInDeck` using its globally unique id. */
   deleteCardsInDeck?: Maybe<DeleteCardsInDeckPayload>;
   /** Deletes a single `CardsInDeck` using a unique key. */
@@ -3843,6 +3908,8 @@ export type Mutation = {
   getClasses?: Maybe<GetClassesPayload>;
   getCollectionCards?: Maybe<GetCollectionCardsPayload>;
   publishCard?: Maybe<PublishCardPayload>;
+  publishGitCard?: Maybe<PublishGitCardPayload>;
+  refreshCurrentCards?: Maybe<RefreshCurrentCardsPayload>;
   saveCard?: Maybe<SaveCardPayload>;
   setCardsInDeck?: Maybe<SetCardsInDeckPayload>;
   /** Updates a single `BannedDraftCard` using its globally unique id and a patch. */
@@ -3853,6 +3920,10 @@ export type Mutation = {
   updateBotUser?: Maybe<UpdateBotUserPayload>;
   /** Updates a single `BotUser` using a unique key and a patch. */
   updateBotUserById?: Maybe<UpdateBotUserPayload>;
+  /** Updates a single `Card` using its globally unique id and a patch. */
+  updateCard?: Maybe<UpdateCardPayload>;
+  /** Updates a single `Card` using a unique key and a patch. */
+  updateCardBySuccession?: Maybe<UpdateCardPayload>;
   /** Updates a single `CardsInDeck` using its globally unique id and a patch. */
   updateCardsInDeck?: Maybe<UpdateCardsInDeckPayload>;
   /** Updates a single `CardsInDeck` using a unique key and a patch. */
@@ -3905,6 +3976,8 @@ export type Mutation = {
   upsertBannedDraftCard?: Maybe<UpsertBannedDraftCardPayload>;
   /** Upserts a single `BotUser`. */
   upsertBotUser?: Maybe<UpsertBotUserPayload>;
+  /** Upserts a single `Card`. */
+  upsertCard?: Maybe<UpsertCardPayload>;
   /** Upserts a single `CardsInDeck`. */
   upsertCardsInDeck?: Maybe<UpsertCardsInDeckPayload>;
   /** Upserts a single `Deck`. */
@@ -4131,6 +4204,18 @@ export type MutationDeleteBotUserByIdArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteCardArgs = {
+  input: DeleteCardInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteCardBySuccessionArgs = {
+  input: DeleteCardBySuccessionInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteCardsInDeckArgs = {
   input: DeleteCardsInDeckInput;
 };
@@ -4293,6 +4378,18 @@ export type MutationPublishCardArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationPublishGitCardArgs = {
+  input: PublishGitCardInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationRefreshCurrentCardsArgs = {
+  input: RefreshCurrentCardsInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationSaveCardArgs = {
   input: SaveCardInput;
 };
@@ -4325,6 +4422,18 @@ export type MutationUpdateBotUserArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateBotUserByIdArgs = {
   input: UpdateBotUserByIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateCardArgs = {
+  input: UpdateCardInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateCardBySuccessionArgs = {
+  input: UpdateCardBySuccessionInput;
 };
 
 
@@ -4487,6 +4596,13 @@ export type MutationUpsertBotUserArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpsertCardArgs = {
+  input: UpsertCardInput;
+  where?: InputMaybe<UpsertCardWhere>;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertCardsInDeckArgs = {
   input: UpsertCardsInDeckInput;
   where?: InputMaybe<UpsertCardsInDeckWhere>;
@@ -4611,6 +4727,39 @@ export type PublishCardPayload = {
   query?: Maybe<Query>;
 };
 
+/** All input for the `publishGitCard` mutation. */
+export type PublishGitCardInput = {
+  cardId?: InputMaybe<Scalars['String']>;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  creator?: InputMaybe<Scalars['String']>;
+  json?: InputMaybe<Scalars['JSON']>;
+};
+
+/** The output of our `publishGitCard` mutation. */
+export type PublishGitCardPayload = {
+  __typename?: 'PublishGitCardPayload';
+  card?: Maybe<Card>;
+  /** An edge for our `Card`. May be used by Relay 1. */
+  cardEdge?: Maybe<CardsEdge>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our `publishGitCard` mutation. */
+export type PublishGitCardPayloadCardEdgeArgs = {
+  orderBy?: InputMaybe<Array<CardsOrderBy>>;
+};
+
 export type Query = Node & {
   __typename?: 'Query';
   allArt: Array<ImageDef>;
@@ -4657,6 +4806,9 @@ export type Query = Node & {
   /** Reads a single `BotUser` using its globally unique `ID`. */
   botUser?: Maybe<BotUser>;
   botUserById?: Maybe<BotUser>;
+  /** Reads a single `Card` using its globally unique `ID`. */
+  card?: Maybe<Card>;
+  cardBySuccession?: Maybe<Card>;
   /** Reads a single `CardsInDeck` using its globally unique `ID`. */
   cardsInDeck?: Maybe<CardsInDeck>;
   cardsInDeckById?: Maybe<CardsInDeck>;
@@ -4950,6 +5102,16 @@ export type QueryBotUserByIdArgs = {
 };
 
 
+export type QueryCardArgs = {
+  nodeId: Scalars['ID'];
+};
+
+
+export type QueryCardBySuccessionArgs = {
+  succession: Scalars['BigInt'];
+};
+
+
 export type QueryCardsInDeckArgs = {
   nodeId: Scalars['ID'];
 };
@@ -5081,6 +5243,27 @@ export type QueryUserEntityAddonArgs = {
 
 export type QueryUserEntityAddonByIdArgs = {
   id: Scalars['String'];
+};
+
+/** All input for the `refreshCurrentCards` mutation. */
+export type RefreshCurrentCardsInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our `refreshCurrentCards` mutation. */
+export type RefreshCurrentCardsPayload = {
+  __typename?: 'RefreshCurrentCardsPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
 };
 
 /** All input for the `saveCard` mutation. */
@@ -5310,6 +5493,53 @@ export type UpdateBotUserPayload = {
 /** The output of our update `BotUser` mutation. */
 export type UpdateBotUserPayloadBotUserEdgeArgs = {
   orderBy?: InputMaybe<Array<BotUsersOrderBy>>;
+};
+
+/** All input for the `updateCardBySuccession` mutation. */
+export type UpdateCardBySuccessionInput = {
+  /** An object where the defined keys will be set on the `Card` being updated. */
+  cardPatch: CardPatch;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  succession: Scalars['BigInt'];
+};
+
+/** All input for the `updateCard` mutation. */
+export type UpdateCardInput = {
+  /** An object where the defined keys will be set on the `Card` being updated. */
+  cardPatch: CardPatch;
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The globally unique `ID` which will identify a single `Card` to be updated. */
+  nodeId: Scalars['ID'];
+};
+
+/** The output of our update `Card` mutation. */
+export type UpdateCardPayload = {
+  __typename?: 'UpdateCardPayload';
+  /** The `Card` that was updated by this mutation. */
+  card?: Maybe<Card>;
+  /** An edge for our `Card`. May be used by Relay 1. */
+  cardEdge?: Maybe<CardsEdge>;
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our update `Card` mutation. */
+export type UpdateCardPayloadCardEdgeArgs = {
+  orderBy?: InputMaybe<Array<CardsOrderBy>>;
 };
 
 /** All input for the `updateCardsInDeckById` mutation. */
@@ -5959,6 +6189,38 @@ export type UpsertBotUserWhere = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+/** All input for the upsert `Card` mutation. */
+export type UpsertCardInput = {
+  /** The `Card` to be upserted by this mutation. */
+  card: CardInput;
+  /** An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+};
+
+/** The output of our upsert `Card` mutation. */
+export type UpsertCardPayload = {
+  __typename?: 'UpsertCardPayload';
+  /** The `Card` that was upserted by this mutation. */
+  card?: Maybe<Card>;
+  /** An edge for our `Card`. May be used by Relay 1. */
+  cardEdge?: Maybe<CardsEdge>;
+  /** The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our upsert `Card` mutation. */
+export type UpsertCardPayloadCardEdgeArgs = {
+  orderBy?: InputMaybe<Array<CardsOrderBy>>;
+};
+
+/** Where conditions for the upsert `Card` mutation. */
+export type UpsertCardWhere = {
+  succession?: InputMaybe<Scalars['BigInt']>;
+};
+
 /** All input for the upsert `CardsInDeck` mutation. */
 export type UpsertCardsInDeckInput = {
   /** The `CardsInDeck` to be upserted by this mutation. */
@@ -6577,6 +6839,7 @@ export type ResolversTypes = {
   CardCondition: ResolverTypeWrapper<Partial<CardCondition>>;
   CardFilter: ResolverTypeWrapper<Partial<CardFilter>>;
   CardInput: ResolverTypeWrapper<Partial<CardInput>>;
+  CardPatch: ResolverTypeWrapper<Partial<CardPatch>>;
   CardsConnection: ResolverTypeWrapper<Partial<CardsConnection>>;
   CardsEdge: ResolverTypeWrapper<Partial<CardsEdge>>;
   CardsInDeck: ResolverTypeWrapper<Partial<CardsInDeck>>;
@@ -6673,6 +6936,9 @@ export type ResolversTypes = {
   DeleteBotUserByIdInput: ResolverTypeWrapper<Partial<DeleteBotUserByIdInput>>;
   DeleteBotUserInput: ResolverTypeWrapper<Partial<DeleteBotUserInput>>;
   DeleteBotUserPayload: ResolverTypeWrapper<Partial<DeleteBotUserPayload>>;
+  DeleteCardBySuccessionInput: ResolverTypeWrapper<Partial<DeleteCardBySuccessionInput>>;
+  DeleteCardInput: ResolverTypeWrapper<Partial<DeleteCardInput>>;
+  DeleteCardPayload: ResolverTypeWrapper<Partial<DeleteCardPayload>>;
   DeleteCardsInDeckByIdInput: ResolverTypeWrapper<Partial<DeleteCardsInDeckByIdInput>>;
   DeleteCardsInDeckInput: ResolverTypeWrapper<Partial<DeleteCardsInDeckInput>>;
   DeleteCardsInDeckPayload: ResolverTypeWrapper<Partial<DeleteCardsInDeckPayload>>;
@@ -6783,11 +7049,15 @@ export type ResolversTypes = {
   MatchmakingTicketsEdge: ResolverTypeWrapper<Partial<MatchmakingTicketsEdge>>;
   MatchmakingTicketsOrderBy: ResolverTypeWrapper<Partial<MatchmakingTicketsOrderBy>>;
   Mutation: ResolverTypeWrapper<{}>;
-  Node: ResolversTypes['BannedDraftCard'] | ResolversTypes['BotUser'] | ResolversTypes['CardsInDeck'] | ResolversTypes['Deck'] | ResolversTypes['DeckPlayerAttributeTuple'] | ResolversTypes['DeckShare'] | ResolversTypes['Friend'] | ResolversTypes['Game'] | ResolversTypes['GameUser'] | ResolversTypes['Guest'] | ResolversTypes['HardRemovalCard'] | ResolversTypes['MatchmakingQueue'] | ResolversTypes['MatchmakingTicket'] | ResolversTypes['Query'] | ResolversTypes['UserEntityAddon'];
+  Node: ResolversTypes['BannedDraftCard'] | ResolversTypes['BotUser'] | ResolversTypes['Card'] | ResolversTypes['CardsInDeck'] | ResolversTypes['Deck'] | ResolversTypes['DeckPlayerAttributeTuple'] | ResolversTypes['DeckShare'] | ResolversTypes['Friend'] | ResolversTypes['Game'] | ResolversTypes['GameUser'] | ResolversTypes['Guest'] | ResolversTypes['HardRemovalCard'] | ResolversTypes['MatchmakingQueue'] | ResolversTypes['MatchmakingTicket'] | ResolversTypes['Query'] | ResolversTypes['UserEntityAddon'];
   PageInfo: ResolverTypeWrapper<Partial<PageInfo>>;
   PublishCardInput: ResolverTypeWrapper<Partial<PublishCardInput>>;
   PublishCardPayload: ResolverTypeWrapper<Partial<PublishCardPayload>>;
+  PublishGitCardInput: ResolverTypeWrapper<Partial<PublishGitCardInput>>;
+  PublishGitCardPayload: ResolverTypeWrapper<Partial<PublishGitCardPayload>>;
   Query: ResolverTypeWrapper<{}>;
+  RefreshCurrentCardsInput: ResolverTypeWrapper<Partial<RefreshCurrentCardsInput>>;
+  RefreshCurrentCardsPayload: ResolverTypeWrapper<Partial<RefreshCurrentCardsPayload>>;
   SaveCardInput: ResolverTypeWrapper<Partial<SaveCardInput>>;
   SaveCardPayload: ResolverTypeWrapper<Partial<SaveCardPayload>>;
   SetCardsInDeckInput: ResolverTypeWrapper<Partial<SetCardsInDeckInput>>;
@@ -6800,6 +7070,9 @@ export type ResolversTypes = {
   UpdateBotUserByIdInput: ResolverTypeWrapper<Partial<UpdateBotUserByIdInput>>;
   UpdateBotUserInput: ResolverTypeWrapper<Partial<UpdateBotUserInput>>;
   UpdateBotUserPayload: ResolverTypeWrapper<Partial<UpdateBotUserPayload>>;
+  UpdateCardBySuccessionInput: ResolverTypeWrapper<Partial<UpdateCardBySuccessionInput>>;
+  UpdateCardInput: ResolverTypeWrapper<Partial<UpdateCardInput>>;
+  UpdateCardPayload: ResolverTypeWrapper<Partial<UpdateCardPayload>>;
   UpdateCardsInDeckByIdInput: ResolverTypeWrapper<Partial<UpdateCardsInDeckByIdInput>>;
   UpdateCardsInDeckInput: ResolverTypeWrapper<Partial<UpdateCardsInDeckInput>>;
   UpdateCardsInDeckPayload: ResolverTypeWrapper<Partial<UpdateCardsInDeckPayload>>;
@@ -6842,6 +7115,9 @@ export type ResolversTypes = {
   UpsertBotUserInput: ResolverTypeWrapper<Partial<UpsertBotUserInput>>;
   UpsertBotUserPayload: ResolverTypeWrapper<Partial<UpsertBotUserPayload>>;
   UpsertBotUserWhere: ResolverTypeWrapper<Partial<UpsertBotUserWhere>>;
+  UpsertCardInput: ResolverTypeWrapper<Partial<UpsertCardInput>>;
+  UpsertCardPayload: ResolverTypeWrapper<Partial<UpsertCardPayload>>;
+  UpsertCardWhere: ResolverTypeWrapper<Partial<UpsertCardWhere>>;
   UpsertCardsInDeckInput: ResolverTypeWrapper<Partial<UpsertCardsInDeckInput>>;
   UpsertCardsInDeckPayload: ResolverTypeWrapper<Partial<UpsertCardsInDeckPayload>>;
   UpsertCardsInDeckWhere: ResolverTypeWrapper<Partial<UpsertCardsInDeckWhere>>;
@@ -6936,6 +7212,7 @@ export type ResolversParentTypes = {
   CardCondition: Partial<CardCondition>;
   CardFilter: Partial<CardFilter>;
   CardInput: Partial<CardInput>;
+  CardPatch: Partial<CardPatch>;
   CardsConnection: Partial<CardsConnection>;
   CardsEdge: Partial<CardsEdge>;
   CardsInDeck: Partial<CardsInDeck>;
@@ -7024,6 +7301,9 @@ export type ResolversParentTypes = {
   DeleteBotUserByIdInput: Partial<DeleteBotUserByIdInput>;
   DeleteBotUserInput: Partial<DeleteBotUserInput>;
   DeleteBotUserPayload: Partial<DeleteBotUserPayload>;
+  DeleteCardBySuccessionInput: Partial<DeleteCardBySuccessionInput>;
+  DeleteCardInput: Partial<DeleteCardInput>;
+  DeleteCardPayload: Partial<DeleteCardPayload>;
   DeleteCardsInDeckByIdInput: Partial<DeleteCardsInDeckByIdInput>;
   DeleteCardsInDeckInput: Partial<DeleteCardsInDeckInput>;
   DeleteCardsInDeckPayload: Partial<DeleteCardsInDeckPayload>;
@@ -7124,11 +7404,15 @@ export type ResolversParentTypes = {
   MatchmakingTicketsConnection: Partial<MatchmakingTicketsConnection>;
   MatchmakingTicketsEdge: Partial<MatchmakingTicketsEdge>;
   Mutation: {};
-  Node: ResolversParentTypes['BannedDraftCard'] | ResolversParentTypes['BotUser'] | ResolversParentTypes['CardsInDeck'] | ResolversParentTypes['Deck'] | ResolversParentTypes['DeckPlayerAttributeTuple'] | ResolversParentTypes['DeckShare'] | ResolversParentTypes['Friend'] | ResolversParentTypes['Game'] | ResolversParentTypes['GameUser'] | ResolversParentTypes['Guest'] | ResolversParentTypes['HardRemovalCard'] | ResolversParentTypes['MatchmakingQueue'] | ResolversParentTypes['MatchmakingTicket'] | ResolversParentTypes['Query'] | ResolversParentTypes['UserEntityAddon'];
+  Node: ResolversParentTypes['BannedDraftCard'] | ResolversParentTypes['BotUser'] | ResolversParentTypes['Card'] | ResolversParentTypes['CardsInDeck'] | ResolversParentTypes['Deck'] | ResolversParentTypes['DeckPlayerAttributeTuple'] | ResolversParentTypes['DeckShare'] | ResolversParentTypes['Friend'] | ResolversParentTypes['Game'] | ResolversParentTypes['GameUser'] | ResolversParentTypes['Guest'] | ResolversParentTypes['HardRemovalCard'] | ResolversParentTypes['MatchmakingQueue'] | ResolversParentTypes['MatchmakingTicket'] | ResolversParentTypes['Query'] | ResolversParentTypes['UserEntityAddon'];
   PageInfo: Partial<PageInfo>;
   PublishCardInput: Partial<PublishCardInput>;
   PublishCardPayload: Partial<PublishCardPayload>;
+  PublishGitCardInput: Partial<PublishGitCardInput>;
+  PublishGitCardPayload: Partial<PublishGitCardPayload>;
   Query: {};
+  RefreshCurrentCardsInput: Partial<RefreshCurrentCardsInput>;
+  RefreshCurrentCardsPayload: Partial<RefreshCurrentCardsPayload>;
   SaveCardInput: Partial<SaveCardInput>;
   SaveCardPayload: Partial<SaveCardPayload>;
   SetCardsInDeckInput: Partial<SetCardsInDeckInput>;
@@ -7141,6 +7425,9 @@ export type ResolversParentTypes = {
   UpdateBotUserByIdInput: Partial<UpdateBotUserByIdInput>;
   UpdateBotUserInput: Partial<UpdateBotUserInput>;
   UpdateBotUserPayload: Partial<UpdateBotUserPayload>;
+  UpdateCardBySuccessionInput: Partial<UpdateCardBySuccessionInput>;
+  UpdateCardInput: Partial<UpdateCardInput>;
+  UpdateCardPayload: Partial<UpdateCardPayload>;
   UpdateCardsInDeckByIdInput: Partial<UpdateCardsInDeckByIdInput>;
   UpdateCardsInDeckInput: Partial<UpdateCardsInDeckInput>;
   UpdateCardsInDeckPayload: Partial<UpdateCardsInDeckPayload>;
@@ -7183,6 +7470,9 @@ export type ResolversParentTypes = {
   UpsertBotUserInput: Partial<UpsertBotUserInput>;
   UpsertBotUserPayload: Partial<UpsertBotUserPayload>;
   UpsertBotUserWhere: Partial<UpsertBotUserWhere>;
+  UpsertCardInput: Partial<UpsertCardInput>;
+  UpsertCardPayload: Partial<UpsertCardPayload>;
+  UpsertCardWhere: Partial<UpsertCardWhere>;
   UpsertCardsInDeckInput: Partial<UpsertCardsInDeckInput>;
   UpsertCardsInDeckPayload: Partial<UpsertCardsInDeckPayload>;
   UpsertCardsInDeckWhere: Partial<UpsertCardsInDeckWhere>;
@@ -7289,6 +7579,7 @@ export type CardResolvers<ContextType = any, ParentType extends ResolversParentT
   isArchived?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isPublished?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   lastModified?: Resolver<ResolversTypes['Datetime'], ParentType, ContextType>;
+  nodeId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   succession?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   uri?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -7747,6 +8038,15 @@ export type DeleteBotUserPayloadResolvers<ContextType = any, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type DeleteCardPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteCardPayload'] = ResolversParentTypes['DeleteCardPayload']> = {
+  card?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType>;
+  cardEdge?: Resolver<Maybe<ResolversTypes['CardsEdge']>, ParentType, ContextType, RequireFields<DeleteCardPayloadCardEdgeArgs, 'orderBy'>>;
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  deletedCardId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type DeleteCardsInDeckPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteCardsInDeckPayload'] = ResolversParentTypes['DeleteCardsInDeckPayload']> = {
   cardsInDeck?: Resolver<Maybe<ResolversTypes['CardsInDeck']>, ParentType, ContextType>;
   cardsInDeckEdge?: Resolver<Maybe<ResolversTypes['CardsInDecksEdge']>, ParentType, ContextType, RequireFields<DeleteCardsInDeckPayloadCardsInDeckEdgeArgs, 'orderBy'>>;
@@ -8125,6 +8425,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteBannedDraftCardByCardId?: Resolver<Maybe<ResolversTypes['DeleteBannedDraftCardPayload']>, ParentType, ContextType, RequireFields<MutationDeleteBannedDraftCardByCardIdArgs, 'input'>>;
   deleteBotUser?: Resolver<Maybe<ResolversTypes['DeleteBotUserPayload']>, ParentType, ContextType, RequireFields<MutationDeleteBotUserArgs, 'input'>>;
   deleteBotUserById?: Resolver<Maybe<ResolversTypes['DeleteBotUserPayload']>, ParentType, ContextType, RequireFields<MutationDeleteBotUserByIdArgs, 'input'>>;
+  deleteCard?: Resolver<Maybe<ResolversTypes['DeleteCardPayload']>, ParentType, ContextType, RequireFields<MutationDeleteCardArgs, 'input'>>;
+  deleteCardBySuccession?: Resolver<Maybe<ResolversTypes['DeleteCardPayload']>, ParentType, ContextType, RequireFields<MutationDeleteCardBySuccessionArgs, 'input'>>;
   deleteCardsInDeck?: Resolver<Maybe<ResolversTypes['DeleteCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationDeleteCardsInDeckArgs, 'input'>>;
   deleteCardsInDeckById?: Resolver<Maybe<ResolversTypes['DeleteCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationDeleteCardsInDeckByIdArgs, 'input'>>;
   deleteDeck?: Resolver<Maybe<ResolversTypes['DeleteDeckPayload']>, ParentType, ContextType, RequireFields<MutationDeleteDeckArgs, 'input'>>;
@@ -8152,12 +8454,16 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   getClasses?: Resolver<Maybe<ResolversTypes['GetClassesPayload']>, ParentType, ContextType, RequireFields<MutationGetClassesArgs, 'input'>>;
   getCollectionCards?: Resolver<Maybe<ResolversTypes['GetCollectionCardsPayload']>, ParentType, ContextType, RequireFields<MutationGetCollectionCardsArgs, 'input'>>;
   publishCard?: Resolver<Maybe<ResolversTypes['PublishCardPayload']>, ParentType, ContextType, RequireFields<MutationPublishCardArgs, 'input'>>;
+  publishGitCard?: Resolver<Maybe<ResolversTypes['PublishGitCardPayload']>, ParentType, ContextType, RequireFields<MutationPublishGitCardArgs, 'input'>>;
+  refreshCurrentCards?: Resolver<Maybe<ResolversTypes['RefreshCurrentCardsPayload']>, ParentType, ContextType, RequireFields<MutationRefreshCurrentCardsArgs, 'input'>>;
   saveCard?: Resolver<Maybe<ResolversTypes['SaveCardPayload']>, ParentType, ContextType, RequireFields<MutationSaveCardArgs, 'input'>>;
   setCardsInDeck?: Resolver<Maybe<ResolversTypes['SetCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationSetCardsInDeckArgs, 'input'>>;
   updateBannedDraftCard?: Resolver<Maybe<ResolversTypes['UpdateBannedDraftCardPayload']>, ParentType, ContextType, RequireFields<MutationUpdateBannedDraftCardArgs, 'input'>>;
   updateBannedDraftCardByCardId?: Resolver<Maybe<ResolversTypes['UpdateBannedDraftCardPayload']>, ParentType, ContextType, RequireFields<MutationUpdateBannedDraftCardByCardIdArgs, 'input'>>;
   updateBotUser?: Resolver<Maybe<ResolversTypes['UpdateBotUserPayload']>, ParentType, ContextType, RequireFields<MutationUpdateBotUserArgs, 'input'>>;
   updateBotUserById?: Resolver<Maybe<ResolversTypes['UpdateBotUserPayload']>, ParentType, ContextType, RequireFields<MutationUpdateBotUserByIdArgs, 'input'>>;
+  updateCard?: Resolver<Maybe<ResolversTypes['UpdateCardPayload']>, ParentType, ContextType, RequireFields<MutationUpdateCardArgs, 'input'>>;
+  updateCardBySuccession?: Resolver<Maybe<ResolversTypes['UpdateCardPayload']>, ParentType, ContextType, RequireFields<MutationUpdateCardBySuccessionArgs, 'input'>>;
   updateCardsInDeck?: Resolver<Maybe<ResolversTypes['UpdateCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationUpdateCardsInDeckArgs, 'input'>>;
   updateCardsInDeckById?: Resolver<Maybe<ResolversTypes['UpdateCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationUpdateCardsInDeckByIdArgs, 'input'>>;
   updateDeck?: Resolver<Maybe<ResolversTypes['UpdateDeckPayload']>, ParentType, ContextType, RequireFields<MutationUpdateDeckArgs, 'input'>>;
@@ -8184,6 +8490,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateUserEntityAddonById?: Resolver<Maybe<ResolversTypes['UpdateUserEntityAddonPayload']>, ParentType, ContextType, RequireFields<MutationUpdateUserEntityAddonByIdArgs, 'input'>>;
   upsertBannedDraftCard?: Resolver<Maybe<ResolversTypes['UpsertBannedDraftCardPayload']>, ParentType, ContextType, RequireFields<MutationUpsertBannedDraftCardArgs, 'input'>>;
   upsertBotUser?: Resolver<Maybe<ResolversTypes['UpsertBotUserPayload']>, ParentType, ContextType, RequireFields<MutationUpsertBotUserArgs, 'input'>>;
+  upsertCard?: Resolver<Maybe<ResolversTypes['UpsertCardPayload']>, ParentType, ContextType, RequireFields<MutationUpsertCardArgs, 'input'>>;
   upsertCardsInDeck?: Resolver<Maybe<ResolversTypes['UpsertCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationUpsertCardsInDeckArgs, 'input'>>;
   upsertDeck?: Resolver<Maybe<ResolversTypes['UpsertDeckPayload']>, ParentType, ContextType, RequireFields<MutationUpsertDeckArgs, 'input'>>;
   upsertDeckPlayerAttributeTuple?: Resolver<Maybe<ResolversTypes['UpsertDeckPlayerAttributeTuplePayload']>, ParentType, ContextType, RequireFields<MutationUpsertDeckPlayerAttributeTupleArgs, 'input'>>;
@@ -8199,7 +8506,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type NodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
-  __resolveType: TypeResolveFn<'BannedDraftCard' | 'BotUser' | 'CardsInDeck' | 'Deck' | 'DeckPlayerAttributeTuple' | 'DeckShare' | 'Friend' | 'Game' | 'GameUser' | 'Guest' | 'HardRemovalCard' | 'MatchmakingQueue' | 'MatchmakingTicket' | 'Query' | 'UserEntityAddon', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'BannedDraftCard' | 'BotUser' | 'Card' | 'CardsInDeck' | 'Deck' | 'DeckPlayerAttributeTuple' | 'DeckShare' | 'Friend' | 'Game' | 'GameUser' | 'Guest' | 'HardRemovalCard' | 'MatchmakingQueue' | 'MatchmakingTicket' | 'Query' | 'UserEntityAddon', ParentType, ContextType>;
   nodeId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
 };
 
@@ -8213,6 +8520,14 @@ export type PageInfoResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type PublishCardPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublishCardPayload'] = ResolversParentTypes['PublishCardPayload']> = {
   bigInt?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PublishGitCardPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublishGitCardPayload'] = ResolversParentTypes['PublishGitCardPayload']> = {
+  card?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType>;
+  cardEdge?: Resolver<Maybe<ResolversTypes['CardsEdge']>, ParentType, ContextType, RequireFields<PublishGitCardPayloadCardEdgeArgs, 'orderBy'>>;
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -8243,6 +8558,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   bannedDraftCardByCardId?: Resolver<Maybe<ResolversTypes['BannedDraftCard']>, ParentType, ContextType, RequireFields<QueryBannedDraftCardByCardIdArgs, 'cardId'>>;
   botUser?: Resolver<Maybe<ResolversTypes['BotUser']>, ParentType, ContextType, RequireFields<QueryBotUserArgs, 'nodeId'>>;
   botUserById?: Resolver<Maybe<ResolversTypes['BotUser']>, ParentType, ContextType, RequireFields<QueryBotUserByIdArgs, 'id'>>;
+  card?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType, RequireFields<QueryCardArgs, 'nodeId'>>;
+  cardBySuccession?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType, RequireFields<QueryCardBySuccessionArgs, 'succession'>>;
   cardsInDeck?: Resolver<Maybe<ResolversTypes['CardsInDeck']>, ParentType, ContextType, RequireFields<QueryCardsInDeckArgs, 'nodeId'>>;
   cardsInDeckById?: Resolver<Maybe<ResolversTypes['CardsInDeck']>, ParentType, ContextType, RequireFields<QueryCardsInDeckByIdArgs, 'id'>>;
   deck?: Resolver<Maybe<ResolversTypes['Deck']>, ParentType, ContextType, RequireFields<QueryDeckArgs, 'nodeId'>>;
@@ -8274,6 +8591,12 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   userEntityAddonById?: Resolver<Maybe<ResolversTypes['UserEntityAddon']>, ParentType, ContextType, RequireFields<QueryUserEntityAddonByIdArgs, 'id'>>;
 };
 
+export type RefreshCurrentCardsPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['RefreshCurrentCardsPayload'] = ResolversParentTypes['RefreshCurrentCardsPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type SaveCardPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['SaveCardPayload'] = ResolversParentTypes['SaveCardPayload']> = {
   card?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType>;
   cardEdge?: Resolver<Maybe<ResolversTypes['CardsEdge']>, ParentType, ContextType, RequireFields<SaveCardPayloadCardEdgeArgs, 'orderBy'>>;
@@ -8300,6 +8623,14 @@ export type UpdateBannedDraftCardPayloadResolvers<ContextType = any, ParentType 
 export type UpdateBotUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateBotUserPayload'] = ResolversParentTypes['UpdateBotUserPayload']> = {
   botUser?: Resolver<Maybe<ResolversTypes['BotUser']>, ParentType, ContextType>;
   botUserEdge?: Resolver<Maybe<ResolversTypes['BotUsersEdge']>, ParentType, ContextType, RequireFields<UpdateBotUserPayloadBotUserEdgeArgs, 'orderBy'>>;
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpdateCardPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateCardPayload'] = ResolversParentTypes['UpdateCardPayload']> = {
+  card?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType>;
+  cardEdge?: Resolver<Maybe<ResolversTypes['CardsEdge']>, ParentType, ContextType, RequireFields<UpdateCardPayloadCardEdgeArgs, 'orderBy'>>;
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -8420,6 +8751,14 @@ export type UpsertBannedDraftCardPayloadResolvers<ContextType = any, ParentType 
 export type UpsertBotUserPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertBotUserPayload'] = ResolversParentTypes['UpsertBotUserPayload']> = {
   botUser?: Resolver<Maybe<ResolversTypes['BotUser']>, ParentType, ContextType>;
   botUserEdge?: Resolver<Maybe<ResolversTypes['BotUsersEdge']>, ParentType, ContextType, RequireFields<UpsertBotUserPayloadBotUserEdgeArgs, 'orderBy'>>;
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpsertCardPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpsertCardPayload'] = ResolversParentTypes['UpsertCardPayload']> = {
+  card?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType>;
+  cardEdge?: Resolver<Maybe<ResolversTypes['CardsEdge']>, ParentType, ContextType, RequireFields<UpsertCardPayloadCardEdgeArgs, 'orderBy'>>;
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -8617,6 +8956,7 @@ export type Resolvers<ContextType = any> = {
   DecksEdge?: DecksEdgeResolvers<ContextType>;
   DeleteBannedDraftCardPayload?: DeleteBannedDraftCardPayloadResolvers<ContextType>;
   DeleteBotUserPayload?: DeleteBotUserPayloadResolvers<ContextType>;
+  DeleteCardPayload?: DeleteCardPayloadResolvers<ContextType>;
   DeleteCardsInDeckPayload?: DeleteCardsInDeckPayloadResolvers<ContextType>;
   DeleteDeckPayload?: DeleteDeckPayloadResolvers<ContextType>;
   DeleteDeckPlayerAttributeTuplePayload?: DeleteDeckPlayerAttributeTuplePayloadResolvers<ContextType>;
@@ -8660,11 +9000,14 @@ export type Resolvers<ContextType = any> = {
   Node?: NodeResolvers<ContextType>;
   PageInfo?: PageInfoResolvers<ContextType>;
   PublishCardPayload?: PublishCardPayloadResolvers<ContextType>;
+  PublishGitCardPayload?: PublishGitCardPayloadResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  RefreshCurrentCardsPayload?: RefreshCurrentCardsPayloadResolvers<ContextType>;
   SaveCardPayload?: SaveCardPayloadResolvers<ContextType>;
   SetCardsInDeckPayload?: SetCardsInDeckPayloadResolvers<ContextType>;
   UpdateBannedDraftCardPayload?: UpdateBannedDraftCardPayloadResolvers<ContextType>;
   UpdateBotUserPayload?: UpdateBotUserPayloadResolvers<ContextType>;
+  UpdateCardPayload?: UpdateCardPayloadResolvers<ContextType>;
   UpdateCardsInDeckPayload?: UpdateCardsInDeckPayloadResolvers<ContextType>;
   UpdateDeckPayload?: UpdateDeckPayloadResolvers<ContextType>;
   UpdateDeckPlayerAttributeTuplePayload?: UpdateDeckPlayerAttributeTuplePayloadResolvers<ContextType>;
@@ -8679,6 +9022,7 @@ export type Resolvers<ContextType = any> = {
   UpdateUserEntityAddonPayload?: UpdateUserEntityAddonPayloadResolvers<ContextType>;
   UpsertBannedDraftCardPayload?: UpsertBannedDraftCardPayloadResolvers<ContextType>;
   UpsertBotUserPayload?: UpsertBotUserPayloadResolvers<ContextType>;
+  UpsertCardPayload?: UpsertCardPayloadResolvers<ContextType>;
   UpsertCardsInDeckPayload?: UpsertCardsInDeckPayloadResolvers<ContextType>;
   UpsertDeckPayload?: UpsertDeckPayloadResolvers<ContextType>;
   UpsertDeckPlayerAttributeTuplePayload?: UpsertDeckPlayerAttributeTuplePayloadResolvers<ContextType>;

@@ -26,6 +26,7 @@ import javascript from "blockly/javascript";
 import useBreakpoint from "@restart/hooks/useBreakpoint";
 import { useEffectOnce } from "../hooks/use-effect-once";
 import { uniqBy } from "lodash";
+import { openFile } from "../lib/fs-utils";
 
 interface CardEditorWorkspaceProps {
   setJSON?: React.Dispatch<React.SetStateAction<string>>;
@@ -248,6 +249,26 @@ const CardEditorWorkspace = forwardRef(
           evt.preventDefault();
           cancelDebounce(); // Immediately run saveAll, skipping next one
           saveAll();
+        }
+
+        if (evt.key === "o" && (evt.metaKey || evt.ctrlKey)) {
+          evt.preventDefault();
+          openFile(".xml", (result) => {
+            const dom = Blockly.Xml.textToDom(result);
+
+            for (const nextBlock of dom.getElementsByTagName("block")) {
+              for (const childNode of nextBlock.childNodes) {
+                const tagName = (childNode as Element).tagName;
+                if (tagName !== "data" && tagName !== "field" && tagName !== "next") {
+                  nextBlock.setAttribute("collapsed", "false");
+                  break;
+                }
+              }
+            }
+
+            const block = Blockly.Xml.domToBlock(dom, mainWorkspace());
+            block.setCollapsed(false);
+          });
         }
       };
       document.addEventListener("keydown", listener);
