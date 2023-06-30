@@ -17,13 +17,13 @@ plugins {
     id 'java-library'
 }
 
-def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def csharpRootDir = 'src/csharp/HiddenSwitch'
 def dotnetCmd = ["dotnet"]
 def csharpGrpcPath = "";
 if (Os.isFamily(Os.FAMILY_WINDOWS)) {
     csharpGrpcPath = "$project.rootProject.projectDir/bin/grpc_csharp_plugin.exe"
 } else if (Os.isFamily(Os.FAMILY_MAC)) {
+    dotnetCmd = ["/opt/homebrew/bin/dotnet"]
     csharpGrpcPath = "$project.rootProject.projectDir/bin/grpc_csharp_plugin"
 } else {
     csharpGrpcPath = "$project.rootProject.projectDir/bin/linux/grpc_csharp_plugin"
@@ -59,9 +59,7 @@ dependencies {
         exclude group: 'jakarta.xml.bind', module: '*'
         exclude group: 'jakarta.activation', module: '*'
     }
-    // includes withCallCredentials fix
     api("io.vertx:vertx-grpc-client:$vertxVersion")
-    api("io.vertx:vertx-grpc-jwt-auth:$vertxVersion")
     api("io.vertx:vertx-grpc-server:$vertxVersion")
 }
 
@@ -121,6 +119,7 @@ tasks.register('installDll', Copy) {
 }
 
 tasks.register('protosChanged') {
+    group("spellsource")
     description('Run whenever the files in src/main/proto have been changed. Recreates the models and updates the client.')
     dependsOn += [installDll, ':spellsource-protos:generateProto']
 }

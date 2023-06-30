@@ -92,26 +92,20 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 
 	@Override
 	public @NotNull CardList query(DeckFormat deckFormat, Spellsource.CardTypeMessage.CardType cardType, Spellsource.RarityMessage.Rarity rarity, String heroClass, Attribute tag, boolean clone) {
-
 		refreshInvalid();
 		return super.query(deckFormat, cardType, rarity, heroClass, tag, clone);
-
 	}
 
 	@Override
 	public @NotNull CardList getAll() {
-
 		refreshInvalid();
 		return super.getAll();
-
 	}
 
 	@Override
 	public @NotNull Card getCardById(@NotNull String id) {
-
 		refreshInvalid();
 		return super.getCardById(id);
-
 	}
 
 	@Override
@@ -204,7 +198,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 			System.out.println("Going to refetch " + toFetch);
 			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 			var getCards = cardsDao.findManyByCondition(CARDS.ID.in(toFetch).and(CARDS.IS_PUBLISHED.eq(true)).and(CARDS.IS_ARCHIVED.eq(false)));
-			if (Vertx.currentContext() != null && ((ContextInternal) Vertx.currentContext()).unwrap() instanceof VirtualThreadContext) {
+			if (Thread.currentThread().isVirtual()) {
 				var cardDbRecords = await(getCards);
 				Async.lock(lock.writeLock());
 				try {

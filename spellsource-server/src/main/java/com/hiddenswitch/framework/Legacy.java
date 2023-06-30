@@ -30,6 +30,7 @@ import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
+import io.vertx.grpc.server.GrpcServerRequest;
 import io.vertx.sqlclient.Row;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -161,17 +162,15 @@ public class Legacy {
 	public static BindAll<HiddenSwitchSpellsourceAPIServiceApi> services(SqlCachedCardCatalogue cardCatalogue) {
 		return new HiddenSwitchSpellsourceAPIServiceApi() {
 			@Override
-			public void subscribeGame(ReadStream<ClientToServerMessage> request, WriteStream<ServerToClientMessage> response) {
+			public void subscribeGame(GrpcServerRequest<ClientToServerMessage, ServerToClientMessage> grpcServerRequest, ReadStream<ClientToServerMessage> request, WriteStream<ServerToClientMessage> response) {
 				request.pause();
-				var consumer = ServerGameContext.subscribeGame(request, response);
-				request.endHandler(v -> consumer.unregister());
-				request.exceptionHandler(t -> consumer.unregister());
-				request.resume();
+				var userId = grpcServerRequest.routingContext().user().subject();
+				ServerGameContext.subscribeGame(userId, grpcServerRequest, response);
 			}
 
 			@Override
-			public Future<Empty> decksDelete(DecksDeleteRequest request) {
-				var userId = Accounts.userId();
+			public Future<Empty> decksDelete(GrpcServerRequest<DecksDeleteRequest, Empty> grpcServerRequest, DecksDeleteRequest request) {
+				var userId = grpcServerRequest.routingContext().user().subject();
 				var deckId = request.getDeckId();
 				// first, try to trash the share if it exists
 				// otherwise, the if it's a premade deck and the trash record does not exist, insert a share record that is trashed
@@ -216,22 +215,22 @@ public class Legacy {
 			}
 
 			@Override
-			public Future<DecksGetResponse> decksGet(DecksGetRequest request) {
+			public Future<DecksGetResponse> decksGet(GrpcServerRequest<DecksGetRequest, DecksGetResponse> grpcServerRequest, DecksGetRequest request) {
 				var deckId = request.getDeckId();
-				var userId = Accounts.userId();
+				var userId = grpcServerRequest.routingContext().user().subject();
 
 				return getDeck(deckId, userId).recover(Environment.onGrpcFailure());
 			}
 
 			@Override
-			public Future<DecksGetAllResponse> decksGetAll(Empty request) {
-				var userId = Accounts.userId();
+			public Future<DecksGetAllResponse> decksGetAll(GrpcServerRequest<Empty, DecksGetAllResponse> grpcServerRequest, Empty request) {
+				var userId = grpcServerRequest.routingContext().user().subject();
 				return getAllDecks(userId).recover(Environment.onGrpcFailure());
 			}
 
 			@Override
-			public Future<DecksPutResponse> decksPut(DecksPutRequest request) {
-				var userId = Accounts.userId();
+			public Future<DecksPutResponse> decksPut(GrpcServerRequest<DecksPutRequest, DecksPutResponse> grpcServerRequest, DecksPutRequest request) {
+				var userId = grpcServerRequest.routingContext().user().subject();
 
 				DeckCreateRequest createRequest;
 				if (!request.getDeckList().isEmpty()) {
@@ -248,10 +247,9 @@ public class Legacy {
 			}
 
 			@Override
-			public Future<DecksGetResponse> decksUpdate(DecksUpdateRequest request) {
-				var configuration = Environment.jooqAkaDaoConfiguration();
+			public Future<DecksGetResponse> decksUpdate(GrpcServerRequest<DecksUpdateRequest, DecksGetResponse> grpcServerRequest, DecksUpdateRequest request) {
 				var deckId = request.getDeckId();
-				var userId = Accounts.userId();
+				var userId = grpcServerRequest.routingContext().user().subject();
 				var updateCommand = request.getUpdateCommand();
 
 				if (deckId.isEmpty()) {
@@ -382,52 +380,49 @@ public class Legacy {
 			}
 
 			@Override
-			public Future<DecksGetResponse> duplicateDeck(StringValue request) {
-				var userId = Accounts.userId();
+			public Future<DecksGetResponse> duplicateDeck(GrpcServerRequest<StringValue, DecksGetResponse> grpcServerRequest, StringValue request) {
+				var userId = grpcServerRequest.routingContext().user().subject();
 				var deckId = request.getValue();
 				var newDeckId = UUID.randomUUID().toString();
 				var promise = Promise.<DecksGetResponse>promise();
+				ReactiveClassicGenericQueryExecutor transaction = null;
+				try {
+					transaction = await(new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), Environment.transactionPool()).beginTransaction());
+					var decksInserted = await(transaction
+							.execute(dsl -> {
+								// new deckId, deck fields...
+								var newDeckIdAndOtherFields = ObjectArrays.concat(DSL.val(newDeckId), withoutFields(DECKS.fields(), DECKS.ID));
+								// replace owner ID
+								var ownerIdPos = Iterators.indexOf(Iterators.forArray(newDeckIdAndOtherFields), t -> t != null && Objects.equals(t.getName(), DECKS.CREATED_BY.getName()));
+								newDeckIdAndOtherFields[ownerIdPos] = DSL.val(userId);
+								// replace premade
+								var premadePos = Iterators.indexOf(Iterators.forArray(newDeckIdAndOtherFields), f -> Objects.equals(f, DECKS.IS_PREMADE));
+								newDeckIdAndOtherFields[premadePos] = DSL.val(false);
+								return dsl.insertInto(DECKS, DECKS.fields())
+										// retrieve fields from existing deck EXCEPT the ID, which we replaced
+										.select(DSL.using(SQLDialect.POSTGRES).select(newDeckIdAndOtherFields)
+												.from(DECKS)
+												// We can duplicate our own decks, decks that are permitted to duplicate by anyone or premade decks
+												.where(DECKS.ID.eq(deckId).and(canEditDeckSql(userId)
+														.or(DECKS.PERMITTED_TO_DUPLICATE.eq(true))
+														.or(DECKS.IS_PREMADE.eq(true)))));
+							}));
 
-				Environment.async().run(v -> {
-					ReactiveClassicGenericQueryExecutor transaction = null;
-					try {
-						transaction = await(new ReactiveClassicGenericQueryExecutor(Environment.jooqAkaDaoConfiguration(), Environment.transactionPool()).beginTransaction());
-						var decksInserted = await(transaction
-								.execute(dsl -> {
-									// new deckId, deck fields...
-									var newDeckIdAndOtherFields = ObjectArrays.concat(DSL.val(newDeckId), withoutFields(DECKS.fields(), DECKS.ID));
-									// replace owner ID
-									var ownerIdPos = Iterators.indexOf(Iterators.forArray(newDeckIdAndOtherFields), t -> t != null && Objects.equals(t.getName(), DECKS.CREATED_BY.getName()));
-									newDeckIdAndOtherFields[ownerIdPos] = DSL.val(userId);
-									// replace premade
-									var premadePos = Iterators.indexOf(Iterators.forArray(newDeckIdAndOtherFields), f -> Objects.equals(f, DECKS.IS_PREMADE));
-									newDeckIdAndOtherFields[premadePos] = DSL.val(false);
-									return dsl.insertInto(DECKS, DECKS.fields())
-											// retrieve fields from existing deck EXCEPT the ID, which we replaced
-											.select(DSL.using(SQLDialect.POSTGRES).select(newDeckIdAndOtherFields)
-													.from(DECKS)
-													// We can duplicate our own decks, decks that are permitted to duplicate by anyone or premade decks
-													.where(DECKS.ID.eq(deckId).and(canEditDeckSql(userId)
-															.or(DECKS.PERMITTED_TO_DUPLICATE.eq(true))
-															.or(DECKS.IS_PREMADE.eq(true)))));
-								}));
-
-						if (decksInserted != 1) {
-							throw Status.NOT_FOUND.asRuntimeException();
-						}
-
-						await(transaction.execute(dsl -> duplicateAllForeign(deckId, newDeckId, CARDS_IN_DECK.ID, CARDS_IN_DECK.DECK_ID)));
-						await(transaction.execute(dsl -> duplicateAllForeign(deckId, newDeckId, DECK_PLAYER_ATTRIBUTE_TUPLES.ID, DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID)));
-						await(transaction.commit());
-						transaction = null;
-						promise.complete(await(getDeck(newDeckId, userId)));
-					} catch (Throwable t) {
-						if (transaction != null) {
-							transaction.rollback();
-						}
-						promise.fail(t);
+					if (decksInserted != 1) {
+						throw Status.NOT_FOUND.asRuntimeException();
 					}
-				});
+
+					await(transaction.execute(dsl -> duplicateAllForeign(deckId, newDeckId, CARDS_IN_DECK.ID, CARDS_IN_DECK.DECK_ID)));
+					await(transaction.execute(dsl -> duplicateAllForeign(deckId, newDeckId, DECK_PLAYER_ATTRIBUTE_TUPLES.ID, DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID)));
+					await(transaction.commit());
+					transaction = null;
+					promise.complete(await(getDeck(newDeckId, userId)));
+				} catch (Throwable t) {
+					if (transaction != null) {
+						transaction.rollback();
+					}
+					promise.fail(t);
+				}
 				return promise.future();
 			}
 		}::bindAll;

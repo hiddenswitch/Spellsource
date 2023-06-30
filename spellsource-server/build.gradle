@@ -59,6 +59,8 @@ application {
 }
 
 dependencies {
+    compileOnly 'org.infinispan:infinispan-component-annotations:15.0.0.Dev01'
+
     implementation project(':spellsource-common')
     implementation project(':spellsource-game')
     implementation project(':spellsource-cards-git')
@@ -67,6 +69,7 @@ dependencies {
     implementation group: 'io.vertx', name: 'vertx-web-client', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-service-discovery', version: vertxVersion
     implementation group: 'io.vertx', name: 'vertx-web', version: vertxVersion
+    implementation group: 'io.vertx', name: 'vertx-auth-jwt', version: vertxVersion
     implementation 'javax.activation:activation:1.1.1'
 
     // keycloak

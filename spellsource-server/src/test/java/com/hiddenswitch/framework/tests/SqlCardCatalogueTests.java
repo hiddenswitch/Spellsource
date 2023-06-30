@@ -20,35 +20,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SqlCardCatalogueTests extends FrameworkTestBase {
 
-	private void testSqlCatalogue(Vertx vertx, VertxTestContext vertxTestContext, Handler<CardCatalogue> handler) {
-		startGateway(vertx)
-				.compose(v -> {
-					var verticle = new AbstractVirtualThreadVerticle() {
-						@Override
-						public void startVirtual() throws Exception {
-							var catalogue = new SqlCardCatalogue();
-							handler.handle(catalogue);
-						}
-					};
-					return vertx.deployVerticle(verticle);
-				})
-				.onComplete(vertxTestContext.succeedingThenComplete());
-	}
-
 	private void testCachedCardCatalogue(Vertx vertx, VertxTestContext vertxTestContext, Handler<CardCatalogue> handler) {
-		startGateway(vertx)
-				.compose(v -> {
-					var verticle = new AbstractVirtualThreadVerticle() {
-						@Override
-						public void startVirtual() throws Exception {
-							var catalogue = new SqlCachedCardCatalogue();
-							catalogue.invalidateAllAndRefresh();
-							await(catalogue.subscribe());
-							vertxTestContext.verify(() -> handler.handle(catalogue));
-						}
-					};
-					return vertx.deployVerticle(verticle);
-				})
+		var verticle = new AbstractVirtualThreadVerticle() {
+			@Override
+			public void startVirtual() throws Exception {
+				var catalogue = new SqlCachedCardCatalogue();
+				catalogue.invalidateAllAndRefresh();
+				await(catalogue.subscribe());
+				vertxTestContext.verify(() -> handler.handle(catalogue));
+			}
+		};
+		vertx.deployVerticle(verticle)
 				.onComplete(vertxTestContext.succeedingThenComplete());
 	}
 

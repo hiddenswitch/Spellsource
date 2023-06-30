@@ -8,6 +8,7 @@ import com.hiddenswitch.framework.rpc.Hiddenswitch.LoginOrCreateReplyOrBuilder;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpcClient;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpcClient;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
+import com.hiddenswitch.spellsource.rpc.MatchmakingGrpc;
 import com.hiddenswitch.spellsource.rpc.Spellsource.*;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MessageTypeMessage.MessageType;
 import com.hiddenswitch.spellsource.rpc.VertxHiddenSwitchSpellsourceAPIServiceGrpcClient;
@@ -19,11 +20,13 @@ import io.vertx.core.http.HttpVersion;
 import io.vertx.core.http.RequestOptions;
 import io.vertx.core.http.impl.headers.HeadersMultiMap;
 import io.vertx.core.net.SocketAddress;
+import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
-import io.vertx.grpc.client.GrpcClient;
+import io.vertx.grpc.common.GrpcException;
+import io.vertx.grpc.common.GrpcStatus;
 import net.demilich.metastone.game.logic.XORShiftRandom;
 import org.keycloak.representations.AccessTokenResponse;
 import org.slf4j.Logger;
@@ -293,9 +296,9 @@ public class Client {
 			}
 
 			return new GrpcClientWithOptions(new HttpClientOptions()
-								.setProtocolVersion(HttpVersion.HTTP_2)
-								.setHttp2ClearTextUpgrade(false)
-								.setSsl(false), vertx);
+					.setProtocolVersion(HttpVersion.HTTP_2)
+					.setHttp2ClearTextUpgrade(false)
+					.setSsl(false), vertx);
 		});
 	}
 
@@ -339,7 +342,38 @@ public class Client {
 	}
 
 	public VertxMatchmakingGrpcClient matchmaking() {
-		return new VertxMatchmakingGrpcClient(client().setRequestOptions(new RequestOptions().setHeaders(credentials())), address());
+		var client = client().setRequestOptions(new RequestOptions().setHeaders(credentials()));
+		var socketAddress = address();
+		return new VertxMatchmakingGrpcClient(client, socketAddress) {
+			@Override
+			public Future<ReadStream<MatchmakingQueuePutResponse>> enqueue(Handler<WriteStream<com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutRequest>> request) {
+				return client.request(socketAddress, MatchmakingGrpc.getEnqueueMethod())
+						.compose(req -> {
+							request.handle(req);
+							var keepAliveManager = Environment.keepAliveManager(req.connection(), v -> {
+								try {
+									req.end();
+								} catch (IllegalStateException ignored) {
+									// already closed
+								}
+							}, true);
+							keepAliveManager.onTransportStarted();
+							req.exceptionHandler(t -> keepAliveManager.onTransportTermination());
+							req.response().onSuccess(res -> {
+								res.endHandler(v -> keepAliveManager.onTransportTermination());
+							});
+							return req.response().flatMap(resp -> {
+								if (resp.status() != null && resp.status() != GrpcStatus.OK) {
+									keepAliveManager.onTransportTermination();
+									return Future.failedFuture(new GrpcException(resp.statusMessage(), resp.status(), null));
+								} else {
+									keepAliveManager.onDataReceived();
+									return Future.succeededFuture(resp);
+								}
+							});
+						});
+			}
+		};
 	}
 
 	public Future<Void> close(Object ignored) {

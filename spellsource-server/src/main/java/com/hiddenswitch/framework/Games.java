@@ -8,6 +8,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.Message;
+import io.vertx.grpc.server.GrpcServerRequest;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,8 +76,8 @@ public class Games {
 	public static BindAll<VertxGamesGrpcServer.GamesApi> services() {
 		return new VertxGamesGrpcServer.GamesApi() {
 			@Override
-			public Future<StringValue> isInMatch(Empty request) {
-				var userId = Accounts.userId();
+			public Future<StringValue> isInMatch(GrpcServerRequest<Empty, StringValue> grpcServerRequest, Empty request) {
+				var userId = grpcServerRequest.routingContext().user().subject();
 				if (userId == null) {
 					return Future.succeededFuture(StringValue.of(""));
 				}

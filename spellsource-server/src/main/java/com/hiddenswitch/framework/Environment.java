@@ -5,20 +5,20 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Streams;
 import com.google.protobuf.Parser;
 import com.hiddenswitch.diagnostics.Tracing;
-import com.hiddenswitch.framework.impl.Clustered;
-import com.hiddenswitch.framework.impl.ModelConversions;
-import com.hiddenswitch.framework.impl.RedissonProtobufCodec;
-import com.hiddenswitch.framework.impl.WeakVertxMap;
+import com.hiddenswitch.framework.impl.*;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.ServerConfiguration;
 import com.hiddenswitch.protos.Serialization;
 import io.github.jklingsporn.vertx.jooq.classic.reactivepg.ReactiveClassicGenericQueryExecutor;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
+import io.grpc.internal.KeepAliveManager;
 import io.micrometer.core.instrument.Metrics;
 import io.opentracing.util.GlobalTracer;
 import io.vertx.await.Async;
 import io.vertx.core.Context;
 import io.vertx.core.*;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.HttpConnection;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.core.tracing.TracingOptions;
@@ -36,6 +36,7 @@ import org.flywaydb.core.api.output.MigrateResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.*;
+import org.jooq.Configuration;
 import org.jooq.Query;
 import org.jooq.Record;
 import org.jooq.conf.ParamType;
@@ -47,6 +48,8 @@ import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.StringCodec;
 import org.redisson.codec.CompositeCodec;
 import org.redisson.config.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -59,6 +62,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.Comparator;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -70,6 +74,8 @@ import java.util.stream.StreamSupport;
 import static com.hiddenswitch.protos.Serialization.configureSerialization;
 
 public class Environment {
+	private final static Logger LOGGER = LoggerFactory.getLogger(Environment.class);
+
 	private static final PrometheusBackendRegistry prometheusRegistry = new PrometheusBackendRegistry(new VertxPrometheusOptions()
 			.setEnabled(true)
 			.setPublishQuantiles(true));
@@ -590,6 +596,33 @@ public class Environment {
 
 	public static PrometheusBackendRegistry registry() {
 		return prometheusRegistry;
+	}
+
+	public static KeepAliveManager keepAliveManager(HttpConnection connection, Handler<Void> failHandler, boolean reply) {
+		var configuration = Environment.getConfiguration().getGrpcConfiguration();
+		var keepAliveManager = new KeepAliveManager(new KeepAliveManager.KeepAlivePinger() {
+
+			@Override
+			public void ping() {
+				connection.ping(Buffer.buffer(new byte[]{0, 1, 2, 3, 4, 5, 6, 7}), res -> {
+					if (res.failed()) {
+						failHandler.handle(null);
+					}
+				});
+			}
+
+			@Override
+			public void onPingTimeout() {
+				failHandler.handle(null);
+			}
+		}, new KeepAliveManagerVertxScheduler(Vertx.currentContext()),
+				TimeUnit.MILLISECONDS.toNanos(configuration.getServerKeepAliveTimeMillis()),
+				TimeUnit.MILLISECONDS.toNanos(configuration.getServerKeepAliveTimeoutMillis()),
+				configuration.getServerPermitKeepAliveWithoutCalls());
+
+		connection.pingHandler(ping -> keepAliveManager.onDataReceived());
+
+		return keepAliveManager;
 	}
 
 	public record PgArgs(PgConnectOptions connectionOptions, PoolOptions poolOptions) {

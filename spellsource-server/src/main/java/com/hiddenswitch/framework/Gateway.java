@@ -71,14 +71,13 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 			router.route("/" + serviceName + "/*").handler(JWTAuthHandler.create(jwtAuth, realm.toRepresentation().getRealm()));
 		}
 
-		router.route().handler(VirtualThreadRoutingContextHandler.create(ctx -> server.handle(ctx.request())));
-
 		for (var service : services) {
 			// basic interceptors for grpc
 			service.bindAll(server);
 		}
 
 		GrpcServiceBridge.bridge(ProtoReflectionService.newInstance().bindService()).bind(server);
+		server.mount(router);
 
 		await(httpServer.requestHandler(router)
 				.listen(port));

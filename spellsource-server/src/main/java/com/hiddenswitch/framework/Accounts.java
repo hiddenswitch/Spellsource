@@ -18,6 +18,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.hiddenswitch.framework.virtual.VirtualThreadRoutingContextHandler;
 import io.grpc.Status;
 import io.vertx.core.Future;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.JWTOptions;
@@ -28,6 +29,7 @@ import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.codec.BodyCodec;
+import io.vertx.grpc.server.GrpcServerRequest;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -99,9 +101,8 @@ public class Accounts {
 	 * @return A {@link UserEntity} SQL model of a user record
 	 * @see #userId() when the user ID will suffice
 	 */
-	public static Future<UserEntity> user() {
+	public static Future<UserEntity> user(String userId) {
 		try {
-			var userId = Accounts.userId();
 			var dao = new UserEntityDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 			var record = await(dao.findOneById(userId));
 			return Future.succeededFuture(record);
@@ -284,8 +285,8 @@ public class Accounts {
 		return new AccountsApi() {
 
 			@Override
-			public Future<LoginOrCreateReply> changePassword(ChangePasswordRequest request) {
-				var userId = Accounts.userId();
+			public Future<LoginOrCreateReply> changePassword(GrpcServerRequest<ChangePasswordRequest, LoginOrCreateReply> grpcServerRequest, ChangePasswordRequest request) {
+				var userId = grpcServerRequest.routingContext().user().subject();
 				// for now we don't invalidate and refresh the old token
 				var token = Accounts.token();
 				if (token == null) {
@@ -306,8 +307,9 @@ public class Accounts {
 			}
 
 			@Override
-			public Future<GetAccountsReply> getAccount(Empty request) {
-				return user()
+			public Future<GetAccountsReply> getAccount(GrpcServerRequest<Empty, GetAccountsReply> grpcServerRequest, Empty request) {
+				var userId = grpcServerRequest.routingContext().user().subject();
+				return user(userId)
 						.compose(thisUser -> {
 							if (thisUser == null) {
 								return Future.failedFuture("must log in");
@@ -325,8 +327,9 @@ public class Accounts {
 			}
 
 			@Override
-			public Future<GetAccountsReply> getAccounts(GetAccountsRequest request) {
-				return user()
+			public Future<GetAccountsReply> getAccounts(GrpcServerRequest<GetAccountsRequest, GetAccountsReply> grpcServerRequest, GetAccountsRequest request) {
+				var userId = grpcServerRequest.routingContext().user().subject();
+				return user(userId)
 						.compose(thisUser -> {
 							if (thisUser == null) {
 								return Future.failedFuture("must log in");

@@ -12,7 +12,6 @@ def graalNpmPrefix = 'node_modules_graal'
 evaluationDependsOn(":spellsource-server")
 
 clean {
-    delete 'public'
     delete '.cache'
 }
 
