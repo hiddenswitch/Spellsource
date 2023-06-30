@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 13.11 (Debian 13.11-1.pgdg110+1)
--- Dumped by pg_dump version 13.11
+-- Dumped by pg_dump version 15.1 (Debian 15.1-1.pgdg110+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -33,6 +33,15 @@ CREATE SCHEMA keycloak;
 
 
 ALTER SCHEMA keycloak OWNER TO admin;
+
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: admin
+--
+
+-- *not* creating schema, since initdb creates it
+
+
+ALTER SCHEMA public OWNER TO admin;
 
 --
 -- Name: spellsource; Type: SCHEMA; Schema: -; Owner: admin
@@ -70,24 +79,6 @@ CREATE TYPE spellsource.game_user_victory_enum AS ENUM (
 
 
 ALTER TYPE spellsource.game_user_victory_enum OWNER TO admin;
-
---
--- Name: after_card_published(); Type: FUNCTION; Schema: spellsource; Owner: admin
---
-
-CREATE FUNCTION spellsource.after_card_published() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
-declare
-begin
-    execute spellsource.refresh_current_cards();
-
-    return new;
-end;
-$$;
-
-
-ALTER FUNCTION spellsource.after_card_published() OWNER TO admin;
 
 --
 -- Name: archive_card(text); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -219,7 +210,9 @@ begin
     return query
         select *
         from spellsource.cards
-        where card_script ->> 'type' = 'FORMAT';
+        where card_script ->> 'type' = 'FORMAT'
+          and is_published
+          and not is_archived;
 end;
 $$;
 
@@ -240,7 +233,9 @@ begin
          union
          select id
          from spellsource.cards
-         where card_script -> 'draft' ->> 'banned' = 'true');
+         where card_script -> 'draft' ->> 'banned' = 'true'
+           and is_published
+           and not is_archived);
 end;
 $$;
 
@@ -259,7 +254,9 @@ begin
         select *
         from spellsource.cards
         where card_script ->> 'type' = 'CLASS'
-          and (card_script ->> 'set') = any (sets);
+          and (card_script ->> 'set') = any (sets)
+          and is_published
+          and not is_archived;
 end;
 $$;
 
@@ -277,7 +274,9 @@ begin
     return query
         select *
         from spellsource.cards
-        where id = card_id;
+        where id = card_id
+          and is_published
+          and not is_archived;
 end;
 $$;
 
@@ -298,6 +297,8 @@ begin
     into result_record
     from spellsource.cards
     where card_script ->> 'name' = card_name
+      and is_published
+      and not is_archived
     limit 1;
 
     return result_record;
@@ -325,6 +326,8 @@ begin
     from spellsource.cards
     where card_script ->> 'name' = card_name
       and card_script ->> 'heroClass' = hero_class
+      and is_published
+      and not is_archived
     limit 1;
 
     return result_record;
@@ -348,7 +351,9 @@ begin
     return query
         select *
         from spellsource.cards
-        where card_script ->> 'type' = 'CLASS';
+        where card_script ->> 'type' = 'CLASS'
+          and is_published
+          and not is_archived;
 end;
 $$;
 
@@ -367,7 +372,9 @@ begin
         select *
         from spellsource.cards
         where card_script ->> 'type' = 'FORMAT'
-          and card_script ->> 'name' = card_name;
+          and card_script ->> 'name' = card_name
+          and is_published
+          and not is_archived;
 end;
 $$;
 
@@ -388,7 +395,9 @@ begin
          union
          select id
          from spellsource.cards
-         where card_script -> 'artificialIntelligence' ->> 'hardRemoval' = 'true');
+         where card_script -> 'artificialIntelligence' ->> 'hardRemoval' = 'true'
+           and is_published
+           and not is_archived);
 end;
 $$;
 
@@ -410,6 +419,8 @@ begin
     from spellsource.cards
     where card_script ->> 'heroClass' = hero_class
       and card_script ->> 'type' = 'HERO'
+      and is_published
+      and not is_archived
     limit 1;
 
     return result_record;
@@ -437,7 +448,9 @@ begin
           and (card_type is null or card_script ->> 'type' = card_type)
           and (rarity is null or card_script ->> 'rarity' = rarity)
           and (hero_class is null or card_script ->> 'heroClass' = hero_class)
-          and (attribute is null or card_script -> 'attributes' ? attribute);
+          and (attribute is null or card_script -> 'attributes' ? attribute)
+          and is_published
+          and not is_archived;
 end;
 $$;
 
@@ -481,7 +494,9 @@ select distinct created_by,
                 id,
                 card_script ->> 'name'                                as name
 from spellsource.cards
-where card_script ->> 'type' = 'CLASS';
+where card_script ->> 'type' = 'CLASS'
+  and is_published
+  and not is_archived;
 $$;
 
 
@@ -690,7 +705,7 @@ select card.id,
        card.card_script ->> 'name'                                    as name,
        card.card_script ->> 'type'                                    as type,
        card.card_script ->> 'heroClass'                               as class,
-       coalesce(card.card_script ->> 'baseManaCost', '0')::int        as cost,
+       coalesce(nullif(card.card_script ->> 'baseManaCost', ''), '0')::int        as cost,
        (coalesce(card.card_script ->> 'collectible', 'true')::bool and
         (card.card_script ->> 'heroClass' = 'ANY' or cl.collectible)) as collectible,
        spellsource.card_message(card::spellsource.cards, cl)          as search_message,
@@ -699,8 +714,8 @@ select card.id,
 from spellsource.cards card
          join spellsource.classes cl on card.card_script ->> 'heroClass' = cl.class
 where card.card_script ->> 'set' != 'TEST'
-  and not card.is_archived
-  and card.is_published;
+  and card.is_published
+  and not card.is_archived;
 $$;
 
 
@@ -781,10 +796,11 @@ declare
     card         spellsource.cards;
     created_time timestamptz;
 begin
+    created_time := now();
+
     select * from spellsource.cards where id = card_id and is_published and not is_archived into card;
 
-    created_time := now();
-    if (card is not null) then
+    if (not (card is null)) then
         if (card.card_script @> json and json @> card.card_script) then
             -- no changes needed
             return card;
@@ -795,29 +811,15 @@ begin
 
     -- create the new published card; triggers will handle side effects
     insert into spellsource.cards (id, created_by, card_script, created_at, is_published)
-    values (card_id, creator, json, created_time, true) into card;
-    
+    values (card_id, creator, json, created_time, true)
+    returning * into card;
+
     return card;
 end;
 $$;
 
 
 ALTER FUNCTION spellsource.publish_git_card(card_id text, json jsonb, creator character varying) OWNER TO admin;
-
---
--- Name: refresh_current_cards(); Type: FUNCTION; Schema: spellsource; Owner: admin
---
-
-CREATE FUNCTION spellsource.refresh_current_cards() RETURNS void
-    LANGUAGE plpgsql SECURITY DEFINER
-    AS $$
-begin
-    refresh materialized view spellsource.current_cards;
-end
-$$;
-
-
-ALTER FUNCTION spellsource.refresh_current_cards() OWNER TO admin;
 
 --
 -- Name: save_card(text, xml, jsonb); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -2393,32 +2395,6 @@ CREATE VIEW spellsource.collection_cards AS
 
 
 ALTER TABLE spellsource.collection_cards OWNER TO admin;
-
---
--- Name: current_cards; Type: MATERIALIZED VIEW; Schema: spellsource; Owner: admin
---
-
-CREATE MATERIALIZED VIEW spellsource.current_cards AS
- SELECT c.id,
-    c.created_by,
-    c.uri,
-    c.blockly_workspace,
-    c.card_script,
-    c.created_at,
-    c.last_modified,
-    c.is_archived,
-    c.is_published,
-    c.succession
-   FROM (spellsource.cards c
-     JOIN ( SELECT cards.id,
-            max(cards.succession) AS max_succession
-           FROM spellsource.cards
-          WHERE (cards.is_published AND (NOT cards.is_archived))
-          GROUP BY cards.id) m ON (((c.id = m.id) AND (c.succession = m.max_succession))))
-  WITH NO DATA;
-
-
-ALTER TABLE spellsource.current_cards OWNER TO admin;
 
 --
 -- Name: deck_player_attribute_tuples; Type: TABLE; Schema: spellsource; Owner: admin
@@ -4298,13 +4274,6 @@ CREATE UNIQUE INDEX spellsource_cards_unique_id ON spellsource.cards USING btree
 
 
 --
--- Name: cards after_card_published; Type: TRIGGER; Schema: spellsource; Owner: admin
---
-
-CREATE TRIGGER after_card_published BEFORE INSERT OR UPDATE ON spellsource.cards FOR EACH ROW WHEN ((new.is_published AND (NOT new.is_archived))) EXECUTE FUNCTION spellsource.after_card_published();
-
-
---
 -- Name: cards before_card_published; Type: TRIGGER; Schema: spellsource; Owner: admin
 --
 
@@ -5122,7 +5091,7 @@ CREATE POLICY website_delete ON spellsource.cards_in_deck FOR DELETE TO website 
 -- Name: cards website_insert; Type: POLICY; Schema: spellsource; Owner: admin
 --
 
-CREATE POLICY website_insert ON spellsource.cards FOR INSERT TO website WITH CHECK ((((created_by)::text = spellsource.get_user_id()) AND starts_with(id, spellsource.get_user_id()) AND (starts_with((card_script ->> 'heroClass'::text), spellsource.get_user_id()) OR ((card_script ->> 'heroClass'::text) = 'ANY'::text))));
+CREATE POLICY website_insert ON spellsource.cards FOR INSERT TO website WITH CHECK ((((created_by)::text = spellsource.get_user_id()) AND starts_with(id, spellsource.get_user_id())));
 
 
 --
@@ -5233,6 +5202,14 @@ CREATE POLICY website_view ON spellsource.decks FOR SELECT TO website USING (spe
 
 
 --
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: admin
+--
+
+REVOKE USAGE ON SCHEMA public FROM PUBLIC;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
 -- Name: SCHEMA spellsource; Type: ACL; Schema: -; Owner: admin
 --
 
@@ -5274,13 +5251,6 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE spellsource.cards_in_deck TO website;
 --
 
 GRANT ALL ON FUNCTION spellsource.create_deck_with_cards(deck_name text, class_hero text, format_name text, card_ids text[]) TO website;
-
-
---
--- Name: FUNCTION refresh_current_cards(); Type: ACL; Schema: spellsource; Owner: admin
---
-
-GRANT ALL ON FUNCTION spellsource.refresh_current_cards() TO website;
 
 
 --

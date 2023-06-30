@@ -337,6 +337,7 @@ tasks.register('jooqGenerate') {
 }
 
 tasks.register('migrationsOrSqlChanged') {
+    group('spellsource')
     description("Run whenever the schema as encoded in $project.projectDir.name/src/main/resources/db/migration has changed - recreates the JOOQ DSL and dumps a ddl.sql file for autocompletion")
     dependsOn += [jooqGenerate]
 }

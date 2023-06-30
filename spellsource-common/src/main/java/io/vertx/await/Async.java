@@ -1,10 +1,10 @@
 package io.vertx.await;
 
 import io.netty.channel.EventLoop;
+import io.vertx.await.impl.DefaultScheduler;
 import io.vertx.await.impl.EventLoopScheduler;
 import io.vertx.await.impl.Scheduler;
 import io.vertx.await.impl.VirtualThreadContext;
-import io.vertx.await.impl.DefaultScheduler;
 import io.vertx.core.Context;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;

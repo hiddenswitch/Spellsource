@@ -20,7 +20,6 @@ import com.hiddenswitch.framework.schema.spellsource.routines.GetLatestCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetUserId;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishGitCard;
-import com.hiddenswitch.framework.schema.spellsource.routines.RefreshCurrentCards;
 import com.hiddenswitch.framework.schema.spellsource.routines.SaveCard;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueFormats;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBannedDraftCards;
@@ -704,17 +703,6 @@ public class Routines {
         f.setCreator(creator);
 
         return f.asField();
-    }
-
-    /**
-     * Call <code>spellsource.refresh_current_cards</code>
-     */
-    public static void refreshCurrentCards(
-          Configuration configuration
-    ) {
-        RefreshCurrentCards p = new RefreshCurrentCards();
-
-        p.execute(configuration);
     }
 
     /**

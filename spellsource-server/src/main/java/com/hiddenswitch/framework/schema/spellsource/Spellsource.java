@@ -19,7 +19,6 @@ import com.hiddenswitch.framework.schema.spellsource.tables.Cards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.Classes;
 import com.hiddenswitch.framework.schema.spellsource.tables.CollectionCards;
-import com.hiddenswitch.framework.schema.spellsource.tables.CurrentCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples;
 import com.hiddenswitch.framework.schema.spellsource.tables.DeckShares;
 import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
@@ -375,11 +374,6 @@ public class Spellsource extends SchemaImpl {
     public final CollectionCards COLLECTION_CARDS = CollectionCards.COLLECTION_CARDS;
 
     /**
-     * The table <code>spellsource.current_cards</code>.
-     */
-    public final CurrentCards CURRENT_CARDS = CurrentCards.CURRENT_CARDS;
-
-    /**
      * The table <code>spellsource.deck_player_attribute_tuples</code>.
      */
     public final DeckPlayerAttributeTuples DECK_PLAYER_ATTRIBUTE_TUPLES = DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES;
@@ -555,7 +549,6 @@ public class Spellsource extends SchemaImpl {
             CardsInDeck.CARDS_IN_DECK,
             Classes.CLASSES,
             CollectionCards.COLLECTION_CARDS,
-            CurrentCards.CURRENT_CARDS,
             DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES,
             DeckShares.DECK_SHARES,
             Decks.DECKS,

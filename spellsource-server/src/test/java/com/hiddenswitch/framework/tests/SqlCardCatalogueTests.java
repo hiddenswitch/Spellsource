@@ -2,7 +2,6 @@ package com.hiddenswitch.framework.tests;
 
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.impl.SqlCachedCardCatalogue;
-import com.hiddenswitch.framework.impl.SqlCardCatalogue;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.CardsDao;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
@@ -53,8 +52,27 @@ public class SqlCardCatalogueTests extends FrameworkTestBase {
 			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 			var beforeChangeCardJson = await(cardsDao.findOneByCondition(CARDS.ID.eq(cardIdTested).and(CARDS.IS_PUBLISHED.eq(true)).and(CARDS.IS_ARCHIVED.eq(false))));
 			beforeChangeCardJson.getCardScript().getJsonObject("attributes").put("RESERVED_BOOLEAN_1", true);
-			await(cardsDao.update(beforeChangeCardJson));
+			await(Environment.withDslContext(dsl -> dsl.update(CARDS)
+					.set(CARDS.CARD_SCRIPT, beforeChangeCardJson.getCardScript())
+					.where(CARDS.ID.eq(beforeChangeCard.getCardId()))));
 			var afterChangeCard = catalogue.getCardById(cardIdTested);
+			assertTrue(afterChangeCard.getAttributes().containsKey(Attribute.RESERVED_BOOLEAN_1));
+		});
+	}
+
+	@Test
+	public void testTwoSubscriptionsProcessCorrectly(Vertx vertx, VertxTestContext vertxTestContext) {
+		testCachedCardCatalogue(vertx, vertxTestContext, catalogue -> {
+			var cardIdTested = "minion_abholos";
+			var beforeChangeCard = catalogue.getCardById(cardIdTested);
+			assertFalse(beforeChangeCard.getAttributes().containsKey(Attribute.RESERVED_BOOLEAN_1));
+			var catalogue2 = new SqlCachedCardCatalogue();
+			await(catalogue2.subscribe());
+			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
+			var beforeChangeCardJson = await(cardsDao.findOneByCondition(CARDS.ID.eq(cardIdTested).and(CARDS.IS_PUBLISHED.eq(true)).and(CARDS.IS_ARCHIVED.eq(false))));
+			beforeChangeCardJson.getCardScript().getJsonObject("attributes").put("RESERVED_BOOLEAN_1", true);
+			await(Environment.withDslContext(dsl -> dsl.update(CARDS).set(CARDS.CARD_SCRIPT, beforeChangeCardJson.getCardScript()).where(CARDS.ID.eq(beforeChangeCard.getCardId()))));
+			var afterChangeCard = catalogue2.getCardById(cardIdTested);
 			assertTrue(afterChangeCard.getAttributes().containsKey(Attribute.RESERVED_BOOLEAN_1));
 		});
 	}
