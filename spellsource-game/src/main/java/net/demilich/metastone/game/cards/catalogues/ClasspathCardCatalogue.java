@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
+import io.vertx.await.Async;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +71,7 @@ public final class ClasspathCardCatalogue extends ListCardCatalogue {
 	 * @param directory
 	 */
 	public void loadAllCards(String directory) {
-		lock.lock();
+		Async.lock(lock);
 
 		try {
 			if (!firstLoad()) {
@@ -137,7 +138,7 @@ public final class ClasspathCardCatalogue extends ListCardCatalogue {
 	 * {@code cards} module. This can be called multiple times, but will not "refresh" the catalogue file.
 	 */
 	public void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
-		lock.lock();
+		Async.lock(lock);
 		try {
 			if (!firstLoad()) {
 				return;
