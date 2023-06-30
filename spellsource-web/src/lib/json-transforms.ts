@@ -74,7 +74,7 @@ export const transformBlock = (object: BlockDef) => {
 export const transformCard = (object: CardDef, file: string) => {
   if (!object.id) {
     // Set the id
-    object.id = path.basename(file);
+    object.id = path.basename(file, ".json");
   }
 
   return object;

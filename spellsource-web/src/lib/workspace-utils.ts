@@ -69,7 +69,7 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
       const length = childNodes.length;
       for (let i = 0; i < length; i++) {
         const childNode = childNodes[i];
-        const name = childNode.attributes["name"]?.value;
+        const name = childNode.attributes?.["name"]?.value;
         switch (childNode.nodeName) {
           case "#text":
             // i.e. if childElementCount === 0

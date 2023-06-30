@@ -118,6 +118,11 @@
         }
       }
     ],
+    "next": {
+      "shadow": {
+        "type": "Property_SHADOW"
+      }
+    },
     "comment": "The starter for a Unit card."
   },
   {
@@ -231,6 +236,11 @@
         }
       }
     ],
+    "next": {
+      "shadow": {
+        "type": "Property_SHADOW"
+      }
+    },
     "comment": "The starter for a Spell card."
   },
   {
@@ -344,7 +354,12 @@
         }
       }
     ],
-    "comment": "The starter for a Secret card."
+    "comment": "The starter for a Secret card.",
+    "next": {
+      "shadow": {
+        "type": "Property_SHADOW"
+      }
+    }
   },
   {
     "type": "Starter_WEAPON",
@@ -454,6 +469,11 @@
         "int": true
       }
     ],
+    "next": {
+      "shadow": {
+        "type": "Property_SHADOW"
+      }
+    },
     "comment": "The starter for an Item card."
   },
   {
@@ -590,6 +610,11 @@
         }
       }
     ],
+    "next": {
+      "shadow": {
+        "type": "Property_SHADOW"
+      }
+    },
     "comment": "The starter for a Quest card. Incremental vs Count by Value determines whether say, restoring 3 Health, would count as 1 quest progress or 3."
   },
   {
@@ -708,6 +733,11 @@
         }
       }
     ],
+    "next": {
+      "shadow": {
+        "type": "Property_SHADOW"
+      }
+    },
     "comment": "The starter for a Skill card. The effect of the \"(do) as a Skill]\" block is baked in to this already.  Will always be uncollectible."
   },
   {
@@ -812,6 +842,11 @@
         }
       }
     ],
+    "next": {
+      "shadow": {
+        "type": "Property_SHADOW"
+      }
+    },
     "comment": "The starter for defining a new base champion for a class. Will always be uncollectible. See below for the playable card that replaces your champion."
   },
   {
@@ -924,6 +959,11 @@
         "int": true
       }
     ],
+    "next": {
+      "shadow": {
+        "type": "Property_SHADOW"
+      }
+    },
     "comment": "The starter for the playable card that replaces your champion. See above for defining a new base champion for a class."
   },
   {
@@ -1007,6 +1047,11 @@
         }
       }
     ],
+    "next": {
+      "shadow": {
+        "type": "Property_SHADOW"
+      }
+    },
     "comment": "Starter for defining a new named Enchantment effect as a card. Will always be uncollectible."
   },
   {
@@ -1116,6 +1161,11 @@
         }
       }
     ],
+    "next": {
+      "shadow": {
+        "type": "Property_SHADOW"
+      }
+    },
     "comment": "The starter for defining a new champion class. Will always be uncollectible. Will appear in the Classes toolbox category for use."
   }
 ]

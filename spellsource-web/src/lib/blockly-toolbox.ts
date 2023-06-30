@@ -687,6 +687,7 @@ function getBlock(type: string): Partial<BlockInfo> {
     type,
     kind: "block",
     inputs: blockInputs(type),
+    next: Blockly.Blocks[type]?.json?.next,
   };
 }
 

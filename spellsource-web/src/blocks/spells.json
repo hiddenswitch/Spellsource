@@ -4648,6 +4648,30 @@
     "comment": "Tells the game that you want this spell effect to be handled as a Skill"
   },
   {
+    "type": "Spell_HeroPower2",
+    "subcategory": "Mechanic",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "As a Skill, (do) %2",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "HeroPowerSpell"
+      },
+      {
+        "type": "input_statement",
+        "name": "spells",
+        "check": "Spells",
+        "block": {
+          "type": "Spell_I"
+        }
+      }
+    ],
+    "comment": "Tells the game that you want this spell effect to be handled as a Skill"
+  },
+  {
     "type": "Spell_Supremacy",
     "subcategory": "Mechanic",
     "inputsInline": false,

@@ -1,5 +1,11 @@
 import * as WorkspaceUtils from "../workspace-utils";
 import Blockly from "blockly";
+import { beforeAll } from "@jest/globals";
+import { getAllBlockJson, getAllIcons } from "../fs-utils";
+import { keyBy } from "lodash";
+import { ContextType } from "react";
+import { BlocklyDataContext } from "../../pages/card-editor";
+import * as BlocklyMiscUtils from "../blockly-misc-utils";
 
 function expectConversion(str, json) {
   const xml = Blockly.utils.xml.textToDom(str);
@@ -8,6 +14,25 @@ function expectConversion(str, json) {
 }
 
 describe("WorkspaceUtils", () => {
+  beforeAll(async () => {
+    const allBlocks = await getAllBlockJson();
+    const blocksByType = keyBy(allBlocks, (block) => block.type);
+    const allIcons = await getAllIcons();
+
+    const data: ContextType<typeof BlocklyDataContext> = {
+      allBlocks,
+      blocksByType,
+      allIcons,
+      userId: "",
+      myCards: [],
+      allArt: [],
+      classes: {},
+    };
+    BlocklyMiscUtils.initBlocks(data);
+    BlocklyMiscUtils.initHeroClassColors(data);
+    // BlocklyMiscUtils.initCardBlocks(data);
+  });
+
   it("converts correctly", () => {
     const json = {
       name: "Name",
@@ -16,7 +41,7 @@ describe("WorkspaceUtils", () => {
       spell: { class: "DamageSpell", value: 4, target: "ENEMY_MINIONS" },
     };
     const xml = `<xml>
-    <block type="CardDesc_SPELL" id="zvVTaR5UEE1iMnWZ7-+K" x="65" y="40">
+    <block type="Starter_SPELL" id="zvVTaR5UEE1iMnWZ7-+K" x="65" y="40">
         <field name="name">Name</field>
         <field name="baseManaCost">4</field>
         <field name="description">Description</field>
@@ -69,9 +94,12 @@ describe("WorkspaceUtils", () => {
           value: 2,
         },
       },
+      attributes: {
+        BATTLECRY: true,
+      },
     };
     const xml = `<xml>
-    <block type="CardDesc_MINION" id="icQZwG,}r{X_J%.DODjA" x="-112" y="148">
+    <block type="Starter_MINION" id="icQZwG,}r{X_J%.DODjA" x="-112" y="148">
         <field name="type">MINION</field>
         <field name="fileFormatVersion">1</field>
         <field name="set">CUSTOM</field>
@@ -86,13 +114,13 @@ describe("WorkspaceUtils", () => {
             </block>
         </value>
         <next>
-            <block type="CardDesc_opener2" id="dMum@aM*sVD!+3pS]t.m" x="-463" y="325">
-        <value name="condition">
-            <block type="Condition_ComparisonCondition2" id="K)[jk*DQG7mhxH6_AIN,">
+            <block type="Property_opener2" id="dMum@aM*sVD!+3pS]t.m" x="-463" y="325">
+        <value name="battlecry.condition">
+            <block type="Condition_Comparison" id="K)[jk*DQG7mhxH6_AIN,">
                 <field name="class">ComparisonCondition</field>
                 <field name="operation">GREATER_OR_EQUAL</field>
                 <value name="value1">
-                    <block type="ValueProvider_CardCountValueProvider" id="1mbj~zeuU[Q(iFJ!nRJp">
+                    <block type="ValueProvider_CardCount" id="1mbj~zeuU[Q(iFJ!nRJp">
                         <field name="class">CardCountValueProvider</field>
                         <value name="targetPlayer">
                             <block type="TargetPlayer_SELF" id="Q,Xu/#qd8E(,79(%g-j/">
@@ -109,12 +137,12 @@ describe("WorkspaceUtils", () => {
                 </value>
             </block>
         </value>
-        <value name="targetSelection">
+        <value name="battlecry.targetSelection">
             <block type="TargetSelection_NONE" id="$6i8y!{uyPFPQbaDIZGo">
                 <data>NONE</data>
             </block>
         </value>
-        <value name="spell">
+        <value name="battlecry.spell">
             <block type="Spell_DamageSpell2" id="7YenHRqYd.),y9qN;-t:">
                 <field name="class">DamageSpell</field>
                 <value name="value">
@@ -130,7 +158,7 @@ describe("WorkspaceUtils", () => {
                 </value>
             </block>
         </value>
-        <data>BLOCKLY_OPENER</data>
+        <data>BLOCKLY_EXTEND_PREVIOUS</data>
     </block></next>
     </block>
     

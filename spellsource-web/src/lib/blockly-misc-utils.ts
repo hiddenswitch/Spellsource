@@ -47,51 +47,45 @@ export function addBlock(block: BlockDef) {
 }
 
 //initializes the json specified shadow blocks of a block on the workspace
-export function manuallyAddShadowBlocks(thisBlock: Block, block: Block) {
+export function manuallyAddShadowBlocks(thisBlock: Block, block: object) {
   for (let i = 0; i < 10; i++) {
-    if (!!block["args" + i.toString()]) {
-      for (let j = 0; j < 10; j++) {
-        const arg = block["args" + i.toString()][j];
-        if (!!arg) {
-          const shadow = arg.shadow;
-          // TODO new shadow/block formatting
-          if (!!shadow && !thisBlock.getInput(arg.name).connection.targetBlock()) {
-            let shadowBlock = newBlock(thisBlock.workspace, shadow.type);
-            if (shadow.notActuallyShadow && !thisBlock.isShadow()) {
-              if (shadow.type.endsWith("SHADOW")) {
-                shadowBlock.setMovable(false);
-              }
-            } else {
-              shadowBlock.setShadow(true);
-            }
-            if (!!shadow.fields) {
-              for (let field of shadow.fields) {
-                if (field.valueI !== null) {
-                  shadowBlock.setFieldValue(field.valueI, field.name);
-                }
-                if (field.valueS !== null) {
-                  shadowBlock.setFieldValue(field.valueS, field.name);
-                }
-                if (field.valueB !== null) {
-                  shadowBlock.setFieldValue(field.valueB, field.name);
-                }
-              }
-            }
-            const connection = arg.type.endsWith("statement")
-              ? shadowBlock.previousConnection
-              : shadowBlock.outputConnection;
-            thisBlock.getInput(arg.name).connection.connect(connection);
-            if ("initSvg" in shadowBlock) {
-              shadowBlock.initSvg();
-            }
-            manuallyAddShadowBlocks(shadowBlock, Blockly.Blocks[shadow.type].json);
-          }
+    if (!block["args" + i.toString()]) continue;
+
+    for (let j = 0; j < 10; j++) {
+      const arg = block["args" + i][j];
+      if (!arg) continue;
+
+      const shadow = arg["shadow"] ?? arg["block"];
+      const input = thisBlock.getInput(arg.name);
+      if (!shadow || !input || !!input.connection.targetBlock()) continue;
+
+      let shadowBlock = newBlock(thisBlock.workspace, shadow.type);
+
+      if (arg["block"] && !thisBlock.isShadow()) {
+        if (shadow.type.endsWith("SHADOW")) {
+          shadowBlock.setMovable(false);
+        }
+      } else {
+        shadowBlock.setShadow(true);
+      }
+
+      if (shadow.fields) {
+        for (let [name, value] of Object.entries(shadow.fields)) {
+          shadowBlock.setFieldValue(value, name);
         }
       }
+
+      const connection = arg.type.endsWith("statement") ? shadowBlock.previousConnection : shadowBlock.outputConnection;
+      thisBlock.getInput(arg.name).connection.connect(connection);
+      if ("initSvg" in shadowBlock) {
+        shadowBlock.initSvg();
+      }
+
+      manuallyAddShadowBlocks(shadowBlock, Blockly.Blocks[shadow.type].json);
     }
   }
 
-  if (block.type.startsWith("Starter")) {
+  if (block["type"].startsWith("Starter")) {
     let shadowBlock = thisBlock.workspace.newBlock("Property_SHADOW");
     shadowBlock.setShadow(true);
     thisBlock.nextConnection.connect(shadowBlock.previousConnection);
@@ -550,6 +544,7 @@ export function pluralStuff(workspace) {
 }
 
 export function isSpellsourceBlock(type) {
+  const blocks = Blockly.Blocks;
   return !!Blockly.Blocks[type]?.json?.type;
 }
 

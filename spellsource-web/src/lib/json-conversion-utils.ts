@@ -94,11 +94,17 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   let lowestBlock = block;
 
   for (let arg of ["heroClass", "rarity", "spell", "targetSelection", "secret", "quest", "heroPower", "hero"]) {
-    if (card.type === "CLASS" && arg === "heroClass") {
+    /*if (card.type === "CLASS" && arg === "heroClass") {
       block.getInput("heroClass").connection.targetBlock().setFieldValue(card.heroClass, "text");
-    } else if (card.type === "HERO_POWER" && arg === "spell") {
+    } else*/
+    if (card.type === "HERO_POWER" && arg === "spell") {
       if (card.spell["class"] == "HeroPowerSpell") {
-        handleArg(block.getInput("spell.spell").connection, card.spell["spell"], "spell.spell", workspace, card.spell);
+        let spell = card.spell["spell"];
+        if (!spell) {
+          const { class: _, ...rest } = card.spell as any;
+          spell = { class: "MetaSpell", ...rest };
+        }
+        handleArg(block.getInput("spell.spell").connection, spell, "spell.spell", workspace, card.spell);
       } else {
         handleArg(block.getInput("spell.spell").connection, card.spell, "spell.spell", workspace, card.spell);
       }
@@ -396,7 +402,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
  * @param inputName The name of the descriptions input argument on the block
  */
 export function dynamicDescription(workspace: Workspace, connection: Connection, descriptions, inputName) {
-  for (let dynamicDescription of descriptions) {
+  for (let description of descriptions) {
     let block = connection.targetBlock() as Block | BlockSvg;
     if (!block) {
       block = BlocklyMiscUtils.newBlock(workspace, "Property_description");
@@ -405,14 +411,14 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
         block.initSvg();
       }
     }
-    if (typeof dynamicDescription === "string") {
-      dynamicDescription = {
+    if (typeof description === "string") {
+      description = {
         class: "StringDescription",
-        string: dynamicDescription,
+        string: description,
       };
     }
 
-    let descBlock = BlocklyMiscUtils.newBlock(workspace, "Property_" + dynamicDescription.class);
+    let descBlock = BlocklyMiscUtils.newBlock(workspace, "Property_" + description.class);
 
     if (descBlock === null) {
       continue;
@@ -420,50 +426,28 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
 
     block.getInput(inputName).connection.connect(descBlock.outputConnection);
 
-    if (!!dynamicDescription.value) {
-      if (isNumeric(dynamicDescription.value)) {
-        handleIntArg(descBlock, "value", workspace, dynamicDescription.value);
+    if (!!description.value) {
+      if (isNumeric(description.value)) {
+        handleIntArg(descBlock, "value", workspace, description.value);
       } else {
-        handleArg(
-          descBlock.getInput("value").connection,
-          dynamicDescription.value,
-          "value",
-          workspace,
-          dynamicDescription
-        );
+        handleArg(descBlock.getInput("value").connection, description.value, "value", workspace, description);
       }
     }
-    if (!!dynamicDescription.condition) {
-      handleArg(
-        descBlock.getInput("condition").connection,
-        dynamicDescription.condition,
-        "condition",
-        workspace,
-        dynamicDescription
-      );
+    if (!!description.condition) {
+      handleArg(descBlock.getInput("condition").connection, description.condition, "condition", workspace, description);
     }
-    if (!!dynamicDescription.string) {
-      descBlock.setFieldValue(dynamicDescription.string, "string");
+    if (!!description.string) {
+      descBlock.setFieldValue(description.string, "string");
     }
-    if (dynamicDescription.hasOwnProperty("description1")) {
-      dynamicDescription(
-        workspace,
-        block.getInput(inputName).connection,
-        [dynamicDescription.description1],
-        "description1"
-      );
+    if (description.hasOwnProperty("description1")) {
+      dynamicDescription(workspace, block.getInput(inputName).connection, [description.description1], "description1");
     }
-    if (dynamicDescription.hasOwnProperty("description2")) {
-      dynamicDescription(
-        workspace,
-        block.getInput(inputName).connection,
-        [dynamicDescription.description2],
-        "description2"
-      );
+    if (description.hasOwnProperty("description2")) {
+      dynamicDescription(workspace, block.getInput(inputName).connection, [description.description2], "description2");
     }
 
-    if (!!dynamicDescription.descriptions) {
-      dynamicDescription(workspace, descBlock.getFirstStatementConnection(), dynamicDescription.descriptions, "i");
+    if (!!description.descriptions) {
+      dynamicDescription(workspace, descBlock.getFirstStatementConnection(), description.descriptions, "i");
     }
 
     block.getInput(inputName).connection.connect(descBlock.outputConnection);
@@ -555,7 +539,9 @@ export function enchantment(trigger, workspace, triggerBlock: Block | BlockSvg =
       lowestOptionConnection = lowestOptionConnection.targetBlock().nextConnection;
     }
   }
-  handleArg(triggerBlock.getInput("spell").connection, trigger.spell, "spell", workspace, trigger);
+  if (trigger.spell) {
+    handleArg(triggerBlock.getInput("spell").connection, trigger.spell, "spell", workspace, trigger);
+  }
   handleArg(triggerBlock.getInput("eventTrigger").connection, trigger.eventTrigger, "eventTrigger", workspace, trigger);
 
   return triggerBlock;
@@ -1480,7 +1466,7 @@ export function mutateJson(json) {
   if (json === null || json === undefined) {
     json = "NONE";
   }
-  if (typeof json !== "object") {
+  if (typeof json !== "object" || !json.class) {
     return json;
   }
   let className = json.class;

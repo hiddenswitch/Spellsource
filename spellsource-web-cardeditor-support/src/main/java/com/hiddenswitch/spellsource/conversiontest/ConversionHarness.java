@@ -35,6 +35,7 @@ public class ConversionHarness {
 	public static boolean assertCardReplaysTheSame(long[] seeds, String cardId, String replacementJson) {
 		synchronized (PROBE) {
 			var cardCatalogue = ClasspathCardCatalogue.INSTANCE;
+			cardCatalogue.loadCardsFromPackage();
 			var originalCard = cardCatalogue.getCards().get(cardId);
 			var originalCardDesc = cardCatalogue.getRecords().get(cardId).getDesc();
 			try {
@@ -72,8 +73,7 @@ public class ConversionHarness {
 							return tuple.context.getTurn() == reproduction.getTurn();
 						});
 			} finally {
-				cardCatalogue.getCards().replace(cardId, originalCard);
-				cardCatalogue.getRecords().put(cardId, new CardCatalogueRecord(cardId, originalCardDesc));;
+				cardCatalogue.addOrReplaceCard(originalCard.getDesc());
 			}
 		}
 	}

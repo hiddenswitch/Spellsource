@@ -336,6 +336,10 @@ public class ListCardCatalogue implements CardCatalogue {
 	 */
 	public String addOrReplaceCard(String json) throws IOException {
 		var cardDesc = Json.decodeValue(json, CardDesc.class);
+		return addOrReplaceCard(cardDesc);
+	}
+
+	public String addOrReplaceCard(CardDesc cardDesc) {
 		if (cardDesc.getName() == null || cardDesc.getName().isEmpty()) {
 			throw new NullPointerException("cardDesc.name");
 		}

@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class TestMain extends TestBase {
 
 	public static GameContext runGym() {
+		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();;
 		final TestBase testBase = new TestBase();
 		AtomicReference<GameContext> gameContext = new AtomicReference<>();
 		testBase.runGym((context, player, opponent) -> {
@@ -34,6 +35,7 @@ public class TestMain extends TestBase {
 	}
 
 	public static GameContext runGym(String friendlyClass, String enemyClass) {
+		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();;
 		final TestBase testBase = new TestBase();
 		if (friendlyClass == null || friendlyClass.equals("ANY")) {
 			friendlyClass = testBase.getDefaultHeroClass();

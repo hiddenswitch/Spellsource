@@ -5,7 +5,7 @@ apply plugin: 'base'
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def isMacOs = Os.isFamily(Os.FAMILY_MAC)
 def spellsourceDepTask = ':spellsource-web-cardeditor-support:shadowJar'
-def nodeBinary = isWindows ? "C:\\Program Files\\nodejs\\node.cmd" : (isMacOs ? "/opt/homebrew/bin/node" : "node")
+def nodeBinary = isWindows ? "C:\\Program Files\\nodejs\\node.exe" : (isMacOs ? "/opt/homebrew/bin/node" : "node")
 def npmBinary = isWindows ? "C:\\Program Files\\nodejs\\npm.cmd" : (isMacOs ? "/opt/homebrew/bin/npm" : "npm")
 def graalNpmPrefix = 'node_modules_graal'
 
@@ -27,7 +27,8 @@ tasks.register('npmInstall') {
     }
 }
 
-tasks.register('npmInstallGraal') {
+// TODO yarn
+/*tasks.register('npmInstallGraal') {
     // todo: check that we are executing as graal
     inputs.file('package.json')
     inputs.file('package-lock.json')
@@ -39,16 +40,18 @@ tasks.register('npmInstallGraal') {
             commandLine npmBinary, '--prefix', graalNpmPrefix, 'install', '--legacy-peer-deps', "--nodedir=$javaHome/languages/js", '--build-from-source'
         }
     }
-}
+}*/
 
-tasks.register('testWithJava') {
-    dependsOn += [spellsourceDepTask, npmInstallGraal]
+// TODO yarn
+/*tasks.register('testWithJava') {
+    group "test"
+    dependsOn += [spellsourceDepTask]
     doLast {
         exec {
-            commandLine nodeBinary, '--prefix', graalNpmPrefix, '--polyglot', '--jvm', './node_modules/jest/bin/jest.js', '--colors', '--verbose'
+            commandLine nodeBinary, *//*'--prefix', graalNpmPrefix,*//* '--polyglot', '--jvm', './node_modules/jest/bin/jest.js', '--colors', '--verbose'
         }
     }
-}
+}*/
 
 tasks.register('copyGameJavadoc', Copy) {
     description("Copies the game module's javadoc into the public directory of the website")

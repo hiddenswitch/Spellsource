@@ -28,6 +28,21 @@ export const readAllJson = async <T = any>(globPath: string, transform?: (json: 
   );
 };
 
+export const readAllJsonSync = <T = any>(globPath: string, transform?: (json: T, file: string) => void) => {
+  const files = glob.sync(path.join(process.cwd(), globPath));
+  return files.map((file) => {
+    const fileText = fs.readFileSync(file, { encoding: "utf8" });
+    try {
+      JSON.parse(fileText);
+    } catch (e) {
+      console.error(`failed to parse json ${file}`);
+    }
+    const json = JSON.parse(fileText) as T;
+    transform?.(json, file);
+    return json;
+  });
+};
+
 /*export type ImageDef = {
   src: string,
   width: number,
