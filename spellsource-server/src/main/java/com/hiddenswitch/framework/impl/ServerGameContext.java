@@ -3,7 +3,6 @@ package com.hiddenswitch.framework.impl;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.hiddenswitch.diagnostics.Tracing;
-import com.hiddenswitch.framework.Accounts;
 import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Legacy;
 import com.hiddenswitch.framework.schema.spellsource.Tables;
@@ -22,7 +21,6 @@ import io.vertx.core.*;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.MessageProducer;
-import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.grpc.server.GrpcServerRequest;
 import net.demilich.metastone.game.GameContext;
@@ -1003,7 +1001,7 @@ public class ServerGameContext extends GameContext implements Server {
      */
     @Override
     public GameDeck getDeck(Player player, String name) {
-        var allDecks = await(Legacy.getAllDecks(player.getUserId()));
+        var allDecks = await(Legacy.getAllDecks(getCardCatalogue(), player.getUserId()));
         var deck = allDecks.getDecksList().stream().filter(get -> get.getCollection().getName().equalsIgnoreCase(name)).findAny();
         return deck.map(decksGetResponse -> ModelConversions.getGameDeck(player.getUserId(), decksGetResponse, getCardCatalogue())).orElse(null);
     }

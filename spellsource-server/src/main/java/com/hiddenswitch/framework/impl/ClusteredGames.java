@@ -88,7 +88,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 			var userId = configuration.getUserId();
 			var deckCollectionFut = Future.succeededFuture();
 			if (configuration.getDeck() instanceof CollectionDeck) {
-				deckCollectionFut = Legacy.getDeck(deckId, userId)
+				deckCollectionFut = Legacy.getDeck(cardCatalogue, deckId, userId)
 						.compose(deckCollection -> {
 							// Create the deck and assign all the appropriate IDs to the cards
 							var deck = ModelConversions.getGameDeck(userId, deckCollection, cardCatalogue);
