@@ -34,6 +34,7 @@ import io.vertx.grpc.server.GrpcServerRequest;
 import io.vertx.sqlclient.Row;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
@@ -219,13 +220,13 @@ public class Legacy {
 				var deckId = request.getDeckId();
 				var userId = grpcServerRequest.routingContext().user().subject();
 
-				return getDeck(deckId, userId).recover(Environment.onGrpcFailure());
+				return getDeck(cardCatalogue, deckId, userId).recover(Environment.onGrpcFailure());
 			}
 
 			@Override
 			public Future<DecksGetAllResponse> decksGetAll(GrpcServerRequest<Empty, DecksGetAllResponse> grpcServerRequest, Empty request) {
 				var userId = grpcServerRequest.routingContext().user().subject();
-				return getAllDecks(userId).recover(Environment.onGrpcFailure());
+				return getAllDecks(cardCatalogue, userId).recover(Environment.onGrpcFailure());
 			}
 
 			@Override
@@ -243,7 +244,7 @@ public class Legacy {
 							.withHeroClass(request.getHeroClass());
 				}
 
-				return createDeck(userId, createRequest).recover(Environment.onGrpcFailure());
+				return createDeck(cardCatalogue, userId, createRequest).recover(Environment.onGrpcFailure());
 			}
 
 			@Override
@@ -260,7 +261,7 @@ public class Legacy {
 				}
 
 				if (!request.hasUpdateCommand()) {
-					return getDeck(deckId, userId);
+					return getDeck(cardCatalogue, deckId, userId);
 				}
 
 				var futs = new ArrayList<Future>();
@@ -375,7 +376,7 @@ public class Legacy {
 							var cache = DECKS_CACHE.get();
 							return Future.fromCompletionStage(cache.fastRemoveAsync(deckId), Vertx.currentContext());
 						})
-						.compose(v -> getDeck(deckId, userId))
+						.compose(v -> getDeck(cardCatalogue, deckId, userId))
 						.recover(Environment.onGrpcFailure()));
 			}
 
@@ -416,7 +417,7 @@ public class Legacy {
 					await(transaction.execute(dsl -> duplicateAllForeign(deckId, newDeckId, DECK_PLAYER_ATTRIBUTE_TUPLES.ID, DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID)));
 					await(transaction.commit());
 					transaction = null;
-					promise.complete(await(getDeck(newDeckId, userId)));
+					promise.complete(await(getDeck(cardCatalogue, newDeckId, userId)));
 				} catch (Throwable t) {
 					if (transaction != null) {
 						transaction.rollback();
@@ -428,11 +429,11 @@ public class Legacy {
 		}::bindAll;
 	}
 
-	public static Future<DecksGetAllResponse> getAllDecks(String userId) {
+	public static Future<DecksGetAllResponse> getAllDecks(CardCatalogue cardCatalogue, String userId) {
 		var timer = GET_ALL_DECKS_TIME.start();
 		return getAllValidDeckIds(userId)
 				.compose(rows -> CompositeFuture.all(rows.stream()
-						.map(deckId -> getDeck(deckId, userId)).collect(toList())))
+						.map(deckId -> getDeck(cardCatalogue, deckId, userId)).collect(toList())))
 				.compose(getDeckResponses -> {
 					var reply = DecksGetAllResponse.newBuilder();
 					for (var i = 0; i < getDeckResponses.size(); i++) {
@@ -562,7 +563,7 @@ public class Legacy {
 		return Environment.cache("Spellsource:decks", DecksGetResponse.parser());
 	}
 
-	public static Future<DecksGetResponse> getDeck(String deckId, String userId) {
+	public static Future<DecksGetResponse> getDeck(CardCatalogue cardCatalogue, String deckId, String userId) {
 		var serverConfiguration = Environment.getConfiguration();
 		var cache = DECKS_CACHE.get();
 		var configuration = Environment.jooqAkaDaoConfiguration();
@@ -574,7 +575,7 @@ public class Legacy {
 						return Future.succeededFuture(existing);
 					}
 
-					return getDeck(deckId)
+					return getDeck(cardCatalogue, deckId)
 							.compose(deck -> Future.fromCompletionStage(cache.fastPutAsync(deckId, deck, serverConfiguration.getDecks().getCachedDeckTimeToLiveMinutes(), TimeUnit.MINUTES), Vertx.currentContext()).map(deck));
 				}).compose(deck -> {
 					// we must always look up the shares record, though this should be fast
@@ -602,7 +603,7 @@ public class Legacy {
 				});
 	}
 
-	private static Future<DecksGetResponse> getDeck(String deckId) {
+	private static Future<DecksGetResponse> getDeck(CardCatalogue cardCatalogue, String deckId) {
 		return Environment.withConnection(delegate -> {
 			var configuration = Environment.jooqAkaDaoConfiguration();
 			var queryExecutor = new ReactiveClassicGenericQueryExecutor(configuration, delegate);
@@ -637,8 +638,7 @@ public class Legacy {
 								.setType(InventoryCollection.InventoryCollectionType.DECK)
 								.setIsStandardDeck(deck.getIsPremade())
 								.setUserId(deck.getCreatedBy())
-								/*.setValidationReport((ValidationReport.Builder) validateDeck(cards.stream().map(row -> row.getString(CARDS_IN_DECK.CARD_ID.getName())).collect(toList()), deck.getHeroClass(), deck.getFormat()))*/;
-								// TODO bring back validation
+								.setValidationReport((ValidationReport.Builder) validateDeck(cardCatalogue, cards.stream().map(row -> row.getString(CARDS_IN_DECK.CARD_ID.getName())).collect(toList()), deck.getHeroClass(), deck.getFormat()));
 						var i = 0;
 						for (var cardRecordRow : cards) {
 							inventoryCollection.addInventory(CardRecord
@@ -668,13 +668,14 @@ public class Legacy {
 		});
 	}
 
-	private static ValidationReportOrBuilder validateDeck(List<String> cardIds, String heroClass, String deckFormat) {
-		var deck = new GameDeck(ClasspathCardCatalogue.INSTANCE, heroClass, cardIds);
+	private static ValidationReportOrBuilder validateDeck(CardCatalogue cardCatalogue, List<String> cardIds, String heroClass, String deckFormat) {
+		var deck = new GameDeck(cardCatalogue, heroClass, cardIds);
 		var validationReport = ValidationReport.newBuilder();
 		validationReport.setValid(true);
 
 		// todo: needs valid format
 		var context = new GameContext();
+		context.setCardCatalogue(cardCatalogue);
 		var player1 = new Player(deck, context.getCardCatalogue());
 		context.setPlayer1(player1);
 		context.setPlayer2(new Player(HeroClass.TEST, context.getCardCatalogue()));
@@ -703,7 +704,7 @@ public class Legacy {
 		return validationReport;
 	}
 
-	public static Future<DecksPutResponse> createDeck(String userId, DeckCreateRequest request) {
+	public static Future<DecksPutResponse> createDeck(CardCatalogue cardCatalogue, String userId, DeckCreateRequest request) {
 		if (request.getInventoryIds() != null && !request.getInventoryIds().isEmpty()) {
 			return Future.failedFuture("cannot specify inventory ids");
 		}
@@ -736,7 +737,7 @@ public class Legacy {
 						return insert;
 					}));
 				})
-				.compose(ignored -> getDeck(deckId, userId))
+				.compose(ignored -> getDeck(cardCatalogue, deckId, userId))
 				.compose(decksGetResponse -> Future.succeededFuture(DecksPutResponse.newBuilder()
 						.setCollection(decksGetResponse.getCollection())
 						.setDeckId(deckId)
