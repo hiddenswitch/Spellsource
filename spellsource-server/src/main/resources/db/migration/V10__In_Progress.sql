@@ -254,23 +254,31 @@ begin
 end;
 $$ language plpgsql volatile;
 
-create or replace function spellsource.before_card_published() returns trigger as
+create or replace function spellsource.on_card_published() returns trigger as
 $$
 declare
 begin
-    update spellsource.cards set is_archived = true where id = new.id and is_published;
+    update spellsource.cards set is_archived = true where id = new.id and is_published and not is_archived;
 
     return new;
 end;
 $$ language plpgsql;
 
-drop trigger if exists before_card_published on spellsource.cards;
-create trigger before_card_published
-    before insert or update
+drop trigger if exists card_published_insert on spellsource.cards;
+create trigger card_published_insert
+    before insert
     on spellsource.cards
     for each row
     when ( new.is_published and not new.is_archived )
-execute procedure spellsource.before_card_published();
+execute procedure spellsource.on_card_published();
+
+drop trigger if exists card_published_update on spellsource.cards;
+create trigger card_published_update
+    before update
+    on spellsource.cards
+    for each row
+    when ( not (old.is_published and not old.is_archived) and (new.is_published and not new.is_archived) )
+execute procedure spellsource.on_card_published();
 
 --- Making the view as a function so it respects RLS
 drop function if exists spellsource.get_classes() cascade;
@@ -342,13 +350,13 @@ select card.id,
        card.created_by,
        card.card_script,
        card.blockly_workspace,
-       card.card_script ->> 'name'                                    as name,
-       card.card_script ->> 'type'                                    as type,
-       card.card_script ->> 'heroClass'                               as class,
-       coalesce(nullif(card.card_script ->> 'baseManaCost', ''), '0')::int        as cost,
+       card.card_script ->> 'name'                                         as name,
+       card.card_script ->> 'type'                                         as type,
+       card.card_script ->> 'heroClass'                                    as class,
+       coalesce(nullif(card.card_script ->> 'baseManaCost', ''), '0')::int as cost,
        (coalesce(card.card_script ->> 'collectible', 'true')::bool and
-        (card.card_script ->> 'heroClass' = 'ANY' or cl.collectible)) as collectible,
-       spellsource.card_message(card::spellsource.cards, cl)          as search_message,
+        (card.card_script ->> 'heroClass' = 'ANY' or cl.collectible))      as collectible,
+       spellsource.card_message(card::spellsource.cards, cl)               as search_message,
        last_modified,
        created_at
 from spellsource.cards card
@@ -717,4 +725,6 @@ $$ language plpgsql;
 --- todo: implement draft queries. the draft logic may be entirely replaced by a sql function, where it will be easier to author
 --- todo: create corresponding views and grant execution privileges to the card builder for these catalogue queries
 
-select * from spellsource.cards where id = '8bcc477d-b2d9-4293-9bf5-dd8a3beddb7d-J`44N56Z{vG~n]~1VC[b';
+select *
+from spellsource.cards
+where id = '8bcc477d-b2d9-4293-9bf5-dd8a3beddb7d-J`44N56Z{vG~n]~1VC[b';

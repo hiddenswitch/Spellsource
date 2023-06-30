@@ -63,7 +63,7 @@ public class SqlCardCatalogueTests extends FrameworkTestBase {
 	@Test
 	public void testTwoSubscriptionsProcessCorrectly(Vertx vertx, VertxTestContext vertxTestContext) {
 		testCachedCardCatalogue(vertx, vertxTestContext, catalogue -> {
-			var cardIdTested = "minion_abholos";
+			var cardIdTested = "minion_merciless_corruptor";
 			var beforeChangeCard = catalogue.getCardById(cardIdTested);
 			assertFalse(beforeChangeCard.getAttributes().containsKey(Attribute.RESERVED_BOOLEAN_1));
 			var catalogue2 = new SqlCachedCardCatalogue();
