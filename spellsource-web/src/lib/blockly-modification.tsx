@@ -12,14 +12,11 @@ import { FieldLabelPlural } from "../components/field-label-plural";
 import { FieldLabelSerializableHidden } from "../components/field-label-serializable-hidden";
 import * as BlocklyMiscUtils from "./blockly-misc-utils";
 import * as DefaultOverrides from "./default-overrides";
-import { CardDef } from "../components/card-display";
 import React from "react";
-import deepmerge from "deepmerge";
+import { Field } from "blockly/core/renderers/measurables/field";
 
 export function modifyAll() {
-  // @ts-ignore
-  // noinspection JSConstantReassignment
-  Blockly.HSV_SATURATION = 0.65;
+  Blockly.utils.colour.setHsvSaturation(0.65);
 
   for (let blocksKey in Blockly.Blocks) {
     let block = Blockly.Blocks[blocksKey];
@@ -35,7 +32,7 @@ export function modifyAll() {
   textColor();
   colorfulColors();
   noToolboxZoom();
-  multiline();
+  // multiline();
   // jsonShadows()
   connections();
   categoryIndenting();
@@ -50,9 +47,6 @@ function autoDecoration() {
   Blockly.BlockSvg.prototype.bumpNeighbours = function () {
     if (!this.workspace) {
       return; // Deleted block.
-    }
-    if (this.workspace.isDragging()) {
-      return; // Don't bump blocks during a drag.
     }
     var rootBlock = this.getRootBlock();
     if (rootBlock.isInFlyout) {
@@ -69,7 +63,7 @@ function autoDecoration() {
         connection.targetBlock().bumpNeighbours();
       }
 
-      var neighbours = connection.neighbours(Blockly.SNAP_RADIUS);
+      var neighbours = connection.neighbours(Blockly.config.snapRadius);
 
       for (var j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
         // If both connections are connected, that's probably fine.  But if
@@ -86,6 +80,10 @@ function autoDecoration() {
         }
       }
     }
+
+    if (this.workspace.isDragging()) {
+      return; // Don't bump blocks during a drag.
+    }
   };
 
   const autoDecorate = function (bumpee, connection) {
@@ -94,7 +92,7 @@ function autoDecoration() {
     }
     let workspace = bumpee.workspace;
     let nexts = workspace.connectionDBList[Blockly.NEXT_STATEMENT];
-    let neighbours = nexts.getNeighbours(connection, Blockly.SNAP_RADIUS);
+    let neighbours = nexts.getNeighbours(connection, Blockly.config.snapRadius);
 
     for (var j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
       if (
@@ -229,7 +227,7 @@ function autoDecoration() {
   };
 }
 
-function hoverComments() {
+/*function hoverComments() {
   const createIcon = Blockly.Icon.prototype.createIcon;
   Blockly.Icon.prototype.createIcon = function () {
     createIcon.call(this);
@@ -268,7 +266,7 @@ function hoverComments() {
     removeComments(block);
     return block;
   };
-}
+}*/
 
 function pluralSpacing() {
   const getInRowSpacing = Blockly.geras.RenderInfo.prototype.getInRowSpacing_;
@@ -280,27 +278,27 @@ function pluralSpacing() {
       Blockly.blockRendering.Types.isField(prev) &&
       next &&
       Blockly.blockRendering.Types.isField(next) &&
-      prev.isEditable === next.isEditable &&
-      prev.field instanceof FieldLabelPlural &&
-      !(next.field instanceof FieldLabelPlural)
+      (prev as Field).isEditable === (next as Field).isEditable &&
+      (prev as Field).field instanceof FieldLabelPlural &&
+      !((next as Field).field instanceof FieldLabelPlural)
     ) {
       return this.constants_.MEDIUM_PADDING;
     }
     if (
       prev &&
       Blockly.blockRendering.Types.isField(prev) &&
-      prev.field instanceof FieldLabelPlural &&
-      prev.field.value_ === " "
+      (prev as Field).field instanceof FieldLabelPlural &&
+      (prev as Field).field.getValue() === " "
     ) {
       return 0;
     }
     if (
       next &&
       Blockly.blockRendering.Types.isField(next) &&
-      next.field instanceof FieldLabelPlural &&
-      (next.field.value_ === " " || next.field.value_ === "s")
+      (next as Field).field instanceof FieldLabelPlural &&
+      ((next as Field).field.getValue() === " " || (next as Field).field.getValue() === "s")
     ) {
-      if (prev?.field instanceof FieldLabel) {
+      if ((prev as Field)?.field instanceof FieldLabel) {
         return 0;
       }
       return 3;
@@ -310,10 +308,10 @@ function pluralSpacing() {
       Blockly.blockRendering.Types.isField(prev) &&
       next &&
       Blockly.blockRendering.Types.isField(next) &&
-      prev.isEditable === next.isEditable &&
-      !(prev.field instanceof FieldLabelPlural) &&
-      next.field instanceof FieldLabelPlural &&
-      !(prev.field instanceof FieldLabelSerializableHidden)
+      (prev as Field).isEditable === (next as Field).isEditable &&
+      !((prev as Field).field instanceof FieldLabelPlural) &&
+      (next as Field).field instanceof FieldLabelPlural &&
+      !((prev as Field).field instanceof FieldLabelSerializableHidden)
     ) {
       return this.constants_.MEDIUM_PADDING;
     }
@@ -539,6 +537,7 @@ function connections() {
   };
 }
 
+// Make nested category indent themselves
 function categoryIndenting() {
   const createRowContainer = Blockly.ToolboxCategory.prototype["createRowContainer_"];
 
@@ -552,7 +551,7 @@ function categoryIndenting() {
   };
 }
 
-function cardDisplay() {
+/*function cardDisplay() {
   const createBubble = Blockly.Comment.prototype["createBubble_"];
 
   Blockly.Comment.prototype["createBubble_"] = function () {
@@ -564,9 +563,9 @@ function cardDisplay() {
       this.foreignObject_.previousElementSibling.remove();
       let card = JSON.parse(block.getCommentText()) as CardDef;
 
-      /*if (!!card.art?.sprite?.named && !!block.artURL) {
+      /!*if (!!card.art?.sprite?.named && !!block.artURL) {
         card.art.sprite.named = block.artURL
-      }*/
+      }*!/
 
       if (card.heroClass) {
         const heroClassBlock = Blockly.Blocks["HeroClass_" + card.heroClass];
@@ -574,11 +573,12 @@ function cardDisplay() {
         card.art = deepmerge(heroClass?.art || {}, card.art || {});
       }
 
-      /*createRoot(this.foreignObject_.firstElementChild).render(<CardDisplay {...card} />);*/
+      /!*createRoot(this.foreignObject_.firstElementChild).render(<CardDisplay {...card} />);*!/
     }
   };
-}
+}*/
 
+// Uncollapse blocks when you take them out of the toolbox
 function flyout() {
   const unCollapse = (block: Block) => {
     if (!block) return;
@@ -596,6 +596,7 @@ function flyout() {
   };
 }
 
+// Make categories on mobile have borders on different sides
 function mobileCategories() {
   ToolboxCategory.prototype["addColourBorder_"] = function (colour) {
     const style = this.rowDiv_.style;

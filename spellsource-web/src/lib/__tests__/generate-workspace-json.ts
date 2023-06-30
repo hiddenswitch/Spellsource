@@ -1,130 +1,103 @@
-import WorkspaceUtils from "../workspace-utils";
-import JsonConversionUtils from "../json-conversion-utils";
-import fs from "fs";
-import path from "path";
+import * as WorkspaceUtils from "../workspace-utils";
+import * as JsonConversionUtils from "../json-conversion-utils";
 import { Workspace } from "blockly";
 import { beforeAll, describe, expect, test } from "@jest/globals";
-import { jsonTransformFileNode } from "../json-transforms";
-import BlocklyMiscUtils from "../blockly-misc-utils";
-import { walk, walkSync } from "../walk";
+import * as BlocklyMiscUtils from "../blockly-misc-utils";
 import SpellsourceTesting from "../spellsource-testing";
+import * as java from "java";
+import { getAllBlockJson, getAllIcons, readAllJson } from "../fs-utils";
+import { keyBy } from "lodash";
+import { BlocklyDataContext } from "../../pages/card-editor";
+import { ContextType } from "react";
+import path from "path";
+import { CardDef } from "../../components/card-display";
+import { transformCard } from "../json-transforms";
 
 const cardsPath = `${__dirname}/../../../../spellsource-cards-git/src/main/resources/cards/collectible`;
 const cardsPath2 = `${__dirname}/../../../../spellsource-game/src/main/resources/basecards/standard`;
-const blocksPath = `${__dirname}/../JsonBlocks/`;
 
-const cards = [];
-for (const f of walkSync(cardsPath)) {
-  const strings = f.split("/");
-  const id = strings[strings.length - 1].replace(/.json$/, "");
-  cards.push([id, f]);
-}
+const cards: CardDef[] = [];
 
 const usedBlocks = {};
 
 const weirdos = [];
 
 // requires graal
-Java.addToClasspath(
+java.classpath.push(
   `${__dirname}/../../../../spellsource-web-cardeditor-support/build/libs/spellsource-web-cardeditor-support-0.9.0-all.jar`
 );
 
 describe("WorkspaceUtils", () => {
   beforeAll(async () => {
-    const blockEdges = [];
-    const cardEdges = [];
-    const jsonEdges = [];
-    const data = {
-      allBlock: { edges: blockEdges },
-      allCard: { edges: cardEdges },
-      allJSON: { edges: jsonEdges },
+    const cards1 = await readAllJson(path.join(cardsPath, "**", "*.json"), transformCard);
+    const cards2 = await readAllJson(path.join(cardsPath2, "**", "*.json"), transformCard);
+
+    cards.push(...cards1);
+    cards.push(...cards2);
+
+    const allBlocks = await getAllBlockJson();
+    const blocksByType = keyBy(allBlocks, (block) => block.type);
+    const allIcons = await getAllIcons();
+
+    const data: ContextType<typeof BlocklyDataContext> = {
+      allBlocks,
+      blocksByType,
+      allIcons,
+      userId: "",
+      myCards: [],
+      allArt: [],
+      classes: Object.fromEntries(cards.filter((card) => card.type === "CLASS").map((card) => [card.id, card])),
     };
-
-    for await (const blocksDefPath of walk(blocksPath)) {
-      if (!blocksDefPath.endsWith(".json")) {
-        continue;
-      }
-
-      const blocksJson = JSON.parse(await fs.promises.readFile(blocksDefPath));
-      for (const blockJson of blocksJson) {
-        jsonTransformFileNode(blockJson, { base: path.basename(blocksDefPath) });
-        blockEdges.push({ node: blockJson });
-      }
-    }
-
-    const handleWalk = async (cardPath) => {
-      if (!cardPath.endsWith(".json")) {
-        return;
-      }
-      const file = await fs.promises.readFile(cardPath);
-      const cardJson = JSON.parse(file);
-      jsonTransformFileNode(cardJson, { base: path.basename(cardPath) });
-      cardEdges.push({ node: cardJson });
-      jsonEdges.push({ node: { internal: { content: file } } });
-    };
-
-    for await (const cardPath of walk(cardsPath)) {
-      await handleWalk(cardPath);
-    }
-    for await (const cardPath of walk(cardsPath2)) {
-      await handleWalk(cardPath);
-    }
-
     BlocklyMiscUtils.initBlocks(data);
     BlocklyMiscUtils.initHeroClassColors(data);
-    BlocklyMiscUtils.initCardBlocks(data);
+    // BlocklyMiscUtils.initCardBlocks(data);
   });
 
-  test.each(cards)("generates card %s ", async (id, cardPath) => {
+  test.each(cards)("generates card %s ", async (srcCard) => {
     const workspace = new Workspace();
-    const srcCard = JSON.parse(await fs.promises.readFile(cardPath));
     JsonConversionUtils.generateCard(workspace, srcCard);
     WorkspaceUtils.workspaceToCardScript(workspace);
     // emit something so that the test registers as in progress
     expect(true).toEqual(true);
   });
 
-  test.each(cards)("no custom generates card %s", async (id, cardPath) => {
+  test.each(cards)("no custom generates card %s", async (srcCard) => {
     const workspace = new Workspace();
-    const srcCard = JSON.parse(await fs.promises.readFile(cardPath));
-    JsonConversionUtils.errorOnCustom = true;
+    JsonConversionUtils.setErrorOnCustom(true);
     JsonConversionUtils.generateCard(workspace, srcCard);
     WorkspaceUtils.workspaceToCardScript(workspace);
     // emit something so that the test registers as in progress
     expect(true).toEqual(true);
   });
 
-  test.each(cards)("deep equals card %s ", async (id, cardPath) => {
+  test.each(cards)("deep equals card %s ", async (srcCard) => {
     const workspace = new Workspace();
-    const srcCard = JSON.parse(await fs.promises.readFile(cardPath));
     JsonConversionUtils.generateCard(workspace, srcCard);
     const json = WorkspaceUtils.workspaceToCardScript(workspace);
     expect(json).toEqual(srcCard);
   });
 
-  test.each(cards)("replays the same %s", async (id, cardPath) => {
-    const ConversionHarness = Java.type("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
+  test.each(cards)("replays the same %s", async (srcCard) => {
+    const ConversionHarness = java.import("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
     const workspace = new Workspace();
-    const srcCard = JSON.parse(await fs.promises.readFile(cardPath));
     JsonConversionUtils.generateCard(workspace, srcCard);
     const json = WorkspaceUtils.workspaceToCardScript(workspace);
-    const result = ConversionHarness.assertCardReplaysTheSame(1, 2, id, JSON.stringify(json));
+    const result = ConversionHarness.assertCardReplaysTheSame(1, 2, srcCard.id, JSON.stringify(json));
     if (!result || result == "false") {
       expect(json).toEqual(srcCard);
-      weirdos.push(id);
+      weirdos.push(srcCard.id);
     } else {
       expect(result).toEqual(true);
     }
   });
 
-  test.each(cards)("no custom and replays the same %s", async (id, cardPath) => {
-    const ConversionHarness = Java.type("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
+  test.each(cards)("no custom and replays the same %s", async (srcCard) => {
+    const ConversionHarness = java.import("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
     const workspace = new Workspace();
-    const srcCard = JSON.parse(await fs.promises.readFile(cardPath));
-    JsonConversionUtils.errorOnCustom = true;
+    JsonConversionUtils.setErrorOnCustom(true);
     JsonConversionUtils.generateCard(workspace, srcCard);
     const json = WorkspaceUtils.workspaceToCardScript(workspace);
-    expect(ConversionHarness.assertCardReplaysTheSame(1, 2, id, JSON.stringify(json))).toEqual(true);
+    expect(ConversionHarness.assertCardReplaysTheSame(1, 2, srcCard.id, JSON.stringify(json))).toEqual(true);
   });
 
   test("java test", async () => {
@@ -137,7 +110,7 @@ describe("WorkspaceUtils", () => {
   });
 
   test("just dreams of strength", async () => {
-    const ConversionHarness = Java.type("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
+    const ConversionHarness = java.import("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
     const json = `
     {
       "name": "Dreams of Strength",
@@ -172,15 +145,14 @@ describe("WorkspaceUtils", () => {
     expect(ConversionHarness.assertCardReplaysTheSame(1, 2, "spell_dreams_of_strength", json)).toEqual(true);
   });
 
-  test.each(cards)("bug test time %s", async (id, cardPath) => {
-    const ConversionHarness = Java.type("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
+  test.each(cards)("bug test time %s", async (srcCard) => {
+    const ConversionHarness = java.import("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
     const workspace = new Workspace();
-    const srcCard = JSON.parse(await fs.promises.readFile(cardPath));
     JsonConversionUtils.generateCard(workspace, srcCard);
     const json = WorkspaceUtils.workspaceToCardScript(workspace);
-    ConversionHarness.assertCardReplaysTheSame(1, 2, id, JSON.stringify(json));
+    ConversionHarness.assertCardReplaysTheSame(1, 2, srcCard.id, JSON.stringify(json));
 
-    const ConversionHarness2 = Java.type("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
+    const ConversionHarness2 = java.import("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
     const workspace2 = new Workspace();
     const srcCard2 = JSON.parse(`
       {
@@ -215,7 +187,7 @@ describe("WorkspaceUtils", () => {
     `);
     JsonConversionUtils.generateCard(workspace2, srcCard2);
     const json2 = WorkspaceUtils.workspaceToCardScript(workspace);
-    expect(ConversionHarness.assertCardReplaysTheSame(1, 2, id, JSON.stringify(json))).toEqual(true);
+    expect(ConversionHarness.assertCardReplaysTheSame(1, 2, srcCard.id, JSON.stringify(json))).toEqual(true);
   });
 
   /*

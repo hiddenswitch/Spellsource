@@ -1,6 +1,5 @@
 import React, { forwardRef, useEffect, useRef } from "react";
 import Blockly, { BlocklyOptions, WorkspaceSvg } from "blockly";
-import { Options } from "options";
 
 export interface SimpleReactBlocklyProps {
   wrapperDivClassName: string;
@@ -16,7 +15,7 @@ export interface SimpleReactBlocklyRef {
 export default forwardRef<SimpleReactBlocklyRef, SimpleReactBlocklyProps>((props, ref) => {
   const innerBlocklyDiv = useRef<HTMLDivElement>(null);
 
-  const options = props.workspaceConfiguration as Partial<Options>;
+  const options = props.workspaceConfiguration;
 
   useEffect(() => {
     const workspace = Blockly.inject(innerBlocklyDiv.current, props.workspaceConfiguration);
@@ -35,18 +34,18 @@ export default forwardRef<SimpleReactBlocklyRef, SimpleReactBlocklyProps>((props
   useEffect(() => {
     if (ref && typeof ref !== "function") {
       const workspace = ref.current.workspace;
-      const xml = Blockly.Xml.workspaceToDom(workspace, false);
+      const state = Blockly.serialization.workspaces.save(workspace);
       const scale = workspace.getScale();
       workspace.dispose();
 
       const newWorkspace = Blockly.inject(innerBlocklyDiv.current, props.workspaceConfiguration);
       newWorkspace.addChangeListener(props.workspaceDidChange);
-      Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, newWorkspace);
+      Blockly.serialization.workspaces.load(state, newWorkspace);
       newWorkspace.setScale(scale);
 
       ref.current = { workspace: newWorkspace, innerBlocklyDiv: innerBlocklyDiv.current };
     }
   }, [options.horizontalLayout, options.toolboxPosition]);
 
-  return <div ref={innerBlocklyDiv} className={props.wrapperDivClassName}></div>;
+  return <div ref={innerBlocklyDiv} className={props.wrapperDivClassName} />;
 });

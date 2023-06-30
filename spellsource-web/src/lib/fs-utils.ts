@@ -3,6 +3,8 @@ import path from "path";
 import fs from "fs";
 import probe from "probe-image-size";
 import { ImageDef } from "../__generated__/client";
+import { BlockDef } from "../__generated__/blocks";
+import { transformBlock } from "./json-transforms";
 
 /**
  * Parses the JSON for all matching files
@@ -113,3 +115,10 @@ export const openFile = (accept: string, onOpen: (result: string) => void) => {
   // Simulate a click on the file input
   input.click();
 };
+
+export const getAllBlockJson = async () =>
+  (await readAllJson<BlockDef[]>(path.join("src", "blocks", "*.json"))).flat(1).map(transformBlock);
+
+const getAllArt = async () => readAllImages(path.join("card-images", "art", "**", "*.png"));
+
+export const getAllIcons = async () => readAllImages(path.join("assets", "editor", "*.png"));

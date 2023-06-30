@@ -2,15 +2,12 @@ import React, { createContext, useMemo } from "react";
 import Layout from "../components/card-editor-layout";
 import * as styles from "../templates/template-styles.module.scss";
 import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
-import path from "path";
-import { BlockDef } from "../__generated__/blocks";
-import { readAllImages, readAllJson } from "../lib/fs-utils";
+import { getAllBlockJson, getAllIcons } from "../lib/fs-utils";
 import { CardDef } from "../components/card-display";
-import { fixArt, transformBlock } from "../lib/json-transforms";
+import { fixArt } from "../lib/json-transforms";
 import { keyBy } from "lodash";
 import {
   Card,
-  CollectionCard,
   GetCardsQuery,
   ImageDef,
   useGetAllArtQuery,
@@ -22,13 +19,6 @@ import { ApolloQueryResult } from "@apollo/client";
 import Head from "next/head";
 import CardEditorView from "../components/card-editor-view";
 import { Spinner } from "react-bootstrap";
-
-const getAllBlockJson = async () =>
-  (await readAllJson<BlockDef[]>(path.join("src", "blocks", "*.json"))).flat(1).map(transformBlock);
-
-const getAllArt = async () => readAllImages(path.join("card-images", "art", "**", "*.png"));
-
-const getAllIcons = async () => readAllImages(path.join("assets", "editor", "*.png"));
 
 /*const getAllCards = async () => (await readAllJson<CardDef>(
   path.join("..", "spellsource-game", "src", "main", "resources", "basecards", "standard", "**", "*.json"),
@@ -47,11 +37,11 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
 };
 
 export const BlocklyDataContext = createContext({ ready: false } as InferGetStaticPropsType<typeof getStaticProps> & {
-  ready: boolean;
+  ready?: boolean;
   classes: Record<string, CardDef>;
   allArt: ImageDef[];
   myCards: Partial<Card>[];
-  refreshMyCards: () => Promise<ApolloQueryResult<GetCardsQuery>>;
+  refreshMyCards?: () => Promise<ApolloQueryResult<GetCardsQuery>>;
   userId: string | null | undefined;
 });
 

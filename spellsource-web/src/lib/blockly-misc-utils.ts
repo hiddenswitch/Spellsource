@@ -8,10 +8,10 @@ import { BlocklyDataContext } from "../pages/card-editor";
 import { ContextType } from "react";
 import { BlockDef } from "../__generated__/blocks";
 import { InitBlockOptions } from "../components/card-editor-workspace";
-import { Flyout } from "flyout_base";
 import { FieldButton } from "../components/field-button";
 import { FieldProgressBar } from "../components/field-progress-bar";
 import * as BlocklyContextMenu from "./blockly-context-menu";
+import { BlockInfo, FlyoutItemInfo } from "blockly/core/utils/toolbox";
 
 export const toTitleCaseCorrected = (string: string) =>
   string
@@ -217,13 +217,15 @@ export function cardMessage(card: CardDef) {
   return ret;
 }
 
-export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options: InitBlockOptions) {
+export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options?: InitBlockOptions) {
   try {
     Blockly.fieldRegistry.register("field_label_serializable_hidden", FieldLabelSerializableHidden);
     Blockly.fieldRegistry.register("field_label_plural", FieldLabelPlural);
     Blockly.fieldRegistry.register("field_button", FieldButton);
     Blockly.fieldRegistry.register("field_progress_bar", FieldProgressBar);
-    BlocklyContextMenu.registerAll(options);
+    if (options) {
+      BlocklyContextMenu.registerAll(options);
+    }
     FieldButton.OnClicks["test"] = (field) => {
       const progressBar = field.getSourceBlock().getField("progress") as FieldProgressBar;
       progressBar.setProgress(Math.random());
@@ -417,7 +419,7 @@ export function newBlock(workspace, type): Block | BlockSvg {
 export function colorToHex(colour) {
   var hue = Number(colour);
   if (!isNaN(hue)) {
-    return Blockly.hueToHex(hue);
+    return Blockly.utils.colour.hueToHex(hue);
   } else {
     return Blockly.utils.colour.parse(colour);
   }
@@ -558,14 +560,14 @@ export function searchToolbox(blockType, mainWorkspace: WorkspaceSvg) {
   for (let category of categories) {
     if (category.getContents) {
       let contents = category.getContents();
-      for (let content of contents) {
-        if (content.kind === "block" && content.type === blockType) {
-          if (category.getParent() && category.getParent().isCollapsible()) {
-            category.getParent().setExpanded(true);
+      for (let content of contents as FlyoutItemInfo[]) {
+        if (content.kind === "block" && (content as BlockInfo).type === blockType) {
+          if (category.getParent() && category.getParent().isCollapsible() && !category.getParent().isExpanded()) {
+            category.getParent().toggleExpanded();
           }
           toolbox.setSelectedItem(category);
 
-          const flyOut = toolbox.getFlyout() as Flyout;
+          const flyOut = toolbox.getFlyout();
 
           let workspace: WorkspaceSvg;
 

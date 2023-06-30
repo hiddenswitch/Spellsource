@@ -11,7 +11,9 @@ const allArgNames = new Set<string>(); //Every different possible arg name that 
 
 export const blockTypeColors = {};
 
-export const errorOnCustom = false;
+let errorOnCustom = false;
+
+export const setErrorOnCustom = (value: boolean) => (errorOnCustom = value);
 
 const customBlocks = {};
 

@@ -22,11 +22,11 @@ import {
 import { CardDef } from "./card-display";
 import { useSession } from "next-auth/react";
 import { useDebounce } from "react-use";
-import javascript from "blockly/javascript";
 import useBreakpoint from "@restart/hooks/useBreakpoint";
 import { useEffectOnce } from "../hooks/use-effect-once";
 import { uniqBy } from "lodash";
 import { openFromFile } from "../lib/blockly-context-menu";
+import { javascriptGenerator } from "blockly/javascript";
 
 interface CardEditorWorkspaceProps {
   setJSON?: React.Dispatch<React.SetStateAction<string>>;
@@ -127,7 +127,7 @@ const CardEditorWorkspace = forwardRef(
       await Promise.all(uniqBy(blocks, (block) => block.getFieldValue("id")).map(onSave));
       console.log("Workspace Saved");
 
-      await data.refreshMyCards();
+      await data.refreshMyCards?.();
     };
 
     const [_, cancelDebounce] = useDebounce(saveAll, 5000, [json]);
@@ -182,7 +182,7 @@ const CardEditorWorkspace = forwardRef(
 
       if (cardId) {
         await deleteCard({ variables: { cardId } });
-        await data.refreshMyCards();
+        await data.refreshMyCards?.();
       }
     };
 
@@ -279,7 +279,7 @@ const CardEditorWorkspace = forwardRef(
       props.setJSON(json);
       setJson(json);
       setAllCardScript(cardScript);
-      props.setJS(javascript.workspaceToCode(mainWorkspace()));
+      props.setJS(javascriptGenerator.workspaceToCode(mainWorkspace()));
     };
 
     const generateCard = (p: string) => {
@@ -306,7 +306,7 @@ const CardEditorWorkspace = forwardRef(
             const card = value.data?.getLatestCard;
             if (card) {
               if (card.blocklyWorkspace) {
-                const dom = Blockly.Xml.textToDom(card.blocklyWorkspace);
+                const dom = Blockly.utils.xml.textToDom(card.blocklyWorkspace);
                 const block = Blockly.Xml.domToBlock(dom, mainWorkspace());
               } else if (card.cardScript) {
                 JsonConversionUtils.generateCard(mainWorkspace(), card.cardScript);

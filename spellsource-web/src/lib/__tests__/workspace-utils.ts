@@ -1,9 +1,8 @@
-import WorkspaceUtils from "../workspace-utils";
+import * as WorkspaceUtils from "../workspace-utils";
+import Blockly from "blockly";
 
 function expectConversion(str, json) {
-  const parser = new DOMParser();
-
-  const xml = parser.parseFromString(str, "text/xml");
+  const xml = Blockly.utils.xml.textToDom(str);
 
   expect(WorkspaceUtils.xmlToCardScript(xml)).toEqual(json);
 }

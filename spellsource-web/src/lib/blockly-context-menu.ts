@@ -1,11 +1,10 @@
 import * as Blockly from "blockly";
-import { BlockDragger, BlockSvg, ContextMenuRegistry, Toolbox, Workspace } from "blockly";
+import { BlockDragger, BlockSvg, ContextMenuRegistry, Toolbox, ToolboxItem, Workspace } from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
 import { openFile, saveFile } from "./fs-utils";
 import * as WorkspaceUtils from "./workspace-utils";
 import * as BlocklyMiscUtils from "./blockly-misc-utils";
 import { InitBlockOptions } from "../components/card-editor-workspace";
-import { ToolboxItem } from "toolbox/toolbox_item";
 
 export const registerAll = (options: InitBlockOptions) => {
   ContextMenuRegistry.registry.register(importCardScript);
@@ -81,7 +80,7 @@ export const openFromFile: ContextMenuRegistry.RegistryItem = {
   preconditionFn: ({ workspace }) => (workspace.targetWorkspace ? "hidden" : "enabled"),
   callback: ({ workspace }) =>
     openFile(".xml", (result) => {
-      const dom = Blockly.Xml.textToDom(result);
+      const dom = Blockly.utils.xml.textToDom(result);
 
       for (const nextBlock of dom.getElementsByTagName("block")) {
         for (const childNode of nextBlock.childNodes) {
@@ -107,8 +106,7 @@ const showInToolbox: ContextMenuRegistry.RegistryItem = {
   scopeType: ContextMenuRegistry.ScopeType.BLOCK,
   preconditionFn: ({ block }) =>
     !block.workspace.targetWorkspace ||
-    ((block.workspace.targetWorkspace?.getToolbox() as Toolbox)?.getSelectedItem() as ToolboxItem)?.getId() ===
-      "Search Results"
+    block.workspace.targetWorkspace?.getToolbox()?.getSelectedItem()?.getId() === "Search Results"
       ? "enabled"
       : "hidden",
   callback: ({ block }) => {

@@ -1,0 +1,32 @@
+diff --git a/node_modules/blockly/core/block.d.ts b/node_modules/blockly/core/block.d.ts
+index bb70b37..275daa6 100644
+--- a/node_modules/blockly/core/block.d.ts
++++ b/node_modules/blockly/core/block.d.ts
+@@ -26,6 +26,27 @@ import { IconType } from './icons/icon_types.js';
+  * Not normally called directly, workspace.newBlock() is preferred.
+  */
+ export declare class Block implements IASTNodeLocation, IDeletable {
++
++    /**
++     * Added by spellsource. Stores the json representation of this block.
++     */
++    json?: any
++    /**
++     * Added by spellsource. Used by art blocks to store whether they've been used on cards or not.
++     */
++    used?: boolean
++    /**
++     * Added by spellsource.
++     */
++    message?: string
++    /**
++     * Added by spellsource. The CardScript representation of this block, if it's a card
++     */
++    cardScript?: any;
++    /**
++     * Added by spellsource. The generated card id for this block, if it's a card
++     */
++    cardId: string
+     /**
+      * An optional callback method to use whenever the block's parent workspace
+      * changes. This is usually only called from the constructor, the block type

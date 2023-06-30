@@ -423,7 +423,7 @@ function rearrangeInputValues(cardScript) {
   }
 }
 
-function workspaceToCardScript(workspace) {
+export function workspaceToCardScript(workspace) {
   const xml = Xml.workspaceToDom(workspace);
   return xmlToCardScript(xml);
 }
