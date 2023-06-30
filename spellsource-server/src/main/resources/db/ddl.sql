@@ -95,24 +95,6 @@ $$;
 
 ALTER FUNCTION spellsource.archive_card(card_id text) OWNER TO admin;
 
---
--- Name: before_card_published(); Type: FUNCTION; Schema: spellsource; Owner: admin
---
-
-CREATE FUNCTION spellsource.before_card_published() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
-declare
-begin
-    update spellsource.cards set is_archived = true where id = new.id and is_published;
-
-    return new;
-end;
-$$;
-
-
-ALTER FUNCTION spellsource.before_card_published() OWNER TO admin;
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -702,13 +684,13 @@ select card.id,
        card.created_by,
        card.card_script,
        card.blockly_workspace,
-       card.card_script ->> 'name'                                    as name,
-       card.card_script ->> 'type'                                    as type,
-       card.card_script ->> 'heroClass'                               as class,
-       coalesce(nullif(card.card_script ->> 'baseManaCost', ''), '0')::int        as cost,
+       card.card_script ->> 'name'                                         as name,
+       card.card_script ->> 'type'                                         as type,
+       card.card_script ->> 'heroClass'                                    as class,
+       coalesce(nullif(card.card_script ->> 'baseManaCost', ''), '0')::int as cost,
        (coalesce(card.card_script ->> 'collectible', 'true')::bool and
-        (card.card_script ->> 'heroClass' = 'ANY' or cl.collectible)) as collectible,
-       spellsource.card_message(card::spellsource.cards, cl)          as search_message,
+        (card.card_script ->> 'heroClass' = 'ANY' or cl.collectible))      as collectible,
+       spellsource.card_message(card::spellsource.cards, cl)               as search_message,
        last_modified,
        created_at
 from spellsource.cards card
@@ -752,6 +734,24 @@ $$;
 
 
 ALTER FUNCTION spellsource.get_user_id() OWNER TO admin;
+
+--
+-- Name: on_card_published(); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.on_card_published() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+declare
+begin
+    update spellsource.cards set is_archived = true where id = new.id and is_published and not is_archived;
+
+    return new;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.on_card_published() OWNER TO admin;
 
 --
 -- Name: publish_card(text); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -4274,17 +4274,24 @@ CREATE UNIQUE INDEX spellsource_cards_unique_id ON spellsource.cards USING btree
 
 
 --
--- Name: cards before_card_published; Type: TRIGGER; Schema: spellsource; Owner: admin
---
-
-CREATE TRIGGER before_card_published BEFORE INSERT OR UPDATE ON spellsource.cards FOR EACH ROW WHEN ((new.is_published AND (NOT new.is_archived))) EXECUTE FUNCTION spellsource.before_card_published();
-
-
---
 -- Name: cards card_changes_trigger; Type: TRIGGER; Schema: spellsource; Owner: admin
 --
 
 CREATE TRIGGER card_changes_trigger AFTER INSERT OR DELETE OR UPDATE ON spellsource.cards FOR EACH ROW EXECUTE FUNCTION spellsource.card_change_notify_event();
+
+
+--
+-- Name: cards card_published_insert; Type: TRIGGER; Schema: spellsource; Owner: admin
+--
+
+CREATE TRIGGER card_published_insert BEFORE INSERT ON spellsource.cards FOR EACH ROW WHEN ((new.is_published AND (NOT new.is_archived))) EXECUTE FUNCTION spellsource.on_card_published();
+
+
+--
+-- Name: cards card_published_update; Type: TRIGGER; Schema: spellsource; Owner: admin
+--
+
+CREATE TRIGGER card_published_update BEFORE UPDATE ON spellsource.cards FOR EACH ROW WHEN (((NOT (old.is_published AND (NOT old.is_archived))) AND (new.is_published AND (NOT new.is_archived)))) EXECUTE FUNCTION spellsource.on_card_published();
 
 
 --
