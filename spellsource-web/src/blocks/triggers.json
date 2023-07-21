@@ -13,6 +13,29 @@
     ]
   },
   {
+    "type": "Trigger_I",
+    "colour": "#888888",
+    "previousStatement": [
+      "Triggers"
+    ],
+    "nextStatement": [
+      "Triggers"
+    ],
+    "message0": "-%1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "i",
+        "check": "Trigger",
+        "shadow": {
+          "type": "Trigger_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT",
+    "comment": "Used to make lists of Triggers.\n(Remember you can always\nDuplicate with right-click)"
+  },
+  {
     "type": "Trigger_QueueCondition",
     "subcategory": "Util",
     "output": "Trigger",

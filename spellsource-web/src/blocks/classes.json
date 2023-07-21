@@ -10,7 +10,7 @@
     "type": "HeroClass_OPPONENT",
     "message0": "Your opponent's class",
     "output": "HeroClass",
-    "colour": 1000,
+    "colour": "#000000",
     "data": "OPPONENT",
     "comment": "Not for use as a card's class,\nonly for game effects"
   },

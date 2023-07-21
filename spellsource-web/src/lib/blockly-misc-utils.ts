@@ -150,6 +150,8 @@ export function inputNameToBlockType(inputName: string) {
     case "toggleOn":
     case "toggleOff":
     case "trigger":
+    case "expirationTriggers":
+    case "activationTriggers":
       return "Trigger";
     case "value":
     case "howMany":
@@ -176,6 +178,8 @@ export function inputNameToBlockType(inputName: string) {
       return "Source";
     case "cardCostModifier":
       return "CostModifier";
+    case "zone":
+      return "Zone";
     default:
       return null;
   }

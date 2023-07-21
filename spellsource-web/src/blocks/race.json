@@ -82,5 +82,28 @@
     "colour": 160,
     "output": "Race",
     "message0": "Titan"
+  },
+  {
+    "type": "Race_I",
+    "colour": 160,
+    "previousStatement": [
+      "Races"
+    ],
+    "nextStatement": [
+      "Races"
+    ],
+    "message0": "-%1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "i",
+        "check": "Race",
+        "shadow": {
+          "type": "Race_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT",
+    "comment": "Used to make lists of Races.\n(Remember you can always\nDuplicate with right-click)"
   }
 ]

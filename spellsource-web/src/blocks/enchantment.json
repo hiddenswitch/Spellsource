@@ -232,6 +232,28 @@
     "data": "BLOCKLY_EXTEND_PREVIOUS"
   },
   {
+    "type": "EnchantmentOption_activationTriggers",
+    "previousStatement": [
+      "EnchantmentOption"
+    ],
+    "nextStatement": [
+      "EnchantmentOption"
+    ],
+    "colour": 280,
+    "message0": "Activates when %1",
+    "args0": [
+      {
+        "type": "input_statement",
+        "check": "Triggers",
+        "name": "activationTriggers",
+        "block": {
+          "type": "Trigger_I"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
     "type": "EnchantmentOption_SHADOW",
     "previousStatement": [
       "EnchantmentOption"

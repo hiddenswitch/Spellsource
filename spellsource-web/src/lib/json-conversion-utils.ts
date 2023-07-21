@@ -498,7 +498,7 @@ export function enchantmentNeedsOptions(trigger, props) {
  * present in the list of enchantment statements
  * @returns The created block
  */
-export function enchantment(trigger, workspace, triggerBlock: Block | BlockSvg = null) {
+export function enchantment(trigger: any, workspace: Workspace, triggerBlock: Block | BlockSvg = null) {
   let props = relevantProperties(trigger);
   if (!enchantmentNeedsOptions(trigger, props)) {
     if (!triggerBlock) {
@@ -529,9 +529,10 @@ export function enchantment(trigger, workspace, triggerBlock: Block | BlockSvg =
         continue;
       }
       let option = BlocklyMiscUtils.newBlock(workspace, match.type);
-      if (trigger[prop] !== true) {
+      handleInputs(match, trigger, option, workspace, trigger);
+      /*if (trigger[prop] !== true) {
         option.setFieldValue(trigger[prop], prop);
-      }
+      }*/
       if ("initSvg" in option) {
         option.initSvg();
       }
@@ -851,7 +852,14 @@ export function getMatch(json, inputName, parentJson) {
  * @param parentJson The level of json above json
  * @param statement Whether we're connected a statement rather than an input
  */
-export function handleArg(connection, json, inputName, workspace, parentJson, statement = false) {
+export function handleArg(
+  connection: Connection,
+  json: any,
+  inputName: string,
+  workspace: Workspace,
+  parentJson: any,
+  statement = false
+) {
   json = mutateJson(json);
 
   if (!!connection.targetBlock() && connection.targetBlock().type === "Property_text_SHADOW") {
@@ -968,6 +976,9 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
 
 export function handleArrayArg(jsonElement, block: Block | BlockSvg, workspace, name) {
   let thingArray = jsonElement;
+  if (block.getFirstStatementConnection() == null) {
+    console.error(block.type);
+  }
   let lowestBlock = block.getFirstStatementConnection().targetBlock();
   handleArg(lowestBlock.getInput("i").connection, thingArray[0], name.slice(0, -1), workspace, thingArray);
   for (let i = 1; i < thingArray.length; i++) {
@@ -1400,6 +1411,9 @@ export function handleNoMatch(json, inputName, parentJson, workspace) {
         } else {
           blockType = "text";
         }
+      }
+      if (blockType === "nulls") {
+        console.error("hrmmm");
       }
       let newArgBlock = BlocklyMiscUtils.newBlock(workspace, "CustomArg_" + blockType);
       newArgBlock.previousConnection.connect(lowestConnection);

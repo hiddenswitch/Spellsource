@@ -378,5 +378,27 @@
       }
     ],
     "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "CostModifierOption_expirationTriggers",
+    "previousStatement": [
+      "CostModifierOption"
+    ],
+    "nextStatement": [
+      "CostModifierOption"
+    ],
+    "colour": 320,
+    "message0": "Expires When %1",
+    "args0": [
+      {
+        "type": "input_statement",
+        "check": "Triggers",
+        "name": "expirationTriggers",
+        "block": {
+          "type": "Trigger_I"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
   }
 ]

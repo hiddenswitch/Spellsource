@@ -834,34 +834,6 @@
     "data": "BLOCKLY_EXTEND_PREVIOUS"
   },
   {
-    "type": "CustomArg_Source",
-    "subcategory": "Arg",
-    "previousStatement": [
-      "CustomArg"
-    ],
-    "nextStatement": [
-      "CustomArg"
-    ],
-    "colour": 10,
-    "message0": "%1 is %2",
-    "args0": [
-      {
-        "type": "field_input",
-        "name": "customArg",
-        "text": "cardSource"
-      },
-      {
-        "type": "input_value",
-        "check": "Source",
-        "name": "customValue",
-        "shadow": {
-          "type": "Source_SHADOW"
-        }
-      }
-    ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS"
-  },
-  {
     "type": "CustomArg_Boolean",
     "subcategory": "Arg",
     "previousStatement": [
@@ -870,7 +842,7 @@
     "nextStatement": [
       "CustomArg"
     ],
-    "colour": -1,
+    "colour": 190,
     "message0": "%1 is %2",
     "args0": [
       {
@@ -1052,5 +1024,126 @@
       }
     ],
     "data": "{value}"
+  },
+  {
+    "type": "CustomArg_Races",
+    "subcategory": "Arg",
+    "previousStatement": [
+      "CustomArg"
+    ],
+    "nextStatement": [
+      "CustomArg"
+    ],
+    "colour": 160,
+    "message0": "%1 are",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "customArg",
+        "text": "races"
+      }
+    ],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "check": "Races",
+        "name": "customValue",
+        "block": {
+          "type": "Race_I"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "CustomArg_Triggers",
+    "subcategory": "Arg",
+    "previousStatement": [
+      "CustomArg"
+    ],
+    "nextStatement": [
+      "CustomArg"
+    ],
+    "colour": 300,
+    "message0": "%1 is",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "customArg",
+        "text": "triggers"
+      }
+    ],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "check": "Triggers",
+        "name": "customValue",
+        "block": {
+          "type": "Trigger_I"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "CustomArg_Zone",
+    "subcategory": "Arg",
+    "previousStatement": [
+      "CustomArg"
+    ],
+    "nextStatement": [
+      "CustomArg"
+    ],
+    "colour": 160,
+    "message0": "%1 is %2",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "customArg",
+        "text": "zone"
+      },
+      {
+        "type": "input_value",
+        "check": "Zone",
+        "name": "customValue",
+        "shadow": {
+          "type": "Zone_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
+    "type": "CustomArg_Zones",
+    "subcategory": "Arg",
+    "previousStatement": [
+      "CustomArg"
+    ],
+    "nextStatement": [
+      "CustomArg"
+    ],
+    "colour": 160,
+    "message0": "%1 are",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "customArg",
+        "text": "zones"
+      }
+    ],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "check": "Zones",
+        "name": "customValue",
+        "block": {
+          "type": "Zone_I"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
   }
 ]

@@ -533,6 +533,14 @@
           [
             "Item",
             "WEAPON"
+          ],
+          [
+            "Skill",
+            "HERO_POWER"
+          ],
+          [
+            "Champion",
+            "HERO"
           ]
         ]
       },

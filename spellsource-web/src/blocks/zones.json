@@ -1,0 +1,151 @@
+[
+  {
+    "type": "Zone_SHADOW",
+    "message0": "Zone",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "NONE"
+  },
+  {
+    "type": "Zone_I",
+    "colour": "#888888",
+    "previousStatement": [
+      "Zones"
+    ],
+    "nextStatement": [
+      "Zones"
+    ],
+    "message0": "-%1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "i",
+        "check": "Zone",
+        "shadow": {
+          "type": "Zone_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_ARRAY_ELEMENT",
+    "comment": "Used to make lists of Zones.\n(Remember you can always\nDuplicate with right-click)"
+  },
+  {
+    "type": "Zone_NONE",
+    "message0": "None",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "NONE"
+  },
+  {
+    "type": "Zone_HAND",
+    "message0": "Hand",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "HAND"
+  },
+  {
+    "type": "Zone_DECK",
+    "message0": "Deck",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "DECK"
+  },
+  {
+    "type": "Zone_GRAVEYARD",
+    "message0": "Graveyard",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "GRAVEYARD"
+  },
+  {
+    "type": "Zone_",
+    "message0": "",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": ""
+  },
+  {
+    "type": "Zone_BATTLEFIELD",
+    "message0": "Battlefield",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "BATTLEFIELD"
+  },
+  {
+    "type": "Zone_SECRET",
+    "message0": "Secret",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "SECRET"
+  },
+  {
+    "type": "Zone_QUEST",
+    "message0": "Quest",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "QUEST"
+  },
+  {
+    "type": "Zone_HERO_POWER",
+    "message0": "Skill",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "HERO_POWER"
+  },
+  {
+    "type": "Zone_HERO",
+    "message0": "Champion",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "HERO"
+  },
+  {
+    "type": "Zone_WEAPON",
+    "message0": "Item",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "WEAPON"
+  },
+  {
+    "type": "Zone_SET_ASIDE_ZONE",
+    "message0": "Set Aside",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "SET_ASIDE_ZONE"
+  },
+  {
+    "type": "Zone_HIDDEN",
+    "message0": "Hidden",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "HIDDEN"
+  },
+  {
+    "type": "Zone_DISCOVER",
+    "message0": "Currently Sourcing",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "DISCOVER"
+  },
+  {
+    "type": "Zone_REMOVED_FROM_PLAY",
+    "message0": "Removed from Play",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "REMOVED_FROM_PLAY"
+  },
+  {
+    "type": "Zone_PLAYER",
+    "message0": "Player",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "PLAYER"
+  },
+  {
+    "type": "Zone_ENCHANTMENT",
+    "message0": "Enchantment",
+    "output": "Zone",
+    "colour": "#888888",
+    "data": "ENCHANTMENT"
+  }
+]
