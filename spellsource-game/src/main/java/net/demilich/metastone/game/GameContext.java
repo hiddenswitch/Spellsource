@@ -195,7 +195,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class GameContext implements Cloneable, Serializable, Inventory, EntityZoneTable, Comparable<GameContext> {
 	private static Logger LOGGER = LoggerFactory.getLogger(GameContext.class);
-	protected transient static ThreadLocal<GameContext> currentContext = new ThreadLocal<>();
+	protected static ThreadLocal<GameContext> currentContext = new ThreadLocal<>();
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
 	protected transient SpanContext spanContext;

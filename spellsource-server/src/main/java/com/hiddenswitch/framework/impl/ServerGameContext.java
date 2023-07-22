@@ -554,6 +554,7 @@ public class ServerGameContext extends GameContext implements Server {
             if (getThread() != null) {
                 throw new UnsupportedOperationException("Cannot play with a fork twice!");
             }
+						// this should create a new thread
             context.runOnContext(v -> {
                 var thread = Thread.currentThread();
                 setThread(thread);
@@ -944,7 +945,7 @@ public class ServerGameContext extends GameContext implements Server {
 
     @Override
     public void onConcede(Client sender) {
-        context.runOnContext(v -> concede(sender.getPlayerId()));
+        concede(sender.getPlayerId());
     }
 
     @Override
@@ -1017,38 +1018,36 @@ public class ServerGameContext extends GameContext implements Server {
 
     @Override
     public void onPlayerReconnected(Client client) {
-        context.runOnContext(v -> {
-            Async.lock(lock);
-            try {
-                // Update the client
-                var listIterator = getClients().listIterator();
-                while (listIterator.hasNext()) {
-                    var iteratee = listIterator.next();
-                    // we're only expecting to replace the client if a new one is actually made
-                    // the lifecycle of the client isn't related to the lifecycle of the network connection
-                    if (iteratee.getPlayerId() == client.getPlayerId() && client != iteratee) {
-                        var promise = Promise.<Void>promise();
-                        iteratee.copyRequestsTo(client);
-                        iteratee.close(promise);
-                        await(timeout(promise.future(), CLOSE_TIMEOUT_MILLIS));
-                        listIterator.set(client);
-                        iteratee = client;
-                    }
-                    iteratee.onConnectionStarted(getActivePlayer());
+        Async.lock(lock);
+        try {
+            // Update the client
+            var listIterator = getClients().listIterator();
+            while (listIterator.hasNext()) {
+                var iteratee = listIterator.next();
+                // we're only expecting to replace the client if a new one is actually made
+                // the lifecycle of the client isn't related to the lifecycle of the network connection
+                if (iteratee.getPlayerId() == client.getPlayerId() && client != iteratee) {
+                    var promise = Promise.<Void>promise();
+                    iteratee.copyRequestsTo(client);
+                    iteratee.close(promise);
+                    await(timeout(promise.future(), CLOSE_TIMEOUT_MILLIS));
+                    listIterator.set(client);
+                    iteratee = client;
                 }
-
-                if (client instanceof Behaviour) {
-                    // Update the behaviour
-                    setBehaviour(client.getPlayerId(), (Behaviour) client);
-                }
-
-                onPlayerReady(client);
-                // Only update the reconnecting client
-                client.onUpdate(getGameStateCopy());
-            } finally {
-                lock.unlock();
+                iteratee.onConnectionStarted(getActivePlayer());
             }
-        });
+
+            if (client instanceof Behaviour) {
+                // Update the behaviour
+                setBehaviour(client.getPlayerId(), (Behaviour) client);
+            }
+
+            onPlayerReady(client);
+            // Only update the reconnecting client
+            client.onUpdate(getGameStateCopy());
+        } finally {
+            lock.unlock();
+        }
     }
 
     public List<Client> getClients() {
