@@ -47,6 +47,8 @@ public class DrawCardFromGraveyardSpell extends Spell {
 			}
 			Card card = context.getLogic().removeRandom(cards);
 			Zones originalZone = card.getZone();
+			// when a card is drawn, this may cause the cards that were previously selected to already be in the hand
+			// draw card now deals with this
 			boolean drawn = context.getLogic().drawCard(player.getId(), card, source) != null;
 			if (drawn) {
 				// Successfully drawn. This minion has now no longer died on the battlefield

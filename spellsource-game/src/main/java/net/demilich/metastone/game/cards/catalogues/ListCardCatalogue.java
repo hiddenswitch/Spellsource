@@ -466,6 +466,10 @@ public class ListCardCatalogue implements CardCatalogue {
 			// Populate the class and hero cards
 			classCards.putAll(newCards.stream().filter(c -> c.getCardType() == Spellsource.CardTypeMessage.CardType.CLASS).collect(toMap(Card::getHeroClass, Function.identity())));
 			for (var classCard : classCards.values()) {
+				if (classCard.getHeroClass().equals(HeroClass.ANY)) {
+					continue;
+				}
+
 				for (var format : formats().values()) {
 					if (format.isInFormat(classCard)) {
 						classCardsForFormat.get(format).removeIf(existing -> Objects.equals(existing.getCardId(), classCard.getCardId()));

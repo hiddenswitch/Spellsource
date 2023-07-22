@@ -241,9 +241,10 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	/**
-	 * Gets the sets that this card lists.
+	 * Used by format cards to define the sets that belong to the format.
 	 *
 	 * @return The card sets
+	 * @see #getCardSet() for the set a card belongs to
 	 */
 	@JsonIgnore
 	public String[] getCardSets() {

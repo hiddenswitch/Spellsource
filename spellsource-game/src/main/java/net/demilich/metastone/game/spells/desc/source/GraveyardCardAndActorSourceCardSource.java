@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Returns a list of cards in the player's graveyard, including minion's cards.
+ * Returns a list of cards in the player's graveyard, including minion cards.
  */
 public class GraveyardCardAndActorSourceCardSource extends CardSource {
 
