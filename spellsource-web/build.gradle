@@ -1,84 +1,157 @@
+import groovy.json.JsonSlurper
 import org.apache.tools.ant.taskdefs.condition.Os
 
-apply plugin: 'base'
+plugins {
+  id "com.github.node-gradle.node" version "5.0.0"
+  id "java"
+  id "idea"
+}
 
-def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
-def isMacOs = Os.isFamily(Os.FAMILY_MAC)
+apply from: "../gradle/instrument.gradle"
+
+def isLinux = Os.isFamily(Os.FAMILY_UNIX) && !Os.isFamily(Os.FAMILY_MAC)
 def spellsourceDepTask = ':spellsource-web-cardeditor-support:shadowJar'
-def nodeBinary = isWindows ? "C:\\Program Files\\nodejs\\node.exe" : (isMacOs ? "/opt/homebrew/bin/node" : "node")
-def npmBinary = isWindows ? "C:\\Program Files\\nodejs\\npm.cmd" : (isMacOs ? "/opt/homebrew/bin/npm" : "npm")
-def graalNpmPrefix = 'node_modules_graal'
+def yarnPath = "languages/nodejs/bin/yarn"
+def npmPath = "bin/npm"
+def nodePath = "bin/node"
+// todo: this will have to be a distinct path
+// you can't really operate them side by side
+def graalNpmPrefix = 'node_modules'
+def packageJsonFile = file('package.json')
+def packageJson = new JsonSlurper().parseText(packageJsonFile.text)
+def scripts = packageJson.scripts
 
 evaluationDependsOn(":spellsource-server")
 
+scripts.each { scriptName, command ->
+  def name = "yarnRun${scriptName.capitalize()}"
+  def setGroup = 'yarn'
+  if (scriptName == 'dev') {
+    name = "run"
+    setGroup = "spellsource"
+  }
+  tasks.register(name, YarnTask) {
+    group(setGroup)
+    args = ['run', scriptName]
+  }
+}
+
+tasks.named('yarn').configure {
+  group('spellsource')
+  args = ['--frozen-lockfile']
+}
+
+
+Provider<JavaLauncher> thisToolchain() {
+  return (project.services.get(JavaToolchainService) as JavaToolchainService).launcherFor(java.toolchain)
+}
+
+Provider<RegularFile> graalFileFor(String graalBinary) {
+  def toolchain = thisToolchain()
+  return toolchain.map { it.metadata.installationPath.file("${graalBinary}${Os.isFamily(Os.FAMILY_WINDOWS) ? '.cmd' : ''}") }
+}
+
+tasks.register('nodeJsDepsGraal') {
+  def bins = ["bin/node", "bin/yarn"]
+  onlyIf {
+    bins.every { bin -> graalFileFor(bin).map { !it.asFile.exists() }.get() }
+  }
+
+  inputs.property("bins", bins)
+  outputs.file(graalFileFor("bin/yarn"))
+  outputs.cacheIf { false }
+
+  doLast {
+    exec {
+      executable graalFileFor(isLinux ? "lib/installer/bin/gu" : "bin/gu").map { it.asFile.path }.get()
+      args 'install', 'org.graalvm.nodejs'
+    }
+
+    exec {
+      executable graalFileFor(npmPath).map { it.asFile.path }.get()
+      args "install", "-g", "yarn"
+    }
+  }
+}
+
 clean {
-    delete '.cache'
+  delete '.cache'
+  delete 'node_modules'
 }
 
-tasks.register('npmInstall') {
-    inputs.file('package.json')
-    inputs.file('package-lock.json')
-    outputs.dir('./node_modules')
+tasks.register('yarnGraal') {
+  dependsOn('nodeJsDepsGraal')
+  group('spellsource')
+  outputs.cacheIf { false }
+  outputs.dir(graalNpmPrefix)
+  inputs.files("yarn.lock", "package.json").withPathSensitivity(PathSensitivity.RELATIVE)
 
-    doLast {
-        exec {
-            commandLine npmBinary, 'install', '--legacy-peer-deps', '-D', '--frozen-lockfile'
-        }
+  def pathSeparator = System.getProperty("path.separator")
+
+  doFirst {
+    mkdir(graalNpmPrefix)
+  }
+
+  doLast {
+    exec {
+      environment("npm_config_build_from_source", "true")
+      environment("npm_config_nodedir", thisToolchain().get().metadata.installationPath.file("languages/nodejs").asFile.path)
+      def path = [
+              thisToolchain().map { it.metadata.installationPath.file("languages/nodejs/npm/bin/node-gyp-bin").asFile.absolutePath }.get(),
+              file("node_modules/.bin").absolutePath,
+              thisToolchain().map { it.metadata.installationPath.file("languages/nodejs/bin").asFile.absolutePath }.get(),
+              System.getenv('PATH')
+      ]
+      environment 'PATH', path.join(pathSeparator)
+      commandLine graalFileFor(yarnPath).get(), '--frozen-lockfile', '--modules-folder', graalNpmPrefix
     }
+  }
 }
 
-// TODO yarn
-/*tasks.register('npmInstallGraal') {
-    // todo: check that we are executing as graal
-    inputs.file('package.json')
-    inputs.file('package-lock.json')
-    outputs.dir(graalNpmPrefix)
-
-    def javaHome = System.properties['java.home']
-    doLast {
-        exec {
-            commandLine npmBinary, '--prefix', graalNpmPrefix, 'install', '--legacy-peer-deps', "--nodedir=$javaHome/languages/js", '--build-from-source'
-        }
+tasks.register('testWithJavaGraal') {
+  group "test"
+  dependsOn += [spellsourceDepTask]
+  doLast {
+    exec {
+      commandLine graalFileFor(nodePath).get(),
+              "--vm.-enable-preview",
+              '--polyglot',
+              '--jvm',
+              './node_modules/jest/bin/jest.js',
+              '--colors',
+              '--verbose'
     }
-}*/
+  }
+}
 
-// TODO yarn
-/*tasks.register('testWithJava') {
-    group "test"
-    dependsOn += [spellsourceDepTask]
-    doLast {
-        exec {
-            commandLine nodeBinary, *//*'--prefix', graalNpmPrefix,*//* '--polyglot', '--jvm', './node_modules/jest/bin/jest.js', '--colors', '--verbose'
-        }
+tasks.register('testWithJavaDebugGraal') {
+  group "test"
+  dependsOn += [spellsourceDepTask]
+  doLast {
+    exec {
+      commandLine graalFileFor(nodePath).get(),
+              "--vm.-enable-preview",
+              "--inspect=0.0.0.0:9229",
+              "--inspect.Secure=false",
+              '--polyglot',
+              '--jvm',
+              './node_modules/jest/bin/jest.js',
+              '--colors',
+              '--verbose'
     }
-}*/
+  }
+}
 
 tasks.register('copyGameJavadoc', Copy) {
-    description("Copies the game module's javadoc into the public directory of the website")
-    dependsOn ':spellsource-game:javadoc'
-    from tasks.getByPath(':spellsource-game:javadoc').outputs
-    into './public/javadoc'
+  description("Copies the game module's javadoc into the public directory of the website")
+  dependsOn ':spellsource-game:javadoc'
+  from tasks.getByPath(':spellsource-game:javadoc').outputs
+  into './public/javadoc'
 }
 
 tasks.register('copyNetJavadoc', Copy) {
-    description("Copies the net module's javadoc into the public directory of the website")
-    dependsOn ':spellsource-server:javadoc'
-    from tasks.getByPath(':spellsource-server:javadoc').outputs
-    into './public/netjavadoc'
-}
-
-tasks.register('distWWW', Exec) {
-    description("Builds and deploys the website")
-    dependsOn += [gatsbyBuild, copyGameJavadoc, copyNetJavadoc]
-    def commands = ['./bin/deploy.sh']
-    if (isWindows) {
-        commands = ["$project.rootProject.projectDir/bin/bash.exe"] + commands
-    }
-
-    commandLine commands
-    doFirst {
-        if (isWindows && !file('C:\\Program Files\\Amazon\\AWSCLIV2\\aws.exe').exists()) {
-            logger.error("Install the AWS CLI from https://awscli.amazonaws.com/AWSCLIV2.msi")
-        }
-    }
+  description("Copies the net module's javadoc into the public directory of the website")
+  dependsOn ':spellsource-server:javadoc'
+  from tasks.getByPath(':spellsource-server:javadoc').outputs
+  into './public/netjavadoc'
 }

@@ -24,6 +24,13 @@ The server application starts in [EntryPoint](spellsource-server/src/main/java/c
 
 The client is private, please contact for access on the Discord.
 
+### Getting started with Development on Windows
+
+ 1. Install dependencies:
+    ```ash
+    npm install -g nodegit
+    ```
+
 ### Getting started with Development on macOS
 
 Requirements: **Java 20 or later** and **Docker**. Check your current version of Java using `java --version`.
@@ -37,8 +44,9 @@ Requirements: **Java 20 or later** and **Docker**. Check your current version of
     # Docker. Look carefully at any messages brew tells you and do them
     brew cask install docker
     # Java (if required)
-    # Install openjdk 20, dotnet 6.0 & gradle 8.1 or higher
-    brew install openjdk dotnet-sdk gradle
+    # Install openjdk 20, dotnet 6.0 & gradle 8.3 or higher
+    # Gradle 8.3 is not released yet, so use the wrapper gradle
+    brew install openjdk dotnet-sdk
     sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
     brew link --force openjdk
     ```
@@ -47,9 +55,22 @@ Requirements: **Java 20 or later** and **Docker**. Check your current version of
     git clone https://github.com/hiddenswitch/Spellsource.git
     cd Spellsource
     ```
- 3. See Spellsource-specific tasks using `gradle tasks --group spellsource`.
- 4. Run tests using `gradle test`
- 5. Start a local server using `gradle run`
+ 3. See Spellsource-specific tasks using `./gradlew tasks --group spellsource`.
+ 4. Run tests using `./gradlew test`
+ 5. Start a local server using `./gradlew run`
+
+### Linux
+
+ 1. Update to Java 20:
+    ```bash
+    sudo apt remove -y openjdk-11-jre
+    ```
+ 1. Install `nodejs`:
+    ```bash
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - &&\
+    sudo apt-get install -y nodejs
+    sudo npm install -g yarn
+    ```
 
 ### Contributing Cards
 

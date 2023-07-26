@@ -1,22 +1,25 @@
+def graalJvmArgs = ['--enable-preview', '--add-opens=java.base/java.lang=ALL-UNNAMED']
+
 tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs += "--enable-preview"
+  options.compilerArgs += "--enable-preview"
 }
 
 tasks.withType(Test).configureEach {
-    jvmArgs += ['--enable-preview', '--add-opens=java.base/java.lang=ALL-UNNAMED']
+  jvmArgs += graalJvmArgs
 }
 
 tasks.withType(JavaExec).configureEach {
-    jvmArgs += ['--enable-preview', '--add-opens=java.base/java.lang=ALL-UNNAMED']
+  jvmArgs += graalJvmArgs
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_20
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(20)
-    }
+  sourceCompatibility = JavaVersion.VERSION_20
+//  toolchain {
+//    vendor = JvmVendorSpec.GRAAL_VM
+//    languageVersion = JavaLanguageVersion.of(20)
+//  }
 }
 
 test {
-    systemProperty("junit.jupiter.extensions.autodetection.enabled", true)
+  systemProperty("junit.jupiter.extensions.autodetection.enabled", true)
 }

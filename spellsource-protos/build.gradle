@@ -13,7 +13,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.google.protobuf' version '0.9.3'
+    id 'com.google.protobuf' version '0.9.4'
     id 'java-library'
 }
 
@@ -85,6 +85,7 @@ tasks.register('dll', Exec) {
     dependsOn copyCsharpGrpc
     workingDir csharpRootDir
     outputs.dir("$project.buildDir/dlls")
+    outputs.cacheIf { true }
     inputs.dir("$csharpRootDir/Framework/Plugins")
     inputs.file("$csharpRootDir/HiddenSwitch.sln")
     inputs.file("$csharpRootDir/Framework/Framework.csproj")
@@ -97,6 +98,7 @@ tasks.register('testDll', Exec) {
     dependsOn dll
     inputs.files(csharpRootDir + '/Framework.Tests/**/*.cs', csharpRootDir + '/Framework.Tests/**/*.csproj')
     outputs.dir("$project.buildDir/nunit")
+    outputs.cacheIf { true }
     workingDir csharpRootDir
     // this is using docker-wrapped dotnet
     commandLine dotnetCmd + ['test', '--results-directory', "$project.buildDir/nunit"]
@@ -108,6 +110,7 @@ tasks.register('installDll', Copy) {
     inputs.dir("$csharpRootDir/Framework/Plugins")
     def destination = project(':spellsource-client').projectDir.path + '/src/unity/Assets/Client'
     outputs.dir(destination)
+    outputs.cacheIf { true }
     from("$project.buildDir/dlls") {
         include 'Framework.dll'
         include 'Framework.pdb'

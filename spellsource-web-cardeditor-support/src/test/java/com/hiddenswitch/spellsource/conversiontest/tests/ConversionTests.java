@@ -11,6 +11,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -50,7 +51,7 @@ public class ConversionTests {
 
 	@ParameterizedTest()
 	@MethodSource("getCardIds")
-	public void testAllCardsReproduce(String cardId) throws JsonProcessingException {
+	public void testAllCardsReproduce(String cardId) throws IOException {
 		assertTrue(ConversionHarness.assertCardReplaysTheSame(new long[]{1L, 2L}, cardId, DatabindCodec.mapper().writeValueAsString(ClasspathCardCatalogue.INSTANCE.getCards().get(cardId).getDesc())));
 	}
 }

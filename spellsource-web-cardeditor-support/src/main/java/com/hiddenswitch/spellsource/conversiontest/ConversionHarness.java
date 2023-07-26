@@ -4,90 +4,96 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
+import net.demilich.metastone.game.cards.catalogues.ConcatenatedCardCatalogues;
+import net.demilich.metastone.game.cards.catalogues.ListCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.tests.util.TestBase;
+import org.junit.platform.commons.util.ExceptionUtils;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.LongStream;
 
 public class ConversionHarness {
-	static {
-	}
 
-	private static final Object PROBE = new Object();
+    static {
+        ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
+    }
 
-	protected static class Tuple {
-		GameContext context;
-		long seed;
+    private static final Object PROBE = new Object();
 
-		public Tuple(GameContext context, long seed) {
-			this.context = context;
-			this.seed = seed;
-		}
-	}
+    protected static class Tuple {
+        GameContext context;
+        long seed;
 
-	public static boolean assertCardReplaysTheSame(int seed1, int seed2, String cardId, String replacementJson) {
-		return assertCardReplaysTheSame(new long[]{seed1, seed2}, cardId, replacementJson);
-	}
+        public Tuple(GameContext context, long seed) {
+            this.context = context;
+            this.seed = seed;
+        }
+    }
 
-	public static boolean assertCardReplaysTheSame(long[] seeds, String cardId, String replacementJson) {
-		synchronized (PROBE) {
-			var cardCatalogue = ClasspathCardCatalogue.INSTANCE;
-			cardCatalogue.loadCardsFromPackage();
-			var originalCard = cardCatalogue.getCards().get(cardId);
-			var originalCardDesc = cardCatalogue.getRecords().get(cardId).getDesc();
-			try {
-				return LongStream.of(seeds)
-						.mapToObj(seed -> {
-							GameContext context = TestBase.fromTwoRandomDecks(seed);
-							ensureCardIsInDeck(context, cardId);
-							context.play();
-							return new Tuple(context, seed);
-						})
-						.filter(tuple -> tuple.context.getTrace().getRawActions().stream().anyMatch(ga -> {
-							if (ga.getSourceReference() == null) {
-								return false;
-							}
-							var source = ga.getSource(tuple.context);
-							if (source == null) {
-								return false;
-							}
-							var sourceCard = source.getSourceCard();
-							if (sourceCard == null) {
-								return false;
-							}
-							return Objects.equals(sourceCard.getCardId(), cardId);
-						}))
-						.allMatch(tuple -> {
-							var desc = Json.decodeValue(replacementJson, CardDesc.class);
-							desc.setId(cardId);
-							cardCatalogue.getRecords().put(cardId, new CardCatalogueRecord(cardId, desc));
-							cardCatalogue.getCards().replace(cardId, desc.create());
+    public static boolean assertCardReplaysTheSame(int seed1, int seed2, String cardId, String replacementJson) throws IOException {
+        try {
+            return assertCardReplaysTheSame(new long[]{seed1, seed2}, cardId, replacementJson);
+        } catch (Throwable t) {
+            throw new RuntimeException(t.getMessage() + "\n" + ExceptionUtils.readStackTrace(t));
+        }
+    }
 
-							GameContext reproduction = TestBase.fromTwoRandomDecks(tuple.seed);
-							ensureCardIsInDeck(reproduction, cardId);
-							reproduction.play();
+    public static boolean assertCardReplaysTheSame(long[] seeds, String cardId, String replacementJson) throws IOException {
+        var singletonCardCatalogue = new ListCardCatalogue();
+        var desc = Json.decodeValue(replacementJson, CardDesc.class);
+        desc.setId(cardId);
 
-							return tuple.context.getTurn() == reproduction.getTurn();
-						});
-			} finally {
-				cardCatalogue.addOrReplaceCard(originalCard.getDesc());
-			}
-		}
-	}
+        singletonCardCatalogue.addOrReplaceCard(desc);
 
-	static void ensureCardIsInDeck(GameContext context, String cardId) {
-		var cardType = context.getCardById(cardId).getCardType();
-		if (cardType == CardType.CLASS || cardType == CardType.ENCHANTMENT || cardType == CardType.HERO_POWER ||
-				(cardType == CardType.HERO && context.getCardById(cardId).hasAttribute(Attribute.HP))) {
-			return;
-		}
-		for (var player : context.getPlayers()) {
-			for (var i = 0; i < 5; i++) {
-				player.getDeck().addCard(context.getCardCatalogue(), cardId);
-			}
-		}
-	}
+        var joinedCardCatalogue = new ConcatenatedCardCatalogues(Arrays.asList(singletonCardCatalogue, ClasspathCardCatalogue.INSTANCE));
+        return LongStream.of(seeds)
+                .mapToObj(seed -> {
+                    ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
+                    // test the game without the replacement
+                    GameContext context = TestBase.fromTwoRandomDecks(seed);
+                    ensureCardIsInDeck(context, cardId);
+                    context.play();
+                    return new Tuple(context, seed);
+                })
+                .filter(tuple -> tuple.context.getTrace().getRawActions().stream().anyMatch(ga -> {
+                    if (ga.getSourceReference() == null) {
+                        return false;
+                    }
+                    var source = ga.getSource(tuple.context);
+                    if (source == null) {
+                        return false;
+                    }
+                    var sourceCard = source.getSourceCard();
+                    if (sourceCard == null) {
+                        return false;
+                    }
+                    return Objects.equals(sourceCard.getCardId(), cardId);
+                }))
+                .allMatch(tuple -> {
+                    GameContext reproduction = TestBase.fromTwoRandomDecks(tuple.seed, joinedCardCatalogue);
+                    ensureCardIsInDeck(reproduction, cardId);
+                    reproduction.play();
+
+                    return tuple.context.getTurn() == reproduction.getTurn();
+                });
+    }
+
+    static void ensureCardIsInDeck(GameContext context, String cardId) {
+        var cardType = context.getCardById(cardId).getCardType();
+        if (cardType == CardType.CLASS || cardType == CardType.ENCHANTMENT || cardType == CardType.HERO_POWER ||
+                (cardType == CardType.HERO && context.getCardById(cardId).hasAttribute(Attribute.HP))) {
+            return;
+        }
+        for (var player : context.getPlayers()) {
+            for (var i = 0; i < 5; i++) {
+                player.getDeck().addCard(context.getCardCatalogue(), cardId);
+            }
+        }
+    }
 }

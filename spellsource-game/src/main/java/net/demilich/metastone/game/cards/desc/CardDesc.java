@@ -10,10 +10,7 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.AttributeMap;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -174,7 +171,6 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 
 	public CardDesc() {
 		super();
-
 	}
 
 	/**

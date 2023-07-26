@@ -2891,7 +2891,7 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/java@^0.9.2":
+"@types/java@~0.9.2":
   version "0.9.2"
   resolved "https://registry.yarnpkg.com/@types/java/-/java-0.9.2.tgz#c4008b9b9df24be2a9db2458ec33b0b2d34cf8d3"
   integrity sha512-V2+KalBKdHAbetsPMc3izAxQrPOyfQ3+YZpRJHBxITdVNVWxL+pb0bfG9FpTz/pvIUIN/30lGYoXAsE45Qagaw==
@@ -6686,7 +6686,7 @@ jackspeak@^2.0.3:
   optionalDependencies:
     "@pkgjs/parseargs" "^0.11.0"
 
-java@^0.13.0:
+java@~0.13.0:
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/java/-/java-0.13.0.tgz#b5ab700a150b6fabb7f73d3b1839aad878ed5a4b"
   integrity sha512-aSR+x/8dvMouYIgv2zqsqVUfIDp7QO9NNLVMZxfOyFgwVwYAA/NLXC4ngyuueBzCpoqb9BsPdr0kUBJG6/nuZw==

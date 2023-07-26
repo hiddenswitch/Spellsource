@@ -1,214 +1,215 @@
 buildscript {
-    repositories {
-        maven { url "file://${rootDir}/mavenRepository" }
-        mavenCentral()
-    }
+  repositories {
+    maven { url "file://${rootDir}/mavenRepository" }
+    mavenCentral()
+  }
 }
 
 plugins {
-    id 'org.javamodularity.moduleplugin' version '1.8.10' apply false
+  id 'org.javamodularity.moduleplugin' version '1.8.10' apply false
+  id 'org.graalvm.buildtools.native' version '0.9.12' apply false
 }
 
 dependencies {
-    gradleApi()
-    localGroovy()
+  gradleApi()
+  localGroovy()
 }
 
 allprojects {
-    project.version = '0.10.1-SNAPSHOT'
+  project.version = '0.10.1-SNAPSHOT'
 }
 
 subprojects {
+  repositories {
+    maven { url "file://${rootDir}/mavenRepository" }
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+  }
+
+  apply plugin: "maven-publish"
+
+  publishing {
     repositories {
-        maven { url "file://${rootDir}/mavenRepository" }
-        mavenCentral()
-        maven { url 'https://jitpack.io' }
-    }
-
-    apply plugin: "maven-publish"
-
-    publishing {
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/hiddenswitch/Spellsource")
-                credentials {
-                    username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                    password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
-                }
-            }
+      maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/hiddenswitch/Spellsource")
+        credentials {
+          username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+          password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
         }
-        publications {
-            if (components.hasProperty('java')) {
-                gpr(MavenPublication) {
-                    from(components.java)
-                }
-            }
-        }
+      }
     }
-
-    configurations.configureEach {
-        resolutionStrategy {
-            preferProjectModules()
-            failOnVersionConflict()
-            eachDependency { DependencyResolveDetails details ->
-                if (details.requested.group == 'org.slf4j') {
-                    details.useVersion slf4jVersion
-                }
-                if ([
-                        'com.fasterxml.jackson.core',
-                        'com.fasterxml.jackson.jaxrs',
-                        'com.fasterxml.jackson.datatype',
-                        'com.fasterxml.jackson.module',
-                        'com.fasterxml.jackson.dataformat'
-                ].contains(details.requested.group)) {
-                    details.useVersion jacksonVersion
-                }
-
-                if (details.requested.group == 'io.netty'
-                        && details.requested.version.contains('Final')
-                        && details.requested.name != 'netty-tcnative-boringssl-static'
-                        && details.requested.name != 'netty-tcnative-classes') {
-                    details.useVersion nettyVersion
-                }
-
-                if (details.requested.group == 'org.checkerframework' && details.requested.module.name == 'checker-qual') {
-                    details.useVersion '3.28.0'
-                }
-
-                if (details.requested.module.name == 'reactive-streams') {
-                    details.useVersion '1.0.4'
-                }
-
-                if (details.requested.group == 'org.apache.commons' && details.requested.module.name == "commons-math3") {
-                    details.useVersion "3.6.1"
-                }
-
-                if (details.requested.group == 'io.reactivex.rxjava3' && details.requested.module.name == "rxjava") {
-                    details.useVersion "3.0.13"
-                }
-
-                if (details.requested.group == 'commons-io') {
-                    details.useVersion "2.11.0"
-                }
-
-                if (details.requested.group == 'io.vertx' && !details.requested.version.toLowerCase().contains("snapshot")) {
-                    details.useVersion vertxVersion
-                }
-
-                if (details.requested.group == 'ch.qos.logback') {
-                    details.useVersion logbackVersion
-                }
-
-                if (details.requested.group == 'com.sun.mail' && details.requested.module.name == 'javax.mail') {
-                    details.useVersion "1.6.2"
-                }
-
-                if (details.requested.group == 'log4j') {
-                    details.useVersion log4jVersion
-                }
-
-                if (details.requested.module.name == 'mockito-core') {
-                    details.useVersion '4.8.0'
-                }
-
-                if (details.requested.group == 'com.google.guava' && details.requested.module.name == 'guava') {
-                    details.useVersion guavaVersion
-                }
-
-                if (details.requested.group == 'com.google.protobuf' && details.requested.module.name == 'protobuf-java') {
-                    details.useVersion protocVersion
-                }
-
-                if (details.requested.group == 'org.openjdk.jmh') {
-                    details.useVersion jmhVersion
-                }
-
-                if (details.requested.group == 'org.junit.jupiter') {
-                    details.useVersion junitVersion
-                }
-
-                if (details.requested.group == 'org.jetbrains' && details.requested.name == 'annotations') {
-                    details.useVersion '23.0.0'
-                }
-
-                if (details.requested.group == 'org.jetbrains.kotlin') {
-                    details.useVersion '1.4.10'
-                }
-
-                if (details.requested.group == 'net.bytebuddy') {
-                    details.useVersion '1.14.4'
-                }
-
-                if (details.requested.group == 'org.apache.httpcomponents' && details.requested.name == 'httpclient') {
-                    details.useVersion '4.5.13'
-                }
-
-                if (details.requested.group == 'org.jboss.logging') {
-                    details.useVersion '3.4.1.Final'
-                }
-
-                if (details.requested.group == 'com.google.code.findbugs') {
-                    details.useVersion '3.0.2'
-                }
-
-                if (details.requested.group == 'com.google.errorprone') {
-                    details.useVersion '2.11.0'
-                }
-
-                if (details.requested.group == 'io.grpc') {
-                    details.useVersion grpcVersion
-                }
-
-                if (details.requested.group == 'org.testcontainers') {
-                    details.useVersion testcontainersVersion
-                }
-
-                if (details.requested.group == 'commons-codec') {
-                    details.useVersion '1.15'
-                }
-
-                if (details.requested.group == 'com.sun.activation' && details.requested.name == 'jakarta.activation') {
-                    details.useVersion '2.0.1'
-                }
-
-                if (details.requested.group == 'org.jboss.resteasy') {
-                    details.useVersion resteasyVersion
-                }
-
-                if (details.requested.group == 'org.yaml' && details.requested.name == 'snakeyaml') {
-                    details.useVersion '1.33'
-                }
-
-                if (details.requested.group == 'jakarta.xml.bind') {
-                    details.useVersion "3.0.1"
-                }
-
-                if (details.requested.group == 'jakarta.validation') {
-                    details.useVersion "3.0.1"
-                }
-
-                if (details.requested.group == 'jakarta.activation') {
-                    details.useVersion "2.1.0"
-                }
-
-
-                if (details.requested.group == 'io.micrometer') {
-                    details.useVersion '1.10.2'
-                }
-
-                if (details.requested.group == 'com.github.ben-manes.caffeine') {
-                    details.useVersion '2.8.4'
-                }
-
-                if (details.requested.group == 'org.ow2.asm') {
-                    details.useVersion '9.4'
-                }
-
-                if (details.requested.group == 'org.infinispan') {
-                    details.useVersion '15.0.0.Dev01'
-                }
-            }
+    publications {
+      if (components.hasProperty('java')) {
+        gpr(MavenPublication) {
+          from(components.java)
         }
+      }
     }
+  }
+
+  configurations.configureEach {
+    resolutionStrategy {
+      preferProjectModules()
+      failOnVersionConflict()
+      eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'org.slf4j') {
+          details.useVersion slf4jVersion
+        }
+        if ([
+                'com.fasterxml.jackson.core',
+                'com.fasterxml.jackson.jaxrs',
+                'com.fasterxml.jackson.datatype',
+                'com.fasterxml.jackson.module',
+                'com.fasterxml.jackson.dataformat'
+        ].contains(details.requested.group)) {
+          details.useVersion jacksonVersion
+        }
+
+        if (details.requested.group == 'io.netty'
+                && details.requested.version.contains('Final')
+                && details.requested.name != 'netty-tcnative-boringssl-static'
+                && details.requested.name != 'netty-tcnative-classes') {
+          details.useVersion nettyVersion
+        }
+
+        if (details.requested.group == 'org.checkerframework' && details.requested.module.name == 'checker-qual') {
+          details.useVersion '3.28.0'
+        }
+
+        if (details.requested.module.name == 'reactive-streams') {
+          details.useVersion '1.0.4'
+        }
+
+        if (details.requested.group == 'org.apache.commons' && details.requested.module.name == "commons-math3") {
+          details.useVersion "3.6.1"
+        }
+
+        if (details.requested.group == 'io.reactivex.rxjava3' && details.requested.module.name == "rxjava") {
+          details.useVersion "3.0.13"
+        }
+
+        if (details.requested.group == 'commons-io') {
+          details.useVersion "2.11.0"
+        }
+
+        if (details.requested.group == 'io.vertx' && !details.requested.version.toLowerCase().contains("snapshot")) {
+          details.useVersion vertxVersion
+        }
+
+        if (details.requested.group == 'ch.qos.logback') {
+          details.useVersion logbackVersion
+        }
+
+        if (details.requested.group == 'com.sun.mail' && details.requested.module.name == 'javax.mail') {
+          details.useVersion "1.6.2"
+        }
+
+        if (details.requested.group == 'log4j') {
+          details.useVersion log4jVersion
+        }
+
+        if (details.requested.module.name == 'mockito-core') {
+          details.useVersion '4.8.0'
+        }
+
+        if (details.requested.group == 'com.google.guava' && details.requested.module.name == 'guava') {
+          details.useVersion guavaVersion
+        }
+
+        if (details.requested.group == 'com.google.protobuf' && details.requested.module.name == 'protobuf-java') {
+          details.useVersion protocVersion
+        }
+
+        if (details.requested.group == 'org.openjdk.jmh') {
+          details.useVersion jmhVersion
+        }
+
+        if (details.requested.group == 'org.junit.jupiter') {
+          details.useVersion junitVersion
+        }
+
+        if (details.requested.group == 'org.jetbrains' && details.requested.name == 'annotations') {
+          details.useVersion '23.0.0'
+        }
+
+        if (details.requested.group == 'org.jetbrains.kotlin') {
+          details.useVersion '1.4.10'
+        }
+
+        if (details.requested.group == 'net.bytebuddy') {
+          details.useVersion '1.14.4'
+        }
+
+        if (details.requested.group == 'org.apache.httpcomponents' && details.requested.name == 'httpclient') {
+          details.useVersion '4.5.13'
+        }
+
+        if (details.requested.group == 'org.jboss.logging') {
+          details.useVersion '3.4.1.Final'
+        }
+
+        if (details.requested.group == 'com.google.code.findbugs') {
+          details.useVersion '3.0.2'
+        }
+
+        if (details.requested.group == 'com.google.errorprone') {
+          details.useVersion '2.11.0'
+        }
+
+        if (details.requested.group == 'io.grpc') {
+          details.useVersion grpcVersion
+        }
+
+        if (details.requested.group == 'org.testcontainers') {
+          details.useVersion testcontainersVersion
+        }
+
+        if (details.requested.group == 'commons-codec') {
+          details.useVersion '1.15'
+        }
+
+        if (details.requested.group == 'com.sun.activation' && details.requested.name == 'jakarta.activation') {
+          details.useVersion '2.0.1'
+        }
+
+        if (details.requested.group == 'org.jboss.resteasy') {
+          details.useVersion resteasyVersion
+        }
+
+        if (details.requested.group == 'org.yaml' && details.requested.name == 'snakeyaml') {
+          details.useVersion '1.33'
+        }
+
+        if (details.requested.group == 'jakarta.xml.bind') {
+          details.useVersion "3.0.1"
+        }
+
+        if (details.requested.group == 'jakarta.validation') {
+          details.useVersion "3.0.1"
+        }
+
+        if (details.requested.group == 'jakarta.activation') {
+          details.useVersion "2.1.0"
+        }
+
+
+        if (details.requested.group == 'io.micrometer') {
+          details.useVersion '1.10.2'
+        }
+
+        if (details.requested.group == 'com.github.ben-manes.caffeine') {
+          details.useVersion '2.8.4'
+        }
+
+        if (details.requested.group == 'org.ow2.asm') {
+          details.useVersion '9.4'
+        }
+
+        if (details.requested.group == 'org.infinispan') {
+          details.useVersion '15.0.0.Dev01'
+        }
+      }
+    }
+  }
 }

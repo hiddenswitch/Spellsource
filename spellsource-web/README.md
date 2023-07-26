@@ -1,45 +1,6 @@
-# The Spellsource Website
+# Spellsource Web
 
-This website is authored using Gatsby.js. You can add new pages by duplicating an existing one [here](src/pages-markdown/).
-
-## Installing
-
-**On macOS:**
-
-```shell script
-npm install -D --frozen-lockfile --legacy-peer-deps
-```
-
-After gatsby-cli is installed, run the website with `npx gatsby develop`.
-
-```shell script
-npx gatsby clean
-npx gatsby develop
-```
-
-Now visit http://localhost:8000/.
-
-## Testing
-
-Running the tests requires the polyglot environment.
-
-#### Enable polyglot Java development
-
-```bash
-# command line utilities for compilation
-xcode-select --install
-# prevents brew from complaining in 2021, this will constantly change
-brew install python@3.9
-brew unlink python@3.9
-# dependencies for node canvas package
-brew install pkg-config cairo pango libpng jpeg giflib librsvg
-# sdkman for graal
-curl -s "https://get.sdkman.io" | bash
-sdk install java 21.0.0.2.r11-grl
-sdk use java 21.0.0.2.r11-grl
-gu install nodejs
-npm install --legacy-peer-deps --save --nodedir="${JAVA_HOME}/languages/js" --build-from-source
-```
+This is the package for the HTML and related backend server content for Spellsource. This includes the online collections UI.
 
 ## Generating Images from PSD/PSBs
 

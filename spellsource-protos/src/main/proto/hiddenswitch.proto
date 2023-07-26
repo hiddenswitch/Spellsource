@@ -11,203 +11,207 @@ import "spellsource.proto";
 
 // Specifies a complete server configuration
 message ServerConfiguration {
-    message PostgresConfiguration {
-        string host = 1;
-        int32 port = 2;
-        string database = 3;
-        string user = 4;
-        string password = 5;
+  message PostgresConfiguration {
+    string host = 1;
+    int32 port = 2;
+    string database = 3;
+    string user = 4;
+    string password = 5;
+  }
+
+  message KeycloakConfiguration {
+    string authUrl = 1;
+    string publicAuthUrl = 8;
+    string adminUsername = 2;
+    string adminPassword = 3;
+    string clientId = 4;
+    string clientSecret = 5;
+    string realmDisplayName = 6;
+    string realmId = 7;
+  }
+
+  message RedisConfiguration {
+    message HostPortUser {
+      string host = 1;
+      int32 port = 2;
+      string user = 3;
     }
 
-    message KeycloakConfiguration {
-        string authUrl = 1;
-        string publicAuthUrl = 8;
-        string adminUsername = 2;
-        string adminPassword = 3;
-        string clientId = 4;
-        string clientSecret = 5;
-        string realmDisplayName = 6;
-        string realmId = 7;
+    oneof connection {
+      HostPortUser hostPortUser = 1;
+      string uri = 2;
     }
+  }
 
-    message RedisConfiguration {
-        message HostPortUser {
-            string host = 1;
-            int32 port = 2;
-            string user = 3;
-        }
+  message GrpcConfiguration {
+    int64 serverKeepAliveTimeMillis = 1;
+    int64 serverKeepAliveTimeoutMillis = 2;
+    bool serverPermitKeepAliveWithoutCalls = 3;
+    int32 port = 4;
+  }
 
-        oneof connection {
-            HostPortUser hostPortUser = 1;
-            string uri = 2;
-        }
-    }
+  message MatchmakingConfiguration {
+    int64 enqueueLockTimeoutMillis = 1;
+    int64 scanFrequencyMillis = 2;
+    int32 maxTicketsToProcess = 3;
+  }
 
-    message GrpcConfiguration {
-        int64 serverKeepAliveTimeMillis = 1;
-        int64 serverKeepAliveTimeoutMillis = 2;
-        bool serverPermitKeepAliveWithoutCalls = 3;
-        int32 port = 4;
-    }
+  message DecksConfiguration {
+    int64 cachedDeckTimeToLiveMinutes = 1;
+  }
 
-    message MatchmakingConfiguration {
-        int64 enqueueLockTimeoutMillis = 1;
-        int64 scanFrequencyMillis = 2;
-        int32 maxTicketsToProcess = 3;
-    }
+  message ApplicationConfiguration {
+    bool useBroadcaster = 1;
+  }
 
-    message DecksConfiguration {
-        int64 cachedDeckTimeToLiveMinutes = 1;
-    }
+  message MigrationConfiguration {
+    bool shouldMigrate = 1;
+  }
 
-    message ApplicationConfiguration {
-        bool useBroadcaster = 1;
-    }
+  message MetricsConfiguration {
+    int32 port = 1;
+    string livenessRoute = 2;
+    string readinessRoute = 3;
+    string metricsRoute = 4;
+  }
 
-    message MigrationConfiguration {
-        bool shouldMigrate = 1;
-    }
+  message RateLimiterConfiguration {
+    bool enabled = 1;
+  }
 
-    message MetricsConfiguration {
-        int32 port = 1;
-        string livenessRoute = 2;
-        string readinessRoute = 3;
-        string metricsRoute = 4;
-    }
+  message JaegerConfiguration {
+    bool enabled = 1;
+    string agentHost = 2;
+    int32 agentPort = 3;
+  }
 
-    message RateLimiterConfiguration {
-        bool enabled = 1;
-    }
+  message VertxConfiguration {
+    bool useInfinispanClusterManager = 1;
+    optional int32 infinspanPort = 2;
+  }
 
-    message JaegerConfiguration {
-        bool enabled = 1;
-        string agentHost = 2;
-        int32 agentPort = 3;
-    }
+  message CardsConfiguration {
+  }
 
-    message VertxConfiguration {
-        bool useInfinispanClusterManager = 1;
-        optional int32 infinspanPort = 2;
-    }
-
-    PostgresConfiguration pg = 1;
-    KeycloakConfiguration keycloak = 2;
-    RedisConfiguration redis = 3;
-    reserved 4;
-    GrpcConfiguration grpcConfiguration = 5;
-    MatchmakingConfiguration matchmaking = 6;
-    ApplicationConfiguration application = 7;
-    DecksConfiguration decks = 8;
-    MigrationConfiguration migration = 9;
-    MetricsConfiguration metrics = 10;
-    RateLimiterConfiguration rateLimiter = 11;
-    JaegerConfiguration jaeger = 12;
-    VertxConfiguration vertx = 13;
+  PostgresConfiguration pg = 1;
+  KeycloakConfiguration keycloak = 2;
+  RedisConfiguration redis = 3;
+  reserved 4;
+  GrpcConfiguration grpcConfiguration = 5;
+  MatchmakingConfiguration matchmaking = 6;
+  ApplicationConfiguration application = 7;
+  DecksConfiguration decks = 8;
+  MigrationConfiguration migration = 9;
+  MetricsConfiguration metrics = 10;
+  RateLimiterConfiguration rateLimiter = 11;
+  JaegerConfiguration jaeger = 12;
+  VertxConfiguration vertx = 13;
+  CardsConfiguration cards = 14;
 }
 
 message ClientConfiguration {
-    message AccountsConfiguration {
-        string keycloakResetPasswordUrl = 1;
-        string keycloakAccountManagementUrl = 2;
-    }
+  message AccountsConfiguration {
+    string keycloakResetPasswordUrl = 1;
+    string keycloakAccountManagementUrl = 2;
+  }
 
-    AccountsConfiguration accounts = 1;
+  AccountsConfiguration accounts = 1;
 }
 
 
 message GetCardsRequest {
-    // The value returned in the ETag header from the server when this was last called, or empty if this is the
-    // first call to this resource.
-    string If_None_Match = 1;
+  // The value returned in the ETag header from the server when this was last called, or empty if this is the
+  // first call to this resource.
+  string If_None_Match = 1;
 }
 
 // A cacheable copy of the entire card catalogue.
 message GetCardsResponse {
-    message Content {
-        // The actual array of cards representing the complete Spellsource catalogue.
-        repeated spellsource.CardRecord cards = 1;
-    }
+  message Content {
+    // The actual array of cards representing the complete Spellsource catalogue.
+    repeated spellsource.CardRecord cards = 1;
+  }
 
-    Content content = 1;
+  Content content = 1;
 
-    // A token used in the If-None-Match argument when checking for new card catalogue content.
-    string version = 2;
-    bool cachedOk = 3;
+  // A token used in the If-None-Match argument when checking for new card catalogue content.
+  string version = 2;
+  bool cachedOk = 3;
 }
 
 
 
 service Unauthenticated {
-    rpc CreateAccount (CreateAccountRequest) returns (LoginOrCreateReply) {}
-    rpc Login (LoginRequest) returns (LoginOrCreateReply) {}
+  rpc CreateAccount (CreateAccountRequest) returns (LoginOrCreateReply) {}
+  rpc Login (LoginRequest) returns (LoginOrCreateReply) {}
 
-    // Verify that the token is valid
-    rpc VerifyToken(AccessTokenResponse) returns (google.protobuf.BoolValue) {}
+  // Verify that the token is valid
+  rpc VerifyToken(AccessTokenResponse) returns (google.protobuf.BoolValue) {}
 
-    // Returns a configuration for the client from the server.
-    rpc GetConfiguration(google.protobuf.Empty) returns (ClientConfiguration) {}
+  // Returns a configuration for the client from the server.
+  rpc GetConfiguration(google.protobuf.Empty) returns (ClientConfiguration) {}
 }
 
 service UnauthenticatedCards {
-    // Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
-    rpc GetCards(GetCardsRequest) returns (GetCardsResponse) {}
+  // Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
+  rpc GetCards(GetCardsRequest) returns (GetCardsResponse) {}
 }
 
 service Accounts {
-    // Returns the account for the token passed
-    rpc GetAccount(google.protobuf.Empty) returns (GetAccountsReply) {}
+  // Returns the account for the token passed
+  rpc GetAccount(google.protobuf.Empty) returns (GetAccountsReply) {}
 
-    // Gets an account by ID.
-    rpc GetAccounts(GetAccountsRequest) returns (GetAccountsReply) {}
+  // Gets an account by ID.
+  rpc GetAccounts(GetAccountsRequest) returns (GetAccountsReply) {}
 
-    // Doesn't invalidate the token right now
-    rpc ChangePassword(ChangePasswordRequest) returns (LoginOrCreateReply) {}
+  // Doesn't invalidate the token right now
+  rpc ChangePassword(ChangePasswordRequest) returns (LoginOrCreateReply) {}
 
-    // Sends a password reset e-mail to the token passed
-    rpc RequestPasswordResetEmail(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  // Sends a password reset e-mail to the token passed
+  rpc RequestPasswordResetEmail(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }
 
 service Games {
-    rpc IsInMatch(google.protobuf.Empty) returns (google.protobuf.StringValue) {}
+  rpc IsInMatch(google.protobuf.Empty) returns (google.protobuf.StringValue) {}
 }
 
 message LoginRequest {
-    string usernameOrEmail = 1;
-    string password = 2;
+  string usernameOrEmail = 1;
+  string password = 2;
 }
 
 message CreateAccountRequest {
-    string email = 1;
-    string username = 2;
-    string password = 3;
-    bool decks = 4;
-    bool guest = 5;
+  string email = 1;
+  string username = 2;
+  string password = 3;
+  bool decks = 4;
+  bool guest = 5;
 }
 
 message ChangePasswordRequest {
-    string newPassword = 1;
+  string newPassword = 1;
 }
 
 message LoginOrCreateReply {
-    AccessTokenResponse accessTokenResponse = 1;
-    UserEntity userEntity = 2;
+  AccessTokenResponse accessTokenResponse = 1;
+  UserEntity userEntity = 2;
 }
 
 message AccessTokenResponse {
-    string token = 1;
+  string token = 1;
 }
 
 message UserEntity {
-    string id = 1;
-    string email = 2;
-    string username = 10;
-    string privacyToken = 11;
+  string id = 1;
+  string email = 2;
+  string username = 10;
+  string privacyToken = 11;
 }
 
 message GetAccountsRequest {
-    repeated string ids = 1;
+  repeated string ids = 1;
 }
 
 message GetAccountsReply {
-    repeated UserEntity userEntities = 1;
+  repeated UserEntity userEntities = 1;
 }
