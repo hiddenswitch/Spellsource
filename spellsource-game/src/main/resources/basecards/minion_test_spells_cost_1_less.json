@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "Spells Cost 1 Less",
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "ANY",

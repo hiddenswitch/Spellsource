@@ -2,5 +2,5 @@
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
-  silent: false,
+  // silent: false,
 };

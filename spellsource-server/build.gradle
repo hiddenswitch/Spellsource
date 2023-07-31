@@ -24,7 +24,6 @@ plugins {
   id 'org.javamodularity.moduleplugin'
   id 'idea'
   id 'application'
-  id 'org.graalvm.buildtools.native' version '0.9.12'
 }
 
 apply from: '../gradle/instrument.gradle'

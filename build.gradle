@@ -7,7 +7,6 @@ buildscript {
 
 plugins {
   id 'org.javamodularity.moduleplugin' version '1.8.10' apply false
-  id 'org.graalvm.buildtools.native' version '0.9.12' apply false
 }
 
 dependencies {

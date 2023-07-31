@@ -3,11 +3,8 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
   id "com.github.node-gradle.node" version "5.0.0"
-  id "java"
-  id "idea"
+  id "base"
 }
-
-apply from: "../gradle/instrument.gradle"
 
 def isLinux = Os.isFamily(Os.FAMILY_UNIX) && !Os.isFamily(Os.FAMILY_MAC)
 def spellsourceDepTask = ':spellsource-web-cardeditor-support:shadowJar'
@@ -20,18 +17,21 @@ def graalNpmPrefix = 'node_modules'
 def packageJsonFile = file('package.json')
 def packageJson = new JsonSlurper().parseText(packageJsonFile.text)
 def scripts = packageJson.scripts
+def scriptNames = ["dev" : "run",
+                   "test": "test"]
 
 evaluationDependsOn(":spellsource-server")
 
 scripts.each { scriptName, command ->
   def name = "yarnRun${scriptName.capitalize()}"
   def setGroup = 'yarn'
-  if (scriptName == 'dev') {
-    name = "run"
-    setGroup = "spellsource"
+  if (scriptNames.containsKey(scriptName)) {
+    name = scriptNames[scriptName]
+    setGroup = 'spellsource'
   }
   tasks.register(name, YarnTask) {
     group(setGroup)
+    dependsOn 'yarn'
     args = ['run', scriptName]
   }
 }
@@ -96,16 +96,18 @@ tasks.register('yarnGraal') {
     exec {
       environment("npm_config_build_from_source", "true")
       environment("npm_config_nodedir", thisToolchain().get().metadata.installationPath.file("languages/nodejs").asFile.path)
-      def path = [
-              thisToolchain().map { it.metadata.installationPath.file("languages/nodejs/npm/bin/node-gyp-bin").asFile.absolutePath }.get(),
-              file("node_modules/.bin").absolutePath,
-              thisToolchain().map { it.metadata.installationPath.file("languages/nodejs/bin").asFile.absolutePath }.get(),
-              System.getenv('PATH')
-      ]
+      def path = [thisToolchain().map { it.metadata.installationPath.file("languages/nodejs/npm/bin/node-gyp-bin").asFile.absolutePath }.get(),
+                  file("node_modules/.bin").absolutePath,
+                  thisToolchain().map { it.metadata.installationPath.file("languages/nodejs/bin").asFile.absolutePath }.get(),
+                  System.getenv('PATH')]
       environment 'PATH', path.join(pathSeparator)
       commandLine graalFileFor(yarnPath).get(), '--frozen-lockfile', '--modules-folder', graalNpmPrefix
     }
   }
+}
+
+tasks.named("test") {
+  dependsOn spellsourceDepTask
 }
 
 tasks.register('testWithJavaGraal') {

@@ -1,10 +1,10 @@
 {
-  "name": "",
+  "name": "Neutral Hero Power",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "",
+  "description": "Does nothing.",
   "targetSelection": "NONE",
   "spell": {
     "class": "NullSpell"
