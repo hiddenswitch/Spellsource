@@ -488,7 +488,7 @@ export function pluralStuff(workspace) {
             if (!!targetBlock) {
               //if the 'src' arg appears on the 'input_value' it's connected to, redirect to that
               let name = targetBlock.getInputWithBlock(block)?.name;
-              for (let arg of JsonConversionUtils.inputsList(targetBlock.json)) {
+              for (let arg of JsonConversionUtils.argsList(targetBlock.json, "input")) {
                 if (arg.name === name && !!arg.src) {
                   //
                   connection = targetBlock.getInput(arg.src).connection;

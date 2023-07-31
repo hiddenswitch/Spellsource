@@ -138,40 +138,24 @@ describe("WorkspaceUtils", () => {
     expect(context.getPlayer1().getMinions().get(0).getHp()).toEqual(6);
   });
 
-  test("just dreams of strength", async () => {
+  test("just one card", async () => {
+    const srcCard = Object.fromEntries(cards)["hero_hercules"];
+
     const ConversionHarness = java.import("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
-    const json = `
-    {
-      "name": "Dreams of Strength",
-      "baseManaCost": 7,
-      "type": "SPELL",
-      "heroClass": "AMBER",
-      "rarity": "EPIC",
-      "description": "Give a Larva +7/+7 and Guard.",
-      "targetSelection": "FRIENDLY_MINIONS",
-      "spell": {
-        "class": "MetaSpell",
-        "spells": [
-          {
-            "class": "BuffSpell",
-            "value": 7
-          },
-          {
-            "class": "AddAttributeSpell",
-            "attribute": "TAUNT"
-          }
-        ],
-        "filter": {
-          "class": "SpecificCardFilter",
-          "card": "token_spiderling"
-        }
-      },
-      "collectible": true,
-      "set": "VERDANT_DREAMS",
-      "fileFormatVersion": 1
+    const workspace = new Workspace();
+    JsonConversionUtils.generateCard(workspace, srcCard);
+    const json = WorkspaceUtils.workspaceToCardScript(workspace);
+    try {
+      const result = ConversionHarness.assertCardReplaysTheSame(1, 2, srcCard.id, JSON.stringify(json));
+      if (result) {
+        expect(result).toEqual(true);
+        return;
+      }
+    } catch (e) {
+      console.warn(e);
     }
-    `;
-    expect(ConversionHarness.assertCardReplaysTheSame(1, 2, "spell_dreams_of_strength", json)).toEqual(true);
+    expect(json).toEqual(srcCard);
+    weirdos.push(srcCard.id);
   });
 
   test.each(cards)("bug test time %s", async (id, srcCard) => {

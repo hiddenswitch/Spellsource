@@ -70,10 +70,24 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     type = "HERO2";
   }
   let block = BlocklyMiscUtils.newBlock(workspace, "Starter_" + type);
-  let args = ["baseManaCost", "name", "baseAttack", "baseHp", "description", "countUntilCast", "damage", "durability"];
+  let args = [
+    "baseManaCost",
+    "name",
+    "baseAttack",
+    "baseHp",
+    "description",
+    "countUntilCast",
+    "damage",
+    "durability",
+    "id",
+    "attributes.ARMOR",
+  ];
   args.forEach((arg) => {
-    if (!!card[arg] && !!block.getField(arg)) {
-      block.setFieldValue(card[arg], arg);
+    if (block.getField(arg)) {
+      const value = traverseJsonByArgName(arg, card);
+      if (value) {
+        block.setFieldValue(value, arg);
+      }
     }
   });
 
@@ -210,7 +224,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     lowestBlock = aurasBlock;
   }
 
-  if (!!card.attributes) {
+  if (card.attributes) {
     delete card.attributes.SPELLSOURCE_NAME;
     delete card.attributes.BATTLECRY;
     delete card.attributes.DEATHRATTLES;
@@ -246,7 +260,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     }
   }
 
-  if (!!card.manaCostModifier) {
+  if (card.manaCostModifier) {
     let costyBlock = null;
     if (card.manaCostModifier["class"] === "ConditionalValueProvider" && card.manaCostModifier["ifFalse"] === 0) {
       costyBlock = BlocklyMiscUtils.newBlock(workspace, "Property_manaCostModifierConditional");
@@ -870,19 +884,19 @@ export function handleArg(
   let bestMatch = getMatch(json, inputName, parentJson);
   let block;
   if (!bestMatch) {
-    /*
-    try {
-      generateDummyBlock(json, inputName, parentJson)
-    } catch (e) {
-      //generating this quality of life dummy block is never worth crashing about
-      console.log('Tried to generate a dummy block for ' + json + ' but failed because of ' + e)
+    if (connection.getCheck().includes("Card")) {
+      block = BlocklyMiscUtils.newBlock(workspace, "Card_REFERENCE");
+      block.setFieldValue(json.toString(), "id");
+      block.setFieldValue(json.toString(), "name"); // TODO async get the real card message
+    } else if (connection.getCheck().includes("HeroClass")) {
+      block = BlocklyMiscUtils.newBlock(workspace, "HeroClass_REFERENCE");
+      block.setFieldValue(json.toString(), "id");
+      block.setFieldValue(json.toString(), "name"); // TODO async get the real card message
+    } else if (errorOnCustom) {
+      throw Error(`Couldn't generate without custom blocks, ${inputName}, ${json?.class}`);
+    } else {
+      block = handleNoMatch(json, inputName, parentJson, workspace);
     }
-
-     */
-    if (errorOnCustom) {
-      throw Error("Couldn't generate without custom blocks");
-    }
-    block = handleNoMatch(json, inputName, parentJson, workspace);
   } else if (!!connection.targetBlock() && connection.targetBlock().type === bestMatch.type) {
     if (!connection.targetBlock().isShadow()) {
       block = connection.targetBlock();
@@ -914,7 +928,7 @@ export function handleArg(
 
 export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace, parentJson) {
   //now handle each dropdown on the new block (assumes stuff will just work)
-  for (let dropdown of dropdownsList(bestMatch)) {
+  for (let dropdown of argsList(bestMatch, "dropdown")) {
     let jsonElement = json[dropdown.name];
     if (
       !jsonElement &&
@@ -931,9 +945,8 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
   }
 
   //now handle each input on the new block
-  for (let inputArg of inputsList(bestMatch)) {
+  for (let inputArg of argsList(bestMatch, "input")) {
     let name = inputArg.name;
-    let argName = name;
     let jsonElement = json[name];
     if (!jsonElement && (name.includes(".") || name.includes("super") || name.includes(","))) {
       jsonElement = traverseJsonByArgName(name, json, parentJson);
@@ -969,7 +982,14 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
       costModifier(block, json.cardCostModifier, workspace);
     } else {
       //default recursion case
-      handleArg(block.getInput(argName).connection, jsonElement, name, workspace, json);
+      handleArg(block.getInput(name).connection, jsonElement, name, workspace, json);
+    }
+  }
+
+  for (let numberArg of argsList(bestMatch, "number")) {
+    let jsonElement = json[numberArg.name];
+    if (isNumeric(jsonElement)) {
+      block.setFieldValue(jsonElement, numberArg.name);
     }
   }
 }
@@ -1197,7 +1217,7 @@ export function simpleHandleArg(block, inputName, json, workspace) {
  * @param parentJson The level above the json to search in (for super purposes)
  * @returns What's in the correct spot, or undefined if it can't find the right spot
  */
-export function traverseJsonByArgName(name, json, parentJson) {
+export function traverseJsonByArgName(name: string, json: object, parentJson?: object) {
   if (!name || !json) {
     return undefined;
   }
@@ -1296,13 +1316,13 @@ export function generateDummyBlock(json, inputName, parentJson) {
       if (shouldBeField) {
         if (prop === "operation") {
           if (
-            dropdownsList(Blockly.Blocks["ValueProvider_Algebraic"].json)[0]
+            argsList(Blockly.Blocks["ValueProvider_Algebraic"].json, "dropdown")[0]
               .options.map((arr) => arr[1])
               .includes(json[prop])
           ) {
-            arg = dropdownsList(Blockly.Blocks["ValueProvider_Algebraic"].json)[0];
+            arg = argsList(Blockly.Blocks["ValueProvider_Algebraic"].json, "dropdown")[0];
           } else {
-            arg = dropdownsList(Blockly.Blocks["Condition_Comparison"].json)[0];
+            arg = argsList(Blockly.Blocks["Condition_Comparison"].json, "dropdown")[0];
           }
         } else {
           arg.type = "field_label_serializable_hidden";
@@ -1413,7 +1433,7 @@ export function handleNoMatch(json, inputName, parentJson, workspace) {
         }
       }
       if (blockType === "nulls") {
-        console.error("hrmmm");
+        console.error("Block type should not be 'nulls'");
       }
       let newArgBlock = BlocklyMiscUtils.newBlock(workspace, "CustomArg_" + blockType);
       newArgBlock.previousConnection.connect(lowestConnection);
@@ -1745,58 +1765,17 @@ export function mutateJson(json) {
 
 /**
  * Returns a list of the all the arguments in a block's json
- * that are input args
  * @param block
- * @returns An array of the input args
- */
-export function inputsList(block) {
-  let inputsList = [];
-  for (let i = 0; i < 10; i++) {
-    if (!!block["args" + i.toString()]) {
-      for (let j = 0; j < 10; j++) {
-        const arg = block["args" + i.toString()][j];
-        if (!!arg && arg.type.includes("input")) {
-          inputsList.push(arg);
-        }
-      }
-    }
-  }
-  return inputsList;
-}
-
-/**
- * Returns a list of the all the arguments in a block's json
- * that are dropdown args
- * @param block
- * @returns An array of the dropdown args
- */
-export function dropdownsList(block: Block | BlockSvg) {
-  let inputsList = [];
-  for (let i = 0; i < 10; i++) {
-    if (!!block["args" + i.toString()]) {
-      for (let j = 0; j < 10; j++) {
-        const arg = block["args" + i.toString()][j];
-        if (!!arg && arg.type.includes("dropdown")) {
-          inputsList.push(arg);
-        }
-      }
-    }
-  }
-  return inputsList;
-}
-
-/**
- * Returns a list of the all the arguments in a block's json
- * @param block
+ * @param type
  * @returns An array of the args
  */
-export function argsList(block: BlockDef) {
-  let argsList = [];
+export function argsList(block: BlockDef, type?: "input" | "dropdown" | "number" | string) {
+  let argsList = [] as BlockArgDef[];
   for (let i = 0; i < 10; i++) {
     if (!!block["args" + i.toString()]) {
       for (let j = 0; j < 10; j++) {
-        const arg = block["args" + i.toString()][j];
-        if (!!arg) {
+        const arg: BlockArgDef = block["args" + i.toString()][j];
+        if (arg && (!type || arg.type?.includes(type))) {
           argsList.push(arg);
         }
       }

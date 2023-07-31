@@ -51,11 +51,7 @@ public class TestMain extends TestBase {
 	}
 
 	public static void addCard(String json) {
-		try {
-            ClasspathCardCatalogue.INSTANCE.addOrReplaceCard(json);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		ClasspathCardCatalogue.INSTANCE.addOrReplaceCard(json);
 	}
 
 	public static void spellEffect(String json, GameContext context, Entity source, Entity target) {

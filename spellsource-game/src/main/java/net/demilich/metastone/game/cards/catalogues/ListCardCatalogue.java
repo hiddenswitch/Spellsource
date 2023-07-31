@@ -335,7 +335,7 @@ public class ListCardCatalogue implements CardCatalogue {
 	 *
 	 * @param json
 	 */
-	public String addOrReplaceCard(String json) throws IOException {
+	public String addOrReplaceCard(String json) {
 		var cardDesc = Json.decodeValue(json, CardDesc.class);
 		return addOrReplaceCard(cardDesc);
 	}

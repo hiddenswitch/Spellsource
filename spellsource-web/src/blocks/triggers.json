@@ -923,6 +923,25 @@
     ]
   },
   {
+    "type": "Trigger_AfterPhysicalAttack4",
+    "subcategory": "Attack",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "%1%2After this is attacked",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AfterPhysicalAttackTrigger"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "hostTargetType",
+        "value": "IGNORE_OTHER_TARGETS"
+      }
+    ]
+  },
+  {
     "type": "Trigger_Supremacy",
     "inputsInline": false,
     "output": "Trigger",

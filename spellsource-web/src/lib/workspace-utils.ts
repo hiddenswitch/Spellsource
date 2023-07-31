@@ -228,7 +228,11 @@ function postProcessCardScript(cardScript) {
     cardScript.attributes.DEATHRATTLES = true;
   }
 
-  if (find(cardScript, { class: "DiscoverSpell" })) {
+  if (
+    typeof cardScript === "object" &&
+    "type" in cardScript &&
+    JSON.stringify(cardScript).includes('"class":"DiscoverSpell"')
+  ) {
     if (!cardScript.attributes) {
       cardScript.attributes = {};
     }

@@ -719,5 +719,26 @@
         "value": "have"
       }
     ]
+  },
+  {
+    "type": "Filter_Collectible",
+    "inputsInline": false,
+    "output": "FilterDesc",
+    "colour": 120,
+    "message0": "%2 collectible",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "CollectibleFilter"
+      },
+      {
+        "type": "field_label_plural",
+        "name": "plural",
+        "src": "OUTPUT",
+        "text": "is/are",
+        "value": "are"
+      }
+    ]
   }
 ]

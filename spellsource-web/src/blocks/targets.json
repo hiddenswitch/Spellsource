@@ -404,5 +404,21 @@
     "output": "EntityReference",
     "message0": "allied cards",
     "plural": true
+  },
+  {
+    "type": "EntityReference_FRIENDLY_TOP_CARD",
+    "subcategory": "Ally",
+    "data": "FRIENDLY_TOP_CARD",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "the top card of your deck"
+  },
+  {
+    "type": "EntityReference_ENEMY_TOP_CARD",
+    "subcategory": "Enemy",
+    "data": "ENEMY_TOP_CARD",
+    "colour": 30,
+    "output": "EntityReference",
+    "message0": "the top card of your opponent's deck"
   }
 ]
