@@ -29,6 +29,7 @@ export type BlockDef = {
   plural?: Maybe<Scalars["Boolean"]>;
   id?: Maybe<Scalars["String"]>;
   path?: Maybe<Scalars["String"]>;
+  value?: Maybe<Scalars["Int"]>;
 };
 
 export type BlockArgsDef = {

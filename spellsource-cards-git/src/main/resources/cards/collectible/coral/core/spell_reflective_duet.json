@@ -7,7 +7,7 @@
   "description": "Summon a copy of a friendly unit.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
-    "class": "CloneMinionSpell"
+    "class": "SummonSpell"
   },
   "collectible": true,
   "set": "CORE",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUEGREY",
   "rarity": "RARE",
-  "description": "Receive a copy of an allied unit  and battlefield. Destroy two of your Lun.",
+  "description": "Receive and summon a copy of an allied unit. Destroy two of your Lun.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -13,7 +13,7 @@
         "class": "CopyCardSpell"
       },
       {
-        "class": "CloneMinionSpell"
+        "class": "SummonSpell"
       },
       {
         "class": "ModifyMaxManaSpell",

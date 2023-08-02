@@ -14,7 +14,7 @@
   },
   {
     "type": "Trigger_I",
-    "colour": "#888888",
+    "colour": 300,
     "previousStatement": [
       "Triggers"
     ],
@@ -337,6 +337,25 @@
         "type": "field_label_serializable_hidden",
         "name": "targetEntityType",
         "value": "MINION"
+      },
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "targetPlayer",
+        "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_DamageReceived5",
+    "subcategory": "Damage",
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "Whenever an ally takes damage",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "DamageReceivedTrigger"
       },
       {
         "type": "field_label_serializable_hidden",
@@ -898,7 +917,7 @@
     ]
   },
   {
-    "type": "Trigger_AfterPhysicalAttack3",
+    "type": "Trigger_HeroAttacks",
     "subcategory": "Attack",
     "inputsInline": false,
     "output": "Trigger",
@@ -923,7 +942,7 @@
     ]
   },
   {
-    "type": "Trigger_AfterPhysicalAttack4",
+    "type": "Trigger_ThisIsAttacked",
     "subcategory": "Attack",
     "output": "Trigger",
     "colour": 300,
@@ -1151,6 +1170,31 @@
         "name": "sourcePlayer",
         "type": "field_label_serializable_hidden",
         "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_TargetAcquisition2",
+    "subcategory": "Card",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "When a spell is cast on this",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "TargetAcquisitionTrigger"
+      },
+      {
+        "name": "actionType",
+        "type": "field_label_serializable_hidden",
+        "value": "SPELL"
+      },
+      {
+        "name": "hostTargetType",
+        "type": "field_label_serializable_hidden",
+        "value": "IGNORE_OTHER_TARGETS"
       }
     ]
   },
@@ -1479,6 +1523,21 @@
         "name": "targetPlayer",
         "type": "field_label_serializable_hidden",
         "value": "SELF"
+      }
+    ]
+  },
+  {
+    "type": "Trigger_WillEndSequenceTrigger",
+    "subcategory": "Misc",
+    "inputsInline": false,
+    "output": "Trigger",
+    "colour": 300,
+    "message0": "At the end of the current sequence",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "WillEndSequenceTrigger"
       }
     ]
   }

@@ -2240,6 +2240,7 @@
         "name": "attribute",
         "check": [
           "BoolAttribute",
+          "IntAttribute",
           "Attribute"
         ],
         "shadow": {

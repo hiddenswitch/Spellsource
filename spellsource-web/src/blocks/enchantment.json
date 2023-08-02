@@ -240,7 +240,7 @@
       "EnchantmentOption"
     ],
     "colour": 280,
-    "message0": "Activates when %1",
+    "message0": "Activates %1",
     "args0": [
       {
         "type": "input_statement",

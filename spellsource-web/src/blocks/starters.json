@@ -693,7 +693,7 @@
         "type": "input_value",
         "name": "rarity",
         "check": "Rarity",
-        "block": {
+        "shadow": {
           "type": "Rarity_FREE"
         }
       }

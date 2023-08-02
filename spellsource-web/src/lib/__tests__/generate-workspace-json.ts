@@ -111,13 +111,17 @@ describe("WorkspaceUtils", () => {
     const workspace = new Workspace();
     JsonConversionUtils.generateCard(workspace, srcCard);
     const json = WorkspaceUtils.workspaceToCardScript(workspace);
-    const result = ConversionHarness.assertCardReplaysTheSame(1, 2, srcCard.id, JSON.stringify(json));
-    if (!result || result == "false") {
-      expect(json).toEqual(srcCard);
-      weirdos.push(srcCard.id);
-    } else {
-      expect(result).toEqual(true);
+    try {
+      const result = ConversionHarness.assertCardReplaysTheSame(100, 200, srcCard.id, JSON.stringify(json));
+      if (result) {
+        expect(result).toEqual(true);
+        return;
+      }
+    } catch (e) {
+      console.warn(e);
     }
+    expect(json).toEqual(srcCard);
+    weirdos.push(srcCard.id);
   });
 
   test.each(cards)("no custom and replays the same %s", async (id, srcCard) => {
@@ -139,7 +143,7 @@ describe("WorkspaceUtils", () => {
   });
 
   test("just one card", async () => {
-    const srcCard = Object.fromEntries(cards)["hero_hercules"];
+    const srcCard = Object.fromEntries(cards)["weapon_spirit_saber"];
 
     const ConversionHarness = java.import("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
     const workspace = new Workspace();

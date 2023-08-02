@@ -435,7 +435,7 @@
         "type": "input_value",
         "check": "TargetPlayer",
         "shadow": {
-          "type": "TargetPlayer_SHADOW"
+          "type": "TargetPlayer_SELF"
         }
       },
       {
@@ -459,7 +459,7 @@
     "inputsInline": false,
     "output": "ConditionDesc",
     "colour": 100,
-    "message0": "there %5 at least %2 %6 that %4 controlled by %3",
+    "message0": "there %5 at least %2 %6 that %4 and controlled by %3",
     "args0": [
       {
         "type": "field_label_serializable_hidden",
@@ -479,7 +479,7 @@
         "type": "input_value",
         "check": "TargetPlayer",
         "shadow": {
-          "type": "TargetPlayer_SHADOW"
+          "type": "TargetPlayer_SELF"
         }
       },
       {

@@ -747,6 +747,36 @@
     "data": "BLOCKLY_EXTEND_PREVIOUS"
   },
   {
+    "type": "CustomArg_Enchantment",
+    "subcategory": "Arg",
+    "previousStatement": [
+      "CustomArg"
+    ],
+    "nextStatement": [
+      "CustomArg"
+    ],
+    "colour": 300,
+    "message0": "%1 is %2",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "customArg",
+        "text": "trigger"
+      },
+      {
+        "type": "input_statement",
+        "check": [
+          "EnchantmentOptionsFake_SHADOW"
+        ],
+        "name": "customValue",
+        "block": {
+          "type": "EnchantmentOptionsFake_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS"
+  },
+  {
     "type": "CustomArg_Race",
     "subcategory": "Arg",
     "previousStatement": [
@@ -1066,7 +1096,7 @@
       "CustomArg"
     ],
     "colour": 300,
-    "message0": "%1 is",
+    "message0": "%1 are",
     "args0": [
       {
         "type": "field_input",

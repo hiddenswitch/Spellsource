@@ -23,7 +23,7 @@ export const toTitleCaseCorrected = (string: string) =>
     .replace("Weapon", "Gear")
     .replace("Hero", "Champion");
 
-export function addBlock(block: BlockDef) {
+export const addBlock = (block: BlockDef) => {
   JsonConversionUtils.addBlockToMap(block);
   return (Blockly.Blocks[block.type!] = {
     init: function () {
@@ -44,7 +44,7 @@ export function addBlock(block: BlockDef) {
     json: block,
     data: block.data,
   });
-}
+};
 
 //initializes the json specified shadow blocks of a block on the workspace
 export function manuallyAddShadowBlocks(thisBlock: Block, block: object) {

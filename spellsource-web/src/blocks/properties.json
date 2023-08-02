@@ -857,5 +857,28 @@
     "colour": "#888888",
     "output": "Art",
     "message0": "Art"
+  },
+  {
+    "type": "Property_race",
+    "colour": "#A6A6A6",
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "Also counts as a %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "check": "Race",
+        "name": "race",
+        "shadow": {
+          "type": "Race_SHADOW"
+        }
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "comment": "Makes a card also count as another race."
   }
 ]

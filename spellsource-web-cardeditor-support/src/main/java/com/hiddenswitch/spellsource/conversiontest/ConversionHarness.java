@@ -45,18 +45,19 @@ public class ConversionHarness {
     }
 
     public static boolean assertCardReplaysTheSame(long[] seeds, String cardId, String replacementJson) throws IOException {
-        var singletonCardCatalogue = new ListCardCatalogue();
-        var desc = Json.decodeValue(replacementJson, CardDesc.class);
-        desc.setId(cardId);
-
-        singletonCardCatalogue.addOrReplaceCard(desc);
-
-        var joinedCardCatalogue = new ConcatenatedCardCatalogues(Arrays.asList(singletonCardCatalogue, ClasspathCardCatalogue.INSTANCE));
+        var baseSingletonCatalogue = new ListCardCatalogue();
+        baseSingletonCatalogue.addOrReplaceCard(ClasspathCardCatalogue.INSTANCE.getCardById(cardId).getDesc());
+        var baseCatalogue = new ConcatenatedCardCatalogues(Arrays.asList(baseSingletonCatalogue, ClasspathCardCatalogue.INSTANCE));
+        
+        var replacedSingletonCatalogue = new ListCardCatalogue();
+        replacedSingletonCatalogue.addOrReplaceCard(replacementJson);
+        var replacedCatalogue = new ConcatenatedCardCatalogues(Arrays.asList(replacedSingletonCatalogue, ClasspathCardCatalogue.INSTANCE));
+        
         return LongStream.of(seeds)
                 .mapToObj(seed -> {
-                    ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
+                    // ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
                     // test the game without the replacement
-                    GameContext context = TestBase.fromTwoRandomDecks(seed);
+                    GameContext context = TestBase.fromTwoRandomDecks(seed, baseCatalogue);
                     ensureCardIsInDeck(context, cardId);
                     context.play();
                     return new Tuple(context, seed);
@@ -76,7 +77,7 @@ public class ConversionHarness {
                     return Objects.equals(sourceCard.getCardId(), cardId);
                 }))
                 .allMatch(tuple -> {
-                    GameContext reproduction = TestBase.fromTwoRandomDecks(tuple.seed, joinedCardCatalogue);
+                    GameContext reproduction = TestBase.fromTwoRandomDecks(tuple.seed, replacedCatalogue);
                     ensureCardIsInDeck(reproduction, cardId);
                     reproduction.play();
 

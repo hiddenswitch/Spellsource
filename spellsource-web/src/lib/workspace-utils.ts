@@ -214,14 +214,14 @@ function postProcessCardScript(cardScript) {
     delete cardScript.cardType;
   }
 
-  if (!!cardScript.battlecry) {
+  if (typeof cardScript === "object" && "type" in cardScript && cardScript.battlecry) {
     if (!cardScript.attributes) {
       cardScript.attributes = {};
     }
     cardScript.attributes.BATTLECRY = true;
   }
 
-  if (!!cardScript.deathrattle) {
+  if (typeof cardScript === "object" && "type" in cardScript && cardScript.deathrattle) {
     if (!cardScript.attributes) {
       cardScript.attributes = {};
     }

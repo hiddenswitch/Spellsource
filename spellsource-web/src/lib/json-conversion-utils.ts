@@ -5,8 +5,8 @@ import { BlockArgDef, BlockDef } from "../__generated__/blocks";
 import { CardDef } from "../components/card-display";
 import { isNumeric } from "./workspace-utils";
 
-const classBlocksDictionary = {}; //A dictionary mapping the 'class' argument a block uses to the block itself
-const enumBlocksDictionary = {}; //A dictionary mapping the enum value of the block to the block itself
+const classBlocksDictionary = {} as Record<string, BlockDef[]>; //A dictionary mapping the 'class' argument a block uses to the block itself
+const enumBlocksDictionary = {} as Record<string, BlockDef[]>; //A dictionary mapping the enum value of the block to the block itself
 const allArgNames = new Set<string>(); //Every different possible arg name that appears on blocks, (for searching)
 
 export const blockTypeColors = {};
@@ -41,16 +41,17 @@ export function addBlockToMap(block: BlockDef) {
       }
     }
     if (!!className) {
-      if (!classBlocksDictionary[className]) {
-        classBlocksDictionary[className] = [];
-      }
+      classBlocksDictionary[className] ??= [];
       classBlocksDictionary[className].push(block);
     }
   } else {
-    if (!enumBlocksDictionary[block.data]) {
-      enumBlocksDictionary[block.data] = [];
-    }
+    enumBlocksDictionary[block.data] ??= [];
     enumBlocksDictionary[block.data].push(block);
+
+    if (block.value) {
+      enumBlocksDictionary[block.value] ??= [];
+      enumBlocksDictionary[block.value].push(block);
+    }
   }
 }
 
@@ -61,6 +62,10 @@ export function addBlockToMap(block: BlockDef) {
  * @returns The created starter block
  */
 export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef) {
+  if (!card.name) {
+    card.name = card.id;
+  }
+  card = JSON.parse(JSON.stringify(card));
   let type = card.type as string;
   if (!!card.quest) {
     type = "QUEST";
@@ -85,7 +90,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   args.forEach((arg) => {
     if (block.getField(arg)) {
       const value = traverseJsonByArgName(arg, card);
-      if (value) {
+      if (value || value === 0) {
         block.setFieldValue(value, arg);
       }
     }
@@ -127,8 +132,18 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     }
   }
 
-  if (!!card.race && card.type === "MINION") {
-    simpleHandleArg(block, "race", card, workspace);
+  if (card.race) {
+    if (card.type === "MINION") {
+      simpleHandleArg(block, "race", card, workspace);
+    } else {
+      let raceBlock = BlocklyMiscUtils.newBlock(workspace, "Property_race");
+      lowestBlock.nextConnection.connect(raceBlock.previousConnection);
+      if ("initSvg" in raceBlock) {
+        raceBlock.initSvg();
+      }
+      simpleHandleArg(raceBlock, "race", card, workspace);
+      lowestBlock = raceBlock;
+    }
   }
 
   if (!!card.countByValue && (String(card.countByValue) === "TRUE" || card.countByValue === true)) {
@@ -557,8 +572,15 @@ export function enchantment(trigger: any, workspace: Workspace, triggerBlock: Bl
   if (trigger.spell) {
     handleArg(triggerBlock.getInput("spell").connection, trigger.spell, "spell", workspace, trigger);
   }
-  handleArg(triggerBlock.getInput("eventTrigger").connection, trigger.eventTrigger, "eventTrigger", workspace, trigger);
-
+  if (trigger.eventTrigger) {
+    handleArg(
+      triggerBlock.getInput("eventTrigger").connection,
+      trigger.eventTrigger,
+      "eventTrigger",
+      workspace,
+      trigger
+    );
+  }
   return triggerBlock;
 }
 
@@ -709,7 +731,7 @@ export function getMatch(json, inputName, parentJson) {
         return match;
       }
     }
-  } else if (!!json.class) {
+  } else if (json.class) {
     //need to find the block that represents that class
     let className = json.class;
     if (className === "AddEnchantmentSpell" && !!json.trigger) {
@@ -959,10 +981,11 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
         block.getInput(name)?.connection.targetBlock()?.type === "EntityReference_IT"
       ) {
         let it = BlocklyMiscUtils.newBlock(workspace, "EntityReference_IT");
-        block.getInput(name).connection.connect(it.outputConnection);
         if ("initSvg" in it) {
           it.initSvg();
         }
+        // it = wrapperBlocks(it, json, name, workspace, json, block.getInput(name).connection);
+        block.getInput(name).connection.connect(it.outputConnection);
       }
       continue;
     }
@@ -971,7 +994,7 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
     if (typeof jsonElement !== "object" && BlocklyMiscUtils.inputNameToBlockType(name) === "ValueProvider") {
       //integer block stuff
       handleIntArg(block, inputArg.name, workspace, jsonElement);
-    } else if (name === "spells" || name === "conditions" || name === "filters" || name === "cards") {
+    } else if (isArray(jsonElement)) {
       //arrays of things stuff
       handleArrayArg(jsonElement, block, workspace, name);
     } else if (name === "trigger" || name === "pact") {
@@ -980,9 +1003,12 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
       auras(block, json, workspace);
     } else if (name === "cardCostModifier") {
       costModifier(block, json.cardCostModifier, workspace);
-    } else {
+    } else if (block.getInput(name)) {
       //default recursion case
       handleArg(block.getInput(name).connection, jsonElement, name, workspace, json);
+    } else if (block.getInput(inputArg.name)) {
+      //default recursion case
+      handleArg(block.getInput(inputArg.name).connection, jsonElement, name, workspace, json);
     }
   }
 
@@ -994,14 +1020,13 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
   }
 }
 
-export function handleArrayArg(jsonElement, block: Block | BlockSvg, workspace, name) {
-  let thingArray = jsonElement;
+export function handleArrayArg(jsonElement: any[], block: Block | BlockSvg, workspace, name) {
   if (block.getFirstStatementConnection() == null) {
     console.error(block.type);
   }
   let lowestBlock = block.getFirstStatementConnection().targetBlock();
-  handleArg(lowestBlock.getInput("i").connection, thingArray[0], name.slice(0, -1), workspace, thingArray);
-  for (let i = 1; i < thingArray.length; i++) {
+  handleArg(lowestBlock.getInput("i").connection, jsonElement[0], name.slice(0, -1), workspace, jsonElement);
+  for (let i = 1; i < jsonElement.length; i++) {
     let thingI;
     switch (name) {
       case "conditions":
@@ -1014,11 +1039,22 @@ export function handleArrayArg(jsonElement, block: Block | BlockSvg, workspace, 
       case "cards":
         thingI = BlocklyMiscUtils.newBlock(workspace, "Card_I");
         break;
+      case "zones":
+        thingI = BlocklyMiscUtils.newBlock(workspace, "Zone_I");
+        break;
+      case "races":
+        thingI = BlocklyMiscUtils.newBlock(workspace, "Race_I");
+        break;
+      case "triggers":
+      case "expirationTriggers":
+      case "activationTriggers":
+        thingI = BlocklyMiscUtils.newBlock(workspace, "Trigger_I");
+        break;
       default:
         thingI = BlocklyMiscUtils.newBlock(workspace, "Spell_I");
         break;
     }
-    handleArg(thingI.getInput("i").connection, thingArray[i], name.slice(0, -1), workspace, thingArray);
+    handleArg(thingI.getInput("i").connection, jsonElement[i], name.slice(0, -1), workspace, jsonElement);
     lowestBlock.nextConnection.connect(thingI.previousConnection);
     if ("initSvg" in thingI) {
       thingI.initSvg();
@@ -1043,7 +1079,15 @@ export function handleArrayArg(jsonElement, block: Block | BlockSvg, workspace, 
  * @param bestMatch The block that was decided to be the best match
  * @returns The eventual outermost block
  */
-export function wrapperBlocks(block, json, inputName, workspace, parentJson, connection, bestMatch) {
+export function wrapperBlocks(
+  block: Block,
+  json: any,
+  inputName: string,
+  workspace: Workspace,
+  parentJson: any,
+  connection: Connection,
+  bestMatch?: BlockDef
+) {
   const wrap = (blockType, inputName = "super") => {
     let newOuterBlock = BlocklyMiscUtils.newBlock(workspace, blockType);
     newOuterBlock.getInput(inputName).connection.connect(outerBlock.outputConnection);
@@ -1142,25 +1186,14 @@ export function wrapperBlocks(block, json, inputName, workspace, parentJson, con
   }
 
   if (inputName.endsWith("targetSelection") && !!parentJson.spell && !!parentJson.spell.filter && json !== "NONE") {
-    if (parentJson.spell.filter.class === "RaceFilter") {
-      wrap("TargetSelection_RACE");
-      handleArg(
-        outerBlock.getInput("super.spell.filter.race").connection,
-        parentJson.spell.filter.race,
-        "race",
-        workspace,
-        parentJson.spell.filter
-      );
-    } else {
-      wrap("TargetSelection_FILTER");
-      handleArg(
-        outerBlock.getInput("super.spell.filter").connection,
-        parentJson.spell.filter,
-        "filter",
-        workspace,
-        parentJson.spell
-      );
-    }
+    wrap("TargetSelection_FILTER");
+    handleArg(
+      outerBlock.getInput("super.spell.filter").connection,
+      parentJson.spell.filter,
+      "filter",
+      workspace,
+      parentJson.spell
+    );
   }
 
   if (inputName === "target" && parentJson.randomTarget === true) {
@@ -1407,7 +1440,7 @@ export function handleNoMatch(json, inputName, parentJson, workspace) {
   let block = BlocklyMiscUtils.newBlock(workspace, "Custom" + type);
   if (typeof json !== "object") {
     block.setFieldValue(json, "value");
-  } else if (!!json.class) {
+  } else if (json.class) {
     block.getInput("class").connection.targetBlock().setFieldValue(json.class, "class");
     let lowestConnection = block.getFirstStatementConnection();
 
@@ -1427,10 +1460,14 @@ export function handleNoMatch(json, inputName, parentJson, workspace) {
           blockType = "Boolean";
           argValue = argValue.toString().toUpperCase();
         } else if (isArray(argValue)) {
-          blockType = BlocklyMiscUtils.inputNameToBlockType(arg.slice(0, -1)) + "s";
+          blockType =
+            BlocklyMiscUtils.inputNameToBlockType(arg) ?? BlocklyMiscUtils.inputNameToBlockType(arg.slice(0, -1)) + "s";
         } else {
           blockType = "text";
         }
+      }
+      if (blockType === "Trigger" && "eventTrigger" in argValue) {
+        blockType = "Enchantment";
       }
       if (blockType === "nulls") {
         console.error("Block type should not be 'nulls'");
@@ -1443,8 +1480,11 @@ export function handleNoMatch(json, inputName, parentJson, workspace) {
       }
       newArgBlock.setFieldValue(arg, "customArg");
 
-      if (!!newArgBlock.getInput("customValue")) {
-        if (isNumeric(argValue)) {
+      if (newArgBlock.getInput("customValue")) {
+        if (
+          isNumeric(argValue) &&
+          newArgBlock.getInput("customValue").connection.getCheck().includes("ValueProviderDesc")
+        ) {
           handleIntArg(newArgBlock, "customValue", workspace, argValue);
         } else if (isArray(argValue)) {
           if (arg === "aura") {
@@ -1452,6 +1492,11 @@ export function handleNoMatch(json, inputName, parentJson, workspace) {
           } else {
             handleArrayArg(argValue, newArgBlock, workspace, arg);
           }
+        } else if (
+          newArgBlock.getInput("customValue").connection.getCheck().includes("EnchantmentOptionsFake_SHADOW")
+        ) {
+          const enchantmentBlock = newArgBlock.getInput("customValue").connection.targetBlock();
+          enchantment(argValue, workspace, enchantmentBlock);
         } else {
           handleArg(newArgBlock.getInput("customValue").connection, argValue, arg, workspace, parentJson);
         }
@@ -1459,6 +1504,7 @@ export function handleNoMatch(json, inputName, parentJson, workspace) {
         newArgBlock.setFieldValue(argValue, "customValue");
       }
     }
+  } else {
   }
   return block;
 }
@@ -1747,12 +1793,12 @@ export function mutateJson(json) {
     json.target = "FRIENDLY_HAND";
   }
 
-  if (className.endsWith("Aura") && !!json.triggers && json.triggers.length === 1) {
+  /*if (className.endsWith("Aura") && !!json.triggers && json.triggers.length === 1) {
     json.trigger = json.triggers[0];
     delete json.triggers;
-  }
+  }*/
 
-  //functionality is the same
+  //functionality is the same TODO or it is not ??
   if (className === "CloneMinionSpell") {
     json.class = "SummonSpell";
   }

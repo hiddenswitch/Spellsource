@@ -170,7 +170,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "SELF",
-    "plural": false
+    "plural": false,
+    "value": -28
   },
   {
     "type": "EntityReference_SHADOW",
