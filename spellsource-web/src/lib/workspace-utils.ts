@@ -2,6 +2,7 @@ import { Xml } from "blockly";
 import { extend, filter, find, fromPairs, isArray, isEmpty, isPlainObject, map, merge } from "lodash";
 import format from "string-format";
 import * as BlocklyMiscUtils from "./blockly-misc-utils";
+import { RgbColour } from "../components/field-colour-hsv-sliders";
 
 const BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = "BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE";
 const BLOCKLY_INT_ATTRIBUTE = "BLOCKLY_INT_ATTRIBUTE";
@@ -264,9 +265,11 @@ function postProcessCardScript(cardScript) {
     cardScript.aura = cardScript.aura[0];
   }
 
-  for (let arg of ["r", "g", "b", "a"]) {
-    if (cardScript.hasOwnProperty(arg) && isNumeric(cardScript[arg])) {
-      cardScript[arg] = Math.round((1000 * cardScript[arg]) / 255) / 1000;
+  if (cardScript.hasOwnProperty("colour")) {
+    const color = new RgbColour().loadFromHex(cardScript.colour);
+    delete cardScript.colour;
+    for (let arg of ["r", "g", "b", "a"]) {
+      cardScript[arg] = Math.round(1000 * color[arg]) / 1000;
     }
   }
 

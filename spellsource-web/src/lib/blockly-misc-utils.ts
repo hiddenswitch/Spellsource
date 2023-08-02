@@ -12,6 +12,7 @@ import { FieldButton } from "../components/field-button";
 import { FieldProgressBar } from "../components/field-progress-bar";
 import * as BlocklyContextMenu from "./blockly-context-menu";
 import { BlockInfo, FlyoutItemInfo } from "blockly/core/utils/toolbox";
+import { FieldColourHsvSliders } from "../components/field-colour-hsv-sliders";
 
 export const toTitleCaseCorrected = (string: string) =>
   string
@@ -221,6 +222,7 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options
     Blockly.fieldRegistry.register("field_label_plural", FieldLabelPlural);
     Blockly.fieldRegistry.register("field_button", FieldButton);
     Blockly.fieldRegistry.register("field_progress_bar", FieldProgressBar);
+    Blockly.fieldRegistry.register("field_colour_hsv_sliders", FieldColourHsvSliders);
     if (options) {
       BlocklyContextMenu.registerAll(options);
     }

@@ -4,6 +4,7 @@ import { isArray } from "lodash";
 import { BlockArgDef, BlockDef } from "../__generated__/blocks";
 import { CardDef } from "../components/card-display";
 import { isNumeric } from "./workspace-utils";
+import { RgbColour } from "../components/field-colour-hsv-sliders";
 
 const classBlocksDictionary = {} as Record<string, BlockDef[]>; //A dictionary mapping the 'class' argument a block uses to the block itself
 const enumBlocksDictionary = {} as Record<string, BlockDef[]>; //A dictionary mapping the enum value of the block to the block itself
@@ -367,7 +368,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     lowestBlock = uncollectibleBlock;
   }
 
-  if (!!card.art) {
+  if (card.art) {
     for (let path of ["art.primary", "art.secondary", "art.shadow", "art.highlight", "art.body.vertex"]) {
       let json = card;
       for (let arg of path.split(".")) {
@@ -378,18 +379,17 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
 
       if (!!json && !!block.getInput(path)) {
         let colorBlock = block.getInput(path).connection.targetBlock();
-        for (let i of ["r", "g", "b", "a"]) {
-          colorBlock.setFieldValue(Math.round(json[i] * 255), i);
-        }
+        colorBlock.setFieldValue(new RgbColour(json["r"], json["g"], json["b"], json["a"]).toHex(), "colour");
       }
     }
-    if (!!card.art["glow"]) {
+    if (card.art["glow"]) {
       let glowBlock = BlocklyMiscUtils.newBlock(workspace, "Property_glow");
       glowBlock.previousConnection.connect(lowestBlock.nextConnection);
       let colorBlock = glowBlock.getInput("art.glow").connection.targetBlock();
-      for (let i of ["r", "g", "b", "a"]) {
-        colorBlock.setFieldValue(Math.round(card.art["glow"][i] * 255), i);
-      }
+      colorBlock.setFieldValue(
+        new RgbColour(card.art["glow"]["r"], card.art["glow"]["g"], card.art["glow"]["b"], card.art["glow"]["a"]),
+        "colour"
+      );
       if ("initSvg" in glowBlock) {
         glowBlock.initSvg();
       }

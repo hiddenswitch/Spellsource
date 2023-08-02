@@ -31,7 +31,7 @@ export function modifyAll() {
   pluralSpacing();
   tooltips();
   textColor();
-  colorfulColors();
+  // colorfulColors();
   noToolboxZoom();
   multiline();
   // jsonShadows()
@@ -40,21 +40,6 @@ export function modifyAll() {
   // cardDisplay()
   flyout();
   mobileCategories();
-
-  const refreshSelection = Blockly.Toolbox.prototype.refreshSelection;
-  Blockly.Toolbox.prototype.refreshSelection = function () {
-    const contents = this.selectedItem_?.getContents();
-
-    if (contents) {
-      for (let i = 0; i < contents.length; i++) {
-        if (contents[i]?.kind === "block" && !contents[i].inputs) {
-          contents[i] = getBlock(contents[i].type);
-        }
-      }
-    }
-
-    return refreshSelection.call(this);
-  };
 
   DefaultOverrides.overrideAll();
 }
@@ -609,6 +594,22 @@ function flyout() {
       unCollapse(result);
     }
     return result;
+  };
+
+  // Ensure shadow blocks added for toolbox
+  const refreshSelection = Blockly.Toolbox.prototype.refreshSelection;
+  Blockly.Toolbox.prototype.refreshSelection = function () {
+    const contents = this.selectedItem_?.getContents();
+
+    if (contents) {
+      for (let i = 0; i < contents.length; i++) {
+        if (contents[i]?.kind === "block" && !contents[i].inputs) {
+          contents[i] = getBlock(contents[i].type);
+        }
+      }
+    }
+
+    return refreshSelection.call(this);
   };
 }
 
