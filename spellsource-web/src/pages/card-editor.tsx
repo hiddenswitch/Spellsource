@@ -1,4 +1,4 @@
-import React, { createContext, useMemo } from "react";
+import React, { createContext, useMemo, useRef } from "react";
 import Layout from "../components/card-editor-layout";
 import * as styles from "../templates/template-styles.module.scss";
 import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
@@ -17,8 +17,8 @@ import {
 import { useSession } from "next-auth/react";
 import { ApolloQueryResult } from "@apollo/client";
 import Head from "next/head";
-import CardEditorView from "../components/card-editor-view";
 import { Spinner } from "react-bootstrap";
+import CardEditorWorkspace from "../components/card-editor-workspace";
 
 /*const getAllCards = async () => (await readAllJson<CardDef>(
   path.join("..", "spellsource-game", "src", "main", "resources", "basecards", "standard", "**", "*.json"),
@@ -88,6 +88,9 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
 
   const refreshMyCards = getMyCards.refetch; // TODO get .reobserve working
 
+  const compactBlocks = true;
+  const blocklyEditor = useRef(null);
+
   return (
     <Layout>
       <Head>
@@ -96,7 +99,11 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
       <BlocklyDataContext.Provider value={{ ...props, classes, allArt, ready, myCards, refreshMyCards, userId }}>
         <div className={styles.cardEditorContainer}>
           {ready ? (
-            <CardEditorView defaultCard={false} />
+            <CardEditorWorkspace
+              ref={blocklyEditor}
+              defaultCard={false}
+              renderer={compactBlocks ? "spellsource" : "geras"}
+            />
           ) : (
             <div className={"h-100 w-100 d-flex"}>
               <Spinner variant={"placeholder"} className={"m-auto"} />

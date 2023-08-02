@@ -27,13 +27,14 @@ import { useEffectOnce } from "../hooks/use-effect-once";
 import { uniqBy } from "lodash";
 import { openFromFile } from "../lib/blockly-context-menu";
 import { javascriptGenerator } from "blockly/javascript";
+import "@blockly/toolbox-search";
+import cx from "classnames";
 
 interface CardEditorWorkspaceProps {
   setJSON?: React.Dispatch<React.SetStateAction<string>>;
   setJS?: React.Dispatch<React.SetStateAction<string>>;
   searchCatalogueBlocks?: boolean;
   searchArtBlocks?: boolean;
-  query?: string;
   defaultCard?: boolean;
   renderer?: string;
 }
@@ -104,7 +105,6 @@ const CardEditorWorkspace = forwardRef(
     const userId = session?.token?.sub ?? "";
     const data = useContext(BlocklyDataContext);
     const [results, setResults] = useState<string[]>([]);
-    const index = useIndex();
 
     const mainWorkspace = () => blocklyEditor.current?.workspace;
     const toolbox = () => mainWorkspace()?.getToolbox() as Toolbox;
@@ -235,10 +235,13 @@ const CardEditorWorkspace = forwardRef(
 
       BlocklyToolbox.initCallbacks(mainWorkspace());
 
-      let params = new URLSearchParams(window.location.search);
+      let url = new URL(window.location.href);
+      let params = url.searchParams;
       let card = params.get("card");
-      if (!!card) {
+      if (card) {
         generateCard(card);
+        params.delete("card");
+        history.replaceState(null, "", url.toString());
       }
 
       // Let you ctrl S to save
@@ -258,12 +261,6 @@ const CardEditorWorkspace = forwardRef(
       return () => document.removeEventListener("keydown", listener);
     });
 
-    //When the query is updated, do some searching
-    useEffect(() => {
-      search(props.query);
-      handleSearchResults(props.query);
-    }, [props.query]);
-
     //Switch the renderer
     useEffect(() => {
       BlocklyMiscUtils.switchRenderer(props.renderer, mainWorkspace());
@@ -276,10 +273,10 @@ const CardEditorWorkspace = forwardRef(
       const cardScript = handleWorkspaceCards(mainWorkspace(), data.userId || "guest");
       BlocklyMiscUtils.pluralStuff(mainWorkspace());
       let json = JSON.stringify(cardScript, null, 2);
-      props.setJSON(json);
+      // props.setJSON(json);
       setJson(json);
       setAllCardScript(cardScript);
-      props.setJS(javascriptGenerator.workspaceToCode(mainWorkspace()));
+      // props.setJS(javascriptGenerator.workspaceToCode(mainWorkspace()));
     };
 
     const generateCard = (p: string) => {
@@ -290,9 +287,9 @@ const CardEditorWorkspace = forwardRef(
       let cardId = null;
       let card = null;
 
-      if (p.includes("{")) {
+      if (p.startsWith("{")) {
         card = JSON.parse(p);
-      } else if (p.includes("www")) {
+      } else if (p.startsWith("www")) {
         cardId = p.split("cards/")[1];
       } else if (p.includes("_") || p.includes("-")) {
         cardId = p;
@@ -321,61 +318,12 @@ const CardEditorWorkspace = forwardRef(
       }
     };
 
-    const handleSearchResults = (query) => {
-      if (query.length === 0) {
-        setResults([]);
-      }
-
-      (toolbox()?.getToolboxItemById("Search Results") as ToolboxCategory).updateFlyoutContents(
-        BlocklyToolbox.searchResultsCategory(results)
-      );
-      toolbox()?.clearSelection();
-      if (query.length > 0) {
-        toolbox().selectItemByPosition(0);
-        toolbox().refreshSelection();
-      }
-    };
-
-    const search = (query: string) => {
-      if (!index) return;
-
-      setResults(
-        index
-          // Query the index with search string to get an [] of IDs
-          .search(query, { expand: true }) // accept partial matches
-          .map(({ ref }) => index.documentStore.getDoc(ref))
-          .filter((doc) => {
-            if (props.searchCatalogueBlocks) {
-              return (
-                doc.nodeType === "Card" &&
-                "baseManaCost" in doc.node &&
-                doc.node.heroClass in Blockly["heroClassColors"]
-              );
-            }
-            if (props.searchArtBlocks) {
-              return doc.nodeType === "File" && !!Blockly.Blocks["Art_" + doc.title];
-            }
-            return doc.nodeType === "Block";
-          })
-          .map((doc) => {
-            if (doc.nodeType === "Card") {
-              return "CatalogueCard_" + doc.id;
-            }
-            if (doc.nodeType === "File") {
-              return "Art_" + doc.title;
-            }
-            return doc.id;
-          })
-          .slice(0, 20)
-      );
-    };
-
     const xs = !useBreakpoint("sm", "up");
 
     return (
       <SimpleReactBlockly
         workspaceDidChange={onWorkspaceChanged}
-        wrapperDivClassName={styles.cardEditor as string}
+        wrapperDivClassName={cx("h-100")}
         workspaceConfiguration={{
           disable: false,
           zoom: {

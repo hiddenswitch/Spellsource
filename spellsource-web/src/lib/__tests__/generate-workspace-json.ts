@@ -112,7 +112,7 @@ describe("WorkspaceUtils", () => {
     JsonConversionUtils.generateCard(workspace, srcCard);
     const json = WorkspaceUtils.workspaceToCardScript(workspace);
     try {
-      const result = ConversionHarness.assertCardReplaysTheSame(100, 200, srcCard.id, JSON.stringify(json));
+      const result = ConversionHarness.assertCardReplaysTheSame(1, 2, srcCard.id, JSON.stringify(json));
       if (result) {
         expect(result).toEqual(true);
         return;
@@ -150,7 +150,7 @@ describe("WorkspaceUtils", () => {
     JsonConversionUtils.generateCard(workspace, srcCard);
     const json = WorkspaceUtils.workspaceToCardScript(workspace);
     try {
-      const result = ConversionHarness.assertCardReplaysTheSame(1, 2, srcCard.id, JSON.stringify(json));
+      const result = ConversionHarness.assertCardReplaysTheSame(100, 200, srcCard.id, JSON.stringify(json));
       if (result) {
         expect(result).toEqual(true);
         return;

@@ -353,6 +353,34 @@ pre {
   .markdown img {
     max-width: 90vw;
   }
+  
+  .blocklyToolboxContents {
+    padding: 0 5px 0 5px
+  }
+  
+  .blocklyTreeRow input {
+    text-align: center;
+  }
+}
+
+.blocklyTreeRow input {
+  // border-radius: 5px;
+  margin-left: 10px !important;
+  padding-left: 10px !important;
+  margin-right: 10px;
+  --placeholder-color: black;
+}
+
+.blocklyTreeRow:not(.blocklyTreeSelected):not(:hover) input {
+  background-color: rgb(221, 221, 221);
+}
+
+.blocklyTreeRow:not(.blocklyTreeSelected):hover input {
+  background-color: transparent;
+}
+
+.blocklyTreeRow.blocklyTreeSelected input {
+  background-color: rgb(228, 228, 228);
 }
 
 .blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {

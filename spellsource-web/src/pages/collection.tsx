@@ -153,6 +153,7 @@ export default () => {
           <Row id={"Collection"} className={"pe-lg-2 mt-2 flex-grow-1"}>
             <Col id={"CardsList"} xs={12} lg={9}>
               <Collection
+                user={user}
                 classes={classes}
                 classColors={classColors}
                 heroClass={heroClass}

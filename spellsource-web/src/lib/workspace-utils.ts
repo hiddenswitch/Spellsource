@@ -241,9 +241,10 @@ function postProcessCardScript(cardScript) {
 
   if (!!cardScript.class && cardScript.class.endsWith("Aura")) {
     if (
-      !!cardScript.attribute &&
+      cardScript.attribute &&
       !cardScript.attribute.startsWith("AURA_") &&
-      !cardScript.attribute.startsWith("RESERVED")
+      !cardScript.attribute.startsWith("RESERVED") &&
+      cardScript.attribute !== "SPELLS_CAST_TWICE"
     ) {
       cardScript.attribute = "AURA_" + cardScript.attribute;
     }

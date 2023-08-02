@@ -70,13 +70,9 @@ const CardRow: FunctionComponent<{
       </td>
       <td>{cardScript.description?.replaceAll(new RegExp("[$#\\[\\]]", "g"), "") ?? ""}</td>
       <td>
-        {card.blocklyWorkspace ? (
-          <Link href={`/card-editor?card=${encodeURIComponent(card.id)}`} target={"_blank"}>
-            Edit
-          </Link>
-        ) : (
-          <></>
-        )}
+        <Link href={`/card-editor?card=${encodeURIComponent(card.id)}`} target={"_blank"}>
+          {!collection.user ? "View" : card.createdBy === collection.user ? "Edit" : "Edit Copy"}
+        </Link>
       </td>
     </tr>
   );
@@ -92,6 +88,7 @@ interface CollectionProps {
   mainHeroClass?: string;
   addToDeck?: (id: string) => void;
   removeFromDeck?: (id: string) => void;
+  user?: string;
 }
 
 const Collection: FunctionComponent<CollectionProps> = (props) => {

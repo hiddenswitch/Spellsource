@@ -60,7 +60,12 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
   return {
     kind: "categoryToolbox",
     contents: [
-      searchResultsCategory(results),
+      {
+        kind: "search",
+        name: "Search",
+        colour: "rgb(85, 119, 238)",
+        contents: [],
+      },
 
       myCardsCategory(data),
 
@@ -682,7 +687,7 @@ function defaultTest(block) {
   );
 }
 
-function getBlock(type: string): Partial<BlockInfo> {
+export function getBlock(type: string): Partial<BlockInfo> {
   return {
     type,
     kind: "block",

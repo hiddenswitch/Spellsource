@@ -1,10 +1,11 @@
 import React, { forwardRef, useEffect, useRef } from "react";
-import Blockly, { BlocklyOptions, WorkspaceSvg } from "blockly";
+import Blockly, { BlocklyOptions, ShortcutRegistry, WorkspaceSvg } from "blockly";
 
 export interface SimpleReactBlocklyProps {
   wrapperDivClassName: string;
   workspaceConfiguration: BlocklyOptions;
   workspaceDidChange: () => void;
+  init?: (workspace: WorkspaceSvg) => void;
 }
 
 export interface SimpleReactBlocklyRef {
@@ -18,8 +19,10 @@ export default forwardRef<SimpleReactBlocklyRef, SimpleReactBlocklyProps>((props
   const options = props.workspaceConfiguration;
 
   useEffect(() => {
+    ShortcutRegistry.registry.unregister("startSearch");
     const workspace = Blockly.inject(innerBlocklyDiv.current, props.workspaceConfiguration);
     workspace.addChangeListener(props.workspaceDidChange);
+    props.init?.(workspace);
 
     const state = { workspace, innerBlocklyDiv: innerBlocklyDiv.current };
 
@@ -42,6 +45,7 @@ export default forwardRef<SimpleReactBlocklyRef, SimpleReactBlocklyProps>((props
       newWorkspace.addChangeListener(props.workspaceDidChange);
       Blockly.serialization.workspaces.load(state, newWorkspace);
       newWorkspace.setScale(scale);
+      props.init?.(newWorkspace);
 
       ref.current = { workspace: newWorkspace, innerBlocklyDiv: innerBlocklyDiv.current };
     }

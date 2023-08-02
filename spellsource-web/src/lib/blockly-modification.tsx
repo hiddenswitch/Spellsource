@@ -14,6 +14,7 @@ import * as BlocklyMiscUtils from "./blockly-misc-utils";
 import * as DefaultOverrides from "./default-overrides";
 import React from "react";
 import { Field } from "blockly/core/renderers/measurables/field";
+import { getBlock } from "./blockly-toolbox";
 
 export function modifyAll() {
   Blockly.utils.colour.setHsvSaturation(0.65);
@@ -32,13 +33,28 @@ export function modifyAll() {
   textColor();
   colorfulColors();
   noToolboxZoom();
-  // multiline();
+  multiline();
   // jsonShadows()
   connections();
   categoryIndenting();
   // cardDisplay()
   flyout();
   mobileCategories();
+
+  const refreshSelection = Blockly.Toolbox.prototype.refreshSelection;
+  Blockly.Toolbox.prototype.refreshSelection = function () {
+    const contents = this.selectedItem_?.getContents();
+
+    if (contents) {
+      for (let i = 0; i < contents.length; i++) {
+        if (contents[i]?.kind === "block" && !contents[i].inputs) {
+          contents[i] = getBlock(contents[i].type);
+        }
+      }
+    }
+
+    return refreshSelection.call(this);
+  };
 
   DefaultOverrides.overrideAll();
 }
@@ -531,7 +547,7 @@ function connections() {
   Blockly.Connection.prototype.setCheck = function (check) {
     const ret = setCheck.call(this, check);
     if (check === "Boolean") {
-      this.check_.push("ConditionDesc");
+      this.check_?.push("ConditionDesc");
     }
     return ret;
   };

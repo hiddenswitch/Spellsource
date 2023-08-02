@@ -106,7 +106,7 @@ const showInToolbox: ContextMenuRegistry.RegistryItem = {
   scopeType: ContextMenuRegistry.ScopeType.BLOCK,
   preconditionFn: ({ block }) =>
     !block.workspace.targetWorkspace ||
-    block.workspace.targetWorkspace?.getToolbox()?.getSelectedItem()?.getId() === "Search Results"
+    block.workspace.targetWorkspace?.getToolbox()?.getSelectedItem()?.["name_"] === "Search"
       ? "enabled"
       : "hidden",
   callback: ({ block }) => {
