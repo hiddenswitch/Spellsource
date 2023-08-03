@@ -77,29 +77,6 @@
             {
               "class": "custom.TextifySpell",
               "target": "FRIENDLY_DECK",
-              "cardFilter": {
-                "class": "AndFilter",
-                "filters": [
-                  {
-                    "class": "CardFilter",
-                    "cardType": "MINION"
-                  },
-                  {
-                    "class": "HasTextFilter"
-                  },
-                  {
-                    "class": "SpecificCardFilter",
-                    "card": "minion_fifi_fizzlewarp",
-                    "invert": true
-                  },
-                  {
-                    "class": "AttributeFilter",
-                    "attribute": "PERMANENT",
-                    "invert": true,
-                    "operation": "HAS"
-                  }
-                ]
-              },
               "filter": {
                 "class": "AndFilter",
                 "filters": [
@@ -111,6 +88,16 @@
                   {
                     "class": "CardFilter",
                     "cardType": "MINION"
+                  },
+                  {
+                    "class": "AttributeFilter",
+                    "attribute": "PERMANENT",
+                    "invert": true,
+                    "operation": "HAS"
+                  },
+                  {
+                    "class": "HasTextFilter",
+                    "invert": true
                   }
                 ]
               }
@@ -118,29 +105,6 @@
             {
               "class": "custom.TextifySpell",
               "target": "FRIENDLY_HAND",
-              "cardFilter": {
-                "class": "AndFilter",
-                "filters": [
-                  {
-                    "class": "CardFilter",
-                    "cardType": "MINION"
-                  },
-                  {
-                    "class": "HasTextFilter"
-                  },
-                  {
-                    "class": "SpecificCardFilter",
-                    "card": "minion_fifi_fizzlewarp",
-                    "invert": true
-                  },
-                  {
-                    "class": "AttributeFilter",
-                    "attribute": "PERMANENT",
-                    "invert": true,
-                    "operation": "HAS"
-                  }
-                ]
-              },
               "filter": {
                 "class": "AndFilter",
                 "filters": [
@@ -152,6 +116,16 @@
                   {
                     "class": "CardFilter",
                     "cardType": "MINION"
+                  },
+                  {
+                    "class": "AttributeFilter",
+                    "attribute": "PERMANENT",
+                    "invert": true,
+                    "operation": "HAS"
+                  },
+                  {
+                    "class": "HasTextFilter",
+                    "invert": true
                   }
                 ]
               }

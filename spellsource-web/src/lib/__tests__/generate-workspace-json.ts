@@ -5,16 +5,7 @@
 // This clogs up unit testing logs, etc.
 // The versions for both log and warn are because they keep changing which ones they are
 // using across builds.
-const tempConsoleLog = console.log;
-const tempConsoleWarn = console.warn;
-console.log = (message) => {
-  if (message.startsWith("WARNING: No message string for %{")) return;
-  else tempConsoleLog(message);
-};
-console.warn = (message) => {
-  if (message.startsWith("No message string for %{")) return;
-  else tempConsoleWarn(message);
-};
+import { CardDef } from "../../components/card-display";
 import * as WorkspaceUtils from "../workspace-utils";
 import * as JsonConversionUtils from "../json-conversion-utils";
 import { Workspace } from "blockly";
@@ -30,17 +21,23 @@ import path from "path";
 import { transformCard } from "../json-transforms";
 import { promisify } from "util";
 
+const tempConsoleLog = console.log;
+const tempConsoleWarn = console.warn;
+console.log = (message) => {
+  if (message.startsWith("WARNING: No message string for %{")) return;
+  else tempConsoleLog(message);
+};
+console.warn = (message) => {
+  if (message.startsWith("No message string for %{")) return;
+  else tempConsoleWarn(message);
+};
+
 console.log = tempConsoleLog;
 console.warn = tempConsoleWarn;
 
 const cardsPath = `../spellsource-cards-git/src/main/resources/cards/collectible`;
 const cardsPath2 = `../spellsource-game/src/main/resources/basecards`;
 
-const usedBlocks = {};
-
-const weirdos = [];
-
-// requires graal
 java.classpath.push(
   path.join(
     process.cwd(),
@@ -62,6 +59,25 @@ const cards = [
   ...readAllJsonSync(path.join(cardsPath, "**", "*.json"), transformCard),
   ...readAllJsonSync(path.join(cardsPath2, "**", "*.json"), transformCard),
 ].map((card) => [card.id, card] as const);
+
+const testReplayCard = (id: string, srcCard: CardDef) => {
+  const ConversionHarness = java.import("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
+  const workspace = new Workspace();
+  JsonConversionUtils.generateCard(workspace, srcCard);
+  const json = WorkspaceUtils.workspaceToCardScript(workspace);
+  try {
+    const result = ConversionHarness.assertCardReplaysTheSame(1, 2, srcCard.id, JSON.stringify(json));
+    if (result) {
+      expect(result).toEqual(true);
+      return;
+    }
+  } catch (e) {
+    console.error(JSON.stringify(srcCard, null, 2));
+    console.error(JSON.stringify(json, null, 2));
+    expect(e).toBeUndefined();
+  }
+  expect(json).toEqual(srcCard);
+};
 
 describe("WorkspaceUtils", () => {
   beforeAll(async () => {
@@ -106,23 +122,7 @@ describe("WorkspaceUtils", () => {
     expect(json).toEqual(srcCard);
   });
 
-  test.each(cards)("replays the same %s", async (id, srcCard) => {
-    const ConversionHarness = java.import("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
-    const workspace = new Workspace();
-    JsonConversionUtils.generateCard(workspace, srcCard);
-    const json = WorkspaceUtils.workspaceToCardScript(workspace);
-    try {
-      const result = ConversionHarness.assertCardReplaysTheSame(1, 2, srcCard.id, JSON.stringify(json));
-      if (result) {
-        expect(result).toEqual(true);
-        return;
-      }
-    } catch (e) {
-      console.warn(e);
-    }
-    expect(json).toEqual(srcCard);
-    weirdos.push(srcCard.id);
-  });
+  test.each(cards)("replays the same %s", testReplayCard);
 
   test.each(cards)("no custom and replays the same %s", async (id, srcCard) => {
     const ConversionHarness = java.import("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
@@ -143,23 +143,9 @@ describe("WorkspaceUtils", () => {
   });
 
   test("just one card", async () => {
-    const srcCard = Object.fromEntries(cards)["weapon_spirit_saber"];
+    const id = "spell_dream_of_ascendance";
 
-    const ConversionHarness = java.import("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
-    const workspace = new Workspace();
-    JsonConversionUtils.generateCard(workspace, srcCard);
-    const json = WorkspaceUtils.workspaceToCardScript(workspace);
-    try {
-      const result = ConversionHarness.assertCardReplaysTheSame(100, 200, srcCard.id, JSON.stringify(json));
-      if (result) {
-        expect(result).toEqual(true);
-        return;
-      }
-    } catch (e) {
-      console.warn(e);
-    }
-    expect(json).toEqual(srcCard);
-    weirdos.push(srcCard.id);
+    testReplayCard(id, Object.fromEntries(cards)[id]);
   });
 
   test.each(cards)("bug test time %s", async (id, srcCard) => {

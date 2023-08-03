@@ -112,6 +112,7 @@ export function inputNameToBlockType(inputName: string) {
     case "condition":
     case "targetSelectionCondition":
     case "andCondition":
+    case "canAffordCondition":
       return "Condition";
     case "spell":
     case "spell1":
@@ -119,6 +120,7 @@ export function inputNameToBlockType(inputName: string) {
     case "deathrattle":
     case "applyEffect":
     case "removeEffect":
+    case "payEffect":
       return "Spell";
     case "filter":
     case "cardFilter":
@@ -172,6 +174,7 @@ export function inputNameToBlockType(inputName: string) {
     case "minValue":
     case "min":
     case "max":
+    case "amountOfCurrency":
       return "ValueProvider";
     case "aura":
       return "Aura";

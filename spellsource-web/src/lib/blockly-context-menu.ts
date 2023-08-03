@@ -40,7 +40,7 @@ const importCardScript: ContextMenuRegistry.RegistryItem = {
       xml.setAttribute("x", String(xy.x));
       xml.setAttribute("y", String(xy.y));
 
-      if (workspace.targetWorkspace) {
+      if (!!workspace.targetWorkspace) {
         workspace = workspace.targetWorkspace;
       }
 

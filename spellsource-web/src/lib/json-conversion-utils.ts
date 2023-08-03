@@ -984,7 +984,9 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
         if ("initSvg" in it) {
           it.initSvg();
         }
-        // it = wrapperBlocks(it, json, name, workspace, json, block.getInput(name).connection);
+        if (isArray(parentJson)) {
+          it = wrapperBlocks(it, json, name, workspace, { ...json, target: "TARGET" }, block.getInput(name).connection);
+        }
         block.getInput(name).connection.connect(it.outputConnection);
       }
       continue;

@@ -5871,5 +5871,28 @@
       }
     ],
     "comment": "Gives a targeted card (probably in hand or deck) a new Opener effect."
+  },
+
+  {
+    "type": "Spell_AddDeathrattle3",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "Give %2 the card's Aftermath",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "AddDeathrattleSpell"
+      },
+      {
+        "name": "target",
+        "type": "input_value",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SELF"
+        }
+      }
+    ]
   }
 ]

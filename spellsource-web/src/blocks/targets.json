@@ -56,7 +56,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "ENEMY_MINIONS",
-    "plural": true
+    "plural": true,
+    "value": -3
   },
   {
     "type": "EntityReference_FRIENDLY_MINIONS",
@@ -65,7 +66,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "FRIENDLY_MINIONS",
-    "plural": true
+    "plural": true,
+    "value": -6
   },
   {
     "type": "EntityReference_ALL_MINIONS",
@@ -74,7 +76,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "ALL_MINIONS",
-    "plural": true
+    "plural": true,
+    "value": -10
   },
   {
     "type": "EntityReference_ENEMY_CHARACTERS",
@@ -83,7 +86,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "ENEMY_CHARACTERS",
-    "plural": true
+    "plural": true,
+    "value": -2
   },
   {
     "type": "EntityReference_FRIENDLY_CHARACTERS",
@@ -92,7 +96,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "FRIENDLY_CHARACTERS",
-    "plural": true
+    "plural": true,
+    "value": -5
   },
   {
     "type": "EntityReference_OTHER_FRIENDLY_MINIONS",
@@ -101,7 +106,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "OTHER_FRIENDLY_MINIONS",
-    "plural": true
+    "plural": true,
+    "value": -7
   },
   {
     "type": "EntityReference_OTHER_MINIONS",
@@ -110,7 +116,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "ALL_OTHER_MINIONS",
-    "plural": true
+    "plural": true,
+    "value": -13
   },
   {
     "type": "EntityReference_ADJACENT_MINIONS",
@@ -118,7 +125,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "ADJACENT_MINIONS",
-    "plural": true
+    "plural": true,
+    "value": -8
   },
   {
     "type": "EntityReference_FRIENDLY_HERO",
@@ -127,7 +135,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "FRIENDLY_HERO",
-    "plural": false
+    "plural": false,
+    "value": -9
   },
   {
     "type": "EntityReference_ENEMY_HERO",
@@ -136,7 +145,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "ENEMY_HERO",
-    "plural": false
+    "plural": false,
+    "value": -4
   },
   {
     "type": "EntityReference_FRIENDLY_WEAPON",
@@ -145,7 +155,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "FRIENDLY_WEAPON",
-    "plural": false
+    "plural": false,
+    "value": -14
   },
   {
     "type": "EntityReference_ENEMY_WEAPON",
@@ -154,7 +165,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "ENEMY_WEAPON",
-    "plural": false
+    "plural": false,
+    "value": -15
   },
   {
     "type": "EntityReference_IT",
@@ -187,7 +199,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "NONE",
-    "plural": false
+    "plural": false,
+    "value": -1
   },
   {
     "type": "EntityReference_FRIENDLY_HAND",
@@ -196,7 +209,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "FRIENDLY_HAND",
-    "plural": true
+    "plural": true,
+    "value": -16
   },
   {
     "type": "EntityReference_ENEMY_HAND",
@@ -205,7 +219,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "ENEMY_HAND",
-    "plural": true
+    "plural": true,
+    "value": -17
   },
   {
     "type": "EntityReference_FRIENDLY_DECK",
@@ -214,7 +229,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "FRIENDLY_DECK",
-    "plural": true
+    "plural": true,
+    "value": -33
   },
   {
     "type": "EntityReference_ENEMY_DECK",
@@ -223,7 +239,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "ENEMY_DECK",
-    "plural": true
+    "plural": true,
+    "value": -34
   },
   {
     "type": "EntityReference_FRIENDLY_PLAYER",
@@ -232,7 +249,8 @@
     "colour": "30",
     "output": "EntityReference",
     "message0": "the allied player",
-    "plural": false
+    "plural": false,
+    "value": -21
   },
   {
     "type": "EntityReference_ENEMY_PLAYER",
@@ -241,7 +259,8 @@
     "colour": "30",
     "output": "EntityReference",
     "message0": "the enemy player",
-    "plural": false
+    "plural": false,
+    "value": -22
   },
   {
     "type": "EntityReference_LEFTMOST_FRIENDLY_CARD_HAND",
@@ -250,7 +269,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "LEFTMOST_FRIENDLY_CARD_HAND",
-    "plural": false
+    "plural": false,
+    "value": -52
   },
   {
     "type": "EntityReference_TRIGGER_HOST",
@@ -258,7 +278,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "TRIGGER_HOST",
-    "plural": false
+    "plural": false,
+    "value": -56
   },
   {
     "type": "EntityReference_ATTACKER",
@@ -266,7 +287,8 @@
     "colour": 30,
     "output": "EntityReference",
     "message0": "the attacker",
-    "plural": false
+    "plural": false,
+    "value": -30
   },
   {
     "type": "EntityReference_TARGET",
@@ -274,7 +296,8 @@
     "colour": 30,
     "output": "EntityReference",
     "message0": "the player's target",
-    "plural": false
+    "plural": false,
+    "value": -25
   },
   {
     "type": "EntityReference_SPELL_TARGET",
@@ -282,7 +305,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "SPELL_TARGET",
-    "plural": false
+    "plural": false,
+    "value": -26
   },
   {
     "type": "EntityReference_OUTPUT",
@@ -290,7 +314,8 @@
     "colour": 30,
     "output": "EntityReference",
     "message0": "the spell's output",
-    "plural": false
+    "plural": false,
+    "value": -32
   },
   {
     "type": "EntityReference_EVENT_TARGET",
@@ -298,7 +323,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "EVENT_TARGET",
-    "plural": false
+    "plural": false,
+    "value": -27
   },
   {
     "type": "EntityReference_EVENT_SOURCE",
@@ -306,7 +332,8 @@
     "output": "EntityReference",
     "colour": 30,
     "data": "EVENT_SOURCE",
-    "plural": false
+    "plural": false,
+    "value": -46
   },
   {
     "type": "EntityReference_FRIENDLY_GRAVEYARD",
@@ -315,7 +342,8 @@
     "colour": 30,
     "output": "EntityReference",
     "message0": "ally graveyard",
-    "plural": false
+    "plural": false,
+    "value": -43
   },
   {
     "type": "EntityReference_FRIENDLY_MINIONS_LEFT_TO_RIGHT",
@@ -324,7 +352,8 @@
     "colour": 30,
     "output": "EntityReference",
     "message0": "allied units (left To right)",
-    "plural": true
+    "plural": true,
+    "value": -64
   },
   {
     "type": "EntityReference_FRIENDLY_SIGNATURE",
@@ -333,7 +362,8 @@
     "colour": 30,
     "output": "EntityReference",
     "message0": "the allied Signature card",
-    "plural": false
+    "plural": false,
+    "value": -78
   },
   {
     "type": "EntityReference_RIGHTMOST_FRIENDLY_CARD_HAND",
@@ -342,7 +372,8 @@
     "colour": 30,
     "output": "EntityReference",
     "message0": "the rightmost card in your hand",
-    "plural": false
+    "plural": false,
+    "value": -74
   },
   {
     "type": "EntityReference_ALL_OTHER_CHARACTERS",
@@ -351,7 +382,8 @@
     "colour": 30,
     "output": "EntityReference",
     "message0": "(all) other characters",
-    "plural": true
+    "plural": true,
+    "value": "-12"
   },
   {
     "type": "EntityReference_ALL_CHARACTERS",
@@ -360,7 +392,8 @@
     "colour": 30,
     "output": "EntityReference",
     "message0": "(all) characters",
-    "plural": true
+    "plural": true,
+    "value": -11
   },
   {
     "type": "EntityReference_LEFTMOST_ENEMY_MINION",
@@ -369,7 +402,8 @@
     "colour": 30,
     "output": "EntityReference",
     "message0": "the leftmost enemy unit",
-    "plural": false
+    "plural": false,
+    "value": -20
   },
   {
     "type": "EntityReference_FRIENDLY_HERO_POWER",
@@ -378,7 +412,8 @@
     "colour": 30,
     "output": "EntityReference",
     "message0": "your Skill",
-    "plural": false
+    "plural": false,
+    "value": -49
   },
   {
     "type": "EntityReference_ENEMY_MINIONS_LEFT_TO_RIGHT",
@@ -387,7 +422,8 @@
     "colour": 30,
     "output": "EntityReference",
     "message0": "enemy units (left To right)",
-    "plural": true
+    "plural": true,
+    "value": -57
   },
   {
     "type": "EntityReference_ADJACENT_TO_TARGET",
@@ -395,7 +431,8 @@
     "colour": 30,
     "output": "EntityReference",
     "message0": "adjacent units to the player's target",
-    "plural": true
+    "plural": true,
+    "value": -65
   },
   {
     "type": "EntityReference_FRIENDLY_CARDS",
@@ -404,7 +441,8 @@
     "colour": 30,
     "output": "EntityReference",
     "message0": "allied cards",
-    "plural": true
+    "plural": true,
+    "value": -69
   },
   {
     "type": "EntityReference_FRIENDLY_TOP_CARD",
@@ -412,7 +450,8 @@
     "data": "FRIENDLY_TOP_CARD",
     "colour": 30,
     "output": "EntityReference",
-    "message0": "the top card of your deck"
+    "message0": "the top card of your deck",
+    "value": -47
   },
   {
     "type": "EntityReference_ENEMY_TOP_CARD",
@@ -420,6 +459,7 @@
     "data": "ENEMY_TOP_CARD",
     "colour": 30,
     "output": "EntityReference",
-    "message0": "the top card of your opponent's deck"
+    "message0": "the top card of your opponent's deck",
+    "value": -48
   }
 ]

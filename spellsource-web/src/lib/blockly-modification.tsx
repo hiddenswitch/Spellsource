@@ -599,9 +599,14 @@ function flyout() {
   // Ensure shadow blocks added for toolbox
   const refreshSelection = Blockly.Toolbox.prototype.refreshSelection;
   Blockly.Toolbox.prototype.refreshSelection = function () {
-    const contents = this.selectedItem_?.getContents();
+    const category = this.getSelectedItem();
+    const contents = category?.getContents();
 
-    if (contents) {
+    if (contents && category.getName() === "Search") {
+      /*if (contents.length == 1 && contents[0].kind === "label") {
+        contents.push({ kind: "button", text: "Search Collection Cards" });
+      }*/
+
       for (let i = 0; i < contents.length; i++) {
         if (contents[i]?.kind === "block" && !contents[i].inputs) {
           contents[i] = getBlock(contents[i].type);

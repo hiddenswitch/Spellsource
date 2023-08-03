@@ -86,7 +86,8 @@ public class ConversionHarness {
     }
 
     static void ensureCardIsInDeck(GameContext context, String cardId) {
-        var cardType = context.getCardById(cardId).getCardType();
+        var card = context.getCardById(cardId);
+        var cardType = card.getCardType();
         if (cardType == CardType.CLASS || cardType == CardType.ENCHANTMENT || cardType == CardType.HERO_POWER ||
                 (cardType == CardType.HERO && context.getCardById(cardId).hasAttribute(Attribute.HP))) {
             return;

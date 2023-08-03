@@ -61,7 +61,7 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 		if (desc.getGameTriggers() != null) {
 			keys.add(Attribute.GAME_TRIGGERS);
 		}
-		if (desc.getRace() != null) {
+		if (desc.getRace() != null && !desc.getRace().equals(Race.NONE)) {
 			keys.add(Attribute.RACE);
 		}
 		if (desc.getSecret() != null) {
@@ -195,7 +195,7 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 			case GAME_TRIGGERS:
 				return desc.getGameTriggers() != null;
 			case RACE:
-				return desc.getRace() != null;
+				return desc.getRace() != null && !desc.getRace().equals(Race.NONE);
 			case SECRET:
 				return desc.getSecret() != null || getCard().hasAttribute(Attribute.SECRET);
 			case QUEST:
