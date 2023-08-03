@@ -1154,7 +1154,7 @@
         "block": {
           "type": "Property_color_SHADOW",
           "fields": {
-            "colour": "#FFFFFF"
+            "colour": "#000000FF"
           }
         }
       }

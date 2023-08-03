@@ -28,7 +28,7 @@ const importCardScript: ContextMenuRegistry.RegistryItem = {
   preconditionFn: ({ block }) => (block.type.startsWith("CatalogueCard") ? "enabled" : "hidden"),
   callback: ({ block }) => {
     let workspace = block.workspace;
-    if (!!block.json && !!block.json.json) {
+    if (block.json && block.json.json) {
       let card = block.json.json;
       let dummyWorkspace = new Workspace();
       JsonConversionUtils.generateCard(dummyWorkspace, card);
@@ -40,7 +40,7 @@ const importCardScript: ContextMenuRegistry.RegistryItem = {
       xml.setAttribute("x", String(xy.x));
       xml.setAttribute("y", String(xy.y));
 
-      if (!!workspace.targetWorkspace) {
+      if (workspace.targetWorkspace) {
         workspace = workspace.targetWorkspace;
       }
 

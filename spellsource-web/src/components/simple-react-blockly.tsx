@@ -19,7 +19,9 @@ export default forwardRef<SimpleReactBlocklyRef, SimpleReactBlocklyProps>((props
   const options = props.workspaceConfiguration;
 
   useEffect(() => {
-    ShortcutRegistry.registry.unregister("startSearch");
+    if (ShortcutRegistry.registry["shortcuts"]?.["startSearch"]) {
+      ShortcutRegistry.registry.unregister("startSearch");
+    }
     const workspace = Blockly.inject(innerBlocklyDiv.current, props.workspaceConfiguration);
     workspace.addChangeListener(props.workspaceDidChange);
     props.init?.(workspace);

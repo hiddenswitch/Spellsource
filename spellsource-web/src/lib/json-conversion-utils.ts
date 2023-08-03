@@ -41,7 +41,7 @@ export function addBlockToMap(block: BlockDef) {
         break;
       }
     }
-    if (!!className) {
+    if (className) {
       classBlocksDictionary[className] ??= [];
       classBlocksDictionary[className].push(block);
     }
@@ -68,9 +68,9 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   }
   card = JSON.parse(JSON.stringify(card));
   let type = card.type as string;
-  if (!!card.quest) {
+  if (card.quest) {
     type = "QUEST";
-  } else if (!!card.secret) {
+  } else if (card.secret) {
     type = "SECRET";
   } else if (type === "HERO" && !card.attributes.hasOwnProperty("HP")) {
     type = "HERO2";
@@ -100,14 +100,14 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   if ("initSvg" in block) {
     block.initSvg();
   }
-  if (!!card.attributes && !!card.attributes.HP) {
+  if (card.attributes && card.attributes.HP) {
     block.setFieldValue(card.attributes.HP, "attributes.HP,attributes.MAX_HP");
   }
 
-  if (!!block.getInput("name")) {
+  if (block.getInput("name")) {
     block.getInput("name").connection.targetBlock().setFieldValue(card.name, "text");
   }
-  if (!!block.getInput("description")) {
+  if (block.getInput("description")) {
     block.getInput("description").connection.targetBlock().setFieldValue(card.description, "text");
   }
 
@@ -128,7 +128,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
       } else {
         handleArg(block.getInput("spell.spell").connection, card.spell, "spell.spell", workspace, card.spell);
       }
-    } else if (card.hasOwnProperty(arg) && !!block.getInput(arg)) {
+    } else if (card.hasOwnProperty(arg) && block.getInput(arg)) {
       simpleHandleArg(block, arg, card, workspace);
     }
   }
@@ -147,13 +147,13 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     }
   }
 
-  if (!!card.countByValue && (String(card.countByValue) === "TRUE" || card.countByValue === true)) {
+  if (card.countByValue && (String(card.countByValue) === "TRUE" || card.countByValue === true)) {
     block.setFieldValue("TRUE", "countByValue");
   }
 
-  if (!!card.battlecry) {
+  if (card.battlecry) {
     let openerBlock;
-    if (!!card.battlecry.condition) {
+    if (card.battlecry.condition) {
       openerBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener2");
     } else {
       openerBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener1");
@@ -178,7 +178,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
       card.battlecry
     );
 
-    if (!!card.battlecry.condition) {
+    if (card.battlecry.condition) {
       handleArg(
         openerBlock.getInput("battlecry.condition").connection,
         card.battlecry.condition,
@@ -190,7 +190,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     lowestBlock = openerBlock;
   }
 
-  if (!!card.deathrattle) {
+  if (card.deathrattle) {
     let aftermathBlock = BlocklyMiscUtils.newBlock(workspace, "Property_aftermath");
     lowestBlock.nextConnection.connect(aftermathBlock.previousConnection);
     if ("initSvg" in aftermathBlock) {
@@ -201,14 +201,14 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   }
 
   const triggers = (trigger, property) => {
-    if (!!card[trigger + "s"] || !!card[trigger]) {
+    if (card[trigger + "s"] || card[trigger]) {
       let triggersBlock = BlocklyMiscUtils.newBlock(workspace, property);
       lowestBlock.nextConnection.connect(triggersBlock.previousConnection);
       if ("initSvg" in triggersBlock) {
         triggersBlock.initSvg();
       }
       let triggers;
-      if (!!card[trigger]) {
+      if (card[trigger]) {
         triggers = [card[trigger]];
       } else {
         triggers = card[trigger + "s"];
@@ -230,7 +230,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   triggers("deckTrigger", "Property_triggers3");
   triggers("gameTrigger", "Property_triggers4");
 
-  if (!!card.auras || !!card.aura) {
+  if (card.auras || card.aura) {
     let aurasBlock = BlocklyMiscUtils.newBlock(workspace, "Property_auras");
     lowestBlock.nextConnection.connect(aurasBlock.previousConnection);
     if ("initSvg" in aurasBlock) {
@@ -315,7 +315,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     lowestBlock = costyBlock;
   }
 
-  if (!!card.cardCostModifier) {
+  if (card.cardCostModifier) {
     let costyBlock = BlocklyMiscUtils.newBlock(workspace, "Property_cardCostModifier");
     lowestBlock.nextConnection.connect(costyBlock.previousConnection);
     if ("initSvg" in costyBlock) {
@@ -327,7 +327,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     lowestBlock = costyBlock;
   }
 
-  if (!!card.dynamicDescription) {
+  if (card.dynamicDescription) {
     let descriptionsBlock = BlocklyMiscUtils.newBlock(workspace, "Property_descriptions");
 
     dynamicDescription(workspace, descriptionsBlock.getFirstStatementConnection(), card.dynamicDescription, "i");
@@ -349,7 +349,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     lowestBlock = setBlock;
   }
 
-  if (!!card.condition) {
+  if (card.condition) {
     let conditionBlock = BlocklyMiscUtils.newBlock(workspace, "Property_condition");
     simpleHandleArg(conditionBlock, "condition", card, workspace);
     conditionBlock.previousConnection.connect(lowestBlock.nextConnection);
@@ -372,12 +372,12 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     for (let path of ["art.primary", "art.secondary", "art.shadow", "art.highlight", "art.body.vertex"]) {
       let json = card;
       for (let arg of path.split(".")) {
-        if (!!json) {
+        if (json) {
           json = json[arg];
         }
       }
 
-      if (!!json && !!block.getInput(path)) {
+      if (json && block.getInput(path)) {
         let colorBlock = block.getInput(path).connection.targetBlock();
         colorBlock.setFieldValue(new RgbColour(json["r"], json["g"], json["b"], json["a"]).toHex(), "colour");
       }
@@ -397,11 +397,11 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     }
   }
 
-  if (!!card.art?.sprite?.named) {
+  if (card.art?.sprite?.named) {
     let spriteBlock = BlocklyMiscUtils.newBlock(workspace, "Property_sprite");
     spriteBlock.previousConnection.connect(lowestBlock.nextConnection);
 
-    if (!!Blockly.Blocks["Art_" + card.art.sprite.named]) {
+    if (Blockly.Blocks["Art_" + card.art.sprite.named]) {
       let artBlock = BlocklyMiscUtils.newBlock(workspace, "Art_" + card.art.sprite.named);
       spriteBlock.getInput("art.sprite.named").connection.connect(artBlock.outputConnection);
       if ("initSvg" in artBlock) {
@@ -455,17 +455,17 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
 
     block.getInput(inputName).connection.connect(descBlock.outputConnection);
 
-    if (!!description.value) {
+    if (description.value) {
       if (isNumeric(description.value)) {
         handleIntArg(descBlock, "value", workspace, description.value);
       } else {
         handleArg(descBlock.getInput("value").connection, description.value, "value", workspace, description);
       }
     }
-    if (!!description.condition) {
+    if (description.condition) {
       handleArg(descBlock.getInput("condition").connection, description.condition, "condition", workspace, description);
     }
-    if (!!description.string) {
+    if (description.string) {
       descBlock.setFieldValue(description.string, "string");
     }
     if (description.hasOwnProperty("description1")) {
@@ -475,7 +475,7 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
       dynamicDescription(workspace, block.getInput(inputName).connection, [description.description2], "description2");
     }
 
-    if (!!description.descriptions) {
+    if (description.descriptions) {
       dynamicDescription(workspace, descBlock.getFirstStatementConnection(), description.descriptions, "i");
     }
 
@@ -496,7 +496,7 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
 export function getInputEndsWith(block, inputName) {
   for (let name of allArgNames) {
     let input = block.getInput(name);
-    if (!!input) {
+    if (input) {
       if (name.endsWith(inputName)) {
         return input;
       }
@@ -514,7 +514,7 @@ export function getInputEndsWith(block, inputName) {
  * @returns {boolean}
  */
 export function enchantmentNeedsOptions(trigger, props) {
-  return !(props.length === 2 && !!trigger.eventTrigger && !!trigger.spell);
+  return !(props.length === 2 && trigger.eventTrigger && trigger.spell);
 }
 
 /**
@@ -597,7 +597,7 @@ export function costModifierNeedsOptions(costModifier, props) {
     return true;
   }
   for (let prop of props) {
-    if (!!Blockly.Blocks["CostModifierOption_" + prop]) {
+    if (Blockly.Blocks["CostModifierOption_" + prop]) {
       return true;
     }
   }
@@ -656,10 +656,10 @@ export function costModifier(costyBlock: Block | BlockSvg, costModifier, workspa
   } else {
     simpleHandleArg(costModifierBlock, "value", costModifier, workspace);
   }
-  if (!!costModifier.target) {
+  if (costModifier.target) {
     simpleHandleArg(costModifierBlock, "target", costModifier, workspace);
   }
-  if (!!costModifier.operation) {
+  if (costModifier.operation) {
     costModifierBlock.setFieldValue(costModifier.operation, "operation");
   }
 
@@ -683,7 +683,7 @@ export function costModifier(costyBlock: Block | BlockSvg, costModifier, workspa
  */
 export function auras(block: Block | BlockSvg, json, workspace) {
   let auras;
-  if (!!json.aura) {
+  if (json.aura) {
     auras = [json.aura];
   } else {
     auras = json["auras"];
@@ -734,15 +734,15 @@ export function getMatch(json, inputName, parentJson) {
   } else if (json.class) {
     //need to find the block that represents that class
     let className = json.class;
-    if (className === "AddEnchantmentSpell" && !!json.trigger) {
+    if (className === "AddEnchantmentSpell" && json.trigger) {
       if (enchantmentNeedsOptions(json.trigger, relevantProperties(json.trigger))) {
-        if (!!json.revertTrigger) {
+        if (json.revertTrigger) {
           return Blockly.Blocks["Spell_AddEnchantment5"].json;
         } else {
           return Blockly.Blocks["Spell_AddEnchantment2"].json;
         }
       } else {
-        if (!!json.revertTrigger) {
+        if (json.revertTrigger) {
           return Blockly.Blocks["Spell_AddEnchantment4"].json;
         } else {
           return Blockly.Blocks["Spell_AddEnchantment"].json;
@@ -898,7 +898,7 @@ export function handleArg(
 ) {
   json = mutateJson(json);
 
-  if (!!connection.targetBlock() && connection.targetBlock().type === "Property_text_SHADOW") {
+  if (connection.targetBlock() && connection.targetBlock().type === "Property_text_SHADOW") {
     connection.targetBlock().setFieldValue(json, "text");
     return;
   }
@@ -919,7 +919,7 @@ export function handleArg(
     } else {
       block = handleNoMatch(json, inputName, parentJson, workspace);
     }
-  } else if (!!connection.targetBlock() && connection.targetBlock().type === bestMatch.type) {
+  } else if (connection.targetBlock() && connection.targetBlock().type === bestMatch.type) {
     if (!connection.targetBlock().isShadow()) {
       block = connection.targetBlock();
       connection.disconnect();
@@ -1099,8 +1099,8 @@ export function wrapperBlocks(
   let outerBlock = block;
 
   if (
-    !!json.targetPlayer &&
-    !!bestMatch &&
+    json.targetPlayer &&
+    bestMatch &&
     (json.targetPlayer !== "SELF" || json.class === "ReturnTargetToHandSpell") &&
     (bestMatch.output === "ValueProviderDesc" || bestMatch.output === "SpellDesc" || bestMatch.output === "Source")
   ) {
@@ -1120,8 +1120,8 @@ export function wrapperBlocks(
 
   if (
     inputName === "target" &&
-    !!parentJson.target &&
-    !!parentJson.filter &&
+    parentJson.target &&
+    parentJson.filter &&
     !getInputEndsWith(connection.getSourceBlock(), "filter") &&
     !connection.getSourceBlock().getInput("filter")
   ) {
@@ -1130,8 +1130,8 @@ export function wrapperBlocks(
   }
 
   if (
-    !!json.invert &&
-    !!bestMatch &&
+    json.invert &&
+    bestMatch &&
     !argsList(bestMatch)
       .map((arg) => arg.name.split(".").slice(-1)[0])
       .includes("invert")
@@ -1143,20 +1143,20 @@ export function wrapperBlocks(
     }
   }
 
-  if (!!json.class && json.class.endsWith("Trigger")) {
-    if (!!json.fireCondition) {
+  if (json.class && json.class.endsWith("Trigger")) {
+    if (json.fireCondition) {
       wrap("Trigger_FireCondition");
       simpleHandleArg(outerBlock, "fireCondition", json, workspace);
     }
-    if (!!json.queueCondition) {
+    if (json.queueCondition) {
       wrap("Trigger_QueueCondition");
       simpleHandleArg(outerBlock, "queueCondition", json, workspace);
     }
-    if (!!json.race) {
+    if (json.race) {
       wrap("Trigger_Race");
       simpleHandleArg(outerBlock, "race", json, workspace);
     }
-    if (!!json.requiredAttribute) {
+    if (json.requiredAttribute) {
       let match = getMatch(json.requiredAttribute, "attribute", json);
       wrap("Trigger_Attribute");
       simpleHandleArg(outerBlock, "requiredAttribute", json, workspace);

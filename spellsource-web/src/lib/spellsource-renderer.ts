@@ -47,7 +47,7 @@ class SpellsourceRenderInfo extends Blockly.geras.RenderInfo {
   // now every single important row has a spacer or equivalent both above and below
   alignRowElements_() {
     let block = Blockly.Blocks[this.block_.type];
-    if (!(!!block.json && !!block.json.type)) {
+    if (!(block.json && block.json.type)) {
       return super.alignRowElements_();
     }
 
@@ -99,10 +99,10 @@ class SpellsourceRenderInfo extends Blockly.geras.RenderInfo {
         if (Types.isSpacer(row)) {
           let aboveRow = this.rows[i + 1];
           let belowRow = this.rows[i - 1];
-          if (!!aboveRow && !Types.isSpacer(aboveRow) && !Types.isTopOrBottomRow(aboveRow)) {
+          if (aboveRow && !Types.isSpacer(aboveRow) && !Types.isTopOrBottomRow(aboveRow)) {
             desiredWidth = aboveRow.width;
           }
-          if (!!belowRow && !Types.isSpacer(belowRow) && !Types.isTopOrBottomRow(belowRow)) {
+          if (belowRow && !Types.isSpacer(belowRow) && !Types.isTopOrBottomRow(belowRow)) {
             desiredWidth = belowRow.width;
           }
         } else if (Types.isTopRow(row)) {

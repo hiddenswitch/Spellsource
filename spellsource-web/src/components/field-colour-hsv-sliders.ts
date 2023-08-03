@@ -588,7 +588,7 @@ Blockly.Css.register(`
   -webkit-appearance: none;
   width: 150px;
   height: 24px;
-  margin: 4px 8px 4px 8px;
+  margin: 4px 8px 9px 8px;
   padding: 0;
 }
 .fieldColourSlider:last-child {

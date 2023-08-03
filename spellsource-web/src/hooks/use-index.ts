@@ -9,30 +9,30 @@ import { ImageDef } from "../__generated__/client";
 export type SearchNode = BlockSearchNode | CardSearchNode | ArtSearchNode | MarkdownSearchNode;
 
 interface ISearchNode {
-  id: string
-  title: string
-  description: string
-  path: string
+  id: string;
+  title: string;
+  description: string;
+  path: string;
 }
 
 interface BlockSearchNode extends ISearchNode {
-  nodeType: "Block"
-  node: BlockDef
+  nodeType: "Block";
+  node: BlockDef;
 }
 
 interface CardSearchNode extends ISearchNode {
-  nodeType: "Card"
-  node: CardDef
+  nodeType: "Card";
+  node: CardDef;
 }
 
 interface ArtSearchNode extends ISearchNode {
-  nodeType: "File"
-  node: ImageDef
+  nodeType: "File";
+  node: ImageDef;
 }
 
 interface MarkdownSearchNode extends ISearchNode {
-  nodeType: "MarkdownRemark"
-  node: string
+  nodeType: "MarkdownRemark";
+  node: string;
 }
 
 export const cardSearchNode = (card: CardDef): CardSearchNode => ({
@@ -42,17 +42,17 @@ export const cardSearchNode = (card: CardDef): CardSearchNode => ({
   nodeType: "Card",
   node: card,
   path: `/cards/${card.id}`,
-})
+});
 
 // returns index
 export const useIndex = () => {
-  const { allBlocks, allArt, classes, blocksByType, ready } = useContext(BlocklyDataContext)
-  const index = useRef<Index<SearchNode> | undefined>(undefined)
+  const { allBlocks, allArt, classes, blocksByType, ready } = useContext(BlocklyDataContext);
+  const index = useRef<Index<SearchNode> | undefined>(undefined);
   if (!index.current && ready) {
-    index.current = elasticlunr<SearchNode>(idx => {
-      idx.setRef("id")
-      idx.addField("title")
-      idx.addField("description")
+    index.current = elasticlunr<SearchNode>((idx) => {
+      idx.setRef("id");
+      idx.addField("title");
+      idx.addField("description");
 
       for (const block of allBlocks) {
         idx.addDoc({
@@ -62,7 +62,7 @@ export const useIndex = () => {
           nodeType: "Block",
           node: block,
           path: `/card-editor?block=${block.type}`,
-        })
+        });
       }
 
       for (const art of allArt) {
@@ -73,57 +73,56 @@ export const useIndex = () => {
           nodeType: "File",
           node: art,
           path: art.src,
-        })
+        });
       }
 
       for (const card of Object.values(classes)) {
-        idx.addDoc(cardSearchNode(card))
+        idx.addDoc(cardSearchNode(card));
       }
-    })
+    });
   }
 
-  return index.current
-}
+  return index.current;
+};
 
 const setupSearchMessage = (block: BlockDef, blocksByType: Record<string, BlockDef>) => {
   const getTextForBlock = (node: BlockDef) => {
-    let text = ""
+    let text = "";
     if (node.messages) {
       for (let i = 0; i < node.messages.length; i++) {
-        let message = node.messages[i]
-        if (!!node.args && !!node.args[i] && !!node.args[i].args) {
-          let args = node.args[i].args
+        let message = node.messages[i];
+        if (node.args && node.args[i] && node.args[i].args) {
+          let args = node.args[i].args;
           for (let j = 0; j < args.length; j++) {
-            let text = getTextForArg(args[j])
-            message = message.replace("%" + (j + 1).toString(), text)
+            let text = getTextForArg(args[j]);
+            message = message.replace("%" + (j + 1).toString(), text);
           }
         }
-        text += message + " "
+        text += message + " ";
       }
     }
-    return text
-  }
+    return text;
+  };
 
   const getTextForArg = (arg) => {
     if (arg.shadow?.type && arg.shadow.type in blocksByType) {
-      return getTextForBlock(blocksByType[arg.shadow.type])
+      return getTextForBlock(blocksByType[arg.shadow.type]);
     }
-    if (!!arg.options) {
-      let text = ""
+    if (arg.options) {
+      let text = "";
       for (let option of arg.options) {
-        text += option[0] + " "
+        text += option[0] + " ";
       }
-      return text
+      return text;
     }
     if (arg.type === "field_label_plural") {
-      return arg.value
+      return arg.value;
     }
-    return ""
-  }
+    return "";
+  };
 
-  return getTextForBlock(block).replace(/\s+/g, " ").trim()
-}
-
+  return getTextForBlock(block).replace(/\s+/g, " ").trim();
+};
 
 /*
 export const useBlockIndex = () => {

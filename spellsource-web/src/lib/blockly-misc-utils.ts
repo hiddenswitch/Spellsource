@@ -29,16 +29,16 @@ export const addBlock = (block: BlockDef) => {
   return (Blockly.Blocks[block.type!] = {
     init: function () {
       this.jsonInit(block);
-      if (!!block.data) {
+      if (block.data) {
         this.data = block.data;
       }
-      if (!!block.hat) {
+      if (block.hat) {
         this.hat = block.hat;
       }
       if (block.type!.endsWith("SHADOW")) {
         this.setMovable(false);
       }
-      if (!!block.comment) {
+      if (block.comment) {
         this.setTooltip(block.comment);
       }
     },
@@ -58,7 +58,7 @@ export function manuallyAddShadowBlocks(thisBlock: Block, block: object) {
 
       const shadow = arg["shadow"] ?? arg["block"];
       const input = thisBlock.getInput(arg.name);
-      if (!shadow || !input || !!input.connection.targetBlock()) continue;
+      if (!shadow || !input || input.connection.targetBlock()) continue;
 
       let shadowBlock = newBlock(thisBlock.workspace, shadow.type);
 
@@ -242,14 +242,14 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options
     }
 
     // Patch back in values from union type
-    if (!!block.args) {
+    if (block.args) {
       block.args.forEach((args) => {
         args.args.forEach((arg) => {
-          if (!!arg.valueI) {
+          if (arg.valueI) {
             arg.value = arg.valueI;
             delete arg.valueI;
           }
-          if (!!arg.valueS) {
+          if (arg.valueS) {
             arg.value = arg.valueS;
             delete arg.valueS;
           }
@@ -264,7 +264,7 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options
             delete arg.valueB;
           }
 
-          if (!!data.allIcons && arg.type === "field_image" && arg.src && !arg.src.includes(".")) {
+          if (data.allIcons && arg.type === "field_image" && arg.src && !arg.src.includes(".")) {
             for (let icon of data.allIcons) {
               if (icon.name === arg.src) {
                 arg.src = icon.src;
@@ -278,14 +278,14 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options
       delete block.args;
     }
 
-    if (!!block.messages) {
+    if (block.messages) {
       block.messages.forEach((message, i) => {
         block["message" + i.toString()] = message;
       });
       delete block.messages;
     }
 
-    if (!!block.output && !JsonConversionUtils.blockTypeColors[block.output]) {
+    if (block.output && !JsonConversionUtils.blockTypeColors[block.output]) {
       JsonConversionUtils.blockTypeColors[block.output] = block.colour;
     }
 
@@ -366,10 +366,10 @@ export function setupHeroClassColor(card: CardDef) {
     }
 
 
-    if (!!card.art?.sprite?.named) {
+    if (card.art?.sprite?.named) {
       let name = 'Art_' + card.art.sprite.named
       let artBlock = Blockly.Blocks[name];
-      if (!!artBlock) {
+      if (artBlock) {
         artBlock.used = true
       }
     }
@@ -386,7 +386,7 @@ export function cardDescription(card: CardDef) {
     return "";
   }
   let desc = '"' + words[0];
-  if (!!card.race) {
+  if (card.race) {
     desc = toTitleCaseCorrected(card.race) + " " + desc;
   }
   let counter = desc.length;
@@ -446,7 +446,7 @@ export function loadableInit(Blockly) {
 }
 
 export function switchRenderer(renderer, workspace) {
-  if (!!workspace.render && renderer !== workspace.getRenderer().name) {
+  if (workspace.render && renderer !== workspace.getRenderer().name) {
     workspace.renderer_ = Blockly.blockRendering.init(
       renderer,
       workspace.getTheme(),
@@ -477,21 +477,21 @@ export function pluralStuff(workspace) {
         //on a plural field, 'src' is where it should look to know whether it's plural or not
         if (arg.src === "OUTPUT") {
           connection = block.outputConnection;
-          if (!!block.outputConnection.targetBlock()) {
+          if (block.outputConnection.targetBlock()) {
             let targetBlock = connection.targetBlock();
-            if (targetBlock.type.endsWith("_I") && !!targetBlock.getPreviousBlock()) {
+            if (targetBlock.type.endsWith("_I") && targetBlock.getPreviousBlock()) {
               let prevBlock = targetBlock.getPreviousBlock();
-              while (!!prevBlock.getPreviousBlock()) {
+              while (prevBlock.getPreviousBlock()) {
                 prevBlock = prevBlock.getPreviousBlock();
               }
               connection = prevBlock.outputConnection;
               targetBlock = connection.targetBlock();
             }
-            if (!!targetBlock) {
+            if (targetBlock) {
               //if the 'src' arg appears on the 'input_value' it's connected to, redirect to that
               let name = targetBlock.getInputWithBlock(block)?.name;
               for (let arg of JsonConversionUtils.argsList(targetBlock.json, "input")) {
-                if (arg.name === name && !!arg.src) {
+                if (arg.name === name && arg.src) {
                   //
                   connection = targetBlock.getInput(arg.src).connection;
                 }
@@ -502,10 +502,10 @@ export function pluralStuff(workspace) {
           connection = block.getInput(arg.src)?.connection;
         }
         if (!connection) {
-          if (!!block.getField(arg.src)) {
+          if (block.getField(arg.src)) {
             shouldBePlural = block.getFieldValue(arg.src) !== 1;
           }
-        } else if (!!connection.targetBlock()) {
+        } else if (connection.targetBlock()) {
           let targetBlock = connection.targetBlock();
           if (targetBlock.json?.plural != null) {
             shouldBePlural = targetBlock.json.plural;
@@ -549,8 +549,7 @@ export function pluralStuff(workspace) {
   }
 }
 
-export function isSpellsourceBlock(type) {
-  const blocks = Blockly.Blocks;
+export function isSpellsourceBlock(type): boolean {
   return !!Blockly.Blocks[type]?.json?.type;
 }
 

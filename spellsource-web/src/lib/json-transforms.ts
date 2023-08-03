@@ -10,13 +10,13 @@ const isNumber = (num) => typeof num == "number";
 const isArray = (arr) => Array.isArray(arr);
 
 export const transformBlock = (object: BlockDef) => {
-  if (!object.id && !!object.type) {
+  if (!object.id && object.type) {
     object.id = object.type;
   }
   const newArgs = [];
   // Patch up types
   for (let i = 0; i <= 9; i++) {
-    if (!!object["args" + i.toString()]) {
+    if (object["args" + i.toString()]) {
       const args = object["args" + i.toString()];
       args.forEach((arg) => {
         if (arg.hasOwnProperty("value")) {
@@ -31,7 +31,7 @@ export const transformBlock = (object: BlockDef) => {
           }
           delete arg.value;
         }
-        if (!!arg.check) {
+        if (arg.check) {
           if (isArray(arg.check)) {
             return;
           }
@@ -46,9 +46,9 @@ export const transformBlock = (object: BlockDef) => {
   }
   const newMessages = [];
   for (let i = 0; i <= 9; i++) {
-    if (!!object["message" + i.toString()]) {
+    if (object["message" + i.toString()]) {
       let newMessage = object["message" + i.toString()];
-      if (!!newArgs[i] && !!newArgs[i].args) {
+      if (newArgs[i] && newArgs[i].args) {
         for (let j = 0; j < newArgs[i].args.length; j++) {
           let arg = newArgs[i].args[j];
           let token = "%" + (1 + j).toString();
@@ -90,7 +90,7 @@ export const fixArt = (classes: Record<string, CardDef>) => {
 };
 
 export const transformCategory = (object) => {
-  if (!object.id && !!object.Style) {
+  if (!object.id && object.Style) {
     object.id = object.Style;
   }
   object.path = "/toolboxes/" + object.id;
@@ -122,14 +122,14 @@ export const jsonTransformFileNode = (object, fileNode) => {
     object.path = "/cards/" + object.id;
   } else if ((object.hasOwnProperty("args0") || object.hasOwnProperty("message0")) && object.hasOwnProperty("type")) {
     // this is a blockly block
-    if (!object.id && !!object.type) {
+    if (!object.id && object.type) {
       object.id = object.type;
     }
 
     const newArgs = [];
     // Patch up types
     for (let i = 0; i <= 9; i++) {
-      if (!!object["args" + i.toString()]) {
+      if (object["args" + i.toString()]) {
         const args = object["args" + i.toString()];
         args.forEach((arg) => {
           if (arg.hasOwnProperty("value")) {
@@ -144,7 +144,7 @@ export const jsonTransformFileNode = (object, fileNode) => {
             }
             delete arg.value;
           }
-          if (!!arg.check) {
+          if (arg.check) {
             if (isArray(arg.check)) {
               return;
             }
@@ -160,9 +160,9 @@ export const jsonTransformFileNode = (object, fileNode) => {
     }
     const newMessages = [];
     for (let i = 0; i <= 9; i++) {
-      if (!!object["message" + i.toString()]) {
+      if (object["message" + i.toString()]) {
         let newMessage = object["message" + i.toString()];
-        if (!!newArgs[i] && !!newArgs[i].args) {
+        if (newArgs[i] && newArgs[i].args) {
           for (let j = 0; j < newArgs[i].args.length; j++) {
             let arg = newArgs[i].args[j];
             let token = "%" + (1 + j).toString();
@@ -183,7 +183,7 @@ export const jsonTransformFileNode = (object, fileNode) => {
     object.path = "/blocks/" + object.id;
   } else if (object.hasOwnProperty("Style") && object.hasOwnProperty("BlockCategoryList")) {
     // this is a toolbox definition
-    if (!object.id && !!object.Style) {
+    if (!object.id && object.Style) {
       object.id = object.Style;
     }
     object.path = "/toolboxes/" + object.id;

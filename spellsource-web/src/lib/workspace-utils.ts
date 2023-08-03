@@ -45,12 +45,12 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
   let next = null;
   switch (xml.nodeName) {
     case "#document":
-      if (!!xml.firstElementChild) {
+      if (xml.firstElementChild) {
         return xmlToCardScript(xml.firstElementChild);
       }
       break;
     case "xml":
-      if (!!xml.firstElementChild) {
+      if (xml.firstElementChild) {
         const elementNodes = filter(Array.from(xml.childNodes) as Element[], (cn) => {
           return cn.nodeType === Node.ELEMENT_NODE && BlocklyMiscUtils.isSpellsourceBlock(cn.getAttribute("type"));
         });
@@ -93,14 +93,14 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
             }
             break;
           case "next":
-            if (!!childNode.firstElementChild && childNode.firstElementChild.nodeName === "block") {
+            if (childNode.firstElementChild && childNode.firstElementChild.nodeName === "block") {
               nextNode = childNode.firstElementChild;
             }
             break;
         }
       }
 
-      if (!!nextNode) {
+      if (nextNode) {
         next = xmlToCardScript(nextNode, obj);
       }
 
@@ -122,7 +122,7 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
                 delete obj.customArg;
                 delete obj.customValue;
               }
-              if (!!prev) {
+              if (prev) {
                 merge(prev, obj);
               }
               retValue = obj;
@@ -132,7 +132,7 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
                 return {};
               }
               const boolAttribute = { [obj.attribute]: true };
-              if (!!next) {
+              if (next) {
                 extend(boolAttribute, next);
               }
               retValue = boolAttribute;
@@ -142,7 +142,7 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
                 return {};
               }
               const intAttribute = { [obj.attribute]: obj.value };
-              if (!!next) {
+              if (next) {
                 extend(intAttribute, next);
               }
               retValue = intAttribute;
@@ -150,10 +150,10 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
             case BLOCKLY_ARRAY_ELEMENT:
               // Handle every array statement on this block
               retValue = [obj];
-              if (!!obj.i) {
+              if (obj.i) {
                 retValue = [obj.i];
               }
-              if (!!next) {
+              if (next) {
                 if (isArray(next)) {
                   retValue = retValue.concat(next);
                 } else {
@@ -202,7 +202,7 @@ function postProcessCardScript(cardScript) {
     return cardScript;
   }
   rearrangeInputValues(cardScript);
-  if (!!cardScript.card && !(typeof cardScript.card === "string")) {
+  if (cardScript.card && !(typeof cardScript.card === "string")) {
     delete cardScript.card;
   }
   if (cardScript.target === "IT") {
@@ -215,32 +215,28 @@ function postProcessCardScript(cardScript) {
     delete cardScript.cardType;
   }
 
-  if (typeof cardScript === "object" && "type" in cardScript && cardScript.battlecry) {
+  if (cardScript.hasOwnProperty("type") && cardScript.battlecry) {
     if (!cardScript.attributes) {
       cardScript.attributes = {};
     }
     cardScript.attributes.BATTLECRY = true;
   }
 
-  if (typeof cardScript === "object" && "type" in cardScript && cardScript.deathrattle) {
+  if (cardScript.hasOwnProperty("type") && cardScript.deathrattle) {
     if (!cardScript.attributes) {
       cardScript.attributes = {};
     }
     cardScript.attributes.DEATHRATTLES = true;
   }
 
-  if (
-    typeof cardScript === "object" &&
-    "type" in cardScript &&
-    JSON.stringify(cardScript).includes('"class":"DiscoverSpell"')
-  ) {
+  if (cardScript.hasOwnProperty("type") && JSON.stringify(cardScript).includes(`"class":"DiscoverSpell"`)) {
     if (!cardScript.attributes) {
       cardScript.attributes = {};
     }
     cardScript.attributes.DISCOVER = true;
   }
 
-  if (!!cardScript.class && cardScript.class.endsWith("Aura")) {
+  if (cardScript.class && cardScript.class.endsWith("Aura")) {
     if (
       cardScript.attribute &&
       !cardScript.attribute.startsWith("AURA_") &&
@@ -250,18 +246,18 @@ function postProcessCardScript(cardScript) {
       cardScript.attribute = "AURA_" + cardScript.attribute;
     }
 
-    if (!!cardScript.trigger) {
+    if (cardScript.trigger) {
       cardScript.triggers = [cardScript.trigger];
       delete cardScript.trigger;
     }
   } else {
-    if (!!cardScript.triggers && cardScript.triggers.length === 1) {
+    if (cardScript.triggers && cardScript.triggers.length === 1) {
       cardScript.trigger = cardScript.triggers[0];
       delete cardScript.triggers;
     }
   }
 
-  if (!!cardScript.aura && isArray(cardScript.aura)) {
+  if (cardScript.aura && isArray(cardScript.aura)) {
     cardScript.aura = cardScript.aura[0];
   }
 
@@ -282,6 +278,18 @@ function postProcessCardScript(cardScript) {
 
   if (cardScript.type === "CLASS" && cardScript.id && !cardScript.heroClass) {
     cardScript.heroClass = cardScript.id;
+  }
+
+  if (cardScript.hasOwnProperty("type") && cardScript.hasOwnProperty("attributes")) {
+    if (cardScript.attributes.BASE_ATTACK) {
+      cardScript.baseAttack = cardScript.attributes.BASE_ATTACK;
+      delete cardScript.attributes.BASE_ATTACK;
+    }
+
+    if (cardScript.attributes.BASE_HP) {
+      cardScript.baseHp = cardScript.attributes.BASE_HP;
+      delete cardScript.attributes.BASE_HP;
+    }
   }
 
   return cardScript;
@@ -382,14 +390,14 @@ function rearrangeInputValues(cardScript) {
         }
       }
       //then do the last one that might override what we're working with
-      if (!!cardScript[cardScriptKey]["super"] && typeof cardScript[cardScriptKey]["super"] === "string") {
+      if (cardScript[cardScriptKey]["super"] && typeof cardScript[cardScriptKey]["super"] === "string") {
         cardScript[cardScriptKey] = cardScript[cardScriptKey]["super"];
       } else if (
-        !!cardScript["super"] &&
+        cardScript["super"] &&
         cardScript.propertyIsEnumerable("super") &&
         typeof cardScript["super"] !== "string"
       ) {
-        let andWhenEveryonesSuper = !!cardScript.super.super;
+        let andWhenEveryonesSuper = cardScript.super.super;
         merge(cardScript, cardScript["super"]);
         if (andWhenEveryonesSuper) {
           //no one will be

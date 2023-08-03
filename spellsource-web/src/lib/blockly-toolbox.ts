@@ -567,7 +567,7 @@ function category(name, color, tooltip, contents, props = null): StaticCategoryI
   if (contents?.length) {
     category.contents = contents;
   }
-  if (!!props) {
+  if (props) {
     for (let propsKey in props) {
       category[propsKey] = props[propsKey];
     }
@@ -644,7 +644,7 @@ function inclusionContents(prefix, ...inclusions) {
 function artContents(used) {
   let contents: Partial<ToolboxItemInfo>[] = [];
   for (let block in Blockly.Blocks) {
-    if (defaultTest(block) && block.startsWith("Art_") && (used === !!Blockly.Blocks[block].used || used === null)) {
+    if (defaultTest(block) && block.startsWith("Art_") && (used === Blockly.Blocks[block].used || used === null)) {
       contents.push(getBlock(block));
     }
   }

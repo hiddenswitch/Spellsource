@@ -90,7 +90,7 @@ export function generateJavaScript() {
     }
 
     if (!javascriptGenerator.forBlock[blocksKey]) {
-      if (!!Blockly.Blocks[blocksKey].json?.data && !!Blockly.Blocks[blocksKey].json?.output) {
+      if (Blockly.Blocks[blocksKey].json?.data && Blockly.Blocks[blocksKey].json?.output) {
         javascriptGenerator.forBlock[blocksKey] = function (block) {
           return ["'" + Blockly.Blocks[blocksKey].json.data + "'", ORDER_NONE];
         };

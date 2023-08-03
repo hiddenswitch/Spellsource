@@ -213,7 +213,7 @@ function autoDecoration() {
           continue;
         }
 
-        if (!!addedBlock) {
+        if (addedBlock) {
           otherConnection.connect(addedBlock.previousConnection);
           if (addedBlock.initSvg) {
             addedBlock.initSvg();
@@ -362,8 +362,8 @@ function tooltips() {
   const show = Blockly.Tooltip["show_"];
   Blockly.Tooltip["show_"] = function () {
     show.call(this);
-    if (!!Blockly.Tooltip["DIV"]) {
-      if (!!Blockly.Tooltip["element_"].tooltipColor) {
+    if (Blockly.Tooltip["DIV"]) {
+      if (Blockly.Tooltip["element_"].tooltipColor) {
         Blockly.Tooltip["DIV"]["style"].backgroundColor = Blockly.Tooltip["element_"].tooltipColor;
         Blockly.Tooltip["DIV"]["style"].color = "#ffffff";
       } else {
@@ -393,7 +393,7 @@ function colorfulColors() {
   Blockly.Field.prototype.setValue = function (newValue) {
     defaultFunction.call(this, newValue);
     let source = this.sourceBlock_;
-    if (!!source && !!Blockly.Blocks[source.type].json) {
+    if (source && Blockly.Blocks[source.type].json) {
       let json = Blockly.Blocks[source.type].json;
       if (json.output === "Color") {
         let r = source.getFieldValue("r");
@@ -564,7 +564,7 @@ function categoryIndenting() {
       this.foreignObject_.previousElementSibling.remove();
       let card = JSON.parse(block.getCommentText()) as CardDef;
 
-      /!*if (!!card.art?.sprite?.named && !!block.artURL) {
+      /!*if (card.art?.sprite?.named && block.artURL) {
         card.art.sprite.named = block.artURL
       }*!/
 

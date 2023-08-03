@@ -46,7 +46,7 @@ const CardRow: FunctionComponent<{
   const [, dragRef, dragPreview] = useDrag({
     type: "collection-card",
     item: { id: cardScript.id },
-    canDrag: (monitor) => !!collection.addToDeck,
+    canDrag: (monitor) => collection.addToDeck,
   });
 
   return (
@@ -293,12 +293,12 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
         <Button
           disabled={!getCards.data}
           variant={"light"}
-          active={!!uncollectible}
+          active={uncollectible}
           onClick={() => setUncollectible(!uncollectible)}
         >
           {uncollectible ? "Uncollectible" : "Collectible"}
         </Button>
-        <Button disabled={!getCards.data} variant={"light"} active={!!ownOnly} onClick={() => setOwnOnly(!ownOnly)}>
+        <Button disabled={!getCards.data} variant={"light"} active={ownOnly} onClick={() => setOwnOnly(!ownOnly)}>
           {ownOnly ? "Your Cards" : "All Cards"}
         </Button>
       </div>

@@ -27,7 +27,7 @@ export function addShadow(type, name, shadowType, fieldName = null, value = null
       type: shadowType,
     },
   };
-  if (!!fieldName) {
+  if (fieldName) {
     arg.shadow.fields = [
       {
         name: fieldName,

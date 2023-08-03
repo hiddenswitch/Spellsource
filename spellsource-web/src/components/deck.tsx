@@ -84,7 +84,7 @@ export const Deck: FunctionComponent<DeckProps> = ({
 
   const groupedCards = chain(cardIds)
     .map((value) => cache[value])
-    .filter((value) => !!value)
+    .filter((value) => value)
     .groupBy((card) => card.id)
     .sortBy(
       ([card]) => card.baseManaCost ?? 0,
