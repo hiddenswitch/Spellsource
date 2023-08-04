@@ -101,3 +101,22 @@ tasks.register('distSteam') {
     }
   }
 }
+
+tasks.register('run') {
+  group('spellsource')
+  if (isWindows) {
+    dependsOn buildProject_StandaloneWindows64
+  } else if (isMacOs) {
+    dependsOn buildProject_StandaloneOSX
+  }
+
+  doLast {
+    exec {
+      if (isWindows) {
+        executable project.layout.buildDirectory.file("StandaloneWindows64/Spellsource.exe").get()
+      } else if (isMacOs) {
+        executable project.layout.buildDirectory.file("StandaloneOSX/Spellsource.app/Contents/MacOS/Spellsource").get()
+      }
+    }
+  }
+}
