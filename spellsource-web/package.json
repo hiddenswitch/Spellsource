@@ -19,7 +19,6 @@
     "@apollo/client": "^3.7.10",
     "@apollo/server": "^4.5.0",
     "@as-integrations/next": "^1.2.0",
-    "@blockly/toolbox-search": "^1.1.3",
     "@graphile-contrib/pg-omit-archived": "^3.2.1",
     "@graphql-tools/stitch": "^8.7.43",
     "@react-icons/all-files": "^4.1.0",

@@ -49,7 +49,6 @@ export type BlockArgDef = {
   int?: Maybe<Scalars["Boolean"]>;
   text?: Maybe<Scalars["String"]>;
   options?: Maybe<Array<Maybe<Array<Maybe<Scalars["String"]>>>>>;
-  shadow?: Maybe<BlockShadowDef>;
   width?: Maybe<Scalars["Int"]>;
   height?: Maybe<Scalars["Int"]>;
   alt?: Maybe<Scalars["String"]>;
@@ -58,17 +57,12 @@ export type BlockArgDef = {
   variableTypes?: Maybe<Array<Maybe<Scalars["String"]>>>;
   defaultType?: Maybe<Scalars["String"]>;
   value?: Maybe<Scalars["Int"] | Scalars["String"] | Scalars["Boolean"]>;
+  shadow?: Maybe<BlockShadowDef>;
+  block?: Maybe<BlockShadowDef>;
+  next?: Maybe<BlockShadowDef>;
 };
 
 export type BlockShadowDef = {
   type?: Maybe<Scalars["String"]>;
-  fields?: Maybe<Array<Maybe<BlockFieldDef>>>;
-  notActuallyShadow?: Maybe<Scalars["Boolean"]>;
-};
-
-export type BlockFieldDef = {
-  name?: Maybe<Scalars["String"]>;
-  valueI?: Maybe<Scalars["Int"]>;
-  valueS?: Maybe<Scalars["String"]>;
-  valueB?: Maybe<Scalars["Boolean"]>;
+  fields?: object;
 };

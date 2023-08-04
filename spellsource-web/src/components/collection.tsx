@@ -46,7 +46,7 @@ const CardRow: FunctionComponent<{
   const [, dragRef, dragPreview] = useDrag({
     type: "collection-card",
     item: { id: cardScript.id },
-    canDrag: (monitor) => collection.addToDeck,
+    canDrag: () => !!collection.addToDeck,
   });
 
   return (
@@ -64,9 +64,9 @@ const CardRow: FunctionComponent<{
       </td>
       <td>{toTitleCaseCorrected(cardScript.type)}</td>
       <td>
-        {!cardScript.baseAttack && !cardScript.baseHp
+        {!cardScript.baseAttack && !cardScript.baseHp && !cardScript.durability
           ? "n/a"
-          : `${cardScript.baseAttack ?? 0}/${cardScript.baseHp ?? 0}`}
+          : `${cardScript.baseAttack ?? 0}/${cardScript.baseHp ?? cardScript.durability ?? 0}`}
       </td>
       <td>{cardScript.description?.replaceAll(new RegExp("[$#\\[\\]]", "g"), "") ?? ""}</td>
       <td>

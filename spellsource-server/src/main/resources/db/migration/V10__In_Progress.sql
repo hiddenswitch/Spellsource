@@ -318,7 +318,8 @@ create or replace function spellsource.card_message(card spellsource.cards, cl s
 $$
 begin
     return coalesce(card.card_script ->> 'baseManaCost', '0') || ' ' || coalesce(card.card_script ->> 'name', '') ||
-           ' ' || cl.name || ' ' || coalesce(card.card_script ->> 'description', '') || ' ' ||
+           ' ' || cl.name || ' ' ||
+           replace(replace(coalesce(card.card_script ->> 'description', ''), '$', ''), '#', '') || ' ' ||
            coalesce(card.card_script ->> 'race', '') || ' ' || coalesce(card.card_script ->> 'set', 'CUSTOM');
 end;
 $$ language plpgsql stable;

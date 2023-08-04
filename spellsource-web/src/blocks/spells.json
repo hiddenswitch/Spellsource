@@ -5872,7 +5872,6 @@
     ],
     "comment": "Gives a targeted card (probably in hand or deck) a new Opener effect."
   },
-
   {
     "type": "Spell_AddDeathrattle3",
     "inputsInline": false,

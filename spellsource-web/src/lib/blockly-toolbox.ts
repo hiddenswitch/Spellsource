@@ -9,6 +9,8 @@ import StaticCategoryInfo = Blockly.utils.toolbox.StaticCategoryInfo;
 import ToolboxInfo = Blockly.utils.toolbox.ToolboxInfo;
 import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo;
 import BlockInfo = Blockly.utils.toolbox.BlockInfo;
+import { ToolboxSearchCategory } from "../components/toolbox-search-category";
+import { CardSearchCategory } from "../components/card-search-category";
 
 /**
  * Initializes the necessary callbacks for the Variables tab's CUSTOM dynamic-ness
@@ -61,8 +63,15 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
     kind: "categoryToolbox",
     contents: [
       {
-        kind: "search",
-        name: "Search",
+        kind: ToolboxSearchCategory.SEARCH_CATEGORY_KIND,
+        name: "Search Blocks",
+        colour: "rgb(85, 119, 238)",
+        contents: [],
+      },
+
+      {
+        kind: CardSearchCategory.SEARCH_CATEGORY_KIND,
+        name: "Search Cards",
         colour: "rgb(85, 119, 238)",
         contents: [],
       },
@@ -687,7 +696,7 @@ function defaultTest(block) {
   );
 }
 
-export function getBlock(type: string): Partial<BlockInfo> {
+export function getBlock(type: string): BlockInfo {
   return {
     type,
     kind: "block",

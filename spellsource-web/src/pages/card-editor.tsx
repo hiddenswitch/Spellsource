@@ -13,6 +13,7 @@ import {
   useGetAllArtQuery,
   useGetCardsQuery,
   useGetClassesQuery,
+  useGetCollectionCardsLazyQuery,
 } from "../__generated__/client";
 import { useSession } from "next-auth/react";
 import { ApolloQueryResult } from "@apollo/client";
@@ -43,6 +44,7 @@ export const BlocklyDataContext = createContext({ ready: false } as InferGetStat
   myCards: Partial<Card>[];
   refreshMyCards?: () => Promise<ApolloQueryResult<GetCardsQuery>>;
   userId: string | null | undefined;
+  getCollectionCards?: ReturnType<typeof useGetCollectionCardsLazyQuery>[0];
 });
 
 const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -64,6 +66,9 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
       },
     },
   });
+
+  const [getCollectionCards] = useGetCollectionCardsLazyQuery();
+
   const classes = useMemo(() => {
     const cards = getClasses.data?.allClasses?.nodes ?? [];
     const allCards = cards.map((card) => ({
@@ -96,7 +101,9 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
       <Head>
         <title>Spellsource Card Editor</title>
       </Head>
-      <BlocklyDataContext.Provider value={{ ...props, classes, allArt, ready, myCards, refreshMyCards, userId }}>
+      <BlocklyDataContext.Provider
+        value={{ ...props, classes, allArt, ready, myCards, refreshMyCards, userId, getCollectionCards }}
+      >
         <div className={styles.cardEditorContainer}>
           {ready ? (
             <CardEditorWorkspace

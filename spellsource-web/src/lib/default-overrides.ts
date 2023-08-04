@@ -27,19 +27,10 @@ export function addShadow(type, name, shadowType, fieldName = null, value = null
       type: shadowType,
     },
   };
-  if (fieldName) {
-    arg.shadow.fields = [
-      {
-        name: fieldName,
-      },
-    ];
-    if (typeof value === "number") {
-      arg.shadow.fields[0].valueI = value;
-    } else if (typeof value === "string") {
-      arg.shadow.fields[0].valueS = value;
-    } else if (value === true || value === false) {
-      arg.shadow.fields[0].valueB = value;
-    }
+  if (fieldName && value) {
+    arg.shadow.fields = {
+      [fieldName]: value,
+    };
   }
   Blockly.Blocks[type].json["args0"].push(arg);
 }
@@ -71,8 +62,6 @@ export function math() {
 }
 
 export function loops() {
-  numShadow("controls_repeat", "TIMES", 10);
-
   numShadow("controls_for", "FROM", 1);
   numShadow("controls_for", "TO", 10);
   numShadow("controls_for", "BY", 1);

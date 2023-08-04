@@ -192,7 +192,7 @@
         "name": "cardSource",
         "check": "Source",
         "shadow": {
-          "type": "Source_SHADOW"
+          "type": "Source_Hand"
         }
       }
     ]

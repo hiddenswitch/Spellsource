@@ -1,8 +1,6 @@
 import React, { forwardRef, MutableRefObject, useContext, useEffect, useState } from "react";
 import * as WorkspaceUtils from "../lib/workspace-utils";
-import * as styles from "./card-editor-view.module.scss";
-import Blockly, { BlockSvg, Toolbox, ToolboxCategory, WorkspaceSvg } from "blockly";
-import { useIndex } from "../hooks/use-index";
+import Blockly, { Block, BlockSvg, Toolbox, ToolboxCategory, WorkspaceSvg } from "blockly";
 import * as JsonConversionUtils from "../lib/json-conversion-utils";
 import * as BlocklyMiscUtils from "../lib/blockly-misc-utils";
 import { refreshBlock } from "../lib/blockly-misc-utils";
@@ -26,8 +24,6 @@ import useBreakpoint from "@restart/hooks/useBreakpoint";
 import { useEffectOnce } from "../hooks/use-effect-once";
 import { uniqBy } from "lodash";
 import { openFromFile } from "../lib/blockly-context-menu";
-import { javascriptGenerator } from "blockly/javascript";
-import "@blockly/toolbox-search";
 import cx from "classnames";
 
 interface CardEditorWorkspaceProps {
@@ -43,10 +39,15 @@ export type InitBlockOptions = {
   onSave: (block: BlockSvg) => void;
   onDelete: (block: BlockSvg) => void;
   onPublish: (block: BlockSvg) => void;
+  generateCardAsync: (cardId: string) => Promise<Block | null>;
 };
 
 //Managing the creation and deletion of WorkspaceCard and WorkspaceHeroClass blocks
-const handleWorkspaceCards = (workspace: WorkspaceSvg, userId: string) => {
+const handleWorkspaceCards = (
+  workspace: WorkspaceSvg,
+  userId: string,
+  getCard: ReturnType<typeof useGetCardLazyQuery>[0]
+) => {
   const cardScript = {} as Record<string, CardDef>;
 
   // Apply card ids and cardScript to all Starter_ blocks
@@ -91,6 +92,16 @@ const handleWorkspaceCards = (workspace: WorkspaceSvg, userId: string) => {
           if (block.getFieldValue("name") != name) {
             block.setFieldValue(name, "name");
           }
+        } else if (block.type === "Card_REFERENCE" && id === block.getFieldValue("name")) {
+          getCard({ variables: { id } }).then((result) => {
+            const card = result?.data?.getLatestCard?.cardScript;
+            if (!card) return;
+            const name = BlocklyMiscUtils.cardMessage(card);
+            if (block.getFieldValue("name") != name) {
+              block.setFieldValue(name, "name");
+            }
+            refreshBlock(block as BlockSvg);
+          });
         }
         refreshBlock(block as BlockSvg);
       });
@@ -192,6 +203,48 @@ const CardEditorWorkspace = forwardRef(
       await publishCard({ variables: { cardId } });
     };
 
+    const generateCard = (p: string) => {
+      if (!p) return;
+
+      let cardId = null;
+      let card = null;
+
+      if (p.startsWith("{")) {
+        card = JSON.parse(p);
+      } else if (p.startsWith("www")) {
+        cardId = p.split("cards/")[1];
+      } else if (p.includes("_") || p.includes("-")) {
+        cardId = p;
+      }
+
+      if (cardId && !card) {
+        if (cardId in data.classes) {
+          card = data.classes[cardId];
+        } else {
+          generateCardAsync(cardId);
+        }
+      }
+
+      if (card) {
+        JsonConversionUtils.generateCard(mainWorkspace(), card);
+      }
+    };
+
+    const generateCardAsync = (cardId: string) =>
+      getCard({ variables: { id: cardId } }).then((value) => {
+        const card = value.data?.getLatestCard;
+        if (card) {
+          if (card.blocklyWorkspace) {
+            const dom = Blockly.utils.xml.textToDom(card.blocklyWorkspace);
+            return Blockly.Xml.domToBlock(dom, mainWorkspace());
+          } else if (card.cardScript) {
+            return JsonConversionUtils.generateCard(mainWorkspace(), card.cardScript);
+          }
+        }
+
+        return null;
+      });
+
     useEffect(() => {
       const classes = toolbox()?.getToolboxItemById("Classes") as ToolboxCategory;
       classes?.updateFlyoutContents(classesCategory(data));
@@ -220,7 +273,7 @@ const CardEditorWorkspace = forwardRef(
     // Run once before the workspace has been created
     useComponentDidMount(() => {
       if (!Blockly["spellsourceInit"]) {
-        BlocklyMiscUtils.initBlocks(data, { onSave, onDelete, onPublish });
+        BlocklyMiscUtils.initBlocks(data, { onSave, onDelete, onPublish, generateCardAsync });
         BlocklyMiscUtils.initHeroClassColors(data);
         BlocklyMiscUtils.initArtBlcks(data);
         Blockly.blockRendering.register("spellsource", SpellsourceRenderer);
@@ -270,52 +323,13 @@ const CardEditorWorkspace = forwardRef(
     const onWorkspaceChanged = () => {
       if (mainWorkspace().isDragging()) return; // While dragging a block, it doesn't appear in the blocks list
 
-      const cardScript = handleWorkspaceCards(mainWorkspace(), data.userId || "guest");
+      const cardScript = handleWorkspaceCards(mainWorkspace(), data.userId || "guest", getCard);
       BlocklyMiscUtils.pluralStuff(mainWorkspace());
       let json = JSON.stringify(cardScript, null, 2);
       // props.setJSON(json);
       setJson(json);
       setAllCardScript(cardScript);
       // props.setJS(javascriptGenerator.workspaceToCode(mainWorkspace()));
-    };
-
-    const generateCard = (p: string) => {
-      if (!p) {
-        return;
-      }
-
-      let cardId = null;
-      let card = null;
-
-      if (p.startsWith("{")) {
-        card = JSON.parse(p);
-      } else if (p.startsWith("www")) {
-        cardId = p.split("cards/")[1];
-      } else if (p.includes("_") || p.includes("-")) {
-        cardId = p;
-      }
-
-      if (cardId && !card) {
-        if (cardId in data.classes) {
-          card = data.classes[cardId];
-        } else {
-          getCard({ variables: { id: cardId } }).then((value) => {
-            const card = value.data?.getLatestCard;
-            if (card) {
-              if (card.blocklyWorkspace) {
-                const dom = Blockly.utils.xml.textToDom(card.blocklyWorkspace);
-                const block = Blockly.Xml.domToBlock(dom, mainWorkspace());
-              } else if (card.cardScript) {
-                JsonConversionUtils.generateCard(mainWorkspace(), card.cardScript);
-              }
-            }
-          });
-        }
-      }
-
-      if (card) {
-        JsonConversionUtils.generateCard(mainWorkspace(), card);
-      }
     };
 
     const xs = !useBreakpoint("sm", "up");
@@ -342,6 +356,7 @@ const CardEditorWorkspace = forwardRef(
           toolbox: BlocklyToolbox.editorToolbox(results, data),
         }}
         ref={blocklyEditor}
+        init={(workspace) => (workspace["getCollectionCards"] = data.getCollectionCards)}
       />
     );
   }

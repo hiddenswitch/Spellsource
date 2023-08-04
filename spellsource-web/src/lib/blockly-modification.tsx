@@ -11,10 +11,10 @@ import Blockly, {
 import { FieldLabelPlural } from "../components/field-label-plural";
 import { FieldLabelSerializableHidden } from "../components/field-label-serializable-hidden";
 import * as BlocklyMiscUtils from "./blockly-misc-utils";
+import { refreshBlock } from "./blockly-misc-utils";
 import * as DefaultOverrides from "./default-overrides";
 import React from "react";
 import { Field } from "blockly/core/renderers/measurables/field";
-import { getBlock } from "./blockly-toolbox";
 
 export function modifyAll() {
   Blockly.utils.colour.setHsvSaturation(0.65);
@@ -596,25 +596,13 @@ function flyout() {
     return result;
   };
 
-  // Ensure shadow blocks added for toolbox
+  // Ensure blocks updated for toolbox
   const refreshSelection = Blockly.Toolbox.prototype.refreshSelection;
   Blockly.Toolbox.prototype.refreshSelection = function () {
-    const category = this.getSelectedItem();
-    const contents = category?.getContents();
-
-    if (contents && category.getName() === "Search") {
-      /*if (contents.length == 1 && contents[0].kind === "label") {
-        contents.push({ kind: "button", text: "Search Collection Cards" });
-      }*/
-
-      for (let i = 0; i < contents.length; i++) {
-        if (contents[i]?.kind === "block" && !contents[i].inputs) {
-          contents[i] = getBlock(contents[i].type);
-        }
-      }
-    }
-
-    return refreshSelection.call(this);
+    refreshSelection.call(this);
+    Blockly.Workspace.getAll()
+      .filter((workspace) => workspace.isFlyout)
+      .forEach((workspace) => workspace.getAllBlocks(false).forEach(refreshBlock));
   };
 }
 

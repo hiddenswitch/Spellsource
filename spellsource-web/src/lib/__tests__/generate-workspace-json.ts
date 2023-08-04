@@ -5,6 +5,17 @@
 // This clogs up unit testing logs, etc.
 // The versions for both log and warn are because they keep changing which ones they are
 // using across builds.
+const tempConsoleLog = console.log;
+const tempConsoleWarn = console.warn;
+console.log = (message) => {
+  if (message.startsWith("WARNING: No message string for %{")) return;
+  else tempConsoleLog(message);
+};
+console.warn = (message) => {
+  if (message.startsWith("No message string for %{")) return;
+  else tempConsoleWarn(message);
+};
+
 import { CardDef } from "../../components/card-display";
 import * as WorkspaceUtils from "../workspace-utils";
 import * as JsonConversionUtils from "../json-conversion-utils";
@@ -20,17 +31,6 @@ import { ContextType } from "react";
 import path from "path";
 import { transformCard } from "../json-transforms";
 import { promisify } from "util";
-
-const tempConsoleLog = console.log;
-const tempConsoleWarn = console.warn;
-console.log = (message) => {
-  if (message.startsWith("WARNING: No message string for %{")) return;
-  else tempConsoleLog(message);
-};
-console.warn = (message) => {
-  if (message.startsWith("No message string for %{")) return;
-  else tempConsoleWarn(message);
-};
 
 console.log = tempConsoleLog;
 console.warn = tempConsoleWarn;
@@ -142,77 +142,9 @@ describe("WorkspaceUtils", () => {
     expect(context.getPlayer1().getMinions().get(0).getHp()).toEqual(6);
   });
 
-  test("just one card", async () => {
+  test("specific card replays the same", async () => {
     const id = "spell_dream_of_ascendance";
 
     testReplayCard(id, Object.fromEntries(cards)[id]);
   });
-
-  test.each(cards)("bug test time %s", async (id, srcCard) => {
-    const ConversionHarness = java.import("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
-    const workspace = new Workspace();
-    JsonConversionUtils.generateCard(workspace, srcCard);
-    const json = WorkspaceUtils.workspaceToCardScript(workspace);
-    ConversionHarness.assertCardReplaysTheSame(1, 2, srcCard.id, JSON.stringify(json));
-
-    const ConversionHarness2 = java.import("com.hiddenswitch.spellsource.conversiontest.ConversionHarness");
-    const workspace2 = new Workspace();
-    const srcCard2 = JSON.parse(`
-      {
-      "name": "Dreams of Strength",
-      "baseManaCost": 7,
-      "type": "SPELL",
-      "heroClass": "AMBER",
-      "rarity": "EPIC",
-      "description": "Give a Larva +7/+7 and Guard.",
-      "targetSelection": "FRIENDLY_MINIONS",
-      "spell": {
-        "class": "MetaSpell",
-        "spells": [
-          {
-            "class": "BuffSpell",
-            "value": 7
-          },
-          {
-            "class": "AddAttributeSpell",
-            "attribute": "TAUNT"
-          }
-        ],
-        "filter": {
-          "class": "SpecificCardFilter",
-          "card": "token_spiderling"
-        }
-      },
-      "collectible": true,
-      "set": "VERDANT_DREAMS",
-      "fileFormatVersion": 1
-    }
-    `);
-    JsonConversionUtils.generateCard(workspace2, srcCard2);
-    const json2 = WorkspaceUtils.workspaceToCardScript(workspace);
-    expect(ConversionHarness.assertCardReplaysTheSame(1, 2, srcCard.id, JSON.stringify(json))).toEqual(true);
-  });
-
-  /*
-  afterAll(async () => {
-
-    let blocks = JsonConversionUtils.customBlocks
-    let keyArray = Object.keys(blocks)
-      .sort((a, b) => blocks[b] - blocks[a])
-
-    for (let i = 0; i < 5; i++) {
-      let key = keyArray[i]
-      let count = blocks[key]
-      console.log('Appearing ' + count + ' times is ' + key)
-    }
-
-
-
-    for (let weirdo of weirdos) {
-      console.log('Weirdo: ' + weirdo)
-    }
-
-  }, 1)
-
-   */
 });

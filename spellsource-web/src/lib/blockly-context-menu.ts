@@ -1,5 +1,5 @@
 import * as Blockly from "blockly";
-import { BlockDragger, BlockSvg, ContextMenuRegistry, Toolbox, ToolboxItem, Workspace } from "blockly";
+import { BlockSvg, ContextMenuRegistry, Toolbox, Workspace } from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
 import { openFile, saveFile } from "./fs-utils";
 import * as WorkspaceUtils from "./workspace-utils";
@@ -7,7 +7,7 @@ import * as BlocklyMiscUtils from "./blockly-misc-utils";
 import { InitBlockOptions } from "../components/card-editor-workspace";
 
 export const registerAll = (options: InitBlockOptions) => {
-  ContextMenuRegistry.registry.register(importCardScript);
+  ContextMenuRegistry.registry.register(importCardScript(options));
   ContextMenuRegistry.registry.register(showInToolbox);
   ContextMenuRegistry.registry.register(getReferenceBlock);
   ContextMenuRegistry.registry.register(logCardscript);
@@ -20,14 +20,19 @@ export const registerAll = (options: InitBlockOptions) => {
   ContextMenuRegistry.registry.unregister("blockInline");
 };
 
-const importCardScript: ContextMenuRegistry.RegistryItem = {
+const importCardScript = ({ generateCardAsync }: InitBlockOptions): ContextMenuRegistry.RegistryItem => ({
   id: "importCardscript",
   displayText: "Import Cardscript",
   weight: 6,
   scopeType: ContextMenuRegistry.ScopeType.BLOCK,
-  preconditionFn: ({ block }) => (block.type.startsWith("CatalogueCard") ? "enabled" : "hidden"),
+  preconditionFn: ({ block }) =>
+    block.type.startsWith("CatalogueCard") || block.type === "Card_REFERENCE" ? "enabled" : "hidden",
   callback: ({ block }) => {
     let workspace = block.workspace;
+    if (workspace.targetWorkspace) {
+      workspace = workspace.targetWorkspace;
+    }
+
     if (block.json && block.json.json) {
       let card = block.json.json;
       let dummyWorkspace = new Workspace();
@@ -40,16 +45,18 @@ const importCardScript: ContextMenuRegistry.RegistryItem = {
       xml.setAttribute("x", String(xy.x));
       xml.setAttribute("y", String(xy.y));
 
-      if (!!workspace.targetWorkspace) {
-        workspace = workspace.targetWorkspace;
-      }
-
       workspace.paste(xml);
       dummyWorkspace.dispose();
-      (workspace.getToolbox() as Toolbox).clearSelection();
+    } else if (block.type === "Card_REFERENCE") {
+      const cardId = block.getFieldValue("id");
+
+      generateCardAsync(cardId);
     }
+
+    const toolbox = workspace.getToolbox() as Toolbox;
+    toolbox.clearSelection();
   },
-};
+});
 
 const saveToFile: ContextMenuRegistry.RegistryItem = {
   id: "saveToFile",

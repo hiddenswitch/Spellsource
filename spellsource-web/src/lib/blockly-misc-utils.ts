@@ -13,6 +13,8 @@ import { FieldProgressBar } from "../components/field-progress-bar";
 import * as BlocklyContextMenu from "./blockly-context-menu";
 import { BlockInfo, FlyoutItemInfo } from "blockly/core/utils/toolbox";
 import { FieldColourHsvSliders } from "../components/field-colour-hsv-sliders";
+import { ToolboxSearchCategory } from "../components/toolbox-search-category";
+import { CardSearchCategory } from "../components/card-search-category";
 
 export const toTitleCaseCorrected = (string: string) =>
   string
@@ -21,7 +23,7 @@ export const toTitleCaseCorrected = (string: string) =>
     .join(" ")
     .replace("Hero Power", "Skill")
     .replace("Minion", "Unit")
-    .replace("Weapon", "Gear")
+    .replace("Weapon", "Item")
     .replace("Hero", "Champion");
 
 export const addBlock = (block: BlockDef) => {
@@ -226,6 +228,18 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options
     Blockly.fieldRegistry.register("field_button", FieldButton);
     Blockly.fieldRegistry.register("field_progress_bar", FieldProgressBar);
     Blockly.fieldRegistry.register("field_colour_hsv_sliders", FieldColourHsvSliders);
+
+    Blockly.registry.register(
+      Blockly.registry.Type.TOOLBOX_ITEM,
+      ToolboxSearchCategory.SEARCH_CATEGORY_KIND,
+      ToolboxSearchCategory
+    );
+    Blockly.registry.register(
+      Blockly.registry.Type.TOOLBOX_ITEM,
+      CardSearchCategory.SEARCH_CATEGORY_KIND,
+      CardSearchCategory
+    );
+
     if (options) {
       BlocklyContextMenu.registerAll(options);
     }
@@ -623,15 +637,14 @@ export function initArtBlcks(data: ContextType<typeof BlocklyDataContext>) {
 export const refreshBlock = (block: BlockSvg) => {
   block.data = Blockly.Blocks[block.type].data;
 
-  if (block.getField("message")) {
-    block.setFieldValue(Blockly.Blocks[block.type].message, "message");
-  }
-
-  if (block.type === "HeroClass_REFERENCE") {
+  if (block.type === "Card_REFERENCE") {
+  } else if (block.type === "HeroClass_REFERENCE") {
     const color = Blockly["heroClassColors"][block.getFieldValue("id")];
     if (color && block.getColour() !== color) {
       block.setColour(color);
     }
+  } else if (block.getField("message")) {
+    block.setFieldValue(Blockly.Blocks[block.type].message, "message");
   }
 
   if (block.render) {
@@ -639,12 +652,8 @@ export const refreshBlock = (block: BlockSvg) => {
     const typeTextColor = Blockly["textColor"]?.[block.type];
     const idTextColor = Blockly["textColor"]?.[block.getFieldValue("id")];
     const color = typeTextColor ?? idTextColor;
-    if (textElement) {
-      if (color) {
-        textElement.style.fill = color;
-      } else {
-        textElement.style.fill = "#fff";
-      }
+    if (textElement && color) {
+      textElement.style.fill = color;
     }
     block.render(false);
   }

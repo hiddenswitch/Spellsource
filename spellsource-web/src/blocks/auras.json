@@ -313,10 +313,7 @@
         "name": "target",
         "check": "EntityReference",
         "shadow": {
-          "type": "EntityReference_SHADOW",
-          "fields": {
-            "int": 0
-          }
+          "type": "EntityReference_SHADOW"
         }
       },
       {
