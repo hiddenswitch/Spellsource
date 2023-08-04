@@ -17,7 +17,7 @@ buildscript {
 
 
 plugins {
-  id 'com.bmuschko.docker-remote-api' version '7.3.0'
+  id 'docker'
   id 'com.google.cloud.tools.jib' version '3.3.2'
   id "org.flywaydb.flyway" version "$flywayVersion"
   id 'com.github.johnrengelman.shadow' version "$shadowPluginVersion"

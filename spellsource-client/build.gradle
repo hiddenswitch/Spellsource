@@ -1,97 +1,103 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 
-import java.io.ByteArrayOutputStream;
+plugins {
+  id 'unity'
+  id 'base'
+}
 
-apply plugin: 'base'
+unity {
+  unityProjectPath.set(project.layout.projectDirectory.dir("src/unity"))
+}
 
 def secretsPath = "${project(':spellsource-private').projectDir}/src/secrets"
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def isMacOs = Os.isFamily(Os.FAMILY_MAC)
-
-tasks.register('buildMacOS', UnityTask) {
-    description("Builds the macOS versions of the game using deploy.sh file and your local Unity version.")
-    flags = '-m'
-    outputDir = 'osx'
-}
-
-tasks.register('buildWindows', UnityTask) {
-    description("Builds the Windows version of the game using deploy.sh file and your local Unity version.")
-    flags = '-w'
-    outputDir = 'win'
-}
-
-tasks.register('buildIOS', UnityTask) {
-    description("Builds the Windows version of the game using deploy.sh file and your local Unity version.")
-    flags = '-i'
-    outputDir = 'ios'
-}
-
-tasks.register('buildAndroid', UnityTask) {
-    description("Builds the Android version of the game using deploy.sh file and your local Unity version.")
-    flags = '-a'
-    outputDir = 'android'
-}
-
-tasks.register('buildWebGL', UnityTask) {
-    description("Builds the WebGL version of the game using deploy.sh file and your local Unity version.")
-    flags = '-W'
-    outputDir = 'webgl'
-}
+//
+//tasks.register('buildMacOS', UnityTask) {
+//    description("Builds the macOS versions of the game using deploy.sh file and your local Unity version.")
+//    flags = '-m'
+//    outputDir = 'osx'
+//}
+//
+//tasks.register('buildWindows', UnityTask) {
+//    description("Builds the Windows version of the game using deploy.sh file and your local Unity version.")
+//    flags = '-w'
+//    outputDir = 'win'
+//}
+//
+//tasks.register('buildIOS', UnityTask) {
+//    description("Builds the Windows version of the game using deploy.sh file and your local Unity version.")
+//    flags = '-i'
+//    outputDir = 'ios'
+//}
+//
+//tasks.register('buildAndroid', UnityTask) {
+//    description("Builds the Android version of the game using deploy.sh file and your local Unity version.")
+//    flags = '-a'
+//    outputDir = 'android'
+//}
+//
+//tasks.register('buildWebGL', UnityTask) {
+//    description("Builds the WebGL version of the game using deploy.sh file and your local Unity version.")
+//    flags = '-W'
+//    outputDir = 'webgl'
+//}
 
 tasks.register('distIOS', Exec) { t ->
-    description("Builds and uploads to Testflight the iOS project")
-    dependsOn buildIOS
-    workingDir "${project.projectDir}/src/unity"
-    Utilities.dotEnv(t, file("$secretsPath/spellsource/unityclient-build.env", PathValidation.NONE))
-    def commands = ['./deploy.sh', '-t']
-    if (isWindows) {
-        commands = ["$project.rootProject.projectDir/bin/bash.exe"] + commands
-    }
-    commandLine commands
+  description("Builds and uploads to Testflight the iOS project")
+//    dependsOn buildIOS
+  workingDir "${project.projectDir}/src/unity"
+  Utilities.dotEnv(t, file("$secretsPath/spellsource/unityclient-build.env", PathValidation.NONE))
+  def commands = ['./deploy.sh', '-t']
+  if (isWindows) {
+    commands = ["$project.rootProject.projectDir/bin/bash.exe"] + commands
+  }
+  commandLine commands
 }
 
 tasks.register('distAndroid', Exec) { t ->
-    description("Builds and uploads the Android project to Google Play")
-    dependsOn buildAndroid
-    workingDir "${project.projectDir}/src/unity"
+  description("Builds and uploads the Android project to Google Play")
+//    dependsOn buildAndroid
+  workingDir "${project.projectDir}/src/unity"
 
-    Utilities.dotEnv(t, file("$secretsPath/spellsource/unityclient-build.env", PathValidation.NONE))
-    environment('KEYSTORE_PATH', "$secretsPath/spellsource/android-keystore.keystore")
-    environment('GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_PATH_TEMP', "$secretsPath/spellsource/google-play-service-account.json")
-    def commands = ['./deploy.sh', '-d']
-    if (isWindows) {
-        commands = ["$project.rootProject.projectDir/bin/bash.exe"] + commands
-    }
-    commandLine commands
+  Utilities.dotEnv(t, file("$secretsPath/spellsource/unityclient-build.env", PathValidation.NONE))
+  environment('KEYSTORE_PATH', "$secretsPath/spellsource/android-keystore.keystore")
+  environment('GOOGLE_SERVICE_ACCOUNT_CREDENTIALS_PATH_TEMP', "$secretsPath/spellsource/google-play-service-account.json")
+  def commands = ['./deploy.sh', '-d']
+  if (isWindows) {
+    commands = ["$project.rootProject.projectDir/bin/bash.exe"] + commands
+  }
+  commandLine commands
 }
 
 tasks.register('distSteam') {
-    description("Uploads the macOS and Windows builds to Steam")
-    dependsOn += [buildWindows, buildMacOS]
-    def props = Utilities.propertiesOrEmpty("$secretsPath/task-dist-steam/task.properties")
-    def steamAccount = props.getProperty("steamcmd.account")
-    def steamCmdPassword = props.getProperty("steamcmd.password")
-    doLast {
-        def steamGuardCode = new ByteArrayOutputStream();
-        exec {
-            workingDir("${rootProject.projectDir}/steamguardcli")
-            commandLine "docker", "build", "-t", "steamguardcli", "."
-        }
-        exec {
-            commandLine "docker", "run", "--rm", "-v=$secretsPath/spellsource/maFiles:/data", "steamguardcli", "mono", "/build/steamguard", "--mafiles-path", "/data", "generate-code"
-            standardOutput(steamGuardCode)
-        }
-        exec {
-            def winLinuxCmd = ["docker", "run", "--rm", "-e", "CPU_MHZ=2000", "-v=${rootProject.projectDir}:/home/steam/workdir", "-w=/home/steam/workdir", "steamcmd/steamcmd:latest", "/home/steam/steamcmd/steamcmd.sh"]
-            def macOsCmd = ["/bin/bash", "$project.rootProject.projectDir/bin/steamcmd/steamcmd_osx/steamcmd.sh"]
-            def cmdProjectDir = isMacOs ? "$rootProject.projectDir" : "/home/steam/workdir"
-            commandLine([] +
-                    (isMacOs ? macOsCmd : winLinuxCmd)
-                    + [
-                    "+login", steamAccount, steamCmdPassword, steamGuardCode.toString(),
-                    "+run_app_build_http", "$cmdProjectDir/spellsource-private/src/secrets/spellsource/steam-app-build.vdf",
-                    "+quit"
-            ])
-        }
+  description("Uploads the macOS and Windows builds to Steam")
+  group('spellsource')
+  dependsOn += [buildProject_StandaloneOSX, buildProject_StandaloneWindows64]
+  def props = Utilities.propertiesOrEmpty("$secretsPath/task-dist-steam/task.properties")
+  def steamAccount = props.getProperty("steamcmd.account")
+  def steamCmdPassword = props.getProperty("steamcmd.password")
+  doLast {
+    def steamGuardCode = new ByteArrayOutputStream();
+    exec {
+      workingDir("${rootProject.projectDir}/steamguardcli")
+      commandLine "docker", "build", "-t", "steamguardcli", "."
     }
+    exec {
+      commandLine "docker", "run", "--rm", "-v=$secretsPath/spellsource/maFiles:/data", "steamguardcli", "mono", "/build/steamguard", "--mafiles-path", "/data", "generate-code"
+      standardOutput(steamGuardCode)
+    }
+    exec {
+      def winLinuxCmd = ["docker", "run", "--rm", "-e", "CPU_MHZ=2000", "-v=${rootProject.projectDir}:/home/steam/workdir", "-w=/home/steam/workdir", "steamcmd/steamcmd:latest", "/home/steam/steamcmd/steamcmd.sh"]
+      def macOsCmd = ["/bin/bash", "$project.rootProject.projectDir/bin/steamcmd/steamcmd_osx/steamcmd.sh"]
+      def cmdProjectDir = isMacOs ? "$rootProject.projectDir" : "/home/steam/workdir"
+      commandLine([] +
+              (isMacOs ? macOsCmd : winLinuxCmd)
+              + [
+              "+login", steamAccount, steamCmdPassword, steamGuardCode.toString(),
+              "+run_app_build_http", "$cmdProjectDir/spellsource-private/src/secrets/spellsource/steam-app-build.vdf",
+              "+quit"
+      ])
+    }
+  }
 }

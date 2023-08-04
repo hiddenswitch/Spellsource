@@ -1,8 +1,55 @@
+plugins {
+  id 'java'
+  id 'java-gradle-plugin'
+  id 'groovy'
+  id 'groovy-gradle-plugin'
+}
+
 repositories {
-    maven { url 'https://plugins.gradle.org/m2/' }
+  mavenCentral()
+  mavenLocal()
+  maven { url "https://repo1.maven.org/maven2" }
+  maven {
+    url "https://oss.sonatype.org/content/repositories/releases/"
+  }
+  maven {
+    url "https://oss.sonatype.org/content/repositories/snapshots/"
+  }
+  maven {
+    url "https://plugins.gradle.org/m2/"
+  }
 }
 
 dependencies {
-    localGroovy()
-    implementation 'com.github.mwiede:jsch:0.2.8'
+  api localGroovy()
+  api gradleApi()
+  api project('spellsource-gradle-plugins')
+  implementation 'com.github.mwiede:jsch:0.2.8'
+}
+
+allprojects {
+  configurations.all {
+    resolutionStrategy {
+      preferProjectModules()
+      eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'com.github.docker-java') {
+          details.useVersion '3.3.0'
+        }
+
+        if ([
+                'com.fasterxml.jackson.core',
+                'com.fasterxml.jackson.jaxrs',
+                'com.fasterxml.jackson.datatype',
+                'com.fasterxml.jackson.module',
+                'com.fasterxml.jackson.dataformat'
+        ].contains(details.requested.group)) {
+          if (details.requested.name == 'jackson-databind') {
+            details.useVersion '2.15.0'
+          } else {
+            details.useVersion '2.15.0'
+          }
+        }
+      }
+    }
+  }
 }

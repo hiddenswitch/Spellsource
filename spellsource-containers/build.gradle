@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'idea'
-    id 'com.bmuschko.docker-remote-api' version '7.3.0'
+    id 'docker'
 }
 
 import com.bmuschko.gradle.docker.tasks.image.*

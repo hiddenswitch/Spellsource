@@ -1,0 +1,51 @@
+plugins {
+  id 'groovy'
+  id 'java-library'
+  id 'java-gradle-plugin'
+  id 'groovy-gradle-plugin'
+}
+
+repositories {
+  mavenCentral()
+  maven {
+    url "https://plugins.gradle.org/m2/"
+  }
+}
+gradlePlugin {
+  plugins {
+    nativeImage {
+      id = 'native-image'
+      implementationClass = 'com.spellsource.tasks.GraalPlugin'
+    }
+    unity {
+      id = 'unity'
+      implementationClass = 'com.spellsource.tasks.UnityPlugin'
+    }
+    docker {
+      id = 'docker'
+      implementationClass = 'com.spellsource.tasks.DockerPlugin'
+    }
+    next {
+      id = 'next'
+      implementationClass = 'com.spellsource.tasks.NextPlugin'
+    }
+    go {
+      id = 'go'
+      implementationClass = 'com.spellsource.tasks.GoPlugin'
+    }
+  }
+}
+
+dependencies {
+  api localGroovy()
+  api gradleApi()
+  api group: 'org.yaml', name: 'snakeyaml', version: snakeyamlVersion
+  implementation "com.google.guava:guava:$guavaVersion"
+  implementation "com.github.node-gradle:gradle-node-plugin:5.0.0"
+  implementation "com.bmuschko:gradle-docker-plugin:9.2.1"
+  implementation platform('software.amazon.awssdk:bom:2.17.121')
+  // needed to get the repository password
+  implementation 'software.amazon.awssdk:ecr'
+  implementation 'software.amazon.awssdk:sts'
+  implementation 'software.amazon.awssdk:s3'
+}

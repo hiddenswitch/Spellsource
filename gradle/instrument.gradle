@@ -14,10 +14,10 @@ tasks.withType(JavaExec).configureEach {
 
 java {
   sourceCompatibility = JavaVersion.VERSION_20
-//  toolchain {
-//    vendor = JvmVendorSpec.GRAAL_VM
-//    languageVersion = JavaLanguageVersion.of(20)
-//  }
+  toolchain {
+    vendor = JvmVendorSpec.GRAAL_VM
+    languageVersion = JavaLanguageVersion.of(20)
+  }
 }
 
 test {
