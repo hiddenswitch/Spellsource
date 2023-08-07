@@ -11,6 +11,7 @@ import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo;
 import BlockInfo = Blockly.utils.toolbox.BlockInfo;
 import { ToolboxSearchCategory } from "../components/toolbox-search-category";
 import { CardSearchCategory } from "../components/card-search-category";
+import { BlockDef } from "../__generated__/blocks";
 
 /**
  * Initializes the necessary callbacks for the Variables tab's CUSTOM dynamic-ness
@@ -711,10 +712,10 @@ function blockInputs(type: string) {
 
   if (!block || !block.json) return inputs;
 
-  let json = block.json;
+  let json = block.json as BlockDef;
   for (let i = 0; i < 10; i++) {
-    if (!json["args" + i]) continue;
-    const args = json["args" + i];
+    if (!json[`args${i}`]) continue;
+    const args = json[`args${i}`];
 
     for (let j = 0; j < 10; j++) {
       const arg = args[j];

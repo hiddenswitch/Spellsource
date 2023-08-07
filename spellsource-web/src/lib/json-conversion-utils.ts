@@ -1819,15 +1819,24 @@ export function mutateJson(json) {
  */
 export function argsList(block: BlockDef, type?: "input" | "dropdown" | "number" | string) {
   let argsList = [] as BlockArgDef[];
-  for (let i = 0; i < 10; i++) {
-    if (!!block["args" + i.toString()]) {
-      for (let j = 0; j < 10; j++) {
-        const arg: BlockArgDef = block["args" + i.toString()][j];
-        if (arg && (!type || arg.type?.includes(type))) {
-          argsList.push(arg);
-        }
-      }
-    }
+
+  for (let i = 0, args: BlockArgDef[]; (args = block[`args${i}`]); i++) {
+    argsList.push(...args.filter((arg) => !type || arg.type?.includes(type)));
   }
+
   return argsList;
+}
+
+export function messagesAndArgs(block: BlockDef) {
+  const list = [] as [string, BlockArgDef[]][];
+
+  for (
+    let i = 0, message: string, args: BlockArgDef[];
+    (message = block[`message${i}`]) && (args = block[`args${i}`]);
+    i++
+  ) {
+    list.push([message, args]);
+  }
+
+  return list;
 }

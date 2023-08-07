@@ -5,6 +5,8 @@ export function overrideAll() {
   math();
   loops();
   text();
+
+  addShadow("controls_if", "IF0", "logic_boolean");
 }
 
 export function numShadow(type, name, value = null) {

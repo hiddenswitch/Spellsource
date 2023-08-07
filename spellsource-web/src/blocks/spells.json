@@ -5893,5 +5893,59 @@
         }
       }
     ]
+  },
+  {
+    "type": "Spell_TestMutator",
+    "inputsInline": false,
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_label_serializable",
+        "name": "class",
+        "text": "TestMutator"
+      }
+    ],
+    "message1": "target %1",
+    "args1": [
+      {
+        "type": "input_value",
+        "name": "target",
+        "check": "EntityReference",
+        "shadow": {
+          "type": "EntityReference_SELF"
+        },
+        "optional": true
+      }
+    ],
+    "message2": "conditions",
+    "args2": [
+    ],
+    "message3": "%1",
+    "args3": [
+      {
+        "type": "input_statement",
+        "name": "conditions",
+        "check": "Conditions",
+        "block": {
+          "type": "Condition_I"
+        },
+        "optional": true
+      }
+    ],
+    "message4": "spell %1",
+    "args4": [
+      {
+        "type": "input_value",
+        "name": "spell",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW"
+        },
+        "optional": true
+      }
+    ],
+    "mutator": "test_mutator"
   }
 ]

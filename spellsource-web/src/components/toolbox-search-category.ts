@@ -9,10 +9,9 @@
  * in its flyout.
  */
 import * as Blockly from "blockly/core";
-import { BlockSearcher } from "./block-searcher";
+import { BlockSearcher } from "./blockly/block-searcher";
 import { SearchCategory } from "./search-category";
 import { BlockInfo, ToolboxItemInfo } from "blockly/core/utils/toolbox";
-import { getBlock } from "../lib/blockly-toolbox";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 

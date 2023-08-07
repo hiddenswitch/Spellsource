@@ -118,6 +118,14 @@ class SpellsourceRenderInfo extends Blockly.geras.RenderInfo {
         if (Types.isTopOrBottomRow(row)) {
           row.widthWithConnectedBlocks = row.width;
         }
+      } else if (
+        row.hasStatement &&
+        row.elements.length < 4 &&
+        this.rows[i + 3] &&
+        !Types.isBottomRow(this.rows[i + 3]) &&
+        !Types.isSpacer(this.rows[i + 3])
+      ) {
+        row.width = this.rows[i + 3].width;
       }
     }
   }

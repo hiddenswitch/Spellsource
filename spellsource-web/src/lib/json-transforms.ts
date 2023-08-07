@@ -13,59 +13,24 @@ export const transformBlock = (object: BlockDef) => {
   if (!object.id && object.type) {
     object.id = object.type;
   }
-  const newArgs = [];
-  // Patch up types
+
   for (let i = 0; i <= 9; i++) {
-    if (object["args" + i.toString()]) {
-      const args = object["args" + i.toString()];
-      args.forEach((arg) => {
-        if (arg.hasOwnProperty("value")) {
-          if (isNumber(arg.value)) {
-            arg["valueI"] = arg.value;
-          } else if (isString(arg.value)) {
-            arg["valueS"] = arg.value;
-          } else if (arg.value === true) {
-            arg["valueB"] = true;
-          } else if (arg.value === false) {
-            arg["valueB"] = false;
-          }
-          delete arg.value;
-        }
-        if (arg.check) {
-          if (isArray(arg.check)) {
-            return;
-          }
-          arg["check"] = [arg.check];
-        }
-      });
-      newArgs.push({ i: i, args: args });
-      delete object["args" + i.toString()];
-    } else {
-      break;
-    }
-  }
-  const newMessages = [];
-  for (let i = 0; i <= 9; i++) {
-    if (object["message" + i.toString()]) {
-      let newMessage = object["message" + i.toString()];
-      if (newArgs[i] && newArgs[i].args) {
-        for (let j = 0; j < newArgs[i].args.length; j++) {
-          let arg = newArgs[i].args[j];
-          let token = "%" + (1 + j).toString();
-          if (arg.type === "field_label_serializable_hidden" && !newMessage.includes(token)) {
-            newMessage = token + newMessage;
-            //console.warn('Block ' + object.type + ' forgot arg ' + token + ' in mess
-          }
+    const args = object["args" + i];
+    let message = object["message" + i];
+    if (message && args) {
+      for (let j = 0; j < args.length; j++) {
+        let arg = args[j];
+        let token = "%" + (1 + j).toString();
+        if (arg.type === "field_label_serializable_hidden" && !message.includes(token)) {
+          message = token + message;
         }
       }
-      newMessages.push(newMessage);
+      object["message" + i] = message;
     } else {
       break;
     }
-    delete object["message" + i.toString()];
   }
-  object.args = newArgs;
-  object.messages = newMessages;
+
   object.path = "/blocks/" + object.id;
 
   return object;
