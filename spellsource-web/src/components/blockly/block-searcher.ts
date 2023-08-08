@@ -6,6 +6,7 @@
 
 import * as Blockly from "blockly/core";
 import { BlockInfo } from "blockly/core/utils/toolbox";
+import { newBlock } from "../../lib/blockly-misc-utils";
 
 /**
  * A class that provides methods for indexing and searching blocks.
@@ -27,10 +28,15 @@ export class BlockSearcher {
   indexBlocks(blockInfos: BlockInfo[]) {
     const blockCreationWorkspace = new Blockly.Workspace();
     blockInfos.forEach((blockInfo) => {
-      const block = Blockly.serialization.blocks.append(
-        blockInfo as Blockly.serialization.blocks.State,
-        blockCreationWorkspace
-      );
+      let block: Blockly.Block;
+      try {
+        block = Blockly.serialization.blocks.append(
+          blockInfo as Blockly.serialization.blocks.State,
+          blockCreationWorkspace
+        );
+      } catch (e) {
+        block = newBlock(blockCreationWorkspace, blockInfo.type);
+      }
       const blockType = block.getFieldValue("id") || block.type;
       // TODO include shadow block text values in searching?
       this.blocksToBlockInfos[blockType] = blockInfo;

@@ -1,10 +1,10 @@
 import React, { CSSProperties } from "react";
-import * as styles from "./creative-layout.module.scss";
-import harvard from "../../public/static/assets/Harvard.png";
-import mit from "../../public/static/assets/MIT.png";
-import mozilla from "../../public/static/assets/Mozilla.png";
-import un from "../../public/static/assets/UnitedNations.png";
-import unity from "../../public/static/assets/Unity.png";
+import * as styles from "../creative-layout.module.scss";
+import harvard from "../../../public/static/assets/Harvard.png";
+import mit from "../../../public/static/assets/MIT.png";
+import mozilla from "../../../public/static/assets/Mozilla.png";
+import un from "../../../public/static/assets/UnitedNations.png";
+import unity from "../../../public/static/assets/Unity.png";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -69,4 +69,4 @@ const Button = ({ title, route, buttonStyle }) => {
   );
 };
 
-export default HeroIntroSection
+export default HeroIntroSection;

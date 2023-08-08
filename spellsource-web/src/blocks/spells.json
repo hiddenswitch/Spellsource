@@ -21,7 +21,7 @@
       }
     ],
     "data": "BLOCKLY_ARRAY_ELEMENT",
-    "comment": "Used to make lists of Spells. (Remember you can always Duplicate with right-click)"
+    "tooltip": "Used to make lists of Spells. (Remember you can always Duplicate with right-click)"
   },
   {
     "type": "Spell_TargetPlayer",
@@ -48,7 +48,7 @@
         }
       }
     ],
-    "comment": "Used to do spell effects for/as the opponent instead of yourself"
+    "tooltip": "Used to do spell effects for/as the opponent instead of yourself"
   },
   {
     "type": "Spell_BothPlayers",
@@ -72,7 +72,7 @@
         }
       }
     ],
-    "comment": "Needed for nesting target players, e.g. 'Both players draw from their opponent's deck.'"
+    "tooltip": "Needed for nesting target players, e.g. 'Both players draw from their opponent's deck.'"
   },
   {
     "type": "Spell_Damage1",
@@ -103,7 +103,7 @@
         }
       }
     ],
-    "comment": "Simply deal some damage. Works for a single target or multiple targets. Factors in Spell Power if used in a Spell card."
+    "tooltip": "Simply deal some damage. Works for a single target or multiple targets. Factors in Spell Power if used in a Spell card."
   },
   {
     "type": "Spell_Damage2",
@@ -142,7 +142,7 @@
     ],
     "messag1": "(Ignoring Spell Power)",
     "args1": [],
-    "comment": "Like above, but won't factor in Spell Power if on a Spell card."
+    "tooltip": "Like above, but won't factor in Spell Power if on a Spell card."
   },
   {
     "type": "Spell_Heal",
@@ -173,7 +173,7 @@
         }
       }
     ],
-    "comment": "Simply do some healing. Works for a single target or multiple targets. Factors in healing amplifiers."
+    "tooltip": "Simply do some healing. Works for a single target or multiple targets. Factors in healing amplifiers."
   },
   {
     "type": "Spell_DrawCard1",
@@ -188,7 +188,7 @@
         "value": "DrawCardSpell"
       }
     ],
-    "comment": "Draw 1 card from your deck."
+    "tooltip": "Draw 1 card from your deck."
   },
   {
     "type": "Spell_DrawCard2",
@@ -211,7 +211,7 @@
         }
       }
     ],
-    "comment": "To do something to the card, use the block \"the spell's output\""
+    "tooltip": "To do something to the card, use the block \"the spell's output\""
   },
   {
     "type": "Spell_DrawCard3",
@@ -245,7 +245,7 @@
         "value": "card"
       }
     ],
-    "comment": "Draw multiple cards from your deck."
+    "tooltip": "Draw multiple cards from your deck."
   },
   {
     "type": "Spell_DrawCard4",
@@ -280,7 +280,7 @@
         }
       }
     ],
-    "comment": "To do something to the card(s), use the block \"the spell's output\""
+    "tooltip": "To do something to the card(s), use the block \"the spell's output\""
   },
   {
     "type": "Spell_DrawCard5",
@@ -320,7 +320,7 @@
         "value": "card"
       }
     ],
-    "comment": "Draw some amount from cards in your deck that pass a given filter."
+    "tooltip": "Draw some amount from cards in your deck that pass a given filter."
   },
   {
     "type": "Spell_DrawCard6",
@@ -368,7 +368,7 @@
         "value": "card"
       }
     ],
-    "comment": "To do something to the card(s), use the block \"the spell's output\""
+    "tooltip": "To do something to the card(s), use the block \"the spell's output\""
   },
   {
     "type": "Spell_Buff2",
@@ -407,7 +407,7 @@
         }
       }
     ],
-    "comment": "Buff the attack and health of something."
+    "tooltip": "Buff the attack and health of something."
   },
   {
     "type": "Spell_Buff3",
@@ -446,7 +446,7 @@
         }
       }
     ],
-    "comment": "Buff the attack and health of the thing doing this spell."
+    "tooltip": "Buff the attack and health of the thing doing this spell."
   },
   {
     "type": "Spell_Buff4",
@@ -481,7 +481,7 @@
         }
       }
     ],
-    "comment": "Buffs the attack and health of something by the same amount"
+    "tooltip": "Buffs the attack and health of something by the same amount"
   },
   {
     "type": "Spell_Buff5",
@@ -512,7 +512,7 @@
         }
       }
     ],
-    "comment": "Buff just the attack of something."
+    "tooltip": "Buff just the attack of something."
   },
   {
     "type": "Spell_Buff6",
@@ -543,7 +543,7 @@
         }
       }
     ],
-    "comment": "Buff just the health of something."
+    "tooltip": "Buff just the health of something."
   },
   {
     "type": "Spell_Buff7",
@@ -590,7 +590,7 @@
         }
       }
     ],
-    "comment": "Give a temporary attack and health buff to something"
+    "tooltip": "Give a temporary attack and health buff to something"
   },
   {
     "type": "Spell_Buff8",
@@ -629,7 +629,7 @@
         }
       }
     ],
-    "comment": "Give a temporary attack buff to something."
+    "tooltip": "Give a temporary attack buff to something."
   },
   {
     "type": "Spell_TemporaryAttack",
@@ -664,7 +664,7 @@
         }
       }
     ],
-    "comment": "Give a specifically 1-turn only attack buff to something."
+    "tooltip": "Give a specifically 1-turn only attack buff to something."
   },
   {
     "type": "Spell_Conditional",
@@ -695,7 +695,7 @@
         }
       }
     ],
-    "comment": "Only do a spell effect if a condition is met."
+    "tooltip": "Only do a spell effect if a condition is met."
   },
   {
     "type": "Spell_Conditional2",
@@ -735,7 +735,7 @@
         }
       }
     ],
-    "comment": "Do a spell effect if a condition is met for a specific target"
+    "tooltip": "Do a spell effect if a condition is met for a specific target"
   },
   {
     "type": "Spell_EitherOr",
@@ -774,7 +774,7 @@
         }
       }
     ],
-    "comment": "Do one spell effect if a condition is met, or another if it's not."
+    "tooltip": "Do one spell effect if a condition is met, or another if it's not."
   },
   {
     "type": "Spell_ConditionalEffect",
@@ -813,7 +813,7 @@
         }
       }
     ],
-    "comment": "Do a spell effect, then do another effect if a condition is now met."
+    "tooltip": "Do a spell effect, then do another effect if a condition is now met."
   },
   {
     "type": "Spell_Summon3",
@@ -837,7 +837,7 @@
         }
       }
     ],
-    "comment": "Summon the unit associated with a given card."
+    "tooltip": "Summon the unit associated with a given card."
   },
   {
     "type": "Spell_Summon1",
@@ -861,7 +861,7 @@
         }
       }
     ],
-    "comment": "Summon a copy of an already existing unit (new unit owned my caster of spell)"
+    "tooltip": "Summon a copy of an already existing unit (new unit owned my caster of spell)"
   },
   {
     "type": "Spell_Summon8",
@@ -900,7 +900,7 @@
         "value": "copies"
       }
     ],
-    "comment": "Summon multiple copies of an existing unit (new units owned my caster of spell)"
+    "tooltip": "Summon multiple copies of an existing unit (new units owned my caster of spell)"
   },
   {
     "type": "Spell_Summon4",
@@ -931,7 +931,7 @@
         }
       }
     ],
-    "comment": "To do something to the copy, use the block \"the spell's output\""
+    "tooltip": "To do something to the copy, use the block \"the spell's output\""
   },
   {
     "type": "Spell_Summon5",
@@ -960,7 +960,7 @@
         "value": "RIGHT"
       }
     ],
-    "comment": "Summon a unit directly to the right of the unit casting this spell."
+    "tooltip": "Summon a unit directly to the right of the unit casting this spell."
   },
   {
     "type": "Spell_Summon6",
@@ -989,7 +989,7 @@
         "value": "RIGHT"
       }
     ],
-    "comment": "Summon a copy of a unit directly to the right of the unit casting this spell."
+    "tooltip": "Summon a copy of a unit directly to the right of the unit casting this spell."
   },
   {
     "type": "Spell_Summon7",
@@ -1018,7 +1018,7 @@
         "value": "LEFT"
       }
     ],
-    "comment": "Summon a unit directly to the left of the unit casting this spell."
+    "tooltip": "Summon a unit directly to the left of the unit casting this spell."
   },
   {
     "type": "Spell_Summon9",
@@ -1057,7 +1057,7 @@
         "value": "copy"
       }
     ],
-    "comment": "Summon multiple of the unit for a given card."
+    "tooltip": "Summon multiple of the unit for a given card."
   },
   {
     "type": "Spell_Summon14",
@@ -1097,7 +1097,7 @@
         }
       }
     ],
-    "comment": "Summon random units from a filtered source of possibilies."
+    "tooltip": "Summon random units from a filtered source of possibilies."
   },
   {
     "type": "Spell_Summon10",
@@ -1123,7 +1123,7 @@
         }
       }
     ],
-    "comment": "Summon the specific units listed."
+    "tooltip": "Summon the specific units listed."
   },
   {
     "type": "Spell_Summon11",
@@ -1162,7 +1162,7 @@
         }
       }
     ],
-    "comment": "Summon a number of random units from the ones listed."
+    "tooltip": "Summon a number of random units from the ones listed."
   },
   {
     "type": "Spell_Summon12",
@@ -1199,7 +1199,7 @@
         "value": "LEFT"
       }
     ],
-    "comment": "Summon a copy of a unit directly to the left of the unit casting this spell. To do something to the copy, use the block \"the spell's output\""
+    "tooltip": "Summon a copy of a unit directly to the left of the unit casting this spell. To do something to the copy, use the block \"the spell's output\""
   },
   {
     "type": "Spell_Summon",
@@ -1236,7 +1236,7 @@
         "value": "RIGHT"
       }
     ],
-    "comment": "Summon a copy of a unit directly to the right of the unit casting this spell. To do something to the copy, use the block \"the spell's output\""
+    "tooltip": "Summon a copy of a unit directly to the right of the unit casting this spell. To do something to the copy, use the block \"the spell's output\""
   },
   {
     "type": "Spell_ReceiveCards",
@@ -1262,7 +1262,7 @@
         }
       }
     ],
-    "comment": "Add the given cards to your hand."
+    "tooltip": "Add the given cards to your hand."
   },
   {
     "type": "Spell_Summon2",
@@ -1299,7 +1299,7 @@
         }
       }
     ],
-    "comment": "Summon the specific units. To do something to the summoned units, use the block \"the spell's output\""
+    "tooltip": "Summon the specific units. To do something to the summoned units, use the block \"the spell's output\""
   },
   {
     "type": "Spell_Summon13",
@@ -1331,7 +1331,7 @@
         }
       }
     ],
-    "comment": "Summon a specific unit. To do something to the summoned unit, use the block \"the spell's output\""
+    "tooltip": "Summon a specific unit. To do something to the summoned unit, use the block \"the spell's output\""
   },
   {
     "type": "Spell_ReceiveCard",
@@ -1355,7 +1355,7 @@
         }
       }
     ],
-    "comment": "Add the given card to your hand."
+    "tooltip": "Add the given card to your hand."
   },
   {
     "type": "Spell_ReceiveCard1",
@@ -1387,7 +1387,7 @@
         }
       }
     ],
-    "comment": "To do something to the card, use the block \"the spell's output\""
+    "tooltip": "To do something to the card, use the block \"the spell's output\""
   },
   {
     "type": "Spell_ReceiveCard2",
@@ -1429,7 +1429,7 @@
         "value": "copies"
       }
     ],
-    "comment": "Add multiple of the same specific card to your hand."
+    "tooltip": "Add multiple of the same specific card to your hand."
   },
   {
     "type": "Spell_ReceiveCard3",
@@ -1471,7 +1471,7 @@
         }
       }
     ],
-    "comment": "Add multiple random cards from a specific filtered source."
+    "tooltip": "Add multiple random cards from a specific filtered source."
   },
   {
     "type": "Spell_ReceiveCard4",
@@ -1505,7 +1505,7 @@
         }
       }
     ],
-    "comment": "Add multiple random cards to your hand from an unfiltered source."
+    "tooltip": "Add multiple random cards to your hand from an unfiltered source."
   },
   {
     "type": "Spell_ReceiveCard5",
@@ -1555,7 +1555,7 @@
         }
       }
     ],
-    "comment": "To do something to the cards, use the block \"the spell's output\""
+    "tooltip": "To do something to the cards, use the block \"the spell's output\""
   },
   {
     "type": "Spell_ReceiveCard6",
@@ -1579,7 +1579,7 @@
         }
       }
     ],
-    "comment": "Add a card to your hand that needs to be specified through the targeting system, e.g. \"your leftmost card\""
+    "tooltip": "Add a card to your hand that needs to be specified through the targeting system, e.g. \"your leftmost card\""
   },
   {
     "type": "Spell_CopyCard",
@@ -1603,7 +1603,7 @@
         }
       }
     ],
-    "comment": "Add the source card of a given target to your hand"
+    "tooltip": "Add the source card of a given target to your hand"
   },
   {
     "type": "Spell_CopyCard2",
@@ -1635,7 +1635,7 @@
         }
       }
     ],
-    "comment": "To do something to the card, use the block \"the spell's output\""
+    "tooltip": "To do something to the card, use the block \"the spell's output\""
   },
   {
     "type": "Spell_CopyCard3",
@@ -1682,7 +1682,7 @@
         "value": "copy"
       }
     ],
-    "comment": "To do something to the card, use the block \"the spell's output\""
+    "tooltip": "To do something to the card, use the block \"the spell's output\""
   },
   {
     "type": "Spell_ReceiveCard7",
@@ -1722,7 +1722,7 @@
         }
       }
     ],
-    "comment": "Add multiple random cards to your hand from a specific list."
+    "tooltip": "Add multiple random cards to your hand from a specific list."
   },
   {
     "type": "Spell_AdjacentEffect1",
@@ -1754,7 +1754,7 @@
         }
       }
     ],
-    "comment": "Do a spell effect on a unit and the ones right next to it"
+    "tooltip": "Do a spell effect on a unit and the ones right next to it"
   },
   {
     "type": "Spell_AdjacentEffect",
@@ -1801,7 +1801,7 @@
         }
       }
     ],
-    "comment": "Do one spell effect on a unit, and another on the units right next to it."
+    "tooltip": "Do one spell effect on a unit, and another on the units right next to it."
   },
   {
     "type": "Spell_AdjacentEffect2",
@@ -1826,7 +1826,7 @@
         }
       }
     ],
-    "comment": "Do a spell effect on the units adjacent to the unit doing this spell."
+    "tooltip": "Do a spell effect on the units adjacent to the unit doing this spell."
   },
   {
     "type": "Spell_Destroy",
@@ -1900,7 +1900,7 @@
         }
       }
     ],
-    "comment": "Do two spell effects."
+    "tooltip": "Do two spell effects."
   },
   {
     "type": "Spell_Meta2",
@@ -1923,7 +1923,7 @@
         }
       }
     ],
-    "comment": "Do multiple spell effects."
+    "tooltip": "Do multiple spell effects."
   },
   {
     "type": "Spell_Meta3",
@@ -1957,7 +1957,7 @@
         }
       }
     ],
-    "comment": "Not recommended for use by creators. It's mainly here so the algorithm can generate certain older cards coded in the before times."
+    "tooltip": "Not recommended for use by creators. It's mainly here so the algorithm can generate certain older cards coded in the before times."
   },
   {
     "type": "Spell_Meta4",
@@ -1991,7 +1991,7 @@
         }
       }
     ],
-    "comment": "Do multiple spell effects multiple times"
+    "tooltip": "Do multiple spell effects multiple times"
   },
   {
     "type": "Spell_SwapAttackAndHp",
@@ -2034,7 +2034,7 @@
         }
       }
     ],
-    "comment": "Swap the attack of the thing doing this spell with the attack of something else"
+    "tooltip": "Swap the attack of the thing doing this spell with the attack of something else"
   },
   {
     "type": "Spell_SwapHp",
@@ -2056,7 +2056,7 @@
         }
       }
     ],
-    "comment": "Swap the health of the thing doing this spell with the health of something else"
+    "tooltip": "Swap the health of the thing doing this spell with the health of something else"
   },
   {
     "type": "Spell_SwapHp2",
@@ -2086,7 +2086,7 @@
         }
       }
     ],
-    "comment": "Swap the health of two targets"
+    "tooltip": "Swap the health of two targets"
   },
   {
     "type": "Spell_Armor",
@@ -2147,7 +2147,7 @@
         }
       }
     ],
-    "comment": "Apply a (true/false) Attribute to something."
+    "tooltip": "Apply a (true/false) Attribute to something."
   },
   {
     "type": "Spell_AddAttribute1",
@@ -2178,7 +2178,7 @@
         }
       }
     ],
-    "comment": "Apply an attribute to the thing doing this spell."
+    "tooltip": "Apply an attribute to the thing doing this spell."
   },
   {
     "type": "Spell_AddAttribute2",
@@ -2220,7 +2220,7 @@
         }
       }
     ],
-    "comment": "Temporarily apply a (true/false) Attribute to something."
+    "tooltip": "Temporarily apply a (true/false) Attribute to something."
   },
   {
     "type": "Spell_RemoveAttribute",
@@ -2256,7 +2256,7 @@
         }
       }
     ],
-    "comment": "Take away a (true/false) Attribute from something, if it had it."
+    "tooltip": "Take away a (true/false) Attribute from something, if it had it."
   },
   {
     "type": "Spell_ModifyAttribute",
@@ -2298,7 +2298,7 @@
         }
       }
     ],
-    "comment": "Change the value of a (number) Attribute of something by a given amount."
+    "tooltip": "Change the value of a (number) Attribute of something by a given amount."
   },
   {
     "type": "Spell_ModifyAttribute2",
@@ -2349,7 +2349,7 @@
         }
       }
     ],
-    "comment": "Temporarily change the value of a (number) Attribute of something by a given amount."
+    "tooltip": "Temporarily change the value of a (number) Attribute of something by a given amount."
   },
   {
     "type": "Spell_SetAttribute",
@@ -2391,7 +2391,7 @@
         }
       }
     ],
-    "comment": "Change the value of a (number) Attribute of something to a given amount."
+    "tooltip": "Change the value of a (number) Attribute of something to a given amount."
   },
   {
     "type": "Spell_SetAttack",
@@ -2422,7 +2422,7 @@
         }
       }
     ],
-    "comment": "Change the base attack value of something to a given value (WON'T affect attack bonuses)."
+    "tooltip": "Change the base attack value of something to a given value (WON'T affect attack bonuses)."
   },
   {
     "type": "Spell_SetAttack2",
@@ -2459,7 +2459,7 @@
         "value": true
       }
     ],
-    "comment": "Change the attack value of something to a given value (WILL affect attack bonuses)"
+    "tooltip": "Change the attack value of something to a given value (WILL affect attack bonuses)"
   },
   {
     "type": "Spell_SetHp",
@@ -2491,7 +2491,7 @@
         }
       }
     ],
-    "comment": "Change the base health value of something to a given value (WON'T affect hp bonuses)"
+    "tooltip": "Change the base health value of something to a given value (WON'T affect hp bonuses)"
   },
   {
     "type": "Spell_SetHp2",
@@ -2528,7 +2528,7 @@
         "value": true
       }
     ],
-    "comment": "Change the health value of something to a given value (WILL affect hp bonuses)"
+    "tooltip": "Change the health value of something to a given value (WILL affect hp bonuses)"
   },
   {
     "type": "Spell_Null",
@@ -2542,7 +2542,7 @@
         "value": "NullSpell"
       }
     ],
-    "comment": "Sometimes, you just don't got no nothing that needs not doing."
+    "tooltip": "Sometimes, you just don't got no nothing that needs not doing."
   },
   {
     "type": "Spell_SHADOW",
@@ -2597,7 +2597,7 @@
         }
       }
     ],
-    "comment": "Do a spell effect on multiple things at random."
+    "tooltip": "Do a spell effect on multiple things at random."
   },
   {
     "type": "Spell_AddEnchantment",
@@ -2630,7 +2630,7 @@
         }
       }
     ],
-    "comment": "Add an enchantment effect to something."
+    "tooltip": "Add an enchantment effect to something."
   },
   {
     "type": "Spell_AddEnchantment2",
@@ -2696,7 +2696,7 @@
         }
       }
     ],
-    "comment": "Add a named card Enchantment effect to something (Useful if you want to specifically remove the enchantment later)."
+    "tooltip": "Add a named card Enchantment effect to something (Useful if you want to specifically remove the enchantment later)."
   },
   {
     "type": "Spell_AddEnchantment4",
@@ -2737,7 +2737,7 @@
         }
       }
     ],
-    "comment": "Add a temporary Enchantment effect to something."
+    "tooltip": "Add a temporary Enchantment effect to something."
   },
   {
     "type": "Spell_AddEnchantment5",
@@ -2778,7 +2778,7 @@
         }
       }
     ],
-    "comment": "Add a temporary, more complicated Enchantment effect to something."
+    "tooltip": "Add a temporary, more complicated Enchantment effect to something."
   },
   {
     "type": "Spell_AddAura",
@@ -2811,7 +2811,7 @@
         }
       }
     ],
-    "comment": "Add an Aura effect to something."
+    "tooltip": "Add an Aura effect to something."
   },
   {
     "type": "Spell_AddAura2",
@@ -2852,7 +2852,7 @@
         }
       }
     ],
-    "comment": "Add a temporary Aura effect to something."
+    "tooltip": "Add a temporary Aura effect to something."
   },
   {
     "type": "Spell_RemoveEnchantment",
@@ -2885,7 +2885,7 @@
         }
       }
     ],
-    "comment": "Remove a specific named card Enchantment effect from something."
+    "tooltip": "Remove a specific named card Enchantment effect from something."
   },
   {
     "type": "Spell_Transform",
@@ -2915,7 +2915,7 @@
         }
       }
     ],
-    "comment": "Transform something into a fresh unit specific by the given card."
+    "tooltip": "Transform something into a fresh unit specific by the given card."
   },
   {
     "type": "Spell_Transform2",
@@ -2945,7 +2945,7 @@
         }
       }
     ],
-    "comment": "Transform a unit into a fresh copy of another unit."
+    "tooltip": "Transform a unit into a fresh copy of another unit."
   },
   {
     "type": "Spell_ReturnTargetToHand",
@@ -2967,7 +2967,7 @@
         }
       }
     ],
-    "comment": "Return a unit to its owner's hand."
+    "tooltip": "Return a unit to its owner's hand."
   },
   {
     "type": "Spell_ReturnTargetToHand2",
@@ -2998,7 +2998,7 @@
         }
       }
     ],
-    "comment": "Return a unit to its owner's hand. To do something to the card, use the block \"the spell's output\""
+    "tooltip": "Return a unit to its owner's hand. To do something to the card, use the block \"the spell's output\""
   },
   {
     "type": "Spell_Stun",
@@ -3047,7 +3047,7 @@
         }
       }
     ],
-    "comment": "Increase your maximum lun by an amount."
+    "tooltip": "Increase your maximum lun by an amount."
   },
   {
     "type": "Spell_Discover",
@@ -3112,7 +3112,7 @@
         "value": "time"
       }
     ],
-    "comment": "Look at a few cards from a filtered source and do a spell effect based on the one chosen, often receiving it."
+    "tooltip": "Look at a few cards from a filtered source and do a spell effect based on the one chosen, often receiving it."
   },
   {
     "type": "Spell_Discover2",
@@ -3172,7 +3172,7 @@
         }
       }
     ],
-    "comment": "Look at a few cards from a specific list and do a spell effect based on the one chosen, often receiving it."
+    "tooltip": "Look at a few cards from a specific list and do a spell effect based on the one chosen, often receiving it."
   },
   {
     "type": "Spell_Discover3",
@@ -3245,7 +3245,7 @@
         }
       }
     ],
-    "comment": "Look at a few cards from a filtered source and do a spell effect using the actual cards themselves (use the block \"it\" in the spell instead of \"the chosen card\")"
+    "tooltip": "Look at a few cards from a filtered source and do a spell effect using the actual cards themselves (use the block \"it\" in the spell instead of \"the chosen card\")"
   },
   {
     "type": "Spell_Discover_SHADOW",
@@ -3299,7 +3299,7 @@
         }
       }
     ],
-    "comment": "Use this for tricky cost modification. The other spells are simplifications of effects you could make with this."
+    "tooltip": "Use this for tricky cost modification. The other spells are simplifications of effects you could make with this."
   },
   {
     "type": "Spell_CardCostModifier1",
@@ -3358,7 +3358,7 @@
         }
       }
     ],
-    "comment": "Change the cost of a specific card."
+    "tooltip": "Change the cost of a specific card."
   },
   {
     "type": "Spell_CardCostModifier2",
@@ -3462,7 +3462,7 @@
         "value": "SELF"
       }
     ],
-    "comment": "Change the cost of the next card you play that passes given filters."
+    "tooltip": "Change the cost of the next card you play that passes given filters."
   },
   {
     "type": "Spell_CardCostModifier3",
@@ -3541,7 +3541,7 @@
         "value": "SELF"
       }
     ],
-    "comment": "Change the cost of the next card you play that's a certain tribe."
+    "tooltip": "Change the cost of the next card you play that's a certain tribe."
   },
   {
     "type": "Spell_RecastWhile",
@@ -3584,7 +3584,7 @@
         }
       }
     ],
-    "comment": "Do a spell effect, then repeat it while a given condition remains true."
+    "tooltip": "Do a spell effect, then repeat it while a given condition remains true."
   },
   {
     "type": "Spell_Missiles",
@@ -3634,7 +3634,7 @@
         "value": "missiles"
       }
     ],
-    "comment": "Pew pew pew"
+    "tooltip": "Pew pew pew"
   },
   {
     "type": "Spell_EquipWeapon",
@@ -3657,7 +3657,7 @@
         }
       }
     ],
-    "comment": "Equip the item specified by the given card."
+    "tooltip": "Equip the item specified by the given card."
   },
   {
     "type": "Spell_Discard",
@@ -3671,7 +3671,7 @@
         "value": "DiscardSpell"
       }
     ],
-    "comment": "Discard a random card in your hand"
+    "tooltip": "Discard a random card in your hand"
   },
   {
     "type": "Spell_Discard3",
@@ -3693,7 +3693,7 @@
         }
       }
     ],
-    "comment": "Discard a specifically targetted card, e.g. \"your leftmost card\"."
+    "tooltip": "Discard a specifically targetted card, e.g. \"your leftmost card\"."
   },
   {
     "type": "Spell_Discard1",
@@ -3722,7 +3722,7 @@
         "value": "card"
       }
     ],
-    "comment": "Discard multiple random cards from your hand."
+    "tooltip": "Discard multiple random cards from your hand."
   },
   {
     "type": "Spell_Discard2",
@@ -3745,7 +3745,7 @@
         }
       }
     ],
-    "comment": "Discard a random card in your hand that passes a given filter."
+    "tooltip": "Discard a random card in your hand that passes a given filter."
   },
   {
     "type": "Spell_TargetToSourceSecondaryToTarget",
@@ -3784,7 +3784,7 @@
         }
       }
     ],
-    "comment": "Do a spell effect as if it was something else doing it."
+    "tooltip": "Do a spell effect as if it was something else doing it."
   },
   {
     "type": "Spell_Fight",
@@ -3816,7 +3816,7 @@
         }
       }
     ],
-    "comment": "Makes the target/targets attack another target or multiple other targets"
+    "tooltip": "Makes the target/targets attack another target or multiple other targets"
   },
   {
     "type": "Spell_Fight2",
@@ -3856,7 +3856,7 @@
         }
       }
     ],
-    "comment": "To do something to the attacker, use the block \"the spell's output\""
+    "tooltip": "To do something to the attacker, use the block \"the spell's output\""
   },
   {
     "type": "Spell_Fight3",
@@ -3893,7 +3893,7 @@
         }
       }
     ],
-    "comment": "Use if you don't want the forced attack to count as its chosen attack this turn."
+    "tooltip": "Use if you don't want the forced attack to count as its chosen attack this turn."
   },
   {
     "type": "Spell_Recruit1",
@@ -3942,7 +3942,7 @@
         "value": "HAND"
       }
     ],
-    "comment": "To do something to the unit, use the block \"the spell's output\""
+    "tooltip": "To do something to the unit, use the block \"the spell's output\""
   },
   {
     "type": "Spell_ForceDeathPhase",
@@ -3958,7 +3958,7 @@
         "value": "ForceDeathPhaseSpell"
       }
     ],
-    "comment": "By default, deaths don't happen until after your ENTIRE spell effect has resolved. Use this to make that happen at an earlier point as well."
+    "tooltip": "By default, deaths don't happen until after your ENTIRE spell effect has resolved. Use this to make that happen at an earlier point as well."
   },
   {
     "type": "Spell_ModifyDamage",
@@ -3987,7 +3987,7 @@
         }
       }
     ],
-    "comment": "When used in an Enchantment with a damage based trigger, this changes the damage of the event."
+    "tooltip": "When used in an Enchantment with a damage based trigger, this changes the damage of the event."
   },
   {
     "type": "Spell_ModifyDamage2",
@@ -4016,7 +4016,7 @@
         }
       }
     ],
-    "comment": "When used in an Enchantment with a damage based trigger, this changes the damage of the event."
+    "tooltip": "When used in an Enchantment with a damage based trigger, this changes the damage of the event."
   },
   {
     "type": "Spell_CastAfterSequence",
@@ -4040,7 +4040,7 @@
         }
       }
     ],
-    "comment": "Do a spell effect after all other spell effects going on right now have finished."
+    "tooltip": "Do a spell effect after all other spell effects going on right now have finished."
   },
   {
     "type": "Spell_RefreshSkill",
@@ -4056,7 +4056,7 @@
         "value": "RefreshHeroPowerSpell"
       }
     ],
-    "comment": "Makes your skill usable again if it was already used this turn."
+    "tooltip": "Makes your skill usable again if it was already used this turn."
   },
   {
     "type": "Spell_CopyDeathrattle",
@@ -4079,7 +4079,7 @@
         }
       }
     ],
-    "comment": "Copy the aftermath effect from something and give it to this"
+    "tooltip": "Copy the aftermath effect from something and give it to this"
   },
   {
     "type": "Spell_CopyDeathrattle2",
@@ -4110,7 +4110,7 @@
         }
       }
     ],
-    "comment": "Copy the aftermath effect from something and give it to another thing"
+    "tooltip": "Copy the aftermath effect from something and give it to another thing"
   },
   {
     "type": "Spell_PutDeckTop",
@@ -4186,7 +4186,7 @@
         "value": "card"
       }
     ],
-    "comment": "Put a card in your deck so that it's a certain number of cards down from the top."
+    "tooltip": "Put a card in your deck so that it's a certain number of cards down from the top."
   },
   {
     "type": "Spell_custom.CopyMinion",
@@ -4232,7 +4232,7 @@
         }
       }
     ],
-    "comment": "Remove the targeted card from wherever it happens to be"
+    "tooltip": "Remove the targeted card from wherever it happens to be"
   },
   {
     "type": "Spell_ShuffleToDeck",
@@ -4271,7 +4271,7 @@
         "value": "copy"
       }
     ],
-    "comment": "Shuffle copies of a targeted unit into your deck"
+    "tooltip": "Shuffle copies of a targeted unit into your deck"
   },
   {
     "type": "Spell_ShuffleToDeck2",
@@ -4303,7 +4303,7 @@
         }
       }
     ],
-    "comment": "To do something to the shuffled card, use the block \"the spell's output\""
+    "tooltip": "To do something to the shuffled card, use the block \"the spell's output\""
   },
   {
     "type": "Spell_ShuffleToDeck3",
@@ -4368,7 +4368,7 @@
         "value": "copy"
       }
     ],
-    "comment": "Shuffle multiple copies of the same card into your deck."
+    "tooltip": "Shuffle multiple copies of the same card into your deck."
   },
   {
     "type": "Spell_ShuffleToDeck45",
@@ -4415,7 +4415,7 @@
         "value": "card"
       }
     ],
-    "comment": "Shuffle some random cards from a filtered source into your deck."
+    "tooltip": "Shuffle some random cards from a filtered source into your deck."
   },
   {
     "type": "Spell_ShuffleToDeck5",
@@ -4470,7 +4470,7 @@
         "value": "card"
       }
     ],
-    "comment": "To do something to the shuffled card(s), use the block \"the spell's output\""
+    "tooltip": "To do something to the shuffled card(s), use the block \"the spell's output\""
   },
   {
     "type": "Spell_ShuffleOriginalToDeck",
@@ -4494,7 +4494,7 @@
         }
       }
     ],
-    "comment": "Shuffles someting DIRECTLY into your deck, removing it from wherever it once was."
+    "tooltip": "Shuffles someting DIRECTLY into your deck, removing it from wherever it once was."
   },
   {
     "type": "Spell_TransformToRandomMinion",
@@ -4528,7 +4528,7 @@
         }
       }
     ],
-    "comment": "Transform a unit into something at random."
+    "tooltip": "Transform a unit into something at random."
   },
   {
     "type": "Spell_CastRepeatedly",
@@ -4560,7 +4560,7 @@
         }
       }
     ],
-    "comment": "Do a spell effect multiple times."
+    "tooltip": "Do a spell effect multiple times."
   },
   {
     "type": "Spell_CastRepeatedly2",
@@ -4599,7 +4599,7 @@
         }
       }
     ],
-    "comment": "Perform the same spell effect multiple times on random targets from a group."
+    "tooltip": "Perform the same spell effect multiple times on random targets from a group."
   },
   {
     "type": "Spell_ChangeHeroPower",
@@ -4646,7 +4646,7 @@
         }
       }
     ],
-    "comment": "Tells the game that you want this spell effect to be handled as a Skill"
+    "tooltip": "Tells the game that you want this spell effect to be handled as a Skill"
   },
   {
     "type": "Spell_HeroPower2",
@@ -4670,7 +4670,7 @@
         }
       }
     ],
-    "comment": "Tells the game that you want this spell effect to be handled as a Skill"
+    "tooltip": "Tells the game that you want this spell effect to be handled as a Skill"
   },
   {
     "type": "Spell_Supremacy",
@@ -4694,7 +4694,7 @@
         }
       }
     ],
-    "comment": "Tells the game that you want this spell effect to be handled as a Supremacy"
+    "tooltip": "Tells the game that you want this spell effect to be handled as a Supremacy"
   },
   {
     "type": "Spell_Decay",
@@ -4718,7 +4718,7 @@
         }
       }
     ],
-    "comment": "Applies the 'Decay' mechanic to a target."
+    "tooltip": "Applies the 'Decay' mechanic to a target."
   },
   {
     "type": "Spell_AddDeathrattle",
@@ -4749,7 +4749,7 @@
         }
       }
     ],
-    "comment": "Apply a new aftermath effect to a target."
+    "tooltip": "Apply a new aftermath effect to a target."
   },
   {
     "type": "Spell_AddDeathrattle2",
@@ -4781,7 +4781,7 @@
         }
       }
     ],
-    "comment": "Apply an Enchantment-card defined aftermath effect to a target."
+    "tooltip": "Apply an Enchantment-card defined aftermath effect to a target."
   },
   {
     "type": "Spell_Invoke",
@@ -4830,7 +4830,7 @@
         }
       }
     ],
-    "comment": "Block for creating Invoke effects"
+    "tooltip": "Block for creating Invoke effects"
   },
   {
     "type": "Spell_InvokeOption",
@@ -4890,7 +4890,7 @@
         }
       }
     ],
-    "comment": "Helper block for creating Invoke effects"
+    "tooltip": "Helper block for creating Invoke effects"
   },
   {
     "type": "Spell_QuickDraw",
@@ -4914,7 +4914,7 @@
         }
       }
     ],
-    "comment": "Tells the game that you want this spell effect to be handled as a Quick Draw"
+    "tooltip": "Tells the game that you want this spell effect to be handled as a Quick Draw"
   },
   {
     "type": "Spell_Roast",
@@ -4945,7 +4945,7 @@
         "value": "card"
       }
     ],
-    "comment": "'Roast' a number of cards off the top your deck"
+    "tooltip": "'Roast' a number of cards off the top your deck"
   },
   {
     "type": "Spell_Recruit3",
@@ -4990,7 +4990,7 @@
         "value": "unit"
       }
     ],
-    "comment": "Summon units from your hand that pass a particular filter"
+    "tooltip": "Summon units from your hand that pass a particular filter"
   },
   {
     "type": "Spell_Recruit4",
@@ -5035,7 +5035,7 @@
         "value": "unit"
       }
     ],
-    "comment": "Summon units from your deck that pass a particular filter"
+    "tooltip": "Summon units from your deck that pass a particular filter"
   },
   {
     "type": "Spell_QueryTarget",
@@ -5104,7 +5104,7 @@
         "value": "target,"
       }
     ],
-    "comment": "A very complicated spell effect that can be very useful for some specific effects. It goes through a number of targets (potentially sorting them) and then does a spell effect on a specific subset of them in order."
+    "tooltip": "A very complicated spell effect that can be very useful for some specific effects. It goes through a number of targets (potentially sorting them) and then does a spell effect on a specific subset of them in order."
   },
   {
     "type": "Spell_QueryTarget2",
@@ -5181,7 +5181,7 @@
         }
       }
     ],
-    "comment": "Same as above but with a filtered set of targets."
+    "tooltip": "Same as above but with a filtered set of targets."
   },
   {
     "type": "Spell_MindControl",
@@ -5204,7 +5204,7 @@
         }
       }
     ],
-    "comment": "Steals a unit from your opponent's board and puts it on your board, unable to attack this turn. If there's no space, it gets destroyed."
+    "tooltip": "Steals a unit from your opponent's board and puts it on your board, unable to attack this turn. If there's no space, it gets destroyed."
   },
   {
     "type": "Spell_GainMana",
@@ -5281,7 +5281,7 @@
         }
       }
     ],
-    "comment": "To do something to the shuffled unit, use the block \"the spell's output\""
+    "tooltip": "To do something to the shuffled unit, use the block \"the spell's output\""
   },
   {
     "type": "Spell_CastCards",
@@ -5312,7 +5312,7 @@
         }
       }
     ],
-    "comment": "Does the effects of a (Spell) card on a given target."
+    "tooltip": "Does the effects of a (Spell) card on a given target."
   },
   {
     "type": "Spell_CastCards2",
@@ -5343,7 +5343,7 @@
         }
       }
     ],
-    "comment": "Does the effects of a Spell card (that need to be targeted as an entity) on a given target."
+    "tooltip": "Does the effects of a Spell card (that need to be targeted as an entity) on a given target."
   },
   {
     "type": "Spell_ReplaceCards",
@@ -5382,7 +5382,7 @@
         }
       }
     ],
-    "comment": "Replaces any cards targeted with random ones from a filtered source."
+    "tooltip": "Replaces any cards targeted with random ones from a filtered source."
   },
   {
     "type": "Spell_ReplaceCards2",
@@ -5413,7 +5413,7 @@
         }
       }
     ],
-    "comment": "Replaces all cards targeted with a specific other card."
+    "tooltip": "Replaces all cards targeted with a specific other card."
   },
   {
     "type": "Spell_Meta5",
@@ -5437,7 +5437,7 @@
         }
       }
     ],
-    "comment": "Just pretend this block doesn't exist"
+    "tooltip": "Just pretend this block doesn't exist"
   },
   {
     "type": "Spell_Duel",
@@ -5469,7 +5469,7 @@
         }
       }
     ],
-    "comment": "Makes a target or targets attack a random other target or targets. Doesn't count as anybody's one chosen attack for a turn."
+    "tooltip": "Makes a target or targets attack a random other target or targets. Doesn't count as anybody's one chosen attack for a turn."
   },
   {
     "type": "Spell_ReviveMinion",
@@ -5500,7 +5500,7 @@
         }
       }
     ],
-    "comment": "To do something to the revived unit, use the block \"the spell's output\""
+    "tooltip": "To do something to the revived unit, use the block \"the spell's output\""
   },
   {
     "type": "Spell_CopyHeroPower",
@@ -5547,7 +5547,7 @@
         }
       }
     ],
-    "comment": "To do something to the roasted card, use the block \"the spell's output\""
+    "tooltip": "To do something to the roasted card, use the block \"the spell's output\""
   },
   {
     "type": "Spell_AdjacentDeathrattle",
@@ -5576,7 +5576,7 @@
         }
       }
     ],
-    "comment": "Due to some internal coding shenanigans, this block must be used to do things to adjacent units in an Aftermath"
+    "tooltip": "Due to some internal coding shenanigans, this block must be used to do things to adjacent units in an Aftermath"
   },
   {
     "type": "Spell_ExcessDamage",
@@ -5616,7 +5616,7 @@
         }
       }
     ],
-    "comment": "Deals up to the exact amount of damage need to kill a target, then does any excess to a different target."
+    "tooltip": "Deals up to the exact amount of damage need to kill a target, then does any excess to a different target."
   },
   {
     "type": "Spell_ExcessDamage2",
@@ -5661,7 +5661,7 @@
         }
       }
     ],
-    "comment": "This is a bit confusing, but to be clear: this only damages the first Target mentioned. The Value and second Target are just used in calculation; they don't get damaged by this. This is used to calculate excess damage for effects that weren't originally trying to care about excess damage."
+    "tooltip": "This is a bit confusing, but to be clear: this only damages the first Target mentioned. The Value and second Target are just used in calculation; they don't get damaged by this. This is used to calculate excess damage for effects that weren't originally trying to care about excess damage."
   },
   {
     "type": "Spell_RefreshAttacks",
@@ -5685,7 +5685,7 @@
         }
       }
     ],
-    "comment": "Allow something to attack again this turn."
+    "tooltip": "Allow something to attack again this turn."
   },
   {
     "type": "Spell_Enrage",
@@ -5717,7 +5717,7 @@
         }
       }
     ],
-    "comment": "Buff or unbuffs a unit's attack as an Enrage effect"
+    "tooltip": "Buff or unbuffs a unit's attack as an Enrage effect"
   },
   {
     "type": "Spell_SplashDamage",
@@ -5749,7 +5749,7 @@
         }
       }
     ],
-    "comment": "This is just like regular damage, except \"the event's source\" is treated as the one causing it."
+    "tooltip": "This is just like regular damage, except \"the event's source\" is treated as the one causing it."
   },
   {
     "type": "Spell_DamageIgnoringArmor",
@@ -5803,7 +5803,7 @@
         }
       }
     ],
-    "comment": "Plays the card specified by the target entity with any necessary choices done randomly."
+    "tooltip": "Plays the card specified by the target entity with any necessary choices done randomly."
   },
   {
     "type": "Spell_AddPact",
@@ -5831,7 +5831,7 @@
         }
       }
     ],
-    "comment": "Creates and puts into play a Pact effect."
+    "tooltip": "Creates and puts into play a Pact effect."
   },
   {
     "type": "Spell_AddBattlecry",
@@ -5870,7 +5870,7 @@
         }
       }
     ],
-    "comment": "Gives a targeted card (probably in hand or deck) a new Opener effect."
+    "tooltip": "Gives a targeted card (probably in hand or deck) a new Opener effect."
   },
   {
     "type": "Spell_AddDeathrattle3",
@@ -5958,28 +5958,18 @@
     }
   },
   {
-    "type": "Spell_MetaTest",
-    "output": "SpellDesc",
+    "type": "Spell_Array_SHADOW",
+    "output": "Spells",
     "colour": 260,
-    "message0": "%1%2 empty",
+    "message0": "%1 empty",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
-        "name": "class",
-        "value": "MetaSpell"
-      },
-      {
         "type": "field_plus"
       }
     ],
-    "message1": "%1%2%3%4",
+    "message1": "%1%2%3",
     "args1": [
       {
-        "type": "field_label_serializable_hidden",
-        "name": "class",
-        "value": "MetaSpell"
-      },
-      {
         "type": "field_plus"
       },
       {
@@ -5987,25 +5977,7 @@
       },
       {
         "type": "input_value",
-        "name": "spells",
-        "check": "SpellDesc",
-        "shadow": {
-          "type": "Spell_SHADOW",
-          "toolbox": false
-        }
-      }
-    ],
-    "message2": "%1%2%3",
-    "args2": [
-      {
-        "type": "field_plus"
-      },
-      {
-        "type": "field_minus"
-      },
-      {
-        "type": "input_value",
-        "name": "spells",
+        "name": "i",
         "check": "SpellDesc",
         "shadow": {
           "type": "Spell_SHADOW",
@@ -6014,9 +5986,62 @@
       }
     ],
     "mutator": "plus_minus_rows",
-    "comment": "Do multiple spell effects.",
-    "mutatorOptions": {
-      "arrayName": "spells"
-    }
+    "data": "BLOCKLY_ARRAY"
+  },
+  {
+    "type": "Spell_MetaTest",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "(do)",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MetaSpell"
+      }
+    ],
+    "message1": "%1",
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "spells",
+        "check": "Spells",
+        "shadow": {
+          "type": "Spell_Array"
+        }
+      }
+    ],
+    "tooltip": "Do multiple spell effects."
+  },
+  {
+    "type": "Spell_Array",
+    "previousStatement": "Spells",
+    "colour": 260,
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_plus"
+      }
+    ],
+    "message1": "%1%2%3",
+    "args1": [
+      {
+        "type": "field_plus"
+      },
+      {
+        "type": "field_minus"
+      },
+      {
+        "type": "input_value",
+        "name": "i",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW",
+          "toolbox": false
+        }
+      }
+    ],
+    "mutator": "plus_minus_rows",
+    "data": "BLOCKLY_ARRAY"
   }
 ]

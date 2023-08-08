@@ -28,14 +28,14 @@
       }
     ],
     "data": "BLOCKLY_ARRAY_ELEMENT",
-    "comment": "Used to make lists of Cards.\n(Remember you can always\nDuplicate with right-click)"
+    "tooltip": "Used to make lists of Cards.\n(Remember you can always\nDuplicate with right-click)"
   },
   {
     "type": "Card_IT",
     "output": "Card",
     "colour": "#888888",
     "message0": "the chosen card",
-    "comment": "Used in the effects of Source spells"
+    "tooltip": "Used in the effects of Source spells"
   },
   {
     "type": "Card_REFERENCE",

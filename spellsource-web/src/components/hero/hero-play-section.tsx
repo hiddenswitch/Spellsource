@@ -1,7 +1,7 @@
 import React from "react";
-import * as styles from "./creative-layout.module.scss";
-import playNow from "../../public/static/assets/play-now.gif";
-import cloud from "../../public/static/assets/transparent-cloud.png";
+import * as styles from "../creative-layout.module.scss";
+import playNow from "../../../public/static/assets/play-now.gif";
+import cloud from "../../../public/static/assets/transparent-cloud.png";
 import Image from "next/image";
 
 function HeroPlaySection() {
@@ -66,4 +66,4 @@ function HeroPlaySection() {
   );
 }
 
-export default HeroPlaySection
+export default HeroPlaySection;

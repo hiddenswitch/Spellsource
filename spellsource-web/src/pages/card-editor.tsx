@@ -3,7 +3,7 @@ import Layout from "../components/card-editor-layout";
 import * as styles from "../templates/template-styles.module.scss";
 import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
 import { getAllBlockJson, getAllIcons } from "../lib/fs-utils";
-import { CardDef } from "../components/card-display";
+import { CardDef } from "../components/collection/card-display";
 import { fixArt } from "../lib/json-transforms";
 import { keyBy } from "lodash";
 import {
@@ -20,6 +20,7 @@ import { ApolloQueryResult } from "@apollo/client";
 import Head from "next/head";
 import { Spinner } from "react-bootstrap";
 import CardEditorWorkspace from "../components/card-editor-workspace";
+import SpellsourceRenderer from "../lib/spellsource-renderer";
 
 /*const getAllCards = async () => (await readAllJson<CardDef>(
   path.join("..", "spellsource-game", "src", "main", "resources", "basecards", "standard", "**", "*.json"),
@@ -109,7 +110,7 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
             <CardEditorWorkspace
               ref={blocklyEditor}
               defaultCard={false}
-              renderer={compactBlocks ? "spellsource" : "geras"}
+              renderer={compactBlocks ? SpellsourceRenderer.name : "geras"}
             />
           ) : (
             <div className={"h-100 w-100 d-flex"}>

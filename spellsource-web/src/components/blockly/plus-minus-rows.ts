@@ -2,10 +2,10 @@ import { ExtensionMixin, MutatorFn } from "./mutators";
 import Blockly, { Block } from "blockly";
 import { BlockArgDef, BlockDef } from "../../__generated__/blocks";
 import { reInitBlock } from "../../lib/blockly-misc-utils";
-import { rowsList } from "../../lib/json-conversion-utils";
+import { argsList, rowsList } from "../../lib/json-conversion-utils";
 
 interface PlusMinusOptions {
-  arrayName: string;
+  arrayName?: string;
   itemCount?: number;
 }
 
@@ -33,7 +33,6 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
   mutationToDom(): Element {
     const container = Blockly.utils.xml.createElement("mutation");
     container.setAttribute("itemCount", String(this.itemCount));
-    container.setAttribute("arrayName", this.options.arrayName);
     return container;
   },
   domToMutation(xmlElement: Element): void {
@@ -55,8 +54,8 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
     const emptyArgs = block.args0;
     const firstMessage = block.message1;
     const firstArgs = block.args1;
-    const restMessage = block.message2;
-    const restArgs = block.args2;
+    const restMessage = block.message2 ?? block.message1;
+    const restArgs = block.args2 ?? block.args1;
 
     rowsList(block).forEach((row, i) => {
       delete block[`message${i}`];
@@ -109,6 +108,7 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
     } else {
       this.updateShape_();
     }
+    this.setShadow(false);
   },
   plus(index: number): void {
     const block = Blockly.Blocks[this.type].json as BlockDef;
@@ -126,10 +126,15 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
 
     this.itemCount++;
     this.updateShape_();
+    this.setShadow(false);
   },
   initMutator(this): void {
     const block = Blockly.Blocks[this.type].json as BlockDef;
-    this.options = block.mutatorOptions as PlusMinusOptions;
+    this.options = (block.mutatorOptions as PlusMinusOptions) ?? {};
+
+    if (!this.options.arrayName) {
+      this.options.arrayName = argsList(block, "input")[0].name;
+    }
 
     if (this.itemCount == null) {
       this.itemCount = this.options.itemCount ?? 0;

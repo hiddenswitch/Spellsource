@@ -3,7 +3,7 @@ import { useContext, useRef } from "react";
 import elasticlunr, { Index } from "elasticlunr";
 import { BlocklyDataContext } from "../pages/card-editor";
 import { BlockDef } from "../__generated__/blocks";
-import { CardDef } from "../components/card-display";
+import { CardDef } from "../components/collection/card-display";
 import { ImageDef } from "../__generated__/client";
 
 export type SearchNode = BlockSearchNode | CardSearchNode | ArtSearchNode | MarkdownSearchNode;

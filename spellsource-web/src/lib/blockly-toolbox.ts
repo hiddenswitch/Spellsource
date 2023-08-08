@@ -3,7 +3,7 @@ import * as BlocklyMiscUtils from "./blockly-misc-utils";
 import { toTitleCaseCorrected } from "./blockly-misc-utils";
 import { ContextType } from "react";
 import { BlocklyDataContext } from "../pages/card-editor";
-import { CardDef } from "../components/card-display";
+import { CardDef } from "../components/collection/card-display";
 import { ImageDef } from "../__generated__/client";
 import { ToolboxSearchCategory } from "../components/blockly/toolbox-search-category";
 import { CardSearchCategory } from "../components/blockly/card-search-category";
@@ -400,28 +400,6 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
   } as ToolboxInfo;
 }
 
-/**
- * Specifically creates the JSON for the "Search Results" category.
- * Defined here so that the category can be easily updated for new search results
- * @returns category json
- */
-export function searchResultsCategory(results: string[]) {
-  return category(
-    "Search Results",
-    "#000000",
-    "The relevant blocks from your search will appear here",
-    results.length
-      ? results.map((id) => getBlock(id))
-      : [
-          {
-            kind: "label",
-            text: "No Search Results",
-          },
-        ],
-    { toolboxitemid: "Search Results" }
-  );
-}
-
 export function myCardsCategory(data: ContextType<typeof BlocklyDataContext>) {
   const setOfSets = new Set([] as string[]);
 
@@ -652,16 +630,6 @@ function inclusionContents(prefix, ...inclusions) {
   return contents;
 }
 
-function artContents(used) {
-  let contents: Partial<ToolboxItemInfo>[] = [];
-  for (let block in Blockly.Blocks) {
-    if (defaultTest(block) && block.startsWith("Art_") && (used === Blockly.Blocks[block].used || used === null)) {
-      contents.push(getBlock(block));
-    }
-  }
-  return contents;
-}
-
 function artCategories() {
   const categoryContents: Record<string, Partial<ToolboxItemInfo>[]> = {};
 
@@ -719,16 +687,20 @@ function blockInputs(type: string) {
       const name = arg?.name;
       if (!name) continue;
 
-      if (arg.shadow && arg.shadow.toolbox !== false) {
-        const input = (inputs[name] ??= {} as any);
-        input.shadow = { ...arg.shadow };
-        input.shadow.inputs = blockInputs(input.shadow.type);
-      }
-
       if (arg.block && arg.block.toolbox !== false) {
         const input = (inputs[name] ??= {} as any);
         input.block = { ...arg.block };
         input.block.inputs = blockInputs(input.block.type);
+
+        if (!arg.shadow) {
+          arg.shadow = arg.block;
+        }
+      }
+
+      if (arg.shadow && arg.shadow.toolbox !== false) {
+        const input = (inputs[name] ??= {} as any);
+        input.shadow = { ...arg.shadow };
+        input.shadow.inputs = blockInputs(input.shadow.type);
       }
     }
   });

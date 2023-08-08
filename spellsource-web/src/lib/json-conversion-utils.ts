@@ -2,7 +2,7 @@ import Blockly, { Block, BlockSvg, Connection, Workspace, WorkspaceSvg } from "b
 import * as BlocklyMiscUtils from "./blockly-misc-utils";
 import { isArray } from "lodash";
 import { BlockArgDef, BlockDef } from "../__generated__/blocks";
-import { CardDef } from "../components/card-display";
+import { CardDef } from "../components/collection/card-display";
 import { isNumeric } from "./workspace-utils";
 import { RgbColour } from "../components/blockly/field-colour-hsv-sliders";
 
@@ -695,6 +695,99 @@ export function auras(block: Block | BlockSvg, json, workspace) {
   }
 }
 
+export function inputNameToBlockType(inputName: string) {
+  if (inputName.includes(".")) {
+    inputName = inputName.split(".").slice(-1)[0];
+  }
+  switch (inputName) {
+    case "heroPower":
+    case "card":
+    case "hero":
+      return "Card";
+    case "cards":
+      return "Cards";
+    case "queueCondition":
+    case "fireCondition":
+    case "condition":
+    case "targetSelectionCondition":
+    case "andCondition":
+    case "canAffordCondition":
+      return "Condition";
+    case "spell":
+    case "spell1":
+    case "spell2":
+    case "deathrattle":
+    case "applyEffect":
+    case "removeEffect":
+    case "payEffect":
+      return "Spell";
+    case "filter":
+    case "cardFilter":
+      return "Filter";
+    case "secondaryTarget":
+    case "target":
+      return "EntityReference";
+    case "race":
+      return "Race";
+    case "sourcePlayer":
+    case "targetPlayer":
+      return "TargetPlayer";
+    case "heroClass":
+      return "HeroClass";
+    case "rarity":
+      return "Rarity";
+    case "attribute":
+    case "requiredAttribute":
+      return "Attribute";
+    case "targetSelection":
+    case "targetSelectionOverride":
+      return "TargetSelection";
+    case "eventTrigger":
+    case "revertTrigger":
+    case "secondaryTrigger":
+    case "secret":
+    case "quest":
+    case "expirationTrigger":
+    case "secondRevertTrigger":
+    case "toggleOn":
+    case "toggleOff":
+    case "trigger":
+    case "expirationTriggers":
+    case "activationTriggers":
+      return "Trigger";
+    case "value":
+    case "howMany":
+    case "ifTrue":
+    case "ifFalse":
+    case "value1":
+    case "value2":
+    case "secondaryValue":
+    case "multiplier":
+    case "offset":
+    case "attackBonus":
+    case "hpBonus":
+    case "armorBonus":
+    case "manaCost":
+    case "mana":
+    case "manaCostModifier":
+    case "minValue":
+    case "min":
+    case "max":
+    case "amountOfCurrency":
+      return "ValueProvider";
+    case "aura":
+      return "Aura";
+    case "cardSource":
+      return "Source";
+    case "cardCostModifier":
+      return "CostModifier";
+    case "zone":
+      return "Zone";
+    default:
+      return null;
+  }
+}
+
 /**
  * Finds the best block match for a given bit of json
  *
@@ -718,7 +811,7 @@ export function getMatch(json, inputName, parentJson) {
   let bestMatch = null;
   if (typeof json !== "object") {
     //just looking for the correct block with the data of the json string
-    let lookingForType = BlocklyMiscUtils.inputNameToBlockType(inputName);
+    let lookingForType = inputNameToBlockType(inputName);
     if (inputName === "attribute") {
       json = json.toString().replace("AURA_", "");
     }
@@ -993,7 +1086,7 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
     }
 
     //if the json has a corresponding argument
-    if (typeof jsonElement !== "object" && BlocklyMiscUtils.inputNameToBlockType(name) === "ValueProvider") {
+    if (typeof jsonElement !== "object" && inputNameToBlockType(name) === "ValueProvider") {
       //integer block stuff
       handleIntArg(block, inputArg.name, workspace, jsonElement);
     } else if (isArray(jsonElement)) {
@@ -1307,6 +1400,19 @@ export function handleIntArg(block: Block | BlockSvg, inputArg, workspace, int) 
   valueBlock.setFieldValue(int, "int");
 }
 
+export function blockTypeToOuput(type) {
+  switch (type) {
+    case "Spell":
+    case "ValueProvider":
+    case "Condition":
+    case "Filter":
+    case "CostModifier":
+      return type + "Desc";
+    default:
+      return type;
+  }
+}
+
 /**
  * The old way of doing custom blocks, which was actually defining
  * a new block with the needed input types and field values built into it
@@ -1323,7 +1429,7 @@ export function handleIntArg(block: Block | BlockSvg, inputArg, workspace, int) 
  * */
 export function generateDummyBlock(json, inputName, parentJson) {
   inputName = inputName.split(".").slice(-1)[0];
-  let type = BlocklyMiscUtils.inputNameToBlockType(inputName);
+  let type = inputNameToBlockType(inputName);
   let consoleBlock;
   if (typeof json !== "object") {
     let color = blockTypeColors[type];
@@ -1340,7 +1446,7 @@ export function generateDummyBlock(json, inputName, parentJson) {
     let messages = [];
     let args = [];
     for (let prop of props) {
-      let shouldBeField = !BlocklyMiscUtils.inputNameToBlockType(prop);
+      let shouldBeField = !inputNameToBlockType(prop);
       if (!!json.class && json.class.endsWith("Trigger") && (prop === "targetPlayer" || prop === "sourcePlayer")) {
         shouldBeField = true;
       }
@@ -1368,12 +1474,12 @@ export function generateDummyBlock(json, inputName, parentJson) {
         arg.type = "input_value";
         arg.check =
           (prop === "attribute" ? (!!parentJson.value ? "Int" : "Bool") : "") +
-          BlocklyMiscUtils.blockTypeToOuput(BlocklyMiscUtils.inputNameToBlockType(prop));
+          blockTypeToOuput(inputNameToBlockType(prop));
         arg.shadow = {
           type:
             prop === "target"
               ? "EntityReference_IT"
-              : BlocklyMiscUtils.inputNameToBlockType(prop) +
+              : inputNameToBlockType(prop) +
                 (prop === "attribute" ? (!!parentJson.value ? "_INT_SHADOW" : "_BOOL_SHADOW") : "_SHADOW"),
         };
       }
@@ -1381,7 +1487,7 @@ export function generateDummyBlock(json, inputName, parentJson) {
       args.push(arg);
     }
 
-    let output = BlocklyMiscUtils.blockTypeToOuput(type);
+    let output = blockTypeToOuput(type);
     let color = blockTypeColors[output];
     consoleBlock = {
       type: type + "_" + className.replace(type, ""),
@@ -1438,7 +1544,7 @@ export function generateDummyBlock(json, inputName, parentJson) {
  */
 export function handleNoMatch(json, inputName, parentJson, workspace) {
   inputName = inputName.split(".").slice(-1)[0];
-  let type = BlocklyMiscUtils.inputNameToBlockType(inputName);
+  let type = inputNameToBlockType(inputName);
   let block = BlocklyMiscUtils.newBlock(workspace, "Custom" + type);
   if (typeof json !== "object") {
     block.setFieldValue(json, "value");
@@ -1454,7 +1560,7 @@ export function handleNoMatch(json, inputName, parentJson, workspace) {
         continue;
       }
 
-      let blockType = BlocklyMiscUtils.inputNameToBlockType(arg);
+      let blockType = inputNameToBlockType(arg);
 
       let argValue = json[arg];
       if (!blockType) {
@@ -1462,8 +1568,7 @@ export function handleNoMatch(json, inputName, parentJson, workspace) {
           blockType = "Boolean";
           argValue = argValue.toString().toUpperCase();
         } else if (isArray(argValue)) {
-          blockType =
-            BlocklyMiscUtils.inputNameToBlockType(arg) ?? BlocklyMiscUtils.inputNameToBlockType(arg.slice(0, -1)) + "s";
+          blockType = inputNameToBlockType(arg) ?? inputNameToBlockType(arg.slice(0, -1)) + "s";
         } else {
           blockType = "text";
         }

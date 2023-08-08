@@ -4,7 +4,6 @@ import Blockly, { Block, BlockSvg, Toolbox, ToolboxCategory, WorkspaceSvg } from
 import * as JsonConversionUtils from "../lib/json-conversion-utils";
 import * as BlocklyMiscUtils from "../lib/blockly-misc-utils";
 import { refreshBlock } from "../lib/blockly-misc-utils";
-import SpellsourceRenderer from "../lib/spellsource-renderer";
 import * as SpellsourceGenerator from "../lib/spellsource-generator";
 import SimpleReactBlockly, { SimpleReactBlocklyRef } from "./simple-react-blockly";
 import * as BlocklyToolbox from "../lib/blockly-toolbox";
@@ -17,7 +16,7 @@ import {
   usePublishCardMutation,
   useSaveCardMutation,
 } from "../__generated__/client";
-import { CardDef } from "./card-display";
+import { CardDef } from "./collection/card-display";
 import { useSession } from "next-auth/react";
 import { useDebounce } from "react-use";
 import useBreakpoint from "@restart/hooks/useBreakpoint";
@@ -25,6 +24,10 @@ import { useEffectOnce } from "../hooks/use-effect-once";
 import { uniqBy } from "lodash";
 import { openFromFile } from "../lib/blockly-context-menu";
 import cx from "classnames";
+import * as BlocklyRegister from "../lib/blockly-register";
+import { plugins } from "../lib/blockly-register";
+import * as BlocklyModification from "../lib/blockly-modification";
+import SpellsourceRenderer from "../lib/spellsource-renderer";
 
 interface CardEditorWorkspaceProps {
   setJSON?: React.Dispatch<React.SetStateAction<string>>;
@@ -273,10 +276,11 @@ const CardEditorWorkspace = forwardRef(
     // Run once before the workspace has been created
     useComponentDidMount(() => {
       if (!Blockly["spellsourceInit"]) {
-        BlocklyMiscUtils.initBlocks(data, { onSave, onDelete, onPublish, generateCardAsync });
+        BlocklyRegister.registerAll({ onSave, onDelete, onPublish, generateCardAsync });
+        BlocklyModification.modifyAll();
+        BlocklyMiscUtils.initBlocks(data);
         BlocklyMiscUtils.initHeroClassColors(data);
         BlocklyMiscUtils.initArtBlcks(data);
-        Blockly.blockRendering.register("spellsource", SpellsourceRenderer);
         SpellsourceGenerator.generateJavaScript();
         Blockly["spellsourceInit"] = true;
       }
@@ -352,8 +356,9 @@ const CardEditorWorkspace = forwardRef(
           },
           oneBasedIndex: false,
           horizontalLayout: xs,
-          renderer: props.renderer || "spellsource",
+          renderer: props.renderer || SpellsourceRenderer.name,
           toolbox: BlocklyToolbox.editorToolbox(results, data),
+          plugins,
         }}
         ref={blocklyEditor}
         init={(workspace) => (workspace["getCollectionCards"] = data.getCollectionCards)}

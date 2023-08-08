@@ -104,6 +104,6 @@
       }
     ],
     "data": "BLOCKLY_ARRAY_ELEMENT",
-    "comment": "Used to make lists of Races.\n(Remember you can always\nDuplicate with right-click)"
+    "tooltip": "Used to make lists of Races.\n(Remember you can always\nDuplicate with right-click)"
   }
 ]

@@ -16,7 +16,7 @@ console.warn = (message) => {
   else tempConsoleWarn(message);
 };
 
-import { CardDef } from "../../components/card-display";
+import { CardDef } from "../../components/collection/card-display";
 import * as WorkspaceUtils from "../workspace-utils";
 import * as JsonConversionUtils from "../json-conversion-utils";
 import { Workspace } from "blockly";
@@ -31,6 +31,7 @@ import { ContextType } from "react";
 import path from "path";
 import { transformCard } from "../json-transforms";
 import { promisify } from "util";
+import * as BlocklyRegister from "../blockly-register";
 
 console.log = tempConsoleLog;
 console.warn = tempConsoleWarn;
@@ -94,6 +95,7 @@ describe("WorkspaceUtils", () => {
       allArt: [],
       classes: Object.fromEntries(cards.filter(([, card]) => card.type === "CLASS")),
     };
+    BlocklyRegister.registerAll();
     BlocklyMiscUtils.initBlocks(data);
     BlocklyMiscUtils.initHeroClassColors(data);
     // BlocklyMiscUtils.initCardBlocks(data);

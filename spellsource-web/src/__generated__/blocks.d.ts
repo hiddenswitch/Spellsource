@@ -1,5 +1,3 @@
-import { ConnectionState } from "blockly/core/serialization/blocks";
-
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
@@ -33,7 +31,7 @@ export type BlockDef = {
   mutator?: Maybe<Scalars["String"]>;
   enableContextMenu?: Maybe<Scalars["Boolean"]>;
   mutatorOptions?: any;
-  next?: ConnectionState;
+  next?: BlocklyShadowState;
   extensions?: Maybe<Array<Scalars["String"]>>;
 } & {
   [K in `message${number}`]?: Maybe<Scalars["String"]>;
@@ -58,10 +56,13 @@ export type BlockArgDef = {
   variableTypes?: Maybe<Array<Maybe<Scalars["String"]>>>;
   defaultType?: Maybe<Scalars["String"]>;
   value?: Maybe<Scalars["Int"] | Scalars["String"] | Scalars["Boolean"]>;
-  shadow?: Maybe<BlockShadowDef>;
-  block?: Maybe<BlockShadowDef>;
   next?: Maybe<BlockShadowDef>;
   checked?: Maybe<Scalars["Boolean"]>;
+} & BlocklyShadowState;
+
+export type BlocklyShadowState = {
+  shadow?: Maybe<BlockShadowDef>;
+  block?: Maybe<BlockShadowDef>;
 };
 
 export type BlockShadowDef = {

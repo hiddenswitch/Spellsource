@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Layout from "../components/creative-layout";
-import CardDisplay from "../components/card-display";
+import CardDisplay from "../components/collection/card-display";
 import * as styles from "../components/creative-layout.module.scss";
 import { useIndex } from "../hooks/use-index";
 import { Form, FormControl } from "react-bootstrap";

@@ -29,7 +29,7 @@
         }
       }
     ],
-    "comment": "Card Sources are only for your stuff by default, so use this to get stuff from your opponent or both players"
+    "tooltip": "Card Sources are only for your stuff by default, so use this to get stuff from your opponent or both players"
   },
   {
     "type": "Source_distinct",
@@ -51,7 +51,7 @@
         }
       }
     ],
-    "comment": "Only get at most 1 of each card from a card source."
+    "tooltip": "Only get at most 1 of each card from a card source."
   },
   {
     "type": "Source_Collectible",
@@ -65,7 +65,7 @@
         "value": "CatalogueSource"
       }
     ],
-    "comment": "Any and all cards you could find in the card catalogue, but non-neutral cards are weighted higher."
+    "tooltip": "Any and all cards you could find in the card catalogue, but non-neutral cards are weighted higher."
   },
   {
     "type": "Source_Uncollectible",
@@ -79,7 +79,7 @@
         "value": "UncollectibleCatalogueSource"
       }
     ],
-    "comment": "Every single card."
+    "tooltip": "Every single card."
   },
   {
     "type": "Source_Unweighted",
@@ -93,7 +93,7 @@
         "value": "UnweightedCatalogueSource"
       }
     ],
-    "comment": "Any and all cards you could find in the card catalogue."
+    "tooltip": "Any and all cards you could find in the card catalogue."
   },
   {
     "type": "Source_GraveyardActors",
@@ -107,7 +107,7 @@
         "value": "GraveyardActorsSource"
       }
     ],
-    "comment": "The actual entities of your units and items that have been destroyed."
+    "tooltip": "The actual entities of your units and items that have been destroyed."
   },
   {
     "type": "Source_GraveyardCards",
@@ -121,7 +121,7 @@
         "value": "GraveyardCardsSource"
       }
     ],
-    "comment": "The actual entities of your cards that have been played, discarded or roasted. Filter by the corresponding Attributes to distinguish."
+    "tooltip": "The actual entities of your cards that have been played, discarded or roasted. Filter by the corresponding Attributes to distinguish."
   },
   {
     "type": "Source_GraveyardCardsAndActors",
@@ -135,7 +135,7 @@
         "value": "GraveyardCardAndActorSourceSource"
       }
     ],
-    "comment": "All entities owned by you that are no longer in play."
+    "tooltip": "All entities owned by you that are no longer in play."
   },
   {
     "type": "Source_Deck",
@@ -149,7 +149,7 @@
         "value": "DeckSource"
       }
     ],
-    "comment": "The cards currently in your deck."
+    "tooltip": "The cards currently in your deck."
   },
   {
     "type": "Source_Hand",
@@ -163,7 +163,7 @@
         "value": "HandSource"
       }
     ],
-    "comment": "The cards currently in your hand."
+    "tooltip": "The cards currently in your hand."
   },
   {
     "type": "Source_TopCardsOfDeck",
@@ -214,7 +214,7 @@
         }
       }
     ],
-    "comment": "The contents of multiple sources put together."
+    "tooltip": "The contents of multiple sources put together."
   },
   {
     "type": "Source_I",
@@ -239,7 +239,7 @@
     "nextStatement": [
       "Source_I"
     ],
-    "comment": "Used to make lists of Sources.\n(Remember you can always\nDuplicate with right-click)"
+    "tooltip": "Used to make lists of Sources.\n(Remember you can always\nDuplicate with right-click)"
   },
   {
     "type": "Source_GraveyardCardAndActorCardSource",
@@ -254,7 +254,7 @@
         "value": "GraveyardCardAndActorSourceCardSource"
       }
     ],
-    "comment": "The original card for every entity owned by you that's been removed from play."
+    "tooltip": "The original card for every entity owned by you that's been removed from play."
   },
   {
     "type": "Source_GraveyardDiedMinionsSource",
@@ -269,6 +269,6 @@
         "value": "GraveyardDiedMinionsSource"
       }
     ],
-    "comment": "The original card for every unit owned by you that's been destroyed."
+    "tooltip": "The original card for every unit owned by you that's been destroyed."
   }
 ]

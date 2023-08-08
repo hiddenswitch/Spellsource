@@ -1,31 +1,12 @@
 import Blockly, { Block, BlockSvg, Connection, Toolbox, ToolboxCategory, WorkspaceSvg } from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
 import { argsList } from "./json-conversion-utils";
-import { FieldLabelSerializableHidden } from "../components/blockly/field-label-serializable-hidden";
-import { FieldLabelPlural } from "../components/blockly/field-label-plural";
-import * as BlocklyModification from "./blockly-modification";
-import { CardDef } from "../components/card-display";
+import { CardDef } from "../components/collection/card-display";
 import { BlocklyDataContext } from "../pages/card-editor";
 import { ContextType } from "react";
-import { BlockDef } from "../__generated__/blocks";
-import { InitBlockOptions } from "../components/card-editor-workspace";
-import { FieldButton } from "../components/blockly/field-button";
-import { FieldProgressBar } from "../components/blockly/field-progress-bar";
-import * as BlocklyContextMenu from "./blockly-context-menu";
+import { BlockDef, BlocklyShadowState } from "../__generated__/blocks";
 import { BlockInfo, FlyoutItemInfo } from "blockly/core/utils/toolbox";
-import { FieldColourHsvSliders } from "../components/blockly/field-colour-hsv-sliders";
-import { ToolboxSearchCategory } from "../components/blockly/toolbox-search-category";
-import { CardSearchCategory } from "../components/blockly/card-search-category";
-import {
-  OptionalRows,
-  OptionalRowsFn,
-  OptionalRowsMixin,
-  OptionalRowsOptions,
-} from "../components/blockly/optional-rows";
-import { TestExtensionMixin, TestExtensionName } from "../components/blockly/test-extension";
-import { FieldPlus } from "../components/blockly/field-plus";
-import { FieldMinus } from "../components/blockly/field-minus";
-import { PlusMinusRows, PlusMinusRowsFn, PlusMinusRowsMixin } from "../components/blockly/plus-minus-rows";
+import { OptionalRows, OptionalRowsOptions } from "../components/blockly/optional-rows";
 
 export const toTitleCaseCorrected = (string: string) =>
   string
@@ -83,9 +64,6 @@ export const addBlock = (block: BlockDef) => {
       if (block.type!.endsWith("SHADOW")) {
         this.setMovable(false);
       }
-      if (block.comment) {
-        this.setTooltip(block.comment);
-      }
     },
     json: block,
     data: block.data,
@@ -93,152 +71,28 @@ export const addBlock = (block: BlockDef) => {
 };
 
 //initializes the json specified shadow blocks of a block on the workspace
-export function manuallyAddShadowBlocks(thisBlock: Block, block: BlockDef) {
+export function manuallyAddShadowBlocks(thisBlock: Block, block: BlockDef, allowNonShadow = true) {
   for (let arg of argsList(block)) {
-    const shadow = arg.shadow ?? arg.block;
-    const input = thisBlock.getInput(arg.name);
-    if (!shadow || !input) continue;
-
-    // let shadowBlock = newBlock(thisBlock.workspace, shadow.type);
-
-    input.connection.setShadowState(shadow);
-
-    const shadowBlock = input.connection.targetBlock();
-    if (shadowBlock && shadowBlock.isShadow()) {
-      manuallyAddShadowBlocks(shadowBlock, Blockly.Blocks[shadow.type].json);
-    }
-
-    /*if (arg["block"] && !thisBlock.isShadow()) {
-      if (shadow.type.endsWith("SHADOW")) {
-        shadowBlock.setMovable(false);
-      }
-    } else {
-      shadowBlock.setShadow(true);
-    }
-
-    if (shadow.fields) {
-      for (let [name, value] of Object.entries(shadow.fields)) {
-        shadowBlock.setFieldValue(value, name);
-      }
-    }
-
-    const connection = arg.type.endsWith("statement") ? shadowBlock.previousConnection : shadowBlock.outputConnection;
-    thisBlock.getInput(arg.name).connection.connect(connection);
-    if ("initSvg" in shadowBlock) {
-      shadowBlock.initSvg();
-    }
-    */
+    addShadowBlocksToConnection(thisBlock.getInput(arg.name)?.connection, arg, allowNonShadow);
   }
 
-  if (block.next && !thisBlock.nextConnection.targetBlock()) {
-    const shadow = block.next.shadow ?? block.next.block;
-    thisBlock.nextConnection.setShadowState(shadow);
-  }
+  addShadowBlocksToConnection(thisBlock.nextConnection, block.next, allowNonShadow);
 }
 
-export function inputNameToBlockType(inputName: string) {
-  if (inputName.includes(".")) {
-    inputName = inputName.split(".").slice(-1)[0];
-  }
-  switch (inputName) {
-    case "heroPower":
-    case "card":
-    case "hero":
-      return "Card";
-    case "cards":
-      return "Cards";
-    case "queueCondition":
-    case "fireCondition":
-    case "condition":
-    case "targetSelectionCondition":
-    case "andCondition":
-    case "canAffordCondition":
-      return "Condition";
-    case "spell":
-    case "spell1":
-    case "spell2":
-    case "deathrattle":
-    case "applyEffect":
-    case "removeEffect":
-    case "payEffect":
-      return "Spell";
-    case "filter":
-    case "cardFilter":
-      return "Filter";
-    case "secondaryTarget":
-    case "target":
-      return "EntityReference";
-    case "race":
-      return "Race";
-    case "sourcePlayer":
-    case "targetPlayer":
-      return "TargetPlayer";
-    case "heroClass":
-      return "HeroClass";
-    case "rarity":
-      return "Rarity";
-    case "attribute":
-    case "requiredAttribute":
-      return "Attribute";
-    case "targetSelection":
-    case "targetSelectionOverride":
-      return "TargetSelection";
-    case "eventTrigger":
-    case "revertTrigger":
-    case "secondaryTrigger":
-    case "secret":
-    case "quest":
-    case "expirationTrigger":
-    case "secondRevertTrigger":
-    case "toggleOn":
-    case "toggleOff":
-    case "trigger":
-    case "expirationTriggers":
-    case "activationTriggers":
-      return "Trigger";
-    case "value":
-    case "howMany":
-    case "ifTrue":
-    case "ifFalse":
-    case "value1":
-    case "value2":
-    case "secondaryValue":
-    case "multiplier":
-    case "offset":
-    case "attackBonus":
-    case "hpBonus":
-    case "armorBonus":
-    case "manaCost":
-    case "mana":
-    case "manaCostModifier":
-    case "minValue":
-    case "min":
-    case "max":
-    case "amountOfCurrency":
-      return "ValueProvider";
-    case "aura":
-      return "Aura";
-    case "cardSource":
-      return "Source";
-    case "cardCostModifier":
-      return "CostModifier";
-    case "zone":
-      return "Zone";
-    default:
-      return null;
-  }
-}
+function addShadowBlocksToConnection(connection: Connection | null, arg?: BlocklyShadowState, allowNonShadow = true) {
+  const shadow = arg?.shadow ?? arg?.block;
+  if (!shadow || !connection) return;
 
-export function blockTypeToOuput(type) {
-  switch (type) {
-    case "Spell":
-    case "ValueProvider":
-    case "Condition":
-    case "Filter":
-    case "CostModifier":
-      return type + "Desc";
-    default:
-      return type;
+  const prevBlock = connection.targetBlock();
+  connection.setShadowState(shadow);
+  const currentBlock = connection.targetBlock();
+
+  if (prevBlock !== currentBlock) {
+    if (allowNonShadow && arg.block && currentBlock.isShadow()) {
+      currentBlock.setShadow(false);
+      connection.setShadowState(shadow);
+    }
+    manuallyAddShadowBlocks(currentBlock, Blockly.Blocks[shadow.type].json, allowNonShadow);
   }
 }
 
@@ -259,43 +113,7 @@ export function cardMessage(card: CardDef) {
   return ret;
 }
 
-export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options?: InitBlockOptions) {
-  try {
-    Blockly.fieldRegistry.register("field_label_serializable_hidden", FieldLabelSerializableHidden);
-    Blockly.fieldRegistry.register("field_label_plural", FieldLabelPlural);
-    Blockly.fieldRegistry.register("field_button", FieldButton);
-    Blockly.fieldRegistry.register("field_progress_bar", FieldProgressBar);
-    Blockly.fieldRegistry.register("field_colour_hsv_sliders", FieldColourHsvSliders);
-    Blockly.fieldRegistry.register("field_plus", FieldPlus);
-    Blockly.fieldRegistry.register("field_minus", FieldMinus);
-
-    Blockly.registry.register(
-      Blockly.registry.Type.TOOLBOX_ITEM,
-      ToolboxSearchCategory.SEARCH_CATEGORY_KIND,
-      ToolboxSearchCategory
-    );
-    Blockly.registry.register(
-      Blockly.registry.Type.TOOLBOX_ITEM,
-      CardSearchCategory.SEARCH_CATEGORY_KIND,
-      CardSearchCategory
-    );
-
-    Blockly.Extensions.registerMutator(OptionalRows, OptionalRowsMixin, OptionalRowsFn);
-    Blockly.Extensions.registerMutator(TestExtensionName, TestExtensionMixin);
-    Blockly.Extensions.registerMutator(PlusMinusRows, PlusMinusRowsMixin, PlusMinusRowsFn);
-
-    if (options) {
-      BlocklyContextMenu.registerAll(options);
-    }
-    FieldButton.OnClicks["test"] = (field) => {
-      const progressBar = field.getSourceBlock().getField("progress") as FieldProgressBar;
-      progressBar.setProgress(Math.random());
-    };
-    BlocklyModification.modifyAll();
-  } catch (e) {
-    // already registered
-  }
-
+export function initBlocks(data: ContextType<typeof BlocklyDataContext>) {
   // All of our spells, triggers, entity reference enum values, etc.
   data.allBlocks?.forEach((block) => {
     if (block.type in Blockly.Blocks) {
@@ -354,70 +172,6 @@ export function setupHeroClassColor(card: CardDef) {
   }
 
   return "#888888";
-}
-
-/*export function initCardBlocks(data: ContextType<typeof BlocklyDataContext>) {
-  for (let card of Object.values(data.classes)) {
-    if (!card.type || card.type === 'FORMAT') {
-      continue
-    }
-    let type = 'CatalogueCard_' + card.id
-    if (type in Blockly.Blocks) {
-      return
-    }
-    if (card.heroClass in Blockly["heroClassColors"]) { //this check if it's *really* collectible
-      let color = Blockly["heroClassColors"][card.heroClass]
-      let block = {
-        'type': type,
-        'args0': [],
-        'message0': cardMessage(card),
-        'output': 'Card',
-        'colour': color,
-        'data': card.id,
-        'comment': cardDescription(card),
-        'json': card
-      }
-      addBlock(block)
-    } else {
-      // console.warn(`${card.id} had invalid hero class`)
-    }
-
-
-    if (card.art?.sprite?.named) {
-      let name = 'Art_' + card.art.sprite.named
-      let artBlock = Blockly.Blocks[name];
-      if (artBlock) {
-        artBlock.used = true
-      }
-    }
-  }
-}*/
-
-export function cardDescription(card: CardDef) {
-  if (!card.description) {
-    return null;
-  }
-  const newLine = 25;
-  let words = card.description.split(" ");
-  if (words.length === 0) {
-    return "";
-  }
-  let desc = '"' + words[0];
-  if (card.race) {
-    desc = toTitleCaseCorrected(card.race) + " " + desc;
-  }
-  let counter = desc.length;
-  for (let word of words.slice(1)) {
-    if (counter + word.length > newLine) {
-      desc += "\n";
-      counter = 0;
-    } else {
-      desc += " ";
-    }
-    counter += word.length;
-    desc += word;
-  }
-  return desc + '"';
 }
 
 /**
@@ -676,7 +430,7 @@ export const reInitBlock = (block: Block, state: BlockDef) => {
       connection?.reconnect(block, name);
     }
   }
-  manuallyAddShadowBlocks(block, state);
+  manuallyAddShadowBlocks(block, state, false);
 
   block.bumpNeighbours();
 };

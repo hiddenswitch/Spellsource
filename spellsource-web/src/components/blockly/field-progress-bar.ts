@@ -2,6 +2,8 @@ import { Field, utils } from "blockly";
 import { clamp } from "lodash";
 
 export class FieldProgressBar extends Field {
+  static type = "field_progress_bar";
+
   protected width: number;
   protected height: number;
 

@@ -1,6 +1,6 @@
 import React from "react";
-import * as styles from "./creative-layout.module.scss";
-import githubLogo from "../../public/static/assets/Github.png";
+import * as styles from "../creative-layout.module.scss";
+import githubLogo from "../../../public/static/assets/Github.png";
 import Image from "next/image";
 
 function HeroGithub() {
@@ -25,4 +25,4 @@ const SectionSubText = ({ title }) => {
   return <h4 className={styles.githubSectionSubText}>{title}</h4>;
 };
 
-export default HeroGithub
+export default HeroGithub;

@@ -1,5 +1,5 @@
 import { BlockDef } from "../__generated__/blocks";
-import { CardDef } from "../components/card-display";
+import { CardDef } from "../components/collection/card-display";
 import deepmerge from "deepmerge";
 import path from "path";
 

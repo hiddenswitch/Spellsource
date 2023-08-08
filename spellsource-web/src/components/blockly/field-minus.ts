@@ -14,6 +14,8 @@ import { Block, FieldImage } from "blockly";
 import { PlusMinusRowsMutator } from "./plus-minus-rows";
 
 export class FieldMinus extends FieldImage {
+  static type = "field_minus";
+
   constructor(options) {
     super(minusImage, 15, 15, "Minus", FieldMinus.onClick);
   }

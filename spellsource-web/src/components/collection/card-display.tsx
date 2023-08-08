@@ -1,14 +1,14 @@
 import React from "react";
 import * as styles from "./card-display.module.scss";
 
-import backgroundLayer from "../../public/static/card-images/layer-1.png";
-import baseAttack from "../../public/static/card-images/attack-token.png";
-import baseHp from "../../public/static/card-images/health-token.png";
-import windowBackground from "../../public/static/card-images/large-card-window-background.png";
-import selkieShadow from "../../public/static/card-images/selkie-shadow.png";
+import backgroundLayer from "../../../public/static/card-images/layer-1.png";
+import baseAttack from "../../../public/static/card-images/attack-token.png";
+import baseHp from "../../../public/static/card-images/health-token.png";
+import windowBackground from "../../../public/static/card-images/large-card-window-background.png";
+import selkieShadow from "../../../public/static/card-images/selkie-shadow.png";
 import { defaultsDeep } from "lodash";
-import { CardDesc } from "../__generated__/spellsource-game";
-import { DeepPartial } from "../lib/deep-partial";
+import { CardDesc } from "../../__generated__/spellsource-game";
+import { DeepPartial } from "../../lib/deep-partial";
 import Image from "next/image";
 
 const defaultArt = {
@@ -178,4 +178,4 @@ function CardDisplay(props: DeepPartial<CardDef>) {
   );
 }
 
-export default CardDisplay
+export default CardDisplay;

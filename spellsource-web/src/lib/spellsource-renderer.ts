@@ -5,7 +5,7 @@ import { RenderInfo } from "blockly/core/renderers/geras/info";
 
 class SpellsourceRenderer extends Blockly.geras.Renderer {
   constructor() {
-    super("Spellsource");
+    super(SpellsourceRenderer.name);
   }
 
   protected makeRenderInfo_(block: BlockSvg): RenderInfo {

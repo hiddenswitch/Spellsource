@@ -123,7 +123,7 @@
         "type": "Property_SHADOW"
       }
     },
-    "comment": "The starter for a Unit card."
+    "tooltip": "The starter for a Unit card."
   },
   {
     "type": "Starter_SPELL",
@@ -241,7 +241,7 @@
         "type": "Property_SHADOW"
       }
     },
-    "comment": "The starter for a Spell card."
+    "tooltip": "The starter for a Spell card."
   },
   {
     "type": "Starter_SECRET",
@@ -354,7 +354,7 @@
         }
       }
     ],
-    "comment": "The starter for a Secret card.",
+    "tooltip": "The starter for a Secret card.",
     "next": {
       "shadow": {
         "type": "Property_SHADOW"
@@ -474,7 +474,7 @@
         "type": "Property_SHADOW"
       }
     },
-    "comment": "The starter for an Item card."
+    "tooltip": "The starter for an Item card."
   },
   {
     "type": "Starter_QUEST",
@@ -615,7 +615,7 @@
         "type": "Property_SHADOW"
       }
     },
-    "comment": "The starter for a Quest card. Incremental vs Count by Value determines whether say, restoring 3 Health, would count as 1 quest progress or 3."
+    "tooltip": "The starter for a Quest card. Incremental vs Count by Value determines whether say, restoring 3 Health, would count as 1 quest progress or 3."
   },
   {
     "type": "Starter_HERO_POWER",
@@ -738,7 +738,7 @@
         "type": "Property_SHADOW"
       }
     },
-    "comment": "The starter for a Skill card. The effect of the \"(do) as a Skill]\" block is baked in to this already.  Will always be uncollectible."
+    "tooltip": "The starter for a Skill card. The effect of the \"(do) as a Skill]\" block is baked in to this already.  Will always be uncollectible."
   },
   {
     "type": "Starter_HERO",
@@ -847,7 +847,7 @@
         "type": "Property_SHADOW"
       }
     },
-    "comment": "The starter for defining a new base champion for a class. Will always be uncollectible. See below for the playable card that replaces your champion."
+    "tooltip": "The starter for defining a new base champion for a class. Will always be uncollectible. See below for the playable card that replaces your champion."
   },
   {
     "type": "Starter_HERO2",
@@ -964,7 +964,7 @@
         "type": "Property_SHADOW"
       }
     },
-    "comment": "The starter for the playable card that replaces your champion. See above for defining a new base champion for a class."
+    "tooltip": "The starter for the playable card that replaces your champion. See above for defining a new base champion for a class."
   },
   {
     "type": "Starter_ENCHANTMENT",
@@ -1052,7 +1052,7 @@
         "type": "Property_SHADOW"
       }
     },
-    "comment": "Starter for defining a new named Enchantment effect as a card. Will always be uncollectible."
+    "tooltip": "Starter for defining a new named Enchantment effect as a card. Will always be uncollectible."
   },
   {
     "type": "Starter_CLASS",
@@ -1164,6 +1164,6 @@
         "type": "Property_SHADOW"
       }
     },
-    "comment": "The starter for defining a new champion class. Will always be uncollectible. Will appear in the Classes toolbox category for use."
+    "tooltip": "The starter for defining a new champion class. Will always be uncollectible. Will appear in the Classes toolbox category for use."
   }
 ]

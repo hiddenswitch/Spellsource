@@ -193,6 +193,8 @@ export class HsvColour {
  * Class for a colour input field that displays HSV slider widgets when clicked.
  */
 export class FieldColourHsvSliders extends FieldColour {
+  static type = "field_colour_hsv_sliders";
+
   /* eslint-disable @typescript-eslint/naming-convention */
   /** The maximum value of the hue slider range. */
   private static readonly HUE_SLIDER_MAX = 360;

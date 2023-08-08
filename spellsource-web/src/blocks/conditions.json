@@ -20,7 +20,7 @@
       }
     ],
     "data": "BLOCKLY_ARRAY_ELEMENT",
-    "comment": "Used to make lists of Conditions.\n(Remember you can always\nDuplicate with right-click)"
+    "tooltip": "Used to make lists of Conditions.\n(Remember you can always\nDuplicate with right-click)"
   },
   {
     "type": "Condition_Comparison",

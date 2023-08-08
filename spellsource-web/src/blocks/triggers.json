@@ -33,7 +33,7 @@
       }
     ],
     "data": "BLOCKLY_ARRAY_ELEMENT",
-    "comment": "Used to make lists of Triggers.\n(Remember you can always\nDuplicate with right-click)"
+    "tooltip": "Used to make lists of Triggers.\n(Remember you can always\nDuplicate with right-click)"
   },
   {
     "type": "Trigger_QueueCondition",
@@ -60,7 +60,7 @@
         }
       }
     ],
-    "comment": "Use a queue condition if you care about\nthe state of the board BEFORE any other\nenchantment effects may have happened."
+    "tooltip": "Use a queue condition if you care about\nthe state of the board BEFORE any other\nenchantment effects may have happened."
   },
   {
     "type": "Trigger_FireCondition",
@@ -87,7 +87,7 @@
         }
       }
     ],
-    "comment": "Use a fire condition if you care about\nthe state of the board AFTER any other\nenchantment effects may have happened."
+    "tooltip": "Use a fire condition if you care about\nthe state of the board AFTER any other\nenchantment effects may have happened."
   },
   {
     "type": "Trigger_Race",

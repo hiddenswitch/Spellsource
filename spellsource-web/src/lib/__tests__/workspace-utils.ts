@@ -6,6 +6,7 @@ import { keyBy } from "lodash";
 import { ContextType } from "react";
 import { BlocklyDataContext } from "../../pages/card-editor";
 import * as BlocklyMiscUtils from "../blockly-misc-utils";
+import * as BlocklyRegister from "../blockly-register";
 
 function expectConversion(str, json) {
   const xml = Blockly.utils.xml.textToDom(str);
@@ -28,6 +29,7 @@ describe("WorkspaceUtils", () => {
       allArt: [],
       classes: {},
     };
+    BlocklyRegister.registerAll();
     BlocklyMiscUtils.initBlocks(data);
     BlocklyMiscUtils.initHeroClassColors(data);
     // BlocklyMiscUtils.initCardBlocks(data);

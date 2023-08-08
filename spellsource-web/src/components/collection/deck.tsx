@@ -8,10 +8,10 @@ import {
   useDeleteDeckMutation,
   useRenameDeckMutation,
   useSetCardsInDeckMutation,
-} from "../__generated__/client";
+} from "../../__generated__/client";
 import { ListActions } from "react-use/lib/useList";
 import { useRouter } from "next/router";
-import { CardCache } from "../pages/collection";
+import { CardCache } from "../../pages/collection";
 import { CardDef } from "./card-display";
 
 interface DeckProps {

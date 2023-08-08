@@ -6,7 +6,7 @@ import { ListGroup } from "react-bootstrap";
 import { useRouter } from "next/router";
 import { isArray } from "lodash";
 import { cardSearchNode } from "../hooks/use-index";
-import CardDisplay from "../components/card-display";
+import CardDisplay from "../components/collection/card-display";
 import { useGetCollectionCardsQuery } from "../__generated__/client";
 
 const SearchResults = () => {

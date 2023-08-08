@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react";
 import CardDisplay, { CardDef } from "./card-display";
 import * as styles from "./collection-card.module.scss";
-import useArtData from "../hooks/use-art-data";
-import { DeepPartial } from "../lib/deep-partial";
+import useArtData from "../../hooks/use-art-data";
+import { DeepPartial } from "../../lib/deep-partial";
 import Link from "next/link";
 
 interface CollectionCardProps {
@@ -34,4 +34,4 @@ const CollectionCard: FunctionComponent<CollectionCardProps> = (props) => {
   );
 };
 
-export default CollectionCard
+export default CollectionCard;

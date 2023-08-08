@@ -1,6 +1,8 @@
-import { BlockSvg, Field, utils } from "blockly";
+import { Field, utils } from "blockly";
 
 export class FieldButton extends Field {
+  static type = "field_button";
+
   static OnClicks: Record<string, (field: FieldButton) => void> = {};
 
   protected onClickName: string;

@@ -8,12 +8,12 @@ import {
 } from "../__generated__/client";
 import React, { createContext, FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
-import Collection, { textDecorationStyle } from "../components/collection";
+import Collection, { textDecorationStyle } from "../components/collection/collection";
 import Head from "next/head";
 import { Button, Col, Dropdown, Offcanvas, OffcanvasBody, Row } from "react-bootstrap";
 import { chain, keyBy } from "lodash";
 import { useRouter } from "next/router";
-import { CardDef, toRgbaString } from "../components/card-display";
+import { CardDef, toRgbaString } from "../components/collection/card-display";
 import Link from "next/link";
 import { useParam, useParamInt } from "../lib/routing";
 import DropdownToggle from "react-bootstrap/DropdownToggle";
@@ -22,7 +22,7 @@ import DropdownItem from "react-bootstrap/DropdownItem";
 import { useList } from "react-use";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { Deck } from "../components/deck";
+import { Deck } from "../components/collection/deck";
 
 // Makes the query state stick around
 export const getServerSideProps = async (context) => ({

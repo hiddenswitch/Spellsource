@@ -1,6 +1,8 @@
 import { FieldLabelSerializable } from "blockly";
 
 export class FieldLabelSerializableHidden extends FieldLabelSerializable {
+  static type = "field_label_serializable_hidden";
+
   constructor(opt_value: any, opt_class?: string, opt_config?: Object) {
     super(opt_value, opt_class, opt_config);
   }

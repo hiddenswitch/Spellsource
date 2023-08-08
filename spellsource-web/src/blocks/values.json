@@ -56,7 +56,7 @@
         }
       }
     ],
-    "comment": "Mutlipliers will happen before offsets"
+    "tooltip": "Mutlipliers will happen before offsets"
   },
   {
     "type": "ValueProvider_offset",
@@ -83,7 +83,7 @@
         }
       }
     ],
-    "comment": "Offsets will happen after multipliers."
+    "tooltip": "Offsets will happen after multipliers."
   },
   {
     "type": "ValueProvider_int",

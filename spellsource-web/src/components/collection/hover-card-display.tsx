@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import CardDisplay, { CardDef } from "./card-display";
 
-import styles from "./creative-layout.module.scss";
+import styles from "../creative-layout.module.scss";
 import { useMouse } from "react-use";
 
 export const useHoverCardDisplay = (options?: { translateX?: string; translateY?: string }) => {

@@ -1,20 +1,20 @@
 import { useSession } from "next-auth/react";
 import React, { FunctionComponent, useContext, useEffect, useState } from "react";
-import { CardType } from "../__generated__/spellsource-game";
-import { CollectionCardFragment, CollectionCardsOrderBy, useGetCollectionCardsQuery } from "../__generated__/client";
+import { CardType } from "../../__generated__/spellsource-game";
+import { CollectionCardFragment, CollectionCardsOrderBy, useGetCollectionCardsQuery } from "../../__generated__/client";
 import { CardDef } from "./card-display";
 import { Button, Dropdown, Form, Table } from "react-bootstrap";
-import { toTitleCaseCorrected } from "../lib/blockly-misc-utils";
+import { toTitleCaseCorrected } from "../../lib/blockly-misc-utils";
 import { clamp } from "lodash";
 import DropdownToggle from "react-bootstrap/DropdownToggle";
 import DropdownItem from "react-bootstrap/DropdownItem";
 import DropdownMenu from "react-bootstrap/DropdownMenu";
-import { useParam, useParamArray, useParamBool, useParamInt } from "../lib/routing";
+import { useParam, useParamArray, useParamBool, useParamInt } from "../../lib/routing";
 import { useRouter } from "next/router";
 import { useDebounce } from "react-use";
 import Link from "next/link";
 import { useDrag, useDrop } from "react-dnd";
-import { CardCache } from "../pages/collection";
+import { CardCache } from "../../pages/collection";
 
 const ShowCardTypes: CardType[] = ["MINION", "SPELL", "WEAPON", "HERO", "HERO_POWER", "CLASS"];
 const DefaultShowCardTypes: CardType[] = ["MINION", "SPELL", "WEAPON"];

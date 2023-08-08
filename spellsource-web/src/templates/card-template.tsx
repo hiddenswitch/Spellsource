@@ -1,6 +1,6 @@
 import React from "react";
 import Layout from "../components/creative-layout";
-import CardDisplay, { CardDef } from "../components/card-display";
+import CardDisplay, { CardDef } from "../components/collection/card-display";
 import * as styles from "../templates/template-styles.module.scss";
 import Link from "next/link";
 
@@ -39,14 +39,12 @@ const CardProperties = (props: { card: CardDef }) => {
 };
 
 export default function CardTemplate({ data }: { data: { card: CardDef } }) {
-  const { card } = data // data.card holds your post data
+  const { card } = data; // data.card holds your post data
   return (
     <Layout>
-      <div className={styles.templateContainer}>
-        {card && <CardProperties card={card} />}
-      </div>
+      <div className={styles.templateContainer}>{card && <CardProperties card={card} />}</div>
     </Layout>
-  )
+  );
 }
 
 // once sprites set, need to add a field to query for sprite

@@ -4,11 +4,6 @@ import format from "string-format";
 import * as BlocklyMiscUtils from "./blockly-misc-utils";
 import { RgbColour } from "../components/blockly/field-colour-hsv-sliders";
 
-const BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = "BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE";
-const BLOCKLY_INT_ATTRIBUTE = "BLOCKLY_INT_ATTRIBUTE";
-const BLOCKLY_ARRAY_ELEMENT = "BLOCKLY_ARRAY_ELEMENT";
-const BLOCKLY_EXTEND_PREVIOUS = "BLOCKLY_EXTEND_PREVIOUS";
-
 export const isNumeric = (str) => !isNaN(str) && !isNaN(parseFloat(str));
 
 /**
@@ -84,18 +79,11 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
             break;
           case "statement":
           case "value":
-            const result =
+            obj[name] =
               childNode.firstElementChild.nodeName === "shadow" &&
               childNode.lastElementChild !== childNode.firstElementChild
                 ? xmlToCardScript(childNode.lastElementChild, null, obj)
                 : xmlToCardScript(childNode.firstElementChild, null, obj);
-
-            if (arrayName && name.match(new RegExp(arrayName + "\\d+"))) {
-              obj[arrayName] ??= [];
-              obj[arrayName].push(result);
-            } else {
-              obj[name] = result;
-            }
 
             break;
           case "next":
@@ -116,14 +104,14 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
         next = xmlToCardScript(nextNode, obj);
       }
 
-      const hasData = find(childNodes, (cn) => cn.nodeName === "data");
-      if (hasData) {
-        const values = hasData.innerHTML.split(",");
+      const data = find(childNodes, (cn) => cn.nodeName === "data");
+      if (data) {
+        const values = data.innerHTML.split(",");
         let retValue = null;
         for (let i = 0; i < values.length; i++) {
           const value = values[i];
           switch (value) {
-            case BLOCKLY_EXTEND_PREVIOUS:
+            case "BLOCKLY_EXTEND_PREVIOUS":
               if (
                 obj.customArg !== null &&
                 obj.customArg !== undefined &&
@@ -139,7 +127,7 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
               }
               retValue = obj;
               break;
-            case BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE:
+            case "BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE":
               if (!obj.attribute) {
                 return {};
               }
@@ -149,7 +137,7 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
               }
               retValue = boolAttribute;
               break;
-            case BLOCKLY_INT_ATTRIBUTE:
+            case "BLOCKLY_INT_ATTRIBUTE":
               if (!obj.attribute) {
                 return {};
               }
@@ -159,7 +147,7 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
               }
               retValue = intAttribute;
               break;
-            case BLOCKLY_ARRAY_ELEMENT:
+            case "BLOCKLY_ARRAY_ELEMENT":
               // Handle every array statement on this block
               retValue = [obj];
               if (obj.i) {
@@ -172,6 +160,9 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
                   retValue = retValue.concat([next]);
                 }
               }
+              break;
+            case "BLOCKLY_ARRAY":
+              retValue = Object.values(obj);
               break;
             default:
               const allValues = filter(childNodes, (cn) => cn.nodeName === "field");

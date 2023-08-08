@@ -12,7 +12,7 @@
     "output": "HeroClass",
     "colour": "#000000",
     "data": "OPPONENT",
-    "comment": "Not for use as a card's class,\nonly for game effects"
+    "tooltip": "Not for use as a card's class,\nonly for game effects"
   },
   {
     "type": "HeroClass_SELF",
@@ -20,7 +20,7 @@
     "output": "HeroClass",
     "colour": "#888888",
     "data": "SELF",
-    "comment": "Not for use as a card's class,\nonly for game effects"
+    "tooltip": "Not for use as a card's class,\nonly for game effects"
   },
   {
     "type": "HeroClass_ANY",

@@ -62,6 +62,6 @@
     "nextStatement": [
       "ArtGen_keyword"
     ],
-    "comment": "Add keywords to your art"
+    "tooltip": "Add keywords to your art"
   }
 ]
