@@ -5,13 +5,14 @@ import { ContextType } from "react";
 import { BlocklyDataContext } from "../pages/card-editor";
 import { CardDef } from "../components/card-display";
 import { ImageDef } from "../__generated__/client";
+import { ToolboxSearchCategory } from "../components/blockly/toolbox-search-category";
+import { CardSearchCategory } from "../components/blockly/card-search-category";
+import { BlockDef } from "../__generated__/blocks";
+import { rowsList } from "./json-conversion-utils";
 import StaticCategoryInfo = Blockly.utils.toolbox.StaticCategoryInfo;
 import ToolboxInfo = Blockly.utils.toolbox.ToolboxInfo;
 import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo;
 import BlockInfo = Blockly.utils.toolbox.BlockInfo;
-import { ToolboxSearchCategory } from "../components/toolbox-search-category";
-import { CardSearchCategory } from "../components/card-search-category";
-import { BlockDef } from "../__generated__/blocks";
 
 /**
  * Initializes the necessary callbacks for the Variables tab's CUSTOM dynamic-ness
@@ -707,34 +708,30 @@ export function getBlock(type: string): BlockInfo {
 }
 
 function blockInputs(type: string) {
-  let block = Blockly.Blocks[type];
-  let inputs = {} as Record<string, any>;
+  const block = Blockly.Blocks[type];
+  const inputs = {} as Record<string, any>;
 
   if (!block || !block.json) return inputs;
+  const json = block.json as BlockDef;
 
-  let json = block.json as BlockDef;
-  for (let i = 0; i < 10; i++) {
-    if (!json[`args${i}`]) continue;
-    const args = json[`args${i}`];
-
-    for (let j = 0; j < 10; j++) {
-      const arg = args[j];
+  rowsList(json).forEach(([, args]) => {
+    for (let arg of args) {
       const name = arg?.name;
       if (!name) continue;
 
-      if (arg.shadow) {
+      if (arg.shadow && arg.shadow.toolbox !== false) {
         const input = (inputs[name] ??= {} as any);
         input.shadow = { ...arg.shadow };
         input.shadow.inputs = blockInputs(input.shadow.type);
       }
 
-      if (arg.block) {
+      if (arg.block && arg.block.toolbox !== false) {
         const input = (inputs[name] ??= {} as any);
         input.block = { ...arg.block };
         input.block.inputs = blockInputs(input.block.type);
       }
     }
-  }
+  });
 
   return inputs;
 }

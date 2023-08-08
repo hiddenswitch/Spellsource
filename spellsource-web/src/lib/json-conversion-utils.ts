@@ -4,7 +4,7 @@ import { isArray } from "lodash";
 import { BlockArgDef, BlockDef } from "../__generated__/blocks";
 import { CardDef } from "../components/card-display";
 import { isNumeric } from "./workspace-utils";
-import { RgbColour } from "../components/field-colour-hsv-sliders";
+import { RgbColour } from "../components/blockly/field-colour-hsv-sliders";
 
 const classBlocksDictionary = {} as Record<string, BlockDef[]>; //A dictionary mapping the 'class' argument a block uses to the block itself
 const enumBlocksDictionary = {} as Record<string, BlockDef[]>; //A dictionary mapping the enum value of the block to the block itself
@@ -1827,7 +1827,7 @@ export function argsList(block: BlockDef, type?: "input" | "dropdown" | "number"
   return argsList;
 }
 
-export function messagesAndArgs(block: BlockDef) {
+export function rowsList(block: BlockDef) {
   const list = [] as [string, BlockArgDef[]][];
 
   for (

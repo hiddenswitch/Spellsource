@@ -5915,8 +5915,7 @@
         "check": "EntityReference",
         "shadow": {
           "type": "EntityReference_SELF"
-        },
-        "optional": true
+        }
       }
     ],
     "message2": "conditions",
@@ -5930,8 +5929,7 @@
         "check": "Conditions",
         "block": {
           "type": "Condition_I"
-        },
-        "optional": true
+        }
       }
     ],
     "message4": "spell %1",
@@ -5941,11 +5939,84 @@
         "name": "spell",
         "check": "SpellDesc",
         "shadow": {
-          "type": "Spell_SHADOW"
-        },
-        "optional": true
+          "type": "Spell_SHADOW",
+          "toolbox": false
+        }
       }
     ],
-    "mutator": "test_mutator"
+    "mutator": "optional_rows",
+    "mutatorOptions": {
+      "optional": {
+        "1": "Target",
+        "2": "Conditions",
+        "3": "Conditions",
+        "4": "Spell"
+      },
+      "defaults": {
+        "Spell": false
+      }
+    }
+  },
+  {
+    "type": "Spell_MetaTest",
+    "output": "SpellDesc",
+    "colour": 260,
+    "message0": "%1%2 empty",
+    "args0": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MetaSpell"
+      },
+      {
+        "type": "field_plus"
+      }
+    ],
+    "message1": "%1%2%3%4",
+    "args1": [
+      {
+        "type": "field_label_serializable_hidden",
+        "name": "class",
+        "value": "MetaSpell"
+      },
+      {
+        "type": "field_plus"
+      },
+      {
+        "type": "field_minus"
+      },
+      {
+        "type": "input_value",
+        "name": "spells",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW",
+          "toolbox": false
+        }
+      }
+    ],
+    "message2": "%1%2%3",
+    "args2": [
+      {
+        "type": "field_plus"
+      },
+      {
+        "type": "field_minus"
+      },
+      {
+        "type": "input_value",
+        "name": "spells",
+        "check": "SpellDesc",
+        "shadow": {
+          "type": "Spell_SHADOW",
+          "toolbox": false
+        }
+      }
+    ],
+    "mutator": "plus_minus_rows",
+    "comment": "Do multiple spell effects.",
+    "mutatorOptions": {
+      "arrayName": "spells"
+    }
   }
 ]

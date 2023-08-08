@@ -34,6 +34,7 @@ export type BlockDef = {
   enableContextMenu?: Maybe<Scalars["Boolean"]>;
   mutatorOptions?: any;
   next?: ConnectionState;
+  extensions?: Maybe<Array<Scalars["String"]>>;
 } & {
   [K in `message${number}`]?: Maybe<Scalars["String"]>;
 } & {
@@ -57,7 +58,14 @@ export type BlockArgDef = {
   variableTypes?: Maybe<Array<Maybe<Scalars["String"]>>>;
   defaultType?: Maybe<Scalars["String"]>;
   value?: Maybe<Scalars["Int"] | Scalars["String"] | Scalars["Boolean"]>;
+  shadow?: Maybe<BlockShadowDef>;
+  block?: Maybe<BlockShadowDef>;
   next?: Maybe<BlockShadowDef>;
-  optional?: Maybe<Scalars["Boolean"]>;
   checked?: Maybe<Scalars["Boolean"]>;
-} & ConnectionState;
+};
+
+export type BlockShadowDef = {
+  type: Scalars["String"];
+  fields?: object;
+  toolbox?: Maybe<Scalars["Boolean"]>;
+};

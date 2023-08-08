@@ -2,7 +2,7 @@ import { Xml } from "blockly";
 import { extend, filter, find, fromPairs, isArray, isEmpty, isPlainObject, map, merge } from "lodash";
 import format from "string-format";
 import * as BlocklyMiscUtils from "./blockly-misc-utils";
-import { RgbColour } from "../components/field-colour-hsv-sliders";
+import { RgbColour } from "../components/blockly/field-colour-hsv-sliders";
 
 const BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE = "BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE";
 const BLOCKLY_INT_ATTRIBUTE = "BLOCKLY_INT_ATTRIBUTE";
@@ -68,9 +68,10 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
       }
       const childNodes = Array.from(xml.childNodes) as Element[];
       const length = childNodes.length;
+      let arrayName: string | undefined = undefined;
       for (let i = 0; i < length; i++) {
         const childNode = childNodes[i];
-        const name = childNode.attributes?.["name"]?.value;
+        const name = childNode.getAttribute("name");
         switch (childNode.nodeName) {
           case "#text":
             // i.e. if childElementCount === 0
@@ -83,19 +84,30 @@ export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, pa
             break;
           case "statement":
           case "value":
-            if (
+            const result =
               childNode.firstElementChild.nodeName === "shadow" &&
               childNode.lastElementChild !== childNode.firstElementChild
-            ) {
-              obj[name] = xmlToCardScript(childNode.lastElementChild, null, obj);
+                ? xmlToCardScript(childNode.lastElementChild, null, obj)
+                : xmlToCardScript(childNode.firstElementChild, null, obj);
+
+            if (arrayName && name.match(new RegExp(arrayName + "\\d+"))) {
+              obj[arrayName] ??= [];
+              obj[arrayName].push(result);
             } else {
-              obj[name] = xmlToCardScript(childNode.firstElementChild, null, obj);
+              obj[name] = result;
             }
+
             break;
           case "next":
             if (childNode.firstElementChild && childNode.firstElementChild.nodeName === "block") {
               nextNode = childNode.firstElementChild;
             }
+            break;
+          case "mutation":
+            if (childNode.hasAttribute("arrayName")) {
+              arrayName = childNode.getAttribute("arrayName");
+            }
+
             break;
         }
       }

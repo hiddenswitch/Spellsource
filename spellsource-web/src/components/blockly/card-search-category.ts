@@ -1,8 +1,8 @@
 import * as Blockly from "blockly/core";
 import { SearchCategory } from "./search-category";
 import { ToolboxItemInfo } from "blockly/core/utils/toolbox";
-import { useGetCollectionCardsLazyQuery } from "../__generated__/client";
-import * as BlocklyMiscUtils from "../lib/blockly-misc-utils";
+import { useGetCollectionCardsLazyQuery } from "../../__generated__/client";
+import * as BlocklyMiscUtils from "../../lib/blockly-misc-utils";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 

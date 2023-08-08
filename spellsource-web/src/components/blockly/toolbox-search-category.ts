@@ -9,7 +9,7 @@
  * in its flyout.
  */
 import * as Blockly from "blockly/core";
-import { BlockSearcher } from "./blockly/block-searcher";
+import { BlockSearcher } from "./block-searcher";
 import { SearchCategory } from "./search-category";
 import { BlockInfo, ToolboxItemInfo } from "blockly/core/utils/toolbox";
 

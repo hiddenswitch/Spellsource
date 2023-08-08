@@ -1,22 +1,31 @@
-import Blockly, { Block, BlockSvg, Extensions, Toolbox, ToolboxCategory, WorkspaceSvg } from "blockly";
+import Blockly, { Block, BlockSvg, Connection, Toolbox, ToolboxCategory, WorkspaceSvg } from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
 import { argsList } from "./json-conversion-utils";
-import { FieldLabelSerializableHidden } from "../components/field-label-serializable-hidden";
-import { FieldLabelPlural } from "../components/field-label-plural";
+import { FieldLabelSerializableHidden } from "../components/blockly/field-label-serializable-hidden";
+import { FieldLabelPlural } from "../components/blockly/field-label-plural";
 import * as BlocklyModification from "./blockly-modification";
 import { CardDef } from "../components/card-display";
 import { BlocklyDataContext } from "../pages/card-editor";
 import { ContextType } from "react";
-import { BlockArgDef, BlockDef } from "../__generated__/blocks";
+import { BlockDef } from "../__generated__/blocks";
 import { InitBlockOptions } from "../components/card-editor-workspace";
-import { FieldButton } from "../components/field-button";
-import { FieldProgressBar } from "../components/field-progress-bar";
+import { FieldButton } from "../components/blockly/field-button";
+import { FieldProgressBar } from "../components/blockly/field-progress-bar";
 import * as BlocklyContextMenu from "./blockly-context-menu";
 import { BlockInfo, FlyoutItemInfo } from "blockly/core/utils/toolbox";
-import { FieldColourHsvSliders } from "../components/field-colour-hsv-sliders";
-import { ToolboxSearchCategory } from "../components/toolbox-search-category";
-import { CardSearchCategory } from "../components/card-search-category";
-import { TestMutatorFn, TestMutatorMixin, TestMutatorName } from "../components/blockly/test-mutator";
+import { FieldColourHsvSliders } from "../components/blockly/field-colour-hsv-sliders";
+import { ToolboxSearchCategory } from "../components/blockly/toolbox-search-category";
+import { CardSearchCategory } from "../components/blockly/card-search-category";
+import {
+  OptionalRows,
+  OptionalRowsFn,
+  OptionalRowsMixin,
+  OptionalRowsOptions,
+} from "../components/blockly/optional-rows";
+import { TestExtensionMixin, TestExtensionName } from "../components/blockly/test-extension";
+import { FieldPlus } from "../components/blockly/field-plus";
+import { FieldMinus } from "../components/blockly/field-minus";
+import { PlusMinusRows, PlusMinusRowsFn, PlusMinusRowsMixin } from "../components/blockly/plus-minus-rows";
 
 export const toTitleCaseCorrected = (string: string) =>
   string
@@ -31,9 +40,7 @@ export const toTitleCaseCorrected = (string: string) =>
 export const addBlock = (block: BlockDef) => {
   JsonConversionUtils.addBlockToMap(block);
 
-  if (block.mutator === TestMutatorName) {
-    const options = block.mutatorOptions as number[];
-
+  if (block.mutator === OptionalRows) {
     const newBlock: BlockDef = {
       type: block.type + "_container",
       message0: block.message0,
@@ -42,23 +49,24 @@ export const addBlock = (block: BlockDef) => {
       nextStatement: null,
     };
 
-    for (
-      let i = 0, index = 1, message: string, args: BlockArgDef[];
-      (message = block[`message${i}`]) && (args = block[`args${i}`]);
-      i++
-    ) {
-      for (let arg of args.filter((arg) => arg.optional)) {
-        newBlock[`message${index}`] = `${arg.name}: %1`;
-        newBlock[`args${index}`] = [
-          {
-            type: "field_checkbox",
-            name: arg.name,
-            checked: true,
-          },
-        ];
-        index++;
-      }
+    const options = block.mutatorOptions as OptionalRowsOptions;
+
+    const args = {} as Record<string, boolean>;
+
+    for (let value of Object.values(options.optional)) {
+      args[value] = options.defaults?.[value] ?? true;
     }
+
+    Object.entries(args).forEach(([name, checked], index) => {
+      newBlock[`message${index}`] = `${name}: %1`;
+      newBlock[`args${index}`] = [
+        {
+          type: "field_checkbox",
+          name,
+          checked,
+        },
+      ];
+    });
 
     addBlock(newBlock);
   }
@@ -89,14 +97,14 @@ export function manuallyAddShadowBlocks(thisBlock: Block, block: BlockDef) {
   for (let arg of argsList(block)) {
     const shadow = arg.shadow ?? arg.block;
     const input = thisBlock.getInput(arg.name);
-    if (!shadow || !input || input.connection.targetBlock()) continue;
+    if (!shadow || !input) continue;
 
     // let shadowBlock = newBlock(thisBlock.workspace, shadow.type);
 
     input.connection.setShadowState(shadow);
 
     const shadowBlock = input.connection.targetBlock();
-    if (shadowBlock) {
+    if (shadowBlock && shadowBlock.isShadow()) {
       manuallyAddShadowBlocks(shadowBlock, Blockly.Blocks[shadow.type].json);
     }
 
@@ -258,6 +266,8 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options
     Blockly.fieldRegistry.register("field_button", FieldButton);
     Blockly.fieldRegistry.register("field_progress_bar", FieldProgressBar);
     Blockly.fieldRegistry.register("field_colour_hsv_sliders", FieldColourHsvSliders);
+    Blockly.fieldRegistry.register("field_plus", FieldPlus);
+    Blockly.fieldRegistry.register("field_minus", FieldMinus);
 
     Blockly.registry.register(
       Blockly.registry.Type.TOOLBOX_ITEM,
@@ -270,7 +280,9 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>, options
       CardSearchCategory
     );
 
-    Extensions.registerMutator(TestMutatorName, TestMutatorMixin, TestMutatorFn);
+    Blockly.Extensions.registerMutator(OptionalRows, OptionalRowsMixin, OptionalRowsFn);
+    Blockly.Extensions.registerMutator(TestExtensionName, TestExtensionMixin);
+    Blockly.Extensions.registerMutator(PlusMinusRows, PlusMinusRowsMixin, PlusMinusRowsFn);
 
     if (options) {
       BlocklyContextMenu.registerAll(options);
@@ -645,4 +657,26 @@ export const refreshBlock = (block: BlockSvg) => {
     }
     block.render(false);
   }
+};
+
+export const reInitBlock = (block: Block, state: BlockDef) => {
+  // Save connections / shadow blocks
+  const connections = {} as Record<string, Connection | undefined>;
+  for (const input of block.inputList.slice()) {
+    const connection = (connections[input.name] = input.connection?.targetConnection);
+    block.removeInput(input.name, true);
+  }
+
+  // Init again
+  block.jsonInit(state);
+
+  // Restore connections / shadow blocks
+  for (let [name, connection] of Object.entries(connections)) {
+    if (block.getInput(name)) {
+      connection?.reconnect(block, name);
+    }
+  }
+  manuallyAddShadowBlocks(block, state);
+
+  block.bumpNeighbours();
 };
