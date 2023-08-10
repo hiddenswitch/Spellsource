@@ -1,18 +1,16 @@
 import Blockly from "blockly";
-import * as BlocklyMiscUtils from "./blockly-misc-utils";
-import { toTitleCaseCorrected } from "./blockly-misc-utils";
+import * as BlocklyMiscUtils from "./blockly-spellsource-utils";
+import { toTitleCaseCorrected } from "./blockly-spellsource-utils";
 import { ContextType } from "react";
 import { BlocklyDataContext } from "../pages/card-editor";
 import { CardDef } from "../components/collection/card-display";
 import { ImageDef } from "../__generated__/client";
 import { ToolboxSearchCategory } from "../components/blockly/toolbox-search-category";
 import { CardSearchCategory } from "../components/blockly/card-search-category";
-import { BlockDef } from "../__generated__/blocks";
-import { rowsList } from "./json-conversion-utils";
+import { getBlockInfo } from "./blockly-utils";
 import StaticCategoryInfo = Blockly.utils.toolbox.StaticCategoryInfo;
 import ToolboxInfo = Blockly.utils.toolbox.ToolboxInfo;
 import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo;
-import BlockInfo = Blockly.utils.toolbox.BlockInfo;
 
 /**
  * Initializes the necessary callbacks for the Variables tab's CUSTOM dynamic-ness
@@ -60,7 +58,7 @@ export function initCallbacks(workspace) {
  * @param data
  * @returns toolbox json
  */
-export function editorToolbox(results: string[] = [], data: ContextType<typeof BlocklyDataContext>): any {
+export function editorToolbox(results: string[] = [], data: ContextType<typeof BlocklyDataContext>): ToolboxInfo {
   return {
     kind: "categoryToolbox",
     contents: [
@@ -183,8 +181,8 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
           kind: "label",
           text: " ",
         },
-        getBlock("TargetPlayer_1"),
-        getBlock("TargetPlayer_2"),
+        getBlockInfo("TargetPlayer_1"),
+        getBlockInfo("TargetPlayer_2"),
       ]),
 
       category("Tribes", "160", "Blocks for the different tribes that units can be a part of", contents("Race")),
@@ -576,7 +574,7 @@ function subContents(prefix, sub) {
     if (defaultTest(block) && block.startsWith(prefix)) {
       let subcategory = Blockly.Blocks[block].json?.subcategory;
       if ((!subcategory && sub === "Misc") || subcategory?.includes(sub)) {
-        contents.push(getBlock(block));
+        contents.push(getBlockInfo(block));
       }
     }
   }
@@ -592,7 +590,7 @@ export function contents(prefix: string) {
   let contents: Partial<ToolboxItemInfo>[] = [];
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && block.startsWith(prefix)) {
-      contents.push(getBlock(block));
+      contents.push(getBlockInfo(block));
     }
   }
   return contents;
@@ -608,7 +606,7 @@ function exclusionContents(prefix, ...exclusions) {
   let contents: Partial<ToolboxItemInfo>[] = [];
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && block.startsWith(prefix) && !exclusions.includes(block)) {
-      contents.push(getBlock(block));
+      contents.push(getBlockInfo(block));
     }
   }
   return contents;
@@ -624,7 +622,7 @@ function inclusionContents(prefix, ...inclusions) {
   let contents: Partial<ToolboxItemInfo>[] = [];
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && (block.startsWith(prefix) || inclusions.includes(block))) {
-      contents.push(getBlock(block));
+      contents.push(getBlockInfo(block));
     }
   }
   return contents;
@@ -643,7 +641,7 @@ function artCategories() {
 
       categoryContents[name] ??= [];
 
-      categoryContents[name].push(getBlock(block));
+      categoryContents[name].push(getBlockInfo(block));
     }
   }
 
@@ -664,46 +662,4 @@ function defaultTest(block) {
     (!block.match(/^.*_.*_.*/) || BlocklyMiscUtils.isSpellsourceBlock(block)) &&
     !block.endsWith("_REFERENCE")
   );
-}
-
-export function getBlock(type: string): BlockInfo {
-  return {
-    type,
-    kind: "block",
-    inputs: blockInputs(type),
-    next: Blockly.Blocks[type]?.json?.next,
-  };
-}
-
-function blockInputs(type: string) {
-  const block = Blockly.Blocks[type];
-  const inputs = {} as Record<string, any>;
-
-  if (!block || !block.json) return inputs;
-  const json = block.json as BlockDef;
-
-  rowsList(json).forEach(([, args]) => {
-    for (let arg of args) {
-      const name = arg?.name;
-      if (!name) continue;
-
-      if (arg.block && arg.block.toolbox !== false) {
-        const input = (inputs[name] ??= {} as any);
-        input.block = { ...arg.block };
-        input.block.inputs = blockInputs(input.block.type);
-
-        if (!arg.shadow) {
-          arg.shadow = arg.block;
-        }
-      }
-
-      if (arg.shadow && arg.shadow.toolbox !== false) {
-        const input = (inputs[name] ??= {} as any);
-        input.shadow = { ...arg.shadow };
-        input.shadow.inputs = blockInputs(input.shadow.type);
-      }
-    }
-  });
-
-  return inputs;
 }

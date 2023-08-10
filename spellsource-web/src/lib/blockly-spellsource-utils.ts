@@ -1,12 +1,10 @@
-import Blockly, { Block, BlockSvg, Connection, Toolbox, ToolboxCategory, WorkspaceSvg } from "blockly";
+import Blockly, { BlockSvg } from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
-import { argsList } from "./json-conversion-utils";
 import { CardDef } from "../components/collection/card-display";
 import { BlocklyDataContext } from "../pages/card-editor";
 import { ContextType } from "react";
-import { BlockDef, BlocklyShadowState } from "../__generated__/blocks";
-import { BlockInfo, FlyoutItemInfo } from "blockly/core/utils/toolbox";
-import { OptionalRows, OptionalRowsOptions } from "../components/blockly/optional-rows";
+import { BlockDef } from "./blockly-types";
+import { addBlock, argsList as argsList1 } from "./blockly-utils";
 
 export const toTitleCaseCorrected = (string: string) =>
   string
@@ -17,84 +15,6 @@ export const toTitleCaseCorrected = (string: string) =>
     .replace("Minion", "Unit")
     .replace("Weapon", "Item")
     .replace("Hero", "Champion");
-
-export const addBlock = (block: BlockDef) => {
-  JsonConversionUtils.addBlockToMap(block);
-
-  if (block.mutator === OptionalRows) {
-    const newBlock: BlockDef = {
-      type: block.type + "_container",
-      message0: block.message0,
-      args0: block.args0,
-      colour: block.colour,
-      nextStatement: null,
-    };
-
-    const options = block.mutatorOptions as OptionalRowsOptions;
-
-    const args = {} as Record<string, boolean>;
-
-    for (let value of Object.values(options.optional)) {
-      args[value] = options.defaults?.[value] ?? true;
-    }
-
-    Object.entries(args).forEach(([name, checked], index) => {
-      newBlock[`message${index}`] = `${name}: %1`;
-      newBlock[`args${index}`] = [
-        {
-          type: "field_checkbox",
-          name,
-          checked,
-        },
-      ];
-    });
-
-    addBlock(newBlock);
-  }
-
-  return (Blockly.Blocks[block.type!] = {
-    init: function () {
-      this.jsonInit(block);
-      if (block.data) {
-        this.data = block.data;
-      }
-      if (block.hat) {
-        this.hat = block.hat;
-      }
-      if (block.type!.endsWith("SHADOW")) {
-        this.setMovable(false);
-      }
-    },
-    json: block,
-    data: block.data,
-  });
-};
-
-//initializes the json specified shadow blocks of a block on the workspace
-export function manuallyAddShadowBlocks(thisBlock: Block, block: BlockDef, allowNonShadow = true) {
-  for (let arg of argsList(block)) {
-    addShadowBlocksToConnection(thisBlock.getInput(arg.name)?.connection, arg, allowNonShadow);
-  }
-
-  addShadowBlocksToConnection(thisBlock.nextConnection, block.next, allowNonShadow);
-}
-
-function addShadowBlocksToConnection(connection: Connection | null, arg?: BlocklyShadowState, allowNonShadow = true) {
-  const shadow = arg?.shadow ?? arg?.block;
-  if (!shadow || !connection) return;
-
-  const prevBlock = connection.targetBlock();
-  connection.setShadowState(shadow);
-  const currentBlock = connection.targetBlock();
-
-  if (prevBlock !== currentBlock) {
-    if (allowNonShadow && arg.block && currentBlock.isShadow()) {
-      currentBlock.setShadow(false);
-      connection.setShadowState(shadow);
-    }
-    manuallyAddShadowBlocks(currentBlock, Blockly.Blocks[shadow.type].json, allowNonShadow);
-  }
-}
 
 //make the message for a generated block for a catalogue/created card
 export function cardMessage(card: CardDef) {
@@ -120,8 +40,8 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>) {
       return;
     }
 
-    if (block.output && !JsonConversionUtils.blockTypeColors[block.output]) {
-      JsonConversionUtils.blockTypeColors[block.output] = block.colour;
+    if (block.output && !JsonConversionUtils.blockTypeColors[block.output as string]) {
+      JsonConversionUtils.blockTypeColors[block.output as string] = block.colour;
     }
 
     addBlock(block);
@@ -172,19 +92,6 @@ export function setupHeroClassColor(card: CardDef) {
   }
 
   return "#888888";
-}
-
-/**
- * Helper method to make sure added blocks have the correct shadows
- * We still want those in case people decide to pull apart the converted stuff
- * @param workspace The workspace
- * @param type The block type to create
- * @returns The created block
- */
-export function newBlock(workspace, type): Block | BlockSvg {
-  let block = workspace.newBlock(type);
-  manuallyAddShadowBlocks(block, Blockly.Blocks[type].json);
-  return block;
 }
 
 export function colorToHex(colour) {
@@ -240,7 +147,7 @@ export function pluralStuff(workspace) {
     if (!block.json) {
       continue;
     }
-    let argsList = JsonConversionUtils.argsList(block.json);
+    let argsList = argsList1(block.json);
     for (let arg of argsList) {
       if (arg.type === "field_label_plural") {
         let shouldBePlural = null;
@@ -261,7 +168,7 @@ export function pluralStuff(workspace) {
             if (targetBlock) {
               //if the 'src' arg appears on the 'input_value' it's connected to, redirect to that
               let name = targetBlock.getInputWithBlock(block)?.name;
-              for (let arg of JsonConversionUtils.argsList(targetBlock.json, "input")) {
+              for (let arg of argsList1(targetBlock.json, "input")) {
                 if (arg.name === name && arg.src) {
                   //
                   connection = targetBlock.getInput(arg.src).connection;
@@ -324,43 +231,6 @@ export function isSpellsourceBlock(type): boolean {
   return !!Blockly.Blocks[type]?.json?.path;
 }
 
-export function searchToolbox(blockType, mainWorkspace: WorkspaceSvg) {
-  let toolbox = mainWorkspace.getToolbox() as Toolbox;
-  let categories = toolbox.getToolboxItems().slice(1) as ToolboxCategory[];
-
-  for (let category of categories) {
-    if (category.getContents) {
-      let contents = category.getContents();
-      for (let content of contents as FlyoutItemInfo[]) {
-        if (content.kind === "block" && (content as BlockInfo).type === blockType) {
-          if (category.getParent() && category.getParent().isCollapsible() && !category.getParent().isExpanded()) {
-            category.getParent().toggleExpanded();
-          }
-          toolbox.setSelectedItem(category);
-
-          const flyOut = toolbox.getFlyout();
-
-          let workspace: WorkspaceSvg;
-
-          if ((workspace = flyOut.getWorkspace())) {
-            let totalHeight = 0;
-            for (let topBlock of workspace.getTopBlocks(true)) {
-              if (topBlock.type === blockType) {
-                workspace.scrollbar.setY(totalHeight);
-                topBlock.addSelect();
-              } else {
-                totalHeight += topBlock.height + 24;
-              }
-            }
-          }
-
-          return;
-        }
-      }
-    }
-  }
-}
-
 export function initArtBlcks(data: ContextType<typeof BlocklyDataContext>) {
   for (let art of data.allArt) {
     let type = "Art_" + art.name;
@@ -411,26 +281,4 @@ export const refreshBlock = (block: BlockSvg) => {
     }
     block.render(false);
   }
-};
-
-export const reInitBlock = (block: Block, state: BlockDef) => {
-  // Save connections / shadow blocks
-  const connections = {} as Record<string, Connection | undefined>;
-  for (const input of block.inputList.slice()) {
-    const connection = (connections[input.name] = input.connection?.targetConnection);
-    block.removeInput(input.name, true);
-  }
-
-  // Init again
-  block.jsonInit(state);
-
-  // Restore connections / shadow blocks
-  for (let [name, connection] of Object.entries(connections)) {
-    if (block.getInput(name)) {
-      connection?.reconnect(block, name);
-    }
-  }
-  manuallyAddShadowBlocks(block, state, false);
-
-  block.bumpNeighbours();
 };

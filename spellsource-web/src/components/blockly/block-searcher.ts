@@ -6,7 +6,8 @@
 
 import * as Blockly from "blockly/core";
 import { BlockInfo } from "blockly/core/utils/toolbox";
-import { newBlock } from "../../lib/blockly-misc-utils";
+
+import { newBlock } from "../../lib/blockly-utils";
 
 /**
  * A class that provides methods for indexing and searching blocks.
@@ -36,6 +37,7 @@ export class BlockSearcher {
         );
       } catch (e) {
         block = newBlock(blockCreationWorkspace, blockInfo.type);
+        console.warn(blockInfo.type, e.message);
       }
       const blockType = block.getFieldValue("id") || block.type;
       // TODO include shadow block text values in searching?

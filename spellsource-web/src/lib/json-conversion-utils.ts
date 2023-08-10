@@ -1,10 +1,11 @@
 import Blockly, { Block, BlockSvg, Connection, Workspace, WorkspaceSvg } from "blockly";
-import * as BlocklyMiscUtils from "./blockly-misc-utils";
+import * as BlocklyMiscUtils from "./blockly-spellsource-utils";
 import { isArray } from "lodash";
-import { BlockArgDef, BlockDef } from "../__generated__/blocks";
 import { CardDef } from "../components/collection/card-display";
 import { isNumeric } from "./workspace-utils";
 import { RgbColour } from "../components/blockly/field-colour-hsv-sliders";
+import { BlockArgDef, BlockDef } from "./blockly-types";
+import { argsList, newBlock } from "./blockly-utils";
 
 const classBlocksDictionary = {} as Record<string, BlockDef[]>; //A dictionary mapping the 'class' argument a block uses to the block itself
 const enumBlocksDictionary = {} as Record<string, BlockDef[]>; //A dictionary mapping the enum value of the block to the block itself
@@ -75,7 +76,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   } else if (type === "HERO" && !card.attributes.hasOwnProperty("HP")) {
     type = "HERO2";
   }
-  let block = BlocklyMiscUtils.newBlock(workspace, "Starter_" + type);
+  let block = newBlock(workspace, "Starter_" + type);
   let args = [
     "baseManaCost",
     "name",
@@ -137,7 +138,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
     if (card.type === "MINION") {
       simpleHandleArg(block, "race", card, workspace);
     } else {
-      let raceBlock = BlocklyMiscUtils.newBlock(workspace, "Property_race");
+      let raceBlock = newBlock(workspace, "Property_race");
       lowestBlock.nextConnection.connect(raceBlock.previousConnection);
       if ("initSvg" in raceBlock) {
         raceBlock.initSvg();
@@ -154,9 +155,9 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   if (card.battlecry) {
     let openerBlock;
     if (card.battlecry.condition) {
-      openerBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener2");
+      openerBlock = newBlock(workspace, "Property_opener2");
     } else {
-      openerBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener1");
+      openerBlock = newBlock(workspace, "Property_opener1");
     }
     lowestBlock.nextConnection.connect(openerBlock.previousConnection);
     if ("initSvg" in openerBlock) {
@@ -191,7 +192,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   }
 
   if (card.deathrattle) {
-    let aftermathBlock = BlocklyMiscUtils.newBlock(workspace, "Property_aftermath");
+    let aftermathBlock = newBlock(workspace, "Property_aftermath");
     lowestBlock.nextConnection.connect(aftermathBlock.previousConnection);
     if ("initSvg" in aftermathBlock) {
       aftermathBlock.initSvg();
@@ -202,7 +203,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
 
   const triggers = (trigger, property) => {
     if (card[trigger + "s"] || card[trigger]) {
-      let triggersBlock = BlocklyMiscUtils.newBlock(workspace, property);
+      let triggersBlock = newBlock(workspace, property);
       lowestBlock.nextConnection.connect(triggersBlock.previousConnection);
       if ("initSvg" in triggersBlock) {
         triggersBlock.initSvg();
@@ -231,7 +232,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   triggers("gameTrigger", "Property_triggers4");
 
   if (card.auras || card.aura) {
-    let aurasBlock = BlocklyMiscUtils.newBlock(workspace, "Property_auras");
+    let aurasBlock = newBlock(workspace, "Property_auras");
     lowestBlock.nextConnection.connect(aurasBlock.previousConnection);
     if ("initSvg" in aurasBlock) {
       aurasBlock.initSvg();
@@ -250,7 +251,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
       delete card.attributes.MAX_HP;
     }
     if (Object.values(card.attributes).length > 0) {
-      let attributesBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes");
+      let attributesBlock = newBlock(workspace, "Property_attributes");
       lowestBlock.nextConnection.connect(attributesBlock.previousConnection);
       if ("initSvg" in attributesBlock) {
         attributesBlock.initSvg();
@@ -259,10 +260,10 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
       for (let atr in card.attributes) {
         let attributeBlock;
         if (isNumeric(card.attributes[atr])) {
-          attributeBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_int");
+          attributeBlock = newBlock(workspace, "Property_attributes_int");
           attributeBlock.getField("value").setValue(card.attributes[atr]);
         } else {
-          attributeBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_boolean");
+          attributeBlock = newBlock(workspace, "Property_attributes_boolean");
         }
         handleArg(attributeBlock.getInput("attribute").connection, atr, "attribute", workspace, card.attributes);
         if ("initSvg" in attributeBlock) {
@@ -279,7 +280,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   if (card.manaCostModifier) {
     let costyBlock = null;
     if (card.manaCostModifier["class"] === "ConditionalValueProvider" && card.manaCostModifier["ifFalse"] === 0) {
-      costyBlock = BlocklyMiscUtils.newBlock(workspace, "Property_manaCostModifierConditional");
+      costyBlock = newBlock(workspace, "Property_manaCostModifierConditional");
       handleArg(
         costyBlock.getInput("manaCostModifier.condition").connection,
         card.manaCostModifier["condition"],
@@ -299,7 +300,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
         handleIntArg(costyBlock, costyBlock.json.args0[0].name, workspace, card.manaCostModifier["ifTrue"]);
       }
     } else {
-      costyBlock = BlocklyMiscUtils.newBlock(workspace, "Property_manaCostModifier");
+      costyBlock = newBlock(workspace, "Property_manaCostModifier");
       handleArg(
         costyBlock.getInput("manaCostModifier").connection,
         card.manaCostModifier,
@@ -316,7 +317,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   }
 
   if (card.cardCostModifier) {
-    let costyBlock = BlocklyMiscUtils.newBlock(workspace, "Property_cardCostModifier");
+    let costyBlock = newBlock(workspace, "Property_cardCostModifier");
     lowestBlock.nextConnection.connect(costyBlock.previousConnection);
     if ("initSvg" in costyBlock) {
       costyBlock.initSvg();
@@ -328,7 +329,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   }
 
   if (card.dynamicDescription) {
-    let descriptionsBlock = BlocklyMiscUtils.newBlock(workspace, "Property_descriptions");
+    let descriptionsBlock = newBlock(workspace, "Property_descriptions");
 
     dynamicDescription(workspace, descriptionsBlock.getFirstStatementConnection(), card.dynamicDescription, "i");
 
@@ -340,7 +341,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   }
 
   if (card.set !== "CUSTOM") {
-    let setBlock = BlocklyMiscUtils.newBlock(workspace, "Property_set");
+    let setBlock = newBlock(workspace, "Property_set");
     setBlock.setFieldValue(card.set, "set");
     setBlock.previousConnection.connect(lowestBlock.nextConnection);
     if ("initSvg" in setBlock) {
@@ -350,7 +351,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   }
 
   if (card.condition) {
-    let conditionBlock = BlocklyMiscUtils.newBlock(workspace, "Property_condition");
+    let conditionBlock = newBlock(workspace, "Property_condition");
     simpleHandleArg(conditionBlock, "condition", card, workspace);
     conditionBlock.previousConnection.connect(lowestBlock.nextConnection);
     if ("initSvg" in conditionBlock) {
@@ -360,7 +361,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   }
 
   if ((card.collectible === false || String(card.collectible) === "FALSE") && type !== "HERO") {
-    let uncollectibleBlock = BlocklyMiscUtils.newBlock(workspace, "Property_uncollectible");
+    let uncollectibleBlock = newBlock(workspace, "Property_uncollectible");
     uncollectibleBlock.previousConnection.connect(lowestBlock.nextConnection);
     if ("initSvg" in uncollectibleBlock) {
       uncollectibleBlock.initSvg();
@@ -383,7 +384,7 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
       }
     }
     if (card.art["glow"]) {
-      let glowBlock = BlocklyMiscUtils.newBlock(workspace, "Property_glow");
+      let glowBlock = newBlock(workspace, "Property_glow");
       glowBlock.previousConnection.connect(lowestBlock.nextConnection);
       let colorBlock = glowBlock.getInput("art.glow").connection.targetBlock();
       colorBlock.setFieldValue(
@@ -398,11 +399,11 @@ export function generateCard(workspace: Workspace | WorkspaceSvg, card: CardDef)
   }
 
   if (card.art?.sprite?.named) {
-    let spriteBlock = BlocklyMiscUtils.newBlock(workspace, "Property_sprite");
+    let spriteBlock = newBlock(workspace, "Property_sprite");
     spriteBlock.previousConnection.connect(lowestBlock.nextConnection);
 
     if (Blockly.Blocks["Art_" + card.art.sprite.named]) {
-      let artBlock = BlocklyMiscUtils.newBlock(workspace, "Art_" + card.art.sprite.named);
+      let artBlock = newBlock(workspace, "Art_" + card.art.sprite.named);
       spriteBlock.getInput("art.sprite.named").connection.connect(artBlock.outputConnection);
       if ("initSvg" in artBlock) {
         artBlock.initSvg();
@@ -434,7 +435,7 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
   for (let description of descriptions) {
     let block = connection.targetBlock() as Block | BlockSvg;
     if (!block) {
-      block = BlocklyMiscUtils.newBlock(workspace, "Property_description");
+      block = newBlock(workspace, "Property_description");
       connection.connect(block.previousConnection);
       if ("initSvg" in block) {
         block.initSvg();
@@ -447,7 +448,7 @@ export function dynamicDescription(workspace: Workspace, connection: Connection,
       };
     }
 
-    let descBlock = BlocklyMiscUtils.newBlock(workspace, "Property_" + description.class);
+    let descBlock = newBlock(workspace, "Property_" + description.class);
 
     if (descBlock === null) {
       continue;
@@ -531,11 +532,11 @@ export function enchantment(trigger: any, workspace: Workspace, triggerBlock: Bl
   let props = relevantProperties(trigger);
   if (!enchantmentNeedsOptions(trigger, props)) {
     if (!triggerBlock) {
-      triggerBlock = BlocklyMiscUtils.newBlock(workspace, "Enchantment");
+      triggerBlock = newBlock(workspace, "Enchantment");
     }
   } else {
     if (!triggerBlock) {
-      triggerBlock = BlocklyMiscUtils.newBlock(workspace, "EnchantmentOptions");
+      triggerBlock = newBlock(workspace, "EnchantmentOptions");
     }
     let lowestOptionConnection = triggerBlock.getFirstStatementConnection();
     for (let prop of props) {
@@ -557,7 +558,7 @@ export function enchantment(trigger: any, workspace: Workspace, triggerBlock: Bl
         console.warn(`Failed to handle prop ${prop} on trigger`, trigger);
         continue;
       }
-      let option = BlocklyMiscUtils.newBlock(workspace, match.type);
+      let option = newBlock(workspace, match.type);
       handleInputs(match, trigger, option, workspace, trigger);
       /*if (trigger[prop] !== true) {
         option.setFieldValue(trigger[prop], prop);
@@ -627,15 +628,15 @@ export function costModifier(costyBlock: Block | BlockSvg, costModifier, workspa
   let costModifierBlock;
   let lowestOptionConnection;
   if (!costModifierNeedsOptions(costModifier, props)) {
-    costModifierBlock = BlocklyMiscUtils.newBlock(workspace, "CostModifier");
+    costModifierBlock = newBlock(workspace, "CostModifier");
   } else {
-    costModifierBlock = BlocklyMiscUtils.newBlock(workspace, "CostModifierOptions");
+    costModifierBlock = newBlock(workspace, "CostModifierOptions");
     lowestOptionConnection = costModifierBlock.getFirstStatementConnection();
     for (let prop of props) {
       if (prop === "value" || prop === "operation" || prop === "target" || prop === "filter") {
         continue;
       }
-      let option = BlocklyMiscUtils.newBlock(workspace, "CostModifierOption_" + prop);
+      let option = newBlock(workspace, "CostModifierOption_" + prop);
       handleInputs(Blockly.Blocks["CostModifierOption_" + prop].json, costModifier, option, workspace, null);
       if ("initSvg" in option) {
         option.initSvg();
@@ -645,7 +646,7 @@ export function costModifier(costyBlock: Block | BlockSvg, costModifier, workspa
     }
   }
   if (costModifier.class === "OneTurnCostModifier") {
-    let option = BlocklyMiscUtils.newBlock(workspace, "CostModifierOption_oneTurn");
+    let option = newBlock(workspace, "CostModifierOption_oneTurn");
     if ("initSvg" in option) {
       option.initSvg();
     }
@@ -1000,11 +1001,11 @@ export function handleArg(
   let block;
   if (!bestMatch) {
     if (connection.getCheck().includes("Card")) {
-      block = BlocklyMiscUtils.newBlock(workspace, "Card_REFERENCE");
+      block = newBlock(workspace, "Card_REFERENCE");
       block.setFieldValue(json.toString(), "id");
       block.setFieldValue(json.toString(), "name"); // TODO async get the real card message
     } else if (connection.getCheck().includes("HeroClass")) {
-      block = BlocklyMiscUtils.newBlock(workspace, "HeroClass_REFERENCE");
+      block = newBlock(workspace, "HeroClass_REFERENCE");
       block.setFieldValue(json.toString(), "id");
       block.setFieldValue(json.toString(), "name"); // TODO async get the real card message
     } else if (errorOnCustom) {
@@ -1020,7 +1021,7 @@ export function handleArg(
     }
   }
   if (!block) {
-    block = BlocklyMiscUtils.newBlock(workspace, bestMatch.type);
+    block = newBlock(workspace, bestMatch.type);
   }
   if ("initSvg" in block) {
     block.initSvg();
@@ -1073,7 +1074,7 @@ export function handleInputs(bestMatch, json, block: Block | BlockSvg, workspace
         block.getInput(name)?.connection.targetBlock()?.type === "EntityReference_SHADOW" ||
         block.getInput(name)?.connection.targetBlock()?.type === "EntityReference_IT"
       ) {
-        let it = BlocklyMiscUtils.newBlock(workspace, "EntityReference_IT");
+        let it = newBlock(workspace, "EntityReference_IT");
         if ("initSvg" in it) {
           it.initSvg();
         }
@@ -1125,28 +1126,28 @@ export function handleArrayArg(jsonElement: any[], block: Block | BlockSvg, work
     let thingI;
     switch (name) {
       case "conditions":
-        thingI = BlocklyMiscUtils.newBlock(workspace, "Condition_I");
+        thingI = newBlock(workspace, "Condition_I");
         break;
       case "filters":
       case "cardFilters":
-        thingI = BlocklyMiscUtils.newBlock(workspace, "Filter_I");
+        thingI = newBlock(workspace, "Filter_I");
         break;
       case "cards":
-        thingI = BlocklyMiscUtils.newBlock(workspace, "Card_I");
+        thingI = newBlock(workspace, "Card_I");
         break;
       case "zones":
-        thingI = BlocklyMiscUtils.newBlock(workspace, "Zone_I");
+        thingI = newBlock(workspace, "Zone_I");
         break;
       case "races":
-        thingI = BlocklyMiscUtils.newBlock(workspace, "Race_I");
+        thingI = newBlock(workspace, "Race_I");
         break;
       case "triggers":
       case "expirationTriggers":
       case "activationTriggers":
-        thingI = BlocklyMiscUtils.newBlock(workspace, "Trigger_I");
+        thingI = newBlock(workspace, "Trigger_I");
         break;
       default:
-        thingI = BlocklyMiscUtils.newBlock(workspace, "Spell_I");
+        thingI = newBlock(workspace, "Spell_I");
         break;
     }
     handleArg(thingI.getInput("i").connection, jsonElement[i], name.slice(0, -1), workspace, jsonElement);
@@ -1184,7 +1185,7 @@ export function wrapperBlocks(
   bestMatch?: BlockDef
 ) {
   const wrap = (blockType, inputName = "super") => {
-    let newOuterBlock = BlocklyMiscUtils.newBlock(workspace, blockType);
+    let newOuterBlock = newBlock(workspace, blockType);
     newOuterBlock.getInput(inputName).connection.connect(outerBlock.outputConnection);
     if ("initSvg" in newOuterBlock) {
       newOuterBlock.initSvg();
@@ -1391,7 +1392,7 @@ export function handleIntArg(block: Block | BlockSvg, inputArg, workspace, int) 
   ) {
     valueBlock = block.getInput(inputArg).connection.targetBlock();
   } else {
-    valueBlock = BlocklyMiscUtils.newBlock(workspace, "ValueProvider_int");
+    valueBlock = newBlock(workspace, "ValueProvider_int");
     block.getInput(inputArg).connection.connect(valueBlock.outputConnection);
     if ("initSvg" in valueBlock) {
       valueBlock.initSvg();
@@ -1545,7 +1546,7 @@ export function generateDummyBlock(json, inputName, parentJson) {
 export function handleNoMatch(json, inputName, parentJson, workspace) {
   inputName = inputName.split(".").slice(-1)[0];
   let type = inputNameToBlockType(inputName);
-  let block = BlocklyMiscUtils.newBlock(workspace, "Custom" + type);
+  let block = newBlock(workspace, "Custom" + type);
   if (typeof json !== "object") {
     block.setFieldValue(json, "value");
   } else if (json.class) {
@@ -1579,7 +1580,7 @@ export function handleNoMatch(json, inputName, parentJson, workspace) {
       if (blockType === "nulls") {
         console.error("Block type should not be 'nulls'");
       }
-      let newArgBlock = BlocklyMiscUtils.newBlock(workspace, "CustomArg_" + blockType);
+      let newArgBlock = newBlock(workspace, "CustomArg_" + blockType);
       newArgBlock.previousConnection.connect(lowestConnection);
       lowestConnection = newArgBlock.nextConnection;
       if ("initSvg" in newArgBlock) {
@@ -1914,34 +1915,4 @@ export function mutateJson(json) {
   }
 
   return json;
-}
-
-/**
- * Returns a list of the all the arguments in a block's json
- * @param block
- * @param type
- * @returns An array of the args
- */
-export function argsList(block: BlockDef, type?: "input" | "dropdown" | "number" | string) {
-  let argsList = [] as BlockArgDef[];
-
-  for (let i = 0, args: BlockArgDef[]; (args = block[`args${i}`]); i++) {
-    argsList.push(...args.filter((arg) => !type || arg.type?.includes(type)));
-  }
-
-  return argsList;
-}
-
-export function rowsList(block: BlockDef) {
-  const list = [] as [string, BlockArgDef[]][];
-
-  for (
-    let i = 0, message: string, args: BlockArgDef[];
-    (message = block[`message${i}`]) && (args = block[`args${i}`]);
-    i++
-  ) {
-    list.push([message, args]);
-  }
-
-  return list;
 }

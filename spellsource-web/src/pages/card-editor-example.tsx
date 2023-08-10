@@ -1,7 +1,7 @@
 import React from "react";
 import Loadable from "react-loadable";
 import Layout from "../components/card-editor-layout";
-import * as BlocklyMiscUtils from "../lib/blockly-misc-utils";
+import * as BlocklyMiscUtils from "../lib/blockly-spellsource-utils";
 
 const LoadableComponent = Loadable.Map({
   loader: {

@@ -1,8 +1,7 @@
 import { ExtensionMixin, MutatorFn } from "./mutators";
 import Blockly, { Block } from "blockly";
-import { BlockArgDef, BlockDef } from "../../__generated__/blocks";
-import { reInitBlock } from "../../lib/blockly-misc-utils";
-import { argsList, rowsList } from "../../lib/json-conversion-utils";
+import { BlockArgDef, BlockDef } from "../../lib/blockly-types";
+import { argsList, reInitBlock, rowsList } from "../../lib/blockly-utils";
 
 interface PlusMinusOptions {
   arrayName?: string;
@@ -28,8 +27,8 @@ export interface PlusMinusRowsMutator extends ExtensionMixin<PlusMinusRowsMutato
 export const PlusMinusRows = "plus_minus_rows";
 
 export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
-  itemCount: null,
-  options: null,
+  itemCount: null!,
+  options: null!,
   mutationToDom(): Element {
     const container = Blockly.utils.xml.createElement("mutation");
     container.setAttribute("itemCount", String(this.itemCount));
@@ -108,7 +107,7 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
     } else {
       this.updateShape_();
     }
-    this.setShadow(false);
+    this.setShadow(this.getPreviousBlock() && this.itemCount == 0);
   },
   plus(index: number): void {
     const block = Blockly.Blocks[this.type].json as BlockDef;
@@ -133,11 +132,19 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
     this.options = (block.mutatorOptions as PlusMinusOptions) ?? {};
 
     if (!this.options.arrayName) {
-      this.options.arrayName = argsList(block, "input")[0].name;
+      this.options.arrayName = argsList(block).find((arg) => arg.name).name;
     }
 
     if (this.itemCount == null) {
       this.itemCount = this.options.itemCount ?? 0;
+    }
+
+    // It's an error to try to add shadow blocks to non-existent connections in the toolbox
+    const inputs = Blockly.Blocks[this.type].toolboxInfo.inputs;
+    if (this.itemCount === 0) {
+      for (let input in inputs) {
+        delete inputs[input];
+      }
     }
   },
 };

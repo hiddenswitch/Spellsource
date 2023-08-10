@@ -2,8 +2,8 @@ import React, { forwardRef, MutableRefObject, useContext, useEffect, useState } 
 import * as WorkspaceUtils from "../lib/workspace-utils";
 import Blockly, { Block, BlockSvg, Toolbox, ToolboxCategory, WorkspaceSvg } from "blockly";
 import * as JsonConversionUtils from "../lib/json-conversion-utils";
-import * as BlocklyMiscUtils from "../lib/blockly-misc-utils";
-import { refreshBlock } from "../lib/blockly-misc-utils";
+import * as BlocklyMiscUtils from "../lib/blockly-spellsource-utils";
+import { refreshBlock } from "../lib/blockly-spellsource-utils";
 import * as SpellsourceGenerator from "../lib/spellsource-generator";
 import SimpleReactBlockly, { SimpleReactBlocklyRef } from "./simple-react-blockly";
 import * as BlocklyToolbox from "../lib/blockly-toolbox";

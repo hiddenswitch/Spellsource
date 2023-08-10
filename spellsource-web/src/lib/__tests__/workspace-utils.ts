@@ -1,11 +1,10 @@
 import * as WorkspaceUtils from "../workspace-utils";
 import Blockly from "blockly";
-import { beforeAll } from "@jest/globals";
 import { getAllBlockJson, getAllIcons } from "../fs-utils";
 import { keyBy } from "lodash";
 import { ContextType } from "react";
 import { BlocklyDataContext } from "../../pages/card-editor";
-import * as BlocklyMiscUtils from "../blockly-misc-utils";
+import * as BlocklyMiscUtils from "../blockly-spellsource-utils";
 import * as BlocklyRegister from "../blockly-register";
 
 function expectConversion(str, json) {

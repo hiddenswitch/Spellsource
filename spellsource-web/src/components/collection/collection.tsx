@@ -4,7 +4,7 @@ import { CardType } from "../../__generated__/spellsource-game";
 import { CollectionCardFragment, CollectionCardsOrderBy, useGetCollectionCardsQuery } from "../../__generated__/client";
 import { CardDef } from "./card-display";
 import { Button, Dropdown, Form, Table } from "react-bootstrap";
-import { toTitleCaseCorrected } from "../../lib/blockly-misc-utils";
+import { toTitleCaseCorrected } from "../../lib/blockly-spellsource-utils";
 import { clamp } from "lodash";
 import DropdownToggle from "react-bootstrap/DropdownToggle";
 import DropdownItem from "react-bootstrap/DropdownItem";

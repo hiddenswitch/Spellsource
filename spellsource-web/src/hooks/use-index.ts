@@ -2,9 +2,9 @@ import { useContext, useRef } from "react";
 
 import elasticlunr, { Index } from "elasticlunr";
 import { BlocklyDataContext } from "../pages/card-editor";
-import { BlockDef } from "../__generated__/blocks";
 import { CardDef } from "../components/collection/card-display";
 import { ImageDef } from "../__generated__/client";
+import { BlockDef } from "../lib/blockly-types";
 
 export type SearchNode = BlockSearchNode | CardSearchNode | ArtSearchNode | MarkdownSearchNode;
 
@@ -88,7 +88,7 @@ export const useIndex = () => {
 const setupSearchMessage = (block: BlockDef, blocksByType: Record<string, BlockDef>) => {
   const getTextForBlock = (node: BlockDef) => {
     let text = "";
-    if (node.messages) {
+    /*if (node.messages) {
       for (let i = 0; i < node.messages.length; i++) {
         let message = node.messages[i];
         if (node.args && node.args[i] && node.args[i].args) {
@@ -100,7 +100,7 @@ const setupSearchMessage = (block: BlockDef, blocksByType: Record<string, BlockD
         }
         text += message + " ";
       }
-    }
+    }*/
     return text;
   };
 

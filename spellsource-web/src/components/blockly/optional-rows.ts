@@ -1,8 +1,7 @@
 import Blockly, { Block, BlockSvg, icons } from "blockly";
 import { MutatorFn, MutatorMixin } from "./mutators";
-import { newBlock, reInitBlock } from "../../lib/blockly-misc-utils";
-import { BlockArgDef, BlockDef } from "../../__generated__/blocks";
-import { rowsList } from "../../lib/json-conversion-utils";
+import { BlockArgDef, BlockDef } from "../../lib/blockly-types";
+import { newBlock, reInitBlock, rowsList } from "../../lib/blockly-utils";
 
 export interface OptionalRowsOptions {
   optional: Record<`${number}`, string>;
@@ -91,8 +90,21 @@ export const OptionalRowsMixin: OptionalRowsMutator = {
     const options = block.mutatorOptions as OptionalRowsOptions;
 
     for (let value of Object.values(options?.optional ?? {})) {
-      this.args[value] = options.defaults?.[value] ?? true;
+      this.args[value] = options.defaults?.[value] ?? false;
     }
+
+    // It's an error to try to add shadow blocks to non-existent connections in the toolbox
+    const inputs = Blockly.Blocks[this.type].toolboxInfo.inputs;
+    rowsList(block).forEach(([, args], index) => {
+      const optional = options.optional[index.toString()];
+      if (!optional) return;
+
+      for (let arg of args) {
+        if (arg.type.startsWith("input") && !options.defaults?.[optional]) {
+          delete inputs[arg.name];
+        }
+      }
+    });
   },
 };
 

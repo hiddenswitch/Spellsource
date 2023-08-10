@@ -2,7 +2,7 @@ import * as Blockly from "blockly/core";
 import { SearchCategory } from "./search-category";
 import { ToolboxItemInfo } from "blockly/core/utils/toolbox";
 import { useGetCollectionCardsLazyQuery } from "../../__generated__/client";
-import * as BlocklyMiscUtils from "../../lib/blockly-misc-utils";
+import * as BlocklyMiscUtils from "../../lib/blockly-spellsource-utils";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 

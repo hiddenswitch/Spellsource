@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useRef } from "react";
-import Blockly, { BlocklyOptions, ShortcutRegistry, WorkspaceSvg } from "blockly";
+import Blockly, { BlocklyOptions, WorkspaceSvg } from "blockly";
 
 export interface SimpleReactBlocklyProps {
   wrapperDivClassName: string;
@@ -10,7 +10,7 @@ export interface SimpleReactBlocklyProps {
 
 export interface SimpleReactBlocklyRef {
   workspace: WorkspaceSvg;
-  innerBlocklyDiv: HTMLDivElement;
+  innerBlocklyDiv: HTMLDivElement | null;
 }
 
 export default forwardRef<SimpleReactBlocklyRef, SimpleReactBlocklyProps>((props, ref) => {
@@ -19,7 +19,7 @@ export default forwardRef<SimpleReactBlocklyRef, SimpleReactBlocklyProps>((props
   const options = props.workspaceConfiguration;
 
   useEffect(() => {
-    const workspace = Blockly.inject(innerBlocklyDiv.current, props.workspaceConfiguration);
+    const workspace = Blockly.inject(innerBlocklyDiv.current!, props.workspaceConfiguration);
     workspace.addChangeListener(props.workspaceDidChange);
     props.init?.(workspace);
 
@@ -35,18 +35,21 @@ export default forwardRef<SimpleReactBlocklyRef, SimpleReactBlocklyProps>((props
   // Handle layout changes
   useEffect(() => {
     if (ref && typeof ref !== "function") {
-      const workspace = ref.current.workspace;
+      const workspace = ref.current!.workspace;
       const state = Blockly.serialization.workspaces.save(workspace);
       const scale = workspace.getScale();
       workspace.dispose();
 
-      const newWorkspace = Blockly.inject(innerBlocklyDiv.current, props.workspaceConfiguration);
+      const newWorkspace = Blockly.inject(innerBlocklyDiv.current!, props.workspaceConfiguration);
       newWorkspace.addChangeListener(props.workspaceDidChange);
       Blockly.serialization.workspaces.load(state, newWorkspace);
       newWorkspace.setScale(scale);
       props.init?.(newWorkspace);
 
-      ref.current = { workspace: newWorkspace, innerBlocklyDiv: innerBlocklyDiv.current };
+      ref.current = {
+        workspace: newWorkspace,
+        innerBlocklyDiv: innerBlocklyDiv.current,
+      };
     }
   }, [options.horizontalLayout, options.toolboxPosition]);
 

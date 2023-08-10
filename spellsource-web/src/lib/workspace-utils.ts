@@ -1,7 +1,7 @@
 import { Xml } from "blockly";
 import { extend, filter, find, fromPairs, isArray, isEmpty, isPlainObject, map, merge } from "lodash";
 import format from "string-format";
-import * as BlocklyMiscUtils from "./blockly-misc-utils";
+import * as BlocklyMiscUtils from "./blockly-spellsource-utils";
 import { RgbColour } from "../components/blockly/field-colour-hsv-sliders";
 
 export const isNumeric = (str) => !isNaN(str) && !isNaN(parseFloat(str));

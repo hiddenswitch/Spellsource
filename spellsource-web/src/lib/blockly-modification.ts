@@ -10,10 +10,10 @@ import Blockly, {
 } from "blockly";
 import { FieldLabelPlural } from "../components/blockly/field-label-plural";
 import { FieldLabelSerializableHidden } from "../components/blockly/field-label-serializable-hidden";
-import * as BlocklyMiscUtils from "./blockly-misc-utils";
-import { refreshBlock } from "./blockly-misc-utils";
+import { refreshBlock } from "./blockly-spellsource-utils";
 import * as DefaultOverrides from "./default-overrides";
 import { Field } from "blockly/core/renderers/measurables/field";
+import { newBlock } from "./blockly-utils";
 
 export function modifyAll() {
   Blockly.utils.colour.setHsvSaturation(0.65);
@@ -108,7 +108,7 @@ function autoDecoration() {
 
         if (otherConnection.getCheck().includes("Properties")) {
           if (bumpee.type.startsWith("Aura_")) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_auras");
+            addedBlock = newBlock(workspace, "Property_auras");
             addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection);
           } else if (bumpee.type.startsWith("Spell")) {
             if (
@@ -119,14 +119,14 @@ function autoDecoration() {
                 ?.toLowerCase()
                 .includes("aftermath")
             ) {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_aftermath");
+              addedBlock = newBlock(workspace, "Property_aftermath");
               addedBlock.getInput("deathrattle").connection.connect(bumpee.outputConnection);
             } else {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener1");
+              addedBlock = newBlock(workspace, "Property_opener1");
               addedBlock.getInput("battlecry.spell").connection.connect(bumpee.outputConnection);
             }
           } else if (bumpee.type.startsWith("TargetSelection")) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener1");
+            addedBlock = newBlock(workspace, "Property_opener1");
             addedBlock.getInput("battlecry.targetSelection").connection.connect(bumpee.outputConnection);
           } else if (bumpee.type.startsWith("ValueProvider")) {
             if (
@@ -137,10 +137,10 @@ function autoDecoration() {
                 ?.toLowerCase()
                 .includes("if")
             ) {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_cost_modifier_conditional");
+              addedBlock = newBlock(workspace, "Property_cost_modifier_conditional");
               addedBlock.getInput("manaCostModifier.ifTrue").connection.connect(bumpee.outputConnection);
             } else {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_cost_modifier");
+              addedBlock = newBlock(workspace, "Property_cost_modifier");
               addedBlock.getInput("manaCostModifier").connection.connect(bumpee.outputConnection);
             }
           } else if (bumpee.type.startsWith("Condition")) {
@@ -152,22 +152,22 @@ function autoDecoration() {
                 ?.toLowerCase()
                 .includes("opener")
             ) {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_opener2");
+              addedBlock = newBlock(workspace, "Property_opener2");
               addedBlock.getInput("battlecry.condition").connection.connect(bumpee.outputConnection);
             } else {
-              addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_condition");
+              addedBlock = newBlock(workspace, "Property_condition");
               addedBlock.getInput("condition").connection.connect(bumpee.outputConnection);
             }
           } else if (bumpee.type.startsWith("Property_attributes_")) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes");
+            addedBlock = newBlock(workspace, "Property_attributes");
             addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection);
           } else if (bumpee.type.startsWith("Attribute")) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes");
+            addedBlock = newBlock(workspace, "Property_attributes");
             let anotherBlock;
             if (bumpee.json?.output === "IntAttribute") {
-              anotherBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_int");
+              anotherBlock = newBlock(workspace, "Property_attributes_int");
             } else {
-              anotherBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_boolean");
+              anotherBlock = newBlock(workspace, "Property_attributes_boolean");
             }
             anotherBlock.getInput("attribute").connection.connect(bumpee.outputConnection);
             if (anotherBlock.initSvg) {
@@ -175,27 +175,27 @@ function autoDecoration() {
             }
             addedBlock.getFirstStatementConnection().connect(anotherBlock.previousConnection);
           } else if (bumpee.type.startsWith("Enchantment")) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_triggers");
+            addedBlock = newBlock(workspace, "Property_triggers");
             addedBlock.getFirstStatementConnection().connect(bumpee.previousConnection);
           } else if (bumpee.type.startsWith("Trigger")) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_triggers");
-            let anotherBlock = BlocklyMiscUtils.newBlock(workspace, "Enchantment");
+            addedBlock = newBlock(workspace, "Property_triggers");
+            let anotherBlock = newBlock(workspace, "Enchantment");
             anotherBlock.getInput("eventTrigger").connection.connect(bumpee.outputConnection);
             if ("initSvg" in anotherBlock) {
               anotherBlock.initSvg();
             }
             addedBlock.getFirstStatementConnection().connect(anotherBlock.previousConnection);
           } else if (bumpee.type.startsWith("Art_")) {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_sprite");
+            addedBlock = newBlock(workspace, "Property_sprite");
             addedBlock.getInput("art.sprite.named").connection.connect(bumpee.outputConnection);
           } else {
             continue;
           }
         } else if (otherConnection.getCheck().includes("Property_attributes") && bumpee.type.startsWith("Attribute_")) {
           if (bumpee.json?.output === "IntAttribute") {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_int");
+            addedBlock = newBlock(workspace, "Property_attributes_int");
           } else {
-            addedBlock = BlocklyMiscUtils.newBlock(workspace, "Property_attributes_boolean");
+            addedBlock = newBlock(workspace, "Property_attributes_boolean");
           }
           addedBlock.getInput("attribute").connection.connect(bumpee.outputConnection);
         } else if (
@@ -206,7 +206,7 @@ function autoDecoration() {
             (otherConnection.getCheck().includes("Filters") && bumpee.type.startsWith("Filter_"))) &&
           !bumpee.type.endsWith("I")
         ) {
-          addedBlock = BlocklyMiscUtils.newBlock(workspace, bumpee.type.split("_")[0] + "_I");
+          addedBlock = newBlock(workspace, bumpee.type.split("_")[0] + "_I");
           addedBlock.getInput("i").connection.connect(bumpee.outputConnection);
         } else {
           continue;

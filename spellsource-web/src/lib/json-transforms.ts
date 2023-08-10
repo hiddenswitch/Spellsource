@@ -1,7 +1,7 @@
-import { BlockDef } from "../__generated__/blocks";
 import { CardDef } from "../components/collection/card-display";
 import deepmerge from "deepmerge";
 import path from "path";
+import { BlockDef } from "./blockly-types";
 
 const isString = (str) => typeof str === "string";
 

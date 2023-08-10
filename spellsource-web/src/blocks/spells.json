@@ -6043,5 +6043,18 @@
     ],
     "mutator": "plus_minus_rows",
     "data": "BLOCKLY_ARRAY"
+  },
+  {
+    "type": "Spell_TestShadow",
+    "output": null,
+    "colour": 260,
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_label",
+        "name": "name",
+        "text": "ShadowTest"
+      }
+    ]
   }
 ]

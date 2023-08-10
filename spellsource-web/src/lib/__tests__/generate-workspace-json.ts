@@ -21,7 +21,7 @@ import * as WorkspaceUtils from "../workspace-utils";
 import * as JsonConversionUtils from "../json-conversion-utils";
 import { Workspace } from "blockly";
 import { beforeAll, describe, expect, test } from "@jest/globals";
-import * as BlocklyMiscUtils from "../blockly-misc-utils";
+import * as BlocklyMiscUtils from "../blockly-spellsource-utils";
 import SpellsourceTesting from "../spellsource-testing";
 import java from "java";
 import { getAllBlockJson, getAllIcons, readAllJsonSync } from "../fs-utils";

@@ -1,5 +1,6 @@
 import Blockly from "blockly";
-import { BlockArgDef } from "../__generated__/blocks";
+
+import { BlockArgDef } from "./blockly-types";
 
 export function overrideAll() {
   math();

@@ -1,5 +1,5 @@
 import Blockly, { BlockSvg } from "blockly";
-import * as BlocklyMiscUtils from "./blockly-misc-utils";
+import * as BlocklyMiscUtils from "./blockly-spellsource-utils";
 import { Renderer } from "blockly/core/renderers/geras/renderer";
 import { RenderInfo } from "blockly/core/renderers/geras/info";
 

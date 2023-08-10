@@ -3,8 +3,8 @@ import path from "path";
 import fs from "fs";
 import probe from "probe-image-size";
 import { ImageDef } from "../__generated__/client";
-import { BlockDef } from "../__generated__/blocks";
 import { transformBlock } from "./json-transforms";
+import { BlockDef } from "./blockly-types";
 
 /**
  * Parses the JSON for all matching files

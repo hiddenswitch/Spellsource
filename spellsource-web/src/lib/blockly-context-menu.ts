@@ -3,7 +3,8 @@ import { BlockSvg, ContextMenuRegistry, Toolbox, Workspace } from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
 import { openFile, saveFile } from "./fs-utils";
 import * as WorkspaceUtils from "./workspace-utils";
-import * as BlocklyMiscUtils from "./blockly-misc-utils";
+import * as BlocklyMiscUtils from "./blockly-spellsource-utils";
+import { newBlock, searchToolbox } from "./blockly-utils";
 import { InitBlockOptions } from "../components/card-editor-workspace";
 
 export const registerAll = (options: InitBlockOptions) => {
@@ -65,16 +66,12 @@ const saveToFile: ContextMenuRegistry.RegistryItem = {
   scopeType: ContextMenuRegistry.ScopeType.BLOCK,
   preconditionFn: () => (process.env.NODE_ENV === "production" ? "hidden" : "enabled"),
   callback: ({ block }) => {
-    const xml = Blockly.Xml.blockToDom(block, false);
-
-    // Serialize XML or DocumentFragment to string
-    const serializer = new XMLSerializer();
-    const xmlString = serializer.serializeToString(xml);
+    const blockJson = Blockly.serialization.blocks.save(block);
 
     saveFile(
-      xmlString,
-      "application/xml",
-      (block.getInputTargetBlock("name")?.getFieldValue("text") || block.type) + ".xml"
+      JSON.stringify(blockJson, null, 2),
+      "application/json",
+      (block.getInputTargetBlock("name")?.getFieldValue("text") || block.type) + ".json"
     );
   },
 };
@@ -86,20 +83,11 @@ export const openFromFile: ContextMenuRegistry.RegistryItem = {
   scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
   preconditionFn: ({ workspace }) => (workspace.targetWorkspace ? "hidden" : "enabled"),
   callback: ({ workspace }) =>
-    openFile(".xml", (result) => {
-      const dom = Blockly.utils.xml.textToDom(result);
+    openFile(".json", (result) => {
+      const blockJson = JSON.parse(result);
 
-      for (const nextBlock of dom.getElementsByTagName("block")) {
-        for (const childNode of nextBlock.childNodes) {
-          const tagName = (childNode as Element).tagName;
-          if (tagName !== "data" && tagName !== "field" && tagName !== "next") {
-            nextBlock.setAttribute("collapsed", "false");
-            break;
-          }
-        }
-      }
+      const block = Blockly.serialization.blocks.append(blockJson, workspace);
 
-      const block = Blockly.Xml.domToBlock(dom, workspace);
       block.setCollapsed(false);
 
       block.bumpNeighbours();
@@ -117,7 +105,7 @@ const showInToolbox: ContextMenuRegistry.RegistryItem = {
       ? "enabled"
       : "hidden",
   callback: ({ block }) => {
-    BlocklyMiscUtils.searchToolbox(block.type, block.workspace.targetWorkspace || block.workspace);
+    searchToolbox(block.type, block.workspace.targetWorkspace || block.workspace);
   },
 };
 
@@ -131,18 +119,18 @@ const getReferenceBlock: ContextMenuRegistry.RegistryItem = {
     const workspace = block.workspace.isFlyout ? block.workspace.targetWorkspace : block.workspace;
     const card = block.cardScript || WorkspaceUtils.xmlToCardScript(Blockly.Xml.blockToDom(block, true));
 
-    const newBlock: BlockSvg = BlocklyMiscUtils.newBlock(
+    const refBlock: BlockSvg = newBlock(
       workspace,
       block.type == "Starter_CLASS" ? "HeroClass_REFERENCE" : "Card_REFERENCE"
     ) as BlockSvg;
-    newBlock.setFieldValue(block.getFieldValue("id"), "id");
-    newBlock.setFieldValue(BlocklyMiscUtils.cardMessage(card), "name");
+    refBlock.setFieldValue(block.getFieldValue("id"), "id");
+    refBlock.setFieldValue(BlocklyMiscUtils.cardMessage(card), "name");
 
-    newBlock.initSvg();
-    BlocklyMiscUtils.refreshBlock(newBlock);
+    refBlock.initSvg();
+    BlocklyMiscUtils.refreshBlock(refBlock);
 
-    newBlock.moveTo(block.getRelativeToSurfaceXY());
-    newBlock.select();
+    refBlock.moveTo(block.getRelativeToSurfaceXY());
+    refBlock.select();
   },
 };
 
