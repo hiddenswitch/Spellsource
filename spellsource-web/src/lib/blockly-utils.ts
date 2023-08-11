@@ -1,7 +1,7 @@
 import { BlockArgDef, BlockDef, BlocklyShadowState } from "./blockly-types";
 import Blockly, { Block, BlockSvg, Connection, Toolbox, ToolboxCategory, WorkspaceSvg } from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
-import { OptionalRows, OptionalRowsOptions } from "../components/blockly/optional-rows";
+import { addMutatorBlock, OptionalRows } from "../components/blockly/optional-rows";
 import { BlockInfo, FlyoutItemInfo } from "blockly/core/utils/toolbox";
 import { ConnectionState } from "blockly/core/serialization/blocks";
 
@@ -137,35 +137,7 @@ export const addBlock = (block: BlockDef) => {
   JsonConversionUtils.addBlockToMap(block);
 
   if (block.mutator === OptionalRows) {
-    const newBlock: BlockDef = {
-      type: block.type + "_container",
-      inputsInline: false,
-      message0: block.message0,
-      args0: block.args0,
-      colour: block.colour,
-      nextStatement: null,
-    };
-
-    const options = block.mutatorOptions as OptionalRowsOptions;
-
-    const args = {} as Record<string, boolean>;
-
-    for (let value of Object.values(options.optional)) {
-      args[value] = options.defaults?.[value] ?? true;
-    }
-
-    Object.entries(args).forEach(([name, checked], index) => {
-      newBlock[`message${index}`] = `${name}: %1`;
-      newBlock[`args${index}`] = [
-        {
-          type: "field_checkbox",
-          name,
-          checked,
-        },
-      ];
-    });
-
-    addBlock(newBlock);
+    addMutatorBlock(block);
   }
 
   return (Blockly.Blocks[block.type!] = {

@@ -1,7 +1,7 @@
 import Blockly, { Block, BlockSvg, icons } from "blockly";
 import { MutatorFn, MutatorMixin } from "./mutators";
 import { BlockArgDef, BlockDef } from "../../lib/blockly-types";
-import { newBlock, reInitBlock, rowsList } from "../../lib/blockly-utils";
+import { addBlock, newBlock, reInitBlock, rowsList } from "../../lib/blockly-utils";
 
 export interface OptionalRowsOptions {
   optional: Record<`${number}`, string>;
@@ -101,4 +101,53 @@ export const OptionalRowsFn: MutatorFn<OptionalRowsMutator> = function (this) {
   this.initMutator();
   this.setMutator(new icons.MutatorIcon([], this as BlockSvg));
   this.rebuildShape_();
+};
+
+export const addMutatorBlock = (block: BlockDef) => {
+  const options = block.mutatorOptions as OptionalRowsOptions;
+
+  const args = {} as Record<string, boolean>;
+
+  for (let value of Object.values(options.optional)) {
+    args[value] = options.defaults?.[value] ?? true;
+  }
+
+  const argLength = Object.values(args).length;
+  const columns = Math.ceil(argLength / 15);
+
+  if (columns == 0) {
+    return;
+  }
+
+  const newBlock: BlockDef = {
+    type: block.type + "_container",
+    inputsInline: false,
+    message0: block.message0,
+    args0: block.args0,
+    colour: block.colour,
+    nextStatement: null,
+  };
+
+  let messageI = "";
+  let argsI = [];
+  let row = 1;
+
+  Object.entries(args).forEach(([name, checked], index) => {
+    messageI += `${name}: %${(index % columns) + 1} `;
+    argsI.push({
+      type: "field_checkbox",
+      name,
+      checked,
+    });
+
+    if ((index + 1) % columns === 0 || index === argLength - 1) {
+      newBlock[`message${row}`] = messageI;
+      newBlock[`args${row}`] = argsI;
+      messageI = "";
+      argsI = [];
+      row++;
+    }
+  });
+
+  addBlock(newBlock);
 };

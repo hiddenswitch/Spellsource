@@ -1,11 +1,11 @@
 import * as Blockly from "blockly";
 import { BlockSvg, ContextMenuRegistry, Toolbox, Workspace } from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
-import { openFile, saveFile } from "./fs-utils";
 import * as WorkspaceUtils from "./workspace-utils";
 import * as BlocklyMiscUtils from "./blockly-spellsource-utils";
 import { newBlock, searchToolbox } from "./blockly-utils";
 import { InitBlockOptions } from "../components/card-editor-workspace";
+import { openFile, saveFile } from "./file-dialogs";
 
 export const registerAll = (options: InitBlockOptions) => {
   ContextMenuRegistry.registry.register(importCardScript(options));
