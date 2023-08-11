@@ -85,9 +85,10 @@ tasks.register("generateTypeScriptClient", GenerateTask) {
   configOptions.putAll([
           'fileContentDataType'   : 'Buffer', // this is apparently substituted in verbatim and should be 'Blob' for browsers
           'enumUnknownDefaultCase': 'true',
-          'platform'              : 'node', // or 'browser' or 'deno'
+          'platform'              : 'browser', // or 'browser' or 'deno'
           'supportsES6'           : 'true',
           'useObjectParameters'   : 'true',
-          'framework'             : 'fetch-api'
+          'framework'             : 'fetch-api',
+          'modelPropertyNaming'   : 'original'
   ])
 }

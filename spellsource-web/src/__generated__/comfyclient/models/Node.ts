@@ -16,7 +16,7 @@ import { HttpFile } from '../http/http';
 export class Node {
     'input'?: NodeInput;
     'output'?: Array<string>;
-    'outputName'?: Array<string>;
+    'output_name'?: Array<string>;
     'name'?: string;
     'description'?: string;
     'category'?: string;
@@ -37,7 +37,7 @@ export class Node {
             "format": ""
         },
         {
-            "name": "outputName",
+            "name": "output_name",
             "baseName": "output_name",
             "type": "Array<string>",
             "format": ""

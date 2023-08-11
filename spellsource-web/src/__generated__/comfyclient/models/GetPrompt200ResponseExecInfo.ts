@@ -13,13 +13,13 @@
 import { HttpFile } from '../http/http';
 
 export class GetPrompt200ResponseExecInfo {
-    'queueRemaining'?: number;
+    'queue_remaining'?: number;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "queueRemaining",
+            "name": "queue_remaining",
             "baseName": "queue_remaining",
             "type": "number",
             "format": ""

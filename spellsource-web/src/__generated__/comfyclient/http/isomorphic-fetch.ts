@@ -1,6 +1,6 @@
 import {HttpLibrary, RequestContext, ResponseContext} from './http';
 import { from, Observable } from '../rxjsStub';
-import fetch from "node-fetch";
+import "whatwg-fetch";
 
 export class IsomorphicFetchHttpLibrary implements HttpLibrary {
 
@@ -12,7 +12,7 @@ export class IsomorphicFetchHttpLibrary implements HttpLibrary {
             method: method,
             body: body as any,
             headers: request.getHeaders(),
-            agent: request.getAgent(),
+            credentials: "same-origin"
         }).then((resp: any) => {
             const headers: { [name: string]: string } = {};
             resp.headers.forEach((value: string, name: string) => {
@@ -21,7 +21,7 @@ export class IsomorphicFetchHttpLibrary implements HttpLibrary {
 
             const body = {
               text: () => resp.text(),
-              binary: () => resp.buffer()
+              binary: () => resp.blob()
             };
             return new ResponseContext(resp.status, headers, body);
         });

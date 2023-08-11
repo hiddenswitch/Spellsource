@@ -26,7 +26,7 @@ export class WorkflowNodesInner {
     'inputs'?: Array<WorkflowNodesInnerInputsInner>;
     'outputs'?: Array<WorkflowNodesInnerOutputsInner>;
     'properties'?: any;
-    'widgetsValues'?: Array<string>;
+    'widgets_values'?: Array<string>;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -92,7 +92,7 @@ export class WorkflowNodesInner {
             "format": ""
         },
         {
-            "name": "widgetsValues",
+            "name": "widgets_values",
             "baseName": "widgets_values",
             "type": "Array<string>",
             "format": ""

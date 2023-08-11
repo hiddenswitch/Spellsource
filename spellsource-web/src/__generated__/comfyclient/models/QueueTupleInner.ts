@@ -16,13 +16,13 @@ import { PromptNode } from '../models/PromptNode';
 import { HttpFile } from '../http/http';
 
 export class QueueTupleInner {
-    'extraPnginfo'?: ExtraDataExtraPnginfo;
+    'extra_pnginfo'?: ExtraDataExtraPnginfo;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "extraPnginfo",
+            "name": "extra_pnginfo",
             "baseName": "extra_pnginfo",
             "type": "ExtraDataExtraPnginfo",
             "format": ""

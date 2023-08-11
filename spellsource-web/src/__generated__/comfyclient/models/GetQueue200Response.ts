@@ -14,20 +14,20 @@ import { QueueTupleInner } from '../models/QueueTupleInner';
 import { HttpFile } from '../http/http';
 
 export class GetQueue200Response {
-    'queueRunning'?: Array<Array<QueueTupleInner>>;
-    'queuePending'?: Array<Array<QueueTupleInner>>;
+    'queue_running'?: Array<Array<QueueTupleInner>>;
+    'queue_pending'?: Array<Array<QueueTupleInner>>;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "queueRunning",
+            "name": "queue_running",
             "baseName": "queue_running",
             "type": "Array<Array<QueueTupleInner>>",
             "format": ""
         },
         {
-            "name": "queuePending",
+            "name": "queue_pending",
             "baseName": "queue_pending",
             "type": "Array<Array<QueueTupleInner>>",
             "format": ""

@@ -15,8 +15,8 @@ import { WorkflowNodesInner } from '../models/WorkflowNodesInner';
 import { HttpFile } from '../http/http';
 
 export class Workflow {
-    'lastNodeId'?: number;
-    'lastLinkId'?: number;
+    'last_node_id'?: number;
+    'last_link_id'?: number;
     'nodes'?: Array<WorkflowNodesInner>;
     'links'?: Array<Array<WorkflowLinksInnerInner>>;
     'groups'?: Array<any>;
@@ -28,13 +28,13 @@ export class Workflow {
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "lastNodeId",
+            "name": "last_node_id",
             "baseName": "last_node_id",
             "type": "number",
             "format": ""
         },
         {
-            "name": "lastLinkId",
+            "name": "last_link_id",
             "baseName": "last_link_id",
             "type": "number",
             "format": ""

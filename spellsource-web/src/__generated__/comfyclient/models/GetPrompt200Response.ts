@@ -14,13 +14,13 @@ import { GetPrompt200ResponseExecInfo } from '../models/GetPrompt200ResponseExec
 import { HttpFile } from '../http/http';
 
 export class GetPrompt200Response {
-    'execInfo'?: GetPrompt200ResponseExecInfo;
+    'exec_info'?: GetPrompt200ResponseExecInfo;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "execInfo",
+            "name": "exec_info",
             "baseName": "exec_info",
             "type": "GetPrompt200ResponseExecInfo",
             "format": ""

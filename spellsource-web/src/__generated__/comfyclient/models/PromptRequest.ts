@@ -15,18 +15,18 @@ import { PromptNode } from '../models/PromptNode';
 import { HttpFile } from '../http/http';
 
 export class PromptRequest {
-    'clientId'?: string;
+    'client_id'?: string;
     /**
     * The keys are stringified integers corresponding to nodes.  You can retrieve the last prompt run using GET /api/v1/prompts 
     */
     'prompt': { [key: string]: PromptNode; };
-    'extraData'?: ExtraData;
+    'extra_data'?: ExtraData;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "clientId",
+            "name": "client_id",
             "baseName": "client_id",
             "type": "string",
             "format": ""
@@ -38,7 +38,7 @@ export class PromptRequest {
             "format": ""
         },
         {
-            "name": "extraData",
+            "name": "extra_data",
             "baseName": "extra_data",
             "type": "ExtraData",
             "format": ""

@@ -15,6 +15,8 @@ import { PlusMinusRows, PlusMinusRowsFn, PlusMinusRowsMixin } from "../component
 import * as BlocklyContextMenu from "./blockly-context-menu";
 import SpellsourceRenderer from "./spellsource-renderer";
 import { SpellsourceConnectionChecker } from "../components/blockly/connection-checker";
+import { createConfiguration, DefaultApi, PromptNode } from "../__generated__/comfyclient";
+import sdxl from "../__generated__/sdxl-ordinary.json";
 
 export const registerAll = (options?: InitBlockOptions) => {
   Blockly.fieldRegistry.register(FieldHidden.type, FieldHidden);
@@ -46,9 +48,29 @@ export const registerAll = (options?: InitBlockOptions) => {
 
   Blockly.blockRendering.register(SpellsourceRenderer.name, SpellsourceRenderer);
 
-  FieldButton.OnClicks["test"] = (field) => {
+  FieldButton.OnClicks["test"] = async (field) => {
+    const block = field.getSourceBlock();
     const progressBar = field.getSourceBlock().getField("progress") as FieldProgressBar;
-    progressBar.setProgress(Math.random());
+
+    const api = new DefaultApi(createConfiguration());
+
+    const promptText = JSON.stringify(sdxl)
+      .replace("$POSITIVE_TEXT", block.getFieldValue("positive_text"))
+      .replace("$NEGATIVE_TEXT", block.getFieldValue("negative_text"));
+
+    const prompt = JSON.parse(promptText) as Record<string, PromptNode>;
+
+    for (let node of Object.values(prompt)) {
+      if (node.class_type === "KSampler") {
+        node.inputs["seed"] = Math.round(Math.random() * 10000000);
+      }
+    }
+
+    const digest = await api.apiV1PromptsPost({ requestBody: prompt });
+
+    if (digest) {
+      const image = await api.apiV1ImagesDigestGet({ digest });
+    }
   };
 
   Blockly.registry.register(

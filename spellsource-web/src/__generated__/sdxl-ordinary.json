@@ -1,0 +1,175 @@
+{
+  "3": {
+    "inputs": {
+      "seed": 732984013877771,
+      "steps": 25,
+      "cfg": 100,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "10",
+        0
+      ],
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "latent_image": [
+        "5",
+        0
+      ]
+    },
+    "class_type": "KSampler"
+  },
+  "4": {
+    "inputs": {
+      "ckpt_name": "sd_xl_base_1.0.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple"
+  },
+  "5": {
+    "inputs": {
+      "width": 512,
+      "height": 512,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage"
+  },
+  "6": {
+    "inputs": {
+      "text": "$POSITIVE_TEXT",
+      "clip": [
+        "10",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode"
+  },
+  "7": {
+    "inputs": {
+      "text": "$NEGATIVE_TEXT",
+      "clip": [
+        "10",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode"
+  },
+  "8": {
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "4",
+        2
+      ]
+    },
+    "class_type": "VAEDecode"
+  },
+  "10": {
+    "inputs": {
+      "lora_name": "pixel-art-xl-v1.1.safetensors",
+      "strength_model": 1,
+      "strength_clip": 1,
+      "model": [
+        "4",
+        0
+      ],
+      "clip": [
+        "4",
+        1
+      ]
+    },
+    "class_type": "LoraLoader"
+  },
+  "15": {
+    "inputs": {
+      "filename_prefix": "Downscale",
+      "images": [
+        "26",
+        0
+      ]
+    },
+    "class_type": "SaveImage"
+  },
+  "16": {
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "PreviewImage"
+  },
+  "18": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "scale_by": 0.125,
+      "image": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "ImageScaleBy"
+  },
+  "19": {
+    "inputs": {
+      "threshold": 250,
+      "mask": [
+        "21",
+        0
+      ]
+    },
+    "class_type": "BinarizeMask"
+  },
+  "21": {
+    "inputs": {
+      "model": "u2net",
+      "image": [
+        "18",
+        0
+      ]
+    },
+    "class_type": "ImageEstimateForegroundMask"
+  },
+  "25": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "scale_by": 8,
+      "image": [
+        "26",
+        0
+      ]
+    },
+    "class_type": "ImageScaleBy"
+  },
+  "26": {
+    "inputs": {
+      "image": [
+        "18",
+        0
+      ],
+      "mask": [
+        "19",
+        0
+      ]
+    },
+    "class_type": "ImageCutout"
+  },
+  "27": {
+    "inputs": {
+      "images": [
+        "25",
+        0
+      ]
+    },
+    "class_type": "PreviewImage"
+  }
+}

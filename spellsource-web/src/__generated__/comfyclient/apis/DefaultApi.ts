@@ -2,8 +2,6 @@
 import {BaseAPIRequestFactory, RequiredError, COLLECTION_FORMATS} from './baseapi';
 import {Configuration} from '../configuration';
 import {RequestContext, HttpMethod, ResponseContext, HttpFile} from '../http/http';
-import  FormData from "form-data";
-import { URLSearchParams } from 'url';
 import {ObjectSerializer} from '../models/ObjectSerializer';
 import {ApiException} from './exception';
 import {canConsumeForm, isCodeInRange} from '../util';
@@ -443,7 +441,7 @@ export class DefaultApiRequestFactory extends BaseAPIRequestFactory {
         if (image !== undefined) {
              // TODO: replace .append with .set
              if (localVarFormParams instanceof FormData) {
-                 localVarFormParams.append('image', image.data, image.name);
+                 localVarFormParams.append('image', image, image.name);
              }
         }
 

@@ -6,19 +6,20 @@
     "hat": "cap",
     "message0": "Art Factory",
     "args0": [],
-    "message1": "Keywords",
-    "args1": [],
-    "message2": "%1",
+    "message1": "Positive Text %1",
+    "args1": [
+      {
+        "type": "field_multilinetext",
+        "name": "positive_text",
+        "text": "an isometric pixel art illustration of a pixel art cat"
+      }
+    ],
+    "message2": "Negative Text %1",
     "args2": [
       {
-        "type": "input_statement",
-        "name": "keywords",
-        "check": [
-          "ArtGen_keyword"
-        ],
-        "shadow": {
-          "type": "ArtGen_keyword_SHADOW"
-        }
+        "type": "field_multilinetext",
+        "name": "negative_text",
+        "text": "text, watermark"
       }
     ],
     "message3": "Create %1",
@@ -35,7 +36,7 @@
       {
         "type": "field_progress_bar",
         "name": "progress",
-        "progress": 0.5,
+        "progress": 0.0,
         "width": 120
       }
     ]

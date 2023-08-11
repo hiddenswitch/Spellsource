@@ -11,13 +11,12 @@
  */
 
 import { PromptNodeInputsValue } from "../models/PromptNodeInputsValue";
-import { HttpFile } from "../http/http";
 
 export class PromptNode {
   /**
    * The node\'s class type, which maps to a class in NODE_CLASS_MAPPINGS.
    */
-  "classType": string;
+  "class_type": string;
   /**
    * The inputs for the node, which can be scalar values or references to other nodes\' outputs.
    */
@@ -25,13 +24,13 @@ export class PromptNode {
   /**
    * A string representing whether the node has changed (optional).
    */
-  "isChanged"?: string;
+  "is_changed"?: string;
 
   static readonly discriminator: string | undefined = undefined;
 
   static readonly attributeTypeMap: Array<{ name: string; baseName: string; type: string; format: string }> = [
     {
-      name: "classType",
+      name: "class_type",
       baseName: "class_type",
       type: "string",
       format: "",
@@ -43,7 +42,7 @@ export class PromptNode {
       format: "",
     },
     {
-      name: "isChanged",
+      name: "is_changed",
       baseName: "is_changed",
       type: "string",
       format: "",

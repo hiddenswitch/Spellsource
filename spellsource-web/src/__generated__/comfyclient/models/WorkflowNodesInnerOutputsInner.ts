@@ -16,7 +16,7 @@ export class WorkflowNodesInnerOutputsInner {
     'name'?: string;
     'type'?: string;
     'links'?: Array<number>;
-    'slotIndex'?: number;
+    'slot_index'?: number;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -40,7 +40,7 @@ export class WorkflowNodesInnerOutputsInner {
             "format": ""
         },
         {
-            "name": "slotIndex",
+            "name": "slot_index",
             "baseName": "slot_index",
             "type": "number",
             "format": ""
