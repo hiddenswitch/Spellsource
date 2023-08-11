@@ -66,7 +66,7 @@ tasks.register("downloadModels") {
 }
 
 tasks.register('run') {
-  group('appmana')
+  group('spellsource')
   dependsOn 'install', 'downloadModels'
   doLast {
     // Run the comfyui binary from the virtual environment
@@ -77,7 +77,7 @@ tasks.register('run') {
 }
 
 tasks.register("generateTypeScriptClient", GenerateTask) {
-  group('appmana')
+  group('spellsource')
   inputSpec.set(project.layout.projectDirectory.file("$sitePackagesDir/comfy/api/openapi.yaml").asFile.path)
   outputDir.set(project.layout.buildDirectory.dir("comfyclient").map { it.asFile.path })
   generatorName = 'typescript'
