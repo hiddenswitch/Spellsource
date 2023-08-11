@@ -1,6 +1,6 @@
 {
-  "last_node_id": 17,
-  "last_link_id": 21,
+  "last_node_id": 27,
+  "last_link_id": 37,
   "nodes": [
     {
       "id": 4,
@@ -50,49 +50,11 @@
       ]
     },
     {
-      "id": 7,
-      "type": "CLIPTextEncode",
-      "pos": [
-        374,
-        389
-      ],
-      "size": {
-        "0": 425.27801513671875,
-        "1": 180.6060791015625
-      },
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 16
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            6
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPTextEncode"
-      },
-      "widgets_values": [
-        "text, watermark"
-      ]
-    },
-    {
       "id": 5,
       "type": "EmptyLatentImage",
       "pos": [
-        473,
-        609
+        437,
+        658
       ],
       "size": {
         "0": 315,
@@ -121,49 +83,170 @@
       ]
     },
     {
-      "id": 6,
-      "type": "CLIPTextEncode",
+      "id": 16,
+      "type": "PreviewImage",
       "pos": [
-        399,
-        115
+        1504,
+        238
       ],
       "size": {
-        "0": 422.84503173828125,
-        "1": 164.31304931640625
+        "0": 210,
+        "1": 246
       },
       "flags": {},
-      "order": 3,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 11
+          "name": "images",
+          "type": "IMAGE",
+          "link": 19
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 18,
+      "type": "ImageScaleBy",
+      "pos": [
+        1096,
+        671
+      ],
+      "size": {
+        "0": 315,
+        "1": 82
+      },
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 24
         }
       ],
       "outputs": [
         {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
+          "name": "IMAGE",
+          "type": "IMAGE",
           "links": [
-            4
+            33,
+            34
           ],
+          "shape": 3,
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "CLIPTextEncode"
+        "Node name for S&R": "ImageScaleBy"
       },
       "widgets_values": [
-        "an isometric pixel art illustration of a pixel art chicken"
+        "nearest-exact",
+        0.125
+      ]
+    },
+    {
+      "id": 26,
+      "type": "ImageCutout",
+      "pos": [
+        1971,
+        913
+      ],
+      "size": {
+        "0": 210,
+        "1": 46
+      },
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 33
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 32
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            35,
+            36
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageCutout"
+      }
+    },
+    {
+      "id": 27,
+      "type": "PreviewImage",
+      "pos": [
+        2312,
+        231
+      ],
+      "size": [
+        210,
+        246
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 37
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 15,
+      "type": "SaveImage",
+      "pos": [
+        2310,
+        552
+      ],
+      "size": [
+        315,
+        270
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 35
+        }
+      ],
+      "properties": {},
+      "widgets_values": [
+        "Downscale"
       ]
     },
     {
       "id": 10,
       "type": "LoraLoader",
       "pos": [
-        -73,
-        247
+        -106,
+        258
       ],
       "size": {
         "0": 315,
@@ -215,24 +298,29 @@
       ]
     },
     {
-      "id": 11,
-      "type": "ImageKCentroidAutoDownscale",
+      "id": 8,
+      "type": "VAEDecode",
       "pos": [
-        1234,
-        638
+        1218,
+        195
       ],
       "size": {
-        "0": 315,
-        "1": 58
+        "0": 210,
+        "1": 46
       },
       "flags": {},
-      "order": 7,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
-          "name": "image",
-          "type": "IMAGE",
-          "link": 14
+          "name": "samples",
+          "type": "LATENT",
+          "link": 7
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 8
         }
       ],
       "outputs": [
@@ -240,25 +328,216 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            17
+            19,
+            24
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      }
+    },
+    {
+      "id": 6,
+      "type": "CLIPTextEncode",
+      "pos": [
+        355,
+        160
+      ],
+      "size": {
+        "0": 422.84503173828125,
+        "1": 164.31304931640625
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            4
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "an isometric pixel art illustration of a pixel art cow"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "CLIPTextEncode",
+      "pos": [
+        306,
+        395
+      ],
+      "size": {
+        "0": 425.27801513671875,
+        "1": 180.6060791015625
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 16
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "text, watermark"
+      ]
+    },
+    {
+      "id": 21,
+      "type": "ImageEstimateForegroundMask",
+      "pos": [
+        1468,
+        600
+      ],
+      "size": {
+        "0": 315,
+        "1": 58
+      },
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 34
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            28
           ],
           "shape": 3,
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "ImageKCentroidAutoDownscale"
+        "Node name for S&R": "ImageEstimateForegroundMask"
       },
       "widgets_values": [
-        2
+        "u2net"
+      ]
+    },
+    {
+      "id": 19,
+      "type": "BinarizeMask",
+      "pos": [
+        1837,
+        599
+      ],
+      "size": {
+        "0": 315,
+        "1": 58
+      },
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 28
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            32
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BinarizeMask"
+      },
+      "widgets_values": [
+        250
+      ]
+    },
+    {
+      "id": 25,
+      "type": "ImageScaleBy",
+      "pos": [
+        1892,
+        245
+      ],
+      "size": {
+        "0": 315,
+        "1": 82
+      },
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 36
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            37
+          ],
+          "shape": 3,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageScaleBy"
+      },
+      "widgets_values": [
+        "nearest-exact",
+        8
       ]
     },
     {
       "id": 3,
       "type": "KSampler",
       "pos": [
-        863,
-        186
+        838,
+        147
       ],
       "size": {
         "0": 315,
@@ -305,187 +584,11 @@
       "widgets_values": [
         732984013877771,
         "fixed",
-        20,
+        25,
         8,
-        "euler",
+        "euler_ancestral",
         "normal",
         1
-      ]
-    },
-    {
-      "id": 8,
-      "type": "VAEDecode",
-      "pos": [
-        1209,
-        188
-      ],
-      "size": {
-        "0": 210,
-        "1": 46
-      },
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "samples",
-          "type": "LATENT",
-          "link": 7
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 8
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            14,
-            19
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAEDecode"
-      }
-    },
-    {
-      "id": 16,
-      "type": "PreviewImage",
-      "pos": [
-        1614.9520918940157,
-        299.2075156053872
-      ],
-      "size": {
-        "0": 210,
-        "1": 246
-      },
-      "flags": {},
-      "order": 8,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 19
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "PreviewImage"
-      }
-    },
-    {
-      "id": 14,
-      "type": "ImageKCentroidDownscale",
-      "pos": [
-        1587,
-        760
-      ],
-      "size": {
-        "0": 315,
-        "1": 106
-      },
-      "flags": {},
-      "order": 9,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "link": 17
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            20
-          ],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "ImageKCentroidDownscale"
-      },
-      "widgets_values": [
-        128,
-        128,
-        2
-      ]
-    },
-    {
-      "id": 15,
-      "type": "SaveImage",
-      "pos": [
-        2419,
-        520
-      ],
-      "size": {
-        "0": 315,
-        "1": 269.9999694824219
-      },
-      "flags": {},
-      "order": 11,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 21
-        }
-      ],
-      "properties": {},
-      "widgets_values": [
-        "Downscale"
-      ]
-    },
-    {
-      "id": 17,
-      "type": "ImageRemoveBackground",
-      "pos": [
-        2020,
-        843
-      ],
-      "size": {
-        "0": 315,
-        "1": 154
-      },
-      "flags": {},
-      "order": 10,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "link": 20
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            21
-          ],
-          "shape": 3,
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "ImageRemoveBackground"
-      },
-      "widgets_values": [
-        "u2net",
-        "enabled",
-        240,
-        10,
-        10
       ]
     }
   ],
@@ -563,28 +666,12 @@
       "MODEL"
     ],
     [
-      14,
-      8,
-      0,
-      11,
-      0,
-      "IMAGE"
-    ],
-    [
       16,
       10,
       1,
       7,
       0,
       "CLIP"
-    ],
-    [
-      17,
-      11,
-      0,
-      14,
-      0,
-      "IMAGE"
     ],
     [
       19,
@@ -595,18 +682,66 @@
       "IMAGE"
     ],
     [
-      20,
-      14,
+      24,
+      8,
       0,
-      17,
+      18,
       0,
       "IMAGE"
     ],
     [
+      28,
       21,
-      17,
+      0,
+      19,
+      0,
+      "MASK"
+    ],
+    [
+      32,
+      19,
+      0,
+      26,
+      1,
+      "MASK"
+    ],
+    [
+      33,
+      18,
+      0,
+      26,
+      0,
+      "IMAGE"
+    ],
+    [
+      34,
+      18,
+      0,
+      21,
+      0,
+      "IMAGE"
+    ],
+    [
+      35,
+      26,
       0,
       15,
+      0,
+      "IMAGE"
+    ],
+    [
+      36,
+      26,
+      0,
+      25,
+      0,
+      "IMAGE"
+    ],
+    [
+      37,
+      25,
+      0,
+      27,
       0,
       "IMAGE"
     ]
