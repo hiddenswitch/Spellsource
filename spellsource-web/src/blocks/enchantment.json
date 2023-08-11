@@ -120,7 +120,7 @@
     "message0": "%1Only active for one turn",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "oneTurn",
         "value": true
       }
@@ -186,7 +186,7 @@
     "message0": "%1Always \"owned\" by the original player",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "persistentOwner",
         "value": true
       }
@@ -205,7 +205,7 @@
     "message0": "%1Counts by the value of the event",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "countByValue",
         "value": true
       }
@@ -224,7 +224,7 @@
     "message0": "%1Stays even if host transforms",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "keepAfterTransform",
         "value": true
       }

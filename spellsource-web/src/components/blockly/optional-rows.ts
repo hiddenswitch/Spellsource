@@ -16,24 +16,10 @@ interface OptionalRowsMutator extends MutatorMixin<OptionalRowsMutator, Record<s
 
 export const OptionalRows = "optional_rows";
 
+const defaultShow = true;
+
 export const OptionalRowsMixin: OptionalRowsMutator = {
   args: undefined,
-  mutationToDom() {
-    const container = Blockly.utils.xml.createElement("mutation");
-    for (let [arg, value] of Object.entries(this.args)) {
-      container.setAttribute(arg, String(value).toUpperCase());
-    }
-    return container;
-  },
-  domToMutation(this, xmlElement: Element): void {
-    this.args = {};
-
-    for (let arg of xmlElement.getAttributeNames()) {
-      this.args[arg] = xmlElement.getAttribute(arg) == "TRUE";
-    }
-
-    this.rebuildShape_();
-  },
   saveExtraState() {
     return this.args;
   },
@@ -88,23 +74,26 @@ export const OptionalRowsMixin: OptionalRowsMutator = {
     const block = Blockly.Blocks[this.type].json as BlockDef;
 
     const options = block.mutatorOptions as OptionalRowsOptions;
+    options.defaults ??= {};
 
     for (let value of Object.values(options?.optional ?? {})) {
-      this.args[value] = options.defaults?.[value] ?? false;
+      this.args[value] = options.defaults[value] ??= defaultShow;
     }
 
     // It's an error to try to add shadow blocks to non-existent connections in the toolbox
-    const inputs = Blockly.Blocks[this.type].toolboxInfo.inputs;
-    rowsList(block).forEach(([, args], index) => {
-      const optional = options.optional[index.toString()];
-      if (!optional) return;
+    const inputs = Blockly.Blocks[this.type].toolboxInfo?.inputs;
+    if (inputs) {
+      rowsList(block).forEach(([, args], index) => {
+        const optional = options.optional[index.toString()];
+        if (!optional) return;
 
-      for (let arg of args) {
-        if (arg.type.startsWith("input") && !options.defaults?.[optional]) {
-          delete inputs[arg.name];
+        for (let arg of args) {
+          if (arg.type.startsWith("input") && !options.defaults[optional]) {
+            delete inputs[arg.name];
+          }
         }
-      }
-    });
+      });
+    }
   },
 };
 

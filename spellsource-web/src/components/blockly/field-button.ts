@@ -10,6 +10,8 @@ export class FieldButton extends Field {
   constructor(value: string, onClickName: string, opt_config?: Object) {
     super(value, null, opt_config);
     this.onClickName = onClickName;
+    this.SERIALIZABLE = false;
+    this.EDITABLE = false;
   }
 
   static fromJson(options) {

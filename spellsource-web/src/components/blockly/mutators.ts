@@ -13,10 +13,6 @@ export abstract class ExtensionMixin<
   MutatedBlock = Mixin & Block
 > implements IPartialBlock
 {
-  abstract mutationToDom(this: MutatedBlock): Element;
-
-  abstract domToMutation(this: MutatedBlock, xmlElement: Element): void;
-
   abstract saveExtraState(this: MutatedBlock): State;
 
   abstract loadExtraState(this: MutatedBlock, state: State);

@@ -1,6 +1,6 @@
 import { InitBlockOptions } from "../components/card-editor-workspace";
 import Blockly from "blockly";
-import { FieldLabelSerializableHidden } from "../components/blockly/field-label-serializable-hidden";
+import { FieldHidden } from "../components/blockly/field-hidden";
 import { FieldLabelPlural } from "../components/blockly/field-label-plural";
 import { FieldButton } from "../components/blockly/field-button";
 import { FieldProgressBar } from "../components/blockly/field-progress-bar";
@@ -17,7 +17,7 @@ import SpellsourceRenderer from "./spellsource-renderer";
 import { SpellsourceConnectionChecker } from "../components/blockly/connection-checker";
 
 export const registerAll = (options?: InitBlockOptions) => {
-  Blockly.fieldRegistry.register(FieldLabelSerializableHidden.type, FieldLabelSerializableHidden);
+  Blockly.fieldRegistry.register(FieldHidden.type, FieldHidden);
   Blockly.fieldRegistry.register(FieldLabelPlural.type, FieldLabelPlural);
   Blockly.fieldRegistry.register(FieldButton.type, FieldButton);
   Blockly.fieldRegistry.register(FieldProgressBar.type, FieldProgressBar);

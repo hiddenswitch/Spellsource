@@ -117,7 +117,7 @@ const getReferenceBlock: ContextMenuRegistry.RegistryItem = {
   preconditionFn: ({ block }) => (block.type.startsWith("Starter_") ? "enabled" : "hidden"),
   callback: ({ block }) => {
     const workspace = block.workspace.isFlyout ? block.workspace.targetWorkspace : block.workspace;
-    const card = block.cardScript || WorkspaceUtils.xmlToCardScript(Blockly.Xml.blockToDom(block, true));
+    const card = block.cardScript || WorkspaceUtils.blockToCardScript(block);
 
     const refBlock: BlockSvg = newBlock(
       workspace,
@@ -142,9 +142,7 @@ const logCardscript: ContextMenuRegistry.RegistryItem = {
   preconditionFn: ({ block }) =>
     block.type.startsWith("Starter_") && process.env.NODE_ENV !== "production" ? "enabled" : "hidden",
   callback: ({ block }) => {
-    const xml = Blockly.Xml.blockToDom(block, true);
-    const json = WorkspaceUtils.xmlToCardScript(xml);
-    console.log(json);
+    console.log(WorkspaceUtils.blockToCardScript(block));
   },
 };
 

@@ -38,7 +38,7 @@
     "colour": 10,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "distinct",
         "value": true
       },
@@ -60,7 +60,7 @@
     "message0": "%1Collectible Cards (weighted)",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CatalogueSource"
       }
@@ -74,7 +74,7 @@
     "message0": "%1All Cards",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "UncollectibleCatalogueSource"
       }
@@ -88,7 +88,7 @@
     "message0": "%1Collectible Cards",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "UnweightedCatalogueSource"
       }
@@ -102,7 +102,7 @@
     "message0": "The unit/item Graveyard",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "GraveyardActorsSource"
       }
@@ -116,7 +116,7 @@
     "message0": "The card Graveyard",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "GraveyardCardsSource"
       }
@@ -130,7 +130,7 @@
     "message0": "The entire Graveyard",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "GraveyardCardAndActorSourceSource"
       }
@@ -144,7 +144,7 @@
     "message0": "%1Cards in deck",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DeckSource"
       }
@@ -158,7 +158,7 @@
     "message0": "%1Cards in hand",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "HandSource"
       }
@@ -172,7 +172,7 @@
     "message0": "%1The top %2 cards in deck",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "TopCardsOfDeckSource"
       },
@@ -196,7 +196,7 @@
     "message0": "%1Combination of:",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CombinationSource"
       }
@@ -249,7 +249,7 @@
     "message0": "The source cards of everything in the graveyard",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "GraveyardCardAndActorSourceCardSource"
       }
@@ -264,7 +264,7 @@
     "message0": "The source cards of dead units",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "GraveyardDiedMinionsSource"
       }

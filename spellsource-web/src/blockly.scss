@@ -99,6 +99,10 @@
   --placeholder-color: black;
 }
 
+.blocklyTreeRow input::placeholder {
+  color: black
+}
+
 .blocklyTreeRow:not(.blocklyTreeSelected):not(:hover) input {
   background-color: rgb(221, 221, 221);
 }

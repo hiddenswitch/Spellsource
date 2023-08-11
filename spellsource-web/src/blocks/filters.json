@@ -29,7 +29,7 @@
     "message0": "%1Filter",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AndFilter"
       }
@@ -42,7 +42,7 @@
     "message0": "%3 type %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardFilter"
       },
@@ -89,7 +89,7 @@
     "inputsInline": true,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "RaceFilter"
       },
@@ -124,7 +124,7 @@
     "message0": "%1 (and)%2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AndFilter"
       },
@@ -145,7 +145,7 @@
     "message0": "%1 (or)%2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "OrFilter"
       },
@@ -166,7 +166,7 @@
     "message0": "%2 damaged",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DamagedFilter"
       },
@@ -186,12 +186,12 @@
     "message0": "%3 undamaged",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DamagedFilter"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "invert",
         "value": true
       },
@@ -219,7 +219,7 @@
         }
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "invert",
         "value": true
       }
@@ -232,7 +232,7 @@
     "message0": "%3 %2 card%4",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardFilter"
       },
@@ -268,7 +268,7 @@
     "inputsInline": false,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardFilter"
       },
@@ -297,7 +297,7 @@
     "inputsInline": false,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "ManaCostFilter"
       },
@@ -351,7 +351,7 @@
     "message0": "%3 %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AttributeFilter"
       },
@@ -384,7 +384,7 @@
     "inputsInline": false,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AttributeFilter"
       },
@@ -449,7 +449,7 @@
     "message0": "%4 the highest %2 among %3",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "HighestAttributeFilter"
       },
@@ -489,7 +489,7 @@
     "message0": "%3 the same entity as %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "EntityEqualsFilter"
       },
@@ -517,7 +517,7 @@
     "message0": "%3 %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardFilter"
       },
@@ -546,7 +546,7 @@
     "message0": "%3 %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "SpecificCardFilter"
       },
@@ -575,7 +575,7 @@
     "message0": "%3 the same card as %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "SpecificCardFilter"
       },
@@ -604,7 +604,7 @@
     "message0": "%2 one of",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "SpecificCardFilter"
       },
@@ -636,7 +636,7 @@
     "message0": "%2 odd cost",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "OddCostFilter"
       },
@@ -657,7 +657,7 @@
     "message0": "%2 even cost",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "EvenCostFilter"
       },
@@ -678,7 +678,7 @@
     "message0": "%2 destroyed",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "IsDestroyedFilter"
       },
@@ -699,7 +699,7 @@
     "message0": "%3 the enchantment %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "HasEnchantmentFilter"
       },
@@ -728,7 +728,7 @@
     "message0": "%2 collectible",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CollectibleFilter"
       },

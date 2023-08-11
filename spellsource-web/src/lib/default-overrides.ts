@@ -1,13 +1,10 @@
-import Blockly from "blockly";
-
-import { BlockArgDef } from "./blockly-types";
+import { getBlockInfo } from "./blockly-utils";
 
 export function overrideAll() {
   math();
   loops();
   text();
-
-  addShadow("controls_if", "IF0", "logic_boolean");
+  logic();
 }
 
 export function numShadow(type, name, value = null) {
@@ -19,23 +16,18 @@ export function textShadow(type, name, value = null) {
 }
 
 export function addShadow(type, name, shadowType, fieldName = null, value = null) {
-  if (!Blockly.Blocks[type].json) {
-    Blockly.Blocks[type].json = {
-      args0: [],
-    };
-  }
-  let arg: BlockArgDef = {
-    name,
+  const toolboxInfo = getBlockInfo(type);
+
+  toolboxInfo.inputs[name] = {
     shadow: {
       type: shadowType,
+      fields: fieldName
+        ? {
+            [fieldName]: value,
+          }
+        : {},
     },
   };
-  if (fieldName && value) {
-    arg.shadow.fields = {
-      [fieldName]: value,
-    };
-  }
-  Blockly.Blocks[type].json["args0"].push(arg);
 }
 
 export function math() {
@@ -68,6 +60,8 @@ export function loops() {
   numShadow("controls_for", "FROM", 1);
   numShadow("controls_for", "TO", 10);
   numShadow("controls_for", "BY", 1);
+
+  addShadow("controls_whileUntil", "BOOL", "logic_boolean");
 }
 
 export function text() {
@@ -93,4 +87,19 @@ export function text() {
   textShadow("text_replace", "TO", "cba");
 
   textShadow("text_reverse", "TEXT", "abc");
+}
+
+export function logic() {
+  addShadow("controls_if", "IF0", "logic_boolean");
+  addShadow("controls_ifelse", "IF0", "logic_boolean");
+
+  addShadow("logic_negate", "BOOL", "logic_boolean");
+
+  numShadow("logic_compare", "A", 1);
+  numShadow("logic_compare", "B", 1);
+
+  addShadow("logic_operation", "A", "logic_boolean");
+  addShadow("logic_operation", "B", "logic_boolean");
+
+  addShadow("logic_ternary", "IF", "logic_boolean");
 }

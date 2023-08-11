@@ -6,7 +6,7 @@
     "message0": "%1Trigger",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "GameStateChangedTrigger"
       }
@@ -153,12 +153,12 @@
     "message0": "%1%2Whenever you play a unit",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "MinionPlayedTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetPlayer",
         "value": "SELF"
       }
@@ -172,12 +172,12 @@
     "message0": "%1%2Whenever your opponent plays a unit",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "MinionPlayedTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetPlayer",
         "value": "OPPONENT"
       }
@@ -191,7 +191,7 @@
     "message0": "%1Whenever a unit is played",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "MinionPlayedTrigger"
       }
@@ -205,12 +205,12 @@
     "message0": "%1%2Whenever you summon a unit",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "MinionSummonedTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetPlayer",
         "value": "SELF"
       }
@@ -224,12 +224,12 @@
     "message0": "%1%2Whenever your opponent summons a unit",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "MinionSummonedTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetPlayer",
         "value": "OPPONENT"
       }
@@ -243,7 +243,7 @@
     "message0": "%1Whenever a unit is summoned",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "MinionSummonedTrigger"
       }
@@ -258,13 +258,13 @@
     "message0": "Before you summon a unit",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "BeforeMinionSummonedTrigger"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -277,12 +277,12 @@
     "message0": "%1%2Whenever this takes damage",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DamageReceivedTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "hostTargetType",
         "value": "IGNORE_OTHER_TARGETS"
       }
@@ -296,7 +296,7 @@
     "message0": "Whenever a character takes damage",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DamageReceivedTrigger"
       }
@@ -310,12 +310,12 @@
     "message0": "Whenever a unit takes damage",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DamageReceivedTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetEntityType",
         "value": "MINION"
       }
@@ -329,17 +329,17 @@
     "message0": "Whenever an allied unit takes damage",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DamageReceivedTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetEntityType",
         "value": "MINION"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetPlayer",
         "value": "SELF"
       }
@@ -353,12 +353,12 @@
     "message0": "Whenever an ally takes damage",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DamageReceivedTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetPlayer",
         "value": "SELF"
       }
@@ -372,12 +372,12 @@
     "message0": "%1At the start of your turn",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "TurnStartTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetPlayer",
         "value": "SELF"
       }
@@ -391,12 +391,12 @@
     "message0": "%1At the end of your turn",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "TurnEndTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetPlayer",
         "value": "SELF"
       }
@@ -409,7 +409,7 @@
     "message0": "%1At the start of the game",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "GameStartTrigger"
       }
@@ -423,7 +423,7 @@
     "message0": "%1Whenever a card is drawn",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardDrawnTrigger"
       }
@@ -437,12 +437,12 @@
     "message0": "%1%2After this attacks",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AfterPhysicalAttackTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "hostTargetType",
         "value": "IGNORE_OTHER_SOURCES"
       }
@@ -456,17 +456,17 @@
     "message0": "%1%2After this attacks a unit%3",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AfterPhysicalAttackTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "hostTargetType",
         "value": "IGNORE_OTHER_SOURCES"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetEntityType",
         "value": "MINION"
       }
@@ -480,12 +480,12 @@
     "message0": "%1%2Whenever an allied unit dies",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "MinionDeathTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetPlayer",
         "value": "SELF"
       }
@@ -499,12 +499,12 @@
     "message0": "%1%2Whenever an enemy unit dies",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "MinionDeathTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetPlayer",
         "value": "OPPONENT"
       }
@@ -518,7 +518,7 @@
     "message0": "%1Whenever a unit dies",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "MinionDeathTrigger"
       }
@@ -532,13 +532,13 @@
     "message0": "Whenever another unit dies",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "MinionDeathTrigger"
       },
       {
         "name": "hostTargetType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "IGNORE_AS_TARGET"
       }
     ]
@@ -551,12 +551,12 @@
     "message0": "%1%2Whenever this damages a character",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DamageCausedTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "hostTargetType",
         "value": "IGNORE_OTHER_SOURCES"
       }
@@ -570,12 +570,12 @@
     "message0": "%1%2Whenever you play a card",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardPlayedTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetPlayer",
         "value": "SELF"
       }
@@ -589,12 +589,12 @@
     "message0": "%1%2Whenever your opponent plays a card",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardPlayedTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "targetPlayer",
         "value": "OPPONENT"
       }
@@ -608,7 +608,7 @@
     "message0": "%1Whenever a card is played",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardPlayedTrigger"
       }
@@ -623,23 +623,23 @@
     "message0": "Whenever an enemy unit attacks%1%2%3%4",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "TargetAcquisitionTrigger"
       },
       {
         "name": "actionType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "PHYSICAL_ATTACK"
       },
       {
         "name": "sourceEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "MINION"
       },
       {
         "name": "sourcePlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "OPPONENT"
       }
     ]
@@ -653,23 +653,23 @@
     "message0": "Whenever an allied unit attacks",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "TargetAcquisitionTrigger"
       },
       {
         "name": "actionType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "PHYSICAL_ATTACK"
       },
       {
         "name": "sourceEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "MINION"
       },
       {
         "name": "sourcePlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -683,18 +683,18 @@
     "message0": "Whenever a unit attacks",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "TargetAcquisitionTrigger"
       },
       {
         "name": "actionType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "PHYSICAL_ATTACK"
       },
       {
         "name": "sourceEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "MINION"
       }
     ]
@@ -708,23 +708,23 @@
     "message0": "When an allied unit takes fatal damage%1%2%3%4",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "FatalDamageTrigger"
       },
       {
         "name": "sourcePlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "BOTH"
       },
       {
         "name": "targetEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "MINION"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -738,7 +738,7 @@
     "message0": "At the end of each turn",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "TurnEndTrigger"
       }
@@ -753,13 +753,13 @@
     "message0": "Before you play a unit",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "BeforeMinionPlayedTrigger"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -773,13 +773,13 @@
     "message0": "Whenever a player casts a spell",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "SpellCastedTrigger"
       },
       {
         "name": "sourcePlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "BOTH"
       }
     ]
@@ -793,13 +793,13 @@
     "message0": "Whenever you cast a spell",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "SpellCastedTrigger"
       },
       {
         "name": "sourcePlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -812,13 +812,13 @@
     "message0": "Whenever this loses Hidden",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "LoseStealthTrigger"
       },
       {
         "name": "hostTargetType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "IGNORE_OTHER_TARGETS"
       }
     ]
@@ -832,23 +832,23 @@
     "message0": "When your champion attacks a unit",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "PhysicalAttackTrigger"
       },
       {
         "name": "sourceEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "HERO"
       },
       {
         "name": "sourcePlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       },
       {
         "name": "targetEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "MINION"
       }
     ]
@@ -862,13 +862,13 @@
     "message0": "Before this damages %3",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "PreDamageTrigger"
       },
       {
         "name": "hostTargetType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "IGNORE_OTHER_SOURCES"
       },
       {
@@ -900,18 +900,18 @@
     "message0": "When your hero is attacked",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "PhysicalAttackTrigger"
       },
       {
         "name": "targetEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "HERO"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -925,18 +925,18 @@
     "message0": "After your champion attacks",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AfterPhysicalAttackTrigger"
       },
       {
         "name": "sourceEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "HERO"
       },
       {
         "name": "sourcePlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -949,12 +949,12 @@
     "message0": "%1%2After this is attacked",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AfterPhysicalAttackTrigger"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "hostTargetType",
         "value": "IGNORE_OTHER_TARGETS"
       }
@@ -968,7 +968,7 @@
     "message0": "When a Supremacy occurs",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "SupremacyTrigger"
       }
@@ -983,13 +983,13 @@
     "message0": "Whenever you draw a card",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardDrawnTrigger"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -1003,13 +1003,13 @@
     "message0": "When you 'Quick Draw'",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "QuickDrawTrigger"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -1022,13 +1022,13 @@
     "message0": "When you use your Skill",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "HeroPowerUsedTrigger"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -1042,18 +1042,18 @@
     "message0": "Whenever this attacks",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "TargetAcquisitionTrigger"
       },
       {
         "name": "actionType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "PHYSICAL_ATTACK"
       },
       {
         "name": "hostTargetType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "IGNORE_OTHER_SOURCES"
       }
     ]
@@ -1067,13 +1067,13 @@
     "message0": "After this attacks",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "PhysicalAttackTrigger"
       },
       {
         "name": "hostTargetType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "IGNORE_OTHER_SOURCES"
       }
     ]
@@ -1087,18 +1087,18 @@
     "message0": "Whenever your champion takes damage",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DamageReceivedTrigger"
       },
       {
         "name": "targetEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "HERO"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -1112,13 +1112,13 @@
     "message0": "After you cast a spell",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AfterSpellCastedTrigger"
       },
       {
         "name": "sourcePlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -1132,13 +1132,13 @@
     "message0": "Whenever you receive a card",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardReceivedTrigger"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -1152,23 +1152,23 @@
     "message0": "When you cast a spell on this",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "TargetAcquisitionTrigger"
       },
       {
         "name": "actionType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SPELL"
       },
       {
         "name": "hostTargetType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "IGNORE_OTHER_TARGETS"
       },
       {
         "name": "sourcePlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -1182,18 +1182,18 @@
     "message0": "When a spell is cast on this",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "TargetAcquisitionTrigger"
       },
       {
         "name": "actionType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SPELL"
       },
       {
         "name": "hostTargetType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "IGNORE_OTHER_TARGETS"
       }
     ]
@@ -1207,18 +1207,18 @@
     "message0": "After an allied unit attacks",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AfterPhysicalAttackTrigger"
       },
       {
         "name": "sourceEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "MINION"
       },
       {
         "name": "sourcePlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -1232,13 +1232,13 @@
     "message0": "At the end of the owner's turn",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "TurnEndTrigger"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "OWNER"
       }
     ]
@@ -1252,13 +1252,13 @@
     "message0": "When your opponent casts a spell",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "SpellCastedTrigger"
       },
       {
         "name": "sourcePlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "OPPONENT"
       }
     ]
@@ -1271,7 +1271,7 @@
     "message0": "Whenever the board changes",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "BoardChangedTrigger"
       }
@@ -1286,18 +1286,18 @@
     "message0": "After you play a unit",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AfterMinionPlayedTrigger"
       },
       {
         "name": "hostTargetType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "IGNORE_AS_TARGET"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -1311,13 +1311,13 @@
     "message0": "When you draw this",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardDrawnTrigger"
       },
       {
         "name": "hostTargetType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "IGNORE_OTHER_TARGETS"
       }
     ]
@@ -1331,13 +1331,13 @@
     "message0": "Whenever you Source",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DiscoverTrigger"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -1351,13 +1351,13 @@
     "message0": "At the end of your opponent's turn",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "TurnEndTrigger"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "OPPONENT"
       }
     ]
@@ -1371,13 +1371,13 @@
     "message0": "At the start of your opponent's turn",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "TurnStartTrigger"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "OPPONENT"
       }
     ]
@@ -1391,23 +1391,23 @@
     "message0": "Whenever your champion damages a unit",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DamageCausedTrigger"
       },
       {
         "name": "sourceEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "HERO"
       },
       {
         "name": "sourcePlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       },
       {
         "name": "targetEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "MINION"
       }
     ]
@@ -1421,18 +1421,18 @@
     "message0": "After your champion is attacked",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AfterPhysicalAttackTrigger"
       },
       {
         "name": "targetEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "HERO"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -1445,7 +1445,7 @@
     "message0": "Whenever Enraged status changes",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "EnrageChangedTrigger"
       }
@@ -1460,18 +1460,18 @@
     "message0": "After you cast a spell on a unit",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AfterSpellCastedTrigger"
       },
       {
         "name": "sourcePlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       },
       {
         "name": "targetEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "MINION"
       }
     ]
@@ -1485,13 +1485,13 @@
     "message0": "Whenever you shuffle a card to a deck",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "ShuffledTrigger"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -1505,23 +1505,23 @@
     "message0": "When another allied unit takes damage",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DamageReceivedTrigger"
       },
       {
         "name": "hostTargetType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "IGNORE_AS_TARGET"
       },
       {
         "name": "targetEntityType",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "MINION"
       },
       {
         "name": "targetPlayer",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SELF"
       }
     ]
@@ -1535,7 +1535,7 @@
     "message0": "At the end of the current sequence",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "WillEndSequenceTrigger"
       }

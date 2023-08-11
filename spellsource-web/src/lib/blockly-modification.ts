@@ -9,7 +9,7 @@ import Blockly, {
   WorkspaceSvg,
 } from "blockly";
 import { FieldLabelPlural } from "../components/blockly/field-label-plural";
-import { FieldLabelSerializableHidden } from "../components/blockly/field-label-serializable-hidden";
+import { FieldHidden } from "../components/blockly/field-hidden";
 import { refreshBlock } from "./blockly-spellsource-utils";
 import * as DefaultOverrides from "./default-overrides";
 import { Field } from "blockly/core/renderers/measurables/field";
@@ -311,7 +311,7 @@ function pluralSpacing() {
       (prev as Field).isEditable === (next as Field).isEditable &&
       !((prev as Field).field instanceof FieldLabelPlural) &&
       (next as Field).field instanceof FieldLabelPlural &&
-      !((prev as Field).field instanceof FieldLabelSerializableHidden)
+      !((prev as Field).field instanceof FieldHidden)
     ) {
       return this.constants_.MEDIUM_PADDING;
     }

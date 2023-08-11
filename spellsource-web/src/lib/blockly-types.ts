@@ -10,6 +10,7 @@ export type BlockDef = {
   inputsInline?: Maybe<boolean>;
   hat?: Maybe<string>;
   comment?: Maybe<string>;
+  category?: Maybe<string>;
   subcategory?: Maybe<string>;
   plural?: Maybe<boolean>;
   id?: Maybe<string>;

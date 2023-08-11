@@ -49,7 +49,7 @@
         "text": "the card name"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "id",
         "text": "the card id"
       }

@@ -80,20 +80,35 @@ export const addShadowBlocksToConnection = (
  * @param state
  */
 export const reInitBlock = (block: Block, state: BlockDef) => {
-  // Save connections / shadow blocks
+  // Save connections / fields / shadow blocks
   const connections = {} as Record<string, Connection | undefined>;
+  const fields = {} as Record<string, any>;
+
   for (const input of block.inputList.slice()) {
-    const connection = (connections[input.name] = input.connection?.targetConnection);
+    for (let field of input.fieldRow.slice()) {
+      if (field.name) {
+        fields[field.name] = field.getValue();
+        input.removeField(field.name, true);
+      }
+    }
+    if (input.connection) {
+      connections[input.name] = input.connection.targetConnection;
+    }
     block.removeInput(input.name, true);
   }
 
   // Init again
   block.jsonInit(state);
 
-  // Restore connections / shadow blocks
+  // Restore connections / fields / shadow blocks
   for (let [name, connection] of Object.entries(connections)) {
     if (block.getInput(name)) {
       connection?.reconnect(block, name);
+    }
+  }
+  for (let [name, value] of Object.entries(fields)) {
+    if (block.getField(name)) {
+      block.setFieldValue(value, name);
     }
   }
   manuallyAddShadowBlocks(block, state, false);
@@ -124,6 +139,7 @@ export const addBlock = (block: BlockDef) => {
   if (block.mutator === OptionalRows) {
     const newBlock: BlockDef = {
       type: block.type + "_container",
+      inputsInline: false,
       message0: block.message0,
       args0: block.args0,
       colour: block.colour,
@@ -164,7 +180,9 @@ export const addBlock = (block: BlockDef) => {
       if (block.type!.endsWith("SHADOW")) {
         this.setMovable(false);
       }
-      this.setInputsInline(false);
+      if (block.inputsInline === undefined || block.inputsInline === null) {
+        this.setInputsInline(false);
+      }
     },
     json: block,
     data: block.data,

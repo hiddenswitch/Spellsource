@@ -893,7 +893,7 @@ export function getMatch(json, inputName, parentJson) {
           }
           if (arg.name.split(".")[0] === property) {
             //just a surface level check, not traversing nested args
-            if (arg.type === "field_label_serializable_hidden") {
+            if (arg.type === "field_hidden") {
               if ((arg.value === "TRUE" ? true : arg.value) === json[property]) {
                 hasThisProp = true;
               }
@@ -936,7 +936,7 @@ export function getMatch(json, inputName, parentJson) {
           let delta = 0;
           let property = traverseJsonByArgName(arg.name, json, parentJson);
           if (property !== null && property !== undefined) {
-            if (arg.type === "field_label_serializable_hidden") {
+            if (arg.type === "field_hidden") {
               if ((arg.value === "TRUE" ? true : arg.value) === property) {
                 delta = 2;
               } else {
@@ -946,7 +946,7 @@ export function getMatch(json, inputName, parentJson) {
               delta = 2; //if it's an input, we assume the correct block can be put here
             }
           } else {
-            if (arg.type === "field_label_serializable_hidden") {
+            if (arg.type === "field_hidden") {
               delta = -5;
             } else {
               //it's kinda bad to straight up not have the property
@@ -1467,7 +1467,7 @@ export function generateDummyBlock(json, inputName, parentJson) {
             arg = argsList(Blockly.Blocks["Condition_Comparison"].json, "dropdown")[0];
           }
         } else {
-          arg.type = "field_label_serializable_hidden";
+          arg.type = "field_hidden";
           arg.value = json[prop];
           newMessage += '"' + BlocklyMiscUtils.toTitleCaseCorrected(json[prop].toString()) + '"';
         }
@@ -1498,7 +1498,7 @@ export function generateDummyBlock(json, inputName, parentJson) {
       message0: className + "%1",
       args0: [
         {
-          type: "field_label_serializable_hidden",
+          type: "field_hidden",
           name: "class",
           value: className,
         },

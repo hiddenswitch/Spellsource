@@ -372,7 +372,7 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
           "Loops",
           "120",
           "Blocks to facilitate simulating many actions iteratively",
-          exclusionContents("controls", "controls_if", "controls_ifelse")
+          exclusionContents("controls", "controls_if", "controls_ifelse", "controls_forEach")
         ),
 
         category(
@@ -421,7 +421,7 @@ export function myCardsCategory(data: ContextType<typeof BlocklyDataContext>) {
         .filter((card) => card.cardScript.set === "CUSTOM")
         .map((card) => ({
           kind: "block",
-          blockxml: card.blocklyWorkspace,
+          ...card.blocklyWorkspace,
         })),
       ...[...setOfSets].map((set) => myCardsForSetCategory(set, data)),
     ],

@@ -6,7 +6,7 @@
     "message0": "Cost Modifier: %2 %5 cost %3 %4",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardCostModifier"
       },
@@ -60,7 +60,7 @@
     "message0": "Cost Modifier: %2 %5 cost %3 %4",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardCostModifier"
       },
@@ -230,7 +230,7 @@
     "message0": "One Turn Only",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "OneTurnCostModifier"
       }
@@ -345,7 +345,7 @@
         }
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "ToggleCostModifier"
       }
@@ -372,7 +372,7 @@
         }
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "ToggleCostModifier"
       }

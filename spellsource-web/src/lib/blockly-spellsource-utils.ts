@@ -4,7 +4,7 @@ import { CardDef } from "../components/collection/card-display";
 import { BlocklyDataContext } from "../pages/card-editor";
 import { ContextType } from "react";
 import { BlockDef } from "./blockly-types";
-import { addBlock, argsList as argsList1 } from "./blockly-utils";
+import { addBlock, argsList, argsList as argsList1 } from "./blockly-utils";
 
 export const toTitleCaseCorrected = (string: string) =>
   string
@@ -34,6 +34,8 @@ export function cardMessage(card: CardDef) {
 }
 
 export function initBlocks(data: ContextType<typeof BlocklyDataContext>) {
+  const icons = Object.fromEntries(data.allIcons.map((icon) => [icon.name, icon.src]));
+
   // All of our spells, triggers, entity reference enum values, etc.
   data.allBlocks?.forEach((block) => {
     if (block.type in Blockly.Blocks) {
@@ -42,6 +44,12 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>) {
 
     if (block.output && !JsonConversionUtils.blockTypeColors[block.output as string]) {
       JsonConversionUtils.blockTypeColors[block.output as string] = block.colour;
+    }
+
+    for (let arg of argsList(block, "field_image")) {
+      if (arg.src in icons) {
+        arg.src = icons[arg.src];
+      }
     }
 
     addBlock(block);

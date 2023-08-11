@@ -32,7 +32,7 @@
     "inputsInline": false,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "ComparisonCondition"
       },
@@ -91,7 +91,7 @@
     "message0": "True",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AlwaysCondition"
       }
@@ -104,7 +104,7 @@
     "message0": "False",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "NeverCondition"
       }
@@ -117,12 +117,12 @@
     "message0": "%3 is alive",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "IsDeadCondition"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "invert",
         "value": true
       },
@@ -143,7 +143,7 @@
     "message0": "%2 is dead",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "IsDeadCondition"
       },
@@ -164,12 +164,12 @@
     "message0": "%3 is undamaged",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "IsDamagedCondition"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "invert",
         "value": true
       },
@@ -190,7 +190,7 @@
     "message0": "%2 is damaged",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "IsDamagedCondition"
       },
@@ -211,7 +211,7 @@
     "message0": "%1Condition",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AndCondition"
       }
@@ -225,7 +225,7 @@
     "inputsInline": true,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "RaceCondition"
       },
@@ -262,7 +262,7 @@
         }
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "invert",
         "value": true
       }
@@ -275,7 +275,7 @@
     "message0": "%1 (and)%2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AndCondition"
       },
@@ -296,7 +296,7 @@
     "message0": "%1 (or)%2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "OrCondition"
       },
@@ -318,7 +318,7 @@
     "inputsInline": true,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AttributeCondition"
       },
@@ -351,7 +351,7 @@
     "inputsInline": true,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AttributeCondition"
       },
@@ -418,7 +418,7 @@
     "message0": "there %4 at least %2 %5 controlled by %3",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "MinionOnBoardCondition"
       },
@@ -462,7 +462,7 @@
     "message0": "there %5 at least %2 %6 that %4 and controlled by %3",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "MinionOnBoardCondition"
       },
@@ -514,7 +514,7 @@
     "message0": "%1%3 is a %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardPropertyCondition"
       },
@@ -562,7 +562,7 @@
     "inputsInline": true,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardPropertyCondition"
       },
@@ -592,7 +592,7 @@
     "inputsInline": false,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "HasAttackedCondition"
       },
@@ -614,7 +614,7 @@
     "inputsInline": false,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "HoldsCardCondition"
       },
@@ -636,7 +636,7 @@
     "message0": "%3 has cost %4 %2 lun",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "ManaCostCondition"
       },
@@ -691,7 +691,7 @@
     "message0": "%3 is owned by %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "OwnedByPlayerCondition"
       },
@@ -721,7 +721,7 @@
     "message0": "%2 has an item equipped",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "HasWeaponCondition"
       },
@@ -743,7 +743,7 @@
     "message0": "you're holding a %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "HoldsCardCondition"
       },
@@ -765,7 +765,7 @@
     "message0": "one or more %2 %3",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AnyMatchFilterCondition"
       },
@@ -795,7 +795,7 @@
     "message0": "all %2 %3",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AllMatchFilterCondition"
       },
@@ -825,7 +825,7 @@
     "message0": "you can summon more units",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CanSummonCondition"
       }
@@ -839,7 +839,7 @@
     "message0": "you're at max lun",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "ManaMaxedCondition"
       }
@@ -853,7 +853,7 @@
     "message0": "your deck has no duplicates",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "HighlanderDeckCondition"
       }
@@ -867,7 +867,7 @@
     "message0": "you win a 50/50",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "RandomCondition"
       }
@@ -881,7 +881,7 @@
     "message0": "this is adjacent to a Permanent",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AdjacentToPermanentCondition"
       }
@@ -895,7 +895,7 @@
     "message0": "this Pact is playable",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CanPlayPactCondition"
       }
@@ -909,7 +909,7 @@
     "message0": "you can Invoke",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "InvokeCondition"
       }
@@ -923,7 +923,7 @@
     "message0": "If your deck contains a card that %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DeckContainsCondition"
       },

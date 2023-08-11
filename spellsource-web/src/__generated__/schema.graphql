@@ -1942,7 +1942,7 @@ type Card implements Node {
   id: String!
   createdBy: String!
   uri: String
-  blocklyWorkspace: String
+  blocklyWorkspace: JSON
   cardScript: JSON
   createdAt: Datetime!
   lastModified: Datetime!
@@ -2022,7 +2022,7 @@ input CardCondition {
   uri: String
 
   """Checks for equality with the object’s `blocklyWorkspace` field."""
-  blocklyWorkspace: String
+  blocklyWorkspace: JSON
 
   """Checks for equality with the object’s `cardScript` field."""
   cardScript: JSON
@@ -2055,6 +2055,9 @@ input CardFilter {
 
   """Filter by the object’s `uri` field."""
   uri: StringFilter
+
+  """Filter by the object’s `blocklyWorkspace` field."""
+  blocklyWorkspace: JSONFilter
 
   """Filter by the object’s `cardScript` field."""
   cardScript: JSONFilter
@@ -3385,7 +3388,7 @@ type CollectionCard {
   id: String
   createdBy: String
   cardScript: JSON
-  blocklyWorkspace: String
+  blocklyWorkspace: JSON
   name: String
   type: String
   class: String
@@ -3449,7 +3452,7 @@ input CollectionCardCondition {
   cardScript: JSON
 
   """Checks for equality with the object’s `blocklyWorkspace` field."""
-  blocklyWorkspace: String
+  blocklyWorkspace: JSON
 
   """Checks for equality with the object’s `name` field."""
   name: String
@@ -3488,6 +3491,9 @@ input CollectionCardFilter {
 
   """Filter by the object’s `cardScript` field."""
   cardScript: JSONFilter
+
+  """Filter by the object’s `blocklyWorkspace` field."""
+  blocklyWorkspace: JSONFilter
 
   """Filter by the object’s `name` field."""
   name: StringFilter
@@ -4392,7 +4398,7 @@ input CardInput {
   id: String!
   createdBy: String!
   uri: String
-  blocklyWorkspace: String
+  blocklyWorkspace: JSON
   cardScript: JSON
   createdAt: Datetime
   lastModified: Datetime
@@ -5133,7 +5139,7 @@ input CardPatch {
   id: String
   createdBy: String
   uri: String
-  blocklyWorkspace: String
+  blocklyWorkspace: JSON
   cardScript: JSON
   createdAt: Datetime
   lastModified: Datetime
@@ -7191,7 +7197,7 @@ type GetCollectionCardsRecord {
   id: String
   createdBy: String
   cardScript: JSON
-  blocklyWorkspace: String
+  blocklyWorkspace: JSON
   name: String
   type: String
   class: String
@@ -7298,7 +7304,7 @@ input SaveCardInput {
   """
   clientMutationId: String
   cardId: String
-  workspace: String
+  workspace: JSON
   json: JSON
 }
 

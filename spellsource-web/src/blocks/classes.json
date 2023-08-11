@@ -41,7 +41,7 @@
         "text": "the class name"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "id",
         "text": "the class id"
       }

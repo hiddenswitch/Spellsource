@@ -245,7 +245,7 @@ export const BotUsersOrderBy = {
 export type BotUsersOrderBy = typeof BotUsersOrderBy[keyof typeof BotUsersOrderBy];
 export type Card = Node & {
   __typename?: 'Card';
-  blocklyWorkspace?: Maybe<Scalars['String']>;
+  blocklyWorkspace?: Maybe<Scalars['JSON']>;
   cardScript?: Maybe<Scalars['JSON']>;
   collectible?: Maybe<Scalars['Boolean']>;
   cost?: Maybe<Scalars['Int']>;
@@ -543,7 +543,7 @@ export type CardCatalogueQueryPayload = {
 /** A condition to be used against `Card` object types. All fields are tested for equality and combined with a logical ‘and.’ */
 export type CardCondition = {
   /** Checks for equality with the object’s `blocklyWorkspace` field. */
-  blocklyWorkspace?: InputMaybe<Scalars['String']>;
+  blocklyWorkspace?: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `cardScript` field. */
   cardScript?: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `createdAt` field. */
@@ -568,6 +568,8 @@ export type CardCondition = {
 export type CardFilter = {
   /** Checks for all expressions in this list. */
   and?: InputMaybe<Array<CardFilter>>;
+  /** Filter by the object’s `blocklyWorkspace` field. */
+  blocklyWorkspace?: InputMaybe<JsonFilter>;
   /** Filter by the object’s `cardScript` field. */
   cardScript?: InputMaybe<JsonFilter>;
   /** Filter by the object’s `collectible` field. */
@@ -600,7 +602,7 @@ export type CardFilter = {
 
 /** An input for mutations affecting `Card` */
 export type CardInput = {
-  blocklyWorkspace?: InputMaybe<Scalars['String']>;
+  blocklyWorkspace?: InputMaybe<Scalars['JSON']>;
   cardScript?: InputMaybe<Scalars['JSON']>;
   createdAt?: InputMaybe<Scalars['Datetime']>;
   createdBy: Scalars['String'];
@@ -613,7 +615,7 @@ export type CardInput = {
 
 /** Represents an update to a `Card`. Fields that are set will be updated. */
 export type CardPatch = {
-  blocklyWorkspace?: InputMaybe<Scalars['String']>;
+  blocklyWorkspace?: InputMaybe<Scalars['JSON']>;
   cardScript?: InputMaybe<Scalars['JSON']>;
   createdAt?: InputMaybe<Scalars['Datetime']>;
   createdBy?: InputMaybe<Scalars['String']>;
@@ -892,7 +894,7 @@ export type ClusteredGamesUpdateGameAndUsersPayload = {
 
 export type CollectionCard = {
   __typename?: 'CollectionCard';
-  blocklyWorkspace?: Maybe<Scalars['String']>;
+  blocklyWorkspace?: Maybe<Scalars['JSON']>;
   cardScript?: Maybe<Scalars['JSON']>;
   class?: Maybe<Scalars['String']>;
   collectible?: Maybe<Scalars['Boolean']>;
@@ -912,7 +914,7 @@ export type CollectionCard = {
  */
 export type CollectionCardCondition = {
   /** Checks for equality with the object’s `blocklyWorkspace` field. */
-  blocklyWorkspace?: InputMaybe<Scalars['String']>;
+  blocklyWorkspace?: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `cardScript` field. */
   cardScript?: InputMaybe<Scalars['JSON']>;
   /** Checks for equality with the object’s `class` field. */
@@ -941,6 +943,8 @@ export type CollectionCardCondition = {
 export type CollectionCardFilter = {
   /** Checks for all expressions in this list. */
   and?: InputMaybe<Array<CollectionCardFilter>>;
+  /** Filter by the object’s `blocklyWorkspace` field. */
+  blocklyWorkspace?: InputMaybe<JsonFilter>;
   /** Filter by the object’s `cardScript` field. */
   cardScript?: InputMaybe<JsonFilter>;
   /** Filter by the object’s `class` field. */
@@ -1566,123 +1570,6 @@ export type CreateUserEntityAddonPayloadUserEntityAddonEdgeArgs = {
   orderBy?: InputMaybe<Array<UserEntityAddonsOrderBy>>;
 };
 
-export type CurrentCard = {
-  __typename?: 'CurrentCard';
-  blocklyWorkspace?: Maybe<Scalars['String']>;
-  cardScript?: Maybe<Scalars['JSON']>;
-  createdAt?: Maybe<Scalars['Datetime']>;
-  createdBy?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['String']>;
-  isArchived?: Maybe<Scalars['Boolean']>;
-  isPublished?: Maybe<Scalars['Boolean']>;
-  lastModified?: Maybe<Scalars['Datetime']>;
-  succession?: Maybe<Scalars['BigInt']>;
-  uri?: Maybe<Scalars['String']>;
-};
-
-/**
- * A condition to be used against `CurrentCard` object types. All fields are tested
- * for equality and combined with a logical ‘and.’
- */
-export type CurrentCardCondition = {
-  /** Checks for equality with the object’s `blocklyWorkspace` field. */
-  blocklyWorkspace?: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `cardScript` field. */
-  cardScript?: InputMaybe<Scalars['JSON']>;
-  /** Checks for equality with the object’s `createdAt` field. */
-  createdAt?: InputMaybe<Scalars['Datetime']>;
-  /** Checks for equality with the object’s `createdBy` field. */
-  createdBy?: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `id` field. */
-  id?: InputMaybe<Scalars['String']>;
-  /** Checks for equality with the object’s `isArchived` field. */
-  isArchived?: InputMaybe<Scalars['Boolean']>;
-  /** Checks for equality with the object’s `isPublished` field. */
-  isPublished?: InputMaybe<Scalars['Boolean']>;
-  /** Checks for equality with the object’s `lastModified` field. */
-  lastModified?: InputMaybe<Scalars['Datetime']>;
-  /** Checks for equality with the object’s `succession` field. */
-  succession?: InputMaybe<Scalars['BigInt']>;
-  /** Checks for equality with the object’s `uri` field. */
-  uri?: InputMaybe<Scalars['String']>;
-};
-
-/** A filter to be used against `CurrentCard` object types. All fields are combined with a logical ‘and.’ */
-export type CurrentCardFilter = {
-  /** Checks for all expressions in this list. */
-  and?: InputMaybe<Array<CurrentCardFilter>>;
-  /** Filter by the object’s `cardScript` field. */
-  cardScript?: InputMaybe<JsonFilter>;
-  /** Filter by the object’s `createdAt` field. */
-  createdAt?: InputMaybe<DatetimeFilter>;
-  /** Filter by the object’s `createdBy` field. */
-  createdBy?: InputMaybe<StringFilter>;
-  /** Filter by the object’s `id` field. */
-  id?: InputMaybe<StringFilter>;
-  /** Filter by the object’s `isArchived` field. */
-  isArchived?: InputMaybe<BooleanFilter>;
-  /** Filter by the object’s `isPublished` field. */
-  isPublished?: InputMaybe<BooleanFilter>;
-  /** Filter by the object’s `lastModified` field. */
-  lastModified?: InputMaybe<DatetimeFilter>;
-  /** Negates the expression. */
-  not?: InputMaybe<CurrentCardFilter>;
-  /** Checks for any expressions in this list. */
-  or?: InputMaybe<Array<CurrentCardFilter>>;
-  /** Filter by the object’s `succession` field. */
-  succession?: InputMaybe<BigIntFilter>;
-  /** Filter by the object’s `uri` field. */
-  uri?: InputMaybe<StringFilter>;
-};
-
-/** A connection to a list of `CurrentCard` values. */
-export type CurrentCardsConnection = {
-  __typename?: 'CurrentCardsConnection';
-  /** A list of edges which contains the `CurrentCard` and cursor to aid in pagination. */
-  edges: Array<CurrentCardsEdge>;
-  /** A list of `CurrentCard` objects. */
-  nodes: Array<Maybe<CurrentCard>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** The count of *all* `CurrentCard` you could get from the connection. */
-  totalCount: Scalars['Int'];
-};
-
-/** A `CurrentCard` edge in the connection. */
-export type CurrentCardsEdge = {
-  __typename?: 'CurrentCardsEdge';
-  /** A cursor for use in pagination. */
-  cursor?: Maybe<Scalars['Cursor']>;
-  /** The `CurrentCard` at the end of the edge. */
-  node?: Maybe<CurrentCard>;
-};
-
-/** Methods to use when ordering `CurrentCard`. */
-export const CurrentCardsOrderBy = {
-  BlocklyWorkspaceAsc: 'BLOCKLY_WORKSPACE_ASC',
-  BlocklyWorkspaceDesc: 'BLOCKLY_WORKSPACE_DESC',
-  CardScriptAsc: 'CARD_SCRIPT_ASC',
-  CardScriptDesc: 'CARD_SCRIPT_DESC',
-  CreatedAtAsc: 'CREATED_AT_ASC',
-  CreatedAtDesc: 'CREATED_AT_DESC',
-  CreatedByAsc: 'CREATED_BY_ASC',
-  CreatedByDesc: 'CREATED_BY_DESC',
-  IdAsc: 'ID_ASC',
-  IdDesc: 'ID_DESC',
-  IsArchivedAsc: 'IS_ARCHIVED_ASC',
-  IsArchivedDesc: 'IS_ARCHIVED_DESC',
-  IsPublishedAsc: 'IS_PUBLISHED_ASC',
-  IsPublishedDesc: 'IS_PUBLISHED_DESC',
-  LastModifiedAsc: 'LAST_MODIFIED_ASC',
-  LastModifiedDesc: 'LAST_MODIFIED_DESC',
-  Natural: 'NATURAL',
-  SuccessionAsc: 'SUCCESSION_ASC',
-  SuccessionDesc: 'SUCCESSION_DESC',
-  UriAsc: 'URI_ASC',
-  UriDesc: 'URI_DESC'
-} as const;
-
-export type CurrentCardsOrderBy = typeof CurrentCardsOrderBy[keyof typeof CurrentCardsOrderBy];
 /** A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’ */
 export type DatetimeFilter = {
   /** Not equal to the specified value, treating null like an ordinary value. */
@@ -3254,7 +3141,7 @@ export type GetCollectionCardsPayload = {
 /** The return type of our `getCollectionCards` mutation. */
 export type GetCollectionCardsRecord = {
   __typename?: 'GetCollectionCardsRecord';
-  blocklyWorkspace?: Maybe<Scalars['String']>;
+  blocklyWorkspace?: Maybe<Scalars['JSON']>;
   cardScript?: Maybe<Scalars['JSON']>;
   class?: Maybe<Scalars['String']>;
   collectible?: Maybe<Scalars['Boolean']>;
@@ -3909,7 +3796,6 @@ export type Mutation = {
   getCollectionCards?: Maybe<GetCollectionCardsPayload>;
   publishCard?: Maybe<PublishCardPayload>;
   publishGitCard?: Maybe<PublishGitCardPayload>;
-  refreshCurrentCards?: Maybe<RefreshCurrentCardsPayload>;
   saveCard?: Maybe<SaveCardPayload>;
   setCardsInDeck?: Maybe<SetCardsInDeckPayload>;
   /** Updates a single `BannedDraftCard` using its globally unique id and a patch. */
@@ -4384,12 +4270,6 @@ export type MutationPublishGitCardArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
-export type MutationRefreshCurrentCardsArgs = {
-  input: RefreshCurrentCardsInput;
-};
-
-
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationSaveCardArgs = {
   input: SaveCardInput;
 };
@@ -4775,8 +4655,6 @@ export type Query = Node & {
   allClasses?: Maybe<ClassesConnection>;
   /** Reads and enables pagination through a set of `CollectionCard`. */
   allCollectionCards?: Maybe<CollectionCardsConnection>;
-  /** Reads and enables pagination through a set of `CurrentCard`. */
-  allCurrentCards?: Maybe<CurrentCardsConnection>;
   /** Reads and enables pagination through a set of `DeckPlayerAttributeTuple`. */
   allDeckPlayerAttributeTuples?: Maybe<DeckPlayerAttributeTuplesConnection>;
   /** Reads and enables pagination through a set of `DeckShare`. */
@@ -4929,19 +4807,6 @@ export type QueryAllCollectionCardsArgs = {
   last?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<CollectionCardsOrderBy>>;
-};
-
-
-export type QueryAllCurrentCardsArgs = {
-  after?: InputMaybe<Scalars['Cursor']>;
-  before?: InputMaybe<Scalars['Cursor']>;
-  condition?: InputMaybe<CurrentCardCondition>;
-  filter?: InputMaybe<CurrentCardFilter>;
-  first?: InputMaybe<Scalars['Int']>;
-  includeArchived?: InputMaybe<IncludeArchivedOption>;
-  last?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<CurrentCardsOrderBy>>;
 };
 
 
@@ -5245,27 +5110,6 @@ export type QueryUserEntityAddonByIdArgs = {
   id: Scalars['String'];
 };
 
-/** All input for the `refreshCurrentCards` mutation. */
-export type RefreshCurrentCardsInput = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   */
-  clientMutationId?: InputMaybe<Scalars['String']>;
-};
-
-/** The output of our `refreshCurrentCards` mutation. */
-export type RefreshCurrentCardsPayload = {
-  __typename?: 'RefreshCurrentCardsPayload';
-  /**
-   * The exact same `clientMutationId` that was provided in the mutation input,
-   * unchanged and unused. May be used by a client to track mutations.
-   */
-  clientMutationId?: Maybe<Scalars['String']>;
-  /** Our root query field type. Allows us to run any query from our mutation payload. */
-  query?: Maybe<Query>;
-};
-
 /** All input for the `saveCard` mutation. */
 export type SaveCardInput = {
   cardId?: InputMaybe<Scalars['String']>;
@@ -5275,7 +5119,7 @@ export type SaveCardInput = {
    */
   clientMutationId?: InputMaybe<Scalars['String']>;
   json?: InputMaybe<Scalars['JSON']>;
-  workspace?: InputMaybe<Scalars['String']>;
+  workspace?: InputMaybe<Scalars['JSON']>;
 };
 
 /** The output of our `saveCard` mutation. */
@@ -6897,12 +6741,6 @@ export type ResolversTypes = {
   CreateMatchmakingTicketPayload: ResolverTypeWrapper<Partial<CreateMatchmakingTicketPayload>>;
   CreateUserEntityAddonInput: ResolverTypeWrapper<Partial<CreateUserEntityAddonInput>>;
   CreateUserEntityAddonPayload: ResolverTypeWrapper<Partial<CreateUserEntityAddonPayload>>;
-  CurrentCard: ResolverTypeWrapper<Partial<CurrentCard>>;
-  CurrentCardCondition: ResolverTypeWrapper<Partial<CurrentCardCondition>>;
-  CurrentCardFilter: ResolverTypeWrapper<Partial<CurrentCardFilter>>;
-  CurrentCardsConnection: ResolverTypeWrapper<Partial<CurrentCardsConnection>>;
-  CurrentCardsEdge: ResolverTypeWrapper<Partial<CurrentCardsEdge>>;
-  CurrentCardsOrderBy: ResolverTypeWrapper<Partial<CurrentCardsOrderBy>>;
   Cursor: ResolverTypeWrapper<Partial<Scalars['Cursor']>>;
   Datetime: ResolverTypeWrapper<Partial<Scalars['Datetime']>>;
   DatetimeFilter: ResolverTypeWrapper<Partial<DatetimeFilter>>;
@@ -7056,8 +6894,6 @@ export type ResolversTypes = {
   PublishGitCardInput: ResolverTypeWrapper<Partial<PublishGitCardInput>>;
   PublishGitCardPayload: ResolverTypeWrapper<Partial<PublishGitCardPayload>>;
   Query: ResolverTypeWrapper<{}>;
-  RefreshCurrentCardsInput: ResolverTypeWrapper<Partial<RefreshCurrentCardsInput>>;
-  RefreshCurrentCardsPayload: ResolverTypeWrapper<Partial<RefreshCurrentCardsPayload>>;
   SaveCardInput: ResolverTypeWrapper<Partial<SaveCardInput>>;
   SaveCardPayload: ResolverTypeWrapper<Partial<SaveCardPayload>>;
   SetCardsInDeckInput: ResolverTypeWrapper<Partial<SetCardsInDeckInput>>;
@@ -7266,11 +7102,6 @@ export type ResolversParentTypes = {
   CreateMatchmakingTicketPayload: Partial<CreateMatchmakingTicketPayload>;
   CreateUserEntityAddonInput: Partial<CreateUserEntityAddonInput>;
   CreateUserEntityAddonPayload: Partial<CreateUserEntityAddonPayload>;
-  CurrentCard: Partial<CurrentCard>;
-  CurrentCardCondition: Partial<CurrentCardCondition>;
-  CurrentCardFilter: Partial<CurrentCardFilter>;
-  CurrentCardsConnection: Partial<CurrentCardsConnection>;
-  CurrentCardsEdge: Partial<CurrentCardsEdge>;
   Cursor: Partial<Scalars['Cursor']>;
   Datetime: Partial<Scalars['Datetime']>;
   DatetimeFilter: Partial<DatetimeFilter>;
@@ -7411,8 +7242,6 @@ export type ResolversParentTypes = {
   PublishGitCardInput: Partial<PublishGitCardInput>;
   PublishGitCardPayload: Partial<PublishGitCardPayload>;
   Query: {};
-  RefreshCurrentCardsInput: Partial<RefreshCurrentCardsInput>;
-  RefreshCurrentCardsPayload: Partial<RefreshCurrentCardsPayload>;
   SaveCardInput: Partial<SaveCardInput>;
   SaveCardPayload: Partial<SaveCardPayload>;
   SetCardsInDeckInput: Partial<SetCardsInDeckInput>;
@@ -7569,7 +7398,7 @@ export type BotUsersEdgeResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type CardResolvers<ContextType = any, ParentType extends ResolversParentTypes['Card'] = ResolversParentTypes['Card']> = {
-  blocklyWorkspace?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  blocklyWorkspace?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   cardScript?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   collectible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   cost?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -7737,7 +7566,7 @@ export type ClusteredGamesUpdateGameAndUsersPayloadResolvers<ContextType = any, 
 };
 
 export type CollectionCardResolvers<ContextType = any, ParentType extends ResolversParentTypes['CollectionCard'] = ResolversParentTypes['CollectionCard']> = {
-  blocklyWorkspace?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  blocklyWorkspace?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   cardScript?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   class?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   collectible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -7899,34 +7728,6 @@ export type CreateUserEntityAddonPayloadResolvers<ContextType = any, ParentType 
   query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
   userEntityAddon?: Resolver<Maybe<ResolversTypes['UserEntityAddon']>, ParentType, ContextType>;
   userEntityAddonEdge?: Resolver<Maybe<ResolversTypes['UserEntityAddonsEdge']>, ParentType, ContextType, RequireFields<CreateUserEntityAddonPayloadUserEntityAddonEdgeArgs, 'orderBy'>>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CurrentCardResolvers<ContextType = any, ParentType extends ResolversParentTypes['CurrentCard'] = ResolversParentTypes['CurrentCard']> = {
-  blocklyWorkspace?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  cardScript?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
-  createdAt?: Resolver<Maybe<ResolversTypes['Datetime']>, ParentType, ContextType>;
-  createdBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  isArchived?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  isPublished?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  lastModified?: Resolver<Maybe<ResolversTypes['Datetime']>, ParentType, ContextType>;
-  succession?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  uri?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CurrentCardsConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['CurrentCardsConnection'] = ResolversParentTypes['CurrentCardsConnection']> = {
-  edges?: Resolver<Array<ResolversTypes['CurrentCardsEdge']>, ParentType, ContextType>;
-  nodes?: Resolver<Array<Maybe<ResolversTypes['CurrentCard']>>, ParentType, ContextType>;
-  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
-  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CurrentCardsEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['CurrentCardsEdge'] = ResolversParentTypes['CurrentCardsEdge']> = {
-  cursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>;
-  node?: Resolver<Maybe<ResolversTypes['CurrentCard']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -8262,7 +8063,7 @@ export type GetCollectionCardsPayloadResolvers<ContextType = any, ParentType ext
 };
 
 export type GetCollectionCardsRecordResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetCollectionCardsRecord'] = ResolversParentTypes['GetCollectionCardsRecord']> = {
-  blocklyWorkspace?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  blocklyWorkspace?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   cardScript?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   class?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   collectible?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -8455,7 +8256,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   getCollectionCards?: Resolver<Maybe<ResolversTypes['GetCollectionCardsPayload']>, ParentType, ContextType, RequireFields<MutationGetCollectionCardsArgs, 'input'>>;
   publishCard?: Resolver<Maybe<ResolversTypes['PublishCardPayload']>, ParentType, ContextType, RequireFields<MutationPublishCardArgs, 'input'>>;
   publishGitCard?: Resolver<Maybe<ResolversTypes['PublishGitCardPayload']>, ParentType, ContextType, RequireFields<MutationPublishGitCardArgs, 'input'>>;
-  refreshCurrentCards?: Resolver<Maybe<ResolversTypes['RefreshCurrentCardsPayload']>, ParentType, ContextType, RequireFields<MutationRefreshCurrentCardsArgs, 'input'>>;
   saveCard?: Resolver<Maybe<ResolversTypes['SaveCardPayload']>, ParentType, ContextType, RequireFields<MutationSaveCardArgs, 'input'>>;
   setCardsInDeck?: Resolver<Maybe<ResolversTypes['SetCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationSetCardsInDeckArgs, 'input'>>;
   updateBannedDraftCard?: Resolver<Maybe<ResolversTypes['UpdateBannedDraftCardPayload']>, ParentType, ContextType, RequireFields<MutationUpdateBannedDraftCardArgs, 'input'>>;
@@ -8541,7 +8341,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   allCardsInDecks?: Resolver<Maybe<ResolversTypes['CardsInDecksConnection']>, ParentType, ContextType, RequireFields<QueryAllCardsInDecksArgs, 'orderBy'>>;
   allClasses?: Resolver<Maybe<ResolversTypes['ClassesConnection']>, ParentType, ContextType, RequireFields<QueryAllClassesArgs, 'orderBy'>>;
   allCollectionCards?: Resolver<Maybe<ResolversTypes['CollectionCardsConnection']>, ParentType, ContextType, RequireFields<QueryAllCollectionCardsArgs, 'orderBy'>>;
-  allCurrentCards?: Resolver<Maybe<ResolversTypes['CurrentCardsConnection']>, ParentType, ContextType, RequireFields<QueryAllCurrentCardsArgs, 'includeArchived' | 'orderBy'>>;
   allDeckPlayerAttributeTuples?: Resolver<Maybe<ResolversTypes['DeckPlayerAttributeTuplesConnection']>, ParentType, ContextType, RequireFields<QueryAllDeckPlayerAttributeTuplesArgs, 'orderBy'>>;
   allDeckShares?: Resolver<Maybe<ResolversTypes['DeckSharesConnection']>, ParentType, ContextType, RequireFields<QueryAllDeckSharesArgs, 'orderBy'>>;
   allDecks?: Resolver<Maybe<ResolversTypes['DecksConnection']>, ParentType, ContextType, RequireFields<QueryAllDecksArgs, 'orderBy'>>;
@@ -8589,12 +8388,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   query?: Resolver<ResolversTypes['Query'], ParentType, ContextType>;
   userEntityAddon?: Resolver<Maybe<ResolversTypes['UserEntityAddon']>, ParentType, ContextType, RequireFields<QueryUserEntityAddonArgs, 'nodeId'>>;
   userEntityAddonById?: Resolver<Maybe<ResolversTypes['UserEntityAddon']>, ParentType, ContextType, RequireFields<QueryUserEntityAddonByIdArgs, 'id'>>;
-};
-
-export type RefreshCurrentCardsPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['RefreshCurrentCardsPayload'] = ResolversParentTypes['RefreshCurrentCardsPayload']> = {
-  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SaveCardPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['SaveCardPayload'] = ResolversParentTypes['SaveCardPayload']> = {
@@ -8940,9 +8733,6 @@ export type Resolvers<ContextType = any> = {
   CreateMatchmakingQueuePayload?: CreateMatchmakingQueuePayloadResolvers<ContextType>;
   CreateMatchmakingTicketPayload?: CreateMatchmakingTicketPayloadResolvers<ContextType>;
   CreateUserEntityAddonPayload?: CreateUserEntityAddonPayloadResolvers<ContextType>;
-  CurrentCard?: CurrentCardResolvers<ContextType>;
-  CurrentCardsConnection?: CurrentCardsConnectionResolvers<ContextType>;
-  CurrentCardsEdge?: CurrentCardsEdgeResolvers<ContextType>;
   Cursor?: GraphQLScalarType;
   Datetime?: GraphQLScalarType;
   Deck?: DeckResolvers<ContextType>;
@@ -9002,7 +8792,6 @@ export type Resolvers<ContextType = any> = {
   PublishCardPayload?: PublishCardPayloadResolvers<ContextType>;
   PublishGitCardPayload?: PublishGitCardPayloadResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  RefreshCurrentCardsPayload?: RefreshCurrentCardsPayloadResolvers<ContextType>;
   SaveCardPayload?: SaveCardPayloadResolvers<ContextType>;
   SetCardsInDeckPayload?: SetCardsInDeckPayloadResolvers<ContextType>;
   UpdateBannedDraftCardPayload?: UpdateBannedDraftCardPayloadResolvers<ContextType>;
@@ -9041,17 +8830,17 @@ export type Resolvers<ContextType = any> = {
 };
 
 
-export type CardFragment = { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: string | null };
+export type CardFragment = { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null };
 
 export type ClassFragment = { __typename?: 'Class', class?: string | null, collectible?: boolean | null, isPublished?: boolean | null, cardScript?: any | null, id?: string | null, name?: string | null };
 
-export type CollectionCardFragment = { __typename?: 'CollectionCard', id?: string | null, createdBy?: string | null, cardScript?: any | null, blocklyWorkspace?: string | null, collectible?: boolean | null, cost?: number | null, type?: string | null, lastModified?: any | null };
+export type CollectionCardFragment = { __typename?: 'CollectionCard', id?: string | null, createdBy?: string | null, cardScript?: any | null, blocklyWorkspace?: any | null, collectible?: boolean | null, cost?: number | null, type?: string | null, lastModified?: any | null };
 
 export type DeckFragment = { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null };
 
 export type DeckCardIdsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string } | null> } };
 
-export type DeckCardsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: string | null } | null } | null> } };
+export type DeckCardsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null> } };
 
 export type ImageFragment = { __typename?: 'ImageDef', id: string, name: string, height: number, width: number, src: string };
 
@@ -9063,7 +8852,7 @@ export type CreateDeckMutationVariables = Exact<{
 }>;
 
 
-export type CreateDeckMutation = { __typename?: 'Mutation', createDeckWithCards?: { __typename?: 'CreateDeckWithCardsPayload', deck?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: string | null } | null } | null> } } | null } | null };
+export type CreateDeckMutation = { __typename?: 'Mutation', createDeckWithCards?: { __typename?: 'CreateDeckWithCardsPayload', deck?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null> } } | null } | null };
 
 export type DeleteCardMutationVariables = Exact<{
   cardId: Scalars['String'];
@@ -9096,12 +8885,12 @@ export type RenameDeckMutation = { __typename?: 'Mutation', updateDeckById?: { _
 
 export type SaveCardMutationVariables = Exact<{
   cardId: Scalars['String'];
-  blocklyWorkspace: Scalars['String'];
+  blocklyWorkspace?: InputMaybe<Scalars['JSON']>;
   cardScript?: InputMaybe<Scalars['JSON']>;
 }>;
 
 
-export type SaveCardMutation = { __typename?: 'Mutation', saveCard?: { __typename?: 'SaveCardPayload', card?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: string | null } | null } | null };
+export type SaveCardMutation = { __typename?: 'Mutation', saveCard?: { __typename?: 'SaveCardPayload', card?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null };
 
 export type SetCardsInDeckMutationVariables = Exact<{
   deckId: Scalars['String'];
@@ -9128,7 +8917,7 @@ export type GetCardQueryVariables = Exact<{
 }>;
 
 
-export type GetCardQuery = { __typename?: 'Query', getLatestCard?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: string | null } | null };
+export type GetCardQuery = { __typename?: 'Query', getLatestCard?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null };
 
 export type GetCardsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -9138,7 +8927,7 @@ export type GetCardsQueryVariables = Exact<{
 }>;
 
 
-export type GetCardsQuery = { __typename?: 'Query', allCards?: { __typename?: 'CardsConnection', totalCount: number, nodes: Array<{ __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: string | null } | null> } | null };
+export type GetCardsQuery = { __typename?: 'Query', allCards?: { __typename?: 'CardsConnection', totalCount: number, nodes: Array<{ __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null> } | null };
 
 export type GetClassesQueryVariables = Exact<{
   filter?: InputMaybe<ClassFilter>;
@@ -9155,14 +8944,14 @@ export type GetCollectionCardsQueryVariables = Exact<{
 }>;
 
 
-export type GetCollectionCardsQuery = { __typename?: 'Query', allCollectionCards?: { __typename?: 'CollectionCardsConnection', totalCount: number, nodes: Array<{ __typename?: 'CollectionCard', id?: string | null, createdBy?: string | null, cardScript?: any | null, blocklyWorkspace?: string | null, collectible?: boolean | null, cost?: number | null, type?: string | null, lastModified?: any | null } | null> } | null };
+export type GetCollectionCardsQuery = { __typename?: 'Query', allCollectionCards?: { __typename?: 'CollectionCardsConnection', totalCount: number, nodes: Array<{ __typename?: 'CollectionCard', id?: string | null, createdBy?: string | null, cardScript?: any | null, blocklyWorkspace?: any | null, collectible?: boolean | null, cost?: number | null, type?: string | null, lastModified?: any | null } | null> } | null };
 
 export type GetDeckQueryVariables = Exact<{
   deckId: Scalars['String'];
 }>;
 
 
-export type GetDeckQuery = { __typename?: 'Query', deckById?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: string | null } | null } | null> } } | null };
+export type GetDeckQuery = { __typename?: 'Query', deckById?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null> } } | null };
 
 export type GetDecksQueryVariables = Exact<{
   user?: InputMaybe<Scalars['String']>;
@@ -9425,7 +9214,7 @@ export type RenameDeckMutationHookResult = ReturnType<typeof useRenameDeckMutati
 export type RenameDeckMutationResult = Apollo.MutationResult<RenameDeckMutation>;
 export type RenameDeckMutationOptions = Apollo.BaseMutationOptions<RenameDeckMutation, RenameDeckMutationVariables>;
 export const SaveCardDocument = gql`
-    mutation saveCard($cardId: String!, $blocklyWorkspace: String!, $cardScript: JSON) {
+    mutation saveCard($cardId: String!, $blocklyWorkspace: JSON, $cardScript: JSON) {
   saveCard(
     input: {cardId: $cardId, workspace: $blocklyWorkspace, json: $cardScript}
   ) {

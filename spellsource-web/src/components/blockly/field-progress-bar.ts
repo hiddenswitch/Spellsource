@@ -1,5 +1,4 @@
 import { Field, utils } from "blockly";
-import { clamp } from "lodash";
 
 export class FieldProgressBar extends Field {
   static type = "field_progress_bar";
@@ -14,6 +13,8 @@ export class FieldProgressBar extends Field {
     super(progress, null, opt_config);
     this.width = width || 100;
     this.height = height || 15;
+    this.SERIALIZABLE = false;
+    this.EDITABLE = false;
   }
 
   static fromJson(options) {

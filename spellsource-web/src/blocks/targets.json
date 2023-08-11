@@ -42,7 +42,7 @@
         }
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "super.randomTarget",
         "value": true
       }

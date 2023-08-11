@@ -1,186 +1,83 @@
-import { Xml } from "blockly";
-import { extend, filter, find, fromPairs, isArray, isEmpty, isPlainObject, map, merge } from "lodash";
+import Blockly, { Block } from "blockly";
+import { isArray, isEmpty, isPlainObject, merge } from "lodash";
 import format from "string-format";
-import * as BlocklyMiscUtils from "./blockly-spellsource-utils";
 import { RgbColour } from "../components/blockly/field-colour-hsv-sliders";
 
 export const isNumeric = (str) => !isNaN(str) && !isNaN(parseFloat(str));
 
-/**
- * Process a given piece of XML, returning a "CardScript" JSON token that corresponds to it.
- *
- * When given an XML document, this will descend, depth-first, to recursive calls to this function, building the
- * object bottom-up.
- *
- * For example,
- *
- * <block 1> xmlToDictionary(1) {
- *   <statement 2> xmlToDictionary(2) {
- *     <block 3 ...> xmlToDictionary(3) {return reduce 2, 3}
- *       <next>
- *         <block 4 ...> xmlToDictionary(4) {return reduce 3, 4}
- *       </next>
- *   </statement> return reduce 2, 1 }
- * </block> return 1 }
- *
- * The way we signal the time and objects to reduce with is using the <data> element for blocks.
- *
- * attributes block (something + an attributes object calculated from the crap we received)
- *   int attribute (something + int attribute + bool attribute + int attribute)
- *     bool attribute (something + int attribute + bool attribute)
- *       int attribute add this int attribute to whatever was previous to it (something + int attribute)
- *
- * @param xml
- * @param prev
- * @param parent
- * @returns {{}|*|{}|[]}
- */
-export function xmlToCardScript(xml: Element | DocumentFragment, prev = null, parent = null) {
-  let nextNode = null;
-  let next = null;
-  switch (xml.nodeName) {
-    case "#document":
-      if (xml.firstElementChild) {
-        return xmlToCardScript(xml.firstElementChild);
-      }
-      break;
-    case "xml":
-      if (xml.firstElementChild) {
-        const elementNodes = filter(Array.from(xml.childNodes) as Element[], (cn) => {
-          return cn.nodeType === Node.ELEMENT_NODE && BlocklyMiscUtils.isSpellsourceBlock(cn.getAttribute("type"));
-        });
-        if (elementNodes.length === 1) {
-          return xmlToCardScript(elementNodes[0]);
-        }
-        return map(elementNodes, (cn) => xmlToCardScript(cn));
-      }
-      break;
-    case "shadow":
-    case "block":
-      const obj: any = {};
-      if (!xml.hasChildNodes()) {
-        return obj;
-      }
-      const childNodes = Array.from(xml.childNodes) as Element[];
-      const length = childNodes.length;
-      let arrayName: string | undefined = undefined;
-      for (let i = 0; i < length; i++) {
-        const childNode = childNodes[i];
-        const name = childNode.getAttribute("name");
-        switch (childNode.nodeName) {
-          case "#text":
-            // i.e. if childElementCount === 0
-            if (length === 1) {
-              return (xml as Element).innerHTML;
-            }
-            break;
-          case "field":
-            obj[name] = isNumeric(childNode.innerHTML) ? Number(childNode.innerHTML) : childNode.innerHTML;
-            break;
-          case "statement":
-          case "value":
-            obj[name] =
-              childNode.firstElementChild.nodeName === "shadow" &&
-              childNode.lastElementChild !== childNode.firstElementChild
-                ? xmlToCardScript(childNode.lastElementChild, null, obj)
-                : xmlToCardScript(childNode.firstElementChild, null, obj);
+export const numberIfNumeric = (str: string) => (isNumeric(str) ? Number(str) : str);
 
-            break;
-          case "next":
-            if (childNode.firstElementChild && childNode.firstElementChild.nodeName === "block") {
-              nextNode = childNode.firstElementChild;
-            }
-            break;
-          case "mutation":
-            if (childNode.hasAttribute("arrayName")) {
-              arrayName = childNode.getAttribute("arrayName");
-            }
-
-            break;
-        }
-      }
-
-      if (nextNode) {
-        next = xmlToCardScript(nextNode, obj);
-      }
-
-      const data = find(childNodes, (cn) => cn.nodeName === "data");
-      if (data) {
-        const values = data.innerHTML.split(",");
-        let retValue = null;
-        for (let i = 0; i < values.length; i++) {
-          const value = values[i];
-          switch (value) {
-            case "BLOCKLY_EXTEND_PREVIOUS":
-              if (
-                obj.customArg !== null &&
-                obj.customArg !== undefined &&
-                obj.customValue !== null &&
-                obj.customValue !== undefined
-              ) {
-                obj[obj.customArg] = obj.customValue;
-                delete obj.customArg;
-                delete obj.customValue;
-              }
-              if (prev) {
-                merge(prev, obj);
-              }
-              retValue = obj;
-              break;
-            case "BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE":
-              if (!obj.attribute) {
-                return {};
-              }
-              const boolAttribute = { [obj.attribute]: true };
-              if (next) {
-                extend(boolAttribute, next);
-              }
-              retValue = boolAttribute;
-              break;
-            case "BLOCKLY_INT_ATTRIBUTE":
-              if (!obj.attribute) {
-                return {};
-              }
-              const intAttribute = { [obj.attribute]: obj.value };
-              if (next) {
-                extend(intAttribute, next);
-              }
-              retValue = intAttribute;
-              break;
-            case "BLOCKLY_ARRAY_ELEMENT":
-              // Handle every array statement on this block
-              retValue = [obj];
-              if (obj.i) {
-                retValue = [obj.i];
-              }
-              if (next) {
-                if (isArray(next)) {
-                  retValue = retValue.concat(next);
-                } else {
-                  retValue = retValue.concat([next]);
-                }
-              }
-              break;
-            case "BLOCKLY_ARRAY":
-              retValue = Object.values(obj);
-              break;
-            default:
-              const allValues = filter(childNodes, (cn) => cn.nodeName === "field");
-              const valuesObj = fromPairs(map(allValues, (cn) => [cn.attributes["name"].value, cn.innerHTML]));
-
-              const res = format(value, valuesObj);
-              retValue = isNumeric(res) ? Number(res) : res;
-              break;
-          }
-        }
-        if (retValue !== null) {
-          return postProcessCardScript(retValue);
-        }
-      }
-      return postProcessCardScript(obj);
-    default:
-      throw new Error("invalid block type to pass here: " + xml.nodeName);
+export function blockStateToCardScript(block: Blockly.serialization.blocks.State) {
+  let cardScript = {} as any;
+  for (let [name, value] of Object.entries(block.fields ?? {})) {
+    cardScript[name] = numberIfNumeric(value);
   }
+
+  for (let [name, input] of Object.entries(block.inputs ?? {})) {
+    const childBlock = input.block ?? input.shadow;
+
+    cardScript[name] = blockStateToCardScript(childBlock);
+  }
+
+  if ("customArg" in cardScript && "customValue" in cardScript) {
+    cardScript[cardScript.customArg] = cardScript.customValue;
+    delete cardScript.customArg;
+    delete cardScript.customValue;
+  }
+
+  if (block.data && !(typeof block.data === "string" && block.data.startsWith("BLOCKLY_"))) {
+    return block.data === "null" ? null : numberIfNumeric(format(block.data, cardScript));
+  }
+
+  if (block.data === "BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE" && cardScript.attribute) {
+    cardScript = {
+      [cardScript.attribute]: true,
+    };
+  }
+
+  if (block.data === "BLOCKLY_INT_ATTRIBUTE" && cardScript.attribute) {
+    cardScript = {
+      [cardScript.attribute]: cardScript.value,
+    };
+  }
+
+  if (block.data === "BLOCKLY_ARRAY_ELEMENT") {
+    cardScript = cardScript.i ? [cardScript.i] : [cardScript];
+  }
+
+  if (block.data === "BLOCKLY_ARRAY") {
+    cardScript = Object.values(cardScript);
+  }
+
+  if (block.data === "BLOCKLY_DICTIONARY") {
+    for (let i = 0, key, value; (key = cardScript["key" + i]) && (value = cardScript["value" + i]); i++) {
+      cardScript[key] = value;
+      delete cardScript["key" + i];
+      delete cardScript["value" + i];
+    }
+  }
+
+  const nextBlock = block.next?.block ?? block.next?.shadow;
+  if (nextBlock) {
+    const nextCardScript = blockStateToCardScript(nextBlock);
+
+    if (
+      nextBlock.data === "BLOCKLY_EXTEND_PREVIOUS" ||
+      nextBlock.data === "BLOCKLY_BOOLEAN_ATTRIBUTE_TRUE" ||
+      nextBlock.data === "BLOCKLY_INT_ATTRIBUTE"
+    ) {
+      merge(cardScript, nextCardScript);
+    } else if (nextBlock.data === "BLOCKLY_ARRAY_ELEMENT") {
+      if (!isArray(cardScript)) {
+        cardScript = [cardScript];
+      }
+      cardScript.push(...(isArray(nextCardScript) ? nextCardScript : [nextCardScript]));
+    } else {
+      // ignored
+    }
+  }
+
+  return postProcessCardScript(cardScript);
 }
 
 /**
@@ -443,6 +340,18 @@ function rearrangeInputValues(cardScript) {
 }
 
 export function workspaceToCardScript(workspace) {
-  const xml = Xml.workspaceToDom(workspace);
-  return xmlToCardScript(xml);
+  const state = Blockly.serialization.workspaces.save(workspace);
+
+  const blocks = state.blocks.blocks as Blockly.serialization.blocks.State[];
+
+  if (blocks.length === 1) {
+    return blockStateToCardScript(blocks[0]);
+  } else {
+    return blocks.map(blockStateToCardScript);
+  }
+}
+
+export function blockToCardScript(block: Block) {
+  const state = Blockly.serialization.blocks.save(block);
+  return blockStateToCardScript(state);
 }

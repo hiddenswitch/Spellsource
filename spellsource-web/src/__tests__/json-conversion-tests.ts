@@ -16,22 +16,22 @@ console.warn = (message) => {
   else tempConsoleWarn(message);
 };
 
-import { CardDef } from "../../components/collection/card-display";
-import * as WorkspaceUtils from "../workspace-utils";
-import * as JsonConversionUtils from "../json-conversion-utils";
+import { CardDef } from "../components/collection/card-display";
+import * as WorkspaceUtils from "../lib/workspace-utils";
+import * as JsonConversionUtils from "../lib/json-conversion-utils";
 import { Workspace } from "blockly";
 import { beforeAll, describe, expect, test } from "@jest/globals";
-import * as BlocklyMiscUtils from "../blockly-spellsource-utils";
-import SpellsourceTesting from "../spellsource-testing";
+import * as BlocklyMiscUtils from "../lib/blockly-spellsource-utils";
+import SpellsourceTesting from "../lib/spellsource-testing";
 import java from "java";
-import { getAllBlockJson, getAllIcons, readAllJsonSync } from "../fs-utils";
+import { getAllBlockJson, getAllIcons, readAllJsonSync } from "../lib/fs-utils";
 import { keyBy } from "lodash";
-import { BlocklyDataContext } from "../../pages/card-editor";
+import { BlocklyDataContext } from "../pages/card-editor";
 import { ContextType } from "react";
 import path from "path";
-import { transformCard } from "../json-transforms";
+import { transformCard } from "../lib/json-transforms";
 import { promisify } from "util";
-import * as BlocklyRegister from "../blockly-register";
+import * as BlocklyRegister from "../lib/blockly-setup";
 
 console.log = tempConsoleLog;
 console.warn = tempConsoleWarn;

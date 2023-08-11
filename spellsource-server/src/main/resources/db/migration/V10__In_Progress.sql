@@ -27,6 +27,7 @@ alter table spellsource.cards
     add if not exists is_published bool not null default true,
     alter is_published set default false,
     drop constraint if exists cards_pkey cascade,
+    alter blockly_workspace type jsonb using null,
     add if not exists succession   bigint primary key generated always as identity;
 ;
 
@@ -178,7 +179,7 @@ begin
 end;
 $$ language plpgsql volatile;
 
-create or replace function spellsource.save_card(card_id text, workspace xml, json jsonb) returns spellsource.cards as
+create or replace function spellsource.save_card(card_id text, workspace jsonb, json jsonb) returns spellsource.cards as
 $$
 declare
     card spellsource.cards;
@@ -333,7 +334,7 @@ create or replace function spellsource.get_collection_cards()
                 id                text,
                 created_by        varchar,
                 card_script       jsonb,
-                blockly_workspace xml,
+                blockly_workspace jsonb,
                 name              text,
                 type              text,
                 class             text,

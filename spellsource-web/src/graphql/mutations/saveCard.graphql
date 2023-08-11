@@ -1,4 +1,4 @@
-mutation saveCard($cardId: String!, $blocklyWorkspace: String!, $cardScript: JSON) {
+mutation saveCard($cardId: String!, $blocklyWorkspace: JSON, $cardScript: JSON) {
   saveCard(input: {cardId: $cardId, workspace: $blocklyWorkspace, json: $cardScript}) {
     card {
       ...card

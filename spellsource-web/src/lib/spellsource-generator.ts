@@ -60,24 +60,21 @@ export function generateJavaScript() {
   for (let blocksKey in Blockly.Blocks) {
     if (Blockly.Blocks[blocksKey]?.json?.output === "ConditionDesc") {
       javascriptGenerator.forBlock[blocksKey] = function (block) {
-        let xml = Blockly.Xml.blockToDom(block, true);
-        let json = WorkspaceUtils.xmlToCardScript(xml);
+        let json = WorkspaceUtils.blockToCardScript(block);
         return ["SpellsourceTesting.condition(`" + JSON.stringify(json, null, 2) + "`, context)", ORDER_NONE];
       };
     }
 
     if (Blockly.Blocks[blocksKey]?.json?.output === "ValueProviderDesc") {
       javascriptGenerator.forBlock[blocksKey] = function (block) {
-        let xml = Blockly.Xml.blockToDom(block, true);
-        let json = WorkspaceUtils.xmlToCardScript(xml);
+        let json = WorkspaceUtils.blockToCardScript(block);
         return ["SpellsourceTesting.value(`" + JSON.stringify(json, null, 2) + "`, context)", ORDER_NONE];
       };
     }
 
     if (blocksKey.startsWith("Starter_")) {
       javascriptGenerator.forBlock[blocksKey] = function (block) {
-        let xml = Blockly.Xml.blockToDom(block, true);
-        let json = WorkspaceUtils.xmlToCardScript(xml);
+        let json = WorkspaceUtils.blockToCardScript(block);
         let id = block.getFieldValue("id");
         let cardId = Blockly.Blocks["WorkspaceCard_" + id]?.data;
 
@@ -135,7 +132,5 @@ function fixJsonVariables(json) {
 }
 
 function blockToJson(block: Blockly.Block) {
-  let xml = Blockly.Xml.blockToDom(block, true);
-  let json = WorkspaceUtils.xmlToCardScript(xml);
-  return this.fixJsonVariables(json);
+  return this.fixJsonVariables(WorkspaceUtils.blockToCardScript(block));
 }

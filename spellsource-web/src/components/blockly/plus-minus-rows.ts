@@ -1,10 +1,9 @@
 import { ExtensionMixin, MutatorFn } from "./mutators";
 import Blockly, { Block } from "blockly";
 import { BlockArgDef, BlockDef } from "../../lib/blockly-types";
-import { argsList, reInitBlock, rowsList } from "../../lib/blockly-utils";
+import { reInitBlock, rowsList } from "../../lib/blockly-utils";
 
 interface PlusMinusOptions {
-  arrayName?: string;
   itemCount?: number;
 }
 
@@ -29,15 +28,6 @@ export const PlusMinusRows = "plus_minus_rows";
 export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
   itemCount: null!,
   options: null!,
-  mutationToDom(): Element {
-    const container = Blockly.utils.xml.createElement("mutation");
-    container.setAttribute("itemCount", String(this.itemCount));
-    return container;
-  },
-  domToMutation(xmlElement: Element): void {
-    this.itemCount = parseInt(xmlElement.getAttribute("itemCount"), 10);
-    this.updateShape_();
-  },
   saveExtraState(): PlusMinusState {
     return { itemCount: this.itemCount };
   },
@@ -65,8 +55,11 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
 
     const argNumbers = (args: BlockArgDef[], i: number) => {
       const newArgs = JSON.parse(JSON.stringify(args)) as BlockArgDef[];
-
-      newArgs.find((arg) => arg.type === "input_value").name = this.options.arrayName + i;
+      newArgs.forEach((arg) => {
+        if (arg.name) {
+          arg.name += i;
+        }
+      });
 
       return newArgs;
     };
@@ -89,15 +82,18 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
     reInitBlock(this, block);
   },
   minus(index: number): void {
-    const block = Blockly.Blocks[this.type].json as BlockDef;
-    const options = block.mutatorOptions as PlusMinusOptions;
-
     let count = 0;
     this.inputList.forEach((input, i) => {
       if (i == index) {
         input.name = "DELETING";
+        input.fieldRow.filter((field) => field.name).forEach((field) => (field.name = "DELETING"));
       } else {
-        input.name = this.options.arrayName + count++;
+        input.name = input.name.replace(/\d+$/, "") + count;
+        input.fieldRow
+          .filter((field) => field.name)
+          .forEach((field) => (field.name = field.name.replace(/\d+$/, "") + count));
+
+        count++;
       }
     });
 
@@ -110,12 +106,12 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
     this.setShadow(this.getPreviousBlock() && this.itemCount == 0);
   },
   plus(index: number): void {
-    const block = Blockly.Blocks[this.type].json as BlockDef;
-    const options = block.mutatorOptions as PlusMinusOptions;
-
     let count = 0;
     this.inputList.forEach((input, i) => {
-      input.name = this.options.arrayName + count;
+      input.name = input.name.replace(/\d+$/, "") + count;
+      input.fieldRow
+        .filter((field) => field.name)
+        .forEach((field) => (field.name = field.name.replace(/\d+$/, "") + count));
       if (index == i) {
         count += 2;
       } else {
@@ -130,10 +126,6 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
   initMutator(this): void {
     const block = Blockly.Blocks[this.type].json as BlockDef;
     this.options = (block.mutatorOptions as PlusMinusOptions) ?? {};
-
-    if (!this.options.arrayName) {
-      this.options.arrayName = argsList(block).find((arg) => arg.name).name;
-    }
 
     if (this.itemCount == null) {
       this.itemCount = this.options.itemCount ?? 0;

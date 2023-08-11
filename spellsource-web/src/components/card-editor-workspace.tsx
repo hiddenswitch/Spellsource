@@ -1,4 +1,4 @@
-import React, { forwardRef, MutableRefObject, useContext, useEffect, useState } from "react";
+import React, { forwardRef, MutableRefObject, useContext, useEffect, useMemo, useState } from "react";
 import * as WorkspaceUtils from "../lib/workspace-utils";
 import Blockly, { Block, BlockSvg, Toolbox, ToolboxCategory, WorkspaceSvg } from "blockly";
 import * as JsonConversionUtils from "../lib/json-conversion-utils";
@@ -24,8 +24,8 @@ import { useEffectOnce } from "../hooks/use-effect-once";
 import { uniqBy } from "lodash";
 import { openFromFile } from "../lib/blockly-context-menu";
 import cx from "classnames";
-import * as BlocklyRegister from "../lib/blockly-register";
-import { plugins } from "../lib/blockly-register";
+import * as BlocklyRegister from "../lib/blockly-setup";
+import { plugins } from "../lib/blockly-setup";
 import * as BlocklyModification from "../lib/blockly-modification";
 import SpellsourceRenderer from "../lib/spellsource-renderer";
 
@@ -60,8 +60,7 @@ const handleWorkspaceCards = (
     .filter((block) => block.type.startsWith("Starter_"))
     .forEach((block: BlockSvg) => {
       block.setFieldValue(userId + "-" + block.id, "id");
-      const blockXml = Blockly.Xml.blockToDom(block, true);
-      const card = (block.cardScript = WorkspaceUtils.xmlToCardScript(blockXml) as CardDef);
+      const card = (block.cardScript = WorkspaceUtils.blockToCardScript(block) as CardDef);
       cardScript[card.id] = card;
 
       if (card.type === "CLASS") {
@@ -121,7 +120,7 @@ const CardEditorWorkspace = forwardRef(
     const [results, setResults] = useState<string[]>([]);
 
     const mainWorkspace = () => blocklyEditor.current?.workspace;
-    const toolbox = () => mainWorkspace()?.getToolbox() as Toolbox;
+    const getToolbox = () => mainWorkspace()?.getToolbox() as Toolbox;
 
     const [json, setJson] = useState("{}");
     const [allCardScript, setAllCardScript] = useState({} as Record<string, CardDef>);
@@ -151,24 +150,17 @@ const CardEditorWorkspace = forwardRef(
       const cardScript = block.cardScript;
       if (!cardId || !userId || !cardScript) return;
 
-      const dom = Blockly.Xml.blockToDom(block, false) as Element;
-      const comment = dom.getElementsByTagName("comment")[0];
-      if (comment) {
-        dom.removeChild(comment);
-      }
+      const blockState = Blockly.serialization.blocks.save(block);
 
-      for (const nextBlock of dom.getElementsByTagName("block")) {
-        for (const childNode of nextBlock.childNodes) {
-          const tagName = (childNode as Element).tagName;
-          if (tagName !== "data" && tagName !== "field" && tagName !== "next") {
-            nextBlock.setAttribute("collapsed", "true");
-            break;
+      for (let block = blockState; block; block = block.next?.block) {
+        block.collapsed = true;
+        for (let input of Object.values(block.inputs ?? {})) {
+          if (input.block && input.block.inputs) {
+            input.block.collapsed = true;
           }
         }
       }
-      dom.setAttribute("collapsed", "false");
-
-      const blocklyWorkspace = Blockly.Xml.domToText(dom);
+      delete blockState.collapsed;
 
       const isPrivate = !cardScript.public;
       if (!isPrivate) {
@@ -179,7 +171,7 @@ const CardEditorWorkspace = forwardRef(
         variables: {
           cardId,
           cardScript,
-          blocklyWorkspace,
+          blocklyWorkspace: blockState,
         },
       });
     };
@@ -249,13 +241,13 @@ const CardEditorWorkspace = forwardRef(
       });
 
     useEffect(() => {
-      const classes = toolbox()?.getToolboxItemById("Classes") as ToolboxCategory;
+      const classes = getToolbox()?.getToolboxItemById("Classes") as ToolboxCategory;
       classes?.updateFlyoutContents(classesCategory(data));
 
-      const cards = toolbox()?.getToolboxItemById("Cards") as ToolboxCategory;
+      const cards = getToolbox()?.getToolboxItemById("Cards") as ToolboxCategory;
       cards?.updateFlyoutContents(cardsCategory(data));
 
-      const myCards = toolbox()?.getToolboxItemById("My Cards") as ToolboxCategory;
+      const myCards = getToolbox()?.getToolboxItemById("My Cards") as ToolboxCategory;
       myCards?.updateFlyoutContents(myCardsCategory(data));
 
       uniqBy(
@@ -263,7 +255,7 @@ const CardEditorWorkspace = forwardRef(
         (card) => card.set
       ).forEach((set) => {
         if (set === "CUSTOM") return;
-        const category = toolbox()?.getToolboxItemById(`My ${set} Cards`) as ToolboxCategory;
+        const category = getToolbox()?.getToolboxItemById(`My ${set} Cards`) as ToolboxCategory;
         category?.updateFlyoutContents(myCardsForSetCategory(set, data));
       });
 
@@ -336,6 +328,8 @@ const CardEditorWorkspace = forwardRef(
       // props.setJS(javascriptGenerator.workspaceToCode(mainWorkspace()));
     };
 
+    const toolbox = useMemo(() => BlocklyToolbox.editorToolbox(results, data), [results, data]);
+
     const xs = !useBreakpoint("sm", "up");
 
     return (
@@ -357,7 +351,7 @@ const CardEditorWorkspace = forwardRef(
           oneBasedIndex: false,
           horizontalLayout: xs,
           renderer: props.renderer || SpellsourceRenderer.name,
-          toolbox: BlocklyToolbox.editorToolbox(results, data),
+          toolbox,
           plugins,
         }}
         ref={blocklyEditor}

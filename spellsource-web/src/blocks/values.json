@@ -111,7 +111,7 @@
     "inputsInline": false,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AlgebraicValueProvider"
       },
@@ -183,7 +183,7 @@
     "message0": "%1number of cards in %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardCountValueProvider"
       },
@@ -205,7 +205,7 @@
     "message0": "%1number of cards in %3 that %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardCountValueProvider"
       },
@@ -236,7 +236,7 @@
     "inputsInline": true,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AttributeValueProvider"
       },
@@ -269,7 +269,7 @@
     "message0": "%1number of entities in %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "EntityCountValueProvider"
       },
@@ -291,7 +291,7 @@
     "message0": "%1number of entites in %2 that %3",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "EntityCountValueProvider"
       },
@@ -321,7 +321,7 @@
     "message0": "%1if %3 then %2 otherwise %4",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "ConditionalValueProvider"
       },
@@ -359,7 +359,7 @@
     "message0": "%1number of units that died this turn",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "DiedThisTurnValueProvider"
       }
@@ -373,7 +373,7 @@
     "message0": "%1number of cards you've played that %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CardsPlayedValueProvider"
       },
@@ -395,12 +395,12 @@
     "message0": "%1%2 your armor",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "AttriibuteValueProvider"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "attribute",
         "value": "ARMOR"
       }
@@ -413,7 +413,7 @@
     "message0": "current turn number",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "CurrentTurnValueProvider"
       }
@@ -426,7 +426,7 @@
     "message0": "last turn number",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "LastTurnValueProvider"
       }
@@ -441,13 +441,13 @@
     "message0": "number of spells you've cast",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "PlayerAttributeValueProvider"
       },
       {
         "name": "playerAttribute",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "SPELLS_CAST"
       }
     ]
@@ -461,13 +461,13 @@
     "message0": "your current lun",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "PlayerAttributeValueProvider"
       },
       {
         "name": "playerAttribute",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "MANA"
       }
     ]
@@ -481,13 +481,13 @@
     "message0": "number of cards in hand",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "PlayerAttributeValueProvider"
       },
       {
         "name": "playerAttribute",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "HAND_COUNT"
       }
     ]
@@ -501,13 +501,13 @@
     "message0": "number of cards in deck",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "PlayerAttributeValueProvider"
       },
       {
         "name": "playerAttribute",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "DECK_COUNT"
       }
     ]
@@ -521,7 +521,7 @@
     "message0": "number of cards that %2 you've played this turn",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "PlayedThisTurnValueProvider"
       },
@@ -544,7 +544,7 @@
     "message0": "The Gatekeeper Sha value",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "GatekeeperShaValueProvider"
       }
@@ -559,7 +559,7 @@
     "message0": "Apply %3 on the %4 of all %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "ReduceValueProvider"
       },
@@ -620,7 +620,7 @@
     "message0": "The lun cost of %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "ManaCostProvider"
       },
@@ -643,7 +643,7 @@
     "message0": "the total board count",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "BoardCountValueProvider"
       }
@@ -657,7 +657,7 @@
     "message0": "the value of the event",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "EventValueProvider"
       }
@@ -672,13 +672,13 @@
     "message0": "The cost of the last card you played",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "PlayerAttributeValueProvider"
       },
       {
         "name": "playerAttribute",
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "value": "LAST_MANA_COST"
       }
     ]
@@ -692,7 +692,7 @@
     "message0": "Your Spell Power applied to %2",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "class",
         "value": "SpellDamageValueProvider"
       },

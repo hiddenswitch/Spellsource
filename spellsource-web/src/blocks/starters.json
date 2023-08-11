@@ -10,27 +10,27 @@
     "inputsInline": false,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "id",
         "value": ""
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "type",
         "value": "MINION"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "fileFormatVersion",
         "value": "1"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "set",
         "value": "CUSTOM"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "collectible",
         "value": true
       }
@@ -136,27 +136,27 @@
     "message0": "Spell Card%1%2%3%4",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "id",
         "value": ""
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "type",
         "value": "SPELL"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "fileFormatVersion",
         "value": "1"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "set",
         "value": "CUSTOM"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "collectible",
         "value": true
       }
@@ -254,27 +254,27 @@
     "message0": "Secret Card%1%2%3%4",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "id",
         "value": ""
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "type",
         "value": "SPELL"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "fileFormatVersion",
         "value": "1"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "set",
         "value": "CUSTOM"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "collectible",
         "value": true
       }
@@ -372,27 +372,27 @@
     "message0": "Item Card%1%2%3%4",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "id",
         "value": ""
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "type",
         "value": "WEAPON"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "fileFormatVersion",
         "value": "1"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "set",
         "value": "CUSTOM"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "collectible",
         "value": true
       }
@@ -487,27 +487,27 @@
     "message0": "Quest Card%1%2%3%4",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "id",
         "value": ""
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "type",
         "value": "SPELL"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "fileFormatVersion",
         "value": "1"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "set",
         "value": "CUSTOM"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "collectible",
         "value": true
       }
@@ -628,32 +628,32 @@
     "message0": "Skill Card",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "id",
         "value": ""
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "type",
         "value": "HERO_POWER"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "fileFormatVersion",
         "value": "1"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "set",
         "value": "CUSTOM"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "collectible",
         "value": false
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "spell.class",
         "value": "HeroPowerSpell"
       }
@@ -751,32 +751,32 @@
     "message0": "Champion",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "id",
         "value": ""
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "type",
         "value": "HERO"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "fileFormatVersion",
         "value": "1"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "set",
         "value": "CUSTOM"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "collectible",
         "value": false
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "baseManaCost",
         "value": 0
       }
@@ -860,32 +860,32 @@
     "message0": "Champion Card",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "id",
         "value": ""
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "type",
         "value": "HERO"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "fileFormatVersion",
         "value": "1"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "set",
         "value": "CUSTOM"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "collectible",
         "value": true
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "attributes.MAX_HP",
         "value": 30
       }
@@ -977,27 +977,27 @@
     "message0": "Enchantment",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "id",
         "value": ""
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "type",
         "value": "ENCHANTMENT"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "fileFormatVersion",
         "value": "1"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "set",
         "value": "CUSTOM"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "collectible",
         "value": false
       }
@@ -1065,27 +1065,27 @@
     "message0": "Class",
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "id",
         "value": ""
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "type",
         "value": "CLASS"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "fileFormatVersion",
         "value": "1"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "set",
         "value": "CUSTOM"
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "collectible",
         "value": true
       }
@@ -1103,7 +1103,7 @@
         }
       },
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "rarity",
         "value": "FREE"
       },

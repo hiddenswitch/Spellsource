@@ -87,7 +87,7 @@
     "colour": 60,
     "args0": [
       {
-        "type": "field_label_serializable_hidden",
+        "type": "field_hidden",
         "name": "super.spell.filter.class",
         "value": "RaceFilter"
       },
