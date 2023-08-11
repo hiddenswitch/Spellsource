@@ -212,7 +212,7 @@ class DockerPlugin implements Plugin<Project> {
               def isRootDockerfile = dockerFileFile.parentFile.equals(project.projectDir)
               def rootProjectName = project.rootProject.name
               def imageName = isRootDockerfile && dockerFileFile.parentFile.name.contains(rootProjectName) ? "${dockerFileFile.parentFile.name.replace(rootProjectName + "-", "")}$variant" : "${dockerFileFile.parentFile.name}$variant"
-              def repositoryName = isRootDockerfile ? rootProjectName : "${dockerFileFile.parentFile.parentFile.name}"
+              def repositoryName = isRootDockerfile ? rootProjectName.toLowerCase() : "${dockerFileFile.parentFile.parentFile.name.toLowerCase()}"
               def localTag = "$repositoryName/$imageName:latest"
               def thisContainerName = "${repositoryName}_${imageName}"
               TaskProvider<DockerBuildImage> thisArchImage = null;

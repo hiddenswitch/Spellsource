@@ -21,6 +21,7 @@ def scriptNames = ["dev" : "run",
                    "test": "test"]
 
 evaluationDependsOn(":spellsource-server")
+evaluationDependsOn(":spellsource-art-generation")
 
 scripts.each { scriptName, command ->
   def name = "yarnRun${scriptName.capitalize()}"
@@ -36,8 +37,25 @@ scripts.each { scriptName, command ->
   }
 }
 
+tasks.register('copyComfyClient') {
+  dependsOn(':spellsource-art-generation:generateTypeScriptClient')
+  def addlInput = project(':spellsource-art-generation').layout.buildDirectory.dir("comfyclient")
+  def addlOutput = "src/__generated__/comfyclient"
+  inputs.dir(addlInput)
+  outputs.dir("src/__generated__/comfyclient")
+  outputs.cacheIf { true }
+  doLast {
+    copy {
+      from addlInput
+      into addlOutput
+      include("**/*.ts")
+    }
+  }
+}
+
 tasks.named('yarn').configure {
   group('spellsource')
+  dependsOn('copyComfyClient')
   args = ['--frozen-lockfile']
 }
 

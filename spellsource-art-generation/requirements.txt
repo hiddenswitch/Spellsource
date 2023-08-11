@@ -1,0 +1,1 @@
+comfyui @ git+https://github.com/doctorpangloss/ComfyUI.git@installable

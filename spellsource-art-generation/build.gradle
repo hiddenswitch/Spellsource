@@ -1,0 +1,93 @@
+plugins {
+  id 'docker'
+  id "org.openapi.generator" version "7.0.0-beta"
+}
+
+
+import org.apache.tools.ant.taskdefs.condition.Os
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
+// Top-level declarations
+def venvDir = 'venv'
+def scriptsDir = System.properties['os.name'].toLowerCase().contains('windows') ? "${venvDir}/Scripts" : "${venvDir}/bin"
+def sitePackagesDir = System.properties['os.name'].toLowerCase().contains('windows') ?
+        "${venvDir}/Lib/site-packages" :
+        // todo: get the path for real using
+        // python -c "import site; print(site.getsitepackages()[0])"
+        "${venvDir}/lib/python3.11/site-packages"
+
+tasks.register('venv') {
+
+  // Specify the outputs of the task
+  outputs.dir 'venv'
+  outputs.cacheIf { true }
+  outputs.upToDateWhen { file(venvDir).exists() }
+  onlyIf { !file(venvDir).exists() }
+
+  doLast {
+    // Create the virtual environment
+    exec {
+      workingDir(project.layout.projectDirectory)
+      commandLine 'python', '-m', 'venv', venvDir
+    }
+  }
+}
+
+tasks.register('install') {
+  dependsOn 'venv'
+  inputs.files("requirements.txt", "setup.py")
+  outputs.dir "${sitePackagesDir}/spellsource_art_generation"
+  outputs.cacheIf { true }
+
+  doLast {
+    // Install ComfyUI using pip of the virtual environment
+    exec {
+      workingDir(project.layout.projectDirectory)
+      commandLine "${scriptsDir}/pip", 'install', "-e", "."
+    }
+  }
+}
+
+tasks.register("downloadModels") {
+  def srcUrl = 'https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors'
+  def destPath = "$projectDir/models/checkpoints/sd_xl_base_1.0.safetensors"
+
+  inputs.property("srcUrl", srcUrl)
+  outputs.file(destPath)
+  outputs.upToDateWhen { file(destPath).exists() }
+  onlyIf { !file(destPath).exists() }
+  outputs.cacheIf { true }
+
+  doLast {
+    exec {
+      commandLine(["curl", "-sL", srcUrl, "-o", destPath])
+    }
+  }
+}
+
+tasks.register('run') {
+  group('appmana')
+  dependsOn 'install', 'downloadModels'
+  doLast {
+    // Run the comfyui binary from the virtual environment
+    exec {
+      commandLine "${scriptsDir}/comfyui", "--listen"
+    }
+  }
+}
+
+tasks.register("generateTypeScriptClient", GenerateTask) {
+  group('appmana')
+  inputSpec.set(project.layout.projectDirectory.file("$sitePackagesDir/comfy/api/openapi.yaml").asFile.path)
+  outputDir.set(project.layout.buildDirectory.dir("comfyclient").map { it.asFile.path })
+  generatorName = 'typescript'
+  outputs.cacheIf { true }
+  configOptions.putAll([
+          'fileContentDataType'   : 'Buffer', // this is apparently substituted in verbatim and should be 'Blob' for browsers
+          'enumUnknownDefaultCase': 'true',
+          'platform'              : 'node', // or 'browser' or 'deno'
+          'supportsES6'           : 'true',
+          'useObjectParameters'   : 'true',
+          'framework'             : 'fetch-api'
+  ])
+}
