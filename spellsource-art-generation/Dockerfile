@@ -3,6 +3,7 @@ FROM python:3.11
 ADD . /spellsource-art-generation
 
 RUN python -m pip install -U pip && \
+    pip install ./comfyui && \
     pip install ./spellsource-art-generation && \
     if [ "$(uname -m)" = "x86_64" ]; then \
         pip uninstall --yes torch torchvision torchaudio && \
@@ -12,4 +13,5 @@ RUN python -m pip install -U pip && \
 
 EXPOSE 8188
 
+WORKDIR "/workdir"
 ENTRYPOINT ["comfyui"]

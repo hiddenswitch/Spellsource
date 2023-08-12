@@ -40,17 +40,21 @@ tasks.register('install') {
   outputs.cacheIf { true }
 
   doLast {
+    exec {
+      workingDir(project.layout.projectDirectory)
+      commandLine "${scriptsDir}/pip", 'install', "-e", "./comfyui"
+    }
     // Install ComfyUI using pip of the virtual environment
     exec {
       workingDir(project.layout.projectDirectory)
-      commandLine "${scriptsDir}/pip", 'install', "-e", "."
+      commandLine "${scriptsDir}/pip", 'install', "-e", "./spellsource_art_generation"
     }
   }
 }
 
 tasks.register("downloadModels") {
   def srcUrl = 'https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors'
-  def destPath = "$projectDir/models/checkpoints/sd_xl_base_1.0.safetensors"
+  def destPath = "$projectDir/workdir/models/checkpoints/sd_xl_base_1.0.safetensors"
 
   inputs.property("srcUrl", srcUrl)
   outputs.file(destPath)
@@ -71,14 +75,16 @@ tasks.register('run') {
   doLast {
     // Run the comfyui binary from the virtual environment
     exec {
-      commandLine "${scriptsDir}/comfyui", "--listen"
+      workingDir('workdir')
+      executable = "${scriptsDir}/comfyui"
+      args "--listen"
     }
   }
 }
 
 tasks.register("generateTypeScriptClient", GenerateTask) {
   group('spellsource')
-  inputSpec.set(project.layout.projectDirectory.file("$sitePackagesDir/comfy/api/openapi.yaml").asFile.path)
+  inputSpec.set(file("comfyui/comfy/api/openapi.yaml").path)
   outputDir.set(project.layout.buildDirectory.dir("comfyclient").map { it.asFile.path })
   generatorName = 'typescript'
   outputs.cacheIf { true }
