@@ -10,13 +10,10 @@ import { FieldMinus } from "../components/blockly/field-minus";
 import { ToolboxSearchCategory } from "../components/blockly/toolbox-search-category";
 import { CardSearchCategory } from "../components/blockly/card-search-category";
 import { OptionalRows, OptionalRowsFn, OptionalRowsMixin } from "../components/blockly/optional-rows";
-import { TestExtensionMixin, TestExtensionName } from "../components/blockly/test-extension";
 import { PlusMinusRows, PlusMinusRowsFn, PlusMinusRowsMixin } from "../components/blockly/plus-minus-rows";
 import * as BlocklyContextMenu from "./blockly-context-menu";
 import SpellsourceRenderer from "./spellsource-renderer";
 import { SpellsourceConnectionChecker } from "../components/blockly/connection-checker";
-import { createConfiguration, DefaultApi, PromptNode } from "../__generated__/comfyclient";
-import sdxl from "../__generated__/sdxl-ordinary.json";
 
 export const registerAll = (options?: InitBlockOptions) => {
   Blockly.fieldRegistry.register(FieldHidden.type, FieldHidden);
@@ -29,17 +26,16 @@ export const registerAll = (options?: InitBlockOptions) => {
 
   Blockly.registry.register(
     Blockly.registry.Type.TOOLBOX_ITEM,
-    ToolboxSearchCategory.SEARCH_CATEGORY_KIND,
+    ToolboxSearchCategory.registrationName,
     ToolboxSearchCategory
   );
   Blockly.registry.register(
     Blockly.registry.Type.TOOLBOX_ITEM,
-    CardSearchCategory.SEARCH_CATEGORY_KIND,
+    CardSearchCategory.registrationName,
     CardSearchCategory
   );
 
   Blockly.Extensions.registerMutator(OptionalRows, OptionalRowsMixin, OptionalRowsFn);
-  Blockly.Extensions.registerMutator(TestExtensionName, TestExtensionMixin);
   Blockly.Extensions.registerMutator(PlusMinusRows, PlusMinusRowsMixin, PlusMinusRowsFn);
 
   if (options) {
@@ -47,31 +43,6 @@ export const registerAll = (options?: InitBlockOptions) => {
   }
 
   Blockly.blockRendering.register(SpellsourceRenderer.name, SpellsourceRenderer);
-
-  FieldButton.OnClicks["test"] = async (field) => {
-    const block = field.getSourceBlock();
-    const progressBar = field.getSourceBlock().getField("progress") as FieldProgressBar;
-
-    const api = new DefaultApi(createConfiguration());
-
-    const promptText = JSON.stringify(sdxl)
-      .replace("$POSITIVE_TEXT", block.getFieldValue("positive_text"))
-      .replace("$NEGATIVE_TEXT", block.getFieldValue("negative_text"));
-
-    const prompt = JSON.parse(promptText) as Record<string, PromptNode>;
-
-    for (let node of Object.values(prompt)) {
-      if (node.class_type === "KSampler") {
-        node.inputs["seed"] = Math.round(Math.random() * 10000000);
-      }
-    }
-
-    const digest = await api.apiV1PromptsPost({ requestBody: prompt });
-
-    if (digest) {
-      const image = await api.apiV1ImagesDigestGet({ digest });
-    }
-  };
 
   Blockly.registry.register(
     Blockly.registry.Type.CONNECTION_CHECKER,

@@ -63,14 +63,14 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
     kind: "categoryToolbox",
     contents: [
       {
-        kind: ToolboxSearchCategory.SEARCH_CATEGORY_KIND,
+        kind: ToolboxSearchCategory.registrationName,
         name: "Search Blocks",
         colour: "rgb(85, 119, 238)",
         contents: [],
       },
 
       {
-        kind: CardSearchCategory.SEARCH_CATEGORY_KIND,
+        kind: CardSearchCategory.registrationName,
         name: "Search Cards",
         colour: "rgb(85, 119, 238)",
         contents: [],

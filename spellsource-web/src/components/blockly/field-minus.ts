@@ -24,6 +24,10 @@ export class FieldMinus extends FieldImage {
     return new FieldMinus(options);
   }
 
+  getText(): string {
+    return "";
+  }
+
   static onClick(field: FieldMinus) {
     const block = field.getSourceBlock() as Block & PlusMinusRowsMutator;
 

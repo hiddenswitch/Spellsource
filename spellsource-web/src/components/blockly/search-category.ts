@@ -9,7 +9,7 @@
  * in its flyout.
  */
 import * as Blockly from "blockly/core";
-import { ToolboxItemInfo } from "blockly/core/utils/toolbox";
+import { FlyoutItemInfoArray, ToolboxItemInfo } from "blockly/core/utils/toolbox";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -23,6 +23,7 @@ export abstract class SearchCategory extends Blockly.ToolboxCategory {
   protected categoryDef: Blockly.utils.toolbox.StaticCategoryInfo;
   protected defaultMessage: string;
   protected noResultsMessage: string;
+  protected hasQueried = false;
 
   /**
    * Initializes a ToolboxSearchCategory.
@@ -63,6 +64,10 @@ export abstract class SearchCategory extends Blockly.ToolboxCategory {
     });
     this.rowContents_.replaceChildren(this.searchField);
     return dom;
+  }
+
+  setSearchQuery(query: string) {
+    this.searchField.value = query;
   }
 
   /**
@@ -109,21 +114,47 @@ export abstract class SearchCategory extends Blockly.ToolboxCategory {
 
   protected abstract getBlocks(): Promise<ToolboxItemInfo[]>;
 
+  getAllContents(): FlyoutItemInfoArray | string {
+    return super.getContents();
+  }
+
+  getContents(): FlyoutItemInfoArray | string {
+    if (!this.hasQueried) {
+      return [];
+    }
+    return super.getContents();
+  }
+
   /**
    * Filters the available blocks based on the current query string.
    */
   private matchBlocks() {
     const query = this.searchField.value;
+    const hasQuery = query.length >= 3;
 
     this.getBlocks().then((blocks) => {
       {
+        this.hasQueried = true;
         this.flyoutItems_ = blocks ?? [];
         if (!this.flyoutItems_.length) {
           this.flyoutItems_.push({
             kind: "label",
-            text: query.length < 3 ? this.defaultMessage : this.noResultsMessage,
+            text: hasQuery ? this.noResultsMessage : this.defaultMessage,
+          });
+          if (!hasQuery) {
+            this.flyoutItems_.push(...this.categoryDef.contents.slice(0, 20));
+          }
+        }
+
+        if (this.flyoutItems_.length > 20) {
+          this.flyoutItems_ = this.flyoutItems_.slice(0, 20);
+
+          this.flyoutItems_.push({
+            kind: "label",
+            text: "...",
           });
         }
+
         this.parentToolbox_.refreshSelection();
       }
     });

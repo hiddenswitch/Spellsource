@@ -1,21 +1,19 @@
-import { Field, utils } from "blockly";
+import Blockly, { Field, utils, WorkspaceSvg } from "blockly";
 
 export class FieldButton extends Field {
   static type = "field_button";
 
-  static OnClicks: Record<string, (field: FieldButton) => void> = {};
+  protected callbackKey: string;
 
-  protected onClickName: string;
-
-  constructor(value: string, onClickName: string, opt_config?: Object) {
+  constructor(value: string, callbackKey: string, opt_config?: Object) {
     super(value, null, opt_config);
-    this.onClickName = onClickName;
+    this.callbackKey = callbackKey;
     this.SERIALIZABLE = false;
     this.EDITABLE = false;
   }
 
   static fromJson(options) {
-    return new FieldButton(options["text"], options["function"], options);
+    return new FieldButton(options["text"], options["callbackKey"], options);
   }
 
   initView() {
@@ -36,7 +34,10 @@ export class FieldButton extends Field {
     this.fieldGroup_.style.cursor = "pointer";
 
     this.textElement_.onclick = (ev) => {
-      FieldButton.OnClicks[this.onClickName]?.(this);
+      const workspace = this.getSourceBlock().workspace as WorkspaceSvg;
+      const buttonCallback = workspace.getButtonCallback(this.callbackKey);
+
+      buttonCallback(this as any);
     };
   }
 

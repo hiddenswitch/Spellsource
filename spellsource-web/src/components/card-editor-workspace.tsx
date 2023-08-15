@@ -26,8 +26,9 @@ import { openFromFile } from "../lib/blockly-context-menu";
 import cx from "classnames";
 import * as BlocklyRegister from "../lib/blockly-setup";
 import { plugins } from "../lib/blockly-setup";
-import * as BlocklyModification from "../lib/blockly-modification";
+import * as BlocklyModification from "../lib/blockly-patches";
 import SpellsourceRenderer from "../lib/spellsource-renderer";
+import { generateArt } from "../lib/art-generation";
 
 interface CardEditorWorkspaceProps {
   setJSON?: React.Dispatch<React.SetStateAction<string>>;
@@ -355,7 +356,11 @@ const CardEditorWorkspace = forwardRef(
           plugins,
         }}
         ref={blocklyEditor}
-        init={(workspace) => (workspace["getCollectionCards"] = data.getCollectionCards)}
+        init={(workspace) => {
+          workspace["getCollectionCards"] = data.getCollectionCards;
+
+          workspace.registerButtonCallback("generateArt", generateArt);
+        }}
       />
     );
   }

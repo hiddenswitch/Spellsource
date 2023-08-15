@@ -4,6 +4,7 @@ import * as JsonConversionUtils from "./json-conversion-utils";
 import { addMutatorBlock, OptionalRows } from "../components/blockly/optional-rows";
 import { BlockInfo, FlyoutItemInfo } from "blockly/core/utils/toolbox";
 import { ConnectionState } from "blockly/core/serialization/blocks";
+import { ToolboxSearchCategory } from "../components/blockly/toolbox-search-category";
 
 /**
  * Returns a list of the all the arguments in a block's json
@@ -51,6 +52,10 @@ export const manuallyAddShadowBlocks = (thisBlock: Block, block: BlockDef, allow
   }
 
   addShadowBlocksToConnection(thisBlock.nextConnection, block.next, allowNonShadow);
+
+  if (thisBlock.hat) {
+    thisBlock.setOutput(false);
+  }
 };
 
 export const addShadowBlocksToConnection = (
@@ -134,6 +139,8 @@ export function newBlock(workspace, type): Block | BlockSvg {
  * @param block
  */
 export const addBlock = (block: BlockDef) => {
+  const json = Object.freeze(block);
+
   JsonConversionUtils.addBlockToMap(block);
 
   if (block.mutator === OptionalRows) {
@@ -142,11 +149,11 @@ export const addBlock = (block: BlockDef) => {
 
   return (Blockly.Blocks[block.type!] = {
     init: function (this: Block) {
-      this.jsonInit(block);
+      this.jsonInit(json);
       if (block.data) {
         this.data = block.data;
       }
-      if (block.hat) {
+      if (block.hat && !block.output) {
         this.hat = block.hat;
       }
       if (block.type!.endsWith("SHADOW")) {
@@ -156,7 +163,7 @@ export const addBlock = (block: BlockDef) => {
         this.setInputsInline(false);
       }
     },
-    json: block,
+    json,
     data: block.data,
   });
 };
@@ -171,41 +178,56 @@ export const searchToolbox = (blockType, mainWorkspace: WorkspaceSvg) => {
   let categories = toolbox.getToolboxItems().slice(1) as ToolboxCategory[];
 
   for (let category of categories) {
-    if (category.getContents) {
-      let contents = category.getContents();
-      for (let content of contents as FlyoutItemInfo[]) {
-        if (content.kind === "block" && (content as BlockInfo).type === blockType) {
-          if (category.getParent() && category.getParent().isCollapsible() && !category.getParent().isExpanded()) {
-            category.getParent().toggleExpanded();
+    if (!category.getContents) continue;
+
+    const contents =
+      category.toolboxItemDef_.kind === ToolboxSearchCategory.registrationName
+        ? (category as ToolboxSearchCategory).getAllContents()
+        : category.getContents();
+    for (let content of contents as FlyoutItemInfo[]) {
+      if (!(content.kind === "block" && (content as BlockInfo).type === blockType)) {
+        continue;
+      }
+
+      if (category.getParent() && category.getParent().isCollapsible() && !category.getParent().isExpanded()) {
+        category.getParent().toggleExpanded();
+      }
+
+      if (category.toolboxItemDef_.kind === ToolboxSearchCategory.registrationName) {
+        (category as ToolboxSearchCategory).setSearchQuery(
+          Blockly.utils.parsing
+            .tokenizeInterpolation(Blockly.Blocks[blockType].json.message0)
+            .filter((value) => typeof value === "string")
+            .join("")
+        );
+      }
+
+      toolbox.setSelectedItem(category);
+
+      const flyOut = toolbox.getFlyout();
+
+      let workspace: WorkspaceSvg;
+
+      if ((workspace = flyOut.getWorkspace())) {
+        let totalHeight = 0;
+        for (let topBlock of workspace.getTopBlocks(true)) {
+          if (topBlock.type === blockType) {
+            workspace.scrollbar.setY(totalHeight);
+            topBlock.addSelect();
+          } else {
+            totalHeight += topBlock.height + 24;
           }
-          toolbox.setSelectedItem(category);
-
-          const flyOut = toolbox.getFlyout();
-
-          let workspace: WorkspaceSvg;
-
-          if ((workspace = flyOut.getWorkspace())) {
-            let totalHeight = 0;
-            for (let topBlock of workspace.getTopBlocks(true)) {
-              if (topBlock.type === blockType) {
-                workspace.scrollbar.setY(totalHeight);
-                topBlock.addSelect();
-              } else {
-                totalHeight += topBlock.height + 24;
-              }
-            }
-          }
-
-          return;
         }
       }
+
+      return;
     }
   }
 };
 
 export const getBlockInputs = (type: string, allowNonShadow = true) => {
   const block = Blockly.Blocks[type];
-  const inputs = {} as Record<string, any>;
+  const inputs = {} as Record<string, Blockly.serialization.blocks.ConnectionState>;
 
   if (!block || !block.json) return inputs;
   const json = block.json as BlockDef;
@@ -217,17 +239,17 @@ export const getBlockInputs = (type: string, allowNonShadow = true) => {
 
       if (arg.block && allowNonShadow) {
         const input = (inputs[name] ??= {} as any);
-        input.block = { ...arg.block };
+        input.block = JSON.parse(JSON.stringify(arg.block));
         input.block.inputs = getBlockInfo(input.block.type).inputs;
 
         if (!arg.shadow && !Object.values(input.block.inputs).some((input: ConnectionState) => input.block)) {
-          arg.shadow = arg.block;
+          input.shadow = input.block;
         }
       }
 
       if (arg.shadow) {
         const input = (inputs[name] ??= {} as any);
-        input.shadow = { ...arg.shadow };
+        input.shadow = JSON.parse(JSON.stringify(arg.shadow));
         input.shadow.inputs = getBlockInfo(input.shadow.type).inputs;
       }
     }
@@ -236,10 +258,11 @@ export const getBlockInputs = (type: string, allowNonShadow = true) => {
   return inputs;
 };
 
-export const getBlockInfo = (type: string): BlockInfo =>
+export const getBlockInfo = (type: string) =>
   (Blockly.Blocks[type].toolboxInfo ??= {
     type,
     kind: "block",
+    ...(Blockly.Blocks[type].json?.hat ? { extraState: { $hat: true } } : {}),
     inputs: getBlockInputs(type),
     next: Blockly.Blocks[type]?.json?.next,
-  });
+  } as BlockInfo);

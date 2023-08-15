@@ -24,6 +24,12 @@ export class FieldPlus extends FieldImage {
     return new FieldPlus(options);
   }
 
+  getText(): string {
+    const block = this.getSourceBlock() as Block & PlusMinusRowsMutator;
+
+    return "List of " + block.type.substring(block.type.lastIndexOf(".") + 1).replace("[]", "") + "               ";
+  }
+
   static onClick(field: FieldPlus) {
     const block = field.getSourceBlock() as Block & PlusMinusRowsMutator;
 

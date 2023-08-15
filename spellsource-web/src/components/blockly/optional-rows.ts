@@ -16,16 +16,20 @@ interface OptionalRowsMutator extends MutatorMixin<OptionalRowsMutator, Record<s
 
 export const OptionalRows = "optional_rows";
 
-const defaultShow = true;
+const defaultShow = false;
 
 export const OptionalRowsMixin: OptionalRowsMutator = {
   args: undefined,
   saveExtraState() {
-    return this.args;
+    return { ...this.args, $hat: !!this.hat };
   },
-  loadExtraState(state) {
+  loadExtraState({ $hat, ...state }) {
     this.args = state;
     this.rebuildShape_();
+    if ($hat) {
+      this.hat = "cap";
+      this.setOutput(false);
+    }
   },
   decompose(workspace): Block {
     const block = newBlock(workspace, this.type + "_container");
@@ -118,12 +122,14 @@ export const addMutatorBlock = (block: BlockDef) => {
   if (columns == 0) {
     return;
   }
-
   const newBlock: BlockDef = {
     type: block.type + "_container",
     inputsInline: false,
-    message0: block.message0,
-    args0: block.args0,
+    message0: Blockly.utils.parsing
+      .tokenizeInterpolation(block.message0)
+      .filter((value) => typeof value === "string")
+      .join(""),
+    args0: [],
     colour: block.colour,
     nextStatement: null,
   };

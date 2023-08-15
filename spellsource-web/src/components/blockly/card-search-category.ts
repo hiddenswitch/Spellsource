@@ -11,7 +11,7 @@ import * as BlocklyMiscUtils from "../../lib/blockly-spellsource-utils";
  * in its flyout.
  */
 export class CardSearchCategory extends SearchCategory {
-  static readonly SEARCH_CATEGORY_KIND = "cardsearch";
+  static readonly registrationName = "cardsearch";
 
   /**
    * Initializes a ToolboxSearchCategory.
@@ -27,7 +27,7 @@ export class CardSearchCategory extends SearchCategory {
     opt_parent?: Blockly.ICollapsibleToolboxItem
   ) {
     super(categoryDef, parentToolbox, opt_parent);
-    this.categoryKind = CardSearchCategory.SEARCH_CATEGORY_KIND;
+    this.categoryKind = CardSearchCategory.registrationName;
     this.defaultMessage = "Type to search for cards";
     this.noResultsMessage = "No matching cards found";
   }

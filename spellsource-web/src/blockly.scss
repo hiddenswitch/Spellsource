@@ -95,16 +95,27 @@
   // border-radius: 4px;
   margin-left: 10px !important;
   padding-left: 10px !important;
+  padding-right: 0px !important;
   margin-right: 10px;
   --placeholder-color: black;
+  font-size: 16px;
+  outline: none;
 }
 
 .blocklyTreeRow input::placeholder {
   color: black
 }
 
+[data-theme="dark"] .blocklyTreeRow input::placeholder {
+  color: white
+}
+
+[data-theme="dark"] .blocklyTreeRow input {
+  color: white
+}
+
 .blocklyTreeRow:not(.blocklyTreeSelected):not(:hover) input {
-  background-color: rgb(221, 221, 221);
+  background-color: transparent;
 }
 
 .blocklyTreeRow:not(.blocklyTreeSelected):hover input {
@@ -115,6 +126,15 @@
   background-color: rgb(228, 228, 228);
 }
 
+[data-theme="dark"] .blocklyTreeRow.blocklyTreeSelected input {
+  background-color: rgb(92, 92, 92);
+}
+
 .blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {
   margin: 0 !important;
+}
+
+.blocklyToolboxDiv {
+  padding-top: 6px;
+  padding-bottom: 6px;
 }

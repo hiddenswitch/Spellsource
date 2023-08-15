@@ -20,7 +20,7 @@ import { BlockInfo, ToolboxItemInfo } from "blockly/core/utils/toolbox";
  * in its flyout.
  */
 export class ToolboxSearchCategory extends SearchCategory {
-  static readonly SEARCH_CATEGORY_KIND = "search";
+  static readonly registrationName = "search";
 
   private blockSearcher = new BlockSearcher();
 
@@ -39,7 +39,7 @@ export class ToolboxSearchCategory extends SearchCategory {
   ) {
     super(categoryDef, parentToolbox, opt_parent);
     this.initBlockSearcher();
-    this.categoryKind = ToolboxSearchCategory.SEARCH_CATEGORY_KIND;
+    this.categoryKind = ToolboxSearchCategory.registrationName;
   }
 
   /**
@@ -49,7 +49,7 @@ export class ToolboxSearchCategory extends SearchCategory {
    *     so far.
    */
   private getAvailableBlocks(schema: Blockly.utils.toolbox.ToolboxItemInfo, allBlocks: Set<BlockInfo>) {
-    if ("contents" in schema) {
+    if ("contents" in schema && schema.kind !== ToolboxSearchCategory.registrationName) {
       schema.contents.forEach((contents) => {
         this.getAvailableBlocks(contents, allBlocks);
       });
@@ -64,9 +64,13 @@ export class ToolboxSearchCategory extends SearchCategory {
    * Builds the BlockSearcher index based on the available blocks.
    */
   private initBlockSearcher() {
-    const availableBlocks = new Set<BlockInfo>();
-    this.workspace_.options.languageTree.contents.map((item) => this.getAvailableBlocks(item, availableBlocks));
-    this.blockSearcher.indexBlocks([...availableBlocks]);
+    if (this.categoryDef.contents.length > 0) {
+      this.blockSearcher.indexBlocks(this.categoryDef.contents);
+    } else {
+      const availableBlocks = new Set<BlockInfo>();
+      this.workspace_.options.languageTree.contents.map((item) => this.getAvailableBlocks(item, availableBlocks));
+      this.blockSearcher.indexBlocks([...availableBlocks]);
+    }
   }
 
   protected async getBlocks(): Promise<ToolboxItemInfo[]> {

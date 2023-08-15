@@ -46,6 +46,7 @@ export type BlockArgDef = {
   value?: Maybe<number | string | boolean>;
   next?: Maybe<BlockShadowDef>;
   checked?: Maybe<boolean>;
+  precision?: Maybe<number>;
 } & BlocklyShadowState;
 
 export type BlocklyShadowState = {
