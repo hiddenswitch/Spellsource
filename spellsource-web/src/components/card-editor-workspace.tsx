@@ -28,7 +28,7 @@ import * as BlocklyRegister from "../lib/blockly-setup";
 import { plugins } from "../lib/blockly-setup";
 import * as BlocklyModification from "../lib/blockly-patches";
 import SpellsourceRenderer from "../lib/spellsource-renderer";
-import { generateArt } from "../lib/art-generation";
+import { generateArt, randomizeSeed } from "../lib/art-generation";
 
 interface CardEditorWorkspaceProps {
   setJSON?: React.Dispatch<React.SetStateAction<string>>;
@@ -360,6 +360,7 @@ const CardEditorWorkspace = forwardRef(
           workspace["getCollectionCards"] = data.getCollectionCards;
 
           workspace.registerButtonCallback("generateArt", generateArt);
+          workspace.registerButtonCallback("randomizeSeed", randomizeSeed);
         }}
       />
     );

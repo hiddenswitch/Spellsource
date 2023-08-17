@@ -81,8 +81,6 @@ export const addShadowBlocksToConnection = (
 
 /**
  * Updates a block in the workspace based on new json definition
- * @param block
- * @param state
  */
 export const reInitBlock = (block: Block, state: BlockDef) => {
   // Save connections / fields / shadow blocks

@@ -16,6 +16,14 @@ export class FieldButton extends Field {
     return new FieldButton(options["text"], options["callbackKey"], options);
   }
 
+  setValue(newValue: any, fireChangeEvent?: boolean) {
+    if (this.textElement_) {
+      this.textElement_.textContent = newValue;
+      this.markDirty();
+    }
+    super.setValue(newValue, fireChangeEvent);
+  }
+
   initView() {
     super.initView();
 
@@ -37,7 +45,7 @@ export class FieldButton extends Field {
       const workspace = this.getSourceBlock().workspace as WorkspaceSvg;
       const buttonCallback = workspace.getButtonCallback(this.callbackKey);
 
-      buttonCallback(this as any);
+      buttonCallback?.(this as any);
     };
   }
 
