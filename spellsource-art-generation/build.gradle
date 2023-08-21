@@ -33,23 +33,24 @@ tasks.register('venv') {
   }
 }
 
-tasks.register('install') {
-  dependsOn 'venv'
-  inputs.files("requirements.txt", "setup.py")
-  outputs.dir "${sitePackagesDir}/spellsource_art_generation"
-  outputs.cacheIf { true }
+["comfyui", "spellsource_art_generation"].each { packageName ->
+  tasks.register("${packageName}_installEditable") {
+    dependsOn 'venv'
+    inputs.files "$packageName/requirements.txt", "$packageName/setup.py"
+    outputs.dir "${sitePackagesDir}/${packageName}-0.0.1.dist-info"
+    outputs.cacheIf { true }
 
-  doLast {
-    exec {
-      workingDir(project.layout.projectDirectory)
-      commandLine "${scriptsDir}/pip", 'install', "-e", "./comfyui"
-    }
-    // Install ComfyUI using pip of the virtual environment
-    exec {
-      workingDir(project.layout.projectDirectory)
-      commandLine "${scriptsDir}/pip", 'install', "-e", "./spellsource_art_generation"
+    doLast {
+      exec {
+        workingDir(project.layout.projectDirectory)
+        commandLine "${scriptsDir}/pip", 'install', "-e", "./$packageName"
+      }
     }
   }
+}
+
+tasks.register('install') {
+  dependsOn "comfyui_installEditable", "spellsource_art_generation_installEditable"
 }
 
 tasks.register("downloadModels") {
