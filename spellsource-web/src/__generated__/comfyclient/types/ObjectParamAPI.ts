@@ -1,6 +1,7 @@
 import { ResponseContext, RequestContext, HttpFile } from '../http/http';
 import { Configuration} from '../configuration'
 
+import { ApiV1PromptsPost200Response } from '../models/ApiV1PromptsPost200Response';
 import { ApiV1PromptsPostRequest } from '../models/ApiV1PromptsPostRequest';
 import { ExtraData } from '../models/ExtraData';
 import { ExtraDataExtraPnginfo } from '../models/ExtraDataExtraPnginfo';
@@ -161,7 +162,7 @@ export class ObjectDefaultApi {
      * (API) Generate image
      * @param param the request object
      */
-    public apiV1PromptsPost(param: DefaultApiApiV1PromptsPostRequest = {}, options?: Configuration): Promise<void | string> {
+    public apiV1PromptsPost(param: DefaultApiApiV1PromptsPostRequest = {}, options?: Configuration): Promise<ApiV1PromptsPost200Response | void> {
         return this.api.apiV1PromptsPost(param.requestBody,  options).toPromise();
     }
 

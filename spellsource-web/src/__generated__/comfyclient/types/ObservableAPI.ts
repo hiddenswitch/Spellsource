@@ -2,6 +2,7 @@ import { ResponseContext, RequestContext, HttpFile } from '../http/http';
 import { Configuration} from '../configuration'
 import { Observable, of, from } from '../rxjsStub';
 import {mergeMap, map} from  '../rxjsStub';
+import { ApiV1PromptsPost200Response } from '../models/ApiV1PromptsPost200Response';
 import { ApiV1PromptsPostRequest } from '../models/ApiV1PromptsPostRequest';
 import { ExtraData } from '../models/ExtraData';
 import { ExtraDataExtraPnginfo } from '../models/ExtraDataExtraPnginfo';
@@ -95,7 +96,7 @@ export class ObservableDefaultApi {
      * (API) Generate image
      * @param requestBody 
      */
-    public apiV1PromptsPost(requestBody?: { [key: string]: PromptNode; }, _options?: Configuration): Observable<void | string> {
+    public apiV1PromptsPost(requestBody?: { [key: string]: PromptNode; }, _options?: Configuration): Observable<ApiV1PromptsPost200Response | void> {
         const requestContextPromise = this.requestFactory.apiV1PromptsPost(requestBody, _options);
 
         // build promise chain

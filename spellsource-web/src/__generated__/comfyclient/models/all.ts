@@ -1,3 +1,4 @@
+export * from '../models/ApiV1PromptsPost200Response'
 export * from '../models/ApiV1PromptsPostRequest'
 export * from '../models/ExtraData'
 export * from '../models/ExtraDataExtraPnginfo'

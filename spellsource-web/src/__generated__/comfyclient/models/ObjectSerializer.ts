@@ -1,3 +1,4 @@
+export * from '../models/ApiV1PromptsPost200Response';
 export * from '../models/ApiV1PromptsPostRequest';
 export * from '../models/ExtraData';
 export * from '../models/ExtraDataExtraPnginfo';
@@ -23,6 +24,7 @@ export * from '../models/WorkflowNodesInnerInputsInner';
 export * from '../models/WorkflowNodesInnerOutputsInner';
 export * from '../models/WorkflowNodesInnerSize';
 
+import { ApiV1PromptsPost200Response } from '../models/ApiV1PromptsPost200Response';
 import { ApiV1PromptsPostRequest } from '../models/ApiV1PromptsPostRequest';
 import { ExtraData } from '../models/ExtraData';
 import { ExtraDataExtraPnginfo } from '../models/ExtraDataExtraPnginfo';
@@ -71,6 +73,7 @@ let enumsMap: Set<string> = new Set<string>([
 ]);
 
 let typeMap: {[index: string]: any} = {
+    "ApiV1PromptsPost200Response": ApiV1PromptsPost200Response,
     "ApiV1PromptsPostRequest": ApiV1PromptsPostRequest,
     "ExtraData": ExtraData,
     "ExtraDataExtraPnginfo": ExtraDataExtraPnginfo,

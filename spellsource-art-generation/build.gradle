@@ -78,7 +78,7 @@ tasks.register('run') {
     exec {
       workingDir('workdir')
       executable = "${scriptsDir}/comfyui"
-      args "--listen"
+      args "--listen", "--enable-cors-header"
     }
   }
 }

@@ -8,6 +8,7 @@ import {canConsumeForm, isCodeInRange} from '../util';
 import {SecurityAuthentication} from '../auth/auth';
 
 
+import { ApiV1PromptsPost200Response } from '../models/ApiV1PromptsPost200Response';
 import { ApiV1PromptsPostRequest } from '../models/ApiV1PromptsPostRequest';
 import { GetHistory200ResponseValue } from '../models/GetHistory200ResponseValue';
 import { GetPrompt200Response } from '../models/GetPrompt200Response';
@@ -584,13 +585,13 @@ export class DefaultApiResponseProcessor {
      * @params response Response returned by the server for a request to apiV1PromptsPost
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async apiV1PromptsPost(response: ResponseContext): Promise<void | string > {
+     public async apiV1PromptsPost(response: ResponseContext): Promise<ApiV1PromptsPost200Response | void > {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: string = ObjectSerializer.deserialize(
+            const body: ApiV1PromptsPost200Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "string", ""
-            ) as string;
+                "ApiV1PromptsPost200Response", ""
+            ) as ApiV1PromptsPost200Response;
             return body;
         }
         if (isCodeInRange("204", response.httpStatusCode)) {
@@ -614,10 +615,10 @@ export class DefaultApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: void | string = ObjectSerializer.deserialize(
+            const body: ApiV1PromptsPost200Response | void = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "void | string", ""
-            ) as void | string;
+                "ApiV1PromptsPost200Response | void", ""
+            ) as ApiV1PromptsPost200Response | void;
             return body;
         }
 
