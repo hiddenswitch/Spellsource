@@ -44,7 +44,7 @@ tasks.register('venv') {
     doLast {
       exec {
         workingDir(project.layout.projectDirectory.dir(dirName))
-        commandLine "${scriptsDir}/pip", 'install', "-e", "."
+        commandLine "${scriptsDir}/pip", 'install', "-e", ".", "--config-settings", "editable_mode=compat"
       }
     }
   }
