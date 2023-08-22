@@ -1916,3 +1916,5 @@ export function mutateJson(json) {
 
   return json;
 }
+
+export const extraBlockInfo = (type: string) => ({});

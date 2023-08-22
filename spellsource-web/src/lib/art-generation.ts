@@ -1,8 +1,10 @@
 import sdxl from "../__generated__/sdxl-ordinary.json";
 import { FieldButton } from "../components/blockly/field-button";
 import { createConfiguration, DefaultApi, PromptNode } from "../__generated__/comfyclient";
-import { argsList, newBlock, reInitBlock } from "./blockly-utils";
+import { argsList, newBlock } from "./blockly-utils";
 import Blockly, { Block, BlockSvg, WorkspaceSvg } from "blockly";
+import { ContextType } from "react";
+import { BlocklyDataContext } from "../pages/card-editor";
 
 export const randomizeSeed = (p1: any) => {
   const field = p1 as FieldButton;
@@ -80,7 +82,8 @@ const onGenerateArt = (block: Block) => async (response: Response | undefined | 
   if (!result || !hash) {
     return;
   }
-  const [relativeUrl] = result["urls"];
+  const urls = result["urls"] as string[];
+  const [relativeUrl] = urls;
 
   if (block.isInFlyout || block.isDisposed() || !relativeUrl) return;
 
@@ -104,6 +107,11 @@ const onGenerateArt = (block: Block) => async (response: Response | undefined | 
   block.nextConnection.connect(artOutput.previousConnection);
 
   workspace.render();
+
+  const { saveGeneratedArt, refreshGeneratedArt } = workspace["_data"] as ContextType<typeof BlocklyDataContext>;
+
+  await saveGeneratedArt({ variables: { hash, urls } });
+  await refreshGeneratedArt();
 };
 
 async function generateHash(body) {

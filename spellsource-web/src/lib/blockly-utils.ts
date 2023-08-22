@@ -1,6 +1,7 @@
 import { BlockArgDef, BlockDef, BlocklyShadowState } from "./blockly-types";
 import Blockly, { Block, BlockSvg, Connection, Toolbox, ToolboxCategory, WorkspaceSvg } from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
+import { extraBlockInfo } from "./json-conversion-utils";
 import { addMutatorBlock, OptionalRows } from "../components/blockly/optional-rows";
 import { BlockInfo, FlyoutItemInfo } from "blockly/core/utils/toolbox";
 import { ConnectionState } from "blockly/core/serialization/blocks";
@@ -81,6 +82,8 @@ export const addShadowBlocksToConnection = (
 
 /**
  * Updates a block in the workspace based on new json definition
+ * @param block
+ * @param state
  */
 export const reInitBlock = (block: Block, state: BlockDef) => {
   // Save connections / fields / shadow blocks
@@ -260,7 +263,7 @@ export const getBlockInfo = (type: string) =>
   (Blockly.Blocks[type].toolboxInfo ??= {
     type,
     kind: "block",
-    ...(Blockly.Blocks[type].json?.hat ? { extraState: { $hat: true } } : {}),
     inputs: getBlockInputs(type),
     next: Blockly.Blocks[type]?.json?.next,
+    ...extraBlockInfo(type),
   } as BlockInfo);

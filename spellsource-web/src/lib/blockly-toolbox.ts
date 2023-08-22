@@ -8,6 +8,7 @@ import { ImageDef } from "../__generated__/client";
 import { ToolboxSearchCategory } from "../components/blockly/toolbox-search-category";
 import { CardSearchCategory } from "../components/blockly/card-search-category";
 import { getBlockInfo } from "./blockly-utils";
+import { createConfiguration } from "../__generated__/comfyclient";
 import StaticCategoryInfo = Blockly.utils.toolbox.StaticCategoryInfo;
 import ToolboxInfo = Blockly.utils.toolbox.ToolboxInfo;
 import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo;
@@ -100,14 +101,7 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
         /*category("Unused", "#888888", "Art that hasn't yet been used by a card", artContents(false)),
         category("Used", "#888888", "Art that's been used by cards already", artContents(true)),
         category("All", "#888888", "All available art", artContents(null)),*/
-        category("Create your Own", "#888888", "Use AI to create your own card art", [
-          ...(data.userId ? contents("ArtGen") : []),
-          {
-            kind: "label",
-            text: data.userId ? "Art You've Created" : "Login to be able to generate your own art",
-          },
-          // TODO cached art from db
-        ]),
+        generatedArtCategory(data),
         ...artCategories(),
       ]),
 
@@ -662,4 +656,18 @@ function defaultTest(block) {
     (!block.match(/^.*_.*_.*/) || BlocklyMiscUtils.isSpellsourceBlock(block)) &&
     !block.endsWith("_REFERENCE")
   );
+}
+
+export function generatedArtCategory(data: ContextType<typeof BlocklyDataContext>) {
+  return category("Create your Own", "#888888", "Use AI to create your own card art", [
+    ...(data.userId ? contents("ArtGen") : []),
+    {
+      kind: "label",
+      text: data.userId ? "Art You've Created" : "Login to be able to generate your own art",
+    },
+    ...data.generatedArt.map((art) => ({
+      ...getBlockInfo("Art_Generated"),
+      fields: { src: createConfiguration().baseServer["url"] + art.urls[0], hash: art.hash },
+    })),
+  ]);
 }

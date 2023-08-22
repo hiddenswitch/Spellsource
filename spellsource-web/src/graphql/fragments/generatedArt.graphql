@@ -1,0 +1,7 @@
+fragment generatedArt on GeneratedArt {
+  hash
+  owner
+  urls
+  info
+  isArchived
+}

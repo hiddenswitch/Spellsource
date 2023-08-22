@@ -431,6 +431,45 @@ type Query implements Node {
     filter: GameFilter
   ): GamesConnection
 
+  """Reads and enables pagination through a set of `GeneratedArt`."""
+  allGeneratedArts(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `GeneratedArt`."""
+    orderBy: [GeneratedArtsOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: GeneratedArtCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: GeneratedArtFilter
+
+    """
+    Indicates whether archived items should be included in the results or not.
+    """
+    includeArchived: IncludeArchivedOption = NO
+  ): GeneratedArtsConnection
+
   """Reads and enables pagination through a set of `Guest`."""
   allGuests(
     """Only read the first `n` values of the set."""
@@ -610,6 +649,7 @@ type Query implements Node {
   friendByIdAndFriend(id: String!, friend: String!): Friend
   gameUserByGameIdAndUserId(gameId: BigInt!, userId: String!): GameUser
   gameById(id: BigInt!): Game
+  generatedArtByHashAndOwner(hash: String!, owner: String!): GeneratedArt
   guestById(id: BigInt!): Guest
   hardRemovalCardByCardId(cardId: String!): HardRemovalCard
   matchmakingQueueById(id: String!): MatchmakingQueue
@@ -810,6 +850,14 @@ type Mutation {
     """
     input: CreateGameInput!
   ): CreateGamePayload
+
+  """Creates a single `GeneratedArt`."""
+  createGeneratedArt(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateGeneratedArtInput!
+  ): CreateGeneratedArtPayload
 
   """Creates a single `Guest`."""
   createGuest(
@@ -1018,6 +1066,14 @@ type Mutation {
     """
     input: UpdateGameByIdInput!
   ): UpdateGamePayload
+
+  """Updates a single `GeneratedArt` using a unique key and a patch."""
+  updateGeneratedArtByHashAndOwner(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGeneratedArtByHashAndOwnerInput!
+  ): UpdateGeneratedArtPayload
 
   """Updates a single `Guest` using its globally unique id and a patch."""
   updateGuest(
@@ -1269,6 +1325,14 @@ type Mutation {
     input: DeleteGameByIdInput!
   ): DeleteGamePayload
 
+  """Deletes a single `GeneratedArt` using a unique key."""
+  deleteGeneratedArtByHashAndOwner(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGeneratedArtByHashAndOwnerInput!
+  ): DeleteGeneratedArtPayload
+
   """Deletes a single `Guest` using its globally unique id."""
   deleteGuest(
     """
@@ -1462,6 +1526,12 @@ type Mutation {
     """
     input: SaveCardInput!
   ): SaveCardPayload
+  saveGeneratedArt(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: SaveGeneratedArtInput!
+  ): SaveGeneratedArtPayload
   setCardsInDeck(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -3881,6 +3951,168 @@ input GameStateEnumFilter {
   greaterThanOrEqualTo: GameStateEnum
 }
 
+"""A connection to a list of `GeneratedArt` values."""
+type GeneratedArtsConnection {
+  """A list of `GeneratedArt` objects."""
+  nodes: [GeneratedArt]!
+
+  """
+  A list of edges which contains the `GeneratedArt` and cursor to aid in pagination.
+  """
+  edges: [GeneratedArtsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `GeneratedArt` you could get from the connection."""
+  totalCount: Int!
+}
+
+type GeneratedArt {
+  hash: String!
+  owner: String!
+  urls: [String]!
+  info: JSON
+  isArchived: Boolean!
+}
+
+"""A `GeneratedArt` edge in the connection."""
+type GeneratedArtsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `GeneratedArt` at the end of the edge."""
+  node: GeneratedArt
+}
+
+"""Methods to use when ordering `GeneratedArt`."""
+enum GeneratedArtsOrderBy {
+  NATURAL
+  HASH_ASC
+  HASH_DESC
+  OWNER_ASC
+  OWNER_DESC
+  URLS_ASC
+  URLS_DESC
+  INFO_ASC
+  INFO_DESC
+  IS_ARCHIVED_ASC
+  IS_ARCHIVED_DESC
+}
+
+"""
+A condition to be used against `GeneratedArt` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input GeneratedArtCondition {
+  """Checks for equality with the object’s `hash` field."""
+  hash: String
+
+  """Checks for equality with the object’s `owner` field."""
+  owner: String
+
+  """Checks for equality with the object’s `urls` field."""
+  urls: [String]
+
+  """Checks for equality with the object’s `info` field."""
+  info: JSON
+
+  """Checks for equality with the object’s `isArchived` field."""
+  isArchived: Boolean
+}
+
+"""
+A filter to be used against `GeneratedArt` object types. All fields are combined with a logical ‘and.’
+"""
+input GeneratedArtFilter {
+  """Filter by the object’s `hash` field."""
+  hash: StringFilter
+
+  """Filter by the object’s `owner` field."""
+  owner: StringFilter
+
+  """Filter by the object’s `urls` field."""
+  urls: StringListFilter
+
+  """Filter by the object’s `info` field."""
+  info: JSONFilter
+
+  """Filter by the object’s `isArchived` field."""
+  isArchived: BooleanFilter
+
+  """Checks for all expressions in this list."""
+  and: [GeneratedArtFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GeneratedArtFilter!]
+
+  """Negates the expression."""
+  not: GeneratedArtFilter
+}
+
+"""
+A filter to be used against String List fields. All fields are combined with a logical ‘and.’
+"""
+input StringListFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: [String]
+
+  """Not equal to the specified value."""
+  notEqualTo: [String]
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: [String]
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: [String]
+
+  """Less than the specified value."""
+  lessThan: [String]
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: [String]
+
+  """Greater than the specified value."""
+  greaterThan: [String]
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: [String]
+
+  """Contains the specified list of values."""
+  contains: [String]
+
+  """Contained by the specified list of values."""
+  containedBy: [String]
+
+  """Overlaps the specified list of values."""
+  overlaps: [String]
+
+  """Any array item is equal to the specified value."""
+  anyEqualTo: String
+
+  """Any array item is not equal to the specified value."""
+  anyNotEqualTo: String
+
+  """Any array item is less than the specified value."""
+  anyLessThan: String
+
+  """Any array item is less than or equal to the specified value."""
+  anyLessThanOrEqualTo: String
+
+  """Any array item is greater than the specified value."""
+  anyGreaterThan: String
+
+  """Any array item is greater than or equal to the specified value."""
+  anyGreaterThanOrEqualTo: String
+}
+
 """A connection to a list of `Guest` values."""
 type GuestsConnection {
   """A list of `Guest` objects."""
@@ -4733,6 +4965,50 @@ input GameInput {
   gitHash: String
   trace: JSON
   createdAt: Datetime
+}
+
+"""The output of our create `GeneratedArt` mutation."""
+type CreateGeneratedArtPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GeneratedArt` that was created by this mutation."""
+  generatedArt: GeneratedArt
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `GeneratedArt`. May be used by Relay 1."""
+  generatedArtEdge(
+    """The method to use when ordering `GeneratedArt`."""
+    orderBy: [GeneratedArtsOrderBy!] = [NATURAL]
+  ): GeneratedArtsEdge
+}
+
+"""All input for the create `GeneratedArt` mutation."""
+input CreateGeneratedArtInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `GeneratedArt` to be created by this mutation."""
+  generatedArt: GeneratedArtInput!
+}
+
+"""An input for mutations affecting `GeneratedArt`"""
+input GeneratedArtInput {
+  hash: String!
+  owner: String
+  urls: [String]!
+  info: JSON
+  isArchived: Boolean
 }
 
 """The output of our create `Guest` mutation."""
@@ -5660,6 +5936,56 @@ input UpdateGameByIdInput {
   id: BigInt!
 }
 
+"""The output of our update `GeneratedArt` mutation."""
+type UpdateGeneratedArtPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GeneratedArt` that was updated by this mutation."""
+  generatedArt: GeneratedArt
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `GeneratedArt`. May be used by Relay 1."""
+  generatedArtEdge(
+    """The method to use when ordering `GeneratedArt`."""
+    orderBy: [GeneratedArtsOrderBy!] = [NATURAL]
+  ): GeneratedArtsEdge
+}
+
+"""All input for the `updateGeneratedArtByHashAndOwner` mutation."""
+input UpdateGeneratedArtByHashAndOwnerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `GeneratedArt` being updated.
+  """
+  generatedArtPatch: GeneratedArtPatch!
+  hash: String!
+  owner: String!
+}
+
+"""
+Represents an update to a `GeneratedArt`. Fields that are set will be updated.
+"""
+input GeneratedArtPatch {
+  hash: String
+  owner: String
+  urls: [String]
+  info: JSON
+  isArchived: Boolean
+}
+
 """The output of our update `Guest` mutation."""
 type UpdateGuestPayload {
   """
@@ -6511,6 +6837,41 @@ input DeleteGameByIdInput {
   id: BigInt!
 }
 
+"""The output of our delete `GeneratedArt` mutation."""
+type DeleteGeneratedArtPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `GeneratedArt` that was deleted by this mutation."""
+  generatedArt: GeneratedArt
+  deletedGeneratedArtId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `GeneratedArt`. May be used by Relay 1."""
+  generatedArtEdge(
+    """The method to use when ordering `GeneratedArt`."""
+    orderBy: [GeneratedArtsOrderBy!] = [NATURAL]
+  ): GeneratedArtsEdge
+}
+
+"""All input for the `deleteGeneratedArtByHashAndOwner` mutation."""
+input DeleteGeneratedArtByHashAndOwnerInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  hash: String!
+  owner: String!
+}
+
 """The output of our delete `Guest` mutation."""
 type DeleteGuestPayload {
   """
@@ -7306,6 +7667,39 @@ input SaveCardInput {
   cardId: String
   workspace: JSON
   json: JSON
+}
+
+"""The output of our `saveGeneratedArt` mutation."""
+type SaveGeneratedArtPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  generatedArt: GeneratedArt
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `GeneratedArt`. May be used by Relay 1."""
+  generatedArtEdge(
+    """The method to use when ordering `GeneratedArt`."""
+    orderBy: [GeneratedArtsOrderBy!] = [NATURAL]
+  ): GeneratedArtsEdge
+}
+
+"""All input for the `saveGeneratedArt` mutation."""
+input SaveGeneratedArtInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  digest: String
+  links: [String]
+  extraInfo: JSON
 }
 
 """The output of our `setCardsInDeck` mutation."""

@@ -612,7 +612,46 @@ begin
 end;
 $$ language plpgsql;
 
+drop table if exists spellsource.generated_art;
+create table if not exists spellsource.generated_art
+(
+    hash        text                                             not null,
+    owner       varchar(36) references keycloak.user_entity (id) not null default spellsource.get_user_id(),
+    urls        text[]                                           not null,
+    info        jsonb,
+    is_archived bool                                             not null default false,
+    unique (hash, owner)
+);
 
+alter table spellsource.generated_art
+    enable row level security;
+
+drop policy if exists view_art on spellsource.generated_art;
+create policy view_art on spellsource.generated_art for select to website
+    using (owner = spellsource.get_user_id());
+drop policy if exists insert_art on spellsource.generated_art;
+create policy insert_art on spellsource.generated_art for insert to website
+    with check (owner = spellsource.get_user_id() and not is_archived);
+drop policy if exists update_art on spellsource.generated_art;
+create policy update_art on spellsource.generated_art for update to website
+    using (owner = spellsource.get_user_id())
+    with check (owner = spellsource.get_user_id());
+
+create or replace function spellsource.save_generated_art(digest text, links text[], extra_info jsonb) returns spellsource.generated_art as
+$$
+declare
+    art spellsource.generated_art;
+begin
+    insert into spellsource.generated_art(hash, urls, info)
+    values (digest, links, extra_info)
+    on conflict (hash,owner) do update set urls = links, info = extra_info
+    returning * into art;
+
+    return art;
+end
+$$ language plpgsql volatile;
+
+grant select, update, insert on spellsource.generated_art to website;
 
 --- getHeroCard
 create or replace function spellsource.card_catalogue_get_hero_card(hero_class text)

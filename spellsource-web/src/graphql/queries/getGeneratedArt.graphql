@@ -1,0 +1,7 @@
+query getGeneratedArt {
+  allGeneratedArts {
+    nodes {
+      ...generatedArt
+    }
+  }
+}

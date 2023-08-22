@@ -8,12 +8,16 @@ import { fixArt } from "../lib/json-transforms";
 import { keyBy } from "lodash";
 import {
   Card,
+  GeneratedArtFragment,
   GetCardsQuery,
+  GetGeneratedArtQuery,
   ImageDef,
   useGetAllArtQuery,
   useGetCardsQuery,
   useGetClassesQuery,
   useGetCollectionCardsLazyQuery,
+  useGetGeneratedArtQuery,
+  useSaveGeneratedArtMutation,
 } from "../__generated__/client";
 import { useSession } from "next-auth/react";
 import { ApolloQueryResult } from "@apollo/client";
@@ -42,10 +46,13 @@ export const BlocklyDataContext = createContext({ ready: false } as InferGetStat
   ready?: boolean;
   classes: Record<string, CardDef>;
   allArt: ImageDef[];
+  generatedArt?: GeneratedArtFragment[];
   myCards: Partial<Card>[];
   refreshMyCards?: () => Promise<ApolloQueryResult<GetCardsQuery>>;
   userId: string | null | undefined;
   getCollectionCards?: ReturnType<typeof useGetCollectionCardsLazyQuery>[0];
+  saveGeneratedArt?: ReturnType<typeof useSaveGeneratedArtMutation>[0];
+  refreshGeneratedArt?: () => Promise<ApolloQueryResult<GetGeneratedArtQuery>>;
 });
 
 const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -69,6 +76,7 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   });
 
   const [getCollectionCards] = useGetCollectionCardsLazyQuery();
+  const [saveGeneratedArt] = useSaveGeneratedArtMutation();
 
   const classes = useMemo(() => {
     const cards = getClasses.data?.allClasses?.nodes ?? [];
@@ -85,7 +93,11 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const getAllArt = useGetAllArtQuery();
   const allArt = getAllArt.data?.allArt ?? [];
 
-  const ready = Object.values(classes).length > 0 && allArt.length > 0 && typeof window !== "undefined";
+  const getGeneratedArt = useGetGeneratedArtQuery();
+  const generatedArt = getGeneratedArt.data?.allGeneratedArts?.nodes ?? [];
+
+  const ready =
+    Object.values(classes).length > 0 && allArt.length > 0 && getGeneratedArt.data && typeof window !== "undefined";
 
   const myCards = useMemo(
     () => (getMyCards.data?.allCards?.nodes ?? []).filter((card) => card.blocklyWorkspace),
@@ -93,6 +105,7 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   );
 
   const refreshMyCards = getMyCards.refetch; // TODO get .reobserve working
+  const refreshGeneratedArt = getGeneratedArt.refetch;
 
   const compactBlocks = true;
   const blocklyEditor = useRef(null);
@@ -103,7 +116,19 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
         <title>Spellsource Card Editor</title>
       </Head>
       <BlocklyDataContext.Provider
-        value={{ ...props, classes, allArt, ready, myCards, refreshMyCards, userId, getCollectionCards }}
+        value={{
+          ...props,
+          classes,
+          allArt,
+          ready,
+          myCards,
+          refreshMyCards,
+          userId,
+          getCollectionCards,
+          saveGeneratedArt,
+          generatedArt,
+          refreshGeneratedArt,
+        }}
       >
         <div className={styles.cardEditorContainer}>
           {ready ? (

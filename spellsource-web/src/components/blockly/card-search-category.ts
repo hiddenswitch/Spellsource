@@ -1,8 +1,9 @@
 import * as Blockly from "blockly/core";
 import { SearchCategory } from "./search-category";
 import { ToolboxItemInfo } from "blockly/core/utils/toolbox";
-import { useGetCollectionCardsLazyQuery } from "../../__generated__/client";
 import * as BlocklyMiscUtils from "../../lib/blockly-spellsource-utils";
+import { ContextType } from "react";
+import { BlocklyDataContext } from "../../pages/card-editor";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -39,7 +40,7 @@ export class CardSearchCategory extends SearchCategory {
 
     const workspace = this.workspace_;
 
-    const getCollectionCards = workspace["getCollectionCards"] as ReturnType<typeof useGetCollectionCardsLazyQuery>[0];
+    const { getCollectionCards } = workspace["_data"] as ContextType<typeof BlocklyDataContext>;
 
     const { data, error } = await getCollectionCards({
       variables: {

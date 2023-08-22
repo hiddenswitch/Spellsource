@@ -1,13 +1,19 @@
 import React, { forwardRef, MutableRefObject, useContext, useEffect, useMemo, useState } from "react";
 import * as WorkspaceUtils from "../lib/workspace-utils";
-import Blockly, { Block, BlockSvg, Toolbox, ToolboxCategory, WorkspaceSvg } from "blockly";
+import Blockly, { Block, BlockSvg, ISelectableToolboxItem, Toolbox, ToolboxCategory, WorkspaceSvg } from "blockly";
 import * as JsonConversionUtils from "../lib/json-conversion-utils";
 import * as BlocklyMiscUtils from "../lib/blockly-spellsource-utils";
 import { refreshBlock } from "../lib/blockly-spellsource-utils";
 import * as SpellsourceGenerator from "../lib/spellsource-generator";
 import SimpleReactBlockly, { SimpleReactBlocklyRef } from "./simple-react-blockly";
 import * as BlocklyToolbox from "../lib/blockly-toolbox";
-import { cardsCategory, classesCategory, myCardsCategory, myCardsForSetCategory } from "../lib/blockly-toolbox";
+import {
+  cardsCategory,
+  classesCategory,
+  generatedArtCategory,
+  myCardsCategory,
+  myCardsForSetCategory,
+} from "../lib/blockly-toolbox";
 import { BlocklyDataContext } from "../pages/card-editor";
 import useComponentDidMount from "../hooks/use-component-did-mount";
 import {
@@ -25,10 +31,9 @@ import { uniqBy } from "lodash";
 import { openFromFile } from "../lib/blockly-context-menu";
 import cx from "classnames";
 import * as BlocklyRegister from "../lib/blockly-setup";
-import { plugins } from "../lib/blockly-setup";
+import { initWorkspace, plugins } from "../lib/blockly-setup";
 import * as BlocklyModification from "../lib/blockly-patches";
 import SpellsourceRenderer from "../lib/spellsource-renderer";
-import { generateArt, randomizeSeed } from "../lib/art-generation";
 
 interface CardEditorWorkspaceProps {
   setJSON?: React.Dispatch<React.SetStateAction<string>>;
@@ -266,6 +271,18 @@ const CardEditorWorkspace = forwardRef(
       onWorkspaceChanged();
     }, [data.myCards]);
 
+    useEffect(() => {
+      const category = getToolbox()
+        ?.getToolboxItems()
+        .find((value: ISelectableToolboxItem) => value?.getName?.() === "Create your Own") as ToolboxCategory;
+      category?.updateFlyoutContents(generatedArtCategory(data));
+
+      console.log("doing it ", category, generatedArtCategory(data));
+
+      mainWorkspace().refreshToolboxSelection();
+      onWorkspaceChanged();
+    }, [data.generatedArt]);
+
     // Run once before the workspace has been created
     useComponentDidMount(() => {
       if (!Blockly["spellsourceInit"]) {
@@ -356,12 +373,7 @@ const CardEditorWorkspace = forwardRef(
           plugins,
         }}
         ref={blocklyEditor}
-        init={(workspace) => {
-          workspace["getCollectionCards"] = data.getCollectionCards;
-
-          workspace.registerButtonCallback("generateArt", generateArt);
-          workspace.registerButtonCallback("randomizeSeed", randomizeSeed);
-        }}
+        init={(workspace) => initWorkspace(workspace, data)}
       />
     );
   }

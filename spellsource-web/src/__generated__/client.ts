@@ -1399,6 +1399,39 @@ export type CreateGameUserPayloadGameUserEdgeArgs = {
   orderBy?: InputMaybe<Array<GameUsersOrderBy>>;
 };
 
+/** All input for the create `GeneratedArt` mutation. */
+export type CreateGeneratedArtInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The `GeneratedArt` to be created by this mutation. */
+  generatedArt: GeneratedArtInput;
+};
+
+/** The output of our create `GeneratedArt` mutation. */
+export type CreateGeneratedArtPayload = {
+  __typename?: 'CreateGeneratedArtPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GeneratedArt` that was created by this mutation. */
+  generatedArt?: Maybe<GeneratedArt>;
+  /** An edge for our `GeneratedArt`. May be used by Relay 1. */
+  generatedArtEdge?: Maybe<GeneratedArtsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our create `GeneratedArt` mutation. */
+export type CreateGeneratedArtPayloadGeneratedArtEdgeArgs = {
+  orderBy?: InputMaybe<Array<GeneratedArtsOrderBy>>;
+};
+
 /** All input for the create `Guest` mutation. */
 export type CreateGuestInput = {
   /**
@@ -2478,6 +2511,40 @@ export type DeleteGameUserPayloadGameUserEdgeArgs = {
   orderBy?: InputMaybe<Array<GameUsersOrderBy>>;
 };
 
+/** All input for the `deleteGeneratedArtByHashAndOwner` mutation. */
+export type DeleteGeneratedArtByHashAndOwnerInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  hash: Scalars['String'];
+  owner: Scalars['String'];
+};
+
+/** The output of our delete `GeneratedArt` mutation. */
+export type DeleteGeneratedArtPayload = {
+  __typename?: 'DeleteGeneratedArtPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  deletedGeneratedArtId?: Maybe<Scalars['ID']>;
+  /** The `GeneratedArt` that was deleted by this mutation. */
+  generatedArt?: Maybe<GeneratedArt>;
+  /** An edge for our `GeneratedArt`. May be used by Relay 1. */
+  generatedArtEdge?: Maybe<GeneratedArtsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our delete `GeneratedArt` mutation. */
+export type DeleteGeneratedArtPayloadGeneratedArtEdgeArgs = {
+  orderBy?: InputMaybe<Array<GeneratedArtsOrderBy>>;
+};
+
 /** All input for the `deleteGuestById` mutation. */
 export type DeleteGuestByIdInput = {
   /**
@@ -3082,6 +3149,108 @@ export const GamesOrderBy = {
 } as const;
 
 export type GamesOrderBy = typeof GamesOrderBy[keyof typeof GamesOrderBy];
+export type GeneratedArt = {
+  __typename?: 'GeneratedArt';
+  hash: Scalars['String'];
+  info?: Maybe<Scalars['JSON']>;
+  isArchived: Scalars['Boolean'];
+  owner: Scalars['String'];
+  urls: Array<Maybe<Scalars['String']>>;
+};
+
+/**
+ * A condition to be used against `GeneratedArt` object types. All fields are
+ * tested for equality and combined with a logical ‘and.’
+ */
+export type GeneratedArtCondition = {
+  /** Checks for equality with the object’s `hash` field. */
+  hash?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `info` field. */
+  info?: InputMaybe<Scalars['JSON']>;
+  /** Checks for equality with the object’s `isArchived` field. */
+  isArchived?: InputMaybe<Scalars['Boolean']>;
+  /** Checks for equality with the object’s `owner` field. */
+  owner?: InputMaybe<Scalars['String']>;
+  /** Checks for equality with the object’s `urls` field. */
+  urls?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** A filter to be used against `GeneratedArt` object types. All fields are combined with a logical ‘and.’ */
+export type GeneratedArtFilter = {
+  /** Checks for all expressions in this list. */
+  and?: InputMaybe<Array<GeneratedArtFilter>>;
+  /** Filter by the object’s `hash` field. */
+  hash?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `info` field. */
+  info?: InputMaybe<JsonFilter>;
+  /** Filter by the object’s `isArchived` field. */
+  isArchived?: InputMaybe<BooleanFilter>;
+  /** Negates the expression. */
+  not?: InputMaybe<GeneratedArtFilter>;
+  /** Checks for any expressions in this list. */
+  or?: InputMaybe<Array<GeneratedArtFilter>>;
+  /** Filter by the object’s `owner` field. */
+  owner?: InputMaybe<StringFilter>;
+  /** Filter by the object’s `urls` field. */
+  urls?: InputMaybe<StringListFilter>;
+};
+
+/** An input for mutations affecting `GeneratedArt` */
+export type GeneratedArtInput = {
+  hash: Scalars['String'];
+  info?: InputMaybe<Scalars['JSON']>;
+  isArchived?: InputMaybe<Scalars['Boolean']>;
+  owner?: InputMaybe<Scalars['String']>;
+  urls: Array<InputMaybe<Scalars['String']>>;
+};
+
+/** Represents an update to a `GeneratedArt`. Fields that are set will be updated. */
+export type GeneratedArtPatch = {
+  hash?: InputMaybe<Scalars['String']>;
+  info?: InputMaybe<Scalars['JSON']>;
+  isArchived?: InputMaybe<Scalars['Boolean']>;
+  owner?: InputMaybe<Scalars['String']>;
+  urls?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** A connection to a list of `GeneratedArt` values. */
+export type GeneratedArtsConnection = {
+  __typename?: 'GeneratedArtsConnection';
+  /** A list of edges which contains the `GeneratedArt` and cursor to aid in pagination. */
+  edges: Array<GeneratedArtsEdge>;
+  /** A list of `GeneratedArt` objects. */
+  nodes: Array<Maybe<GeneratedArt>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** The count of *all* `GeneratedArt` you could get from the connection. */
+  totalCount: Scalars['Int'];
+};
+
+/** A `GeneratedArt` edge in the connection. */
+export type GeneratedArtsEdge = {
+  __typename?: 'GeneratedArtsEdge';
+  /** A cursor for use in pagination. */
+  cursor?: Maybe<Scalars['Cursor']>;
+  /** The `GeneratedArt` at the end of the edge. */
+  node?: Maybe<GeneratedArt>;
+};
+
+/** Methods to use when ordering `GeneratedArt`. */
+export const GeneratedArtsOrderBy = {
+  HashAsc: 'HASH_ASC',
+  HashDesc: 'HASH_DESC',
+  InfoAsc: 'INFO_ASC',
+  InfoDesc: 'INFO_DESC',
+  IsArchivedAsc: 'IS_ARCHIVED_ASC',
+  IsArchivedDesc: 'IS_ARCHIVED_DESC',
+  Natural: 'NATURAL',
+  OwnerAsc: 'OWNER_ASC',
+  OwnerDesc: 'OWNER_DESC',
+  UrlsAsc: 'URLS_ASC',
+  UrlsDesc: 'URLS_DESC'
+} as const;
+
+export type GeneratedArtsOrderBy = typeof GeneratedArtsOrderBy[keyof typeof GeneratedArtsOrderBy];
 /** All input for the `getClasses` mutation. */
 export type GetClassesInput = {
   /**
@@ -3722,6 +3891,8 @@ export type Mutation = {
   createGame?: Maybe<CreateGamePayload>;
   /** Creates a single `GameUser`. */
   createGameUser?: Maybe<CreateGameUserPayload>;
+  /** Creates a single `GeneratedArt`. */
+  createGeneratedArt?: Maybe<CreateGeneratedArtPayload>;
   /** Creates a single `Guest`. */
   createGuest?: Maybe<CreateGuestPayload>;
   /** Creates a single `HardRemovalCard`. */
@@ -3772,6 +3943,8 @@ export type Mutation = {
   deleteGameUser?: Maybe<DeleteGameUserPayload>;
   /** Deletes a single `GameUser` using a unique key. */
   deleteGameUserByGameIdAndUserId?: Maybe<DeleteGameUserPayload>;
+  /** Deletes a single `GeneratedArt` using a unique key. */
+  deleteGeneratedArtByHashAndOwner?: Maybe<DeleteGeneratedArtPayload>;
   /** Deletes a single `Guest` using its globally unique id. */
   deleteGuest?: Maybe<DeleteGuestPayload>;
   /** Deletes a single `Guest` using a unique key. */
@@ -3797,6 +3970,7 @@ export type Mutation = {
   publishCard?: Maybe<PublishCardPayload>;
   publishGitCard?: Maybe<PublishGitCardPayload>;
   saveCard?: Maybe<SaveCardPayload>;
+  saveGeneratedArt?: Maybe<SaveGeneratedArtPayload>;
   setCardsInDeck?: Maybe<SetCardsInDeckPayload>;
   /** Updates a single `BannedDraftCard` using its globally unique id and a patch. */
   updateBannedDraftCard?: Maybe<UpdateBannedDraftCardPayload>;
@@ -3838,6 +4012,8 @@ export type Mutation = {
   updateGameUser?: Maybe<UpdateGameUserPayload>;
   /** Updates a single `GameUser` using a unique key and a patch. */
   updateGameUserByGameIdAndUserId?: Maybe<UpdateGameUserPayload>;
+  /** Updates a single `GeneratedArt` using a unique key and a patch. */
+  updateGeneratedArtByHashAndOwner?: Maybe<UpdateGeneratedArtPayload>;
   /** Updates a single `Guest` using its globally unique id and a patch. */
   updateGuest?: Maybe<UpdateGuestPayload>;
   /** Updates a single `Guest` using a unique key and a patch. */
@@ -4036,6 +4212,12 @@ export type MutationCreateGameUserArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationCreateGeneratedArtArgs = {
+  input: CreateGeneratedArtInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateGuestArgs = {
   input: CreateGuestInput;
 };
@@ -4186,6 +4368,12 @@ export type MutationDeleteGameUserByGameIdAndUserIdArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteGeneratedArtByHashAndOwnerArgs = {
+  input: DeleteGeneratedArtByHashAndOwnerInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGuestArgs = {
   input: DeleteGuestInput;
 };
@@ -4272,6 +4460,12 @@ export type MutationPublishGitCardArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationSaveCardArgs = {
   input: SaveCardInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationSaveGeneratedArtArgs = {
+  input: SaveGeneratedArtInput;
 };
 
 
@@ -4398,6 +4592,12 @@ export type MutationUpdateGameUserArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGameUserByGameIdAndUserIdArgs = {
   input: UpdateGameUserByGameIdAndUserIdInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateGeneratedArtByHashAndOwnerArgs = {
+  input: UpdateGeneratedArtByHashAndOwnerInput;
 };
 
 
@@ -4667,6 +4867,8 @@ export type Query = Node & {
   allGameUsers?: Maybe<GameUsersConnection>;
   /** Reads and enables pagination through a set of `Game`. */
   allGames?: Maybe<GamesConnection>;
+  /** Reads and enables pagination through a set of `GeneratedArt`. */
+  allGeneratedArts?: Maybe<GeneratedArtsConnection>;
   /** Reads and enables pagination through a set of `Guest`. */
   allGuests?: Maybe<GuestsConnection>;
   /** Reads and enables pagination through a set of `HardRemovalCard`. */
@@ -4708,6 +4910,7 @@ export type Query = Node & {
   /** Reads a single `GameUser` using its globally unique `ID`. */
   gameUser?: Maybe<GameUser>;
   gameUserByGameIdAndUserId?: Maybe<GameUser>;
+  generatedArtByHashAndOwner?: Maybe<GeneratedArt>;
   getLatestCard?: Maybe<Card>;
   getUserId?: Maybe<Scalars['String']>;
   /** Reads a single `Guest` using its globally unique `ID`. */
@@ -4882,6 +5085,19 @@ export type QueryAllGamesArgs = {
 };
 
 
+export type QueryAllGeneratedArtsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  condition?: InputMaybe<GeneratedArtCondition>;
+  filter?: InputMaybe<GeneratedArtFilter>;
+  first?: InputMaybe<Scalars['Int']>;
+  includeArchived?: InputMaybe<IncludeArchivedOption>;
+  last?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GeneratedArtsOrderBy>>;
+};
+
+
 export type QueryAllGuestsArgs = {
   after?: InputMaybe<Scalars['Cursor']>;
   before?: InputMaybe<Scalars['Cursor']>;
@@ -5050,6 +5266,12 @@ export type QueryGameUserByGameIdAndUserIdArgs = {
 };
 
 
+export type QueryGeneratedArtByHashAndOwnerArgs = {
+  hash: Scalars['String'];
+  owner: Scalars['String'];
+};
+
+
 export type QueryGetLatestCardArgs = {
   cardId?: InputMaybe<Scalars['String']>;
   published?: InputMaybe<Scalars['Boolean']>;
@@ -5141,6 +5363,39 @@ export type SaveCardPayload = {
 /** The output of our `saveCard` mutation. */
 export type SaveCardPayloadCardEdgeArgs = {
   orderBy?: InputMaybe<Array<CardsOrderBy>>;
+};
+
+/** All input for the `saveGeneratedArt` mutation. */
+export type SaveGeneratedArtInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  digest?: InputMaybe<Scalars['String']>;
+  extraInfo?: InputMaybe<Scalars['JSON']>;
+  links?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** The output of our `saveGeneratedArt` mutation. */
+export type SaveGeneratedArtPayload = {
+  __typename?: 'SaveGeneratedArtPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  generatedArt?: Maybe<GeneratedArt>;
+  /** An edge for our `GeneratedArt`. May be used by Relay 1. */
+  generatedArtEdge?: Maybe<GeneratedArtsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our `saveGeneratedArt` mutation. */
+export type SaveGeneratedArtPayloadGeneratedArtEdgeArgs = {
+  orderBy?: InputMaybe<Array<GeneratedArtsOrderBy>>;
 };
 
 /** All input for the `setCardsInDeck` mutation. */
@@ -5243,6 +5498,46 @@ export type StringFilter = {
   startsWith?: InputMaybe<Scalars['String']>;
   /** Starts with the specified string (case-insensitive). */
   startsWithInsensitive?: InputMaybe<Scalars['String']>;
+};
+
+/** A filter to be used against String List fields. All fields are combined with a logical ‘and.’ */
+export type StringListFilter = {
+  /** Any array item is equal to the specified value. */
+  anyEqualTo?: InputMaybe<Scalars['String']>;
+  /** Any array item is greater than the specified value. */
+  anyGreaterThan?: InputMaybe<Scalars['String']>;
+  /** Any array item is greater than or equal to the specified value. */
+  anyGreaterThanOrEqualTo?: InputMaybe<Scalars['String']>;
+  /** Any array item is less than the specified value. */
+  anyLessThan?: InputMaybe<Scalars['String']>;
+  /** Any array item is less than or equal to the specified value. */
+  anyLessThanOrEqualTo?: InputMaybe<Scalars['String']>;
+  /** Any array item is not equal to the specified value. */
+  anyNotEqualTo?: InputMaybe<Scalars['String']>;
+  /** Contained by the specified list of values. */
+  containedBy?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Contains the specified list of values. */
+  contains?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Equal to the specified value. */
+  equalTo?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Greater than the specified value. */
+  greaterThan?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: InputMaybe<Scalars['Boolean']>;
+  /** Less than the specified value. */
+  lessThan?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Not equal to the specified value. */
+  notEqualTo?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Overlaps the specified list of values. */
+  overlaps?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 /** All input for the `updateBannedDraftCardByCardId` mutation. */
@@ -5726,6 +6021,41 @@ export type UpdateGameUserPayload = {
 /** The output of our update `GameUser` mutation. */
 export type UpdateGameUserPayloadGameUserEdgeArgs = {
   orderBy?: InputMaybe<Array<GameUsersOrderBy>>;
+};
+
+/** All input for the `updateGeneratedArtByHashAndOwner` mutation. */
+export type UpdateGeneratedArtByHashAndOwnerInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `GeneratedArt` being updated. */
+  generatedArtPatch: GeneratedArtPatch;
+  hash: Scalars['String'];
+  owner: Scalars['String'];
+};
+
+/** The output of our update `GeneratedArt` mutation. */
+export type UpdateGeneratedArtPayload = {
+  __typename?: 'UpdateGeneratedArtPayload';
+  /**
+   * The exact same `clientMutationId` that was provided in the mutation input,
+   * unchanged and unused. May be used by a client to track mutations.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The `GeneratedArt` that was updated by this mutation. */
+  generatedArt?: Maybe<GeneratedArt>;
+  /** An edge for our `GeneratedArt`. May be used by Relay 1. */
+  generatedArtEdge?: Maybe<GeneratedArtsEdge>;
+  /** Our root query field type. Allows us to run any query from our mutation payload. */
+  query?: Maybe<Query>;
+};
+
+
+/** The output of our update `GeneratedArt` mutation. */
+export type UpdateGeneratedArtPayloadGeneratedArtEdgeArgs = {
+  orderBy?: InputMaybe<Array<GeneratedArtsOrderBy>>;
 };
 
 /** All input for the `updateGuestById` mutation. */
@@ -6731,6 +7061,8 @@ export type ResolversTypes = {
   CreateGamePayload: ResolverTypeWrapper<Partial<CreateGamePayload>>;
   CreateGameUserInput: ResolverTypeWrapper<Partial<CreateGameUserInput>>;
   CreateGameUserPayload: ResolverTypeWrapper<Partial<CreateGameUserPayload>>;
+  CreateGeneratedArtInput: ResolverTypeWrapper<Partial<CreateGeneratedArtInput>>;
+  CreateGeneratedArtPayload: ResolverTypeWrapper<Partial<CreateGeneratedArtPayload>>;
   CreateGuestInput: ResolverTypeWrapper<Partial<CreateGuestInput>>;
   CreateGuestPayload: ResolverTypeWrapper<Partial<CreateGuestPayload>>;
   CreateHardRemovalCardInput: ResolverTypeWrapper<Partial<CreateHardRemovalCardInput>>;
@@ -6798,6 +7130,8 @@ export type ResolversTypes = {
   DeleteGameUserByGameIdAndUserIdInput: ResolverTypeWrapper<Partial<DeleteGameUserByGameIdAndUserIdInput>>;
   DeleteGameUserInput: ResolverTypeWrapper<Partial<DeleteGameUserInput>>;
   DeleteGameUserPayload: ResolverTypeWrapper<Partial<DeleteGameUserPayload>>;
+  DeleteGeneratedArtByHashAndOwnerInput: ResolverTypeWrapper<Partial<DeleteGeneratedArtByHashAndOwnerInput>>;
+  DeleteGeneratedArtPayload: ResolverTypeWrapper<Partial<DeleteGeneratedArtPayload>>;
   DeleteGuestByIdInput: ResolverTypeWrapper<Partial<DeleteGuestByIdInput>>;
   DeleteGuestInput: ResolverTypeWrapper<Partial<DeleteGuestInput>>;
   DeleteGuestPayload: ResolverTypeWrapper<Partial<DeleteGuestPayload>>;
@@ -6841,6 +7175,14 @@ export type ResolversTypes = {
   GamesConnection: ResolverTypeWrapper<Partial<GamesConnection>>;
   GamesEdge: ResolverTypeWrapper<Partial<GamesEdge>>;
   GamesOrderBy: ResolverTypeWrapper<Partial<GamesOrderBy>>;
+  GeneratedArt: ResolverTypeWrapper<Partial<GeneratedArt>>;
+  GeneratedArtCondition: ResolverTypeWrapper<Partial<GeneratedArtCondition>>;
+  GeneratedArtFilter: ResolverTypeWrapper<Partial<GeneratedArtFilter>>;
+  GeneratedArtInput: ResolverTypeWrapper<Partial<GeneratedArtInput>>;
+  GeneratedArtPatch: ResolverTypeWrapper<Partial<GeneratedArtPatch>>;
+  GeneratedArtsConnection: ResolverTypeWrapper<Partial<GeneratedArtsConnection>>;
+  GeneratedArtsEdge: ResolverTypeWrapper<Partial<GeneratedArtsEdge>>;
+  GeneratedArtsOrderBy: ResolverTypeWrapper<Partial<GeneratedArtsOrderBy>>;
   GetClassesInput: ResolverTypeWrapper<Partial<GetClassesInput>>;
   GetClassesPayload: ResolverTypeWrapper<Partial<GetClassesPayload>>;
   GetClassesRecord: ResolverTypeWrapper<Partial<GetClassesRecord>>;
@@ -6896,10 +7238,13 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   SaveCardInput: ResolverTypeWrapper<Partial<SaveCardInput>>;
   SaveCardPayload: ResolverTypeWrapper<Partial<SaveCardPayload>>;
+  SaveGeneratedArtInput: ResolverTypeWrapper<Partial<SaveGeneratedArtInput>>;
+  SaveGeneratedArtPayload: ResolverTypeWrapper<Partial<SaveGeneratedArtPayload>>;
   SetCardsInDeckInput: ResolverTypeWrapper<Partial<SetCardsInDeckInput>>;
   SetCardsInDeckPayload: ResolverTypeWrapper<Partial<SetCardsInDeckPayload>>;
   String: ResolverTypeWrapper<Partial<Scalars['String']>>;
   StringFilter: ResolverTypeWrapper<Partial<StringFilter>>;
+  StringListFilter: ResolverTypeWrapper<Partial<StringListFilter>>;
   UpdateBannedDraftCardByCardIdInput: ResolverTypeWrapper<Partial<UpdateBannedDraftCardByCardIdInput>>;
   UpdateBannedDraftCardInput: ResolverTypeWrapper<Partial<UpdateBannedDraftCardInput>>;
   UpdateBannedDraftCardPayload: ResolverTypeWrapper<Partial<UpdateBannedDraftCardPayload>>;
@@ -6930,6 +7275,8 @@ export type ResolversTypes = {
   UpdateGameUserByGameIdAndUserIdInput: ResolverTypeWrapper<Partial<UpdateGameUserByGameIdAndUserIdInput>>;
   UpdateGameUserInput: ResolverTypeWrapper<Partial<UpdateGameUserInput>>;
   UpdateGameUserPayload: ResolverTypeWrapper<Partial<UpdateGameUserPayload>>;
+  UpdateGeneratedArtByHashAndOwnerInput: ResolverTypeWrapper<Partial<UpdateGeneratedArtByHashAndOwnerInput>>;
+  UpdateGeneratedArtPayload: ResolverTypeWrapper<Partial<UpdateGeneratedArtPayload>>;
   UpdateGuestByIdInput: ResolverTypeWrapper<Partial<UpdateGuestByIdInput>>;
   UpdateGuestInput: ResolverTypeWrapper<Partial<UpdateGuestInput>>;
   UpdateGuestPayload: ResolverTypeWrapper<Partial<UpdateGuestPayload>>;
@@ -7092,6 +7439,8 @@ export type ResolversParentTypes = {
   CreateGamePayload: Partial<CreateGamePayload>;
   CreateGameUserInput: Partial<CreateGameUserInput>;
   CreateGameUserPayload: Partial<CreateGameUserPayload>;
+  CreateGeneratedArtInput: Partial<CreateGeneratedArtInput>;
+  CreateGeneratedArtPayload: Partial<CreateGeneratedArtPayload>;
   CreateGuestInput: Partial<CreateGuestInput>;
   CreateGuestPayload: Partial<CreateGuestPayload>;
   CreateHardRemovalCardInput: Partial<CreateHardRemovalCardInput>;
@@ -7156,6 +7505,8 @@ export type ResolversParentTypes = {
   DeleteGameUserByGameIdAndUserIdInput: Partial<DeleteGameUserByGameIdAndUserIdInput>;
   DeleteGameUserInput: Partial<DeleteGameUserInput>;
   DeleteGameUserPayload: Partial<DeleteGameUserPayload>;
+  DeleteGeneratedArtByHashAndOwnerInput: Partial<DeleteGeneratedArtByHashAndOwnerInput>;
+  DeleteGeneratedArtPayload: Partial<DeleteGeneratedArtPayload>;
   DeleteGuestByIdInput: Partial<DeleteGuestByIdInput>;
   DeleteGuestInput: Partial<DeleteGuestInput>;
   DeleteGuestPayload: Partial<DeleteGuestPayload>;
@@ -7194,6 +7545,13 @@ export type ResolversParentTypes = {
   GameUsersEdge: Partial<GameUsersEdge>;
   GamesConnection: Partial<GamesConnection>;
   GamesEdge: Partial<GamesEdge>;
+  GeneratedArt: Partial<GeneratedArt>;
+  GeneratedArtCondition: Partial<GeneratedArtCondition>;
+  GeneratedArtFilter: Partial<GeneratedArtFilter>;
+  GeneratedArtInput: Partial<GeneratedArtInput>;
+  GeneratedArtPatch: Partial<GeneratedArtPatch>;
+  GeneratedArtsConnection: Partial<GeneratedArtsConnection>;
+  GeneratedArtsEdge: Partial<GeneratedArtsEdge>;
   GetClassesInput: Partial<GetClassesInput>;
   GetClassesPayload: Partial<GetClassesPayload>;
   GetClassesRecord: Partial<GetClassesRecord>;
@@ -7244,10 +7602,13 @@ export type ResolversParentTypes = {
   Query: {};
   SaveCardInput: Partial<SaveCardInput>;
   SaveCardPayload: Partial<SaveCardPayload>;
+  SaveGeneratedArtInput: Partial<SaveGeneratedArtInput>;
+  SaveGeneratedArtPayload: Partial<SaveGeneratedArtPayload>;
   SetCardsInDeckInput: Partial<SetCardsInDeckInput>;
   SetCardsInDeckPayload: Partial<SetCardsInDeckPayload>;
   String: Partial<Scalars['String']>;
   StringFilter: Partial<StringFilter>;
+  StringListFilter: Partial<StringListFilter>;
   UpdateBannedDraftCardByCardIdInput: Partial<UpdateBannedDraftCardByCardIdInput>;
   UpdateBannedDraftCardInput: Partial<UpdateBannedDraftCardInput>;
   UpdateBannedDraftCardPayload: Partial<UpdateBannedDraftCardPayload>;
@@ -7278,6 +7639,8 @@ export type ResolversParentTypes = {
   UpdateGameUserByGameIdAndUserIdInput: Partial<UpdateGameUserByGameIdAndUserIdInput>;
   UpdateGameUserInput: Partial<UpdateGameUserInput>;
   UpdateGameUserPayload: Partial<UpdateGameUserPayload>;
+  UpdateGeneratedArtByHashAndOwnerInput: Partial<UpdateGeneratedArtByHashAndOwnerInput>;
+  UpdateGeneratedArtPayload: Partial<UpdateGeneratedArtPayload>;
   UpdateGuestByIdInput: Partial<UpdateGuestByIdInput>;
   UpdateGuestInput: Partial<UpdateGuestInput>;
   UpdateGuestPayload: Partial<UpdateGuestPayload>;
@@ -7688,6 +8051,14 @@ export type CreateGameUserPayloadResolvers<ContextType = any, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CreateGeneratedArtPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateGeneratedArtPayload'] = ResolversParentTypes['CreateGeneratedArtPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  generatedArt?: Resolver<Maybe<ResolversTypes['GeneratedArt']>, ParentType, ContextType>;
+  generatedArtEdge?: Resolver<Maybe<ResolversTypes['GeneratedArtsEdge']>, ParentType, ContextType, RequireFields<CreateGeneratedArtPayloadGeneratedArtEdgeArgs, 'orderBy'>>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type CreateGuestPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateGuestPayload'] = ResolversParentTypes['CreateGuestPayload']> = {
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   guest?: Resolver<Maybe<ResolversTypes['Guest']>, ParentType, ContextType>;
@@ -7916,6 +8287,15 @@ export type DeleteGameUserPayloadResolvers<ContextType = any, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type DeleteGeneratedArtPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteGeneratedArtPayload'] = ResolversParentTypes['DeleteGeneratedArtPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  deletedGeneratedArtId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  generatedArt?: Resolver<Maybe<ResolversTypes['GeneratedArt']>, ParentType, ContextType>;
+  generatedArtEdge?: Resolver<Maybe<ResolversTypes['GeneratedArtsEdge']>, ParentType, ContextType, RequireFields<DeleteGeneratedArtPayloadGeneratedArtEdgeArgs, 'orderBy'>>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type DeleteGuestPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteGuestPayload'] = ResolversParentTypes['DeleteGuestPayload']> = {
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   deletedGuestId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
@@ -8034,6 +8414,29 @@ export type GamesConnectionResolvers<ContextType = any, ParentType extends Resol
 export type GamesEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['GamesEdge'] = ResolversParentTypes['GamesEdge']> = {
   cursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>;
   node?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GeneratedArtResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneratedArt'] = ResolversParentTypes['GeneratedArt']> = {
+  hash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  info?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  isArchived?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  owner?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  urls?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GeneratedArtsConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneratedArtsConnection'] = ResolversParentTypes['GeneratedArtsConnection']> = {
+  edges?: Resolver<Array<ResolversTypes['GeneratedArtsEdge']>, ParentType, ContextType>;
+  nodes?: Resolver<Array<Maybe<ResolversTypes['GeneratedArt']>>, ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GeneratedArtsEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneratedArtsEdge'] = ResolversParentTypes['GeneratedArtsEdge']> = {
+  cursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>;
+  node?: Resolver<Maybe<ResolversTypes['GeneratedArt']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -8217,6 +8620,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createFriend?: Resolver<Maybe<ResolversTypes['CreateFriendPayload']>, ParentType, ContextType, RequireFields<MutationCreateFriendArgs, 'input'>>;
   createGame?: Resolver<Maybe<ResolversTypes['CreateGamePayload']>, ParentType, ContextType, RequireFields<MutationCreateGameArgs, 'input'>>;
   createGameUser?: Resolver<Maybe<ResolversTypes['CreateGameUserPayload']>, ParentType, ContextType, RequireFields<MutationCreateGameUserArgs, 'input'>>;
+  createGeneratedArt?: Resolver<Maybe<ResolversTypes['CreateGeneratedArtPayload']>, ParentType, ContextType, RequireFields<MutationCreateGeneratedArtArgs, 'input'>>;
   createGuest?: Resolver<Maybe<ResolversTypes['CreateGuestPayload']>, ParentType, ContextType, RequireFields<MutationCreateGuestArgs, 'input'>>;
   createHardRemovalCard?: Resolver<Maybe<ResolversTypes['CreateHardRemovalCardPayload']>, ParentType, ContextType, RequireFields<MutationCreateHardRemovalCardArgs, 'input'>>;
   createMatchmakingQueue?: Resolver<Maybe<ResolversTypes['CreateMatchmakingQueuePayload']>, ParentType, ContextType, RequireFields<MutationCreateMatchmakingQueueArgs, 'input'>>;
@@ -8242,6 +8646,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteGameById?: Resolver<Maybe<ResolversTypes['DeleteGamePayload']>, ParentType, ContextType, RequireFields<MutationDeleteGameByIdArgs, 'input'>>;
   deleteGameUser?: Resolver<Maybe<ResolversTypes['DeleteGameUserPayload']>, ParentType, ContextType, RequireFields<MutationDeleteGameUserArgs, 'input'>>;
   deleteGameUserByGameIdAndUserId?: Resolver<Maybe<ResolversTypes['DeleteGameUserPayload']>, ParentType, ContextType, RequireFields<MutationDeleteGameUserByGameIdAndUserIdArgs, 'input'>>;
+  deleteGeneratedArtByHashAndOwner?: Resolver<Maybe<ResolversTypes['DeleteGeneratedArtPayload']>, ParentType, ContextType, RequireFields<MutationDeleteGeneratedArtByHashAndOwnerArgs, 'input'>>;
   deleteGuest?: Resolver<Maybe<ResolversTypes['DeleteGuestPayload']>, ParentType, ContextType, RequireFields<MutationDeleteGuestArgs, 'input'>>;
   deleteGuestById?: Resolver<Maybe<ResolversTypes['DeleteGuestPayload']>, ParentType, ContextType, RequireFields<MutationDeleteGuestByIdArgs, 'input'>>;
   deleteHardRemovalCard?: Resolver<Maybe<ResolversTypes['DeleteHardRemovalCardPayload']>, ParentType, ContextType, RequireFields<MutationDeleteHardRemovalCardArgs, 'input'>>;
@@ -8257,6 +8662,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   publishCard?: Resolver<Maybe<ResolversTypes['PublishCardPayload']>, ParentType, ContextType, RequireFields<MutationPublishCardArgs, 'input'>>;
   publishGitCard?: Resolver<Maybe<ResolversTypes['PublishGitCardPayload']>, ParentType, ContextType, RequireFields<MutationPublishGitCardArgs, 'input'>>;
   saveCard?: Resolver<Maybe<ResolversTypes['SaveCardPayload']>, ParentType, ContextType, RequireFields<MutationSaveCardArgs, 'input'>>;
+  saveGeneratedArt?: Resolver<Maybe<ResolversTypes['SaveGeneratedArtPayload']>, ParentType, ContextType, RequireFields<MutationSaveGeneratedArtArgs, 'input'>>;
   setCardsInDeck?: Resolver<Maybe<ResolversTypes['SetCardsInDeckPayload']>, ParentType, ContextType, RequireFields<MutationSetCardsInDeckArgs, 'input'>>;
   updateBannedDraftCard?: Resolver<Maybe<ResolversTypes['UpdateBannedDraftCardPayload']>, ParentType, ContextType, RequireFields<MutationUpdateBannedDraftCardArgs, 'input'>>;
   updateBannedDraftCardByCardId?: Resolver<Maybe<ResolversTypes['UpdateBannedDraftCardPayload']>, ParentType, ContextType, RequireFields<MutationUpdateBannedDraftCardByCardIdArgs, 'input'>>;
@@ -8278,6 +8684,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateGameById?: Resolver<Maybe<ResolversTypes['UpdateGamePayload']>, ParentType, ContextType, RequireFields<MutationUpdateGameByIdArgs, 'input'>>;
   updateGameUser?: Resolver<Maybe<ResolversTypes['UpdateGameUserPayload']>, ParentType, ContextType, RequireFields<MutationUpdateGameUserArgs, 'input'>>;
   updateGameUserByGameIdAndUserId?: Resolver<Maybe<ResolversTypes['UpdateGameUserPayload']>, ParentType, ContextType, RequireFields<MutationUpdateGameUserByGameIdAndUserIdArgs, 'input'>>;
+  updateGeneratedArtByHashAndOwner?: Resolver<Maybe<ResolversTypes['UpdateGeneratedArtPayload']>, ParentType, ContextType, RequireFields<MutationUpdateGeneratedArtByHashAndOwnerArgs, 'input'>>;
   updateGuest?: Resolver<Maybe<ResolversTypes['UpdateGuestPayload']>, ParentType, ContextType, RequireFields<MutationUpdateGuestArgs, 'input'>>;
   updateGuestById?: Resolver<Maybe<ResolversTypes['UpdateGuestPayload']>, ParentType, ContextType, RequireFields<MutationUpdateGuestByIdArgs, 'input'>>;
   updateHardRemovalCard?: Resolver<Maybe<ResolversTypes['UpdateHardRemovalCardPayload']>, ParentType, ContextType, RequireFields<MutationUpdateHardRemovalCardArgs, 'input'>>;
@@ -8347,6 +8754,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   allFriends?: Resolver<Maybe<ResolversTypes['FriendsConnection']>, ParentType, ContextType, RequireFields<QueryAllFriendsArgs, 'orderBy'>>;
   allGameUsers?: Resolver<Maybe<ResolversTypes['GameUsersConnection']>, ParentType, ContextType, RequireFields<QueryAllGameUsersArgs, 'orderBy'>>;
   allGames?: Resolver<Maybe<ResolversTypes['GamesConnection']>, ParentType, ContextType, RequireFields<QueryAllGamesArgs, 'orderBy'>>;
+  allGeneratedArts?: Resolver<Maybe<ResolversTypes['GeneratedArtsConnection']>, ParentType, ContextType, RequireFields<QueryAllGeneratedArtsArgs, 'includeArchived' | 'orderBy'>>;
   allGuests?: Resolver<Maybe<ResolversTypes['GuestsConnection']>, ParentType, ContextType, RequireFields<QueryAllGuestsArgs, 'orderBy'>>;
   allHardRemovalCards?: Resolver<Maybe<ResolversTypes['HardRemovalCardsConnection']>, ParentType, ContextType, RequireFields<QueryAllHardRemovalCardsArgs, 'orderBy'>>;
   allMatchmakingQueues?: Resolver<Maybe<ResolversTypes['MatchmakingQueuesConnection']>, ParentType, ContextType, RequireFields<QueryAllMatchmakingQueuesArgs, 'orderBy'>>;
@@ -8373,6 +8781,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   gameById?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType, RequireFields<QueryGameByIdArgs, 'id'>>;
   gameUser?: Resolver<Maybe<ResolversTypes['GameUser']>, ParentType, ContextType, RequireFields<QueryGameUserArgs, 'nodeId'>>;
   gameUserByGameIdAndUserId?: Resolver<Maybe<ResolversTypes['GameUser']>, ParentType, ContextType, RequireFields<QueryGameUserByGameIdAndUserIdArgs, 'gameId' | 'userId'>>;
+  generatedArtByHashAndOwner?: Resolver<Maybe<ResolversTypes['GeneratedArt']>, ParentType, ContextType, RequireFields<QueryGeneratedArtByHashAndOwnerArgs, 'hash' | 'owner'>>;
   getLatestCard?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType, Partial<QueryGetLatestCardArgs>>;
   getUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   guest?: Resolver<Maybe<ResolversTypes['Guest']>, ParentType, ContextType, RequireFields<QueryGuestArgs, 'nodeId'>>;
@@ -8394,6 +8803,14 @@ export type SaveCardPayloadResolvers<ContextType = any, ParentType extends Resol
   card?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType>;
   cardEdge?: Resolver<Maybe<ResolversTypes['CardsEdge']>, ParentType, ContextType, RequireFields<SaveCardPayloadCardEdgeArgs, 'orderBy'>>;
   clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SaveGeneratedArtPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['SaveGeneratedArtPayload'] = ResolversParentTypes['SaveGeneratedArtPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  generatedArt?: Resolver<Maybe<ResolversTypes['GeneratedArt']>, ParentType, ContextType>;
+  generatedArtEdge?: Resolver<Maybe<ResolversTypes['GeneratedArtsEdge']>, ParentType, ContextType, RequireFields<SaveGeneratedArtPayloadGeneratedArtEdgeArgs, 'orderBy'>>;
   query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -8486,6 +8903,14 @@ export type UpdateGameUserPayloadResolvers<ContextType = any, ParentType extends
   gameByGameId?: Resolver<Maybe<ResolversTypes['Game']>, ParentType, ContextType>;
   gameUser?: Resolver<Maybe<ResolversTypes['GameUser']>, ParentType, ContextType>;
   gameUserEdge?: Resolver<Maybe<ResolversTypes['GameUsersEdge']>, ParentType, ContextType, RequireFields<UpdateGameUserPayloadGameUserEdgeArgs, 'orderBy'>>;
+  query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UpdateGeneratedArtPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateGeneratedArtPayload'] = ResolversParentTypes['UpdateGeneratedArtPayload']> = {
+  clientMutationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  generatedArt?: Resolver<Maybe<ResolversTypes['GeneratedArt']>, ParentType, ContextType>;
+  generatedArtEdge?: Resolver<Maybe<ResolversTypes['GeneratedArtsEdge']>, ParentType, ContextType, RequireFields<UpdateGeneratedArtPayloadGeneratedArtEdgeArgs, 'orderBy'>>;
   query?: Resolver<Maybe<ResolversTypes['Query']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -8728,6 +9153,7 @@ export type Resolvers<ContextType = any> = {
   CreateFriendPayload?: CreateFriendPayloadResolvers<ContextType>;
   CreateGamePayload?: CreateGamePayloadResolvers<ContextType>;
   CreateGameUserPayload?: CreateGameUserPayloadResolvers<ContextType>;
+  CreateGeneratedArtPayload?: CreateGeneratedArtPayloadResolvers<ContextType>;
   CreateGuestPayload?: CreateGuestPayloadResolvers<ContextType>;
   CreateHardRemovalCardPayload?: CreateHardRemovalCardPayloadResolvers<ContextType>;
   CreateMatchmakingQueuePayload?: CreateMatchmakingQueuePayloadResolvers<ContextType>;
@@ -8754,6 +9180,7 @@ export type Resolvers<ContextType = any> = {
   DeleteFriendPayload?: DeleteFriendPayloadResolvers<ContextType>;
   DeleteGamePayload?: DeleteGamePayloadResolvers<ContextType>;
   DeleteGameUserPayload?: DeleteGameUserPayloadResolvers<ContextType>;
+  DeleteGeneratedArtPayload?: DeleteGeneratedArtPayloadResolvers<ContextType>;
   DeleteGuestPayload?: DeleteGuestPayloadResolvers<ContextType>;
   DeleteHardRemovalCardPayload?: DeleteHardRemovalCardPayloadResolvers<ContextType>;
   DeleteMatchmakingQueuePayload?: DeleteMatchmakingQueuePayloadResolvers<ContextType>;
@@ -8768,6 +9195,9 @@ export type Resolvers<ContextType = any> = {
   GameUsersEdge?: GameUsersEdgeResolvers<ContextType>;
   GamesConnection?: GamesConnectionResolvers<ContextType>;
   GamesEdge?: GamesEdgeResolvers<ContextType>;
+  GeneratedArt?: GeneratedArtResolvers<ContextType>;
+  GeneratedArtsConnection?: GeneratedArtsConnectionResolvers<ContextType>;
+  GeneratedArtsEdge?: GeneratedArtsEdgeResolvers<ContextType>;
   GetClassesPayload?: GetClassesPayloadResolvers<ContextType>;
   GetClassesRecord?: GetClassesRecordResolvers<ContextType>;
   GetCollectionCardsPayload?: GetCollectionCardsPayloadResolvers<ContextType>;
@@ -8793,6 +9223,7 @@ export type Resolvers<ContextType = any> = {
   PublishGitCardPayload?: PublishGitCardPayloadResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   SaveCardPayload?: SaveCardPayloadResolvers<ContextType>;
+  SaveGeneratedArtPayload?: SaveGeneratedArtPayloadResolvers<ContextType>;
   SetCardsInDeckPayload?: SetCardsInDeckPayloadResolvers<ContextType>;
   UpdateBannedDraftCardPayload?: UpdateBannedDraftCardPayloadResolvers<ContextType>;
   UpdateBotUserPayload?: UpdateBotUserPayloadResolvers<ContextType>;
@@ -8804,6 +9235,7 @@ export type Resolvers<ContextType = any> = {
   UpdateFriendPayload?: UpdateFriendPayloadResolvers<ContextType>;
   UpdateGamePayload?: UpdateGamePayloadResolvers<ContextType>;
   UpdateGameUserPayload?: UpdateGameUserPayloadResolvers<ContextType>;
+  UpdateGeneratedArtPayload?: UpdateGeneratedArtPayloadResolvers<ContextType>;
   UpdateGuestPayload?: UpdateGuestPayloadResolvers<ContextType>;
   UpdateHardRemovalCardPayload?: UpdateHardRemovalCardPayloadResolvers<ContextType>;
   UpdateMatchmakingQueuePayload?: UpdateMatchmakingQueuePayloadResolvers<ContextType>;
@@ -8841,6 +9273,8 @@ export type DeckFragment = { __typename?: 'Deck', id: string, name?: string | nu
 export type DeckCardIdsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string } | null> } };
 
 export type DeckCardsFragment = { __typename?: 'Deck', cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, cardByCardId?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null> } };
+
+export type GeneratedArtFragment = { __typename?: 'GeneratedArt', hash: string, owner: string, urls: Array<string | null>, info?: any | null, isArchived: boolean };
 
 export type ImageFragment = { __typename?: 'ImageDef', id: string, name: string, height: number, width: number, src: string };
 
@@ -8891,6 +9325,15 @@ export type SaveCardMutationVariables = Exact<{
 
 
 export type SaveCardMutation = { __typename?: 'Mutation', saveCard?: { __typename?: 'SaveCardPayload', card?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null };
+
+export type SaveGeneratedArtMutationVariables = Exact<{
+  hash: Scalars['String'];
+  urls: Array<Scalars['String']> | Scalars['String'];
+  info?: InputMaybe<Scalars['JSON']>;
+}>;
+
+
+export type SaveGeneratedArtMutation = { __typename?: 'Mutation', saveGeneratedArt?: { __typename?: 'SaveGeneratedArtPayload', generatedArt?: { __typename?: 'GeneratedArt', hash: string, owner: string, urls: Array<string | null>, info?: any | null, isArchived: boolean } | null } | null };
 
 export type SetCardsInDeckMutationVariables = Exact<{
   deckId: Scalars['String'];
@@ -8960,6 +9403,11 @@ export type GetDecksQueryVariables = Exact<{
 
 export type GetDecksQuery = { __typename?: 'Query', allDecks?: { __typename?: 'DecksConnection', nodes: Array<{ __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null } | null> } | null, allDeckShares?: { __typename?: 'DeckSharesConnection', nodes: Array<{ __typename?: 'DeckShare', deckByDeckId?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null } | null } | null> } | null };
 
+export type GetGeneratedArtQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetGeneratedArtQuery = { __typename?: 'Query', allGeneratedArts?: { __typename?: 'GeneratedArtsConnection', nodes: Array<{ __typename?: 'GeneratedArt', hash: string, owner: string, urls: Array<string | null>, info?: any | null, isArchived: boolean } | null> } | null };
+
 export const ClassFragmentDoc = gql`
     fragment class on Class {
   class
@@ -9024,6 +9472,15 @@ export const DeckCardsFragmentDoc = gql`
   }
 }
     ${CardFragmentDoc}`;
+export const GeneratedArtFragmentDoc = gql`
+    fragment generatedArt on GeneratedArt {
+  hash
+  owner
+  urls
+  info
+  isArchived
+}
+    `;
 export const ImageFragmentDoc = gql`
     fragment image on ImageDef {
   id
@@ -9252,6 +9709,43 @@ export function useSaveCardMutation(baseOptions?: Apollo.MutationHookOptions<Sav
 export type SaveCardMutationHookResult = ReturnType<typeof useSaveCardMutation>;
 export type SaveCardMutationResult = Apollo.MutationResult<SaveCardMutation>;
 export type SaveCardMutationOptions = Apollo.BaseMutationOptions<SaveCardMutation, SaveCardMutationVariables>;
+export const SaveGeneratedArtDocument = gql`
+    mutation saveGeneratedArt($hash: String!, $urls: [String!]!, $info: JSON) {
+  saveGeneratedArt(input: {digest: $hash, links: $urls, extraInfo: $info}) {
+    generatedArt {
+      ...generatedArt
+    }
+  }
+}
+    ${GeneratedArtFragmentDoc}`;
+export type SaveGeneratedArtMutationFn = Apollo.MutationFunction<SaveGeneratedArtMutation, SaveGeneratedArtMutationVariables>;
+
+/**
+ * __useSaveGeneratedArtMutation__
+ *
+ * To run a mutation, you first call `useSaveGeneratedArtMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveGeneratedArtMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveGeneratedArtMutation, { data, loading, error }] = useSaveGeneratedArtMutation({
+ *   variables: {
+ *      hash: // value for 'hash'
+ *      urls: // value for 'urls'
+ *      info: // value for 'info'
+ *   },
+ * });
+ */
+export function useSaveGeneratedArtMutation(baseOptions?: Apollo.MutationHookOptions<SaveGeneratedArtMutation, SaveGeneratedArtMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SaveGeneratedArtMutation, SaveGeneratedArtMutationVariables>(SaveGeneratedArtDocument, options);
+      }
+export type SaveGeneratedArtMutationHookResult = ReturnType<typeof useSaveGeneratedArtMutation>;
+export type SaveGeneratedArtMutationResult = Apollo.MutationResult<SaveGeneratedArtMutation>;
+export type SaveGeneratedArtMutationOptions = Apollo.BaseMutationOptions<SaveGeneratedArtMutation, SaveGeneratedArtMutationVariables>;
 export const SetCardsInDeckDocument = gql`
     mutation setCardsInDeck($deckId: String!, $cardIds: [String!]) {
   setCardsInDeck(input: {deck: $deckId, cardIds: $cardIds}) {
@@ -9599,3 +10093,39 @@ export function useGetDecksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetDecksQueryHookResult = ReturnType<typeof useGetDecksQuery>;
 export type GetDecksLazyQueryHookResult = ReturnType<typeof useGetDecksLazyQuery>;
 export type GetDecksQueryResult = Apollo.QueryResult<GetDecksQuery, GetDecksQueryVariables>;
+export const GetGeneratedArtDocument = gql`
+    query getGeneratedArt {
+  allGeneratedArts {
+    nodes {
+      ...generatedArt
+    }
+  }
+}
+    ${GeneratedArtFragmentDoc}`;
+
+/**
+ * __useGetGeneratedArtQuery__
+ *
+ * To run a query within a React component, call `useGetGeneratedArtQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGeneratedArtQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGeneratedArtQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetGeneratedArtQuery(baseOptions?: Apollo.QueryHookOptions<GetGeneratedArtQuery, GetGeneratedArtQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGeneratedArtQuery, GetGeneratedArtQueryVariables>(GetGeneratedArtDocument, options);
+      }
+export function useGetGeneratedArtLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGeneratedArtQuery, GetGeneratedArtQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGeneratedArtQuery, GetGeneratedArtQueryVariables>(GetGeneratedArtDocument, options);
+        }
+export type GetGeneratedArtQueryHookResult = ReturnType<typeof useGetGeneratedArtQuery>;
+export type GetGeneratedArtLazyQueryHookResult = ReturnType<typeof useGetGeneratedArtLazyQuery>;
+export type GetGeneratedArtQueryResult = Apollo.QueryResult<GetGeneratedArtQuery, GetGeneratedArtQueryVariables>;

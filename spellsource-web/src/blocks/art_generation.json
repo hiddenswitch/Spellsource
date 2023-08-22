@@ -81,10 +81,10 @@
     "message0": "%1%2",
     "args0": [
       {
-        "type": "field_image",
+        "type": "field_image_serializable",
         "name": "src",
-        "width": 64,
-        "height": 64,
+        "width": 128,
+        "height": 128,
         "src": "loading"
       },
       {
