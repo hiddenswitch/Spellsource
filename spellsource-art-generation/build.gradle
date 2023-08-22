@@ -4,7 +4,6 @@ plugins {
 }
 
 
-import org.apache.tools.ant.taskdefs.condition.Os
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 // Top-level declarations
@@ -33,24 +32,26 @@ tasks.register('venv') {
   }
 }
 
-["comfyui", "spellsource_art_generation"].each { packageName ->
+[["comfyui", "comfy"], ["spellsource_art_generation", "spellsource_art_generation"]].each { tuple ->
+  def dirName = tuple[0]
+  def packageName = tuple[1]
   tasks.register("${packageName}_installEditable") {
     dependsOn 'venv'
-    inputs.files "$packageName/requirements.txt", "$packageName/setup.py"
-    outputs.dir "${sitePackagesDir}/${packageName}-0.0.1.dist-info"
+    inputs.files "$dirName/requirements.txt", "$dirName/setup.py"
     outputs.cacheIf { true }
+    outputs.file "${sitePackagesDir}/__editable__.${packageName}-0.0.1.pth"
 
     doLast {
       exec {
-        workingDir(project.layout.projectDirectory)
-        commandLine "${scriptsDir}/pip", 'install', "-e", "./$packageName"
+        workingDir(project.layout.projectDirectory.dir(dirName))
+        commandLine "${scriptsDir}/pip", 'install', "-e", "."
       }
     }
   }
 }
 
 tasks.register('install') {
-  dependsOn "comfyui_installEditable", "spellsource_art_generation_installEditable"
+  dependsOn "comfy_installEditable", "spellsource_art_generation_installEditable"
 }
 
 tasks.register("downloadModels") {
