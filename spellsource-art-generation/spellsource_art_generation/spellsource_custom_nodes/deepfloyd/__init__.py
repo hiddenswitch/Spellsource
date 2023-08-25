@@ -1,3 +1,10 @@
+import os
+
+from comfy.cmd import folder_paths
+
+if not 'TRANSFORMERS_CACHE' in os.environ:
+    os.environ['TRANSFORMERS_CACHE'] = os.path.join(folder_paths.models_dir, "deepfloyd")
+
 from transformers import logging as transformers_logging
 from diffusers import logging as diffusers_logging
 from warnings import filterwarnings
