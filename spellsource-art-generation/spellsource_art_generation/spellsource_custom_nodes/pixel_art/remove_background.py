@@ -3,6 +3,7 @@
 '''
 Estimate what pixels belong to the background and perform a cut-out, using the 'rembg' models.
 '''
+
 import numpy as np
 import rembg
 import torch

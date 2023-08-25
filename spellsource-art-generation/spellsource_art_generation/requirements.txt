@@ -1,4 +1,4 @@
-comfy
+comfyui
 diffusers>=0.16.1
 bitsandbytes>=0.40.1
 rembg

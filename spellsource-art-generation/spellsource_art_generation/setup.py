@@ -74,5 +74,10 @@ setup(
     description='',
     license='AGPLv3',
     keywords='spellsource art generation',
-    url='https://github.com/hiddenswitch/spellsource/spellsource_art_generation'
+    url='https://github.com/hiddenswitch/spellsource/spellsource_art_generation',
+    entry_points={
+        'comfyui.custom_nodes': [
+            'spellsource_art_generation = spellsource_custom_nodes',
+        ],
+    },
 )

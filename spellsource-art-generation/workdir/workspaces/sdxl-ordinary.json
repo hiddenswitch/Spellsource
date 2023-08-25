@@ -450,7 +450,7 @@
         "Node name for S&R": "ImageEstimateForegroundMask"
       },
       "widgets_values": [
-        "u2net"
+        "isnet-general-use"
       ]
     },
     {

@@ -18,7 +18,7 @@ def sitePackagesDir = System.properties['os.name'].toLowerCase().contains('windo
 tasks.register('venv') {
 
   // Specify the outputs of the task
-  outputs.dir 'venv'
+  outputs.file "venv/pyvenv.cfg"
   outputs.cacheIf { true }
   outputs.upToDateWhen { file(venvDir).exists() }
   onlyIf { !file(venvDir).exists() }
@@ -38,8 +38,10 @@ tasks.register('venv') {
   tasks.register("${packageName}_installEditable") {
     dependsOn 'venv'
     inputs.files "$dirName/requirements.txt", "$dirName/setup.py"
-    outputs.cacheIf { true }
-    outputs.file "${sitePackagesDir}/__editable__.${packageName}-0.0.1.pth"
+    outputs.cacheIf { false }
+
+    def editablePath = "${sitePackagesDir}/__editable__.${packageName}-0.0.1.pth"
+    outputs.file editablePath
 
     doLast {
       exec {
@@ -62,7 +64,7 @@ tasks.register("downloadModels") {
   outputs.file(destPath)
   outputs.upToDateWhen { file(destPath).exists() }
   onlyIf { !file(destPath).exists() }
-  outputs.cacheIf { true }
+  outputs.cacheIf { false }
 
   doLast {
     exec {

@@ -4,7 +4,6 @@
 Extra mask operations.
 '''
 import numpy as np
-import rembg
 import torch
 
 from comfy.nodes.package_typing import CustomNode
@@ -66,4 +65,9 @@ class ImageCutout(CustomNode):
 NODE_CLASS_MAPPINGS = {
     "BinarizeMask": BinarizeMask,
     "ImageCutout": ImageCutout,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "BinarizeMask": "Binarize Mask",
+    "ImageCutout": "Image Cutout",
 }
