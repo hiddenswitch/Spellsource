@@ -10,68 +10,118 @@ Please see the [Issues](https://github.com/hiddenswitch/Spellsource/issues) tab 
 
 ### Description
 
-The `Spellsource-Server` project is a 2-player card battler that supports hosted, networked gameplay. It features matchmaking, collection management and support for game mechanics that persist between matches.
+The `Spellsource-Server` project is a 2-player card battler that supports hosted, networked gameplay. It features
+matchmaking, collection management and support for game mechanics that persist between matches.
 
 ### Getting Around
 
-Cards are located at [spellsource-cards-git/src/main/resources/cards/custom](https://github.com/hiddenswitch/Spellsource/tree/master/spellsource-cards-git).
+Cards are located
+at [spellsource-cards-git/src/main/resources/cards/custom](https://github.com/hiddenswitch/Spellsource/tree/master/spellsource-cards-git).
 
-To implement new effects (called **Spells** inside Spellsource) add a new Spell subclass to [spellsource-game/src/main/java/net/demilich/metastone/game/spells](spellsource-game/src/main/java/net/demilich/metastone/game/spells).
+To implement new effects (called **Spells** inside Spellsource) add a new Spell subclass
+to [spellsource-game/src/main/java/net/demilich/metastone/game/spells](spellsource-game/src/main/java/net/demilich/metastone/game/spells).
 
-You can learn more about the Spellsource AI as implemented in the [GameStateValueBehaviour](spellsource-game/src/main/java/net/demilich/metastone/game/behaviour/GameStateValueBehaviour.java) class.
+You can learn more about the Spellsource AI as implemented in
+the [GameStateValueBehaviour](spellsource-game/src/main/java/net/demilich/metastone/game/behaviour/GameStateValueBehaviour.java)
+class.
 
-The server application starts in [EntryPoint](spellsource-server/src/main/java/com/hiddenswitch/framework/EntryPoint.java). `./gradlew spellsource:run` uses the test [EntryPoint](spellsource-server/src/test/java/com/hiddenswitch/framework/tests/applications/EntryPoint.java).
+The server application starts
+in [EntryPoint](spellsource-server/src/main/java/com/hiddenswitch/framework/EntryPoint.java). `./gradlew spellsource:run`
+uses the
+test [EntryPoint](spellsource-server/src/test/java/com/hiddenswitch/framework/tests/applications/EntryPoint.java).
 
 The client is private, please contact for access on the Discord.
 
 ### Getting started on Windows
 
+Enable Developer Mode in Windows 10 and 11. If you're on Windows server editions, you do not need to do any additional
+steps.*
+
 Hit `Win + X` and click Windows PowerShell (Admin). Then run the following:
 
-```
+```pwsh
 # installs chocolatey
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-# gets a way to use administrative stuff
-choco install -y gsudo
+# install dependencies
+wsl --install
+choco install -y gsudo git.portable 7zip openjdk vcredist140 docker-desktop dotnet-sdk nodejs.install python
+# separately add vs2022 compilation tools with clang
+choco install -y visualstudio2022-workload-nativedesktop --package-parameters "--add Microsoft.VisualStudio.Component.VC.Llvm.Clang --add Microsoft.VisualStudio.Component.VC.Llvm.ClangToolset"
+# disable realtime monitoring from windows defender, since it interferes with developer workloads
+Set-MpPreference -DisableRealtimeMonitoring $true
 ```
 
-Then, close the window. Hit `Win + X` and click Windows Powershell. Do not start as an admin. Then run the following:
+Then, close the window and restart Windows for Docker Desktop to be enabled.
+
+Once you've rebooted, start Docker Desktop at least once. Observe you may be prompted by "Ubuntu" to set a username and
+password. This is for your Linux-on-Windows install. There is no right answer, but it is safe to use the username and
+password of your Windows account.
+
+Hit `Win + X` and click Windows Powershell. Do not start a prompt as an admin. Then run the following:
 
 ```sh
-# install minimum dependencies
-sudo choco install -y git.portable 7zip openjdk
-# install chocolatey and use it to install dependencies
-# enable git symlinks everywhere
+# enable git symlinks in git
 git config --global core.symlinks=true
+git lfs install
+
+# now clone the repository
+cd ~/Documents/
+git clone https://github.com/hiddenswitch/Spellsource.git
+cd Spellsource
+# you are now in the spellsource directory, get the submodules
+git submodule update --init --recursive
+```
+
+You should now be able to run the tests.
+
+```
+./gradlew test
+```
+
+*To enable symlink creation without enabling developer mode, you can use the following script. This requires
+administrative privileges:
+
+```pwsh
+$exportPath = "$env:TEMP\secpol.cfg"
+$importPath = "$env:TEMP\secpol_modified.cfg"
+
+secedit /export /cfg "$exportPath"
+
+(Get-Content $exportPath) -replace '^SeCreateSymbolicLinkPrivilege.*$', ("SeCreateSymbolicLinkPrivilege = *S-1-5-32-544,*" + [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value) | Set-Content $importPath
+
+secedit /import /cfg "$importPath"
+
+Remove-Item $exportPath
+Remove-Item $importPath
 ```
 
 ### Getting started with Development on macOS
 
 Requirements: **Java 20 or later** and **Docker**. Check your current version of Java using `java --version`.
 
- 1. Install dependencies:
-    ```shell script
-    # XCode binaries
-    xcode-select --install
-    # Brew
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    # Docker. Look carefully at any messages brew tells you and do them
-    brew cask install docker
-    # Java (if required)
-    # Install openjdk 20, dotnet 6.0 & gradle 8.3 or higher
-    # Gradle 8.3 is not released yet, so use the wrapper gradle
-    brew install openjdk dotnet-sdk
-    sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
-    brew link --force openjdk
-    ```
- 2. Clone the repository:
-    ```shell script
-    git clone https://github.com/hiddenswitch/Spellsource.git
-    cd Spellsource
-    ```
- 3. See Spellsource-specific tasks using `./gradlew tasks --group spellsource`.
- 4. Run tests using `./gradlew test`
- 5. Start a local server using `./gradlew run`. This will download about 9GB of content.
+1. Install dependencies:
+   ```shell script
+   # XCode binaries
+   xcode-select --install
+   # Brew
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+   # Docker. Look carefully at any messages brew tells you and do them
+   brew cask install docker
+   # Java (if required)
+   # Install openjdk 20, dotnet 6.0 & gradle 8.3 or higher
+   # Gradle 8.3 is not released yet, so use the wrapper gradle
+   brew install openjdk dotnet-sdk
+   sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
+   brew link --force openjdk
+   ```
+2. Clone the repository:
+   ```shell script
+   git clone https://github.com/hiddenswitch/Spellsource.git
+   cd Spellsource
+   ```
+3. See Spellsource-specific tasks using `./gradlew tasks --group spellsource`.
+4. Run tests using `./gradlew test`
+5. Start a local server using `./gradlew run`. This will download about 9GB of content.
 
 ### Contributing Cards
 
@@ -79,7 +129,8 @@ Visit the [Contribution Guide](CONTRIBUTE.md) for more about contributions, incl
 
 ### Deployment
 
-Use `./gradlew tasks --group spellsource` to see all deployment related tasks. You will need to be an Administrative user for these.
+Use `./gradlew tasks --group spellsource` to see all deployment related tasks. You will need to be an Administrative
+user for these.
 
 ### Troubleshooting
 
@@ -93,7 +144,9 @@ git clone https://github.com/hiddenswitch/Spellsource.git
 
 > I am having issues with Git Submodules, like failures to download
 
-Public users do not have access to the private repositories that fail to download. You can safely ignore those errors. If you'd like to contribute to the private repositories, like the game client, please use the Discord invite link above and discuss with the team there.
+Public users do not have access to the private repositories that fail to download. You can safely ignore those errors.
+If you'd like to contribute to the private repositories, like the game client, please use the Discord invite link above
+and discuss with the team there.
 
 > I am seeing issues with too many files open.
 
@@ -116,9 +169,11 @@ Visit the [Steam partner's page](https://partner.steamgames.com/apps/builds/9871
 
 > I uploaded to TestFlight but the build isn't public yet.
 
-Make sure the Public group is [added here](https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1257566265/testflight?section=iosbuilds).
+Make sure the Public group
+is [added here](https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1257566265/testflight?section=iosbuilds).
 
-> `./gradlew spellsource-server:run` hangs with error `Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out waiting for log output matching '.*waiting for connections on port.*'`
+> `./gradlew spellsource-server:run` hangs with
+> error `Caused by: org.testcontainers.containers.ContainerLaunchException: Timed out waiting for log output matching '.*waiting for connections on port.*'`
 
 Make sure to use your local `docker` context using `docker context use default`.
 
@@ -137,11 +192,13 @@ Restart Docker. Make sure Docker is running.
 
 You need special authorization for this. It is accessed via an audited API key.
 
-> I receive an error related to `(sharp:42678): GLib-CRITICAL **: 17:17:14.186: g_hash_table_lookup: assertion 'hash_table != NULL' failed`
+> I receive an error related
+> to `(sharp:42678): GLib-CRITICAL **: 17:17:14.186: g_hash_table_lookup: assertion 'hash_table != NULL' failed`
 
 Delete the NPM modules folder: `rm -rf www/npm_modules`, then rerun `./gradlew distWWW`.
 
-> Autocomplete, code insight, intellisense or other code completion features are missing when I am trying to write code accessing the generating protobufs definitions, like `Spellsource.java` or `Hiddenswitch.java`
+> Autocomplete, code insight, intellisense or other code completion features are missing when I am trying to write code
+> accessing the generating protobufs definitions, like `Spellsource.java` or `Hiddenswitch.java`
 
 In IntelliJ, visit the Help > Edit Custom Properties... menu, then add the following lines:
 

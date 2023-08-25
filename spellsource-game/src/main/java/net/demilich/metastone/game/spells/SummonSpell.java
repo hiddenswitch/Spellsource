@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import net.demilich.metastone.game.entities.Actor;
@@ -349,12 +350,14 @@ public class SummonSpell extends Spell {
 				boolean summoned = context.getLogic().summon(player.getId(), minion, source, boardPosition, false);
 				if (!summoned) {
 					// It's still possible that, even if a minion was successfully summoned, a subspell later destroys it
-					return;
+					continue;
 				}
 				summonedMinions.add(minion);
 				if (!fromBase) {
 					// We definitely added enchantments via summoning here, so let's skip the ones that were written on the card
 					context.getLogic().copyEnchantments(player, source, target, minion, e -> !Objects.equals(e.getSourceCard(), minion.getSourceCard()), false);
+					// All cloned targets should have summoning sickness
+					minion.setAttribute(Attribute.SUMMONING_SICKNESS);
 				}
 			}
 		}
@@ -370,7 +373,7 @@ public class SummonSpell extends Spell {
 			if (summoned.isDestroyed()
 					&& summoned.getZone() == Zones.GRAVEYARD) {
 				logger.debug("onCast {} {}: The minion {} that was previously summoned successfully is now destroyed or in the graveyard", context.getGameId(), source, summoned);
-				return;
+				continue;
 			}
 
 			List<SpellDesc> collect = desc.subSpells(0);

@@ -32,7 +32,7 @@ import { DefaultApiRequestFactory, DefaultApiResponseProcessor} from "../apis/De
 
 export interface DefaultApiApiV1ImagesDigestGetRequest {
     /**
-     * A digest of the request used to generate the imaeg
+     * A digest of the request used to generate the image
      * @type string
      * @memberof DefaultApiapiV1ImagesDigestGet
      */

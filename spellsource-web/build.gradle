@@ -55,7 +55,7 @@ tasks.register('copyComfyClient') {
 
 tasks.named('yarn').configure {
   group('spellsource')
-  dependsOn('copyComfyClient')
+  dependsOn += ['copyComfyClient', 'nodeJsDeps']
   args = ['--frozen-lockfile']
 }
 
@@ -67,6 +67,11 @@ Provider<JavaLauncher> thisToolchain() {
 Provider<RegularFile> graalFileFor(String graalBinary) {
   def toolchain = thisToolchain()
   return toolchain.map { it.metadata.installationPath.file("${graalBinary}${Os.isFamily(Os.FAMILY_WINDOWS) ? '.cmd' : ''}") }
+}
+
+tasks.register('nodeJsDeps', NpmTask) {
+  args = ['install', '-g', 'yarn']
+  outputs.cacheIf { true }
 }
 
 tasks.register('nodeJsDepsGraal') {

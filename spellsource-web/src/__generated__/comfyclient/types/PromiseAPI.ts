@@ -43,7 +43,7 @@ export class PromiseDefaultApi {
     /**
      * Returns an image given a content hash. 
      * (API) Get image
-     * @param digest A digest of the request used to generate the imaeg
+     * @param digest A digest of the request used to generate the image
      */
     public apiV1ImagesDigestGet(digest: string, _options?: Configuration): Promise<HttpFile> {
         const result = this.api.apiV1ImagesDigestGet(digest, _options);

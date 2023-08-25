@@ -27,7 +27,7 @@ export class DefaultApiRequestFactory extends BaseAPIRequestFactory {
     /**
      * Returns an image given a content hash. 
      * (API) Get image
-     * @param digest A digest of the request used to generate the imaeg
+     * @param digest A digest of the request used to generate the image
      */
     public async apiV1ImagesDigestGet(digest: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
