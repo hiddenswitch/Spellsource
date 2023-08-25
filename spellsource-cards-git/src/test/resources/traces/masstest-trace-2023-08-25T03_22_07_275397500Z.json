@@ -1,0 +1,26 @@
+{
+  "seed" : 7805459870999088512,
+  "catalogueVersion" : 0,
+  "heroClasses" : [ "AMBER", "TWILIGHT" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_giant_spider", "minion_twilight_mercenary", "spell_call_the_cavalry", "minion_forest_magistrate", "spell_spider_surveillance", "minion_twilight_annihilator", "spell_harden", "minion_unnerving_spectre", "spell_refang", "minion_cursing_disciple", "spell_spiderbomb", "minion_volcanic_elemental", "minion_sp1der", "minion_tempest_elemental", "spell_urgent_recycling", "minion_anobii", "minion_acolyte_of_peroth'arn", "minion_mother_matron", "minion_blood_cultist", "minion_tetradimensionalist", "minion_mossy_giant", "minion_selfburner", "minion_big_ol_beetle", "spell_two_by_two", "minion_spectral_steed", "minion_enhancing_shaman", "minion_hypnotist", "minion_holdout_soldier", "minion_seeker_of_knowledge", "minion_giant_serpent" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_channeled_spirit", "minion_shacklebreaker", "minion_shadowsurger", "minion_jack_in_the_box", "minion_twisted_sentinel", "minion_hostile_snapdragon", "minion_ichor_spewer", "minion_fleshshaper", "minion_glass_golem", "minion_undead_trickster", "spell_demongrip", "spell_dark_skies", "minion_hands_on_historian", "weapon_hooked_cleaver", "minion_divine_cleric", "minion_harbinger_of_hope", "spell_the_cyntanami", "minion_doodles", "minion_colrum", "spell_reap", "minion_fiery_tyrant", "spell_hemoplate", "minion_manic_ritualist", "minion_smogg", "spell_scarlet_thirst_rework", "minion_ichor_spewer", "spell_blood_scent", "spell_ichor_blast_rework", "spell_hemoshape", "spell_hate_spike" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "CORE", "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ 9, 26 ]
+  } ],
+  "actions" : [ 1, 0, 0, 2, 0, 1, 0, 0, 0, 4, 0, 1, 0, 2, 2, 1, 3, 1, 4, 0, 2, 0, 0, 4, 6, 3, 3, 6, 1, 1, 9, 2, 1, 2, 2, 1, 1, 0, 12, 2, 0, 2, 0, 6, 3, 0, 18, 4, 4, 12, 4, 2, 3, 10, 16, 0, 2, 6, 0, 4, 6, 22, 47, 30, 16, 13, 5, 3, 0, 33, 18, 0, 18, 2, 2, 2, 7, 8, 3, 15, 5, 0, 9, 7 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

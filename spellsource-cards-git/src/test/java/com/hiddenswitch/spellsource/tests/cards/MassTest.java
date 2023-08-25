@@ -1,11 +1,9 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
+import com.google.common.collect.Maps;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.logic.Trace;
@@ -22,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
@@ -97,6 +96,28 @@ public class MassTest extends TestBase {
 					throw new IllegalStateException("returned test");
 				}
 				return card;
+			}
+
+			@Override
+			public @NotNull Map<String, Card> getCards() {
+				var cards = super.getCards();
+				return Maps.transformValues(cards, card -> {
+					if (CardSet.TEST.equals(card.getCardSet())) {
+						throw new IllegalStateException("returned test");
+					}
+					return card;
+				});
+			}
+
+			@Override
+			public @NotNull Map<String, CardCatalogueRecord> getRecords() {
+				var records = super.getRecords();
+				return Maps.transformValues(records, record -> {
+					if (CardSet.TEST.equals(record.getDesc().getSet())) {
+						throw new IllegalStateException("returned test");
+					}
+					return record;
+				});
 			}
 		};
 		catalogueWithExceptions.loadCardsFromPackage();

@@ -17,7 +17,7 @@
       "spell_test_discover_loop"
     ]
   },
-  "collectible": true,
+  "collectible": false,
   "set": "TEST",
   "fileFormatVersion": 1
 }
