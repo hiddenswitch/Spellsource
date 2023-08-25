@@ -24,6 +24,27 @@ The server application starts in [EntryPoint](spellsource-server/src/main/java/c
 
 The client is private, please contact for access on the Discord.
 
+### Getting started on Windows
+
+Hit `Win + X` and click Windows PowerShell (Admin). Then run the following:
+
+```
+# installs chocolatey
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+# gets a way to use administrative stuff
+choco install -y gsudo
+```
+
+Then, close the window. Hit `Win + X` and click Windows Powershell. Do not start as an admin. Then run the following:
+
+```sh
+# install minimum dependencies
+sudo choco install -y git.portable 7zip openjdk
+# install chocolatey and use it to install dependencies
+# enable git symlinks everywhere
+git config --global core.symlinks=true
+```
+
 ### Getting started with Development on macOS
 
 Requirements: **Java 20 or later** and **Docker**. Check your current version of Java using `java --version`.
