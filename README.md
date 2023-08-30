@@ -34,8 +34,7 @@ The client is private, please contact for access on the Discord.
 
 ### Getting started on Windows
 
-Enable Developer Mode in Windows 10 and 11. If you're on Windows server editions, you do not need to do any additional
-steps.*
+Enable Developer Mode in Windows 10 and greater. Or, follow the [instructions here](#symlinks) to enable symlinking on Windows headlessly.
 
 Hit `Win + X` and click Windows PowerShell (Admin). Then run the following:
 
@@ -78,21 +77,21 @@ You should now be able to run the tests.
 ./gradlew test
 ```
 
-*To enable symlink creation without enabling developer mode, you can use the following script. This requires
+#### Symlinks
+
+To enable symlink creation without enabling developer mode, you can use the following script. This requires
 administrative privileges:
 
 ```pwsh
 $exportPath = "$env:TEMP\secpol.cfg"
 $importPath = "$env:TEMP\secpol_modified.cfg"
-
+$dbPath = "$env:TEMP\secpol.sdb"
 secedit /export /cfg "$exportPath"
-
 (Get-Content $exportPath) -replace '^SeCreateSymbolicLinkPrivilege.*$', ("SeCreateSymbolicLinkPrivilege = *S-1-5-32-544,*" + [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value) | Set-Content $importPath
-
-secedit /import /cfg "$importPath"
-
+secedit /import /db "$dbPath" /cfg "$importPath" /overwrite
 Remove-Item $exportPath
 Remove-Item $importPath
+Remove-Item $dbPath
 ```
 
 ### Getting started with Development on macOS

@@ -1,10 +1,3 @@
-import os
-
-from comfy.cmd import folder_paths
-
-if not 'TRANSFORMERS_CACHE' in os.environ:
-    os.environ['TRANSFORMERS_CACHE'] = os.path.join(folder_paths.models_dir, "deepfloyd")
-
 from transformers import logging as transformers_logging
 from diffusers import logging as diffusers_logging
 from warnings import filterwarnings
@@ -25,7 +18,6 @@ NODE_CLASS_MAPPINGS = {
     "IFEncoder": IFEncoder,
     "IFStageI": IFStageI,
     "IFStageII": IFStageII,
-    "IFStageIII": IFStageIII,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -33,5 +25,4 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "IFEncoder": "DeepFloyd IF Encoder",
     "IFStageI": "DeepFloyd IF Stage I",
     "IFStageII": "DeepFloyd IF Stage II",
-    "IFStageIII": "DeepFloyd IF Stage III",
 }
