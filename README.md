@@ -43,7 +43,7 @@ Hit `Win + X` and click Windows PowerShell (Admin). Then run the following:
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 # install dependencies
 wsl --install
-choco install -y gsudo git.portable 7zip openjdk vcredist140 docker-desktop dotnet-sdk nodejs.install python
+choco install -y gsudo git.portable 7zip openjdk vcredist140 docker-desktop dotnet-sdk nodejs.install python gradle
 # separately add vs2022 compilation tools with clang
 choco install -y visualstudio2022-workload-nativedesktop --package-parameters "--add Microsoft.VisualStudio.Component.VC.Llvm.Clang --add Microsoft.VisualStudio.Component.VC.Llvm.ClangToolset"
 # disable realtime monitoring from windows defender, since it interferes with developer workloads
@@ -74,7 +74,7 @@ git submodule update --init --recursive
 You should now be able to run the tests.
 
 ```
-./gradlew test
+gradle test
 ```
 
 #### Symlinks
@@ -108,8 +108,7 @@ Requirements: **Java 20 or later** and **Docker**. Check your current version of
    brew cask install docker
    # Java (if required)
    # Install openjdk 20, dotnet 6.0 & gradle 8.3 or higher
-   # Gradle 8.3 is not released yet, so use the wrapper gradle
-   brew install openjdk dotnet-sdk
+   brew install openjdk dotnet-sdk gradle
    sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
    brew link --force openjdk
    ```
