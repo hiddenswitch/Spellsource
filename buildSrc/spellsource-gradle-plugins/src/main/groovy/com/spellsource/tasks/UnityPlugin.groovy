@@ -24,7 +24,12 @@ class UnityPlugin implements Plugin<Project> {
     }
 
     def thisUnityProjectPath = extension.unityProjectPath.get()
-    def projectSettingsText = project.file("${thisUnityProjectPath.asFile.path}/ProjectSettings/ProjectSettings.asset").text =~ /productName: (\w+)/
+
+    def configuredProjectSettingsFile = project.file("${thisUnityProjectPath.asFile.path}/ProjectSettings/ProjectSettings.asset")
+    if (!configuredProjectSettingsFile.exists()) {
+      return
+    }
+    def projectSettingsText = configuredProjectSettingsFile.text =~ /productName: (\w+)/
     def productName = projectSettingsText[0][1]
 
     def buildProjectTask = tasks.register("buildUnityProject") {
