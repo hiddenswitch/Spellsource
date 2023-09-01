@@ -58,13 +58,13 @@ public enum Environment {
 	 * This variable stores a stack of event targets, as events are executed one after another until all events are
 	 * processed.
 	 * <p>
-	 * This implements card texts that read, "take double damage," and implements {@link
-	 * net.demilich.metastone.game.targeting.EntityReference#EVENT_TARGET}.
+	 * This implements card texts that read, "take double damage," and implements
+	 * {@link net.demilich.metastone.game.targeting.EntityReference#EVENT_TARGET}.
 	 */
 	EVENT_TARGET_REFERENCE_STACK,
 	/**
-	 * This variable stores the current target of an event or action. This variable is consulted for {@link
-	 * net.demilich.metastone.game.targeting.EntityReference#TARGET}.
+	 * This variable stores the current target of an event or action. This variable is consulted for
+	 * {@link net.demilich.metastone.game.targeting.EntityReference#TARGET}.
 	 */
 	TARGET,
 	/**
@@ -78,15 +78,15 @@ public enum Environment {
 	 */
 	TRANSFORM_REFERENCE,
 	/**
-	 * This variable stores overrides to the next amount of damage dealt by a {@link
-	 * net.demilich.metastone.game.spells.DamageSpell}.
+	 * This variable stores overrides to the next amount of damage dealt by a
+	 * {@link net.demilich.metastone.game.spells.DamageSpell}.
 	 * <p>
 	 * This implements cards like Magic Armor.
 	 */
 	DAMAGE_STACK,
 	/**
-	 * This variable stores a stack of entities that were output by spells. The variable can be referenced with {@link
-	 * net.demilich.metastone.game.targeting.EntityReference#OUTPUT}.
+	 * This variable stores a stack of entities that were output by spells. The variable can be referenced with
+	 * {@link net.demilich.metastone.game.targeting.EntityReference#OUTPUT}.
 	 * <p>
 	 * This implements Ivory Knight.
 	 */
@@ -114,7 +114,7 @@ public enum Environment {
 	 * entities a particular Frostmourne has destroyed.
 	 *
 	 * @see net.demilich.metastone.game.spells.custom.ResurrectFromEntityStorageSpell for resurrecting minions from this
-	 * 		list.
+	 * list.
 	 * @see net.demilich.metastone.game.spells.custom.StoreEntitySpell for adding entities to the list.
 	 */
 	ENTITY_LIST,
@@ -136,8 +136,9 @@ public enum Environment {
 	 */
 	TRIGGER_HOST_STACK,
 	/**
-	 * Stores the next target of an {@link net.demilich.metastone.game.logic.GameLogic#castSpell(int, SpellDesc,
-	 * EntityReference, EntityReference, TargetSelection, boolean, GameAction)} invocation to allow it to be modified.
+	 * Stores the next target of an
+	 * {@link net.demilich.metastone.game.logic.GameLogic#castSpell(int, SpellDesc, EntityReference, EntityReference,
+	 * TargetSelection, boolean, GameAction)} invocation to allow it to be modified.
 	 */
 	TARGET_OVERRIDE_STACK,
 	/**
@@ -145,8 +146,14 @@ public enum Environment {
 	 */
 	DEATHRATTLES_TRIGGERED,
 	/**
-	 * Stores the cards that are currently selected to be randomly played, preventing them from being randomly played
-	 * more than once per sequence.
+	 * Stores the cards that are currently selected to be randomly played, preventing them from being randomly played more
+	 * than once per sequence.
 	 */
-	RANDOMLY_PLAYED_QUEUE
+	RANDOMLY_PLAYED_QUEUE,
+	/**
+	 * Stores the currently processing aftermaths.
+	 * <p>
+	 * This prevents aftermaths from recursively triggering themselves.
+	 */
+	PROCESSING_AFTERMATHS_STACK,
 }

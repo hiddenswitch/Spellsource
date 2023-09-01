@@ -17,7 +17,7 @@ public class AftermathsCountValueProvider extends ValueProvider {
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
 		return (int) context.getAftermaths().getAftermaths()
 				.stream()
-				.filter(item -> item.getPlayerId() == player.getId())
+				.filter(item -> item.playerId() == player.getId())
 				.count();
 	}
 }

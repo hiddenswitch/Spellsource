@@ -30,7 +30,7 @@ public final class SleightOfHandSpell extends ReturnTargetToHandSpell {
 		Actor actor = (Actor) target;
 		int boardPosition = target.getEntityLocation().getIndex();
 
-		List<SpellDesc> aftermaths = context.getLogic().getAftermathSpells(actor);
+		var aftermaths = context.getLogic().getAftermaths(actor);
 		super.onCast(context, player, desc, source, target);
 		context.getLogic().resolveAftermaths(player.getId(), target.getReference(), aftermaths, target.getOwner(), boardPosition);
 	}

@@ -295,9 +295,9 @@ public class SpellUtils {
 			return null;
 		}
 		Card card;
-		if (cardId.toUpperCase().equals("EVENT_SOURCE")) {
+		if (cardId.equalsIgnoreCase("EVENT_SOURCE")) {
 			card = (Card) context.resolveSingleTarget(context.getEventSourceStack().peek());
-		} else if (cardId.toUpperCase().equals("OUTPUT")) {
+		} else if (cardId.equalsIgnoreCase("OUTPUT")) {
 			card = context.getOutputCard();
 		} else {
 			card = getCardFromContextOrDiscover(context, cardId);

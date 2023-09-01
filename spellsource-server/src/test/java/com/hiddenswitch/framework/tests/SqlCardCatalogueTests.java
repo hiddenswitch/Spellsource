@@ -72,6 +72,10 @@ public class SqlCardCatalogueTests extends FrameworkTestBase {
 			var beforeChangeCardJson = await(cardsDao.findOneByCondition(CARDS.ID.eq(cardIdTested).and(CARDS.IS_PUBLISHED.eq(true)).and(CARDS.IS_ARCHIVED.eq(false))));
 			beforeChangeCardJson.getCardScript().getJsonObject("attributes").put("RESERVED_BOOLEAN_1", true);
 			await(Environment.withDslContext(dsl -> dsl.update(CARDS).set(CARDS.CARD_SCRIPT, beforeChangeCardJson.getCardScript()).where(CARDS.ID.eq(beforeChangeCard.getCardId()))));
+
+			// todo: it still has to wait for the notification, because the update will complete before notifications are sent
+			// you can't apparently wait for all subscriptions to be notified
+			await(Environment.sleep(100));
 			var afterChangeCard = catalogue2.getCardById(cardIdTested);
 			assertTrue(afterChangeCard.getAttributes().containsKey(Attribute.RESERVED_BOOLEAN_1));
 		});

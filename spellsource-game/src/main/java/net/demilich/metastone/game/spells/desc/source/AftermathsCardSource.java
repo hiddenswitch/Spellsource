@@ -23,8 +23,8 @@ public class AftermathsCardSource extends CardSource implements HasCardCreationS
 	protected CardList match(GameContext context, Entity source, Player player) {
 		return context.getAftermaths().getAftermaths()
 				.stream()
-				.filter(aftermath -> aftermath.getPlayerId() == player.getId())
-				.map(EnvironmentAftermathTriggeredList.EnvironmentAftermathTriggeredItem::getCardId)
+				.filter(aftermath -> aftermath.playerId() == player.getId())
+				.map(EnvironmentAftermathTriggeredList.EnvironmentAftermathTriggeredItem::cardId)
 				.filter(Objects::nonNull)
 				.map(context::getCardById)
 				.collect(Collectors.toCollection(CardArrayList::new));

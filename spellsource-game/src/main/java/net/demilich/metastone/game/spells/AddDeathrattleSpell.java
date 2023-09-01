@@ -27,8 +27,8 @@ import java.util.Map;
  * play. To add an effect that occurs when a card is removed from the hand, use an {@link AddEnchantmentSpell} with a
  * {@link DiscardTrigger}.
  * <p>
- * Deathrattles are equivalent to an {@link AddEnchantmentSpell} with a {@link MinionDeathTrigger}, {@link
- * TargetType#IGNORE_OTHER_TARGETS}.
+ * Deathrattles are equivalent to an {@link AddEnchantmentSpell} with a {@link MinionDeathTrigger},
+ * {@link TargetType#IGNORE_OTHER_TARGETS}.
  * <p>
  * Minions removed peacefully with {@link GameLogic#removePeacefully(Entity)} do not trigger deathrattles.
  * <p>
@@ -105,34 +105,19 @@ public class AddDeathrattleSpell extends Spell {
 				desc.spellStream(0, false).map(as -> new CardAftermathTuple(as, source.getSourceCard())),
 				Arrays.stream(SpellUtils.getCards(context, desc)).filter(c -> c.getDesc().getDeathrattle() != null).map(c -> new CardAftermathTuple(c.getDesc().getDeathrattle(), c))
 		).forEach(a -> {
-			var spell = a.getSpell();
+			var spell = a.spell();
 			if (finalValue != null) {
 				spell = spell.addArg(SpellArg.VALUE, finalValue);
 			}
 			if (desc.containsKey(SpellArg.CARD)) {
 				spell = spell.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
 			}
-			var aftermath = spell.tryCreate(context, player, source, a.getEnchantmentSource(), target, true);
+			var aftermath = spell.tryCreate(context, player, source, a.enchantmentSource(), target, true);
 			context.getLogic().addEnchantment(player, aftermath.orElseThrow(), source, target);
 		});
 	}
 
-	public static class CardAftermathTuple {
-		public SpellDesc getSpell() {
-			return spell;
-		}
-
-		public Card getEnchantmentSource() {
-			return enchantmentSource;
-		}
-
-		private final SpellDesc spell;
-		private final Card enchantmentSource;
-
-		public CardAftermathTuple(SpellDesc spell, Card enchantmentSource) {
-			this.spell = spell;
-			this.enchantmentSource = enchantmentSource;
-		}
+	public record CardAftermathTuple(SpellDesc spell, Card enchantmentSource) {
 	}
 }
 

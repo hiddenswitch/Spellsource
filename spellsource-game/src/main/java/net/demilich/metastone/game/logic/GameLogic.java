@@ -4217,7 +4217,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		var playerId = player.getId();
-		var aftermaths = getAftermathSpells(actor);
+		var aftermaths = getAftermaths(actor);
 
 		var sourceReference = actor.getReference();
 		var sourceOwner = actor.getOwner();
@@ -4226,31 +4226,25 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@NotNull
-	public List<SpellDesc> getAftermathSpells(Actor actor) {
-		return getAftermaths(actor)
-				.map(Aftermath::getSpell)
-				.collect(toList());
-	}
-
-	@NotNull
-	public Stream<Aftermath> getAftermaths(Entity host) {
+	public List<Aftermath> getAftermaths(Entity host) {
 		return context.getTriggers().stream()
 				.filter(t -> t instanceof Aftermath)
 				.map(t -> (Aftermath) t)
-				.filter(a -> !a.isExpired() && a.isActivated() && Objects.equals(a.getHostReference(), host.getReference()));
+				.filter(a -> !a.isExpired() && a.isActivated() && Objects.equals(a.getHostReference(), host.getReference()))
+				.toList();
 	}
 
 	/**
-	 * Casts a list of deathrattle spells given information about the entity that "hosts" those deathrattles
+	 * Casts a list of deathrattle spells given information about the entity that "hosts" those aftermaths
 	 *
 	 * @param playerId        The casting player
 	 * @param sourceReference A reference to the source
-	 * @param deathrattles    The actual deathrattles to cast
+	 * @param aftermaths      The actual aftermaths to cast
 	 * @param sourceOwner     The owner of the source
 	 * @param boardPosition   The former board position of the source
 	 */
-	public void resolveAftermaths(int playerId, EntityReference sourceReference, List<SpellDesc> deathrattles, int sourceOwner, int boardPosition) {
-		resolveAftermaths(playerId, sourceReference, deathrattles, sourceOwner, boardPosition, true);
+	public void resolveAftermaths(int playerId, EntityReference sourceReference, List<Aftermath> aftermaths, int sourceOwner, int boardPosition) {
+		resolveAftermaths(playerId, sourceReference, aftermaths, sourceOwner, boardPosition, true);
 	}
 
 	/**
@@ -4258,13 +4252,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param playerId                         The casting player
 	 * @param sourceReference                  A reference to the source
-	 * @param deathrattles                     The actual deathrattles to cast
+	 * @param aftermaths                       The actual aftermaths to cast
 	 * @param sourceOwner                      The owner of the source
 	 * @param boardPosition                    The former board position of the source
 	 * @param shouldAddToDeathrattlesTriggered {@code true} if the deathrattle should be recorded in the list of triggered
-	 *                                         deathrattles
+	 *                                         aftermaths
 	 */
-	public void resolveAftermaths(int playerId, EntityReference sourceReference, List<SpellDesc> deathrattles, int sourceOwner, int boardPosition, boolean shouldAddToDeathrattlesTriggered) {
+	public void resolveAftermaths(int playerId, EntityReference sourceReference, List<Aftermath> aftermaths, int sourceOwner, int boardPosition, boolean shouldAddToDeathrattlesTriggered) {
 		var doubleDeathrattles = false;
 		var doubleDeathrattleAuras = SpellUtils.getAuras(context, sourceOwner, DoubleDeathrattlesAura.class);
 		if (!doubleDeathrattleAuras.isEmpty()) {
@@ -4276,23 +4270,39 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		// TODO: What happens if an aftermath modifies another aftermath?
-		var id = 0;
-		for (var deathrattleTemplate : deathrattles) {
-			var deathrattle = deathrattleTemplate.addArg(SpellArg.BOARD_POSITION_ABSOLUTE, boardPosition);
-			deathrattle.put(SpellArg.AFTERMATH_ID, id);
-			id++;
-			castSpell(playerId, deathrattle, sourceReference, EntityReference.NONE, TargetSelection.NONE, false, null);
-			if (doubleDeathrattles) {
-				// TODO: Likewise, with double deathrattles, make sure that we can still target whatever we're targeting in the spells (possibly metaspells!)
-				castSpell(playerId, deathrattle, sourceReference, EntityReference.NONE, TargetSelection.NONE, true, null);
-				if (shouldAddToDeathrattlesTriggered) {
-					context.getAftermaths().addAftermath(playerId, sourceReference, deathrattle, context.resolveSingleTarget(sourceReference).getSourceCard().getCardId());
-				}
+		var id = 1;
+		for (var aftermath : aftermaths) {
+			if (!resolveAftermath(playerId, sourceReference, boardPosition, shouldAddToDeathrattlesTriggered, aftermath, id, doubleDeathrattles)) {
+				continue;
 			}
+			id++;
+		}
+	}
+
+	private boolean resolveAftermath(int playerId, EntityReference sourceReference, int boardPosition, boolean shouldAddToDeathrattlesTriggered, Aftermath aftermath, int id, boolean doubleDeathrattles) {
+		// don't recurse through aftermaths
+		if (context.getProcessingAftermathsStack().contains(aftermath)) {
+			return false;
+		}
+
+		context.getProcessingAftermathsStack().push(aftermath);
+		var spell = aftermath.getSpell();
+		// cast it with the board position
+		spell = spell.addArg(SpellArg.BOARD_POSITION_ABSOLUTE, boardPosition).addArg(SpellArg.AFTERMATH_ID, id);
+		castSpell(playerId, spell, sourceReference, EntityReference.NONE, TargetSelection.NONE, false, null);
+		var cardId = context.resolveSingleTarget(sourceReference).getSourceCard().getCardId();
+		if (doubleDeathrattles) {
+			// TODO: Likewise, with double aftermaths, make sure that we can still target whatever we're targeting in the spells (possibly metaspells!)
+			castSpell(playerId, spell, sourceReference, EntityReference.NONE, TargetSelection.NONE, true, null);
 			if (shouldAddToDeathrattlesTriggered) {
-				context.getAftermaths().addAftermath(playerId, sourceReference, deathrattle, context.resolveSingleTarget(sourceReference).getSourceCard().getCardId());
+				context.getAftermaths().addAftermath(playerId, aftermath, sourceReference, cardId, boardPosition, id);
 			}
 		}
+		if (shouldAddToDeathrattlesTriggered) {
+			context.getAftermaths().addAftermath(playerId, aftermath, sourceReference, cardId, boardPosition, id);
+		}
+		context.getProcessingAftermathsStack().pop();
+		return true;
 	}
 
 	/**

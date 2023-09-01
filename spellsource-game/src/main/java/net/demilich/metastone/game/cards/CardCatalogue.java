@@ -44,7 +44,7 @@ public interface CardCatalogue {
         int minExcess = smallestFormat.getSets().size();
 
         for (Map.Entry<String, DeckFormat> format : formats().entrySet()) {
-            Set<String> formatSets = format.getValue().getCardSets();
+	        Set<String> formatSets = format.getValue().getSets();
             if (!formatSets.containsAll(requiredSets)) {
                 continue;
             }
@@ -56,6 +56,8 @@ public interface CardCatalogue {
             }
         }
 
+				smallestFormat = smallestFormat.clone();
+				smallestFormat.getSets().remove(CardSet.TEST);
         return smallestFormat;
     }
 

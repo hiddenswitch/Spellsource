@@ -37,6 +37,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
+import net.demilich.metastone.game.spells.trigger.Aftermath;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.statistics.SimulationResult;
@@ -1448,7 +1449,21 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
         return (Deque<EntityReference>) getEnvironment().get(Environment.EVENT_SOURCE_REFERENCE_STACK);
     }
 
-    /**
+	/**
+	 * Retrieves the stack of event sources.
+	 *
+	 * @return A stack of event source {@link EntityReference} objects.
+	 */
+	@SuppressWarnings("unchecked")
+	public Deque<Aftermath> getProcessingAftermathsStack() {
+		if (!getEnvironment().containsKey(Environment.PROCESSING_AFTERMATHS_STACK)) {
+			getEnvironment().put(Environment.PROCESSING_AFTERMATHS_STACK, new EnvironmentDeque<Aftermath>());
+		}
+		return (Deque<Aftermath>) getEnvironment().get(Environment.PROCESSING_AFTERMATHS_STACK);
+	}
+
+
+	/**
      * Runs a simulation of the decks with the specified AIs.
      * <p>
      * This call will be blocking regardless of using it in a parallel fashion.

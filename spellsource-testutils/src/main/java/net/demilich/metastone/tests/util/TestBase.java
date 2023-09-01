@@ -103,7 +103,7 @@ public class TestBase {
         } else if (name.equals("Liquid Membrane")) {
             assertTrue(minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
         } else if (name.equals("Living Spores")) {
-            assertEquals(context.getLogic().getAftermaths(minion).count(), 1L);
+            assertEquals(context.getLogic().getAftermaths(minion).size(), 1L);
         } else if (name.equals("Massive")) {
             assertTrue(minion.hasAttribute(Attribute.TAUNT));
         } else if (name.equals("Poison Spit")) {
@@ -367,9 +367,9 @@ public class TestBase {
 
     public void runGym(GymConsumer consumer, String heroClass1, String heroClass2) {
         var defaultFormat = getDefaultFormat();
-        var format = new DeckFormat()
+	    var format = new DeckFormat()
                 .withName(defaultFormat.getName())
-                .withCardSets(defaultFormat.getCardSets());
+                .withCardSets(defaultFormat.getSets());
         // Remove the starting card
         format.setSecondPlayerBonusCards(new String[0]);
         GameContext context = new DebugContext(new Player(heroClass1, ClasspathCardCatalogue.INSTANCE), new Player(heroClass2, ClasspathCardCatalogue.INSTANCE), new GameLogic() {
@@ -496,7 +496,7 @@ public class TestBase {
     }
 
     public DeckFormat getDefaultFormat() {
-        return ClasspathCardCatalogue.INSTANCE.all;
+        return ClasspathCardCatalogue.INSTANCE.spellsource();
     }
 
     public DebugContext createContext(String hero1, String hero2, boolean shouldInit, DeckFormat deckFormat) {

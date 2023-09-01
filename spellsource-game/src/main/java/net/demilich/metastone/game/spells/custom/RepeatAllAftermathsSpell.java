@@ -20,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Repeats all other aftermaths the casting player has triggered as long as the source is in play.
@@ -40,7 +39,7 @@ public class RepeatAllAftermathsSpell extends Spell {
 		}
 
 		TargetPlayer castingTargetPlayer = desc.getTargetPlayer() == null ? TargetPlayer.OWNER : desc.getTargetPlayer();
-		List<EnvironmentAftermathTriggeredList.EnvironmentAftermathTriggeredItem> getAftermaths = getAftermaths(context, source);
+		List<EnvironmentAftermathTriggeredList.EnvironmentAftermathTriggeredItem> previouslyTriggeredAftermaths = getAftermaths(context, source);
 		boolean isItselfAftermath = desc.containsKey(SpellArg.AFTERMATH_ID);
 
 		int index;
@@ -51,8 +50,8 @@ public class RepeatAllAftermathsSpell extends Spell {
 		}
 		if (isItselfAftermath) {
 			CardList cards = new CardArrayList();
-			List<SpellDesc> spells = getAftermaths.stream().filter(item -> {
-				if (RepeatAllAftermathsSpell.class.isAssignableFrom(item.getSpell().getDescClass())) {
+			var aftermaths = previouslyTriggeredAftermaths.stream().filter(item -> {
+						if (RepeatAllAftermathsSpell.class.isAssignableFrom(item.aftermath().getSpell().getDescClass())) {
 					return false;
 				}
 
@@ -61,22 +60,23 @@ public class RepeatAllAftermathsSpell extends Spell {
 				}
 
 				// We are only interested in source cards, so it's okay if we're accepting removed from play entities
-				var entity = context.resolveSingleTarget(item.getSource(), false);
+				var entity = context.resolveSingleTarget(item.source(), false);
 				var sourceCard = entity.getSourceCard();
 				cards.add(sourceCard);
 				executedOn.add(source, sourceCard.getId() == IdFactory.UNASSIGNED ? entity : sourceCard);
 				return true;
-			}).map(EnvironmentAftermathTriggeredList.EnvironmentAftermathTriggeredItem::getSpell)
-					.collect(Collectors.toList());
+			})
+					.map(EnvironmentAftermathTriggeredList.EnvironmentAftermathTriggeredItem::aftermath)
+					.toList();
 
 			// The source is valid, we don't use the aftermath's source
-			context.getLogic().resolveAftermaths(player.getId(), source.getReference(), spells, player.getId(), index, false);
+			context.getLogic().resolveAftermaths(player.getId(), source.getReference(), aftermaths, player.getId(), index, false);
 			// TODO: We should probably reveal the cards one by one
 			cards.forEach(card -> context.getLogic().revealCard(player, card));
 		} else {
 			var aftermathSource = source;
-			for (EnvironmentAftermathTriggeredList.EnvironmentAftermathTriggeredItem item : getAftermaths) {
-				SpellDesc spell = item.getSpell();
+			for (EnvironmentAftermathTriggeredList.EnvironmentAftermathTriggeredItem item : previouslyTriggeredAftermaths) {
+				SpellDesc spell = item.aftermath().getSpell();
 				if (RepeatAllAftermathsSpell.class.isAssignableFrom(spell.getDescClass())) {
 					continue;
 				}
@@ -87,7 +87,7 @@ public class RepeatAllAftermathsSpell extends Spell {
 
 				// if the source is a minion, execute the spells from this point of view
 				// otherwise, use the original source
-				var sourceEntity = context.resolveSingleTarget(item.getSource());
+				var sourceEntity = context.resolveSingleTarget(item.source());
 				if (source.getEntityType() == EntityType.MINION && (source.isInPlay() || source.getZone() == Zones.GRAVEYARD)) {
 					aftermathSource = source;
 				} else {
@@ -115,7 +115,7 @@ public class RepeatAllAftermathsSpell extends Spell {
 				Player castingPlayer = determineCastingPlayer.getCastingPlayer();
 				var sourceCard = sourceEntity.getSourceCard();
 				executedOn.add(source, sourceCard.getId() == IdFactory.UNASSIGNED ? sourceEntity : sourceCard);
-				context.getLogic().resolveAftermaths(castingPlayer.getId(), aftermathSource.getReference(), Collections.singletonList(spell), aftermathSource.getOwner(), index, false);
+				context.getLogic().resolveAftermaths(castingPlayer.getId(), aftermathSource.getReference(), Collections.singletonList(item.aftermath()), aftermathSource.getOwner(), index, false);
 				context.getLogic().revealCard(player, sourceCard);
 			}
 		}
@@ -123,7 +123,7 @@ public class RepeatAllAftermathsSpell extends Spell {
 	}
 
 	protected boolean aftermathPredicate(GameContext context, Player player, Entity source, Entity target, EnvironmentAftermathTriggeredList.EnvironmentAftermathTriggeredItem item) {
-		if (item.getPlayerId() != player.getId()) {
+		if (item.playerId() != player.getId()) {
 			return false;
 		}
 		return true;

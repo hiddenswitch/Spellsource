@@ -59,7 +59,8 @@ public class Trace implements Serializable, Cloneable {
 	@JsonIgnore
 	public void setStartState(GameState gameState) {
 		Player[] players = new Player[]{gameState.getPlayer1(), gameState.getPlayer2()};
-		deckFormatSets = new ArrayList<>(gameState.getDeckFormat().getCardSets());
+        DeckFormat deckFormat = gameState.getDeckFormat();
+        deckFormatSets = new ArrayList<>(deckFormat.getSets());
 		deckFormatName = gameState.getDeckFormat().getName();
 		secondPlayerBonusCards = Arrays.asList(gameState.getDeckFormat().getSecondPlayerBonusCards());
 		setHeroClasses(Arrays.asList(null, null));

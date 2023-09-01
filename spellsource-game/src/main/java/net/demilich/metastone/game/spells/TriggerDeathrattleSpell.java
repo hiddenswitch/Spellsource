@@ -1,11 +1,8 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.google.common.base.Objects;
 import com.google.common.collect.Streams;
+import jdk.incubator.concurrent.ScopedValue;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -15,8 +12,10 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Aftermath;
 import net.demilich.metastone.game.targeting.EntityReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -28,8 +27,7 @@ import static java.util.stream.Collectors.toList;
  * If it is a {@link Card}, the aftermaths written on the card will be used instead.
  */
 public class TriggerDeathrattleSpell extends Spell {
-
-	private static Logger logger = LoggerFactory.getLogger(TriggerDeathrattleSpell.class);
+	private final static ScopedValue<HashMap<Card, Aftermath>> aftermathsCache = ScopedValue.newInstance();
 
 	public static SpellDesc create(EntityReference target) {
 		Map<SpellArg, Object> arguments = new SpellDesc(TriggerDeathrattleSpell.class);
@@ -50,26 +48,40 @@ public class TriggerDeathrattleSpell extends Spell {
 				// Include expired aftermaths
 				context.getLogic().resolveAftermaths(player.getId(), actor.getReference(),
 						context.getTriggers().stream().filter(t -> t instanceof Aftermath && t.getHostReference().equals(target.getReference()))
-								.map(t -> ((Aftermath) t).getSpell())
+								.map(t -> ((Aftermath) t))
 								.collect(toList())
 						, target.getOwner(), -1, true);
 			}
 
-		} else if (target instanceof Card) {
-			Card card = (Card) target;
+		} else if (target instanceof Card card) {
+			HashMap<Card, Aftermath> aftermathsCacheCheck;
+			if (aftermathsCache.isBound()) {
+				aftermathsCacheCheck = aftermathsCache.get();
+			} else {
+				aftermathsCacheCheck = new HashMap<>();
+			}
+			ScopedValue.where(aftermathsCache, aftermathsCacheCheck)
+					.run(() -> {
+						var aftermathsPrintedOnCards = aftermathsCache.get();
+						Aftermath printedOnCard = null;
+						if (aftermathsPrintedOnCards.containsKey(card)) {
+							printedOnCard = aftermathsPrintedOnCards.get(card);
+						} else if (card.getDesc().getDeathrattle() != null) {
+							printedOnCard = new Aftermath(card.getDesc().getDeathrattle(), card, player.getHero());
+							aftermathsPrintedOnCards.put(card, printedOnCard);
+						}
 
-			var aftermaths = Streams.concat(Stream.ofNullable(card.getDesc().getDeathrattle()),
-					context.getTriggers()
-							.stream()
-							.filter(t -> t instanceof Aftermath && Objects.equal(t.getHostReference(), card.getReference()) && !t.isExpired())
-							.map(t -> ((Aftermath) t).getSpell()))
-					.collect(Collectors.toUnmodifiableList());
+						var aftermaths = Streams.concat(Stream.ofNullable(printedOnCard),
+										context.getTriggers()
+												.stream()
+												.filter(t -> t instanceof Aftermath && Objects.equal(t.getHostReference(), card.getReference()) && !t.isExpired())
+												.map(t -> ((Aftermath) t)))
+								.toList();
 
-			// More aftermaths may be put into play here
-			aftermaths.forEach(aftermath -> {
-				SpellUtils.castChildSpell(context, player, aftermath, source, target);
-				context.getAftermaths().addAftermath(player.getId(), source.getReference(), aftermath, source.getSourceCard().getCardId());
-			});
+						// More aftermaths may be put into play here
+						context.getLogic().resolveAftermaths(player.getId(), source.getReference(), aftermaths, target.getOwner(), -1, true);
+					});
+
 		}
 	}
 }

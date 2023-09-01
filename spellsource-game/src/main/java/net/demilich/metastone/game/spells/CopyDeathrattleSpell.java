@@ -50,26 +50,25 @@ public class CopyDeathrattleSpell extends AddDeathrattleSpell {
 		var aftermathsStream = Stream.<CardAftermathTuple>empty();
 		CardList impliedCards = SpellUtils.getCards(context, player, target, source, desc, max);
 		if (target instanceof Actor) {
-			aftermathsStream = context.getLogic().getAftermaths((Actor) target).map(a -> new CardAftermathTuple(a.getSpell(), a.getSourceCard()));
+			aftermathsStream = context.getLogic().getAftermaths((Actor) target).stream().map(a -> new CardAftermathTuple(a.getSpell(), a.getSourceCard()));
 		} else if (!impliedCards.isEmpty()) {
 			if (desc.containsKey(SpellArg.RANDOM_TARGET)) {
 				impliedCards.shuffle(context.getLogic().getRandom());
 			}
 			aftermathsStream = impliedCards.stream().filter(c -> c.getDesc().getDeathrattle() != null).map(c -> new CardAftermathTuple(c.getDesc().getDeathrattle(), c));
-		} else if (target instanceof Card) {
-			var card = (Card) target;
+		} else if (target instanceof Card card) {
 			if (card.getDesc().getDeathrattle() != null) {
 				aftermathsStream = Stream.of(new CardAftermathTuple(card.getDesc().getDeathrattle(), card));
 			}
 		}
-		var aftermaths = Streams.concat(aftermathsStream, desc.spellStream(0, false).map(s -> new CardAftermathTuple(s, source.getSourceCard()))).collect(toList());
+		var aftermaths = Streams.concat(aftermathsStream, desc.spellStream(0, false).map(s -> new CardAftermathTuple(s, source.getSourceCard()))).toList();
 		Actor finalCopyTo = copyTo;
 		aftermaths.forEach(a -> {
 			if (context.getLogic().hasTooManyAftermaths(finalCopyTo)) {
 				return;
 			}
-			var spell = a.getSpell();
-			var aftermath = spell.tryCreate(context, player, source, a.getEnchantmentSource(), finalCopyTo, true);
+			var spell = a.spell();
+			var aftermath = spell.tryCreate(context, player, source, a.enchantmentSource(), finalCopyTo, true);
 			context.getLogic().addEnchantment(player, aftermath.orElseThrow(), source, finalCopyTo);
 		});
 		if (impliedCards.isEmpty() && target != null && !aftermaths.isEmpty() && desc.getSpell() != null) {

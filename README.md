@@ -43,7 +43,7 @@ Hit `Win + X` and click Windows PowerShell (Admin). Then run the following:
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 # install dependencies
 wsl --install
-choco install -y gsudo git.portable 7zip openjdk vcredist140 docker-desktop dotnet-sdk nodejs.install python gradle
+choco install -y gsudo git.portable 7zip openjdk vcredist140 docker-desktop dotnet-sdk nvm python gradle
 # separately add vs2022 compilation tools with clang
 choco install -y visualstudio2022-workload-nativedesktop --package-parameters "--add Microsoft.VisualStudio.Component.VC.Llvm.Clang --add Microsoft.VisualStudio.Component.VC.Llvm.ClangToolset"
 # disable realtime monitoring from windows defender, since it interferes with developer workloads
@@ -59,6 +59,10 @@ password of your Windows account.
 Hit `Win + X` and click Windows Powershell. Do not start a prompt as an admin. Then run the following:
 
 ```sh
+# install node 18
+nvm install 18
+nvm use 18
+
 # enable git symlinks in git
 git config --global core.symlinks=true
 git lfs install

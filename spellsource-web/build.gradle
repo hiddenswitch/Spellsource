@@ -4,7 +4,10 @@ import org.apache.tools.ant.taskdefs.condition.Os
 plugins {
   id "com.github.node-gradle.node"
   id "base"
+  id "java"
 }
+
+apply from: '../gradle/instrument.gradle'
 
 def isLinux = Os.isFamily(Os.FAMILY_UNIX) && !Os.isFamily(Os.FAMILY_MAC)
 def spellsourceDepTask = ':spellsource-web-cardeditor-support:shadowJar'
@@ -17,8 +20,7 @@ def graalNpmPrefix = 'node_modules'
 def packageJsonFile = file('package.json')
 def packageJson = new JsonSlurper().parseText(packageJsonFile.text)
 def scripts = packageJson.scripts
-def scriptNames = ["dev" : "run",
-                   "test": "test"]
+def scriptNames = ["dev" : "run"]
 
 evaluationDependsOn(":spellsource-server")
 evaluationDependsOn(":spellsource-art-generation")
@@ -35,6 +37,10 @@ scripts.each { scriptName, command ->
     dependsOn 'yarn'
     args = ['run', scriptName]
   }
+}
+
+tasks.named('test') {
+  dependsOn 'yarnRunTest'
 }
 
 tasks.register('copyComfyClient') {

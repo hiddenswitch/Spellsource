@@ -1,0 +1,26 @@
+{
+  "seed" : 200077235249555008,
+  "catalogueVersion" : 0,
+  "heroClasses" : [ "DARKBLUE", "CANDY" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_uccian_hydra", "minion_burst_bug", "spell_deathwalk", "minion_psychopomp", "secret_otherworldly_bond", "minion_novice_time_traveler", "spell_grim_vortex", "minion_reckless_hero", "minion_vindictive_spirit", "spell_infusion", "spell_extract_nightmare", "minion_polychrome_hydra", "spell_rebirth", "minion_pixie_knight", "minion_xavius", "spell_dreamstep", "minion_twilight_mercenary", "spell_rite_of_promise", "minion_knowledge_feeder", "minion_lucid_seer", "minion_channeled_spirit", "minion_captain_of_the_guard", "minion_the_imperial_soul", "minion_mechanical_monstrosity", "minion_chronocaller", "minion_selfburner", "minion_tortured_soul", "permanent_the_end_time", "minion_klive_icetooth", "minion_mirror_phantom" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_spotlight_hog", "minion_ringside_impresario", "spell_stage_fright", "minion_crystal_giant", "minion_flamerunner", "spell_night_of_a_lifetime", "minion_finale_architect", "minion_doctosaur", "minion_red_agressor", "minion_talent_scout", "minion_savage_dancer", "spell_croak", "minion_ringside_impresario", "minion_river_reveler", "minion_nezumi_master", "minion_slitherbow", "minion_magedrainer", "spell_stage_fright", "minion_savage_dancer", "minion_amathyst_panther", "minion_bronze_warden", "spell_costume_draft", "minion_kuroko_puppet", "minion_finale_architect", "spell_darling_audience", "spell_fantastical_play", "minion_great_showman", "minion_micro_raptors", "minion_bogovanis", "minion_costume_seller" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "CORE", "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 33 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ ]
+  } ],
+  "actions" : [ 0, 1, 1, 1, 0, 1, 0, 2, 1, 0, 1, 6, 0, 0, 6, 0, 0, 14, 0, 6, 2, 0, 5, 1, 2, 4, 5, 1, 1, 4, 8, 2, 0, 0, 19, 8, 3, 2, 0, 0, 7, 2, 3, 0, 3, 0, 4, 13, 3, 1, 0, 3, 0, 0, 7, 0, 3, 3, 1, 1, 0, 0, 0, 3, 3, 0, 7, 7, 18, 7, 1, 0, 0, 2, 17, 6, 14, 16, 6, 4, 0, 1, 0, 2, 9, 3, 0, 6, 2, 1, 0, 0, 13, 35, 6, 9, 0, 8, 3, 22, 3, 7, 1, 1, 8, 40, 0, 3, 25, 0, 1, 0, 1, 1, 1 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

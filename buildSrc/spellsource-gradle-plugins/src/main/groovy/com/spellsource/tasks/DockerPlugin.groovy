@@ -107,15 +107,13 @@ class DockerPlugin implements Plugin<Project> {
     def thisOsArch = System.properties['os.arch'] as String
 
     // enumerate the docker files
-    def dockerSourcesPath = "."
-    project.fileTree(dockerSourcesPath)
-            .matching {
-              include 'docker/**/*Dockerfile'
-              include 'src/**/*Dockerfile'
-              include '*Dockerfile'
-            }
+    ((project.fileTree('docker') + project.fileTree('src')).matching {
+      include "**/*Dockerfile"
+    } + project.files("Dockerfile"))
             .each { dockerFileFile ->
-
+              if (!dockerFileFile.exists()) {
+                return
+              }
               def parsedDockerfile = new Dockerfile(dockerFileFile, dockerFileFile.parentFile)
               def parseResult = parsedDockerfile.parse()
               def windowsBaseImages = [

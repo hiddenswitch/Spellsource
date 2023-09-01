@@ -1,15 +1,15 @@
-def graalJvmArgs = ['--enable-preview', '--add-opens=java.base/java.lang=ALL-UNNAMED']
+def allJvmArgs = ['--enable-preview', '--add-opens=java.base/java.lang=ALL-UNNAMED', "--add-modules", "jdk.incubator.concurrent"]
 
 tasks.withType(JavaCompile).configureEach {
-  options.compilerArgs += "--enable-preview"
+  options.compilerArgs += ["--enable-preview", "--add-modules", "jdk.incubator.concurrent"]
 }
 
 tasks.withType(Test).configureEach {
-  jvmArgs += graalJvmArgs
+  jvmArgs += allJvmArgs
 }
 
 tasks.withType(JavaExec).configureEach {
-  jvmArgs += graalJvmArgs
+  jvmArgs += allJvmArgs
 }
 
 java {

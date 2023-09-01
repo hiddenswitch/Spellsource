@@ -5,6 +5,7 @@ import com.hiddenswitch.spellsource.rpc.Spellsource;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.logic.Trace;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +22,8 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
@@ -119,6 +122,12 @@ public class MassTest extends TestBase {
 					return record;
 				});
 			}
+
+			@Override
+			protected void updatedWith(Map<String, CardDesc> cardDescs) {
+				var filtered = Maps.filterValues(cardDescs, desc -> !Objects.equals(desc.getSet(), CardSet.TEST));
+				super.updatedWith(filtered);
+			}
 		};
 		catalogueWithExceptions.loadCardsFromPackage();
 		initializing.set(false);
@@ -131,8 +140,7 @@ public class MassTest extends TestBase {
 	 */
 	@RepeatedTest(value = 100000)
 	public void testRandomMassPlay() {
-		GameContext context = TestBase.fromTwoRandomDecks(ClasspathCardCatalogue.INSTANCE.spellsource());
-		context.setCardCatalogue(catalogueWithExceptions);
+		GameContext context = TestBase.fromTwoRandomDecks(ThreadLocalRandom.current().nextLong(), catalogueWithExceptions);
 
 		try {
 			assertTimeoutPreemptively(Duration.ofMillis(10000), () -> {

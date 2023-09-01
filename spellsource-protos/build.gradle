@@ -1,73 +1,76 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 
 buildscript {
-    ext {
-        grpcWindowsArtifactsUrl = 'https://packages.grpc.io/archive/2020/11/adf6b33c3d0283dc4c3d70b1ad6f5fa01ca5b69a-ec34da51-aac4-4cc4-afde-1d74252db27c/protoc/grpc-protoc_windows_x64-1.35.0-dev.zip'
-        grpcUnityArtifactsUrl = 'https://packages.grpc.io/archive/2020/11/adf6b33c3d0283dc4c3d70b1ad6f5fa01ca5b69a-ec34da51-aac4-4cc4-afde-1d74252db27c/csharp/grpc_unity_package.2.35.0-dev202011301311.zip'
-    }
-    repositories {
-        maven { url "file://${rootDir}/mavenRepository" }
-        mavenLocal()
-        mavenCentral()
-    }
+  ext {
+    grpcWindowsArtifactsUrl = 'https://packages.grpc.io/archive/2020/11/adf6b33c3d0283dc4c3d70b1ad6f5fa01ca5b69a-ec34da51-aac4-4cc4-afde-1d74252db27c/protoc/grpc-protoc_windows_x64-1.35.0-dev.zip'
+    grpcUnityArtifactsUrl = 'https://packages.grpc.io/archive/2020/11/adf6b33c3d0283dc4c3d70b1ad6f5fa01ca5b69a-ec34da51-aac4-4cc4-afde-1d74252db27c/csharp/grpc_unity_package.2.35.0-dev202011301311.zip'
+  }
+  repositories {
+    maven { url "file://${rootDir}/mavenRepository" }
+    mavenLocal()
+    mavenCentral()
+  }
 }
 
 plugins {
-    id 'com.google.protobuf' version '0.9.4'
-    id 'java-library'
+  id 'idea'
+  id 'com.google.protobuf' version '0.9.4'
+  id 'java-library'
 }
 
-def csharpRootDir = 'src/csharp/HiddenSwitch'
+apply from: "../gradle/instrument.gradle"
+
+def csharpRootDir = 'src/main/csharp/HiddenSwitch'
 def dotnetCmd = ["dotnet"]
 def csharpGrpcPath = "";
 if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-    csharpGrpcPath = "$project.rootProject.projectDir/bin/grpc_csharp_plugin.exe"
+  csharpGrpcPath = "$project.rootProject.projectDir/bin/grpc_csharp_plugin.exe"
 } else if (Os.isFamily(Os.FAMILY_MAC)) {
-    dotnetCmd = ["/opt/homebrew/bin/dotnet"]
-    csharpGrpcPath = "$project.rootProject.projectDir/bin/grpc_csharp_plugin"
+  dotnetCmd = ["/opt/homebrew/bin/dotnet"]
+  csharpGrpcPath = "$project.rootProject.projectDir/bin/grpc_csharp_plugin"
 } else {
-    csharpGrpcPath = "$project.rootProject.projectDir/bin/linux/grpc_csharp_plugin"
+  csharpGrpcPath = "$project.rootProject.projectDir/bin/linux/grpc_csharp_plugin"
 }
 
 
 dependencies {
-    api group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
-    // https://mvnrepository.com/artifact/com.google.api.grpc/proto-google-common-protos
-    api group: 'com.google.api.grpc', name: 'proto-google-common-protos', version: '2.9.0'
-    api(group: 'com.google.protobuf', name: 'protobuf-java-util', version: protocVersion) {
-        exclude group: 'com.google.code.gson', module: 'gson'
-    }
-    api("com.google.protobuf:protobuf-java:$protocVersion") {
-        exclude group: 'com.google.code.gson', module: 'gson'
-    }
-    api("com.google.protobuf:protobuf-java-util:$protocVersion") {
-        exclude group: 'com.google.code.gson', module: 'gson'
-    }
-    api("io.grpc:grpc-services:$grpcVersion") {
-        exclude group: 'com.google.code.gson', module: 'gson'
-        exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
-    }
-    api("com.hubspot.jackson:jackson-datatype-protobuf:0.9.13") {
-        exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
-        exclude group: 'com.google.code.findbugs', module: 'annotations'
-    }
-    api('com.netflix.concurrency-limits:concurrency-limits-grpc:0.3.6') {
-        exclude group: 'com.google.protobuf', module: 'protobuf-java'
-        exclude group: 'com.google.code.gson', module: 'gson'
-    }
-    api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion") {
-        exclude group: 'jakarta.xml.bind', module: '*'
-        exclude group: 'jakarta.activation', module: '*'
-    }
-    api("io.vertx:vertx-grpc-client:$vertxVersion")
-    api("io.vertx:vertx-grpc-server:$vertxVersion")
+  api group: 'javax.annotation', name: 'javax.annotation-api', version: '1.3.2'
+  // https://mvnrepository.com/artifact/com.google.api.grpc/proto-google-common-protos
+  api group: 'com.google.api.grpc', name: 'proto-google-common-protos', version: '2.9.0'
+  api(group: 'com.google.protobuf', name: 'protobuf-java-util', version: protocVersion) {
+    exclude group: 'com.google.code.gson', module: 'gson'
+  }
+  api("com.google.protobuf:protobuf-java:$protocVersion") {
+    exclude group: 'com.google.code.gson', module: 'gson'
+  }
+  api("com.google.protobuf:protobuf-java-util:$protocVersion") {
+    exclude group: 'com.google.code.gson', module: 'gson'
+  }
+  api("io.grpc:grpc-services:$grpcVersion") {
+    exclude group: 'com.google.code.gson', module: 'gson'
+    exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
+  }
+  api("com.hubspot.jackson:jackson-datatype-protobuf:0.9.13") {
+    exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
+    exclude group: 'com.google.code.findbugs', module: 'annotations'
+  }
+  api('com.netflix.concurrency-limits:concurrency-limits-grpc:0.3.6') {
+    exclude group: 'com.google.protobuf', module: 'protobuf-java'
+    exclude group: 'com.google.code.gson', module: 'gson'
+  }
+  api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion") {
+    exclude group: 'jakarta.xml.bind', module: '*'
+    exclude group: 'jakarta.activation', module: '*'
+  }
+  api("io.vertx:vertx-grpc-client:$vertxVersion")
+  api("io.vertx:vertx-grpc-server:$vertxVersion")
 }
 
 clean {
-    delete csharpRootDir + '/Framework/bin'
-    delete csharpRootDir + '/Framework/obj'
-    delete csharpRootDir + '/Framework.Tests/bin'
-    delete csharpRootDir + '/Framework.Tests/obj'
+  delete csharpRootDir + '/Framework/bin'
+  delete csharpRootDir + '/Framework/obj'
+  delete csharpRootDir + '/Framework.Tests/bin'
+  delete csharpRootDir + '/Framework.Tests/obj'
 }
 
 tasks.register('copyCsharpGrpc', Copy) {
@@ -75,95 +78,93 @@ tasks.register('copyCsharpGrpc', Copy) {
     from("$project.buildDir/generated/source/proto/main/csharp") {
         include '**/*.cs'
     }
-    from("$project.buildDir/generated/source/proto/main/csharp_grpc") {
-        include '**/*.cs'
-    }
-    into(csharpRootDir + '/Framework/')
+    into("$csharpRootDir/Framework/Sources")
 }
 
 tasks.register('dll', Exec) {
-    dependsOn copyCsharpGrpc
-    workingDir csharpRootDir
-    outputs.dir("$project.buildDir/dlls")
-    outputs.cacheIf { true }
-    inputs.dir("$csharpRootDir/Framework/Plugins")
-    inputs.file("$csharpRootDir/HiddenSwitch.sln")
-    inputs.file("$csharpRootDir/Framework/Framework.csproj")
-    inputs.files("$csharpRootDir/Framework/**/*.cs")
-    // this is using docker-wrapped dotnet
-    commandLine dotnetCmd + ['publish', '--output', "$project.buildDir/dlls"]
+  dependsOn copyCsharpGrpc
+  workingDir csharpRootDir
+  outputs.dir("$project.buildDir/dlls")
+  outputs.cacheIf { true }
+  inputs.dir("$csharpRootDir/Framework/Plugins").withPathSensitivity(PathSensitivity.RELATIVE)
+  inputs.file("$csharpRootDir/HiddenSwitch.sln").withPathSensitivity(PathSensitivity.RELATIVE)
+  inputs.file("$csharpRootDir/Framework/Framework.csproj").withPathSensitivity(PathSensitivity.RELATIVE)
+  inputs.dir("$csharpRootDir/Framework/Sources").withPathSensitivity(PathSensitivity.RELATIVE)
+  // this is using docker-wrapped dotnet
+  commandLine dotnetCmd + ['publish', '--output', "$project.buildDir/dlls"]
 }
 
 tasks.register('testDll', Exec) {
-    dependsOn dll
-    inputs.files(csharpRootDir + '/Framework.Tests/**/*.cs', csharpRootDir + '/Framework.Tests/**/*.csproj')
-    outputs.dir("$project.buildDir/nunit")
-    outputs.cacheIf { true }
-    workingDir csharpRootDir
-    // this is using docker-wrapped dotnet
-    commandLine dotnetCmd + ['test', '--results-directory', "$project.buildDir/nunit"]
+  dependsOn dll
+  inputs.files(csharpRootDir + '/Framework.Tests/**/*.cs', csharpRootDir + '/Framework.Tests/**/*.csproj').withPathSensitivity(PathSensitivity.RELATIVE)
+  outputs.dir("$project.buildDir/nunit")
+  outputs.cacheIf { true }
+  workingDir csharpRootDir
+  // this is using docker-wrapped dotnet
+  commandLine dotnetCmd + ['test', '--results-directory', "$project.buildDir/nunit"]
 }
 
 tasks.register('installDll', Copy) {
-    dependsOn dll
-    inputs.dir("$project.buildDir/dlls")
-    inputs.dir("$csharpRootDir/Framework/Plugins")
-    def destination = project(':spellsource-client').projectDir.path + '/src/unity/Assets/Client'
-    outputs.dir(destination)
-    outputs.cacheIf { true }
-    from("$project.buildDir/dlls") {
-        include 'Framework.dll'
-        include 'Framework.pdb'
-    }
-    from("$csharpRootDir/Framework/Plugins") {
-        include '**/*.*'
-    }
-    into(destination)
+  dependsOn dll
+  inputs.dir("$project.buildDir/dlls").withPathSensitivity(PathSensitivity.RELATIVE)
+  inputs.dir("$csharpRootDir/Framework/Plugins").withPathSensitivity(PathSensitivity.RELATIVE)
+  def destination = project(':spellsource-client').projectDir.path + '/src/unity/Assets/Client'
+  outputs.dir(destination)
+  outputs.cacheIf { true }
+  from("$project.buildDir/dlls") {
+    include 'Framework.dll'
+    include 'Framework.pdb'
+  }
+  from("$csharpRootDir/Framework/Plugins") {
+    include '**/*.*'
+  }
+  into(destination)
 }
 
 tasks.register('protosChanged') {
-    group("spellsource")
-    description('Run whenever the files in src/main/proto have been changed. Recreates the models and updates the client.')
-    dependsOn += [installDll, ':spellsource-protos:generateProto']
+  group("spellsource")
+  description('Run whenever the files in src/main/proto have been changed. Recreates the models and updates the client.')
+  dependsOn += [installDll, ':spellsource-protos:generateProto']
 }
 
 protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:$protocVersion"
+  protoc {
+    artifact = "com.google.protobuf:protoc:$protocVersion"
+  }
+  plugins {
+    grpc_java {
+      artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
     }
-    plugins {
-        grpc_java {
-            artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
-        }
-        grpc_java_vertx {
-            artifact = "io.vertx:vertx-grpc-protoc-plugin2:$vertxVersion"
-        }
-        grpc_csharp {
-            path = csharpGrpcPath
-        }
+    grpc_java_vertx {
+      artifact = "io.vertx:vertx-grpc-protoc-plugin2:$vertxVersion"
     }
-    generateProtoTasks {
-        all()*.builtins {
-            java {}
-            csharp {
-                option 'serializable'
-            }
-        }
-        all()*.plugins {
-            grpc_java {
-                outputSubDir = "java"
-            }
-            grpc_java_vertx {
-                outputSubDir = "java"
-            }
-            grpc_csharp {
-                outputSubDir = "csharp_grpc"
-            }
-        }
+    grpc_csharp {
+      path = csharpGrpcPath
     }
+  }
+  generateProtoTasks {
+    all()*.builtins {
+      java {}
+      csharp {
+        outputSubDir = "csharp/Hiddenswitch/Framework/Sources"
+        option 'serializable'
+      }
+    }
+    all()*.plugins {
+      grpc_java {
+        outputSubDir = "java"
+      }
+      grpc_java_vertx {
+        outputSubDir = "java"
+      }
+      grpc_csharp {
+        outputSubDir = "csharp/Hiddenswitch/Framework/Sources"
+      }
+    }
+  }
 }
 
 
 compileJava {
-    dependsOn += [':spellsource-protos:generateProto']
+  dependsOn += [':spellsource-protos:generateProto']
 }

@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.environment;
 
-import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.Aftermath;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.io.Serializable;
@@ -18,78 +18,14 @@ public final class EnvironmentAftermathTriggeredList implements EnvironmentValue
 	/**
 	 * Describes a particular triggering of an aftermath
 	 */
-	public static class EnvironmentAftermathTriggeredItem implements Cloneable, Serializable {
-		// This is immutable here so we do not have to deep clone
-		private SpellDesc spell;
-		private int playerId;
-		private EntityReference source;
-		private String cardId;
+	public record EnvironmentAftermathTriggeredItem(
+			int playerId,
+			Aftermath aftermath,
+			EntityReference source,
+			String cardId,
+			int boardPosition,
+			int aftermathId) implements Serializable {
 
-		public EnvironmentAftermathTriggeredItem(int playerId, EntityReference source, SpellDesc spell, String cardId) {
-			this.spell = spell;
-			this.playerId = playerId;
-			this.source = source;
-			this.cardId = cardId;
-		}
-
-		/**
-		 * The spell, including its aftermath ID.
-		 *
-		 * @return
-		 */
-		public SpellDesc getSpell() {
-			return spell;
-		}
-
-		public EnvironmentAftermathTriggeredItem setSpell(SpellDesc spell) {
-			this.spell = spell;
-			return this;
-		}
-
-		/**
-		 * The exact card id of the source at the time the aftermath was triggered
-		 * @return
-		 */
-		public String getCardId() {
-			return cardId;
-		}
-
-		/**
-		 * The player from whose point of view the aftermath was triggered
-		 *
-		 * @return
-		 */
-		public int getPlayerId() {
-			return playerId;
-		}
-
-		public EnvironmentAftermathTriggeredItem setPlayerId(int playerId) {
-			this.playerId = playerId;
-			return this;
-		}
-
-		/**
-		 * A reference to the source.
-		 *
-		 * @return
-		 */
-		public EntityReference getSource() {
-			return source;
-		}
-
-		public EnvironmentAftermathTriggeredItem setSource(EntityReference source) {
-			this.source = source;
-			return this;
-		}
-
-		@Override
-		protected EnvironmentAftermathTriggeredItem clone() {
-			try {
-				return (EnvironmentAftermathTriggeredItem) super.clone();
-			} catch (CloneNotSupportedException e) {
-				throw new RuntimeException(e);
-			}
-		}
 	}
 
 	@Override
@@ -101,14 +37,17 @@ public final class EnvironmentAftermathTriggeredList implements EnvironmentValue
 	}
 
 	/**
-	 * Records a aftermath as triggered. The {@code spell} should be immutable because it is not cloned.
+	 * Records an aftermath was triggered
 	 *
-	 * @param playerId
-	 * @param source
-	 * @param spell
+	 * @param playerId              the player that triggered it
+	 * @param aftermath             the aftermath
+	 * @param source                the source of the aftermath
+	 * @param cardId                the card ID that put the content on the aftermath
+	 * @param boardPositionAbsolute the board position of the actor that died, or -1 if no board position
+	 * @param aftermathId           an id during execution
 	 */
-	public void addAftermath(int playerId, EntityReference source, SpellDesc spell, String cardId) {
-		aftermaths.add(new EnvironmentAftermathTriggeredItem(playerId, source, spell, cardId));
+	public void addAftermath(int playerId, Aftermath aftermath, EntityReference source, String cardId, int boardPositionAbsolute, int aftermathId) {
+		aftermaths.add(new EnvironmentAftermathTriggeredItem(playerId, aftermath, source, cardId, boardPositionAbsolute, aftermathId));
 	}
 
 	/**

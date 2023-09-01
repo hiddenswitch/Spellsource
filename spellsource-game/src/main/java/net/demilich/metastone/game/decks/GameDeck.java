@@ -15,9 +15,10 @@ import java.util.stream.Collectors;
  * A deck that contains cards, a name, a hero card, etc. that can be actually used to populate a player's deck in a
  * {@link net.demilich.metastone.game.GameContext}.
  * <p>
- * Create an instance of this class and add cards using {@link #getCards()}'s {@link CardList#addCard(CardCatalogue, String)} method.
- * Set the hero class using {@link #setHeroClass(String)}. Set the format using {@link #setFormat(DeckFormat)}. This
- * format should correspond to the one the {@link GameContext#getDeckFormat()} uses.
+ * Create an instance of this class and add cards using {@link #getCards()}'s
+ * {@link CardList#addCard(CardCatalogue, String)} method. Set the hero class using {@link #setHeroClass(String)}. Set
+ * the format using {@link #setFormat(DeckFormat)}. This format should correspond to the one the
+ * {@link GameContext#getDeckFormat()} uses.
  */
 public class GameDeck implements Serializable, Cloneable, Deck {
 	public static final GameDeck EMPTY;
@@ -134,7 +135,9 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 		if (format == null) {
 			// Retrieve the format that is implied by the cards inside this deck.
 			Set<String> cardSets = getCards().stream().map(Card::getCardSet).collect(Collectors.toSet());
-			return ClasspathCardCatalogue.INSTANCE.getSmallestSupersetFormat(cardSets);
+			DeckFormat smallestSupersetFormat = ClasspathCardCatalogue.INSTANCE.getSmallestSupersetFormat(cardSets);
+			smallestSupersetFormat.getSets().remove(CardSet.TEST);
+			return smallestSupersetFormat;
 		}
 
 		return format;

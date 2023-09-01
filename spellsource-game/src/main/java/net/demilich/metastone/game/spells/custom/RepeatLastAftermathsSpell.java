@@ -22,7 +22,7 @@ public class RepeatLastAftermathsSpell extends RepeatAllAftermathsSpell {
 		// Just return the last three from the owner of the source
 		Collections.reverse(aftermaths);
 		return aftermaths.stream()
-				.takeWhile(item -> item.getPlayerId() == source.getOwner())
+				.takeWhile(item -> item.playerId() == source.getOwner())
 				.limit(3L)
 				.collect(Collectors.toCollection(ArrayList::new));
 	}

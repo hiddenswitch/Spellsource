@@ -245,7 +245,11 @@ public class ListCardCatalogue implements CardCatalogue {
 	public Card getHeroCard(String heroClass) {
 		Async.lock(lock.readLock());
 		try {
-			return heroCards.getOrDefault(heroClass, getCardById(this.getNeutralHero()));
+			var heroCard = heroCards.getOrDefault(heroClass, null);
+			if (heroCard == null) {
+				return getCardById(this.getNeutralHero());
+			}
+			return heroCard;
 		} finally {
 			lock.readLock().unlock();
 		}
