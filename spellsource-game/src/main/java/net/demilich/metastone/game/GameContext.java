@@ -194,12 +194,12 @@ import static java.util.stream.Collectors.toList;
  * @see Player#getStatistics() to see a summary of a player's activity during a game.
  * @see #getEntities() for a way to enumerate through all of the entities in the game.
  */
-public class GameContext implements Cloneable, Serializable, Inventory, EntityZoneTable, Comparable<GameContext> {
+public class GameContext implements Cloneable, Inventory, EntityZoneTable, Comparable<GameContext> {
     private static Logger LOGGER = LoggerFactory.getLogger(GameContext.class);
     protected static ThreadLocal<GameContext> currentContext = new ThreadLocal<>();
     public static final int PLAYER_1 = 0;
     public static final int PLAYER_2 = 1;
-    protected transient SpanContext spanContext;
+    protected SpanContext spanContext;
     private Player[] players = new Player[2];
     private Behaviour[] behaviours;
     private GameLogic logic;
@@ -208,9 +208,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
     private List<Trigger> triggers = new ArrayList<Trigger>();
     private Deque<GameLogic.QueuedTrigger> deferredTriggersQueue = new ArrayDeque<>();
     private Deque<GameAction> actionStack = new ArrayDeque<>();
-    private Set<Trigger> processingTriggers = new HashSet<>();
-    private Map<Environment, Object> environment = new HashMap<>();
-    private Map<String, AtomicInteger> variables = new HashMap<>();
+    private Set<Trigger> processingTriggers = new LinkedHashSet<>();
+    private Map<Environment, Object> environment = new LinkedHashMap<>();
+    private Map<String, AtomicInteger> variables = new LinkedHashMap<>();
     private int activePlayerId = -1;
     private Player winner;
     private GameStatus result;
@@ -224,8 +224,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
     private CardList tempCards = new CardArrayList();
     private boolean didCallEndGame;
 
-    private transient Trace trace = new Trace();
-    private transient Thread thread;
+    private Trace trace = new Trace();
+    private Thread thread;
 
     /**
      * Creates a game context with two empty players and two {@link PlayRandomBehaviour} behaviours.
@@ -236,6 +236,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
     public GameContext() {
         behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
         setLogic(new GameLogic());
+	      setCardCatalogue(ClasspathCardCatalogue.INSTANCE);
         setDeckFormat(ClasspathCardCatalogue.INSTANCE.all());
         setPlayer1(new Player());
         setPlayer2(new Player());
@@ -252,6 +253,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
         Player player2Clone = fromContext.getPlayer2().clone();
         setLogic(logicClone);
         behaviours = new Behaviour[]{fromContext.behaviours[0] == null ? null : fromContext.behaviours[0].clone(), fromContext.behaviours[1] == null ? null : fromContext.behaviours[1].clone()};
+	      setCardCatalogue(fromContext.getCardCatalogue());
         setDeckFormat(fromContext.getDeckFormat());
         setPlayer1(player1Clone);
         setPlayer2(player2Clone);
@@ -281,7 +283,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
             }
         }
 
-        variables = new HashMap<>();
+        variables = new LinkedHashMap<>();
         for (var kv : fromContext.variables.entrySet()) {
             variables.put(kv.getKey(), new AtomicInteger(kv.getValue().intValue()));
         }
@@ -1153,6 +1155,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
     public GameContext setDeckFormat(DeckFormat deckFormat) {
         this.deckFormat = deckFormat;
+				trace.setDeckFormatName(deckFormat.getName());
+				trace.setDeckFormatSets(new ArrayList<>(deckFormat.getSets()));
+				trace.setSecondPlayerBonusCards(Arrays.stream(deckFormat.getSecondPlayerBonusCards()).toList());
         return this;
     }
 
@@ -1651,7 +1656,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
      * @see #play() to actually execute the game.
      */
     public static GameContext fromDecks(List<GameDeck> decks, Behaviour behaviour1, Behaviour behaviour2) {
-        return fromDecks(decks, behaviour1, behaviour2, ClasspathCardCatalogue.INSTANCE);
+        return fromDecks(decks, behaviour1, behaviour2, ClasspathCardCatalogue.INSTANCE, ClasspathCardCatalogue.INSTANCE.spellsource());
     }
 
     /**
@@ -1659,19 +1664,20 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
      *
      * @param decks         The {@link GameDeck}s to use for the players.
      * @param cardCatalogue
+     * @param deckFormat
      * @return A {@link GameContext} for which {@link #play()} will immediately work.
      * @see #getTrace() to get the log of actions that were taken in the game.
      * @see #play() to actually execute the game.
      */
-    public static GameContext fromDecks(List<GameDeck> decks, Behaviour behaviour1, Behaviour behaviour2, CardCatalogue cardCatalogue) {
+    public static GameContext fromDecks(List<GameDeck> decks, Behaviour behaviour1, Behaviour behaviour2, CardCatalogue cardCatalogue, DeckFormat deckFormat) {
         GameContext context = new GameContext();
         context.setCardCatalogue(cardCatalogue);
+				context.setDeckFormat(deckFormat);
         Behaviour[] behaviours = new Behaviour[]{behaviour1, behaviour2};
         for (int i = 0; i < 2; i++) {
             context.setPlayer(i, new Player(decks.get(i), "Player " + i, cardCatalogue));
             context.behaviours[i] = behaviours[i];
         }
-        context.setDeckFormat(context.getCardCatalogue().getSmallestSupersetFormat(decks));
 
         return context;
 
@@ -1719,7 +1725,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
     }
 
     public static GameContext fromDecks(long seed, List<GameDeck> decks, CardCatalogue cardCatalogue) {
-        var context = fromDecks(decks, new PlayGameLogicRandomBehaviour(), new PlayGameLogicRandomBehaviour(), cardCatalogue);
+        var context = fromDecks(decks, new PlayGameLogicRandomBehaviour(), new PlayGameLogicRandomBehaviour(), cardCatalogue, cardCatalogue.spellsource());
         context.setLogic(new GameLogic(seed));
         return context;
     }
@@ -2043,6 +2049,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
      */
     public GameContext setCardCatalogue(CardCatalogue cardCatalogue) {
         this.cardCatalogue = cardCatalogue;
+				trace.setCardCatalogue(cardCatalogue);
         if (deckFormat != null) {
             var format = cardCatalogue.getFormat(deckFormat.getName());
             if (format != null) {

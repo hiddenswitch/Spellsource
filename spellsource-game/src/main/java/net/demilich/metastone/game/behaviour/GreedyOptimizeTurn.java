@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class GreedyOptimizeTurn extends IntelligentBehaviour {
@@ -21,7 +22,7 @@ public class GreedyOptimizeTurn extends IntelligentBehaviour {
 	private final Heuristic heuristic;
 
 	private int assignedGC;
-	private final HashMap<ActionType, Integer> evaluatedActions = new HashMap<ActionType, Integer>();
+	private final HashMap<ActionType, Integer> evaluatedActions = new LinkedHashMap<ActionType, Integer>();
 	private final TranspositionTable table = new TranspositionTable();
 
 	public GreedyOptimizeTurn(Heuristic heuristic) {

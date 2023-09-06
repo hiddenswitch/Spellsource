@@ -41,7 +41,7 @@ public class SpecificCardFilter extends EntityFilter {
 		}
 
 		String cardId = entity.getSourceCard().getCardId();
-		Set<String> requiredCardIds = new HashSet<>(getDesc().getCardOrCards());
+		Set<String> requiredCardIds = new LinkedHashSet<>(getDesc().getCardOrCards());
 		EntityReference comparedTo = (EntityReference) getDesc().get(EntityFilterArg.SECONDARY_TARGET);
 		if (comparedTo != null && !comparedTo.equals(EntityReference.NONE)) {
 			Entity target = context.resolveSingleTarget(player, host, comparedTo);

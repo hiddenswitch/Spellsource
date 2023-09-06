@@ -1,0 +1,26 @@
+{
+  "seed" : 6661691729451237852,
+  "catalogueVersion" : 0,
+  "heroClasses" : [ "LEATHER", "ROSE" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_redhide_butcher", "weapon_scissors_of_dots", "minion_crew_commander", "minion_magic_muffler", "spell_escape_position", "spell_party_portal", "minion_macabre_samaritan", "minion_skeletal_warrior", "minion_stone_sentinel_basic", "minion_deranged_greengill", "minion_ironplate_samurai", "minion_giants_toad", "minion_jungle_operative", "minion_westlands_mugger", "weapon_sharp_a_practice", "minion_sleepy_scarecrow", "minion_wild_pyrodancer", "spell_amber_drop", "minion_sand_giant", "spell_triple_shot", "minion_kiljaeden_deceiver", "minion_gnoll_scout", "minion_lunstone_rumbler", "minion_smogg", "minion_jungle_wanderer", "minion_lord_cookie", "spell_defensive_position", "minion_nightmare_warden", "minion_molten_cauterizer", "minion_haunted_armor" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "spell_cemetary_party", "minion_timewalker_stormlord", "minion_tiki_tokens", "minion_raptor_rider_raider", "secret_black_magic", "minion_jungle_wanderer", "minion_fiendish_giant", "secret_bloodsport", "minion_centaur_acumen", "spell_cursed_mask", "secret_ghastly_visage", "weapon_sacrificial_blade", "minion_hooded_figure", "minion_phantom_advisor", "minion_old_jungle_masta", "secret_ward_evil_eye", "minion_aeonus", "minion_void_reaper", "minion_holdover_lich", "minion_shadowveiler", "minion_expert_explorer", "spell_mojo_curse", "spell_hex_behemoth", "spell_beastcallers_summon", "spell_frightful_vision", "minion_temple_watcher", "minion_magelight_dragon", "spell_evocation_witchdoctor", "minion_amathyst_panther", "minion_buffeting_elemental" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "CORE", "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 37 ]
+  } ],
+  "actions" : [ 0, 1, 1, 2, 0, 0, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 5, 1, 0, 0, 1, 1, 1, 1, 4, 7, 0, 12, 2, 10, 3, 3, 9 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 5
+}

@@ -9,6 +9,7 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -64,7 +65,7 @@ import java.util.Map;
  */
 public final class StatefulAttributeValueAura extends EffectlessAura {
 
-	private Map<Integer, Integer> currentValues = new HashMap<>();
+	private Map<Integer, Integer> currentValues = new LinkedHashMap<>();
 
 	public StatefulAttributeValueAura(AuraDesc desc) {
 		super(desc);
@@ -73,7 +74,7 @@ public final class StatefulAttributeValueAura extends EffectlessAura {
 	@Override
 	public StatefulAttributeValueAura clone() {
 		StatefulAttributeValueAura clone = (StatefulAttributeValueAura) super.clone();
-		clone.currentValues = new HashMap<>(currentValues);
+		clone.currentValues = new LinkedHashMap<>(currentValues);
 		return clone;
 	}
 

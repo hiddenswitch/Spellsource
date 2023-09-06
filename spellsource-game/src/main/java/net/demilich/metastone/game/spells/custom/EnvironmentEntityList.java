@@ -39,7 +39,7 @@ public final class EnvironmentEntityList implements EnvironmentValue, Serializab
 		return (EnvironmentEntityList) context.getEnvironment().get(environmentVariable);
 	}
 
-	Map<EntityReference, List<EntityReference>> data = new HashMap<>();
+	Map<EntityReference, List<EntityReference>> data = new LinkedHashMap<>();
 
 	@Override
 	public EnvironmentValue getCopy() {

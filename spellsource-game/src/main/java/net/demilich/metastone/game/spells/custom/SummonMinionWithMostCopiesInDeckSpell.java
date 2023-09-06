@@ -9,10 +9,7 @@ import net.demilich.metastone.game.spells.SummonSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Summons a minion from the player's deck with the most copies in the deck. If there are multiple minions with the most
@@ -21,7 +18,7 @@ import java.util.Map;
 public class SummonMinionWithMostCopiesInDeckSpell extends SummonSpell {
 	@Override
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Map<String, Integer> countOfCard = new HashMap<>();
+		Map<String, Integer> countOfCard = new LinkedHashMap<>();
 		for (int i = 0; i < player.getDeck().size(); i++) {
 			Card card = player.getDeck().get(i);
 			if (card.getCardType() != CardType.MINION) {

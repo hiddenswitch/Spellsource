@@ -14,6 +14,7 @@ import net.demilich.metastone.game.spells.trigger.Aftermath;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -27,7 +28,7 @@ import static java.util.stream.Collectors.toList;
  * If it is a {@link Card}, the aftermaths written on the card will be used instead.
  */
 public class TriggerDeathrattleSpell extends Spell {
-	private final static ScopedValue<HashMap<Card, Aftermath>> aftermathsCache = ScopedValue.newInstance();
+	private final static ScopedValue<LinkedHashMap<Card, Aftermath>> aftermathsCache = ScopedValue.newInstance();
 
 	public static SpellDesc create(EntityReference target) {
 		Map<SpellArg, Object> arguments = new SpellDesc(TriggerDeathrattleSpell.class);
@@ -54,11 +55,11 @@ public class TriggerDeathrattleSpell extends Spell {
 			}
 
 		} else if (target instanceof Card card) {
-			HashMap<Card, Aftermath> aftermathsCacheCheck;
+			LinkedHashMap<Card, Aftermath> aftermathsCacheCheck;
 			if (aftermathsCache.isBound()) {
 				aftermathsCacheCheck = aftermathsCache.get();
 			} else {
-				aftermathsCacheCheck = new HashMap<>();
+				aftermathsCacheCheck = new LinkedHashMap<>();
 			}
 			ScopedValue.where(aftermathsCache, aftermathsCacheCheck)
 					.run(() -> {

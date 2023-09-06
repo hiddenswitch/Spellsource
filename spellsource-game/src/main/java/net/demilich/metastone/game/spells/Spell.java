@@ -191,7 +191,7 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 * @param validArgs The valid arguments
 	 */
 	protected void checkArguments(Logger logger, GameContext context, Entity source, SpellDesc desc, SpellArg... validArgs) {
-		Set<SpellArg> unexpectedArgs = new HashSet<>(desc == null ? Collections.emptySet() : desc.keySet());
+		Set<SpellArg> unexpectedArgs = new LinkedHashSet<>(desc == null ? Collections.emptySet() : desc.keySet());
 		unexpectedArgs.removeAll(Arrays.asList(validArgs == null ? new SpellArg[0] : validArgs));
 		unexpectedArgs.removeAll(COMMON_ARGS);
 		if (unexpectedArgs.size() > 0) {

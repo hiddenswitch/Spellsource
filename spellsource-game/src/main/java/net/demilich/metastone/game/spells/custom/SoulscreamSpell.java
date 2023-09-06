@@ -10,6 +10,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import static java.util.stream.Collectors.*;
 
@@ -28,7 +29,7 @@ public final class SoulscreamSpell extends TriggerDeathrattleSpell {
 		if (minions.isEmpty()) {
 			return;
 		}
-		var choices = new HashMap<String, Entity>();
+		var choices = new LinkedHashMap<String, Entity>();
 		for (var minion : minions) {
 			choices.putIfAbsent(minion.getSourceCard().getCardId(), minion);
 		}

@@ -3,6 +3,7 @@ package net.demilich.metastone.game.logic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
@@ -32,9 +33,9 @@ import java.util.stream.Collectors;
  *
  * @see #dump() to create a string you can save and later load.
  * @see #load(String) to recreate this object from a dumped string.
- * @see #replayContext(boolean, Consumer) to replay a context after loading it from a string. Provide {@code
- * 		skipLastAction: true} as the argument if the last action throws an exception (useful for debugging). Provide {@code
- * 		recorder} is useful if you'd like to process each {@link GameContext} (useful for recording replays).
+ * @see #replayContext(boolean, Consumer) to replay a context after loading it from a string. Provide
+ * {@code skipLastAction: true} as the argument if the last action throws an exception (useful for debugging). Provide
+ * {@code recorder} is useful if you'd like to process each {@link GameContext} (useful for recording replays).
  */
 public class Trace implements Serializable, Cloneable {
 	private static final long serialVersionUID = 4L;
@@ -49,9 +50,11 @@ public class Trace implements Serializable, Cloneable {
 	private List<Integer> actions = new ArrayList<>();
 	private String id;
 	private boolean traceErrors;
-	private int version = 4;
+	private int version = 5;
 	@JsonIgnore
 	private transient List<GameAction> rawActions = new ArrayList<>();
+	@JsonIgnore
+	private transient CardCatalogue cardCatalogue;
 
 	public Trace() {
 	}
@@ -59,8 +62,8 @@ public class Trace implements Serializable, Cloneable {
 	@JsonIgnore
 	public void setStartState(GameState gameState) {
 		Player[] players = new Player[]{gameState.getPlayer1(), gameState.getPlayer2()};
-        DeckFormat deckFormat = gameState.getDeckFormat();
-        deckFormatSets = new ArrayList<>(deckFormat.getSets());
+		DeckFormat deckFormat = gameState.getDeckFormat();
+		deckFormatSets = new ArrayList<>(deckFormat.getSets());
 		deckFormatName = gameState.getDeckFormat().getName();
 		secondPlayerBonusCards = Arrays.asList(gameState.getDeckFormat().getSecondPlayerBonusCards());
 		setHeroClasses(Arrays.asList(null, null));
@@ -117,6 +120,21 @@ public class Trace implements Serializable, Cloneable {
 	 */
 	@JsonIgnore
 	public GameContext replayContext(boolean skipLastAction, @Nullable Consumer<GameContext> beforeRequestActionHandler) {
+		return replayContext(skipLastAction, beforeRequestActionHandler, this.cardCatalogue == null ? ClasspathCardCatalogue.INSTANCE : this.cardCatalogue);
+	}
+
+	/**
+	 * Creates a game context and replays it using data from this trace. A {@link Consumer} can be optionally specified
+	 * that receives the game context before every action taken by either player.
+	 *
+	 * @param skipLastAction
+	 * @param beforeRequestActionHandler
+	 * @param cardCatalogue
+	 * @return
+	 */
+	@JsonIgnore
+	public GameContext replayContext(boolean skipLastAction, @Nullable Consumer<GameContext> beforeRequestActionHandler, CardCatalogue cardCatalogue) {
+		this.cardCatalogue = cardCatalogue;
 		AtomicInteger nextAction = new AtomicInteger();
 		GameContext gameContext = new GameContext();
 		restoreStartingStateTo(gameContext);
@@ -141,15 +159,8 @@ public class Trace implements Serializable, Cloneable {
 	}
 
 	public void restoreStartingStateTo(GameContext context) {
-		if (heroClasses != null && deckCardIds != null) {
-            context.setPlayer(0, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(0), deckCardIds.get(0).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 0", ClasspathCardCatalogue.INSTANCE));
-            context.setPlayer(1, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(1), deckCardIds.get(1).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 1", ClasspathCardCatalogue.INSTANCE));
-		} else if (heroClasses != null) {
-			context.setPlayer(0, new Player(heroClasses.get(0), context.getCardCatalogue()));
-			context.setPlayer(1, new Player(heroClasses.get(1), context.getCardCatalogue()));
-		} else {
-			context.setPlayer(0, new Player());
-			context.setPlayer(1, new Player());
+		if (version >= 5 && this.cardCatalogue != null) {
+			context.setCardCatalogue(this.cardCatalogue);
 		}
 
 		// Compatibility with previous deck formats
@@ -173,6 +184,17 @@ public class Trace implements Serializable, Cloneable {
 			deckFormat.setSecondPlayerBonusCards(new String[]{"spell_the_coin"});
 		}
 		context.setDeckFormat(deckFormat);
+
+		if (heroClasses != null && deckCardIds != null) {
+			context.setPlayer(0, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(0), deckCardIds.get(0).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 0", context.getCardCatalogue()));
+			context.setPlayer(1, new Player(DeckCreateRequest.fromCardIds(heroClasses.get(1), deckCardIds.get(1).getCardIds()).withFormat(deckFormatName).toGameDeck(), "Player 1", context.getCardCatalogue()));
+		} else if (heroClasses != null) {
+			context.setPlayer(0, new Player(heroClasses.get(0), context.getCardCatalogue()));
+			context.setPlayer(1, new Player(heroClasses.get(1), context.getCardCatalogue()));
+		} else {
+			context.setPlayer(0, new Player());
+			context.setPlayer(1, new Player());
+		}
 
 		GameLogic logic = new GameLogic((IdFactoryImpl) context.getLogic().getIdFactory(), getSeed());
 		logic.setContext(context);
@@ -294,7 +316,6 @@ public class Trace implements Serializable, Cloneable {
 					mulliganTraces.add(mulliganTrace.clone());
 				}
 				clone.setMulligans(mulliganTraces);
-
 			}
 
 			if (actions != null) {
@@ -316,5 +337,13 @@ public class Trace implements Serializable, Cloneable {
 
 	public JsonObject toJson() {
 		return JsonObject.mapFrom(this);
+	}
+
+	public void setCardCatalogue(CardCatalogue cardCatalogue) {
+		this.cardCatalogue = cardCatalogue;
+	}
+
+	public CardCatalogue getCardCatalogue() {
+		return cardCatalogue;
 	}
 }

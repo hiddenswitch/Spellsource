@@ -1,0 +1,26 @@
+{
+  "seed" : -6913170156039141564,
+  "catalogueVersion" : 0,
+  "heroClasses" : [ "CANDY", "LEATHER" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_rafaam_archivist", "minion_ringside_impresario", "minion_spiritblade_dancer", "minion_floating_crystal", "spell_stage_fright", "minion_kuroko_puppet", "minion_savage_sprite", "minion_mind_controlled_mech", "minion_cacodemon", "spell_night_of_a_lifetime", "minion_doctor_hatchett", "minion_bookkeeper", "minion_finale_architect", "minion_fiery_warchief", "spell_croak", "minion_emerald_dreamer", "minion_twilight_mercenary", "minion_cursing_chimp", "weapon_twirling_baton", "minion_crouching_tiger", "spell_practice", "spell_dining_dash", "minion_prince_tenris", "minion_bungling_busker", "minion_knight_eternal", "minion_spotlight_hog", "spell_warm_up", "spell_warm_up", "minion_opa_masters_mentor", "minion_roadblock_pufferfish" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_end_reveler", "minion_cacodemon", "spell_dead_or_alive", "minion_skilled_hunter", "spell_new_arrival", "minion_one_handed_butcher", "minion_skilled_hunter", "minion_gentleman_s_giant", "weapon_scissors_of_dots", "spell_amber_drop", "minion_xavius", "spell_take_a_drink", "minion_monumancer", "minion_timelost_sarcophagus", "spell_distract", "minion_highwayman", "spell_supply_sabotage", "minion_macabre_samaritan", "minion_westlands_mugger", "minion_aeonus", "minion_chief_vigilante", "minion_highwayman", "minion_faerie_nightmare", "spell_reload", "minion_monumancer", "spell_triple_shot", "spell_revelating_gas", "minion_bullet_bull", "minion_treasure_mimic", "minion_augmented_pixie" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "CORE", "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 60, 38 ]
+  } ],
+  "actions" : [ 0, 0, 0, 0, 3, 4, 0, 0, 0, 0, 0, 1, 10, 1, 0, 4, 1, 0, 0, 17, 6, 0, 2, 0, 0, 6, 8, 5, 0, 2, 0, 0, 0, 0, 7, 1, 1, 4, 8, 8, 6, 18, 13, 29, 4, 4, 13, 4, 0, 5, 10, 5, 18, 9, 4, 4, 4, 19, 7, 1, 0, 27, 17, 0, 5, 10, 4, 1, 1, 8, 0, 0, 1 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 5
+}

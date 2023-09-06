@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -78,7 +79,7 @@ public class ShuffleToDeckSpell extends Spell {
 		CardList cards = SpellUtils.getCards(context, player, target, source, desc,
 				desc.getValue(SpellArg.VALUE, context, player, target, source, 1));
 
-		Map<Card, Boolean> didShuffle = new HashMap<>();
+		Map<Card, Boolean> didShuffle = new LinkedHashMap<>();
 		for (int i = 0; i < copies; i++) {
 			for (Card original : cards) {
 				Card copy = shuffle(context, player, source, null, original, extraCopy, source.getOwner());

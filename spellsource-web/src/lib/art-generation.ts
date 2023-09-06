@@ -1,10 +1,12 @@
 import sdxl from "../__generated__/sdxl-ordinary.json";
 import { FieldButton } from "../components/blockly/field-button";
-import { createConfiguration, DefaultApi, PromptNode } from "../__generated__/comfyclient";
+import { createConfiguration } from "../__generated__/comfyclient/configuration";
 import { argsList, newBlock } from "./blockly-utils";
 import Blockly, { Block, BlockSvg, WorkspaceSvg } from "blockly";
 import { ContextType } from "react";
 import { BlocklyDataContext } from "../pages/card-editor";
+import { PromptNode } from "../__generated__/comfyclient/models/PromptNode";
+import { ObjectDefaultApi as DefaultApi } from "../__generated__/comfyclient/types/ObjectParamAPI";
 
 export const randomizeSeed = (p1: any) => {
   const field = p1 as FieldButton;

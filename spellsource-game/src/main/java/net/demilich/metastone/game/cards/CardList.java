@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.cards;
 
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.XORShiftRandom;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -16,10 +17,10 @@ import java.util.stream.Stream;
 
 /**
  * An interface describing common actions for a collection of cards. This abstracts away the difference between an
- * {@link net.demilich.metastone.game.entities.EntityZone}, which enforces that its containing {@link
- * net.demilich.metastone.game.entities.Entity} objects can only be in one {@link net.demilich.metastone.game.entities.EntityZone}
- * at a time, versus a plain {@link CardArrayList}, which is just an array of cards that various pieces of logic might
- * want to {@link #addCard(Card)} to.
+ * {@link net.demilich.metastone.game.entities.EntityZone}, which enforces that its containing
+ * {@link net.demilich.metastone.game.entities.Entity} objects can only be in one
+ * {@link net.demilich.metastone.game.entities.EntityZone} at a time, versus a plain {@link CardArrayList}, which is
+ * just an array of cards that various pieces of logic might want to {@link #addCard(Card)} to.
  * <p>
  * Use {@link CardZone} for the {@link Zones#HAND}, {@link Zones#DECK} and {@link Zones#DISCOVER} zones--when a card
  * should only be in one place at a time. Use a {@link CardArrayList} for situations where you need to e.g., get a list
@@ -35,7 +36,10 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	 * @param card The card
 	 * @return This instance.
 	 */
-	CardList addCard(@NotNull Card card);
+	default CardList addCard(@NotNull Card card) {
+		this.add(card);
+		return this;
+	}
 
 	default CardList addCard(CardCatalogue cardCatalogue, String cardId) {
 		Card cardById = cardCatalogue.getCardById(cardId);
@@ -52,7 +56,10 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	 * @param cardList The cards to add.
 	 * @return This instance.
 	 */
-	CardList addAll(CardList cardList);
+	default CardList addAll(CardList cardList) {
+		((List<Card>) this).addAll(cardList);
+		return this;
+	}
 
 	/**
 	 * Calls {@link Card#clone()} on every card in this list and returns a new copy of this list.
@@ -60,17 +67,21 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	 * @return A clone of the list and all its contents. Generally only helpful for "immutable views" of this list.
 	 * @see #getCopy() for a more game logic useful version of this method.
 	 */
-	CardList clone();
+	default CardList clone() {
+		return new CardArrayList(this);
+	}
 
 	/**
-	 * Checks if the list has the specific reference to a card. Does not use the card's {@link
-	 * net.demilich.metastone.game.entities.Entity#id} or its {@link Card#getCardId()}, which may be more helpful.
+	 * Checks if the list has the specific reference to a card. Does not use the card's {@link Entity#getId()} or its
+	 * {@link Card#getCardId()}, which may be more helpful.
 	 *
 	 * @param card The card instance to check.
 	 * @return {@code true} if the specific instance is inside this list.
 	 * @see #containsCard(Card) for a more game logic useful version of this method.
 	 */
-	boolean contains(Card card);
+	default boolean contains(Card card) {
+		return ((List<Card>) this).contains(card);
+	}
 
 	/**
 	 * Checks if there is a card in this list whose {@link Card#getCardId()} matches the specified instance of a card.

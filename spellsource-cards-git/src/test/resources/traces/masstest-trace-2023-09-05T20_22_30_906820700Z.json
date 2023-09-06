@@ -1,0 +1,26 @@
+{
+  "seed" : 3329921769384092241,
+  "catalogueVersion" : 0,
+  "heroClasses" : [ "PEACH", "CANDY" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_holy_giant", "minion_hybreeder", "minion_rafaam_philanthropist", "minion_managrounder", "minion_grape_merchant", "minion_magedrainer", "minion_managrounder", "minion_starmaiden", "spell_star_scripture", "minion_ragtag_rescuer", "spell_star_scripture", "minion_novice_enchantress", "minion_warclub_ruffian", "spell_nine_tail_fury", "minion_sollya_the_healer", "spell_celestial_guidance", "minion_smogg", "minion_alien_invader", "spell_morning_flame", "minion_glimmer_dancer", "minion_hard_puncher", "spell_morning_flame", "minion_fifi_fizzlewarp", "minion_bugbiter", "spell_celestial_guidance", "minion_krentiaxx_tyrant", "minion_lunar_oracle", "minion_fahrya_the_flame", "spell_lost_possessions", "spell_starlight_ceremony" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_saru_spinner", "minion_guardian_kirin", "spell_food_festival", "spell_living_firework", "minion_end", "minion_opening_actor", "spell_stage_dive", "minion_chaotic_cutthroat", "spell_meteor_spin", "minion_jungle_king", "minion_enhancing_shaman", "weapon_dancer's_torch", "minion_river_reveler", "minion_hoffis_the_dunewalker", "minion_savage_dancer", "minion_baby_griffin", "minion_spotlight_hog", "minion_nightmare_dragonflight", "minion_ringside_impresario", "minion_bromeliad_pup", "spell_light_entertainment", "minion_kuroko_puppet", "minion_xavius", "minion_blue_nestwatcher", "minion_finale_architect", "minion_reckless_hero", "minion_redhide_butcher", "minion_hunchback_supplier", "minion_dawn_drake", "minion_treasure_hunter" ]
+  } ],
+  "deckFormatName" : "Pauper",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ ]
+  } ],
+  "actions" : [ 0, 1, 0, 0, 1, 0, 4, 0, 3, 0, 0, 0, 8, 0, 0, 6, 0, 1, 0, 15, 0, 5, 0, 11, 14, 2, 1, 1, 0, 22, 1, 0, 0, 22, 28, 6, 1, 5, 38, 5, 0, 3, 1, 1, 0, 6, 5, 0, 12, 3, 0, 3, 2, 1, 1, 2, 0, 0, 20, 38, 0, 20, 22, 1, 0, 2, 2, 0, 13, 2, 5, 0, 14, 4, 20, 7, 0, 5, 29, 3, 3, 9, 4, 0, 21, 0, 28, 2, 4, 3, 6, 0, 0, 5, 8, 1, 10 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 5
+}

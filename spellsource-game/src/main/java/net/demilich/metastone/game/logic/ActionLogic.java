@@ -69,7 +69,7 @@ public class ActionLogic implements Serializable {
 					.filter(trigger -> trigger instanceof PhysicalAttackTargetOverrideAura)
 					.map(trigger -> (PhysicalAttackTargetOverrideAura) trigger).collect(Collectors.toList());
 			if (!filters.isEmpty()) {
-				Set<EntityReference> common = new HashSet<>();
+				Set<EntityReference> common = new LinkedHashSet<>();
 
 				for (Integer targetId : filters.get(0).getAffectedEntities()) {
 					common.add(new EntityReference(targetId));

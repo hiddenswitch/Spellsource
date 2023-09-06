@@ -32,7 +32,7 @@ public class CreateCardSpell extends Spell {
 			spells.add(spell);
 		}
 
-		Map<String, Integer> spellOrder = new HashMap<String, Integer>();
+		Map<String, Integer> spellOrder = new LinkedHashMap<String, Integer>();
 		for (int i = 0; i < spells.size(); i++) {
 			SpellDesc spell = spells.get(i);
 			spellOrder.put(spell.getString(SpellArg.NAME), i);

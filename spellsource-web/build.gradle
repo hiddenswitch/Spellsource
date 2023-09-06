@@ -55,6 +55,7 @@ tasks.register('copyComfyClient') {
       from addlInput
       into addlOutput
       include("**/*.ts")
+      exclude("index.ts")
     }
   }
 }

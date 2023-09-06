@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -84,7 +85,7 @@ public class FromDeckToHandSpell extends Spell {
 			}
 		}
 
-		Set<String> drawnCardIds = new HashSet<>();
+		Set<String> drawnCardIds = new LinkedHashSet<>();
 		for (int i = 0; i < cardsToDraw; i++) {
 			CardList relevantCards = getCards(context, player, source, cardFilter);
 			Card card = null;

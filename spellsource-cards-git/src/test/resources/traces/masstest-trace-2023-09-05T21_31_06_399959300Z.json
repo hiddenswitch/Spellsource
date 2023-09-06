@@ -1,0 +1,26 @@
+{
+  "seed" : 6895538415257866034,
+  "catalogueVersion" : 0,
+  "heroClasses" : [ "PEACH", "TEAL" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_dragonfruit_whelp", "spell_future_sight", "spell_starlight_ceremony", "minion_mana_former", "minion_skeletal_warrior", "minion_peacock_mystic", "spell_whisper_of_betrayal", "minion_wise_sage", "spell_mark_of_twilight", "minion_reckless_hero", "minion_giant_reaper", "minion_redhide_butcher", "minion_spellquaker", "spell_stars_gift", "minion_nice_cream", "minion_vixen_stargazer", "spell_golden_blessing", "minion_primalist_kirra", "minion_whizbang_the_plunderful", "spell_future_sight", "spell_celestial_guidance", "minion_magelight_dragon", "spell_starlight_ceremony", "spell_kindred_spirits", "minion_alemental", "minion_headless_horseman_revengeance", "spell_stars_gift", "minion_bramblebound_warrior", "minion_roadblock_pufferfish", "minion_twilight_annihilator" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_gilblin_plunderer", "minion_n_zoth_s_battlemaiden", "spell_water_blast", "minion_blue_nestwatcher", "minion_warlord_kalithresh", "minion_commander_gareth", "spell_salt_the_wound", "minion_doodles_v2", "minion_timelost_sarcophagus", "minion_highmountain_primalist", "spell_regal_gaze", "spell_three_fathoms_below", "minion_blubber_behemoth", "minion_n_zoth_s_battlemaiden", "minion_mechanical_monstrosity", "minion_verdant_dreams_dracomancer", "weapon_brine_crossbolter", "minion_crystal_shatterer", "minion_chromatic_vohlok", "minion_disco_inferno", "spell_frostfire", "minion_sky_high_surveyor", "spell_frostfire", "minion_smogg", "minion_coilfang_battlemaiden", "spell_calm_currents", "weapon_cerith_scepter", "minion_ankylo_devotee", "minion_barnacled_dweller", "minion_uccian_hydra" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "CORE", "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 7, 27 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ ]
+  } ],
+  "actions" : [ 0, 0, 1, 0, 1, 3, 0, 0, 3, 1, 0, 3, 1, 1, 0, 8, 2, 2, 5, 1, 0, 3, 9, 2, 0, 8, 3, 4, 4, 4, 13, 2, 4, 14, 2, 3, 5, 0, 2, 6, 4, 0, 0, 13, 1, 1, 5, 0, 0, 12, 1, 0, 1, 14, 5, 1, 1, 2, 4, 3, 2, 2, 6, 4, 2, 1, 0, 15, 7, 0, 5, 2, 2, 1, 0, 0, 7, 33, 46, 13, 1, 1, 0, 10, 13, 6, 0, 13, 1, 27, 45, 1, 2 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 5
+}

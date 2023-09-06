@@ -23,15 +23,14 @@ import { Workspace } from "blockly";
 import { beforeAll, describe, expect, test } from "@jest/globals";
 import * as BlocklyMiscUtils from "../lib/blockly-spellsource-utils";
 import SpellsourceTesting from "../lib/spellsource-testing";
-import java from "java";
 import { getAllBlockJson, getAllIcons, readAllJsonSync } from "../lib/fs-utils";
 import { keyBy } from "lodash";
 import { BlocklyDataContext } from "../pages/card-editor";
 import { ContextType } from "react";
 import path from "path";
 import { transformCard } from "../lib/json-transforms";
-import { promisify } from "util";
 import * as BlocklyRegister from "../lib/blockly-setup";
+import { java } from "../lib/java";
 
 console.log = tempConsoleLog;
 console.warn = tempConsoleWarn;
@@ -39,22 +38,7 @@ console.warn = tempConsoleWarn;
 const cardsPath = `../spellsource-cards-git/src/main/resources/cards/collectible`;
 const cardsPath2 = `../spellsource-game/src/main/resources/basecards`;
 
-java.classpath.push(
-  path.join(
-    process.cwd(),
-    "../spellsource-web-cardeditor-support/build/libs/spellsource-web-cardeditor-support-all.jar"
-  )
-);
 
-java.options.push("--enable-preview");
-
-// @ts-ignore
-java.asyncOptions = {
-  syncSuffix: "",
-  asyncSuffix: "Callback",
-  promiseSuffix: "Async",
-  promisify,
-};
 
 const cards = [
   ...readAllJsonSync(path.join(cardsPath, "**", "*.json"), transformCard),

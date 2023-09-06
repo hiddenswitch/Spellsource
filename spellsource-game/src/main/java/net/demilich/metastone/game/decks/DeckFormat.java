@@ -23,7 +23,7 @@ public class DeckFormat implements Serializable, Cloneable {
 
 
 	public DeckFormat() {
-		setSets(new HashSet<>());
+		setSets(new LinkedHashSet<>());
 	}
 
 	public DeckFormat addSet(String cardSet) {
@@ -119,7 +119,7 @@ public class DeckFormat implements Serializable, Cloneable {
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}
-		clone.sets = new HashSet<>(sets);
+		clone.sets = new LinkedHashSet<>(sets);
 		return clone;
 	}
 }

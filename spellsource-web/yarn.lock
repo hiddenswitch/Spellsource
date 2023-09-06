@@ -5839,6 +5839,17 @@ glob@^10.2.2:
     minipass "^5.0.0 || ^6.0.2"
     path-scurry "^1.10.0"
 
+glob@^10.3.3:
+  version "10.3.4"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-10.3.4.tgz#c85c9c7ab98669102b6defda76d35c5b1ef9766f"
+  integrity sha512-6LFElP3A+i/Q8XQKEvZjkEWEOTgAIALR9AO2rwT8bgPhDd1anmqDJDZ6lLddI4ehxxxR1S5RIqKe1uapMQfYaQ==
+  dependencies:
+    foreground-child "^3.1.0"
+    jackspeak "^2.0.3"
+    minimatch "^9.0.1"
+    minipass "^5.0.0 || ^6.0.2 || ^7.0.0"
+    path-scurry "^1.10.1"
+
 glob@^7.1.1, glob@^7.1.3, glob@^7.1.4, glob@^7.2.0:
   version "7.2.3"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.2.3.tgz#b8df0fb802bbfa8e89bd1d938b4e16578ed44f2b"
@@ -6723,6 +6734,50 @@ jackspeak@^2.0.3:
     "@isaacs/cliui" "^8.0.2"
   optionalDependencies:
     "@pkgjs/parseargs" "^0.11.0"
+
+java-bridge-darwin-arm64@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/java-bridge-darwin-arm64/-/java-bridge-darwin-arm64-2.4.0.tgz#d339bb533536c21cc836ca099da8786d79be9302"
+  integrity sha512-dIFMV6w+lXnOU6xaeOmKsUOloIAzm577mkmi7Cim3Lue2nLZUFhDbwLiHTcnUTbq5+d7Qb8JbkdNTE2AjaPLmg==
+
+java-bridge-darwin-x64@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/java-bridge-darwin-x64/-/java-bridge-darwin-x64-2.4.0.tgz#21ec7c0605ac2fd51b98c8b2c297f14eac7a514a"
+  integrity sha512-2Fj9DUynyP6Wt6ceAmeCgkSaUkW20bOtRN/0JTqQe2wwFVGafFxzUjWUYygHlGG26Gtik3kJzic+c7Sxr1lFUQ==
+
+java-bridge-linux-arm64-gnu@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/java-bridge-linux-arm64-gnu/-/java-bridge-linux-arm64-gnu-2.4.0.tgz#0b9710309a6cd0e3688cf7cbd6e4f896ea68614a"
+  integrity sha512-5IyZ5t6JDxEgjsOazhS+ZyBFjpSKN2agNFuCuW+R8wQmZMj459kXhsIZEHujtp7MobmMXc1dTcwaV8n3mqaR1w==
+
+java-bridge-linux-x64-gnu@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/java-bridge-linux-x64-gnu/-/java-bridge-linux-x64-gnu-2.4.0.tgz#331368f5e112c8c6d1483721c6bd003530c674f0"
+  integrity sha512-9V6kRmEbX1FFGqzRWr+NK9jxf9otiw9wCuLBoLBj/iErAjQpia6l061Z7vydt5c4Yu/lk107oBUo/Hsbtc/syQ==
+
+java-bridge-win32-ia32-msvc@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/java-bridge-win32-ia32-msvc/-/java-bridge-win32-ia32-msvc-2.4.0.tgz#0d0e6fef379ae869ea0d8dc8afdbadafff9c2142"
+  integrity sha512-D+Im+AAiPgbT0BVWXbuSVQcbek4+VK6SHUVCXF4Gi02Yew/SJ+aNgIIkjP0TMVeYrxG1AlwcYQ80ahuzOm1acA==
+
+java-bridge-win32-x64-msvc@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/java-bridge-win32-x64-msvc/-/java-bridge-win32-x64-msvc-2.4.0.tgz#b70b60c59094afcc3440a0fbdf76b4aed030a74f"
+  integrity sha512-gK43rdXS6w7pNkz7DDHFnpj4A9v5yu5HPdFU4PankuQzlvLC5r4/S1hBXR4jvI5+md9c8LnvLaxLQwQ+OUfE8A==
+
+java-bridge@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/java-bridge/-/java-bridge-2.4.0.tgz#27ce751c271e41fa7379930dcc0a5c179262f4dc"
+  integrity sha512-KxJCs1DnmxPVol8N6+N7y89u9wfLG5oSkm0xoBBJ7CLEhuuTc/1hiFITjrEEub66AwNZDr2byYB5N2lbUQhrkg==
+  dependencies:
+    glob "^10.3.3"
+  optionalDependencies:
+    java-bridge-darwin-arm64 "2.4.0"
+    java-bridge-darwin-x64 "2.4.0"
+    java-bridge-linux-arm64-gnu "2.4.0"
+    java-bridge-linux-x64-gnu "2.4.0"
+    java-bridge-win32-ia32-msvc "2.4.0"
+    java-bridge-win32-x64-msvc "2.4.0"
 
 java@~0.13.0:
   version "0.13.0"
@@ -8247,6 +8302,11 @@ minipass@^5.0.0:
   resolved "https://registry.yarnpkg.com/minipass/-/minipass-6.0.2.tgz#542844b6c4ce95b202c0995b0a471f1229de4c81"
   integrity sha512-MzWSV5nYVT7mVyWCwn2o7JH13w2TBRmmSqSRCKzTw+lmft9X4z+3wjvs06Tzijo5z4W/kahUCDpRXTF+ZrmF/w==
 
+"minipass@^5.0.0 || ^6.0.2 || ^7.0.0":
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/minipass/-/minipass-7.0.3.tgz#05ea638da44e475037ed94d1c7efcc76a25e1974"
+  integrity sha512-LhbbwCfz3vsb12j/WkWQPZfKTsgqIe1Nf/ti1pKjYESGLHIVjWU96G9/ljLH4F9mWNVhlQOm0VySdAWzf05dpg==
+
 minizlib@^2.1.1, minizlib@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/minizlib/-/minizlib-2.1.2.tgz#e90d3466ba209b932451508a11ce3d3632145931"
@@ -8923,6 +8983,14 @@ path-scurry@^1.10.0:
   dependencies:
     lru-cache "^9.1.1 || ^10.0.0"
     minipass "^5.0.0 || ^6.0.2"
+
+path-scurry@^1.10.1:
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/path-scurry/-/path-scurry-1.10.1.tgz#9ba6bf5aa8500fe9fd67df4f0d9483b2b0bfc698"
+  integrity sha512-MkhCqzzBEpPvxxQ71Md0b1Kk51W01lrYvlMzSUaIzNsODdd7mqhiimSZlr+VegAz5Z6Vzt9Xg2ttE//XBhH3EQ==
+  dependencies:
+    lru-cache "^9.1.1 || ^10.0.0"
+    minipass "^5.0.0 || ^6.0.2 || ^7.0.0"
 
 path-to-regexp@0.1.7:
   version "0.1.7"

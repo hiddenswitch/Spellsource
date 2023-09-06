@@ -35,7 +35,7 @@ public class DiscoverOptionSpell extends Spell {
 		SpellDesc[] spellArray = (SpellDesc[]) desc.get(SpellArg.SPELLS);
 		spells.addAll(Arrays.asList(spellArray));
 
-		Map<String, Integer> spellOrder = new HashMap<>();
+		Map<String, Integer> spellOrder = new LinkedHashMap<>();
 		for (int i = 0; i < spells.size(); i++) {
 			SpellDesc spell = spells.get(i);
 			spellOrder.put(spell.getString(SpellArg.NAME), i);

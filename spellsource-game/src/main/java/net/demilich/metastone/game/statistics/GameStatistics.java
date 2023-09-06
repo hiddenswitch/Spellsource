@@ -8,10 +8,7 @@ import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.logic.GameLogic;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class collects a player's actions in a game.
@@ -21,8 +18,8 @@ import java.util.Map;
  */
 public class GameStatistics implements Cloneable, Serializable {
 	private final Map<Statistic, Object> stats = new EnumMap<>(Statistic.class);
-	private final Map<String, Map<Integer, Integer>> cardsPlayed = new HashMap<>();
-	private final Map<String, Integer> minionsSummoned = new HashMap<>();
+	private final Map<String, Map<Integer, Integer>> cardsPlayed = new LinkedHashMap<>();
+	private final Map<String, Integer> minionsSummoned = new LinkedHashMap<>();
 
 	private void add(Statistic key, long value) {
 		if (!stats.containsKey(key)) {
@@ -81,7 +78,7 @@ public class GameStatistics implements Cloneable, Serializable {
 		clone.stats.putAll(stats);
 		clone.cardsPlayed.putAll(getCardsPlayed());
 		for (var kv : cardsPlayed.entrySet()) {
-			var m = new HashMap<Integer, Integer>();
+			var m = new LinkedHashMap<Integer, Integer>();
 			for (var kv1 : kv.getValue().entrySet()) {
 				m.put(kv1.getKey(), kv1.getValue());
 			}
@@ -151,7 +148,7 @@ public class GameStatistics implements Cloneable, Serializable {
 		}
 		String cardId = card.getCardId();
 		if (!getCardsPlayed().containsKey(cardId)) {
-			getCardsPlayed().put(cardId, new HashMap<>());
+			getCardsPlayed().put(cardId, new LinkedHashMap<>());
 		}
 		if (!getCardsPlayed().get(cardId).containsKey(turn)) {
 			getCardsPlayed().get(cardId).put(turn, 0);
@@ -184,7 +181,7 @@ public class GameStatistics implements Cloneable, Serializable {
 		}
 		for (String cardId : otherStatistics.getCardsPlayed().keySet()) {
 			if (!getCardsPlayed().containsKey(cardId)) {
-				getCardsPlayed().put(cardId, new HashMap<Integer, Integer>());
+				getCardsPlayed().put(cardId, new LinkedHashMap<Integer, Integer>());
 			}
 			for (int turn : otherStatistics.getCardsPlayed().get(cardId).keySet()) {
 				if (!getCardsPlayed().get(cardId).containsKey(turn)) {

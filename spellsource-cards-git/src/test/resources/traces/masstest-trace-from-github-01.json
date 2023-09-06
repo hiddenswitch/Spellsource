@@ -1,0 +1,26 @@
+{
+  "seed" : -1852209498089347750,
+  "catalogueVersion" : 0,
+  "heroClasses" : [ "OFFWHITE", "CRIMSON" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "token_fragment", "minion_fel_manticore", "minion_ryoras_disciple", "minion_portal_keeper", "minion_fragment_wielder", "minion_bogovanis", "minion_babbling_prophet", "minion_fassnu_avenger", "token_fragment", "spell_insomnia", "minion_infinite_behemoth", "minion_mind_controlled_mech", "minion_tiny_persecutor", "minion_necksnapper", "minion_shadowheart", "minion_fassnu_avenger", "spell_touch_of_corruption", "minion_shadowheart", "spell_soulshackle", "minion_warclub_ruffian", "minion_mind_controlled_mech", "spell_banish_to_the_dream", "minion_nightmare_wraith", "minion_darkshard_duelist", "minion_the_grudge", "minion_end_reveler", "minion_colrum", "spell_feast_of_souls", "minion_sparkly_messenger", "minion_babbling_prophet" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_magma_hound", "minion_lingering_spirit", "minion_anarking", "pact_reinforcements", "minion_little_purrsuer", "minion_jungle_wanderer", "minion_tiny_persecutor", "spell_curse_on_strength", "pact_reinforcements", "minion_debt_collector", "minion_faldoran_the_ninja", "minion_necksnapper", "pact_punish_resistance", "minion_sinister_jailer", "minion_frontline_coward", "minion_bone_man", "minion_festivity_golem", "pact_extraction", "pact_soul_lightning", "pact_soul_lightning", "minion_alien_ravager", "minion_gasbelly_oni", "minion_crazed_wraith", "minion_fiery_warchief", "minion_gracious_timekeeper", "spell_desperate_act", "spell_recycle_the_dead", "minion_stallius_the_horned", "spell_plague_of_flesh", "minion_molten_cauterizer" ]
+  } ],
+  "deckFormatName" : "Pauper",
+  "deckFormatSets" : [ "VERDANT_DREAMS", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 52 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ ]
+  } ],
+  "actions" : [ 1, 1, 0, 0, 1, 0, 0, 2, 0, 2, 0, 6, 1, 2, 0, 0, 2, 0, 5, 13, 4, 1, 0, 1, 0, 2, 2, 2, 8, 1, 0, 0, 1, 3, 0, 4, 1, 2, 0, 0, 3, 6, 1, 4, 2, 0, 0, 0, 0, 4, 0, 1, 0, 2, 0, 0, 9, 16, 15, 7, 3, 1, 4, 10, 8, 1, 0, 0 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 4
+}

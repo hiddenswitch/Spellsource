@@ -104,15 +104,15 @@ public class AddDeathrattleSpell extends Spell {
 		Streams.concat(
 				desc.spellStream(0, false).map(as -> new CardAftermathTuple(as, source.getSourceCard())),
 				Arrays.stream(SpellUtils.getCards(context, desc)).filter(c -> c.getDesc().getDeathrattle() != null).map(c -> new CardAftermathTuple(c.getDesc().getDeathrattle(), c))
-		).forEach(a -> {
-			var spell = a.spell();
+		).forEach(aftermathCandidate -> {
+			var spell = aftermathCandidate.spell();
 			if (finalValue != null) {
 				spell = spell.addArg(SpellArg.VALUE, finalValue);
 			}
 			if (desc.containsKey(SpellArg.CARD)) {
 				spell = spell.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
 			}
-			var aftermath = spell.tryCreate(context, player, source, a.enchantmentSource(), target, true);
+			var aftermath = spell.tryCreate(context, player, source, aftermathCandidate.enchantmentSource(), target, true);
 			context.getLogic().addEnchantment(player, aftermath.orElseThrow(), source, target);
 		});
 	}

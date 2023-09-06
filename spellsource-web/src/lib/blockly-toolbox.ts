@@ -8,7 +8,7 @@ import { ImageDef } from "../__generated__/client";
 import { ToolboxSearchCategory } from "../components/blockly/toolbox-search-category";
 import { CardSearchCategory } from "../components/blockly/card-search-category";
 import { getBlockInfo } from "./blockly-utils";
-import { createConfiguration } from "../__generated__/comfyclient";
+import { createConfiguration } from "../__generated__/comfyclient/configuration";
 import StaticCategoryInfo = Blockly.utils.toolbox.StaticCategoryInfo;
 import ToolboxInfo = Blockly.utils.toolbox.ToolboxInfo;
 import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo;
@@ -99,8 +99,8 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
 
       category("Card Art", "#888888", "Blocks representing the art that your card can have", [
         /*category("Unused", "#888888", "Art that hasn't yet been used by a card", artContents(false)),
-        category("Used", "#888888", "Art that's been used by cards already", artContents(true)),
-        category("All", "#888888", "All available art", artContents(null)),*/
+                category("Used", "#888888", "Art that's been used by cards already", artContents(true)),
+                category("All", "#888888", "All available art", artContents(null)),*/
         generatedArtCategory(data),
         ...artCategories(),
       ]),
@@ -377,16 +377,16 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
         ),
 
         /* Not sure if these are actually going to be needed
-          category('Text', '160',
-            "Test",
-            simpleContents('text')
-          ),
-  
-          category('Lists', '260',
-            "Test",
-            simpleContents('list')
-          ),
-          */
+                  category('Text', '160',
+                    "Test",
+                    simpleContents('text')
+                  ),
+          
+                  category('Lists', '260',
+                    "Test",
+                    simpleContents('list')
+                  ),
+                  */
       ]),
     ],
   } as ToolboxInfo;

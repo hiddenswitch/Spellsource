@@ -1,14 +1,8 @@
 package com.hiddenswitch.spellsource.tests.cards;
 
-import com.google.common.collect.Maps;
-import com.hiddenswitch.spellsource.rpc.Spellsource;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
-import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.logic.Trace;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.parallel.Execution;
@@ -21,10 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
@@ -38,7 +29,7 @@ public class MassTest extends TestBase {
 	private static final Path path2 = FileSystems.getDefault().getPath("cards", "src", "test", "resources", "traces");
 
 	private static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MassTest.class);
-	private static ClasspathCardCatalogue catalogueWithExceptions;
+	private static ClasspathCardCatalogue catalogueWithExceptions = new TestClasspathCardCatalogue();
 
 	/**
 	 * Saves a trace to a path, trying to find a path to a directory that exists before attempting to save there.
@@ -71,66 +62,7 @@ public class MassTest extends TestBase {
 
 	@BeforeAll
 	public static void configureCardCatalogue() {
-		var initializing = new AtomicBoolean(true);
-		catalogueWithExceptions = new ClasspathCardCatalogue() {
-
-			@Override
-			public @NotNull CardList query(DeckFormat deckFormat, Spellsource.CardTypeMessage.CardType cardType, Spellsource.RarityMessage.Rarity rarity, String heroClass, Attribute tag, boolean clone) {
-				var cards = super.query(deckFormat, cardType, rarity, heroClass, tag, clone);
-				if (!initializing.get() && cards.stream().anyMatch(card -> CardSet.TEST.equals(card.getCardSet()))) {
-					throw new IllegalStateException("return test");
-				}
-				return cards;
-			}
-
-			@Override
-			public CardList queryUncollectible(DeckFormat deckFormat) {
-				var cards = super.queryUncollectible(deckFormat);
-				if (!initializing.get() && cards.stream().anyMatch(card -> CardSet.TEST.equals(card.getCardSet()))) {
-					throw new IllegalStateException("returned test");
-				}
-				return cards;
-			}
-
-			@Override
-			public @NotNull Card getCardById(@NotNull String id) {
-				var card = super.getCardById(id);
-				if (!initializing.get() && CardSet.TEST.equals(card.getCardSet())) {
-					throw new IllegalStateException("returned test");
-				}
-				return card;
-			}
-
-			@Override
-			public @NotNull Map<String, Card> getCards() {
-				var cards = super.getCards();
-				return Maps.transformValues(cards, card -> {
-					if (CardSet.TEST.equals(card.getCardSet())) {
-						throw new IllegalStateException("returned test");
-					}
-					return card;
-				});
-			}
-
-			@Override
-			public @NotNull Map<String, CardCatalogueRecord> getRecords() {
-				var records = super.getRecords();
-				return Maps.transformValues(records, record -> {
-					if (CardSet.TEST.equals(record.getDesc().getSet())) {
-						throw new IllegalStateException("returned test");
-					}
-					return record;
-				});
-			}
-
-			@Override
-			protected void updatedWith(Map<String, CardDesc> cardDescs) {
-				var filtered = Maps.filterValues(cardDescs, desc -> !Objects.equals(desc.getSet(), CardSet.TEST));
-				super.updatedWith(filtered);
-			}
-		};
 		catalogueWithExceptions.loadCardsFromPackage();
-		initializing.set(false);
 	}
 
 	/**
@@ -163,4 +95,5 @@ public class MassTest extends TestBase {
 			throw any;
 		}
 	}
+
 }

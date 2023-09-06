@@ -1,6 +1,4 @@
-import java from "java";
-// todo: this has to use a real path
-java.classpath.push(`${__dirname}/../../../spellsource-web-cardeditor-support/build/libs/spellsource-web-cardeditor-support-all.jar`);
+import { java } from "./java";
 
 export default class SpellsourceTesting {
   // todo: this will have to migrate to some kind of session or context, because it should retrieve the card text from sql

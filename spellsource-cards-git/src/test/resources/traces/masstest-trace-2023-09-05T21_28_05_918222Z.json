@@ -1,0 +1,26 @@
+{
+  "seed" : -1876272800547247337,
+  "catalogueVersion" : 0,
+  "heroClasses" : [ "LIGHTBROWN", "ROSE" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "spell_blast_apart", "minion_swarmed_captive", "minion_pixie_knight", "minion_beloved_benji", "minion_rejan_last_defender", "minion_slitherbow", "spell_blast_apart_2", "spell_shelter", "minion_mosshorn", "minion_dreamway_whale", "minion_bone_guard", "minion_trigger_happy_survivor", "minion_farseer_kethaan", "minion_reckless_giant", "spell_sword_in_stone", "minion_streetwise_specialist", "weapon_rustblade", "minion_blackflame_bomber", "weapon_gravekeepers_scythe", "weapon_the_bulldozer", "minion_desolate_sandstorm", "spell_plant_plating", "minion_paleontologist", "minion_lava_pebble", "minion_thrakul_the_armorhulk", "minion_flingin_alchemist", "minion_matriarch_aiiran", "minion_nightmare_dragonflight", "minion_shedding_chameleon", "minion_holy_bulwark" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_tiki_tokens", "minion_the_grudge", "minion_titanic_fanatic", "minion_gracious_timekeeper", "minion_rafaam_archivist", "spell_marked_for_sacrifice", "minion_highmountain_primalist", "minion_miniature_gunner", "minion_magelight_dragon", "minion_molten_cauterizer", "spell_spiritual_diffusion", "spell_wicked_insight", "minion_hostile_snapdragon", "minion_gaitha_the_protector", "minion_aegwynn", "minion_krentiaxx_prowler", "spell_bat-talion", "minion_ritual_shaman", "minion_zalmah", "minion_jungle_survivalist", "minion_sourceborn_aelin", "minion_uccian_hydra", "minion_dead_horse", "minion_chaotic_cutthroat", "spell_bottled_spirit", "minion_whiptail_gatherer", "minion_deranged_greengill", "minion_sleepy_scarecrow", "minion_peacock_mystic", "spell_split_personality" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "CORE", "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 1,
+    "entityIds" : [ 51, 64 ]
+  }, {
+    "playerId" : 0,
+    "entityIds" : [ ]
+  } ],
+  "actions" : [ 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 4, 0, 2, 1, 0, 10, 10, 10, 0, 2, 0, 18, 22, 1, 18, 15, 13, 2, 3, 4, 0, 22, 11, 1, 2, 2, 3, 11, 0, 0, 14, 0, 1, 0, 0, 1, 12, 10, 23, 8, 0, 3, 2, 12, 13, 2, 0, 9, 28, 23, 2, 6, 0, 1, 7, 3, 1, 0, 0, 9, 4, 0, 8, 6, 3, 0, 0, 13, 10, 2, 0, 0, 3, 0, 0, 7, 1, 9, 1, 2, 6, 6, 0, 0, 10, 16, 4, 0, 11, 7, 1, 5, 1, 2, 0, 12, 8, 2, 2, 8, 1 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 5
+}

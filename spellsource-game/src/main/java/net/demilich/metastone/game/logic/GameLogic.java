@@ -163,7 +163,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @see #silence(int, Actor) for the silence game logic.
 	 */
-	public static final Set<Attribute> IMMUNE_TO_SILENCE = new HashSet<>();
+	public static final Set<Attribute> IMMUNE_TO_SILENCE = new LinkedHashSet<>();
 	public static final int INFINITE = -1;
 	public static final String DEFAULT_SIGNATURE = "token_berry";
 	/**
@@ -1810,7 +1810,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	public void destroy(Actor... targets) {
 		// Reverse the targets
-		Map<Actor, EntityLocation> previousLocations = new HashMap<>();
+		Map<Actor, EntityLocation> previousLocations = new LinkedHashMap<>();
 
 		List<Actor> reversed = new ArrayList<>(Arrays.asList(targets));
 

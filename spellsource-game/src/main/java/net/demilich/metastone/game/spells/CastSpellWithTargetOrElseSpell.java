@@ -14,11 +14,12 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * Tries to cast the spell card (given either by {@link SpellArg#CARD} or {@link SpellArg#SECONDARY_TARGET}) onto the specified
- * target. If that is unable to happen, then the {@link SpellArg#SPELL} is cast instead, with the card's id passed down into the
- * {@link SpellArg#CARD} attribute.
+ * Tries to cast the spell card (given either by {@link SpellArg#CARD} or {@link SpellArg#SECONDARY_TARGET}) onto the
+ * specified target. If that is unable to happen, then the {@link SpellArg#SPELL} is cast instead, with the card's id
+ * passed down into the {@link SpellArg#CARD} attribute.
  * <p>
- * If a {@link SpellArg#TRIGGER} is specified, then it is used to delay the casting of the spell until that event occurs.
+ * If a {@link SpellArg#TRIGGER} is specified, then it is used to delay the casting of the spell until that event
+ * occurs.
  * <p>
  * See Finale Architect
  */
@@ -40,7 +41,12 @@ public class CastSpellWithTargetOrElseSpell extends Spell {
 		Entity secondaryTarget = context.resolveSingleTarget(player, source, desc.getSecondaryTarget());
 
 		if (!card.isSpell()) {
-			LOGGER.error("Needs to be a spell");
+			LOGGER.error("onCast {} {}: Card unexpectedly was not a spell, was {}", context.getGameId(), source, card);
+		}
+
+		if (card.getSpell() == null) {
+			LOGGER.error("onCast {} {}: Spell unexpectedly null, card was {}, target was {}", context.getGameId(), source, card, target);
+			return;
 		}
 
 		SpellDesc orElse = desc.getSpell();
@@ -52,7 +58,10 @@ public class CastSpellWithTargetOrElseSpell extends Spell {
 			if (card.getTargetSelection() != TargetSelection.NONE && target != null) {
 				thisButLater.put(SpellArg.SECONDARY_TARGET, target.getReference());
 			}
+
 			thisButLater.put(SpellArg.TARGET, card.getReference());
+			// sometimes the card that this is cast on is from the catalogue, so we'll write down the card ID too
+			thisButLater.put(SpellArg.CARD, card.getCardId());
 			trigger.setSpell(thisButLater);
 			SpellDesc addEnchantmentSpellDesc = AddEnchantmentSpell.create(trigger);
 			SpellUtils.castChildSpell(context, player, addEnchantmentSpellDesc, source, player);

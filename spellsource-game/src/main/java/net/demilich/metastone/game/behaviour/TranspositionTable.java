@@ -7,6 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class TranspositionTable {
 
@@ -29,9 +30,9 @@ public class TranspositionTable {
 		return hash;
 	}
 
-	private HashMap<Integer, Double> knownScores = new HashMap<Integer, Double>();
+	private HashMap<Integer, Double> knownScores = new LinkedHashMap<Integer, Double>();
 
-	// private HashMap<Integer, GameContext> debug = new HashMap<Integer,
+	// private HashMap<Integer, GameContext> debug = new LinkedHashMap<Integer,
 	// GameContext>();
 	private int cachedKey;
 

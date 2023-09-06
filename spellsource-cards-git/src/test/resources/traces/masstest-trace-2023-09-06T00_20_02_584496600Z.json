@@ -1,0 +1,26 @@
+{
+  "seed" : 4173478422748358222,
+  "catalogueVersion" : 0,
+  "heroClasses" : [ "CANDY", "CRIMSON" ],
+  "deckCardIds" : [ {
+    "playerId" : 0,
+    "cardIds" : [ "minion_infinite_behemoth", "minion_ironplate_samurai", "minion_bittertide_crab", "minion_aeonus", "minion_emerald_cleanser", "spell_star_performance", "minion_the_grudge", "spell_meteor_spin", "minion_finale_architect", "spell_living_firework", "minion_wild_pyrodancer", "weapon_twirling_baton", "spell_living_firework", "spell_practice", "minion_vitium_surger", "spell_costume_draft", "minion_savage_dancer", "spell_frog_song", "minion_finale_architect", "spell_dining_dash", "minion_hoffis_the_dunewalker", "spell_night_of_a_lifetime", "minion_river_reveler", "minion_doodles", "minion_mighty_mufunga", "weapon_dancer's_torch", "spell_practice", "minion_streetwise_specialist", "minion_dragon_pod", "minion_jungle_wanderer" ]
+  }, {
+    "playerId" : 1,
+    "cardIds" : [ "minion_smogg", "minion_dark_artist", "minion_redhide_butcher", "minion_articus__dragon_giant", "pact_binding_nightmare", "minion_recruit_barracks", "pact_building_forces", "minion_underworld_guard", "pact_binding_nightmare", "minion_amathyst_panther", "spell_boon_of_the_dead", "minion_champion_of_death", "minion_oppressor_defender", "minion_fae_wraith_caroline", "minion_festivity_golem", "minion_harbinger_of_hope", "minion_bone_man", "minion_magic_glutton", "spell_blood_cleave", "spell_curse_on_strength", "minion_sinister_jailer", "minion_tiny_persecutor", "minion_zathahun_bloodthirsty", "minion_lava_manticore", "minion_cacodemon", "minion_doodles_v2", "minion_henchman_helper", "minion_lord_of_the_sea", "minion_flare_fireworker", "minion_alien_ravager" ]
+  } ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "CORE", "VERDANT_DREAMS", "SPELLSOURCE", "SANDS_OF_TIME", "WHAT_LIES_BENEATH", "BATTLE_FOR_ASHENVALE", "CUSTOM", "SPELLSOURCE_BASIC", "SOURCESTORM" ],
+  "secondPlayerBonusCards" : [ "spell_lunstone" ],
+  "mulligans" : [ {
+    "playerId" : 0,
+    "entityIds" : [ 29 ]
+  }, {
+    "playerId" : 1,
+    "entityIds" : [ 45 ]
+  } ],
+  "actions" : [ 0, 2, 1, 1, 0, 1, 0, 0, 1, 5, 4, 0, 7, 2, 9, 2, 0, 16, 6, 3, 15, 3, 0, 16, 0, 2, 6, 2, 0, 0, 9, 4, 4, 1, 0, 10, 12, 5, 2, 21, 7, 3, 3, 15, 0, 8 ],
+  "id" : null,
+  "traceErrors" : true,
+  "version" : 5
+}

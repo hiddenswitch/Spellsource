@@ -31,10 +31,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -60,7 +57,7 @@ import java.util.stream.Collectors;
  */
 public class Player extends Entity implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Map<Integer, Entity> lookup = new HashMap<>(55);
+	private Map<Integer, Entity> lookup = new LinkedHashMap<>(55);
 	protected CardZone deck = new CardZone(getId(), Zones.DECK, lookup);
 	private CardZone hand = new CardZone(getId(), Zones.HAND, lookup);
 	private CardZone discoverZone = new CardZone(getId(), Zones.DISCOVER, lookup);
@@ -131,7 +128,7 @@ public class Player extends Entity implements Serializable {
 		this.maxMana = otherPlayer.maxMana;
 		this.lockedMana = otherPlayer.lockedMana;
 		this.statistics = otherPlayer.getStatistics().clone();
-		this.lookup = new HashMap<>(playerZone.size()
+		this.lookup = new LinkedHashMap<>(playerZone.size()
 				+ secretZone.size()
 				+ quests.size()
 				+ deck.size()

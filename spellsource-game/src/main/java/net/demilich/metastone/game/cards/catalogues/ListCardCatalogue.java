@@ -39,17 +39,17 @@ public class ListCardCatalogue implements CardCatalogue {
 	}
 
 	protected final ReadWriteLock lock = new ReentrantReadWriteLock();
-	protected final Map<String, DeckFormat> formatsByName = new HashMap<>(64);
-	protected final Set<String> bannedCardIds = new HashSet<>();
-	protected final Set<String> hardRemovalCardIds = new HashSet<>();
-	protected final Map<String, Card> cards = new HashMap<>(8196);
-	protected final Map<String, CardCatalogueRecord> records = new HashMap<>(8196);
-	protected final Multimap<String, CardCatalogueRecord> recordsByName = Multimaps.newSetMultimap(new HashMap<>(8196), HashSet::new);
-	protected final Map<String, Card> classCards = new HashMap<>(64);
-	protected final Map<String, Card> heroCards = new HashMap<>(64);
-	protected final Map<String, Card> formatCardsByName = new HashMap<>(64);
-	protected final Multimap<DeckFormat, Card> classCardsForFormat = Multimaps.newSetMultimap(new HashMap<>(64), HashSet::new);
-	protected final Multimap<DeckFormat, String> baseClassesForFormat = Multimaps.newSetMultimap(new HashMap<>(64), HashSet::new);
+	protected final Map<String, DeckFormat> formatsByName = new LinkedHashMap<>(64);
+	protected final Set<String> bannedCardIds = new LinkedHashSet<>();
+	protected final Set<String> hardRemovalCardIds = new LinkedHashSet<>();
+	protected final Map<String, Card> cards = new LinkedHashMap<>(8196);
+	protected final Map<String, CardCatalogueRecord> records = new LinkedHashMap<>(8196);
+	protected final Multimap<String, CardCatalogueRecord> recordsByName = Multimaps.newSetMultimap(new LinkedHashMap<>(8196), HashSet::new);
+	protected final Map<String, Card> classCards = new LinkedHashMap<>(64);
+	protected final Map<String, Card> heroCards = new LinkedHashMap<>(64);
+	protected final Map<String, Card> formatCardsByName = new LinkedHashMap<>(64);
+	protected final Multimap<DeckFormat, Card> classCardsForFormat = Multimaps.newSetMultimap(new LinkedHashMap<>(64), LinkedHashSet::new);
+	protected final Multimap<DeckFormat, String> baseClassesForFormat = Multimaps.newSetMultimap(new LinkedHashMap<>(64), LinkedHashSet::new);
 
 	@Override
 	public Map<String, DeckFormat> formats() {
@@ -399,7 +399,7 @@ public class ListCardCatalogue implements CardCatalogue {
 	 * @param inputStreams
 	 */
 	public void loadCards(Collection<ResourceInputStream> inputStreams) {
-		Map<String, CardDesc> cardDescs = new HashMap<>();
+		Map<String, CardDesc> cardDescs = new LinkedHashMap<>();
 		var cardParser = new CardParser();
 
 		for (var resourceInputStream : inputStreams) {
@@ -426,7 +426,10 @@ public class ListCardCatalogue implements CardCatalogue {
 		Async.lock(lock.writeLock());
 		try {
 			var newCards = new ArrayList<Card>(cardDescs.size());
-			for (var desc : cardDescs.values()) {
+			// sort so that this is more consistent
+			List<CardDesc> values = new ArrayList<>(cardDescs.values());
+			values.sort(Comparator.comparing(CardDesc::getId));
+			for (var desc : values) {
 				// TODO more manual checks for whether a card is valid for play (references nonexistent cards / attributes / etc)
 				var instance = desc.create();
 				newCards.add(instance);
