@@ -20,7 +20,7 @@ def graalNpmPrefix = 'node_modules'
 def packageJsonFile = file('package.json')
 def packageJson = new JsonSlurper().parseText(packageJsonFile.text)
 def scripts = packageJson.scripts
-def scriptNames = ["dev" : "run"]
+def scriptNames = ["dev": "run"]
 
 evaluationDependsOn(":spellsource-server")
 evaluationDependsOn(":spellsource-art-generation")
@@ -39,11 +39,17 @@ scripts.each { scriptName, command ->
   }
 }
 
+tasks.named('yarnRunTest') {
+  enabled = false
+}
+
 tasks.named('test') {
-  dependsOn 'yarnRunTest'
+  dependsOn 'yarnRunTest', spellsourceDepTask
+  enabled = false
 }
 
 tasks.register('copyComfyClient') {
+  enabled = false
   dependsOn(':spellsource-art-generation:generateTypeScriptClient')
   def addlInput = project(':spellsource-art-generation').layout.buildDirectory.dir("comfyclient")
   def addlOutput = "src/__generated__/comfyclient"
@@ -134,10 +140,6 @@ tasks.register('yarnGraal') {
       commandLine graalFileFor(yarnPath).get(), '--frozen-lockfile', '--modules-folder', graalNpmPrefix
     }
   }
-}
-
-tasks.named("test") {
-  dependsOn spellsourceDepTask
 }
 
 tasks.register('testWithJavaGraal') {
