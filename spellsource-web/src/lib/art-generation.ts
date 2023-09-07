@@ -72,7 +72,7 @@ const onRequestStop = (block: Block) => {
   }
 
   if (!block.isDisposed()) {
-    const baseArgs = Object.fromEntries(argsList(Blockly.Blocks["ArtGen_Factory"].json).map((arg) => [arg.name, arg]));
+    const baseArgs = Object.fromEntries(argsList(Blockly.Blocks[block.type].json).map((arg) => [arg.name, arg]));
     block.setFieldValue(baseArgs["counter"].text, "counter");
     block.setFieldValue(baseArgs["button"].text, "button");
   }

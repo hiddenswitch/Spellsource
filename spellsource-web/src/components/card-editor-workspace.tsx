@@ -361,6 +361,7 @@ const CardEditorWorkspace = forwardRef(
             minScale: 0.5,
             maxScale: 2.0,
             pinch: true,
+            wheel: true,
             startScale: xs ? 0.75 : 1,
           },
           move: {

@@ -288,3 +288,18 @@ details {
 summary {
   margin-bottom: 10px;
 }
+
+.hover-zoom,
+.hover-zoom img {
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Apply zoom effect to the image itself when hovered */
+img.hover-zoom:hover {
+  transform: scale(1.1);
+}
+
+/* Apply zoom effect to descendant images when the parent with .hover-zoom class is hovered */
+.hover-zoom:hover img {
+  transform: scale(1.1);
+}

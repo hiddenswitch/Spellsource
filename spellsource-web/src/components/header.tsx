@@ -42,9 +42,9 @@ const DesktopNavbar = ({ pages }: { pages?: ReactNode }) => {
   return (
     <ul className={styles.desktopNavbar}>
       {/*<li key={'search'}><Search placeholder={'Search'}/></li>*/}
-      <li key={"javadocs"}>
+      {/*<li key={"javadocs"}>
         <a href="/javadoc">Docs</a>
-      </li>
+      </li>*/}
       {pages}
       {/* <li key={'download'}><Link href="/download">Play Now</Link></li> */}
     </ul>

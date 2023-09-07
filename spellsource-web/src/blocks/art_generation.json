@@ -54,6 +54,69 @@
     ]
   },
   {
+    "type": "ArtGen_Factory2",
+    "colour": "#A6A6A6",
+    "nextStatement": [
+      "ArtGen_Output"
+    ],
+    "hat": "cap",
+    "message0": "Art Factory",
+    "args0": [],
+    "message1": "Seed %1 %2",
+    "args1": [
+      {
+        "type": "field_number",
+        "name": "seed",
+        "value": "1701",
+        "precision": 1
+      },
+      {
+        "type": "field_button",
+        "text": "Randomize",
+        "callbackKey": "randomizeSeed"
+      }
+    ],
+    "message2": "Portrait of a(n) %1",
+    "args2": [
+      {
+        "type": "input_value",
+        "name": "positive_text",
+        "check": "ArtGen_Noun",
+        "shadow": {
+          "type": "ArtGen_Noun_SHADOW"
+        }
+      }
+    ],
+    "message3": "that doesn't have any",
+    "args3": [
+    ],
+    "message4": "%1",
+    "args4": [
+      {
+        "type": "input_statement",
+        "name": "negative_text",
+        "check": "ArtGen_Noun[]",
+        "shadow": {
+          "type": "ArtGen_Noun[]"
+        }
+      }
+    ],
+    "message5": "Generate: %1 %2",
+    "args5": [
+      {
+        "type": "field_button",
+        "name": "button",
+        "text": "Start",
+        "callbackKey": "generateArt"
+      },
+      {
+        "type": "field_label",
+        "name": "counter",
+        "text": ""
+      }
+    ]
+  },
+  {
     "type": "Art_Output",
     "colour": "#A6A6A6",
     "previousStatement": [
@@ -96,18 +159,6 @@
     "data": "{src}"
   },
   {
-    "type": "ArtGen_keywords_medieval_SHADOW",
-    "colour": "#A6A6A6",
-    "previousStatement": [
-      "ArtGen_keyword"
-    ],
-    "nextStatement": [
-      "ArtGen_keyword"
-    ],
-    "message0": "Medieval",
-    "data": "medieval"
-  },
-  {
     "type": "ArtGen_keyword_SHADOW",
     "colour": "#A6A6A6",
     "message0": "Keywords",
@@ -118,5 +169,133 @@
       "ArtGen_keyword"
     ],
     "tooltip": "Add keywords to your art"
+  },
+  {
+    "type": "ArtGen_Noun_Phrase",
+    "colour": "#A6A6A6",
+    "output": "ArtGen_Noun",
+    "message0": "%1 %2",
+    "inputsInline": true,
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "adjective",
+        "check": "ArtGen_Adjective",
+        "shadow": {
+          "type": "ArtGen_Adjective_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "noun",
+        "check": "ArtGen_Noun",
+        "shadow": {
+          "type": "ArtGen_Noun_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "ArtGen_Holding",
+    "colour": "#A6A6A6",
+    "output": "ArtGen_Noun",
+    "message0": "%1 holding a(n) %2",
+    "inputsInline": true,
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "noun",
+        "check": "ArtGen_Noun",
+        "shadow": {
+          "type": "ArtGen_Noun_SHADOW"
+        }
+      },
+      {
+        "type": "input_value",
+        "name": "holding",
+        "check": "ArtGen_Noun",
+        "shadow": {
+          "type": "ArtGen_Noun_SHADOW"
+        }
+      }
+    ]
+  },
+  {
+    "type": "ArtGen_Noun_Animal_Cat",
+    "colour": "#A6A6A6",
+    "output": "ArtGen_Noun",
+    "message0": "Cat",
+    "data": "Cat"
+  },
+  {
+    "type": "ArtGen_Noun_Dog",
+    "colour": "#A6A6A6",
+    "output": "ArtGen_Noun",
+    "message0": "Dog",
+    "data": "Dog"
+  },
+  {
+    "type": "ArtGen_Noun_Animal_Dog",
+    "colour": "#A6A6A6",
+    "output": "ArtGen_Noun",
+    "message0": "Dog",
+    "data": "Dog"
+  },
+  {
+    "type": "ArtGen_Noun[]",
+    "colour": "#A6A6A6",
+    "previousStatement": "ArtGen_Noun[]",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_plus"
+      }
+    ],
+    "message1": "%1%2%3",
+    "args1": [
+      {
+        "type": "field_plus"
+      },
+      {
+        "type": "field_minus"
+      },
+      {
+        "type": "input_value",
+        "name": "i",
+        "check": "ArtGen_Noun",
+        "shadow": {
+          "type": "ArtGen_Noun_SHADOW"
+        }
+      }
+    ],
+    "mutator": "plus_minus_rows"
+  },
+  {
+    "type": "ArtGen_Noun_SHADOW",
+    "colour": "#A6A6A6",
+    "output": "ArtGen_Noun",
+    "message0": "Noun",
+    "data": ""
+  },
+  {
+    "type": "ArtGen_Adjective_Cute",
+    "colour": "#A6A6A6",
+    "output": "ArtGen_Adjective",
+    "message0": "Cute",
+    "data": "Cute"
+  },
+  {
+    "type": "ArtGen_Adjective_Medieval",
+    "colour": "#A6A6A6",
+    "output": "ArtGen_Adjective",
+    "message0": "Medieval",
+    "data": "Medieval"
+  },
+  {
+    "type": "ArtGen_Adjective_SHADOW",
+    "colour": "#A6A6A6",
+    "output": "ArtGen_Adjective",
+    "message0": "Adjective",
+    "data": ""
   }
 ]

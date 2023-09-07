@@ -10,7 +10,9 @@ export const AuthButton = () => {
       className={styles.loginButton}
       onClick={async () => {
         if (status === "unauthenticated") {
-          await signIn("keycloak", { callbackUrl: window.location.href });
+          await signIn("keycloak", {
+            callbackUrl: window.location.pathname !== "/" ? window.location.href : window.location.href + "/home",
+          });
         } else if (status === "authenticated") {
           await signOut({ callbackUrl: window.location.origin });
         }

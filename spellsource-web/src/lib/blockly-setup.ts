@@ -28,6 +28,7 @@ import { generateArt, randomizeSeed } from "./art-generation";
 import { FieldImageSerializable } from "../components/blockly/field-image-serializable";
 import { ContextType } from "react";
 import { BlocklyDataContext } from "../pages/card-editor";
+import { workspaceCopy, workspaceCut, workspacePaste } from "./blockly-shortcuts";
 
 export const registerAll = (options?: InitBlockOptions) => {
   Blockly.fieldRegistry.register(FieldHidden.type, FieldHidden);
@@ -68,6 +69,63 @@ export const registerAll = (options?: InitBlockOptions) => {
 
   Blockly.Extensions.registerMutator(OptionalRows, OptionalRowsMixin, OptionalRowsFn);
   Blockly.Extensions.registerMutator(PlusMinusRows, PlusMinusRowsMixin, PlusMinusRowsFn);
+
+
+
+  Blockly.ShortcutRegistry.registry.unregister(
+    Blockly.ShortcutItems.names.PASTE
+  );
+  Blockly.ShortcutRegistry.registry.register(workspacePaste);
+  const ctrlV = Blockly.ShortcutRegistry.registry.createSerializedKey(
+    Blockly.utils.KeyCodes.V,
+    [Blockly.utils.KeyCodes.CTRL]
+  );
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+    ctrlV,
+    Blockly.ShortcutItems.names.PASTE
+  );
+  const altV = Blockly.ShortcutRegistry.registry.createSerializedKey(
+    Blockly.utils.KeyCodes.V,
+    [Blockly.utils.KeyCodes.ALT]
+  );
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+    altV,
+    Blockly.ShortcutItems.names.PASTE
+  );
+
+  Blockly.ShortcutRegistry.registry.unregister(
+    Blockly.ShortcutItems.names.COPY
+  );
+  Blockly.ShortcutRegistry.registry.register(workspaceCopy);
+  const ctrlC = Blockly.ShortcutRegistry.registry.createSerializedKey(
+    Blockly.utils.KeyCodes.C,
+    [Blockly.utils.KeyCodes.CTRL]
+  );
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+    ctrlC,
+    Blockly.ShortcutItems.names.COPY
+  );
+  const altC = Blockly.ShortcutRegistry.registry.createSerializedKey(
+    Blockly.utils.KeyCodes.C,
+    [Blockly.utils.KeyCodes.ALT]
+  );
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+    altC,
+    Blockly.ShortcutItems.names.COPY
+  );
+
+  Blockly.ShortcutRegistry.registry.unregister(Blockly.ShortcutItems.names.CUT);
+  Blockly.ShortcutRegistry.registry.register(workspaceCut);
+  const ctrlX = Blockly.ShortcutRegistry.registry.createSerializedKey(
+    Blockly.utils.KeyCodes.X,
+    [Blockly.utils.KeyCodes.CTRL]
+  );
+  Blockly.ShortcutRegistry.registry.addKeyMapping(
+    ctrlX,
+    Blockly.ShortcutItems.names.CUT
+  );
+  
+  
 
   if (options) {
     BlocklyContextMenu.registerAll(options);
