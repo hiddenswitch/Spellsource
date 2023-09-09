@@ -21,6 +21,7 @@ import com.hiddenswitch.framework.schema.spellsource.routines.GetUserId;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishGitCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.SaveCard;
+import com.hiddenswitch.framework.schema.spellsource.routines.SaveGeneratedArt;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueFormats;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBannedDraftCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBaseClasses;
@@ -44,6 +45,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsInDeckR
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.ClassesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.GeneratedArtRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GetClassesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.GetCollectionCardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.SetCardsInDeckRecord;
@@ -54,7 +56,6 @@ import org.jooq.Configuration;
 import org.jooq.Field;
 import org.jooq.JSON;
 import org.jooq.Result;
-import org.jooq.XML;
 
 
 /**
@@ -711,7 +712,7 @@ public class Routines {
     public static CardsRecord saveCard(
           Configuration configuration
         , String cardId
-        , XML workspace
+        , JsonObject workspace
         , JsonObject json
     ) {
         SaveCard f = new SaveCard();
@@ -728,7 +729,7 @@ public class Routines {
      */
     public static Field<CardsRecord> saveCard(
           String cardId
-        , XML workspace
+        , JsonObject workspace
         , JsonObject json
     ) {
         SaveCard f = new SaveCard();
@@ -744,13 +745,63 @@ public class Routines {
      */
     public static Field<CardsRecord> saveCard(
           Field<String> cardId
-        , Field<XML> workspace
+        , Field<JsonObject> workspace
         , Field<JsonObject> json
     ) {
         SaveCard f = new SaveCard();
         f.setCardId(cardId);
         f.setWorkspace(workspace);
         f.setJson(json);
+
+        return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.save_generated_art</code>
+     */
+    public static GeneratedArtRecord saveGeneratedArt(
+          Configuration configuration
+        , String digest
+        , String[] links
+        , JsonObject extraInfo
+    ) {
+        SaveGeneratedArt f = new SaveGeneratedArt();
+        f.setDigest(digest);
+        f.setLinks(links);
+        f.setExtraInfo(extraInfo);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.save_generated_art</code> as a field.
+     */
+    public static Field<GeneratedArtRecord> saveGeneratedArt(
+          String digest
+        , String[] links
+        , JsonObject extraInfo
+    ) {
+        SaveGeneratedArt f = new SaveGeneratedArt();
+        f.setDigest(digest);
+        f.setLinks(links);
+        f.setExtraInfo(extraInfo);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.save_generated_art</code> as a field.
+     */
+    public static Field<GeneratedArtRecord> saveGeneratedArt(
+          Field<String> digest
+        , Field<String[]> links
+        , Field<JsonObject> extraInfo
+    ) {
+        SaveGeneratedArt f = new SaveGeneratedArt();
+        f.setDigest(digest);
+        f.setLinks(links);
+        f.setExtraInfo(extraInfo);
 
         return f.asField();
     }

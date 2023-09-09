@@ -3,6 +3,7 @@ package com.hiddenswitch.framework;
 import com.github.marschall.micrometer.jfr.JfrMeterRegistry;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Streams;
+import com.google.common.hash.Hashing;
 import com.google.protobuf.Parser;
 import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.impl.*;
@@ -20,6 +21,7 @@ import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpConnection;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
+import io.vertx.core.json.Json;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.core.tracing.TracingOptions;
 import io.vertx.ext.cluster.infinispan.InfinispanClusterManager;
@@ -31,6 +33,8 @@ import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.*;
 import io.vertx.sqlclient.Row;
 import io.vertx.tracing.opentracing.OpenTracingOptions;
+import net.demilich.metastone.game.cards.CardCatalogueRecord;
+import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.output.MigrateResult;
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +59,7 @@ import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
@@ -72,6 +77,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static com.hiddenswitch.protos.Serialization.configureSerialization;
+import static io.vertx.await.Async.await;
 
 public class Environment {
 	private final static Logger LOGGER = LoggerFactory.getLogger(Environment.class);
@@ -99,6 +105,7 @@ public class Environment {
 	private static RedissonClient redissonClientConstructor(Vertx vertx) {
 		var configuration = getConfiguration();
 		var config = new Config();
+		// todo: this should probably come out of the configuration, shouldn't it?
 		config.useSingleServer().setAddress(configuration.getRedis().getUri());
 		return Redisson.create(config);
 	}
@@ -590,7 +597,7 @@ public class Environment {
 				.set(record);
 	}
 
-	static <T> RMapCacheAsync<String, T> cache(String name, Parser<T> parser) {
+	public static <T> RMapCacheAsync<String, T> cache(String name, Parser<T> parser) {
 		return redisson().getMapCache(name, new CompositeCodec(new StringCodec(), new RedissonProtobufCodec(parser)));
 	}
 
@@ -623,6 +630,32 @@ public class Environment {
 		connection.pingHandler(ping -> keepAliveManager.onDataReceived());
 
 		return keepAliveManager;
+	}
+
+	/**
+	 * Retrieves the user ID of the user that owns the cards from GitHub. Represents a "system" user.
+	 *
+	 * @return
+	 */
+	public static String getSpellsourceUserId() {
+		var realm = await(Accounts.realm());
+		// todo: is this an exact match? could be bad
+		return realm.users().search("Spellsource").stream().findFirst().get().getId();
+	}
+
+	/**
+	 * Computes a checksum on the cards in git
+	 *
+	 * @return
+	 */
+	public static int cardsChecksum() {
+		var checksum = Hashing.crc32().newHasher();
+		ClasspathCardCatalogue.INSTANCE.getRecords().values().stream()
+				.sorted(Comparator.comparing(CardCatalogueRecord::getId))
+				.map(CardCatalogueRecord::getDesc)
+				.map(Json::encode)
+				.forEach(str -> checksum.putString(str, Charset.defaultCharset()));
+		return checksum.hash().asInt();
 	}
 
 	public record PgArgs(PgConnectOptions connectionOptions, PoolOptions poolOptions) {

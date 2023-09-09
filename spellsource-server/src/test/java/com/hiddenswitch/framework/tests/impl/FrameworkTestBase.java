@@ -1,10 +1,13 @@
 package com.hiddenswitch.framework.tests.impl;
 
 import com.hiddenswitch.framework.Gateway;
+import com.hiddenswitch.framework.impl.SqlCachedCardCatalogue;
 import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
+import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
 import io.vertx.core.*;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.junit5.VertxExtension;
+import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static io.vertx.await.Async.await;
 import static io.vertx.core.CompositeFuture.all;
 import static org.testcontainers.Testcontainers.exposeHostPorts;
 
@@ -198,6 +202,17 @@ public class FrameworkTestBase {
 
 		public static Future<Void> awaitCheckpoints(Checkpoint... checkpoints) {
 			return all(Arrays.asList(checkpoints)).map((Void) null);
+		}
+
+		public void testVirtual(Vertx vertx, VertxTestContext vertxTestContext, VertxTestContext.ExecutionBlock runnable) {
+			var verticle = new AbstractVirtualThreadVerticle() {
+				@Override
+				public void startVirtual() throws Exception {
+					vertxTestContext.verify(runnable);
+				}
+			};
+			vertx.deployVerticle(verticle)
+					.onComplete(vertxTestContext.succeedingThenComplete());
 		}
 	}
 }

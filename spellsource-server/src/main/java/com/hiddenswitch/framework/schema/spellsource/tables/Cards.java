@@ -33,7 +33,6 @@ import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
-import org.jooq.XML;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -71,14 +70,20 @@ public class Cards extends TableImpl<CardsRecord> {
     public final TableField<CardsRecord, String> CREATED_BY = createField(DSL.name("created_by"), SQLDataType.VARCHAR.nullable(false), this, "");
 
     /**
-     * The column <code>spellsource.cards.uri</code>.
+     * The column <code>spellsource.cards.uri</code>. The URI of the application
+     * that created this card. The git URL by default represents cards that came
+     * from the
+     *     Spellsource git repository.
+     * https://www.getspellsource.com/cards/editor or similar represents cards
+     * authored in the
+     *     web interface
      */
-    public final TableField<CardsRecord, String> URI = createField(DSL.name("uri"), SQLDataType.CLOB, this, "");
+    public final TableField<CardsRecord, String> URI = createField(DSL.name("uri"), SQLDataType.CLOB, this, "The URI of the application that created this card. The git URL by default represents cards that came from the\r\n    Spellsource git repository. https://www.getspellsource.com/cards/editor or similar represents cards authored in the\r\n    web interface");
 
     /**
      * The column <code>spellsource.cards.blockly_workspace</code>.
      */
-    public final TableField<CardsRecord, XML> BLOCKLY_WORKSPACE = createField(DSL.name("blockly_workspace"), SQLDataType.XML, this, "");
+    public final TableField<CardsRecord, JsonObject> BLOCKLY_WORKSPACE = createField(DSL.name("blockly_workspace"), SQLDataType.JSONB, this, "", new JSONBToJsonObjectConverter());
 
     /**
      * The column <code>spellsource.cards.card_script</code>.
@@ -150,7 +155,7 @@ public class Cards extends TableImpl<CardsRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.asList(Indexes.IDX_CARD_ID, Indexes.IDX_CARD_ID_SUCCESSION, Indexes.SPELLSOURCE_CARDS_UNIQUE_ID);
+        return Arrays.asList(Indexes.IDX_CARD_CREATED_BY, Indexes.IDX_CARD_ID, Indexes.IDX_CARD_ID_SUCCESSION, Indexes.SPELLSOURCE_CARDS_UNIQUE_ID);
     }
 
     @Override
@@ -225,14 +230,14 @@ public class Cards extends TableImpl<CardsRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<String, String, String, XML, JsonObject, OffsetDateTime, OffsetDateTime, Boolean, Boolean, Long> fieldsRow() {
+    public Row10<String, String, String, JsonObject, JsonObject, OffsetDateTime, OffsetDateTime, Boolean, Boolean, Long> fieldsRow() {
         return (Row10) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function10<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function10<? super String, ? super String, ? super String, ? super JsonObject, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? super Long, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -240,7 +245,7 @@ public class Cards extends TableImpl<CardsRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super String, ? super String, ? super String, ? super JsonObject, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? super Long, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

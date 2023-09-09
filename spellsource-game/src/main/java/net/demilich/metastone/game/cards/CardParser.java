@@ -18,7 +18,7 @@ public class CardParser {
 	}
 
 	@SuppressWarnings("unchecked")
-	public CardCatalogueRecord parseCard(ResourceInputStream resourceInputStream) throws IOException {
+	public CardCatalogueRecordImpl parseCard(ResourceInputStream resourceInputStream) throws IOException {
 		var inputStream = resourceInputStream.getInputStream();
 		ByteArrayOutputStream result = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
@@ -42,6 +42,6 @@ public class CardParser {
 			desc.setDescription(desc.getDescription().replaceAll("(</?[bi]>)|\\[x\\]", ""));
 		}
 
-		return new CardCatalogueRecord(id, desc);
+		return new CardCatalogueRecordImpl(id, desc);
 	}
 }

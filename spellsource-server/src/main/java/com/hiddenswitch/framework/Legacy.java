@@ -7,8 +7,8 @@ import com.google.protobuf.StringValue;
 import com.hiddenswitch.framework.impl.*;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.GetCardsRequest;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.GetCardsResponse;
+import com.hiddenswitch.framework.rpc.VertxAuthenticatedCardsGrpcServer;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpcServer;
-import com.hiddenswitch.framework.schema.spellsource.tables.daos.CardsDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.DeckPlayerAttributeTuplesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.DeckSharesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.DecksDao;
@@ -16,7 +16,6 @@ import com.hiddenswitch.framework.schema.spellsource.tables.pojos.DeckPlayerAttr
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Decks;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.DecksRecord;
 import com.hiddenswitch.spellsource.rpc.Spellsource.*;
-import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.VertxHiddenSwitchSpellsourceAPIServiceGrpcServer.HiddenSwitchSpellsourceAPIServiceApi;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
@@ -36,13 +35,12 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
-import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckCreateRequest;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
-import net.openhft.hashing.LongHashFunction;
+import org.jetbrains.annotations.NotNull;
 import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
@@ -59,7 +57,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
-import static com.hiddenswitch.framework.Environment.withConnection;
 import static com.hiddenswitch.framework.Environment.withExecutor;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.*;
 import static com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS;
@@ -86,76 +83,38 @@ public class Legacy {
 			.description("the amount of time spent retrieving all the decks")
 			.register(Metrics.globalRegistry);
 
+	private static final String GIT_CARD_URI = "git@github.com:hiddenswitch/Spellsource.git";
+	private static final String WEBSITE_CARD_URI = "https://playspellsource.com/card-editor";
+
+	public static BindAll<VertxAuthenticatedCardsGrpcServer.AuthenticatedCardsApi> authenticatedCards(SqlCachedCardCatalogue cardCatalogue) {
+		return new VertxAuthenticatedCardsGrpcServer.AuthenticatedCardsApi() {
+			@Override
+			public void getCardsByUser(GrpcServerRequest<GetCardsRequest, GetCardsResponse> grpcServerRequest, GetCardsRequest request, Promise<GetCardsResponse> response) {
+				var userId = request.getUserId();
+
+				if (request.getUserId().isBlank()) {
+					userId = grpcServerRequest.routingContext().user().subject();
+				}
+
+				request = GetCardsRequest.newBuilder(request).setUserId(userId).build();
+
+				response.tryComplete(cardCatalogue.cachedRequest(request));
+			}
+		}::bindAll;
+	}
+
 	public static BindAll<VertxUnauthenticatedCardsGrpcServer.UnauthenticatedCardsApi> unauthenticatedCards(SqlCachedCardCatalogue cardCatalogue) {
 		return new VertxUnauthenticatedCardsGrpcServer.UnauthenticatedCardsApi() {
 			@Override
-			public Future<GetCardsResponse> getCards(GetCardsRequest request) {
-				// retrieve the hashcode from the migration schema for the cards
-				if (CARDS_BUILT.compareAndSet(false, true)) {
-					var workingContext = new GameContext();
-
-					withConnection(connection -> new CardsDao(Environment.jooqAkaDaoConfiguration(), connection).findAll())
-							.map(cards -> cards
-									.stream()
-									.filter(card -> card.getIsPublished() && !card.getIsArchived())
-									.map(card -> {
-										try {
-											return card.getCardScript().mapTo(CardDesc.class);
-										} catch (Throwable e) {
-											System.out.println("Failed to deserialize card " + card.getId());
-											return null;
-										}
-									})
-									.filter(cd -> cd != null && cardCatalogue.spellsource().isInFormat(cd.getSet())
-											&& cd.getType() != CardType.GROUP)
-									.map(card -> {
-										var entity = ModelConversions.getEntity(workingContext, card.create(), 0);
-										if (card.getArt() != null) {
-											var value = card.getArt();
-											entity.setArt(value);
-										}
-										if (card.getTooltips() != null) {
-											for (var t : card.getTooltips()) {
-												entity.addAllTooltips(Arrays.asList(card.getTooltips()));
-											}
-										}
-										return entity;
-									})
-									.map(card -> CardRecord.newBuilder().setEntity(card))
-									.collect(toList()))
-							.map(cards -> {
-								var builder = GetCardsResponse.Content.newBuilder();
-
-								for (var i = 0; i < cards.size(); i++) {
-									cards.get(i).getEntityBuilder()
-											.setId(i);
-									builder.addCards(cards.get(i).build());
-								}
-
-								var built = builder.build();
-								var checksum = LongHashFunction.xx().hashBytes(built.toByteArray());
-
-								var response = GetCardsResponse.newBuilder()
-										.setVersion(Long.toString(checksum));
-
-								response.setContent(built);
-
-								return response.build();
-							})
-							.onFailure(Environment.onFailure("failed to build cached cards db"))
-							.onFailure(t -> CARDS_BUILT.compareAndSet(true, false))
-							.onSuccess(GET_CARDS_RESPONSE_PROMISE::complete);
+			public Future<GetCardsResponse> getCards(@NotNull GetCardsRequest request) {
+				request = GetCardsRequest
+						.newBuilder(request)
+						.setUserId("").build();
+				try {
+					return Future.succeededFuture(cardCatalogue.cachedRequest(request));
+				} catch (Throwable t) {
+					return Environment.<GetCardsResponse>onGrpcFailure().apply(t);
 				}
-
-				return GET_CARDS_RESPONSE_PROMISE.future()
-						.compose(res -> {
-							if (Objects.equals(request.getIfNoneMatch(), res.getVersion())) {
-								return Future.succeededFuture(GetCardsResponse.newBuilder().setCachedOk(true).build());
-							}
-
-							return Future.succeededFuture(res);
-						})
-						.recover(Environment.onGrpcFailure());
 			}
 		}::bindAll;
 	}
@@ -629,7 +588,7 @@ public class Legacy {
 						var playerEntityAttributes = res.<List<DeckPlayerAttributeTuples>>resultAt(2);
 						var reply = DecksGetResponse.newBuilder();
 						var inventoryCollection = InventoryCollection.newBuilder();
-						
+
 						inventoryCollection.setId(deck.getId())
 								.setDeckType(InventoryCollection.InventoryCollectionDeckType.forNumber(deck.getDeckType()))
 								.setFormat(deck.getFormat())

@@ -5,6 +5,7 @@ import com.hiddenswitch.framework.impl.GrpcClientWithOptions;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.CreateAccountRequest;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.LoginOrCreateReply;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.LoginOrCreateReplyOrBuilder;
+import com.hiddenswitch.framework.rpc.VertxAuthenticatedCardsGrpcClient;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpcClient;
 import com.hiddenswitch.framework.rpc.VertxUnauthenticatedGrpcClient;
 import com.hiddenswitch.framework.schema.keycloak.tables.pojos.UserEntity;
@@ -339,6 +340,9 @@ public class Client {
 
 	public VertxHiddenSwitchSpellsourceAPIServiceGrpcClient legacy() {
 		return new VertxHiddenSwitchSpellsourceAPIServiceGrpcClient(client().setRequestOptions(new RequestOptions().setHeaders(credentials())), SocketAddress.inetSocketAddress(port(), host()));
+	}
+	public VertxAuthenticatedCardsGrpcClient cards() {
+		return new VertxAuthenticatedCardsGrpcClient(client().setRequestOptions(new RequestOptions().setHeaders(credentials())), SocketAddress.inetSocketAddress(port(), host()));
 	}
 
 	public VertxMatchmakingGrpcClient matchmaking() {

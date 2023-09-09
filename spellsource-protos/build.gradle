@@ -74,17 +74,17 @@ clean {
 }
 
 tasks.register('copyCsharpGrpc', Copy) {
-    dependsOn += [":spellsource-protos:generateProto"]
-    from("$project.buildDir/generated/source/proto/main/csharp") {
-        include '**/*.cs'
-    }
-    into("$csharpRootDir/Framework/Sources")
+  dependsOn += [":spellsource-protos:generateProto"]
+  from(layout.buildDirectory.dir("generated/source/proto/main/csharp/Hiddenswitch/Framework/Sources")) {
+    include '**/*.cs'
+  }
+  into("$csharpRootDir/Framework/Sources")
 }
 
 tasks.register('dll', Exec) {
   dependsOn copyCsharpGrpc
   workingDir csharpRootDir
-  outputs.dir("$project.buildDir/dlls")
+  outputs.dir(layout.buildDirectory.dir("dlls"))
   outputs.cacheIf { true }
   inputs.dir("$csharpRootDir/Framework/Plugins").withPathSensitivity(PathSensitivity.RELATIVE)
   inputs.file("$csharpRootDir/HiddenSwitch.sln").withPathSensitivity(PathSensitivity.RELATIVE)
@@ -97,7 +97,7 @@ tasks.register('dll', Exec) {
 tasks.register('testDll', Exec) {
   dependsOn dll
   inputs.files(csharpRootDir + '/Framework.Tests/**/*.cs', csharpRootDir + '/Framework.Tests/**/*.csproj').withPathSensitivity(PathSensitivity.RELATIVE)
-  outputs.dir("$project.buildDir/nunit")
+  outputs.dir(layout.buildDirectory.dir("nunit"))
   outputs.cacheIf { true }
   workingDir csharpRootDir
   // this is using docker-wrapped dotnet
@@ -106,7 +106,7 @@ tasks.register('testDll', Exec) {
 
 tasks.register('installDll', Copy) {
   dependsOn dll
-  inputs.dir("$project.buildDir/dlls").withPathSensitivity(PathSensitivity.RELATIVE)
+  inputs.dir(layout.buildDirectory.dir("dlls")).withPathSensitivity(PathSensitivity.RELATIVE)
   inputs.dir("$csharpRootDir/Framework/Plugins").withPathSensitivity(PathSensitivity.RELATIVE)
   def destination = project(':spellsource-client').projectDir.path + '/src/unity/Assets/Client'
   outputs.dir(destination)

@@ -24,6 +24,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
 import com.hiddenswitch.framework.schema.spellsource.tables.Friends;
 import com.hiddenswitch.framework.schema.spellsource.tables.GameUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Games;
+import com.hiddenswitch.framework.schema.spellsource.tables.GeneratedArt;
 import com.hiddenswitch.framework.schema.spellsource.tables.GetClasses;
 import com.hiddenswitch.framework.schema.spellsource.tables.GetCollectionCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.Guests;
@@ -388,6 +389,11 @@ public class Tables {
      * The table <code>spellsource.games</code>.
      */
     public static final Games GAMES = Games.GAMES;
+
+    /**
+     * The table <code>spellsource.generated_art</code>.
+     */
+    public static final GeneratedArt GENERATED_ART = GeneratedArt.GENERATED_ART;
 
     /**
      * The table <code>spellsource.get_classes</code>.

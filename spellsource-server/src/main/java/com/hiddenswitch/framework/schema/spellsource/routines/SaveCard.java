@@ -12,7 +12,6 @@ import io.vertx.core.json.JsonObject;
 
 import org.jooq.Field;
 import org.jooq.Parameter;
-import org.jooq.XML;
 import org.jooq.impl.AbstractRoutine;
 import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
@@ -39,7 +38,7 @@ public class SaveCard extends AbstractRoutine<CardsRecord> {
     /**
      * The parameter <code>spellsource.save_card.workspace</code>.
      */
-    public static final Parameter<XML> WORKSPACE = Internal.createParameter("workspace", SQLDataType.XML, false, false);
+    public static final Parameter<JsonObject> WORKSPACE = Internal.createParameter("workspace", SQLDataType.JSONB, false, false, new JSONBToJsonObjectConverter());
 
     /**
      * The parameter <code>spellsource.save_card.json</code>.
@@ -77,7 +76,7 @@ public class SaveCard extends AbstractRoutine<CardsRecord> {
     /**
      * Set the <code>workspace</code> parameter IN value to the routine
      */
-    public void setWorkspace(XML value) {
+    public void setWorkspace(JsonObject value) {
         setValue(WORKSPACE, value);
     }
 
@@ -85,7 +84,7 @@ public class SaveCard extends AbstractRoutine<CardsRecord> {
      * Set the <code>workspace</code> parameter to the function to be used with
      * a {@link org.jooq.Select} statement
      */
-    public SaveCard setWorkspace(Field<XML> field) {
+    public SaveCard setWorkspace(Field<JsonObject> field) {
         setField(WORKSPACE, field);
         return this;
     }

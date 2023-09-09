@@ -14,7 +14,6 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 
 import org.jooq.Configuration;
-import org.jooq.XML;
 
 
 import java.util.List;
@@ -90,7 +89,7 @@ public class CardsDao extends AbstractReactiveVertxDAO<CardsRecord, com.hiddensw
      * Find records that have <code>blockly_workspace IN (values)</code>
      * asynchronously
      */
-        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByBlocklyWorkspace(Collection<XML> values) {
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByBlocklyWorkspace(Collection<JsonObject> values) {
                 return findManyByCondition(Cards.CARDS.BLOCKLY_WORKSPACE.in(values));
         }
 
@@ -98,7 +97,7 @@ public class CardsDao extends AbstractReactiveVertxDAO<CardsRecord, com.hiddensw
      * Find records that have <code>blockly_workspace IN (values)</code>
      * asynchronously limited by the given limit
      */
-        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByBlocklyWorkspace(Collection<XML> values, int limit) {
+        public Future<List<com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards>> findManyByBlocklyWorkspace(Collection<JsonObject> values, int limit) {
                 return findManyByCondition(Cards.CARDS.BLOCKLY_WORKSPACE.in(values),limit);
         }
 

@@ -1,4 +1,5 @@
 root = true
+
 [*]
 charset = utf-8
 end_of_line = lf
@@ -1384,3 +1385,6 @@ ij_properties_spaces_around_key_value_delimiter = false
 indent_size = 2
 ij_yaml_keep_indents_on_empty_lines = false
 ij_yaml_keep_line_breaks = true
+
+[*.proto]
+indent_size = 2

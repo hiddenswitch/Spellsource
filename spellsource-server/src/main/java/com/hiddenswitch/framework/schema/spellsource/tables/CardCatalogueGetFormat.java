@@ -23,7 +23,6 @@ import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.XML;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -70,7 +69,7 @@ public class CardCatalogueGetFormat extends TableImpl<CardCatalogueGetFormatReco
      * The column
      * <code>spellsource.card_catalogue_get_format.blockly_workspace</code>.
      */
-    public final TableField<CardCatalogueGetFormatRecord, XML> BLOCKLY_WORKSPACE = createField(DSL.name("blockly_workspace"), SQLDataType.XML, this, "");
+    public final TableField<CardCatalogueGetFormatRecord, JsonObject> BLOCKLY_WORKSPACE = createField(DSL.name("blockly_workspace"), SQLDataType.JSONB, this, "", new JSONBToJsonObjectConverter());
 
     /**
      * The column
@@ -189,7 +188,7 @@ public class CardCatalogueGetFormat extends TableImpl<CardCatalogueGetFormatReco
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<String, String, String, XML, JsonObject, OffsetDateTime, OffsetDateTime, Boolean, Boolean, Long> fieldsRow() {
+    public Row10<String, String, String, JsonObject, JsonObject, OffsetDateTime, OffsetDateTime, Boolean, Boolean, Long> fieldsRow() {
         return (Row10) super.fieldsRow();
     }
 
@@ -222,7 +221,7 @@ public class CardCatalogueGetFormat extends TableImpl<CardCatalogueGetFormatReco
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function10<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function10<? super String, ? super String, ? super String, ? super JsonObject, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? super Long, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -230,7 +229,7 @@ public class CardCatalogueGetFormat extends TableImpl<CardCatalogueGetFormatReco
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super String, ? super String, ? super String, ? super XML, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super String, ? super String, ? super String, ? super JsonObject, ? super JsonObject, ? super OffsetDateTime, ? super OffsetDateTime, ? super Boolean, ? super Boolean, ? super Long, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

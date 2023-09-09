@@ -3,6 +3,7 @@ package com.hiddenswitch.framework;
 import com.hiddenswitch.framework.impl.BindAll;
 import com.hiddenswitch.framework.impl.SqlCachedCardCatalogue;
 import com.hiddenswitch.framework.rpc.AccountsGrpc;
+import com.hiddenswitch.framework.rpc.AuthenticatedCardsGrpc;
 import com.hiddenswitch.framework.rpc.GamesGrpc;
 import com.hiddenswitch.framework.virtual.VirtualThreadRoutingContextHandler;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
@@ -50,6 +51,7 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 		var services = new BindAll<?>[]{
 				Legacy.services(cardCatalogue),
 				Legacy.unauthenticatedCards(cardCatalogue),
+				Legacy.authenticatedCards(cardCatalogue),
 				matchmaking.binder(),
 				Accounts.unauthenticatedService(),
 				Accounts.authenticatedService(),
@@ -66,7 +68,8 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 				HiddenSwitchSpellsourceAPIServiceGrpc.SERVICE_NAME,
 				MatchmakingGrpc.SERVICE_NAME,
 				AccountsGrpc.SERVICE_NAME,
-				GamesGrpc.SERVICE_NAME
+				GamesGrpc.SERVICE_NAME,
+				AuthenticatedCardsGrpc.SERVICE_NAME
 		}) {
 			router.route("/" + serviceName + "/*").handler(JWTAuthHandler.create(jwtAuth, realm.toRepresentation().getRealm()));
 		}

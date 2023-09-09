@@ -25,7 +25,6 @@ import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.XML;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -70,7 +69,7 @@ public class CollectionCards extends TableImpl<CollectionCardsRecord> {
     /**
      * The column <code>spellsource.collection_cards.blockly_workspace</code>.
      */
-    public final TableField<CollectionCardsRecord, XML> BLOCKLY_WORKSPACE = createField(DSL.name("blockly_workspace"), SQLDataType.XML, this, "");
+    public final TableField<CollectionCardsRecord, JsonObject> BLOCKLY_WORKSPACE = createField(DSL.name("blockly_workspace"), SQLDataType.JSONB, this, "", new JSONBToJsonObjectConverter());
 
     /**
      * The column <code>spellsource.collection_cards.name</code>.
@@ -210,14 +209,14 @@ public class CollectionCards extends TableImpl<CollectionCardsRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row12<String, String, JsonObject, XML, String, String, String, Integer, Boolean, String, OffsetDateTime, OffsetDateTime> fieldsRow() {
+    public Row12<String, String, JsonObject, JsonObject, String, String, String, Integer, Boolean, String, OffsetDateTime, OffsetDateTime> fieldsRow() {
         return (Row12) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function12<? super String, ? super String, ? super JsonObject, ? super XML, ? super String, ? super String, ? super String, ? super Integer, ? super Boolean, ? super String, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function12<? super String, ? super String, ? super JsonObject, ? super JsonObject, ? super String, ? super String, ? super String, ? super Integer, ? super Boolean, ? super String, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -225,7 +224,7 @@ public class CollectionCards extends TableImpl<CollectionCardsRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function12<? super String, ? super String, ? super JsonObject, ? super XML, ? super String, ? super String, ? super String, ? super Integer, ? super Boolean, ? super String, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function12<? super String, ? super String, ? super JsonObject, ? super JsonObject, ? super String, ? super String, ? super String, ? super Integer, ? super Boolean, ? super String, ? super OffsetDateTime, ? super OffsetDateTime, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

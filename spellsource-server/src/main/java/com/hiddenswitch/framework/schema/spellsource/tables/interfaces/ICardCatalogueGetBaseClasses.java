@@ -10,8 +10,6 @@ import io.vertx.core.json.JsonObject;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
-import org.jooq.XML;
-
 
 import static io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo.*;
 /**
@@ -56,13 +54,13 @@ public interface ICardCatalogueGetBaseClasses extends VertxPojo, Serializable {
      * Setter for
      * <code>spellsource.card_catalogue_get_base_classes.blockly_workspace</code>.
      */
-    public ICardCatalogueGetBaseClasses setBlocklyWorkspace(XML value);
+    public ICardCatalogueGetBaseClasses setBlocklyWorkspace(JsonObject value);
 
     /**
      * Getter for
      * <code>spellsource.card_catalogue_get_base_classes.blockly_workspace</code>.
      */
-    public XML getBlocklyWorkspace();
+    public JsonObject getBlocklyWorkspace();
 
     /**
      * Setter for
@@ -157,7 +155,7 @@ public interface ICardCatalogueGetBaseClasses extends VertxPojo, Serializable {
                 setOrThrow(this::setId,json::getString,"id","java.lang.String");
                 setOrThrow(this::setCreatedBy,json::getString,"created_by","java.lang.String");
                 setOrThrow(this::setUri,json::getString,"uri","java.lang.String");
-                // Omitting unrecognized type org.jooq.XML for column blockly_workspace!
+                setBlocklyWorkspace(com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().from(json.getJsonObject("blockly_workspace")));
                 setCardScript(com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().from(json.getJsonObject("card_script")));
                 setOrThrow(this::setCreatedAt,key -> {String s = json.getString(key); return s==null?null:java.time.OffsetDateTime.parse(s);},"created_at","java.time.OffsetDateTime");
                 setOrThrow(this::setLastModified,key -> {String s = json.getString(key); return s==null?null:java.time.OffsetDateTime.parse(s);},"last_modified","java.time.OffsetDateTime");
@@ -174,7 +172,7 @@ public interface ICardCatalogueGetBaseClasses extends VertxPojo, Serializable {
                 json.put("id",getId());
                 json.put("created_by",getCreatedBy());
                 json.put("uri",getUri());
-                // Omitting unrecognized type org.jooq.XML for column blockly_workspace!
+                json.put("blockly_workspace",com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().to(getBlocklyWorkspace()));
                 json.put("card_script",com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().to(getCardScript()));
                 json.put("created_at",getCreatedAt()==null?null:getCreatedAt().toString());
                 json.put("last_modified",getLastModified()==null?null:getLastModified().toString());

@@ -54,17 +54,6 @@ public class TestClasspathCardCatalogue extends ClasspathCardCatalogue {
 	}
 
 	@Override
-	public @NotNull Map<String, CardCatalogueRecord> getRecords() {
-		var records = super.getRecords();
-		return Maps.transformValues(records, record -> {
-			if (CardSet.TEST.equals(record.getDesc().getSet())) {
-				throw new IllegalStateException("returned test");
-			}
-			return record;
-		});
-	}
-
-	@Override
 	protected void updatedWith(Map<String, CardDesc> cardDescs) {
 		var filtered = Maps.filterValues(cardDescs, desc -> !Objects.equals(desc.getSet(), CardSet.TEST));
 		super.updatedWith(filtered);

@@ -10,8 +10,6 @@ import io.vertx.core.json.JsonObject;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
-import org.jooq.XML;
-
 
 import static io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo.*;
 /**
@@ -54,13 +52,13 @@ public interface IGetCollectionCards extends VertxPojo, Serializable {
      * Setter for
      * <code>spellsource.get_collection_cards.blockly_workspace</code>.
      */
-    public IGetCollectionCards setBlocklyWorkspace(XML value);
+    public IGetCollectionCards setBlocklyWorkspace(JsonObject value);
 
     /**
      * Getter for
      * <code>spellsource.get_collection_cards.blockly_workspace</code>.
      */
-    public XML getBlocklyWorkspace();
+    public JsonObject getBlocklyWorkspace();
 
     /**
      * Setter for <code>spellsource.get_collection_cards.name</code>.
@@ -163,7 +161,7 @@ public interface IGetCollectionCards extends VertxPojo, Serializable {
                 setOrThrow(this::setId,json::getString,"id","java.lang.String");
                 setOrThrow(this::setCreatedBy,json::getString,"created_by","java.lang.String");
                 setCardScript(com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().from(json.getJsonObject("card_script")));
-                // Omitting unrecognized type org.jooq.XML for column blockly_workspace!
+                setBlocklyWorkspace(com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().from(json.getJsonObject("blockly_workspace")));
                 setOrThrow(this::setName,json::getString,"name","java.lang.String");
                 setOrThrow(this::setType,json::getString,"type","java.lang.String");
                 setOrThrow(this::setClass_,json::getString,"class","java.lang.String");
@@ -182,7 +180,7 @@ public interface IGetCollectionCards extends VertxPojo, Serializable {
                 json.put("id",getId());
                 json.put("created_by",getCreatedBy());
                 json.put("card_script",com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().to(getCardScript()));
-                // Omitting unrecognized type org.jooq.XML for column blockly_workspace!
+                json.put("blockly_workspace",com.hiddenswitch.framework.schema.spellsource.tables.converters.Converters.IO_GITHUB_JKLINGSPORN_VERTX_JOOQ_SHARED_POSTGRES_JSONBTOJSONOBJECTCONVERTER_INSTANCE.pgConverter().to(getBlocklyWorkspace()));
                 json.put("name",getName());
                 json.put("type",getType());
                 json.put("class",getClass_());

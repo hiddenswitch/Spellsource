@@ -1,6 +1,6 @@
 package com.hiddenswitch.framework.migrations;
 
-import com.hiddenswitch.framework.impl.MigrationUtils;
+import com.hiddenswitch.framework.Environment;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
@@ -24,13 +24,13 @@ public class V7__Create_cards extends BaseJavaMigration {
 
 	@Override
 	public Integer getChecksum() {
-		return MigrationUtils.cardsChecksum();
+		return Environment.cardsChecksum();
 	}
 
 	@Override
 	public void migrate(Context context) throws Exception {
 		var dsl = DSL.using(context.getConnection(), SQLDialect.POSTGRES);
-		var ownerUserId = MigrationUtils.getSpellsourceUserId();
+		var ownerUserId = Environment.getSpellsourceUserId();
 		ClasspathCardCatalogue.INSTANCE.loadCardsFromPackage();
 		var insertAndUpdate = ClasspathCardCatalogue.INSTANCE.getRecords().values().stream().map(record -> {
 			var now = OffsetDateTime.now();

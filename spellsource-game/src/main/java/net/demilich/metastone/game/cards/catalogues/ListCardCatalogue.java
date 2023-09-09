@@ -43,8 +43,7 @@ public class ListCardCatalogue implements CardCatalogue {
 	protected final Set<String> bannedCardIds = new LinkedHashSet<>();
 	protected final Set<String> hardRemovalCardIds = new LinkedHashSet<>();
 	protected final Map<String, Card> cards = new LinkedHashMap<>(8196);
-	protected final Map<String, CardCatalogueRecord> records = new LinkedHashMap<>(8196);
-	protected final Multimap<String, CardCatalogueRecord> recordsByName = Multimaps.newSetMultimap(new LinkedHashMap<>(8196), HashSet::new);
+	protected final Multimap<String, Card> cardsByName = Multimaps.newSetMultimap(new LinkedHashMap<>(8196), LinkedHashSet::new);
 	protected final Map<String, Card> classCards = new LinkedHashMap<>(64);
 	protected final Map<String, Card> heroCards = new LinkedHashMap<>(64);
 	protected final Map<String, Card> formatCardsByName = new LinkedHashMap<>(64);
@@ -113,19 +112,13 @@ public class ListCardCatalogue implements CardCatalogue {
 	}
 
 	@Override
-	@NotNull
-	public Map<String, CardCatalogueRecord> getRecords() {
-		return Collections.unmodifiableMap(records);
-	}
-
-	@Override
 	@Nullable
 	public Card getCardByName(String name) {
 		Async.lock(lock.readLock());
 		try {
-			var namedCard = recordsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).findFirst().orElse(recordsByName.get(name).stream().findFirst().orElse(null));
+			var namedCard = cardsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).findFirst().orElse(cardsByName.get(name).stream().findFirst().orElse(null));
 			if (namedCard != null) {
-				return getCardById(namedCard.getId());
+				return getCardById(namedCard.getCardId());
 			}
 			return null;
 		} finally {
@@ -138,19 +131,19 @@ public class ListCardCatalogue implements CardCatalogue {
 	public Card getCardByName(String name, String heroClass) {
 		Async.lock(lock.readLock());
 		try {
-			var namedCards = recordsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).toList();
+			var namedCards = cardsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).toList();
 			if (!namedCards.isEmpty()) {
 				if (namedCards.size() > 1) {
 					for (var namedCard : namedCards) {
-						var card = getCardById(namedCard.getId());
+						var card = getCardById(namedCard.getCardId());
 						if (card.hasHeroClass(heroClass)) {
 							return card;
 						}
 					}
 				}
-				return getCardById(namedCards.get(0).getId());
+				return getCardById(namedCards.get(0).getCardId());
 			}
-			return getCardById(recordsByName.get(name).stream().findFirst().orElseThrow(NullPointerException::new).getDesc().getId());
+			return getCardById(cardsByName.get(name).stream().findFirst().orElseThrow(NullPointerException::new).getDesc().getId());
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -208,11 +201,10 @@ public class ListCardCatalogue implements CardCatalogue {
 	public void removeCard(String id) {
 		Async.lock(lock.writeLock());
 		try {
-			var res = records.remove(id);
-			cards.remove(id);
+			var res = cards.remove(id);
 			if (res != null) {
-				recordsByName.remove(res.getDesc().getName(), res);
-				switch (res.desc().getType()) {
+				cardsByName.remove(res.getDesc().getName(), res);
+				switch (res.getDesc().getType()) {
 					case FORMAT -> {
 						formatCardsByName.remove(res.getDesc().getName());
 						formatsByName.remove(res.getDesc().getName());
@@ -223,7 +215,7 @@ public class ListCardCatalogue implements CardCatalogue {
 							classCardsForFormat.get(format).removeIf(c -> c.getDesc().getId().equals(res.getId()));
 						}
 					}
-					case HERO -> heroCards.remove(res.id());
+					case HERO -> heroCards.remove(res.getCardId());
 				}
 			}
 		} finally {
@@ -371,8 +363,7 @@ public class ListCardCatalogue implements CardCatalogue {
 			bannedCardIds.clear();
 			hardRemovalCardIds.clear();
 			cards.clear();
-			records.clear();
-			recordsByName.clear();
+			cardsByName.clear();
 			classCards.clear();
 			heroCards.clear();
 			formatCardsByName.clear();
@@ -433,19 +424,18 @@ public class ListCardCatalogue implements CardCatalogue {
 				// TODO more manual checks for whether a card is valid for play (references nonexistent cards / attributes / etc)
 				var instance = desc.create();
 				newCards.add(instance);
-				cards.put(instance.getCardId(), instance);
-				var record = new CardCatalogueRecord(desc.getId(), desc);
-				records.put(desc.getId(), record);
 				// find old name and remove it if it exists
-				var existing = records.get(desc.getId());
+				var existing = cards.get(desc.getId());
 				if (existing != null) {
-					recordsByName.remove(existing.desc().getName(), existing);
-					if (existing.desc().getType() == Spellsource.CardTypeMessage.CardType.FORMAT) {
-						formatsByName.remove(existing.desc().getName());
-						formatCardsByName.remove(existing.desc().getName());
+					cardsByName.remove(existing.getDesc().getName(), existing);
+					if (existing.getDesc().getType() == Spellsource.CardTypeMessage.CardType.FORMAT) {
+						formatsByName.remove(existing.getDesc().getName());
+						formatCardsByName.remove(existing.getDesc().getName());
 					}
 				}
-				recordsByName.put(desc.getName(), record);
+
+				cards.put(instance.getCardId(), instance);
+				cardsByName.put(desc.getName(), instance);
 				if (desc.draft() != null && desc.draft().getBanned()) {
 					bannedCardIds.add(desc.getId());
 				} else {

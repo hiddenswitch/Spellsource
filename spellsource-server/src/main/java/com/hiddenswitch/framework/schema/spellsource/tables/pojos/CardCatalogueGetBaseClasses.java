@@ -11,8 +11,6 @@ import io.vertx.core.json.JsonObject;
 
 import java.time.OffsetDateTime;
 
-import org.jooq.XML;
-
 
 import static io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo.*;
 /**
@@ -26,7 +24,7 @@ public class CardCatalogueGetBaseClasses implements VertxPojo, ICardCatalogueGet
     private String id;
     private String createdBy;
     private String uri;
-    private XML blocklyWorkspace;
+    private JsonObject blocklyWorkspace;
     private JsonObject cardScript;
     private OffsetDateTime createdAt;
     private OffsetDateTime lastModified;
@@ -53,7 +51,7 @@ public class CardCatalogueGetBaseClasses implements VertxPojo, ICardCatalogueGet
         String id,
         String createdBy,
         String uri,
-        XML blocklyWorkspace,
+        JsonObject blocklyWorkspace,
         JsonObject cardScript,
         OffsetDateTime createdAt,
         OffsetDateTime lastModified,
@@ -136,7 +134,7 @@ public class CardCatalogueGetBaseClasses implements VertxPojo, ICardCatalogueGet
      * <code>spellsource.card_catalogue_get_base_classes.blockly_workspace</code>.
      */
     @Override
-    public XML getBlocklyWorkspace() {
+    public JsonObject getBlocklyWorkspace() {
         return this.blocklyWorkspace;
     }
 
@@ -145,7 +143,7 @@ public class CardCatalogueGetBaseClasses implements VertxPojo, ICardCatalogueGet
      * <code>spellsource.card_catalogue_get_base_classes.blockly_workspace</code>.
      */
     @Override
-    public CardCatalogueGetBaseClasses setBlocklyWorkspace(XML blocklyWorkspace) {
+    public CardCatalogueGetBaseClasses setBlocklyWorkspace(JsonObject blocklyWorkspace) {
         this.blocklyWorkspace = blocklyWorkspace;
         return this;
     }

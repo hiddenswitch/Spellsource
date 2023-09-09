@@ -129,7 +129,7 @@ dependencies {
     exclude group: 'io.micrometer', module: 'micrometer-core'
   }
   implementation "org.flywaydb:flyway-core:$flywayVersion"
-  implementation 'org.redisson:redisson:3.15.5'
+  implementation 'org.redisson:redisson:3.23.4'
   implementation(group: 'com.github.pcj', name: 'google-options', version: '1.0.0') {
     exclude group: 'com.google.guava', module: 'guava'
   }

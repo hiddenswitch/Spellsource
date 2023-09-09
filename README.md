@@ -194,11 +194,6 @@ Restart Docker. Make sure Docker is running.
 
 You need special authorization for this. It is accessed via an audited API key.
 
-> I receive an error related
-> to `(sharp:42678): GLib-CRITICAL **: 17:17:14.186: g_hash_table_lookup: assertion 'hash_table != NULL' failed`
-
-Delete the NPM modules folder: `rm -rf www/npm_modules`, then rerun `./gradlew distWWW`.
-
 > Autocomplete, code insight, intellisense or other code completion features are missing when I am trying to write code
 > accessing the generating protobufs definitions, like `Spellsource.java` or `Hiddenswitch.java`
 
@@ -208,6 +203,10 @@ In IntelliJ, visit the Help > Edit Custom Properties... menu, then add the follo
 # custom IntelliJ IDEA properties
 idea.max.intellisense.filesize=99999
 ```
+
+> How do I add a new RPC to the Spellsource server?
+
+
 
 ### Special Thanks
 

@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
  * This represents the "columns" of the proverbial data that is stored in an entity. Many keywords, like <b>stealth</b>,
  * have a corresponding attribute. But it really depends on how the implementation works.
  * <p>
- * The attributes here interact with many mechanics. They are also the keys to an {@link AttributeMap} and {@link
- * CardAttributeMap}.
+ * The attributes here interact with many mechanics. They are also the keys to an {@link AttributeMap} and
+ * {@link CardAttributeMap}.
  */
 public enum Attribute {
 	/**
@@ -77,8 +77,8 @@ public enum Attribute {
 	 */
 	MAX_HP,
 	/**
-	 * The current armor belonging to the {@link Actor}, or the additional armor gained by playing the specified {@link
-	 * net.demilich.metastone.game.cards.Card}.
+	 * The current armor belonging to the {@link Actor}, or the additional armor gained by playing the specified
+	 * {@link net.demilich.metastone.game.cards.Card}.
 	 */
 	ARMOR,
 	/**
@@ -121,10 +121,11 @@ public enum Attribute {
 	 */
 	BASE_ATTACK,
 	/**
-	 * A conditional attack bonus for the {@link Actor} that corresponds to bonuses from an {@link
-	 * net.demilich.metastone.game.spells.EnrageSpell}, {@link net.demilich.metastone.game.spells.ConditionalAttackBonusSpell}
-	 * or {@link net.demilich.metastone.game.spells.SetAttributeSpell}. This bonus is typically controlled by a {@link
-	 * net.demilich.metastone.game.spells.desc.condition.Condition}.
+	 * A conditional attack bonus for the {@link Actor} that corresponds to bonuses from an
+	 * {@link net.demilich.metastone.game.spells.EnrageSpell},
+	 * {@link net.demilich.metastone.game.spells.ConditionalAttackBonusSpell} or
+	 * {@link net.demilich.metastone.game.spells.SetAttributeSpell}. This bonus is typically controlled by a
+	 * {@link net.demilich.metastone.game.spells.desc.condition.Condition}.
 	 */
 	CONDITIONAL_ATTACK_BONUS,
 	/**
@@ -135,11 +136,12 @@ public enum Attribute {
 	RACE,
 	/**
 	 * When the entity has this attribute, it is destroyed. However, entities are also considered destroyed if their
-	 * {@link Actor#getHp()} is below zero or if they are in the {@link Zones#GRAVEYARD} or {@link
-	 * Zones#REMOVED_FROM_PLAY} zones.
+	 * {@link Actor#getHp()} is below zero or if they are in the {@link Zones#GRAVEYARD} or
+	 * {@link Zones#REMOVED_FROM_PLAY} zones.
 	 * <p>
-	 * At the end of {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction)} in {@link
-	 * GameLogic#endOfSequence()}, all entities with {@link #DESTROYED} will be sent to the {@link Zones#GRAVEYARD}.
+	 * At the end of {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction)} in
+	 * {@link GameLogic#endOfSequence()}, all entities with {@link #DESTROYED} will be sent to the
+	 * {@link Zones#GRAVEYARD}.
 	 *
 	 * @see Actor#isDestroyed() for a complete list of situations where an {@link Actor} is destroyed.
 	 */
@@ -155,9 +157,9 @@ public enum Attribute {
 	 */
 	FATIGUE,
 	/**
-	 * A frozen {@link Actor} cannot attack. Freezing is cleared by a {@link net.demilich.metastone.game.spells.SilenceSpell}
-	 * (when the minion is {@link #SILENCED}) or the owning player ends his turn on a different turn than when the minion
-	 * was {@link #FROZEN}.
+	 * A frozen {@link Actor} cannot attack. Freezing is cleared by a
+	 * {@link net.demilich.metastone.game.spells.SilenceSpell} (when the minion is {@link #SILENCED}) or the owning player
+	 * ends his turn on a different turn than when the minion was {@link #FROZEN}.
 	 */
 	FROZEN,
 	/**
@@ -194,9 +196,10 @@ public enum Attribute {
 	 */
 	UNLIMITED_ATTACKS,
 	/**
-	 * An {@link Actor} with {@link #TAUNT} must be targeted by opposing {@link net.demilich.metastone.game.actions.PhysicalAttackAction}
-	 * actions first. This means the {@link Minion} with {@link #TAUNT} acts like a shield for its other non-taunt minions
-	 * and its owning player's hero, because the opposing minions and hero must attack the taunt minion first.
+	 * An {@link Actor} with {@link #TAUNT} must be targeted by opposing
+	 * {@link net.demilich.metastone.game.actions.PhysicalAttackAction} actions first. This means the {@link Minion} with
+	 * {@link #TAUNT} acts like a shield for its other non-taunt minions and its owning player's hero, because the
+	 * opposing minions and hero must attack the taunt minion first.
 	 *
 	 * @see net.demilich.metastone.game.logic.TargetLogic#getValidTargets(GameContext, Player, GameAction) for the
 	 * complete targeting logic.
@@ -278,9 +281,9 @@ public enum Attribute {
 	 */
 	ENRAGED,
 	/**
-	 * An {@link Entity} with {@link #BATTLECRY} performs an action when it goes from the {@link Zones#HAND} to the {@link
-	 * Zones#BATTLEFIELD}. This attribute is used to look up / keep track of entities that have battlecries. It does not
-	 * define the battlecry itself.
+	 * An {@link Entity} with {@link #BATTLECRY} performs an action when it goes from the {@link Zones#HAND} to the
+	 * {@link Zones#BATTLEFIELD}. This attribute is used to look up / keep track of entities that have battlecries. It
+	 * does not define the battlecry itself.
 	 */
 	BATTLECRY,
 	/**
@@ -430,15 +433,15 @@ public enum Attribute {
 	 */
 	AURA_UNTARGETABLE_BY_SPELLS,
 	/**
-	 * When a {@link net.demilich.metastone.game.cards.Card} that casts a {@link net.demilich.metastone.game.spells.DamageSpell}
-	 * has this attribute, its bonus from spell damage is doubled.
+	 * When a {@link net.demilich.metastone.game.cards.Card} that casts a
+	 * {@link net.demilich.metastone.game.spells.DamageSpell} has this attribute, its bonus from spell damage is doubled.
 	 *
 	 * @see GameLogic#applySpellpower(Player, Entity, int) for an entity's spellpower contribution.
 	 */
 	SPELL_DAMAGE_MULTIPLIER,
 	/**
-	 * When any friendly {@link Entity} has this attribute, all friendly spell damage effects (typically cast by {@link
-	 * net.demilich.metastone.game.spells.DamageSpell} deal damage multiplied by this attribute's value.
+	 * When any friendly {@link Entity} has this attribute, all friendly spell damage effects (typically cast by
+	 * {@link net.demilich.metastone.game.spells.DamageSpell} deal damage multiplied by this attribute's value.
 	 * <p>
 	 * This implements Prophet Velen.
 	 *
@@ -450,8 +453,8 @@ public enum Attribute {
 	 */
 	HERO_POWER_DAMAGE_AMPLIFY_MULTIPLIER,
 	/**
-	 * When any friendly {@link Entity} has this attribute, all friendly healing effects that use {@link
-	 * GameLogic#heal(Player, Actor, int, Entity)} are multiplied by this attribute's value.
+	 * When any friendly {@link Entity} has this attribute, all friendly healing effects that use
+	 * {@link GameLogic#heal(Player, Actor, int, Entity)} are multiplied by this attribute's value.
 	 * <p>
 	 * This implements Prophet Velen.
 	 */
@@ -477,9 +480,10 @@ public enum Attribute {
 	/**
 	 * When set, this {@link Minion} cannot target heroes with physical attacks.
 	 * <p>
-	 * Unusually, this attribute affects the {@link net.demilich.metastone.game.actions
-	 * .PhysicalAttackAction#canBeExecutedOn(GameContext, Player, Entity)} method instead of {@link
-	 * net.demilich.metastone.game.logic.TargetLogic#filterTargets (GameContext, Player, GameAction, List)}.
+	 * Unusually, this attribute affects the
+	 * {@link net.demilich.metastone.game.actions .PhysicalAttackAction#canBeExecutedOn(GameContext, Player, Entity)}
+	 * method instead of
+	 * {@link net.demilich.metastone.game.logic.TargetLogic#filterTargets (GameContext, Player, GameAction, List)}.
 	 */
 	CANNOT_ATTACK_HEROES,
 	/**
@@ -519,9 +523,9 @@ public enum Attribute {
 	 */
 	HERO_POWERS_DISABLED,
 	/**
-	 * Records the amount of damage last sustained by an {@link Actor}. Typically used by an {@link
-	 * net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider} to feed a value into a spell (e.g., a
-	 * healing spell may heal the owning player by the amount of damage last dealt to an entity).
+	 * Records the amount of damage last sustained by an {@link Actor}. Typically used by an
+	 * {@link net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider} to feed a value into a spell
+	 * (e.g., a healing spell may heal the owning player by the amount of damage last dealt to an entity).
 	 */
 	LAST_HIT,
 	/**
@@ -529,8 +533,8 @@ public enum Attribute {
 	 */
 	LAST_HEAL,
 	/**
-	 * Marks that this {@link Entity} has a passive trigger that activates to a {@link
-	 * net.demilich.metastone.game.events.GameEvent}.
+	 * Marks that this {@link Entity} has a passive trigger that activates to a
+	 * {@link net.demilich.metastone.game.events.GameEvent}.
 	 *
 	 * @see GameLogic#fireGameEvent(GameEvent)  for the complete rules on event triggering.
 	 * @see Enchantment for the entity that corresponds to a passive trigger.
@@ -783,9 +787,9 @@ public enum Attribute {
 	 */
 	AURA_POISONOUS,
 	/**
-	 * A shorthand implementation of the Lifesteal keyword. Indicates that the {@link Hero} of the owner of the {@link
-	 * Minion}, or {@link net.demilich.metastone.game.cards.Card} should be healed by the amount of damage dealt by that
-	 * minion.
+	 * A shorthand implementation of the Lifesteal keyword. Indicates that the {@link Hero} of the owner of the
+	 * {@link Minion}, or {@link net.demilich.metastone.game.cards.Card} should be healed by the amount of damage dealt by
+	 * that minion.
 	 */
 	LIFESTEAL,
 	/**
@@ -807,8 +811,8 @@ public enum Attribute {
 	 */
 	MANA_SPENT,
 	/**
-	 * An {@link EntityReference} that, when set, indicates which entity this copied, if the entity copied with {@link
-	 * Entity#getCopy}.
+	 * An {@link EntityReference} that, when set, indicates which entity this copied, if the entity copied with
+	 * {@link Entity#getCopy}.
 	 */
 	COPIED_FROM,
 	/**
@@ -879,13 +883,14 @@ public enum Attribute {
 	 */
 	TRANSFORM_REFERENCE,
 	/**
-	 * Whenever a {@link Card} is received into the hand, this attribute indicates on which turn (typically {@link
-	 * GameContext#getTurn()} the card was received.
+	 * Whenever a {@link Card} is received into the hand, this attribute indicates on which turn (typically
+	 * {@link GameContext#getTurn()} the card was received.
 	 */
 	RECEIVED_ON_TURN,
 	/**
 	 * Remembers the {@link #ATTACK_BONUS}, {@link #HP_BONUS}, {@link #LIFESTEAL}, {@link #WINDFURY}, {@link #POISONOUS}
-	 * that was applied to the {@link Actor} that gets subjected to a {@link net.demilich.metastone.game.spells.ShuffleToDeckSpell}.
+	 * that was applied to the {@link Actor} that gets subjected to a
+	 * {@link net.demilich.metastone.game.spells.ShuffleToDeckSpell}.
 	 * <p>
 	 * Implements Kingsbane.
 	 */
@@ -954,8 +959,8 @@ public enum Attribute {
 	 */
 	HAND_INDEX,
 	/**
-	 * Indicates this card was roasted (removed from the top of the deck) by a {@link RoastSpell} on the specified {@link
-	 * Integer} turn.
+	 * Indicates this card was roasted (removed from the top of the deck) by a {@link RoastSpell} on the specified
+	 * {@link Integer} turn.
 	 * <p>
 	 * Implements Warchef Gordo / Chef's Roast effect.
 	 */
@@ -1143,7 +1148,8 @@ public enum Attribute {
 	 */
 	SURGE,
 	/**
-	 * An override for the entity's description that indicates it has an {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescription}.
+	 * An override for the entity's description that indicates it has an
+	 * {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescription}.
 	 * <p>
 	 * Contains an array of {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc}
 	 */
@@ -1222,7 +1228,21 @@ public enum Attribute {
 	/**
 	 * The {@link EntityReference} of the entity that destroyed this one.
 	 */
-	DESTROYED_BY;
+	DESTROYED_BY,
+	// todo: these fields can really bog down the client with data it doesn't need, should we scrub it out?
+	// maybe we should be using cap'n'proto
+	/**
+	 * The user who authored this card.
+	 */
+	CREATED_BY_USER_ID,
+	/**
+	 * Indicates this card is publicly published for play and should appear in collections.
+	 */
+	PUBLISHED,
+	/**
+	 * Indicates the card is archived and should not appear in collections.
+	 */
+	ARCHIVED;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
@@ -1291,8 +1311,8 @@ public enum Attribute {
 	/**
 	 * Contains the set of attributes that store turn numbers.
 	 * <p>
-	 * This affects whether or not the entity is considered having an integer attribute in the {@link
-	 * Entity#hasAttribute(Attribute)} call.
+	 * This affects whether or not the entity is considered having an integer attribute in the
+	 * {@link Entity#hasAttribute(Attribute)} call.
 	 *
 	 * @return A set of attributes.
 	 */

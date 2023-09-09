@@ -2,10 +2,12 @@ package net.demilich.metastone.game.cards;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.RarityMessage.Rarity;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * A place that stores {@link CardCatalogueRecord} records that were generated from the "cards" Java package.
+ * A place that stores {@link CardCatalogueRecordImpl} records that were generated from the "cards" Java package.
  */
 public interface CardCatalogue {
 	String FORMAT_NAME_ALL = "All";
@@ -137,11 +139,24 @@ public interface CardCatalogue {
 	@NotNull Card getCardById(@NotNull String id);
 
 	/**
-	 * Gets all the {@link CardCatalogueRecord} objects specified in the {@code cards} module.
+	 * Gets all the {@link CardCatalogueRecordImpl} objects specified in the {@code cards} module.
 	 *
 	 * @return
 	 */
-	@NotNull Map<String, CardCatalogueRecord> getRecords();
+	default
+	@NotNull Map<String, CardCatalogueRecord> getRecords() {
+		return Maps.transformValues(getCards(), card -> new CardCatalogueRecord() {
+			@Override
+			public String getId() {
+				return card.getCardId();
+			}
+
+			@Override
+			public CardDesc getDesc() {
+				return card.getDesc();
+			}
+		});
+	}
 
 	@Nullable Card getCardByName(String name);
 

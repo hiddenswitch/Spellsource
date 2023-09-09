@@ -74,11 +74,6 @@ public final class ConcatenatedCardCatalogues implements CardCatalogue {
 	}
 
 	@Override
-	public @NotNull Map<String, CardCatalogueRecord> getRecords() {
-		return cardCatalogues.stream().flatMap(cc -> cc.getRecords().entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, ((cardCatalogueRecord, cardCatalogueRecord2) -> cardCatalogueRecord)));
-	}
-
-	@Override
 	public @Nullable Card getCardByName(String name) {
 		for (var cc : cardCatalogues) {
 			var card = cc.getCardByName(name);

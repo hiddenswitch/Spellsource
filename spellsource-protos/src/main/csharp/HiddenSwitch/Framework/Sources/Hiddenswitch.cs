@@ -81,45 +81,47 @@ namespace HiddenSwitch.Proto {
             "dHMYASABKAsyNy5oaWRkZW5zd2l0Y2guQ2xpZW50Q29uZmlndXJhdGlvbi5B",
             "Y2NvdW50c0NvbmZpZ3VyYXRpb24aXwoVQWNjb3VudHNDb25maWd1cmF0aW9u",
             "EiAKGGtleWNsb2FrUmVzZXRQYXNzd29yZFVybBgBIAEoCRIkChxrZXljbG9h",
-            "a0FjY291bnRNYW5hZ2VtZW50VXJsGAIgASgJIigKD0dldENhcmRzUmVxdWVz",
-            "dBIVCg1JZl9Ob25lX01hdGNoGAEgASgJIqEBChBHZXRDYXJkc1Jlc3BvbnNl",
-            "EjcKB2NvbnRlbnQYASABKAsyJi5oaWRkZW5zd2l0Y2guR2V0Q2FyZHNSZXNw",
-            "b25zZS5Db250ZW50Eg8KB3ZlcnNpb24YAiABKAkSEAoIY2FjaGVkT2sYAyAB",
-            "KAgaMQoHQ29udGVudBImCgVjYXJkcxgBIAMoCzIXLnNwZWxsc291cmNlLkNh",
-            "cmRSZWNvcmQiOQoMTG9naW5SZXF1ZXN0EhcKD3VzZXJuYW1lT3JFbWFpbBgB",
-            "IAEoCRIQCghwYXNzd29yZBgCIAEoCSJnChRDcmVhdGVBY2NvdW50UmVxdWVz",
-            "dBINCgVlbWFpbBgBIAEoCRIQCgh1c2VybmFtZRgCIAEoCRIQCghwYXNzd29y",
-            "ZBgDIAEoCRINCgVkZWNrcxgEIAEoCBINCgVndWVzdBgFIAEoCCIsChVDaGFu",
-            "Z2VQYXNzd29yZFJlcXVlc3QSEwoLbmV3UGFzc3dvcmQYASABKAkiggEKEkxv",
-            "Z2luT3JDcmVhdGVSZXBseRI+ChNhY2Nlc3NUb2tlblJlc3BvbnNlGAEgASgL",
-            "MiEuaGlkZGVuc3dpdGNoLkFjY2Vzc1Rva2VuUmVzcG9uc2USLAoKdXNlckVu",
-            "dGl0eRgCIAEoCzIYLmhpZGRlbnN3aXRjaC5Vc2VyRW50aXR5IiQKE0FjY2Vz",
-            "c1Rva2VuUmVzcG9uc2USDQoFdG9rZW4YASABKAkiTwoKVXNlckVudGl0eRIK",
-            "CgJpZBgBIAEoCRINCgVlbWFpbBgCIAEoCRIQCgh1c2VybmFtZRgKIAEoCRIU",
-            "Cgxwcml2YWN5VG9rZW4YCyABKAkiIQoSR2V0QWNjb3VudHNSZXF1ZXN0EgsK",
-            "A2lkcxgBIAMoCSJCChBHZXRBY2NvdW50c1JlcGx5Ei4KDHVzZXJFbnRpdGll",
-            "cxgBIAMoCzIYLmhpZGRlbnN3aXRjaC5Vc2VyRW50aXR5MtQCCg9VbmF1dGhl",
-            "bnRpY2F0ZWQSVwoNQ3JlYXRlQWNjb3VudBIiLmhpZGRlbnN3aXRjaC5DcmVh",
-            "dGVBY2NvdW50UmVxdWVzdBogLmhpZGRlbnN3aXRjaC5Mb2dpbk9yQ3JlYXRl",
-            "UmVwbHkiABJHCgVMb2dpbhIaLmhpZGRlbnN3aXRjaC5Mb2dpblJlcXVlc3Qa",
-            "IC5oaWRkZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJlcGx5IgASTgoLVmVyaWZ5",
-            "VG9rZW4SIS5oaWRkZW5zd2l0Y2guQWNjZXNzVG9rZW5SZXNwb25zZRoaLmdv",
-            "b2dsZS5wcm90b2J1Zi5Cb29sVmFsdWUiABJPChBHZXRDb25maWd1cmF0aW9u",
-            "EhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GiEuaGlkZGVuc3dpdGNoLkNsaWVu",
-            "dENvbmZpZ3VyYXRpb24iADJjChRVbmF1dGhlbnRpY2F0ZWRDYXJkcxJLCghH",
-            "ZXRDYXJkcxIdLmhpZGRlbnN3aXRjaC5HZXRDYXJkc1JlcXVlc3QaHi5oaWRk",
-            "ZW5zd2l0Y2guR2V0Q2FyZHNSZXNwb25zZSIAMs8CCghBY2NvdW50cxJGCgpH",
-            "ZXRBY2NvdW50EhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5Gh4uaGlkZGVuc3dp",
-            "dGNoLkdldEFjY291bnRzUmVwbHkiABJRCgtHZXRBY2NvdW50cxIgLmhpZGRl",
-            "bnN3aXRjaC5HZXRBY2NvdW50c1JlcXVlc3QaHi5oaWRkZW5zd2l0Y2guR2V0",
-            "QWNjb3VudHNSZXBseSIAElkKDkNoYW5nZVBhc3N3b3JkEiMuaGlkZGVuc3dp",
-            "dGNoLkNoYW5nZVBhc3N3b3JkUmVxdWVzdBogLmhpZGRlbnN3aXRjaC5Mb2dp",
-            "bk9yQ3JlYXRlUmVwbHkiABJNChlSZXF1ZXN0UGFzc3dvcmRSZXNldEVtYWls",
-            "EhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GhYuZ29vZ2xlLnByb3RvYnVmLkVt",
-            "cHR5IgAyTAoFR2FtZXMSQwoJSXNJbk1hdGNoEhYuZ29vZ2xlLnByb3RvYnVm",
-            "LkVtcHR5GhwuZ29vZ2xlLnByb3RvYnVmLlN0cmluZ1ZhbHVlIgBCNwoeY29t",
-            "LmhpZGRlbnN3aXRjaC5mcmFtZXdvcmsucnBjUACqAhJIaWRkZW5Td2l0Y2gu",
-            "UHJvdG9iBnByb3RvMw=="));
+            "a0FjY291bnRNYW5hZ2VtZW50VXJsGAIgASgJIjgKD0dldENhcmRzUmVxdWVz",
+            "dBIVCg1JZl9Ob25lX01hdGNoGAEgASgJEg4KBnVzZXJJZBgCIAEoCSKhAQoQ",
+            "R2V0Q2FyZHNSZXNwb25zZRI3Cgdjb250ZW50GAEgASgLMiYuaGlkZGVuc3dp",
+            "dGNoLkdldENhcmRzUmVzcG9uc2UuQ29udGVudBIPCgd2ZXJzaW9uGAIgASgJ",
+            "EhAKCGNhY2hlZE9rGAMgASgIGjEKB0NvbnRlbnQSJgoFY2FyZHMYASADKAsy",
+            "Fy5zcGVsbHNvdXJjZS5DYXJkUmVjb3JkIjkKDExvZ2luUmVxdWVzdBIXCg91",
+            "c2VybmFtZU9yRW1haWwYASABKAkSEAoIcGFzc3dvcmQYAiABKAkiZwoUQ3Jl",
+            "YXRlQWNjb3VudFJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIdXNlcm5hbWUY",
+            "AiABKAkSEAoIcGFzc3dvcmQYAyABKAkSDQoFZGVja3MYBCABKAgSDQoFZ3Vl",
+            "c3QYBSABKAgiLAoVQ2hhbmdlUGFzc3dvcmRSZXF1ZXN0EhMKC25ld1Bhc3N3",
+            "b3JkGAEgASgJIoIBChJMb2dpbk9yQ3JlYXRlUmVwbHkSPgoTYWNjZXNzVG9r",
+            "ZW5SZXNwb25zZRgBIAEoCzIhLmhpZGRlbnN3aXRjaC5BY2Nlc3NUb2tlblJl",
+            "c3BvbnNlEiwKCnVzZXJFbnRpdHkYAiABKAsyGC5oaWRkZW5zd2l0Y2guVXNl",
+            "ckVudGl0eSIkChNBY2Nlc3NUb2tlblJlc3BvbnNlEg0KBXRva2VuGAEgASgJ",
+            "Ik8KClVzZXJFbnRpdHkSCgoCaWQYASABKAkSDQoFZW1haWwYAiABKAkSEAoI",
+            "dXNlcm5hbWUYCiABKAkSFAoMcHJpdmFjeVRva2VuGAsgASgJIiEKEkdldEFj",
+            "Y291bnRzUmVxdWVzdBILCgNpZHMYASADKAkiQgoQR2V0QWNjb3VudHNSZXBs",
+            "eRIuCgx1c2VyRW50aXRpZXMYASADKAsyGC5oaWRkZW5zd2l0Y2guVXNlckVu",
+            "dGl0eTLUAgoPVW5hdXRoZW50aWNhdGVkElcKDUNyZWF0ZUFjY291bnQSIi5o",
+            "aWRkZW5zd2l0Y2guQ3JlYXRlQWNjb3VudFJlcXVlc3QaIC5oaWRkZW5zd2l0",
+            "Y2guTG9naW5PckNyZWF0ZVJlcGx5IgASRwoFTG9naW4SGi5oaWRkZW5zd2l0",
+            "Y2guTG9naW5SZXF1ZXN0GiAuaGlkZGVuc3dpdGNoLkxvZ2luT3JDcmVhdGVS",
+            "ZXBseSIAEk4KC1ZlcmlmeVRva2VuEiEuaGlkZGVuc3dpdGNoLkFjY2Vzc1Rv",
+            "a2VuUmVzcG9uc2UaGi5nb29nbGUucHJvdG9idWYuQm9vbFZhbHVlIgASTwoQ",
+            "R2V0Q29uZmlndXJhdGlvbhIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRohLmhp",
+            "ZGRlbnN3aXRjaC5DbGllbnRDb25maWd1cmF0aW9uIgAyYwoUVW5hdXRoZW50",
+            "aWNhdGVkQ2FyZHMSSwoIR2V0Q2FyZHMSHS5oaWRkZW5zd2l0Y2guR2V0Q2Fy",
+            "ZHNSZXF1ZXN0Gh4uaGlkZGVuc3dpdGNoLkdldENhcmRzUmVzcG9uc2UiADJn",
+            "ChJBdXRoZW50aWNhdGVkQ2FyZHMSUQoOR2V0Q2FyZHNCeVVzZXISHS5oaWRk",
+            "ZW5zd2l0Y2guR2V0Q2FyZHNSZXF1ZXN0Gh4uaGlkZGVuc3dpdGNoLkdldENh",
+            "cmRzUmVzcG9uc2UiADLPAgoIQWNjb3VudHMSRgoKR2V0QWNjb3VudBIWLmdv",
+            "b2dsZS5wcm90b2J1Zi5FbXB0eRoeLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50",
+            "c1JlcGx5IgASUQoLR2V0QWNjb3VudHMSIC5oaWRkZW5zd2l0Y2guR2V0QWNj",
+            "b3VudHNSZXF1ZXN0Gh4uaGlkZGVuc3dpdGNoLkdldEFjY291bnRzUmVwbHki",
+            "ABJZCg5DaGFuZ2VQYXNzd29yZBIjLmhpZGRlbnN3aXRjaC5DaGFuZ2VQYXNz",
+            "d29yZFJlcXVlc3QaIC5oaWRkZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJlcGx5",
+            "IgASTQoZUmVxdWVzdFBhc3N3b3JkUmVzZXRFbWFpbBIWLmdvb2dsZS5wcm90",
+            "b2J1Zi5FbXB0eRoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eSIAMkwKBUdhbWVz",
+            "EkMKCUlzSW5NYXRjaBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRocLmdvb2ds",
+            "ZS5wcm90b2J1Zi5TdHJpbmdWYWx1ZSIAQjcKHmNvbS5oaWRkZW5zd2l0Y2gu",
+            "ZnJhbWV3b3JrLnJwY1AAqgISSGlkZGVuU3dpdGNoLlByb3RvYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, global::Spellsource.Proto.SpellsourceReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -137,7 +139,7 @@ namespace HiddenSwitch.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.VertxConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.VertxConfiguration.Parser, new[]{ "UseInfinispanClusterManager", "InfinspanPort" }, new[]{ "InfinspanPort" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.CardsConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.CardsConfiguration.Parser, null, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ClientConfiguration), global::HiddenSwitch.Proto.ClientConfiguration.Parser, new[]{ "Accounts" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ClientConfiguration.Types.AccountsConfiguration), global::HiddenSwitch.Proto.ClientConfiguration.Types.AccountsConfiguration.Parser, new[]{ "KeycloakResetPasswordUrl", "KeycloakAccountManagementUrl" }, null, null, null, null)}),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsRequest), global::HiddenSwitch.Proto.GetCardsRequest.Parser, new[]{ "IfNoneMatch" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsRequest), global::HiddenSwitch.Proto.GetCardsRequest.Parser, new[]{ "IfNoneMatch", "UserId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsResponse), global::HiddenSwitch.Proto.GetCardsResponse.Parser, new[]{ "Content", "Version", "CachedOk" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsResponse.Types.Content), global::HiddenSwitch.Proto.GetCardsResponse.Types.Content.Parser, new[]{ "Cards" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.LoginRequest), global::HiddenSwitch.Proto.LoginRequest.Parser, new[]{ "UsernameOrEmail", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.CreateAccountRequest), global::HiddenSwitch.Proto.CreateAccountRequest.Parser, new[]{ "Email", "Username", "Password", "Decks", "Guest" }, null, null, null, null),
@@ -5018,6 +5020,7 @@ namespace HiddenSwitch.Proto {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GetCardsRequest(GetCardsRequest other) : this() {
       ifNoneMatch_ = other.ifNoneMatch_;
+      userId_ = other.userId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -5043,6 +5046,21 @@ namespace HiddenSwitch.Proto {
       }
     }
 
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 2;
+    private string userId_ = "";
+    /// <summary>
+    /// the creator of the cards to retrieve
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -5059,6 +5077,7 @@ namespace HiddenSwitch.Proto {
         return true;
       }
       if (IfNoneMatch != other.IfNoneMatch) return false;
+      if (UserId != other.UserId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -5067,6 +5086,7 @@ namespace HiddenSwitch.Proto {
     public override int GetHashCode() {
       int hash = 1;
       if (IfNoneMatch.Length != 0) hash ^= IfNoneMatch.GetHashCode();
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -5089,6 +5109,10 @@ namespace HiddenSwitch.Proto {
         output.WriteRawTag(10);
         output.WriteString(IfNoneMatch);
       }
+      if (UserId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(UserId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -5103,6 +5127,10 @@ namespace HiddenSwitch.Proto {
         output.WriteRawTag(10);
         output.WriteString(IfNoneMatch);
       }
+      if (UserId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(UserId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -5115,6 +5143,9 @@ namespace HiddenSwitch.Proto {
       int size = 0;
       if (IfNoneMatch.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(IfNoneMatch);
+      }
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -5130,6 +5161,9 @@ namespace HiddenSwitch.Proto {
       }
       if (other.IfNoneMatch.Length != 0) {
         IfNoneMatch = other.IfNoneMatch;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -5150,6 +5184,10 @@ namespace HiddenSwitch.Proto {
             IfNoneMatch = input.ReadString();
             break;
           }
+          case 18: {
+            UserId = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -5167,6 +5205,10 @@ namespace HiddenSwitch.Proto {
             break;
           case 10: {
             IfNoneMatch = input.ReadString();
+            break;
+          }
+          case 18: {
+            UserId = input.ReadString();
             break;
           }
         }

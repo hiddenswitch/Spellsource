@@ -29,7 +29,7 @@ public class RowMappers {
                         pojo.setId(row.getString("id"));
                         pojo.setCreatedBy(row.getString("created_by"));
                         pojo.setUri(row.getString("uri"));
-                        // Omitting unrecognized type DataType [ t=xml; p=0; s=0; u="pg_catalog"."xml"; j=null ] (org.jooq.XML) for column blockly_workspace!
+                        pojo.setBlocklyWorkspace(row.getJsonObject("blockly_workspace"));
                         pojo.setCardScript(row.getJsonObject("card_script"));
                         pojo.setCreatedAt(row.getOffsetDateTime("created_at"));
                         pojo.setLastModified(row.getOffsetDateTime("last_modified"));

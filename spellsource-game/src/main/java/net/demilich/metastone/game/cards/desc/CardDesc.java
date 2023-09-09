@@ -148,7 +148,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	private EnchantmentDesc[] deckTriggers = new EnchantmentDesc[0];
 	private EnchantmentDesc[] gameTriggers = new EnchantmentDesc[0];
 	private ValueProviderDesc manaCostModifier;
-	private AttributeMap attributes;
+	private AttributeMap attributes = new AttributeMap();
 	private String author;
 	private String flavor;
 	private String wiki;
@@ -163,7 +163,7 @@ public class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Se
 	private TargetSelection targetSelectionOverride;
 	private ConditionDesc targetSelectionCondition;
 	private Spellsource.Art art;
-	private Spellsource.Tooltip[] tooltips;
+	private Spellsource.Tooltip[] tooltips = new Spellsource.Tooltip[0];
 	private Spellsource.Draft draft;
 	private Spellsource.ArtificialIntelligence artificialIntelligence;
 	@JsonIgnore

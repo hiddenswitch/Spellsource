@@ -11,8 +11,6 @@ import io.vertx.core.json.JsonObject;
 
 import java.time.OffsetDateTime;
 
-import org.jooq.XML;
-
 
 import static io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo.*;
 /**
@@ -26,7 +24,7 @@ public class CollectionCards implements VertxPojo, ICollectionCards {
     private String id;
     private String createdBy;
     private JsonObject cardScript;
-    private XML blocklyWorkspace;
+    private JsonObject blocklyWorkspace;
     private String name;
     private String type;
     private String class_;
@@ -57,7 +55,7 @@ public class CollectionCards implements VertxPojo, ICollectionCards {
         String id,
         String createdBy,
         JsonObject cardScript,
-        XML blocklyWorkspace,
+        JsonObject blocklyWorkspace,
         String name,
         String type,
         String class_,
@@ -141,7 +139,7 @@ public class CollectionCards implements VertxPojo, ICollectionCards {
      * Getter for <code>spellsource.collection_cards.blockly_workspace</code>.
      */
     @Override
-    public XML getBlocklyWorkspace() {
+    public JsonObject getBlocklyWorkspace() {
         return this.blocklyWorkspace;
     }
 
@@ -149,7 +147,7 @@ public class CollectionCards implements VertxPojo, ICollectionCards {
      * Setter for <code>spellsource.collection_cards.blockly_workspace</code>.
      */
     @Override
-    public CollectionCards setBlocklyWorkspace(XML blocklyWorkspace) {
+    public CollectionCards setBlocklyWorkspace(JsonObject blocklyWorkspace) {
         this.blocklyWorkspace = blocklyWorkspace;
         return this;
     }

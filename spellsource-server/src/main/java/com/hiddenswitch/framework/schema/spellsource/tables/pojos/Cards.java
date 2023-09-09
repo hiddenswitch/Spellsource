@@ -11,8 +11,6 @@ import io.vertx.core.json.JsonObject;
 
 import java.time.OffsetDateTime;
 
-import org.jooq.XML;
-
 
 import static io.github.jklingsporn.vertx.jooq.shared.internal.VertxPojo.*;
 /**
@@ -26,7 +24,7 @@ public class Cards implements VertxPojo, ICards {
     private String id;
     private String createdBy;
     private String uri;
-    private XML blocklyWorkspace;
+    private JsonObject blocklyWorkspace;
     private JsonObject cardScript;
     private OffsetDateTime createdAt;
     private OffsetDateTime lastModified;
@@ -53,7 +51,7 @@ public class Cards implements VertxPojo, ICards {
         String id,
         String createdBy,
         String uri,
-        XML blocklyWorkspace,
+        JsonObject blocklyWorkspace,
         JsonObject cardScript,
         OffsetDateTime createdAt,
         OffsetDateTime lastModified,
@@ -113,7 +111,13 @@ public class Cards implements VertxPojo, ICards {
     }
 
     /**
-     * Getter for <code>spellsource.cards.uri</code>.
+     * Getter for <code>spellsource.cards.uri</code>. The URI of the application
+     * that created this card. The git URL by default represents cards that came
+     * from the
+     *     Spellsource git repository.
+     * https://www.getspellsource.com/cards/editor or similar represents cards
+     * authored in the
+     *     web interface
      */
     @Override
     public String getUri() {
@@ -121,7 +125,13 @@ public class Cards implements VertxPojo, ICards {
     }
 
     /**
-     * Setter for <code>spellsource.cards.uri</code>.
+     * Setter for <code>spellsource.cards.uri</code>. The URI of the application
+     * that created this card. The git URL by default represents cards that came
+     * from the
+     *     Spellsource git repository.
+     * https://www.getspellsource.com/cards/editor or similar represents cards
+     * authored in the
+     *     web interface
      */
     @Override
     public Cards setUri(String uri) {
@@ -133,7 +143,7 @@ public class Cards implements VertxPojo, ICards {
      * Getter for <code>spellsource.cards.blockly_workspace</code>.
      */
     @Override
-    public XML getBlocklyWorkspace() {
+    public JsonObject getBlocklyWorkspace() {
         return this.blocklyWorkspace;
     }
 
@@ -141,7 +151,7 @@ public class Cards implements VertxPojo, ICards {
      * Setter for <code>spellsource.cards.blockly_workspace</code>.
      */
     @Override
-    public Cards setBlocklyWorkspace(XML blocklyWorkspace) {
+    public Cards setBlocklyWorkspace(JsonObject blocklyWorkspace) {
         this.blocklyWorkspace = blocklyWorkspace;
         return this;
     }

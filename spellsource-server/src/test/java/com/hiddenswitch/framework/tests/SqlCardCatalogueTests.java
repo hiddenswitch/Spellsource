@@ -55,6 +55,7 @@ public class SqlCardCatalogueTests extends FrameworkTestBase {
 			await(Environment.withDslContext(dsl -> dsl.update(CARDS)
 					.set(CARDS.CARD_SCRIPT, beforeChangeCardJson.getCardScript())
 					.where(CARDS.ID.eq(beforeChangeCard.getCardId()))));
+			await(Environment.sleep(100));
 			var afterChangeCard = catalogue.getCardById(cardIdTested);
 			assertTrue(afterChangeCard.getAttributes().containsKey(Attribute.RESERVED_BOOLEAN_1));
 		});

@@ -206,7 +206,11 @@ subprojects {
         }
 
         if (details.requested.group == 'org.infinispan') {
-          details.useVersion '15.0.0.Dev01'
+          details.useVersion '15.0.0.Dev02'
+        }
+
+        if (details.requested.group == 'org.objenesis') {
+          details.useVersion '3.3'
         }
       }
     }

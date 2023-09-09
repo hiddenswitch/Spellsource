@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 13.11 (Debian 13.11-1.pgdg110+1)
--- Dumped by pg_dump version 15.1 (Debian 15.1-1.pgdg110+1)
+-- Dumped by pg_dump version 13.11
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -33,15 +33,6 @@ CREATE SCHEMA keycloak;
 
 
 ALTER SCHEMA keycloak OWNER TO admin;
-
---
--- Name: public; Type: SCHEMA; Schema: -; Owner: admin
---
-
--- *not* creating schema, since initdb creates it
-
-
-ALTER SCHEMA public OWNER TO admin;
 
 --
 -- Name: spellsource; Type: SCHEMA; Schema: -; Owner: admin
@@ -169,7 +160,7 @@ CREATE TABLE spellsource.cards (
     id text NOT NULL,
     created_by character varying NOT NULL,
     uri text,
-    blockly_workspace xml,
+    blockly_workspace jsonb,
     card_script jsonb,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     last_modified timestamp with time zone DEFAULT now() NOT NULL,
@@ -180,6 +171,15 @@ CREATE TABLE spellsource.cards (
 
 
 ALTER TABLE spellsource.cards OWNER TO admin;
+
+--
+-- Name: COLUMN cards.uri; Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON COLUMN spellsource.cards.uri IS 'The URI of the application that created this card. The git URL by default represents cards that came from the
+    Spellsource git repository. https://www.getspellsource.com/cards/editor or similar represents cards authored in the
+    web interface';
+
 
 --
 -- Name: card_catalogue_formats(); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -507,13 +507,14 @@ ALTER TABLE spellsource.classes OWNER TO admin;
 
 CREATE FUNCTION spellsource.card_message(card spellsource.cards, cl spellsource.classes) RETURNS text
     LANGUAGE plpgsql STABLE
-    AS $$
+    AS $_$
 begin
     return coalesce(card.card_script ->> 'baseManaCost', '0') || ' ' || coalesce(card.card_script ->> 'name', '') ||
-           ' ' || cl.name || ' ' || coalesce(card.card_script ->> 'description', '') || ' ' ||
+           ' ' || cl.name || ' ' ||
+           replace(replace(coalesce(card.card_script ->> 'description', ''), '$', ''), '#', '') || ' ' ||
            coalesce(card.card_script ->> 'race', '') || ' ' || coalesce(card.card_script ->> 'set', 'CUSTOM');
 end;
-$$;
+$_$;
 
 
 ALTER FUNCTION spellsource.card_message(card spellsource.cards, cl spellsource.classes) OWNER TO admin;
@@ -677,7 +678,7 @@ ALTER FUNCTION spellsource.create_deck_with_cards(deck_name text, class_hero tex
 -- Name: get_collection_cards(); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
-CREATE FUNCTION spellsource.get_collection_cards() RETURNS TABLE(id text, created_by character varying, card_script jsonb, blockly_workspace xml, name text, type text, class text, cost integer, collectible boolean, search_message text, last_modified timestamp with time zone, created_at timestamp with time zone)
+CREATE FUNCTION spellsource.get_collection_cards() RETURNS TABLE(id text, created_by character varying, card_script jsonb, blockly_workspace jsonb, name text, type text, class text, cost integer, collectible boolean, search_message text, last_modified timestamp with time zone, created_at timestamp with time zone)
     LANGUAGE sql
     AS $$
 select card.id,
@@ -793,8 +794,9 @@ CREATE FUNCTION spellsource.publish_git_card(card_id text, json jsonb, creator c
     LANGUAGE plpgsql
     AS $$
 declare
-    card         spellsource.cards;
-    created_time timestamptz;
+    card          spellsource.cards;
+    created_time  timestamptz;
+    const_git_uri text := 'git@github.com:hiddenswitch/Spellsource.git';
 begin
     created_time := now();
 
@@ -810,8 +812,8 @@ begin
     end if;
 
     -- create the new published card; triggers will handle side effects
-    insert into spellsource.cards (id, created_by, card_script, created_at, is_published)
-    values (card_id, creator, json, created_time, true)
+    insert into spellsource.cards (id, created_by, card_script, created_at, is_published, uri)
+    values (card_id, creator, json, created_time, true, const_git_uri)
     returning * into card;
 
     return card;
@@ -822,20 +824,22 @@ $$;
 ALTER FUNCTION spellsource.publish_git_card(card_id text, json jsonb, creator character varying) OWNER TO admin;
 
 --
--- Name: save_card(text, xml, jsonb); Type: FUNCTION; Schema: spellsource; Owner: admin
+-- Name: save_card(text, jsonb, jsonb); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
-CREATE FUNCTION spellsource.save_card(card_id text, workspace xml, json jsonb) RETURNS spellsource.cards
+CREATE FUNCTION spellsource.save_card(card_id text, workspace jsonb, json jsonb) RETURNS spellsource.cards
     LANGUAGE plpgsql
     AS $$
 declare
     card spellsource.cards;
+    -- todo: we probably want the website itself to set this value
+    const_website_uri text := 'https://playspellsource.com/card-editor';
 begin
     card := spellsource.get_latest_card(card_id, false);
 
     if (card is null) then
-        insert into spellsource.cards (id, created_by, blockly_workspace, card_script)
-        values (card_id, spellsource.get_user_id(), workspace, json)
+        insert into spellsource.cards (id, created_by, blockly_workspace, card_script, uri)
+        values (card_id, spellsource.get_user_id(), workspace, json, const_website_uri)
         returning * into card;
     else
         update spellsource.cards
@@ -850,7 +854,44 @@ end;
 $$;
 
 
-ALTER FUNCTION spellsource.save_card(card_id text, workspace xml, json jsonb) OWNER TO admin;
+ALTER FUNCTION spellsource.save_card(card_id text, workspace jsonb, json jsonb) OWNER TO admin;
+
+--
+-- Name: generated_art; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.generated_art (
+    hash text NOT NULL,
+    owner character varying(36) DEFAULT spellsource.get_user_id() NOT NULL,
+    urls text[] NOT NULL,
+    info jsonb,
+    is_archived boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE spellsource.generated_art OWNER TO admin;
+
+--
+-- Name: save_generated_art(text, text[], jsonb); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.save_generated_art(digest text, links text[], extra_info jsonb) RETURNS spellsource.generated_art
+    LANGUAGE plpgsql
+    AS $$
+declare
+    art spellsource.generated_art;
+begin
+    insert into spellsource.generated_art(hash, urls, info)
+    values (digest, links, extra_info)
+    on conflict (hash,owner) do update set urls = links, info = extra_info
+    returning * into art;
+
+    return art;
+end
+$$;
+
+
+ALTER FUNCTION spellsource.save_generated_art(digest text, links text[], extra_info jsonb) OWNER TO admin;
 
 --
 -- Name: set_cards_in_deck(text, text[]); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -3534,6 +3575,14 @@ ALTER TABLE ONLY spellsource.games
 
 
 --
+-- Name: generated_art generated_art_hash_owner_key; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.generated_art
+    ADD CONSTRAINT generated_art_hash_owner_key UNIQUE (hash, owner);
+
+
+--
 -- Name: guests guests_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
@@ -4187,6 +4236,13 @@ CREATE INDEX decks_is_premade_idx ON spellsource.decks USING btree (is_premade) 
 --
 
 CREATE INDEX decks_trashed_idx ON spellsource.decks USING btree (trashed) WHERE (is_premade IS FALSE);
+
+
+--
+-- Name: idx_card_created_by; Type: INDEX; Schema: spellsource; Owner: admin
+--
+
+CREATE INDEX idx_card_created_by ON spellsource.cards USING btree (created_by);
 
 
 --
@@ -4991,6 +5047,14 @@ ALTER TABLE ONLY spellsource.game_users
 
 
 --
+-- Name: generated_art generated_art_owner_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.generated_art
+    ADD CONSTRAINT generated_art_owner_fkey FOREIGN KEY (owner) REFERENCES keycloak.user_entity(id);
+
+
+--
 -- Name: guests guests_user_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
@@ -5063,6 +5127,19 @@ ALTER TABLE spellsource.deck_shares ENABLE ROW LEVEL SECURITY;
 ALTER TABLE spellsource.decks ENABLE ROW LEVEL SECURITY;
 
 --
+-- Name: generated_art; Type: ROW SECURITY; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.generated_art ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: generated_art insert_art; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY insert_art ON spellsource.generated_art FOR INSERT TO website WITH CHECK ((((owner)::text = spellsource.get_user_id()) AND (NOT is_archived)));
+
+
+--
 -- Name: cards public_view; Type: POLICY; Schema: spellsource; Owner: admin
 --
 
@@ -5074,6 +5151,20 @@ CREATE POLICY public_view ON spellsource.cards FOR SELECT TO website USING (is_p
 --
 
 CREATE POLICY public_view ON spellsource.decks FOR SELECT USING (is_premade);
+
+
+--
+-- Name: generated_art update_art; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY update_art ON spellsource.generated_art FOR UPDATE TO website USING (((owner)::text = spellsource.get_user_id())) WITH CHECK (((owner)::text = spellsource.get_user_id()));
+
+
+--
+-- Name: generated_art view_art; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY view_art ON spellsource.generated_art FOR SELECT TO website USING (((owner)::text = spellsource.get_user_id()));
 
 
 --
@@ -5209,14 +5300,6 @@ CREATE POLICY website_view ON spellsource.decks FOR SELECT TO website USING (spe
 
 
 --
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: admin
---
-
-REVOKE USAGE ON SCHEMA public FROM PUBLIC;
-GRANT ALL ON SCHEMA public TO PUBLIC;
-
-
---
 -- Name: SCHEMA spellsource; Type: ACL; Schema: -; Owner: admin
 --
 
@@ -5258,6 +5341,13 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE spellsource.cards_in_deck TO website;
 --
 
 GRANT ALL ON FUNCTION spellsource.create_deck_with_cards(deck_name text, class_hero text, format_name text, card_ids text[]) TO website;
+
+
+--
+-- Name: TABLE generated_art; Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT SELECT,INSERT,UPDATE ON TABLE spellsource.generated_art TO website;
 
 
 --

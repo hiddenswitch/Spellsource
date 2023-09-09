@@ -31,6 +31,19 @@ alter table spellsource.cards
     add if not exists succession   bigint primary key generated always as identity;
 ;
 
+comment on column spellsource.cards.uri is
+    'The URI of the application that created this card. The git URL by default represents cards that came from the
+    Spellsource git repository. https://www.getspellsource.com/cards/editor or similar represents cards authored in the
+    web interface';
+
+update spellsource.cards
+-- a constant for the uri of cards from git
+set uri = 'git@github.com:hiddenswitch/Spellsource.git'
+from keycloak.user_entity
+where spellsource.cards.created_by = keycloak.user_entity.id
+  -- a constant from MigrationUtils. this is the owner of the git cards
+  and keycloak.user_entity.username = 'Spellsource';
+
 /*
 alter table spellsource.cards_in_deck
     add column card bigint references spellsource.cards (succession);
@@ -182,13 +195,15 @@ $$ language plpgsql volatile;
 create or replace function spellsource.save_card(card_id text, workspace jsonb, json jsonb) returns spellsource.cards as
 $$
 declare
-    card spellsource.cards;
+    card              spellsource.cards;
+    -- todo: we probably want the website itself to set this value
+    const_website_uri text := 'https://playspellsource.com/card-editor';
 begin
     card := spellsource.get_latest_card(card_id, false);
 
     if (card is null) then
-        insert into spellsource.cards (id, created_by, blockly_workspace, card_script)
-        values (card_id, spellsource.get_user_id(), workspace, json)
+        insert into spellsource.cards (id, created_by, blockly_workspace, card_script, uri)
+        values (card_id, spellsource.get_user_id(), workspace, json, const_website_uri)
         returning * into card;
     else
         update spellsource.cards
@@ -230,8 +245,9 @@ $$ language plpgsql volatile;
 create or replace function spellsource.publish_git_card(card_id text, json jsonb, creator varchar) returns spellsource.cards as
 $$
 declare
-    card         spellsource.cards;
-    created_time timestamptz;
+    card          spellsource.cards;
+    created_time  timestamptz;
+    const_git_uri text := 'git@github.com:hiddenswitch/Spellsource.git';
 begin
     created_time := now();
 
@@ -247,8 +263,8 @@ begin
     end if;
 
     -- create the new published card; triggers will handle side effects
-    insert into spellsource.cards (id, created_by, card_script, created_at, is_published)
-    values (card_id, creator, json, created_time, true)
+    insert into spellsource.cards (id, created_by, card_script, created_at, is_published, uri)
+    values (card_id, creator, json, created_time, true, const_git_uri)
     returning * into card;
 
     return card;
@@ -444,6 +460,9 @@ create index if not exists idx_card_id
 
 create index if not exists idx_card_id_succession
     on spellsource.cards (id, succession);
+
+create index if not exists idx_card_created_by
+    on spellsource.cards (created_by);
 
 create unique index if not exists spellsource_cards_unique_id on spellsource.cards (id)
     where is_published and not is_archived;
@@ -705,7 +724,6 @@ begin
 end;
 $$ language plpgsql;
 
---- whenever one of the cards change, this will be fired for the purposes of invalidating caches
 create or replace function spellsource.card_change_notify_event() returns trigger as
 $$
 declare
@@ -713,12 +731,16 @@ declare
 begin
     payload := json_build_object(
             '__table', tg_table_name,
-            'id', new.id
+            'id', new.id,
+            'createdBy', new.created_by
         );
     perform pg_notify('spellsource_cards_changes_v0', payload::text);
     return new;
 end;
 $$ language plpgsql;
+comment on function spellsource.card_change_notify_event is 'Whenever one of the cards change, this will be fired for
+    the purposes of invalidating caches. This is a JSON object with fields id for the card ID and createdBy for the user
+    that created the card.';
 
 drop trigger if exists card_changes_trigger on spellsource.cards;
 create trigger card_changes_trigger

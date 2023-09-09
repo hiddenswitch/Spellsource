@@ -514,6 +514,183 @@ namespace HiddenSwitch.Proto {
     }
 
   }
+  public static partial class AuthenticatedCards
+  {
+    static readonly string __ServiceName = "hiddenswitch.AuthenticatedCards";
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static void __Helper_SerializeMessage(global::Google.Protobuf.IMessage message, grpc::SerializationContext context)
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (message is global::Google.Protobuf.IBufferMessage)
+      {
+        context.SetPayloadLength(message.CalculateSize());
+        global::Google.Protobuf.MessageExtensions.WriteTo(message, context.GetBufferWriter());
+        context.Complete();
+        return;
+      }
+      #endif
+      context.Complete(global::Google.Protobuf.MessageExtensions.ToByteArray(message));
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static class __Helper_MessageCache<T>
+    {
+      public static readonly bool IsBufferMessage = global::System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(global::Google.Protobuf.IBufferMessage)).IsAssignableFrom(typeof(T));
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static T __Helper_DeserializeMessage<T>(grpc::DeserializationContext context, global::Google.Protobuf.MessageParser<T> parser) where T : global::Google.Protobuf.IMessage<T>
+    {
+      #if !GRPC_DISABLE_PROTOBUF_BUFFER_SERIALIZATION
+      if (__Helper_MessageCache<T>.IsBufferMessage)
+      {
+        return parser.ParseFrom(context.PayloadAsReadOnlySequence());
+      }
+      #endif
+      return parser.ParseFrom(context.PayloadAsNewBuffer());
+    }
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.GetCardsRequest> __Marshaller_hiddenswitch_GetCardsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.GetCardsRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::HiddenSwitch.Proto.GetCardsResponse> __Marshaller_hiddenswitch_GetCardsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HiddenSwitch.Proto.GetCardsResponse.Parser));
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::HiddenSwitch.Proto.GetCardsRequest, global::HiddenSwitch.Proto.GetCardsResponse> __Method_GetCardsByUser = new grpc::Method<global::HiddenSwitch.Proto.GetCardsRequest, global::HiddenSwitch.Proto.GetCardsResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetCardsByUser",
+        __Marshaller_hiddenswitch_GetCardsRequest,
+        __Marshaller_hiddenswitch_GetCardsResponse);
+
+    /// <summary>Service descriptor</summary>
+    public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
+    {
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.Services[2]; }
+    }
+
+    /// <summary>Base class for server-side implementations of AuthenticatedCards</summary>
+    [grpc::BindServiceMethod(typeof(AuthenticatedCards), "BindService")]
+    public abstract partial class AuthenticatedCardsBase
+    {
+      /// <summary>
+      /// Returns the cards that belong to this user
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::HiddenSwitch.Proto.GetCardsResponse> GetCardsByUser(global::HiddenSwitch.Proto.GetCardsRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+    }
+
+    /// <summary>Client for AuthenticatedCards</summary>
+    public partial class AuthenticatedCardsClient : grpc::ClientBase<AuthenticatedCardsClient>
+    {
+      /// <summary>Creates a new client for AuthenticatedCards</summary>
+      /// <param name="channel">The channel to use to make remote calls.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public AuthenticatedCardsClient(grpc::ChannelBase channel) : base(channel)
+      {
+      }
+      /// <summary>Creates a new client for AuthenticatedCards that uses a custom <c>CallInvoker</c>.</summary>
+      /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public AuthenticatedCardsClient(grpc::CallInvoker callInvoker) : base(callInvoker)
+      {
+      }
+      /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      protected AuthenticatedCardsClient() : base()
+      {
+      }
+      /// <summary>Protected constructor to allow creation of configured clients.</summary>
+      /// <param name="configuration">The client configuration.</param>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      protected AuthenticatedCardsClient(ClientBaseConfiguration configuration) : base(configuration)
+      {
+      }
+
+      /// <summary>
+      /// Returns the cards that belong to this user
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::HiddenSwitch.Proto.GetCardsResponse GetCardsByUser(global::HiddenSwitch.Proto.GetCardsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetCardsByUser(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Returns the cards that belong to this user
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::HiddenSwitch.Proto.GetCardsResponse GetCardsByUser(global::HiddenSwitch.Proto.GetCardsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetCardsByUser, null, options, request);
+      }
+      /// <summary>
+      /// Returns the cards that belong to this user
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::HiddenSwitch.Proto.GetCardsResponse> GetCardsByUserAsync(global::HiddenSwitch.Proto.GetCardsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetCardsByUserAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Returns the cards that belong to this user
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::HiddenSwitch.Proto.GetCardsResponse> GetCardsByUserAsync(global::HiddenSwitch.Proto.GetCardsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetCardsByUser, null, options, request);
+      }
+      /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      protected override AuthenticatedCardsClient NewInstance(ClientBaseConfiguration configuration)
+      {
+        return new AuthenticatedCardsClient(configuration);
+      }
+    }
+
+    /// <summary>Creates service definition that can be registered with a server</summary>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    public static grpc::ServerServiceDefinition BindService(AuthenticatedCardsBase serviceImpl)
+    {
+      return grpc::ServerServiceDefinition.CreateBuilder()
+          .AddMethod(__Method_GetCardsByUser, serviceImpl.GetCardsByUser).Build();
+    }
+
+    /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
+    /// Note: this method is part of an experimental API that can change or be removed without any prior notice.</summary>
+    /// <param name="serviceBinder">Service methods will be bound by calling <c>AddMethod</c> on this object.</param>
+    /// <param name="serviceImpl">An object implementing the server-side handling logic.</param>
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    public static void BindService(grpc::ServiceBinderBase serviceBinder, AuthenticatedCardsBase serviceImpl)
+    {
+      serviceBinder.AddMethod(__Method_GetCardsByUser, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::HiddenSwitch.Proto.GetCardsRequest, global::HiddenSwitch.Proto.GetCardsResponse>(serviceImpl.GetCardsByUser));
+    }
+
+  }
   public static partial class Accounts
   {
     static readonly string __ServiceName = "hiddenswitch.Accounts";
@@ -597,7 +774,7 @@ namespace HiddenSwitch.Proto {
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.Services[2]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.Services[3]; }
     }
 
     /// <summary>Base class for server-side implementations of Accounts</summary>
@@ -960,7 +1137,7 @@ namespace HiddenSwitch.Proto {
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
-      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.Services[3]; }
+      get { return global::HiddenSwitch.Proto.HiddenswitchReflection.Descriptor.Services[4]; }
     }
 
     /// <summary>Base class for server-side implementations of Games</summary>

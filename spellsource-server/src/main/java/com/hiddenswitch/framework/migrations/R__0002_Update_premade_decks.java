@@ -1,8 +1,8 @@
 package com.hiddenswitch.framework.migrations;
 
 import com.google.common.hash.Hashing;
+import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Legacy;
-import com.hiddenswitch.framework.impl.MigrationUtils;
 import com.hiddenswitch.spellsource.rpc.Spellsource.InventoryCollection;
 import io.vertx.core.json.Json;
 import io.vertx.sqlclient.Tuple;
@@ -47,7 +47,7 @@ public class R__0002_Update_premade_decks extends BaseJavaMigration {
 			throw new RuntimeException("duplicate names in premade decks: " + premadeDecks.stream().map(DeckCreateRequest::getName).collect(Collectors.groupingBy(identity(), counting())).entrySet().stream().filter(e -> e.getValue() > 1L).map(Map.Entry::getKey).collect(joining(", ")));
 		}
 
-		var ownerUserId = MigrationUtils.getSpellsourceUserId();
+		var ownerUserId = Environment.getSpellsourceUserId();
 		var currentDecksInBuild = premadeDecks.stream().map(DeckCreateRequest::getName).map(name -> deckIdPrefix + name).collect(toList());
 		// insert and update new decks
 		var inserts = new ArrayList<Query>();

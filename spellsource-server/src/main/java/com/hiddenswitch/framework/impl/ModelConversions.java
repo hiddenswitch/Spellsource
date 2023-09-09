@@ -455,7 +455,7 @@ public class ModelConversions {
 					return e.build();
 				})
 				// Don't include heroes that have already been added
-				.filter( e -> playerEntities.stream().noneMatch(v -> v.getId() == e.getId()))
+				.filter(e -> playerEntities.stream().noneMatch(v -> v.getId() == e.getId()))
 				.collect(toList());
 		entities.addAll(graveyardHeroes);
 
@@ -726,6 +726,12 @@ public class ModelConversions {
 		entity.setRoasted(card.hasAttribute(Attribute.ROASTED));
 		entity.setTaunt(card.hasAttribute(Attribute.TAUNT));
 		entity.setHostsTrigger(card.hasTrigger() || card.hasAura() || card.hasCardCostModifier());
+		// in order to not leak information, these now have to be sent all the time
+		if (card.getDesc().getArt() != null) {
+			entity.setArt(card.getDesc().getArt());
+		}
+		entity.addAllTooltips(Arrays.asList(card.getDesc().getTooltips()));
+
 		var heroClass = card.getHeroClass();
 
 		// Put the condition met glow on the card
@@ -740,7 +746,7 @@ public class ModelConversions {
 
 		entity.setHeroClass(heroClass);
 		entity.setCardType(card.getCardType());
-		var hostsTrigger = workingContext.getLogic().getActiveTriggers(card.getReference()).size() > 0;
+		var hostsTrigger = !workingContext.getLogic().getActiveTriggers(card.getReference()).isEmpty();
 		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.
 		// I'd personally recommend making the glowing border effect be a custom programmable part of the .json file -doombubbles
 		switch (card.getCardType()) {

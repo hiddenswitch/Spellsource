@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CardTests extends FrameworkTestBase {
 	@Test
-	public void testCards1(Vertx vertx, VertxTestContext vertxTestContext) {
+	public void testGitCardsFile(Vertx vertx, VertxTestContext vertxTestContext) {
 		var client = new Client(vertx);
 		startGateway(vertx)
 				.compose(v -> client.createAndLogin())
@@ -39,4 +39,48 @@ public class CardTests extends FrameworkTestBase {
 				.eventually(v -> client.closeFut())
 				.onComplete(vertxTestContext.succeedingThenComplete());
 	}
+
+	@Test
+	public void testCachePersonalEmpty(Vertx vertx, VertxTestContext vertxTestContext) {
+		var client = new Client(vertx);
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin())
+				.compose(v -> client.cards().getCardsByUser(GetCardsRequest.newBuilder().setUserId(client.getUserEntity().getId()).build()))
+				.compose(res -> {
+					vertxTestContext.verify(() -> {
+						assertNotEquals("", res.getVersion());
+						assertEquals(0, res.getContent().getCardsCount());
+						assertFalse(res.getCachedOk());
+					});
+					return Future.succeededFuture(res.getVersion());
+				})
+				// should default to my own user id
+				.compose(version -> client.cards().getCardsByUser(GetCardsRequest.newBuilder().setIfNoneMatch(version).build()))
+				.onSuccess(res -> {
+					vertxTestContext.verify(() -> {
+						assertTrue(res.getCachedOk());
+						assertEquals("", res.getVersion());
+						assertFalse(res.hasContent());
+					});
+				})
+				.eventually(v -> client.closeFut())
+				.onComplete(vertxTestContext.succeedingThenComplete());
+	}
+
+//	@Test
+//	public void testPersonalCardsInvalidatedCorrectly(Vertx vertx, VertxTestContext vertxTestContext) {
+//		// verify empty
+//		var client = new Client(vertx);
+//		startGateway(vertx)
+//				.compose(v -> client.createAndLogin())
+//				.compose(v -> client.cards().getCardsByUser(GetCardsRequest.newBuilder().setUserId(client.getUserEntity().getId()).build()))
+//				.compose(res -> {
+//					vertxTestContext.verify(() -> {
+//						assertNotEquals("", res.getVersion());
+//						assertEquals(0, res.getContent().getCardsCount());
+//						assertFalse(res.getCachedOk());
+//					});
+//					return Future.succeededFuture(res.getVersion());
+//				});
+//	}
 }

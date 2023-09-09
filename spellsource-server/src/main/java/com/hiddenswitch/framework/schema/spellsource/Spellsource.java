@@ -25,6 +25,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.Decks;
 import com.hiddenswitch.framework.schema.spellsource.tables.Friends;
 import com.hiddenswitch.framework.schema.spellsource.tables.GameUsers;
 import com.hiddenswitch.framework.schema.spellsource.tables.Games;
+import com.hiddenswitch.framework.schema.spellsource.tables.GeneratedArt;
 import com.hiddenswitch.framework.schema.spellsource.tables.GetClasses;
 import com.hiddenswitch.framework.schema.spellsource.tables.GetCollectionCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.Guests;
@@ -404,6 +405,11 @@ public class Spellsource extends SchemaImpl {
     public final Games GAMES = Games.GAMES;
 
     /**
+     * The table <code>spellsource.generated_art</code>.
+     */
+    public final GeneratedArt GENERATED_ART = GeneratedArt.GENERATED_ART;
+
+    /**
      * The table <code>spellsource.get_classes</code>.
      */
     public final GetClasses GET_CLASSES = GetClasses.GET_CLASSES;
@@ -555,6 +561,7 @@ public class Spellsource extends SchemaImpl {
             Friends.FRIENDS,
             GameUsers.GAME_USERS,
             Games.GAMES,
+            GeneratedArt.GENERATED_ART,
             GetClasses.GET_CLASSES,
             GetCollectionCards.GET_COLLECTION_CARDS,
             Guests.GUESTS,

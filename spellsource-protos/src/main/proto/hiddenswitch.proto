@@ -123,6 +123,8 @@ message GetCardsRequest {
   // The value returned in the ETag header from the server when this was last called, or empty if this is the
   // first call to this resource.
   string If_None_Match = 1;
+  // the creator of the cards to retrieve
+  string userId = 2;
 }
 
 // A cacheable copy of the entire card catalogue.
@@ -155,6 +157,11 @@ service Unauthenticated {
 service UnauthenticatedCards {
   // Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
   rpc GetCards(GetCardsRequest) returns (GetCardsResponse) {}
+}
+
+service AuthenticatedCards {
+  // Returns the cards that belong to this user
+  rpc GetCardsByUser(GetCardsRequest) returns (GetCardsResponse) {}
 }
 
 service Accounts {
