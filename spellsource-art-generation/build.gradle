@@ -88,8 +88,12 @@ tasks.register('run') {
 
 tasks.register("generateTypeScriptClient", GenerateTask) {
   group('spellsource')
-  inputSpec.set(file("comfyui/comfy/api/openapi.yaml").path)
-  outputDir.set(project.layout.buildDirectory.dir("comfyclient").map { it.asFile.path })
+  def inputSpecFile = provider { file("comfyui/comfy/api/openapi.yaml") }
+  // don't even configure if it doesn't exist
+  onlyIf { inputSpecFile.map { it.exists() } }
+  inputSpec.set(inputSpecFile.map { it.exists() ? it.path : file("dummy.yaml").path })
+  outputDir.set(layout.buildDirectory.dir("comfyclient").map { it.asFile.path })
+  validateSpec.set(inputSpecFile.map { it.exists() })
   generatorName = 'typescript'
   outputs.cacheIf { true }
   configOptions.putAll([
