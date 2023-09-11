@@ -5,10 +5,6 @@ import com.google.common.collect.ObjectArrays;
 import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
 import com.hiddenswitch.framework.impl.*;
-import com.hiddenswitch.framework.rpc.Hiddenswitch.GetCardsRequest;
-import com.hiddenswitch.framework.rpc.Hiddenswitch.GetCardsResponse;
-import com.hiddenswitch.framework.rpc.VertxAuthenticatedCardsGrpcServer;
-import com.hiddenswitch.framework.rpc.VertxUnauthenticatedCardsGrpcServer;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.DeckPlayerAttributeTuplesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.DeckSharesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.DecksDao;
@@ -40,7 +36,6 @@ import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
-import org.jetbrains.annotations.NotNull;
 import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
@@ -54,7 +49,6 @@ import java.time.Duration;
 import java.util.Comparator;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 import static com.hiddenswitch.framework.Environment.withExecutor;
@@ -73,8 +67,6 @@ public class Legacy {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Legacy.class);
 	private static final WeakVertxMap<List<DeckCreateRequest>> PREMADE_DECKS = new WeakVertxMap<>(Legacy::getPremadeDecksPrivate);
 	private static final WeakVertxMap<RMapCacheAsync<String, DecksGetResponse>> DECKS_CACHE = new WeakVertxMap<>(Legacy::decksCacheConstructor);
-	private static final Promise<GetCardsResponse> GET_CARDS_RESPONSE_PROMISE = Promise.promise();
-	private static final AtomicBoolean CARDS_BUILT = new AtomicBoolean();
 	private static final LongTaskTimer GET_ALL_DECKS_TIME = LongTaskTimer
 			.builder("spellsource_getalldecks_duration")
 			.minimumExpectedValue(Duration.ofMillis(5))
@@ -82,42 +74,6 @@ public class Legacy {
 			.publishPercentileHistogram()
 			.description("the amount of time spent retrieving all the decks")
 			.register(Metrics.globalRegistry);
-
-	private static final String GIT_CARD_URI = "git@github.com:hiddenswitch/Spellsource.git";
-	private static final String WEBSITE_CARD_URI = "https://playspellsource.com/card-editor";
-
-	public static BindAll<VertxAuthenticatedCardsGrpcServer.AuthenticatedCardsApi> authenticatedCards(SqlCachedCardCatalogue cardCatalogue) {
-		return new VertxAuthenticatedCardsGrpcServer.AuthenticatedCardsApi() {
-			@Override
-			public void getCardsByUser(GrpcServerRequest<GetCardsRequest, GetCardsResponse> grpcServerRequest, GetCardsRequest request, Promise<GetCardsResponse> response) {
-				var userId = request.getUserId();
-
-				if (request.getUserId().isBlank()) {
-					userId = grpcServerRequest.routingContext().user().subject();
-				}
-
-				request = GetCardsRequest.newBuilder(request).setUserId(userId).build();
-
-				response.tryComplete(cardCatalogue.cachedRequest(request));
-			}
-		}::bindAll;
-	}
-
-	public static BindAll<VertxUnauthenticatedCardsGrpcServer.UnauthenticatedCardsApi> unauthenticatedCards(SqlCachedCardCatalogue cardCatalogue) {
-		return new VertxUnauthenticatedCardsGrpcServer.UnauthenticatedCardsApi() {
-			@Override
-			public Future<GetCardsResponse> getCards(@NotNull GetCardsRequest request) {
-				request = GetCardsRequest
-						.newBuilder(request)
-						.setUserId("").build();
-				try {
-					return Future.succeededFuture(cardCatalogue.cachedRequest(request));
-				} catch (Throwable t) {
-					return Environment.<GetCardsResponse>onGrpcFailure().apply(t);
-				}
-			}
-		}::bindAll;
-	}
 
 	public static BindAll<HiddenSwitchSpellsourceAPIServiceApi> services(SqlCachedCardCatalogue cardCatalogue) {
 		return new HiddenSwitchSpellsourceAPIServiceApi() {
@@ -133,7 +89,7 @@ public class Legacy {
 				var userId = grpcServerRequest.routingContext().user().subject();
 				var deckId = request.getDeckId();
 				// first, try to trash the share if it exists
-				// otherwise, the if it's a premade deck and the trash record does not exist, insert a share record that is trashed
+				// otherwise, if it's a premade deck and the trash record does not exist, insert a share record that is trashed
 				// otherwise, if we own the deck, trash the deck.
 				return withExecutor(queryExecutor -> queryExecutor.execute(dsl -> dsl.update(DECK_SHARES)
 								.set(DECK_SHARES.TRASHED_BY_RECIPIENT, true)

@@ -5,7 +5,6 @@ import com.hiddenswitch.framework.impl.SqlCachedCardCatalogue;
 import com.hiddenswitch.framework.rpc.AccountsGrpc;
 import com.hiddenswitch.framework.rpc.AuthenticatedCardsGrpc;
 import com.hiddenswitch.framework.rpc.GamesGrpc;
-import com.hiddenswitch.framework.virtual.VirtualThreadRoutingContextHandler;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
 import com.hiddenswitch.spellsource.rpc.HiddenSwitchSpellsourceAPIServiceGrpc;
 import com.hiddenswitch.spellsource.rpc.MatchmakingGrpc;
@@ -50,8 +49,8 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 		this.matchmaking = Matchmaking.services();
 		var services = new BindAll<?>[]{
 				Legacy.services(cardCatalogue),
-				Legacy.unauthenticatedCards(cardCatalogue),
-				Legacy.authenticatedCards(cardCatalogue),
+				Cards.unauthenticatedCards(cardCatalogue),
+				Cards.authenticatedCards(cardCatalogue),
 				matchmaking.binder(),
 				Accounts.unauthenticatedService(),
 				Accounts.authenticatedService(),
@@ -94,4 +93,15 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 		await(this.httpServer.close());
 	}
 
+	public SqlCachedCardCatalogue getCardCatalogue() {
+		return cardCatalogue;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public Matchmaking.Services getMatchmaking() {
+		return matchmaking;
+	}
 }

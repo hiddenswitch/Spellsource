@@ -201,18 +201,19 @@ public class FrameworkTestBase {
 		}
 
 		public static Future<Void> awaitCheckpoints(Checkpoint... checkpoints) {
-			return all(Arrays.asList(checkpoints)).map((Void) null);
+			return Future.all(Arrays.asList(checkpoints)).map((Void) null);
 		}
+	}
 
-		public void testVirtual(Vertx vertx, VertxTestContext vertxTestContext, VertxTestContext.ExecutionBlock runnable) {
-			var verticle = new AbstractVirtualThreadVerticle() {
-				@Override
-				public void startVirtual() throws Exception {
-					vertxTestContext.verify(runnable);
-				}
-			};
-			vertx.deployVerticle(verticle)
-					.onComplete(vertxTestContext.succeedingThenComplete());
-		}
+	public void testVirtual(Vertx vertx, VertxTestContext vertxTestContext, VertxTestContext.ExecutionBlock runnable) {
+		var verticle = new AbstractVirtualThreadVerticle() {
+			@Override
+			public void startVirtual() throws Exception {
+				vertxTestContext.verify(runnable);
+			}
+		};
+		vertx.deployVerticle(verticle)
+				.onComplete(vertxTestContext.succeedingThenComplete())
+				.onSuccess(vertx::undeploy);
 	}
 }
