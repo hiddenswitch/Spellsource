@@ -40,16 +40,13 @@ scripts.each { scriptName, command ->
 }
 
 tasks.named('yarnRunTest') {
-  enabled = false
 }
 
 tasks.named('test') {
   dependsOn 'yarnRunTest', spellsourceDepTask
-  enabled = false
 }
 
 tasks.register('copyComfyClient') {
-  enabled = false
   dependsOn(':spellsource-art-generation:generateTypeScriptClient')
   def addlInput = project(':spellsource-art-generation').layout.buildDirectory.dir("comfyclient")
   def addlOutput = "src/__generated__/comfyclient"
@@ -68,7 +65,7 @@ tasks.register('copyComfyClient') {
 
 tasks.named('yarn').configure {
   group('spellsource')
-  dependsOn += ['copyComfyClient', 'nodeJsDeps']
+  dependsOn += ['copyComfyClient']
   args = ['--frozen-lockfile']
 }
 
@@ -80,11 +77,6 @@ Provider<JavaLauncher> thisToolchain() {
 Provider<RegularFile> graalFileFor(String graalBinary) {
   def toolchain = thisToolchain()
   return toolchain.map { it.metadata.installationPath.file("${graalBinary}${Os.isFamily(Os.FAMILY_WINDOWS) ? '.cmd' : ''}") }
-}
-
-tasks.register('nodeJsDeps', NpmTask) {
-  args = ['install', '-g', 'yarn']
-  outputs.cacheIf { true }
 }
 
 tasks.register('nodeJsDepsGraal') {

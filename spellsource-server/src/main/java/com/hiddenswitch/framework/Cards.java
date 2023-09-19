@@ -35,7 +35,7 @@ public class Cards {
 				try {
 					response.tryComplete(cardCatalogue.cachedRequest(request));
 				} catch (Throwable t) {
-					response.tryFail(Status.fromThrowable(t).asRuntimeException());
+					response.tryFail(Environment.onGrpcFailure().apply(t).cause());
 				}
 			}
 		}::bindAll;

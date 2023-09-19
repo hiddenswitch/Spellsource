@@ -12,7 +12,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Aftermath;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Stream;

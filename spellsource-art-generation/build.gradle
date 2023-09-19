@@ -8,15 +8,15 @@ import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 // Top-level declarations
 def venvDir = 'venv'
-def scriptsDir = System.properties['os.name'].toLowerCase().contains('windows') ? "${venvDir}/Scripts" : "${venvDir}/bin"
-def sitePackagesDir = System.properties['os.name'].toLowerCase().contains('windows') ?
+def isWindows = System.properties['os.name'].toLowerCase().contains('windows')
+def scriptsDir = isWindows ? "${venvDir}/Scripts" : "${venvDir}/bin"
+def sitePackagesDir = isWindows ?
         "${venvDir}/Lib/site-packages" :
         // todo: get the path for real using
         // python -c "import site; print(site.getsitepackages()[0])"
         "${venvDir}/lib/python3.11/site-packages"
-
+def fileExt = isWindows ? ".exe" : ""
 tasks.register('venv') {
-
   // Specify the outputs of the task
   outputs.file "venv/pyvenv.cfg"
   outputs.cacheIf { true }
@@ -32,7 +32,7 @@ tasks.register('venv') {
   }
 }
 
-[["comfyui", "comfy"], ["spellsource_art_generation", "spellsource_art_generation"]].each { tuple ->
+[["comfyui", "comfyui"], ["spellsource_art_generation", "spellsource_art_generation"]].each { tuple ->
   def dirName = tuple[0]
   def packageName = tuple[1]
   tasks.register("${packageName}_installEditable") {
@@ -45,15 +45,15 @@ tasks.register('venv') {
 
     doLast {
       exec {
-        workingDir(project.layout.projectDirectory.dir(dirName))
-        commandLine "${scriptsDir}/pip", 'install', "-e", ".", "--config-settings", "editable_mode=compat"
+        workingDir(layout.projectDirectory.dir(dirName))
+        commandLine layout.projectDirectory.file("${scriptsDir}/pip${fileExt}").asFile.path, 'install', "-e", ".", "--config-settings", "editable_mode=compat"
       }
     }
   }
 }
 
 tasks.register('install') {
-  dependsOn "comfy_installEditable", "spellsource_art_generation_installEditable"
+  dependsOn "comfyui_installEditable", "spellsource_art_generation_installEditable"
 }
 
 tasks.register("downloadModels") {
@@ -79,9 +79,8 @@ tasks.register('run') {
   doLast {
     // Run the comfyui binary from the virtual environment
     exec {
-      workingDir('workdir')
-      executable = "${scriptsDir}/comfyui"
-      args "--listen", "--enable-cors-header"
+      workingDir(layout.projectDirectory.dir("workdir"))
+      commandLine([layout.projectDirectory.file("${scriptsDir}/comfyui${fileExt}").asFile.path, "--listen", "--enable-cors-header"])
     }
   }
 }

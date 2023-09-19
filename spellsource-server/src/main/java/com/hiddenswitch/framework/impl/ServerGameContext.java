@@ -74,8 +74,7 @@ public class ServerGameContext extends GameContext implements Server {
     public static final String WRITER_ADDRESS_PREFIX = "games:writer:";
     public static final String READER_ADDRESS_PREFIX = "games:reader:";
     private static final long CLOSE_TIMEOUT_MILLIS = 4000L;
-    private static final long REGISTRATION_TIMEOUT = 4000L;
-    private static final Counter GAMES_FINISHED = Counter.builder("games.finished")
+	  private static final Counter GAMES_FINISHED = Counter.builder("games.finished")
             .description("The number of games finished.")
             .baseUnit(BaseUnits.EVENTS)
             .register(globalRegistry);
@@ -879,6 +878,8 @@ public class ServerGameContext extends GameContext implements Server {
             if (didCallEndGame()) {
                 return;
             }
+
+						GAMES_FINISHED.increment();
 
             // We have to release the users before we call end game, because that way when the client receives the end game
             // message, their model of the world is that they're no longer in a game.

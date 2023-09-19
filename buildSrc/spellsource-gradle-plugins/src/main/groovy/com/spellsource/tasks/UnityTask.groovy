@@ -66,24 +66,15 @@ abstract class UnityTask extends AbstractExecTask<UnityTask> {
     inputs.files(projectFiles)
             .withPathSensitivity(PathSensitivity.RELATIVE)
             .withPropertyName("assetsDirectory")
-    inputs.files(projectPath.map { "$it/ProjectSettings/*.asset" })
+    inputs.files(projectPath.map {
+      project
+              .fileTree("$it/ProjectSettings")
+              .include("*.asset")
+    })
             .withPathSensitivity(PathSensitivity.RELATIVE)
             .withPropertyName("projectSettings")
     outputs.dir(outputPath.map { project.layout.projectDirectory.file(it) })
             .withPropertyName("outputDirectory")
-
-
-//    def fileDependencies = project.fileTree()
-//    def packageJsonFile = project.file("$thisUnityProjectPath.asFile.path/Packages/manifest.json")
-//    // parse the package.json for file references and use the sources there
-//    def packageJson = new JsonSlurper().parseText(packageJsonFile.text)
-//    packageJson.dependencies.each { depName, dep ->
-//      def depStr = dep as String
-//      if (depStr.startsWith("file:")) {
-//        def relativeToPackages = depStr.split(":")[1]
-//        inputs.files("Packages/$relativeToPackages/**/*.cs")
-//      }
-//    }
 
     return this
   }

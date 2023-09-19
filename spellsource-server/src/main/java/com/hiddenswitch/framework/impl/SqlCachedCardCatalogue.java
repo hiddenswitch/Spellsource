@@ -6,20 +6,23 @@ import com.hiddenswitch.framework.rpc.Hiddenswitch;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.CardsDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.Cards;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Tags;
+import io.micrometer.core.instrument.binder.BaseUnits;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import io.vertx.await.Async;
-import io.vertx.core.Closeable;
 import io.vertx.core.Future;
-import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.json.jackson.DatabindCodec;
 import io.vertx.pgclient.pubsub.PgSubscriber;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.catalogues.ListCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -27,23 +30,37 @@ import net.openhft.hashing.LongHashFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.redisson.api.RBucket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS;
+import static io.micrometer.core.instrument.Metrics.globalRegistry;
 import static io.vertx.await.Async.await;
 
 public class SqlCachedCardCatalogue extends ListCardCatalogue {
-	private static Logger LOGGER = LoggerFactory.getLogger(SqlCachedCardCatalogue.class);
 	public static final RedissonProtobufCodec GET_CARDS_RESPONSE_CODEC = new RedissonProtobufCodec(Hiddenswitch.GetCardsResponse.parser());
 	private static final String SPELLSOURCE_CARDS_CHANGES_CHANNEL_FROM_DDL = "spellsource_cards_changes_v0";
+	private static final Counter.Builder REQUESTS = Counter.builder("cards.cached.request.count")
+			.description("The number of requests for cards that hit the Redis cache.")
+			.baseUnit(BaseUnits.OBJECTS);
+	private static final Counter.Builder REQUESTS_BYTES = Counter.builder("cards.cached.request.bytes")
+			.description("The number of bytes for card requests that were retrieved from the Redis cache.")
+			.baseUnit(BaseUnits.BYTES);
+	private static final Counter CARD_INVALIDATIONS = Counter.builder("cards.invalidations")
+			.description("The number of invalidations of cards received from Postgres.")
+			.baseUnit(BaseUnits.ROWS)
+			.register(globalRegistry);
+	private static final Counter CARD_LOADS = Counter.builder("cards.loads")
+			.description("The number of card records loaded into the card catalogue.")
+			.baseUnit(BaseUnits.ROWS)
+			.register(globalRegistry);
+	private static final String BUCKET_HAS_CONTENT_TAG = "bucket_has_content";
+	private static final String CLIENT_CACHE_HIT_TAG = "client_cache_hit";
+	private static final String DATA_EXPIRED_TAG = "data_expired";
 	private final Subject<String> userInvalidations = PublishSubject.create();
 	Deque<String> invalidated = new ConcurrentLinkedDeque<>();
 	WeakVertxMap<PgSubscriber> subscribers = new WeakVertxMap<>(vertx -> PgSubscriber.subscriber(vertx, Environment.pgArgs().connectionOptions()));
@@ -74,20 +91,16 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		try {
 			invalidated.clear();
 			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
-			try {
-				// this gets all the cards in SQL by all the users that are published
-				// is this really what we want to do? probably, for now. It will take hundreds of thousands of cards for this to
-				// make a significant impact on performance
-				// really we should operate the SqlCachedCardCatalogue cards object as a TTL'd or LRU'd cache. or, replicate the
-				// cards into a read-only sql database that runs side by side with the java process. would that be any faster?
-				// we're not the only people on earth with this problem.
-				var cardDbRecords = await(cardsDao.findManyByCondition(CARDS.IS_PUBLISHED.eq(true).and(CARDS.IS_ARCHIVED.eq(false))));
-				clear();
-				loadFromCardDbRecords(cardDbRecords);
-				workingContext = new GameContext(this, this.spellsource());
-			} catch (Throwable t) {
-				throw t;
-			}
+			// this gets all the cards in SQL by all the users that are published
+			// is this really what we want to do? probably, for now. It will take hundreds of thousands of cards for this to
+			// make a significant impact on performance
+			// really we should operate the SqlCachedCardCatalogue cards object as a TTL'd or LRU'd cache. or, replicate the
+			// cards into a read-only sql database that runs side by side with the java process. would that be any faster?
+			// we're not the only people on earth with this problem.
+			var cardDbRecords = await(cardsDao.findManyByCondition(CARDS.IS_PUBLISHED.eq(true).and(CARDS.IS_ARCHIVED.eq(false))));
+			clear();
+			loadFromCardDbRecords(cardDbRecords);
+			workingContext = new GameContext(this, this.spellsource());
 		} finally {
 			lock.writeLock().unlock();
 		}
@@ -105,6 +118,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		subscriber.channel(SPELLSOURCE_CARDS_CHANGES_CHANNEL_FROM_DDL)
 				.handler(payload -> context.runOnContext(v -> {
 					try {
+						CARD_INVALIDATIONS.increment();
 						var decoded = DatabindCodec.mapper().readValue(payload, SpellsourceCardChangesChannelNotification.class);
 						// todo: should we just send the whole card here? what are the downsides?
 						invalidateCardForGameplayPurposes(decoded.id());
@@ -301,29 +315,29 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 
 	@NotNull
 	private Hiddenswitch.GetCardsResponse createCardsResponse(Predicate<Card> cardPredicate) {
-			var cards = getCards().values()
-					.stream()
-					.filter(cardPredicate)
-					.map(card -> ModelConversions.getEntity(workingContext, card, 0))
-					.map(card -> Spellsource.CardRecord.newBuilder().setEntity(card))
-					.toList();
+		var cards = getCards().values()
+				.stream()
+				.filter(cardPredicate)
+				.map(card -> ModelConversions.getEntity(workingContext, card, 0))
+				.map(card -> Spellsource.CardRecord.newBuilder().setEntity(card))
+				.toList();
 
-			var builder = Hiddenswitch.GetCardsResponse.Content.newBuilder();
+		var builder = Hiddenswitch.GetCardsResponse.Content.newBuilder();
 
-			for (var i = 0; i < cards.size(); i++) {
-				cards.get(i).getEntityBuilder().setId(i);
-				builder.addCards(cards.get(i).build());
-			}
+		for (var i = 0; i < cards.size(); i++) {
+			cards.get(i).getEntityBuilder().setId(i);
+			builder.addCards(cards.get(i).build());
+		}
 
-			var built = builder.build();
-			var checksum = LongHashFunction.xx().hashBytes(built.toByteArray());
+		var built = builder.build();
+		var checksum = LongHashFunction.xx().hashBytes(built.toByteArray());
 
-			var response = Hiddenswitch.GetCardsResponse.newBuilder()
-					.setVersion(Long.toString(checksum));
+		var response = Hiddenswitch.GetCardsResponse.newBuilder()
+				.setVersion(Long.toString(checksum));
 
-			response.setContent(built);
+		response.setContent(built);
 
-			return response.build();
+		return response.build();
 
 	}
 
@@ -341,15 +355,24 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 
 		var buckets = getBucketsForUser(userId);
 		var ttl = Objects.equals(userId, gitUserId) ? Duration.ofDays(Integer.MAX_VALUE) : Duration.ofDays(1);
+		boolean bucketHasContent;
+		boolean clientCacheHit;
+		boolean dataExpired = false;
+
+		Hiddenswitch.GetCardsResponse response;
 		var head = await(buckets.head().getAsync().toCompletableFuture());
-		if (head != null && Objects.equals(head.getVersion(), request.getIfNoneMatch())) {
-			return Hiddenswitch.GetCardsResponse.newBuilder()
+
+		bucketHasContent = head != null;
+		clientCacheHit = bucketHasContent && Objects.equals(head.getVersion(), request.getIfNoneMatch());
+		if (bucketHasContent && clientCacheHit) {
+			response = Hiddenswitch.GetCardsResponse.newBuilder()
 					.setCachedOk(true)
 					.build();
 		} else {
 			var data = await(buckets.data().getAndExpireAsync(ttl).toCompletableFuture());
 
-			if (data == null) {
+			dataExpired = data == null;
+			if (dataExpired) {
 				// compute
 				data = createUserCards(userId);
 				head = Hiddenswitch.GetCardsResponse.newBuilder().setVersion(data.getVersion()).build();
@@ -357,8 +380,23 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 				buckets.data().setAsync(data, ttl);
 			}
 
-			return data;
+			response = data;
 		}
+
+		var tags = Tags.of(
+				BUCKET_HAS_CONTENT_TAG, Boolean.toString(bucketHasContent),
+				CLIENT_CACHE_HIT_TAG, Boolean.toString(clientCacheHit),
+				DATA_EXPIRED_TAG, Boolean.toString(dataExpired));
+		REQUESTS.tags(tags).register(globalRegistry).increment();
+		REQUESTS_BYTES.tags(tags).register(globalRegistry).increment(response.getSerializedSize());
+
+		return response;
+	}
+
+	@Override
+	protected void updatedWith(Map<String, CardDesc> cardDescs) {
+		CARD_LOADS.increment(cardDescs.size());
+		super.updatedWith(cardDescs);
 	}
 
 	record SpellsourceCardChangesChannelNotification(String __table, String id, String createdBy) {
@@ -366,4 +404,5 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 
 	record Buckets(RBucket<Hiddenswitch.GetCardsResponse> head, RBucket<Hiddenswitch.GetCardsResponse> data) {
 	}
+
 }

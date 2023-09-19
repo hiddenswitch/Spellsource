@@ -216,3 +216,8 @@ subprojects {
     }
   }
 }
+
+tasks.register("runServer") {
+  group("spellsource")
+  dependsOn ":spellsource-web:run", ":spellsource-server:run"
+}

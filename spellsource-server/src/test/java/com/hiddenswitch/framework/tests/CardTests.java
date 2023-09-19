@@ -93,17 +93,41 @@ public class CardTests extends FrameworkTestBase {
 			desc.put("id", cardId);
 			var jooq = Environment.jooqAkaDaoConfiguration();
 
+			// "log in" to sql as the specified user
 			var userId = jooq.dsl().setLocal(DSL.name("user.id"), DSL.value(client.getUserEntity().getId()));
 			var cardRecord = jooq.dsl().select(Routines.saveCard(cardId, new JsonObject(), desc));
 			var publish = jooq.dsl().select(Routines.publishCard(cardId));
 			var saveCard = userId.getSQL(ParamType.INLINED) + ";" + cardRecord.getSQL(ParamType.INLINED) + ";" + publish.getSQL(ParamType.INLINED);
 			await(Environment.sqlClient().query(saveCard).execute());
 			await(Environment.sleep(200));
-			var res = await(client.cards().getCardsByUser(GetCardsRequest.newBuilder().setUserId(client.getUserEntity().getId()).build()));
-			assertNotEquals("", res.getVersion());
-			assertEquals(1, res.getContent().getCardsCount());
-			assertEquals(minion.getName(), res.getContent().getCards(0).getEntity().getName());
-			assertFalse(res.getCachedOk());
+
+			// retrieve cards
+			var cardsForUserId = await(client.cards().getCardsByUser(GetCardsRequest.newBuilder().setUserId(client.getUserEntity().getId()).build()));
+			assertNotEquals("", cardsForUserId.getVersion());
+			assertEquals(1, cardsForUserId.getContent().getCardsCount());
+			assertEquals(minion.getName(), cardsForUserId.getContent().getCards(0).getEntity().getName());
+			// i should not have this cached
+			assertFalse(cardsForUserId.getCachedOk());
+
+			// check cache works
+			var cacheShouldBeOkay = await(client.cards().getCardsByUser(GetCardsRequest.newBuilder()
+					.setIfNoneMatch(cardsForUserId.getVersion())
+					.setUserId(client.getUserEntity().getId()).build()));
+			assertTrue(cacheShouldBeOkay.getCachedOk());
+			assertFalse(cacheShouldBeOkay.hasContent());
+
+			// retrieve cards as another user
+			var client2 = new Client(vertx);
+			await(client2.createAndLogin());
+			var cardsFromOtherUser = await(client2.cards().getCardsByUser(GetCardsRequest.newBuilder().setUserId(client.getUserEntity().getId()).build()));
+			assertNotEquals("", cardsFromOtherUser.getVersion());
+			assertEquals(1, cardsFromOtherUser.getContent().getCardsCount());
+			assertEquals(minion.getName(), cardsFromOtherUser.getContent().getCards(0).getEntity().getName());
+			// i should not have this cached
+			assertFalse(cardsFromOtherUser.getCachedOk());
+
+			// should be identical
+			assertEquals(cardsForUserId.getVersion(), cardsFromOtherUser.getVersion());
 		});
 	}
 }

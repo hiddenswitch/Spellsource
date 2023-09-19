@@ -12,36 +12,6 @@ unity {
 def secretsPath = "${project(':spellsource-private').projectDir}/src/secrets"
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def isMacOs = Os.isFamily(Os.FAMILY_MAC)
-//
-//tasks.register('buildMacOS', UnityTask) {
-//    description("Builds the macOS versions of the game using deploy.sh file and your local Unity version.")
-//    flags = '-m'
-//    outputDir = 'osx'
-//}
-//
-//tasks.register('buildWindows', UnityTask) {
-//    description("Builds the Windows version of the game using deploy.sh file and your local Unity version.")
-//    flags = '-w'
-//    outputDir = 'win'
-//}
-//
-//tasks.register('buildIOS', UnityTask) {
-//    description("Builds the Windows version of the game using deploy.sh file and your local Unity version.")
-//    flags = '-i'
-//    outputDir = 'ios'
-//}
-//
-//tasks.register('buildAndroid', UnityTask) {
-//    description("Builds the Android version of the game using deploy.sh file and your local Unity version.")
-//    flags = '-a'
-//    outputDir = 'android'
-//}
-//
-//tasks.register('buildWebGL', UnityTask) {
-//    description("Builds the WebGL version of the game using deploy.sh file and your local Unity version.")
-//    flags = '-W'
-//    outputDir = 'webgl'
-//}
 
 tasks.register('distIOS', Exec) { t ->
   description("Builds and uploads to Testflight the iOS project")
@@ -103,6 +73,7 @@ tasks.register('distSteam') {
 }
 
 tasks.register('run') {
+  enabled = false
   group('spellsource')
   if (isWindows) {
     dependsOn buildProject_StandaloneWindows64
@@ -113,9 +84,9 @@ tasks.register('run') {
   doLast {
     exec {
       if (isWindows) {
-        executable project.layout.buildDirectory.file("StandaloneWindows64/Spellsource.exe").get()
+        executable layout.buildDirectory.file("StandaloneWindows64/Spellsource.exe").get()
       } else if (isMacOs) {
-        executable project.layout.buildDirectory.file("StandaloneOSX/Spellsource.app/Contents/MacOS/Spellsource").get()
+        executable layout.buildDirectory.file("StandaloneOSX/Spellsource.app/Contents/MacOS/Spellsource").get()
       }
     }
   }
