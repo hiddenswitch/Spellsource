@@ -27,6 +27,8 @@ import net.openhft.hashing.LongHashFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.redisson.api.RBucket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.*;
@@ -39,6 +41,7 @@ import static com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS;
 import static io.vertx.await.Async.await;
 
 public class SqlCachedCardCatalogue extends ListCardCatalogue {
+	private static Logger LOGGER = LoggerFactory.getLogger(SqlCachedCardCatalogue.class);
 	public static final RedissonProtobufCodec GET_CARDS_RESPONSE_CODEC = new RedissonProtobufCodec(Hiddenswitch.GetCardsResponse.parser());
 	private static final String SPELLSOURCE_CARDS_CHANGES_CHANNEL_FROM_DDL = "spellsource_cards_changes_v0";
 	private final Subject<String> userInvalidations = PublishSubject.create();
@@ -46,6 +49,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 	WeakVertxMap<PgSubscriber> subscribers = new WeakVertxMap<>(vertx -> PgSubscriber.subscriber(vertx, Environment.pgArgs().connectionOptions()));
 	private PgSubscriber subscriber;
 	private String gitUserId;
+	private GameContext workingContext;
 
 	public static void invalidateGitCardsFile() {
 		var buckets = getBucketsForUser(Environment.getSpellsourceUserId());
@@ -80,6 +84,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 				var cardDbRecords = await(cardsDao.findManyByCondition(CARDS.IS_PUBLISHED.eq(true).and(CARDS.IS_ARCHIVED.eq(false))));
 				clear();
 				loadFromCardDbRecords(cardDbRecords);
+				workingContext = new GameContext(this, this.spellsource());
 			} catch (Throwable t) {
 				throw t;
 			}
@@ -284,13 +289,18 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		return createCardsResponse(cardPredicate);
 	}
 
+	@Override
+	public DeckFormat spellsource() {
+		return getFormat("Spellsource");
+	}
+
+	@Override
+	public DeckFormat defaultFormat() {
+		return spellsource();
+	}
+
 	@NotNull
 	private Hiddenswitch.GetCardsResponse createCardsResponse(Predicate<Card> cardPredicate) {
-		Async.lock(lock.readLock());
-		try {
-			var workingContext = new GameContext();
-			workingContext.setCardCatalogue(this);
-			workingContext.setDeckFormat(spellsource());
 			var cards = getCards().values()
 					.stream()
 					.filter(cardPredicate)
@@ -314,9 +324,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 			response.setContent(built);
 
 			return response.build();
-		} finally {
-			lock.readLock().unlock();
-		}
+
 	}
 
 	private void invalidateUserGetCardsResponseForUnityCollection(String userId) {
@@ -333,20 +341,20 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 
 		var buckets = getBucketsForUser(userId);
 		var ttl = Objects.equals(userId, gitUserId) ? Duration.ofDays(Integer.MAX_VALUE) : Duration.ofDays(1);
-		var head = buckets.head().get();
+		var head = await(buckets.head().getAsync().toCompletableFuture());
 		if (head != null && Objects.equals(head.getVersion(), request.getIfNoneMatch())) {
 			return Hiddenswitch.GetCardsResponse.newBuilder()
 					.setCachedOk(true)
 					.build();
 		} else {
-			var data = buckets.data().getAndExpire(ttl);
+			var data = await(buckets.data().getAndExpireAsync(ttl).toCompletableFuture());
 
 			if (data == null) {
 				// compute
 				data = createUserCards(userId);
 				head = Hiddenswitch.GetCardsResponse.newBuilder().setVersion(data.getVersion()).build();
-				buckets.head().set(head);
-				buckets.data().set(data, ttl);
+				buckets.head().setAsync(head);
+				buckets.data().setAsync(data, ttl);
 			}
 
 			return data;

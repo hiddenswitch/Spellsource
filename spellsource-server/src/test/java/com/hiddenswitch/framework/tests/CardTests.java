@@ -97,18 +97,13 @@ public class CardTests extends FrameworkTestBase {
 			var cardRecord = jooq.dsl().select(Routines.saveCard(cardId, new JsonObject(), desc));
 			var publish = jooq.dsl().select(Routines.publishCard(cardId));
 			var saveCard = userId.getSQL(ParamType.INLINED) + ";" + cardRecord.getSQL(ParamType.INLINED) + ";" + publish.getSQL(ParamType.INLINED);
-			LOGGER.warn("about to save with {}", saveCard);
-			var saved = await(Environment.sqlClient().query(saveCard).execute());
-			LOGGER.warn("saved", saveCard);
+			await(Environment.sqlClient().query(saveCard).execute());
 			await(Environment.sleep(200));
-			LOGGER.warn("getting cards");
 			var res = await(client.cards().getCardsByUser(GetCardsRequest.newBuilder().setUserId(client.getUserEntity().getId()).build()));
-			LOGGER.warn("got em");
 			assertNotEquals("", res.getVersion());
 			assertEquals(1, res.getContent().getCardsCount());
 			assertEquals(minion.getName(), res.getContent().getCards(0).getEntity().getName());
 			assertFalse(res.getCachedOk());
-			LOGGER.warn("finished");
 		});
 	}
 }

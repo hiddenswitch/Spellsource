@@ -235,4 +235,8 @@ public interface CardCatalogue {
 		var weapons = query(deckFormat, CardType.WEAPON, null, HeroClass.ANY);
 		return Lists.newArrayList(Iterables.concat(minions, spells, weapons));
 	}
+
+	default DeckFormat defaultFormat() {
+		return spellsource();
+	}
 }

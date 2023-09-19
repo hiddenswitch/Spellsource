@@ -3,6 +3,7 @@ package net.demilich.metastone.game.cards.catalogues;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import com.googlecode.concurentlocks.ReentrantReadWriteUpdateLock;
 import com.hiddenswitch.protos.Serialization;
 import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
@@ -484,7 +485,6 @@ public class ListCardCatalogue implements CardCatalogue {
 				classCardsForFormat.put(all(), classCard);
 				baseClassesForFormat.put(all(), classCard.getHeroClass());
 			}
-
 			heroCards.putAll(classCards
 					.values()
 					.stream()
@@ -492,7 +492,7 @@ public class ListCardCatalogue implements CardCatalogue {
 					// or vice versa. This should not cause a problem in terms of the consistency of the card catalogue
 					// even if it's not super useful for a game
 					.filter(card -> card.getHero() != null && cards.containsKey(card.getHero()))
-					.map(value -> getCardById(Objects.requireNonNull(value).getHero()))
+					.map(value -> cards.get(Objects.requireNonNull(value).getHero()))
 					.collect(toMap(Card::getHeroClass, Function.identity())));
 		} finally {
 			lock.writeLock().unlock();

@@ -334,14 +334,6 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		return this;
 	}
 
-	public boolean isValid() {
-		if (getName() == null
-				|| getHeroClass() == null) return false;
-		DeckFormat deckFormat = ClasspathCardCatalogue.INSTANCE.spellsource();
-		return ClasspathCardCatalogue.INSTANCE.getBaseClasses(deckFormat).contains(getHeroClass())
-				&& (getCardIds().size() + getInventoryIds().size()) == 30;
-	}
-
 	@Override
 	public String toString() {
 		return new ReflectionToStringBuilder(this).toString();

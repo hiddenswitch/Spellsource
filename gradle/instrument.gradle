@@ -1,7 +1,7 @@
-def allJvmArgs = ['--enable-preview', '--add-opens=java.base/java.lang=ALL-UNNAMED', "--add-modules", "jdk.incubator.concurrent"]
+def allJvmArgs = ['--enable-preview', '--add-opens=java.base/java.lang=ALL-UNNAMED']
 
 tasks.withType(JavaCompile).configureEach {
-  options.compilerArgs += ["--enable-preview", "--add-modules", "jdk.incubator.concurrent"]
+  options.compilerArgs += ["--enable-preview"]
 }
 
 tasks.withType(Test).configureEach {
@@ -13,10 +13,9 @@ tasks.withType(JavaExec).configureEach {
 }
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_20
+  sourceCompatibility = JavaVersion.VERSION_21
   toolchain {
-    vendor = JvmVendorSpec.GRAAL_VM
-    languageVersion = JavaLanguageVersion.of(20)
+    languageVersion = JavaLanguageVersion.of(21)
   }
 }
 

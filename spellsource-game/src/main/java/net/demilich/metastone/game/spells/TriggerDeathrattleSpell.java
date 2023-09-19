@@ -2,7 +2,6 @@ package net.demilich.metastone.game.spells;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Streams;
-import jdk.incubator.concurrent.ScopedValue;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;

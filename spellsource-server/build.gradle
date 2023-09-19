@@ -52,7 +52,7 @@ def localDatabaseName = 'spellsource'
 def localPort = '5432'
 def mainClassNameConst = 'com.hiddenswitch.framework.EntryPoint'
 def jdbcUrl = "jdbc:postgresql://localhost:5432/$localDatabaseName"
-def jvmArgs = ['--enable-preview', '--add-opens', 'java.base/java.lang=ALL-UNNAMED', "--add-modules", "jdk.incubator.concurrent"]
+def jvmArgs = ['--enable-preview', '--add-opens', 'java.base/java.lang=ALL-UNNAMED']
 
 application {
   mainClassName mainClassNameConst
