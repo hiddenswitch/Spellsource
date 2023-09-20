@@ -788,6 +788,4 @@ $$ language plpgsql;
 --- todo: implement draft queries. the draft logic may be entirely replaced by a sql function, where it will be easier to author
 --- todo: create corresponding views and grant execution privileges to the card builder for these catalogue queries
 
-select *
-from spellsource.cards
-where id = '8bcc477d-b2d9-4293-9bf5-dd8a3beddb7d-J`44N56Z{vG~n]~1VC[b';
+drop table spellsource.user_entity_addons cascade;

@@ -451,7 +451,8 @@ declare
 begin
     payload := json_build_object(
             '__table', tg_table_name,
-            'id', new.id
+            'id', new.id,
+            'createdBy', new.created_by
         );
     perform pg_notify('spellsource_cards_changes_v0', payload::text);
     return new;
@@ -460,6 +461,15 @@ $$;
 
 
 ALTER FUNCTION spellsource.card_change_notify_event() OWNER TO admin;
+
+--
+-- Name: FUNCTION card_change_notify_event(); Type: COMMENT; Schema: spellsource; Owner: admin
+--
+
+COMMENT ON FUNCTION spellsource.card_change_notify_event() IS 'Whenever one of the cards change, this will be fired for
+    the purposes of invalidating caches. This is a JSON object with fields id for the card ID and createdBy for the user
+    that created the card.';
+
 
 --
 -- Name: get_classes(); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -831,7 +841,7 @@ CREATE FUNCTION spellsource.save_card(card_id text, workspace jsonb, json jsonb)
     LANGUAGE plpgsql
     AS $$
 declare
-    card spellsource.cards;
+    card              spellsource.cards;
     -- todo: we probably want the website itself to set this value
     const_website_uri text := 'https://playspellsource.com/card-editor';
 begin
@@ -2633,20 +2643,6 @@ ALTER TABLE spellsource.matchmaking_tickets ALTER COLUMN ticket_id ADD GENERATED
 
 
 --
--- Name: user_entity_addons; Type: TABLE; Schema: spellsource; Owner: admin
---
-
-CREATE TABLE spellsource.user_entity_addons (
-    id text NOT NULL,
-    privacy_token text DEFAULT floor(((1000)::double precision + (random() * (8999)::double precision))),
-    migrated boolean DEFAULT false,
-    show_premade_decks boolean DEFAULT true
-);
-
-
-ALTER TABLE spellsource.user_entity_addons OWNER TO admin;
-
---
 -- Name: flyway_schema_history flyway_schema_history_pk; Type: CONSTRAINT; Schema: hiddenswitch; Owner: admin
 --
 
@@ -3612,14 +3608,6 @@ ALTER TABLE ONLY spellsource.matchmaking_queues
 
 ALTER TABLE ONLY spellsource.matchmaking_tickets
     ADD CONSTRAINT matchmaking_tickets_pkey PRIMARY KEY (user_id);
-
-
---
--- Name: user_entity_addons user_entity_addons_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
---
-
-ALTER TABLE ONLY spellsource.user_entity_addons
-    ADD CONSTRAINT user_entity_addons_pkey PRIMARY KEY (id);
 
 
 --
@@ -5092,14 +5080,6 @@ ALTER TABLE ONLY spellsource.matchmaking_tickets
 
 ALTER TABLE ONLY spellsource.matchmaking_tickets
     ADD CONSTRAINT matchmaking_tickets_user_id_fkey FOREIGN KEY (user_id) REFERENCES keycloak.user_entity(id) ON DELETE CASCADE;
-
-
---
--- Name: user_entity_addons user_entity_addons_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
---
-
-ALTER TABLE ONLY spellsource.user_entity_addons
-    ADD CONSTRAINT user_entity_addons_id_fkey FOREIGN KEY (id) REFERENCES keycloak.user_entity(id) ON DELETE CASCADE;
 
 
 --

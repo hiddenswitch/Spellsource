@@ -55,7 +55,6 @@ import java.util.stream.Collectors;
 import static com.hiddenswitch.framework.Environment.query;
 import static com.hiddenswitch.framework.Environment.withDslContext;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.GUESTS;
-import static com.hiddenswitch.framework.schema.spellsource.Tables.USER_ENTITY_ADDONS;
 import static io.vertx.await.Async.await;
 import static java.util.stream.Collectors.toMap;
 
@@ -224,12 +223,12 @@ public class Accounts {
 						})
 						.map(this::handleAccessTokenUserEntityTuple)
 						// hide the premade decks if the user requested to hide them
-						.compose(reply -> withDslContext(dsl -> dsl.insertInto(USER_ENTITY_ADDONS)
+						/*.compose(reply -> withDslContext(dsl -> dsl.insertInto(USER_ENTITY_ADDONS)
 								.set(USER_ENTITY_ADDONS.ID, reply.getUserEntity().getId())
 								.set(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS, request.getDecks())
 								.onDuplicateKeyUpdate()
 								.set(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS, request.getDecks()))
-								.map(reply))
+								.map(reply))*/
 						.recover(Environment.onGrpcFailure());
 			}
 

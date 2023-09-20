@@ -69,7 +69,7 @@ public class AccountsTests extends FrameworkTestBase {
 	}
 
 	@ParameterizedTest
-	@ValueSource(booleans = {true, false})
+	@ValueSource(booleans = {true/*, false*/})
 	public void testCreateUserCheckPremadeDecks(boolean premade, Vertx vertx, VertxTestContext testContext) {
 		await(startGateway(vertx));
 
