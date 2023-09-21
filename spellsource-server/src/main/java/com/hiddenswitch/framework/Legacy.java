@@ -53,7 +53,8 @@ import java.util.function.Function;
 
 import static com.hiddenswitch.framework.Environment.withExecutor;
 import static com.hiddenswitch.framework.schema.keycloak.Tables.USER_ATTRIBUTE;
-import static com.hiddenswitch.framework.schema.spellsource.Tables.*;
+import static com.hiddenswitch.framework.schema.spellsource.Tables.BOT_USERS;
+import static com.hiddenswitch.framework.schema.spellsource.Tables.DECK_SHARES;
 import static com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS;
 import static com.hiddenswitch.framework.schema.spellsource.tables.CardsInDeck.CARDS_IN_DECK;
 import static com.hiddenswitch.framework.schema.spellsource.tables.DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES;

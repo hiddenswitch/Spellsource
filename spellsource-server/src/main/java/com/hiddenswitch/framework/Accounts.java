@@ -53,6 +53,7 @@ import static com.hiddenswitch.framework.Environment.query;
 import static com.hiddenswitch.framework.Environment.withDslContext;
 import static com.hiddenswitch.framework.schema.keycloak.Keycloak.KEYCLOAK;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.GUESTS;
+import static com.hiddenswitch.framework.schema.keycloak.Tables.USER_ATTRIBUTE;
 import static io.vertx.await.Async.await;
 import static java.util.stream.Collectors.toMap;
 

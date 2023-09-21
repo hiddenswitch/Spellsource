@@ -17,11 +17,13 @@ import com.hiddenswitch.framework.schema.spellsource.routines.CardsType;
 import com.hiddenswitch.framework.schema.spellsource.routines.ClusteredGamesUpdateGameAndUsers;
 import com.hiddenswitch.framework.schema.spellsource.routines.CreateDeckWithCards;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetLatestCard;
+import com.hiddenswitch.framework.schema.spellsource.routines.GetUserAttribute;
 import com.hiddenswitch.framework.schema.spellsource.routines.GetUserId;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.PublishGitCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.SaveCard;
 import com.hiddenswitch.framework.schema.spellsource.routines.SaveGeneratedArt;
+import com.hiddenswitch.framework.schema.spellsource.routines.SetUserAttribute;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueFormats;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBannedDraftCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.CardCatalogueGetBaseClasses;
@@ -598,6 +600,56 @@ public class Routines {
     }
 
     /**
+     * Call <code>spellsource.get_user_attribute</code>
+     */
+    public static String getUserAttribute(
+          Configuration configuration
+        , String idUser
+        , String attribute
+        , String orDefault
+    ) {
+        GetUserAttribute f = new GetUserAttribute();
+        f.setIdUser(idUser);
+        f.setAttribute(attribute);
+        f.setOrDefault(orDefault);
+
+        f.execute(configuration);
+        return f.getReturnValue();
+    }
+
+    /**
+     * Get <code>spellsource.get_user_attribute</code> as a field.
+     */
+    public static Field<String> getUserAttribute(
+          String idUser
+        , String attribute
+        , String orDefault
+    ) {
+        GetUserAttribute f = new GetUserAttribute();
+        f.setIdUser(idUser);
+        f.setAttribute(attribute);
+        f.setOrDefault(orDefault);
+
+        return f.asField();
+    }
+
+    /**
+     * Get <code>spellsource.get_user_attribute</code> as a field.
+     */
+    public static Field<String> getUserAttribute(
+          Field<String> idUser
+        , Field<String> attribute
+        , Field<String> orDefault
+    ) {
+        GetUserAttribute f = new GetUserAttribute();
+        f.setIdUser(idUser);
+        f.setAttribute(attribute);
+        f.setOrDefault(orDefault);
+
+        return f.asField();
+    }
+
+    /**
      * Call <code>spellsource.get_user_id</code>
      */
     public static String getUserId(
@@ -804,6 +856,23 @@ public class Routines {
         f.setExtraInfo(extraInfo);
 
         return f.asField();
+    }
+
+    /**
+     * Call <code>spellsource.set_user_attribute</code>
+     */
+    public static void setUserAttribute(
+          Configuration configuration
+        , String idUser
+        , String attribute
+        , String val
+    ) {
+        SetUserAttribute p = new SetUserAttribute();
+        p.setIdUser(idUser);
+        p.setAttribute(attribute);
+        p.setVal(val);
+
+        p.execute(configuration);
     }
 
     /**

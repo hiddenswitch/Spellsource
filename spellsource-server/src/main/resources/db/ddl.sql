@@ -748,6 +748,25 @@ $_$;
 ALTER FUNCTION spellsource.get_latest_card(card_id text, published boolean) OWNER TO admin;
 
 --
+-- Name: get_user_attribute(text, text, text); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.get_user_attribute(id_user text, attribute text, or_default text DEFAULT 'null'::text) RETURNS text
+    LANGUAGE plpgsql
+    AS $$
+declare
+    result text;
+begin
+    result := or_default;
+    select value from keycloak.user_attribute where user_id = id_user and name = attribute limit 1 into result;
+    return result;
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.get_user_attribute(id_user text, attribute text, or_default text) OWNER TO admin;
+
+--
 -- Name: get_user_id(); Type: FUNCTION; Schema: spellsource; Owner: admin
 --
 
@@ -940,6 +959,22 @@ $$;
 
 
 ALTER FUNCTION spellsource.set_cards_in_deck(deck text, card_ids text[]) OWNER TO admin;
+
+--
+-- Name: set_user_attribute(text, text, text); Type: FUNCTION; Schema: spellsource; Owner: admin
+--
+
+CREATE FUNCTION spellsource.set_user_attribute(id_user text, attribute text, val text) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+begin
+    delete from keycloak.user_attribute where user_id = id_user and attribute = name;
+    insert into keycloak.user_attribute values (attribute, val, id_user, gen_random_uuid()::text);
+end;
+$$;
+
+
+ALTER FUNCTION spellsource.set_user_attribute(id_user text, attribute text, val text) OWNER TO admin;
 
 --
 -- Name: flyway_schema_history; Type: TABLE; Schema: hiddenswitch; Owner: admin
@@ -5097,6 +5132,19 @@ ALTER TABLE ONLY spellsource.matchmaking_tickets
 
 
 --
+-- Name: user_attribute; Type: ROW SECURITY; Schema: keycloak; Owner: admin
+--
+
+ALTER TABLE keycloak.user_attribute ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: user_attribute users; Type: POLICY; Schema: keycloak; Owner: admin
+--
+
+CREATE POLICY users ON keycloak.user_attribute USING (((user_id)::text = spellsource.get_user_id())) WITH CHECK (((user_id)::text = spellsource.get_user_id()));
+
+
+--
 -- Name: cards; Type: ROW SECURITY; Schema: spellsource; Owner: admin
 --
 
@@ -5349,6 +5397,13 @@ GRANT SELECT,INSERT,UPDATE ON TABLE spellsource.generated_art TO website;
 --
 
 GRANT ALL ON FUNCTION spellsource.set_cards_in_deck(deck text, card_ids text[]) TO website;
+
+
+--
+-- Name: TABLE user_attribute; Type: ACL; Schema: keycloak; Owner: admin
+--
+
+GRANT ALL ON TABLE keycloak.user_attribute TO website;
 
 
 --
