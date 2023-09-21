@@ -4,10 +4,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.ObjectArrays;
 import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
-import com.hiddenswitch.framework.impl.BindAll;
-import com.hiddenswitch.framework.impl.ServerGameContext;
-import com.hiddenswitch.framework.impl.SqlCachedCardCatalogue;
-import com.hiddenswitch.framework.impl.WeakVertxMap;
+import com.hiddenswitch.framework.impl.*;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.DeckPlayerAttributeTuplesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.DeckSharesDao;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.DecksDao;
@@ -55,6 +52,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import static com.hiddenswitch.framework.Environment.withExecutor;
+import static com.hiddenswitch.framework.schema.keycloak.Tables.USER_ATTRIBUTE;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.BOT_USERS;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.DECK_SHARES;
 import static com.hiddenswitch.framework.schema.spellsource.tables.Cards.CARDS;
@@ -385,6 +383,9 @@ public class Legacy {
 								// this user is a bot
 								.join(BOT_USERS, JoinType.LEFT_OUTER_JOIN)
 								.on(BOT_USERS.ID.eq(userId))
+								.join(USER_ATTRIBUTE, JoinType.LEFT_OUTER_JOIN)
+								// include the global preferences from the user entity add-ons
+								.on(USER_ATTRIBUTE.USER_ID.eq(userId).and(USER_ATTRIBUTE.NAME.eq("show_premade_decks")))
 								.where(
 										// the deck is not trashed and, if there is a deck share record, the deck share's trashed
 										// value is null or false
@@ -395,7 +396,7 @@ public class Legacy {
 														// this is a premade deck - there's no share record or if there was a share record, it was trashed by the recipient
 														DECKS.IS_PREMADE.eq(true)
 																.and(DECK_SHARES.SHARE_RECIPIENT_ID.isNull().or(DECK_SHARES.TRASHED_BY_RECIPIENT.eq(false)))
-                                                )
+																.and(USER_ATTRIBUTE.VALUE.eq("true").or(USER_ATTRIBUTE.VALUE.isNull()).or(BOT_USERS.ID.isNotNull())))
 												.or(
 														// this deck is shared with the user - it is not a premade deck, there is a recipient id, and it has not been trashed by the recipient
 														DECKS.IS_PREMADE.eq(false).and(DECK_SHARES.SHARE_RECIPIENT_ID.isNotNull().and(DECK_SHARES.TRASHED_BY_RECIPIENT.eq(false)))

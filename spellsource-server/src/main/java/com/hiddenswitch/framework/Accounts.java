@@ -55,6 +55,7 @@ import java.util.stream.Collectors;
 import static com.hiddenswitch.framework.Environment.query;
 import static com.hiddenswitch.framework.Environment.withDslContext;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.GUESTS;
+import static com.hiddenswitch.framework.schema.keycloak.Tables.USER_ATTRIBUTE;
 import static io.vertx.await.Async.await;
 import static java.util.stream.Collectors.toMap;
 
@@ -223,12 +224,12 @@ public class Accounts {
 						})
 						.map(this::handleAccessTokenUserEntityTuple)
 						// hide the premade decks if the user requested to hide them
-						/*.compose(reply -> withDslContext(dsl -> dsl.insertInto(USER_ENTITY_ADDONS)
-								.set(USER_ENTITY_ADDONS.ID, reply.getUserEntity().getId())
-								.set(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS, request.getDecks())
-								.onDuplicateKeyUpdate()
-								.set(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS, request.getDecks()))
-								.map(reply))*/
+						.compose(reply -> withDslContext(dsl -> dsl.insertInto(USER_ATTRIBUTE)
+								.set(USER_ATTRIBUTE.ID, UUID.randomUUID().toString())
+								.set(USER_ATTRIBUTE.NAME, "show_premade_decks") // TODO globally enumify ?
+								.set(USER_ATTRIBUTE.USER_ID, reply.getUserEntity().getId())
+								.set(USER_ATTRIBUTE.VALUE, String.valueOf(request.getDecks()).toLowerCase()))
+								.map(reply))
 						.recover(Environment.onGrpcFailure());
 			}
 

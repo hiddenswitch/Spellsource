@@ -788,4 +788,37 @@ $$ language plpgsql;
 --- todo: implement draft queries. the draft logic may be entirely replaced by a sql function, where it will be easier to author
 --- todo: create corresponding views and grant execution privileges to the card builder for these catalogue queries
 
-drop table spellsource.user_entity_addons cascade;
+insert into keycloak.user_attribute
+select 'show_premade_decks', show_premade_decks::text, id, gen_random_uuid()::text
+from spellsource.user_entity_addons;
+
+drop table if exists spellsource.user_entity_addons cascade;
+
+grant all on table keycloak.user_attribute to website;
+alter table keycloak.user_attribute
+    enable row level security;
+create policy users on keycloak.user_attribute
+    as permissive
+    for all
+    using (user_id = spellsource.get_user_id())
+    with check (user_id = spellsource.get_user_id());
+
+
+create function spellsource.set_user_attribute(id_user text, attribute text, val text) returns void as
+$$
+begin
+    delete from keycloak.user_attribute where user_id = id_user and attribute = name;
+    insert into keycloak.user_attribute values (attribute, val, id_user, gen_random_uuid()::text);
+end;
+$$ language plpgsql volatile;
+
+create function spellsource.get_user_attribute(id_user text, attribute text, or_default text default 'null') returns text as
+$$
+declare
+    result text;
+begin
+    result := or_default;
+    select value from keycloak.user_attribute where user_id = id_user and name = attribute limit 1 into result;
+    return result;
+end;
+$$ language plpgsql volatile;
