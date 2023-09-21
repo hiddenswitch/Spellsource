@@ -33,28 +33,30 @@ public abstract class AbstractVirtualThreadVerticle extends AbstractVerticle {
 	}
 
 	@Override
-	public final void start(Promise<Void> startPromise) throws Exception {
-		this.startingContext = Vertx.currentContext();
+	public final void start(Promise<Void> startPromise) {
+		setStartingContext(Vertx.currentContext());
 		context.runOnContext(v -> {
 			try {
 				startVirtual();
-				startingContext.runOnContext(v2 -> startPromise.complete());
 			} catch (Throwable t) {
-				startingContext.runOnContext(v2 -> startPromise.fail(t));
+				startingContext().runOnContext(v2 -> startPromise.fail(t));
+				return;
 			}
+			startingContext().runOnContext(v2 -> startPromise.complete());
 		});
 	}
 
 	@Override
-	public final void stop(Promise<Void> stopPromise) throws Exception {
-		this.stoppingContext = Vertx.currentContext();
+	public final void stop(Promise<Void> stopPromise) {
+		setStoppingContext(Vertx.currentContext());
 		context.runOnContext(v -> {
 			try {
 				stopVirtual();
-				stoppingContext.runOnContext(v2 -> stopPromise.complete());
 			} catch (Throwable t) {
-				stoppingContext.runOnContext(v2 -> stopPromise.fail(t));
+				stoppingContext().runOnContext(v2 -> stopPromise.fail(t));
+				return;
 			}
+			stoppingContext().runOnContext(v2 -> stopPromise.complete());
 		});
 	}
 
@@ -70,5 +72,13 @@ public abstract class AbstractVirtualThreadVerticle extends AbstractVerticle {
 
 	protected Context stoppingContext() {
 		return stoppingContext;
+	}
+
+	protected void setStartingContext(Context startingContext) {
+		this.startingContext = startingContext;
+	}
+
+	protected void setStoppingContext(Context stoppingContext) {
+		this.stoppingContext = stoppingContext;
 	}
 }

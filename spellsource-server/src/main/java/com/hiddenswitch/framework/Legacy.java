@@ -349,7 +349,7 @@ public class Legacy {
 	public static Future<DecksGetAllResponse> getAllDecks(CardCatalogue cardCatalogue, String userId) {
 		var timer = GET_ALL_DECKS_TIME.start();
 		return getAllValidDeckIds(userId)
-				.compose(rows -> CompositeFuture.all(rows.stream()
+				.compose(rows -> Future.all(rows.stream()
 						.map(deckId -> getDeck(cardCatalogue, deckId, userId)).collect(toList())))
 				.compose(getDeckResponses -> {
 					var reply = DecksGetAllResponse.newBuilder();
@@ -385,7 +385,9 @@ public class Legacy {
 								.on(BOT_USERS.ID.eq(userId))
 								.join(USER_ATTRIBUTE, JoinType.LEFT_OUTER_JOIN)
 								// include the global preferences from the user entity add-ons
-								.on(USER_ATTRIBUTE.USER_ID.eq(userId).and(USER_ATTRIBUTE.NAME.eq(Accounts.SHOW_PREMADE_DECKS)))
+								.on(USER_ATTRIBUTE.USER_ID.eq(userId)
+										.and(USER_ATTRIBUTE.NAME.eq(Accounts.SHOW_PREMADE_DECKS))
+										.and(USER_ATTRIBUTE.VALUE.eq(Accounts.WITH_PREMADE_DECKS)))
 								.where(
 										// the deck is not trashed and, if there is a deck share record, the deck share's trashed
 										// value is null or false
@@ -396,7 +398,7 @@ public class Legacy {
 														// this is a premade deck - there's no share record or if there was a share record, it was trashed by the recipient
 														DECKS.IS_PREMADE.eq(true)
 																.and(DECK_SHARES.SHARE_RECIPIENT_ID.isNull().or(DECK_SHARES.TRASHED_BY_RECIPIENT.eq(false)))
-																.and(USER_ATTRIBUTE.VALUE.eq(Accounts.WITH_PREMADE_DECKS).or(USER_ATTRIBUTE.VALUE.isNull()).or(BOT_USERS.ID.isNotNull())))
+																.and(USER_ATTRIBUTE.VALUE.eq(Accounts.WITH_PREMADE_DECKS).or(BOT_USERS.ID.isNotNull())))
 												.or(
 														// this deck is shared with the user - it is not a premade deck, there is a recipient id, and it has not been trashed by the recipient
 														DECKS.IS_PREMADE.eq(false).and(DECK_SHARES.SHARE_RECIPIENT_ID.isNotNull().and(DECK_SHARES.TRASHED_BY_RECIPIENT.eq(false)))

@@ -51,9 +51,7 @@ import java.util.stream.Collectors;
 
 import static com.hiddenswitch.framework.Environment.query;
 import static com.hiddenswitch.framework.Environment.withDslContext;
-import static com.hiddenswitch.framework.schema.keycloak.Keycloak.KEYCLOAK;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.GUESTS;
-import static com.hiddenswitch.framework.schema.keycloak.Tables.USER_ATTRIBUTE;
 import static io.vertx.await.Async.await;
 import static java.util.stream.Collectors.toMap;
 
@@ -74,12 +72,13 @@ import static java.util.stream.Collectors.toMap;
  */
 public class Accounts {
 	public static final String SHOW_PREMADE_DECKS = "showPremadeDecks";
+	public static final String WITH_PREMADE_DECKS = "With Premade Decks";
+	public static final String DEFAULTS = "Defaults";
+	public static final String GUEST_PREFIX = "Guest_";
 	protected static final String KEYCLOAK_LOGIN_PATH = "/realms/hiddenswitch/protocol/openid-connect/token";
 	protected static final String KEYCLOAK_FORGOT_PASSWORD_PATH = "/realms/hiddenswitch/login-actions/reset-credentials";
 	private static final Logger LOGGER = LoggerFactory.getLogger(Accounts.class);
 	private static final WeakVertxMap<Keycloak> keycloakReference = new WeakVertxMap<>(Accounts::keycloakConstructor);
-	public static final String WITH_PREMADE_DECKS = "With Premade Decks";
-	public static final String DEFAULTS = "Defaults";
 
 	/**
 	 * Gets the user associated with the GRPC context currently being executed.
@@ -182,7 +181,7 @@ public class Accounts {
 							.map(rowSet -> Lists.newArrayList(rowSet.iterator()).stream().map(RowMappers.getGuestsMapper()).collect(Collectors.toList()))
 							.compose(guestRow -> {
 								var guestId = guestRow.get(0).getId();
-								return createUser(finalEmail, "Guest " + guestId, finalPassword)
+								return createUser(finalEmail, GUEST_PREFIX + guestId, finalPassword, new UserAttributes(true))
 										.compose(userEntity ->
 												withDslContext(dsl ->
 														dsl.update(GUESTS)
@@ -210,7 +209,7 @@ public class Accounts {
 									return Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("This username already exists.").asRuntimeException());
 								}
 
-								return createUser(finalEmail, request.getUsername(), finalPassword)
+								return createUser(finalEmail, request.getUsername(), finalPassword, new UserAttributes(request.getDecks()))
 										.recover(t -> Future.failedFuture(Status.INVALID_ARGUMENT.withDescription("The username, e-mail or password are invalid. Please check them and try again.").asRuntimeException()));
 							});
 				}
@@ -224,14 +223,6 @@ public class Accounts {
 							return client.login(finalEmail, finalPassword).map(accessTokenResponse -> new Object[]{accessTokenResponse, userEntity});
 						})
 						.map(this::handleAccessTokenUserEntityTuple)
-						// hide the premade decks if the user requested to hide them
-						.compose(reply -> withDslContext(dsl -> dsl.insertInto(KEYCLOAK.USER_ATTRIBUTE)
-								.set(KEYCLOAK.USER_ATTRIBUTE.USER_ID, reply.getUserEntity().getId())
-								.set(KEYCLOAK.USER_ATTRIBUTE.NAME, SHOW_PREMADE_DECKS)
-								.set(KEYCLOAK.USER_ATTRIBUTE.ID, UUID.randomUUID().toString())
-								.set(KEYCLOAK.USER_ATTRIBUTE.VALUE, request.getDecks() ? WITH_PREMADE_DECKS : DEFAULTS)
-								.onDuplicateKeyIgnore())
-								.map(reply))
 						.recover(Environment.onGrpcFailure());
 			}
 
@@ -381,6 +372,10 @@ public class Accounts {
 	}
 
 	public static Future<UserEntity> createUser(String email, String username, String password) {
+		return createUser(email, username, password, new UserAttributes(true));
+	}
+
+	public static Future<UserEntity> createUser(String email, String username, String password, UserAttributes userAttributes) {
 		return realm()
 				.compose(realm -> {
 					var user = new UserRepresentation();
@@ -391,6 +386,8 @@ public class Accounts {
 					credential.setType(CredentialRepresentation.PASSWORD);
 					credential.setValue(password);
 					credential.setTemporary(false);
+					// todo: do we need to populate this with a username and email attribute? "username", List.of(username), "email", List.of("email")
+					user.setAttributes(Map.of(SHOW_PREMADE_DECKS, List.of(userAttributes.showPremadeDecks() ? WITH_PREMADE_DECKS : DEFAULTS)));
 					user.setCredentials(Collections.singletonList(credential));
 
 					// TODO: Not sure yet how to get the ID of the user you just created
@@ -561,5 +558,8 @@ public class Accounts {
 		jwtAuthOptions.setPermissionsClaimKey("realm_access/roles");
 
 		return jwtAuthOptions;
+	}
+
+	public record UserAttributes(boolean showPremadeDecks) {
 	}
 }

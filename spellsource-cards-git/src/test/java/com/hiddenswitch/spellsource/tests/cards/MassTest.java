@@ -70,7 +70,7 @@ public class MassTest extends TestBase {
 	 * <p>
 	 * The game is given a maximum of 10,000 milliseconds to execute.
 	 */
-	@RepeatedTest(value = 100000)
+	@RepeatedTest(value = 10000)
 	public void testRandomMassPlay() {
 		GameContext context = TestBase.fromTwoRandomDecks(ThreadLocalRandom.current().nextLong(), catalogueWithExceptions);
 

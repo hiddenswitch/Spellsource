@@ -3,11 +3,13 @@ package com.hiddenswitch.framework.tests;
 import com.google.common.base.Strings;
 import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.*;
-import com.hiddenswitch.framework.rpc.Hiddenswitch.*;
+import com.hiddenswitch.framework.rpc.Hiddenswitch.AccessTokenResponse;
+import com.hiddenswitch.framework.rpc.Hiddenswitch.CreateAccountRequest;
+import com.hiddenswitch.framework.rpc.Hiddenswitch.GetAccountsRequest;
+import com.hiddenswitch.framework.rpc.Hiddenswitch.UserEntity;
 import com.hiddenswitch.framework.rpc.VertxAccountsGrpcClient;
 import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
-import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
 import io.vertx.core.Vertx;
@@ -71,22 +73,14 @@ public class AccountsTests extends FrameworkTestBase {
 	@ParameterizedTest
 	@ValueSource(booleans = {true, false})
 	public void testCreateUserCheckPremadeDecks(boolean premade, Vertx vertx, VertxTestContext testContext) {
-		await(startGateway(vertx));
-
-		var verticle = new AbstractVirtualThreadVerticle() {
-			@Override
-			public void startVirtual() throws Exception {
-				var client = new Client(vertx);
-				var userId = UUID.randomUUID().toString();
-				await(client.createAndLogin(userId, userId + "@hiddenswitch.com", "password", premade));
-				var decksGetAllResponse = await(client.legacy().decksGetAll(Empty.getDefaultInstance()));
-				testContext.verify(() -> {
-					assertEquals(premade ? Legacy.getPremadeDecks().size() : 0, decksGetAllResponse.getDecksCount(), "premade decks count");
-				});
-			}
-		};
-		await(vertx.deployVerticle(verticle));
-		testContext.completeNow();
+		testVirtual(vertx, testContext, () -> {
+			await(startGateway(vertx));
+			var client = new Client(vertx);
+			var userId = UUID.randomUUID().toString();
+			await(client.createAndLogin(userId, userId + "@hiddenswitch.com", "password", premade));
+			var decksGetAllResponse = await(client.legacy().decksGetAll(Empty.getDefaultInstance()));
+			assertEquals(premade ? Legacy.getPremadeDecks().size() : 0, decksGetAllResponse.getDecksCount(), "premade decks count");
+		});
 	}
 
 	@Test

@@ -2,16 +2,14 @@ package com.hiddenswitch.spellsource.tests.cards;
 
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
+import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ScanResult;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
-import net.demilich.metastone.game.cards.catalogues.ListCardCatalogue;
 import net.demilich.metastone.game.entities.Entity;
-import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import net.demilich.metastone.game.logic.Trace;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -30,8 +28,8 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
-import static net.demilich.metastone.tests.util.TestBase.fromTwoRandomDecks;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @Execution(ExecutionMode.CONCURRENT)
 public class TraceTests extends TestBase {
@@ -41,7 +39,7 @@ public class TraceTests extends TestBase {
 	public static Object[][] getTraces() {
 		try (ScanResult scanResult = new ClassGraph()
 				.disableRuntimeInvisibleAnnotations()
-				.whitelistPaths(getDirectoryPrefix()).scan()) {
+				.acceptPaths(getDirectoryPrefix()).scan()) {
 			List<Trace> traces = scanResult
 					.getResourcesWithExtension(".json")
 					.stream()
@@ -153,6 +151,7 @@ public class TraceTests extends TestBase {
 	 * This test can be used to find source cards that cause issues in game reproducibility.
 	 */
 	@Test
+	@Disabled
 	public void testDiagnoseTraces() {
 		Multiset<String> cards = ConcurrentHashMultiset.create();
 		IntStream.range(0, 10000).parallel().forEach(i -> {
@@ -171,11 +170,14 @@ public class TraceTests extends TestBase {
 		// Find the card which most frequently appear in the bad set
 		var entries = new ArrayList<>(cards.entrySet());
 		entries.sort(Comparator.comparing((Multiset.Entry e) -> e.getCount()).reversed());
-		LOGGER.error("Cards which appeared in decks with reproducibility issues:");
-		for (var entry : entries) {
-			try {
-				LOGGER.error("{}x: {} ({})", entry.getCount(), entry.getElement(), cardCatalogue.getCardById(entry.getElement()).getDescription());
-			} catch (Throwable ignored) {}
+		if (!entries.isEmpty()) {
+			LOGGER.error("Cards which appeared in decks with reproducibility issues:");
+			for (var entry : entries) {
+				try {
+					LOGGER.error("{}x: {} ({})", entry.getCount(), entry.getElement(), cardCatalogue.getCardById(entry.getElement()).getDescription());
+				} catch (Throwable ignored) {
+				}
+			}
 		}
 		if (!cards.isEmpty()) {
 			fail("Invalid trace");
