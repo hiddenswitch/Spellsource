@@ -442,7 +442,7 @@ export class DefaultApiRequestFactory extends BaseAPIRequestFactory {
         if (image !== undefined) {
              // TODO: replace .append with .set
              if (localVarFormParams instanceof FormData) {
-                 localVarFormParams.append('image', image, image.name);
+                 localVarFormParams.append('image', image as any, image.name);
              }
         }
 

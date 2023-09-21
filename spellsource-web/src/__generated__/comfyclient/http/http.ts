@@ -1,6 +1,6 @@
 import { Observable, from } from '../rxjsStub';
 
-export * from './isomorphic-fetch';
+export {} from './isomorphic-fetch';
 
 /**
  * Represents an HTTP method.
@@ -141,7 +141,7 @@ export class SelfDecodingBody implements ResponseBody {
             const reader = new FileReader();
             reader.addEventListener("load", () => resolve(reader.result as string));
             reader.addEventListener("error", () => reject(reader.error));
-            reader.readAsText(data);
+            reader.readAsText(data as any);
         });
     }
 }
@@ -188,7 +188,7 @@ export class ResponseContext {
         const fileName = this.getParsedHeader("content-disposition")["filename"] || "";
         const contentType = this.headers["content-type"] || "";
         try {
-            return new File([data], fileName, { type: contentType });
+            return new File([data], fileName, { type: contentType }) as any;
         } catch (error) {
             /** Fallback for when the File constructor is not available */
             return Object.assign(data, {

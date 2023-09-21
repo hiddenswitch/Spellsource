@@ -61,6 +61,24 @@ tasks.register('copyComfyClient') {
       exclude("index.ts")
     }
   }
+  
+  finalizedBy 'fixComfyClient'
+}
+
+tasks.register('fixComfyClient') {
+  doLast {
+    def http = file("src/__generated__/comfyclient/http/http.ts")
+    
+    http.text = http.text
+            .replaceFirst(/export \* from/, 'export {} from')
+            .replaceFirst(/(reader.readAsText\(data)\)/, '$1 as any)')
+            .replaceFirst(/(return new File\(\[data], fileName, \{ type: contentType }\));/, '$1 as any;')
+    
+    def defaultApi = file("src/__generated__/comfyclient/apis/DefaultApi.ts")
+    
+    defaultApi.text = defaultApi.text.replaceFirst(/(localVarFormParams.append\('image', image),/, '$1 as any,')
+    
+  }
 }
 
 tasks.named('yarn').configure {
