@@ -78,6 +78,7 @@ dependencies {
   implementation(group: 'org.keycloak', name: 'keycloak-admin-client', version: "$keycloakVersion") {
     exclude group: 'org.jboss.resteasy', module: 'resteasy-client'
   }
+  implementation 'jakarta.ws.rs:jakarta.ws.rs-api:3.1.0'
   implementation "org.keycloak:keycloak-server-spi:$keycloakVersion"
   implementation "org.keycloak:keycloak-server-spi-private:$keycloakVersion"
 
@@ -236,7 +237,7 @@ tasks.register('stopPostgresContainer', DockerStopContainer) {
 
 tasks.register('createKeycloakContainer', DockerCreateContainer) {
   dependsOn += [createPostgresContainer, pullKeycloakImage]
-  imageId.set("quay.io/keycloak/keycloak:20.0")
+  imageId.set("quay.io/keycloak/keycloak:22.0.3")
   envVars.putAll([
           'KEYCLOAK_ADMIN_USERNAME': "admin",
           'KEYCLOAK_ADMIN_PASSWORD': 'password',
@@ -247,7 +248,8 @@ tasks.register('createKeycloakContainer', DockerCreateContainer) {
           'KC_DB_USERNAME'         : localUsername,
           'KC_DB_PASSWORD'         : localPassword,
           'KC_DB_SCHEMA'           : 'keycloak',
-          'KC_HOSTNAME_STRICT'     : 'false'
+          'KC_HOSTNAME_STRICT'     : 'false',
+          'KC_FEATURES'            : 'declarative-user-profile'
   ])
   cmd.set(["start-dev"])
   hostConfig.autoRemove.set(true)

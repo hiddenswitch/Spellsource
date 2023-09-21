@@ -18,9 +18,22 @@ import org.junit.jupiter.api.Test;
 
 import java.util.stream.Collectors;
 
+import static io.vertx.await.Async.await;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DecksTests extends FrameworkTestBase {
+
+	@NotNull
+	public static Future<DecksPutResponse> createRandomDeck(Client client) {
+		var service = client.legacy();
+		var randomDeck = TestBase.randomDeck();
+		return service.decksPut(DecksPutRequest.newBuilder()
+				.setName("Test Deck")
+				.setFormat(randomDeck.getFormat().getName())
+				.setHeroClass(randomDeck.getHeroClass())
+				.addAllCardIds(randomDeck.getCards().stream().map(Card::getCardId).collect(Collectors.toList()))
+				.build());
+	}
 
 	@Test
 	public void testCreateDeck(Vertx vertx, VertxTestContext testContext) {
@@ -49,13 +62,13 @@ public class DecksTests extends FrameworkTestBase {
 					var toReplace = decksPutResponse.getCollection().getInventory(10).getId();
 					var service = client.legacy();
 					return service.decksUpdate(DecksUpdateRequest.newBuilder()
-							.setDeckId(decksPutResponse.getDeckId())
-							.setUpdateCommand(DecksUpdateCommand.newBuilder()
-									.addPullAllInventoryIds(toReplace)
-									.setPushCardIds(DecksUpdateCommand.PushCardIdsMessage.newBuilder()
-											.addEach(replacement)
-											.build())
-									.build()).build())
+									.setDeckId(decksPutResponse.getDeckId())
+									.setUpdateCommand(DecksUpdateCommand.newBuilder()
+											.addPullAllInventoryIds(toReplace)
+											.setPushCardIds(DecksUpdateCommand.PushCardIdsMessage.newBuilder()
+													.addEach(replacement)
+													.build())
+											.build()).build())
 							.onSuccess(decksGetResponse -> {
 								testContext.verify(() -> {
 									assertTrue(decksGetResponse.getCollection().getInventoryList().stream().anyMatch(cr -> cr.getEntity().getCardId().equals(replacement)), "should have added lunstone");
@@ -67,7 +80,6 @@ public class DecksTests extends FrameworkTestBase {
 				.onComplete(testContext.succeedingThenComplete());
 	}
 
-
 	@Test
 	public void testUpdateDecksWithCardIds(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
@@ -76,10 +88,10 @@ public class DecksTests extends FrameworkTestBase {
 				.compose(v -> {
 					var service = client.legacy();
 
-                    return service.decksPut(DecksPutRequest.newBuilder()
-							.setName("Test Deck 2")
-							.setHeroClass(HeroClass.TEST)
-							.setFormat(ClasspathCardCatalogue.INSTANCE.spellsource().getName()).build())
+					return service.decksPut(DecksPutRequest.newBuilder()
+									.setName("Test Deck 2")
+									.setHeroClass(HeroClass.TEST)
+									.setFormat(ClasspathCardCatalogue.INSTANCE.spellsource().getName()).build())
 							.compose(decksPutResponse -> service.decksUpdate(DecksUpdateRequest.newBuilder()
 									.setDeckId(decksPutResponse.getCollection().getId())
 									.setUpdateCommand(DecksUpdateCommand.newBuilder()
@@ -162,6 +174,19 @@ public class DecksTests extends FrameworkTestBase {
 	}
 
 	@Test
+	public void testNoPremadeDecks(Vertx vertx, VertxTestContext testContext) {
+		testVirtual(vertx, testContext, () -> {
+			var client = new Client(vertx);
+			await(startGateway(vertx));
+			await(client.createAndLogin("someusername", "someemail@test.com", "somepassword", false));
+			var service = client.legacy();
+			var decks = await(service.decksGetAll(Empty.getDefaultInstance()));
+			assertEquals(0, decks.getDecksCount());
+			client.close();
+		});
+	}
+
+	@Test
 	public void testDuplicateDeck(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
 
@@ -181,11 +206,11 @@ public class DecksTests extends FrameworkTestBase {
 						}))
 				// try editing the deck, observe it is successful
 				.compose(copiedDeck -> client.legacy().decksUpdate(DecksUpdateRequest.newBuilder()
-						.setDeckId(copiedDeck.getCollection().getId())
-						.setUpdateCommand(DecksUpdateCommand.newBuilder()
-								.setSetName("testname")
+								.setDeckId(copiedDeck.getCollection().getId())
+								.setUpdateCommand(DecksUpdateCommand.newBuilder()
+										.setSetName("testname")
+										.build())
 								.build())
-						.build())
 						.onSuccess(res -> {
 							testContext.verify(() -> {
 								assertEquals("testname", res.getCollection().getName());
@@ -193,17 +218,5 @@ public class DecksTests extends FrameworkTestBase {
 						}))
 				.onComplete(client::close)
 				.onComplete(testContext.succeedingThenComplete());
-	}
-
-	@NotNull
-	public static Future<DecksPutResponse> createRandomDeck(Client client) {
-		var service = client.legacy();
-		var randomDeck = TestBase.randomDeck();
-		return service.decksPut(DecksPutRequest.newBuilder()
-				.setName("Test Deck")
-				.setFormat(randomDeck.getFormat().getName())
-				.setHeroClass(randomDeck.getHeroClass())
-				.addAllCardIds(randomDeck.getCards().stream().map(Card::getCardId).collect(Collectors.toList()))
-				.build());
 	}
 }

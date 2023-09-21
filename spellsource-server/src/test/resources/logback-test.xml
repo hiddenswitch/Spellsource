@@ -28,6 +28,7 @@
     <logger name="com.hiddenswitch.framework" level="WARN"/>
     <logger name="com.hiddenswitch.framework.impl.ClusteredGames" level="WARN"/>
     <logger name="com.hiddenswitch.framework.impl.ClientMatchmakingService" level="WARN"/>
+    <logger name="com.hiddenswitch.framework.tests.applications" level="INFO"/>
     <logger name="com.hiddenswitch.diagnostics" level="ALL"/>
     <logger name="net.demilich.metastone.game" level="WARN"/>
     <logger name="io.vertx.ext.auth.jwt" level="ERROR"/>

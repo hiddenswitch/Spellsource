@@ -859,7 +859,7 @@ public class RowMappers {
                         com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer pojo = new com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer();
                         pojo.setId(row.getString("id"));
                         pojo.setAllowRsRemoteMgmt(row.getBoolean("allow_rs_remote_mgmt"));
-                        pojo.setPolicyEnforceMode(row.getString("policy_enforce_mode"));
+                        pojo.setPolicyEnforceMode(row.getShort("policy_enforce_mode"));
                         pojo.setDecisionStrategy(row.getShort("decision_strategy"));
                         return pojo;
                 };
@@ -888,8 +888,8 @@ public class RowMappers {
                         pojo.setName(row.getString("name"));
                         pojo.setDescription(row.getString("description"));
                         pojo.setType(row.getString("type"));
-                        pojo.setDecisionStrategy(row.getString("decision_strategy"));
-                        pojo.setLogic(row.getString("logic"));
+                        pojo.setDecisionStrategy(row.getShort("decision_strategy"));
+                        pojo.setLogic(row.getShort("logic"));
                         pojo.setResourceServerId(row.getString("resource_server_id"));
                         pojo.setOwner(row.getString("owner"));
                         return pojo;

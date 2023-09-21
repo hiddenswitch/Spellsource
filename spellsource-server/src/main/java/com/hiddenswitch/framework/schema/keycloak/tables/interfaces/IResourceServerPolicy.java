@@ -60,23 +60,23 @@ public interface IResourceServerPolicy extends VertxPojo, Serializable {
      * Setter for
      * <code>keycloak.resource_server_policy.decision_strategy</code>.
      */
-    public IResourceServerPolicy setDecisionStrategy(String value);
+    public IResourceServerPolicy setDecisionStrategy(Short value);
 
     /**
      * Getter for
      * <code>keycloak.resource_server_policy.decision_strategy</code>.
      */
-    public String getDecisionStrategy();
+    public Short getDecisionStrategy();
 
     /**
      * Setter for <code>keycloak.resource_server_policy.logic</code>.
      */
-    public IResourceServerPolicy setLogic(String value);
+    public IResourceServerPolicy setLogic(Short value);
 
     /**
      * Getter for <code>keycloak.resource_server_policy.logic</code>.
      */
-    public String getLogic();
+    public Short getLogic();
 
     /**
      * Setter for
@@ -122,8 +122,8 @@ public interface IResourceServerPolicy extends VertxPojo, Serializable {
                 setOrThrow(this::setName,json::getString,"name","java.lang.String");
                 setOrThrow(this::setDescription,json::getString,"description","java.lang.String");
                 setOrThrow(this::setType,json::getString,"type","java.lang.String");
-                setOrThrow(this::setDecisionStrategy,json::getString,"decision_strategy","java.lang.String");
-                setOrThrow(this::setLogic,json::getString,"logic","java.lang.String");
+                setOrThrow(this::setDecisionStrategy,key -> {Integer i = json.getInteger(key); return i==null?null:i.shortValue();},"decision_strategy","java.lang.Short");
+                setOrThrow(this::setLogic,key -> {Integer i = json.getInteger(key); return i==null?null:i.shortValue();},"logic","java.lang.Short");
                 setOrThrow(this::setResourceServerId,json::getString,"resource_server_id","java.lang.String");
                 setOrThrow(this::setOwner,json::getString,"owner","java.lang.String");
                 return this;

@@ -77,12 +77,12 @@ public class ResourceServerPolicy extends TableImpl<ResourceServerPolicyRecord> 
      * The column
      * <code>keycloak.resource_server_policy.decision_strategy</code>.
      */
-    public final TableField<ResourceServerPolicyRecord, String> DECISION_STRATEGY = createField(DSL.name("decision_strategy"), SQLDataType.VARCHAR(20), this, "");
+    public final TableField<ResourceServerPolicyRecord, Short> DECISION_STRATEGY = createField(DSL.name("decision_strategy"), SQLDataType.SMALLINT, this, "");
 
     /**
      * The column <code>keycloak.resource_server_policy.logic</code>.
      */
-    public final TableField<ResourceServerPolicyRecord, String> LOGIC = createField(DSL.name("logic"), SQLDataType.VARCHAR(20), this, "");
+    public final TableField<ResourceServerPolicyRecord, Short> LOGIC = createField(DSL.name("logic"), SQLDataType.SMALLINT, this, "");
 
     /**
      * The column
@@ -212,14 +212,14 @@ public class ResourceServerPolicy extends TableImpl<ResourceServerPolicyRecord> 
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<String, String, String, String, String, String, String, String> fieldsRow() {
+    public Row8<String, String, String, String, Short, Short, String, String> fieldsRow() {
         return (Row8) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function8<? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function8<? super String, ? super String, ? super String, ? super String, ? super Short, ? super Short, ? super String, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -227,7 +227,7 @@ public class ResourceServerPolicy extends TableImpl<ResourceServerPolicyRecord> 
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super String, ? super String, ? super String, ? super String, ? super Short, ? super Short, ? super String, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

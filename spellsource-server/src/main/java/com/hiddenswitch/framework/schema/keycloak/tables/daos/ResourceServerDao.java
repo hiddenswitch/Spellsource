@@ -58,7 +58,7 @@ public class ResourceServerDao extends AbstractReactiveVertxDAO<ResourceServerRe
      * Find records that have <code>policy_enforce_mode IN (values)</code>
      * asynchronously
      */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByPolicyEnforceMode(Collection<String> values) {
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByPolicyEnforceMode(Collection<Short> values) {
                 return findManyByCondition(ResourceServer.RESOURCE_SERVER.POLICY_ENFORCE_MODE.in(values));
         }
 
@@ -66,7 +66,7 @@ public class ResourceServerDao extends AbstractReactiveVertxDAO<ResourceServerRe
      * Find records that have <code>policy_enforce_mode IN (values)</code>
      * asynchronously limited by the given limit
      */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByPolicyEnforceMode(Collection<String> values, int limit) {
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServer>> findManyByPolicyEnforceMode(Collection<Short> values, int limit) {
                 return findManyByCondition(ResourceServer.RESOURCE_SERVER.POLICY_ENFORCE_MODE.in(values),limit);
         }
 

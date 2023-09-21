@@ -88,7 +88,7 @@ public class ResourceServerPolicyDao extends AbstractReactiveVertxDAO<ResourceSe
      * Find records that have <code>decision_strategy IN (values)</code>
      * asynchronously
      */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPolicy>> findManyByDecisionStrategy(Collection<String> values) {
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPolicy>> findManyByDecisionStrategy(Collection<Short> values) {
                 return findManyByCondition(ResourceServerPolicy.RESOURCE_SERVER_POLICY.DECISION_STRATEGY.in(values));
         }
 
@@ -96,14 +96,14 @@ public class ResourceServerPolicyDao extends AbstractReactiveVertxDAO<ResourceSe
      * Find records that have <code>decision_strategy IN (values)</code>
      * asynchronously limited by the given limit
      */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPolicy>> findManyByDecisionStrategy(Collection<String> values, int limit) {
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPolicy>> findManyByDecisionStrategy(Collection<Short> values, int limit) {
                 return findManyByCondition(ResourceServerPolicy.RESOURCE_SERVER_POLICY.DECISION_STRATEGY.in(values),limit);
         }
 
         /**
      * Find records that have <code>logic IN (values)</code> asynchronously
      */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPolicy>> findManyByLogic(Collection<String> values) {
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPolicy>> findManyByLogic(Collection<Short> values) {
                 return findManyByCondition(ResourceServerPolicy.RESOURCE_SERVER_POLICY.LOGIC.in(values));
         }
 
@@ -111,7 +111,7 @@ public class ResourceServerPolicyDao extends AbstractReactiveVertxDAO<ResourceSe
      * Find records that have <code>logic IN (values)</code> asynchronously
      * limited by the given limit
      */
-        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPolicy>> findManyByLogic(Collection<String> values, int limit) {
+        public Future<List<com.hiddenswitch.framework.schema.keycloak.tables.pojos.ResourceServerPolicy>> findManyByLogic(Collection<Short> values, int limit) {
                 return findManyByCondition(ResourceServerPolicy.RESOURCE_SERVER_POLICY.LOGIC.in(values),limit);
         }
 

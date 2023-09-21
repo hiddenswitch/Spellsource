@@ -20,7 +20,7 @@ public class ResourceServer implements VertxPojo, IResourceServer {
 
     private String id;
     private Boolean allowRsRemoteMgmt;
-    private String policyEnforceMode;
+    private Short policyEnforceMode;
     private Short decisionStrategy;
 
     public ResourceServer() {}
@@ -35,7 +35,7 @@ public class ResourceServer implements VertxPojo, IResourceServer {
     public ResourceServer(
         String id,
         Boolean allowRsRemoteMgmt,
-        String policyEnforceMode,
+        Short policyEnforceMode,
         Short decisionStrategy
     ) {
         this.id = id;
@@ -87,7 +87,7 @@ public class ResourceServer implements VertxPojo, IResourceServer {
      * Getter for <code>keycloak.resource_server.policy_enforce_mode</code>.
      */
     @Override
-    public String getPolicyEnforceMode() {
+    public Short getPolicyEnforceMode() {
         return this.policyEnforceMode;
     }
 
@@ -95,7 +95,7 @@ public class ResourceServer implements VertxPojo, IResourceServer {
      * Setter for <code>keycloak.resource_server.policy_enforce_mode</code>.
      */
     @Override
-    public ResourceServer setPolicyEnforceMode(String policyEnforceMode) {
+    public ResourceServer setPolicyEnforceMode(Short policyEnforceMode) {
         this.policyEnforceMode = policyEnforceMode;
         return this;
     }

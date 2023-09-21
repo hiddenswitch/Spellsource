@@ -62,7 +62,7 @@ public class ResourceServer extends TableImpl<ResourceServerRecord> {
     /**
      * The column <code>keycloak.resource_server.policy_enforce_mode</code>.
      */
-    public final TableField<ResourceServerRecord, String> POLICY_ENFORCE_MODE = createField(DSL.name("policy_enforce_mode"), SQLDataType.VARCHAR(15).nullable(false), this, "");
+    public final TableField<ResourceServerRecord, Short> POLICY_ENFORCE_MODE = createField(DSL.name("policy_enforce_mode"), SQLDataType.SMALLINT.nullable(false), this, "");
 
     /**
      * The column <code>keycloak.resource_server.decision_strategy</code>.
@@ -156,14 +156,14 @@ public class ResourceServer extends TableImpl<ResourceServerRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<String, Boolean, String, Short> fieldsRow() {
+    public Row4<String, Boolean, Short, Short> fieldsRow() {
         return (Row4) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function4<? super String, ? super Boolean, ? super String, ? super Short, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function4<? super String, ? super Boolean, ? super Short, ? super Short, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -171,7 +171,7 @@ public class ResourceServer extends TableImpl<ResourceServerRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super String, ? super Boolean, ? super String, ? super Short, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super String, ? super Boolean, ? super Short, ? super Short, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

@@ -26,8 +26,8 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 	 * Create a KeycloakContainer by passing the full docker image name
 	 */
 	public KeycloakContainer() {
-		super("quay.io/keycloak/keycloak:21.1");
-		withCommand("start-dev");
+		super("quay.io/keycloak/keycloak:22.0.3");
+		withCommand("start-dev", "--features=declarative-user-profile");
 		withExposedPorts(KEYCLOAK_PORT_HTTP);
 		withReuse(false);
 		setWaitStrategy(Wait

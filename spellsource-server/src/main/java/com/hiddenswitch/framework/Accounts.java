@@ -18,18 +18,16 @@ import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.hiddenswitch.framework.virtual.VirtualThreadRoutingContextHandler;
 import io.grpc.Status;
 import io.vertx.core.Future;
-import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.JWTOptions;
-import io.vertx.ext.auth.PubSecKeyOptions;
-import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.authentication.TokenCredentials;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.codec.BodyCodec;
 import io.vertx.grpc.server.GrpcServerRequest;
+import jakarta.ws.rs.NotFoundException;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -47,15 +45,14 @@ import org.keycloak.representations.idm.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.NotFoundException;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.framework.Environment.query;
 import static com.hiddenswitch.framework.Environment.withDslContext;
+import static com.hiddenswitch.framework.schema.keycloak.Keycloak.KEYCLOAK;
 import static com.hiddenswitch.framework.schema.spellsource.Tables.GUESTS;
-import static com.hiddenswitch.framework.schema.spellsource.Tables.USER_ENTITY_ADDONS;
 import static io.vertx.await.Async.await;
 import static java.util.stream.Collectors.toMap;
 
@@ -75,10 +72,13 @@ import static java.util.stream.Collectors.toMap;
  * application.
  */
 public class Accounts {
+	public static final String SHOW_PREMADE_DECKS = "showPremadeDecks";
 	protected static final String KEYCLOAK_LOGIN_PATH = "/realms/hiddenswitch/protocol/openid-connect/token";
 	protected static final String KEYCLOAK_FORGOT_PASSWORD_PATH = "/realms/hiddenswitch/login-actions/reset-credentials";
 	private static final Logger LOGGER = LoggerFactory.getLogger(Accounts.class);
 	private static final WeakVertxMap<Keycloak> keycloakReference = new WeakVertxMap<>(Accounts::keycloakConstructor);
+	public static final String WITH_PREMADE_DECKS = "With Premade Decks";
+	public static final String DEFAULTS = "Defaults";
 
 	/**
 	 * Gets the user associated with the GRPC context currently being executed.
@@ -224,11 +224,12 @@ public class Accounts {
 						})
 						.map(this::handleAccessTokenUserEntityTuple)
 						// hide the premade decks if the user requested to hide them
-						.compose(reply -> withDslContext(dsl -> dsl.insertInto(USER_ENTITY_ADDONS)
-								.set(USER_ENTITY_ADDONS.ID, reply.getUserEntity().getId())
-								.set(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS, request.getDecks())
-								.onDuplicateKeyUpdate()
-								.set(USER_ENTITY_ADDONS.SHOW_PREMADE_DECKS, request.getDecks()))
+						.compose(reply -> withDslContext(dsl -> dsl.insertInto(KEYCLOAK.USER_ATTRIBUTE)
+								.set(KEYCLOAK.USER_ATTRIBUTE.USER_ID, reply.getUserEntity().getId())
+								.set(KEYCLOAK.USER_ATTRIBUTE.NAME, SHOW_PREMADE_DECKS)
+								.set(KEYCLOAK.USER_ATTRIBUTE.ID, UUID.randomUUID().toString())
+								.set(KEYCLOAK.USER_ATTRIBUTE.VALUE, request.getDecks() ? WITH_PREMADE_DECKS : DEFAULTS)
+								.onDuplicateKeyIgnore())
 								.map(reply))
 						.recover(Environment.onGrpcFailure());
 			}

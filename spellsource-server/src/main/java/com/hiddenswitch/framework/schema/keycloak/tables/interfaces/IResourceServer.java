@@ -39,12 +39,12 @@ public interface IResourceServer extends VertxPojo, Serializable {
     /**
      * Setter for <code>keycloak.resource_server.policy_enforce_mode</code>.
      */
-    public IResourceServer setPolicyEnforceMode(String value);
+    public IResourceServer setPolicyEnforceMode(Short value);
 
     /**
      * Getter for <code>keycloak.resource_server.policy_enforce_mode</code>.
      */
-    public String getPolicyEnforceMode();
+    public Short getPolicyEnforceMode();
 
     /**
      * Setter for <code>keycloak.resource_server.decision_strategy</code>.
@@ -76,7 +76,7 @@ public interface IResourceServer extends VertxPojo, Serializable {
         public default IResourceServer fromJson(io.vertx.core.json.JsonObject json) {
                 setOrThrow(this::setId,json::getString,"id","java.lang.String");
                 setOrThrow(this::setAllowRsRemoteMgmt,json::getBoolean,"allow_rs_remote_mgmt","java.lang.Boolean");
-                setOrThrow(this::setPolicyEnforceMode,json::getString,"policy_enforce_mode","java.lang.String");
+                setOrThrow(this::setPolicyEnforceMode,key -> {Integer i = json.getInteger(key); return i==null?null:i.shortValue();},"policy_enforce_mode","java.lang.Short");
                 setOrThrow(this::setDecisionStrategy,key -> {Integer i = json.getInteger(key); return i==null?null:i.shortValue();},"decision_strategy","java.lang.Short");
                 return this;
         }

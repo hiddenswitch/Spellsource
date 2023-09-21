@@ -33,7 +33,6 @@ import com.hiddenswitch.framework.schema.spellsource.tables.HardRemovalCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
 import com.hiddenswitch.framework.schema.spellsource.tables.SetCardsInDeck;
-import com.hiddenswitch.framework.schema.spellsource.tables.UserEntityAddons;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueFormatsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetBannedDraftCardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetBaseClassesRecord;
@@ -521,11 +520,6 @@ public class Spellsource extends SchemaImpl {
     }
 
     /**
-     * The table <code>spellsource.user_entity_addons</code>.
-     */
-    public final UserEntityAddons USER_ENTITY_ADDONS = UserEntityAddons.USER_ENTITY_ADDONS;
-
-    /**
      * No further instances allowed
      */
     private Spellsource() {
@@ -568,8 +562,7 @@ public class Spellsource extends SchemaImpl {
             HardRemovalCards.HARD_REMOVAL_CARDS,
             MatchmakingQueues.MATCHMAKING_QUEUES,
             MatchmakingTickets.MATCHMAKING_TICKETS,
-            SetCardsInDeck.SET_CARDS_IN_DECK,
-            UserEntityAddons.USER_ENTITY_ADDONS
+            SetCardsInDeck.SET_CARDS_IN_DECK
         );
     }
 }

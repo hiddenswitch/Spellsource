@@ -22,8 +22,8 @@ public class ResourceServerPolicy implements VertxPojo, IResourceServerPolicy {
     private String name;
     private String description;
     private String type;
-    private String decisionStrategy;
-    private String logic;
+    private Short decisionStrategy;
+    private Short logic;
     private String resourceServerId;
     private String owner;
 
@@ -45,8 +45,8 @@ public class ResourceServerPolicy implements VertxPojo, IResourceServerPolicy {
         String name,
         String description,
         String type,
-        String decisionStrategy,
-        String logic,
+        Short decisionStrategy,
+        Short logic,
         String resourceServerId,
         String owner
     ) {
@@ -138,7 +138,7 @@ public class ResourceServerPolicy implements VertxPojo, IResourceServerPolicy {
      * <code>keycloak.resource_server_policy.decision_strategy</code>.
      */
     @Override
-    public String getDecisionStrategy() {
+    public Short getDecisionStrategy() {
         return this.decisionStrategy;
     }
 
@@ -147,7 +147,7 @@ public class ResourceServerPolicy implements VertxPojo, IResourceServerPolicy {
      * <code>keycloak.resource_server_policy.decision_strategy</code>.
      */
     @Override
-    public ResourceServerPolicy setDecisionStrategy(String decisionStrategy) {
+    public ResourceServerPolicy setDecisionStrategy(Short decisionStrategy) {
         this.decisionStrategy = decisionStrategy;
         return this;
     }
@@ -156,7 +156,7 @@ public class ResourceServerPolicy implements VertxPojo, IResourceServerPolicy {
      * Getter for <code>keycloak.resource_server_policy.logic</code>.
      */
     @Override
-    public String getLogic() {
+    public Short getLogic() {
         return this.logic;
     }
 
@@ -164,7 +164,7 @@ public class ResourceServerPolicy implements VertxPojo, IResourceServerPolicy {
      * Setter for <code>keycloak.resource_server_policy.logic</code>.
      */
     @Override
-    public ResourceServerPolicy setLogic(String logic) {
+    public ResourceServerPolicy setLogic(Short logic) {
         this.logic = logic;
         return this;
     }

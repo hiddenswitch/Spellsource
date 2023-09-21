@@ -1,0 +1,1 @@
+select uuid_generate_v4();
