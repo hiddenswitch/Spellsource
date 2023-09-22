@@ -497,6 +497,7 @@ public class Accounts {
 					realmRepresentation.setEditUsernameAllowed(true);
 					realmRepresentation.setVerifyEmail(false);
 					realmRepresentation.setLoginWithEmailAllowed(true);
+					realmRepresentation.setLoginTheme("spellsource-keycloak-theme");
 
 					keycloak.realms().create(realmRepresentation);
 

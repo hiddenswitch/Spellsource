@@ -1,0 +1,29 @@
+plugins {
+  id 'base'
+}
+
+version "1.0.0"
+
+tasks.register('buildTheme', Jar) {
+  inputs.dir 'src'
+  inputs.file 'keycloak-themes.json'
+
+  into "theme/spellsource-keycloak-theme/", {
+    from "${projectDir}/src/"
+  }
+
+  metaInf {
+    from 'keycloak-themes.json'
+  }
+
+  doLast {
+    copy {
+      from outputs.files
+      into "${project(':spellsource-containers').projectDir}/src/main/resources/docker/keycloak"
+
+      rename "${project.name}-${project.version}.jar", "spellsource-keycloak-theme.jar"
+    }
+  }
+}
+
+build.dependsOn buildTheme

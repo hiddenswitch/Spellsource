@@ -1,10 +1,12 @@
 package com.hiddenswitch.containers;
 
+import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.containers.wait.strategy.WaitStrategy;
 import org.testcontainers.utility.MountableFile;
 
+import java.nio.file.Paths;
 import java.time.Duration;
 
 public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
@@ -34,6 +36,14 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 				.forHttp("/")
 				.forPort(KEYCLOAK_PORT_HTTP)
 				.withStartupTimeout(Duration.ofSeconds(60))
+		);
+		/*withFileSystemBind(
+                "../spellsource-containers/src/main/resources/docker/keycloak/spellsource-keycloak-theme.jar", 
+                "/opt/keycloak/providers/spellsource-keycloak-theme.jar"
+        );*/
+		withFileSystemBind(
+				"../spellsource-keycloak/src",
+				"/opt/keycloak/themes/spellsource-keycloak-theme"
 		);
 	}
 

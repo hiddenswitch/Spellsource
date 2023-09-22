@@ -1,0 +1,13 @@
+:root {
+    font-family: "system-ui";
+}
+
+label {
+    font-size: 14px !important;
+}
+
+
+.card-pf a {
+    text-decoration: underline;
+    font-size: 14px !important;
+}

@@ -1,0 +1,79 @@
+.login-pf body {
+    /*noinspection CssUnknownTarget*/
+    background-image: url("../img/gradient-section-3.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
+.login-pf-page {
+    padding-bottom: 60px;
+}
+
+.login-pf-page .card-pf {
+    border: none;
+    border-radius: .5rem;
+}
+
+.pf-c-button.pf-m-primary {
+    border-radius: .25rem;
+    /*noinspection CssUnknownTarget*/
+    background-image: url("../img/gradient-section-1.png");
+    background-size: cover;
+    transition: .3s;
+}
+
+.pf-c-button.pf-m-primary:hover, .pf-c-button.pf-m-primary:focus  {
+    opacity: .85;
+    transition: .3s;
+}
+
+.pf-c-form-control {
+    border-radius: .25rem;
+    border: 1px grey solid;
+}
+
+#kc-header-wrapper {
+    color: transparent;
+    /*noinspection CssUnknownTarget*/
+    background-image: url("../img/spellsource.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+@media (min-width: 768px) {
+
+    #kc-info-wrapper {
+        border-bottom-left-radius: .5rem;
+        border-bottom-right-radius: .5rem;
+        /*noinspection CssUnknownTarget*/
+        background-image: url("../img/gradient-footer.png");
+        background-size: cover;
+    }
+
+}
+
+@media (max-width: 768px) {
+    #kc-header-wrapper {
+        /*display: flex;
+        align-items: baseline;*/
+        padding: 40px;
+    }
+    
+    .card-pf {
+        background: none;
+    }
+
+    /*#kc-header-wrapper::after {
+        content: "";
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        !*noinspection CssUnknownTarget*!
+        background-image: url("../img/icon.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }*/
+}
