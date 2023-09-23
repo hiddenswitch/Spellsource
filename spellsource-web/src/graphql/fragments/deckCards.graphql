@@ -2,8 +2,10 @@ fragment deckCards on Deck {
   cardsInDecksByDeckId {
     nodes {
       cardId
-      cardByCardId {
-        ...card
+      publishedCardByCardId {
+        cardBySuccession {
+          ...card
+        }
       }
     }
     totalCount

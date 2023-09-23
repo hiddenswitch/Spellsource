@@ -98,7 +98,7 @@ export default () => {
     variables: { deckId },
     onCompleted: (data) =>
       data.deckById?.cardsInDecksByDeckId?.nodes?.forEach(
-        (node) => (cache[node.cardId] = node.cardByCardId.cardScript)
+        (node) => (cache[node.cardId] = node.publishedCardByCardId.cardBySuccession.cardScript)
       ),
   });
   const deck = getDeck?.data?.deckById ?? getDeck?.previousData?.deckById;
