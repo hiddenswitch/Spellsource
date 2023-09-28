@@ -39,7 +39,7 @@ import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
 import org.jooq.Record;
 import org.jooq.*;
 import org.jooq.impl.DSL;
-import org.redisson.api.RMapCacheAsync;
+import org.redisson.api.RBucketAsync;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -68,7 +68,6 @@ import static java.util.stream.Collectors.*;
 public class Legacy {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Legacy.class);
 	private static final WeakVertxMap<List<DeckCreateRequest>> PREMADE_DECKS = new WeakVertxMap<>(Legacy::getPremadeDecksPrivate);
-	private static final WeakVertxMap<RMapCacheAsync<String, DecksGetResponse>> DECKS_CACHE = new WeakVertxMap<>(Legacy::decksCacheConstructor);
 	private static final LongTaskTimer GET_ALL_DECKS_TIME = LongTaskTimer
 			.builder("spellsource_getalldecks_duration")
 			.minimumExpectedValue(Duration.ofMillis(5))
@@ -76,6 +75,10 @@ public class Legacy {
 			.publishPercentileHistogram()
 			.description("the amount of time spent retrieving all the decks")
 			.register(Metrics.globalRegistry);
+
+	public static RBucketAsync<DecksGetResponse> getBucketForDeck(String deckId) {
+		return Environment.redisson().getBucket(String.format("Spellsource:deck:%s", deckId), new RedissonProtobufCodec(DecksGetResponse.parser()));
+	}
 
 	public static BindAll<HiddenSwitchSpellsourceAPIServiceApi> services(SqlCachedCardCatalogue cardCatalogue) {
 		return new HiddenSwitchSpellsourceAPIServiceApi() {
@@ -125,8 +128,7 @@ public class Legacy {
 									});
 						}).compose(v -> {
 							// invalidate cache
-							var cache = DECKS_CACHE.get();
-							return Future.fromCompletionStage(cache.fastRemoveAsync(deckId), Vertx.currentContext());
+							return invalidateDeck(deckId);
 						})
 						.map(Empty.getDefaultInstance())
 						.recover(Environment.onGrpcFailure()));
@@ -185,6 +187,7 @@ public class Legacy {
 
 
 				// Assert that we have permissions to edit this deck
+				// todo: use RLS instead
 				return withExecutor(queryExecutor -> queryExecutor.execute(dsl -> dsl
 								.select(DECKS.ID)
 								.from(DECKS)
@@ -288,10 +291,9 @@ public class Legacy {
 
 							return CompositeFuture.all(futs);
 						})
-						.compose(v -> {
-							// invalidate cache
-							var cache = DECKS_CACHE.get();
-							return Future.fromCompletionStage(cache.fastRemoveAsync(deckId), Vertx.currentContext());
+						.compose(v -> invalidateDeck(deckId))
+						.onSuccess(wasDeleted -> {
+							LOGGER.error("was deleted? {}", wasDeleted);
 						})
 						.compose(v -> getDeck(cardCatalogue, deckId, userId))
 						.recover(Environment.onGrpcFailure()));
@@ -344,6 +346,10 @@ public class Legacy {
 				return promise.future();
 			}
 		}::bindAll;
+	}
+
+	private static Future<Boolean> invalidateDeck(String deckId) {
+		return Future.fromCompletionStage(getBucketForDeck(deckId).deleteAsync(), Vertx.currentContext());
 	}
 
 	public static Future<DecksGetAllResponse> getAllDecks(CardCatalogue cardCatalogue, String userId) {
@@ -478,24 +484,19 @@ public class Legacy {
 		return returnArray;
 	}
 
-	private static RMapCacheAsync<String, DecksGetResponse> decksCacheConstructor(Vertx vertx) {
-		return Environment.cache("Spellsource:decks", DecksGetResponse.parser());
-	}
-
 	public static Future<DecksGetResponse> getDeck(CardCatalogue cardCatalogue, String deckId, String userId) {
 		var serverConfiguration = Environment.getConfiguration();
-		var cache = DECKS_CACHE.get();
+		var bucket = getBucketForDeck(deckId);
 		var configuration = Environment.jooqAkaDaoConfiguration();
 		var delegate = Environment.sqlClient();
-		// todo: invalidate cache when the deck is modified elsewhere, like the website
-		return Future.fromCompletionStage(cache.getAsync(deckId), Vertx.currentContext())
+		return Future.fromCompletionStage(bucket.getAsync(), Vertx.currentContext())
 				.compose(existing -> {
 					if (existing != null) {
 						return Future.succeededFuture(existing);
 					}
 
 					return getDeck(cardCatalogue, deckId)
-							.compose(deck -> Future.fromCompletionStage(cache.fastPutAsync(deckId, deck, serverConfiguration.getDecks().getCachedDeckTimeToLiveMinutes(), TimeUnit.MINUTES), Vertx.currentContext()).map(deck));
+							.compose(deck -> Future.fromCompletionStage(bucket.setAsync(deck, serverConfiguration.getDecks().getCachedDeckTimeToLiveMinutes(), TimeUnit.MINUTES), Vertx.currentContext()).map(deck));
 				}).compose(deck -> {
 					// we must always look up the shares record, though this should be fast
 					var deckSharesDao = new DeckSharesDao(configuration, delegate);
@@ -512,13 +513,6 @@ public class Legacy {
 						}
 						return Future.succeededFuture(deck);
 					});
-				}).map(deck -> {
-					// transmit the right editability
-					var editableDeck = DecksGetResponse.newBuilder(deck);
-					var collection = InventoryCollection.newBuilder(editableDeck.getCollection());
-					collection.setCanEdit(canEditDeck(deck, userId));
-					editableDeck.setCollection(collection);
-					return editableDeck.build();
 				});
 	}
 

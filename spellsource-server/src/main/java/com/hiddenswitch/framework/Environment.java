@@ -597,10 +597,6 @@ public class Environment {
 				.set(record);
 	}
 
-	public static <T> RMapCacheAsync<String, T> cache(String name, Parser<T> parser) {
-		return redisson().getMapCache(name, new CompositeCodec(new StringCodec(), new RedissonProtobufCodec(parser)));
-	}
-
 	public static PrometheusBackendRegistry registry() {
 		return prometheusRegistry;
 	}

@@ -76,8 +76,8 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 
 	private static Buckets getBucketsForUser(String userId) {
 		var redisson = Environment.redisson();
-		var head = redisson.<Hiddenswitch.GetCardsResponse>getBucket(String.format("%s:head", userId), GET_CARDS_RESPONSE_CODEC);
-		var data = redisson.<Hiddenswitch.GetCardsResponse>getBucket(String.format("%s:data", userId), GET_CARDS_RESPONSE_CODEC);
+		var head = redisson.<Hiddenswitch.GetCardsResponse>getBucket(String.format("Spellsource:cards:%s:head", userId), GET_CARDS_RESPONSE_CODEC);
+		var data = redisson.<Hiddenswitch.GetCardsResponse>getBucket(String.format("Spellsource:cards:%s:data", userId), GET_CARDS_RESPONSE_CODEC);
 		return new Buckets(head, data);
 	}
 

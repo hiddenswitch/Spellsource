@@ -5,6 +5,7 @@ import { pgPool, postgraphileOptions } from "./postgraphile";
 import { printSchema } from "graphql";
 import fs from "fs";
 import { createArtSchema } from "./art";
+import { invalidateDeckPlugin } from "../lib/invalidate-deck-plugin";
 
 const path = postgraphileOptions.exportGqlSchemaPath;
 
@@ -23,8 +24,7 @@ export const createApolloServer = async () => {
 
   return new ApolloServer({
     schema,
-    plugins: [postgraphile.plugin],
+    plugins: [postgraphile.plugin, invalidateDeckPlugin],
     introspection: process.env.NODE_ENV !== "production",
   });
 };
-

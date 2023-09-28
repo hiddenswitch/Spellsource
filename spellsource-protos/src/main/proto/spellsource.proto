@@ -1203,8 +1203,8 @@ message InventoryCollection {
     string userId = 10;
     ValidationReport validationReport = 11;
 
-    // Can the user who received this record edit this deck?
-    bool canEdit = 12;
+    // This used to store the deck editability flag, which is no longer read.
+    reserved 12;
 }
 
 // An object that indicates the player has a pending invitation to a game.

@@ -81,6 +81,47 @@ public class DecksTests extends FrameworkTestBase {
 	}
 
 	@Test
+	public void testDeckIsInvalidatedOnUpdate(Vertx vertx, VertxTestContext testContext) {
+		testVirtual(vertx, testContext, () -> {
+			await(startGateway(vertx));
+			var client = new Client(vertx);
+			await(client.createAndLogin());
+			var service = client.legacy();
+			var decksPutReponse = await(service.decksPut(DecksPutRequest.newBuilder()
+					.setName("Invalidated Deck")
+					.setHeroClass(HeroClass.CORAL)
+					.setFormat("Spellsource")
+					.build()
+			));
+			var deckId = decksPutReponse.getDeckId();
+			var bucket = Legacy.getBucketForDeck(deckId);
+			var cachedDeck = await(bucket.getAsync().toCompletableFuture());
+			var getDeck = await(service.decksGet(DecksGetRequest.newBuilder()
+					.setDeckId(deckId)
+					.build()));
+			assertEquals(0, getDeck.getCollection().getInventoryCount());
+			assertEquals("Invalidated Deck", getDeck.getCollection().getName());
+			cachedDeck = await(bucket.getAsync().toCompletableFuture());
+			assertNotNull(cachedDeck);
+			assertEquals(getDeck, cachedDeck);
+			// this will actually invalidate i.e. because it calls getDeck it stores the latest on every update
+			getDeck = await(service.decksUpdate(DecksUpdateRequest.newBuilder()
+					.setDeckId(deckId)
+					.setUpdateCommand(DecksUpdateCommand
+							.newBuilder()
+							.setPushCardIds(DecksUpdateCommand.PushCardIdsMessage.newBuilder()
+									// todo: test cards probably are not added to the sql database
+									.addEach("minion_test_3_2")
+									.build()))
+					.build()));
+			cachedDeck = await(bucket.getAsync().toCompletableFuture());
+			assertTrue(getDeck.getCollection().getInventoryList().stream().anyMatch(il -> il.getEntity().getCardId().equals("minion_test_3_2")));
+			assertNotNull(cachedDeck);
+			assertEquals(getDeck, cachedDeck);
+		});
+	}
+
+	@Test
 	public void testUpdateDecksWithCardIds(Vertx vertx, VertxTestContext testContext) {
 		var client = new Client(vertx);
 		startGateway(vertx)
