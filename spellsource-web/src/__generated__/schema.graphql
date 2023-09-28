@@ -606,8 +606,8 @@ type Query implements Node {
     filter: MatchmakingTicketFilter
   ): MatchmakingTicketsConnection
 
-  """Reads and enables pagination through a set of `UserEntityAddon`."""
-  allUserEntityAddons(
+  """Reads and enables pagination through a set of `PublishedCard`."""
+  allPublishedCards(
     """Only read the first `n` values of the set."""
     first: Int
 
@@ -626,19 +626,19 @@ type Query implements Node {
     """Read all values in the set after (below) this cursor."""
     after: Cursor
 
-    """The method to use when ordering `UserEntityAddon`."""
-    orderBy: [UserEntityAddonsOrderBy!] = [PRIMARY_KEY_ASC]
+    """The method to use when ordering `PublishedCard`."""
+    orderBy: [PublishedCardsOrderBy!] = [PRIMARY_KEY_ASC]
 
     """
     A condition to be used in determining which values should be returned by the collection.
     """
-    condition: UserEntityAddonCondition
+    condition: PublishedCardCondition
 
     """
     A filter to be used in determining which values should be returned by the collection.
     """
-    filter: UserEntityAddonFilter
-  ): UserEntityAddonsConnection
+    filter: PublishedCardFilter
+  ): PublishedCardsConnection
   bannedDraftCardByCardId(cardId: String!): BannedDraftCard
   botUserById(id: String!): BotUser
   cardBySuccession(succession: BigInt!): Card
@@ -654,7 +654,7 @@ type Query implements Node {
   hardRemovalCardByCardId(cardId: String!): HardRemovalCard
   matchmakingQueueById(id: String!): MatchmakingQueue
   matchmakingTicketByUserId(userId: String!): MatchmakingTicket
-  userEntityAddonById(id: String!): UserEntityAddon
+  publishedCardById(id: String!): PublishedCard
   getLatestCard(cardId: String, published: Boolean): Card
   getUserId: String
 
@@ -756,13 +756,13 @@ type Query implements Node {
     nodeId: ID!
   ): MatchmakingTicket
 
-  """Reads a single `UserEntityAddon` using its globally unique `ID`."""
-  userEntityAddon(
+  """Reads a single `PublishedCard` using its globally unique `ID`."""
+  publishedCard(
     """
-    The globally unique `ID` to be used in selecting a single `UserEntityAddon`.
+    The globally unique `ID` to be used in selecting a single `PublishedCard`.
     """
     nodeId: ID!
-  ): UserEntityAddon
+  ): PublishedCard
   artById(id: String!): ImageDef
   allArt: [ImageDef!]!
 }
@@ -891,13 +891,13 @@ type Mutation {
     input: CreateMatchmakingTicketInput!
   ): CreateMatchmakingTicketPayload
 
-  """Creates a single `UserEntityAddon`."""
-  createUserEntityAddon(
+  """Creates a single `PublishedCard`."""
+  createPublishedCard(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
-    input: CreateUserEntityAddonInput!
-  ): CreateUserEntityAddonPayload
+    input: CreatePublishedCardInput!
+  ): CreatePublishedCardPayload
 
   """
   Updates a single `BannedDraftCard` using its globally unique id and a patch.
@@ -1146,22 +1146,22 @@ type Mutation {
   ): UpdateMatchmakingTicketPayload
 
   """
-  Updates a single `UserEntityAddon` using its globally unique id and a patch.
+  Updates a single `PublishedCard` using its globally unique id and a patch.
   """
-  updateUserEntityAddon(
+  updatePublishedCard(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
-    input: UpdateUserEntityAddonInput!
-  ): UpdateUserEntityAddonPayload
+    input: UpdatePublishedCardInput!
+  ): UpdatePublishedCardPayload
 
-  """Updates a single `UserEntityAddon` using a unique key and a patch."""
-  updateUserEntityAddonById(
+  """Updates a single `PublishedCard` using a unique key and a patch."""
+  updatePublishedCardById(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
-    input: UpdateUserEntityAddonByIdInput!
-  ): UpdateUserEntityAddonPayload
+    input: UpdatePublishedCardByIdInput!
+  ): UpdatePublishedCardPayload
 
   """Deletes a single `BannedDraftCard` using its globally unique id."""
   deleteBannedDraftCard(
@@ -1397,21 +1397,21 @@ type Mutation {
     input: DeleteMatchmakingTicketByUserIdInput!
   ): DeleteMatchmakingTicketPayload
 
-  """Deletes a single `UserEntityAddon` using its globally unique id."""
-  deleteUserEntityAddon(
+  """Deletes a single `PublishedCard` using its globally unique id."""
+  deletePublishedCard(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
-    input: DeleteUserEntityAddonInput!
-  ): DeleteUserEntityAddonPayload
+    input: DeletePublishedCardInput!
+  ): DeletePublishedCardPayload
 
-  """Deletes a single `UserEntityAddon` using a unique key."""
-  deleteUserEntityAddonById(
+  """Deletes a single `PublishedCard` using a unique key."""
+  deletePublishedCardById(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
-    input: DeleteUserEntityAddonByIdInput!
-  ): DeleteUserEntityAddonPayload
+    input: DeletePublishedCardByIdInput!
+  ): DeletePublishedCardPayload
   archiveCard(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -1508,6 +1508,12 @@ type Mutation {
     """
     input: GetCollectionCardsInput!
   ): GetCollectionCardsPayload
+  getUserAttribute(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: GetUserAttributeInput!
+  ): GetUserAttributePayload
   publishCard(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -1538,6 +1544,12 @@ type Mutation {
     """
     input: SetCardsInDeckInput!
   ): SetCardsInDeckPayload
+  setUserAttribute(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: SetUserAttributeInput!
+  ): SetUserAttributePayload
 
   """Upserts a single `BannedDraftCard`."""
   upsertBannedDraftCard(
@@ -1679,15 +1691,15 @@ type Mutation {
     input: UpsertMatchmakingTicketInput!
   ): UpsertMatchmakingTicketPayload
 
-  """Upserts a single `UserEntityAddon`."""
-  upsertUserEntityAddon(
-    where: UpsertUserEntityAddonWhere
+  """Upserts a single `PublishedCard`."""
+  upsertPublishedCard(
+    where: UpsertPublishedCardWhere
 
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
-    input: UpsertUserEntityAddonInput!
-  ): UpsertUserEntityAddonPayload
+    input: UpsertPublishedCardInput!
+  ): UpsertPublishedCardPayload
 }
 
 """An object with a globally unique `ID`."""
@@ -2011,6 +2023,12 @@ type Card implements Node {
   nodeId: ID!
   id: String!
   createdBy: String!
+
+  """
+  The URI of the application that created this card. The git URL by default represents cards that came from the
+      Spellsource git repository. https://www.getspellsource.com/cards/editor or similar represents cards authored in the
+      web interface
+  """
   uri: String
   blocklyWorkspace: JSON
   cardScript: JSON
@@ -2019,6 +2037,40 @@ type Card implements Node {
   isArchived: Boolean!
   isPublished: Boolean!
   succession: BigInt!
+
+  """Reads and enables pagination through a set of `PublishedCard`."""
+  publishedCardsBySuccession(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `PublishedCard`."""
+    orderBy: [PublishedCardsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: PublishedCardCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: PublishedCardFilter
+  ): PublishedCardsConnection!
   collectible: Boolean
   cost: Int
   type: String
@@ -2042,372 +2094,67 @@ strings and not numbers.
 """
 scalar BigInt
 
-"""A `Card` edge in the connection."""
-type CardsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
+"""A connection to a list of `PublishedCard` values."""
+type PublishedCardsConnection {
+  """A list of `PublishedCard` objects."""
+  nodes: [PublishedCard]!
 
-  """The `Card` at the end of the edge."""
-  node: Card
+  """
+  A list of edges which contains the `PublishedCard` and cursor to aid in pagination.
+  """
+  edges: [PublishedCardsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `PublishedCard` you could get from the connection."""
+  totalCount: Int!
 }
 
-"""Methods to use when ordering `Card`."""
-enum CardsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  CREATED_BY_ASC
-  CREATED_BY_DESC
-  URI_ASC
-  URI_DESC
-  BLOCKLY_WORKSPACE_ASC
-  BLOCKLY_WORKSPACE_DESC
-  CARD_SCRIPT_ASC
-  CARD_SCRIPT_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-  LAST_MODIFIED_ASC
-  LAST_MODIFIED_DESC
-  IS_ARCHIVED_ASC
-  IS_ARCHIVED_DESC
-  IS_PUBLISHED_ASC
-  IS_PUBLISHED_DESC
-  SUCCESSION_ASC
-  SUCCESSION_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `Card` object types. All fields are tested for equality and combined with a logical ‘and.’
-"""
-input CardCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: String
-
-  """Checks for equality with the object’s `createdBy` field."""
-  createdBy: String
-
-  """Checks for equality with the object’s `uri` field."""
-  uri: String
-
-  """Checks for equality with the object’s `blocklyWorkspace` field."""
-  blocklyWorkspace: JSON
-
-  """Checks for equality with the object’s `cardScript` field."""
-  cardScript: JSON
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
-
-  """Checks for equality with the object’s `lastModified` field."""
-  lastModified: Datetime
-
-  """Checks for equality with the object’s `isArchived` field."""
-  isArchived: Boolean
-
-  """Checks for equality with the object’s `isPublished` field."""
-  isPublished: Boolean
-
-  """Checks for equality with the object’s `succession` field."""
-  succession: BigInt
-}
-
-"""
-A filter to be used against `Card` object types. All fields are combined with a logical ‘and.’
-"""
-input CardFilter {
-  """Filter by the object’s `id` field."""
-  id: StringFilter
-
-  """Filter by the object’s `createdBy` field."""
-  createdBy: StringFilter
-
-  """Filter by the object’s `uri` field."""
-  uri: StringFilter
-
-  """Filter by the object’s `blocklyWorkspace` field."""
-  blocklyWorkspace: JSONFilter
-
-  """Filter by the object’s `cardScript` field."""
-  cardScript: JSONFilter
-
-  """Filter by the object’s `createdAt` field."""
-  createdAt: DatetimeFilter
-
-  """Filter by the object’s `lastModified` field."""
-  lastModified: DatetimeFilter
-
-  """Filter by the object’s `isArchived` field."""
-  isArchived: BooleanFilter
-
-  """Filter by the object’s `isPublished` field."""
-  isPublished: BooleanFilter
-
-  """Filter by the object’s `succession` field."""
-  succession: BigIntFilter
-
-  """Filter by the object’s `collectible` field."""
-  collectible: BooleanFilter
-
-  """Filter by the object’s `cost` field."""
-  cost: IntFilter
-
-  """Filter by the object’s `type` field."""
-  type: StringFilter
-
-  """Checks for all expressions in this list."""
-  and: [CardFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [CardFilter!]
-
-  """Negates the expression."""
-  not: CardFilter
-}
-
-"""
-A filter to be used against JSON fields. All fields are combined with a logical ‘and.’
-"""
-input JSONFilter {
+type PublishedCard implements Node {
   """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
   """
-  isNull: Boolean
+  nodeId: ID!
+  id: String!
+  succession: BigInt!
 
-  """Equal to the specified value."""
-  equalTo: JSON
+  """Reads a single `Card` that is related to this `PublishedCard`."""
+  cardBySuccession: Card
 
-  """Not equal to the specified value."""
-  notEqualTo: JSON
+  """Reads and enables pagination through a set of `CardsInDeck`."""
+  cardsInDecksByCardId(
+    """Only read the first `n` values of the set."""
+    first: Int
 
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: JSON
+    """Only read the last `n` values of the set."""
+    last: Int
 
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: JSON
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
 
-  """Included in the specified list."""
-  in: [JSON!]
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
 
-  """Not included in the specified list."""
-  notIn: [JSON!]
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
 
-  """Less than the specified value."""
-  lessThan: JSON
+    """The method to use when ordering `CardsInDeck`."""
+    orderBy: [CardsInDecksOrderBy!] = [PRIMARY_KEY_ASC]
 
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: JSON
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: CardsInDeckCondition
 
-  """Greater than the specified value."""
-  greaterThan: JSON
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: JSON
-
-  """Contains the specified JSON."""
-  contains: JSON
-
-  """Contains the specified key."""
-  containsKey: String
-
-  """Contains all of the specified keys."""
-  containsAllKeys: [String!]
-
-  """Contains any of the specified keys."""
-  containsAnyKeys: [String!]
-
-  """Contained by the specified JSON."""
-  containedBy: JSON
-}
-
-"""
-A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’
-"""
-input DatetimeFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: Datetime
-
-  """Not equal to the specified value."""
-  notEqualTo: Datetime
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Datetime
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: Datetime
-
-  """Included in the specified list."""
-  in: [Datetime!]
-
-  """Not included in the specified list."""
-  notIn: [Datetime!]
-
-  """Less than the specified value."""
-  lessThan: Datetime
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: Datetime
-
-  """Greater than the specified value."""
-  greaterThan: Datetime
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: Datetime
-}
-
-"""
-A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
-"""
-input BooleanFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: Boolean
-
-  """Not equal to the specified value."""
-  notEqualTo: Boolean
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Boolean
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: Boolean
-
-  """Included in the specified list."""
-  in: [Boolean!]
-
-  """Not included in the specified list."""
-  notIn: [Boolean!]
-
-  """Less than the specified value."""
-  lessThan: Boolean
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: Boolean
-
-  """Greater than the specified value."""
-  greaterThan: Boolean
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: Boolean
-}
-
-"""
-A filter to be used against BigInt fields. All fields are combined with a logical ‘and.’
-"""
-input BigIntFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: BigInt
-
-  """Not equal to the specified value."""
-  notEqualTo: BigInt
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: BigInt
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: BigInt
-
-  """Included in the specified list."""
-  in: [BigInt!]
-
-  """Not included in the specified list."""
-  notIn: [BigInt!]
-
-  """Less than the specified value."""
-  lessThan: BigInt
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: BigInt
-
-  """Greater than the specified value."""
-  greaterThan: BigInt
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: BigInt
-}
-
-"""
-A filter to be used against Int fields. All fields are combined with a logical ‘and.’
-"""
-input IntFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: Int
-
-  """Not equal to the specified value."""
-  notEqualTo: Int
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: Int
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: Int
-
-  """Included in the specified list."""
-  in: [Int!]
-
-  """Not included in the specified list."""
-  notIn: [Int!]
-
-  """Less than the specified value."""
-  lessThan: Int
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: Int
-
-  """Greater than the specified value."""
-  greaterThan: Int
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: Int
-}
-
-"""
-Indicates whether archived items should be included in the results or not.
-"""
-enum IncludeArchivedOption {
-  """Exclude archived items."""
-  NO
-
-  """Include archived items."""
-  YES
-
-  """Only include archived items (i.e. exclude non-archived items)."""
-  EXCLUSIVELY
-
-  """
-  If there is a parent GraphQL record and it is archived then this is equivalent to YES, in all other cases this is equivalent to NO.
-  """
-  INHERIT
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: CardsInDeckFilter
+  ): CardsInDecksConnection!
 }
 
 """A connection to a list of `CardsInDeck` values."""
@@ -2442,6 +2189,9 @@ type CardsInDeck implements Node {
 
   """Reads a single `Deck` that is related to this `CardsInDeck`."""
   deckByDeckId: Deck
+
+  """Reads a single `PublishedCard` that is related to this `CardsInDeck`."""
+  publishedCardByCardId: PublishedCard
   cardByCardId: Card
 }
 
@@ -2725,6 +2475,48 @@ input CardsInDeckFilter {
   not: CardsInDeckFilter
 }
 
+"""
+A filter to be used against BigInt fields. All fields are combined with a logical ‘and.’
+"""
+input BigIntFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: BigInt
+
+  """Not equal to the specified value."""
+  notEqualTo: BigInt
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: BigInt
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: BigInt
+
+  """Included in the specified list."""
+  in: [BigInt!]
+
+  """Not included in the specified list."""
+  notIn: [BigInt!]
+
+  """Less than the specified value."""
+  lessThan: BigInt
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: BigInt
+
+  """Greater than the specified value."""
+  greaterThan: BigInt
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: BigInt
+}
+
 """A connection to a list of `DeckPlayerAttributeTuple` values."""
 type DeckPlayerAttributeTuplesConnection {
   """A list of `DeckPlayerAttributeTuple` objects."""
@@ -2828,6 +2620,48 @@ input DeckPlayerAttributeTupleFilter {
   not: DeckPlayerAttributeTupleFilter
 }
 
+"""
+A filter to be used against Int fields. All fields are combined with a logical ‘and.’
+"""
+input IntFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Int
+
+  """Not equal to the specified value."""
+  notEqualTo: Int
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Int
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Int
+
+  """Included in the specified list."""
+  in: [Int!]
+
+  """Not included in the specified list."""
+  notIn: [Int!]
+
+  """Less than the specified value."""
+  lessThan: Int
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Int
+
+  """Greater than the specified value."""
+  greaterThan: Int
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Int
+}
+
 """A connection to a list of `DeckShare` values."""
 type DeckSharesConnection {
   """A list of `DeckShare` objects."""
@@ -2917,6 +2751,48 @@ input DeckShareFilter {
 
   """Negates the expression."""
   not: DeckShareFilter
+}
+
+"""
+A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
+"""
+input BooleanFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Boolean
+
+  """Not equal to the specified value."""
+  notEqualTo: Boolean
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Boolean
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Boolean
+
+  """Included in the specified list."""
+  in: [Boolean!]
+
+  """Not included in the specified list."""
+  notIn: [Boolean!]
+
+  """Less than the specified value."""
+  lessThan: Boolean
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Boolean
+
+  """Greater than the specified value."""
+  greaterThan: Boolean
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Boolean
 }
 
 """A connection to a list of `GameUser` values."""
@@ -3303,6 +3179,48 @@ input MatchmakingTicketFilter {
   not: MatchmakingTicketFilter
 }
 
+"""
+A filter to be used against Datetime fields. All fields are combined with a logical ‘and.’
+"""
+input DatetimeFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Datetime
+
+  """Not equal to the specified value."""
+  notEqualTo: Datetime
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Datetime
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Datetime
+
+  """Included in the specified list."""
+  in: [Datetime!]
+
+  """Not included in the specified list."""
+  notIn: [Datetime!]
+
+  """Less than the specified value."""
+  lessThan: Datetime
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Datetime
+
+  """Greater than the specified value."""
+  greaterThan: Datetime
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Datetime
+}
+
 """A `MatchmakingTicket` edge in the connection."""
 type MatchmakingTicketsEdge {
   """A cursor for use in pagination."""
@@ -3319,6 +3237,258 @@ type CardsInDecksEdge {
 
   """The `CardsInDeck` at the end of the edge."""
   node: CardsInDeck
+}
+
+"""A `PublishedCard` edge in the connection."""
+type PublishedCardsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `PublishedCard` at the end of the edge."""
+  node: PublishedCard
+}
+
+"""Methods to use when ordering `PublishedCard`."""
+enum PublishedCardsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  SUCCESSION_ASC
+  SUCCESSION_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `PublishedCard` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input PublishedCardCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: String
+
+  """Checks for equality with the object’s `succession` field."""
+  succession: BigInt
+}
+
+"""
+A filter to be used against `PublishedCard` object types. All fields are combined with a logical ‘and.’
+"""
+input PublishedCardFilter {
+  """Filter by the object’s `id` field."""
+  id: StringFilter
+
+  """Filter by the object’s `succession` field."""
+  succession: BigIntFilter
+
+  """Checks for all expressions in this list."""
+  and: [PublishedCardFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [PublishedCardFilter!]
+
+  """Negates the expression."""
+  not: PublishedCardFilter
+}
+
+"""A `Card` edge in the connection."""
+type CardsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Card` at the end of the edge."""
+  node: Card
+}
+
+"""Methods to use when ordering `Card`."""
+enum CardsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  CREATED_BY_ASC
+  CREATED_BY_DESC
+  URI_ASC
+  URI_DESC
+  BLOCKLY_WORKSPACE_ASC
+  BLOCKLY_WORKSPACE_DESC
+  CARD_SCRIPT_ASC
+  CARD_SCRIPT_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  LAST_MODIFIED_ASC
+  LAST_MODIFIED_DESC
+  IS_ARCHIVED_ASC
+  IS_ARCHIVED_DESC
+  IS_PUBLISHED_ASC
+  IS_PUBLISHED_DESC
+  SUCCESSION_ASC
+  SUCCESSION_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Card` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input CardCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: String
+
+  """Checks for equality with the object’s `createdBy` field."""
+  createdBy: String
+
+  """Checks for equality with the object’s `uri` field."""
+  uri: String
+
+  """Checks for equality with the object’s `blocklyWorkspace` field."""
+  blocklyWorkspace: JSON
+
+  """Checks for equality with the object’s `cardScript` field."""
+  cardScript: JSON
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+
+  """Checks for equality with the object’s `lastModified` field."""
+  lastModified: Datetime
+
+  """Checks for equality with the object’s `isArchived` field."""
+  isArchived: Boolean
+
+  """Checks for equality with the object’s `isPublished` field."""
+  isPublished: Boolean
+
+  """Checks for equality with the object’s `succession` field."""
+  succession: BigInt
+}
+
+"""
+A filter to be used against `Card` object types. All fields are combined with a logical ‘and.’
+"""
+input CardFilter {
+  """Filter by the object’s `id` field."""
+  id: StringFilter
+
+  """Filter by the object’s `createdBy` field."""
+  createdBy: StringFilter
+
+  """Filter by the object’s `uri` field."""
+  uri: StringFilter
+
+  """Filter by the object’s `blocklyWorkspace` field."""
+  blocklyWorkspace: JSONFilter
+
+  """Filter by the object’s `cardScript` field."""
+  cardScript: JSONFilter
+
+  """Filter by the object’s `createdAt` field."""
+  createdAt: DatetimeFilter
+
+  """Filter by the object’s `lastModified` field."""
+  lastModified: DatetimeFilter
+
+  """Filter by the object’s `isArchived` field."""
+  isArchived: BooleanFilter
+
+  """Filter by the object’s `isPublished` field."""
+  isPublished: BooleanFilter
+
+  """Filter by the object’s `succession` field."""
+  succession: BigIntFilter
+
+  """Filter by the object’s `collectible` field."""
+  collectible: BooleanFilter
+
+  """Filter by the object’s `cost` field."""
+  cost: IntFilter
+
+  """Filter by the object’s `type` field."""
+  type: StringFilter
+
+  """Checks for all expressions in this list."""
+  and: [CardFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [CardFilter!]
+
+  """Negates the expression."""
+  not: CardFilter
+}
+
+"""
+A filter to be used against JSON fields. All fields are combined with a logical ‘and.’
+"""
+input JSONFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: JSON
+
+  """Not equal to the specified value."""
+  notEqualTo: JSON
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: JSON
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: JSON
+
+  """Included in the specified list."""
+  in: [JSON!]
+
+  """Not included in the specified list."""
+  notIn: [JSON!]
+
+  """Less than the specified value."""
+  lessThan: JSON
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: JSON
+
+  """Greater than the specified value."""
+  greaterThan: JSON
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: JSON
+
+  """Contains the specified JSON."""
+  contains: JSON
+
+  """Contains the specified key."""
+  containsKey: String
+
+  """Contains all of the specified keys."""
+  containsAllKeys: [String!]
+
+  """Contains any of the specified keys."""
+  containsAnyKeys: [String!]
+
+  """Contained by the specified JSON."""
+  containedBy: JSON
+}
+
+"""
+Indicates whether archived items should be included in the results or not.
+"""
+enum IncludeArchivedOption {
+  """Exclude archived items."""
+  NO
+
+  """Include archived items."""
+  YES
+
+  """Only include archived items (i.e. exclude non-archived items)."""
+  EXCLUSIVELY
+
+  """
+  If there is a parent GraphQL record and it is archived then this is equivalent to YES, in all other cases this is equivalent to NO.
+  """
+  INHERIT
 }
 
 """A connection to a list of `Class` values."""
@@ -4412,104 +4582,6 @@ input MatchmakingQueueFilter {
   not: MatchmakingQueueFilter
 }
 
-"""A connection to a list of `UserEntityAddon` values."""
-type UserEntityAddonsConnection {
-  """A list of `UserEntityAddon` objects."""
-  nodes: [UserEntityAddon]!
-
-  """
-  A list of edges which contains the `UserEntityAddon` and cursor to aid in pagination.
-  """
-  edges: [UserEntityAddonsEdge!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """
-  The count of *all* `UserEntityAddon` you could get from the connection.
-  """
-  totalCount: Int!
-}
-
-type UserEntityAddon implements Node {
-  """
-  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
-  """
-  nodeId: ID!
-  id: String!
-  privacyToken: String
-  migrated: Boolean
-  showPremadeDecks: Boolean
-}
-
-"""A `UserEntityAddon` edge in the connection."""
-type UserEntityAddonsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `UserEntityAddon` at the end of the edge."""
-  node: UserEntityAddon
-}
-
-"""Methods to use when ordering `UserEntityAddon`."""
-enum UserEntityAddonsOrderBy {
-  NATURAL
-  ID_ASC
-  ID_DESC
-  PRIVACY_TOKEN_ASC
-  PRIVACY_TOKEN_DESC
-  MIGRATED_ASC
-  MIGRATED_DESC
-  SHOW_PREMADE_DECKS_ASC
-  SHOW_PREMADE_DECKS_DESC
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-}
-
-"""
-A condition to be used against `UserEntityAddon` object types. All fields are
-tested for equality and combined with a logical ‘and.’
-"""
-input UserEntityAddonCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: String
-
-  """Checks for equality with the object’s `privacyToken` field."""
-  privacyToken: String
-
-  """Checks for equality with the object’s `migrated` field."""
-  migrated: Boolean
-
-  """Checks for equality with the object’s `showPremadeDecks` field."""
-  showPremadeDecks: Boolean
-}
-
-"""
-A filter to be used against `UserEntityAddon` object types. All fields are combined with a logical ‘and.’
-"""
-input UserEntityAddonFilter {
-  """Filter by the object’s `id` field."""
-  id: StringFilter
-
-  """Filter by the object’s `privacyToken` field."""
-  privacyToken: StringFilter
-
-  """Filter by the object’s `migrated` field."""
-  migrated: BooleanFilter
-
-  """Filter by the object’s `showPremadeDecks` field."""
-  showPremadeDecks: BooleanFilter
-
-  """Checks for all expressions in this list."""
-  and: [UserEntityAddonFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [UserEntityAddonFilter!]
-
-  """Negates the expression."""
-  not: UserEntityAddonFilter
-}
-
 """The output of our create `BannedDraftCard` mutation."""
 type CreateBannedDraftCardPayload {
   """
@@ -4629,6 +4701,12 @@ input CreateCardInput {
 input CardInput {
   id: String!
   createdBy: String!
+
+  """
+  The URI of the application that created this card. The git URL by default represents cards that came from the
+      Spellsource git repository. https://www.getspellsource.com/cards/editor or similar represents cards authored in the
+      web interface
+  """
   uri: String
   blocklyWorkspace: JSON
   cardScript: JSON
@@ -4656,6 +4734,9 @@ type CreateCardsInDeckPayload {
 
   """Reads a single `Deck` that is related to this `CardsInDeck`."""
   deckByDeckId: Deck
+
+  """Reads a single `PublishedCard` that is related to this `CardsInDeck`."""
+  publishedCardByCardId: PublishedCard
 
   """An edge for our `CardsInDeck`. May be used by Relay 1."""
   cardsInDeckEdge(
@@ -5197,47 +5278,48 @@ input MatchmakingTicketInput {
   createdAt: Datetime
 }
 
-"""The output of our create `UserEntityAddon` mutation."""
-type CreateUserEntityAddonPayload {
+"""The output of our create `PublishedCard` mutation."""
+type CreatePublishedCardPayload {
   """
   The exact same `clientMutationId` that was provided in the mutation input,
   unchanged and unused. May be used by a client to track mutations.
   """
   clientMutationId: String
 
-  """The `UserEntityAddon` that was created by this mutation."""
-  userEntityAddon: UserEntityAddon
+  """The `PublishedCard` that was created by this mutation."""
+  publishedCard: PublishedCard
 
   """
   Our root query field type. Allows us to run any query from our mutation payload.
   """
   query: Query
 
-  """An edge for our `UserEntityAddon`. May be used by Relay 1."""
-  userEntityAddonEdge(
-    """The method to use when ordering `UserEntityAddon`."""
-    orderBy: [UserEntityAddonsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): UserEntityAddonsEdge
+  """Reads a single `Card` that is related to this `PublishedCard`."""
+  cardBySuccession: Card
+
+  """An edge for our `PublishedCard`. May be used by Relay 1."""
+  publishedCardEdge(
+    """The method to use when ordering `PublishedCard`."""
+    orderBy: [PublishedCardsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PublishedCardsEdge
 }
 
-"""All input for the create `UserEntityAddon` mutation."""
-input CreateUserEntityAddonInput {
+"""All input for the create `PublishedCard` mutation."""
+input CreatePublishedCardInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
   """
   clientMutationId: String
 
-  """The `UserEntityAddon` to be created by this mutation."""
-  userEntityAddon: UserEntityAddonInput!
+  """The `PublishedCard` to be created by this mutation."""
+  publishedCard: PublishedCardInput!
 }
 
-"""An input for mutations affecting `UserEntityAddon`"""
-input UserEntityAddonInput {
+"""An input for mutations affecting `PublishedCard`"""
+input PublishedCardInput {
   id: String!
-  privacyToken: String
-  migrated: Boolean
-  showPremadeDecks: Boolean
+  succession: BigInt!
 }
 
 """The output of our update `BannedDraftCard` mutation."""
@@ -5414,6 +5496,12 @@ input UpdateCardInput {
 input CardPatch {
   id: String
   createdBy: String
+
+  """
+  The URI of the application that created this card. The git URL by default represents cards that came from the
+      Spellsource git repository. https://www.getspellsource.com/cards/editor or similar represents cards authored in the
+      web interface
+  """
   uri: String
   blocklyWorkspace: JSON
   cardScript: JSON
@@ -5456,6 +5544,9 @@ type UpdateCardsInDeckPayload {
 
   """Reads a single `Deck` that is related to this `CardsInDeck`."""
   deckByDeckId: Deck
+
+  """Reads a single `PublishedCard` that is related to this `CardsInDeck`."""
+  publishedCardByCardId: PublishedCard
 
   """An edge for our `CardsInDeck`. May be used by Relay 1."""
   cardsInDeckEdge(
@@ -6268,31 +6359,34 @@ input UpdateMatchmakingTicketByUserIdInput {
   userId: String!
 }
 
-"""The output of our update `UserEntityAddon` mutation."""
-type UpdateUserEntityAddonPayload {
+"""The output of our update `PublishedCard` mutation."""
+type UpdatePublishedCardPayload {
   """
   The exact same `clientMutationId` that was provided in the mutation input,
   unchanged and unused. May be used by a client to track mutations.
   """
   clientMutationId: String
 
-  """The `UserEntityAddon` that was updated by this mutation."""
-  userEntityAddon: UserEntityAddon
+  """The `PublishedCard` that was updated by this mutation."""
+  publishedCard: PublishedCard
 
   """
   Our root query field type. Allows us to run any query from our mutation payload.
   """
   query: Query
 
-  """An edge for our `UserEntityAddon`. May be used by Relay 1."""
-  userEntityAddonEdge(
-    """The method to use when ordering `UserEntityAddon`."""
-    orderBy: [UserEntityAddonsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): UserEntityAddonsEdge
+  """Reads a single `Card` that is related to this `PublishedCard`."""
+  cardBySuccession: Card
+
+  """An edge for our `PublishedCard`. May be used by Relay 1."""
+  publishedCardEdge(
+    """The method to use when ordering `PublishedCard`."""
+    orderBy: [PublishedCardsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PublishedCardsEdge
 }
 
-"""All input for the `updateUserEntityAddon` mutation."""
-input UpdateUserEntityAddonInput {
+"""All input for the `updatePublishedCard` mutation."""
+input UpdatePublishedCardInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -6300,28 +6394,26 @@ input UpdateUserEntityAddonInput {
   clientMutationId: String
 
   """
-  The globally unique `ID` which will identify a single `UserEntityAddon` to be updated.
+  The globally unique `ID` which will identify a single `PublishedCard` to be updated.
   """
   nodeId: ID!
 
   """
-  An object where the defined keys will be set on the `UserEntityAddon` being updated.
+  An object where the defined keys will be set on the `PublishedCard` being updated.
   """
-  userEntityAddonPatch: UserEntityAddonPatch!
+  publishedCardPatch: PublishedCardPatch!
 }
 
 """
-Represents an update to a `UserEntityAddon`. Fields that are set will be updated.
+Represents an update to a `PublishedCard`. Fields that are set will be updated.
 """
-input UserEntityAddonPatch {
+input PublishedCardPatch {
   id: String
-  privacyToken: String
-  migrated: Boolean
-  showPremadeDecks: Boolean
+  succession: BigInt
 }
 
-"""All input for the `updateUserEntityAddonById` mutation."""
-input UpdateUserEntityAddonByIdInput {
+"""All input for the `updatePublishedCardById` mutation."""
+input UpdatePublishedCardByIdInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -6329,9 +6421,9 @@ input UpdateUserEntityAddonByIdInput {
   clientMutationId: String
 
   """
-  An object where the defined keys will be set on the `UserEntityAddon` being updated.
+  An object where the defined keys will be set on the `PublishedCard` being updated.
   """
-  userEntityAddonPatch: UserEntityAddonPatch!
+  publishedCardPatch: PublishedCardPatch!
   id: String!
 }
 
@@ -6498,6 +6590,9 @@ type DeleteCardsInDeckPayload {
 
   """Reads a single `Deck` that is related to this `CardsInDeck`."""
   deckByDeckId: Deck
+
+  """Reads a single `PublishedCard` that is related to this `CardsInDeck`."""
+  publishedCardByCardId: PublishedCard
 
   """An edge for our `CardsInDeck`. May be used by Relay 1."""
   cardsInDeckEdge(
@@ -7075,32 +7170,35 @@ input DeleteMatchmakingTicketByUserIdInput {
   userId: String!
 }
 
-"""The output of our delete `UserEntityAddon` mutation."""
-type DeleteUserEntityAddonPayload {
+"""The output of our delete `PublishedCard` mutation."""
+type DeletePublishedCardPayload {
   """
   The exact same `clientMutationId` that was provided in the mutation input,
   unchanged and unused. May be used by a client to track mutations.
   """
   clientMutationId: String
 
-  """The `UserEntityAddon` that was deleted by this mutation."""
-  userEntityAddon: UserEntityAddon
-  deletedUserEntityAddonId: ID
+  """The `PublishedCard` that was deleted by this mutation."""
+  publishedCard: PublishedCard
+  deletedPublishedCardId: ID
 
   """
   Our root query field type. Allows us to run any query from our mutation payload.
   """
   query: Query
 
-  """An edge for our `UserEntityAddon`. May be used by Relay 1."""
-  userEntityAddonEdge(
-    """The method to use when ordering `UserEntityAddon`."""
-    orderBy: [UserEntityAddonsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): UserEntityAddonsEdge
+  """Reads a single `Card` that is related to this `PublishedCard`."""
+  cardBySuccession: Card
+
+  """An edge for our `PublishedCard`. May be used by Relay 1."""
+  publishedCardEdge(
+    """The method to use when ordering `PublishedCard`."""
+    orderBy: [PublishedCardsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PublishedCardsEdge
 }
 
-"""All input for the `deleteUserEntityAddon` mutation."""
-input DeleteUserEntityAddonInput {
+"""All input for the `deletePublishedCard` mutation."""
+input DeletePublishedCardInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -7108,13 +7206,13 @@ input DeleteUserEntityAddonInput {
   clientMutationId: String
 
   """
-  The globally unique `ID` which will identify a single `UserEntityAddon` to be deleted.
+  The globally unique `ID` which will identify a single `PublishedCard` to be deleted.
   """
   nodeId: ID!
 }
 
-"""All input for the `deleteUserEntityAddonById` mutation."""
-input DeleteUserEntityAddonByIdInput {
+"""All input for the `deletePublishedCardById` mutation."""
+input DeletePublishedCardByIdInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -7578,6 +7676,33 @@ input GetCollectionCardsInput {
   clientMutationId: String
 }
 
+"""The output of our `getUserAttribute` mutation."""
+type GetUserAttributePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  string: String
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
+
+"""All input for the `getUserAttribute` mutation."""
+input GetUserAttributeInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  idUser: String
+  attribute: String
+  orDefault: String
+}
+
 """The output of our `publishCard` mutation."""
 type PublishCardPayload {
   """
@@ -7728,6 +7853,32 @@ input SetCardsInDeckInput {
   cardIds: [String]
 }
 
+"""The output of our `setUserAttribute` mutation."""
+type SetUserAttributePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
+
+"""All input for the `setUserAttribute` mutation."""
+input SetUserAttributeInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  idUser: String
+  attribute: String
+  val: String
+}
+
 """The output of our upsert `BannedDraftCard` mutation."""
 type UpsertBannedDraftCardPayload {
   """
@@ -7859,6 +8010,9 @@ type UpsertCardsInDeckPayload {
 
   """Reads a single `Deck` that is related to this `CardsInDeck`."""
   deckByDeckId: Deck
+
+  """Reads a single `PublishedCard` that is related to this `CardsInDeck`."""
+  publishedCardByCardId: PublishedCard
 
   """An edge for our `CardsInDeck`. May be used by Relay 1."""
   cardsInDeckEdge(
@@ -8291,42 +8445,45 @@ input UpsertMatchmakingTicketInput {
   matchmakingTicket: MatchmakingTicketInput!
 }
 
-"""The output of our upsert `UserEntityAddon` mutation."""
-type UpsertUserEntityAddonPayload {
+"""The output of our upsert `PublishedCard` mutation."""
+type UpsertPublishedCardPayload {
   """
   The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations.
   """
   clientMutationId: String
 
-  """The `UserEntityAddon` that was upserted by this mutation."""
-  userEntityAddon: UserEntityAddon
+  """The `PublishedCard` that was upserted by this mutation."""
+  publishedCard: PublishedCard
 
   """
   Our root query field type. Allows us to run any query from our mutation payload.
   """
   query: Query
 
-  """An edge for our `UserEntityAddon`. May be used by Relay 1."""
-  userEntityAddonEdge(
-    """The method to use when ordering `UserEntityAddon`."""
-    orderBy: [UserEntityAddonsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): UserEntityAddonsEdge
+  """Reads a single `Card` that is related to this `PublishedCard`."""
+  cardBySuccession: Card
+
+  """An edge for our `PublishedCard`. May be used by Relay 1."""
+  publishedCardEdge(
+    """The method to use when ordering `PublishedCard`."""
+    orderBy: [PublishedCardsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): PublishedCardsEdge
 }
 
-"""Where conditions for the upsert `UserEntityAddon` mutation."""
-input UpsertUserEntityAddonWhere {
+"""Where conditions for the upsert `PublishedCard` mutation."""
+input UpsertPublishedCardWhere {
   id: String
 }
 
-"""All input for the upsert `UserEntityAddon` mutation."""
-input UpsertUserEntityAddonInput {
+"""All input for the upsert `PublishedCard` mutation."""
+input UpsertPublishedCardInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the payload verbatim. May be used to track mutations by the client.
   """
   clientMutationId: String
 
-  """The `UserEntityAddon` to be upserted by this mutation."""
-  userEntityAddon: UserEntityAddonInput!
+  """The `PublishedCard` to be upserted by this mutation."""
+  publishedCard: PublishedCardInput!
 }
 
 type ImageDef {

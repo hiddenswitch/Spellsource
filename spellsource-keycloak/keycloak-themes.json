@@ -1,0 +1,10 @@
+{
+  "themes": [
+    {
+      "name": "spellsource-keycloak-theme",
+      "types": [
+        "account", "login" , "common"
+      ]
+    }
+  ]
+}

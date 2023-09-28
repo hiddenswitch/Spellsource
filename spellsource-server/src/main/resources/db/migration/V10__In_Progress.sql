@@ -29,7 +29,35 @@ alter table spellsource.cards
     drop constraint if exists cards_pkey cascade,
     alter blockly_workspace type jsonb using null,
     add if not exists succession   bigint primary key generated always as identity;
-;
+
+create table if not exists spellsource.published_cards
+(
+    id         text   not null primary key,
+    succession bigint not null references spellsource.cards (succession) deferrable initially deferred
+);
+grant select, insert, update, delete on spellsource.published_cards to website;
+alter table spellsource.published_cards
+    enable row level security;
+
+drop policy if exists website_view on spellsource.published_cards;
+create policy website_view on spellsource.published_cards
+    as permissive
+    for select
+    using (true);
+
+drop policy if exists website_edit on spellsource.published_cards;
+create policy website_edit on spellsource.published_cards
+    as permissive
+    for all
+    using (starts_with(id, spellsource.get_user_id()))
+    with check (starts_with(id, spellsource.get_user_id()));
+
+insert into spellsource.published_cards
+select id, succession
+from spellsource.cards;
+
+alter table spellsource.cards_in_deck
+    add constraint cards_in_deck_card_id_fkey foreign key (card_id) references spellsource.published_cards (id);
 
 comment on column spellsource.cards.uri is
     'The URI of the application that created this card. The git URL by default represents cards that came from the
@@ -148,14 +176,31 @@ create policy public_view on spellsource.cards for select to website
 create or replace function spellsource.get_latest_card(card_id text, published bool)
     returns spellsource.cards as
 $$
-select *
-from spellsource.cards
-where id = $1
-  and is_published = $2
-  and not is_archived
-order by succession desc
-limit 1
-$$ language sql stable;
+declare
+    result spellsource.cards;
+begin
+    if published
+    then
+        select c.*
+        from spellsource.cards c
+                 inner join spellsource.published_cards pc on c.succession = pc.succession
+        where c.id = card_id
+        limit 1
+        into result;
+    else
+        select *
+        from spellsource.cards
+        where id = $1
+          and not is_published
+          and not is_archived
+        order by succession desc
+        limit 1
+        into result;
+    end if;
+
+    return result;
+end;
+$$ language plpgsql stable;
 
 create or replace function spellsource.cards_in_deck_card_by_card_id(cards_in_deck spellsource.cards_in_deck) returns spellsource.cards as
 $$
@@ -276,6 +321,10 @@ $$
 declare
 begin
     update spellsource.cards set is_archived = true where id = new.id and is_published and not is_archived;
+
+    insert into spellsource.published_cards
+    values (new.id, new.succession)
+    on conflict (id) do update set succession = new.succession;
 
     return new;
 end;
