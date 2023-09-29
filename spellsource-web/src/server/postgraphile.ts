@@ -1,19 +1,7 @@
-import { Pool } from "pg";
-import { pgPort } from "../lib/config";
 import { PostGraphileOptions } from "postgraphile";
 import PgConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 import { PgMutationUpsertPlugin } from "postgraphile-upsert-plugin";
 import PgOmitArchivedPlugin from "@graphile-contrib/pg-omit-archived";
-
-const pool = new Pool({
-  user: "admin",
-  password: "password",
-  host: "localhost",
-  database: "spellsource",
-  port: pgPort,
-});
-
-export { pool as pgPool };
 
 export const postgraphileOptions: PostGraphileOptions = {
   // watchPg: true, // Need extension for this to work properly

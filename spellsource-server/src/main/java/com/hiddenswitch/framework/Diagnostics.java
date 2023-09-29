@@ -3,25 +3,22 @@ package com.hiddenswitch.framework;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
-import com.google.common.collect.Multisets;
-import com.google.common.collect.Sets;
 import com.google.protobuf.Empty;
 import com.hiddenswitch.diagnostics.Tracing;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.prometheus.client.exporter.common.TextFormat;
-import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.ext.web.Router;
-import io.vertx.sqlclient.SqlClient;
+import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.PoolOptions;
 import org.redisson.api.redisnode.RedisNodes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class Diagnostics {
@@ -64,11 +61,21 @@ public class Diagnostics {
 
 					var protos = client.unauthenticated().getConfiguration(Empty.getDefaultInstance()).eventually(client::close);
 					var redis = Future.fromCompletionStage(Environment.redisson().getRedisNodes(RedisNodes.SINGLE).getInstance().pingAsync(200, TimeUnit.MILLISECONDS));
+					var pgConnectOptions = Environment.pgArgs().connectionOptions();
+					pgConnectOptions.setConnectTimeout(1000);
+					var pgClient = PgPool.client(vertx, pgConnectOptions, new PoolOptions());
+					var postgres = pgClient.query("""
+									select success
+									     from hiddenswitch.flyway_schema_history
+									     order by installed_rank desc
+									     limit 1
+									     """)
+							.execute()
+							.compose(res -> res.size() == 0 ? Future.failedFuture("migration not complete") : Future.succeededFuture())
+							.eventually(v -> pgClient.close());
 
-					CompositeFuture.all(redis, protos)
-							.onSuccess(v1 -> {
-								routingContext.end(Buffer.buffer("OK"));
-							})
+					Future.all(redis, protos, postgres)
+							.onSuccess(v -> routingContext.end(Buffer.buffer("OK")))
 							.onFailure(t -> {
 								routingContext.response().setStatusCode(500);
 								routingContext.end(Buffer.buffer("health check failed with error:\n" + Throwables.getStackTraceAsString(t)));
