@@ -5,7 +5,7 @@ export const pgUser = process.env.PGUSER || process.env.PG_USER || "admin";
 export const pgPassword = process.env.PGPASSWORD || process.env.PG_PASSWORD || "password";
 export const pgDatabase = process.env.PGDATABASE || process.env.PG_DATABASE || "spellsource";
 // this is also from redis.uri in the master config
-export const redisUri = parseInt(process.env.REDIS_URI || "redis://localhost:6379");
+export const redisUri = process.env.REDIS_URI || "redis://localhost:6379";
 export const keycloakUrl =
   process.env.KEYCLOAK_URL || `http://localhost:${parseInt(process.env.KEYCLOAK_PORT || "8080")}`;
 
