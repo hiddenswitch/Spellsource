@@ -7,7 +7,7 @@ export const pgDatabase = process.env.PGDATABASE || process.env.PG_DATABASE || "
 // this is also from redis.uri in the master config
 export const redisUri = parseInt(process.env.REDIS_URI || "redis://localhost:6379");
 export const keycloakUrl =
-  process.env.KEYCLOAK_URL || `http://localhost${parseInt(process.env.KEYCLOAK_PORT || "8080")}`;
+  process.env.KEYCLOAK_URL || `http://localhost:${parseInt(process.env.KEYCLOAK_PORT || "8080")}`;
 
 export const clientId = "spellsource";
 export const clientSecret = "clientsecret";
