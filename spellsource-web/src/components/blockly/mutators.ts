@@ -15,7 +15,7 @@ export abstract class ExtensionMixin<
 {
   abstract saveExtraState(this: MutatedBlock): State;
 
-  abstract loadExtraState(this: MutatedBlock, state: State);
+  abstract loadExtraState(this: MutatedBlock, state: State): void;
 }
 
 export abstract class MutatorMixin<
@@ -38,7 +38,7 @@ export abstract class MutatorMixin<
  * @returns {string} A stringified version of the extra state of the given
  *     block.
  */
-export function getExtraBlockState(block) {
+export function getExtraBlockState(block: Blockly.BlockSvg) {
   // TODO: This is a dupe of the BlockChange.getExtraBlockState code, do we
   //    want to make that public?
   if (block.saveExtraState) {

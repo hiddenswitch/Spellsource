@@ -3,7 +3,7 @@ import { isArray } from "lodash";
 import { getArtById } from "../../../server/art";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const nameParam = req.query["name"];
+  const nameParam = req.query["name"] ?? "";
   const name = isArray(nameParam) ? nameParam.join("/") : nameParam;
 
   const artById = await getArtById();

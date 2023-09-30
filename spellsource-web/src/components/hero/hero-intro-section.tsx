@@ -1,4 +1,4 @@
-import React, { CSSProperties } from "react";
+import React, { CSSProperties, FunctionComponent } from "react";
 import * as styles from "../creative-layout.module.scss";
 import harvard from "../../../public/static/assets/Harvard.png";
 import mit from "../../../public/static/assets/MIT.png";
@@ -7,6 +7,7 @@ import un from "../../../public/static/assets/UnitedNations.png";
 import unity from "../../../public/static/assets/Unity.png";
 import Link from "next/link";
 import Image from "next/image";
+import {ReactNodeLike} from "prop-types";
 
 function HeroIntroSection() {
   const title = "Let’s rethink game development";
@@ -36,7 +37,11 @@ function HeroIntroSection() {
   );
 }
 
-const Button = ({ title, route, buttonStyle }) => {
+const Button: FunctionComponent<{
+  title: string | ReactNodeLike;
+  route: string;
+  buttonStyle: "light" | "dark";
+}> = ({ title, route, buttonStyle }) => {
   const light: CSSProperties = {
     color: "#1B1B1B",
     border: "2px solid #1B1B1B",

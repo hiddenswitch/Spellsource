@@ -1,4 +1,3 @@
-// redis-client.ts
 import Redis from "ioredis";
 import { redisUri } from "./config";
 

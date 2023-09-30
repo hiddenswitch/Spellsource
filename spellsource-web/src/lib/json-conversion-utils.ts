@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Blockly, { Block, BlockSvg, Connection, Workspace, WorkspaceSvg } from "blockly";
 import * as BlocklyMiscUtils from "./blockly-spellsource-utils";
 import { isArray } from "lodash";
@@ -11,7 +12,7 @@ const classBlocksDictionary = {} as Record<string, BlockDef[]>; //A dictionary m
 const enumBlocksDictionary = {} as Record<string, BlockDef[]>; //A dictionary mapping the enum value of the block to the block itself
 const allArgNames = new Set<string>(); //Every different possible arg name that appears on blocks, (for searching)
 
-export const blockTypeColors = {};
+export const blockTypeColors: Record<string, string> = {};
 
 let errorOnCustom = false;
 
@@ -25,7 +26,7 @@ const customBlocks = {};
  * @param block The block to add
  */
 export function addBlockToMap(block: BlockDef) {
-  if (block.type.endsWith("SHADOW")) {
+  if (block.type!.endsWith("SHADOW")) {
     return;
   }
   let list = argsList(block).filter((arg) => arg.type !== "field_image");

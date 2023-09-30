@@ -1,4 +1,4 @@
-import Blockly from "blockly";
+import Blockly, { WorkspaceSvg } from "blockly";
 import * as BlocklyMiscUtils from "./blockly-spellsource-utils";
 import { toTitleCaseCorrected } from "./blockly-spellsource-utils";
 import { ContextType } from "react";
@@ -17,9 +17,9 @@ import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo;
  * Initializes the necessary callbacks for the Variables tab's CUSTOM dynamic-ness
  * @param workspace
  */
-export function initCallbacks(workspace) {
+export function initCallbacks(workspace: WorkspaceSvg) {
   workspace.registerToolboxCategoryCallback("SPELLSOURCE_VARIABLES", (workspace) => {
-    var xmlList = [];
+    var xmlList: Element[] = [];
     var button = document.createElement("button");
     button.setAttribute("text", "Create entity variable...");
     button.setAttribute("callbackKey", "CREATE_VARIABLE_ENTITY");
@@ -99,8 +99,8 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
 
       category("Card Art", "#888888", "Blocks representing the art that your card can have", [
         /*category("Unused", "#888888", "Art that hasn't yet been used by a card", artContents(false)),
-                category("Used", "#888888", "Art that's been used by cards already", artContents(true)),
-                category("All", "#888888", "All available art", artContents(null)),*/
+                                                                category("Used", "#888888", "Art that's been used by cards already", artContents(true)),
+                                                                category("All", "#888888", "All available art", artContents(null)),*/
         generatedArtCategory(data),
         ...artCategories(),
       ]),
@@ -377,16 +377,16 @@ export function editorToolbox(results: string[] = [], data: ContextType<typeof B
         ),
 
         /* Not sure if these are actually going to be needed
-                  category('Text', '160',
-                    "Test",
-                    simpleContents('text')
-                  ),
-          
-                  category('Lists', '260',
-                    "Test",
-                    simpleContents('list')
-                  ),
-                  */
+                                                                  category('Text', '160',
+                                                                    "Test",
+                                                                    simpleContents('text')
+                                                                  ),
+                                                          
+                                                                  category('Lists', '260',
+                                                                    "Test",
+                                                                    simpleContents('list')
+                                                                  ),
+                                                                  */
       ]),
     ],
   } as ToolboxInfo;
@@ -538,7 +538,15 @@ export function cardsCategory(data: ContextType<typeof BlocklyDataContext>) {
  * @param props The toolbox CUSTOM field, if it needs one
  * @returns category json
  */
-function category(name, color, tooltip, contents, props = null): StaticCategoryInfo {
+function category(
+  name: string,
+  color: string | -1,
+  tooltip: string,
+  contents: ArrayLike<unknown> | null,
+  props: {
+    [p: string]: any;
+  } | null = null
+): StaticCategoryInfo {
   let category: any = {
     kind: "category",
     name: name,
@@ -562,7 +570,7 @@ function category(name, color, tooltip, contents, props = null): StaticCategoryI
  * @param sub The subcategory to match
  * @returns [category json blocks]
  */
-function subContents(prefix, sub) {
+function subContents(prefix: string, sub: string) {
   let contents: Partial<ToolboxItemInfo>[] = [];
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && block.startsWith(prefix)) {
@@ -596,7 +604,7 @@ export function contents(prefix: string) {
  * @param exclusions Specific blocks to not include
  * @returns [category json blocks]
  */
-function exclusionContents(prefix, ...exclusions) {
+function exclusionContents(prefix: string, ...exclusions: Array<unknown>) {
   let contents: Partial<ToolboxItemInfo>[] = [];
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && block.startsWith(prefix) && !exclusions.includes(block)) {
@@ -612,7 +620,7 @@ function exclusionContents(prefix, ...exclusions) {
  * @param inclusions Additional blocks to include
  * @returns [category json blocks]
  */
-function inclusionContents(prefix, ...inclusions) {
+function inclusionContents(prefix: string, ...inclusions: Array<unknown>) {
   let contents: Partial<ToolboxItemInfo>[] = [];
   for (let block in Blockly.Blocks) {
     if (defaultTest(block) && (block.startsWith(prefix) || inclusions.includes(block))) {
@@ -629,7 +637,7 @@ function artCategories() {
     if (defaultTest(block) && block.startsWith("Art_") && Blockly.Blocks[block]["art"]) {
       const art = Blockly.Blocks[block]["art"] as ImageDef;
 
-      const folder = art.src.split("/").at(-2);
+      const folder = art.src.split("/").at(-2) ?? "";
 
       const name = toTitleCaseCorrected(folder);
 
@@ -650,7 +658,7 @@ function artCategories() {
  * @param block The block type to check
  * @returns boolean
  */
-function defaultTest(block) {
+function defaultTest(block: string) {
   return (
     !block.endsWith("SHADOW") &&
     (!block.match(/^.*_.*_.*/) || BlocklyMiscUtils.isSpellsourceBlock(block)) &&
@@ -665,9 +673,17 @@ export function generatedArtCategory(data: ContextType<typeof BlocklyDataContext
       kind: "label",
       text: data.userId ? "Art You've Created" : "Login to be able to generate your own art",
     },
-    ...data.generatedArt.map((art) => ({
+    ...(data.generatedArt ?? []).map((art) => ({
       ...getBlockInfo("Art_Generated"),
-      fields: { src: createConfiguration().baseServer["url"] + art.urls[0], hash: art.hash },
+      fields: {
+        src:
+          (
+            createConfiguration().baseServer as unknown as {
+              url: string;
+            }
+          )["url"] + art.urls[0],
+        hash: art.hash,
+      },
     })),
   ]);
 }

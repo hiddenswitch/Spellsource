@@ -56,8 +56,8 @@ export const useIndex = () => {
 
       for (const block of allBlocks) {
         idx.addDoc({
-          id: block.type,
-          title: setupSearchMessage(block, blocksByType) ?? "",
+          id: block.type!,
+          title: setupSearchMessage(block /*, blocksByType*/) ?? "",
           description: block.comment || "",
           nodeType: "Block",
           node: block,
@@ -85,41 +85,43 @@ export const useIndex = () => {
   return index.current;
 };
 
-const setupSearchMessage = (block: BlockDef, blocksByType: Record<string, BlockDef>) => {
+const setupSearchMessage = (block: BlockDef /*, blocksByType: Record<string, BlockDef>*/) => {
   const getTextForBlock = (node: BlockDef) => {
     let text = "";
     /*if (node.messages) {
-      for (let i = 0; i < node.messages.length; i++) {
-        let message = node.messages[i];
-        if (node.args && node.args[i] && node.args[i].args) {
-          let args = node.args[i].args;
-          for (let j = 0; j < args.length; j++) {
-            let text = getTextForArg(args[j]);
-            message = message.replace("%" + (j + 1).toString(), text);
+          for (let i = 0; i < node.messages.length; i++) {
+            let message = node.messages[i];
+            if (node.args && node.args[i] && node.args[i].args) {
+              let args = node.args[i].args;
+              for (let j = 0; j < args.length; j++) {
+                let text = getTextForArg(args[j]);
+                message = message.replace("%" + (j + 1).toString(), text);
+              }
+            }
+            text += message + " ";
           }
-        }
-        text += message + " ";
-      }
-    }*/
+        }*/
     return text;
   };
+  /*
+      const getTextForArg = (arg) => {
+        if (arg.shadow?.type && arg.shadow.type in blocksByType) {
+          return getTextForBlock(blocksByType[arg.shadow.type]);
+        }
+        if (arg.options) {
+          let text = "";
+          for (let option of arg.options) {
+            text += option[0] + " ";
+          }
+          return text;
+        }
+        if (arg.type === "field_label_plural") {
+          return arg.value;
+        }
+        return "";
+      };
 
-  const getTextForArg = (arg) => {
-    if (arg.shadow?.type && arg.shadow.type in blocksByType) {
-      return getTextForBlock(blocksByType[arg.shadow.type]);
-    }
-    if (arg.options) {
-      let text = "";
-      for (let option of arg.options) {
-        text += option[0] + " ";
-      }
-      return text;
-    }
-    if (arg.type === "field_label_plural") {
-      return arg.value;
-    }
-    return "";
-  };
+     */
 
   return getTextForBlock(block).replace(/\s+/g, " ").trim();
 };

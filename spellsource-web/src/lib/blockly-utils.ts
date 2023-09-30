@@ -1,11 +1,11 @@
-import { BlockArgDef, BlockDef, BlocklyShadowState } from "./blockly-types";
-import Blockly, { Block, BlockSvg, Connection, Toolbox, ToolboxCategory, WorkspaceSvg } from "blockly";
+import {BlockArgDef, BlockDef, BlocklyShadowState} from "./blockly-types";
+import Blockly, {Block, BlockSvg, Connection, Toolbox, ToolboxCategory, WorkspaceSvg} from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
-import { extraBlockInfo } from "./json-conversion-utils";
-import { addMutatorBlock, OptionalRows } from "../components/blockly/optional-rows";
-import { BlockInfo, FlyoutItemInfo } from "blockly/core/utils/toolbox";
-import { ConnectionState } from "blockly/core/serialization/blocks";
-import { ToolboxSearchCategory } from "../components/blockly/toolbox-search-category";
+import {extraBlockInfo} from "./json-conversion-utils";
+import {addMutatorBlock, OptionalRows} from "../components/blockly/optional-rows";
+import {BlockInfo, FlyoutItemInfo} from "blockly/core/utils/toolbox";
+import {ConnectionState} from "blockly/core/serialization/blocks";
+import {ToolboxSearchCategory} from "../components/blockly/toolbox-search-category";
 
 /**
  * Returns a list of the all the arguments in a block's json
@@ -16,7 +16,7 @@ import { ToolboxSearchCategory } from "../components/blockly/toolbox-search-cate
 export const argsList = (block: BlockDef, type?: "input" | "dropdown" | "number" | string) => {
   let argsList = [] as BlockArgDef[];
 
-  for (let i = 0, args: BlockArgDef[]; (args = block[`args${i}`]); i++) {
+  for (let i = 0, args: BlockArgDef[]; (args = block[`args${i}`]!); i++) {
     argsList.push(...args.filter((arg) => !type || arg.type?.includes(type)));
   }
 
@@ -32,7 +32,7 @@ export const rowsList = (block: BlockDef) => {
 
   for (
     let i = 0, message: string, args: BlockArgDef[];
-    (message = block[`message${i}`]) && (args = block[`args${i}`]);
+    (message = block[`message${i}`]!) && (args = block[`args${i}`]!);
     i++
   ) {
     list.push([message, args]);
@@ -49,7 +49,7 @@ export const rowsList = (block: BlockDef) => {
  */
 export const manuallyAddShadowBlocks = (thisBlock: Block, block: BlockDef, allowNonShadow = true) => {
   for (let arg of argsList(block)) {
-    addShadowBlocksToConnection(thisBlock.getInput(arg.name)?.connection, arg, allowNonShadow);
+    addShadowBlocksToConnection(thisBlock.getInput(arg.name!)?.connection!, arg, allowNonShadow);
   }
 
   addShadowBlocksToConnection(thisBlock.nextConnection, block.next, allowNonShadow);
@@ -69,14 +69,18 @@ export const addShadowBlocksToConnection = (
 
   const prevBlock = connection.targetBlock();
   connection.setShadowState(shadow);
+  // todo: does this make sense? does setting the shadow state change the result of target block?
   const currentBlock = connection.targetBlock();
 
+  // todo: what if currentBlock is null?
   if (prevBlock !== currentBlock) {
-    if (allowNonShadow && arg.block && currentBlock.isShadow()) {
-      currentBlock.setShadow(false);
+    if (allowNonShadow && arg?.block && currentBlock!.isShadow()) {
+      currentBlock?.setShadow(false);
       connection.setShadowState(shadow);
     }
-    manuallyAddShadowBlocks(currentBlock, Blockly.Blocks[shadow.type].json, allowNonShadow);
+    if (currentBlock) {
+      manuallyAddShadowBlocks(currentBlock, Blockly.Blocks[shadow.type].json, allowNonShadow);
+    }
   }
 };
 
@@ -97,7 +101,7 @@ export const reInitBlock = (block: Block, state: BlockDef) => {
         input.removeField(field.name, true);
       }
     }
-    if (input.connection) {
+    if (input.connection && input.connection.targetConnection) {
       connections[input.name] = input.connection.targetConnection;
     }
     block.removeInput(input.name, true);
@@ -129,7 +133,7 @@ export const reInitBlock = (block: Block, state: BlockDef) => {
  * @param type The block type to create
  * @returns The created block
  */
-export function newBlock(workspace, type): Block | BlockSvg {
+export function newBlock(workspace: WorkspaceSvg, type: string): Block | BlockSvg {
   let block = workspace.newBlock(type);
   manuallyAddShadowBlocks(block, Blockly.Blocks[type].json);
   return block;
@@ -174,7 +178,7 @@ export const addBlock = (block: BlockDef) => {
  * @param blockType
  * @param mainWorkspace
  */
-export const searchToolbox = (blockType, mainWorkspace: WorkspaceSvg) => {
+export const searchToolbox = (blockType: string, mainWorkspace: WorkspaceSvg) => {
   let toolbox = mainWorkspace.getToolbox() as Toolbox;
   let categories = toolbox.getToolboxItems().slice(1) as ToolboxCategory[];
 
@@ -190,8 +194,9 @@ export const searchToolbox = (blockType, mainWorkspace: WorkspaceSvg) => {
         continue;
       }
 
-      if (category.getParent() && category.getParent().isCollapsible() && !category.getParent().isExpanded()) {
-        category.getParent().toggleExpanded();
+      const parent = category.getParent();
+      if (parent && parent.isCollapsible() && !parent.isExpanded()) {
+        parent.toggleExpanded();
       }
 
       if (category.toolboxItemDef_.kind === ToolboxSearchCategory.registrationName) {
@@ -207,13 +212,17 @@ export const searchToolbox = (blockType, mainWorkspace: WorkspaceSvg) => {
 
       const flyOut = toolbox.getFlyout();
 
+      if (!flyOut) {
+        return;
+      }
+
       let workspace: WorkspaceSvg;
 
       if ((workspace = flyOut.getWorkspace())) {
         let totalHeight = 0;
         for (let topBlock of workspace.getTopBlocks(true)) {
           if (topBlock.type === blockType) {
-            workspace.scrollbar.setY(totalHeight);
+            workspace.scrollbar?.setY(totalHeight);
             topBlock.addSelect();
           } else {
             totalHeight += topBlock.height + 24;
@@ -241,9 +250,12 @@ export const getBlockInputs = (type: string, allowNonShadow = true) => {
       if (arg.block && allowNonShadow) {
         const input = (inputs[name] ??= {} as any);
         input.block = JSON.parse(JSON.stringify(arg.block));
-        input.block.inputs = getBlockInfo(input.block.type).inputs;
+        if (!input.block) {
+          continue;
+        }
+        input.block.inputs = getBlockInfo(input.block.type).inputs ?? [];
 
-        if (!arg.shadow && !Object.values(input.block.inputs).some((input: ConnectionState) => input.block)) {
+        if (!arg.shadow && !Object.values(input.block.inputs!).some((input: ConnectionState) => input.block)) {
           input.shadow = input.block;
         }
       }
@@ -251,6 +263,9 @@ export const getBlockInputs = (type: string, allowNonShadow = true) => {
       if (arg.shadow) {
         const input = (inputs[name] ??= {} as any);
         input.shadow = JSON.parse(JSON.stringify(arg.shadow));
+        if (!input.shadow) {
+          continue;
+        }
         input.shadow.inputs = getBlockInfo(input.shadow.type).inputs;
       }
     }

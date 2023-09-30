@@ -2,6 +2,7 @@ import Blockly, { BlockSvg } from "blockly";
 import * as BlocklyMiscUtils from "./blockly-spellsource-utils";
 import { Renderer } from "blockly/core/renderers/geras/renderer";
 import { RenderInfo } from "blockly/core/renderers/geras/info";
+import {InputRow} from "blockly/core/renderers/measurables/input_row";
 
 class SpellsourceRenderer extends Blockly.geras.Renderer {
   constructor() {
@@ -57,7 +58,8 @@ class SpellsourceRenderInfo extends Blockly.geras.RenderInfo {
     // align statement rows normally and align input rows to nearest 10 pixels
     for (let i = 0, row; (row = this.rows[i]); i++) {
       if (row.hasStatement) {
-        this.alignStatementRow_(row);
+        const row1 = row as InputRow
+        this.alignStatementRow_(row1);
       }
       if (row.hasExternalInput && row.width > 1) {
         let happyWidth;

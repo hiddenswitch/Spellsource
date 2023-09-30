@@ -50,11 +50,17 @@ async function handle(requestContext: GraphQLRequestContext<BaseContext>) {
   const { operation } = requestContext;
   const deckIdsSet = new Set<string>();
   if (operation && operation.operation === "mutation") {
+    if (!requestContext.response.body) {
+      return;
+    }
     switch (requestContext.response.body.kind) {
       case "incremental":
         // todo: way too complicated for me to know what to do here
         const docs = [requestContext.response.body.initialResult.data];
         for await (const docArr of requestContext.response.body.subsequentResults) {
+          if (!docArr.incremental) {
+            continue;
+          }
           for (const doc of docArr.incremental) {
             if ("data" in doc && doc.data) {
               docs.push(doc.data);
@@ -68,9 +74,12 @@ async function handle(requestContext: GraphQLRequestContext<BaseContext>) {
             }
           }
         }
-        docs.flatMap((doc) => Array.from(extractDeckIdsFromResponse(doc))).forEach((deckId) => deckIdsSet.add(deckId));
+        docs.flatMap((doc) => Array.from(extractDeckIdsFromResponse(doc!))).forEach((deckId) => deckIdsSet.add(deckId));
         break;
       case "single":
+        if (!requestContext.response.body.singleResult.data) {
+          return;
+        }
         extractDeckIdsFromResponse(requestContext.response.body.singleResult.data).forEach((deckId) =>
           deckIdsSet.add(deckId)
         );

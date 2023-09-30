@@ -9,8 +9,8 @@ export const transformBlock = (object: BlockDef) => {
   }
 
   for (let i = 0; i <= 9; i++) {
-    const args = object["args" + i];
-    let message = object["message" + i];
+    const args = object[`args${i}`];
+    let message = object[`message${i}`];
     if (message && args) {
       for (let j = 0; j < args.length; j++) {
         let arg = args[j];
@@ -19,7 +19,7 @@ export const transformBlock = (object: BlockDef) => {
           message = token + message;
         }
       }
-      object["message" + i] = message;
+      object[`message${i}`] = message;
     } else {
       break;
     }

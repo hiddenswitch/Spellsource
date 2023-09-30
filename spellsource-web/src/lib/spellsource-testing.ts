@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { java } from "./java";
 
 export default class SpellsourceTesting {

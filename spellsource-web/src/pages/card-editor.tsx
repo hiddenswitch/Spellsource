@@ -81,8 +81,8 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const classes = useMemo(() => {
     const cards = getClasses.data?.allClasses?.nodes ?? [];
     const allCards = cards.map((card) => ({
-      ...(card.cardScript ?? {}),
-      id: card.id,
+      ...(card!.cardScript ?? {}),
+      id: card!.id,
     }));
     const cardsById = keyBy(allCards, (card) => card.id);
     fixArt(cardsById);

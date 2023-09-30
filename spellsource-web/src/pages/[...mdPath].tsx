@@ -32,7 +32,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: GetStaticPropsContext) => ({
   props: {
-    data: await getHtmlFromMd(directory, `${path.join(...params.mdPath)}.md`),
+    data: await getHtmlFromMd(directory, `${path.join(...params!.mdPath!)}.md`),
   },
 });
 

@@ -1,4 +1,4 @@
-import Blockly, { BlockSvg } from "blockly";
+import Blockly, { Block, BlockSvg } from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
 import { CardDef } from "../components/collection/card-display";
 import { BlocklyDataContext } from "../pages/card-editor";
@@ -38,16 +38,16 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>) {
 
   // All of our spells, triggers, entity reference enum values, etc.
   data.allBlocks?.forEach((block) => {
-    if (block.type in Blockly.Blocks) {
+    if (block.type! in Blockly.Blocks) {
       return;
     }
 
-    if (block.output && !JsonConversionUtils.blockTypeColors[block.output as string]) {
+    if (block.output && !JsonConversionUtils.blockTypeColors[block.output as string] && block.colour) {
       JsonConversionUtils.blockTypeColors[block.output as string] = block.colour;
     }
 
     for (let arg of argsList(block, "field_image")) {
-      if (arg.src in icons) {
+      if (arg.src && arg.src in icons) {
         arg.src = icons[arg.src];
       }
     }
@@ -57,14 +57,20 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>) {
 }
 
 export function initHeroClassColors(data: ContextType<typeof BlocklyDataContext>) {
-  if (!Blockly["textColor"]) {
-    Blockly["textColor"] = {
+  const blockly: object & {
+    textColor?: Record<string, string>;
+    heroClassColors?: Record<string, string>;
+  } = Blockly;
+  if (!("textColor" in blockly)) {
+    blockly["textColor"] = {
       Rarity_COMMON: "#000000",
     };
   }
-  Blockly["heroClassColors"] = {
-    ANY: "#A6A6A6",
-  };
+  if (!("heroClassColors" in blockly)) {
+    blockly["heroClassColors"] = {
+      ANY: "#A6A6A6",
+    };
+  }
 
   /**
    * first pass through the card catalogue to figure out all the collectible
@@ -201,18 +207,18 @@ export function pluralStuff(workspace) {
         }
 
         let before = block.getFieldValue(arg.name);
-        const options = arg.text.split("/");
+        const options = arg.text!.split("/");
         if (shouldBePlural === null) {
           if (arg.value) {
             //on a plural field, 'value' is the default text to show (e.g. in the toolbox)
-            block.setFieldValue(arg.value, arg.name);
+            block.setFieldValue(arg.value, <string>arg.name);
           } else {
-            block.setFieldValue(arg.text, arg.name);
+            block.setFieldValue(arg.text, <string>arg.name);
           }
         } else if (shouldBePlural) {
-          block.setFieldValue(options[1], arg.name);
+          block.setFieldValue(options[1], <string>arg.name);
         } else {
-          block.setFieldValue(options[0], arg.name);
+          block.setFieldValue(options[0], <string>arg.name);
         }
 
         if (block.getFieldValue(arg.name) !== before) {
@@ -235,7 +241,7 @@ export function pluralStuff(workspace) {
   }
 }
 
-export function isSpellsourceBlock(type): boolean {
+export function isSpellsourceBlock(type: string): boolean {
   return !!Blockly.Blocks[type]?.json?.path;
 }
 
@@ -245,7 +251,9 @@ export function initArtBlcks(data: ContextType<typeof BlocklyDataContext>) {
     if (type in Blockly.Blocks) {
       return;
     }
-    const block = addBlock({
+    const block: BlockDef & {
+      art?: typeof art;
+    } = addBlock({
       type: type,
       message0: "%1",
       args0: [
@@ -261,28 +269,33 @@ export function initArtBlcks(data: ContextType<typeof BlocklyDataContext>) {
       data: art.name,
       comment: art.name,
     } as BlockDef);
-
     block["art"] = art;
   }
 }
 
-export const refreshBlock = (block: BlockSvg) => {
-  block.data = Blockly.Blocks[block.type].data;
+export const refreshBlock = (block: BlockSvg | Block) => {
+  const blockly = Blockly;
+  if (!("textColor" in blockly) || !("heroClassColors" in blockly)) {
+    return;
+  }
+  block.data = blockly.Blocks[block.type].data;
 
   if (block.type === "Card_REFERENCE") {
   } else if (block.type === "HeroClass_REFERENCE") {
-    const color = Blockly["heroClassColors"][block.getFieldValue("id")];
+    const heroClassColors = blockly["heroClassColors"] as Record<string, string>;
+    const color = heroClassColors[block.getFieldValue("id")];
     if (color && block.getColour() !== color) {
       block.setColour(color);
     }
   } else if (block.getField("message")) {
-    block.setFieldValue(Blockly.Blocks[block.type].message, "message");
+    block.setFieldValue(blockly.Blocks[block.type].message, "message");
   }
 
-  if (block.render) {
+  if ("render" in block) {
     let textElement = block.getSvgRoot().querySelector("text");
-    const typeTextColor = Blockly["textColor"]?.[block.type];
-    const idTextColor = Blockly["textColor"]?.[block.getFieldValue("id")];
+    const textColor = blockly["textColor"] as Record<string, string>;
+    const typeTextColor = textColor?.[block.type];
+    const idTextColor = textColor?.[block.getFieldValue("id")];
     const color = typeTextColor ?? idTextColor;
     if (textElement && color) {
       textElement.style.fill = color;

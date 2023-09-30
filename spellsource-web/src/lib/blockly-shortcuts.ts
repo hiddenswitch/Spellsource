@@ -1,12 +1,13 @@
 import { KeyboardShortcut } from "blockly/core/shortcut_registry";
-import Blockly, { Block, BlockSvg, WorkspaceSvg } from "blockly";
+import Blockly, { Block, BlockSvg, Workspace, WorkspaceSvg } from "blockly";
 import { generateCard } from "./json-conversion-utils";
 import { blockStateToCardScript } from "./workspace-utils";
 
 export const workspacePaste: KeyboardShortcut = {
   name: Blockly.ShortcutItems.names.PASTE,
   preconditionFn: (workspace) => !workspace.options.readOnly && !Blockly.Gesture.inProgress(),
-  callback: (workspace: WorkspaceSvg, event) => {
+  callback: (workspace1: Workspace, event) => {
+    const workspace = workspace1 as WorkspaceSvg;
     event.preventDefault();
 
     navigator.clipboard
@@ -35,22 +36,32 @@ export const workspaceCopy: KeyboardShortcut = {
       (!selected || (selected.isDeletable() && selected.isMovable()))
     );
   },
-  callback(workspace: WorkspaceSvg, event) {
+  callback(workspace1: Workspace, event) {
+    const workspace = workspace1 as WorkspaceSvg;
+
     event.preventDefault();
     workspace.hideChaff();
 
     let selected =
       Blockly.getSelected() ?? workspace.getTopBlocks(true).find((block) => block.type.startsWith("Starter_"));
 
-    if (!selected) return false;
+    if (!selected) {
+      return false;
+    }
 
     Blockly.clipboard.copy(selected);
 
-    if (!(selected instanceof Block)) return false;
+    if (!(selected instanceof BlockSvg)) {
+      return false;
+    }
 
     const blockState = Blockly.serialization.blocks.save(selected, {
       addCoordinates: true,
     });
+
+    if (!blockState) {
+      return false;
+    }
 
     try {
       const cardScript = blockStateToCardScript(blockState);
@@ -80,11 +91,12 @@ export const workspaceCut: KeyboardShortcut = {
       !selected.workspace!.isFlyout
     );
   },
-  callback(workspace: WorkspaceSvg, event, shortcut) {
-    if (!workspaceCopy.callback(workspace, event, shortcut)) return false;
+  callback(workspace1: Workspace, event, shortcut) {
+    const workspace = workspace1 as WorkspaceSvg;
+    if (!workspaceCopy.callback!(workspace, event, shortcut)) return false;
 
     const selected = Blockly.getSelected();
-    if (selected instanceof Block) {
+    if (selected instanceof BlockSvg) {
       (selected as BlockSvg).checkAndDelete();
     }
 

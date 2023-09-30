@@ -36,12 +36,15 @@ export const openFile = (accept: string, onOpen: (result: string) => void) => {
 
   // This function will be called when the user selects a file
   input.onchange = (event: Event) => {
-    for (const file of (event.target as HTMLInputElement).files) {
+    if (!event.target) {
+      return;
+    }
+    for (const file of (event.target as HTMLInputElement).files!) {
       const reader: FileReader = new FileReader();
 
       reader.onload = (e: ProgressEvent<FileReader>) => {
         // The file's text will be printed here
-        const result: string = e.target.result as string;
+        const result: string = e.target!.result as string;
 
         onOpen(result);
       };

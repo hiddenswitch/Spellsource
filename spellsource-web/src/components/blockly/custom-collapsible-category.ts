@@ -23,7 +23,7 @@ export class CustomCollapsibleCategory extends CollapsibleToolboxCategory {
 
     const category = this as CollapsibleToolboxCategory;
     const toolbox = category["parentToolbox_"] as Toolbox;
-    const htmlDiv = toolbox.HtmlDiv;
-    utils.style.scrollIntoContainerView(category.getDiv(), htmlDiv, !isExpanded);
+    const htmlDiv = toolbox.HtmlDiv!;
+    utils.style.scrollIntoContainerView(category.getDiv()!, htmlDiv, !isExpanded);
   }
 }

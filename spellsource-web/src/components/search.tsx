@@ -1,15 +1,17 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Form, FormControl, ListGroup } from "react-bootstrap";
+import React, {ChangeEvent, FormEvent, FunctionComponent, useEffect, useMemo, useRef, useState} from "react";
+import {Form, FormControl, ListGroup} from "react-bootstrap";
 import * as styles from "./creative-layout.module.scss";
 
-import { SearchNode, useIndex } from "../hooks/use-index";
+import {SearchNode, useIndex} from "../hooks/use-index";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useDebounce } from "react-use";
-import { useGetCardsLazyQuery, useGetCollectionCardsLazyQuery } from "../__generated__/client";
+import {useRouter} from "next/router";
+import {useDebounce} from "react-use";
+import {useGetCollectionCardsLazyQuery} from "../__generated__/client"; // Search component
 
 // Search component
-function Search(props) {
+const Search: FunctionComponent<{
+  placeholder: string;
+}> = (props) => {
   const [query, setQuery] = useState(``);
   const [results, setResults] = useState([] as SearchNode[]);
   const [searchListLeft, setSearchListLeft] = useState(0);
@@ -17,11 +19,14 @@ function Search(props) {
   const router = useRouter();
 
   function updatePosition() {
+    if (!inputBox.current) {
+      return;
+    }
     setSearchListLeft(inputBox.current.getBoundingClientRect().left);
   }
 
   // css sizing for input box
-  const inputBox = useRef(null);
+  const inputBox = useRef<HTMLFormElement>(null);
   useEffect(() => {
     window.addEventListener("resize", updatePosition);
     updatePosition();
@@ -49,32 +54,32 @@ function Search(props) {
   }, [query, results]);
 
   // update input value
-  const updateQuery = (event) => {
-    setQuery(event.target.value);
+  const updateQuery = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setQuery(event.target!.value);
     window.setTimeout(() => updatePosition(), 10);
   };
 
   // display full search page on enter
-  const navigateToSearchResults = (event) => {
+  const navigateToSearchResults = (event: FormEvent) => {
     event.preventDefault();
     const encoded = encodeURI(query);
     router.push(`../searchresults?query=${encoded}`);
   };
 
-  const search = (evt) => {
+  const search = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     /*const query = evt.target.value
-    setQuery(query)
-    setResults(index
-      // Query the index with search string to get an [] of IDs
-      .search(query, { expand: true }) // accept partial matches
-      // map over each ID and return full document
-      .map(({ ref }) => index.documentStore.getDoc(ref))
-      .filter(doc => {
-        return doc.nodeType === 'Card' || doc.nodeType === 'MarkdownRemark'
-      })
-      .slice(0, 5)
-      // map over each ID and return full document
-    )*/
+                setQuery(query)
+                setResults(index
+                  // Query the index with search string to get an [] of IDs
+                  .search(query, { expand: true }) // accept partial matches
+                  // map over each ID and return full document
+                  .map(({ ref }) => index.documentStore.getDoc(ref))
+                  .filter(doc => {
+                    return doc.nodeType === 'Card' || doc.nodeType === 'MarkdownRemark'
+                  })
+                  .slice(0, 5)
+                  // map over each ID and return full document
+                )*/
   };
 
   const [getCards] = useGetCollectionCardsLazyQuery();
@@ -122,6 +127,6 @@ function Search(props) {
       )}
     </Form>
   );
-}
+};
 
 export default Search;

@@ -1,7 +1,8 @@
 import { ApolloServer } from "@apollo/server";
 import { stitchSchemas } from "@graphql-tools/stitch";
 import { makeSchemaAndPlugin } from "./postgraphile-apollo-server";
-import { pgPool, postgraphileOptions } from "./postgraphile";
+import { postgraphileOptions } from "./postgraphile";
+import { pgPool } from "./postgres-pool";
 import { printSchema } from "graphql";
 import fs from "fs";
 import { createArtSchema } from "./art";
@@ -14,7 +15,7 @@ export const createApolloServer = async () => {
 
   const artSchema = await createArtSchema();
 
-  const schema = stitchSchemas({ subschemas: [postgraphile.schema, artSchema] });
+  const schema = stitchSchemas({ subschemas: [postgraphile.schema!, artSchema] });
 
   if (process.env.NODE_ENV !== "production" && path) {
     const contents = printSchema(schema);
@@ -24,7 +25,7 @@ export const createApolloServer = async () => {
 
   return new ApolloServer({
     schema,
-    plugins: [postgraphile.plugin, invalidateDeckPlugin],
+    plugins: [postgraphile.plugin!, invalidateDeckPlugin],
     introspection: process.env.NODE_ENV !== "production",
   });
 };

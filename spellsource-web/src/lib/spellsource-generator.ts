@@ -1,4 +1,4 @@
-import Blockly from "blockly";
+import Blockly, { Block, WorkspaceSvg } from "blockly";
 import { javascriptGenerator } from "blockly/javascript";
 import * as WorkspaceUtils from "./workspace-utils";
 
@@ -9,25 +9,25 @@ export function generateJavaScript() {
     return "const context = SpellsourceTesting.runGym()\n";
   };
 
-  javascriptGenerator.forBlock["TestStarter_RunGym2"] = function (block) {
+  javascriptGenerator.forBlock["TestStarter_RunGym2"] = function (block: Block) {
     let friendlyClass = javascriptGenerator.valueToCode(block, "friendlyClass", ORDER_NONE);
     let enemyClass = javascriptGenerator.valueToCode(block, "enemyClass", ORDER_NONE);
     return "const context = SpellsourceTesting.runGym(" + friendlyClass + ", " + enemyClass + ")\n";
   };
 
-  javascriptGenerator.forBlock["TestAssertion"] = function (block) {
-    let condition = block.getInput("condition").connection.targetBlock();
-    let json = blockToJson(condition);
+  javascriptGenerator.forBlock["TestAssertion"] = function (block: Block) {
+    let condition = block.getInput("condition")?.connection?.targetBlock();
+    let json = blockToJson(condition!);
     return "expect(SpellsourceTesting.condition(`" + JSON.stringify(json, null, 2) + "`, context)).toEqual(true)";
   };
 
-  javascriptGenerator.forBlock["TestActionSpellEffect"] = function (block) {
-    let spell = block.getInput("spell").connection.targetBlock();
-    let json = blockToJson(spell);
+  javascriptGenerator.forBlock["TestActionSpellEffect"] = function (block: Block) {
+    let spell = block.getInput("spell")?.connection?.targetBlock();
+    let json = blockToJson(spell!);
     return "SpellsourceTesting.spell(`" + JSON.stringify(json, null, 2) + "`, context)\n";
   };
 
-  javascriptGenerator.forBlock["TestActionPlayCard"] = function (block) {
+  javascriptGenerator.forBlock["TestActionPlayCard"] = function (block: Block) {
     let card = javascriptGenerator.valueToCode(block, "card", ORDER_NONE);
     let player = javascriptGenerator.valueToCode(block, "player", ORDER_NONE);
     let target = javascriptGenerator.valueToCode(block, "target", ORDER_NONE);
@@ -38,11 +38,12 @@ export function generateJavaScript() {
     return ret + ")\n";
   };
 
-  javascriptGenerator.forBlock["TestActionPlayMinion"] = function (block) {
+  javascriptGenerator.forBlock["TestActionPlayMinion"] = function (block: Block) {
     let card = javascriptGenerator.valueToCode(block, "card", ORDER_NONE);
     let player = javascriptGenerator.valueToCode(block, "player", ORDER_NONE);
     let target = javascriptGenerator.valueToCode(block, "target", ORDER_NONE);
-    let variable = block.getField("variable").getVariable().name;
+    const field = block.getField("variable")! as Blockly.FieldVariable;
+    let variable = field!.getVariable()!.name;
     let ret = variable + " = SpellsourceTesting.playMinion(context, " + player + ", " + card;
     if (target !== "'NONE'") {
       ret += ", " + target;
@@ -50,30 +51,31 @@ export function generateJavaScript() {
     return ret + ")\n";
   };
 
-  javascriptGenerator.forBlock["TestActionReceiveCard"] = function (block) {
+  javascriptGenerator.forBlock["TestActionReceiveCard"] = function (block: Block) {
     let card = javascriptGenerator.valueToCode(block, "card", ORDER_NONE);
     let player = javascriptGenerator.valueToCode(block, "player", ORDER_NONE);
-    let variable = block.getField("variable").getVariable().name;
+    const field = block.getField("variable")!  as Blockly.FieldVariable;
+    let variable = field.getVariable()!.name;
     return variable + " = SpellsourceTesting.receiveCard(context, " + player + ", " + card + ")\n";
   };
 
   for (let blocksKey in Blockly.Blocks) {
     if (Blockly.Blocks[blocksKey]?.json?.output === "ConditionDesc") {
-      javascriptGenerator.forBlock[blocksKey] = function (block) {
+      javascriptGenerator.forBlock[blocksKey] = function (block: Block) {
         let json = WorkspaceUtils.blockToCardScript(block);
         return ["SpellsourceTesting.condition(`" + JSON.stringify(json, null, 2) + "`, context)", ORDER_NONE];
       };
     }
 
     if (Blockly.Blocks[blocksKey]?.json?.output === "ValueProviderDesc") {
-      javascriptGenerator.forBlock[blocksKey] = function (block) {
+      javascriptGenerator.forBlock[blocksKey] = function (block: Block) {
         let json = WorkspaceUtils.blockToCardScript(block);
         return ["SpellsourceTesting.value(`" + JSON.stringify(json, null, 2) + "`, context)", ORDER_NONE];
       };
     }
 
     if (blocksKey.startsWith("Starter_")) {
-      javascriptGenerator.forBlock[blocksKey] = function (block) {
+      javascriptGenerator.forBlock[blocksKey] = function (block: Block) {
         let json = WorkspaceUtils.blockToCardScript(block);
         let id = block.getFieldValue("id");
         let cardId = Blockly.Blocks["WorkspaceCard_" + id]?.data;
@@ -88,11 +90,11 @@ export function generateJavaScript() {
 
     if (!javascriptGenerator.forBlock[blocksKey]) {
       if (Blockly.Blocks[blocksKey].json?.data && Blockly.Blocks[blocksKey].json?.output) {
-        javascriptGenerator.forBlock[blocksKey] = function (block) {
+        javascriptGenerator.forBlock[blocksKey] = function (block: Block) {
           return ["'" + Blockly.Blocks[blocksKey].json.data + "'", ORDER_NONE];
         };
       } else {
-        javascriptGenerator.forBlock[blocksKey] = function (block) {
+        javascriptGenerator.forBlock[blocksKey] = function (block: Block) {
           return "";
         };
       }
@@ -100,13 +102,13 @@ export function generateJavaScript() {
   }
 
   const init = javascriptGenerator.init;
-  javascriptGenerator.init = function (workspace) {
+  javascriptGenerator.init = function (workspace: WorkspaceSvg) {
     javascriptGenerator["cardsDB"] = {};
     return init.call(this, workspace);
   };
 
   const finish = javascriptGenerator.finish;
-  javascriptGenerator.finish = function (code) {
+  javascriptGenerator.finish = function (code: string) {
     for (let cardId in javascriptGenerator["cardsDB"]) {
       let json = javascriptGenerator["cardsDB"][cardId];
       let addCode = "SpellsourceTesting.addCard(`" + JSON.stringify(json, null, 2) + "`)";
@@ -118,19 +120,20 @@ export function generateJavaScript() {
   };
 }
 
-function fixJsonVariables(json) {
+function fixJsonVariables(json: any) {
+
   if (json["VAR"]) {
     let VAR = json["VAR"];
     return "` + " + VAR + " + `";
   }
   for (const jsonKey in json) {
     if (json.hasOwnProperty(jsonKey) && json.propertyIsEnumerable(jsonKey) && typeof json[jsonKey] !== "string") {
-      json[jsonKey] = this.fixJsonVariables(json[jsonKey]);
+      json[jsonKey] = fixJsonVariables(json[jsonKey]);
     }
   }
   return json;
 }
 
 function blockToJson(block: Blockly.Block) {
-  return this.fixJsonVariables(WorkspaceUtils.blockToCardScript(block));
+    return fixJsonVariables(WorkspaceUtils.blockToCardScript(block));
 }

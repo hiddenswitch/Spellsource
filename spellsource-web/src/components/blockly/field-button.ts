@@ -1,4 +1,4 @@
-import Blockly, { Field, utils, WorkspaceSvg } from "blockly";
+import { Field, utils, WorkspaceSvg } from "blockly";
 
 export class FieldButton extends Field {
   static type = "field_button";
@@ -12,7 +12,12 @@ export class FieldButton extends Field {
     this.EDITABLE = false;
   }
 
-  static fromJson(options) {
+  static fromJson(
+    options: {
+      text: string;
+      callbackKey: string;
+    } & object
+  ) {
     return new FieldButton(options["text"], options["callbackKey"], options);
   }
 
@@ -27,22 +32,22 @@ export class FieldButton extends Field {
   initView() {
     super.initView();
 
-    this.textElement_.textContent = this.getValue();
+    this.textElement_!.textContent = this.getValue();
 
-    const blockColor = utils.colour.parse(this.getSourceBlock().getColour());
+    const blockColor = utils.colour.parse(this.getSourceBlock()!.getColour());
 
-    const color = utils.colour.blend(blockColor, "#FFFFFF", 0.75);
+    const color = utils.colour.blend(blockColor!, "#FFFFFF", 0.75);
 
-    this.borderRect_.setAttribute("fill", color);
+    this.borderRect_!.setAttribute("fill", color!);
 
-    if (this.sourceBlock_.isInFlyout) {
+    if (this.sourceBlock_!.isInFlyout) {
       return;
     }
 
-    this.fieldGroup_.style.cursor = "pointer";
+    this.fieldGroup_!.style.cursor = "pointer";
 
-    this.textElement_.onclick = (ev) => {
-      const workspace = this.getSourceBlock().workspace as WorkspaceSvg;
+    this.textElement_!.onclick = (ev) => {
+      const workspace = this.getSourceBlock()!.workspace as WorkspaceSvg;
       const buttonCallback = workspace.getButtonCallback(this.callbackKey);
 
       buttonCallback?.(this as any);
@@ -51,6 +56,6 @@ export class FieldButton extends Field {
 
   protected render_() {
     super.render_();
-    this.fieldGroup_.classList.remove("blocklyEditableText");
+    this.fieldGroup_?.classList.remove("blocklyEditableText");
   }
 }

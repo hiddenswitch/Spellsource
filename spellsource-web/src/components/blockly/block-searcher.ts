@@ -5,9 +5,9 @@
  */
 
 import * as Blockly from "blockly/core";
-import { BlockInfo } from "blockly/core/utils/toolbox";
+import {BlockInfo} from "blockly/core/utils/toolbox";
 
-import { newBlock } from "../../lib/blockly-utils";
+import {newBlock} from "../../lib/blockly-utils";
 
 /**
  * A class that provides methods for indexing and searching blocks.
@@ -35,13 +35,13 @@ export class BlockSearcher {
           blockInfo as Blockly.serialization.blocks.State,
           blockCreationWorkspace
         );
-      } catch (e) {
+      } catch (e: any) {
         block = newBlock(blockCreationWorkspace, blockInfo.type);
         console.warn(blockInfo.type, e.message);
       }
       const blockType = block.getFieldValue("id") || block.type;
       // TODO include shadow block text values in searching?
-      this.blocksToBlockInfos[blockType] = blockInfo;
+      this.blocksToBlockInfos.set(blockType, blockInfo);
       this.indexBlockText(blockType.replaceAll("_", " "), blockType);
       block.inputList.forEach((input) => {
         input.fieldRow.forEach((field) => {
@@ -66,7 +66,7 @@ export class BlockSearcher {
           return this.getIntersection(matches, current);
         })
         .values(),
-    ].map((blockType) => this.blocksToBlockInfos[blockType]);
+    ].map((blockType) => this.blocksToBlockInfos.get(blockType)!);
   }
 
   /**

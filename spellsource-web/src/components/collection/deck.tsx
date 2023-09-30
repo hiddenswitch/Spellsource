@@ -4,6 +4,8 @@ import { textDecorationStyle } from "./collection";
 import { Button } from "react-bootstrap";
 import { useDrag, useDrop } from "react-dnd";
 import {
+  Exact,
+  GetDeckQuery, GetDeckQueryVariables, GetDecksQuery, GetDecksQueryVariables, InputMaybe,
   useCreateDeckMutation,
   useDeleteDeckMutation,
   useRenameDeckMutation,
@@ -13,18 +15,20 @@ import { ListActions } from "react-use/lib/useList";
 import { useRouter } from "next/router";
 import { CardCache } from "../../pages/collection";
 import { CardDef } from "./card-display";
+import {QueryResult} from "@apollo/client";
 
+export type GetDeckQueryDeck = GetDeckQuery["deckById"]
 interface DeckProps {
-  deck;
+  deck: GetDeckQueryDeck;
   user?: string;
   myDeck: boolean;
   cardIds: string[];
-  classColors;
+  classColors: Record<string, string | undefined>;
   cardActions: ListActions<string>;
-  getDeck;
-  getDecks;
-  setDeckId;
-  realCards;
+  getDeck: QueryResult<GetDeckQuery, GetDeckQueryVariables>;
+  getDecks: QueryResult<GetDecksQuery, GetDecksQueryVariables>;
+  setDeckId: (deckId: string) => Promise<boolean>;
+  realCards: string[];
 }
 
 function DeckCard(props: {
@@ -102,14 +106,17 @@ export const Deck: FunctionComponent<DeckProps> = ({
   const [, deckDrop] = useDrop({
     accept: ["collection-card"],
     drop: (item) => {
-      addCardToDeck(item["id"]);
+      if (typeof item === "object" && item != null && "id" in item) {
+        const itemObj = item as Record<string, string>;
+        addCardToDeck(itemObj["id"]);
+      }
     },
   });
 
   return (
     <div ref={deckDrop}>
       <h3 className={"d-flex flex-row gap-2 align-items-baseline flex-wrap"}>
-        <span style={textDecorationStyle(deck?.heroClass, classColors)}>{deck?.name ?? "Your Decks"}</span>
+        <span style={textDecorationStyle(deck!.heroClass!, classColors)}>{deck?.name ?? "Your Decks"}</span>
         <span className={`ms-auto ${cardIds.length > 30 && "text-danger"}`}>{cardIds.length}/30</span>
         <Button
           className={"ms-auto"}
@@ -133,14 +140,15 @@ export const Deck: FunctionComponent<DeckProps> = ({
         {user && (
           <Button
             onClick={async () => {
-              const deckName = prompt("New Deck Name", deck.name) || "Duplicate of " + deck.name;
+              // todo: don't use prompt if possible
+              const deckName = prompt("New Deck Name", deck?.name ?? "") || "Duplicate of " + deck?.name;
 
               const { data } = await createDeck({
                 variables: {
                   deckName,
-                  heroClass: deck.heroClass,
-                  cardIds: deck.cardsInDecksByDeckId.nodes.map((value) => value.cardId),
-                  format: deck.format,
+                  heroClass: deck?.heroClass ?? "",
+                  cardIds: deck?.cardsInDecksByDeckId.nodes.map((value) => value!.cardId),
+                  format: deck?.format ?? "",
                 },
               });
               const newDeckId = data?.createDeckWithCards?.deck?.id;
@@ -163,11 +171,11 @@ export const Deck: FunctionComponent<DeckProps> = ({
 
                 const { data } = await renameDeck({
                   variables: {
-                    deckId: deck.id,
+                    deckId: deck!.id,
                     deckName: newName,
                   },
                 });
-                if (data.updateDeckById?.deck?.name) {
+                if (data!.updateDeckById?.deck?.name) {
                   await getDecks.refetch();
                 }
               }}
@@ -187,7 +195,7 @@ export const Deck: FunctionComponent<DeckProps> = ({
                 const { data } = await setCardsInDeck({
                   variables: {
                     cardIds,
-                    deckId: deck.id,
+                    deckId: deck!.id,
                   },
                 });
                 if (data?.setCardsInDeck?.cardsInDecks) {
@@ -200,10 +208,10 @@ export const Deck: FunctionComponent<DeckProps> = ({
             <Button
               variant={"danger"}
               onClick={async () => {
-                if (!confirm(`Are you sure you want to delete "${deck.name}"?`)) return;
+                if (!confirm(`Are you sure you want to delete "${deck!.name}"?`)) return;
 
-                const { data } = await deleteDeck({ variables: { deckId: deck.id } });
-                if (data.updateDeckById?.deck?.trashed) {
+                const { data } = await deleteDeck({ variables: { deckId: deck!.id } });
+                if (data!.updateDeckById?.deck?.trashed) {
                   await getDecks.refetch();
                   await router.replace({
                     query: {

@@ -1,31 +1,31 @@
 import Layout from "../components/creative-layout";
 import {
-  DeckFragment,
-  useCreateDeckMutation,
-  useGetClassesQuery,
-  useGetDeckQuery,
-  useGetDecksQuery,
+    DeckFragment,
+    useCreateDeckMutation,
+    useGetClassesQuery,
+    useGetDeckQuery,
+    useGetDecksQuery,
 } from "../__generated__/client";
-import React, { createContext, FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
-import { useSession } from "next-auth/react";
-import Collection, { textDecorationStyle } from "../components/collection/collection";
+import React, {createContext, FunctionComponent, useEffect, useMemo, useRef, useState} from "react";
+import {useSession} from "next-auth/react";
+import Collection, {textDecorationStyle} from "../components/collection/collection";
 import Head from "next/head";
-import { Button, Col, Dropdown, Offcanvas, OffcanvasBody, Row } from "react-bootstrap";
-import { chain, keyBy } from "lodash";
-import { useRouter } from "next/router";
-import { CardDef, toRgbaString } from "../components/collection/card-display";
+import {Button, Col, Dropdown, Offcanvas, OffcanvasBody, Row} from "react-bootstrap";
+import {chain, keyBy} from "lodash";
+import {useRouter} from "next/router";
+import {CardDef, toRgbaString} from "../components/collection/card-display";
 import Link from "next/link";
-import { useParam, useParamInt } from "../lib/routing";
+import {useParam, useParamInt} from "../lib/routing";
 import DropdownToggle from "react-bootstrap/DropdownToggle";
 import DropdownMenu from "react-bootstrap/DropdownMenu";
 import DropdownItem from "react-bootstrap/DropdownItem";
-import { useList } from "react-use";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { Deck } from "../components/collection/deck";
+import {useList} from "react-use";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend} from "react-dnd-html5-backend";
+import {Deck} from "../components/collection/deck";
 
 // Makes the query state stick around
-export const getServerSideProps = async (context) => ({
+export const getServerSideProps = async () => ({
   props: {},
 });
 
@@ -47,27 +47,27 @@ export default () => {
   const classes = useMemo(
     () =>
       chain(getClasses.data?.allClasses?.nodes ?? [])
-        .filter((card) => card.class !== "ANY")
-        .keyBy((card) => card.class)
-        .mapValues((card) => (card.cardScript as CardDef).name)
+        .filter((card) => card!.class !== "ANY")
+        .keyBy((card) => card!.class!)
+        .mapValues((card) => (card!.cardScript as CardDef).name)
         .value(),
     [getClasses.data]
   );
   const classColors = useMemo(
     () =>
       chain(getClasses.data?.allClasses?.nodes ?? [])
-        .filter((card) => card.class !== "ANY")
-        .keyBy((card) => card.class)
-        .mapValues((card) => toRgbaString((card.cardScript as CardDef).art?.primary))
+        .filter((card) => card!.class !== "ANY")
+        .keyBy((card) => card!.class!)
+        .mapValues((card) => toRgbaString((card!.cardScript as CardDef).art?.primary))
         .value(),
     [getClasses.data]
-  );
+  ) as Record<string, string>;
   const textColors = useMemo(
     () =>
       chain(getClasses.data?.allClasses?.nodes ?? [])
-        .filter((card) => card.class !== "ANY")
-        .keyBy((card) => card.class)
-        .mapValues((card) => toRgbaString((card.cardScript as CardDef).art?.body?.vertex))
+        .filter((card) => card!.class !== "ANY")
+        .keyBy((card) => card!.class!)
+        .mapValues((card) => toRgbaString((card!.cardScript as CardDef).art?.body?.vertex))
         .value(),
     [getClasses.data]
   );
@@ -75,18 +75,20 @@ export default () => {
   const getDecks = useGetDecksQuery({ variables: { user } });
   const allDecks = [
     ...(getDecks.data?.allDecks?.nodes ?? []),
-    ...(getDecks.data?.allDeckShares?.nodes?.map((node) => node.deckByDeckId) ?? []),
+    ...(getDecks.data?.allDeckShares?.nodes?.map((node) => node!.deckByDeckId) ?? []),
   ];
-  const decksById = useMemo(() => keyBy(allDecks, (value) => value.id), [allDecks]);
+  const decksById = useMemo(() => keyBy(allDecks, (value) => value!.id), [allDecks]);
   const selectedDeck = decksById[deckId];
 
-  const DeckEntry: FunctionComponent<{ deck: DeckFragment }> = ({ deck }) => (
+  const DeckEntry: FunctionComponent<{
+    deck: DeckFragment;
+  }> = ({ deck }) => (
     <li className={"d-flex flex-row align-items-baseline gap-2"}>
       <Link draggable={false} href={{ query: { ...router.query, deckId: deck.id, heroClass: "ALLOWED" } }}>
         <Button
           variant={"light"}
           className={""}
-          style={{ borderColor: deck.heroClass in classColors ? classColors[deck.heroClass] : "initial" }}
+          style={{ borderColor: deck.heroClass! in classColors ? classColors[deck.heroClass!] : "initial" }}
         >
           {deck.name}
         </Button>
@@ -98,12 +100,12 @@ export default () => {
     variables: { deckId },
     onCompleted: (data) =>
       data.deckById?.cardsInDecksByDeckId?.nodes?.forEach(
-        (node) => (cache[node.cardId] = node.publishedCardByCardId.cardBySuccession.cardScript)
+        (node) => (cache[node!.cardId] = node?.publishedCardByCardId?.cardBySuccession?.cardScript)
       ),
   });
   const deck = getDeck?.data?.deckById ?? getDeck?.previousData?.deckById;
 
-  const realCards = useMemo(() => deck?.cardsInDecksByDeckId?.nodes?.map((node) => node.cardId) ?? [], [deck]);
+  const realCards = useMemo(() => deck?.cardsInDecksByDeckId?.nodes?.map((node) => node!.cardId) ?? [], [deck]);
 
   const [deckCards, deckActions] = useList([] as string[]);
 
@@ -179,7 +181,7 @@ export default () => {
                     <Deck
                       user={user}
                       deck={deck}
-                      myDeck={myDeck}
+                      myDeck={!!myDeck}
                       cardIds={deckCards}
                       cardActions={deckActions}
                       getDecks={getDecks}
@@ -211,19 +213,19 @@ export default () => {
                           </h3>
                           <ul className={"d-flex flex-column gap-3 mb-1"}>
                             {allDecks
-                              .filter((deck) => !deck.isPremade)
+                              .filter((deck) => !deck?.isPremade)
                               .map((deck) => (
-                                <DeckEntry key={deck.id} deck={deck} />
+                                <DeckEntry key={deck!.id} deck={deck!} />
                               ))}
                           </ul>
                         </>
                       )}
                       <h3>Premade Decks</h3>
-                      <ul className={"d-flex flex-column gap-3"}>
+                      <ul className={"d-flex flex-column gap-3"} aria-label={"Premade Deck List"}>
                         {allDecks
-                          .filter((deck) => deck.isPremade)
+                          .filter((deck) => deck?.isPremade)
                           .map((deck) => (
-                            <DeckEntry key={deck.id} deck={deck} />
+                            <DeckEntry key={deck!.id} deck={deck!} />
                           ))}
                       </ul>
                     </div>

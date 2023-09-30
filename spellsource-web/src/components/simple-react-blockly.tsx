@@ -54,7 +54,7 @@ export default forwardRef<SimpleReactBlocklyRef, SimpleReactBlocklyProps>((props
   }, [options.horizontalLayout, options.toolboxPosition]);
 
   useEffect(() => {
-    if (typeof ref !== "function" && ref.current?.workspace) {
+    if (typeof ref !== "function" && ref?.current?.workspace) {
       if (props.workspaceConfiguration?.theme instanceof Theme) {
         ref.current.workspace.setTheme(props.workspaceConfiguration.theme);
         for (let block of ref.current.workspace.getTopBlocks(false)) {

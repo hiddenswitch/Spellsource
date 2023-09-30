@@ -7,7 +7,7 @@ export class FieldHidden extends FieldLabelSerializable {
     super(opt_value, opt_class, opt_config);
   }
 
-  static fromJson(options) {
+  static fromJson(options: { value?: string } & object) {
     return new FieldHidden(options.value);
   }
 

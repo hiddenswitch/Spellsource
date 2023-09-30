@@ -65,12 +65,12 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
     };
 
     if (this.itemCount == 0) {
-      rows.push([emptyMessage, emptyArgs]);
+      rows.push([emptyMessage!, emptyArgs!]);
     } else {
-      rows.push([firstMessage, argNumbers(firstArgs, 0)]);
+      rows.push([firstMessage!, argNumbers(firstArgs!, 0)]);
 
       for (let i = 1; i < this.itemCount; i++) {
-        rows.push([restMessage, argNumbers(restArgs, i)]);
+        rows.push([restMessage!, argNumbers(restArgs!, i)]);
       }
     }
 
@@ -91,7 +91,7 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
         input.name = input.name.replace(/\d+$/, "") + count;
         input.fieldRow
           .filter((field) => field.name)
-          .forEach((field) => (field.name = field.name.replace(/\d+$/, "") + count));
+          .forEach((field) => (field.name = field.name?.replace(/\d+$/, "") ?? "" + count));
 
         count++;
       }
@@ -103,7 +103,7 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
     } else {
       this.updateShape_();
     }
-    this.setShadow(this.getPreviousBlock() && this.itemCount == 0);
+    this.setShadow((this.getPreviousBlock() && this.itemCount == 0) || false);
   },
   plus(index: number): void {
     let count = 0;
@@ -111,7 +111,7 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
       input.name = input.name.replace(/\d+$/, "") + count;
       input.fieldRow
         .filter((field) => field.name)
-        .forEach((field) => (field.name = field.name.replace(/\d+$/, "") + count));
+        .forEach((field) => (field.name = field.name?.replace(/\d+$/, "") ?? "" + count));
       if (index == i) {
         count += 2;
       } else {
@@ -142,6 +142,6 @@ export const PlusMinusRowsMixin: PlusMinusRowsMutator = {
 };
 
 export const PlusMinusRowsFn: MutatorFn<PlusMinusRowsMutator> = function (this) {
-  this.initMutator();
-  this.updateShape_();
+    this.initMutator();
+    this.updateShape_();
 };

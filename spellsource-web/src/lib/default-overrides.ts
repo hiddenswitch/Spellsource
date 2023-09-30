@@ -7,15 +7,21 @@ export function overrideAll() {
   logic();
 }
 
-export function numShadow(type, name, value = null) {
+export function numShadow(type: string, name: string, value: number | null = null) {
   addShadow(type, name, "math_number", "NUM", value);
 }
 
-export function textShadow(type, name, value = null) {
+export function textShadow(type: string, name: string, value: string | null = null) {
   addShadow(type, name, "text", "TEXT", value);
 }
 
-export function addShadow(type, name, shadowType, fieldName = null, value = null) {
+export function addShadow(
+  type: string,
+  name: string,
+  shadowType: string,
+  fieldName: string | null = null,
+  value: number | string | null = null
+) {
   const toolboxInfo = getBlockInfo(type);
 
   toolboxInfo.inputs[name] = {

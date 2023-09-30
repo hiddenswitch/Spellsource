@@ -407,7 +407,7 @@ export class FieldColourHsvSliders extends FieldColour {
     const hue: number = parseFloat(this.hueSlider.value) / FieldColourHsvSliders.HUE_SLIDER_MAX;
     const saturation: number = parseFloat(this.saturationSlider.value) / FieldColourHsvSliders.SATURATION_SLIDER_MAX;
     const brightness: number = parseFloat(this.brightnessSlider.value) / FieldColourHsvSliders.BRIGHTNESS_SLIDER_MAX;
-    const alpha: number = parseFloat(this.alphaSlider.value) / FieldColourHsvSliders.ALPHA_SLIDER_MAX;
+    const alpha: number = parseFloat(this.alphaSlider?.value ?? "100") / FieldColourHsvSliders.ALPHA_SLIDER_MAX;
     this.setValue(FieldColourHsvSliders.hsvToHex(hue, saturation, brightness, alpha));
     this.renderSliders();
   }

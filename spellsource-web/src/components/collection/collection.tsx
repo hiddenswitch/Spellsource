@@ -30,7 +30,7 @@ const orderings = {
   TYPE_ASC: "Type",
 } as Record<CollectionCardsOrderBy, string>;
 
-export const textDecorationStyle = (heroClass: string, classColors: Record<string, string>) => ({
+export const textDecorationStyle = (heroClass: string, classColors: Record<string, string | undefined>) => ({
   textDecorationLine: "underline",
   textDecorationColor: heroClass in classColors ? classColors[heroClass] : "rgba(#888888)",
 });
@@ -70,7 +70,7 @@ const CardRow: FunctionComponent<{
       </td>
       <td>{cardScript.description?.replaceAll(new RegExp("[$#\\[\\]]", "g"), "") ?? ""}</td>
       <td>
-        <Link href={`/card-editor?card=${encodeURIComponent(card.id)}`} target={"_blank"}>
+        <Link href={`/card-editor?card=${encodeURIComponent(card.id!)}`} target={"_blank"}>
           {!collection.user ? "View" : card.createdBy === collection.user ? "Edit" : "Edit Copy"}
         </Link>
       </td>
@@ -85,7 +85,7 @@ interface CollectionProps {
   setHeroClass: (heroClass: string) => void;
   offset: number;
   setOffset: (offset: number) => void;
-  mainHeroClass?: string;
+  mainHeroClass?: string | null;
   addToDeck?: (id: string) => void;
   removeFromDeck?: (id: string) => void;
   user?: string;
@@ -129,7 +129,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
         createdBy: ownOnly ? { equalTo: user ?? "" } : undefined,
       },
     },
-    onCompleted: (data) => data.allCollectionCards?.nodes?.forEach((node) => (cache[node.id] = node.cardScript)),
+    onCompleted: (data) => data.allCollectionCards?.nodes?.forEach((node) => (cache[node!.id!] = node!.cardScript)),
   });
   const cards = getCards?.data?.allCollectionCards?.nodes ?? getCards?.previousData?.allCollectionCards?.nodes ?? [];
   const total =
@@ -148,8 +148,10 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
 
   const [, collectionDrop] = useDrop({
     accept: ["deck-card"],
-    drop: (item) => {
-      removeFromDeck?.(item["id"]);
+    drop: (item: object) => {
+      if ("id" in item && typeof item["id"] === "string") {
+        removeFromDeck?.(item["id"]);
+      }
     },
   });
 
@@ -317,7 +319,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
           </thead>
           <tbody>
             {cards.map((card) => (
-              <CardRow key={card.id} card={card} collection={props} />
+              <CardRow key={card!.id} card={card!} collection={props} />
             ))}
           </tbody>
         </Table>

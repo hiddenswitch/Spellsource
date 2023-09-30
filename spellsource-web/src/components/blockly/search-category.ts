@@ -19,7 +19,7 @@ import { FlyoutItemInfoArray, ToolboxItemInfo } from "blockly/core/utils/toolbox
  */
 export abstract class SearchCategory extends Blockly.ToolboxCategory {
   protected searchField?: HTMLInputElement;
-  protected categoryKind: string;
+  protected categoryKind: string="";
   protected categoryDef: Blockly.utils.toolbox.StaticCategoryInfo;
   protected defaultMessage: string;
   protected noResultsMessage: string;
@@ -62,12 +62,12 @@ export abstract class SearchCategory extends Blockly.ToolboxCategory {
 
       this.matchBlocks();
     });
-    this.rowContents_.replaceChildren(this.searchField);
+    this.rowContents_!.replaceChildren(this.searchField);
     return dom;
   }
 
   setSearchQuery(query: string) {
-    this.searchField.value = query;
+    this.searchField!.value = query;
   }
 
   /**
@@ -76,7 +76,7 @@ export abstract class SearchCategory extends Blockly.ToolboxCategory {
    *    if it cannot be determined, e.g. if this is a nested category.
    */
   private getPosition() {
-    const categories = this.workspace_.options.languageTree.contents;
+    const categories = this.workspace_.options.languageTree?.contents ?? [];
     for (let i = 0; i < categories.length; i++) {
       if (categories[i].kind === this.categoryKind) {
         return i;
@@ -104,11 +104,11 @@ export abstract class SearchCategory extends Blockly.ToolboxCategory {
   override setSelected(isSelected: boolean) {
     super.setSelected(isSelected);
     if (isSelected) {
-      this.searchField.focus();
+      this.searchField!.focus();
       this.matchBlocks();
     } else {
-      this.searchField.value = "";
-      this.searchField.blur();
+      this.searchField!.value = "";
+      this.searchField!.blur();
     }
   }
 
@@ -129,7 +129,7 @@ export abstract class SearchCategory extends Blockly.ToolboxCategory {
    * Filters the available blocks based on the current query string.
    */
   private matchBlocks() {
-    const query = this.searchField.value;
+    const query = this.searchField!.value;
     const hasQuery = query.length >= 3;
 
     this.getBlocks().then((blocks) => {

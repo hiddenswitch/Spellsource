@@ -1,11 +1,12 @@
 import * as Blockly from "blockly";
-import { BlockSvg, ContextMenuRegistry, Toolbox, Workspace } from "blockly";
+import {Block, BlockSvg, ContextMenuRegistry, ISelectableToolboxItem, Toolbox, Workspace} from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
 import * as WorkspaceUtils from "./workspace-utils";
 import * as BlocklyMiscUtils from "./blockly-spellsource-utils";
 import { newBlock, searchToolbox } from "./blockly-utils";
 import { InitBlockOptions } from "../components/card-editor-workspace";
 import { openFile, saveFile } from "./file-dialogs";
+import {CardDef} from "../components/collection/card-display";
 
 export const registerAll = (options: InitBlockOptions) => {
   ContextMenuRegistry.registry.register(importCardScript(options));
@@ -27,15 +28,16 @@ const importCardScript = ({ generateCardAsync }: InitBlockOptions): ContextMenuR
   weight: 6,
   scopeType: ContextMenuRegistry.ScopeType.BLOCK,
   preconditionFn: ({ block }) =>
-    block.type.startsWith("CatalogueCard") || block.type === "Card_REFERENCE" ? "enabled" : "hidden",
-  callback: ({ block }) => {
+    block?.type.startsWith("CatalogueCard") || block?.type === "Card_REFERENCE" ? "enabled" : "hidden",
+  callback: (clb) => {
+    const block = clb.block!;
     let workspace = block.workspace;
     if (workspace.targetWorkspace) {
       workspace = workspace.targetWorkspace;
     }
 
-    if (block.json && block.json.json) {
-      let card = block.json.json;
+    if ("json" in block && "json" in (block["json"] as object)) {
+      let card = (block.json as any)["json"] as CardDef;
       let dummyWorkspace = new Workspace();
       JsonConversionUtils.generateCard(dummyWorkspace, card);
 
@@ -66,12 +68,12 @@ const saveToFile: ContextMenuRegistry.RegistryItem = {
   scopeType: ContextMenuRegistry.ScopeType.BLOCK,
   preconditionFn: () => (process.env.NODE_ENV === "production" ? "hidden" : "enabled"),
   callback: ({ block }) => {
-    const blockJson = Blockly.serialization.blocks.save(block);
+    const blockJson = Blockly.serialization.blocks.save(block!);
 
     saveFile(
       JSON.stringify(blockJson, null, 2),
       "application/json",
-      (block.getInputTargetBlock("name")?.getFieldValue("text") || block.type) + ".json"
+      (block?.getInputTargetBlock("name")?.getFieldValue("text") || block?.type) + ".json"
     );
   },
 };
@@ -81,12 +83,12 @@ export const openFromFile: ContextMenuRegistry.RegistryItem = {
   displayText: "Open from File",
   weight: 6,
   scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
-  preconditionFn: ({ workspace }) => (workspace.targetWorkspace ? "hidden" : "enabled"),
+  preconditionFn: ({ workspace }) => (workspace!.targetWorkspace ? "hidden" : "enabled"),
   callback: ({ workspace }) =>
     openFile(".json", (result) => {
       const blockJson = JSON.parse(result);
 
-      const block = Blockly.serialization.blocks.append(blockJson, workspace);
+      const block = Blockly.serialization.blocks.append(blockJson, workspace!);
 
       block.setCollapsed(false);
 
@@ -100,12 +102,12 @@ const showInToolbox: ContextMenuRegistry.RegistryItem = {
   weight: 6,
   scopeType: ContextMenuRegistry.ScopeType.BLOCK,
   preconditionFn: ({ block }) =>
-    !block.workspace.targetWorkspace ||
-    block.workspace.targetWorkspace?.getToolbox()?.getSelectedItem()?.["name_"] === "Search"
+    !block?.workspace.targetWorkspace ||
+    (block.workspace.targetWorkspace?.getToolbox()?.getSelectedItem() as ISelectableToolboxItem).getName() === "Search"
       ? "enabled"
       : "hidden",
   callback: ({ block }) => {
-    searchToolbox(block.type, block.workspace.targetWorkspace || block.workspace);
+    searchToolbox(block?.type, block?.workspace.targetWorkspace || block?.workspace!);
   },
 };
 
@@ -114,8 +116,9 @@ const getReferenceBlock: ContextMenuRegistry.RegistryItem = {
   displayText: "Get Reference Block",
   weight: 6,
   scopeType: ContextMenuRegistry.ScopeType.BLOCK,
-  preconditionFn: ({ block }) => (block.type.startsWith("Starter_") ? "enabled" : "hidden"),
-  callback: ({ block }) => {
+  preconditionFn: ({ block }) => (block?.type.startsWith("Starter_") ? "enabled" : "hidden"),
+  callback: (clb) => {
+    const block = clb.block! as Block
     const workspace = block.workspace.isFlyout ? block.workspace.targetWorkspace : block.workspace;
     const card = block.cardScript || WorkspaceUtils.blockToCardScript(block);
 
@@ -140,9 +143,9 @@ const logCardscript: ContextMenuRegistry.RegistryItem = {
   weight: 6,
   scopeType: ContextMenuRegistry.ScopeType.BLOCK,
   preconditionFn: ({ block }) =>
-    block.type.startsWith("Starter_") && process.env.NODE_ENV !== "production" ? "enabled" : "hidden",
+    block?.type.startsWith("Starter_") && process.env.NODE_ENV !== "production" ? "enabled" : "hidden",
   callback: ({ block }) => {
-    console.log(WorkspaceUtils.blockToCardScript(block));
+    console.log(WorkspaceUtils.blockToCardScript(block!));
   },
 };
 
@@ -151,10 +154,10 @@ const deleteCard = ({ onDelete }: InitBlockOptions): ContextMenuRegistry.Registr
   displayText: "Permanently Delete Card",
   weight: 7,
   scopeType: ContextMenuRegistry.ScopeType.BLOCK,
-  preconditionFn: ({ block }) => (block.type.startsWith("Starter_") ? "enabled" : "hidden"),
+  preconditionFn: ({ block }) => (block?.type.startsWith("Starter_") ? "enabled" : "hidden"),
   callback: ({ block }) => {
     if (confirm("Remove this card from database?")) {
-      onDelete(block);
+      onDelete(block!);
     }
   },
 });
@@ -164,10 +167,10 @@ const publishCard = ({ onPublish }: InitBlockOptions): ContextMenuRegistry.Regis
   displayText: "Publish Card",
   weight: 8,
   scopeType: ContextMenuRegistry.ScopeType.BLOCK,
-  preconditionFn: ({ block }) => (block.type.startsWith("Starter_") ? "enabled" : "hidden"),
+  preconditionFn: ({ block }) => (block?.type.startsWith("Starter_") ? "enabled" : "hidden"),
   callback: ({ block }) => {
     if (confirm("Publish this card / its changes for other players to use?")) {
-      onPublish(block);
+      onPublish(block!);
     }
   },
 });

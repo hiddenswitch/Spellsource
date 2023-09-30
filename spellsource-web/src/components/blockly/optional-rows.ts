@@ -19,7 +19,8 @@ export const OptionalRows = "optional_rows";
 const defaultShow = false;
 
 export const OptionalRowsMixin: OptionalRowsMutator = {
-  args: undefined,
+  args: {},
+
   saveExtraState() {
     return { ...this.args, $hat: !!this.hat };
   },
@@ -56,8 +57,10 @@ export const OptionalRowsMixin: OptionalRowsMutator = {
     const options = block.mutatorOptions as OptionalRowsOptions;
     const rows = [] as [string, BlockArgDef[]][];
     rowsList(block).forEach((row, i) => {
-      const key = options.optional[i.toString()];
-      if (!key || typeof key !== "string" || this.args[key]) {
+      const s = i.toString() as `${number}`;
+      const key = options.optional[s];
+      // todo: can this really be simplified
+      if (!key || this.args[key]) {
         rows.push(row);
       }
       delete block[`message${i}`];
@@ -80,20 +83,21 @@ export const OptionalRowsMixin: OptionalRowsMutator = {
     const options = block.mutatorOptions as OptionalRowsOptions;
     options.defaults ??= {};
 
+    const defaults = options.defaults;
     for (let value of Object.values(options?.optional ?? {})) {
-      this.args[value] = options.defaults[value] ??= defaultShow;
+      this.args[value] = defaults[value] ??= defaultShow;
     }
 
     // It's an error to try to add shadow blocks to non-existent connections in the toolbox
     const inputs = Blockly.Blocks[this.type].toolboxInfo?.inputs;
     if (inputs) {
       rowsList(block).forEach(([, args], index) => {
-        const optional = options.optional[index.toString()];
+        const optional = options.optional[index.toString() as `${number}`];
         if (!optional) return;
 
         for (let arg of args) {
-          if (arg.type.startsWith("input") && !options.defaults[optional]) {
-            delete inputs[arg.name];
+          if (arg.type?.startsWith("input") && !defaults[optional]) {
+            delete inputs[arg.name!];
           }
         }
       });
@@ -126,7 +130,7 @@ export const addMutatorBlock = (block: BlockDef) => {
     type: block.type + "_container",
     inputsInline: false,
     message0: Blockly.utils.parsing
-      .tokenizeInterpolation(block.message0)
+      .tokenizeInterpolation(block.message0!)
       .filter((value) => typeof value === "string")
       .join(""),
     args0: [],
@@ -135,7 +139,11 @@ export const addMutatorBlock = (block: BlockDef) => {
   };
 
   let messageI = "";
-  let argsI = [];
+  let argsI: {
+    type: string;
+    name: string;
+    checked: boolean;
+  }[] = [];
   let row = 1;
 
   Object.entries(args).forEach(([name, checked], index) => {

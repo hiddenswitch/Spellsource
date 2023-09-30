@@ -1,9 +1,9 @@
-import Blockly, { Block } from "blockly";
+import Blockly, { Block, Workspace } from "blockly";
 import { isArray, isEmpty, isPlainObject, merge } from "lodash";
 import format from "string-format";
 import { RgbColour } from "../components/blockly/field-colour-hsv-sliders";
 
-export const isNumeric = (str) => !isNaN(str) && !isNaN(parseFloat(str));
+export const isNumeric = (str: any) => !isNaN(str) && !isNaN(parseFloat(str));
 
 export const numberIfNumeric = (str: string) => (isNumeric(str) ? Number(str) : str);
 
@@ -15,7 +15,9 @@ export function blockStateToCardScript(block: Blockly.serialization.blocks.State
 
   for (let [name, input] of Object.entries(block.inputs ?? {})) {
     const childBlock = input.block ?? input.shadow;
-
+    if (!childBlock) {
+      continue;
+    }
     cardScript[name] = blockStateToCardScript(childBlock);
   }
 
@@ -94,7 +96,7 @@ export function blockStateToCardScript(block: Blockly.serialization.blocks.State
  * @param cardScript
  * @returns the modified cardScript
  */
-function postProcessCardScript(cardScript) {
+function postProcessCardScript(cardScript: any) {
   if (isArray(cardScript)) {
     for (const cardScriptElement of cardScript) {
       postProcessCardScript(cardScriptElement);
@@ -165,7 +167,8 @@ function postProcessCardScript(cardScript) {
     const color = new RgbColour().loadFromHex(cardScript.colour);
     delete cardScript.colour;
     for (let arg of ["r", "g", "b", "a"]) {
-      cardScript[arg] = Math.round(1000 * color[arg]) / 1000;
+      const arg1 = arg as keyof RgbColour;
+      cardScript[arg1] = Math.round(1000 * (color[arg1] as number)) / 1000;
     }
   }
 
@@ -255,7 +258,7 @@ function postProcessCardScript(cardScript) {
  *    }
  * @param cardScript
  */
-function rearrangeInputValues(cardScript) {
+function rearrangeInputValues(cardScript: any) {
   if (typeof cardScript === "string") {
     return;
   }
@@ -339,7 +342,7 @@ function rearrangeInputValues(cardScript) {
   }
 }
 
-export function workspaceToCardScript(workspace) {
+export function workspaceToCardScript(workspace: Workspace) {
   const state = Blockly.serialization.workspaces.save(workspace);
 
   const blocks = state.blocks.blocks as Blockly.serialization.blocks.State[];
@@ -352,6 +355,6 @@ export function workspaceToCardScript(workspace) {
 }
 
 export function blockToCardScript(block: Block) {
-  const state = Blockly.serialization.blocks.save(block);
+  const state = Blockly.serialization.blocks.save(block)!;
   return blockStateToCardScript(state);
 }

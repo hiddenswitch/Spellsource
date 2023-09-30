@@ -16,11 +16,11 @@ import { PlusMinusRowsMutator } from "./plus-minus-rows";
 export class FieldPlus extends FieldImage {
   static type = "field_plus";
 
-  constructor(options) {
+  constructor(options: unknown) {
     super(plusImage, 15, 15, "Plus", FieldPlus.onClick);
   }
 
-  static fromJson(options) {
+  static fromJson(options: unknown) {
     return new FieldPlus(options);
   }
 

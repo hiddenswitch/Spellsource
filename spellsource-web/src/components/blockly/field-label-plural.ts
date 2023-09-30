@@ -7,7 +7,12 @@ export class FieldLabelPlural extends FieldLabel {
     super(opt_value, opt_class, opt_config);
   }
 
-  static fromJson(options) {
+  static fromJson(
+    options: {
+      value?: string;
+      text?: string;
+    } & object
+  ) {
     const field = new FieldLabelPlural();
     if (options.value) {
       field.setValue(options.value);

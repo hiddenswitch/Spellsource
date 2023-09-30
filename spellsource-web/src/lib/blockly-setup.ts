@@ -1,12 +1,5 @@
 import { InitBlockOptions } from "../components/card-editor-workspace";
-import Blockly, {
-  BlockSvg,
-  CollapsibleToolboxCategory,
-  hasBubble,
-  ISelectableToolboxItem,
-  Toolbox,
-  WorkspaceSvg,
-} from "blockly";
+import Blockly, { BlockSvg, CollapsibleToolboxCategory, hasBubble, WorkspaceSvg } from "blockly";
 import { FieldHidden } from "../components/blockly/field-hidden";
 import { FieldLabelPlural } from "../components/blockly/field-label-plural";
 import { FieldButton } from "../components/blockly/field-button";
@@ -70,62 +63,34 @@ export const registerAll = (options?: InitBlockOptions) => {
   Blockly.Extensions.registerMutator(OptionalRows, OptionalRowsMixin, OptionalRowsFn);
   Blockly.Extensions.registerMutator(PlusMinusRows, PlusMinusRowsMixin, PlusMinusRowsFn);
 
-
-
-  Blockly.ShortcutRegistry.registry.unregister(
-    Blockly.ShortcutItems.names.PASTE
-  );
+  Blockly.ShortcutRegistry.registry.unregister(Blockly.ShortcutItems.names.PASTE);
   Blockly.ShortcutRegistry.registry.register(workspacePaste);
-  const ctrlV = Blockly.ShortcutRegistry.registry.createSerializedKey(
-    Blockly.utils.KeyCodes.V,
-    [Blockly.utils.KeyCodes.CTRL]
-  );
-  Blockly.ShortcutRegistry.registry.addKeyMapping(
-    ctrlV,
-    Blockly.ShortcutItems.names.PASTE
-  );
-  const altV = Blockly.ShortcutRegistry.registry.createSerializedKey(
-    Blockly.utils.KeyCodes.V,
-    [Blockly.utils.KeyCodes.ALT]
-  );
-  Blockly.ShortcutRegistry.registry.addKeyMapping(
-    altV,
-    Blockly.ShortcutItems.names.PASTE
-  );
+  const ctrlV = Blockly.ShortcutRegistry.registry.createSerializedKey(Blockly.utils.KeyCodes.V, [
+    Blockly.utils.KeyCodes.CTRL,
+  ]);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(ctrlV, Blockly.ShortcutItems.names.PASTE);
+  const altV = Blockly.ShortcutRegistry.registry.createSerializedKey(Blockly.utils.KeyCodes.V, [
+    Blockly.utils.KeyCodes.ALT,
+  ]);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(altV, Blockly.ShortcutItems.names.PASTE);
 
-  Blockly.ShortcutRegistry.registry.unregister(
-    Blockly.ShortcutItems.names.COPY
-  );
+  Blockly.ShortcutRegistry.registry.unregister(Blockly.ShortcutItems.names.COPY);
   Blockly.ShortcutRegistry.registry.register(workspaceCopy);
-  const ctrlC = Blockly.ShortcutRegistry.registry.createSerializedKey(
-    Blockly.utils.KeyCodes.C,
-    [Blockly.utils.KeyCodes.CTRL]
-  );
-  Blockly.ShortcutRegistry.registry.addKeyMapping(
-    ctrlC,
-    Blockly.ShortcutItems.names.COPY
-  );
-  const altC = Blockly.ShortcutRegistry.registry.createSerializedKey(
-    Blockly.utils.KeyCodes.C,
-    [Blockly.utils.KeyCodes.ALT]
-  );
-  Blockly.ShortcutRegistry.registry.addKeyMapping(
-    altC,
-    Blockly.ShortcutItems.names.COPY
-  );
+  const ctrlC = Blockly.ShortcutRegistry.registry.createSerializedKey(Blockly.utils.KeyCodes.C, [
+    Blockly.utils.KeyCodes.CTRL,
+  ]);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(ctrlC, Blockly.ShortcutItems.names.COPY);
+  const altC = Blockly.ShortcutRegistry.registry.createSerializedKey(Blockly.utils.KeyCodes.C, [
+    Blockly.utils.KeyCodes.ALT,
+  ]);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(altC, Blockly.ShortcutItems.names.COPY);
 
   Blockly.ShortcutRegistry.registry.unregister(Blockly.ShortcutItems.names.CUT);
   Blockly.ShortcutRegistry.registry.register(workspaceCut);
-  const ctrlX = Blockly.ShortcutRegistry.registry.createSerializedKey(
-    Blockly.utils.KeyCodes.X,
-    [Blockly.utils.KeyCodes.CTRL]
-  );
-  Blockly.ShortcutRegistry.registry.addKeyMapping(
-    ctrlX,
-    Blockly.ShortcutItems.names.CUT
-  );
-  
-  
+  const ctrlX = Blockly.ShortcutRegistry.registry.createSerializedKey(Blockly.utils.KeyCodes.X, [
+    Blockly.utils.KeyCodes.CTRL,
+  ]);
+  Blockly.ShortcutRegistry.registry.addKeyMapping(ctrlX, Blockly.ShortcutItems.names.CUT);
 
   if (options) {
     BlocklyContextMenu.registerAll(options);
@@ -146,16 +111,33 @@ export const plugins = {
   [Blockly.registry.Type.FLYOUTS_VERTICAL_TOOLBOX.toString()]: CustomVerticalFlyout.name,
 };
 
-export const initWorkspace = (workspace: WorkspaceSvg, data: ContextType<typeof BlocklyDataContext>) => {
+export type WorkspaceSvgWithData = WorkspaceSvg & {
+  _data: ContextType<typeof BlocklyDataContext>;
+};
+
+export const initWorkspace = (workspace1: WorkspaceSvg, data: ContextType<typeof BlocklyDataContext>) => {
+  const workspace = workspace1 as WorkspaceSvgWithData;
   workspace["_data"] = data;
   workspace.registerButtonCallback("generateArt", generateArt);
   workspace.registerButtonCallback("randomizeSeed", randomizeSeed);
 
-  workspace.addChangeListener((event: Blockly.Events.Click) => {
-    if (event.type !== Blockly.Events.CLICK || event.targetType !== "block") return;
+  workspace.addChangeListener((event1: Blockly.Events.Abstract) => {
+    if (event1.type !== Blockly.Events.CLICK) {
+      return;
+    }
+    const event = event1 as Blockly.Events.Click;
+
+    if (event.targetType !== "block") {
+      return;
+    }
 
     const workspace = Blockly.Workspace.getById(event.workspaceId);
-    const block = workspace.getBlockById(event.blockId) as BlockSvg;
+    if (!workspace || !event.blockId) {
+      return;
+    }
+    const block = workspace.getBlockById(event.blockId) as BlockSvg & {
+      _lastClickTime?: number;
+    };
 
     if (block.isInFlyout || !block.isMovable() || !workspace.options.collapse) return;
 
@@ -169,8 +151,15 @@ export const initWorkspace = (workspace: WorkspaceSvg, data: ContextType<typeof 
   });
 
   // Click on workspace to close comment / mutator bubbles
-  workspace.addChangeListener((event: Blockly.Events.Click) => {
-    if (event.type !== Blockly.Events.CLICK || event.targetType !== "workspace") return;
+  workspace.addChangeListener((event1: Blockly.Events.Abstract) => {
+    if (event1.type !== Blockly.Events.CLICK) {
+      return;
+    }
+    const event = event1 as Blockly.Events.Click;
+
+    if (event.targetType !== "workspace") {
+      return;
+    }
 
     const workspace = Blockly.Workspace.getById(event.workspaceId) as WorkspaceSvg;
 
@@ -184,4 +173,6 @@ export const initWorkspace = (workspace: WorkspaceSvg, data: ContextType<typeof 
       }
     });
   });
+
+  return workspace as WorkspaceSvgWithData;
 };

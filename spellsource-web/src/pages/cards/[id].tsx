@@ -6,7 +6,7 @@ import { useGetCardQuery } from "../../__generated__/client";
 export default () => {
   const router = useRouter();
   const idParam = router.query["id"];
-  const id = isArray(idParam) ? idParam.join("_") : idParam;
+  const id = isArray(idParam) ? idParam.join("_") : idParam ?? "";
 
   const getCard = useGetCardQuery({ variables: { id } });
   const cardRecord = getCard.data?.getLatestCard;

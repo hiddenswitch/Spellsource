@@ -2,15 +2,19 @@ import sdxl from "../__generated__/sdxl-ordinary.json";
 import { FieldButton } from "../components/blockly/field-button";
 import { createConfiguration } from "../__generated__/comfyclient/configuration";
 import { argsList, newBlock } from "./blockly-utils";
-import Blockly, { Block, BlockSvg, WorkspaceSvg } from "blockly";
+import Blockly, { BlockSvg, WorkspaceSvg } from "blockly";
 import { ContextType } from "react";
 import { BlocklyDataContext } from "../pages/card-editor";
 import { PromptNode } from "../__generated__/comfyclient/models/PromptNode";
 import { ObjectDefaultApi as DefaultApi } from "../__generated__/comfyclient/types/ObjectParamAPI";
 
+type BlockWithPrivate = Blockly.Block & {
+  _interval?: NodeJS.Timer | number;
+  _hash?: string;
+};
 export const randomizeSeed = (p1: any) => {
   const field = p1 as FieldButton;
-  const block = field.getSourceBlock();
+  const block = field.getSourceBlock()!;
   if (block.isInFlyout) return;
 
   block.setFieldValue(Math.round(Math.random() * 10000000), "seed");
@@ -19,7 +23,7 @@ export const randomizeSeed = (p1: any) => {
 export const generateArt = async (p1: any) => {
   const field = p1 as FieldButton;
 
-  const block = field.getSourceBlock();
+  const block = field.getSourceBlock()! as BlockWithPrivate;
   if (block.isInFlyout) return;
 
   if (block.getFieldValue("button") === "Stop" || block["_interval"] || block["_hash"]) {
@@ -50,7 +54,7 @@ export const generateArt = async (p1: any) => {
   block["_interval"] = setInterval(() => {
     elapsed++;
     block.setFieldValue(`Processing... ${elapsed}s`, "counter");
-  }, 1000);
+  }, 1000) as NodeJS.Timer | number;
   block["_hash"] = await generateHash(prompt);
 
   fetch("http://localhost:8188/api/v1/prompts", {
@@ -64,7 +68,7 @@ export const generateArt = async (p1: any) => {
     .finally(() => onRequestStop(block));
 };
 
-const onRequestStop = (block: Block) => {
+const onRequestStop = (block: BlockWithPrivate) => {
   delete block["_hash"];
   if (block["_interval"]) {
     clearInterval(block["_interval"]);
@@ -78,7 +82,7 @@ const onRequestStop = (block: Block) => {
   }
 };
 
-const onGenerateArt = (block: Block) => async (response: Response | undefined | null) => {
+const onGenerateArt = (block: BlockWithPrivate) => async (response: Response | undefined | null) => {
   const hash = block["_hash"];
   const result = await response?.json();
   if (!result || !hash) {
@@ -94,29 +98,35 @@ const onGenerateArt = (block: Block) => async (response: Response | undefined | 
     return;
   }
 
-  const workspace = block.workspace as WorkspaceSvg;
+  const workspace = block.workspace as WorkspaceSvg & {
+    _data: ContextType<typeof BlocklyDataContext>;
+  };
   const artOutput = newBlock(workspace, "Art_Output");
   const artGenerated = newBlock(workspace, "Art_Generated");
   (artGenerated as BlockSvg).initSvg();
   (artOutput as BlockSvg).initSvg();
-  artGenerated.setFieldValue(createConfiguration().baseServer["url"] + relativeUrl, "src");
+  // expose private property here
+  const baseServer = createConfiguration().baseServer as unknown as {
+    url: string;
+  };
+  artGenerated.setFieldValue(baseServer["url"] + relativeUrl, "src");
   artGenerated.setFieldValue(hash, "hash");
-  artOutput.getInput("art").connection.connect(artGenerated.outputConnection);
-  const targetBlock = block.nextConnection.targetBlock();
+  artOutput.getInput("art")!.connection!.connect(artGenerated.outputConnection!);
+  const targetBlock = block.nextConnection!.targetBlock();
   if (targetBlock) {
-    targetBlock.previousConnection.connect(artOutput.nextConnection);
+    targetBlock.previousConnection!.connect(artOutput.nextConnection!);
   }
-  block.nextConnection.connect(artOutput.previousConnection);
+  block.nextConnection!.connect(artOutput.previousConnection!);
 
   workspace.render();
 
-  const { saveGeneratedArt, refreshGeneratedArt } = workspace["_data"] as ContextType<typeof BlocklyDataContext>;
+  const { saveGeneratedArt, refreshGeneratedArt } = workspace["_data"];
 
-  await saveGeneratedArt({ variables: { hash, urls } });
-  await refreshGeneratedArt();
+  await saveGeneratedArt!({ variables: { hash, urls } });
+  await refreshGeneratedArt!();
 };
 
-async function generateHash(body) {
+async function generateHash(body: object) {
   // Stringify and sort keys in the JSON object
   let str = JSON.stringify(body);
 

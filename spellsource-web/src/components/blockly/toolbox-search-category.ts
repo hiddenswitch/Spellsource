@@ -68,13 +68,13 @@ export class ToolboxSearchCategory extends SearchCategory {
       this.blockSearcher.indexBlocks(this.categoryDef.contents);
     } else {
       const availableBlocks = new Set<BlockInfo>();
-      this.workspace_.options.languageTree.contents.map((item) => this.getAvailableBlocks(item, availableBlocks));
+      (this.workspace_.options.languageTree?.contents ?? []).map((item) => this.getAvailableBlocks(item, availableBlocks));
       this.blockSearcher.indexBlocks([...availableBlocks]);
     }
   }
 
   protected async getBlocks(): Promise<ToolboxItemInfo[]> {
-    const query = this.searchField.value;
+    const query = this.searchField?.value;
     return query ? this.blockSearcher.blockTypesMatching(query.trim()) : [];
   }
 }
