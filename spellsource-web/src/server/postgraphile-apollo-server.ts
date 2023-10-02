@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 import { createPostGraphileSchema, PostGraphileOptions, withPostGraphileContext } from "postgraphile";
-import { ApolloServerPlugin } from "@apollo/server";
+import {ApolloServerPlugin, HTTPGraphQLRequest} from "@apollo/server";
 import { GraphQLRequestContextDidResolveOperation } from "@apollo/server/src/externalTypes";
 
 const authorizationBearerRex = /^\s*bearer\s+([a-z0-9\-._~+/]+=*)\s*$/i;
@@ -8,8 +8,7 @@ const authorizationBearerRex = /^\s*bearer\s+([a-z0-9\-._~+/]+=*)\s*$/i;
 const createBadAuthorizationHeaderError = () =>
   httpError(400, "Authorization header is not of the correct bearer scheme format.");
 
-const getJwtToken = (request) => {
-  const authorization = request.headers.get("authorization");
+const getJwtToken = (authorization: string | string[] | null) => {
   if (Array.isArray(authorization)) throw createBadAuthorizationHeaderError();
 
   // If there was no authorization header, just return null.
@@ -25,10 +24,10 @@ const getJwtToken = (request) => {
   return match[1];
 };
 
-const httpError = (status, message) => {
+const httpError = (status: unknown, message: string) => {
   const err = new Error(message);
   // @ts-ignore
-  err.status = status;
+  err["status"] = status;
   return err;
 };
 
@@ -48,7 +47,7 @@ export const makeSchemaAndPlugin = async (
   const { pgSettings: pgSettingsGenerator, additionalGraphQLContextFromRequest, jwtSecret } = postGraphileOptions;
 
   async function makePostgraphileApolloRequestHooks(): Promise<any> {
-    let finished;
+    let finished: ((value?: (PromiseLike<any> | any)) => void) | null = null;
     return {
       /*
        * Since `requestDidStart` itself is synchronous, we must hijack an
@@ -74,7 +73,7 @@ export const makeSchemaAndPlugin = async (
          */
 
         // Extract the JWT if present:
-        const jwtToken = jwtSecret ? getJwtToken(req) : null;
+        const jwtToken = jwtSecret ? getJwtToken(req.headers?.get("authorization") ?? null) : null;
 
         // Extract additional context
         const additionalContext =
@@ -124,7 +123,7 @@ export const makeSchemaAndPlugin = async (
           });
         });
       },
-      async willSendResponse(context) {
+      async willSendResponse() {
         // Release the context;
         if (finished) {
           finished();

@@ -18,10 +18,10 @@ function HeroGithub() {
   );
 }
 
-const SectionTitle = ({ title }) => {
+const SectionTitle = ({ title }: { title: string }) => {
   return <h1 className={styles.githubSectionTitle}>{title}</h1>;
 };
-const SectionSubText = ({ title }) => {
+const SectionSubText = ({ title }: { title: string }) => {
   return <h4 className={styles.githubSectionSubText}>{title}</h4>;
 };
 

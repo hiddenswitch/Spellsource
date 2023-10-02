@@ -1,12 +1,20 @@
 import * as Blockly from "blockly";
-import {Block, BlockSvg, ContextMenuRegistry, ISelectableToolboxItem, Toolbox, Workspace} from "blockly";
+import {
+  Block,
+  BlockSvg,
+  ContextMenuRegistry,
+  ISelectableToolboxItem,
+  Toolbox,
+  Workspace,
+  WorkspaceSvg,
+} from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
 import * as WorkspaceUtils from "./workspace-utils";
 import * as BlocklyMiscUtils from "./blockly-spellsource-utils";
 import { newBlock, searchToolbox } from "./blockly-utils";
 import { InitBlockOptions } from "../components/card-editor-workspace";
 import { openFile, saveFile } from "./file-dialogs";
-import {CardDef} from "../components/collection/card-display";
+import { CardDef } from "../components/collection/card-display";
 
 export const registerAll = (options: InitBlockOptions) => {
   ContextMenuRegistry.registry.register(importCardScript(options));
@@ -107,7 +115,7 @@ const showInToolbox: ContextMenuRegistry.RegistryItem = {
       ? "enabled"
       : "hidden",
   callback: ({ block }) => {
-    searchToolbox(block?.type, block?.workspace.targetWorkspace || block?.workspace!);
+    searchToolbox(block!.type, block?.workspace.targetWorkspace || block?.workspace!);
   },
 };
 
@@ -118,8 +126,8 @@ const getReferenceBlock: ContextMenuRegistry.RegistryItem = {
   scopeType: ContextMenuRegistry.ScopeType.BLOCK,
   preconditionFn: ({ block }) => (block?.type.startsWith("Starter_") ? "enabled" : "hidden"),
   callback: (clb) => {
-    const block = clb.block! as Block
-    const workspace = block.workspace.isFlyout ? block.workspace.targetWorkspace : block.workspace;
+    const block = clb.block! as Block;
+    const workspace = (block.workspace.isFlyout ? (block.workspace as WorkspaceSvg).targetWorkspace : block.workspace)!;
     const card = block.cardScript || WorkspaceUtils.blockToCardScript(block);
 
     const refBlock: BlockSvg = newBlock(

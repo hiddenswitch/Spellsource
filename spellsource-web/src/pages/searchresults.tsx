@@ -6,7 +6,7 @@ import { ListGroup } from "react-bootstrap";
 import { useRouter } from "next/router";
 import { isArray } from "lodash";
 import { cardSearchNode } from "../hooks/use-index";
-import CardDisplay from "../components/collection/card-display";
+import CardDisplay, {CardDef} from "../components/collection/card-display";
 import { useGetCollectionCardsQuery } from "../__generated__/client";
 
 const SearchResults = () => {
@@ -27,8 +27,8 @@ const SearchResults = () => {
   });
 
   const results = (getCards?.data?.allCollectionCards?.nodes ?? []).map((node) => ({
-    ...cardSearchNode(node.cardScript),
-    id: node.id,
+    ...cardSearchNode(node!.cardScript as CardDef),
+    id: node!.id,
   }));
 
   useEffect(() => {

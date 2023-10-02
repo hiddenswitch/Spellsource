@@ -73,7 +73,7 @@ const handleWorkspaceCards = (
   workspace
     .getTopBlocks(false)
     .filter((block) => block.type.startsWith("Starter_"))
-    .forEach((block: BlockSvg & {cardScript?: CardDef}) => {
+    .forEach((block: BlockSvg & { cardScript?: CardDef }) => {
       block.setFieldValue(userId + "-" + block.id, "id");
 
       const card = (block.cardScript = WorkspaceUtils.blockToCardScript(block) as CardDef);
@@ -84,17 +84,17 @@ const handleWorkspaceCards = (
       }
 
       /*if (block.rendered) {
-                                                                let ogText = block.getCommentText()
-                                                                block.setCommentText(JSON.stringify(card))
-                                                      
-                                                                block.commentModel.size.width = 274
-                                                                block.commentModel.size.height = 324
-                                                                // block.commentModel.pinned = true
-                                                      
-                                                                if (block.getCommentIcon().isVisible() && block.getCommentText() !== ogText) {
-                                                                  block.getCommentIcon().updateText()
-                                                                }
-                                                              }*/
+                                                                                              let ogText = block.getCommentText()
+                                                                                              block.setCommentText(JSON.stringify(card))
+                                                                                    
+                                                                                              block.commentModel.size.width = 274
+                                                                                              block.commentModel.size.height = 324
+                                                                                              // block.commentModel.pinned = true
+                                                                                    
+                                                                                              if (block.getCommentIcon().isVisible() && block.getCommentText() !== ogText) {
+                                                                                                block.getCommentIcon().updateText()
+                                                                                              }
+                                                                                            }*/
     });
 
   // Update visuals for Cards and Class reference blocks
@@ -137,10 +137,8 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
   const mainWorkspace = () => {
     if (blocklyEditor !== null && "current" in blocklyEditor) {
       return blocklyEditor.current?.workspace;
-    } else if (typeof blocklyEditor === "function") {
-      // todo: what am I supposed to put here?
-      return blocklyEditor(null);
     }
+    throw new Error("callback refs unsupported");
   };
   const getToolbox = () => mainWorkspace()?.getToolbox() as Toolbox;
 
@@ -367,15 +365,20 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
 
   //Switch the renderer
   useEffect(() => {
-    BlocklyMiscUtils.switchRenderer(props.renderer, mainWorkspace());
+    if (props.renderer) {
+      BlocklyMiscUtils.switchRenderer(props.renderer, mainWorkspace()!);
+    }
   }, [props.renderer]);
 
   //The default workspace changed event handler
   const onWorkspaceChanged = () => {
-    if (mainWorkspace()?.isDragging()) return; // While dragging a block, it doesn't appear in the blocks list
+    if (!mainWorkspace()) {
+      return;
+    }
+    if (mainWorkspace()!.isDragging()) return; // While dragging a block, it doesn't appear in the blocks list
 
     const cardScript = handleWorkspaceCards(mainWorkspace()!, data.userId || "guest", getCard);
-    BlocklyMiscUtils.pluralStuff(mainWorkspace());
+    BlocklyMiscUtils.pluralStuff(mainWorkspace()!);
     let json = JSON.stringify(cardScript, null, 2);
     // props.setJSON(json);
     setJson(json);

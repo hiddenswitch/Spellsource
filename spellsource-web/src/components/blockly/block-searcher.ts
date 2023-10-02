@@ -36,7 +36,7 @@ export class BlockSearcher {
           blockCreationWorkspace
         );
       } catch (e: any) {
-        block = newBlock(blockCreationWorkspace, blockInfo.type);
+        block = newBlock(blockCreationWorkspace, blockInfo.type!);
         console.warn(blockInfo.type, e.message);
       }
       const blockType = block.getFieldValue("id") || block.type;

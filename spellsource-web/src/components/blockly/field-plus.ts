@@ -10,7 +10,7 @@
 
 import * as Blockly from "blockly/core";
 import { getExtraBlockState } from "./mutators";
-import { Block, FieldImage, Input } from "blockly";
+import {Block, BlockSvg, FieldImage, Input} from "blockly";
 import { PlusMinusRowsMutator } from "./plus-minus-rows";
 
 export class FieldPlus extends FieldImage {
@@ -31,7 +31,7 @@ export class FieldPlus extends FieldImage {
   }
 
   static onClick(field: FieldPlus) {
-    const block = field.getSourceBlock() as Block & PlusMinusRowsMutator;
+    const block = field.getSourceBlock() as BlockSvg & PlusMinusRowsMutator;
 
     if (block.isInFlyout) return;
     Blockly.Events.setGroup(true);

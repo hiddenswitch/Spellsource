@@ -1,10 +1,11 @@
-import Blockly, { Block, BlockSvg } from "blockly";
+import Blockly, { Block, BlockSvg, Field, WorkspaceSvg } from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
 import { CardDef } from "../components/collection/card-display";
 import { BlocklyDataContext } from "../pages/card-editor";
 import { ContextType } from "react";
-import { BlockDef } from "./blockly-types";
+import { BlockDef, heroClassColors, textColor } from "./blockly-types";
 import { addBlock, argsList, argsList as argsList1 } from "./blockly-utils";
+import { FieldInput } from "blockly/core/field_input";
 
 export const toTitleCaseCorrected = (string: string) =>
   string
@@ -57,21 +58,6 @@ export function initBlocks(data: ContextType<typeof BlocklyDataContext>) {
 }
 
 export function initHeroClassColors(data: ContextType<typeof BlocklyDataContext>) {
-  const blockly: object & {
-    textColor?: Record<string, string>;
-    heroClassColors?: Record<string, string>;
-  } = Blockly;
-  if (!("textColor" in blockly)) {
-    blockly["textColor"] = {
-      Rarity_COMMON: "#000000",
-    };
-  }
-  if (!("heroClassColors" in blockly)) {
-    blockly["heroClassColors"] = {
-      ANY: "#A6A6A6",
-    };
-  }
-
   /**
    * first pass through the card catalogue to figure out all the collectible
    * hero classes and their colors
@@ -90,7 +76,7 @@ export function initHeroClassColors(data: ContextType<typeof BlocklyDataContext>
 
 export function setupHeroClassColor(card: CardDef) {
   if (card.art?.body?.vertex) {
-    Blockly["textColor"][card.heroClass] = Blockly.utils.colour.rgbToHex(
+    textColor[card.heroClass] = Blockly.utils.colour.rgbToHex(
       card.art.body.vertex.r * 255,
       card.art.body.vertex.g * 255,
       card.art.body.vertex.b * 255
@@ -98,7 +84,7 @@ export function setupHeroClassColor(card: CardDef) {
   }
 
   if (card.art?.primary) {
-    return (Blockly["heroClassColors"][card.heroClass] = Blockly.utils.colour.rgbToHex(
+    return (heroClassColors[card.heroClass] = Blockly.utils.colour.rgbToHex(
       card.art.primary.r * 255,
       card.art.primary.g * 255,
       card.art.primary.b * 255
@@ -108,7 +94,7 @@ export function setupHeroClassColor(card: CardDef) {
   return "#888888";
 }
 
-export function colorToHex(colour) {
+export function colorToHex(colour: string) {
   var hue = Number(colour);
   if (!isNaN(hue)) {
     return Blockly.utils.colour.hueToHex(hue);
@@ -125,39 +111,52 @@ export function tertiaryColor(color) {
   return Blockly.blockRendering.ConstantProvider.prototype.generateTertiaryColour_(color)
 }*/
 
-export function loadableInit(Blockly) {
+export function loadableInit(blockly: typeof Blockly) {
   setTimeout(() => {
-    const all = Blockly.Workspace.getAll();
+    const all = blockly.Workspace.getAll();
     for (let i = 0; i < all.length; i++) {
       const workspace = all[i];
-      if (!workspace.parentWorkspace && workspace.rendered) {
-        Blockly.svgResize(workspace);
+      if (!workspace.getRootWorkspace() && workspace.rendered) {
+        Blockly.svgResize(workspace as WorkspaceSvg);
       }
     }
   }, 1);
 }
 
-export function switchRenderer(renderer, workspace) {
-  if (workspace.render && renderer !== workspace.getRenderer().name) {
+type WorkspaceWithPrivateRenderer = WorkspaceSvg & {
+  name: string;
+  renderer_: Blockly.blockRendering.Renderer;
+};
+
+export function switchRenderer(renderer: string, workspace1: WorkspaceSvg) {
+  const workspace = workspace1 as WorkspaceWithPrivateRenderer;
+  if (renderer !== workspace.getRenderer()["name"]) {
     workspace.renderer_ = Blockly.blockRendering.init(
       renderer,
       workspace.getTheme(),
-      workspace.options.rendererOverrides
+      workspace.options.rendererOverrides ?? undefined
     );
 
-    workspace.getToolbox().getFlyout().getWorkspace().renderer_ = Blockly.blockRendering.init(
+    const toolboxFlyoutWorkspace = workspace.getToolbox()?.getFlyout()?.getWorkspace() as WorkspaceWithPrivateRenderer;
+    toolboxFlyoutWorkspace.renderer_ = Blockly.blockRendering.init(
       renderer,
-      workspace.getToolbox().getFlyout().getWorkspace().getTheme(),
-      workspace.options.rendererOverrides
+      toolboxFlyoutWorkspace.getTheme(),
+      workspace.options.rendererOverrides ?? undefined
     );
 
     workspace.refreshTheme();
   }
 }
 
-export function pluralStuff(workspace) {
+type FieldInputWithPrivateEditor = FieldInput<any> & {
+  // re-export protected fields
+  isBeingEdited_: boolean;
+  showEditor_: (_e?: Event, quietInput?: boolean) => void;
+};
+
+export function pluralStuff(workspace: WorkspaceSvg) {
   let anyChange = false;
-  for (let block of workspace.getAllBlocks()) {
+  for (let block of workspace.getAllBlocks(true)) {
     if (!block.json) {
       continue;
     }
@@ -171,13 +170,16 @@ export function pluralStuff(workspace) {
           connection = block.outputConnection;
           if (block.outputConnection.targetBlock()) {
             let targetBlock = connection.targetBlock();
+            if (!targetBlock) {
+              continue;
+            }
             if (targetBlock.type.endsWith("_I") && targetBlock.getPreviousBlock()) {
               let prevBlock = targetBlock.getPreviousBlock();
-              while (prevBlock.getPreviousBlock()) {
+              while (prevBlock != null && prevBlock.getPreviousBlock()) {
                 prevBlock = prevBlock.getPreviousBlock();
               }
-              connection = prevBlock.outputConnection;
-              targetBlock = connection.targetBlock();
+              connection = prevBlock?.outputConnection;
+              targetBlock = connection?.targetBlock() ?? null;
             }
             if (targetBlock) {
               //if the 'src' arg appears on the 'input_value' it's connected to, redirect to that
@@ -185,28 +187,28 @@ export function pluralStuff(workspace) {
               for (let arg of argsList1(targetBlock.json, "input")) {
                 if (arg.name === name && arg.src) {
                   //
-                  connection = targetBlock.getInput(arg.src).connection;
+                  connection = targetBlock.getInput(arg.src)?.connection;
                 }
               }
             }
           }
         } else {
-          connection = block.getInput(arg.src)?.connection;
+          connection = block.getInput(arg.src!)?.connection;
         }
         if (!connection) {
-          if (block.getField(arg.src)) {
-            shouldBePlural = block.getFieldValue(arg.src) !== 1;
+          if (block.getField(arg.src!)) {
+            shouldBePlural = block.getFieldValue(arg.src!) !== 1;
           }
         } else if (connection.targetBlock()) {
           let targetBlock = connection.targetBlock();
-          if (targetBlock.json?.plural != null) {
+          if (targetBlock?.json?.plural != null) {
             shouldBePlural = targetBlock.json.plural;
-          } else if (targetBlock.type === "ValueProvider_int") {
+          } else if (targetBlock?.type === "ValueProvider_int") {
             shouldBePlural = targetBlock.getFieldValue("int") !== 1;
           }
         }
 
-        let before = block.getFieldValue(arg.name);
+        let before = block.getFieldValue(arg.name!);
         const options = arg.text!.split("/");
         if (shouldBePlural === null) {
           if (arg.value) {
@@ -221,7 +223,7 @@ export function pluralStuff(workspace) {
           block.setFieldValue(options[0], <string>arg.name);
         }
 
-        if (block.getFieldValue(arg.name) !== before) {
+        if (block.getFieldValue(arg.name!) !== before) {
           anyChange = true;
         }
       }
@@ -229,11 +231,11 @@ export function pluralStuff(workspace) {
   }
 
   if (anyChange) {
-    for (let block of workspace.getAllBlocks()) {
+    for (let block of workspace.getAllBlocks(true)) {
       for (var i = 0, input; (input = block.inputList[i]); i++) {
-        for (var j = 0, field; (field = input.fieldRow[j]); j++) {
-          if (field.isBeingEdited_ && field.showEditor_) {
-            field.showEditor_();
+        for (var j = 0, field: Field | FieldInputWithPrivateEditor; (field = input.fieldRow[j]); j++) {
+          if ("isBeingEdited_" in field && "showEditor_" in field && typeof field["showEditor_"] === "function") {
+            field["showEditor_"]();
           }
         }
       }
@@ -274,28 +276,22 @@ export function initArtBlcks(data: ContextType<typeof BlocklyDataContext>) {
 }
 
 export const refreshBlock = (block: BlockSvg | Block) => {
-  const blockly = Blockly;
-  if (!("textColor" in blockly) || !("heroClassColors" in blockly)) {
-    return;
-  }
-  block.data = blockly.Blocks[block.type].data;
+  block.data = Blockly.Blocks[block.type].data;
 
   if (block.type === "Card_REFERENCE") {
   } else if (block.type === "HeroClass_REFERENCE") {
-    const heroClassColors = blockly["heroClassColors"] as Record<string, string>;
     const color = heroClassColors[block.getFieldValue("id")];
     if (color && block.getColour() !== color) {
       block.setColour(color);
     }
   } else if (block.getField("message")) {
-    block.setFieldValue(blockly.Blocks[block.type].message, "message");
+    block.setFieldValue(Blockly.Blocks[block.type].message, "message");
   }
 
   if ("render" in block) {
     let textElement = block.getSvgRoot().querySelector("text");
-    const textColor = blockly["textColor"] as Record<string, string>;
-    const typeTextColor = textColor?.[block.type];
-    const idTextColor = textColor?.[block.getFieldValue("id")];
+    const typeTextColor = textColor[block.type];
+    const idTextColor = textColor[block.getFieldValue("id")];
     const color = typeTextColor ?? idTextColor;
     if (textElement && color) {
       textElement.style.fill = color;

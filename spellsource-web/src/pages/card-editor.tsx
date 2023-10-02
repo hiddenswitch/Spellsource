@@ -1,28 +1,28 @@
-import React, { createContext, useMemo, useRef } from "react";
+import React, {createContext, useMemo, useRef} from "react";
 import Layout from "../components/card-editor-layout";
 import * as styles from "../templates/template-styles.module.scss";
-import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
-import { getAllBlockJson, getAllIcons } from "../lib/fs-utils";
-import { CardDef } from "../components/collection/card-display";
-import { fixArt } from "../lib/json-transforms";
-import { keyBy } from "lodash";
+import {GetStaticPropsContext, InferGetStaticPropsType} from "next";
+import {getAllBlockJson, getAllIcons} from "../lib/fs-utils";
+import {CardDef} from "../components/collection/card-display";
+import {fixArt} from "../lib/json-transforms";
+import {keyBy} from "lodash";
 import {
-  Card,
-  GeneratedArtFragment,
-  GetCardsQuery,
-  GetGeneratedArtQuery,
-  ImageDef,
-  useGetAllArtQuery,
-  useGetCardsQuery,
-  useGetClassesQuery,
-  useGetCollectionCardsLazyQuery,
-  useGetGeneratedArtQuery,
-  useSaveGeneratedArtMutation,
+    Card,
+    GeneratedArtFragment,
+    GetCardsQuery,
+    GetGeneratedArtQuery,
+    ImageDef,
+    useGetAllArtQuery,
+    useGetCardsQuery,
+    useGetClassesQuery,
+    useGetCollectionCardsLazyQuery,
+    useGetGeneratedArtQuery,
+    useSaveGeneratedArtMutation,
 } from "../__generated__/client";
-import { useSession } from "next-auth/react";
-import { ApolloQueryResult } from "@apollo/client";
+import {useSession} from "next-auth/react";
+import {ApolloQueryResult} from "@apollo/client";
 import Head from "next/head";
-import { Spinner } from "react-bootstrap";
+import {Spinner} from "react-bootstrap";
 import CardEditorWorkspace from "../components/card-editor-workspace";
 import SpellsourceRenderer from "../lib/spellsource-renderer";
 
@@ -83,7 +83,7 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
     const allCards = cards.map((card) => ({
       ...(card!.cardScript ?? {}),
       id: card!.id,
-    }));
+    } as CardDef));
     const cardsById = keyBy(allCards, (card) => card.id);
     fixArt(cardsById);
 
@@ -94,13 +94,14 @@ const CardEditor = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const allArt = getAllArt.data?.allArt ?? [];
 
   const getGeneratedArt = useGetGeneratedArtQuery();
-  const generatedArt = getGeneratedArt.data?.allGeneratedArts?.nodes ?? [];
+  const generatedArt = (getGeneratedArt.data?.allGeneratedArts?.nodes ?? []).flatMap(f => !!f ? [f] : []);
 
   const ready =
     Object.values(classes).length > 0 && allArt.length > 0 && getGeneratedArt.data && typeof window !== "undefined";
 
   const myCards = useMemo(
-    () => (getMyCards.data?.allCards?.nodes ?? []).filter((card) => card.blocklyWorkspace),
+    () => (getMyCards.data?.allCards?.nodes ?? [])
+            .flatMap((card) => card?.blocklyWorkspace ? [card] : []),
     [getMyCards.data]
   );
 

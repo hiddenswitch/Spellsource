@@ -1,5 +1,5 @@
 import {BlockArgDef, BlockDef, BlocklyShadowState} from "./blockly-types";
-import Blockly, {Block, BlockSvg, Connection, Toolbox, ToolboxCategory, WorkspaceSvg} from "blockly";
+import Blockly, {Block, BlockSvg, Connection, Toolbox, ToolboxCategory, Workspace, WorkspaceSvg} from "blockly";
 import * as JsonConversionUtils from "./json-conversion-utils";
 import {extraBlockInfo} from "./json-conversion-utils";
 import {addMutatorBlock, OptionalRows} from "../components/blockly/optional-rows";
@@ -133,7 +133,7 @@ export const reInitBlock = (block: Block, state: BlockDef) => {
  * @param type The block type to create
  * @returns The created block
  */
-export function newBlock(workspace: WorkspaceSvg, type: string): Block | BlockSvg {
+export function newBlock(workspace: Workspace, type: string): Block | BlockSvg {
   let block = workspace.newBlock(type);
   manuallyAddShadowBlocks(block, Blockly.Blocks[type].json);
   return block;

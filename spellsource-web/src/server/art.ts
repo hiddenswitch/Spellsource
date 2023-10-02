@@ -1,7 +1,6 @@
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { gql } from "@apollo/client";
-import { getAllArt, readAllImages } from "../lib/fs-utils";
-import path from "path";
+import { getAllArt } from "../lib/fs-utils";
 import { keyBy } from "lodash";
 import { ImageDef, QueryArtByIdArgs } from "../__generated__/client";
 import { GraphQLResolveInfo } from "graphql";
@@ -23,9 +22,10 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    artById: async (parent, args: QueryArtByIdArgs, context, info: GraphQLResolveInfo) =>
+    artById: async (parent: unknown, args: QueryArtByIdArgs, context: unknown, info: GraphQLResolveInfo) =>
       (await getArtById())?.[args.id],
-    allArt: async (parent, args, context, info: GraphQLResolveInfo) => Object.values(await getArtById()),
+    allArt: async (parent: unknown, args: unknown, context: unknown, info: GraphQLResolveInfo) =>
+      Object.values(await getArtById()),
   },
 };
 

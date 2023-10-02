@@ -4,7 +4,6 @@ import { textDecorationStyle } from "./collection";
 import { Button } from "react-bootstrap";
 import { useDrag, useDrop } from "react-dnd";
 import {
-  Exact,
   GetDeckQuery, GetDeckQueryVariables, GetDecksQuery, GetDecksQueryVariables, InputMaybe,
   useCreateDeckMutation,
   useDeleteDeckMutation,

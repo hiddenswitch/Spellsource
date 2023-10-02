@@ -59,3 +59,10 @@ export type BlockShadowDef = {
   fields?: object;
   toolbox?: Maybe<boolean>;
 };
+
+export const textColor: Record<string, string | undefined> = {
+  Rarity_COMMON: "#000000",
+};
+export const heroClassColors: Record<string, string | undefined> = {
+  ANY: "#A6A6A6",
+};
