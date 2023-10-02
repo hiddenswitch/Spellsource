@@ -4,9 +4,10 @@ import React from "react";
 
 export const AuthButton = () => {
   const { status } = useSession();
-
+  const label = status !== "authenticated" ? "Login" : "Logout";
   return (
     <a
+      aria-label={label}
       className={styles.loginButton}
       onClick={async () => {
         if (status === "unauthenticated") {
@@ -18,7 +19,7 @@ export const AuthButton = () => {
         }
       }}
     >
-      {status !== "authenticated" ? "Login" : "Logout"}
+      {label}
     </a>
   );
 };

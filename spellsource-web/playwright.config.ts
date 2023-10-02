@@ -1,5 +1,6 @@
 import { defineConfig } from "@playwright/test";
 
+export const baseURL = "http://127.0.0.1:3000";
 export default defineConfig({
   webServer: [
     {
@@ -28,6 +29,6 @@ export default defineConfig({
     },
   ],
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    baseURL: baseURL,
   },
 });
