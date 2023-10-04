@@ -7,6 +7,8 @@ import { ContextType } from "react";
 import { BlocklyDataContext } from "../pages/card-editor";
 import { PromptNode } from "../__generated__/comfyclient/models/PromptNode";
 import { ObjectDefaultApi as DefaultApi } from "../__generated__/comfyclient/types/ObjectParamAPI";
+import { FetchResult, MutationResult } from "@apollo/client";
+import { GenerateArtMutation, GenerateArtResult } from "../__generated__/client";
 
 type BlockWithPrivate = Blockly.Block & {
   _interval?: NodeJS.Timer | number;
@@ -57,12 +59,17 @@ export const generateArt = async (p1: any) => {
   }, 1000) as NodeJS.Timer | number;
   block["_hash"] = await generateHash(prompt);
 
-  fetch("http://localhost:8188/api/v1/prompts", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const workspace = block.workspace as WorkspaceSvg & {
+    _data: ContextType<typeof BlocklyDataContext>;
+  };
+  const { generateArt } = workspace["_data"];
+
+  generateArt!({
+    variables: {
+      positiveText: block.getFieldValue("positive_text"),
+      negativeText: block.getFieldValue("negative_text"),
+      seed: parseInt(block.getFieldValue("seed")),
     },
-    body: JSON.stringify(prompt),
   })
     .then(onGenerateArt(block))
     .finally(() => onRequestStop(block));
@@ -82,49 +89,50 @@ const onRequestStop = (block: BlockWithPrivate) => {
   }
 };
 
-const onGenerateArt = (block: BlockWithPrivate) => async (response: Response | undefined | null) => {
-  const hash = block["_hash"];
-  const result = await response?.json();
-  if (!result || !hash) {
-    return;
-  }
-  const urls = result["urls"] as string[];
-  const [relativeUrl] = urls;
+const onGenerateArt =
+  (block: BlockWithPrivate) => async (response: FetchResult<GenerateArtMutation> | undefined | null) => {
+    const hash = block["_hash"];
+    const result = response?.data?.generateArt;
+    if (!result || !hash) {
+      return;
+    }
+    const urls = result["urls"] as string[];
+    const [relativeUrl] = urls;
 
-  if (block.isInFlyout || block.isDisposed() || !relativeUrl) return;
+    if (block.isInFlyout || block.isDisposed() || !relativeUrl) return;
 
-  if (!relativeUrl.includes(hash)) {
-    console.log("not generating for canceled request");
-    return;
-  }
+    if (!relativeUrl.includes(hash)) {
+      console.log("not generating for canceled request");
+      return;
+    }
 
-  const workspace = block.workspace as WorkspaceSvg & {
-    _data: ContextType<typeof BlocklyDataContext>;
+    const workspace = block.workspace as WorkspaceSvg & {
+      _data: ContextType<typeof BlocklyDataContext>;
+    };
+    const artOutput = newBlock(workspace, "Art_Output");
+    const artGenerated = newBlock(workspace, "Art_Generated");
+    (artGenerated as BlockSvg).initSvg();
+    (artOutput as BlockSvg).initSvg();
+    // expose private property here
+    const baseServer = createConfiguration().baseServer as unknown as {
+      url: string;
+    };
+    artGenerated.setFieldValue(baseServer["url"] + relativeUrl, "src");
+    artGenerated.setFieldValue(hash, "hash");
+    artOutput.getInput("art")!.connection!.connect(artGenerated.outputConnection!);
+    const targetBlock = block.nextConnection!.targetBlock();
+    if (targetBlock) {
+      targetBlock.previousConnection!.connect(artOutput.nextConnection!);
+    }
+    block.nextConnection!.connect(artOutput.previousConnection!);
+
+    workspace.render();
+
+    const { saveGeneratedArt, refreshGeneratedArt } = workspace["_data"];
+
+    await saveGeneratedArt!({ variables: { hash, urls } });
+    await refreshGeneratedArt!();
   };
-  const artOutput = newBlock(workspace, "Art_Output");
-  const artGenerated = newBlock(workspace, "Art_Generated");
-  (artGenerated as BlockSvg).initSvg();
-  (artOutput as BlockSvg).initSvg();
-  // expose private property here
-  const baseServer = createConfiguration().baseServer as unknown as {
-    url: string;
-  };
-  artGenerated.setFieldValue(baseServer["url"] + relativeUrl, "src");
-  artGenerated.setFieldValue(hash, "hash");
-  artOutput.getInput("art")!.connection!.connect(artGenerated.outputConnection!);
-  const targetBlock = block.nextConnection!.targetBlock();
-  if (targetBlock) {
-    targetBlock.previousConnection!.connect(artOutput.nextConnection!);
-  }
-  block.nextConnection!.connect(artOutput.previousConnection!);
-
-  workspace.render();
-
-  const { saveGeneratedArt, refreshGeneratedArt } = workspace["_data"];
-
-  await saveGeneratedArt!({ variables: { hash, urls } });
-  await refreshGeneratedArt!();
-};
 
 async function generateHash(body: object) {
   // Stringify and sort keys in the JSON object

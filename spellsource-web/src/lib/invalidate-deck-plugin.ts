@@ -22,14 +22,14 @@ function extractDeckIdsFromResponse(responseObj: RecordOrArrayThereof): Set<stri
       const nestedIds = extractDeckIdsFromResponse(item);
       nestedIds.forEach((id) => deckIds.add(id));
     }
-  } else if (typeof responseObj === "object") {
+  } else if (responseObj && typeof responseObj === "object") {
     const typeName = responseObj.__typename;
     const deckIdField = deckIdFields[typeName as keyof DeckIdFields];
     if (deckIdField && responseObj[deckIdField]) {
       deckIds.add(responseObj[deckIdField] as string);
     }
     for (const key in responseObj) {
-      if (key !== "__typename" && responseObj.hasOwnProperty(key)) {
+      if (key !== "__typename" && key in responseObj) {
         const responseObjElement = responseObj[key];
         if (typeof responseObjElement === "object" || Array.isArray(responseObjElement)) {
           const resAsRec =

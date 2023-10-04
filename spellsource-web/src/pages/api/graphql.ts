@@ -8,9 +8,10 @@ const cors = Cors({
   methods: ["POST", "GET", "HEAD"],
 });
 
+let handler;
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const process1 = process as any;
-  process1["handler"] ??= createApolloServer().then((server) =>
+  handler ??= createApolloServer().then((server) =>
     startServerAndCreateNextHandler(server, {
       context: async (req) => {
         const session = await getSessionDirect(req);
@@ -19,11 +20,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
   );
 
-  if (process1.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV !== "production") {
     await runMiddleware(req, res, cors);
   }
 
-  return (await process1["handler"])(req, res);
+  return (await handler)(req, res);
 };
 
 function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: Function) {

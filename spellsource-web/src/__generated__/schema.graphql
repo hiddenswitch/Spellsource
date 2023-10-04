@@ -767,9 +767,6 @@ type Query implements Node {
   allArt: [ImageDef!]!
 }
 
-"""
-The root mutation type which contains root level fields which mutate data.
-"""
 type Mutation {
   """Creates a single `BannedDraftCard`."""
   createBannedDraftCard(
@@ -1700,6 +1697,7 @@ type Mutation {
     """
     input: UpsertPublishedCardInput!
   ): UpsertPublishedCardPayload
+  generateArt(positiveText: String!, negativeText: String!, seed: Int!): GenerateArtResult
 }
 
 """An object with a globally unique `ID`."""
@@ -8492,4 +8490,8 @@ type ImageDef {
   src: String!
   height: Int!
   width: Int!
+}
+
+type GenerateArtResult {
+  urls: [String!]!
 }

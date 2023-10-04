@@ -852,6 +852,7 @@ begin
 end;
 $$ language plpgsql volatile;
 
+
 create function spellsource.get_user_attribute(id_user text, attribute text, or_default text default 'null') returns text as
 $$
 declare

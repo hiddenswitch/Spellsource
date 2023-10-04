@@ -1,0 +1,5 @@
+mutation generateArt($positiveText: String!, $negativeText: String!, $seed: Int!) {
+  generateArt(positiveText: $positiveText, negativeText: $negativeText, seed: $seed) {
+    urls
+  }
+}

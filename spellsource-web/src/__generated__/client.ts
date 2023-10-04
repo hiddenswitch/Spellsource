@@ -3188,6 +3188,11 @@ export const GamesOrderBy = {
 } as const;
 
 export type GamesOrderBy = typeof GamesOrderBy[keyof typeof GamesOrderBy];
+export type GenerateArtResult = {
+  __typename?: 'GenerateArtResult';
+  urls: Array<Scalars['String']>;
+};
+
 export type GeneratedArt = {
   __typename?: 'GeneratedArt';
   hash: Scalars['String'];
@@ -3918,7 +3923,6 @@ export const MatchmakingTicketsOrderBy = {
 } as const;
 
 export type MatchmakingTicketsOrderBy = typeof MatchmakingTicketsOrderBy[keyof typeof MatchmakingTicketsOrderBy];
-/** The root mutation type which contains root level fields which mutate data. */
 export type Mutation = {
   __typename?: 'Mutation';
   archiveCard?: Maybe<ArchiveCardPayload>;
@@ -4029,6 +4033,7 @@ export type Mutation = {
   deletePublishedCard?: Maybe<DeletePublishedCardPayload>;
   /** Deletes a single `PublishedCard` using a unique key. */
   deletePublishedCardById?: Maybe<DeletePublishedCardPayload>;
+  generateArt?: Maybe<GenerateArtResult>;
   getClasses?: Maybe<GetClassesPayload>;
   getCollectionCards?: Maybe<GetCollectionCardsPayload>;
   getUserAttribute?: Maybe<GetUserAttributePayload>;
@@ -4133,711 +4138,602 @@ export type Mutation = {
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationArchiveCardArgs = {
   input: ArchiveCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCardCatalogueFormatsArgs = {
   input: CardCatalogueFormatsInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCardCatalogueGetBannedDraftCardsArgs = {
   input: CardCatalogueGetBannedDraftCardsInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCardCatalogueGetBaseClassesArgs = {
   input: CardCatalogueGetBaseClassesInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCardCatalogueGetCardByIdArgs = {
   input: CardCatalogueGetCardByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCardCatalogueGetCardByNameArgs = {
   input: CardCatalogueGetCardByNameInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCardCatalogueGetCardByNameAndClassArgs = {
   input: CardCatalogueGetCardByNameAndClassInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCardCatalogueGetClassCardsArgs = {
   input: CardCatalogueGetClassCardsInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCardCatalogueGetFormatArgs = {
   input: CardCatalogueGetFormatInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCardCatalogueGetHardRemovalCardsArgs = {
   input: CardCatalogueGetHardRemovalCardsInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCardCatalogueGetHeroCardArgs = {
   input: CardCatalogueGetHeroCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCardCatalogueQueryArgs = {
   input: CardCatalogueQueryInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationClusteredGamesUpdateGameAndUsersArgs = {
   input: ClusteredGamesUpdateGameAndUsersInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateBannedDraftCardArgs = {
   input: CreateBannedDraftCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateBotUserArgs = {
   input: CreateBotUserInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateCardArgs = {
   input: CreateCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateCardsInDeckArgs = {
   input: CreateCardsInDeckInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateDeckArgs = {
   input: CreateDeckInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateDeckPlayerAttributeTupleArgs = {
   input: CreateDeckPlayerAttributeTupleInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateDeckShareArgs = {
   input: CreateDeckShareInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateDeckWithCardsArgs = {
   input: CreateDeckWithCardsInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateFriendArgs = {
   input: CreateFriendInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateGameArgs = {
   input: CreateGameInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateGameUserArgs = {
   input: CreateGameUserInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateGeneratedArtArgs = {
   input: CreateGeneratedArtInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateGuestArgs = {
   input: CreateGuestInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateHardRemovalCardArgs = {
   input: CreateHardRemovalCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateMatchmakingQueueArgs = {
   input: CreateMatchmakingQueueInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreateMatchmakingTicketArgs = {
   input: CreateMatchmakingTicketInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationCreatePublishedCardArgs = {
   input: CreatePublishedCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteBannedDraftCardArgs = {
   input: DeleteBannedDraftCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteBannedDraftCardByCardIdArgs = {
   input: DeleteBannedDraftCardByCardIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteBotUserArgs = {
   input: DeleteBotUserInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteBotUserByIdArgs = {
   input: DeleteBotUserByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteCardArgs = {
   input: DeleteCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteCardBySuccessionArgs = {
   input: DeleteCardBySuccessionInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteCardsInDeckArgs = {
   input: DeleteCardsInDeckInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteCardsInDeckByIdArgs = {
   input: DeleteCardsInDeckByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteDeckArgs = {
   input: DeleteDeckInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteDeckByIdArgs = {
   input: DeleteDeckByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteDeckPlayerAttributeTupleArgs = {
   input: DeleteDeckPlayerAttributeTupleInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteDeckPlayerAttributeTupleByIdArgs = {
   input: DeleteDeckPlayerAttributeTupleByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteDeckShareArgs = {
   input: DeleteDeckShareInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteDeckShareByDeckIdAndShareRecipientIdArgs = {
   input: DeleteDeckShareByDeckIdAndShareRecipientIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteFriendArgs = {
   input: DeleteFriendInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteFriendByIdAndFriendArgs = {
   input: DeleteFriendByIdAndFriendInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGameArgs = {
   input: DeleteGameInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGameByIdArgs = {
   input: DeleteGameByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGameUserArgs = {
   input: DeleteGameUserInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGameUserByGameIdAndUserIdArgs = {
   input: DeleteGameUserByGameIdAndUserIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGeneratedArtByHashAndOwnerArgs = {
   input: DeleteGeneratedArtByHashAndOwnerInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGuestArgs = {
   input: DeleteGuestInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteGuestByIdArgs = {
   input: DeleteGuestByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteHardRemovalCardArgs = {
   input: DeleteHardRemovalCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteHardRemovalCardByCardIdArgs = {
   input: DeleteHardRemovalCardByCardIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteMatchmakingQueueArgs = {
   input: DeleteMatchmakingQueueInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteMatchmakingQueueByIdArgs = {
   input: DeleteMatchmakingQueueByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteMatchmakingTicketArgs = {
   input: DeleteMatchmakingTicketInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteMatchmakingTicketByUserIdArgs = {
   input: DeleteMatchmakingTicketByUserIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeletePublishedCardArgs = {
   input: DeletePublishedCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeletePublishedCardByIdArgs = {
   input: DeletePublishedCardByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
+export type MutationGenerateArtArgs = {
+  negativeText: Scalars['String'];
+  positiveText: Scalars['String'];
+  seed: Scalars['Int'];
+};
+
+
 export type MutationGetClassesArgs = {
   input: GetClassesInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationGetCollectionCardsArgs = {
   input: GetCollectionCardsInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationGetUserAttributeArgs = {
   input: GetUserAttributeInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationPublishCardArgs = {
   input: PublishCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationPublishGitCardArgs = {
   input: PublishGitCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationSaveCardArgs = {
   input: SaveCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationSaveGeneratedArtArgs = {
   input: SaveGeneratedArtInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationSetCardsInDeckArgs = {
   input: SetCardsInDeckInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationSetUserAttributeArgs = {
   input: SetUserAttributeInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateBannedDraftCardArgs = {
   input: UpdateBannedDraftCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateBannedDraftCardByCardIdArgs = {
   input: UpdateBannedDraftCardByCardIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateBotUserArgs = {
   input: UpdateBotUserInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateBotUserByIdArgs = {
   input: UpdateBotUserByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateCardArgs = {
   input: UpdateCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateCardBySuccessionArgs = {
   input: UpdateCardBySuccessionInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateCardsInDeckArgs = {
   input: UpdateCardsInDeckInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateCardsInDeckByIdArgs = {
   input: UpdateCardsInDeckByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateDeckArgs = {
   input: UpdateDeckInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateDeckByIdArgs = {
   input: UpdateDeckByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateDeckPlayerAttributeTupleArgs = {
   input: UpdateDeckPlayerAttributeTupleInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateDeckPlayerAttributeTupleByIdArgs = {
   input: UpdateDeckPlayerAttributeTupleByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateDeckShareArgs = {
   input: UpdateDeckShareInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateDeckShareByDeckIdAndShareRecipientIdArgs = {
   input: UpdateDeckShareByDeckIdAndShareRecipientIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateFriendArgs = {
   input: UpdateFriendInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateFriendByIdAndFriendArgs = {
   input: UpdateFriendByIdAndFriendInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGameArgs = {
   input: UpdateGameInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGameByIdArgs = {
   input: UpdateGameByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGameUserArgs = {
   input: UpdateGameUserInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGameUserByGameIdAndUserIdArgs = {
   input: UpdateGameUserByGameIdAndUserIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGeneratedArtByHashAndOwnerArgs = {
   input: UpdateGeneratedArtByHashAndOwnerInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGuestArgs = {
   input: UpdateGuestInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateGuestByIdArgs = {
   input: UpdateGuestByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateHardRemovalCardArgs = {
   input: UpdateHardRemovalCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateHardRemovalCardByCardIdArgs = {
   input: UpdateHardRemovalCardByCardIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateMatchmakingQueueArgs = {
   input: UpdateMatchmakingQueueInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateMatchmakingQueueByIdArgs = {
   input: UpdateMatchmakingQueueByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateMatchmakingTicketArgs = {
   input: UpdateMatchmakingTicketInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateMatchmakingTicketByUserIdArgs = {
   input: UpdateMatchmakingTicketByUserIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdatePublishedCardArgs = {
   input: UpdatePublishedCardInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdatePublishedCardByIdArgs = {
   input: UpdatePublishedCardByIdInput;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertBannedDraftCardArgs = {
   input: UpsertBannedDraftCardInput;
   where?: InputMaybe<UpsertBannedDraftCardWhere>;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertBotUserArgs = {
   input: UpsertBotUserInput;
   where?: InputMaybe<UpsertBotUserWhere>;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertCardArgs = {
   input: UpsertCardInput;
   where?: InputMaybe<UpsertCardWhere>;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertCardsInDeckArgs = {
   input: UpsertCardsInDeckInput;
   where?: InputMaybe<UpsertCardsInDeckWhere>;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertDeckArgs = {
   input: UpsertDeckInput;
   where?: InputMaybe<UpsertDeckWhere>;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertDeckPlayerAttributeTupleArgs = {
   input: UpsertDeckPlayerAttributeTupleInput;
   where?: InputMaybe<UpsertDeckPlayerAttributeTupleWhere>;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertDeckShareArgs = {
   input: UpsertDeckShareInput;
   where?: InputMaybe<UpsertDeckShareWhere>;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertFriendArgs = {
   input: UpsertFriendInput;
   where?: InputMaybe<UpsertFriendWhere>;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertGameArgs = {
   input: UpsertGameInput;
   where?: InputMaybe<UpsertGameWhere>;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertGameUserArgs = {
   input: UpsertGameUserInput;
   where?: InputMaybe<UpsertGameUserWhere>;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertGuestArgs = {
   input: UpsertGuestInput;
   where?: InputMaybe<UpsertGuestWhere>;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertHardRemovalCardArgs = {
   input: UpsertHardRemovalCardInput;
   where?: InputMaybe<UpsertHardRemovalCardWhere>;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertMatchmakingQueueArgs = {
   input: UpsertMatchmakingQueueInput;
   where?: InputMaybe<UpsertMatchmakingQueueWhere>;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertMatchmakingTicketArgs = {
   input: UpsertMatchmakingTicketInput;
   where?: InputMaybe<UpsertMatchmakingTicketWhere>;
 };
 
 
-/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpsertPublishedCardArgs = {
   input: UpsertPublishedCardInput;
   where?: InputMaybe<UpsertPublishedCardWhere>;
@@ -7283,6 +7179,7 @@ export type ResolversTypes = {
   GamesConnection: ResolverTypeWrapper<Partial<GamesConnection>>;
   GamesEdge: ResolverTypeWrapper<Partial<GamesEdge>>;
   GamesOrderBy: ResolverTypeWrapper<Partial<GamesOrderBy>>;
+  GenerateArtResult: ResolverTypeWrapper<Partial<GenerateArtResult>>;
   GeneratedArt: ResolverTypeWrapper<Partial<GeneratedArt>>;
   GeneratedArtCondition: ResolverTypeWrapper<Partial<GeneratedArtCondition>>;
   GeneratedArtFilter: ResolverTypeWrapper<Partial<GeneratedArtFilter>>;
@@ -7657,6 +7554,7 @@ export type ResolversParentTypes = {
   GameUsersEdge: Partial<GameUsersEdge>;
   GamesConnection: Partial<GamesConnection>;
   GamesEdge: Partial<GamesEdge>;
+  GenerateArtResult: Partial<GenerateArtResult>;
   GeneratedArt: Partial<GeneratedArt>;
   GeneratedArtCondition: Partial<GeneratedArtCondition>;
   GeneratedArtFilter: Partial<GeneratedArtFilter>;
@@ -8539,6 +8437,11 @@ export type GamesEdgeResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GenerateArtResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['GenerateArtResult'] = ResolversParentTypes['GenerateArtResult']> = {
+  urls?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GeneratedArtResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeneratedArt'] = ResolversParentTypes['GeneratedArt']> = {
   hash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   info?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
@@ -8786,6 +8689,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteMatchmakingTicketByUserId?: Resolver<Maybe<ResolversTypes['DeleteMatchmakingTicketPayload']>, ParentType, ContextType, RequireFields<MutationDeleteMatchmakingTicketByUserIdArgs, 'input'>>;
   deletePublishedCard?: Resolver<Maybe<ResolversTypes['DeletePublishedCardPayload']>, ParentType, ContextType, RequireFields<MutationDeletePublishedCardArgs, 'input'>>;
   deletePublishedCardById?: Resolver<Maybe<ResolversTypes['DeletePublishedCardPayload']>, ParentType, ContextType, RequireFields<MutationDeletePublishedCardByIdArgs, 'input'>>;
+  generateArt?: Resolver<Maybe<ResolversTypes['GenerateArtResult']>, ParentType, ContextType, RequireFields<MutationGenerateArtArgs, 'negativeText' | 'positiveText' | 'seed'>>;
   getClasses?: Resolver<Maybe<ResolversTypes['GetClassesPayload']>, ParentType, ContextType, RequireFields<MutationGetClassesArgs, 'input'>>;
   getCollectionCards?: Resolver<Maybe<ResolversTypes['GetCollectionCardsPayload']>, ParentType, ContextType, RequireFields<MutationGetCollectionCardsArgs, 'input'>>;
   getUserAttribute?: Resolver<Maybe<ResolversTypes['GetUserAttributePayload']>, ParentType, ContextType, RequireFields<MutationGetUserAttributeArgs, 'input'>>;
@@ -9336,6 +9240,7 @@ export type Resolvers<ContextType = any> = {
   GameUsersEdge?: GameUsersEdgeResolvers<ContextType>;
   GamesConnection?: GamesConnectionResolvers<ContextType>;
   GamesEdge?: GamesEdgeResolvers<ContextType>;
+  GenerateArtResult?: GenerateArtResultResolvers<ContextType>;
   GeneratedArt?: GeneratedArtResolvers<ContextType>;
   GeneratedArtsConnection?: GeneratedArtsConnectionResolvers<ContextType>;
   GeneratedArtsEdge?: GeneratedArtsEdgeResolvers<ContextType>;
@@ -9444,6 +9349,15 @@ export type DeleteDeckMutationVariables = Exact<{
 
 
 export type DeleteDeckMutation = { __typename?: 'Mutation', updateDeckById?: { __typename?: 'UpdateDeckPayload', deck?: { __typename?: 'Deck', trashed: boolean } | null } | null };
+
+export type GenerateArtMutationVariables = Exact<{
+  positiveText: Scalars['String'];
+  negativeText: Scalars['String'];
+  seed: Scalars['Int'];
+}>;
+
+
+export type GenerateArtMutation = { __typename?: 'Mutation', generateArt?: { __typename?: 'GenerateArtResult', urls: Array<string> } | null };
 
 export type PublishCardMutationVariables = Exact<{
   cardId: Scalars['String'];
@@ -9745,6 +9659,45 @@ export function useDeleteDeckMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeleteDeckMutationHookResult = ReturnType<typeof useDeleteDeckMutation>;
 export type DeleteDeckMutationResult = Apollo.MutationResult<DeleteDeckMutation>;
 export type DeleteDeckMutationOptions = Apollo.BaseMutationOptions<DeleteDeckMutation, DeleteDeckMutationVariables>;
+export const GenerateArtDocument = gql`
+    mutation generateArt($positiveText: String!, $negativeText: String!, $seed: Int!) {
+  generateArt(
+    positiveText: $positiveText
+    negativeText: $negativeText
+    seed: $seed
+  ) {
+    urls
+  }
+}
+    `;
+export type GenerateArtMutationFn = Apollo.MutationFunction<GenerateArtMutation, GenerateArtMutationVariables>;
+
+/**
+ * __useGenerateArtMutation__
+ *
+ * To run a mutation, you first call `useGenerateArtMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGenerateArtMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [generateArtMutation, { data, loading, error }] = useGenerateArtMutation({
+ *   variables: {
+ *      positiveText: // value for 'positiveText'
+ *      negativeText: // value for 'negativeText'
+ *      seed: // value for 'seed'
+ *   },
+ * });
+ */
+export function useGenerateArtMutation(baseOptions?: Apollo.MutationHookOptions<GenerateArtMutation, GenerateArtMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GenerateArtMutation, GenerateArtMutationVariables>(GenerateArtDocument, options);
+      }
+export type GenerateArtMutationHookResult = ReturnType<typeof useGenerateArtMutation>;
+export type GenerateArtMutationResult = Apollo.MutationResult<GenerateArtMutation>;
+export type GenerateArtMutationOptions = Apollo.BaseMutationOptions<GenerateArtMutation, GenerateArtMutationVariables>;
 export const PublishCardDocument = gql`
     mutation publishCard($cardId: String!) {
   publishCard(input: {cardId: $cardId}) {

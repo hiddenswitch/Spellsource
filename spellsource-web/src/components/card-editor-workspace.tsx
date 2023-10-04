@@ -309,8 +309,6 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
       }) as ToolboxCategory;
     category?.updateFlyoutContents(generatedArtCategory(data));
 
-    console.log("doing it ", category, generatedArtCategory(data));
-
     mainWorkspace()?.refreshToolboxSelection();
     onWorkspaceChanged();
   }, [data.generatedArt]);
