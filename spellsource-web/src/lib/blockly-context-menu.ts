@@ -24,6 +24,7 @@ export const registerAll = (options: InitBlockOptions) => {
   ContextMenuRegistry.registry.register(saveToFile);
   ContextMenuRegistry.registry.register(deleteCard(options));
   ContextMenuRegistry.registry.register(publishCard(options));
+  ContextMenuRegistry.registry.register(deleteArt(options));
 
   ContextMenuRegistry.registry.register(openFromFile);
 
@@ -128,7 +129,7 @@ const getReferenceBlock: ContextMenuRegistry.RegistryItem = {
   callback: (clb) => {
     const block = clb.block! as Block;
     const workspace = (block.workspace.isFlyout ? (block.workspace as WorkspaceSvg).targetWorkspace : block.workspace)!;
-    const card = block.cardScript || WorkspaceUtils.blockToCardScript(block);
+    const card = (block as any)["cardScript"] || WorkspaceUtils.blockToCardScript(block);
 
     const refBlock: BlockSvg = newBlock(
       workspace,
@@ -180,5 +181,24 @@ const publishCard = ({ onPublish }: InitBlockOptions): ContextMenuRegistry.Regis
     if (confirm("Publish this card / its changes for other players to use?")) {
       onPublish(block!);
     }
+  },
+});
+
+const deleteArt = ({ deleteArtAsync }: InitBlockOptions): ContextMenuRegistry.RegistryItem => ({
+  id: "deleteArt",
+  displayText: "Delete Art",
+  weight: 8,
+  scopeType: ContextMenuRegistry.ScopeType.BLOCK,
+  preconditionFn: ({ block }) => (block?.type === "Art_Generated" ? "enabled" : "hidden"),
+  callback: ({ block }) => {
+    const hash = block?.getFieldValue("hash");
+    if (!hash) return false;
+    deleteArtAsync(hash);
+
+    block?.dispose(true, true);
+
+    (block?.workspace?.targetWorkspace ?? block?.workspace)?.refreshToolboxSelection();
+
+    return true;
   },
 });

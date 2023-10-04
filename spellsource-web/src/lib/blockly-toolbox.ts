@@ -8,7 +8,6 @@ import { ImageDef } from "../__generated__/client";
 import { ToolboxSearchCategory } from "../components/blockly/toolbox-search-category";
 import { CardSearchCategory } from "../components/blockly/card-search-category";
 import { getBlockInfo } from "./blockly-utils";
-import { createConfiguration } from "../__generated__/comfyclient/configuration";
 import StaticCategoryInfo = Blockly.utils.toolbox.StaticCategoryInfo;
 import ToolboxInfo = Blockly.utils.toolbox.ToolboxInfo;
 import ToolboxItemInfo = Blockly.utils.toolbox.ToolboxItemInfo;
@@ -676,12 +675,7 @@ export function generatedArtCategory(data: ContextType<typeof BlocklyDataContext
     ...(data.generatedArt ?? []).map((art) => ({
       ...getBlockInfo("Art_Generated"),
       fields: {
-        src:
-          (
-            createConfiguration().baseServer as unknown as {
-              url: string;
-            }
-          )["url"] + art.urls[0],
+        src: art.urls[0],
         hash: art.hash,
       },
     })),

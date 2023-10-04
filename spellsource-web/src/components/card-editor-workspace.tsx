@@ -25,6 +25,7 @@ import {
 import { BlocklyDataContext } from "../pages/card-editor";
 import useComponentDidMount from "../hooks/use-component-did-mount";
 import {
+  useDeleteArtMutation,
   useDeleteCardMutation,
   useGetCardLazyQuery,
   usePublishCardMutation,
@@ -32,7 +33,7 @@ import {
 } from "../__generated__/client";
 import { CardDef } from "./collection/card-display";
 import { useSession } from "next-auth/react";
-import { useDebounce } from "react-use";
+import { useDebounce, useDrop } from "react-use";
 import useBreakpoint from "@restart/hooks/useBreakpoint";
 import { useEffectOnce } from "../hooks/use-effect-once";
 import { uniqBy } from "lodash";
@@ -43,6 +44,8 @@ import { initWorkspace, plugins } from "../lib/blockly-setup";
 import * as BlocklyModification from "../lib/blockly-patches";
 import SpellsourceRenderer from "../lib/spellsource-renderer";
 import { CardDesc } from "../__generated__/spellsource-game";
+import { newBlock } from "../lib/blockly-utils";
+import { comfyUrl } from "../lib/config";
 
 interface CardEditorWorkspaceProps {
   setJSON?: React.Dispatch<React.SetStateAction<string>>;
@@ -58,6 +61,7 @@ export type InitBlockOptions = {
   onDelete: (block: BlockSvg) => void;
   onPublish: (block: BlockSvg) => void;
   generateCardAsync: (cardId: string) => Promise<Block | null>;
+  deleteArtAsync: (hash: string) => Promise<void>;
 };
 
 //Managing the creation and deletion of WorkspaceCard and WorkspaceHeroClass blocks
@@ -272,6 +276,15 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
       return null;
     });
 
+  const [deleteArt] = useDeleteArtMutation();
+
+  const deleteArtAsync = async (hash: string) => {
+    if (!userId) return;
+
+    await deleteArt({ variables: { hash, owner: userId } });
+    await data.refreshGeneratedArt!();
+  };
+
   useEffect(() => {
     const classes = getToolbox()?.getToolboxItemById("Classes") as ToolboxCategory;
     classes?.updateFlyoutContents(classesCategory(data));
@@ -319,7 +332,7 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
       spellsourceInit?: boolean;
     } & object = Blockly;
     if (!blocklyInited["spellsourceInit"]) {
-      BlocklyRegister.registerAll({ onSave, onDelete, onPublish, generateCardAsync });
+      BlocklyRegister.registerAll({ onSave, onDelete, onPublish, generateCardAsync, deleteArtAsync });
       BlocklyModification.modifyAll();
       BlocklyMiscUtils.initBlocks(data);
       BlocklyMiscUtils.initHeroClassColors(data);
@@ -387,6 +400,47 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
   const toolbox = useMemo(() => BlocklyToolbox.editorToolbox(results, data), [results, data]);
 
   const xs = !useBreakpoint("sm", "up");
+
+  useDrop({
+    onFiles: async (files, event) => {
+      if (!userId) return;
+
+      for (const file of files) {
+        if (!file.type.includes("png") && !file.type.includes("jpeg")) {
+          continue;
+        }
+
+        const response = await fetch(window.location.origin + "/api/art/upload", {
+          method: "POST",
+          body: file,
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
+
+        const uuid = (await response.json()) as string;
+
+        const url = `/api/art/uploaded/${userId}/${uuid}`;
+
+        const artGenerated = newBlock(mainWorkspace()!, "Art_Generated");
+        (artGenerated as BlockSvg).initSvg();
+        artGenerated.setFieldValue(url, "src");
+        artGenerated.setFieldValue(uuid, "hash");
+
+        // TODO merge with serverside postgraphile querying
+        await data.saveGeneratedArt!({
+          variables: {
+            hash: uuid,
+            urls: [url],
+            info: { name: file.name, size: file.size, lastModified: file.lastModified },
+          },
+        });
+      }
+
+      mainWorkspace()!.render();
+      await data.refreshGeneratedArt!();
+    },
+  });
 
   return (
     <SimpleReactBlockly

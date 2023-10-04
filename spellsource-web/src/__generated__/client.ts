@@ -9336,6 +9336,14 @@ export type CreateDeckMutationVariables = Exact<{
 
 export type CreateDeckMutation = { __typename?: 'Mutation', createDeckWithCards?: { __typename?: 'CreateDeckWithCardsPayload', deck?: { __typename?: 'Deck', id: string, name?: string | null, isPremade: boolean, createdBy: string, heroClass?: string | null, format?: string | null, cardsInDecksByDeckId: { __typename?: 'CardsInDecksConnection', totalCount: number, nodes: Array<{ __typename?: 'CardsInDeck', cardId: string, publishedCardByCardId?: { __typename?: 'PublishedCard', cardBySuccession?: { __typename?: 'Card', id: string, createdBy: string, cardScript?: any | null, blocklyWorkspace?: any | null } | null } | null } | null> } } | null } | null };
 
+export type DeleteArtMutationVariables = Exact<{
+  hash: Scalars['String'];
+  owner: Scalars['String'];
+}>;
+
+
+export type DeleteArtMutation = { __typename?: 'Mutation', updateGeneratedArtByHashAndOwner?: { __typename?: 'UpdateGeneratedArtPayload', generatedArt?: { __typename?: 'GeneratedArt', hash: string, owner: string, urls: Array<string | null>, info?: any | null, isArchived: boolean } | null } | null };
+
 export type DeleteCardMutationVariables = Exact<{
   cardId: Scalars['String'];
 }>;
@@ -9591,6 +9599,44 @@ export function useCreateDeckMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateDeckMutationHookResult = ReturnType<typeof useCreateDeckMutation>;
 export type CreateDeckMutationResult = Apollo.MutationResult<CreateDeckMutation>;
 export type CreateDeckMutationOptions = Apollo.BaseMutationOptions<CreateDeckMutation, CreateDeckMutationVariables>;
+export const DeleteArtDocument = gql`
+    mutation deleteArt($hash: String!, $owner: String!) {
+  updateGeneratedArtByHashAndOwner(
+    input: {owner: $owner, hash: $hash, generatedArtPatch: {isArchived: true}}
+  ) {
+    generatedArt {
+      ...generatedArt
+    }
+  }
+}
+    ${GeneratedArtFragmentDoc}`;
+export type DeleteArtMutationFn = Apollo.MutationFunction<DeleteArtMutation, DeleteArtMutationVariables>;
+
+/**
+ * __useDeleteArtMutation__
+ *
+ * To run a mutation, you first call `useDeleteArtMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteArtMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteArtMutation, { data, loading, error }] = useDeleteArtMutation({
+ *   variables: {
+ *      hash: // value for 'hash'
+ *      owner: // value for 'owner'
+ *   },
+ * });
+ */
+export function useDeleteArtMutation(baseOptions?: Apollo.MutationHookOptions<DeleteArtMutation, DeleteArtMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteArtMutation, DeleteArtMutationVariables>(DeleteArtDocument, options);
+      }
+export type DeleteArtMutationHookResult = ReturnType<typeof useDeleteArtMutation>;
+export type DeleteArtMutationResult = Apollo.MutationResult<DeleteArtMutation>;
+export type DeleteArtMutationOptions = Apollo.BaseMutationOptions<DeleteArtMutation, DeleteArtMutationVariables>;
 export const DeleteCardDocument = gql`
     mutation deleteCard($cardId: String!) {
   archiveCard(input: {cardId: $cardId}) {

@@ -7,8 +7,9 @@ import { ContextType } from "react";
 import { BlocklyDataContext } from "../pages/card-editor";
 import { PromptNode } from "../__generated__/comfyclient/models/PromptNode";
 import { ObjectDefaultApi as DefaultApi } from "../__generated__/comfyclient/types/ObjectParamAPI";
-import { FetchResult, MutationResult } from "@apollo/client";
-import { GenerateArtMutation, GenerateArtResult } from "../__generated__/client";
+import { FetchResult } from "@apollo/client";
+import { GenerateArtMutation, MutationGenerateArtArgs } from "../__generated__/client";
+import { comfyUrl } from "./config";
 
 type BlockWithPrivate = Blockly.Block & {
   _interval?: NodeJS.Timer | number;
@@ -89,6 +90,24 @@ const onRequestStop = (block: BlockWithPrivate) => {
   }
 };
 
+export const getPrompt = (args: MutationGenerateArtArgs) => {
+  const { positiveText, negativeText, seed } = args;
+
+  const promptText = JSON.stringify(sdxl)
+    .replace("$POSITIVE_TEXT", positiveText.trim())
+    .replace("$NEGATIVE_TEXT", negativeText.trim());
+
+  const prompt = JSON.parse(promptText) as Record<string, PromptNode>;
+
+  for (let node of Object.values(prompt)) {
+    if (node.class_type === "KSampler") {
+      node.inputs["seed"] = seed!;
+    }
+  }
+
+  return prompt;
+};
+
 const onGenerateArt =
   (block: BlockWithPrivate) => async (response: FetchResult<GenerateArtMutation> | undefined | null) => {
     const hash = block["_hash"];
@@ -109,16 +128,12 @@ const onGenerateArt =
     const workspace = block.workspace as WorkspaceSvg & {
       _data: ContextType<typeof BlocklyDataContext>;
     };
-    const artOutput = newBlock(workspace, "Art_Output");
     const artGenerated = newBlock(workspace, "Art_Generated");
     (artGenerated as BlockSvg).initSvg();
-    (artOutput as BlockSvg).initSvg();
-    // expose private property here
-    const baseServer = createConfiguration().baseServer as unknown as {
-      url: string;
-    };
-    artGenerated.setFieldValue(baseServer["url"] + relativeUrl, "src");
+    artGenerated.setFieldValue(comfyUrl + relativeUrl, "src");
     artGenerated.setFieldValue(hash, "hash");
+    const artOutput = newBlock(workspace, "Art_Output");
+    (artOutput as BlockSvg).initSvg();
     artOutput.getInput("art")!.connection!.connect(artGenerated.outputConnection!);
     const targetBlock = block.nextConnection!.targetBlock();
     if (targetBlock) {
@@ -130,7 +145,9 @@ const onGenerateArt =
 
     const { saveGeneratedArt, refreshGeneratedArt } = workspace["_data"];
 
-    await saveGeneratedArt!({ variables: { hash, urls } });
+    // TODO make this happen serverside
+    await saveGeneratedArt!({ variables: { hash, urls: ["/api/art/generated/" + hash, comfyUrl + relativeUrl] } });
+
     await refreshGeneratedArt!();
   };
 

@@ -4,11 +4,10 @@ import { getAllArt } from "../lib/fs-utils";
 import { keyBy } from "lodash";
 import { ImageDef, MutationGenerateArtArgs, QueryArtByIdArgs } from "../__generated__/client";
 import { GraphQLError, GraphQLResolveInfo } from "graphql";
-import sdxl from "../__generated__/sdxl-ordinary.json";
-import { PromptNode } from "../__generated__/comfyclient/models/PromptNode";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import fetch from "node-fetch";
 import { awsAccessKeyId, awsBucketName, awsSecretAccessKey, comfyUrl } from "../lib/config";
+import { getPrompt } from "../lib/art-generation";
 
 const s3 = new S3Client({
   region: "us-west-2",
@@ -49,20 +48,8 @@ const resolvers = {
       Object.values(await getArtById()),
   },
   Mutation: {
-    generateArt: async (parent: unknown, args: MutationGenerateArtArgs, context: unknown, info: GraphQLResolveInfo) => {
-      const { positiveText, negativeText, seed } = args;
-
-      const promptText = JSON.stringify(sdxl)
-        .replace("$POSITIVE_TEXT", positiveText.trim())
-        .replace("$NEGATIVE_TEXT", negativeText.trim());
-
-      const prompt = JSON.parse(promptText) as Record<string, PromptNode>;
-
-      for (let node of Object.values(prompt)) {
-        if (node.class_type === "KSampler") {
-          node.inputs["seed"] = seed!;
-        }
-      }
+    generateArt: async (parent: unknown, args: MutationGenerateArtArgs, context: object, info: GraphQLResolveInfo) => {
+      const prompt = getPrompt(args);
 
       const comfyResponse = await fetch(comfyUrl + "/api/v1/prompts", {
         method: "POST",

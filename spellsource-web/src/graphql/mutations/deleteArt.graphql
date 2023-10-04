@@ -1,0 +1,7 @@
+mutation deleteArt($hash: String!, $owner: String!) {
+  updateGeneratedArtByHashAndOwner(input: {owner: $owner, hash: $hash, generatedArtPatch: {isArchived: true}}) {
+    generatedArt {
+      ...generatedArt
+    }
+  }
+}

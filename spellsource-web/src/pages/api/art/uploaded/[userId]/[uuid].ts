@@ -1,5 +1,5 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { awsAccessKeyId, awsBucketName, awsSecretAccessKey } from "../../../../lib/config";
+import { awsAccessKeyId, awsBucketName, awsSecretAccessKey } from "../../../../../lib/config";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const s3 = new S3Client({
@@ -11,10 +11,18 @@ const s3 = new S3Client({
 });
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const hash = req.query["hash"];
+  const userId = req.query["userId"];
+  const uuid = req.query["uuid"];
+
+  const key = `images/uploaded/${userId}/${uuid}`;
 
   try {
-    const data = await s3.send(new GetObjectCommand({ Bucket: awsBucketName, Key: `images/generated/${hash}` }));
+    const data = await s3.send(
+      new GetObjectCommand({
+        Bucket: awsBucketName,
+        Key: key,
+      })
+    );
 
     res
       .status(200)
