@@ -430,16 +430,16 @@ export function myCardsForSetCategory(set: string, data: ContextType<typeof Bloc
     [
       {
         kind: "label",
-        text: `Cards You've Created in the "${set}" Set`,
+        text: `Cards You've Created in the "${set}" Set.`,
       },
       ...data.myCards
         .filter((card) => card.cardScript.set === set)
         .map((card) => ({
           kind: "block",
-          blockxml: card.blocklyWorkspace,
+          ...card.blocklyWorkspace,
         })),
     ],
-    { toolboxitemid: `My ${set} Cards` }
+    { toolboxitemid: `${set} Set Cards` }
   );
 }
 

@@ -36,7 +36,7 @@ import { useSession } from "next-auth/react";
 import { useDebounce, useDrop } from "react-use";
 import useBreakpoint from "@restart/hooks/useBreakpoint";
 import { useEffectOnce } from "../hooks/use-effect-once";
-import { uniqBy } from "lodash";
+import { uniq, uniqBy } from "lodash";
 import { openFromFile } from "../lib/blockly-context-menu";
 import cx from "classnames";
 import * as BlocklyRegister from "../lib/blockly-setup";
@@ -45,7 +45,7 @@ import * as BlocklyModification from "../lib/blockly-patches";
 import SpellsourceRenderer from "../lib/spellsource-renderer";
 import { CardDesc } from "../__generated__/spellsource-game";
 import { newBlock } from "../lib/blockly-utils";
-import { comfyUrl } from "../lib/config";
+import { compareNodes } from "@graphql-tools/utils";
 
 interface CardEditorWorkspaceProps {
   setJSON?: React.Dispatch<React.SetStateAction<string>>;
@@ -86,19 +86,6 @@ const handleWorkspaceCards = (
       if (card.type === "CLASS") {
         BlocklyMiscUtils.setupHeroClassColor(card);
       }
-
-      /*if (block.rendered) {
-                                                                                              let ogText = block.getCommentText()
-                                                                                              block.setCommentText(JSON.stringify(card))
-                                                                                    
-                                                                                              block.commentModel.size.width = 274
-                                                                                              block.commentModel.size.height = 324
-                                                                                              // block.commentModel.pinned = true
-                                                                                    
-                                                                                              if (block.getCommentIcon().isVisible() && block.getCommentText() !== ogText) {
-                                                                                                block.getCommentIcon().updateText()
-                                                                                              }
-                                                                                            }*/
     });
 
   // Update visuals for Cards and Class reference blocks
@@ -147,7 +134,6 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
   const getToolbox = () => mainWorkspace()?.getToolbox() as Toolbox;
 
   const [json, setJson] = useState("{}");
-  const [allCardScript, setAllCardScript] = useState({} as Record<string, CardDef>);
   const [saveCard] = useSaveCardMutation();
   const [deleteCard] = useDeleteCardMutation();
   const [publishCard] = usePublishCardMutation();
@@ -286,26 +272,7 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
   };
 
   useEffect(() => {
-    const classes = getToolbox()?.getToolboxItemById("Classes") as ToolboxCategory;
-    classes?.updateFlyoutContents(classesCategory(data));
-
-    const cards = getToolbox()?.getToolboxItemById("Cards") as ToolboxCategory;
-    cards?.updateFlyoutContents(cardsCategory(data));
-
-    const myCards = getToolbox()?.getToolboxItemById("My Cards") as ToolboxCategory;
-    myCards?.updateFlyoutContents(myCardsCategory(data));
-
-    uniqBy(
-      data.myCards.map((card) => card.cardScript.set),
-      (card) => card.set
-    ).forEach((set) => {
-      if (set === "CUSTOM") return;
-      const category = getToolbox()?.getToolboxItemById(`My ${set} Cards`) as ToolboxCategory;
-      category?.updateFlyoutContents(myCardsForSetCategory(set, data));
-    });
-
-    // TODO visually remove set category if no more blocks in it
-
+    getToolbox()?.render(toolbox);
     mainWorkspace()?.refreshToolboxSelection();
     onWorkspaceChanged();
   }, [data.myCards]);
@@ -391,16 +358,14 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
     const cardScript = handleWorkspaceCards(mainWorkspace()!, data.userId || "guest", getCard);
     BlocklyMiscUtils.pluralStuff(mainWorkspace()!);
     let json = JSON.stringify(cardScript, null, 2);
-    // props.setJSON(json);
     setJson(json);
-    setAllCardScript(cardScript);
-    // props.setJS(javascriptGenerator.workspaceToCode(mainWorkspace()));
   };
 
   const toolbox = useMemo(() => BlocklyToolbox.editorToolbox(results, data), [results, data]);
 
   const xs = !useBreakpoint("sm", "up");
 
+  // Upload art via drag & drop
   useDrop({
     onFiles: async (files, event) => {
       if (!userId) return;

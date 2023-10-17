@@ -11,6 +11,7 @@ export interface SimpleReactBlocklyProps {
 export interface SimpleReactBlocklyRef {
   workspace: WorkspaceSvg;
   innerBlocklyDiv: HTMLDivElement | null;
+  refreshWorkspace: () => void;
 }
 
 export default forwardRef<SimpleReactBlocklyRef, SimpleReactBlocklyProps>((props, ref) => {
@@ -18,12 +19,31 @@ export default forwardRef<SimpleReactBlocklyRef, SimpleReactBlocklyProps>((props
 
   const options = props.workspaceConfiguration;
 
+  const refreshWorkspace = () => {
+    if (!ref || typeof ref === "function") return;
+
+    const workspace = ref.current!.workspace;
+    const state = Blockly.serialization.workspaces.save(workspace);
+    const scale = workspace.getScale();
+    workspace.dispose();
+    const newWorkspace = Blockly.inject(innerBlocklyDiv.current!, props.workspaceConfiguration);
+    newWorkspace.addChangeListener(props.workspaceDidChange);
+    Blockly.serialization.workspaces.load(state, newWorkspace);
+    newWorkspace.setScale(scale);
+    props.init?.(newWorkspace);
+    ref.current = {
+      workspace: newWorkspace,
+      innerBlocklyDiv: innerBlocklyDiv.current,
+      refreshWorkspace,
+    };
+  };
+
   useEffect(() => {
     const workspace = Blockly.inject(innerBlocklyDiv.current!, props.workspaceConfiguration);
     workspace.addChangeListener(props.workspaceDidChange);
     props.init?.(workspace);
 
-    const state = { workspace, innerBlocklyDiv: innerBlocklyDiv.current };
+    const state = { workspace, innerBlocklyDiv: innerBlocklyDiv.current, refreshWorkspace };
 
     if (typeof ref === "function") {
       ref(state);
@@ -33,42 +53,12 @@ export default forwardRef<SimpleReactBlocklyRef, SimpleReactBlocklyProps>((props
   }, []);
 
   // Handle layout changes
-  useEffect(() => {
-    if (ref && typeof ref !== "function") {
-      const workspace = ref.current!.workspace;
-      const state = Blockly.serialization.workspaces.save(workspace);
-      const scale = workspace.getScale();
-      workspace.dispose();
-
-      const newWorkspace = Blockly.inject(innerBlocklyDiv.current!, props.workspaceConfiguration);
-      newWorkspace.addChangeListener(props.workspaceDidChange);
-      Blockly.serialization.workspaces.load(state, newWorkspace);
-      newWorkspace.setScale(scale);
-      props.init?.(newWorkspace);
-
-      ref.current = {
-        workspace: newWorkspace,
-        innerBlocklyDiv: innerBlocklyDiv.current,
-      };
-    }
-  }, [options.horizontalLayout, options.toolboxPosition]);
+  useEffect(refreshWorkspace, [options.horizontalLayout, options.toolboxPosition]);
 
   useEffect(() => {
     if (typeof ref !== "function" && ref?.current?.workspace) {
       if (props.workspaceConfiguration?.theme instanceof Theme) {
         ref.current.workspace.setTheme(props.workspaceConfiguration.theme);
-        for (let block of ref.current.workspace.getTopBlocks(false)) {
-          if (block.saveExtraState) {
-            const extraState = block.saveExtraState();
-            if (typeof extraState === "object" && "$hat" in extraState) {
-              block.hat = "cap";
-            }
-          }
-
-          if (block.hat) {
-            block.setOutput(false);
-          }
-        }
       }
     }
   }, [props.workspaceConfiguration?.theme, ref]);

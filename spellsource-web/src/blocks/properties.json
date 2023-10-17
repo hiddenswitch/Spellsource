@@ -1,5 +1,25 @@
 [
   {
+    "type": "Property_set",
+    "colour": "#A6A6A6",
+    "previousStatement": [
+      "Properties"
+    ],
+    "nextStatement": [
+      "Properties"
+    ],
+    "message0": "Part of Set: %1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "set",
+        "text": "CUSTOM"
+      }
+    ],
+    "data": "BLOCKLY_EXTEND_PREVIOUS",
+    "tooltip": "Makes a card be considered a part of a particular set of cards with that id."
+  },
+  {
     "type": "Property_sprite",
     "colour": "#A6A6A6",
     "previousStatement": [
@@ -486,26 +506,6 @@
     ],
     "data": "BLOCKLY_EXTEND_PREVIOUS",
     "tooltip": "Makes a card not able to be put in decks or randomly generated."
-  },
-  {
-    "type": "Property_set",
-    "colour": "#A6A6A6",
-    "previousStatement": [
-      "Properties"
-    ],
-    "nextStatement": [
-      "Properties"
-    ],
-    "message0": "Part of Set: %1",
-    "args0": [
-      {
-        "type": "field_input",
-        "name": "set",
-        "text": "CUSTOM"
-      }
-    ],
-    "data": "BLOCKLY_EXTEND_PREVIOUS",
-    "tooltip": "Makes a card be considered a part of a particular set of cards with that id."
   },
   {
     "type": "Property_glow",
