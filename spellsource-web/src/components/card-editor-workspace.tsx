@@ -426,6 +426,7 @@ const CardEditorWorkspace = forwardRef<SimpleReactBlocklyRef, CardEditorWorkspac
         },
         oneBasedIndex: false,
         horizontalLayout: xs,
+        toolboxPosition: xs ? "end" : "start",
         renderer: props.renderer || SpellsourceRenderer.name,
         toolbox,
         plugins,

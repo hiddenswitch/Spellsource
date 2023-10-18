@@ -30,9 +30,12 @@ const orderings = {
   TYPE_ASC: "Type",
 } as Record<CollectionCardsOrderBy, string>;
 
-export const textDecorationStyle = (heroClass: string, classColors: Record<string, string | undefined>) => ({
+export const textDecorationStyle = (
+  heroClass: string | null | undefined,
+  classColors: Record<string, string | undefined>
+) => ({
   textDecorationLine: "underline",
-  textDecorationColor: heroClass in classColors ? classColors[heroClass] : "rgba(#888888)",
+  textDecorationColor: heroClass && heroClass in classColors ? classColors[heroClass!] : "rgba(#888888)",
 });
 
 const CardRow: FunctionComponent<{
@@ -164,7 +167,7 @@ const Collection: FunctionComponent<CollectionProps> = (props) => {
             cancelDebounce();
             setSearch(searchVisual);
           }}
-          className={"me-lg-auto"}
+          className={"flex-grow-1"}
         >
           <Form.Control
             placeholder={"Search"}

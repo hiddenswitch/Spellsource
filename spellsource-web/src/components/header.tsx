@@ -66,7 +66,7 @@ const MobileNavbar = ({ pages }: { pages?: ReactNode }) => {
         />
       ) : (
         <div>
-          <AiOutlineClose
+          <AiOutlineMenu
             color="#000"
             size={32}
             onClick={() => {

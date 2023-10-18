@@ -4,7 +4,11 @@ import { textDecorationStyle } from "./collection";
 import { Button } from "react-bootstrap";
 import { useDrag, useDrop } from "react-dnd";
 import {
-  GetDeckQuery, GetDeckQueryVariables, GetDecksQuery, GetDecksQueryVariables, InputMaybe,
+  GetDeckQuery,
+  GetDeckQueryVariables,
+  GetDecksQuery,
+  GetDecksQueryVariables,
+  InputMaybe,
   useCreateDeckMutation,
   useDeleteDeckMutation,
   useRenameDeckMutation,
@@ -14,9 +18,9 @@ import { ListActions } from "react-use/lib/useList";
 import { useRouter } from "next/router";
 import { CardCache } from "../../pages/collection";
 import { CardDef } from "./card-display";
-import {QueryResult} from "@apollo/client";
+import { QueryResult } from "@apollo/client";
 
-export type GetDeckQueryDeck = GetDeckQuery["deckById"]
+export type GetDeckQueryDeck = GetDeckQuery["deckById"];
 interface DeckProps {
   deck: GetDeckQueryDeck;
   user?: string;
@@ -115,7 +119,7 @@ export const Deck: FunctionComponent<DeckProps> = ({
   return (
     <div ref={deckDrop}>
       <h3 className={"d-flex flex-row gap-2 align-items-baseline flex-wrap"}>
-        <span style={textDecorationStyle(deck!.heroClass!, classColors)}>{deck?.name ?? "Your Decks"}</span>
+        <span style={textDecorationStyle(deck?.heroClass, classColors)}>{deck?.name ?? "Your Decks"}</span>
         <span className={`ms-auto ${cardIds.length > 30 && "text-danger"}`}>{cardIds.length}/30</span>
         <Button
           className={"ms-auto"}

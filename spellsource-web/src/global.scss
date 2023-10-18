@@ -303,3 +303,22 @@ img.hover-zoom:hover {
 .hover-zoom:hover img {
   transform: scale(1.1);
 }
+
+
+@media (max-width: 576px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 576.01px) and (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 768.01px) {
+  html {
+    font-size: 15px;
+  }
+}
