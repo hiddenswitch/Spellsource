@@ -1,7 +1,8 @@
-import { Pool } from "pg";
-import { createPostGraphileSchema, PostGraphileOptions, withPostGraphileContext } from "postgraphile";
-import {ApolloServerPlugin, HTTPGraphQLRequest} from "@apollo/server";
+import { ApolloServerPlugin } from "@apollo/server";
 import { GraphQLRequestContextDidResolveOperation } from "@apollo/server/src/externalTypes";
+import { makeSchema } from "postgraphile";
+import { hookArgs } from "grafast";
+import { GraphQLRequestListener } from "@apollo/server/src/externalTypes/plugins";
 
 const authorizationBearerRex = /^\s*bearer\s+([a-z0-9\-._~+/]+=*)\s*$/i;
 
@@ -34,20 +35,12 @@ const httpError = (status: unknown, message: string) => {
 /**
  * This is a version of https://github.com/graphile/postgraphile-apollo-server/blob/master/index.js but in TypeScript
  */
-export const makeSchemaAndPlugin = async (
-  pgPool: Pool,
-  dbSchema: string | string[],
-  postGraphileOptions: PostGraphileOptions
-) => {
-  if (!pgPool || typeof pgPool !== "object") {
-    throw new Error("The first argument must be a pgPool instance");
-  }
-
+export const makeSchemaAndPlugin = async (preset: GraphileConfig.Preset): Promise<GraphQLRequestListener> => {
   // See https://www.graphile.org/postgraphile/usage-schema/ for schema-only usage guidance
-  const { pgSettings: pgSettingsGenerator, additionalGraphQLContextFromRequest, jwtSecret } = postGraphileOptions;
+  const {} = preset;
 
-  async function makePostgraphileApolloRequestHooks(): Promise<any> {
-    let finished: ((value?: (PromiseLike<any> | any)) => void) | null = null;
+  const makePostgraphileApolloRequestHooks = (resolvedPreset: GraphileConfig.ResolvedPreset) => async () => {
+    let finished: ((value?: PromiseLike<any> | any) => void) | null = null;
     return {
       /*
        * Since `requestDidStart` itself is synchronous, we must hijack an
@@ -56,72 +49,18 @@ export const makeSchemaAndPlugin = async (
       async didResolveOperation(requestContext: GraphQLRequestContextDidResolveOperation<Record<string, any>>) {
         const { contextValue: context, request: graphqlRequest } = requestContext;
 
-        /*
-         * Get access to the original HTTP request to determine the JWT and
-         * also perform anything needed for pgSettings support.  (Actually this
-         * is a subset of the original HTTP request according to the Apollo
-         * Server typings, it only contains "headers"?)
-         */
-        const { http } = graphqlRequest;
-        const req = { ...http, context };
+        const { http: req } = graphqlRequest;
+        const jwtToken = jwtSecret ? getJwtToken(req) : null;
 
-        /*
-         * The below code implements similar logic to this area of
-         * PostGraphile:
-         *
-         * https://github.com/graphile/postgraphile/blob/ff620cac86f56b1cd58d6a260e51237c19df3017/src/postgraphile/http/createPostGraphileHttpRequestHandler.ts#L114-L131
-         */
+        try {
+          const args = await hookArgs(requestContext, resolvedPreset, requestContext);
 
-        // Extract the JWT if present:
-        const jwtToken = jwtSecret ? getJwtToken(req.headers?.get("authorization") ?? null) : null;
+          Object.assign(context, args);
 
-        // Extract additional context
-        const additionalContext =
-          typeof additionalGraphQLContextFromRequest === "function"
-            ? await additionalGraphQLContextFromRequest(req as any, undefined as any)
-            : {};
-
-        // Perform the `pgSettings` callback, if appropriate
-        const pgSettings =
-          typeof pgSettingsGenerator === "function" ? await pgSettingsGenerator(req as any) : pgSettingsGenerator;
-
-        // Finally add our required properties to the context
-        const withContextOptions = {
-          ...postGraphileOptions,
-          pgSettings,
-          pgPool,
-          jwtToken: jwtToken ?? "",
-        };
-
-        await new Promise<void>((resolve, reject) => {
-          withPostGraphileContext(
-            withContextOptions,
-            (postgraphileContext) =>
-              new Promise((releaseContext) => {
-                // Jesse, an Apollo Server developer, told me to do this 😜
-                Object.assign(context, additionalGraphQLContextFromRequest, postgraphileContext);
-
-                /*
-                 * Don't resolve (don't release the pgClient on context) until
-                 * the request is complete.
-                 */
-                finished = releaseContext;
-
-                // The context is now ready to be used.
-                resolve();
-              })
-          ).catch((e) => {
-            // console.error("Error occurred creating context!");
-            console.error(e);
-            // Release context
-            if (finished) {
-              finished();
-              finished = null;
-            }
-
-            reject(e);
-          });
-        });
+          console.log(args);
+        } catch (e) {
+          console.warn(e);
+        }
       },
       async willSendResponse() {
         // Release the context;
@@ -131,13 +70,13 @@ export const makeSchemaAndPlugin = async (
         }
       },
     };
-  }
+  };
 
   try {
-    const schema = await createPostGraphileSchema(pgPool, dbSchema, postGraphileOptions);
+    const schema = await makeSchema(preset);
 
     const plugin = {
-      requestDidStart: makePostgraphileApolloRequestHooks,
+      requestDidStart: makePostgraphileApolloRequestHooks(schema.resolvedPreset),
     } as ApolloServerPlugin;
     return {
       schema,

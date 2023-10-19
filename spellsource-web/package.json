@@ -20,7 +20,7 @@
     "@apollo/server": "^4.5.0",
     "@as-integrations/next": "^1.2.0",
     "@aws-sdk/client-s3": "^3.423.0",
-    "@graphile-contrib/pg-omit-archived": "^3.2.1",
+    "@graphile-contrib/pg-omit-archived": "^4.0.0-beta.2",
     "@graphql-tools/stitch": "^8.7.43",
     "@react-icons/all-files": "^4.1.0",
     "@react-spring/parallax": "^9.1.2",
@@ -37,14 +37,13 @@
     "es6-promise": "^4.2.8",
     "form-data": "^4.0.0",
     "glob-promise": "^6.0.2",
-    "graphql": "15.8.0",
+    "graphql": "16.8.1",
     "graphql-tools": "^8.3.19",
     "gray-matter": "^4.0.3",
     "ioredis": "^5.3.2",
     "java-bridge": "^2.4.0",
     "kaitai-struct": "^0.9.0",
     "lodash": "^4.17.15",
-    "marked": "^2.0.3",
     "next": "^13.2.4",
     "next-auth": "^4.20.1",
     "nextjs-cors": "^2.1.2",
@@ -52,8 +51,8 @@
     "node-fs-extra": "^0.8.2",
     "pify": "^5.0.0",
     "pixelmatch": "^5.2.1",
-    "postgraphile": "^4.13.0",
-    "postgraphile-plugin-connection-filter": "^2.3.0",
+    "postgraphile": "^5.0.0-beta.15",
+    "postgraphile-plugin-connection-filter": "^3.0.0-beta.1",
     "postgraphile-upsert-plugin": "^3.2.2",
     "probe-image-size": "^7.2.3",
     "psd.js": "^3.3.15",
@@ -86,7 +85,7 @@
     "ts-node": "^10.9.1",
     "url-parse": "^1.5.10",
     "webpack": "^5.76.2",
-    "yarn": "^1.22.10"
+    "yarn": "^2.4.3"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
@@ -119,11 +118,12 @@
     "standard": "^16.0.3",
     "ts-jest": "^29.1.0",
     "typed-scss-modules": "^7.1.0",
-    "typescript": "^4.3.2"
+    "typescript": "^5.2.2"
   },
   "resolutions": {
     "graphql": "15.8.0",
     "wrap-ansi": "7.0.0",
     "string-width": "4.1.0"
-  }
+  },
+  "packageManager": "yarn@3.6.4"
 }

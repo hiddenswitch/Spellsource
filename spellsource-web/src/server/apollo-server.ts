@@ -1,17 +1,16 @@
 import { ApolloServer } from "@apollo/server";
 import { stitchSchemas } from "@graphql-tools/stitch";
 import { makeSchemaAndPlugin } from "./postgraphile-apollo-server";
-import { postgraphileOptions } from "./postgraphile";
-import { pgPool } from "./postgres-pool";
 import { printSchema } from "graphql";
 import fs from "fs";
 import { createArtSchema } from "./art";
 import { invalidateDeckPlugin } from "../lib/invalidate-deck-plugin";
+import preset from "../../graphile.config";
 
-const path = postgraphileOptions.exportGqlSchemaPath;
+const path = "src/__generated__/schema.graphql";
 
 export const createApolloServer = async () => {
-  const postgraphile = await makeSchemaAndPlugin(pgPool, "spellsource", postgraphileOptions);
+  const postgraphile = await makeSchemaAndPlugin(preset);
 
   const artSchema = await createArtSchema();
 
