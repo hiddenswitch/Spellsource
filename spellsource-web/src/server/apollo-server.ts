@@ -1,6 +1,6 @@
 import { ApolloServer } from "@apollo/server";
 import { stitchSchemas } from "@graphql-tools/stitch";
-import { makeSchemaAndPlugin } from "./postgraphile-apollo-server";
+import { createPostgraphileSchema } from "./postgraphile-apollo-server";
 import { printSchema } from "graphql";
 import fs from "fs";
 import { createArtSchema } from "./art";
@@ -10,11 +10,11 @@ import preset from "../../graphile.config";
 const path = "src/__generated__/schema.graphql";
 
 export const createApolloServer = async () => {
-  const postgraphile = await makeSchemaAndPlugin(preset);
+  const postgraphileSchema = await createPostgraphileSchema(preset);
 
   const artSchema = await createArtSchema();
 
-  const schema = stitchSchemas({ subschemas: [postgraphile.schema!, artSchema] });
+  const schema = stitchSchemas({ subschemas: [postgraphileSchema, artSchema] });
 
   if (process.env.NODE_ENV !== "production" && path) {
     const contents = printSchema(schema);
@@ -24,7 +24,7 @@ export const createApolloServer = async () => {
 
   return new ApolloServer({
     schema,
-    plugins: [postgraphile.plugin!, invalidateDeckPlugin],
+    plugins: [invalidateDeckPlugin],
     introspection: process.env.NODE_ENV !== "production",
   });
 };

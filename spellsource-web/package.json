@@ -16,8 +16,8 @@
   "author": "Benjamin Berman",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@apollo/client": "^3.7.10",
-    "@apollo/server": "^4.5.0",
+    "@apollo/client": "^3.8.6",
+    "@apollo/server": "^4.9.4",
     "@as-integrations/next": "^1.2.0",
     "@aws-sdk/client-s3": "^3.423.0",
     "@graphile-contrib/pg-omit-archived": "^4.0.0-beta.2",
@@ -121,7 +121,6 @@
     "typescript": "^5.2.2"
   },
   "resolutions": {
-    "graphql": "15.8.0",
     "wrap-ansi": "7.0.0",
     "string-width": "4.1.0"
   },
