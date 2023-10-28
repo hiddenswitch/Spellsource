@@ -514,6 +514,8 @@ public class Accounts {
 					client.setStandardFlowEnabled(true);
 					client.setSecret(configuration.getKeycloak().getClientSecret());
 					client.setRedirectUris(List.of("/oauth2callback", "http://localhost:3000/*"));
+					client.setRootUrl("http://localhost:3000");
+					client.setBaseUrl("/home");
 					client.setAuthenticationFlowBindingOverrides(ImmutableMap.of(
 							"direct_grant", flows.get("direct grant"),
 							"browser", flows.get("browser")

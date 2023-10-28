@@ -11,7 +11,7 @@ import { useSession } from "next-auth/react";
 import Collection, { textDecorationStyle } from "../components/collection/collection";
 import Head from "next/head";
 import { Button, Col, Container, Dropdown, Offcanvas, OffcanvasBody, Row } from "react-bootstrap";
-import { chain, keyBy } from "lodash";
+import _ from "lodash";
 import { useRouter } from "next/router";
 import { CardDef, toRgbaString } from "../components/collection/card-display";
 import Link from "next/link";
@@ -46,7 +46,7 @@ export default () => {
   const getClasses = useGetClassesQuery({ variables: { filter: { collectible: { equalTo: true } } } });
   const classes = useMemo(
     () =>
-      chain(getClasses.data?.allClasses?.nodes ?? [])
+      _.chain(getClasses.data?.allClasses?.nodes ?? [])
         .filter((card) => card!.class !== "ANY")
         .keyBy((card) => card!.class!)
         .mapValues((card) => (card!.cardScript as CardDef).name)
@@ -55,7 +55,7 @@ export default () => {
   );
   const classColors = useMemo(
     () =>
-      chain(getClasses.data?.allClasses?.nodes ?? [])
+      _.chain(getClasses.data?.allClasses?.nodes ?? [])
         .filter((card) => card!.class !== "ANY")
         .keyBy((card) => card!.class!)
         .mapValues((card) => toRgbaString((card!.cardScript as CardDef).art?.primary))
@@ -64,7 +64,7 @@ export default () => {
   ) as Record<string, string>;
   const textColors = useMemo(
     () =>
-      chain(getClasses.data?.allClasses?.nodes ?? [])
+      _.chain(getClasses.data?.allClasses?.nodes ?? [])
         .filter((card) => card!.class !== "ANY")
         .keyBy((card) => card!.class!)
         .mapValues((card) => toRgbaString((card!.cardScript as CardDef).art?.body?.vertex))
@@ -77,7 +77,7 @@ export default () => {
     ...(getDecks.data?.allDecks?.nodes ?? []),
     ...(getDecks.data?.allDeckShares?.nodes?.map((node) => node!.deckByDeckId) ?? []),
   ];
-  const decksById = useMemo(() => keyBy(allDecks, (value) => value!.id), [allDecks]);
+  const decksById = useMemo(() => _.keyBy(allDecks, (value) => value!.id), [allDecks]);
   const selectedDeck = decksById[deckId];
 
   const DeckEntry: FunctionComponent<{

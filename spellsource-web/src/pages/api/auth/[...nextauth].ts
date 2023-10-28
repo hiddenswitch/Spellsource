@@ -14,6 +14,7 @@ const NextOptions: NextAuthOptions = {
       clientId,
       clientSecret,
       issuer,
+      checks: ["none"],
     }),
   ],
   events: {

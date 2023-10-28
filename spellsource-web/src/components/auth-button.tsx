@@ -10,12 +10,12 @@ export const AuthButton = () => {
       aria-label={label}
       className={styles.loginButton}
       onClick={async () => {
-        if (status === "unauthenticated") {
+        if (status === "authenticated") {
+          await signOut({ callbackUrl: window.location.origin });
+        } else {
           await signIn("keycloak", {
             callbackUrl: window.location.pathname !== "/" ? window.location.href : window.location.href + "/home",
           });
-        } else if (status === "authenticated") {
-          await signOut({ callbackUrl: window.location.origin });
         }
       }}
     >

@@ -1,8 +1,16 @@
 import { Client } from "pg";
-import { pgDatabase, pgHost, pgPassword, pgPort, pgUser } from "../../lib/config";
+import { keycloakUrl, pgDatabase, pgHost, pgPassword, pgPort, pgUser } from "../../lib/config";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const response = await fetch(keycloakUrl, { redirect: "follow" });
+
+  if (!response.ok) {
+    console.error(`Tried to reach keycloak at ${keycloakUrl} but couldn't`);
+    res.status(500).send("Can't reach keycloak");
+    return;
+  }
+
   // Create a new client instance with a connection timeout of 1000 milliseconds
   const client = new Client({
     user: pgUser,
@@ -18,11 +26,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await client.connect();
 
     const result = await client.query(`
-            SELECT success
-            FROM hiddenswitch.flyway_schema_history
-            ORDER BY installed_rank DESC
-            LIMIT 1
-        `);
+        select success
+        from hiddenswitch.flyway_schema_history
+        order by installed_rank desc LIMIT 1
+    `);
 
     if (result.rows[0]?.success) {
       res.status(200).send("OK");

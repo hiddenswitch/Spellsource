@@ -1,8 +1,9 @@
 import { makeSchema } from "postgraphile";
 import { wrapSchema } from "@graphql-tools/wrap";
 import { grafast } from "grafast";
-import { print } from "postgraphile/graphql";
 import { ExecutionResult } from "@graphql-tools/utils";
+// @ts-ignore
+import { print } from "postgraphile/graphql";
 
 export const createPostgraphileSchema = async (preset: GraphileConfig.Preset) => {
   try {

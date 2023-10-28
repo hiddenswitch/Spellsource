@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext } from "react";
-import { chain, isEqual } from "lodash";
+import _, { isEqual } from "lodash";
 import { textDecorationStyle } from "./collection";
 import { Button } from "react-bootstrap";
 import { useDrag, useDrop } from "react-dnd";
@@ -8,7 +8,6 @@ import {
   GetDeckQueryVariables,
   GetDecksQuery,
   GetDecksQueryVariables,
-  InputMaybe,
   useCreateDeckMutation,
   useDeleteDeckMutation,
   useRenameDeckMutation,
@@ -89,7 +88,7 @@ export const Deck: FunctionComponent<DeckProps> = ({
 
   const cache = useContext(CardCache);
 
-  const groupedCards = chain(cardIds)
+  const groupedCards = _.chain(cardIds)
     .map((value) => cache[value])
     .filter((value) => !!value)
     .groupBy((card) => card.id)

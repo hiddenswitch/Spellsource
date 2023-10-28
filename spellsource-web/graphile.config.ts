@@ -1,9 +1,12 @@
 import { pgPool } from "./src/server/postgres-pool";
-import { makeV4Preset } from "postgraphile/presets/v4";
-import PostGraphileAmberPreset from "postgraphile/presets/amber";
-import { makePgService } from "postgraphile/adaptors/pg";
 import PgOmitArchivedPlugin from "@graphile-contrib/pg-omit-archived";
 import { PostGraphileConnectionFilterPreset } from "postgraphile-plugin-connection-filter";
+// @ts-ignore
+import { makeV4Preset } from "postgraphile/presets/v4";
+// @ts-ignore
+import PostGraphileAmberPreset from "postgraphile/presets/amber";
+// @ts-ignore
+import { makePgService } from "postgraphile/adaptors/pg";
 
 const preset: GraphileConfig.Preset = {
   extends: [

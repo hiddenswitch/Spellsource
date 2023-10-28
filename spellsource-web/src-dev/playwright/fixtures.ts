@@ -17,10 +17,9 @@ export const test = baseTest.extend<{}, { workerStorageState: string }>({
         await use(fileName);
         return;
       }
-      const context = await browser.newContext({ storageState: undefined, baseURL: baseURL });
-      const page = await context.newPage();
+      const page = await browser.newPage({ storageState: undefined, baseURL });
 
-      await page.goto(`/`);
+      await page.goto(`/`, { waitUntil: "domcontentloaded" });
       await page.getByLabel("Login").click();
       await page.waitForURL(/realms\/hiddenswitch\//, { waitUntil: "domcontentloaded" });
       await page.getByText("Register").click();
@@ -34,19 +33,30 @@ export const test = baseTest.extend<{}, { workerStorageState: string }>({
 
       const randomPassword = uuidv4();
       await page.getByLabel("Password", { exact: true }).fill(randomPassword);
-      await page.getByLabel("Confirm Password").fill(randomPassword);
+      await page.getByLabel("Confirm password").fill(randomPassword);
 
       await page.getByLabel("Starting Collection").selectOption("With Premade Decks");
 
       await page.getByRole("button", { name: "Register" }).click();
 
-      await page.waitForURL(`${baseURL}/home`);
+      await page.waitForLoadState("domcontentloaded");
 
-      await context.storageState({ path: fileName });
+      await page.context().storageState({ path: fileName });
       await page.close();
-      await context.close();
       await use(fileName);
     },
     { scope: "worker" },
   ],
+
+  /*page: async ({ page }, use) => {
+    await page.goto(`/`, { waitUntil: "domcontentloaded" });
+    const login = page.getByLabel("Login");
+
+    if ((await login.count()) > 0) {
+      await login.click();
+      await page.waitForLoadState("domcontentloaded");
+    }
+
+    await use(page);
+  },*/
 });
