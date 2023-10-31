@@ -1,5 +1,5 @@
 {
-  "name": "Astella Aeon",
+  "name": "Alto & Aeon",
   "heroPower": "hero_power_rise",
   "baseManaCost": 0,
   "type": "HERO",
@@ -16,9 +16,6 @@
     }
   },
   "collectible": false,
-  "fileFormatVersion": 1,
-  "sets": [
-    "CUSTOM",
-    "BASIC"
-  ]
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

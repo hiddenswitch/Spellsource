@@ -1,0 +1,22 @@
+{
+  "name": "Sybil the Skyseer",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Aftermath: Put 10 copies of \"The Stars are Falling\" on the bottom of your deck.",
+  "deathrattle": {
+    "class": "PutOnBottomOfDeckSpell",
+    "card": "token_the_stars_are_falling",
+    "howMany": 10
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

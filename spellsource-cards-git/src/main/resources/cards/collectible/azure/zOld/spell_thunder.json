@@ -1,0 +1,23 @@
+{
+  "name": "Thunder",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "FREE",
+  "description": "Deal damage to a unit equal to your hand size.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": {
+      "class": "PlayerAttributeValueProvider",
+      "playerAttribute": "HAND_COUNT",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": false,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ]
+}

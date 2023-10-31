@@ -1,0 +1,16 @@
+{
+  "name": "Wayward Winds",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "COMMON",
+  "description": "Draw 3.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": 3
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

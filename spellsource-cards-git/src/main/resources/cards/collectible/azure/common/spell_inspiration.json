@@ -1,0 +1,31 @@
+{
+  "name": "Inspiration",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "COMMON",
+  "description": "Draw. It costs (6) less this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 1,
+        "spell": {
+          "class": "CardCostModifierSpell",
+          "target": "OUTPUT",
+          "cardCostModifier": {
+            "class": "OneTurnCostModifier",
+            "target": "SELF",
+            "value": 6,
+            "operation": "SUBTRACT"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "set": "CUSTOM"
+}

@@ -1,0 +1,33 @@
+{
+    "name": "Bolt from Blue",
+    "baseManaCost": 1,
+    "type": "MINION",
+    "heroClass": "ANY",
+    "baseAttack": 2,
+    "baseHp": 1,
+    "rarity": "COMMON",
+    "description": "Dash. After this attacks, gain Dodge.",
+    "trigger": {
+        "eventTrigger": {
+            "class": "AfterPhysicalAttackTrigger",
+            "fireCondition": {
+                "class": "IsDeadCondition",
+                "target": "TRIGGER_HOST",
+                "invert": true
+            },
+            "hostTargetType": "IGNORE_OTHER_SOURCES",
+            "targetEntityType": "ANY"
+        },
+        "spell": {
+            "class": "AddAttributeSpell",
+            "target": "TRIGGER_HOST",
+            "attribute": "DIVINE_SHIELD"
+        }
+    },
+    "attributes": {
+        "RUSH": true
+    },
+    "collectible": true,
+    "set": "CUSTOM",
+    "fileFormatVersion": 1
+}

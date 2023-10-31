@@ -1,0 +1,34 @@
+{
+  "name": "Chaotic Spellstorm",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "EPIC",
+  "description": "Deal $2 damage to all units. Transform a random card in each player's hand into a random spell.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ALL_MINIONS",
+        "value": 2
+      },
+      {
+        "class": "ForceDeathPhaseSpell"
+      },
+      {
+        "class": "ReplaceCardsSpell",
+        "target": "FRIENDLY_HAND",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        },
+        "randomTarget": true
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "SOURCESTORM",
+  "fileFormatVersion": 1
+}

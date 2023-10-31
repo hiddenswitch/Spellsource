@@ -1,0 +1,28 @@
+{
+  "name": "Harbinger",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Whenever you cast a spell, summon a random Elemental.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "ELEMENTAL",
+        "cardType": "MINION"
+      }
+    }
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "set": "CUSTOM"
+}

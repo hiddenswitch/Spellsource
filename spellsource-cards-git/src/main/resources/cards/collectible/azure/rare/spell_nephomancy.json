@@ -1,0 +1,28 @@
+{
+  "name": "Nephomancy",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "AZURE",
+  "rarity": "RARE",
+  "description": "Draw 2. They cost (1) less.",
+  "spell": {
+    "class": "MetaSpell",
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 2,
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "OUTPUT",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 1,
+          "operation": "SUBTRACT"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

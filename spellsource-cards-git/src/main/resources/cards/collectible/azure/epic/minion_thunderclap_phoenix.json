@@ -1,0 +1,38 @@
+{
+  "name": "Thunderclap Phoenix",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "AZURE",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Costs (1) less for each spell you cast while in hand. Opener: Recieve a Firebolt.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "SELF",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 1,
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 1,
+      "card": "token_firebolt"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
