@@ -1,10 +1,14 @@
 import { test as baseTest } from "@playwright/test";
-import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
 import path from "path";
 import { baseURL } from "../../playwright.config";
 
 export * from "@playwright/test";
+
+function uuidv4(): string {
+  return `s-${Math.random().toString().replace(".", "_")}`;
+}
+
 export const test = baseTest.extend<{}, { workerStorageState: string }>({
   storageState: ({ workerStorageState }, use) => use(workerStorageState),
 
@@ -49,14 +53,14 @@ export const test = baseTest.extend<{}, { workerStorageState: string }>({
   ],
 
   /*page: async ({ page }, use) => {
-    await page.goto(`/`, { waitUntil: "domcontentloaded" });
-    const login = page.getByLabel("Login");
-
-    if ((await login.count()) > 0) {
-      await login.click();
-      await page.waitForLoadState("domcontentloaded");
-    }
-
-    await use(page);
-  },*/
+      await page.goto(`/`, { waitUntil: "domcontentloaded" });
+      const login = page.getByLabel("Login");
+  
+      if ((await login.count()) > 0) {
+        await login.click();
+        await page.waitForLoadState("domcontentloaded");
+      }
+  
+      await use(page);
+    },*/
 });

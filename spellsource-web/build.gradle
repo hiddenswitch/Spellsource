@@ -11,6 +11,7 @@ apply from: '../gradle/instrument.gradle'
 
 def isLinux = Os.isFamily(Os.FAMILY_UNIX) && !Os.isFamily(Os.FAMILY_MAC)
 def spellsourceDepTask = ':spellsource-web-cardeditor-support:shadowJar'
+def yarnVersionStr = (new JsonSlurper().parse(file("package.json")).packageManager as String).split("@")[1]
 def yarnPath = "languages/nodejs/bin/yarn"
 def npmPath = "bin/npm"
 def nodePath = "bin/node"
@@ -39,7 +40,13 @@ scripts.each { scriptName, command ->
   }
 }
 
+node {
+  download = false
+  yarnVersion = yarnVersionStr
+}
+
 tasks.named('yarnRunTest') {
+  dependsOn "yarnRunPlaywrightInstall"
 }
 
 tasks.named('test') {
@@ -61,30 +68,46 @@ tasks.register('copyComfyClient') {
       exclude("index.ts")
     }
   }
-  
+
   finalizedBy 'fixComfyClient'
 }
 
 tasks.register('fixComfyClient') {
   doLast {
     def http = file("src/__generated__/comfyclient/http/http.ts")
-    
+
     http.text = http.text
             .replaceFirst(/export \* from/, 'export {} from')
             .replaceFirst(/(reader.readAsText\(data)\)/, '$1 as any)')
             .replaceFirst(/(return new File\(\[data], fileName, \{ type: contentType }\));/, '$1 as any;')
-    
+
     def defaultApi = file("src/__generated__/comfyclient/apis/DefaultApi.ts")
-    
+
     defaultApi.text = defaultApi.text.replaceFirst(/(localVarFormParams.append\('image', image),/, '$1 as any,')
-    
+
   }
 }
 
 tasks.named('yarn').configure {
   group('spellsource')
-  dependsOn += ['copyComfyClient']
-  args = ['--frozen-lockfile']
+  // todo: we need to patch the generator
+  //  dependsOn += ['copyComfyClient']
+  args = ['--immutable']
+}
+
+tasks.register("corepack") {
+  doLast {
+    def dirPath = ".gradle/yarn/yarn-v${yarnVersionStr}/bin/"
+    mkdir(dirPath)
+    exec {
+      commandLine "corepack", "enable", "--install-directory", dirPath
+    }
+  }
+}
+
+tasks.named('yarnSetup').configure {
+  dependsOn "corepack"
+  enabled = false
 }
 
 
