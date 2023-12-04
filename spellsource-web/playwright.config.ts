@@ -9,7 +9,7 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       stdout: "ignore",
       stderr: "pipe",
-      timeout: 120 * 1000,
+      timeout: 300 * 1000,
     },
     {
       command: "yarn run dev",
@@ -17,7 +17,7 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       stdout: "pipe",
       stderr: "pipe",
-      timeout: 120 * 1000,
+      timeout: 300 * 1000,
     },
     /*{
       command: "gradle :spellsource-art-generation:run",
