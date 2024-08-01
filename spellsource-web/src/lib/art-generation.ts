@@ -12,7 +12,7 @@ import { GenerateArtMutation, MutationGenerateArtArgs } from "../__generated__/c
 import { comfyUrl } from "./config";
 
 type BlockWithPrivate = Blockly.Block & {
-  _interval?: NodeJS.Timer | number;
+  _interval?: number | ReturnType<typeof setInterval>;
   _hash?: string;
 };
 export const randomizeSeed = (p1: any) => {
@@ -57,7 +57,7 @@ export const generateArt = async (p1: any) => {
   block["_interval"] = setInterval(() => {
     elapsed++;
     block.setFieldValue(`Processing... ${elapsed}s`, "counter");
-  }, 1000) as NodeJS.Timer | number;
+  }, 1000);
   block["_hash"] = await generateHash(prompt);
 
   const workspace = block.workspace as WorkspaceSvg & {

@@ -45,6 +45,9 @@ export const test = baseTest.extend<{}, { workerStorageState: string }>({
 
       await page.waitForLoadState("domcontentloaded");
 
+      // In dev mode, make sure the graphql endpoint gets compiled asap for more consistency across tests
+      await fetch(baseURL + "/api/graphql");
+
       await page.context().storageState({ path: fileName });
       await page.close();
       await use(fileName);
