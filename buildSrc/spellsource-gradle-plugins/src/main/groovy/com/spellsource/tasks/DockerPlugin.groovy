@@ -214,7 +214,7 @@ class DockerPlugin implements Plugin<Project> {
               def localTag = "$repositoryName/$imageName:latest"
               def thisContainerName = "${repositoryName}_${imageName}"
               TaskProvider<DockerBuildImage> thisArchImage = null;
-              def ecrDestination = "${awsAccountId}.dkr.ecr.${awsRegion}.amazonaws.com/${imageName}"
+              def remoteDestination = "ghcr.io/hiddenswitch/spellsource/${imageName}"
               def prepareContext = project.tasks.register("prepareContext_${repositoryName}_${imageName}") {
                 group = 'docker'
               }
@@ -225,7 +225,7 @@ class DockerPlugin implements Plugin<Project> {
                 def dockerPlatform = "$platformArchTuple.platform/$arch"
                 def correctLocalArch = thisOsArch.contains(osArch) || thisOsArch.contains(arch)
                 def ecrImages = platformArchTuple.tags.collect { tag ->
-                  return "$ecrDestination:$tag".toString()
+                  return "$remoteDestination:$tag".toString()
                 }
 
                 def createCraneImageTask = project.tasks.register("createAndPushImageCrane_${repositoryName}_${imageName}_${platformArchTuple.suffix}") { task ->
@@ -306,11 +306,11 @@ class DockerPlugin implements Plugin<Project> {
                 dependsOn(project.tasks.collect { it.name.startsWith("createAndPushImageCrane_${repositoryName}_${imageName}") })
                 def ecrImages = platformArchTuples.collectMany {
                   it.tags.collect { tag ->
-                    return "$ecrDestination:$tag".toString()
+                    return "$remoteDestination:$tag".toString()
                   }
                 }
 
-                def latestTag = "$ecrDestination:latest"
+                def latestTag = "$remoteDestination:latest"
                 def commands = ["docker", "manifest", "create", latestTag] + ecrImages.collectMany { ["--amend", it] }
 
                 doLast {
@@ -339,7 +339,7 @@ class DockerPlugin implements Plugin<Project> {
                 }
                 doLast {
                   project.exec {
-                    commandLine kanikoBin, "--dockerfile=${dockerFileFile.absolutePath}", "--context=${project.file(dockerFileFile.parent).absolutePath}", "--destination=${ecrDestination}"
+                    commandLine kanikoBin, "--dockerfile=${dockerFileFile.absolutePath}", "--context=${project.file(dockerFileFile.parent).absolutePath}", "--destination=${remoteDestination}"
                   }
                 }
               }

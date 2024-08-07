@@ -67,12 +67,9 @@ yarn-error.log
 _site
 .sass-cache/
 .pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+.yarn/cache
+.yarn/install-state.gz
+# TODO removed the negative include here for gradle compatability, but is anything now missing that may show up in that folder?
 build/
 
 .next
@@ -81,3 +78,4 @@ build/
 public/javadoc
 
 test-results
+docker

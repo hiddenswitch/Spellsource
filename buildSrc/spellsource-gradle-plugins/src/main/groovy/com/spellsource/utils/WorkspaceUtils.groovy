@@ -23,24 +23,29 @@ class WorkspaceUtils {
   static def createDist(Project project, String distDir, boolean includeSelf) {
     def slurper = new JsonSlurper()
     def parent = project.parent
-    def parentPackage = slurper.parse(project.file("${parent.projectDir}/package.json"))
-
-    // Map of Gradle project names to their slurped package.json object
-    def packages = (Map<String, Object>) parentPackage.workspaces.collectEntries({
-      def pkg = project.file("$parent.projectDir/$it/package.json")
-      return [parent.subprojects.find({ p -> it.startsWith(p.name) })?.name, pkg.exists() ? slurper.parse(pkg) : null]
-    })
-
     def dependencies = new HashSet([project.name])
-    while (true) {
-      def prevSize = dependencies.size()
-      dependencies.addAll(packages.findAll({ entry ->
-        dependencies.any { p ->
-          entry.value && packages.get(p)?.dependencies?.containsKey(entry.value.name)
+
+    def parentPackageJson = project.file("${parent.projectDir}/package.json")
+
+    if (parentPackageJson.exists()) {
+      def parentPackage = slurper.parse()
+
+      // Map of Gradle project names to their slurped package.json object
+      def packages = (Map<String, Object>) parentPackage.workspaces.collectEntries({
+        def pkg = project.file("$parent.projectDir/$it/package.json")
+        return [parent.subprojects.find({ p -> it.startsWith(p.name) })?.name, pkg.exists() ? slurper.parse(pkg) : null]
+      })
+
+      while (true) {
+        def prevSize = dependencies.size()
+        dependencies.addAll(packages.findAll({ entry ->
+          dependencies.any { p ->
+            entry.value && packages.get(p)?.dependencies?.containsKey(entry.value.name)
+          }
+        }).keySet())
+        if (dependencies.size() == prevSize) {
+          break
         }
-      }).keySet())
-      if (dependencies.size() == prevSize) {
-        break
       }
     }
 

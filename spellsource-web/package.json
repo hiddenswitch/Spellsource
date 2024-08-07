@@ -10,7 +10,7 @@
     "develop": "next dev",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -H 0.0.0.0",
     "codegen": "graphql-codegen",
     "scss": "typed-scss-modules src"
   },
@@ -118,7 +118,7 @@
     "standard": "^16.0.3",
     "ts-jest": "^29.1.0",
     "typed-scss-modules": "^7.1.0",
-    "typescript": "^4.3.2"
+    "typescript": "^5.3.3"
   },
   "resolutions": {
     "wrap-ansi": "7.0.0",

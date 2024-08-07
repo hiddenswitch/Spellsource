@@ -5,6 +5,8 @@ plugins {
   id "com.github.node-gradle.node"
   id "base"
   id "java"
+  id "next"
+  id "docker"
 }
 
 apply from: '../gradle/instrument.gradle'
@@ -221,4 +223,36 @@ tasks.register('copyNetJavadoc', Copy) {
   dependsOn ':spellsource-server:javadoc'
   from tasks.getByPath(':spellsource-server:javadoc').outputs
   into './public/netjavadoc'
+}
+
+def distDir = "docker/spellsource/web"
+
+tasks.named("createDist").configure {
+  outputs.dir(distDir)
+  
+  group "spellsource"
+  
+  doLast {
+    copy {
+      from "$project.parent.projectDir/CONTRIBUTE.md"
+      into "$distDir/"
+    }
+  }
+}
+
+def spellsourceTags = ['latest', project.version.toString()]
+def spellsourceImage = "ghcr.io/hiddenswitch/${distDir.replace("docker/", "")}"
+
+tasks.register('githubDockerPush') {
+  dependsOn tasks.named("createImage_spellsource_web_linux_amd64")
+  
+  group "spellsource"
+  
+  doLast {
+    for (def image : spellsourceTags.collect { tag -> "$spellsourceImage:$tag" }) {
+      exec {
+        commandLine(['docker', 'push'] + [image])
+      }
+    }
+  }
 }
