@@ -9,9 +9,10 @@ export const redisUri = process.env.REDIS_URI || "redis://localhost:6379";
 export const keycloakUrl =
   process.env.KEYCLOAK_URL || `http://localhost:${parseInt(process.env.KEYCLOAK_PORT || "8080")}`;
 
-export const clientId = "spellsource";
-export const clientSecret = "clientsecret";
-export const issuer = `${keycloakUrl}/realms/hiddenswitch`;
+export const clientId = process.env.KEYCLOAK_CLIENT_ID || "spellsource";
+export const clientSecret = process.env.KEYCLOAK_CLIENT_SECRET || "clientsecret";
+export const realm = process.env.KEYCLOAK_REALM || "hiddenswitch";
+export const issuer = `${keycloakUrl}/realms/${realm}`;
 export const baseUrl = process.env.BASE_URL || "http://localhost:3000";
 export const awsAccessKeyId = process.env.AWS_ACCESS_KEY_ID ?? "";
 export const awsSecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY ?? "";
