@@ -24,7 +24,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     await runMiddleware(req, res, cors);
   }
 
-  (await handler)(req, res);
+  return (await handler)(req, res);
 };
 
 function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: Function) {
