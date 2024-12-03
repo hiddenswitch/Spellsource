@@ -4,10 +4,10 @@ import React, { FunctionComponent } from "react";
 import cx from "classnames";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
-import gameplay from "public/static/assets/gameplay.png";
-import cardEditor from "public/static/assets/card-editor.png";
-import collection from "public/static/assets/collection.png";
-import map from "public/static/wiki/Artboard_1-50.jpg";
+import gameplay from "../../public/static/assets/gameplay.png";
+import cardEditor from "../../public/static/assets/card-editor.png";
+import collection from "../../public/static/assets/collection.png";
+import map from "../../public/static/wiki/Artboard_1-50.jpg";
 
 const Rectangle: FunctionComponent<{
   href: string;

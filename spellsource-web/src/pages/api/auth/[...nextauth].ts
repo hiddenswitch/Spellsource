@@ -14,7 +14,7 @@ const NextOptions: NextAuthOptions = {
       clientId,
       clientSecret,
       issuer,
-      checks: ["pkce"],
+      checks: "none",
       authorization: {
         params: { scope: "openid profile email offline_access" },
       },
