@@ -11,9 +11,7 @@ import com.hiddenswitch.framework.impl.ModelConversions;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MessageTypeMessage.MessageType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.*;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
-import io.vertx.core.Vertx;
+import io.vertx.core.*;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
@@ -36,7 +34,7 @@ public class GameTests extends FrameworkTestBase {
 		startGateway(vertx)
 				.compose(v -> client1.createAndLogin())
 				.compose(v -> client2.createAndLogin())
-				.compose(v -> vertx.deployVerticle(new ClusteredGames()))
+				.compose(v -> vertx.deployVerticle(new ClusteredGames(), new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD)))
 				.compose(v -> client1.legacy().decksGetAll(Empty.getDefaultInstance()))
 				.compose(decks1 -> {
 					Games.createGame(new ConfigurationRequest()

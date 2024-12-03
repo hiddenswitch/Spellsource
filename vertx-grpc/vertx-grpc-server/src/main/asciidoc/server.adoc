@@ -1,0 +1,148 @@
+== Vert.x gRPC Server
+
+Vert.x gRPC Server is a new gRPC server powered by Vert.x HTTP server superseding the integrated Netty based gRPC client.
+
+This server provides a gRPC request/response oriented API as well as a the generated stub approach with a service bridge.
+
+=== Using Vert.x gRPC Server
+
+To use Vert.x gRPC Server, add the following dependency to the _dependencies_ section of your build descriptor:
+
+* Maven (in your `pom.xml`):
+
+[source,xml,subs="+attributes"]
+----
+<dependency>
+  <groupId>io.vertx</groupId>
+  <artifactId>vertx-grpc-server</artifactId>
+  <version>${maven.version}</version>
+</dependency>
+----
+
+* Gradle (in your `build.gradle` file):
+
+[source,groovy,subs="+attributes"]
+----
+dependencies {
+  compile 'io.vertx:vertx-grpc-server:${maven.version}'
+}
+----
+
+=== gRPC request/response server API
+
+The gRPC request/response server API provides an alternative way to interact with a client without the need of a generated stub.
+
+A `{@link io.vertx.grpc.server.GrpcServer}` is a `Handler<HttpServerRequest>` and can be used as an HTTP server request handler.
+
+[source,java]
+----
+{@link examples.GrpcServerExamples#createServer}
+----
+
+TIP: a `GrpcServer` can be mounted in a Vert.x Web router
+
+==== Request/response
+
+Each service method is processed by a handler
+
+[source,java]
+----
+{@link examples.GrpcServerExamples#requestResponse}
+----
+
+==== Streaming request
+
+You can set handlers to process request events
+
+[source,java]
+----
+{@link examples.GrpcServerExamples#streamingRequest}
+----
+
+==== Streaming response
+
+A streaming response involves calling `{@link io.vertx.grpc.server.GrpcServerResponse#write}` for each element of the stream
+and using `{@link io.vertx.grpc.server.GrpcServerResponse#end()}` to end the stream
+
+[source,java]
+----
+{@link examples.GrpcServerExamples#streamingResponse}
+----
+
+==== Bidi request/response
+
+A bidi request/response is simply the combination of a streaming request and a streaming response
+
+[source,java]
+----
+{@link examples.GrpcServerExamples#bidi}
+----
+
+=== Flow control
+
+Request and response are back pressured Vert.x streams.
+
+You can pause/resume/fetch a request
+
+[source,java]
+----
+{@link examples.GrpcServerExamples#requestFlowControl}
+----
+
+You can check the writability of a response and set a drain handler
+
+[source,java]
+----
+{@link examples.GrpcServerExamples#responseFlowControl}
+----
+
+=== Compression
+
+You can compress response messages by setting the response encoding *prior* before sending any message
+
+[source,java]
+----
+{@link examples.GrpcServerExamples#responseCompression}
+----
+
+=== Decompression
+
+Decompression is done transparently by the server when the client send encoded requests.
+
+=== Stub API
+
+The Vert.x gRPC Server can bridge a gRPC service to use with a generated server stub in a more traditional fashion
+
+[source,java]
+----
+{@link examples.GrpcServerExamples#stubExample}
+----
+
+=== Message level API
+
+The server provides a message level API to interact directly with protobuf encoded gRPC messages.
+
+TIP: the server message level API can be used with the client message level API to write a gRPC reverse proxy
+
+Such API is useful when you are not interested in the content of the messages, and instead you want to forward them to
+another service, e.g. you are writing a proxy.
+
+[source,java]
+----
+{@link examples.GrpcServerExamples#protobufLevelAPI}
+----
+
+You can also set a `messageHandler` to handle `{@link io.vertx.grpc.common.GrpcMessage}`, such messages preserve the
+client encoding, which is useful the service you are forwarding to can handle compressed messages directly, in this case
+the message does not need to be decompressed and compressed again.
+
+[source,java]
+----
+{@link examples.GrpcServerExamples#messageLevelAPI}
+----
+
+The `{@link io.vertx.grpc.server.GrpcServerResponse#writeMessage}` and `{@link io.vertx.grpc.server.GrpcServerResponse#endMessage}` will
+handle the message encoding:
+
+- when the message uses the response encoding, the message is sent as is
+- when the message uses a different encoding, it will be encoded, e.g. compressed or uncompressed

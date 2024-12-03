@@ -1,11 +1,13 @@
 package com.hiddenswitch.framework.tests.impl;
 
 import com.hiddenswitch.framework.Gateway;
-import com.hiddenswitch.framework.impl.SqlCachedCardCatalogue;
 import com.hiddenswitch.framework.tests.applications.StandaloneApplication;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
 import io.vertx.core.*;
+import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
+import io.vertx.core.impl.future.FutureInternal;
+import io.vertx.core.impl.future.Listener;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.AfterEach;
@@ -29,13 +31,7 @@ import static org.testcontainers.Testcontainers.exposeHostPorts;
 @ExtendWith({VertxExtension.class})
 @Testcontainers
 public class FrameworkTestBase {
-	@AfterEach
-	public void delay() throws InterruptedException {
-		TimeUnit.SECONDS.sleep(3);
-	}
-
 	protected static ToxiproxyContainer TOXIPROXY = new ToxiproxyContainer(DockerImageName.parse("ghcr.io/shopify/toxiproxy:latest").asCompatibleSubstituteFor("shopify/toxiproxy"));
-
 	private static ToxiproxyContainer.ContainerProxy toxicGrpcProxy;
 
 	public static ToxiproxyContainer.ContainerProxy toxicGrpcProxy() {
@@ -54,18 +50,47 @@ public class FrameworkTestBase {
 		toxicGrpcProxy = TOXIPROXY.getProxy("host.testcontainers.internal", Gateway.defaultGrpcPort());
 	}
 
+	@AfterEach
+	public void delay() throws InterruptedException {
+		TimeUnit.SECONDS.sleep(3);
+	}
+
 	protected Future<String> startGateway(Vertx vertx) {
 		return startGateway(vertx, Gateway.defaultGrpcPort());
 	}
 
 	protected Future<String> startGateway(Vertx vertx, int port) {
-		return vertx.deployVerticle(() -> new Gateway(port), new DeploymentOptions().setInstances(CpuCoreSensor.availableProcessors() * 2));
+		return vertx.deployVerticle(() -> new Gateway(port), new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD).setInstances(CpuCoreSensor.availableProcessors()));
 	}
 
-	public static class Checkpoint implements Future<Void> {
+	public void testVirtual(Vertx vertx, VertxTestContext vertxTestContext, VertxTestContext.ExecutionBlock runnable) {
+		var verticle = new AbstractVirtualThreadVerticle() {
+			@Override
+			public void startVirtual() throws Exception {
+				vertxTestContext.verify(runnable);
+			}
+		};
+		vertx.deployVerticle(verticle, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD))
+				.onComplete(vertxTestContext.succeedingThenComplete())
+				.onSuccess(vertx::undeploy);
+	}
+
+	public static class Checkpoint implements FutureInternal<Void> {
+		private final Promise<Void> finished = Promise.promise();
+		private final Future<Void> future = finished.future();
 		private int times;
-		private Promise<Void> finished = Promise.promise();
-		private Future<Void> future = finished.future();
+
+		private Checkpoint(int times) {
+			this.times = times;
+		}
+
+		public static Checkpoint checkpoint(int times) {
+			return new Checkpoint(times);
+		}
+
+		public static Future<Void> awaitCheckpoints(Checkpoint... checkpoints) {
+			return Future.all(Arrays.asList(checkpoints)).map((Void) null);
+		}
 
 		@Override
 		public boolean isComplete() {
@@ -168,20 +193,18 @@ public class FrameworkTestBase {
 		}
 
 		@Override
+		public Future<Void> expecting(Expectation<? super Void> expectation) {
+			return future.expecting(expectation);
+		}
+
+		@Override
+		public Future<Void> timeout(long delay, TimeUnit unit) {
+			return future.timeout(delay, unit);
+		}
+
+		@Override
 		public CompletionStage<Void> toCompletionStage() {
 			return future.toCompletionStage();
-		}
-
-		public static <T> Future<T> fromCompletionStage(CompletionStage<T> completionStage) {
-			return Future.fromCompletionStage(completionStage);
-		}
-
-		public static <T> Future<T> fromCompletionStage(CompletionStage<T> completionStage, Context context) {
-			return Future.fromCompletionStage(completionStage, context);
-		}
-
-		private Checkpoint(int times) {
-			this.times = times;
 		}
 
 		public Future<Void> flag() {
@@ -196,24 +219,19 @@ public class FrameworkTestBase {
 			return Future.succeededFuture();
 		}
 
-		public static Checkpoint checkpoint(int times) {
-			return new Checkpoint(times);
+		@Override
+		public ContextInternal context() {
+			return ((FutureInternal<Void>) future).context();
 		}
 
-		public static Future<Void> awaitCheckpoints(Checkpoint... checkpoints) {
-			return Future.all(Arrays.asList(checkpoints)).map((Void) null);
+		@Override
+		public void addListener(Listener<Void> listener) {
+			((FutureInternal<Void>) future).addListener(listener);
 		}
-	}
 
-	public void testVirtual(Vertx vertx, VertxTestContext vertxTestContext, VertxTestContext.ExecutionBlock runnable) {
-		var verticle = new AbstractVirtualThreadVerticle() {
-			@Override
-			public void startVirtual() throws Exception {
-				vertxTestContext.verify(runnable);
-			}
-		};
-		vertx.deployVerticle(verticle)
-				.onComplete(vertxTestContext.succeedingThenComplete())
-				.onSuccess(vertx::undeploy);
+		@Override
+		public void removeListener(Listener<Void> listener) {
+			((FutureInternal<Void>) future).removeListener(listener);
+		}
 	}
 }

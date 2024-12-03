@@ -1,0 +1,97 @@
+plugins {
+  id 'java-library'
+  id 'com.google.protobuf' version '0.9.4'
+}
+
+evaluationDependsOn(":vertx-grpc:vertx-grpc-protoc-plugin2")
+
+sourceSets {
+  main {
+    java {
+      exclude 'examples/**'
+    }
+  }
+  examples {
+    java {
+      srcDir 'src/main/java/examples'
+    }
+    resources {
+      srcDir 'src/main/proto'
+    }
+  }
+}
+
+configurations {
+  examplesImplementation
+  examplesRuntimeOnly
+  protocPlugin
+}
+
+dependencies {
+  api "io.vertx:vertx-core:$vertxVersion"
+  api project(':vertx-grpc:vertx-grpc-common')
+
+  implementation("io.grpc:grpc-protobuf:$grpcVersion") {
+    exclude group: 'com.google.guava', module: 'guava'
+  }
+
+  implementation("io.grpc:grpc-stub:$grpcVersion") {
+    exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+  }
+  implementation("io.grpc:grpc-api:$grpcVersion") {
+    exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+    exclude group: 'org.codehaus.mojo', module: 'animal-sniffer-annotations'
+  }
+
+
+  testCompileOnly "javax.annotation:javax.annotation-api:1.3.2"
+  testImplementation "io.vertx:vertx-unit:$vertxVersion"
+  testImplementation project(':vertx-grpc:vertx-grpc-client')
+  testImplementation project(':vertx-grpc:vertx-grpc-server')
+  testImplementation("io.grpc:grpc-netty:$grpcVersion") {
+    exclude group: '*', module: '*'
+  }
+  testImplementation("io.grpc:grpc-protobuf:$grpcVersion") {
+    exclude group: 'com.google.guava', module: 'guava'
+  }
+
+  // Examples-specific dependencies
+  examplesImplementation project(':vertx-grpc:vertx-grpc-common')
+  examplesImplementation("io.grpc:grpc-protobuf:$grpcVersion") {
+    exclude group: 'com.google.guava', module: 'guava'
+  }
+  examplesImplementation "io.grpc:grpc-stub:$grpcVersion"
+  examplesImplementation "io.grpc:grpc-api:$grpcVersion"
+
+  // Protoc plugin dependency
+  protocPlugin project(path: ':vertx-grpc:vertx-grpc-protoc-plugin2', configuration: 'shadow')
+}
+
+protobuf {
+  protoc {
+    artifact = "com.google.protobuf:protoc:3.25.5"
+  }
+  plugins {
+    grpc {
+      artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
+    }
+    vertx {
+      path = tasks.getByPath(':vertx-grpc:vertx-grpc-protoc-plugin2:shadowJar').archiveFile.get().asFile
+    }
+  }
+  generateProtoTasks {
+    all().each { task ->
+      task.plugins {
+        grpc {}
+        vertx {}
+      }
+      task.dependsOn ':vertx-grpc:vertx-grpc-protoc-plugin2:shadowJar'
+    }
+    ofSourceSet('examples').each { task ->
+      task.plugins {
+        grpc {}  // For regular gRPC classes
+        vertx {} // For Vert.x specific classes
+      }
+    }
+  }
+}

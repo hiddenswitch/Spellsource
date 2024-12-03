@@ -1,0 +1,174 @@
+== Vert.x gRPC Client
+
+Vert.x gRPC Client is a new gRPC client powered by Vert.x HTTP client superseding the integrated Netty based gRPC client.
+
+This client provides a gRPC request/response oriented API as well as a the generated stub approach with a gRPC Channel
+
+=== Using Vert.x gRPC Client
+
+To use Vert.x gRPC Client, add the following dependency to the _dependencies_ section of your build descriptor:
+
+* Maven (in your `pom.xml`):
+
+[source,xml,subs="+attributes"]
+----
+<dependency>
+  <groupId>io.vertx</groupId>
+  <artifactId>vertx-grpc-client</artifactId>
+  <version>${maven.version}</version>
+</dependency>
+----
+
+* Gradle (in your `build.gradle` file):
+
+[source,groovy,subs="+attributes"]
+----
+dependencies {
+  compile 'io.vertx:vertx-grpc-client:${maven.version}'
+}
+----
+
+=== gRPC request/response client API
+
+The gRPC request/response client API provides an alternative way to interact with a server without the need of a generated stub.
+
+You can easily create the gRPC client
+
+[source,java]
+----
+{@link examples.GrpcClientExamples#createClient}
+----
+
+==== Request/response
+
+Any interaction with a gRPC server involves creating a request to the remote gRPC service
+
+[source,java]
+----
+{@link examples.GrpcClientExamples#sendRequest}
+----
+
+The `{@link io.vertx.grpc.client.GrpcClientRequest#response}` holds the response and the
+`{@link io.vertx.grpc.client.GrpcClientResponse#last}` holds the result
+
+[source,java]
+----
+{@link examples.GrpcClientExamples#receiveResponse}
+----
+
+Future composition can combine all the previous steps together in a compact fashion
+
+[source,java]
+----
+{@link examples.GrpcClientExamples#requestResponse}
+----
+
+==== Streaming request
+
+A streaming request involves calling `{@link io.vertx.grpc.client.GrpcClientRequest#write}` for each element of the stream
+and using `{@link io.vertx.grpc.client.GrpcClientRequest#end()}` to end the stream
+
+[source,java]
+----
+{@link examples.GrpcClientExamples#streamingRequest}
+----
+
+==== Streaming response
+
+You can set handlers to process response events
+
+[source,java]
+----
+{@link examples.GrpcClientExamples#streamingResponse}
+----
+
+==== Bidi request/response
+
+A bidi request/response is simply the combination of a streaming request and a streaming response.
+
+=== Flow control
+
+Request and response are back pressured Vert.x streams.
+
+You can check the writability of a request and set a drain handler
+
+[source,java]
+----
+{@link examples.GrpcClientExamples#requestFlowControl}
+----
+
+You can pause/resume/fetch a response
+
+[source,java]
+----
+{@link examples.GrpcClientExamples#responseFlowControl}
+----
+
+=== Cancellation
+
+You can call `{@link io.vertx.grpc.client.GrpcClientRequest#cancel}` to cancel a request
+
+[source,java]
+----
+{@link examples.GrpcClientExamples#requestCancellation}
+----
+
+NOTE: cancellation sends an HTTP/2 reset frame to the server
+
+=== Compression
+
+You can compress request messages by setting the request encoding *prior* before sending any message
+
+[source,java]
+----
+{@link examples.GrpcClientExamples#requestCompression}
+----
+
+=== Decompression
+
+Decompression is done transparently by the client when the server send encoded responses.
+
+=== Stub API
+
+The Vert.x gRPC Client provides a gRPC channel to use with a generated client stub in a more traditional fashion
+
+[source,java]
+----
+{@link examples.GrpcClientExamples#stubExample}
+----
+
+=== Message level API
+
+The client provides a message level API to interact directly with protobuf encoded gRPC messages.
+
+TIP: the client message level API can be used with the server message level API to write a gRPC reverse proxy
+
+Such API is useful when you are not interested in the content of the messages, and instead you want to forward them to
+another service, e.g. you are writing a proxy.
+
+[source,java]
+----
+{@link examples.GrpcClientExamples#protobufLevelAPI}
+----
+
+You can also set a `messageHandler` to handle `{@link io.vertx.grpc.common.GrpcMessage}`, such messages preserve the server encoding.
+
+[source,java]
+----
+{@link examples.GrpcClientExamples#messageLevelAPI}
+----
+
+The `{@link io.vertx.grpc.client.GrpcClientRequest#writeMessage}` and `{@link io.vertx.grpc.client.GrpcClientRequest#endMessage}` will
+handle the message encoding:
+
+- when the message uses the response encoding, the message is sent as is
+- when the message uses a different encoding, it will be encoded, e.g. compressed or uncompressed
+
+=== Error Handling
+
+A `{@link io.vertx.grpc.common.GrpcException}` may be throw and accessed via a `onFailure` handler. It may grant access to the response and the gRPC status via `{@link io.vertx.grpc.common.GrpcStatus}`.
+
+[source,java]
+----
+{@link examples.GrpcClientExamples#errorHandling}
+----

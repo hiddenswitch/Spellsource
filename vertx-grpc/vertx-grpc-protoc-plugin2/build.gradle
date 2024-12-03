@@ -1,0 +1,54 @@
+plugins {
+  id 'application'
+  id 'com.gradleup.shadow' version "8.3.5"
+}
+
+apply from: "${project.rootProject.layout.projectDirectory}/gradle/instrument.gradle"
+
+def mainClassNameStr = 'io.vertx.grpc.plugin.VertxGrpcGenerator'
+
+dependencies {
+  implementation("com.salesforce.servicelibs:jprotoc:1.2.1") {
+    exclude group: 'javax.annotation', module: 'javax.annotation-api'
+  }
+  implementation "io.vertx:vertx-codegen:$vertxVersion"
+  implementation "io.vertx:vertx-docgen:3.5.1"
+  testImplementation "junit:junit:4.13.1"
+  testImplementation "io.vertx:vertx-core:$vertxVersion:tests"
+
+  implementation "io.vertx:vertx-core:$vertxVersion"
+  implementation("io.grpc:grpc-core:$grpcVersion") {
+    exclude group: 'com.google.guava', module: 'guava'
+  }
+  implementation("io.grpc:grpc-protobuf:$grpcVersion") {
+    exclude group: 'com.google.guava', module: 'guava'
+  }
+
+  implementation("io.grpc:grpc-stub:$grpcVersion") {
+    exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+  }
+  implementation("io.grpc:grpc-api:$grpcVersion") {
+    exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+    exclude group: 'org.codehaus.mojo', module: 'animal-sniffer-annotations'
+  }
+}
+
+jar {
+  manifest {
+    attributes('Main-Class': mainClassNameStr)
+  }
+
+  from {
+    configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+
+  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+shadowJar {
+  mainClassName = mainClassNameStr
+}
+
+tasks.named('run').configure {
+  enabled = false
+}

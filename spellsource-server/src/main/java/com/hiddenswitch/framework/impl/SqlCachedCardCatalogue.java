@@ -12,7 +12,6 @@ import io.micrometer.core.instrument.binder.BaseUnits;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.Subject;
-import io.vertx.await.Async;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.impl.ContextInternal;
@@ -85,8 +84,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		if (!Thread.currentThread().isVirtual()) {
 			throw new IllegalStateException("must run in virtual");
 		}
-
-		Async.lock(lock.writeLock());
+		lock.writeLock().lock();
 		gitUserId = Environment.getSpellsourceUserId();
 		try {
 			invalidated.clear();
@@ -254,7 +252,8 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 	private void refreshInvalidCardsFromSql() {
 		// if we're currently a bot, never refresh
 		var gameContext = GameContext.current();
-		if (gameContext != null && !gameContext.getBehaviours().get(gameContext.getActivePlayerId()).isHuman() && GameStateValueBehaviour.isInBotSimulation()) {
+		// todo: the current game context on a virtual thread should really be managed like a real context rather than arbitrarily set
+		if (gameContext != null && gameContext.getActivePlayerId() != -1 && !gameContext.getBehaviours().get(gameContext.getActivePlayerId()).isHuman() && GameStateValueBehaviour.isInBotSimulation()) {
 			return;
 		}
 		String invalid;
@@ -269,7 +268,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 			var cardsDao = new CardsDao(Environment.jooqAkaDaoConfiguration(), Environment.sqlClient());
 			var getCards = cardsDao.findManyByCondition(CARDS.ID.in(toFetch).and(CARDS.IS_PUBLISHED.eq(true)).and(CARDS.IS_ARCHIVED.eq(false)));
 			if (Thread.currentThread().isVirtual()) {
-				Async.lock(lock.writeLock());
+				lock.writeLock().lock();
 				var cardDbRecords = await(getCards);
 				try {
 					loadFromCardDbRecords(cardDbRecords);
@@ -279,7 +278,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 			} else {
 				// not sure we're ever in a non-virtual context
 				getCards.onSuccess(cardDbRecords -> {
-					Async.lock(lock.writeLock());
+					lock.writeLock().lock();
 					try {
 						loadFromCardDbRecords(cardDbRecords);
 					} finally {

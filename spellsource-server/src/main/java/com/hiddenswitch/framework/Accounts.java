@@ -279,7 +279,7 @@ public class Accounts {
 
 			@Override
 			public Future<LoginOrCreateReply> changePassword(GrpcServerRequest<ChangePasswordRequest, LoginOrCreateReply> grpcServerRequest, ChangePasswordRequest request) {
-				var userId = grpcServerRequest.routingContext().user().subject();
+				var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
 				// for now we don't invalidate and refresh the old token
 				var token = Accounts.token();
 				if (token == null) {
@@ -301,7 +301,7 @@ public class Accounts {
 
 			@Override
 			public Future<GetAccountsReply> getAccount(GrpcServerRequest<Empty, GetAccountsReply> grpcServerRequest, Empty request) {
-				var userId = grpcServerRequest.routingContext().user().subject();
+				var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
 				return user(userId)
 						.compose(thisUser -> {
 							if (thisUser == null) {
@@ -321,7 +321,7 @@ public class Accounts {
 
 			@Override
 			public Future<GetAccountsReply> getAccounts(GrpcServerRequest<GetAccountsRequest, GetAccountsReply> grpcServerRequest, GetAccountsRequest request) {
-				var userId = grpcServerRequest.routingContext().user().subject();
+				var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
 				return user(userId)
 						.compose(thisUser -> {
 							if (thisUser == null) {
@@ -533,34 +533,40 @@ public class Accounts {
 	}
 
 	public static JWTAuthOptions jwtAuthOptions() {
+		var vertx = Vertx.currentContext().owner();
+		var webClient = WebClient.create(vertx);
+
+		return await(jwtAuthOptions(webClient));
+	}
+
+	public static Future<JWTAuthOptions> jwtAuthOptions(WebClient webClient) {
 		var issuer = keycloakAuthUrl();
 		var issuerUri = URI.create(issuer);
 		var jwksUri = URI.create(String.format("%s://%s:%d%s",
 				issuerUri.getScheme(), issuerUri.getHost(), issuerUri.getPort(), issuerUri.getPath() + "realms/hiddenswitch/protocol/openid-connect/certs"));
-		var vertx = Vertx.currentContext().owner();
-		var webClient = WebClient.create(vertx);
-		var response = await(webClient.get(jwksUri.getPort(), jwksUri.getHost(), jwksUri.getPath())
+		return webClient.get(jwksUri.getPort(), jwksUri.getHost(), jwksUri.getPath())
 				.as(BodyCodec.jsonObject())
-				.send());
+				.send()
+				.compose(response -> {
+					var jwksResponse = response.body();
+					var keys = jwksResponse.getJsonArray("keys");
 
-		var jwksResponse = response.body();
-		var keys = jwksResponse.getJsonArray("keys");
-
-		// Configure JWT validation options
-		var jwtOptions = new JWTOptions();
+					// Configure JWT validation options
+					var jwtOptions = new JWTOptions();
 //		jwtOptions.setIssuer(issuer);
 
-		// extract JWKS from keys array
-		var jwks = ((List<Object>) keys.getList()).stream()
-				.map(o -> new JsonObject((Map<String, Object>) o))
-				.collect(Collectors.toList());
-		// configure JWTAuth
-		var jwtAuthOptions = new JWTAuthOptions();
-		jwtAuthOptions.setJwks(jwks);
-		jwtAuthOptions.setJWTOptions(jwtOptions);
-		jwtAuthOptions.setPermissionsClaimKey("realm_access/roles");
+					// extract JWKS from keys array
+					var jwks = ((List<Object>) keys.getList()).stream()
+							.map(o -> new JsonObject((Map<String, Object>) o))
+							.collect(Collectors.toList());
+					// configure JWTAuth
+					var jwtAuthOptions = new JWTAuthOptions();
+					jwtAuthOptions.setJwks(jwks);
+					jwtAuthOptions.setJWTOptions(jwtOptions);
+					jwtAuthOptions.setPermissionsClaimKey("realm_access/roles");
 
-		return jwtAuthOptions;
+					return Future.succeededFuture(jwtAuthOptions);
+				});
 	}
 
 	public record UserAttributes(boolean showPremadeDecks) {

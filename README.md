@@ -60,8 +60,8 @@ Hit `Win + X` and click Windows Powershell. Do not start a prompt as an admin. T
 
 ```sh
 # install node 18
-nvm install 18
-nvm use 18
+nvm install 20
+nvm use 20
 
 # enable git symlinks in git
 git config --global core.symlinks=true
@@ -100,7 +100,7 @@ Remove-Item $dbPath
 
 ### Getting started with Development on macOS
 
-Requirements: **Java 20 or later** and **Docker**. Check your current version of Java using `java --version`.
+Requirements: **Java 21 or later** and **Docker**. Check your current version of Java using `java --version`.
 
 1. Install dependencies:
    ```shell script
@@ -111,7 +111,7 @@ Requirements: **Java 20 or later** and **Docker**. Check your current version of
    # Docker. Look carefully at any messages brew tells you and do them
    brew cask install docker
    # Java (if required)
-   # Install openjdk 21, dotnet 6.0 & gradle 8.3 or higher
+   # Install openjdk 21 or later, dotnet 6.0 & gradle 8.3 or higher
    brew install openjdk dotnet-sdk gradle
    sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
    brew link --force openjdk
@@ -124,6 +124,13 @@ Requirements: **Java 20 or later** and **Docker**. Check your current version of
 3. See Spellsource-specific tasks using `./gradlew tasks --group spellsource`.
 4. Run tests using `./gradlew test`
 5. Start a local server using `./gradlew run`. This will download about 9GB of content.
+
+macOS requires larger receive buffer limits:
+
+```shell
+sudo sysctl -w kern.ipc.maxsockbuf=33554432
+sudo sysctl -w net.inet.udp.recvspace=29554432
+```
 
 ### Contributing Cards
 

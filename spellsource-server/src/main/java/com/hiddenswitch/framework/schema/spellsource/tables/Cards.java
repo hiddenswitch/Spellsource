@@ -78,7 +78,7 @@ public class Cards extends TableImpl<CardsRecord> {
      * authored in the
      *     web interface
      */
-    public final TableField<CardsRecord, String> URI = createField(DSL.name("uri"), SQLDataType.CLOB, this, "The URI of the application that created this card. The git URL by default represents cards that came from the\r\n    Spellsource git repository. https://www.getspellsource.com/cards/editor or similar represents cards authored in the\r\n    web interface");
+    public final TableField<CardsRecord, String> URI = createField(DSL.name("uri"), SQLDataType.CLOB, this, "The URI of the application that created this card. The git URL by default represents cards that came from the\n    Spellsource git repository. https://www.getspellsource.com/cards/editor or similar represents cards authored in the\n    web interface");
 
     /**
      * The column <code>spellsource.cards.blockly_workspace</code>.

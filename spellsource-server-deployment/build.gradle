@@ -1,7 +1,6 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 
 apply plugin: 'base'
-version = '0.9.0'
 
 def isWindows = Os.isFamily(Os.FAMILY_WINDOWS)
 def sourceDir = "$project.projectDir.absolutePath/src/main/helm"

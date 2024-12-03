@@ -4,7 +4,6 @@ import com.github.marschall.micrometer.jfr.JfrMeterRegistry;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Streams;
 import com.google.common.hash.Hashing;
-import com.google.protobuf.Parser;
 import com.hiddenswitch.diagnostics.Tracing;
 import com.hiddenswitch.framework.impl.*;
 import com.hiddenswitch.framework.rpc.Hiddenswitch.ServerConfiguration;
@@ -15,21 +14,20 @@ import io.grpc.StatusRuntimeException;
 import io.grpc.internal.KeepAliveManager;
 import io.micrometer.core.instrument.Metrics;
 import io.opentracing.util.GlobalTracer;
-import io.vertx.await.Async;
 import io.vertx.core.Context;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpConnection;
+import io.vertx.core.impl.NoStackTraceThrowable;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.core.json.Json;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.core.tracing.TracingOptions;
-import io.vertx.ext.cluster.infinispan.InfinispanClusterManager;
 import io.vertx.micrometer.MicrometerMetricsOptions;
 import io.vertx.micrometer.VertxPrometheusOptions;
 import io.vertx.micrometer.backends.PrometheusBackendRegistry;
+import io.vertx.pgclient.PgBuilder;
 import io.vertx.pgclient.PgConnectOptions;
-import io.vertx.pgclient.PgPool;
 import io.vertx.sqlclient.*;
 import io.vertx.sqlclient.Row;
 import io.vertx.tracing.opentracing.OpenTracingOptions;
@@ -44,26 +42,23 @@ import org.jooq.Configuration;
 import org.jooq.Query;
 import org.jooq.Record;
 import org.jooq.conf.ParamType;
+import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 import org.redisson.Redisson;
-import org.redisson.api.RMapCacheAsync;
 import org.redisson.api.RedissonClient;
-import org.redisson.client.codec.StringCodec;
-import org.redisson.codec.CompositeCodec;
 import org.redisson.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.NetworkInterface;
-import java.net.SocketException;
+import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.DriverManager;
 import java.util.*;
 import java.util.Comparator;
 import java.util.concurrent.Callable;
@@ -87,7 +82,6 @@ public class Environment {
 			.setPublishQuantiles(true));
 	private static final AtomicBoolean prometheusInited = new AtomicBoolean();
 	private static final AtomicReference<Configuration> jooqConfiguration = new AtomicReference<>();
-	private static final WeakVertxMap<Async> asyncs = new WeakVertxMap<>(Environment::asyncConstructor);
 	private static final String CONFIGURATION_NAME_TOKEN = "spellsource";
 	private static final AtomicReference<ServerConfiguration> cachedConfiguration = new AtomicReference<>();
 	private static ServerConfiguration programmaticConfiguration = ServerConfiguration.newBuilder().build();
@@ -110,24 +104,24 @@ public class Environment {
 		return Redisson.create(config);
 	}
 
-	private static Async asyncConstructor(Vertx vertx) {
-		return new Async(vertx, true);
-	}
-
-	private static PgPool pool(Vertx vertx) {
+	private static Pool pool(Vertx vertx) {
 		var args = pgArgs();
-		return PgPool.pool(vertx, args.connectionOptions(), args.poolOptions());
+		return PgBuilder.pool().using(vertx).connectingTo(args.connectionOptions()).with(args.poolOptions()).build();
 	}
 
-	private static PgPool sharedPool(Vertx vertx) {
+	private static Pool sharedPool(Vertx vertx) {
 		var args = pgArgs();
 		var options = sharedOptions("sharedPools__", vertx, args.poolOptions());
-		return PgPool.pool(vertx, args.connectionOptions(), options);
+		return Pool.pool(vertx, args.connectionOptions(), options);
 	}
 
 	private static SqlClient client(Vertx vertx) {
 		var args = pgArgs();
-		return PgPool.client(vertx, args.connectionOptions(), args.poolOptions());
+		return PgBuilder
+				.client()
+				.using(vertx)
+				.with(args.poolOptions())
+				.connectingTo(args.connectionOptions()).build();
 	}
 
 	private static PoolOptions sharedOptions(String prefix, Vertx vertx, PoolOptions options) {
@@ -140,7 +134,7 @@ public class Environment {
 	private static SqlClient sharedClient(Vertx vertx) {
 		var args = pgArgs();
 		var options = sharedOptions("sharedClient__", vertx, args.poolOptions());
-		return PgPool.client(vertx, args.connectionOptions(), options);
+		return PgBuilder.client().using(vertx).connectingTo(args.connectionOptions()).with(options).build();
 	}
 
 	@NotNull
@@ -172,8 +166,7 @@ public class Environment {
 
 		var poolOptions = new PoolOptions()
 				.setMaxSize(Math.min(CpuCoreSensor.availableProcessors(), 8));
-		var args = new PgArgs(connectionOptions, poolOptions);
-		return args;
+		return new PgArgs(connectionOptions, poolOptions);
 	}
 
 	public static void metrics() {
@@ -190,10 +183,6 @@ public class Environment {
 
 	public static Pool transactionPool() {
 		return transactionPools.get();
-	}
-
-	public static Async async() {
-		return asyncs.get();
 	}
 
 	public static Future<Integer> withDslContext(Function<DSLContext, ? extends Query> handler) {
@@ -315,6 +304,30 @@ public class Environment {
 
 	public static Future<MigrateResult> migrate(String url, String username, String password) {
 		return executeBlocking(() -> {
+			var shortenedUrl = url;
+			var jdbcPrefix = "jdbc:";
+			if (shortenedUrl.startsWith(jdbcPrefix)) {
+				shortenedUrl = shortenedUrl.substring(jdbcPrefix.length());
+			}
+			var uri = new URI(shortenedUrl);
+			var databaseName = uri.getPath();
+			if (databaseName.startsWith("/")) {
+				databaseName = databaseName.substring(1);
+			}
+
+			if (!databaseName.equals("postgres")) {
+				var noDbiUrl = url.replace(uri.getPath(), "/postgres");
+				try (var conn = DriverManager.getConnection(noDbiUrl, username, password)) {
+					conn.setAutoCommit(true);
+					// We cannot use JOOQ directly because of https://stackoverflow.com/a/66442831
+					var dsl = DSL.using(conn, SQLDialect.POSTGRES);
+					dsl.createDatabase(databaseName).execute();
+				} catch (DataAccessException alreadyExists) {
+					// Continue
+				}
+			}
+
+
 			var flyway = Flyway.configure()
 					.group(true)
 					.mixed(true)
@@ -346,11 +359,12 @@ public class Environment {
 		if (configuration.hasVertx() && configuration.getVertx().getUseInfinispanClusterManager()) {
 			var port = configuration.getVertx().getInfinspanPort();
 			var isKubernetes = System.getenv().containsKey("KUBERNETES_SERVICE_HOST");
-			clusterManager = new InfinispanClusterManager(isKubernetes ? Clustered.infinispanClusterManagerKubernetes(port) : Clustered.infinispanClusterManagerUdp(port));
+			clusterManager = new Infinispan15ClusterManager(isKubernetes ? Clustered.infinispanClusterManagerKubernetes(port) : Clustered.infinispanClusterManagerTcp(port));
 		}
 		return new VertxOptions()
 				.setEventLoopPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))
 				.setInternalBlockingPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 4, 16))
+				.setWorkerPoolSize(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))
 				.setTracingOptions(tracingOptions)
 				.setClusterManager(clusterManager)
 				.setMetricsOptions(
@@ -545,16 +559,18 @@ public class Environment {
 			var isVirtualbox = false;
 			var isSelfAssigned = false;
 			var isHyperV = false;
+			var isMacOSBridgeNet = false;
 			try {
 				isSelfAssigned = ni.inetAddresses().anyMatch(i -> i.getHostAddress().startsWith("169"));
 				isLoopback = ni.isLoopback();
 				supportsMulticast = ni.supportsMulticast();
 				isVirtualbox = ni.getDisplayName().contains("VirtualBox") || ni.getDisplayName().contains("Host-Only");
 				isHyperV = ni.getDisplayName().contains("Hyper-V");
+				isMacOSBridgeNet = ni.getDisplayName().startsWith("bridge");
 			} catch (IOException failure) {
 			}
 			var hasIPv4 = ni.getInterfaceAddresses().stream().anyMatch(ia -> ia.getAddress() instanceof Inet4Address);
-			return supportsMulticast && !isSelfAssigned && !isLoopback && !ni.isVirtual() && hasIPv4 && !isVirtualbox && !isHyperV;
+			return supportsMulticast && !isSelfAssigned && !isLoopback && !ni.isVirtual() && hasIPv4 && !isVirtualbox && !isHyperV && !isMacOSBridgeNet;
 		}).sorted(Comparator.comparing(NetworkInterface::getName)).findFirst().orElse(null);
 	}
 

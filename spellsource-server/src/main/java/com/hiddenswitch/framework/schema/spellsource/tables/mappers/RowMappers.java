@@ -171,4 +171,13 @@ public class RowMappers {
                 };
         }
 
+        public static Function<Row,com.hiddenswitch.framework.schema.spellsource.tables.pojos.PublishedCards> getPublishedCardsMapper() {
+                return row -> {
+                        com.hiddenswitch.framework.schema.spellsource.tables.pojos.PublishedCards pojo = new com.hiddenswitch.framework.schema.spellsource.tables.pojos.PublishedCards();
+                        pojo.setId(row.getString("id"));
+                        pojo.setSuccession(row.getLong("succession"));
+                        return pojo;
+                };
+        }
+
 }

@@ -1,0 +1,262 @@
+== Vert.x gRPC Protoc Plugin
+
+The easiest way to start using vertx-grpc is to utilize its built-in code generator plugin. To do so, one must define
+the protocol in the `protobuffer` format as required by gRPC.
+
+[source,proto]
+----
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "examples";
+option java_outer_classname = "HelloWorldProto";
+package helloworld;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}
+----
+
+This is a very simple example showing the single request, single response mode.
+
+=== Compile the RPC definition
+
+Using the definition above we need to compile it.
+
+You can compile the proto file using the `protoc` compiler if you https://github.com/google/protobuf/tree/master/java#installation---without-maven[like]
+or you can integrate it in your build.
+
+
+If you’re using Apache Maven you need to add the plugin:
+
+[source,xml]
+----
+<plugin>
+  <groupId>org.xolstice.maven.plugins</groupId>
+  <artifactId>protobuf-maven-plugin</artifactId>
+  <version>0.6.1</version>
+  <configuration>
+    <protocArtifact>com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}</protocArtifact>
+    <pluginId>grpc-java</pluginId>
+    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
+    <protocPlugins>
+      <protocPlugin>
+        <id>vertx-grpc-protoc-plugin2</id>
+        <groupId>io.vertx</groupId>
+        <artifactId>vertx-grpc-protoc-plugin2</artifactId>
+        <version>${stack.version}</version>
+        <mainClass>io.vertx.grpc.plugin.VertxGrpcGenerator</mainClass>
+      </protocPlugin>
+    </protocPlugins>
+  </configuration>
+  <executions>
+    <execution>
+      <id>compile</id>
+      <configuration>
+        <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
+        <clearOutputDirectory>false</clearOutputDirectory>
+      </configuration>
+      <goals>
+        <goal>compile</goal>
+        <goal>compile-custom</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>
+----
+
+The `${os.detected.classifier}` property is used to make the build OS independant, on OSX it is replaced
+by _osx-x86_64_ and so on. To use it you need to add the os-maven-plugin[https://github.com/trustin/os-maven-plugin]
+in the `build` section of your `pom.xml`:
+
+[source,xml]
+----
+<build>
+  ...
+  <extensions>
+    <extension>
+      <groupId>kr.motd.maven</groupId>
+      <artifactId>os-maven-plugin</artifactId>
+      <version>1.4.1.Final</version>
+    </extension>
+  </extensions>
+  ...
+</build>
+----
+
+This plugin will compile your proto files under `src/main/proto` and make them available to your project.
+
+If you're using Gradle you need to add the plugin:
+
+[source,groovy]
+----
+...
+apply plugin: 'com.google.protobuf'
+...
+buildscript {
+  ...
+  dependencies {
+    // ASSUMES GRADLE 2.12 OR HIGHER. Use plugin version 0.7.5 with earlier gradle versions
+    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+  }
+}
+...
+protobuf {
+  protoc {
+    artifact = 'com.google.protobuf:protoc:3.2.0'
+  }
+  plugins {
+    grpc {
+      artifact = "io.grpc:protoc-gen-grpc-java:1.25.0"
+    }
+    vertx {
+      artifact = "io.vertx:vertx-grpc-protoc-plugin2:${vertx.grpc.version}"
+    }
+  }
+  generateProtoTasks {
+    all()*.plugins {
+      grpc
+      vertx
+    }
+  }
+}
+----
+
+This plugin will compile your proto files under `build/generated/source/proto/main` and make them available to your project.
+
+=== Writing a service
+
+The plugin generates vertx idiomatic Vert.x service stubs.
+
+Each service comes in two flavors, you can override the method you like depending on the style.
+
+Unary services can return a Vert.x `Future`:
+
+```java
+VertxGreeterGrpcServer.GreeterApi stub = new VertxGreeterGrpcServer.GreeterApi() {
+  @Override
+  public Future<HelloReply> sayHello(HelloRequest request) {
+    return Future.succeededFuture(HelloReply.newBuilder().setMessage("Hello " + request.getName()).build());
+  }
+};
+```
+
+or process a Vert.x `Promise`
+
+```java
+VertxGreeterGrpcServer.GreeterApi stub = new VertxGreeterGrpcServer.GreeterApi() {
+  @Override
+  public void sayHello(HelloRequest request, Promise<HelloReply> response) {
+    response.complete(HelloReply.newBuilder().setMessage("Hello " + request.getName()).build());
+  }
+};
+```
+
+In both case you need to bind the stub to an existing `GrpcServer`:
+
+```java
+server.bindAll(stub);
+```
+
+==== Streaming requests
+
+Streaming requests are implemented with Vert.x `ReadStream`:
+
+```java
+VertxStreamingGrpcServer.StreamingApi stub = new VertxStreamingGrpcServer.StreamingApi() {
+  @Override
+  public void sink(ReadStream<Item> stream, Promise<Empty> response) {
+    stream.handler(item -> {
+      System.out.println("Process item " + item.getValue());
+    });
+    // Send response
+    stream.endHandler(v -> response.complete(Empty.getDefaultInstance()));
+  }
+};
+```
+
+==== Streaming responses
+
+Streaming responses are implemented with Vert.x streams and comes in two flavors.
+
+You can return a Vert.x `ReadStream` and let the service send it for you:
+
+```java
+VertxStreamingGrpcServer.StreamingApi stub = new VertxStreamingGrpcServer.StreamingApi() {
+  @Override
+  public ReadStream<Item> source(Empty request) {
+    return streamOfItem();
+  }
+};
+```
+
+or you can process a `WriteStream`:
+
+```java
+VertxStreamingGrpcServer.StreamingApi stub = new VertxStreamingGrpcServer.StreamingApi() {
+  @Override
+  public void source(Empty request, WriteStream<Item> response) {
+    response.write(Item.newBuilder().setValue("value-1").build());
+    response.end(Item.newBuilder().setValue("value-2").build());
+  }
+};
+```
+
+=== Writing a client
+
+The plugin generates Vert.x service clients.
+
+A client wraps a `GrpcClient` and provides Vert.x idiomatic API to interact with the service:
+
+```java
+VertxGreeterGrpcClient client = new VertxGreeterGrpcClient(grpcClient, server);
+```
+
+Unary services returns a Vert.x `Future`
+
+```java
+Future<HelloReply> response = client.sayHello(HelloRequest.newBuilder().setName("John").build());
+
+response.onSuccess(result -> System.out.println("Service responded: " + ar.result().getMessage()));
+
+response.onFailure(err -> System.out.println("Service failure: " + ar.cause().getMessage()));
+```
+
+=== Streaming requests
+
+Streaming requests use a lambda passed a Vert.x `WriteStream` of messages sent to the service
+
+```java
+Future<Empty> response = client.sink(stream -> {
+  stream.write(Item.newBuilder().setValue("Value 1").build());
+  stream.write(Item.newBuilder().setValue("Value 2").build());
+  stream.end(Item.newBuilder().setValue("Value 3").build());
+});
+```
+
+=== Streaming responses
+
+Streaming responses get a Vert.x `ReadStream` of messages sent by the service
+
+```java
+Future<ReadStream<Item>> response = client.source(Empty.getDefaultInstance());
+
+response.onSuccess(stream -> stream
+  .handler(item -> System.out.println("Item " + item.getValue()))
+  .exceptionHandler(err -> System.out.println("Stream failed " + err.getMessage()));
+  .endHandler(v -> System.out.println("Stream ended")));
+
+response.onFailure(err -> System.out.println("Service failure: " + ar.cause().getMessage()));
+```

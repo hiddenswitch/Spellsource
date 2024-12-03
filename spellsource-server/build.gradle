@@ -18,9 +18,9 @@ buildscript {
 
 plugins {
   id 'docker'
-  id 'com.google.cloud.tools.jib' version '3.3.2'
+  id 'com.google.cloud.tools.jib' version "$googleContainerToolsJibVersion"
   id "org.flywaydb.flyway" version "$flywayVersion"
-  id 'com.github.johnrengelman.shadow' version "$shadowPluginVersion"
+  id 'com.gradleup.shadow' version "$shadowPluginVersion"
   id 'org.javamodularity.moduleplugin'
   id 'idea'
   id 'application'
@@ -121,6 +121,7 @@ dependencies {
     exclude group: 'io.jaegertracing', module: '*'
   }
   implementation "io.vertx:vertx-micrometer-metrics:$vertxVersion"
+  implementation "io.micrometer:micrometer-core:$micrometerVersion"
   implementation "io.micrometer:micrometer-registry-prometheus:$micrometerVersion"
   implementation "io.micrometer:micrometer-registry-jmx:$micrometerVersion"
   implementation 'com.be-hase.grpc-micrometer:grpc-micrometer:0.0.2'
@@ -360,6 +361,7 @@ test {
   useJUnitPlatform()
   enableAssertions = false
   maxHeapSize = '4096m'
+  systemProperty("vertx.grpc.stack.traces", "true")
   testLogging {
     showExceptions true
     exceptionFormat "full"
@@ -372,7 +374,7 @@ def spellsourceTags = ['latest', project.version.toString()]
 def spellsourceImage = 'ghcr.io/hiddenswitch/spellsource'
 jib {
   from {
-    image = "eclipse-temurin:20.0.1_9-jre-alpine"
+    image = "eclipse-temurin:23-ubi9-minimal"
   }
   to {
     image = spellsourceImage

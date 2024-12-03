@@ -1,0 +1,44 @@
+== Vert.x gRPC Context Storage
+
+Vert.x gRPC Context Storage overrides the default `io.grpc.Context.Storage` implementation.
+
+The default implementation always stores the gRPC context in a _thread-local_ variable.
+This implementation stores the gRPC context the same way as Vert.x core stores request tracing data.
+
+This means, for example, that when you implement a service method, the gRPC context is propagated across Vert.x async API calls:
+
+[source,java]
+----
+{@link examples.GrpcContextStorageExamples#example}
+----
+
+[CAUTION]
+====
+The gRPC context is propagated across Vert.x async API calls only when the current Vert.x {@link io.vertx.core.Context} is bound to a Vert.x HTTP server request.
+
+It is not propagated if, for example, you invoke a stub on a non-Vert.x thread or from a verticle {@link io.vertx.core.Verticle#start} method.
+====
+
+=== Using Vert.x gRPC Context Storage
+
+To use Vert.x gRPC Context Storage, add the following dependency to the _dependencies_ section of your build descriptor:
+
+* Maven (in your `pom.xml`):
+
+[source,xml,subs="+attributes"]
+----
+<dependency>
+  <groupId>io.vertx</groupId>
+  <artifactId>vertx-grpc-context-storage</artifactId>
+  <version>${maven.version}</version>
+</dependency>
+----
+
+* Gradle (in your `build.gradle` file):
+
+[source,groovy,subs="+attributes"]
+----
+dependencies {
+  compile 'io.vertx:vertx-grpc-context-storage:${maven.version}'
+}
+----

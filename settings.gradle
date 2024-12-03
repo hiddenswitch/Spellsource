@@ -6,13 +6,12 @@ pluginManagement {
 }
 
 plugins {
-  id('org.gradle.toolchains.foojay-resolver-convention') version '0.6.0'
+  id('org.gradle.toolchains.foojay-resolver-convention') version '0.8.0'
 }
 
 buildCache {
   local {
     directory = new File(rootDir, '.gradle/build-cache')
-    removeUnusedEntriesAfterDays = 30
   }
 }
 
@@ -33,3 +32,9 @@ include 'spellsource-private'
 include 'spellsource-web-cardeditor-support'
 include 'spellsource-art-generation'
 include 'spellsource-keycloak'
+include 'vertx-grpc:vertx-grpc-protoc-plugin2'
+include 'vertx-grpc:vertx-grpc-client'
+include 'vertx-grpc:vertx-grpc-common'
+include 'vertx-grpc:vertx-grpc-context-storage'
+include 'vertx-grpc:vertx-grpc-it'
+include 'vertx-grpc:vertx-grpc-server'

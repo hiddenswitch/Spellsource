@@ -3,11 +3,12 @@
 --
 
 -- Dumped from database version 13.11 (Debian 13.11-1.pgdg110+1)
--- Dumped by pg_dump version 13.11
+-- Dumped by pg_dump version 17.2 (Debian 17.2-1.pgdg120+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -33,6 +34,15 @@ CREATE SCHEMA keycloak;
 
 
 ALTER SCHEMA keycloak OWNER TO admin;
+
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: admin
+--
+
+-- *not* creating schema, since initdb creates it
+
+
+ALTER SCHEMA public OWNER TO admin;
 
 --
 -- Name: spellsource; Type: SCHEMA; Schema: -; Owner: admin
@@ -523,7 +533,7 @@ CREATE VIEW spellsource.classes AS
    FROM spellsource.get_classes() get_classes(created_by, class, is_published, collectible, card_script, id, name);
 
 
-ALTER TABLE spellsource.classes OWNER TO admin;
+ALTER VIEW spellsource.classes OWNER TO admin;
 
 --
 -- Name: card_message(spellsource.cards, spellsource.classes); Type: FUNCTION; Schema: spellsource; Owner: admin
@@ -733,15 +743,32 @@ ALTER FUNCTION spellsource.get_collection_cards() OWNER TO admin;
 --
 
 CREATE FUNCTION spellsource.get_latest_card(card_id text, published boolean) RETURNS spellsource.cards
-    LANGUAGE sql STABLE
+    LANGUAGE plpgsql STABLE
     AS $_$
-select *
-from spellsource.cards
-where id = $1
-  and is_published = $2
-  and not is_archived
-order by succession desc
-limit 1
+declare
+    result spellsource.cards;
+begin
+    if published
+    then
+        select c.*
+        from spellsource.cards c
+                 inner join spellsource.published_cards pc on c.succession = pc.succession
+        where c.id = card_id
+        limit 1
+        into result;
+    else
+        select *
+        from spellsource.cards
+        where id = $1
+          and not is_published
+          and not is_archived
+        order by succession desc
+        limit 1
+        into result;
+    end if;
+
+    return result;
+end;
 $_$;
 
 
@@ -789,6 +816,10 @@ CREATE FUNCTION spellsource.on_card_published() RETURNS trigger
 declare
 begin
     update spellsource.cards set is_archived = true where id = new.id and is_published and not is_archived;
+
+    insert into spellsource.published_cards
+    values (new.id, new.succession)
+    on conflict (id) do update set succession = new.succession;
 
     return new;
 end;
@@ -2494,7 +2525,7 @@ CREATE VIEW spellsource.collection_cards AS
    FROM spellsource.get_collection_cards() get_collection_cards(id, created_by, card_script, blockly_workspace, name, type, class, cost, collectible, search_message, last_modified, created_at);
 
 
-ALTER TABLE spellsource.collection_cards OWNER TO admin;
+ALTER VIEW spellsource.collection_cards OWNER TO admin;
 
 --
 -- Name: deck_player_attribute_tuples; Type: TABLE; Schema: spellsource; Owner: admin
@@ -2690,6 +2721,18 @@ ALTER TABLE spellsource.matchmaking_tickets ALTER COLUMN ticket_id ADD GENERATED
     CACHE 1
 );
 
+
+--
+-- Name: published_cards; Type: TABLE; Schema: spellsource; Owner: admin
+--
+
+CREATE TABLE spellsource.published_cards (
+    id text NOT NULL,
+    succession bigint NOT NULL
+);
+
+
+ALTER TABLE spellsource.published_cards OWNER TO admin;
 
 --
 -- Name: flyway_schema_history flyway_schema_history_pk; Type: CONSTRAINT; Schema: hiddenswitch; Owner: admin
@@ -3657,6 +3700,14 @@ ALTER TABLE ONLY spellsource.matchmaking_queues
 
 ALTER TABLE ONLY spellsource.matchmaking_tickets
     ADD CONSTRAINT matchmaking_tickets_pkey PRIMARY KEY (user_id);
+
+
+--
+-- Name: published_cards published_cards_pkey; Type: CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.published_cards
+    ADD CONSTRAINT published_cards_pkey PRIMARY KEY (id);
 
 
 --
@@ -4996,6 +5047,14 @@ ALTER TABLE ONLY spellsource.cards
 
 
 --
+-- Name: cards_in_deck cards_in_deck_card_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.cards_in_deck
+    ADD CONSTRAINT cards_in_deck_card_id_fkey FOREIGN KEY (card_id) REFERENCES spellsource.published_cards(id);
+
+
+--
 -- Name: cards_in_deck cards_in_deck_deck_id_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
 --
 
@@ -5132,6 +5191,14 @@ ALTER TABLE ONLY spellsource.matchmaking_tickets
 
 
 --
+-- Name: published_cards published_cards_succession_fkey; Type: FK CONSTRAINT; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE ONLY spellsource.published_cards
+    ADD CONSTRAINT published_cards_succession_fkey FOREIGN KEY (succession) REFERENCES spellsource.cards(succession) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: user_attribute; Type: ROW SECURITY; Schema: keycloak; Owner: admin
 --
 
@@ -5196,6 +5263,12 @@ CREATE POLICY public_view ON spellsource.decks FOR SELECT USING (is_premade);
 
 
 --
+-- Name: published_cards; Type: ROW SECURITY; Schema: spellsource; Owner: admin
+--
+
+ALTER TABLE spellsource.published_cards ENABLE ROW LEVEL SECURITY;
+
+--
 -- Name: generated_art update_art; Type: POLICY; Schema: spellsource; Owner: admin
 --
 
@@ -5225,6 +5298,13 @@ CREATE POLICY website_delete ON spellsource.cards_in_deck FOR DELETE TO website 
     decks.permitted_to_duplicate
    FROM spellsource.decks
   WHERE ((decks.id = cards_in_deck.deck_id) AND ((decks.created_by)::text = spellsource.get_user_id())))));
+
+
+--
+-- Name: published_cards website_edit; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY website_edit ON spellsource.published_cards USING (starts_with(id, spellsource.get_user_id())) WITH CHECK (starts_with(id, spellsource.get_user_id()));
 
 
 --
@@ -5342,6 +5422,21 @@ CREATE POLICY website_view ON spellsource.decks FOR SELECT TO website USING (spe
 
 
 --
+-- Name: published_cards website_view; Type: POLICY; Schema: spellsource; Owner: admin
+--
+
+CREATE POLICY website_view ON spellsource.published_cards FOR SELECT USING (true);
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: admin
+--
+
+REVOKE USAGE ON SCHEMA public FROM PUBLIC;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
 -- Name: SCHEMA spellsource; Type: ACL; Schema: -; Owner: admin
 --
 
@@ -5403,7 +5498,7 @@ GRANT ALL ON FUNCTION spellsource.set_cards_in_deck(deck text, card_ids text[]) 
 -- Name: TABLE user_attribute; Type: ACL; Schema: keycloak; Owner: admin
 --
 
-GRANT ALL ON TABLE keycloak.user_attribute TO website;
+GRANT SELECT,INSERT,REFERENCES,DELETE,TRIGGER,TRUNCATE,UPDATE ON TABLE keycloak.user_attribute TO website;
 
 
 --
@@ -5418,6 +5513,13 @@ GRANT SELECT ON TABLE spellsource.collection_cards TO website;
 --
 
 GRANT SELECT ON TABLE spellsource.deck_shares TO website;
+
+
+--
+-- Name: TABLE published_cards; Type: ACL; Schema: spellsource; Owner: admin
+--
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE spellsource.published_cards TO website;
 
 
 --

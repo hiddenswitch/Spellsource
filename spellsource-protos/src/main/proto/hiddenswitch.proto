@@ -88,6 +88,7 @@ message ServerConfiguration {
   message VertxConfiguration {
     bool useInfinispanClusterManager = 1;
     optional int32 infinspanPort = 2;
+    string infinispanAddresses = 3;
   }
 
   message CardsConfiguration {

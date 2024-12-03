@@ -20,6 +20,17 @@ const NextOptions: NextAuthOptions = {
       },
     }),
   ],
+  cookies: {
+    pkceCodeVerifier: {
+      name: "next-auth.pkce.code_verifier",
+      options: {
+        httpOnly: true,
+        sameSite: "none",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+  },
   events: {
     signOut: async ({ token }) => {
       await fetch(`${issuer}/protocol/openid-connect/logout?client_id=${clientId}&id_token_hint=${token.idToken}`);

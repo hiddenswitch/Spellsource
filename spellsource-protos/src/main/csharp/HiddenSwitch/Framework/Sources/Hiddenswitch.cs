@@ -26,7 +26,7 @@ namespace HiddenSwitch.Proto {
           string.Concat(
             "ChJoaWRkZW5zd2l0Y2gucHJvdG8SDGhpZGRlbnN3aXRjaBoeZ29vZ2xlL3By",
             "b3RvYnVmL3dyYXBwZXJzLnByb3RvGhtnb29nbGUvcHJvdG9idWYvZW1wdHku",
-            "cHJvdG8aEXNwZWxsc291cmNlLnByb3RvIucRChNTZXJ2ZXJDb25maWd1cmF0",
+            "cHJvdG8aEXNwZWxsc291cmNlLnByb3RvIoUSChNTZXJ2ZXJDb25maWd1cmF0",
             "aW9uEkMKAnBnGAEgASgLMjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3Vy",
             "YXRpb24uUG9zdGdyZXNDb25maWd1cmF0aW9uEkkKCGtleWNsb2FrGAIgASgL",
             "MjcuaGlkZGVuc3dpdGNoLlNlcnZlckNvbmZpZ3VyYXRpb24uS2V5Y2xvYWtD",
@@ -74,54 +74,55 @@ namespace HiddenSwitch.Proto {
             "ASgJEhQKDG1ldHJpY3NSb3V0ZRgEIAEoCRorChhSYXRlTGltaXRlckNvbmZp",
             "Z3VyYXRpb24SDwoHZW5hYmxlZBgBIAEoCBpMChNKYWVnZXJDb25maWd1cmF0",
             "aW9uEg8KB2VuYWJsZWQYASABKAgSEQoJYWdlbnRIb3N0GAIgASgJEhEKCWFn",
-            "ZW50UG9ydBgDIAEoBRpnChJWZXJ0eENvbmZpZ3VyYXRpb24SIwobdXNlSW5m",
-            "aW5pc3BhbkNsdXN0ZXJNYW5hZ2VyGAEgASgIEhoKDWluZmluc3BhblBvcnQY",
-            "AiABKAVIAIgBAUIQCg5faW5maW5zcGFuUG9ydBoUChJDYXJkc0NvbmZpZ3Vy",
-            "YXRpb25KBAgEEAUiwQEKE0NsaWVudENvbmZpZ3VyYXRpb24SSQoIYWNjb3Vu",
-            "dHMYASABKAsyNy5oaWRkZW5zd2l0Y2guQ2xpZW50Q29uZmlndXJhdGlvbi5B",
-            "Y2NvdW50c0NvbmZpZ3VyYXRpb24aXwoVQWNjb3VudHNDb25maWd1cmF0aW9u",
-            "EiAKGGtleWNsb2FrUmVzZXRQYXNzd29yZFVybBgBIAEoCRIkChxrZXljbG9h",
-            "a0FjY291bnRNYW5hZ2VtZW50VXJsGAIgASgJIjgKD0dldENhcmRzUmVxdWVz",
-            "dBIVCg1JZl9Ob25lX01hdGNoGAEgASgJEg4KBnVzZXJJZBgCIAEoCSKhAQoQ",
-            "R2V0Q2FyZHNSZXNwb25zZRI3Cgdjb250ZW50GAEgASgLMiYuaGlkZGVuc3dp",
-            "dGNoLkdldENhcmRzUmVzcG9uc2UuQ29udGVudBIPCgd2ZXJzaW9uGAIgASgJ",
-            "EhAKCGNhY2hlZE9rGAMgASgIGjEKB0NvbnRlbnQSJgoFY2FyZHMYASADKAsy",
-            "Fy5zcGVsbHNvdXJjZS5DYXJkUmVjb3JkIjkKDExvZ2luUmVxdWVzdBIXCg91",
-            "c2VybmFtZU9yRW1haWwYASABKAkSEAoIcGFzc3dvcmQYAiABKAkiZwoUQ3Jl",
-            "YXRlQWNjb3VudFJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIdXNlcm5hbWUY",
-            "AiABKAkSEAoIcGFzc3dvcmQYAyABKAkSDQoFZGVja3MYBCABKAgSDQoFZ3Vl",
-            "c3QYBSABKAgiLAoVQ2hhbmdlUGFzc3dvcmRSZXF1ZXN0EhMKC25ld1Bhc3N3",
-            "b3JkGAEgASgJIoIBChJMb2dpbk9yQ3JlYXRlUmVwbHkSPgoTYWNjZXNzVG9r",
-            "ZW5SZXNwb25zZRgBIAEoCzIhLmhpZGRlbnN3aXRjaC5BY2Nlc3NUb2tlblJl",
-            "c3BvbnNlEiwKCnVzZXJFbnRpdHkYAiABKAsyGC5oaWRkZW5zd2l0Y2guVXNl",
-            "ckVudGl0eSIkChNBY2Nlc3NUb2tlblJlc3BvbnNlEg0KBXRva2VuGAEgASgJ",
-            "Ik8KClVzZXJFbnRpdHkSCgoCaWQYASABKAkSDQoFZW1haWwYAiABKAkSEAoI",
-            "dXNlcm5hbWUYCiABKAkSFAoMcHJpdmFjeVRva2VuGAsgASgJIiEKEkdldEFj",
-            "Y291bnRzUmVxdWVzdBILCgNpZHMYASADKAkiQgoQR2V0QWNjb3VudHNSZXBs",
-            "eRIuCgx1c2VyRW50aXRpZXMYASADKAsyGC5oaWRkZW5zd2l0Y2guVXNlckVu",
-            "dGl0eTLUAgoPVW5hdXRoZW50aWNhdGVkElcKDUNyZWF0ZUFjY291bnQSIi5o",
-            "aWRkZW5zd2l0Y2guQ3JlYXRlQWNjb3VudFJlcXVlc3QaIC5oaWRkZW5zd2l0",
-            "Y2guTG9naW5PckNyZWF0ZVJlcGx5IgASRwoFTG9naW4SGi5oaWRkZW5zd2l0",
-            "Y2guTG9naW5SZXF1ZXN0GiAuaGlkZGVuc3dpdGNoLkxvZ2luT3JDcmVhdGVS",
-            "ZXBseSIAEk4KC1ZlcmlmeVRva2VuEiEuaGlkZGVuc3dpdGNoLkFjY2Vzc1Rv",
-            "a2VuUmVzcG9uc2UaGi5nb29nbGUucHJvdG9idWYuQm9vbFZhbHVlIgASTwoQ",
-            "R2V0Q29uZmlndXJhdGlvbhIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRohLmhp",
-            "ZGRlbnN3aXRjaC5DbGllbnRDb25maWd1cmF0aW9uIgAyYwoUVW5hdXRoZW50",
-            "aWNhdGVkQ2FyZHMSSwoIR2V0Q2FyZHMSHS5oaWRkZW5zd2l0Y2guR2V0Q2Fy",
-            "ZHNSZXF1ZXN0Gh4uaGlkZGVuc3dpdGNoLkdldENhcmRzUmVzcG9uc2UiADJn",
-            "ChJBdXRoZW50aWNhdGVkQ2FyZHMSUQoOR2V0Q2FyZHNCeVVzZXISHS5oaWRk",
-            "ZW5zd2l0Y2guR2V0Q2FyZHNSZXF1ZXN0Gh4uaGlkZGVuc3dpdGNoLkdldENh",
-            "cmRzUmVzcG9uc2UiADLPAgoIQWNjb3VudHMSRgoKR2V0QWNjb3VudBIWLmdv",
-            "b2dsZS5wcm90b2J1Zi5FbXB0eRoeLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50",
-            "c1JlcGx5IgASUQoLR2V0QWNjb3VudHMSIC5oaWRkZW5zd2l0Y2guR2V0QWNj",
-            "b3VudHNSZXF1ZXN0Gh4uaGlkZGVuc3dpdGNoLkdldEFjY291bnRzUmVwbHki",
-            "ABJZCg5DaGFuZ2VQYXNzd29yZBIjLmhpZGRlbnN3aXRjaC5DaGFuZ2VQYXNz",
-            "d29yZFJlcXVlc3QaIC5oaWRkZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJlcGx5",
-            "IgASTQoZUmVxdWVzdFBhc3N3b3JkUmVzZXRFbWFpbBIWLmdvb2dsZS5wcm90",
-            "b2J1Zi5FbXB0eRoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eSIAMkwKBUdhbWVz",
-            "EkMKCUlzSW5NYXRjaBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRocLmdvb2ds",
-            "ZS5wcm90b2J1Zi5TdHJpbmdWYWx1ZSIAQjcKHmNvbS5oaWRkZW5zd2l0Y2gu",
-            "ZnJhbWV3b3JrLnJwY1AAqgISSGlkZGVuU3dpdGNoLlByb3RvYgZwcm90bzM="));
+            "ZW50UG9ydBgDIAEoBRqEAQoSVmVydHhDb25maWd1cmF0aW9uEiMKG3VzZUlu",
+            "ZmluaXNwYW5DbHVzdGVyTWFuYWdlchgBIAEoCBIaCg1pbmZpbnNwYW5Qb3J0",
+            "GAIgASgFSACIAQESGwoTaW5maW5pc3BhbkFkZHJlc3NlcxgDIAEoCUIQCg5f",
+            "aW5maW5zcGFuUG9ydBoUChJDYXJkc0NvbmZpZ3VyYXRpb25KBAgEEAUiwQEK",
+            "E0NsaWVudENvbmZpZ3VyYXRpb24SSQoIYWNjb3VudHMYASABKAsyNy5oaWRk",
+            "ZW5zd2l0Y2guQ2xpZW50Q29uZmlndXJhdGlvbi5BY2NvdW50c0NvbmZpZ3Vy",
+            "YXRpb24aXwoVQWNjb3VudHNDb25maWd1cmF0aW9uEiAKGGtleWNsb2FrUmVz",
+            "ZXRQYXNzd29yZFVybBgBIAEoCRIkChxrZXljbG9ha0FjY291bnRNYW5hZ2Vt",
+            "ZW50VXJsGAIgASgJIjgKD0dldENhcmRzUmVxdWVzdBIVCg1JZl9Ob25lX01h",
+            "dGNoGAEgASgJEg4KBnVzZXJJZBgCIAEoCSKhAQoQR2V0Q2FyZHNSZXNwb25z",
+            "ZRI3Cgdjb250ZW50GAEgASgLMiYuaGlkZGVuc3dpdGNoLkdldENhcmRzUmVz",
+            "cG9uc2UuQ29udGVudBIPCgd2ZXJzaW9uGAIgASgJEhAKCGNhY2hlZE9rGAMg",
+            "ASgIGjEKB0NvbnRlbnQSJgoFY2FyZHMYASADKAsyFy5zcGVsbHNvdXJjZS5D",
+            "YXJkUmVjb3JkIjkKDExvZ2luUmVxdWVzdBIXCg91c2VybmFtZU9yRW1haWwY",
+            "ASABKAkSEAoIcGFzc3dvcmQYAiABKAkiZwoUQ3JlYXRlQWNjb3VudFJlcXVl",
+            "c3QSDQoFZW1haWwYASABKAkSEAoIdXNlcm5hbWUYAiABKAkSEAoIcGFzc3dv",
+            "cmQYAyABKAkSDQoFZGVja3MYBCABKAgSDQoFZ3Vlc3QYBSABKAgiLAoVQ2hh",
+            "bmdlUGFzc3dvcmRSZXF1ZXN0EhMKC25ld1Bhc3N3b3JkGAEgASgJIoIBChJM",
+            "b2dpbk9yQ3JlYXRlUmVwbHkSPgoTYWNjZXNzVG9rZW5SZXNwb25zZRgBIAEo",
+            "CzIhLmhpZGRlbnN3aXRjaC5BY2Nlc3NUb2tlblJlc3BvbnNlEiwKCnVzZXJF",
+            "bnRpdHkYAiABKAsyGC5oaWRkZW5zd2l0Y2guVXNlckVudGl0eSIkChNBY2Nl",
+            "c3NUb2tlblJlc3BvbnNlEg0KBXRva2VuGAEgASgJIk8KClVzZXJFbnRpdHkS",
+            "CgoCaWQYASABKAkSDQoFZW1haWwYAiABKAkSEAoIdXNlcm5hbWUYCiABKAkS",
+            "FAoMcHJpdmFjeVRva2VuGAsgASgJIiEKEkdldEFjY291bnRzUmVxdWVzdBIL",
+            "CgNpZHMYASADKAkiQgoQR2V0QWNjb3VudHNSZXBseRIuCgx1c2VyRW50aXRp",
+            "ZXMYASADKAsyGC5oaWRkZW5zd2l0Y2guVXNlckVudGl0eTLUAgoPVW5hdXRo",
+            "ZW50aWNhdGVkElcKDUNyZWF0ZUFjY291bnQSIi5oaWRkZW5zd2l0Y2guQ3Jl",
+            "YXRlQWNjb3VudFJlcXVlc3QaIC5oaWRkZW5zd2l0Y2guTG9naW5PckNyZWF0",
+            "ZVJlcGx5IgASRwoFTG9naW4SGi5oaWRkZW5zd2l0Y2guTG9naW5SZXF1ZXN0",
+            "GiAuaGlkZGVuc3dpdGNoLkxvZ2luT3JDcmVhdGVSZXBseSIAEk4KC1Zlcmlm",
+            "eVRva2VuEiEuaGlkZGVuc3dpdGNoLkFjY2Vzc1Rva2VuUmVzcG9uc2UaGi5n",
+            "b29nbGUucHJvdG9idWYuQm9vbFZhbHVlIgASTwoQR2V0Q29uZmlndXJhdGlv",
+            "bhIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRohLmhpZGRlbnN3aXRjaC5DbGll",
+            "bnRDb25maWd1cmF0aW9uIgAyYwoUVW5hdXRoZW50aWNhdGVkQ2FyZHMSSwoI",
+            "R2V0Q2FyZHMSHS5oaWRkZW5zd2l0Y2guR2V0Q2FyZHNSZXF1ZXN0Gh4uaGlk",
+            "ZGVuc3dpdGNoLkdldENhcmRzUmVzcG9uc2UiADJnChJBdXRoZW50aWNhdGVk",
+            "Q2FyZHMSUQoOR2V0Q2FyZHNCeVVzZXISHS5oaWRkZW5zd2l0Y2guR2V0Q2Fy",
+            "ZHNSZXF1ZXN0Gh4uaGlkZGVuc3dpdGNoLkdldENhcmRzUmVzcG9uc2UiADLP",
+            "AgoIQWNjb3VudHMSRgoKR2V0QWNjb3VudBIWLmdvb2dsZS5wcm90b2J1Zi5F",
+            "bXB0eRoeLmhpZGRlbnN3aXRjaC5HZXRBY2NvdW50c1JlcGx5IgASUQoLR2V0",
+            "QWNjb3VudHMSIC5oaWRkZW5zd2l0Y2guR2V0QWNjb3VudHNSZXF1ZXN0Gh4u",
+            "aGlkZGVuc3dpdGNoLkdldEFjY291bnRzUmVwbHkiABJZCg5DaGFuZ2VQYXNz",
+            "d29yZBIjLmhpZGRlbnN3aXRjaC5DaGFuZ2VQYXNzd29yZFJlcXVlc3QaIC5o",
+            "aWRkZW5zd2l0Y2guTG9naW5PckNyZWF0ZVJlcGx5IgASTQoZUmVxdWVzdFBh",
+            "c3N3b3JkUmVzZXRFbWFpbBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoWLmdv",
+            "b2dsZS5wcm90b2J1Zi5FbXB0eSIAMkwKBUdhbWVzEkMKCUlzSW5NYXRjaBIW",
+            "Lmdvb2dsZS5wcm90b2J1Zi5FbXB0eRocLmdvb2dsZS5wcm90b2J1Zi5TdHJp",
+            "bmdWYWx1ZSIAQjcKHmNvbS5oaWRkZW5zd2l0Y2guZnJhbWV3b3JrLnJwY1AA",
+            "qgISSGlkZGVuU3dpdGNoLlByb3RvYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.WrappersReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.EmptyReflection.Descriptor, global::Spellsource.Proto.SpellsourceReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -136,7 +137,7 @@ namespace HiddenSwitch.Proto {
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.MetricsConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.MetricsConfiguration.Parser, new[]{ "Port", "LivenessRoute", "ReadinessRoute", "MetricsRoute" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.RateLimiterConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.RateLimiterConfiguration.Parser, new[]{ "Enabled" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.JaegerConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.JaegerConfiguration.Parser, new[]{ "Enabled", "AgentHost", "AgentPort" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.VertxConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.VertxConfiguration.Parser, new[]{ "UseInfinispanClusterManager", "InfinspanPort" }, new[]{ "InfinspanPort" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.VertxConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.VertxConfiguration.Parser, new[]{ "UseInfinispanClusterManager", "InfinspanPort", "InfinispanAddresses" }, new[]{ "InfinspanPort" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ServerConfiguration.Types.CardsConfiguration), global::HiddenSwitch.Proto.ServerConfiguration.Types.CardsConfiguration.Parser, null, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ClientConfiguration), global::HiddenSwitch.Proto.ClientConfiguration.Parser, new[]{ "Accounts" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.ClientConfiguration.Types.AccountsConfiguration), global::HiddenSwitch.Proto.ClientConfiguration.Types.AccountsConfiguration.Parser, new[]{ "KeycloakResetPasswordUrl", "KeycloakAccountManagementUrl" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::HiddenSwitch.Proto.GetCardsRequest), global::HiddenSwitch.Proto.GetCardsRequest.Parser, new[]{ "IfNoneMatch", "UserId" }, null, null, null, null),
@@ -4187,6 +4188,7 @@ namespace HiddenSwitch.Proto {
           _hasBits0 = other._hasBits0;
           useInfinispanClusterManager_ = other.useInfinispanClusterManager_;
           infinspanPort_ = other.infinspanPort_;
+          infinispanAddresses_ = other.infinispanAddresses_;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -4235,6 +4237,18 @@ namespace HiddenSwitch.Proto {
           _hasBits0 &= ~1;
         }
 
+        /// <summary>Field number for the "infinispanAddresses" field.</summary>
+        public const int InfinispanAddressesFieldNumber = 3;
+        private string infinispanAddresses_ = "";
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public string InfinispanAddresses {
+          get { return infinispanAddresses_; }
+          set {
+            infinispanAddresses_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
         public override bool Equals(object other) {
@@ -4252,6 +4266,7 @@ namespace HiddenSwitch.Proto {
           }
           if (UseInfinispanClusterManager != other.UseInfinispanClusterManager) return false;
           if (InfinspanPort != other.InfinspanPort) return false;
+          if (InfinispanAddresses != other.InfinispanAddresses) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -4261,6 +4276,7 @@ namespace HiddenSwitch.Proto {
           int hash = 1;
           if (UseInfinispanClusterManager != false) hash ^= UseInfinispanClusterManager.GetHashCode();
           if (HasInfinspanPort) hash ^= InfinspanPort.GetHashCode();
+          if (InfinispanAddresses.Length != 0) hash ^= InfinispanAddresses.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -4287,6 +4303,10 @@ namespace HiddenSwitch.Proto {
             output.WriteRawTag(16);
             output.WriteInt32(InfinspanPort);
           }
+          if (InfinispanAddresses.Length != 0) {
+            output.WriteRawTag(26);
+            output.WriteString(InfinispanAddresses);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -4305,6 +4325,10 @@ namespace HiddenSwitch.Proto {
             output.WriteRawTag(16);
             output.WriteInt32(InfinspanPort);
           }
+          if (InfinispanAddresses.Length != 0) {
+            output.WriteRawTag(26);
+            output.WriteString(InfinispanAddresses);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(ref output);
           }
@@ -4320,6 +4344,9 @@ namespace HiddenSwitch.Proto {
           }
           if (HasInfinspanPort) {
             size += 1 + pb::CodedOutputStream.ComputeInt32Size(InfinspanPort);
+          }
+          if (InfinispanAddresses.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(InfinispanAddresses);
           }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
@@ -4338,6 +4365,9 @@ namespace HiddenSwitch.Proto {
           }
           if (other.HasInfinspanPort) {
             InfinspanPort = other.InfinspanPort;
+          }
+          if (other.InfinispanAddresses.Length != 0) {
+            InfinispanAddresses = other.InfinispanAddresses;
           }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
@@ -4362,6 +4392,10 @@ namespace HiddenSwitch.Proto {
                 InfinspanPort = input.ReadInt32();
                 break;
               }
+              case 26: {
+                InfinispanAddresses = input.ReadString();
+                break;
+              }
             }
           }
         #endif
@@ -4383,6 +4417,10 @@ namespace HiddenSwitch.Proto {
               }
               case 16: {
                 InfinspanPort = input.ReadInt32();
+                break;
+              }
+              case 26: {
+                InfinispanAddresses = input.ReadString();
                 break;
               }
             }

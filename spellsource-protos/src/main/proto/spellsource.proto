@@ -1204,6 +1204,7 @@ message InventoryCollection {
     ValidationReport validationReport = 11;
 
     // This used to store the deck editability flag, which is no longer read.
+    // A deck is editable if the userId (aka owner) associated with the collection matches the user making the edits
     reserved 12;
 }
 

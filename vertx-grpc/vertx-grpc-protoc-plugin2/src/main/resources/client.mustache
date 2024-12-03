@@ -1,0 +1,73 @@
+{{#packageName}}
+package {{packageName}};
+{{/packageName}}
+
+import io.grpc.Status;
+import io.grpc.StatusException;
+import io.grpc.StatusRuntimeException;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
+import io.vertx.core.net.SocketAddress;
+import io.vertx.grpc.client.GrpcClient;
+import io.vertx.core.streams.ReadStream;
+import io.vertx.core.streams.WriteStream;
+import io.vertx.grpc.common.GrpcStatus;
+
+public class {{className}} {
+  private final GrpcClient client;
+  private final SocketAddress socketAddress;
+
+  public {{className}}(GrpcClient client, SocketAddress socketAddress) {
+    this.client = client;
+    this.socketAddress = socketAddress;
+  }
+
+{{#unaryMethods}}
+  public Future<{{outputType}}> {{methodName}}({{inputType}} request) {
+    return client.request(socketAddress, {{serviceName}}Grpc.{{methodNameGetter}}()).compose(req -> {
+      req.end(request);
+      return req.response().compose(resp -> resp.last());
+    });
+  }
+
+{{/unaryMethods}}
+{{#unaryManyMethods}}
+  public Future<ReadStream<{{outputType}}>> {{methodName}}({{inputType}} request) {
+    return client.request(socketAddress, {{serviceName}}Grpc.{{methodNameGetter}}()).compose(req -> {
+      req.end(request);
+      return req.response().flatMap(resp -> {
+        if (resp.status() != null && resp.status() != GrpcStatus.OK) {
+          return Future.failedFuture(Status.fromCodeValue(resp.status().code).withDescription(resp.statusMessage()).asRuntimeException());
+        } else {
+          return Future.succeededFuture(resp);
+        }
+      });
+    });
+  }
+
+{{/unaryManyMethods}}
+{{#manyUnaryMethods}}
+  public Future<{{outputType}}> {{methodName}}(Handler<WriteStream<{{inputType}}>> request) {
+    return client.request(socketAddress, {{serviceName}}Grpc.{{methodNameGetter}}()).compose(req -> {
+      request.handle(req);
+      return req.response().compose(resp -> resp.last());
+    });
+  }
+
+{{/manyUnaryMethods}}
+{{#manyManyMethods}}
+  public Future<ReadStream<{{outputType}}>> {{methodName}}(Handler<WriteStream<{{inputType}}>> request) {
+    return client.request(socketAddress, {{serviceName}}Grpc.{{methodNameGetter}}()).compose(req -> {
+      request.handle(req);
+      return req.response().flatMap(resp -> {
+        if (resp.status() != null && resp.status() != GrpcStatus.OK) {
+          return Future.failedFuture(Status.fromCodeValue(resp.status().code).withDescription(resp.statusMessage()).asRuntimeException());
+        } else {
+          return Future.succeededFuture(resp);
+        }
+      });
+    });
+  }
+
+{{/manyManyMethods}}
+}

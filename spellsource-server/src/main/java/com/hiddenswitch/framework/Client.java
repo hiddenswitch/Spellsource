@@ -14,19 +14,24 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.*;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MessageTypeMessage.MessageType;
 import com.hiddenswitch.spellsource.rpc.VertxHiddenSwitchSpellsourceAPIServiceGrpcClient;
 import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpcClient;
+import io.grpc.Status;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.HttpVersion;
 import io.vertx.core.http.RequestOptions;
 import io.vertx.core.http.impl.headers.HeadersMultiMap;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
+import io.vertx.ext.auth.impl.jose.JWK;
+import io.vertx.ext.auth.impl.jose.JWT;
+import io.vertx.ext.auth.jwt.JWTAuth;
+import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
-import io.vertx.grpc.common.GrpcException;
 import io.vertx.grpc.common.GrpcStatus;
 import net.demilich.metastone.game.logic.XORShiftRandom;
 import org.keycloak.representations.AccessTokenResponse;
@@ -52,6 +57,7 @@ public class Client {
 	private final Logger LOGGER = LoggerFactory.getLogger(Client.class);
 	private final String loginUri;
 	private final XORShiftRandom random = new XORShiftRandom(System.nanoTime());
+	private final JWT jwt;
 	private AccessTokenResponse accessToken;
 	private UserEntity userEntity;
 	private String username;
@@ -64,6 +70,7 @@ public class Client {
 		this.vertx = vertx;
 		this.webClient = webClient;
 		this.keycloakPath = keycloakPath;
+		this.jwt = new JWT();
 		loginUri = URI.create(keycloakPath + Accounts.KEYCLOAK_LOGIN_PATH).normalize().toString();
 	}
 
@@ -190,6 +197,7 @@ public class Client {
 					}
 					matchmakingResponseFut = null;
 				})
+				.onFailure(Environment.onFailure())
 				.map(f -> f.resultAt(1));
 	}
 
@@ -204,7 +212,8 @@ public class Client {
 				.compose(decks -> {
 					var index = random.nextInt(0, decks.getDecksCount());
 					return matchmake(matchmaking, queueId, decks.getDecks(index).getCollection().getId());
-				});
+				})
+				.onFailure(Environment.onFailure());
 	}
 
 	public Future<Void> cancelMatchmaking() {
@@ -228,7 +237,7 @@ public class Client {
 						.setDecks(premadeDecks)
 						.build())
 				.onFailure(Environment.onFailure())
-				.onSuccess(this::handleCreateAccountReply);
+				.compose(this::handleCreateAccountReply);
 	}
 
 	public Future<LoginOrCreateReply> createAndLogin() {
@@ -244,6 +253,7 @@ public class Client {
 					.map(AccessTokenResponse::getToken)
 					.recover(ignored -> createAndLogin(username, email, password)
 							.onSuccess(this::handleCreateAccountReply)
+							.onFailure(Environment.onFailure())
 							.map(response -> response.getAccessTokenResponse().getToken())));
 			return credentials();
 		}
@@ -296,10 +306,10 @@ public class Client {
 				return existing;
 			}
 
-			return new GrpcClientWithOptions(new HttpClientOptions()
+			return new GrpcClientWithOptions(vertx, new HttpClientOptions()
 					.setProtocolVersion(HttpVersion.HTTP_2)
 					.setHttp2ClearTextUpgrade(false)
-					.setSsl(false), vertx);
+					.setSsl(false));
 		});
 	}
 
@@ -321,13 +331,35 @@ public class Client {
 		return close((Object) null);
 	}
 
-	private void handleCreateAccountReply(LoginOrCreateReplyOrBuilder reply) {
-		handleLogin(new AccessTokenResponse());
-		handleAccountsCreateUser(new UserEntity()
-				.setId(reply.getUserEntity().getId())
-				.setUsername(reply.getUserEntity().getUsername())
-				.setEmail(reply.getUserEntity().getEmail()));
-		this.accessToken.setToken(reply.getAccessTokenResponse().getToken());
+	private Future<LoginOrCreateReply> handleCreateAccountReply(LoginOrCreateReply reply) {
+		Future<LoginOrCreateReply> jwtComplete;
+		if (this.jwt.isUnsecure()) {
+			jwtComplete = Accounts.jwtAuthOptions(this.webClient)
+					.compose(jwtAuthOptions -> {
+						if (jwtAuthOptions.getJwks() != null) {
+							jwtAuthOptions.getJwks().forEach(jwk -> jwt.addJWK(new JWK(jwk)));
+						}
+						if (jwtAuthOptions.getPubSecKeys() != null) {
+							jwtAuthOptions.getPubSecKeys().forEach(psk -> jwt.addJWK(new JWK(psk)));
+						}
+						return Future.succeededFuture(reply);
+					});
+		} else {
+			jwtComplete = Future.succeededFuture(reply);
+		}
+		return jwtComplete.compose(v -> {
+			var jwtDecoded = this.jwt.decode(reply.getAccessTokenResponse().getToken());
+			var atr = new AccessTokenResponse();
+			atr.setToken(reply.getAccessTokenResponse().getToken());
+			atr.setExpiresIn((jwtDecoded.getLong("exp") - jwtDecoded.getLong("iat")));
+			handleLogin(atr);
+			handleAccountsCreateUser(new UserEntity()
+					.setId(reply.getUserEntity().getId())
+					.setUsername(reply.getUserEntity().getUsername())
+					.setEmail(reply.getUserEntity().getEmail()));
+			this.accessToken.setToken(reply.getAccessTokenResponse().getToken());
+			return Future.succeededFuture(reply);
+		});
 	}
 
 	private void handleLogin(AccessTokenResponse accessToken) {
@@ -341,6 +373,7 @@ public class Client {
 	public VertxHiddenSwitchSpellsourceAPIServiceGrpcClient legacy() {
 		return new VertxHiddenSwitchSpellsourceAPIServiceGrpcClient(client().setRequestOptions(new RequestOptions().setHeaders(credentials())), SocketAddress.inetSocketAddress(port(), host()));
 	}
+
 	public VertxAuthenticatedCardsGrpcClient cards() {
 		return new VertxAuthenticatedCardsGrpcClient(client().setRequestOptions(new RequestOptions().setHeaders(credentials())), SocketAddress.inetSocketAddress(port(), host()));
 	}
@@ -369,7 +402,7 @@ public class Client {
 							return req.response().flatMap(resp -> {
 								if (resp.status() != null && resp.status() != GrpcStatus.OK) {
 									keepAliveManager.onTransportTermination();
-									return Future.failedFuture(new GrpcException(resp.statusMessage(), resp.status(), null));
+									return Future.failedFuture(Status.fromCodeValue(resp.status().code).withDescription(resp.statusMessage()).asRuntimeException());
 								} else {
 									keepAliveManager.onDataReceived();
 									return Future.succeededFuture(resp);

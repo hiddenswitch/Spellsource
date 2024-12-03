@@ -26,14 +26,14 @@ public class GrpcClientWithOptions implements GrpcClient {
 	private HttpClient client;
 	private RequestOptions requestOptions = new RequestOptions();
 
-	public GrpcClientWithOptions(HttpClientOptions options, Vertx vertx) {
+	public GrpcClientWithOptions(Vertx vertx, HttpClientOptions options) {
 		this.vertx = vertx;
 		this.client = vertx.createHttpClient(new HttpClientOptions(options)
 				.setProtocolVersion(HttpVersion.HTTP_2));
 	}
 
 	public GrpcClientWithOptions(Vertx vertx) {
-		this(new HttpClientOptions().setHttp2ClearTextUpgrade(false), vertx);
+		this(vertx, new HttpClientOptions().setHttp2ClearTextUpgrade(false));
 	}
 
 	@Override

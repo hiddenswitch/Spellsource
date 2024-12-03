@@ -1,0 +1,71 @@
+plugins {
+  id 'java-library'
+}
+
+sourceSets {
+  main {
+    java {
+      exclude 'src/main/java/examples/**'
+    }
+  }
+  examples {
+    java {
+      srcDir 'src/main/java/examples'
+    }
+    resources {
+      srcDir 'src/main/proto'
+    }
+  }
+}
+
+configurations {
+  examplesImplementation
+  examplesRuntimeOnly
+}
+
+dependencies {
+  api "io.vertx:vertx-core:$vertxVersion"
+  api("io.grpc:grpc-stub:$grpcVersion") {
+    exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+  }
+
+  api("io.grpc:grpc-api:$grpcVersion") {
+    exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+    exclude group: 'org.codehaus.mojo', module: 'animal-sniffer-annotations'
+  }
+  implementation 'com.google.guava:guava:31.1-jre'
+
+  testImplementation "io.grpc:grpc-netty:$grpcVersion"
+  testImplementation "io.vertx:vertx-unit:$vertxVersion"
+  testImplementation "org.bouncycastle:bcpkix-jdk15on:1.70"
+  testImplementation("io.grpc:grpc-netty:$grpcVersion") {
+    exclude group: '*', module: '*'
+  }
+
+  // Examples-specific dependencies
+  examplesImplementation project(':vertx-grpc:vertx-grpc-common')
+  examplesImplementation group: 'com.google.protobuf', name: 'protobuf-java', version: javaProtobufVersion
+
+  examplesImplementation("io.grpc:grpc-protobuf:$grpcVersion") {
+    exclude group: 'com.google.guava', module: 'guava'
+  }
+  examplesImplementation "io.grpc:grpc-stub:$grpcVersion"
+  examplesImplementation "io.grpc:grpc-api:$grpcVersion"
+}
+
+// In vertx-grpc-common/build.gradle
+tasks.register('testJar', Jar) {
+  archiveClassifier = 'tests'
+  from sourceSets.test.output
+}
+
+configurations {
+  testClasses {
+    canBeResolved = true
+    canBeConsumed = true
+  }
+}
+
+artifacts {
+  testClasses testJar
+}

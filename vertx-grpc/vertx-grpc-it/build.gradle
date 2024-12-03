@@ -1,0 +1,68 @@
+plugins {
+  id 'java-library'
+  id 'com.google.protobuf' version '0.9.4'
+}
+
+configurations {
+  protocPlugin
+}
+
+dependencies {
+  implementation project(':vertx-grpc:vertx-grpc-client')
+  implementation project(':vertx-grpc:vertx-grpc-server')
+
+  testImplementation project(path: ':vertx-grpc:vertx-grpc-common', configuration: 'testClasses')
+
+  testImplementation project(':vertx-grpc:vertx-grpc-server')
+  testImplementation project(':vertx-grpc:vertx-grpc-client')
+  testImplementation "io.vertx:vertx-unit:$vertxVersion"
+  testImplementation "org.bouncycastle:bcpkix-jdk15on:1.70"
+  testImplementation("io.grpc:grpc-stub:$grpcVersion") {
+    exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+  }
+  testImplementation("io.grpc:grpc-netty:$grpcVersion") {
+    exclude group: '*', module: '*'
+  }
+  testImplementation group: 'com.google.protobuf', name: 'protobuf-java', version: javaProtobufVersion
+  testCompileOnly "javax.annotation:javax.annotation-api:1.3.2"
+
+  testImplementation("io.grpc:grpc-protobuf:$grpcVersion") {
+    exclude group: 'com.google.guava', module: 'guava'
+  }
+
+  testImplementation("io.grpc:grpc-stub:$grpcVersion") {
+    exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+  }
+  testImplementation("io.grpc:grpc-api:$grpcVersion") {
+    exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+    exclude group: 'org.codehaus.mojo', module: 'animal-sniffer-annotations'
+  }
+
+
+  protocPlugin project(path: ':vertx-grpc:vertx-grpc-protoc-plugin2', configuration: 'shadow')
+
+}
+
+
+protobuf {
+  protoc {
+    artifact = "com.google.protobuf:protoc:3.25.5"
+  }
+  plugins {
+    grpc {
+      artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
+    }
+    vertx {
+      path = tasks.getByPath(':vertx-grpc:vertx-grpc-protoc-plugin2:shadowJar').archiveFile.get().asFile
+    }
+  }
+  generateProtoTasks {
+    all().each { task ->
+      task.plugins {
+        grpc {}
+        vertx {}
+      }
+      task.dependsOn ':vertx-grpc:vertx-grpc-protoc-plugin2:shadowJar'
+    }
+  }
+}

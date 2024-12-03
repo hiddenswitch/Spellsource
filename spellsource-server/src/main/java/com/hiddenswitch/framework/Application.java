@@ -35,20 +35,20 @@ public class Application {
 		var configuration = getConfiguration();
 		LOGGER.debug("configuration: " + configuration.toString());
 		vertx.runOnContext(v -> {
-			var broadcaster = configuration.getApplication().getUseBroadcaster() ? vertx.deployVerticle(Broadcaster.class, new DeploymentOptions().setInstances(1)) : Future.succeededFuture("");
+			var broadcaster = configuration.getApplication().getUseBroadcaster() ? vertx.deployVerticle(Broadcaster.class, new DeploymentOptions().setInstances(1).setThreadingModel(ThreadingModel.VIRTUAL_THREAD)) : Future.succeededFuture("");
 			// liveness should be going before we start the migration
 			Diagnostics.tracing(vertx)
-					.compose(v1 -> Diagnostics.routes(vertx))
-					.compose(v1 -> {
+					.compose(w -> Diagnostics.routes(vertx))
+					.compose(w -> {
 						if (configuration.hasMigration() && configuration.getMigration().getShouldMigrate()) {
 							return Environment.migrate(configuration);
 						}
 						return Future.succeededFuture();
 					})
-					.compose(v1 ->
-							all(vertx.deployVerticle(Gateway::new, new DeploymentOptions().setInstances(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))),
-									vertx.deployVerticle(Matchmaking.class, new DeploymentOptions().setInstances(1)),
-									vertx.deployVerticle(ClusteredGames.class, new DeploymentOptions().setInstances(CpuCoreSensor.availableProcessors() * 2)),
+					.compose(w ->
+							Future.all(vertx.deployVerticle(Gateway::new, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD).setInstances(Math.max(CpuCoreSensor.availableProcessors() * 2, 8))),
+									vertx.deployVerticle(Matchmaking.class, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD).setInstances(1)),
+									vertx.deployVerticle(ClusteredGames.class, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD).setInstances(CpuCoreSensor.availableProcessors() * 2)),
 									broadcaster)
 					)
 					.onFailure(t -> LOGGER.error("main: failed with", t))

@@ -25,8 +25,8 @@ import java.util.function.BiConsumer;
  * Copies a {@code target}'s source card. Includes card cost modifiers that are hosted by the card (typically ones that
  * target {@link net.demilich.metastone.game.targeting.EntityReference#SELF}.
  * <p>
- * Casts the {@link SpellArg#SPELL} sub-spell on each newly generated card as the {@link
- * net.demilich.metastone.game.targeting.EntityReference#OUTPUT}. To copy a card in your opponent's hand:
+ * Casts the {@link SpellArg#SPELL} sub-spell on each newly generated card as the
+ * {@link net.demilich.metastone.game.targeting.EntityReference#OUTPUT}. To copy a card in your opponent's hand:
  * <pre>
  *   {
  *     "class": "CopyCardSpell",
@@ -37,7 +37,7 @@ import java.util.function.BiConsumer;
  */
 public class CopyCardSpell extends Spell {
 
-	private static Logger logger = LoggerFactory.getLogger(CopyCardSpell.class);
+	private static final Logger logger = LoggerFactory.getLogger(CopyCardSpell.class);
 
 	public static SpellDesc create(Card card) {
 		Map<SpellArg, Object> args = new SpellDesc(CopyCardSpell.class);
@@ -49,62 +49,6 @@ public class CopyCardSpell extends Spell {
 		SpellDesc desc = create(card);
 		desc.put(SpellArg.VALUE, copies);
 		return desc;
-	}
-
-	@Override
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.CARD_LOCATION, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.SPELL, SpellArg.VALUE);
-		int numberOfCardsToCopy = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
-		if (target != null) {
-			Card targetCard = target.getSourceCard();
-			if (target instanceof Minion) {
-				targetCard = context.getCardById(target.getSourceCard().getCardId());
-			}
-			for (int i = 0; i < numberOfCardsToCopy; i++) {
-				final Card clone = copyCard(context, player, source, targetCard, (playerId, card) -> context.getLogic().receiveCard(playerId, card));
-				final SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
-				SpellUtils.castChildSpell(context, player, subSpell, source, target, clone);
-			}
-			return;
-		}
-
-		CardList sourceCollection = null;
-		Zones cardLocation = (Zones) desc.get(SpellArg.CARD_LOCATION);
-		if (cardLocation != null) {
-			sourceCollection = getCardsFromLocation(context, player, cardLocation);
-		}
-
-		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
-		if (cardSource != null) {
-			sourceCollection = cardSource.getCards(context, source, player);
-		}
-
-		if (sourceCollection == null) {
-			throw new NullPointerException("Trying to access a null source collection.");
-		}
-
-		EntityFilter filter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
-
-		if (filter != null) {
-			sourceCollection = sourceCollection.filtered(filter.matcher(context, player, source));
-		}
-
-		List<SpellDesc> subSpells = desc.subSpells(0);
-		for (int i = 0; i < numberOfCardsToCopy; i++) {
-			if (sourceCollection.isEmpty()) {
-				return;
-			}
-			Card random = context.getLogic().getRandom(sourceCollection);
-			peek(random, context, player);
-			Card output = copyCard(context, player, source, random, (playerId, card) -> context.getLogic().receiveCard(playerId, card));
-			// Only cast the subspells if they actually made it into the player's hand
-			if (output == null || output.getZone() != Zones.HAND) {
-				continue;
-			}
-			for (SpellDesc subSpell : subSpells) {
-				SpellUtils.castChildSpell(context, player, subSpell, source, target, output);
-			}
-		}
 	}
 
 	/**
@@ -149,6 +93,62 @@ public class CopyCardSpell extends Spell {
 			clone.setAttribute(Attribute.DEATHRATTLES, inCard.getAttribute(Attribute.DEATHRATTLES));
 		}
 		return clone;
+	}
+
+	@Override
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.CARD_LOCATION, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.SPELL, SpellArg.VALUE);
+		int numberOfCardsToCopy = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
+		if (target != null) {
+			Card targetCard = target.getSourceCard();
+			if (target instanceof Minion) {
+				targetCard = context.getCardById(target.getSourceCard().getCardId());
+			}
+			for (int i = 0; i < numberOfCardsToCopy; i++) {
+				final Card clone = copyCard(context, player, source, targetCard, (playerId, card) -> context.getLogic().receiveCard(playerId, card));
+				final SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
+				SpellUtils.castChildSpell(context, player, subSpell, source, target, clone);
+			}
+			return;
+		}
+
+		CardList sourceCollection = null;
+		Zones cardLocation = (Zones) desc.get(SpellArg.CARD_LOCATION);
+		CardSource cardSource = (CardSource) desc.get(SpellArg.CARD_SOURCE);
+
+		if (cardLocation != null) {
+			sourceCollection = getCardsFromLocation(context, player, cardLocation);
+		} else if (cardSource != null) {
+			sourceCollection = cardSource.getCards(context, source, player);
+		}
+
+		if (sourceCollection == null) {
+			logger.error("{}: Trying to access a null source collection.", source.getSourceCard().getCardId());
+			return;
+		}
+
+		EntityFilter filter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
+
+		if (filter != null) {
+			sourceCollection = sourceCollection.filtered(filter.matcher(context, player, source));
+		}
+
+		List<SpellDesc> subSpells = desc.subSpells(0);
+		for (int i = 0; i < numberOfCardsToCopy; i++) {
+			if (sourceCollection.isEmpty()) {
+				return;
+			}
+			Card random = context.getLogic().getRandom(sourceCollection);
+			peek(random, context, player);
+			Card output = copyCard(context, player, source, random, (playerId, card) -> context.getLogic().receiveCard(playerId, card));
+			// Only cast the subspells if they actually made it into the player's hand
+			if (output == null || output.getZone() != Zones.HAND) {
+				continue;
+			}
+			for (SpellDesc subSpell : subSpells) {
+				SpellUtils.castChildSpell(context, player, subSpell, source, target, output);
+			}
+		}
 	}
 
 	protected void peek(final Card random, GameContext context, Player player) {

@@ -119,10 +119,11 @@ public class CardsInDeck extends TableImpl<CardsInDeckRecord> {
 
     @Override
     public List<ForeignKey<CardsInDeckRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.CARDS_IN_DECK__CARDS_IN_DECK_DECK_ID_FKEY);
+        return Arrays.asList(Keys.CARDS_IN_DECK__CARDS_IN_DECK_DECK_ID_FKEY, Keys.CARDS_IN_DECK__CARDS_IN_DECK_CARD_ID_FKEY);
     }
 
     private transient Decks _decks;
+    private transient PublishedCards _publishedCards;
 
     /**
      * Get the implicit join path to the <code>spellsource.decks</code> table.
@@ -132,6 +133,17 @@ public class CardsInDeck extends TableImpl<CardsInDeckRecord> {
             _decks = new Decks(this, Keys.CARDS_IN_DECK__CARDS_IN_DECK_DECK_ID_FKEY);
 
         return _decks;
+    }
+
+    /**
+     * Get the implicit join path to the
+     * <code>spellsource.published_cards</code> table.
+     */
+    public PublishedCards publishedCards() {
+        if (_publishedCards == null)
+            _publishedCards = new PublishedCards(this, Keys.CARDS_IN_DECK__CARDS_IN_DECK_CARD_ID_FKEY);
+
+        return _publishedCards;
     }
 
     @Override

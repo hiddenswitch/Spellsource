@@ -5,6 +5,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.hiddenswitch.framework.Environment;
 import com.hiddenswitch.framework.Games;
+import com.hiddenswitch.framework.Gateway;
 import com.hiddenswitch.framework.Matchmaking;
 import com.hiddenswitch.spellsource.rpc.Spellsource;
 import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpcServer;
@@ -49,7 +50,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 
 	@Override
 	public void enqueue(GrpcServerRequest<Spellsource.MatchmakingQueuePutRequest, Spellsource.MatchmakingQueuePutResponse> grpcServerRequest, ReadStream<Spellsource.MatchmakingQueuePutRequest> request, WriteStream<Spellsource.MatchmakingQueuePutResponse> response) {
-		var userId = grpcServerRequest.routingContext().user().subject();
+		var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
 		Objects.requireNonNull(userId);
 
 		var vertx = Vertx.currentContext().owner();

@@ -25,16 +25,6 @@ public class Diagnostics {
 	private final static Logger LOGGER = LoggerFactory.getLogger(Diagnostics.class);
 	private final static Multiset<String> MESSAGES = ConcurrentHashMultiset.create();
 
-	public static void expect(String message, int times) {
-		Environment.sleep(1000)
-				.onSuccess(v -> {
-					var removed = MESSAGES.remove(message, times);
-					if (removed != times) {
-						LOGGER.error("message {} not received, saw {} expected {}", message, removed, times);
-					}
-				});
-	}
-
 	public static void post(String message) {
 		MESSAGES.add(message);
 	}
@@ -59,7 +49,7 @@ public class Diagnostics {
 					// TODO: what should the redis nodes selection here be?
 					var client = new Client(vertx);
 
-					var protos = client.unauthenticated().getConfiguration(Empty.getDefaultInstance()).eventually(client::close);
+					var protos = client.unauthenticated().getConfiguration(Empty.getDefaultInstance()).eventually(v -> client.closeFut());
 					var redis = Future.fromCompletionStage(Environment.redisson().getRedisNodes(RedisNodes.SINGLE).getInstance().pingAsync(200, TimeUnit.MILLISECONDS));
 					var pgConnectOptions = Environment.pgArgs().connectionOptions();
 					pgConnectOptions.setConnectTimeout(1000);

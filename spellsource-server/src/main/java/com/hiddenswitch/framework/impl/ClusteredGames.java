@@ -11,10 +11,7 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.ServerToClientMessage;
 import io.github.jklingsporn.vertx.jooq.shared.postgres.JSONToJsonObjectConverter;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.binder.BaseUnits;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
-import io.vertx.core.Promise;
-import io.vertx.core.Vertx;
+import io.vertx.core.*;
 import io.vertx.core.eventbus.MessageConsumer;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
@@ -40,9 +37,8 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 			.register(globalRegistry);
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClusteredGames.class);
 	private final Map<String, ServerGameContext> contexts = new ConcurrentHashMap<>();
-	private MessageConsumer<?> registration;
 	private final SqlCachedCardCatalogue cardCatalogue = new SqlCachedCardCatalogue();
-
+	private MessageConsumer<?> registration;
 
 	@Override
 	public void startVirtual() throws Exception {
@@ -154,7 +150,7 @@ public class ClusteredGames extends AbstractVirtualThreadVerticle {
 							}
 						}
 					};
-					return vertx.deployVerticle(serverContextVerticle)
+					return vertx.deployVerticle(serverContextVerticle, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD))
 							.map(deploymentId -> CreateGameSessionResponse.session(deploymentID(), serverContextVerticle.serverGameContext));
 				})
 				.onFailure(Environment.onFailure())

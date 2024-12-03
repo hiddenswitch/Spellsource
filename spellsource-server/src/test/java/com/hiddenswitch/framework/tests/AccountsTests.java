@@ -233,4 +233,28 @@ public class AccountsTests extends FrameworkTestBase {
 				})
 				.onComplete(testContext.succeedingThenComplete());
 	}
+
+	@Test
+	public void testTokenExpiryDuration(Vertx vertx, VertxTestContext testContext) {
+		var webClient = WebClient.create(vertx);
+		var client = new Client(vertx, webClient);
+
+		// Number of seconds in 364 days
+		long minimumExpirySeconds = 364L * 24L * 60L * 60L;
+
+		startGateway(vertx)
+				.compose(v -> client.createAndLogin(
+						UUID.randomUUID().toString(),
+						UUID.randomUUID().toString() + "@hiddenswitch.com",
+						"password"))
+				.onSuccess(loginReply -> {
+					testContext.verify(() -> {
+						assertTrue(client.getAccessToken().getExpiresIn() >= minimumExpirySeconds,
+								String.format("Token expiry duration (%d seconds) should be at least %d seconds (364 days)",
+										client.getAccessToken().getExpiresIn(), minimumExpirySeconds));
+					});
+				})
+				.compose(v -> client.closeFut())
+				.onComplete(testContext.succeedingThenComplete());
+	}
 }

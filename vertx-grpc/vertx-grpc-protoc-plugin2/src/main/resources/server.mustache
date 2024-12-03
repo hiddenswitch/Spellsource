@@ -1,0 +1,184 @@
+{{#packageName}}
+package {{packageName}};
+{{/packageName}}
+
+import com.google.common.base.Throwables;
+import io.grpc.Status;
+import io.grpc.StatusException;
+import io.grpc.StatusRuntimeException;
+import io.vertx.core.Future;
+import io.vertx.core.Promise;
+import io.vertx.core.Handler;
+import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.streams.ReadStream;
+import io.vertx.core.streams.WriteStream;
+import io.vertx.grpc.common.GrpcStatus;
+import io.vertx.grpc.server.GrpcServer;
+import io.vertx.grpc.server.GrpcServerRequest;
+import io.vertx.grpc.server.GrpcServerResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class {{className}}  {
+  private static final boolean GRPC_ENABLE_STACK_TRACES = Boolean.getBoolean("vertx.grpc.stack.traces");
+
+  public interface {{serviceName}}Api {
+{{#unaryMethods}}
+    default Future<{{outputType}}> {{methodName}}({{inputType}} request) {
+      throw new UnsupportedOperationException("Not implemented");
+    }
+    default Future<{{outputType}}> {{methodName}}(GrpcServerRequest<{{inputType}}, {{outputType}}> grpcServerRequest, {{inputType}} request) {
+      return {{methodName}}(request);
+    }
+    default void {{methodName}}(GrpcServerRequest<{{inputType}}, {{outputType}}> grpcServerRequest, {{inputType}} request, Promise<{{outputType}}> response) {
+      {{methodName}}(grpcServerRequest, request)
+        .onSuccess(msg -> response.complete(msg))
+        .onFailure(error -> response.fail(error));
+    }
+{{/unaryMethods}}
+{{#unaryManyMethods}}
+    default ReadStream<{{outputType}}> {{methodName}}({{inputType}} request) {
+      throw new UnsupportedOperationException("Not implemented");
+    }
+    default ReadStream<{{outputType}}> {{methodName}}(GrpcServerRequest<{{inputType}}, {{outputType}}> grpcServerRequest, {{inputType}} request) {
+      return {{methodName}}(request);
+    }
+    default void {{methodName}}(GrpcServerRequest<{{inputType}}, {{outputType}}> grpcServerRequest, {{inputType}} request, WriteStream<{{outputType}}> response) {
+      {{methodName}}(grpcServerRequest, request)
+        .handler(msg -> response.write(msg))
+        .endHandler(msg -> response.end())
+        .resume();
+    }
+{{/unaryManyMethods}}
+{{#manyUnaryMethods}}
+    default Future<{{outputType}}> {{methodName}}(ReadStream<{{inputType}}> request) {
+      throw new UnsupportedOperationException("Not implemented");
+    }
+    default Future<{{outputType}}> {{methodName}}(GrpcServerRequest<{{inputType}}, {{outputType}}> grpcServerRequest, ReadStream<{{inputType}}> request) {
+      return {{methodName}}(request);
+    }
+    default void {{methodName}}(GrpcServerRequest<{{inputType}}, {{outputType}}> grpcServerRequest, ReadStream<{{inputType}}> request, Promise<{{outputType}}> response) {
+      {{methodName}}(grpcServerRequest, request)
+        .onSuccess(msg -> response.complete(msg))
+        .onFailure(error -> response.fail(error));
+    }
+{{/manyUnaryMethods}}
+{{#manyManyMethods}}
+    default ReadStream<{{outputType}}> {{methodName}}(ReadStream<{{inputType}}> request) {
+      throw new UnsupportedOperationException("Not implemented");
+    }
+    default ReadStream<{{outputType}}> {{methodName}}(GrpcServerRequest<{{inputType}}, {{outputType}}> grpcServerRequest, ReadStream<{{inputType}}> request) {
+      return {{methodName}}(request);
+    }
+    default void {{methodName}}(GrpcServerRequest<{{inputType}}, {{outputType}}> grpcServerRequest, ReadStream<{{inputType}}> request, WriteStream<{{outputType}}> response) {
+      {{methodName}}(grpcServerRequest, request)
+        .handler(msg -> response.write(msg))
+        .endHandler(msg -> response.end())
+        .resume();
+    }
+{{/manyManyMethods}}
+
+{{#unaryMethods}}
+    default {{serviceName}}Api bind_{{methodName}}(GrpcServer server) {
+      server.callHandler({{serviceName}}Grpc.{{methodNameGetter}}(), request -> {
+        Promise<{{outputType}}> promise = Promise.promise();
+        request.handler(req -> {
+          try {
+            {{methodName}}(request, req, promise);
+          } catch (RuntimeException err) {
+            promise.tryFail(err);
+          }
+        });
+        promise.future()
+          .onFailure(err -> {
+            if (err instanceof StatusRuntimeException) {
+              StatusRuntimeException grpcException = (StatusRuntimeException)err;
+              request.response().status(GrpcStatus.valueOf(grpcException.getStatus().getCode().value())).statusMessage(grpcException.getMessage()).end();
+            } else {
+              request.response().status(GrpcStatus.INTERNAL);
+              if (GRPC_ENABLE_STACK_TRACES) {
+                request.response().statusMessage(err.getMessage() + "\n" + Throwables.getStackTraceAsString(err));
+              }
+              request.response().end();
+            }
+          })
+          .onSuccess(resp -> request.response().end(resp));
+      });
+      return this;
+    }
+{{/unaryMethods}}
+{{#unaryManyMethods}}
+    default {{serviceName}}Api bind_{{methodName}}(GrpcServer server) {
+      server.callHandler({{serviceName}}Grpc.{{methodNameGetter}}(), request -> {
+        request.handler(req -> {
+          try {
+            {{methodName}}(request, req, request.response());
+          } catch (StatusRuntimeException grpcException) {
+            request.response().status(GrpcStatus.valueOf(grpcException.getStatus().getCode().value())).statusMessage(grpcException.getMessage()).end();
+          } catch (RuntimeException err) {
+            request.response().status(GrpcStatus.INTERNAL);
+            if (GRPC_ENABLE_STACK_TRACES) {
+              request.response().statusMessage(err.getMessage() + "\n" + Throwables.getStackTraceAsString(err));
+            }
+            request.response().end();
+          }
+        });
+      });
+      return this;
+    }
+{{/unaryManyMethods}}
+{{#manyUnaryMethods}}
+    default {{serviceName}}Api bind_{{methodName}}(GrpcServer server) {
+      server.callHandler({{serviceName}}Grpc.{{methodNameGetter}}(), request -> {
+        Promise<{{outputType}}> promise = Promise.promise();
+        promise.future()
+          .onFailure(err -> {
+            if (err instanceof StatusRuntimeException) {
+              StatusRuntimeException grpcException = (StatusRuntimeException)err;
+              request.response().status(GrpcStatus.valueOf(grpcException.getStatus().getCode().value())).statusMessage(grpcException.getMessage()).end();
+            } else {
+              request.response().status(GrpcStatus.INTERNAL);
+              if (GRPC_ENABLE_STACK_TRACES) {
+                request.response().statusMessage(err.getMessage() + "\n" + Throwables.getStackTraceAsString(err));
+              }
+              request.response().end();
+            }
+          })
+          .onSuccess(resp -> request.response().end(resp));
+        try {
+          {{methodName}}(request, request, promise);
+        } catch (RuntimeException err) {
+          promise.tryFail(err);
+        }
+      });
+      return this;
+    }
+{{/manyUnaryMethods}}
+{{#manyManyMethods}}
+    default {{serviceName}}Api bind_{{methodName}}(GrpcServer server) {
+      server.callHandler({{serviceName}}Grpc.{{methodNameGetter}}(), request -> {
+        try {
+          {{methodName}}(request, request, request.response());
+        } catch (StatusRuntimeException grpcException) {
+          request.response().status(GrpcStatus.valueOf(grpcException.getStatus().getCode().value())).statusMessage(grpcException.getMessage()).end();
+        } catch (RuntimeException err) {
+          request.response().status(GrpcStatus.INTERNAL);
+          if (GRPC_ENABLE_STACK_TRACES) {
+            request.response().statusMessage(err.getMessage() + "\n" + Throwables.getStackTraceAsString(err));
+          }
+          request.response().end();
+        }
+      });
+      return this;
+    }
+{{/manyManyMethods}}
+
+    default {{serviceName}}Api bindAll(GrpcServer server) {
+{{#methods}}
+      bind_{{methodName}}(server);
+{{/methods}}
+      return this;
+    }
+  }
+}

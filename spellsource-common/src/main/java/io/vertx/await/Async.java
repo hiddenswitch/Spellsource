@@ -1,91 +1,88 @@
 package io.vertx.await;
 
-import io.netty.channel.EventLoop;
-import io.vertx.await.impl.DefaultScheduler;
-import io.vertx.await.impl.EventLoopScheduler;
-import io.vertx.await.impl.Scheduler;
-import io.vertx.await.impl.VirtualThreadContext;
-import io.vertx.core.Context;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
-import io.vertx.core.impl.ContextInternal;
 
+import io.vertx.core.*;
+import io.vertx.core.impl.ContextInternal;
+import io.vertx.core.impl.VertxInternal;
+
+import java.lang.ref.WeakReference;
+import java.util.Objects;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.locks.Lock;
+
+import static io.vertx.core.impl.Utils.throwAsUnchecked;
 
 public class Async {
+	private static final ThreadLocal<WeakReference<ContextInternal>> stickyContext = new ThreadLocal<>();
 
-	private final Vertx vertx;
-	private final boolean useVirtualEventLoopThreads;
-
-	public Async(Vertx vertx) {
-		this(vertx, false);
-	}
-
-	public Async(Vertx vertx, boolean useVirtualEventLoopThreads) {
-		this.vertx = vertx;
-		this.useVirtualEventLoopThreads = useVirtualEventLoopThreads;
-	}
-
-	/**
-	 * Run a task on a virtual thread
-	 */
-	public void run(Handler<Void> task) {
-		Context ctx = vertx.getOrCreateContext();
-		EventLoop eventLoop;
-		if (ctx.isEventLoopContext()) {
-			eventLoop = ((ContextInternal) ctx).nettyEventLoop();
-		} else {
-			throw new IllegalStateException();
+	public static <T> T await(Future<T> fut) {
+		if (fut == null) {
+			throw new IllegalArgumentException("Future cannot be null");
 		}
-		// Scheduler scheduler = useVirtualEventLoopThreads ? new SchedulerImpl(LoomaniaScheduler2.threadFactory(eventLoop)): new SchedulerImpl(SchedulerImpl.DEFAULT_THREAD_FACTORY);
-		Scheduler scheduler = useVirtualEventLoopThreads ? new EventLoopScheduler(eventLoop) : new DefaultScheduler(DefaultScheduler.DEFAULT_THREAD_FACTORY);
-		VirtualThreadContext context = VirtualThreadContext.create(vertx, eventLoop, scheduler);
-		context.runOnContext(task);
-	}
-
-	private static VirtualThreadContext virtualThreadContextNullable() {
-		ContextInternal ctx = (ContextInternal) Vertx.currentContext();
-		if (ctx != null) {
-			ctx = ctx.unwrap();
-			if (ctx instanceof VirtualThreadContext) {
-				return ((VirtualThreadContext) ctx);
+		if (fut.isComplete()) {
+			if (fut.succeeded()) {
+				return fut.result();
+			} else if (fut.cause() != null) {
+				throwAsUnchecked(fut.cause());
+			} else {
+				throw new FailedFutureException(fut);
 			}
 		}
-		return null;
-	}
-
-	public static <T> T await(Future<T> future) {
-		return await(future.toCompletionStage().toCompletableFuture());
-	}
-
-	public static void lock(Lock lock) {
-		if (Vertx.currentContext() == null) {
-			lock.lock();
-			return;
-		}
-
-
-		var ctx = virtualThreadContextNullable();
-		if (ctx == null) {
-			lock.lock();
-			return;
-		}
-
-		ctx.lock(lock);
-	}
-
-	public static <T> T await(CompletableFuture<T> future) {
-		VirtualThreadContext ctx = virtualThreadContextNullable();
+		var ctx = Vertx.currentContext();
 		if (ctx == null) {
 			try {
-				return future.get();
+				return fut.toCompletionStage().toCompletableFuture().get();
 			} catch (InterruptedException | ExecutionException e) {
-				throw new RuntimeException(e);
+				throwAsUnchecked(e);
 			}
 		}
-		return ctx.await(future);
+		return io.vertx.core.Future.await(fut);
+	}
+
+	public static <T> T await(CompletableFuture<T> fut) {
+		if (fut.state() == java.util.concurrent.Future.State.SUCCESS) {
+			return fut.resultNow();
+		}
+		if (fut.state() == java.util.concurrent.Future.State.FAILED) {
+			throwAsUnchecked(fut.exceptionNow());
+			return null;
+		}
+		try {
+			return fut.get();
+		} catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static <T> Future<T> vt(Vertx vertx, Callable<T> handler) {
+		var promise = Promise.<T>promise();
+		var vertxInternal = (VertxInternal) vertx;
+		var ref = stickyContext.get();
+		var context = vertxInternal.getContext();
+		if (context == null || context.threadingModel() != ThreadingModel.VIRTUAL_THREAD) {
+			if (ref == null || ref.get() == null || ref.get().closeFuture().isClosed()) {
+				context = vertxInternal.createVirtualThreadContext();
+				ref = new WeakReference<>(context);
+				stickyContext.set(ref);
+				var finalRef = ref;
+				vertxInternal.addCloseHook(prom -> {
+					finalRef.clear();
+					prom.complete(null);
+				});
+			} else {
+				context = ref.get();
+				Objects.requireNonNull(context);
+			}
+		}
+
+		context.runOnContext(v -> {
+			try {
+				promise.complete(handler.call());
+			} catch (Throwable e) {
+				promise.fail(e);
+			}
+		});
+		return promise.future();
 	}
 }

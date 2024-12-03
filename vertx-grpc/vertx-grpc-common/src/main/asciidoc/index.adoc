@@ -1,0 +1,35 @@
+= Vert.x gRPC
+
+The best description of gRPC can be seen at wikipedia.
+
+[quote, wikipedia, wikipedia]
+____
+gRPC is an open source remote procedure call (RPC) system initially developed at Google. It uses HTTP/2 for
+transport, Protocol Buffers as the interface description language, and provides features such as authentication,
+bidirectional streaming and flow control, blocking or nonblocking bindings, and cancellation and timeouts. It
+generates cross-platform client and server bindings for many languages.
+____
+
+Vert.x gRPC is a module that will align the programming style of Google gRPC with Vert.x style. As a user of this
+module you will be more familiar with the code style using Vert.x Streams and Futures while benefiting from all the
+benefits of gRPC.
+
+For more information related to gRPC please consult the official documentation site http://www.grpc.io/.
+
+WARNING: Since Vert.x 4.3, this module is the new support for gRPC in the Vert.x stack, the previous implementation based
+on gRPC Netty is still available and has been renamed Vert.x gRPC Netty, it can be found at https://vertx.io/docs/vertx-grpc-netty/java/ .
+This module has _Tech Preview_ status, this means the API can change between versions.
+
+Vert.x gRPC is split into three parts:
+
+- Vert.x gRPC Server
+- Vert.x gRPC Client
+- Vert.x gRPC Context Storage
+
+include::server.adoc[]
+
+include::client.adoc[]
+
+include::plugin.adoc[]
+
+include::storage.adoc[]

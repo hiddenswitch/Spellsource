@@ -21,6 +21,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.Guests;
 import com.hiddenswitch.framework.schema.spellsource.tables.HardRemovalCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
+import com.hiddenswitch.framework.schema.spellsource.tables.PublishedCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.BannedDraftCardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.BotUsersRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardsInDeckRecord;
@@ -36,6 +37,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.records.GuestsRecord
 import com.hiddenswitch.framework.schema.spellsource.tables.records.HardRemovalCardsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingQueuesRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingTicketsRecord;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.PublishedCardsRecord;
 
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
@@ -70,6 +72,7 @@ public class Keys {
     public static final UniqueKey<HardRemovalCardsRecord> HARD_REMOVAL_CARDS_PKEY = Internal.createUniqueKey(HardRemovalCards.HARD_REMOVAL_CARDS, DSL.name("hard_removal_cards_pkey"), new TableField[] { HardRemovalCards.HARD_REMOVAL_CARDS.CARD_ID }, true);
     public static final UniqueKey<MatchmakingQueuesRecord> MATCHMAKING_QUEUES_PKEY = Internal.createUniqueKey(MatchmakingQueues.MATCHMAKING_QUEUES, DSL.name("matchmaking_queues_pkey"), new TableField[] { MatchmakingQueues.MATCHMAKING_QUEUES.ID }, true);
     public static final UniqueKey<MatchmakingTicketsRecord> MATCHMAKING_TICKETS_PKEY = Internal.createUniqueKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_pkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.USER_ID }, true);
+    public static final UniqueKey<PublishedCardsRecord> PUBLISHED_CARDS_PKEY = Internal.createUniqueKey(PublishedCards.PUBLISHED_CARDS, DSL.name("published_cards_pkey"), new TableField[] { PublishedCards.PUBLISHED_CARDS.ID }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -77,6 +80,7 @@ public class Keys {
 
     public static final ForeignKey<BotUsersRecord, UserEntityRecord> BOT_USERS__BOT_USERS_ID_FKEY = Internal.createForeignKey(BotUsers.BOT_USERS, DSL.name("bot_users_id_fkey"), new TableField[] { BotUsers.BOT_USERS.ID }, com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, new TableField[] { UserEntity.USER_ENTITY.ID }, true);
     public static final ForeignKey<CardsRecord, UserEntityRecord> CARDS__CARDS_CREATED_BY_FKEY = Internal.createForeignKey(Cards.CARDS, DSL.name("cards_created_by_fkey"), new TableField[] { Cards.CARDS.CREATED_BY }, com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, new TableField[] { UserEntity.USER_ENTITY.ID }, true);
+    public static final ForeignKey<CardsInDeckRecord, PublishedCardsRecord> CARDS_IN_DECK__CARDS_IN_DECK_CARD_ID_FKEY = Internal.createForeignKey(CardsInDeck.CARDS_IN_DECK, DSL.name("cards_in_deck_card_id_fkey"), new TableField[] { CardsInDeck.CARDS_IN_DECK.CARD_ID }, Keys.PUBLISHED_CARDS_PKEY, new TableField[] { PublishedCards.PUBLISHED_CARDS.ID }, true);
     public static final ForeignKey<CardsInDeckRecord, DecksRecord> CARDS_IN_DECK__CARDS_IN_DECK_DECK_ID_FKEY = Internal.createForeignKey(CardsInDeck.CARDS_IN_DECK, DSL.name("cards_in_deck_deck_id_fkey"), new TableField[] { CardsInDeck.CARDS_IN_DECK.DECK_ID }, Keys.DECKS_PKEY, new TableField[] { Decks.DECKS.ID }, true);
     public static final ForeignKey<DeckPlayerAttributeTuplesRecord, DecksRecord> DECK_PLAYER_ATTRIBUTE_TUPLES__DECK_PLAYER_ATTRIBUTE_TUPLES_DECK_ID_FKEY = Internal.createForeignKey(DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES, DSL.name("deck_player_attribute_tuples_deck_id_fkey"), new TableField[] { DeckPlayerAttributeTuples.DECK_PLAYER_ATTRIBUTE_TUPLES.DECK_ID }, Keys.DECKS_PKEY, new TableField[] { Decks.DECKS.ID }, true);
     public static final ForeignKey<DeckSharesRecord, DecksRecord> DECK_SHARES__DECK_SHARES_DECK_ID_FKEY = Internal.createForeignKey(DeckShares.DECK_SHARES, DSL.name("deck_shares_deck_id_fkey"), new TableField[] { DeckShares.DECK_SHARES.DECK_ID }, Keys.DECKS_PKEY, new TableField[] { Decks.DECKS.ID }, true);
@@ -94,4 +98,5 @@ public class Keys {
     public static final ForeignKey<MatchmakingTicketsRecord, DecksRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_DECK_ID_FKEY = Internal.createForeignKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_deck_id_fkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.DECK_ID }, Keys.DECKS_PKEY, new TableField[] { Decks.DECKS.ID }, true);
     public static final ForeignKey<MatchmakingTicketsRecord, MatchmakingQueuesRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_QUEUE_ID_FKEY = Internal.createForeignKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_queue_id_fkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.QUEUE_ID }, Keys.MATCHMAKING_QUEUES_PKEY, new TableField[] { MatchmakingQueues.MATCHMAKING_QUEUES.ID }, true);
     public static final ForeignKey<MatchmakingTicketsRecord, UserEntityRecord> MATCHMAKING_TICKETS__MATCHMAKING_TICKETS_USER_ID_FKEY = Internal.createForeignKey(MatchmakingTickets.MATCHMAKING_TICKETS, DSL.name("matchmaking_tickets_user_id_fkey"), new TableField[] { MatchmakingTickets.MATCHMAKING_TICKETS.USER_ID }, com.hiddenswitch.framework.schema.keycloak.Keys.CONSTRAINT_FB, new TableField[] { UserEntity.USER_ENTITY.ID }, true);
+    public static final ForeignKey<PublishedCardsRecord, CardsRecord> PUBLISHED_CARDS__PUBLISHED_CARDS_SUCCESSION_FKEY = Internal.createForeignKey(PublishedCards.PUBLISHED_CARDS, DSL.name("published_cards_succession_fkey"), new TableField[] { PublishedCards.PUBLISHED_CARDS.SUCCESSION }, Keys.CARDS_PKEY, new TableField[] { Cards.CARDS.SUCCESSION }, true);
 }

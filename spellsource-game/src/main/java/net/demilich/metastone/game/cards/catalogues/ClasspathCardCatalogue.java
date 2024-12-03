@@ -6,22 +6,13 @@ import com.hiddenswitch.spellsource.core.ResourceInputStream;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
-import io.vertx.await.Async;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.net.URISyntaxException;
-import java.nio.file.FileSystemNotFoundException;
-import java.nio.file.FileVisitOption;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.spi.FileSystemProvider;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 public class ClasspathCardCatalogue extends ListCardCatalogue {
@@ -58,8 +49,8 @@ public class ClasspathCardCatalogue extends ListCardCatalogue {
 	 * {@code cards} module. This can be called multiple times, but will not "refresh" the catalogue file.
 	 */
 	public void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
-		Async.lock(lock.writeLock());
-		try {
+        lock.writeLock().lock();
+        try {
 			if (!firstLoad()) {
 				return;
 			}

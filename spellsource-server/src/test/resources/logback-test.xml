@@ -25,7 +25,7 @@
     <root level="WARN">
         <appender-ref ref="ASYNC"/>
     </root>
-    <logger name="com.hiddenswitch.framework" level="WARN"/>
+    <logger name="com.hiddenswitch.framework" level="INFO" />o
     <logger name="com.hiddenswitch.framework.impl.ClusteredGames" level="WARN"/>
     <logger name="com.hiddenswitch.framework.impl.ClientMatchmakingService" level="WARN"/>
     <logger name="com.hiddenswitch.framework.tests.applications" level="INFO"/>
@@ -35,4 +35,7 @@
     <logger name="io.grpc.netty" level="WARN"/>
     <logger name="io.netty" level="WARN"/>
     <logger name="io.jaegertracing" level="OFF"/>
+    <logger name="org.redisson" level="WARN" />
+    <logger name="io.github.jklingsporn" level="ERROR" />
+    <logger name="com.github.dockerjava" level="ERROR" />
 </configuration>

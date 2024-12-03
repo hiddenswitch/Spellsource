@@ -44,9 +44,9 @@ allprojects {
                 'com.fasterxml.jackson.dataformat'
         ].contains(details.requested.group)) {
           if (details.requested.name == 'jackson-databind') {
-            details.useVersion '2.15.0'
+            details.useVersion '2.18.1'
           } else {
-            details.useVersion '2.15.0'
+            details.useVersion '2.18.1'
           }
         }
       }

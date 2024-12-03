@@ -5,7 +5,9 @@ import com.hiddenswitch.framework.impl.SqlCachedCardCatalogue;
 import com.hiddenswitch.framework.schema.spellsource.tables.daos.CardsDao;
 import com.hiddenswitch.framework.tests.impl.FrameworkTestBase;
 import com.hiddenswitch.framework.virtual.concurrent.AbstractVirtualThreadVerticle;
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Handler;
+import io.vertx.core.ThreadingModel;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
 import net.demilich.metastone.game.cards.Attribute;
@@ -29,7 +31,7 @@ public class SqlCardCatalogueTests extends FrameworkTestBase {
 				vertxTestContext.verify(() -> handler.handle(catalogue));
 			}
 		};
-		vertx.deployVerticle(verticle)
+		vertx.deployVerticle(verticle, new DeploymentOptions().setThreadingModel(ThreadingModel.VIRTUAL_THREAD))
 				.onComplete(vertxTestContext.succeedingThenComplete());
 	}
 

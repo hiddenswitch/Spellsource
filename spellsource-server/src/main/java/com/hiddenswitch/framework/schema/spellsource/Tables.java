@@ -31,6 +31,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.Guests;
 import com.hiddenswitch.framework.schema.spellsource.tables.HardRemovalCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.MatchmakingTickets;
+import com.hiddenswitch.framework.schema.spellsource.tables.PublishedCards;
 import com.hiddenswitch.framework.schema.spellsource.tables.SetCardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueFormatsRecord;
 import com.hiddenswitch.framework.schema.spellsource.tables.records.CardCatalogueGetBannedDraftCardsRecord;
@@ -459,6 +460,11 @@ public class Tables {
      * The table <code>spellsource.matchmaking_tickets</code>.
      */
     public static final MatchmakingTickets MATCHMAKING_TICKETS = MatchmakingTickets.MATCHMAKING_TICKETS;
+
+    /**
+     * The table <code>spellsource.published_cards</code>.
+     */
+    public static final PublishedCards PUBLISHED_CARDS = PublishedCards.PUBLISHED_CARDS;
 
     /**
      * The table <code>spellsource.set_cards_in_deck</code>.

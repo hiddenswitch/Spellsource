@@ -1,12 +1,12 @@
 package com.hiddenswitch.framework.impl;
 
-import io.vertx.await.Async;
 import io.vertx.core.Vertx;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
@@ -21,7 +21,7 @@ public class WeakVertxMap<T> {
 	}
 
 	public T get() {
-		Async.lock(lock);
+		((Lock) lock).lock();
 		try {
 			if (Vertx.currentContext() == null) {
 				return reference.updateAndGet(existing -> {

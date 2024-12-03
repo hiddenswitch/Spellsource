@@ -12,7 +12,6 @@ import com.hiddenswitch.spellsource.rpc.Spellsource.*;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.GameEventTypeMessage.GameEventType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MessageTypeMessage.MessageType;
-import io.vertx.await.Async;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.streams.ReadStream;
@@ -51,9 +50,8 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
  * {@link ClientToServerMessage} and encoding the sent buffers with {@link ServerToClientMessage}.
  */
 public class UnityClientBehaviour extends UtilityBehaviour implements Client, Closeable, HasElapsableTurns {
-	private static final Logger LOGGER = LoggerFactory.getLogger(UnityClientBehaviour.class);
 	public static final int MAX_POWER_HISTORY_SIZE = 10;
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(UnityClientBehaviour.class);
 	private final Queue<ServerToClientMessage.Builder> messageBuffer = new ConcurrentLinkedQueue<>();
 	private final AtomicInteger eventCounter = new AtomicInteger();
 	private final AtomicInteger callbackIdCounter = new AtomicInteger();
@@ -109,6 +107,27 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		reader.resume();
 	}
 
+	public static Spellsource.GameState.Builder getClientGameState(int playerId, GameState state) {
+		var simulatedContext = new GameContext();
+		simulatedContext.setGameState(state);
+
+		// Compute the local player
+		Player local;
+		Player opponent;
+		if (playerId == PLAYER_1) {
+			local = state.getPlayer1();
+			opponent = state.getPlayer2();
+		} else if (playerId == PLAYER_2) {
+			local = state.getPlayer2();
+			opponent = state.getPlayer1();
+		} else {
+			// TODO: How should we define spectators?
+			throw new IllegalStateException("playerId");
+		}
+		simulatedContext.setIgnoreEvents(true);
+		return ModelConversions.getGameState(simulatedContext, local, opponent);
+	}
+
 	private void secondIntervalElapsed(Long timer) {
 		if (!server.isGameReady()) {
 			return;
@@ -131,7 +150,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.setTimers(Timers.newBuilder()
 						.setMillisRemaining(millisRemaining)));
 	}
-
 
 	private void noActivity(ActivityMonitor activityMonitor) {
 		elapseAwaitingRequests();
@@ -159,7 +177,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 */
 	@Override
 	public void elapseAwaitingRequests() {
-		Async.lock(requestsLock);
+		requestsLock.lock();
 		elapsed = true;
 		try {
 			// Prevent concurrent modification by locking access to this iterator
@@ -181,9 +199,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 	}
 
-
 	private GameplayRequest getMulliganRequest() {
-		Async.lock(requestsLock);
+		requestsLock.lock();
 		try {
 			for (var request : getRequests()) {
 				if (request.getType() == GameplayRequestType.MULLIGAN) {
@@ -196,9 +213,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 	}
 
-
 	private GameplayRequest getRequest(String messageId) {
-		Async.lock(requestsLock);
+		requestsLock.lock();
 		try {
 			for (var request : getRequests()) {
 				if (request.getCallbackId().equals(messageId)) {
@@ -284,9 +300,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 	}
 
-
 	public void retryRequests() {
-		Async.lock(requestsLock);
+		requestsLock.lock();
 		try {
 			for (var request : getRequests()) {
 				switch (request.getType()) {
@@ -315,11 +330,10 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		return await(promise.future());
 	}
 
-
 	@Override
 	public void mulliganAsync(GameContext context, Player player, List<Card> cards, Consumer<List<Card>> next) {
 		var id = Integer.toString(callbackIdCounter.getAndIncrement());
-		Async.lock(requestsLock);
+		requestsLock.lock();
 		try {
 			getRequests().add(new GameplayRequest()
 					.setCallbackId(id)
@@ -343,7 +357,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 */
 
 	public void onMulliganReceived(List<Integer> discardedCardIndices) {
-		Async.lock(requestsLock);
+		requestsLock.lock();
 		try {
 			var request = getMulliganRequest();
 			if (request == null) {
@@ -378,7 +392,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 		var promise = Promise.<GameAction>promise();
-		Async.lock(requestsLock);
+		requestsLock.lock();
 		try {
 			var id = Integer.toString(callbackIdCounter.getAndIncrement());
 			Consumer<GameAction> completer = promise::tryComplete;
@@ -410,7 +424,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			requestsLock.unlock();
 		}
 	}
-
 
 	/**
 	 * When a player's turn ends prematurely, this method will process a player's turn, choosing
@@ -447,7 +460,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		return actions.get(ThreadLocalRandom.current().nextInt(actions.size()));
 	}
 
-
 	/**
 	 * Handles the chosen game action from a client.
 	 *
@@ -463,7 +475,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			return;
 		}
 
-		Async.lock(requestsLock);
+		requestsLock.lock();
 		try {
 			var action = request.getActions().get(actionIndex);
 
@@ -490,11 +502,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		sendGameOver(context.getGameStateCopy(), context.getWinner());
 	}
 
-
 	private void sendMessage(ServerToClientMessage.Builder message) {
 		sendMessage(getWriter(), message);
 	}
-
 
 	private void sendMessage(MessageProducer<ServerToClientMessage> socket, ServerToClientMessage.Builder message) {
 		// Always include the playerId in the message
@@ -704,27 +714,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.setGameState(gameState));
 	}
 
-	public static Spellsource.GameState.Builder getClientGameState(int playerId, GameState state) {
-		var simulatedContext = new GameContext();
-		simulatedContext.setGameState(state);
-
-		// Compute the local player
-		Player local;
-		Player opponent;
-		if (playerId == PLAYER_1) {
-			local = state.getPlayer1();
-			opponent = state.getPlayer2();
-		} else if (playerId == PLAYER_2) {
-			local = state.getPlayer2();
-			opponent = state.getPlayer1();
-		} else {
-			// TODO: How should we define spectators?
-			throw new IllegalStateException("playerId");
-		}
-		simulatedContext.setIgnoreEvents(true);
-		return ModelConversions.getGameState(simulatedContext, local, opponent);
-	}
-
 	@Override
 	public void onRequestAction(String id, GameState state, List<GameAction> availableActions) {
 		flush();
@@ -803,7 +792,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	public void copyRequestsTo(Client client) {
 		var targetClient = (UnityClientBehaviour) client;
 		var willAdd = new ArrayList<GameplayRequest>();
-		Async.lock(requestsLock);
+		requestsLock.lock();
 		try {
 			outer:
 			for (var request : requests) {
@@ -821,7 +810,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			requestsLock.unlock();
 		}
 
-		Async.lock(targetClient.requestsLock);
+		targetClient.requestsLock.lock();
 		try {
 			targetClient.requests.addAll(willAdd);
 		} finally {

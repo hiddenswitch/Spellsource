@@ -10,8 +10,11 @@ plugins {
 }
 
 apply from: '../gradle/instrument.gradle'
+apply from: '../gradle/node.gradle'
 
-def isLinux = Os.isFamily(Os.FAMILY_UNIX) && !Os.isFamily(Os.FAMILY_MAC)
+def isWindows = org.gradle.internal.os.OperatingSystem.current().isWindows()
+def isLinux = org.gradle.internal.os.OperatingSystem.current().isLinux()
+def isMacOs = org.gradle.internal.os.OperatingSystem.current().isMacOsX()
 def spellsourceDepTask = ':spellsource-web-cardeditor-support:shadowJar'
 def yarnVersionStr = (new JsonSlurper().parse(file("package.json")).packageManager as String).split("@")[1]
 def yarnPath = "languages/nodejs/bin/yarn"
@@ -24,6 +27,9 @@ def packageJsonFile = file('package.json')
 def packageJson = new JsonSlurper().parseText(packageJsonFile.text)
 def scripts = packageJson.scripts
 def scriptNames = ["dev": "run"]
+def binExt = isWindows ? ".cmd" : ""
+def distDir = "docker/spellsource/web"
+
 
 evaluationDependsOn(":spellsource-server")
 evaluationDependsOn(":spellsource-art-generation")
@@ -42,11 +48,6 @@ scripts.each { scriptName, command ->
   }
 }
 
-node {
-  download = false
-  yarnVersion = yarnVersionStr
-}
-
 tasks.named('yarnRunTest') {
   dependsOn "yarnRunPlaywrightInstall"
 }
@@ -54,6 +55,7 @@ tasks.named('yarnRunTest') {
 tasks.named('test') {
   dependsOn 'yarnRunTest', spellsourceDepTask
 }
+
 
 tasks.register('copyComfyClient') {
   dependsOn(':spellsource-art-generation:generateTypeScriptClient')
@@ -90,6 +92,11 @@ tasks.register('fixComfyClient') {
   }
 }
 
+tasks.named("yarnSetup").configure {
+  enabled = false
+  dependsOn "corepack"
+}
+
 tasks.named('yarn').configure {
   group('spellsource')
   // todo: we need to patch the generator
@@ -98,11 +105,13 @@ tasks.named('yarn').configure {
 }
 
 tasks.register("corepack") {
+  enabled = true
+  def dirPath = ".gradle/yarn/yarn-v${yarnVersionStr}/${isWindows ? "" : "/bin"}"
+  outputs.dir(dirPath)
   doLast {
-    def dirPath = ".gradle/yarn/yarn-v${yarnVersionStr}/bin/"
     mkdir(dirPath)
     exec {
-      commandLine "corepack", "enable", "--install-directory", dirPath
+      commandLine "${isMacOs ? '/opt/homebrew/bin/' : ''}corepack${binExt}", "enable", "--install-directory", file(dirPath).absolutePath
     }
   }
 }
@@ -150,67 +159,6 @@ clean {
   delete 'node_modules'
 }
 
-tasks.register('yarnGraal') {
-  dependsOn('nodeJsDepsGraal')
-  group('spellsource')
-  outputs.cacheIf { false }
-  outputs.dir(graalNpmPrefix)
-  inputs.files("yarn.lock", "package.json").withPathSensitivity(PathSensitivity.RELATIVE)
-
-  def pathSeparator = System.getProperty("path.separator")
-
-  doFirst {
-    mkdir(graalNpmPrefix)
-  }
-
-  doLast {
-    exec {
-      environment("npm_config_build_from_source", "true")
-      environment("npm_config_nodedir", thisToolchain().get().metadata.installationPath.file("languages/nodejs").asFile.path)
-      def path = [thisToolchain().map { it.metadata.installationPath.file("languages/nodejs/npm/bin/node-gyp-bin").asFile.absolutePath }.get(),
-                  file("node_modules/.bin").absolutePath,
-                  thisToolchain().map { it.metadata.installationPath.file("languages/nodejs/bin").asFile.absolutePath }.get(),
-                  System.getenv('PATH')]
-      environment 'PATH', path.join(pathSeparator)
-      commandLine graalFileFor(yarnPath).get(), '--frozen-lockfile', '--modules-folder', graalNpmPrefix
-    }
-  }
-}
-
-tasks.register('testWithJavaGraal') {
-  group "test"
-  dependsOn += [spellsourceDepTask]
-  doLast {
-    exec {
-      commandLine graalFileFor(nodePath).get(),
-              "--vm.-enable-preview",
-              '--polyglot',
-              '--jvm',
-              './node_modules/jest/bin/jest.js',
-              '--colors',
-              '--verbose'
-    }
-  }
-}
-
-tasks.register('testWithJavaDebugGraal') {
-  group "test"
-  dependsOn += [spellsourceDepTask]
-  doLast {
-    exec {
-      commandLine graalFileFor(nodePath).get(),
-              "--vm.-enable-preview",
-              "--inspect=0.0.0.0:9229",
-              "--inspect.Secure=false",
-              '--polyglot',
-              '--jvm',
-              './node_modules/jest/bin/jest.js',
-              '--colors',
-              '--verbose'
-    }
-  }
-}
-
 tasks.register('copyGameJavadoc', Copy) {
   description("Copies the game module's javadoc into the public directory of the website")
   dependsOn ':spellsource-game:javadoc'
@@ -225,13 +173,12 @@ tasks.register('copyNetJavadoc', Copy) {
   into './public/netjavadoc'
 }
 
-def distDir = "docker/spellsource/web"
 
 tasks.named("createDist").configure {
   outputs.dir(distDir)
-  
+
   group "spellsource"
-  
+
   doLast {
     copy {
       from "$project.parent.projectDir/CONTRIBUTE.md"
@@ -245,9 +192,9 @@ def spellsourceImage = "ghcr.io/hiddenswitch/${distDir.replace("docker/", "")}"
 
 tasks.register('githubDockerPush') {
   dependsOn tasks.named("createImage_spellsource_web_linux_amd64")
-  
+
   group "spellsource"
-  
+
   doLast {
     for (def image : spellsourceTags.collect { tag -> "$spellsourceImage:$tag" }) {
       exec {

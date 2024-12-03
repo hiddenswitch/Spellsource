@@ -1,0 +1,36 @@
+subprojects {
+  apply plugin: 'java-library'
+  apply plugin: 'maven-publish'
+  apply from: "${project.rootProject.layout.projectDirectory}/gradle/instrument.gradle"
+
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    implementation "io.vertx:vertx-codegen:$vertxVersion"
+    implementation "io.vertx:vertx-docgen:3.5.1"
+    testImplementation "junit:junit:4.13.1"
+    testImplementation "io.vertx:vertx-core:$vertxVersion:tests"
+
+    implementation "io.vertx:vertx-core:$vertxVersion"
+    api("io.grpc:grpc-core:$grpcVersion") {
+      exclude group: 'com.google.guava', module: 'guava'
+    }
+    api("io.grpc:grpc-protobuf:$grpcVersion") {
+      exclude group: 'com.google.guava', module: 'guava'
+    }
+
+    api("io.grpc:grpc-stub:$grpcVersion") {
+      exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+    }
+    api("io.grpc:grpc-api:$grpcVersion") {
+      exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
+      exclude group: 'org.codehaus.mojo', module: 'animal-sniffer-annotations'
+    }
+  }
+
+  tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+  }
+}
