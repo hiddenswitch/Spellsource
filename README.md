@@ -10,25 +10,17 @@ Please see the [Issues](https://github.com/hiddenswitch/Spellsource/issues) tab 
 
 ### Description
 
-The `Spellsource-Server` project is a 2-player card battler that supports hosted, networked gameplay. It features
-matchmaking, collection management and support for game mechanics that persist between matches.
+The `Spellsource-Server` project is a 2-player card battler that supports hosted, networked gameplay. It features matchmaking, collection management and support for game mechanics that persist between matches.
 
 ### Getting Around
 
-Cards are located
-at [spellsource-cards-git/src/main/resources/cards/custom](https://github.com/hiddenswitch/Spellsource/tree/master/spellsource-cards-git).
+Cards are located at [spellsource-cards-git/src/main/resources/cards/custom](https://github.com/hiddenswitch/Spellsource/tree/master/spellsource-cards-git).
 
-To implement new effects (called **Spells** inside Spellsource) add a new Spell subclass
-to [spellsource-game/src/main/java/net/demilich/metastone/game/spells](spellsource-game/src/main/java/net/demilich/metastone/game/spells).
+To implement new effects (called **Spells** inside Spellsource) add a new Spell subclass to [spellsource-game/src/main/java/net/demilich/metastone/game/spells](spellsource-game/src/main/java/net/demilich/metastone/game/spells).
 
-You can learn more about the Spellsource AI as implemented in
-the [GameStateValueBehaviour](spellsource-game/src/main/java/net/demilich/metastone/game/behaviour/GameStateValueBehaviour.java)
-class.
+You can learn more about the Spellsource AI as implemented in the [GameStateValueBehaviour](spellsource-game/src/main/java/net/demilich/metastone/game/behaviour/GameStateValueBehaviour.java) class.
 
-The server application starts
-in [EntryPoint](spellsource-server/src/main/java/com/hiddenswitch/framework/EntryPoint.java). `./gradlew spellsource:run`
-uses the
-test [EntryPoint](spellsource-server/src/test/java/com/hiddenswitch/framework/tests/applications/EntryPoint.java).
+The server application starts in [EntryPoint](spellsource-server/src/main/java/com/hiddenswitch/framework/EntryPoint.java). `./gradlew spellsource:runServer` uses the test [EntryPoint](spellsource-server/src/test/java/com/hiddenswitch/framework/tests/applications/EntryPoint.java).
 
 The client is private, please contact for access on the Discord.
 
@@ -60,8 +52,8 @@ Hit `Win + X` and click Windows Powershell. Do not start a prompt as an admin. T
 
 ```sh
 # install node 18
-nvm install 20
-nvm use 20
+nvm install 22
+nvm use 22
 
 # enable git symlinks in git
 git config --global core.symlinks=true
@@ -77,8 +69,14 @@ git submodule update --init --recursive
 
 You should now be able to run the tests.
 
-```
+```shell
 gradle test
+```
+
+Start a local server and website using:
+
+```shell
+gradle runServer
 ```
 
 #### Symlinks
@@ -210,10 +208,6 @@ In IntelliJ, visit the Help > Edit Custom Properties... menu, then add the follo
 # custom IntelliJ IDEA properties
 idea.max.intellisense.filesize=99999
 ```
-
-> How do I add a new RPC to the Spellsource server?
-
-
 
 ### Special Thanks
 
