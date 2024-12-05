@@ -1,0 +1,51 @@
+plugins {
+//  id 'docker'
+  id "org.openapi.generator" version "7.10.0"
+}
+
+
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
+// Top-level declarations
+def venvDir = '.venv'
+def isWindows = System.properties['os.name'].toLowerCase().contains('windows')
+def scriptsDir = isWindows ? "${venvDir}/Scripts" : "${venvDir}/bin"
+def sitePackagesDir = isWindows ?
+        "${venvDir}/Lib/site-packages" :
+        // todo: get the path for real using
+        // python -c "import site; print(site.getsitepackages()[0])"
+        "${venvDir}/lib/python3.11/site-packages"
+
+def fileExt = isWindows ? ".exe" : ""
+tasks.register('run') {
+  group('spellsource')
+  dependsOn ':venv'
+  doLast {
+    // Run the comfyui binary from the virtual environment
+    exec {
+      workingDir(layout.projectDirectory.dir("workdir"))
+      commandLine([layout.projectDirectory.file("${scriptsDir}/comfyui${fileExt}").asFile.path, "--listen", "--enable-cors-header"])
+    }
+  }
+}
+
+tasks.register("generateTypeScriptClient", GenerateTask) {
+  group('spellsource')
+  def inputSpecFile = provider { file("$sitePackagesDir/comfy/api/openapi.yaml") }
+  // don't even configure if it doesn't exist
+  onlyIf { inputSpecFile.map { it.exists() } }
+  inputSpec.set(inputSpecFile.map { it.exists() ? it.path : file("dummy.yaml").path })
+  outputDir.set(layout.buildDirectory.dir("comfyclient").map { it.asFile.path })
+  validateSpec.set(inputSpecFile.map { it.exists() })
+  generatorName = 'typescript'
+  outputs.cacheIf { true }
+  configOptions.putAll([
+          'fileContentDataType'   : 'Buffer', // this is apparently substituted in verbatim and should be 'Blob' for browsers
+          'enumUnknownDefaultCase': 'true',
+          'platform'              : 'browser', // or 'browser' or 'deno'
+          'supportsES6'           : 'true',
+          'useObjectParameters'   : 'true',
+          'framework'             : 'fetch-api',
+          'modelPropertyNaming'   : 'original'
+  ])
+}

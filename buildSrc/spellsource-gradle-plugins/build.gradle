@@ -41,8 +41,8 @@ dependencies {
   api gradleApi()
   api group: 'org.yaml', name: 'snakeyaml', version: snakeyamlVersion
   implementation "com.google.guava:guava:$guavaVersion"
-  implementation "com.github.node-gradle:gradle-node-plugin:7.0.1"
-  implementation "com.bmuschko:gradle-docker-plugin:9.2.1"
+  implementation "com.github.node-gradle:gradle-node-plugin:7.1.0"
+  implementation "com.bmuschko:gradle-docker-plugin:9.4.0"
   implementation platform('software.amazon.awssdk:bom:2.26.25')
   // needed to get the repository password
   implementation 'software.amazon.awssdk:ecr'

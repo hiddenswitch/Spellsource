@@ -1,0 +1,38 @@
+[project]
+name = "spellsource"
+# Note: You'll need to define the version variable somewhere,
+# typically in a separate file like __init__.py
+version = "0.10.1"
+authors = [
+    { name = "doctorpangloss" }
+]
+description = ""
+license = { text = "AGPLv3" }
+keywords = ["spellsource", "art", "generation"]
+dependencies = [
+    "comfyui@git+https://github.com/hiddenswitch/ComfyUI.git",
+    "comfyui_controlnet_aux@git+https://github.com/AppMana/appmana-comfyui-nodes-controlnet-aux.git",
+    'py4j',
+    'tqdm>=4',
+    'objdict',
+    'msgpack',
+    'Click',
+    'autoboto',
+    'scrapy',
+    'boto3',
+    'pymongo',
+    'mistletoe',
+    'GitPython',
+    'psd-tools',
+    "SecretColors==1.1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/hiddenswitch/spellsource"
+
+[project.entry-points."comfyui.custom_nodes"]
+spellsource = "spellsource.comfyui_nodes"
+
+[build-system]
+requires = ["setuptools", "wheel", "pip"]
+build-backend = "setuptools.build_meta"

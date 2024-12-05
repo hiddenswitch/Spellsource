@@ -204,3 +204,78 @@ tasks.register("runServer") {
   group("spellsource")
   dependsOn ":spellsource-web:run", ":spellsource-server:run"
 }
+
+// Python
+
+def isWindows = org.gradle.internal.os.OperatingSystem.current().isWindows()
+def isLinux = org.gradle.internal.os.OperatingSystem.current().isLinux()
+def isMacOs = org.gradle.internal.os.OperatingSystem.current().isMacOsX()
+def pythonFiles = subprojects
+        .collectMany { p ->
+          [
+                  "setup.py",
+                  "requirements.txt",
+                  "pyproject.toml",
+                  "src/setup.py",
+                  "src/requirements.txt",
+                  "src/pyproject.toml",
+
+          ].collect { f -> new Tuple(p.layout.projectDirectory.file(f), p) }
+        }
+        .findAll { t ->
+          def (f, p) = t
+          f.asFile.exists() && (p as Project).name != 'appmana-grpc'
+        }
+
+tasks.register('venv') {
+  group('spellsource')
+  description('Creates a Python environment and installs projects with setup.py or pyproject.toml files editably into it')
+  def shell = isWindows ? ["./bin/sh.exe", "-c"] : ["sh", "-c"]
+
+  inputs.files(pythonFiles.collect {
+    def (f, p) = it
+    f
+  })
+  def paths = pythonFiles.collect {
+    def (f, p) = it
+    (f as RegularFile).asFile.parent
+  }.unique()
+
+  // install comfyui first
+  paths = paths.sort { a, b ->
+    def aContainsComfy = a.contains('comfy') ? 0 : 1
+    def bContainsComfy = b.contains('comfy') ? 0 : 1
+    if (aContainsComfy == bContainsComfy) {
+      return a <=> b
+    }
+    aContainsComfy <=> bContainsComfy
+  }
+
+  doLast {
+    exec {
+      commandLine(shell + ["curl -LsSf https://astral.sh/uv/install.sh | sh"])
+    }
+    if (!file(".venv").exists()) {
+      exec {
+        commandLine("uv", "venv", "--seed")
+      }
+    }
+    def venvSrc = "source .venv/${isWindows ? "scripts" : "bin"}/activate"
+    exec {
+      commandLine(shell + ["$venvSrc; uv pip install -U wheel Cython poetry setuptools"])
+    }
+    if (!isMacOs) {
+      exec {
+        commandLine(shell + ["$venvSrc; uv pip install --no-build-isolation --no-deps xformers==$xformersVersion --index-url https://download.pytorch.org/whl/"])
+      }
+    }
+    exec {
+      commandLine(shell + ["$venvSrc; uv pip install -U torch==${torchVersion}${isWindows ? "+cu121" : ""} torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/${isWindows || isLinux ? "cu121" : ""}"])
+    }
+    paths.forEach { pythonProjectPath ->
+      exec {
+        commandLine(shell + ["$venvSrc; uv pip install --no-build-isolation -e '${pythonProjectPath}'"] as List<String>)
+      }
+    }
+  }
+}

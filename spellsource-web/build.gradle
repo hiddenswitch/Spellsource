@@ -32,7 +32,7 @@ def distDir = "docker/spellsource/web"
 
 
 evaluationDependsOn(":spellsource-server")
-evaluationDependsOn(":spellsource-art-generation")
+evaluationDependsOn(":spellsource-python")
 
 scripts.each { scriptName, command ->
   def name = "yarnRun${scriptName.capitalize()}"
@@ -58,8 +58,8 @@ tasks.named('test') {
 
 
 tasks.register('copyComfyClient') {
-  dependsOn(':spellsource-art-generation:generateTypeScriptClient')
-  def addlInput = project(':spellsource-art-generation').layout.buildDirectory.dir("comfyclient")
+  dependsOn(':spellsource-python:generateTypeScriptClient')
+  def addlInput = project(':spellsource-python').layout.buildDirectory.dir("comfyclient")
   def addlOutput = "src/__generated__/comfyclient"
   inputs.dir(addlInput)
   outputs.dir("src/__generated__/comfyclient")
