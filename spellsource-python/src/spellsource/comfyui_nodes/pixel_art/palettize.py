@@ -3,16 +3,16 @@
 '''
 Palettize an image.
 '''
-import os
 
 import numpy as np
-from PIL import Image
 import torch
-
+from PIL import Image
+from comfy.cmd.folder_paths import add_model_folder_path
+from comfy.execution_context import current_execution_context
 from comfy.nodes.package_typing import CustomNode
 
-PALETTES_PATH = os.path.join(os.path.dirname(__file__), '../../..', 'palettes')
-PAL_EXT = '.png'
+add_model_folder_path("palettes", extensions={".png"})
+
 
 QUANTIZE_METHODS = {
     'median_cut': Image.Quantize.MEDIANCUT,
@@ -63,25 +63,6 @@ def determine_best_k(image, max_k, quantize_method=Image.Quantize.FASTOCTREE):
     return best_k
 
 
-palette_warned = False
-
-
-def list_palettes():
-    global palette_warned
-    palettes = []
-    try:
-        for filename in os.listdir(PALETTES_PATH):
-            if filename.endswith(PAL_EXT):
-                palettes.append(filename[0:-len(PAL_EXT)])
-    except FileNotFoundError:
-        pass
-    if not palettes and not palette_warned:
-        palette_warned = True
-        print(
-            "ImagePalettize warning: no fixed palettes found. You can put these in the palettes/ directory below the ComfyUI root.")
-    return palettes
-
-
 def get_image_colors(pal_img):
     palette = []
     pal_img = pal_img.convert('RGB')
@@ -92,17 +73,14 @@ def get_image_colors(pal_img):
     return palette
 
 
-def load_palette(name):
-    return get_image_colors(Image.open(os.path.join(PALETTES_PATH, name + PAL_EXT)))
-
-
 class ImagePalettize(CustomNode):
     @classmethod
     def INPUT_TYPES(s):
+        fn = current_execution_context().folder_names_and_paths
         return {
             "required": {
                 "image": ("IMAGE",),
-                "palette": (["auto_best_k", "auto_fixed_k"] + list_palettes(), {
+                "palette": (["auto_best_k", "auto_fixed_k"] + list(str(p) for p in fn.get_paths("palettes")), {
                     "default": "auto_best_k",
                 }),
                 "max_k": ("INT", {
@@ -126,7 +104,7 @@ class ImagePalettize(CustomNode):
         k = None
         pal_img = None
         if palette not in {'auto_best_k', 'auto_fixed_k'}:
-            pal_entries = load_palette(palette)
+            pal_entries = Image.open(current_execution_context().folder_names_and_paths.first_existing_or_none("palettes", palette))
             k = len(pal_entries) // 3
             pal_img = Image.new('P', (1, 1))  # image size doesn't matter it only holds the palette
             pal_img.putpalette(pal_entries)

@@ -7,6 +7,7 @@ buildscript {
 
 plugins {
   id 'org.javamodularity.moduleplugin' version '1.8.15' apply false
+  id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
 }
 
 dependencies {
@@ -276,6 +277,40 @@ tasks.register('venv') {
       exec {
         commandLine(shell + ["$venvSrc; uv pip install --no-build-isolation -e '${pythonProjectPath}'"] as List<String>)
       }
+    }
+  }
+}
+
+idea.project.settings {
+  generateImlFiles = true
+}
+
+idea.module.settings {
+  def pythonPackageSourceRoots = pythonFiles
+          .unique { tuple -> (tuple[1] as Project).name }
+          .collect { tuple ->
+            def (f, p) = tuple
+            def setupPy = f as RegularFile
+            def topLevelPackageDirPath = null
+            setupPy.asFile.parentFile.traverse(maxDepth: 3) { file ->
+              if (file.name == '__init__.py') {
+                topLevelPackageDirPath = project.relativePath(file.parentFile.parentFile)
+                return false
+              }
+            }
+            return topLevelPackageDirPath
+          }
+
+  withModuleXml() { XmlProvider provider ->
+    def projectNode = provider.asNode()
+    def moduleRootManager = projectNode.component.find { it.'@name' == 'NewModuleRootManager' }
+    def contentNode = moduleRootManager.find { it.name() == 'content' }
+
+    contentNode.children().findAll { it.name() == 'sourceFolder' }.each { it.replaceNode {} }
+
+    def urls = pythonPackageSourceRoots.collect { "file://${project.rootProject.projectDir}/" + it.replace('\\', "/") }
+    urls.each { url ->
+      contentNode.appendNode('sourceFolder', [url: url, isTestSource: 'false'])
     }
   }
 }

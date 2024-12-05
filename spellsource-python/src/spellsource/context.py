@@ -1,9 +1,12 @@
 import contextlib
 import os
-import sys
+from importlib.resources import files
+from pathlib import Path
 
 from py4j.java_gateway import JavaGateway, java_import, CallbackServerParameters, GatewayParameters, launch_gateway, \
     JVMView
+
+from . import __version__
 
 
 class Context(contextlib.AbstractContextManager):
@@ -46,12 +49,6 @@ class Context(contextlib.AbstractContextManager):
         per port.
         """
         self._is_closing = False
-        if os.name == 'nt' and 'java' not in os.environ['PATH']:
-            # As a friendly gesture, append the OpenJDK bin build that is specified in the readme.
-            _OPEN_JDK_11_0_1 = 'C:\\Program Files\\ojdkbuild\\java-11-openjdk-11.0.1-1\\bin'
-            if os.path.exists(_OPEN_JDK_11_0_1):
-                os.environ['PATH'] += ';' + _OPEN_JDK_11_0_1
-
         try:
             self._gateway = Context._start_gateway(port=port)
         except FileNotFoundError:
@@ -140,48 +137,21 @@ class Context(contextlib.AbstractContextManager):
         self.close()
 
     @staticmethod
-    def find_resource_path(filename='spellsource-server-0.9.0-all.jar'):
-        """
-        Tries to find the path where the Spellsource jar is located.
-        """
-        paths = []
-        paths.append(filename)
-        # local
-        dirname = os.path.dirname(os.path.realpath(__file__))
-        paths.append(os.path.join(dirname, '..', '..', 'spellsource-server', 'build', 'libs', filename))
-        paths.append(os.path.join(dirname, '..', '..', 'spellsource-cards-private', 'build', 'libs', filename))
-        paths.append(os.path.join(dirname, '..', 'docs', filename))
-        paths.append(os.path.join(dirname, '..', 'share', 'spellsource', filename))
-        paths.append(os.path.join(sys.prefix, 'share', 'spellsource', filename))
-        # pip install py4j
-        #  On Ubuntu 16.04, where virtualenvpath=/usr/local
-        #   this file is here:
-        #     virtualenvpath/lib/pythonX/dist-packages/spellsource/java_gateway.py
-        #   the jar file is here: virtualenvpath/share/spellsource/py4j.jar
-        # pip install --user py4j
-        #  On Ubuntu 16.04, where virtualenvepath=~/.local
-        #   this file is here:
-        #     virtualenvpath/lib/pythonX/site-packages/spellsource/java_gateway.py
-        #   the jar file is here: virtualenvpath/share/spellsource/py4j.jar
-        paths.append(os.path.join(dirname, '..', '..', '..', '..', 'share', 'spellsource', filename))
-
-        for path in paths:
-            if os.path.exists(path):
-                return path
-        raise FileNotFoundError()
-
-    @staticmethod
-    def _start_gateway(port=0) -> JavaGateway:
+    def _start_gateway(port=0, with_jars=(f'spellsource-server-{__version__}-all.jar', f'spellsource-cards-private-{__version__}-all.jar')) -> JavaGateway:
         # launch Java side with dynamic port and get back the port on which the
         # server was bound to.
-        net_jar_path = Context.find_resource_path('spellsource-server-0.9.0-all.jar')
-        try:
-            internalcontent_jar_path = Context.find_resource_path('spellsource-cards-private-0.9.0.jar')
-        except:
-            internalcontent_jar_path = None
+        classpath_jars = []
+        for jar in with_jars:
+            jar_path = Path(jar)
+            jar_path_in_package = Path(files(__package__) / jar)
+            if jar_path.exists(follow_symlinks=True):
+                classpath_jars += str(jar_path.resolve())
+            elif jar_path_in_package.exists(follow_symlinks=True):
+                classpath_jars += str(jar_path_in_package)
+
+        assert len(classpath_jars) > 0, "expected to find at least one classpath jar for java integration"
         port = launch_gateway(port=port,
-                              classpath=os.pathsep.join(
-                                  list(filter(lambda x: x is not None, (net_jar_path, internalcontent_jar_path)))),
+                              classpath=os.pathsep.join(classpath_jars),
                               die_on_exit=True)
 
         # connect python side to Java side with Java dynamic port and start python

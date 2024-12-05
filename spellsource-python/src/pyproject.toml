@@ -12,6 +12,7 @@ keywords = ["spellsource", "art", "generation"]
 dependencies = [
     "comfyui@git+https://github.com/hiddenswitch/ComfyUI.git",
     "comfyui_controlnet_aux@git+https://github.com/AppMana/appmana-comfyui-nodes-controlnet-aux.git",
+    "comfy-bria-rmbg@git+https://github.com/AppMana/appmana-comfyui-nodes-bria-bg-removal.git",
     'py4j',
     'tqdm>=4',
     'objdict',
@@ -36,3 +37,9 @@ spellsource = "spellsource.comfyui_nodes"
 [build-system]
 requires = ["setuptools", "wheel", "pip"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+exclude = ["tests*"]
+
+[tool.setuptools.package-data]
+"*" = ["**/*"]

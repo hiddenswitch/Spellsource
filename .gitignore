@@ -1,4 +1,6 @@
-spellsource-art-generation/workdir/models/
+spellsource-python/workdir/models/
+spellsource-python/workdir/user/
+spellsource-python/workdir/custom_nodes/
 .settings
 .classpath
 .project

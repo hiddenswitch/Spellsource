@@ -1,0 +1,17 @@
+apply plugin: "org.jetbrains.gradle.plugin.idea-ext"
+
+idea.module.settings {
+
+  withModuleXml() { XmlProvider provider ->
+    def projectNode = provider.asNode()
+
+    // Get a reference to 'NewModuleRootManager' component
+    def moduleRootManagers = projectNode.'component'.findAll { it.'@name' == 'NewModuleRootManager' }
+
+    moduleRootManagers.each { moduleRootManager ->
+      // Identify 'content' nodes for removal
+      def contentNodes = moduleRootManager.'content'
+      contentNodes.each { it.replaceNode {} } // Replace 'content' nodes with an empty closure
+    }
+  }
+}

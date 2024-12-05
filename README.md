@@ -80,6 +80,18 @@ Start a local server and website using:
 gradle runServer
 ```
 
+##### Configure your IDE for Python development:
+
+1. Run `gradle venv`.
+2. Install the **Python** plugin inside the [**Plugin Marketplace**](jetbrains://idea/settings?name=Plugins). By default, this pane is navigated to **Installed**, make sure to click **Marketplace** to find it.
+3. Check **Generate *.iml files for modules imported from Gradle** in the [**Gradle**](jetbrains://idea/settings?name=Build%2C+Execution%2C+Deployment--Build+Tools--Gradle) settings.
+4. In **Project Structure**:
+    1. Visit **SDKs** and add the `python` executable for your platform at `.venv/bin/python` or `.venv/scripts/python.exe`.
+    2. Visit **Facets** and add the Python facet to your root project. Then select the Python interpreter corresponding to the SDK you added (typically named Spellsource).
+
+Sometimes autocomplete / modules cannot be detected in IntelliJ even after this configuration. Open **Project Structure**, delete your Python Facet on the root module, add it again, then **File > Invalidate Caches**.
+
+
 #### Symlinks
 
 To enable symlink creation without enabling developer mode, you can use the following script. This requires

@@ -1,8 +1,9 @@
 plugins {
-//  id 'docker'
+  id "base"
   id "org.openapi.generator" version "7.10.0"
 }
 
+apply from: "$rootDir/gradle/python.gradle"
 
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
@@ -49,3 +50,14 @@ tasks.register("generateTypeScriptClient", GenerateTask) {
           'modelPropertyNaming'   : 'original'
   ])
 }
+
+tasks.register("copyShadowJar", Copy) {
+  dependsOn ":spellsource-server:shadowJar"
+  from tasks.getByPath(':spellsource-server:shadowJar').archiveFile
+  into "src/spellsource"
+}
+
+tasks.named("build").configure {
+  dependsOn "copyShadowJar"
+}
+
