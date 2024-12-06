@@ -42,10 +42,8 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    artById: async (parent: unknown, args: QueryArtByIdArgs, context: unknown, info: GraphQLResolveInfo) =>
-      (await getArtById())?.[args.id],
-    allArt: async (parent: unknown, args: unknown, context: unknown, info: GraphQLResolveInfo) =>
-      Object.values(await getArtById()),
+    artById: async (parent: unknown, args: QueryArtByIdArgs, context: unknown, info: GraphQLResolveInfo) => (await getArtById())?.[args.id],
+    allArt: async (parent: unknown, args: unknown, context: unknown, info: GraphQLResolveInfo) => Object.values(await getArtById()),
   },
   Mutation: {
     generateArt: async (parent: unknown, args: MutationGenerateArtArgs, context: object, info: GraphQLResolveInfo) => {
@@ -67,7 +65,14 @@ const resolvers = {
       }
 
       const urls = comfyResult["urls"] as string[];
-      const [relativePath] = urls;
+
+      let relativePath = "/";
+      try {
+        const parsedUrl = new URL(urls[0]);
+        relativePath = parsedUrl.pathname + parsedUrl.search;
+      } catch {
+        relativePath = urls[0];
+      }
 
       if (!relativePath) {
         console.warn(comfyResponse);
@@ -81,14 +86,21 @@ const resolvers = {
 
       const path = relativePath.replace("/api/v1/", "");
 
-      const result = await s3.send(
-        new PutObjectCommand({
-          Bucket: awsBucketName,
-          Key: path,
-          Body: body,
-          ContentType: contentType,
-        })
-      );
+      try {
+        // only save to s3 if we've configured credentials
+        if (awsAccessKeyId) {
+          const result = await s3.send(
+            new PutObjectCommand({
+              Bucket: awsBucketName,
+              Key: path,
+              Body: body,
+              ContentType: contentType,
+            })
+          );
+        }
+      } catch (e: unknown) {
+        console.error(e);
+      }
 
       return { urls };
     },
