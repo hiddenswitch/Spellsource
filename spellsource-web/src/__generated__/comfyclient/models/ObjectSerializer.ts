@@ -1,4 +1,54 @@
+export * from '../models/ApiV1PromptsPost200Response';
+export * from '../models/ApiV1PromptsPostRequest';
+export * from '../models/ExtraData';
+export * from '../models/ExtraDataExtraPnginfo';
+export * from '../models/GetHistory200ResponseValue';
+export * from '../models/GetPrompt200Response';
+export * from '../models/GetPrompt200ResponseExecInfo';
+export * from '../models/GetQueue200Response';
+export * from '../models/Node';
+export * from '../models/NodeInput';
+export * from '../models/NodeInputRequiredValueInner';
+export * from '../models/NodeInputRequiredValueInnerOneOf';
+export * from '../models/PostHistoryRequest';
+export * from '../models/PromptNode';
+export * from '../models/PromptNodeInputsValue';
+export * from '../models/PromptNodeInputsValueOneOfInner';
+export * from '../models/PromptRequest';
+export * from '../models/QueueTupleInner';
+export * from '../models/UploadImage200Response';
+export * from '../models/Workflow';
+export * from '../models/WorkflowLinksInnerInner';
+export * from '../models/WorkflowNodesInner';
+export * from '../models/WorkflowNodesInnerInputsInner';
+export * from '../models/WorkflowNodesInnerOutputsInner';
+export * from '../models/WorkflowNodesInnerSize';
 
+import { ApiV1PromptsPost200Response } from '../models/ApiV1PromptsPost200Response';
+import { ApiV1PromptsPostRequest } from '../models/ApiV1PromptsPostRequest';
+import { ExtraData } from '../models/ExtraData';
+import { ExtraDataExtraPnginfo } from '../models/ExtraDataExtraPnginfo';
+import { GetHistory200ResponseValue } from '../models/GetHistory200ResponseValue';
+import { GetPrompt200Response } from '../models/GetPrompt200Response';
+import { GetPrompt200ResponseExecInfo } from '../models/GetPrompt200ResponseExecInfo';
+import { GetQueue200Response } from '../models/GetQueue200Response';
+import { Node } from '../models/Node';
+import { NodeInput } from '../models/NodeInput';
+import { NodeInputRequiredValueInner } from '../models/NodeInputRequiredValueInner';
+import { NodeInputRequiredValueInnerOneOf } from '../models/NodeInputRequiredValueInnerOneOf';
+import { PostHistoryRequest } from '../models/PostHistoryRequest';
+import { PromptNode } from '../models/PromptNode';
+import { PromptNodeInputsValue } from '../models/PromptNodeInputsValue';
+import { PromptNodeInputsValueOneOfInner } from '../models/PromptNodeInputsValueOneOfInner';
+import { PromptRequest } from '../models/PromptRequest';
+import { QueueTupleInner } from '../models/QueueTupleInner';
+import { UploadImage200Response } from '../models/UploadImage200Response';
+import { Workflow } from '../models/Workflow';
+import { WorkflowLinksInnerInner } from '../models/WorkflowLinksInnerInner';
+import { WorkflowNodesInner } from '../models/WorkflowNodesInner';
+import { WorkflowNodesInnerInputsInner } from '../models/WorkflowNodesInnerInputsInner';
+import { WorkflowNodesInnerOutputsInner } from '../models/WorkflowNodesInnerOutputsInner';
+import { WorkflowNodesInnerSize } from '../models/WorkflowNodesInnerSize';
 
 /* tslint:disable:no-unused-variable */
 let primitives = [
@@ -12,70 +62,43 @@ let primitives = [
                     "any"
                  ];
 
+const supportedMediaTypes: { [mediaType: string]: number } = {
+  "application/json": Infinity,
+  "application/octet-stream": 0,
+  "application/x-www-form-urlencoded": 0
+}
+
+
 let enumsMap: Set<string> = new Set<string>([
 ]);
 
 let typeMap: {[index: string]: any} = {
+    "ApiV1PromptsPost200Response": ApiV1PromptsPost200Response,
+    "ApiV1PromptsPostRequest": ApiV1PromptsPostRequest,
+    "ExtraData": ExtraData,
+    "ExtraDataExtraPnginfo": ExtraDataExtraPnginfo,
+    "GetHistory200ResponseValue": GetHistory200ResponseValue,
+    "GetPrompt200Response": GetPrompt200Response,
+    "GetPrompt200ResponseExecInfo": GetPrompt200ResponseExecInfo,
+    "GetQueue200Response": GetQueue200Response,
+    "Node": Node,
+    "NodeInput": NodeInput,
+    "NodeInputRequiredValueInner": NodeInputRequiredValueInner,
+    "NodeInputRequiredValueInnerOneOf": NodeInputRequiredValueInnerOneOf,
+    "PostHistoryRequest": PostHistoryRequest,
+    "PromptNode": PromptNode,
+    "PromptNodeInputsValue": PromptNodeInputsValue,
+    "PromptNodeInputsValueOneOfInner": PromptNodeInputsValueOneOfInner,
+    "PromptRequest": PromptRequest,
+    "QueueTupleInner": QueueTupleInner,
+    "UploadImage200Response": UploadImage200Response,
+    "Workflow": Workflow,
+    "WorkflowLinksInnerInner": WorkflowLinksInnerInner,
+    "WorkflowNodesInner": WorkflowNodesInner,
+    "WorkflowNodesInnerInputsInner": WorkflowNodesInnerInputsInner,
+    "WorkflowNodesInnerOutputsInner": WorkflowNodesInnerOutputsInner,
+    "WorkflowNodesInnerSize": WorkflowNodesInnerSize,
 }
-
-type MimeTypeDescriptor = {
-    type: string;
-    subtype: string;
-    subtypeTokens: string[];
-};
-
-/**
- * Every mime-type consists of a type, subtype, and optional parameters.
- * The subtype can be composite, including information about the content format.
- * For example: `application/json-patch+json`, `application/merge-patch+json`.
- *
- * This helper transforms a string mime-type into an internal representation.
- * This simplifies the implementation of predicates that in turn define common rules for parsing or stringifying
- * the payload.
- */
-const parseMimeType = (mimeType: string): MimeTypeDescriptor => {
-    const [type = '', subtype = ''] = mimeType.split('/');
-    return {
-        type,
-        subtype,
-        subtypeTokens: subtype.split('+'),
-    };
-};
-
-type MimeTypePredicate = (mimeType: string) => boolean;
-
-// This factory creates a predicate function that checks a string mime-type against defined rules.
-const mimeTypePredicateFactory = (predicate: (descriptor: MimeTypeDescriptor) => boolean): MimeTypePredicate => (mimeType) => predicate(parseMimeType(mimeType));
-
-// Use this factory when you need to define a simple predicate based only on type and, if applicable, subtype.
-const mimeTypeSimplePredicateFactory = (type: string, subtype?: string): MimeTypePredicate => mimeTypePredicateFactory((descriptor) => {
-    if (descriptor.type !== type) return false;
-    if (subtype != null && descriptor.subtype !== subtype) return false;
-    return true;
-});
-
-// Creating a set of named predicates that will help us determine how to handle different mime-types
-const isTextLikeMimeType = mimeTypeSimplePredicateFactory('text');
-const isJsonMimeType = mimeTypeSimplePredicateFactory('application', 'json');
-const isJsonLikeMimeType = mimeTypePredicateFactory((descriptor) => descriptor.type === 'application' && descriptor.subtypeTokens.some((item) => item === 'json'));
-const isOctetStreamMimeType = mimeTypeSimplePredicateFactory('application', 'octet-stream');
-const isFormUrlencodedMimeType = mimeTypeSimplePredicateFactory('application', 'x-www-form-urlencoded');
-
-// Defining a list of mime-types in the order of prioritization for handling.
-const supportedMimeTypePredicatesWithPriority: MimeTypePredicate[] = [
-    isJsonMimeType,
-    isJsonLikeMimeType,
-    isTextLikeMimeType,
-    isOctetStreamMimeType,
-    isFormUrlencodedMimeType,
-];
-
-const nullableSuffix = " | null";
-const optionalSuffix = " | undefined";
-const arrayPrefix = "Array<";
-const arraySuffix = ">";
-const mapPrefix = "{ [key: string]: ";
-const mapSuffix = "; }";
 
 export class ObjectSerializer {
     public static findCorrectType(data: any, expectedType: string) {
@@ -101,11 +124,8 @@ export class ObjectSerializer {
             } else {
                 if (data[discriminatorProperty]) {
                     var discriminatorType = data[discriminatorProperty];
-                    let mapping = typeMap[expectedType].mapping;
-                    if (mapping != undefined && mapping[discriminatorType]) {
-                        return mapping[discriminatorType]; // use the type given in the discriminator
-                    } else if(typeMap[discriminatorType]) {
-                        return discriminatorType;
+                    if(typeMap[discriminatorType]){
+                        return discriminatorType; // use the type given in the discriminator
                     } else {
                         return expectedType; // discriminator did not map to a type
                     }
@@ -116,33 +136,17 @@ export class ObjectSerializer {
         }
     }
 
-    public static serialize(data: any, type: string, format: string): any {
+    public static serialize(data: any, type: string, format: string) {
         if (data == undefined) {
             return data;
         } else if (primitives.indexOf(type.toLowerCase()) !== -1) {
             return data;
-        } else if (type.endsWith(nullableSuffix)) {
-            let subType: string = type.slice(0, -nullableSuffix.length); // Type | null => Type
-            return ObjectSerializer.serialize(data, subType, format);
-        } else if (type.endsWith(optionalSuffix)) {
-            let subType: string = type.slice(0, -optionalSuffix.length); // Type | undefined => Type
-            return ObjectSerializer.serialize(data, subType, format);
-        } else if (type.startsWith(arrayPrefix)) {
-            let subType: string = type.slice(arrayPrefix.length, -arraySuffix.length); // Array<Type> => Type
+        } else if (type.lastIndexOf("Array<", 0) === 0) { // string.startsWith pre es6
+            let subType: string = type.replace("Array<", ""); // Array<Type> => Type>
+            subType = subType.substring(0, subType.length - 1); // Type> => Type
             let transformedData: any[] = [];
             for (let date of data) {
                 transformedData.push(ObjectSerializer.serialize(date, subType, format));
-            }
-            return transformedData;
-        } else if (type.startsWith(mapPrefix)) {
-            let subType: string = type.slice(mapPrefix.length, -mapSuffix.length); // { [key: string]: Type; } => Type
-            let transformedData: { [key: string]: any } = {};
-            for (let key in data) {
-                transformedData[key] = ObjectSerializer.serialize(
-                    data[key],
-                    subType,
-                    format,
-                );
             }
             return transformedData;
         } else if (type === "Date") {
@@ -177,35 +181,19 @@ export class ObjectSerializer {
         }
     }
 
-    public static deserialize(data: any, type: string, format: string): any {
+    public static deserialize(data: any, type: string, format: string) {
         // polymorphism may change the actual type.
         type = ObjectSerializer.findCorrectType(data, type);
         if (data == undefined) {
             return data;
         } else if (primitives.indexOf(type.toLowerCase()) !== -1) {
             return data;
-        } else if (type.endsWith(nullableSuffix)) {
-            let subType: string = type.slice(0, -nullableSuffix.length); // Type | null => Type
-            return ObjectSerializer.deserialize(data, subType, format);
-        } else if (type.endsWith(optionalSuffix)) {
-            let subType: string = type.slice(0, -optionalSuffix.length); // Type | undefined => Type
-            return ObjectSerializer.deserialize(data, subType, format);
-        } else if (type.startsWith(arrayPrefix)) {
-            let subType: string = type.slice(arrayPrefix.length, -arraySuffix.length); // Array<Type> => Type
+        } else if (type.lastIndexOf("Array<", 0) === 0) { // string.startsWith pre es6
+            let subType: string = type.replace("Array<", ""); // Array<Type> => Type>
+            subType = subType.substring(0, subType.length - 1); // Type> => Type
             let transformedData: any[] = [];
             for (let date of data) {
                 transformedData.push(ObjectSerializer.deserialize(date, subType, format));
-            }
-            return transformedData;
-        } else if (type.startsWith(mapPrefix)) {
-            let subType: string = type.slice(mapPrefix.length, -mapSuffix.length); // { [key: string]: Type; } => Type
-            let transformedData: { [key: string]: any } = {};
-            for (let key in data) {
-                transformedData[key] = ObjectSerializer.deserialize(
-                    data[key],
-                    subType,
-                    format,
-                );
             }
             return transformedData;
         } else if (type === "Date") {
@@ -241,7 +229,7 @@ export class ObjectSerializer {
         if (mediaType === undefined) {
             return undefined;
         }
-        return (mediaType.split(";")[0] ?? '').trim().toLowerCase();
+        return mediaType.split(";")[0].trim().toLowerCase();
     }
 
     /**
@@ -257,27 +245,31 @@ export class ObjectSerializer {
         }
 
         const normalMediaTypes = mediaTypes.map(this.normalizeMediaType);
-
-        for (const predicate of supportedMimeTypePredicatesWithPriority) {
-            for (const mediaType of normalMediaTypes) {
-                if (mediaType != null && predicate(mediaType)) {
-                    return mediaType;
-                }
+        let selectedMediaType: string | undefined = undefined;
+        let selectedRank: number = -Infinity;
+        for (const mediaType of normalMediaTypes) {
+            if (supportedMediaTypes[mediaType!] > selectedRank) {
+                selectedMediaType = mediaType;
+                selectedRank = supportedMediaTypes[mediaType!];
             }
         }
 
-        throw new Error("None of the given media types are supported: " + mediaTypes.join(", "));
+        if (selectedMediaType === undefined) {
+            throw new Error("None of the given media types are supported: " + mediaTypes.join(", "));
+        }
+
+        return selectedMediaType!;
     }
 
     /**
      * Convert data to a string according the given media type
      */
     public static stringify(data: any, mediaType: string): string {
-        if (isTextLikeMimeType(mediaType)) {
+        if (mediaType === "text/plain") {
             return String(data);
         }
 
-        if (isJsonLikeMimeType(mediaType)) {
+        if (mediaType === "application/json") {
             return JSON.stringify(data);
         }
 
@@ -292,12 +284,16 @@ export class ObjectSerializer {
             throw new Error("Cannot parse content. No Content-Type defined.");
         }
 
-        if (isTextLikeMimeType(mediaType)) {
+        if (mediaType === "text/plain") {
             return rawData;
         }
 
-        if (isJsonLikeMimeType(mediaType)) {
+        if (mediaType === "application/json") {
             return JSON.parse(rawData);
+        }
+
+        if (mediaType === "text/html") {
+            return rawData;
         }
 
         throw new Error("The mediaType " + mediaType + " is not supported by ObjectSerializer.parse.");

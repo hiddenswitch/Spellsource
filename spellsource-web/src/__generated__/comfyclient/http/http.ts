@@ -33,20 +33,11 @@ export class HttpException extends Error {
  */
 export type RequestBody = undefined | string | FormData | URLSearchParams;
 
-type Headers = Record<string, string>;
-
-function ensureAbsoluteUrl(url: string) {
-    if (url.startsWith("http://") || url.startsWith("https://")) {
-        return url;
-    }
-    return window.location.origin + url;
-}
-
 /**
  * Represents an HTTP request context
  */
 export class RequestContext {
-    private headers: Headers = {};
+    private headers: { [key: string]: string } = {};
     private body: RequestBody = undefined;
     private url: URL;
 
@@ -57,7 +48,7 @@ export class RequestContext {
      * @param httpMethod http method
      */
     public constructor(url: string, private httpMethod: HttpMethod) {
-        this.url = new URL(ensureAbsoluteUrl(url));
+        this.url = new URL(url);
     }
 
     /*
@@ -75,7 +66,7 @@ export class RequestContext {
      *
      */
     public setUrl(url: string) {
-        this.url = new URL(ensureAbsoluteUrl(url));
+        this.url = new URL(url);
     }
 
     /**
@@ -95,7 +86,7 @@ export class RequestContext {
         return this.httpMethod;
     }
 
-    public getHeaders(): Headers {
+    public getHeaders(): { [key: string]: string } {
         return this.headers;
     }
 
@@ -105,10 +96,6 @@ export class RequestContext {
 
     public setQueryParam(name: string, value: string) {
         this.url.searchParams.set(name, value);
-    }
-
-    public appendQueryParam(name: string, value: string) {
-        this.url.searchParams.append(name, value);
     }
 
     /**
@@ -162,7 +149,7 @@ export class SelfDecodingBody implements ResponseBody {
 export class ResponseContext {
     public constructor(
         public httpStatusCode: number,
-        public headers: Headers,
+        public headers: { [key: string]: string },
         public body: ResponseBody
     ) {}
 
@@ -173,18 +160,15 @@ export class ResponseContext {
      * Parameter names are converted to lower case
      * The first parameter is returned with the key `""`
      */
-    public getParsedHeader(headerName: string): Headers {
-        const result: Headers = {};
+    public getParsedHeader(headerName: string): { [parameter: string]: string } {
+        const result: { [parameter: string]: string } = {};
         if (!this.headers[headerName]) {
             return result;
         }
 
-        const parameters = this.headers[headerName]!.split(";");
+        const parameters = this.headers[headerName].split(";");
         for (const parameter of parameters) {
             let [key, value] = parameter.split("=", 2);
-            if (!key) {
-                continue;
-            }
             key = key.toLowerCase().trim();
             if (value === undefined) {
                 result[""] = key;
@@ -245,15 +229,4 @@ export function wrapHttpLibrary(promiseHttpLibrary: PromiseHttpLibrary): HttpLib
       return from(promiseHttpLibrary.send(request));
     }
   }
-}
-
-export class HttpInfo<T> extends ResponseContext {
-    public constructor(
-        httpStatusCode: number,
-        headers: Headers,
-        body: ResponseBody,
-        public data: T,
-    ) {
-        super(httpStatusCode, headers, body);
-    }
 }

@@ -206,6 +206,11 @@ tasks.register("runServer") {
   dependsOn ":spellsource-web:run", ":spellsource-server:run"
 }
 
+tasks.register("runServerWithArt") {
+  group("spellsource")
+  dependsOn ":spellsource-web:run", ":spellsource-server:run", ":spellsource-python:run"
+}
+
 // Python
 
 def isWindows = org.gradle.internal.os.OperatingSystem.current().isWindows()

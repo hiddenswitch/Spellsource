@@ -8,7 +8,7 @@ apply from: "$rootDir/gradle/python.gradle"
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 // Top-level declarations
-def venvDir = '.venv'
+def venvDir = "${rootDir}/.venv"
 def isWindows = System.properties['os.name'].toLowerCase().contains('windows')
 def scriptsDir = isWindows ? "${venvDir}/Scripts" : "${venvDir}/bin"
 def sitePackagesDir = isWindows ?
