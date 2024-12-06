@@ -107,24 +107,19 @@ const onGenerateArt = (block: BlockWithPrivate) => async (response: FetchResult<
   const hash = block["_hash"];
   const result = response?.data?.generateArt;
   if (!result || !hash) {
+    console.log("canceled request");
     return;
   }
-  const urls = result["urls"] as string[];
-  const [relativeUrl] = urls;
+  const url = result.urls.at(-1);
 
-  if (block.isInFlyout || block.isDisposed() || !relativeUrl) return;
-
-  if (!relativeUrl.includes(hash)) {
-    console.log("not generating for canceled request");
-    return;
-  }
+  if (!url || block.isInFlyout || block.isDisposed()) return;
 
   const workspace = block.workspace as WorkspaceSvg & {
     _data: ContextType<typeof BlocklyDataContext>;
   };
   const artGenerated = newBlock(workspace, "Art_Generated");
   (artGenerated as BlockSvg).initSvg();
-  artGenerated.setFieldValue(comfyUrl + relativeUrl, "src");
+  artGenerated.setFieldValue(url, "src");
   artGenerated.setFieldValue(hash, "hash");
   const artOutput = newBlock(workspace, "Art_Output");
   (artOutput as BlockSvg).initSvg();
@@ -140,7 +135,7 @@ const onGenerateArt = (block: BlockWithPrivate) => async (response: FetchResult<
   const { saveGeneratedArt, refreshGeneratedArt } = workspace["_data"];
 
   // TODO make this happen serverside
-  await saveGeneratedArt!({ variables: { hash, urls: ["/api/art/generated/" + hash, comfyUrl + relativeUrl] } });
+  await saveGeneratedArt!({ variables: { hash, urls: ["/api/art/generated/" + hash, url] } });
 
   await refreshGeneratedArt!();
 };
