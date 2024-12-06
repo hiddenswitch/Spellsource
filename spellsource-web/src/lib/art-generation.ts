@@ -1,12 +1,10 @@
 import sdxl from "../__generated__/sdxl-ordinary.json";
 import { FieldButton } from "../components/blockly/field-button";
-import { createConfiguration } from "../__generated__/comfyclient/configuration";
 import { argsList, newBlock } from "./blockly-utils";
 import Blockly, { BlockSvg, WorkspaceSvg } from "blockly";
 import { ContextType } from "react";
 import { BlocklyDataContext } from "../pages/card-editor";
-import { PromptNode } from "../__generated__/comfyclient/models/PromptNode";
-import { ObjectDefaultApi as DefaultApi } from "../__generated__/comfyclient/types/ObjectParamAPI";
+import { client as api, PromptNode } from "../__generated__/comfyclient";
 import { FetchResult } from "@apollo/client";
 import { GenerateArtMutation, MutationGenerateArtArgs } from "../__generated__/client";
 import { comfyUrl } from "./config";
@@ -34,12 +32,11 @@ export const generateArt = async (p1: any) => {
     return;
   }
 
-  const config = createConfiguration();
-  const api = new DefaultApi(config);
+  api.setConfig({
+    baseUrl: comfyUrl,
+  });
 
-  const promptText = JSON.stringify(sdxl)
-    .replace("$POSITIVE_TEXT", block.getFieldValue("positive_text").trim())
-    .replace("$NEGATIVE_TEXT", block.getFieldValue("negative_text").trim());
+  const promptText = JSON.stringify(sdxl).replace("$POSITIVE_TEXT", block.getFieldValue("positive_text").trim()).replace("$NEGATIVE_TEXT", block.getFieldValue("negative_text").trim());
 
   const prompt = JSON.parse(promptText) as Record<string, PromptNode>;
 
@@ -93,9 +90,7 @@ const onRequestStop = (block: BlockWithPrivate) => {
 export const getPrompt = (args: MutationGenerateArtArgs) => {
   const { positiveText, negativeText, seed } = args;
 
-  const promptText = JSON.stringify(sdxl)
-    .replace("$POSITIVE_TEXT", positiveText.trim())
-    .replace("$NEGATIVE_TEXT", negativeText.trim());
+  const promptText = JSON.stringify(sdxl).replace("$POSITIVE_TEXT", positiveText.trim()).replace("$NEGATIVE_TEXT", negativeText.trim());
 
   const prompt = JSON.parse(promptText) as Record<string, PromptNode>;
 
@@ -108,48 +103,47 @@ export const getPrompt = (args: MutationGenerateArtArgs) => {
   return prompt;
 };
 
-const onGenerateArt =
-  (block: BlockWithPrivate) => async (response: FetchResult<GenerateArtMutation> | undefined | null) => {
-    const hash = block["_hash"];
-    const result = response?.data?.generateArt;
-    if (!result || !hash) {
-      return;
-    }
-    const urls = result["urls"] as string[];
-    const [relativeUrl] = urls;
+const onGenerateArt = (block: BlockWithPrivate) => async (response: FetchResult<GenerateArtMutation> | undefined | null) => {
+  const hash = block["_hash"];
+  const result = response?.data?.generateArt;
+  if (!result || !hash) {
+    return;
+  }
+  const urls = result["urls"] as string[];
+  const [relativeUrl] = urls;
 
-    if (block.isInFlyout || block.isDisposed() || !relativeUrl) return;
+  if (block.isInFlyout || block.isDisposed() || !relativeUrl) return;
 
-    if (!relativeUrl.includes(hash)) {
-      console.log("not generating for canceled request");
-      return;
-    }
+  if (!relativeUrl.includes(hash)) {
+    console.log("not generating for canceled request");
+    return;
+  }
 
-    const workspace = block.workspace as WorkspaceSvg & {
-      _data: ContextType<typeof BlocklyDataContext>;
-    };
-    const artGenerated = newBlock(workspace, "Art_Generated");
-    (artGenerated as BlockSvg).initSvg();
-    artGenerated.setFieldValue(comfyUrl + relativeUrl, "src");
-    artGenerated.setFieldValue(hash, "hash");
-    const artOutput = newBlock(workspace, "Art_Output");
-    (artOutput as BlockSvg).initSvg();
-    artOutput.getInput("art")!.connection!.connect(artGenerated.outputConnection!);
-    const targetBlock = block.nextConnection!.targetBlock();
-    if (targetBlock) {
-      targetBlock.previousConnection!.connect(artOutput.nextConnection!);
-    }
-    block.nextConnection!.connect(artOutput.previousConnection!);
-
-    workspace.render();
-
-    const { saveGeneratedArt, refreshGeneratedArt } = workspace["_data"];
-
-    // TODO make this happen serverside
-    await saveGeneratedArt!({ variables: { hash, urls: ["/api/art/generated/" + hash, comfyUrl + relativeUrl] } });
-
-    await refreshGeneratedArt!();
+  const workspace = block.workspace as WorkspaceSvg & {
+    _data: ContextType<typeof BlocklyDataContext>;
   };
+  const artGenerated = newBlock(workspace, "Art_Generated");
+  (artGenerated as BlockSvg).initSvg();
+  artGenerated.setFieldValue(comfyUrl + relativeUrl, "src");
+  artGenerated.setFieldValue(hash, "hash");
+  const artOutput = newBlock(workspace, "Art_Output");
+  (artOutput as BlockSvg).initSvg();
+  artOutput.getInput("art")!.connection!.connect(artGenerated.outputConnection!);
+  const targetBlock = block.nextConnection!.targetBlock();
+  if (targetBlock) {
+    targetBlock.previousConnection!.connect(artOutput.nextConnection!);
+  }
+  block.nextConnection!.connect(artOutput.previousConnection!);
+
+  workspace.render();
+
+  const { saveGeneratedArt, refreshGeneratedArt } = workspace["_data"];
+
+  // TODO make this happen serverside
+  await saveGeneratedArt!({ variables: { hash, urls: ["/api/art/generated/" + hash, comfyUrl + relativeUrl] } });
+
+  await refreshGeneratedArt!();
+};
 
 async function generateHash(body: object) {
   // Stringify and sort keys in the JSON object

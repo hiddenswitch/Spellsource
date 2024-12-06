@@ -123,21 +123,11 @@
     "inputs": {
       "threshold": 250,
       "mask": [
-        "21",
-        0
+        "29",
+        1
       ]
     },
     "class_type": "BinarizeMask"
-  },
-  "21": {
-    "inputs": {
-      "model": "u2net",
-      "image": [
-        "18",
-        0
-      ]
-    },
-    "class_type": "ImageEstimateForegroundMask"
   },
   "25": {
     "inputs": {
@@ -171,5 +161,22 @@
       ]
     },
     "class_type": "PreviewImage"
+  },
+  "28": {
+    "inputs": {},
+    "class_type": "BRIA_RMBG_ModelLoader_Zho"
+  },
+  "29": {
+    "inputs": {
+      "rmbgmodel": [
+        "28",
+        0
+      ],
+      "image": [
+        "18",
+        0
+      ]
+    },
+    "class_type": "BRIA_RMBG_Zho"
   }
 }

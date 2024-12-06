@@ -203,3 +203,25 @@ tasks.register('githubDockerPush') {
     }
   }
 }
+
+def venvDir = "$rootDir/.venv"
+def sitePackagesDir = isWindows ?
+        "${venvDir}/Lib/site-packages" :
+        // todo: get the path for real using
+        // python -c "import site; print(site.getsitepackages()[0])"
+        "${venvDir}/lib/python3.11/site-packages"
+
+
+tasks.named("yarnRunOpenapi-ts").configure {
+  group('spellsource')
+  def inputSpecFile = provider { file("$sitePackagesDir/comfy/api/openapi.yaml") }
+// don't even configure if it doesn't exist
+  onlyIf { inputSpecFile.map { it.exists() } }
+  def inputSpec = inputSpecFile.map { it.exists() ? it.path : project(":spellsource-python").file("dummy.yaml").path }
+
+  outputs.cacheIf { true }
+
+  inputs.file(inputSpec)
+  outputs.dir("src/__generated__/comfyclient")
+  args = ["run", "openapi-ts", "-i", inputSpec.get(), "-o", "src/__generated__/comfyclient", "-c", "@hey-api/client-fetch"]
+}
