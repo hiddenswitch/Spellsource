@@ -80,6 +80,17 @@ Start a local server and website using:
 gradle runServer
 ```
 
+##### Starting the Servers
+
+There are four main components:
+
+ - The Java server backend: `gradle spellsource-server:run`
+ - The website: `yarn install --immutable; cd spellsource-web; yarn run dev`
+ - The image generator:
+   - Windows: `gradle venv; & .venv/scripts/activate.ps1; comfyui -w ./spellsource-python/workdir`
+   - Linux and macOS: `gradle venv; source .venv/bin/activate; comfyui -w ./spellsource-python/workdir`
+ - The Unity client: Open `spellsource-client/src/unity` in Unity 6, open the Game scene, and hit Play.
+
 ##### Configure your IDE for Python development:
 
 1. Run `gradle venv`.
