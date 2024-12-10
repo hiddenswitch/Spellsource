@@ -2,10 +2,11 @@ name: Build Image
 on:
   push:
     branches: ['master']
+    tags: ['*']
   
 jobs:
   build-and-deploy-server:
-    
+    if: startsWith(github.ref, 'refs/tags/') # Deploy a new server version when a new tag is pushed
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,6 +37,7 @@ jobs:
         run: ./gradlew spellsource-server:githubDockerPush
         
   build-and-deploy-website:
+    if: !startsWith(github.ref, 'refs/tags/') # Deploy a new website version for each push to master
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,6 +52,8 @@ jobs:
         with:
           node-version: 18
       - uses: gradle/wrapper-validation-action@v1
+      - name: Test with Gradle
+        run: ./gradlew --no-parallel :spellsource-web:yarnRunTest
       - name: Log in to the Container registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
