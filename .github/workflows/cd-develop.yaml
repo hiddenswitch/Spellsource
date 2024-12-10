@@ -5,7 +5,7 @@ on:
   
 jobs:
   build-and-deploy-server:
-    # if: startsWith(github.ref, 'refs/tags/') # Deploy a new server version when a new tag is pushed
+    # if: "startsWith(github.ref, 'refs/tags/')" # Deploy a new server version when a new tag is pushed
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,7 +36,7 @@ jobs:
         run: ./gradlew spellsource-server:githubDockerPush
   
   build-and-deploy-website:
-    if: !startsWith(github.ref, 'refs/tags/') # Deploy a new website version for each push to master
+    if: "!startsWith(github.ref, 'refs/tags/')" # Deploy a new website version for each push to master
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
