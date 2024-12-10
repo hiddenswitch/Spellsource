@@ -14,16 +14,16 @@ jobs:
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: temurin
+          java-version: '23'
+          distribution: oracle
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - uses: actions/setup-dotnet@v3
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
             6.x.x
-      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel test
       - name: Log in to the Container registry
@@ -45,12 +45,12 @@ jobs:
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: temurin
+          java-version: '23'
+          distribution: oracle
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/actions/wrapper-validation@v3
       - name: Test with Gradle
         run: ./gradlew --no-parallel :spellsource-web:yarnRunTest
       - name: Log in to the Container registry
@@ -59,5 +59,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set Project Version
+        run: |
+          COMMIT_SHA=$(git rev-parse --short=7 HEAD)
+          TIMESTAMP=$(date +%s)
+          echo "PROJECT_VERSION=${COMMIT_SHA}-${TIMESTAMP}" >> $GITHUB_ENV
       - name: Build Website Image
         run: ./gradlew spellsource-web:githubDockerPush
+        env:
+          PROJECT_VERSION: ${{ env.PROJECT_VERSION }}
