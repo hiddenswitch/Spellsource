@@ -316,7 +316,7 @@ public class Environment {
 			}
 
 			if (!databaseName.equals("postgres")) {
-				var noDbiUrl = url.replace(uri.getPath(), "/postgres");
+				var noDbiUrl = url.replaceFirst(uri.getPath() + "$", "/postgres");
 				try (var conn = DriverManager.getConnection(noDbiUrl, username, password)) {
 					conn.setAutoCommit(true);
 					// We cannot use JOOQ directly because of https://stackoverflow.com/a/66442831
