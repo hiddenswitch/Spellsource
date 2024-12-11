@@ -81,9 +81,9 @@ tasks.register('fixComfyClient') {
     def http = file("src/__generated__/comfyclient/http/http.ts")
 
     http.text = http.text
-        .replaceFirst(/export \* from/, 'export {} from')
-        .replaceFirst(/(reader.readAsText\(data)\)/, '$1 as any)')
-        .replaceFirst(/(return new File\(\[data], fileName, \{ type: contentType }\));/, '$1 as any;')
+            .replaceFirst(/export \* from/, 'export {} from')
+            .replaceFirst(/(reader.readAsText\(data)\)/, '$1 as any)')
+            .replaceFirst(/(return new File\(\[data], fileName, \{ type: contentType }\));/, '$1 as any;')
 
     def defaultApi = file("src/__generated__/comfyclient/apis/DefaultApi.ts")
 
@@ -187,7 +187,8 @@ tasks.named("createDist").configure {
   }
 }
 
-def spellsourceTags = ['latest', project.version.toString()]
+def projectVersion = System.getenv("PROJECT_VERSION") ?: project.version.toString()
+def spellsourceTags = ['latest', projectVersion]
 def spellsourceImage = "ghcr.io/hiddenswitch/${distDir.replace("docker/", "")}"
 
 tasks.register('githubDockerPush') {
@@ -196,8 +197,7 @@ tasks.register('githubDockerPush') {
   group "spellsource"
 
   doLast {
-    def allTags = spellsourceTags + [(System.currentTimeMillis() / 1000).toString()]
-    for (def image : allTags.collect { tag -> "$spellsourceImage:$tag" }) {
+    for (def image : spellsourceTags.collect { tag -> "$spellsourceImage:$tag" }) {
       exec {
         commandLine(['docker', 'push'] + [image])
       }
@@ -207,10 +207,10 @@ tasks.register('githubDockerPush') {
 
 def venvDir = "$rootDir/.venv"
 def sitePackagesDir = isWindows ?
-    "${venvDir}/Lib/site-packages" :
-    // todo: get the path for real using
-    // python -c "import site; print(site.getsitepackages()[0])"
-    "${venvDir}/lib/python3.11/site-packages"
+        "${venvDir}/Lib/site-packages" :
+        // todo: get the path for real using
+        // python -c "import site; print(site.getsitepackages()[0])"
+        "${venvDir}/lib/python3.11/site-packages"
 
 
 tasks.named("yarnRunOpenapi-ts").configure {
