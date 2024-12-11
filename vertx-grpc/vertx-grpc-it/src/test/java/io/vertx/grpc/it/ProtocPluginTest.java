@@ -11,6 +11,8 @@
 package io.vertx.grpc.it;
 
 import com.google.protobuf.ByteString;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.grpc.examples.helloworld.HelloReply;
 import io.grpc.examples.helloworld.HelloRequest;
 import io.grpc.examples.helloworld.VertxGreeterGrpcClient;
@@ -397,9 +399,9 @@ public class ProtocPluginTest extends ProxyTestBase {
       .build();
     client.streamingOutputCall(request)
       .onComplete(should.asyncAssertFailure(err -> {
-        should.assertTrue(err instanceof GrpcException);
-        GrpcException grpcException = (GrpcException)err;
-        should.assertEquals(GrpcStatus.INTERNAL, grpcException.status());
+        should.assertTrue(err instanceof StatusRuntimeException);
+        var grpcException = (StatusRuntimeException)err;
+        should.assertEquals(Status.INTERNAL.getCode(), grpcException.getStatus().getCode());
         test.complete();
       }));
     test.awaitSuccess();
@@ -532,9 +534,9 @@ public class ProtocPluginTest extends ProxyTestBase {
         req.end();
       })
       .onComplete(should.asyncAssertFailure(err -> {
-        should.assertTrue(err instanceof GrpcException);
-        GrpcException grpcException = (GrpcException)err;
-        should.assertEquals(GrpcStatus.INTERNAL, grpcException.status());
+        should.assertTrue(err instanceof StatusRuntimeException);
+        var grpcException = (StatusRuntimeException)err;
+        should.assertEquals(io.grpc.Status.INTERNAL.getCode(), grpcException.getStatus().getCode());
         test.complete();
       }));
     test.awaitSuccess();
