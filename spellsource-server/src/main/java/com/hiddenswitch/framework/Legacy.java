@@ -85,13 +85,13 @@ public class Legacy {
 			@Override
 			public void subscribeGame(GrpcServerRequest<ClientToServerMessage, ServerToClientMessage> grpcServerRequest, ReadStream<ClientToServerMessage> request, WriteStream<ServerToClientMessage> response) {
 				request.pause();
-				var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
+				var userId = grpcServerRequest.routingContext().user().subject();
 				ServerGameContext.subscribeGame(userId, grpcServerRequest, response);
 			}
 
 			@Override
 			public Future<Empty> decksDelete(GrpcServerRequest<DecksDeleteRequest, Empty> grpcServerRequest, DecksDeleteRequest request) {
-				var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
+				var userId = grpcServerRequest.routingContext().user().subject();
 				var deckId = request.getDeckId();
 				// first, try to trash the share if it exists
 				// otherwise, if it's a premade deck and the trash record does not exist, insert a share record that is trashed
@@ -137,20 +137,20 @@ public class Legacy {
 			@Override
 			public Future<DecksGetResponse> decksGet(GrpcServerRequest<DecksGetRequest, DecksGetResponse> grpcServerRequest, DecksGetRequest request) {
 				var deckId = request.getDeckId();
-				var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
+				var userId = grpcServerRequest.routingContext().user().subject();
 
 				return getDeck(cardCatalogue, deckId, userId).recover(Environment.onGrpcFailure());
 			}
 
 			@Override
 			public Future<DecksGetAllResponse> decksGetAll(GrpcServerRequest<Empty, DecksGetAllResponse> grpcServerRequest, Empty request) {
-				var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
+				var userId = grpcServerRequest.routingContext().user().subject();
 				return getAllDecks(cardCatalogue, userId).recover(Environment.onGrpcFailure());
 			}
 
 			@Override
 			public Future<DecksPutResponse> decksPut(GrpcServerRequest<DecksPutRequest, DecksPutResponse> grpcServerRequest, DecksPutRequest request) {
-				var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
+				var userId = grpcServerRequest.routingContext().user().subject();
 
 				DeckCreateRequest createRequest;
 				if (!request.getDeckList().isEmpty()) {
@@ -169,7 +169,7 @@ public class Legacy {
 			@Override
 			public Future<DecksGetResponse> decksUpdate(GrpcServerRequest<DecksUpdateRequest, DecksGetResponse> grpcServerRequest, DecksUpdateRequest request) {
 				var deckId = request.getDeckId();
-				var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
+				var userId = grpcServerRequest.routingContext().user().subject();
 				var updateCommand = request.getUpdateCommand();
 
 				if (deckId.isEmpty()) {
@@ -298,7 +298,7 @@ public class Legacy {
 
 			@Override
 			public Future<DecksGetResponse> duplicateDeck(GrpcServerRequest<StringValue, DecksGetResponse> grpcServerRequest, StringValue request) {
-				var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
+				var userId = grpcServerRequest.routingContext().user().subject();
 				var deckId = request.getValue();
 				var newDeckId = UUID.randomUUID().toString();
 				var promise = Promise.<DecksGetResponse>promise();

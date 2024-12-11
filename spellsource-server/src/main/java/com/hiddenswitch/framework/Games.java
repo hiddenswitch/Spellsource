@@ -77,7 +77,7 @@ public class Games {
 		return new VertxGamesGrpcServer.GamesApi() {
 			@Override
 			public Future<StringValue> isInMatch(GrpcServerRequest<Empty, StringValue> grpcServerRequest, Empty request) {
-				var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
+				var userId = grpcServerRequest.routingContext().user().subject();
 				if (userId == null) {
 					return Future.succeededFuture(StringValue.of(""));
 				}

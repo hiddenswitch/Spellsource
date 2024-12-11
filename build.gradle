@@ -109,7 +109,8 @@ subprojects {
           details.useVersion guavaVersion
         }
 
-        if (details.requested.group == 'com.google.protobuf' && details.requested.module.name == 'protobuf-java') {
+        if (details.requested.group == 'com.google.protobuf' &&
+                (details.requested.module.name == 'protobuf-java' || details.requested.module.name == 'protobuf-java-util')) {
           details.useVersion protocVersion
         }
 

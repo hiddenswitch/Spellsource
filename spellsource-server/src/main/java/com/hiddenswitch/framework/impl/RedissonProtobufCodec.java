@@ -1,6 +1,6 @@
 package com.hiddenswitch.framework.impl;
 
-import com.google.protobuf.GeneratedMessageV3;
+import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -17,8 +17,8 @@ public class RedissonProtobufCodec extends BaseCodec {
 	private final Parser<?> parser;
 
 	private final Encoder encoder = in -> {
-		if (in instanceof GeneratedMessageV3) {
-			var message = (GeneratedMessageV3) in;
+		if (in instanceof Message) {
+			var message = (Message) in;
 			var buffer = ByteBufAllocator.DEFAULT.buffer();
 			var buf = new ByteBufOutputStream(buffer);
 			message.writeTo(buf);

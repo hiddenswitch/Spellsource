@@ -1,0 +1,24 @@
+{{#packageName}}
+package {{packageName}};
+{{/packageName}}
+
+import com.google.protobuf.Message;
+
+import java.util.List;
+
+/**
+ * Generated default instances for all Protocol Buffer message types in this package.
+ */
+public final class {{className}} {
+  /**
+   * A list containing the default instance of every Protocol Buffer message type in this package.
+   */
+  public static final List<Message> DEFAULT_INSTANCES = List.of(
+    {{#messages}}
+      {{messageType}}.getDefaultInstance(){{^isLast}},{{/isLast}}
+    {{/messages}}
+  );
+
+  private {{className}}() {
+  }
+}

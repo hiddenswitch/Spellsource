@@ -50,7 +50,7 @@ public class ClientMatchmakingService implements Closeable, VertxMatchmakingGrpc
 
 	@Override
 	public void enqueue(GrpcServerRequest<Spellsource.MatchmakingQueuePutRequest, Spellsource.MatchmakingQueuePutResponse> grpcServerRequest, ReadStream<Spellsource.MatchmakingQueuePutRequest> request, WriteStream<Spellsource.MatchmakingQueuePutResponse> response) {
-		var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
+		var userId = grpcServerRequest.routingContext().user().subject();
 		Objects.requireNonNull(userId);
 
 		var vertx = Vertx.currentContext().owner();

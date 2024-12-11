@@ -21,6 +21,7 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.JWTAuthHandler;
 import io.vertx.grpc.server.GrpcServer;
 import io.vertx.grpc.server.GrpcServiceBridge;
+import io.vertx.grpc.server.impl.GrpcServerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,8 +83,7 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 		}) {
 			router.route("/" + serviceName + "/*")
 					.handler(rc -> {
-						ROUTING_CONTEXT.set(rc);
-						server.handle(rc.request());
+						((GrpcServerImpl) server).handle(rc.request(), rc);
 					});
 		}
 		for (var serviceName : new String[]{
@@ -96,8 +96,7 @@ public class Gateway extends AbstractVirtualThreadVerticle {
 			router.route("/" + serviceName + "/*")
 					.handler(JWTAuthHandler.create(jwtAuth, realm.toRepresentation().getRealm()))
 					.handler(rc -> {
-						ROUTING_CONTEXT.set(rc);
-						server.handle(rc.request());
+						((GrpcServerImpl) server).handle(rc.request(), rc);
 					});
 		}
 

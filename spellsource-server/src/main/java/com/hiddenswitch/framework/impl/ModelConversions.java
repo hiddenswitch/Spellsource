@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.google.protobuf.Int32Value;
 import com.google.protobuf.Message;
 import com.hiddenswitch.diagnostics.Tracing;
@@ -12,18 +13,17 @@ import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.rpc.Hiddenswitch;
 import com.hiddenswitch.framework.schema.spellsource.tables.interfaces.ICardsInDeck;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.CardsInDeck;
+import com.hiddenswitch.protos.Serialization;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ActionTypeMessage.ActionType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.*;
 import com.hiddenswitch.spellsource.rpc.Spellsource.CardTypeMessage.CardType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.DamageTypeMessage.DamageType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.EntityTypeMessage.EntityType;
 import com.hiddenswitch.spellsource.rpc.Spellsource.ZonesMessage.Zones;
-import com.hubspot.jackson.datatype.protobuf.ProtobufModule;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Actor;
@@ -49,6 +49,7 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import org.curioswitch.common.protobuf.json.MessageMarshallerModule;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,12 +65,15 @@ import static java.util.stream.Collectors.toList;
 
 public class ModelConversions {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ModelConversions.class);
-	private static ObjectMapper caseInsensitiveMapper = new ObjectMapper().registerModule(new ProtobufModule())
-			.setAnnotationIntrospector(new JacksonAnnotationIntrospector())
-			.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-			.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-			.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
-			.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
+	private static ObjectMapper ignoreUnknownFieldsMapper =
+			JsonMapper.builder()
+					.addModule(MessageMarshallerModule.of(Serialization.getMarshallerBuilder().ignoringUnknownFields(true).build()))
+					.annotationIntrospector(new JacksonAnnotationIntrospector())
+					.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+					.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+					.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
+					.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
+					.build();
 
 	/**
 	 * Get an entity representing a censored secret card.
@@ -94,8 +98,7 @@ public class ModelConversions {
 	}
 
 	/**
-	 * Converts an inventory record into a {@link CardDesc}, that eventually gets turned into an
-	 * {@link net.demilich.metastone.game.cards.Card} in the game.
+	 * Converts an inventory record into a {@link CardDesc}, that eventually gets turned into an {@link net.demilich.metastone.game.cards.Card} in the game.
 	 *
 	 * @param cardRecord The record from the database describing a card in a player's collection.
 	 * @param userId     The player to whom this card belongs.
@@ -226,8 +229,7 @@ public class ModelConversions {
 	/**
 	 * Gets a client view of a game event.
 	 * <p>
-	 * This method does not correctly consider security issues accurately. It leaks which cards the opponent draws and
-	 * which secrets the opponent plays. In the future, it will respect these limitations.
+	 * This method does not correctly consider security issues accurately. It leaks which cards the opponent draws and which secrets the opponent plays. In the future, it will respect these limitations.
 	 *
 	 * @param event    A game engine event.
 	 * @param playerId The player requesting the view.
@@ -320,8 +322,7 @@ public class ModelConversions {
 	}
 
 	/**
-	 * Given a context and a specification of who the local and opposing players are, generate a client game state view.
-	 * This view does not leak secure information.
+	 * Given a context and a specification of who the local and opposing players are, generate a client game state view. This view does not leak secure information.
 	 *
 	 * @param workingContext A context containing the complete game state.
 	 * @param local          The local player.
@@ -494,8 +495,7 @@ public class ModelConversions {
 	}
 
 	/**
-	 * Gets a client view of the specified game engine entity. Tries its best to not leak information given the specified
-	 * user.
+	 * Gets a client view of the specified game engine entity. Tries its best to not leak information given the specified user.
 	 *
 	 * @param workingContext A context to generate the entity view for.
 	 * @param entity         The entity.
@@ -664,8 +664,7 @@ public class ModelConversions {
 	}
 
 	/**
-	 * A view of a card. This does not censor information from opposing player's--the calling method should handle the
-	 * censoring.
+	 * A view of a card. This does not censor information from opposing player's--the calling method should handle the censoring.
 	 *
 	 * @param workingContext The context to generate the client view for.
 	 * @param card           The card entity.
@@ -811,8 +810,7 @@ public class ModelConversions {
 	}
 
 	/**
-	 * Uses information from enchantments like {@link net.demilich.metastone.game.spells.aura.BuffAura} and
-	 * {@link WhereverTheyAreEnchantment} to add the appropriate hand buff stats.
+	 * Uses information from enchantments like {@link net.demilich.metastone.game.spells.aura.BuffAura} and {@link WhereverTheyAreEnchantment} to add the appropriate hand buff stats.
 	 *
 	 * @param context
 	 * @param playerId
@@ -953,7 +951,7 @@ public class ModelConversions {
 		// first decode into a map
 		var target = new LinkedHashMap<String, Object>();
 		for (var kv : map.entrySet()) {
-			var path = kv.getKey().toLowerCase(Locale.ROOT);
+			var path = kv.getKey(); //.toLowerCase(Locale.ROOT);
 			if (!path.startsWith(prefix + separator)) {
 				continue;
 			}
@@ -1022,7 +1020,8 @@ public class ModelConversions {
 
 		try {
 			// decode into the protobuf to get the benefit of field insensitivity
-			var toMerge = caseInsensitiveMapper.convertValue(target, Hiddenswitch.ServerConfiguration.class);
+
+			var toMerge = ignoreUnknownFieldsMapper.convertValue(target, Hiddenswitch.ServerConfiguration.class);
 			// merge
 			@SuppressWarnings("unchecked")
 			var merged = (T) existing.toBuilder().mergeFrom(toMerge).build();

@@ -279,7 +279,7 @@ public class Accounts {
 
 			@Override
 			public Future<LoginOrCreateReply> changePassword(GrpcServerRequest<ChangePasswordRequest, LoginOrCreateReply> grpcServerRequest, ChangePasswordRequest request) {
-				var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
+				var userId = grpcServerRequest.routingContext().user().subject();
 				// for now we don't invalidate and refresh the old token
 				var token = Accounts.token();
 				if (token == null) {
@@ -301,7 +301,7 @@ public class Accounts {
 
 			@Override
 			public Future<GetAccountsReply> getAccount(GrpcServerRequest<Empty, GetAccountsReply> grpcServerRequest, Empty request) {
-				var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
+				var userId = grpcServerRequest.routingContext().user().subject();
 				return user(userId)
 						.compose(thisUser -> {
 							if (thisUser == null) {
@@ -321,7 +321,7 @@ public class Accounts {
 
 			@Override
 			public Future<GetAccountsReply> getAccounts(GrpcServerRequest<GetAccountsRequest, GetAccountsReply> grpcServerRequest, GetAccountsRequest request) {
-				var userId = Gateway.ROUTING_CONTEXT.get().user().subject();
+				var userId = grpcServerRequest.routingContext().user().subject();
 				return user(userId)
 						.compose(thisUser -> {
 							if (thisUser == null) {

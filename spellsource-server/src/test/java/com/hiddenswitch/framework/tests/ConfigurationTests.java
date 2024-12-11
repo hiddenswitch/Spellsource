@@ -40,8 +40,8 @@ public class ConfigurationTests {
 				.build();
 		var map = ModelConversions.fromStringMap(configuration, "fails", "_", System.getenv());
 		// nothing should happen, should just not be red
-		variables.set("SPELLSOURCE_APPLICATION_USEBROADCASTER", "true");
-		variables.set("SPELLSOURCE_REDIS_HOSTPORTUSER_PORT", "10000");
+		variables.set("spellsource_application_useBroadcaster", "true");
+		variables.set("spellsource_redis_hostPortUser_port", "10000");
 		var result = ModelConversions.fromStringMap(configuration, "spellsource", "_", System.getenv());
 		assertTrue(result.getApplication().getUseBroadcaster());
 		assertEquals(10000, result.getRedis().getHostPortUser().getPort());

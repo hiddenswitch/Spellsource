@@ -19,11 +19,7 @@ import com.salesforce.jprotoc.GeneratorException;
 import com.salesforce.jprotoc.ProtoTypeMap;
 import com.salesforce.jprotoc.ProtocPlugin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class VertxGrpcGenerator extends Generator {
@@ -53,17 +49,118 @@ public class VertxGrpcGenerator extends Generator {
     return Collections.singletonList(PluginProtos.CodeGeneratorResponse.Feature.FEATURE_PROTO3_OPTIONAL);
   }
 
-  @Override
-  public List<PluginProtos.CodeGeneratorResponse.File> generateFiles(PluginProtos.CodeGeneratorRequest request) throws GeneratorException {
-    ProtoTypeMap typeMap = ProtoTypeMap.of(request.getProtoFileList());
+	@Override
+	public List<PluginProtos.CodeGeneratorResponse.File> generateFiles(PluginProtos.CodeGeneratorRequest request) throws GeneratorException {
+		ProtoTypeMap typeMap = ProtoTypeMap.of(request.getProtoFileList());
 
-    List<DescriptorProtos.FileDescriptorProto> protosToGenerate = request.getProtoFileList().stream()
-      .filter(protoFile -> request.getFileToGenerateList().contains(protoFile.getName()))
-      .collect(Collectors.toList());
+		List<DescriptorProtos.FileDescriptorProto> protosToGenerate = request.getProtoFileList().stream()
+				.filter(protoFile -> request.getFileToGenerateList().contains(protoFile.getName()))
+				.collect(Collectors.toList());
 
-    List<ServiceContext> services = findServices(protosToGenerate, typeMap);
-    return generateFiles(services);
-  }
+		List<ServiceContext> services = findServices(protosToGenerate, typeMap);
+		List<PluginProtos.CodeGeneratorResponse.File> files = new ArrayList<>();
+
+		// Generate normal service files
+		files.addAll(services.stream()
+				.map(this::buildFiles)
+				.flatMap(Collection::stream)
+				.collect(Collectors.toList()));
+
+		// Generate default instance files
+		files.addAll(generateDefaultInstanceFiles(protosToGenerate, typeMap));
+
+		return files;
+	}
+
+	private List<PluginProtos.CodeGeneratorResponse.File> generateDefaultInstanceFiles(
+			List<DescriptorProtos.FileDescriptorProto> protos,
+			ProtoTypeMap typeMap) {
+
+		// Group message types by package
+		Map<String, List<MessageContext>> messagesByPackage = new HashMap<>();
+
+		for (DescriptorProtos.FileDescriptorProto fileProto : protos) {
+			String packageName = extractPackageName(fileProto);
+
+			List<MessageContext> messages = new ArrayList<>();
+			// Add top-level messages
+			for (DescriptorProtos.DescriptorProto messageProto : fileProto.getMessageTypeList()) {
+				addMessageAndNested(messages, messageProto, fileProto.getPackage(), "", typeMap);
+			}
+
+			if (!messages.isEmpty()) {
+				messagesByPackage.computeIfAbsent(packageName, k -> new ArrayList<>()).addAll(messages);
+			}
+		}
+
+		// Generate one file per package
+		return messagesByPackage.entrySet().stream()
+				.map(entry -> buildDefaultInstanceFile(entry.getKey(), entry.getValue()))
+				.collect(Collectors.toList());
+	}
+
+	private void addMessageAndNested(
+			List<MessageContext> messages,
+			DescriptorProtos.DescriptorProto messageProto,
+			String protoPackage,
+			String parentName,
+			ProtoTypeMap typeMap) {
+
+		String fullName = "." + protoPackage + parentName + "." + messageProto.getName();
+
+		MessageContext context = new MessageContext();
+		context.messageType = typeMap.toJavaTypeName(fullName);
+		messages.add(context);
+
+		// Recursively add nested messages
+		String newParent = parentName + "." + messageProto.getName();
+		for (DescriptorProtos.DescriptorProto nested : messageProto.getNestedTypeList()) {
+			addMessageAndNested(messages, nested, protoPackage, newParent, typeMap);
+		}
+	}
+
+	private PluginProtos.CodeGeneratorResponse.File buildDefaultInstanceFile(
+			String packageName,
+			List<MessageContext> messages) {
+
+		DefaultInstanceFileContext context = new DefaultInstanceFileContext();
+		context.packageName = packageName;
+		context.className = "DefaultInstances";
+		context.messages = messages;
+
+		// Mark last message to handle comma placement in template
+		if (!messages.isEmpty()) {
+			messages.getLast().isLast = true;
+		}
+
+		String content = applyTemplate("default-instances.mustache", context);
+		String fileName = absoluteFileName(packageName, context.className + ".java");
+
+		return PluginProtos.CodeGeneratorResponse.File.newBuilder()
+				.setName(fileName)
+				.setContent(content)
+				.build();
+	}
+
+	private String absoluteFileName(String packageName, String fileName) {
+		String dir = packageName.replace('.', '/');
+		if (Strings.isNullOrEmpty(dir)) {
+			return fileName;
+		} else {
+			return dir + "/" + fileName;
+		}
+	}
+
+	private static class MessageContext {
+		public String messageType;
+		public boolean isLast;
+	}
+
+	private static class DefaultInstanceFileContext {
+		public String packageName;
+		public String className;
+		public List<MessageContext> messages;
+	}
 
   private List<ServiceContext> findServices(List<DescriptorProtos.FileDescriptorProto> protos, ProtoTypeMap typeMap) {
     List<ServiceContext> contexts = new ArrayList<>();
@@ -306,6 +403,8 @@ public class VertxGrpcGenerator extends Generator {
       return dir + "/" + ctx.fileName;
     }
   }
+
+
 
   private String getComments(DescriptorProtos.SourceCodeInfo.Location location) {
     return location.getLeadingComments().isEmpty() ? location.getTrailingComments() : location.getLeadingComments();

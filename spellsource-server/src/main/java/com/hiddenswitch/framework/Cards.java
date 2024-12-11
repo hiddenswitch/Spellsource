@@ -27,7 +27,7 @@ public class Cards {
 				var userId = request.getUserId();
 
 				if (request.getUserId().isBlank()) {
-					userId = Gateway.ROUTING_CONTEXT.get().user().subject();
+					userId = grpcServerRequest.routingContext().user().subject();
 				}
 
 				request = Hiddenswitch.GetCardsRequest.newBuilder(request).setUserId(userId).build();
