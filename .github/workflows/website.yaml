@@ -15,8 +15,8 @@ jobs:
       - run: git lfs checkout
       - uses: actions/setup-java@v4
         with:
-          java-version: '23'
-          distribution: oracle
+          java-version: '21'
+          distribution: temurin
       - uses: actions/setup-node@v4
         with:
           node-version: 18

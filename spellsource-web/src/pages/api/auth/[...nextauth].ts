@@ -14,7 +14,7 @@ const NextOptions: NextAuthOptions = {
       clientId,
       clientSecret,
       issuer,
-      checks: "none",
+      checks: process.env.NODE_ENV === "production" ? "pkce" : "none",
       authorization: {
         params: { scope: "openid profile email offline_access" },
       },

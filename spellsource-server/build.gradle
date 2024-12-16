@@ -377,7 +377,7 @@ def spellsourceTags = ['latest', project.version.toString()]
 def spellsourceImage = 'ghcr.io/hiddenswitch/spellsource'
 jib {
   from {
-    image = "eclipse-temurin:23-ubi9-minimal"
+    image = "eclipse-temurin:21-ubi9-minimal"
   }
   to {
     image = spellsourceImage
