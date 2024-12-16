@@ -14,8 +14,8 @@
     "postinstall": "yarn run patch-package",
     "develop": "next dev",
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start -H 0.0.0.0",
+    "build": "NODE_ENV=production next build",
+    "start": "NODE_ENV=production next start -H 0.0.0.0",
     "codegen": "graphql-codegen",
     "scss": "typed-scss-modules src",
     "openapi-ts": "openapi-ts"
@@ -25,7 +25,7 @@
   "dependencies": {
     "@apollo/client": "^3.8.6",
     "@apollo/server": "^4.9.4",
-    "@as-integrations/next": "^1.2.0",
+    "@as-integrations/next": "^3.2.0",
     "@aws-sdk/client-s3": "^3.423.0",
     "@graphile-contrib/pg-omit-archived": "^4.0.0-beta.2",
     "@graphql-tools/stitch": "^8.7.43",

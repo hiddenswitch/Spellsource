@@ -9,7 +9,7 @@ export const createPostgraphileSchema = async (preset: GraphileConfig.Preset) =>
   try {
     const { schema, resolvedPreset } = await makeSchema(preset);
 
-    return wrapSchema({
+    const postgraphileSchema = wrapSchema({
       schema,
       executor: async (request) =>
         grafast({
@@ -21,6 +21,12 @@ export const createPostgraphileSchema = async (preset: GraphileConfig.Preset) =>
           source: print(request.document),
         }) as ExecutionResult,
     });
+
+    if (process.env.VERBOSE == "true") {
+      console.log("Successfully created postgraphile schema");
+    }
+
+    return postgraphileSchema;
   } catch (e) {
     console.error("Failed to create postgraphile schema");
     console.error(e);

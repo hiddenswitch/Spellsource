@@ -120,5 +120,11 @@ export const getArtById = async () => {
 
 export const createArtSchema = async () => {
   await getArtById();
-  return makeExecutableSchema({ typeDefs, resolvers });
+  const artSchema = makeExecutableSchema({ typeDefs, resolvers });
+
+  if (process.env.VERBOSE) {
+    console.log("Successfully created art schema");
+  }
+
+  return artSchema;
 };

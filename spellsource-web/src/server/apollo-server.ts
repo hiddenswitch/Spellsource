@@ -16,15 +16,25 @@ export const createApolloServer = async () => {
 
   const schema = stitchSchemas({ subschemas: [postgraphileSchema, artSchema] });
 
+  if (process.env.VERBOSE) {
+    console.log("Successfully stitched schemas");
+  }
+
   if (process.env.NODE_ENV !== "production" && path) {
     const contents = printSchema(schema);
     await fs.promises.writeFile(path, contents);
     console.log(`Wrote schema to ${path}`);
   }
 
-  return new ApolloServer({
+  const server = new ApolloServer({
     schema,
     plugins: [invalidateDeckPlugin],
     introspection: process.env.NODE_ENV !== "production",
   });
+
+  if (process.env.VERBOSE == "true") {
+    console.log("Successfully created apollo server");
+  }
+
+  return server;
 };

@@ -1,3 +1,4 @@
+"""The root query type which gives access points into the data universe."""
 type Query implements Node {
   """
   Exposes the root query type nested one level down. This is helpful for Relay 1
@@ -796,792 +797,6 @@ type Query implements Node {
     """
     filter: GameUserFilter
   ): GameUsersConnection
-  artById(id: String!): ImageDef
-  allArt: [ImageDef!]!
-}
-
-type Mutation {
-  cardCatalogueGetBannedDraftCards(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetBannedDraftCardsInput!
-  ): CardCatalogueGetBannedDraftCardsPayload
-  cardCatalogueGetHardRemovalCards(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetHardRemovalCardsInput!
-  ): CardCatalogueGetHardRemovalCardsPayload
-  archiveCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: ArchiveCardInput!
-  ): ArchiveCardPayload
-  publishCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: PublishCardInput!
-  ): PublishCardPayload
-  setUserAttribute(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: SetUserAttributeInput!
-  ): SetUserAttributePayload
-  getUserAttribute(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: GetUserAttributeInput!
-  ): GetUserAttributePayload
-  clusteredGamesUpdateGameAndUsers(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: ClusteredGamesUpdateGameAndUsersInput!
-  ): ClusteredGamesUpdateGameAndUsersPayload
-  getClasses(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: GetClassesInput!
-  ): GetClassesPayload
-  getCollectionCards(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: GetCollectionCardsInput!
-  ): GetCollectionCardsPayload
-  setCardsInDeck(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: SetCardsInDeckInput!
-  ): SetCardsInDeckPayload
-  createDeckWithCards(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateDeckWithCardsInput!
-  ): CreateDeckWithCardsPayload
-  saveGeneratedArt(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: SaveGeneratedArtInput!
-  ): SaveGeneratedArtPayload
-  cardCatalogueFormats(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueFormatsInput!
-  ): CardCatalogueFormatsPayload
-  cardCatalogueGetClassCards(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetClassCardsInput!
-  ): CardCatalogueGetClassCardsPayload
-  cardCatalogueGetBaseClasses(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetBaseClassesInput!
-  ): CardCatalogueGetBaseClassesPayload
-  cardCatalogueGetCardById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetCardByIdInput!
-  ): CardCatalogueGetCardByIdPayload
-  cardCatalogueGetCardByName(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetCardByNameInput!
-  ): CardCatalogueGetCardByNamePayload
-  cardCatalogueGetFormat(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetFormatInput!
-  ): CardCatalogueGetFormatPayload
-  cardCatalogueGetHeroCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetHeroCardInput!
-  ): CardCatalogueGetHeroCardPayload
-  cardCatalogueGetCardByNameAndClass(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueGetCardByNameAndClassInput!
-  ): CardCatalogueGetCardByNameAndClassPayload
-  publishGitCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: PublishGitCardInput!
-  ): PublishGitCardPayload
-  saveCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: SaveCardInput!
-  ): SaveCardPayload
-  cardCatalogueQuery(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CardCatalogueQueryInput!
-  ): CardCatalogueQueryPayload
-
-  """Creates a single `BannedDraftCard`."""
-  createBannedDraftCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateBannedDraftCardInput!
-  ): CreateBannedDraftCardPayload
-
-  """Creates a single `BotUser`."""
-  createBotUser(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateBotUserInput!
-  ): CreateBotUserPayload
-
-  """Creates a single `HardRemovalCard`."""
-  createHardRemovalCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateHardRemovalCardInput!
-  ): CreateHardRemovalCardPayload
-
-  """Creates a single `PublishedCard`."""
-  createPublishedCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreatePublishedCardInput!
-  ): CreatePublishedCardPayload
-
-  """Creates a single `Guest`."""
-  createGuest(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateGuestInput!
-  ): CreateGuestPayload
-
-  """Creates a single `DeckShare`."""
-  createDeckShare(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateDeckShareInput!
-  ): CreateDeckSharePayload
-
-  """Creates a single `CardsInDeck`."""
-  createCardsInDeck(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateCardsInDeckInput!
-  ): CreateCardsInDeckPayload
-
-  """Creates a single `DeckPlayerAttributeTuple`."""
-  createDeckPlayerAttributeTuple(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateDeckPlayerAttributeTupleInput!
-  ): CreateDeckPlayerAttributeTuplePayload
-
-  """Creates a single `Deck`."""
-  createDeck(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateDeckInput!
-  ): CreateDeckPayload
-
-  """Creates a single `Friend`."""
-  createFriend(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateFriendInput!
-  ): CreateFriendPayload
-
-  """Creates a single `MatchmakingTicket`."""
-  createMatchmakingTicket(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateMatchmakingTicketInput!
-  ): CreateMatchmakingTicketPayload
-
-  """Creates a single `MatchmakingQueue`."""
-  createMatchmakingQueue(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateMatchmakingQueueInput!
-  ): CreateMatchmakingQueuePayload
-
-  """Creates a single `GeneratedArt`."""
-  createGeneratedArt(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateGeneratedArtInput!
-  ): CreateGeneratedArtPayload
-
-  """Creates a single `Game`."""
-  createGame(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateGameInput!
-  ): CreateGamePayload
-
-  """Creates a single `Card`."""
-  createCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateCardInput!
-  ): CreateCardPayload
-
-  """Creates a single `GameUser`."""
-  createGameUser(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateGameUserInput!
-  ): CreateGameUserPayload
-
-  """
-  Updates a single `BannedDraftCard` using its globally unique id and a patch.
-  """
-  updateBannedDraftCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateBannedDraftCardInput!
-  ): UpdateBannedDraftCardPayload
-
-  """Updates a single `BannedDraftCard` using a unique key and a patch."""
-  updateBannedDraftCardByCardId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateBannedDraftCardByCardIdInput!
-  ): UpdateBannedDraftCardPayload
-
-  """Updates a single `BotUser` using its globally unique id and a patch."""
-  updateBotUser(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateBotUserInput!
-  ): UpdateBotUserPayload
-
-  """Updates a single `BotUser` using a unique key and a patch."""
-  updateBotUserById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateBotUserByIdInput!
-  ): UpdateBotUserPayload
-
-  """
-  Updates a single `HardRemovalCard` using its globally unique id and a patch.
-  """
-  updateHardRemovalCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateHardRemovalCardInput!
-  ): UpdateHardRemovalCardPayload
-
-  """Updates a single `HardRemovalCard` using a unique key and a patch."""
-  updateHardRemovalCardByCardId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateHardRemovalCardByCardIdInput!
-  ): UpdateHardRemovalCardPayload
-
-  """
-  Updates a single `PublishedCard` using its globally unique id and a patch.
-  """
-  updatePublishedCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdatePublishedCardInput!
-  ): UpdatePublishedCardPayload
-
-  """Updates a single `PublishedCard` using a unique key and a patch."""
-  updatePublishedCardById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdatePublishedCardByIdInput!
-  ): UpdatePublishedCardPayload
-
-  """Updates a single `Guest` using its globally unique id and a patch."""
-  updateGuest(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateGuestInput!
-  ): UpdateGuestPayload
-
-  """Updates a single `Guest` using a unique key and a patch."""
-  updateGuestById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateGuestByIdInput!
-  ): UpdateGuestPayload
-
-  """Updates a single `DeckShare` using its globally unique id and a patch."""
-  updateDeckShare(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateDeckShareInput!
-  ): UpdateDeckSharePayload
-
-  """Updates a single `DeckShare` using a unique key and a patch."""
-  updateDeckShareByDeckIdAndShareRecipientId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateDeckShareByDeckIdAndShareRecipientIdInput!
-  ): UpdateDeckSharePayload
-
-  """
-  Updates a single `CardsInDeck` using its globally unique id and a patch.
-  """
-  updateCardsInDeck(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateCardsInDeckInput!
-  ): UpdateCardsInDeckPayload
-
-  """Updates a single `CardsInDeck` using a unique key and a patch."""
-  updateCardsInDeckById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateCardsInDeckByIdInput!
-  ): UpdateCardsInDeckPayload
-
-  """
-  Updates a single `DeckPlayerAttributeTuple` using its globally unique id and a patch.
-  """
-  updateDeckPlayerAttributeTuple(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateDeckPlayerAttributeTupleInput!
-  ): UpdateDeckPlayerAttributeTuplePayload
-
-  """
-  Updates a single `DeckPlayerAttributeTuple` using a unique key and a patch.
-  """
-  updateDeckPlayerAttributeTupleById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateDeckPlayerAttributeTupleByIdInput!
-  ): UpdateDeckPlayerAttributeTuplePayload
-
-  """Updates a single `Deck` using its globally unique id and a patch."""
-  updateDeck(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateDeckInput!
-  ): UpdateDeckPayload
-
-  """Updates a single `Deck` using a unique key and a patch."""
-  updateDeckById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateDeckByIdInput!
-  ): UpdateDeckPayload
-
-  """Updates a single `Friend` using its globally unique id and a patch."""
-  updateFriend(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateFriendInput!
-  ): UpdateFriendPayload
-
-  """Updates a single `Friend` using a unique key and a patch."""
-  updateFriendByIdAndFriend(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateFriendByIdAndFriendInput!
-  ): UpdateFriendPayload
-
-  """
-  Updates a single `MatchmakingTicket` using its globally unique id and a patch.
-  """
-  updateMatchmakingTicket(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateMatchmakingTicketInput!
-  ): UpdateMatchmakingTicketPayload
-
-  """Updates a single `MatchmakingTicket` using a unique key and a patch."""
-  updateMatchmakingTicketByUserId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateMatchmakingTicketByUserIdInput!
-  ): UpdateMatchmakingTicketPayload
-
-  """
-  Updates a single `MatchmakingQueue` using its globally unique id and a patch.
-  """
-  updateMatchmakingQueue(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateMatchmakingQueueInput!
-  ): UpdateMatchmakingQueuePayload
-
-  """Updates a single `MatchmakingQueue` using a unique key and a patch."""
-  updateMatchmakingQueueById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateMatchmakingQueueByIdInput!
-  ): UpdateMatchmakingQueuePayload
-
-  """Updates a single `GeneratedArt` using a unique key and a patch."""
-  updateGeneratedArtByHashAndOwner(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateGeneratedArtByHashAndOwnerInput!
-  ): UpdateGeneratedArtPayload
-
-  """Updates a single `Game` using its globally unique id and a patch."""
-  updateGame(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateGameInput!
-  ): UpdateGamePayload
-
-  """Updates a single `Game` using a unique key and a patch."""
-  updateGameById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateGameByIdInput!
-  ): UpdateGamePayload
-
-  """Updates a single `Card` using its globally unique id and a patch."""
-  updateCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateCardInput!
-  ): UpdateCardPayload
-
-  """Updates a single `Card` using a unique key and a patch."""
-  updateCardBySuccession(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateCardBySuccessionInput!
-  ): UpdateCardPayload
-
-  """Updates a single `GameUser` using its globally unique id and a patch."""
-  updateGameUser(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateGameUserInput!
-  ): UpdateGameUserPayload
-
-  """Updates a single `GameUser` using a unique key and a patch."""
-  updateGameUserByGameIdAndUserId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateGameUserByGameIdAndUserIdInput!
-  ): UpdateGameUserPayload
-
-  """Deletes a single `BannedDraftCard` using its globally unique id."""
-  deleteBannedDraftCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteBannedDraftCardInput!
-  ): DeleteBannedDraftCardPayload
-
-  """Deletes a single `BannedDraftCard` using a unique key."""
-  deleteBannedDraftCardByCardId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteBannedDraftCardByCardIdInput!
-  ): DeleteBannedDraftCardPayload
-
-  """Deletes a single `BotUser` using its globally unique id."""
-  deleteBotUser(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteBotUserInput!
-  ): DeleteBotUserPayload
-
-  """Deletes a single `BotUser` using a unique key."""
-  deleteBotUserById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteBotUserByIdInput!
-  ): DeleteBotUserPayload
-
-  """Deletes a single `HardRemovalCard` using its globally unique id."""
-  deleteHardRemovalCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteHardRemovalCardInput!
-  ): DeleteHardRemovalCardPayload
-
-  """Deletes a single `HardRemovalCard` using a unique key."""
-  deleteHardRemovalCardByCardId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteHardRemovalCardByCardIdInput!
-  ): DeleteHardRemovalCardPayload
-
-  """Deletes a single `PublishedCard` using its globally unique id."""
-  deletePublishedCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeletePublishedCardInput!
-  ): DeletePublishedCardPayload
-
-  """Deletes a single `PublishedCard` using a unique key."""
-  deletePublishedCardById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeletePublishedCardByIdInput!
-  ): DeletePublishedCardPayload
-
-  """Deletes a single `Guest` using its globally unique id."""
-  deleteGuest(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteGuestInput!
-  ): DeleteGuestPayload
-
-  """Deletes a single `Guest` using a unique key."""
-  deleteGuestById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteGuestByIdInput!
-  ): DeleteGuestPayload
-
-  """Deletes a single `DeckShare` using its globally unique id."""
-  deleteDeckShare(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteDeckShareInput!
-  ): DeleteDeckSharePayload
-
-  """Deletes a single `DeckShare` using a unique key."""
-  deleteDeckShareByDeckIdAndShareRecipientId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteDeckShareByDeckIdAndShareRecipientIdInput!
-  ): DeleteDeckSharePayload
-
-  """Deletes a single `CardsInDeck` using its globally unique id."""
-  deleteCardsInDeck(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteCardsInDeckInput!
-  ): DeleteCardsInDeckPayload
-
-  """Deletes a single `CardsInDeck` using a unique key."""
-  deleteCardsInDeckById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteCardsInDeckByIdInput!
-  ): DeleteCardsInDeckPayload
-
-  """
-  Deletes a single `DeckPlayerAttributeTuple` using its globally unique id.
-  """
-  deleteDeckPlayerAttributeTuple(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteDeckPlayerAttributeTupleInput!
-  ): DeleteDeckPlayerAttributeTuplePayload
-
-  """Deletes a single `DeckPlayerAttributeTuple` using a unique key."""
-  deleteDeckPlayerAttributeTupleById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteDeckPlayerAttributeTupleByIdInput!
-  ): DeleteDeckPlayerAttributeTuplePayload
-
-  """Deletes a single `Deck` using its globally unique id."""
-  deleteDeck(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteDeckInput!
-  ): DeleteDeckPayload
-
-  """Deletes a single `Deck` using a unique key."""
-  deleteDeckById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteDeckByIdInput!
-  ): DeleteDeckPayload
-
-  """Deletes a single `Friend` using its globally unique id."""
-  deleteFriend(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteFriendInput!
-  ): DeleteFriendPayload
-
-  """Deletes a single `Friend` using a unique key."""
-  deleteFriendByIdAndFriend(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteFriendByIdAndFriendInput!
-  ): DeleteFriendPayload
-
-  """Deletes a single `MatchmakingTicket` using its globally unique id."""
-  deleteMatchmakingTicket(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteMatchmakingTicketInput!
-  ): DeleteMatchmakingTicketPayload
-
-  """Deletes a single `MatchmakingTicket` using a unique key."""
-  deleteMatchmakingTicketByUserId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteMatchmakingTicketByUserIdInput!
-  ): DeleteMatchmakingTicketPayload
-
-  """Deletes a single `MatchmakingQueue` using its globally unique id."""
-  deleteMatchmakingQueue(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteMatchmakingQueueInput!
-  ): DeleteMatchmakingQueuePayload
-
-  """Deletes a single `MatchmakingQueue` using a unique key."""
-  deleteMatchmakingQueueById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteMatchmakingQueueByIdInput!
-  ): DeleteMatchmakingQueuePayload
-
-  """Deletes a single `GeneratedArt` using a unique key."""
-  deleteGeneratedArtByHashAndOwner(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteGeneratedArtByHashAndOwnerInput!
-  ): DeleteGeneratedArtPayload
-
-  """Deletes a single `Game` using its globally unique id."""
-  deleteGame(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteGameInput!
-  ): DeleteGamePayload
-
-  """Deletes a single `Game` using a unique key."""
-  deleteGameById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteGameByIdInput!
-  ): DeleteGamePayload
-
-  """Deletes a single `Card` using its globally unique id."""
-  deleteCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteCardInput!
-  ): DeleteCardPayload
-
-  """Deletes a single `Card` using a unique key."""
-  deleteCardBySuccession(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteCardBySuccessionInput!
-  ): DeleteCardPayload
-
-  """Deletes a single `GameUser` using its globally unique id."""
-  deleteGameUser(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteGameUserInput!
-  ): DeleteGameUserPayload
-
-  """Deletes a single `GameUser` using a unique key."""
-  deleteGameUserByGameIdAndUserId(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteGameUserByGameIdAndUserIdInput!
-  ): DeleteGameUserPayload
-  generateArt(positiveText: String!, negativeText: String!, seed: Int!): GenerateArtResult
 }
 
 """An object with a globally unique `ID`."""
@@ -4774,6 +3989,792 @@ input CollectionCardFilter {
 
   """Negates the expression."""
   not: CollectionCardFilter
+}
+
+"""
+The root mutation type which contains root level fields which mutate data.
+"""
+type Mutation {
+  cardCatalogueGetBannedDraftCards(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CardCatalogueGetBannedDraftCardsInput!
+  ): CardCatalogueGetBannedDraftCardsPayload
+  cardCatalogueGetHardRemovalCards(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CardCatalogueGetHardRemovalCardsInput!
+  ): CardCatalogueGetHardRemovalCardsPayload
+  archiveCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: ArchiveCardInput!
+  ): ArchiveCardPayload
+  publishCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: PublishCardInput!
+  ): PublishCardPayload
+  setUserAttribute(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: SetUserAttributeInput!
+  ): SetUserAttributePayload
+  getUserAttribute(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: GetUserAttributeInput!
+  ): GetUserAttributePayload
+  clusteredGamesUpdateGameAndUsers(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: ClusteredGamesUpdateGameAndUsersInput!
+  ): ClusteredGamesUpdateGameAndUsersPayload
+  getClasses(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: GetClassesInput!
+  ): GetClassesPayload
+  getCollectionCards(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: GetCollectionCardsInput!
+  ): GetCollectionCardsPayload
+  setCardsInDeck(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: SetCardsInDeckInput!
+  ): SetCardsInDeckPayload
+  createDeckWithCards(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateDeckWithCardsInput!
+  ): CreateDeckWithCardsPayload
+  saveGeneratedArt(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: SaveGeneratedArtInput!
+  ): SaveGeneratedArtPayload
+  cardCatalogueFormats(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CardCatalogueFormatsInput!
+  ): CardCatalogueFormatsPayload
+  cardCatalogueGetClassCards(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CardCatalogueGetClassCardsInput!
+  ): CardCatalogueGetClassCardsPayload
+  cardCatalogueGetBaseClasses(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CardCatalogueGetBaseClassesInput!
+  ): CardCatalogueGetBaseClassesPayload
+  cardCatalogueGetCardById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CardCatalogueGetCardByIdInput!
+  ): CardCatalogueGetCardByIdPayload
+  cardCatalogueGetCardByName(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CardCatalogueGetCardByNameInput!
+  ): CardCatalogueGetCardByNamePayload
+  cardCatalogueGetFormat(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CardCatalogueGetFormatInput!
+  ): CardCatalogueGetFormatPayload
+  cardCatalogueGetHeroCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CardCatalogueGetHeroCardInput!
+  ): CardCatalogueGetHeroCardPayload
+  cardCatalogueGetCardByNameAndClass(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CardCatalogueGetCardByNameAndClassInput!
+  ): CardCatalogueGetCardByNameAndClassPayload
+  publishGitCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: PublishGitCardInput!
+  ): PublishGitCardPayload
+  saveCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: SaveCardInput!
+  ): SaveCardPayload
+  cardCatalogueQuery(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CardCatalogueQueryInput!
+  ): CardCatalogueQueryPayload
+
+  """Creates a single `BannedDraftCard`."""
+  createBannedDraftCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateBannedDraftCardInput!
+  ): CreateBannedDraftCardPayload
+
+  """Creates a single `BotUser`."""
+  createBotUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateBotUserInput!
+  ): CreateBotUserPayload
+
+  """Creates a single `HardRemovalCard`."""
+  createHardRemovalCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateHardRemovalCardInput!
+  ): CreateHardRemovalCardPayload
+
+  """Creates a single `PublishedCard`."""
+  createPublishedCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreatePublishedCardInput!
+  ): CreatePublishedCardPayload
+
+  """Creates a single `Guest`."""
+  createGuest(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateGuestInput!
+  ): CreateGuestPayload
+
+  """Creates a single `DeckShare`."""
+  createDeckShare(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateDeckShareInput!
+  ): CreateDeckSharePayload
+
+  """Creates a single `CardsInDeck`."""
+  createCardsInDeck(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateCardsInDeckInput!
+  ): CreateCardsInDeckPayload
+
+  """Creates a single `DeckPlayerAttributeTuple`."""
+  createDeckPlayerAttributeTuple(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateDeckPlayerAttributeTupleInput!
+  ): CreateDeckPlayerAttributeTuplePayload
+
+  """Creates a single `Deck`."""
+  createDeck(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateDeckInput!
+  ): CreateDeckPayload
+
+  """Creates a single `Friend`."""
+  createFriend(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateFriendInput!
+  ): CreateFriendPayload
+
+  """Creates a single `MatchmakingTicket`."""
+  createMatchmakingTicket(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateMatchmakingTicketInput!
+  ): CreateMatchmakingTicketPayload
+
+  """Creates a single `MatchmakingQueue`."""
+  createMatchmakingQueue(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateMatchmakingQueueInput!
+  ): CreateMatchmakingQueuePayload
+
+  """Creates a single `GeneratedArt`."""
+  createGeneratedArt(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateGeneratedArtInput!
+  ): CreateGeneratedArtPayload
+
+  """Creates a single `Game`."""
+  createGame(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateGameInput!
+  ): CreateGamePayload
+
+  """Creates a single `Card`."""
+  createCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateCardInput!
+  ): CreateCardPayload
+
+  """Creates a single `GameUser`."""
+  createGameUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateGameUserInput!
+  ): CreateGameUserPayload
+
+  """
+  Updates a single `BannedDraftCard` using its globally unique id and a patch.
+  """
+  updateBannedDraftCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateBannedDraftCardInput!
+  ): UpdateBannedDraftCardPayload
+
+  """Updates a single `BannedDraftCard` using a unique key and a patch."""
+  updateBannedDraftCardByCardId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateBannedDraftCardByCardIdInput!
+  ): UpdateBannedDraftCardPayload
+
+  """Updates a single `BotUser` using its globally unique id and a patch."""
+  updateBotUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateBotUserInput!
+  ): UpdateBotUserPayload
+
+  """Updates a single `BotUser` using a unique key and a patch."""
+  updateBotUserById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateBotUserByIdInput!
+  ): UpdateBotUserPayload
+
+  """
+  Updates a single `HardRemovalCard` using its globally unique id and a patch.
+  """
+  updateHardRemovalCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateHardRemovalCardInput!
+  ): UpdateHardRemovalCardPayload
+
+  """Updates a single `HardRemovalCard` using a unique key and a patch."""
+  updateHardRemovalCardByCardId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateHardRemovalCardByCardIdInput!
+  ): UpdateHardRemovalCardPayload
+
+  """
+  Updates a single `PublishedCard` using its globally unique id and a patch.
+  """
+  updatePublishedCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePublishedCardInput!
+  ): UpdatePublishedCardPayload
+
+  """Updates a single `PublishedCard` using a unique key and a patch."""
+  updatePublishedCardById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdatePublishedCardByIdInput!
+  ): UpdatePublishedCardPayload
+
+  """Updates a single `Guest` using its globally unique id and a patch."""
+  updateGuest(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGuestInput!
+  ): UpdateGuestPayload
+
+  """Updates a single `Guest` using a unique key and a patch."""
+  updateGuestById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGuestByIdInput!
+  ): UpdateGuestPayload
+
+  """Updates a single `DeckShare` using its globally unique id and a patch."""
+  updateDeckShare(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateDeckShareInput!
+  ): UpdateDeckSharePayload
+
+  """Updates a single `DeckShare` using a unique key and a patch."""
+  updateDeckShareByDeckIdAndShareRecipientId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateDeckShareByDeckIdAndShareRecipientIdInput!
+  ): UpdateDeckSharePayload
+
+  """
+  Updates a single `CardsInDeck` using its globally unique id and a patch.
+  """
+  updateCardsInDeck(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateCardsInDeckInput!
+  ): UpdateCardsInDeckPayload
+
+  """Updates a single `CardsInDeck` using a unique key and a patch."""
+  updateCardsInDeckById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateCardsInDeckByIdInput!
+  ): UpdateCardsInDeckPayload
+
+  """
+  Updates a single `DeckPlayerAttributeTuple` using its globally unique id and a patch.
+  """
+  updateDeckPlayerAttributeTuple(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateDeckPlayerAttributeTupleInput!
+  ): UpdateDeckPlayerAttributeTuplePayload
+
+  """
+  Updates a single `DeckPlayerAttributeTuple` using a unique key and a patch.
+  """
+  updateDeckPlayerAttributeTupleById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateDeckPlayerAttributeTupleByIdInput!
+  ): UpdateDeckPlayerAttributeTuplePayload
+
+  """Updates a single `Deck` using its globally unique id and a patch."""
+  updateDeck(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateDeckInput!
+  ): UpdateDeckPayload
+
+  """Updates a single `Deck` using a unique key and a patch."""
+  updateDeckById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateDeckByIdInput!
+  ): UpdateDeckPayload
+
+  """Updates a single `Friend` using its globally unique id and a patch."""
+  updateFriend(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateFriendInput!
+  ): UpdateFriendPayload
+
+  """Updates a single `Friend` using a unique key and a patch."""
+  updateFriendByIdAndFriend(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateFriendByIdAndFriendInput!
+  ): UpdateFriendPayload
+
+  """
+  Updates a single `MatchmakingTicket` using its globally unique id and a patch.
+  """
+  updateMatchmakingTicket(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateMatchmakingTicketInput!
+  ): UpdateMatchmakingTicketPayload
+
+  """Updates a single `MatchmakingTicket` using a unique key and a patch."""
+  updateMatchmakingTicketByUserId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateMatchmakingTicketByUserIdInput!
+  ): UpdateMatchmakingTicketPayload
+
+  """
+  Updates a single `MatchmakingQueue` using its globally unique id and a patch.
+  """
+  updateMatchmakingQueue(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateMatchmakingQueueInput!
+  ): UpdateMatchmakingQueuePayload
+
+  """Updates a single `MatchmakingQueue` using a unique key and a patch."""
+  updateMatchmakingQueueById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateMatchmakingQueueByIdInput!
+  ): UpdateMatchmakingQueuePayload
+
+  """Updates a single `GeneratedArt` using a unique key and a patch."""
+  updateGeneratedArtByHashAndOwner(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGeneratedArtByHashAndOwnerInput!
+  ): UpdateGeneratedArtPayload
+
+  """Updates a single `Game` using its globally unique id and a patch."""
+  updateGame(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGameInput!
+  ): UpdateGamePayload
+
+  """Updates a single `Game` using a unique key and a patch."""
+  updateGameById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGameByIdInput!
+  ): UpdateGamePayload
+
+  """Updates a single `Card` using its globally unique id and a patch."""
+  updateCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateCardInput!
+  ): UpdateCardPayload
+
+  """Updates a single `Card` using a unique key and a patch."""
+  updateCardBySuccession(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateCardBySuccessionInput!
+  ): UpdateCardPayload
+
+  """Updates a single `GameUser` using its globally unique id and a patch."""
+  updateGameUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGameUserInput!
+  ): UpdateGameUserPayload
+
+  """Updates a single `GameUser` using a unique key and a patch."""
+  updateGameUserByGameIdAndUserId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateGameUserByGameIdAndUserIdInput!
+  ): UpdateGameUserPayload
+
+  """Deletes a single `BannedDraftCard` using its globally unique id."""
+  deleteBannedDraftCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteBannedDraftCardInput!
+  ): DeleteBannedDraftCardPayload
+
+  """Deletes a single `BannedDraftCard` using a unique key."""
+  deleteBannedDraftCardByCardId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteBannedDraftCardByCardIdInput!
+  ): DeleteBannedDraftCardPayload
+
+  """Deletes a single `BotUser` using its globally unique id."""
+  deleteBotUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteBotUserInput!
+  ): DeleteBotUserPayload
+
+  """Deletes a single `BotUser` using a unique key."""
+  deleteBotUserById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteBotUserByIdInput!
+  ): DeleteBotUserPayload
+
+  """Deletes a single `HardRemovalCard` using its globally unique id."""
+  deleteHardRemovalCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteHardRemovalCardInput!
+  ): DeleteHardRemovalCardPayload
+
+  """Deletes a single `HardRemovalCard` using a unique key."""
+  deleteHardRemovalCardByCardId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteHardRemovalCardByCardIdInput!
+  ): DeleteHardRemovalCardPayload
+
+  """Deletes a single `PublishedCard` using its globally unique id."""
+  deletePublishedCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePublishedCardInput!
+  ): DeletePublishedCardPayload
+
+  """Deletes a single `PublishedCard` using a unique key."""
+  deletePublishedCardById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeletePublishedCardByIdInput!
+  ): DeletePublishedCardPayload
+
+  """Deletes a single `Guest` using its globally unique id."""
+  deleteGuest(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGuestInput!
+  ): DeleteGuestPayload
+
+  """Deletes a single `Guest` using a unique key."""
+  deleteGuestById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGuestByIdInput!
+  ): DeleteGuestPayload
+
+  """Deletes a single `DeckShare` using its globally unique id."""
+  deleteDeckShare(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteDeckShareInput!
+  ): DeleteDeckSharePayload
+
+  """Deletes a single `DeckShare` using a unique key."""
+  deleteDeckShareByDeckIdAndShareRecipientId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteDeckShareByDeckIdAndShareRecipientIdInput!
+  ): DeleteDeckSharePayload
+
+  """Deletes a single `CardsInDeck` using its globally unique id."""
+  deleteCardsInDeck(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteCardsInDeckInput!
+  ): DeleteCardsInDeckPayload
+
+  """Deletes a single `CardsInDeck` using a unique key."""
+  deleteCardsInDeckById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteCardsInDeckByIdInput!
+  ): DeleteCardsInDeckPayload
+
+  """
+  Deletes a single `DeckPlayerAttributeTuple` using its globally unique id.
+  """
+  deleteDeckPlayerAttributeTuple(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteDeckPlayerAttributeTupleInput!
+  ): DeleteDeckPlayerAttributeTuplePayload
+
+  """Deletes a single `DeckPlayerAttributeTuple` using a unique key."""
+  deleteDeckPlayerAttributeTupleById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteDeckPlayerAttributeTupleByIdInput!
+  ): DeleteDeckPlayerAttributeTuplePayload
+
+  """Deletes a single `Deck` using its globally unique id."""
+  deleteDeck(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteDeckInput!
+  ): DeleteDeckPayload
+
+  """Deletes a single `Deck` using a unique key."""
+  deleteDeckById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteDeckByIdInput!
+  ): DeleteDeckPayload
+
+  """Deletes a single `Friend` using its globally unique id."""
+  deleteFriend(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteFriendInput!
+  ): DeleteFriendPayload
+
+  """Deletes a single `Friend` using a unique key."""
+  deleteFriendByIdAndFriend(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteFriendByIdAndFriendInput!
+  ): DeleteFriendPayload
+
+  """Deletes a single `MatchmakingTicket` using its globally unique id."""
+  deleteMatchmakingTicket(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteMatchmakingTicketInput!
+  ): DeleteMatchmakingTicketPayload
+
+  """Deletes a single `MatchmakingTicket` using a unique key."""
+  deleteMatchmakingTicketByUserId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteMatchmakingTicketByUserIdInput!
+  ): DeleteMatchmakingTicketPayload
+
+  """Deletes a single `MatchmakingQueue` using its globally unique id."""
+  deleteMatchmakingQueue(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteMatchmakingQueueInput!
+  ): DeleteMatchmakingQueuePayload
+
+  """Deletes a single `MatchmakingQueue` using a unique key."""
+  deleteMatchmakingQueueById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteMatchmakingQueueByIdInput!
+  ): DeleteMatchmakingQueuePayload
+
+  """Deletes a single `GeneratedArt` using a unique key."""
+  deleteGeneratedArtByHashAndOwner(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGeneratedArtByHashAndOwnerInput!
+  ): DeleteGeneratedArtPayload
+
+  """Deletes a single `Game` using its globally unique id."""
+  deleteGame(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGameInput!
+  ): DeleteGamePayload
+
+  """Deletes a single `Game` using a unique key."""
+  deleteGameById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGameByIdInput!
+  ): DeleteGamePayload
+
+  """Deletes a single `Card` using its globally unique id."""
+  deleteCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteCardInput!
+  ): DeleteCardPayload
+
+  """Deletes a single `Card` using a unique key."""
+  deleteCardBySuccession(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteCardBySuccessionInput!
+  ): DeleteCardPayload
+
+  """Deletes a single `GameUser` using its globally unique id."""
+  deleteGameUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGameUserInput!
+  ): DeleteGameUserPayload
+
+  """Deletes a single `GameUser` using a unique key."""
+  deleteGameUserByGameIdAndUserId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteGameUserByGameIdAndUserIdInput!
+  ): DeleteGameUserPayload
 }
 
 """The output of our `cardCatalogueGetBannedDraftCards` mutation."""
@@ -8024,16 +8025,4 @@ input DeleteGameUserByGameIdAndUserIdInput {
   clientMutationId: String
   gameId: BigInt!
   userId: String!
-}
-
-type ImageDef {
-  id: String!
-  name: String!
-  src: String!
-  height: Int!
-  width: Int!
-}
-
-type GenerateArtResult {
-  urls: [String!]!
 }

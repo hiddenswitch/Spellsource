@@ -1,8 +1,8 @@
 name: Build Server
 on:
   push:
-    branches: ['develop']
-    # tags: [ "*" ]
+    # branches: ['develop']
+    tags: [ "*" ]
 
 jobs:
   build-and-deploy-server:

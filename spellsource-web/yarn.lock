@@ -347,13 +347,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@as-integrations/next@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "@as-integrations/next@npm:1.2.0"
+"@as-integrations/next@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@as-integrations/next@npm:3.2.0"
   peerDependencies:
     "@apollo/server": ^4.0.0
-    next: ^12.0.0 || ^13.0.0
-  checksum: 67a761ed22c0ea4c034039a5b63020507ba02f92955e7e2c4160841480991244e5f4484f44e5fb407917eb49e47c383a8c242bce5c2253ba54e9f23cacb0a71f
+    next: ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0
+  checksum: 0ed9eb1a01961992e4d2d859f1b4c69f6a56d0b5009d473db5989b3202596ab21dfad51f078cb7f4bdf153acda048bb27d557f21fa348bcccbc8e08bb9ff5dfb
   languageName: node
   linkType: hard
 
@@ -16379,7 +16379,7 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:^3.8.6"
     "@apollo/server": "npm:^4.9.4"
-    "@as-integrations/next": "npm:^1.2.0"
+    "@as-integrations/next": "npm:^3.2.0"
     "@aws-sdk/client-s3": "npm:^3.423.0"
     "@babel/preset-env": "npm:^7.20.2"
     "@babel/preset-typescript": "npm:^7.21.0"

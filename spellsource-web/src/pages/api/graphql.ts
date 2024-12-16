@@ -11,17 +11,27 @@ const cors = Cors({
 let handler;
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  handler ??= createApolloServer().then((server) =>
-    startServerAndCreateNextHandler(server, {
+  handler ??= createApolloServer().then((server) => {
+    const h = startServerAndCreateNextHandler(server, {
       context: async (req) => {
         const session = await getSessionDirect(req);
         return { session };
       },
-    })
-  );
+    });
+
+    if (process.env.VERBOSE == "true") {
+      console.log("Successfully created handler");
+    }
+
+    return h;
+  });
 
   if (process.env.NODE_ENV !== "production") {
     await runMiddleware(req, res, cors);
+  }
+
+  if (process.env.VERBOSE == "true") {
+    console.log("Calling handler for graphql request");
   }
 
   return (await handler)(req, res);
