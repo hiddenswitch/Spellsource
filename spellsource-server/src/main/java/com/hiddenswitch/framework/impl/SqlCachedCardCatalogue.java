@@ -9,7 +9,9 @@ import com.hiddenswitch.spellsource.rpc.Spellsource;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Tags;
 import io.micrometer.core.instrument.binder.BaseUnits;
+import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import io.vertx.core.Future;
@@ -17,6 +19,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.json.jackson.DatabindCodec;
 import io.vertx.pgclient.pubsub.PgSubscriber;
+import io.vertx.rxjava3.RxHelper;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.Attribute;
@@ -131,6 +134,7 @@ public class SqlCachedCardCatalogue extends ListCardCatalogue {
 		var debounceInvalidations = Observable.merge(userInvalidations
 						.groupBy(s -> s)
 						.map(group -> group.debounce(8, TimeUnit.SECONDS)))
+				.observeOn(RxHelper.scheduler(context))
 				.subscribe(this::invalidateUserGetCardsResponseForUnityCollection);
 
 		context.addCloseHook(completion -> {

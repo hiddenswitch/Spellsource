@@ -78,7 +78,7 @@ subprojects {
         }
 
         if (details.requested.group == 'io.reactivex.rxjava3' && details.requested.module.name == "rxjava") {
-          details.useVersion "3.1.6"
+          details.useVersion rxJavaVersion
         }
 
         if (details.requested.group == 'commons-io') {

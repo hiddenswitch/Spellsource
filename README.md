@@ -91,6 +91,8 @@ There are four main components:
    - Linux and macOS: `gradle venv; source .venv/bin/activate; comfyui -w ./spellsource-python/workdir`
  - The Unity client: Open `spellsource-client/src/unity` in Unity 6, open the Game scene, and hit Play.
 
+Start the Java server backend first, since it also starts Postgres and Redis.
+
 ##### Configure your IDE for Python development:
 
 1. Run `gradle venv`.

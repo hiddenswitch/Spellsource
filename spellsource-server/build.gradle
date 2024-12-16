@@ -70,6 +70,7 @@ dependencies {
   implementation group: 'io.vertx', name: 'vertx-service-discovery', version: vertxVersion
   implementation group: 'io.vertx', name: 'vertx-web', version: vertxVersion
   implementation group: 'io.vertx', name: 'vertx-auth-jwt', version: vertxVersion
+  implementation "io.vertx:vertx-rx-java3:$vertxVersion"
   implementation 'javax.activation:activation:1.1.1'
 
   // keycloak
@@ -131,7 +132,7 @@ dependencies {
     exclude group: 'io.micrometer', module: 'micrometer-core'
   }
   implementation "org.flywaydb:flyway-core:$flywayVersion"
-  implementation 'org.redisson:redisson:3.23.4'
+  implementation 'org.redisson:redisson:3.40.1'
   implementation(group: 'com.github.pcj', name: 'google-options', version: '1.0.0') {
     exclude group: 'com.google.guava', module: 'guava'
   }
@@ -179,6 +180,8 @@ run {
   dependsOn += [classes, testClasses]
   classpath sourceSets.test.runtimeClasspath
   mainClass.set('com.hiddenswitch.framework.tests.applications.EntryPoint')
+  // to preserve sql db for keycloak as a practical matter
+  environment("TESTCONTAINERS_REUSE_ENABLE", "true")
   jvmArgs.addAll(jvmArgs)
 }
 

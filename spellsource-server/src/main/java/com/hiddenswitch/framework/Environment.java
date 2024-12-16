@@ -18,7 +18,7 @@ import io.vertx.core.Context;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpConnection;
-import io.vertx.core.impl.NoStackTraceThrowable;
+import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.core.json.Json;
 import io.vertx.core.spi.cluster.ClusterManager;
@@ -28,8 +28,8 @@ import io.vertx.micrometer.VertxPrometheusOptions;
 import io.vertx.micrometer.backends.PrometheusBackendRegistry;
 import io.vertx.pgclient.PgBuilder;
 import io.vertx.pgclient.PgConnectOptions;
-import io.vertx.sqlclient.*;
 import io.vertx.sqlclient.Row;
+import io.vertx.sqlclient.*;
 import io.vertx.tracing.opentracing.OpenTracingOptions;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.catalogues.ClasspathCardCatalogue;
@@ -37,10 +37,10 @@ import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.output.MigrateResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jooq.*;
 import org.jooq.Configuration;
 import org.jooq.Query;
 import org.jooq.Record;
+import org.jooq.*;
 import org.jooq.conf.ParamType;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
@@ -52,16 +52,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.Inet4Address;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.DriverManager;
-import java.util.*;
 import java.util.Comparator;
+import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -575,8 +579,7 @@ public class Environment {
 	}
 
 	/**
-	 * Retrieves a local-network-accessible IPv4 address for this instance by heuristically picking the "primary" network
-	 * interface on this device.
+	 * Retrieves a local-network-accessible IPv4 address for this instance by heuristically picking the "primary" network interface on this device.
 	 *
 	 * @return A string in the form of "192.168.0.1"
 	 */
