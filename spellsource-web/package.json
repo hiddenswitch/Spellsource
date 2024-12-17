@@ -59,7 +59,7 @@
     "node-fs-extra": "^0.8.2",
     "pify": "^5.0.0",
     "pixelmatch": "^5.2.1",
-    "postgraphile": "^5.0.0-beta.15",
+    "postgraphile": "^5.0.0-beta.37",
     "postgraphile-plugin-connection-filter": "^3.0.0-beta.1",
     "probe-image-size": "^7.2.3",
     "psd.js": "^3.3.15",

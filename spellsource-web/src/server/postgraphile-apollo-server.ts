@@ -7,7 +7,13 @@ import { print } from "postgraphile/graphql";
 
 export const createPostgraphileSchema = async (preset: GraphileConfig.Preset) => {
   try {
+    if (process.env.VERBOSE == "true") {
+      console.log("Starting to create postgraphile schema");
+    }
     const { schema, resolvedPreset } = await makeSchema(preset);
+    if (process.env.VERBOSE == "true") {
+      console.log("Successfully made initial schema");
+    }
 
     const postgraphileSchema = wrapSchema({
       schema,

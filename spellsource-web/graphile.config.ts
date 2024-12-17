@@ -32,6 +32,7 @@ const preset: GraphileConfig.Preset = {
   ],
   plugins: [PgOmitArchivedPlugin],
   pgServices: [
+    // @ts-ignore
     makePgService({
       schemas: ["spellsource"],
       pool: pgPool,
