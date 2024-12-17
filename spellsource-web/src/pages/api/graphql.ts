@@ -11,20 +11,22 @@ const cors = Cors({
 let handler;
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  handler ??= createApolloServer().then((server) => {
-    const h = startServerAndCreateNextHandler(server, {
-      context: async (req) => {
-        const session = await getSessionDirect(req);
-        return { session };
-      },
-    });
+  handler ??= createApolloServer()
+    .then((server) => {
+      const h = startServerAndCreateNextHandler(server, {
+        context: async (req) => {
+          const session = await getSessionDirect(req);
+          return { session };
+        },
+      });
 
-    if (process.env.VERBOSE == "true") {
-      console.log("Successfully created handler");
-    }
+      if (process.env.VERBOSE == "true") {
+        console.log("Successfully created handler");
+      }
 
-    return h;
-  });
+      return h;
+    })
+    .catch((reason) => console.error(reason));
 
   if (process.env.NODE_ENV !== "production") {
     await runMiddleware(req, res, cors);

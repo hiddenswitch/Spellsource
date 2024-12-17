@@ -10,13 +10,16 @@ import preset from "../../graphile.config";
 const path = "src/__generated__/schema.graphql";
 
 export const createApolloServer = async () => {
+  if (process.env.VERBOSE == "true") {
+    console.log("Starting to create server");
+  }
   const postgraphileSchema = await createPostgraphileSchema(preset);
 
   const artSchema = await createArtSchema();
 
   const schema = stitchSchemas({ subschemas: [postgraphileSchema, artSchema] });
 
-  if (process.env.VERBOSE) {
+  if (process.env.VERBOSE == "true") {
     console.log("Successfully stitched schemas");
   }
 
