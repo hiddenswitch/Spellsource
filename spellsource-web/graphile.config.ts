@@ -31,6 +31,9 @@ const preset: GraphileConfig.Preset = {
     PostGraphileConnectionFilterPreset,
   ],
   plugins: [PgOmitArchivedPlugin],
+  schema: {
+    dontSwallowErrors: true,
+  },
   pgServices: [
     // @ts-ignore
     makePgService({

@@ -7,5 +7,6 @@ export const pool = new Pool({
   host: pgHost,
   database: pgDatabase,
   port: pgPort,
+  connectionTimeoutMillis: 1000, // Set connection timeout to 1 second
 });
 export { pool as pgPool };
