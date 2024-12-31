@@ -40,26 +40,26 @@ type Query implements Node {
   """Get a single `DeckPlayerAttributeTuple`."""
   deckPlayerAttributeTupleById(id: BigInt!): DeckPlayerAttributeTuple
 
+  """Get a single `Deck`."""
+  deckById(id: String!): Deck
+
   """Get a single `Friend`."""
   friendByIdAndFriend(id: String!, friend: String!): Friend
 
   """Get a single `MatchmakingTicket`."""
   matchmakingTicketByUserId(userId: String!): MatchmakingTicket
 
-  """Get a single `Deck`."""
-  deckById(id: String!): Deck
-
   """Get a single `MatchmakingQueue`."""
   matchmakingQueueById(id: String!): MatchmakingQueue
-
-  """Get a single `Card`."""
-  cardBySuccession(succession: BigInt!): Card
 
   """Get a single `GeneratedArt`."""
   generatedArtByHashAndOwner(hash: String!, owner: String!): GeneratedArt
 
   """Get a single `Game`."""
   gameById(id: BigInt!): Game
+
+  """Get a single `Card`."""
+  cardBySuccession(succession: BigInt!): Card
 
   """Get a single `GameUser`."""
   gameUserByGameIdAndUserId(gameId: BigInt!, userId: String!): GameUser
@@ -127,6 +127,12 @@ type Query implements Node {
     nodeId: ID!
   ): DeckPlayerAttributeTuple
 
+  """Reads a single `Deck` using its globally unique `ID`."""
+  deck(
+    """The globally unique `ID` to be used in selecting a single `Deck`."""
+    nodeId: ID!
+  ): Deck
+
   """Reads a single `Friend` using its globally unique `ID`."""
   friend(
     """The globally unique `ID` to be used in selecting a single `Friend`."""
@@ -141,12 +147,6 @@ type Query implements Node {
     nodeId: ID!
   ): MatchmakingTicket
 
-  """Reads a single `Deck` using its globally unique `ID`."""
-  deck(
-    """The globally unique `ID` to be used in selecting a single `Deck`."""
-    nodeId: ID!
-  ): Deck
-
   """Reads a single `MatchmakingQueue` using its globally unique `ID`."""
   matchmakingQueue(
     """
@@ -155,17 +155,17 @@ type Query implements Node {
     nodeId: ID!
   ): MatchmakingQueue
 
-  """Reads a single `Card` using its globally unique `ID`."""
-  card(
-    """The globally unique `ID` to be used in selecting a single `Card`."""
-    nodeId: ID!
-  ): Card
-
   """Reads a single `Game` using its globally unique `ID`."""
   game(
     """The globally unique `ID` to be used in selecting a single `Game`."""
     nodeId: ID!
   ): Game
+
+  """Reads a single `Card` using its globally unique `ID`."""
+  card(
+    """The globally unique `ID` to be used in selecting a single `Card`."""
+    nodeId: ID!
+  ): Card
 
   """Reads a single `GameUser` using its globally unique `ID`."""
   gameUser(
@@ -447,6 +447,40 @@ type Query implements Node {
     filter: DeckPlayerAttributeTupleFilter
   ): DeckPlayerAttributeTuplesConnection
 
+  """Reads and enables pagination through a set of `Deck`."""
+  allDecks(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Deck`."""
+    orderBy: [DecksOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: DeckCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: DeckFilter
+  ): DecksConnection
+
   """Reads and enables pagination through a set of `Class`."""
   allClasses(
     """Only read the first `n` values of the set."""
@@ -549,40 +583,6 @@ type Query implements Node {
     filter: MatchmakingTicketFilter
   ): MatchmakingTicketsConnection
 
-  """Reads and enables pagination through a set of `Deck`."""
-  allDecks(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Deck`."""
-    orderBy: [DecksOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: DeckCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: DeckFilter
-  ): DecksConnection
-
   """Reads and enables pagination through a set of `MatchmakingQueue`."""
   allMatchmakingQueues(
     """Only read the first `n` values of the set."""
@@ -616,79 +616,6 @@ type Query implements Node {
     """
     filter: MatchmakingQueueFilter
   ): MatchmakingQueuesConnection
-
-  """Reads and enables pagination through a set of `Card`."""
-  allCards(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `Card`."""
-    orderBy: [CardsOrderBy!] = [PRIMARY_KEY_ASC]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: CardCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: CardFilter
-
-    """
-    Indicates whether archived items should be included in the results or not.
-    """
-    includeArchived: IncludeArchivedOption = NO
-  ): CardsConnection
-
-  """Reads and enables pagination through a set of `CollectionCard`."""
-  allCollectionCards(
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """The method to use when ordering `CollectionCard`."""
-    orderBy: [CollectionCardsOrderBy!] = [NATURAL]
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: CollectionCardCondition
-
-    """
-    A filter to be used in determining which values should be returned by the collection.
-    """
-    filter: CollectionCardFilter
-  ): CollectionCardsConnection
 
   """Reads and enables pagination through a set of `GeneratedArt`."""
   allGeneratedArts(
@@ -762,6 +689,79 @@ type Query implements Node {
     """
     filter: GameFilter
   ): GamesConnection
+
+  """Reads and enables pagination through a set of `Card`."""
+  allCards(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Card`."""
+    orderBy: [CardsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: CardCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: CardFilter
+
+    """
+    Indicates whether archived items should be included in the results or not.
+    """
+    includeArchived: IncludeArchivedOption = NO
+  ): CardsConnection
+
+  """Reads and enables pagination through a set of `CollectionCard`."""
+  allCollectionCards(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `CollectionCard`."""
+    orderBy: [CollectionCardsOrderBy!] = [NATURAL]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: CollectionCardCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: CollectionCardFilter
+  ): CollectionCardsConnection
 
   """Reads and enables pagination through a set of `GameUser`."""
   allGameUsers(
@@ -867,6 +867,12 @@ type Mutation {
     """
     input: CreateDeckWithCardsInput!
   ): CreateDeckWithCardsPayload
+  saveGeneratedArt(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: SaveGeneratedArtInput!
+  ): SaveGeneratedArtPayload
   cardCatalogueFormats(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
@@ -933,12 +939,6 @@ type Mutation {
     """
     input: CardCatalogueQueryInput!
   ): CardCatalogueQueryPayload
-  saveGeneratedArt(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: SaveGeneratedArtInput!
-  ): SaveGeneratedArtPayload
 
   """Creates a single `BannedDraftCard`."""
   createBannedDraftCard(
@@ -1004,6 +1004,14 @@ type Mutation {
     input: CreateDeckPlayerAttributeTupleInput!
   ): CreateDeckPlayerAttributeTuplePayload
 
+  """Creates a single `Deck`."""
+  createDeck(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateDeckInput!
+  ): CreateDeckPayload
+
   """Creates a single `Friend`."""
   createFriend(
     """
@@ -1020,14 +1028,6 @@ type Mutation {
     input: CreateMatchmakingTicketInput!
   ): CreateMatchmakingTicketPayload
 
-  """Creates a single `Deck`."""
-  createDeck(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateDeckInput!
-  ): CreateDeckPayload
-
   """Creates a single `MatchmakingQueue`."""
   createMatchmakingQueue(
     """
@@ -1035,14 +1035,6 @@ type Mutation {
     """
     input: CreateMatchmakingQueueInput!
   ): CreateMatchmakingQueuePayload
-
-  """Creates a single `Card`."""
-  createCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateCardInput!
-  ): CreateCardPayload
 
   """Creates a single `GeneratedArt`."""
   createGeneratedArt(
@@ -1059,6 +1051,14 @@ type Mutation {
     """
     input: CreateGameInput!
   ): CreateGamePayload
+
+  """Creates a single `Card`."""
+  createCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateCardInput!
+  ): CreateCardPayload
 
   """Creates a single `GameUser`."""
   createGameUser(
@@ -1208,6 +1208,22 @@ type Mutation {
     input: UpdateDeckPlayerAttributeTupleByIdInput!
   ): UpdateDeckPlayerAttributeTuplePayload
 
+  """Updates a single `Deck` using its globally unique id and a patch."""
+  updateDeck(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateDeckInput!
+  ): UpdateDeckPayload
+
+  """Updates a single `Deck` using a unique key and a patch."""
+  updateDeckById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateDeckByIdInput!
+  ): UpdateDeckPayload
+
   """Updates a single `Friend` using its globally unique id and a patch."""
   updateFriend(
     """
@@ -1242,22 +1258,6 @@ type Mutation {
     input: UpdateMatchmakingTicketByUserIdInput!
   ): UpdateMatchmakingTicketPayload
 
-  """Updates a single `Deck` using its globally unique id and a patch."""
-  updateDeck(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateDeckInput!
-  ): UpdateDeckPayload
-
-  """Updates a single `Deck` using a unique key and a patch."""
-  updateDeckById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateDeckByIdInput!
-  ): UpdateDeckPayload
-
   """
   Updates a single `MatchmakingQueue` using its globally unique id and a patch.
   """
@@ -1275,22 +1275,6 @@ type Mutation {
     """
     input: UpdateMatchmakingQueueByIdInput!
   ): UpdateMatchmakingQueuePayload
-
-  """Updates a single `Card` using its globally unique id and a patch."""
-  updateCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateCardInput!
-  ): UpdateCardPayload
-
-  """Updates a single `Card` using a unique key and a patch."""
-  updateCardBySuccession(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateCardBySuccessionInput!
-  ): UpdateCardPayload
 
   """Updates a single `GeneratedArt` using a unique key and a patch."""
   updateGeneratedArtByHashAndOwner(
@@ -1315,6 +1299,22 @@ type Mutation {
     """
     input: UpdateGameByIdInput!
   ): UpdateGamePayload
+
+  """Updates a single `Card` using its globally unique id and a patch."""
+  updateCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateCardInput!
+  ): UpdateCardPayload
+
+  """Updates a single `Card` using a unique key and a patch."""
+  updateCardBySuccession(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateCardBySuccessionInput!
+  ): UpdateCardPayload
 
   """Updates a single `GameUser` using its globally unique id and a patch."""
   updateGameUser(
@@ -1462,6 +1462,22 @@ type Mutation {
     input: DeleteDeckPlayerAttributeTupleByIdInput!
   ): DeleteDeckPlayerAttributeTuplePayload
 
+  """Deletes a single `Deck` using its globally unique id."""
+  deleteDeck(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteDeckInput!
+  ): DeleteDeckPayload
+
+  """Deletes a single `Deck` using a unique key."""
+  deleteDeckById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteDeckByIdInput!
+  ): DeleteDeckPayload
+
   """Deletes a single `Friend` using its globally unique id."""
   deleteFriend(
     """
@@ -1494,22 +1510,6 @@ type Mutation {
     input: DeleteMatchmakingTicketByUserIdInput!
   ): DeleteMatchmakingTicketPayload
 
-  """Deletes a single `Deck` using its globally unique id."""
-  deleteDeck(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteDeckInput!
-  ): DeleteDeckPayload
-
-  """Deletes a single `Deck` using a unique key."""
-  deleteDeckById(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteDeckByIdInput!
-  ): DeleteDeckPayload
-
   """Deletes a single `MatchmakingQueue` using its globally unique id."""
   deleteMatchmakingQueue(
     """
@@ -1525,22 +1525,6 @@ type Mutation {
     """
     input: DeleteMatchmakingQueueByIdInput!
   ): DeleteMatchmakingQueuePayload
-
-  """Deletes a single `Card` using its globally unique id."""
-  deleteCard(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteCardInput!
-  ): DeleteCardPayload
-
-  """Deletes a single `Card` using a unique key."""
-  deleteCardBySuccession(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteCardBySuccessionInput!
-  ): DeleteCardPayload
 
   """Deletes a single `GeneratedArt` using a unique key."""
   deleteGeneratedArtByHashAndOwner(
@@ -1565,6 +1549,22 @@ type Mutation {
     """
     input: DeleteGameByIdInput!
   ): DeleteGamePayload
+
+  """Deletes a single `Card` using its globally unique id."""
+  deleteCard(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteCardInput!
+  ): DeleteCardPayload
+
+  """Deletes a single `Card` using a unique key."""
+  deleteCardBySuccession(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteCardBySuccessionInput!
+  ): DeleteCardPayload
 
   """Deletes a single `GameUser` using its globally unique id."""
   deleteGameUser(
@@ -3902,6 +3902,94 @@ input GuestFilter {
   not: GuestFilter
 }
 
+"""A connection to a list of `Deck` values."""
+type DecksConnection {
+  """A list of `Deck` objects."""
+  nodes: [Deck]!
+
+  """
+  A list of edges which contains the `Deck` and cursor to aid in pagination.
+  """
+  edges: [DecksEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Deck` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Deck` edge in the connection."""
+type DecksEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Deck` at the end of the edge."""
+  node: Deck
+}
+
+"""Methods to use when ordering `Deck`."""
+enum DecksOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ID_ASC
+  ID_DESC
+  CREATED_BY_ASC
+  CREATED_BY_DESC
+  LAST_EDITED_BY_ASC
+  LAST_EDITED_BY_DESC
+  NAME_ASC
+  NAME_DESC
+  HERO_CLASS_ASC
+  HERO_CLASS_DESC
+  TRASHED_ASC
+  TRASHED_DESC
+  FORMAT_ASC
+  FORMAT_DESC
+  DECK_TYPE_ASC
+  DECK_TYPE_DESC
+  IS_PREMADE_ASC
+  IS_PREMADE_DESC
+  PERMITTED_TO_DUPLICATE_ASC
+  PERMITTED_TO_DUPLICATE_DESC
+}
+
+"""
+A condition to be used against `Deck` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input DeckCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: String
+
+  """Checks for equality with the object’s `createdBy` field."""
+  createdBy: String
+
+  """Checks for equality with the object’s `lastEditedBy` field."""
+  lastEditedBy: String
+
+  """Checks for equality with the object’s `name` field."""
+  name: String
+
+  """Checks for equality with the object’s `heroClass` field."""
+  heroClass: String
+
+  """Checks for equality with the object’s `trashed` field."""
+  trashed: Boolean
+
+  """Checks for equality with the object’s `format` field."""
+  format: String
+
+  """Checks for equality with the object’s `deckType` field."""
+  deckType: Int
+
+  """Checks for equality with the object’s `isPremade` field."""
+  isPremade: Boolean
+
+  """Checks for equality with the object’s `permittedToDuplicate` field."""
+  permittedToDuplicate: Boolean
+}
+
 """A connection to a list of `Class` values."""
 type ClassesConnection {
   """A list of `Class` objects."""
@@ -4094,94 +4182,6 @@ input FriendFilter {
   not: FriendFilter
 }
 
-"""A connection to a list of `Deck` values."""
-type DecksConnection {
-  """A list of `Deck` objects."""
-  nodes: [Deck]!
-
-  """
-  A list of edges which contains the `Deck` and cursor to aid in pagination.
-  """
-  edges: [DecksEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `Deck` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `Deck` edge in the connection."""
-type DecksEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `Deck` at the end of the edge."""
-  node: Deck
-}
-
-"""Methods to use when ordering `Deck`."""
-enum DecksOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ID_ASC
-  ID_DESC
-  CREATED_BY_ASC
-  CREATED_BY_DESC
-  LAST_EDITED_BY_ASC
-  LAST_EDITED_BY_DESC
-  NAME_ASC
-  NAME_DESC
-  HERO_CLASS_ASC
-  HERO_CLASS_DESC
-  TRASHED_ASC
-  TRASHED_DESC
-  FORMAT_ASC
-  FORMAT_DESC
-  DECK_TYPE_ASC
-  DECK_TYPE_DESC
-  IS_PREMADE_ASC
-  IS_PREMADE_DESC
-  PERMITTED_TO_DUPLICATE_ASC
-  PERMITTED_TO_DUPLICATE_DESC
-}
-
-"""
-A condition to be used against `Deck` object types. All fields are tested for equality and combined with a logical ‘and.’
-"""
-input DeckCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: String
-
-  """Checks for equality with the object’s `createdBy` field."""
-  createdBy: String
-
-  """Checks for equality with the object’s `lastEditedBy` field."""
-  lastEditedBy: String
-
-  """Checks for equality with the object’s `name` field."""
-  name: String
-
-  """Checks for equality with the object’s `heroClass` field."""
-  heroClass: String
-
-  """Checks for equality with the object’s `trashed` field."""
-  trashed: Boolean
-
-  """Checks for equality with the object’s `format` field."""
-  format: String
-
-  """Checks for equality with the object’s `deckType` field."""
-  deckType: Int
-
-  """Checks for equality with the object’s `isPremade` field."""
-  isPremade: Boolean
-
-  """Checks for equality with the object’s `permittedToDuplicate` field."""
-  permittedToDuplicate: Boolean
-}
-
 """A connection to a list of `MatchmakingQueue` values."""
 type MatchmakingQueuesConnection {
   """A list of `MatchmakingQueue` objects."""
@@ -4283,6 +4283,240 @@ input MatchmakingQueueCondition {
   queueCreatedAt: Datetime
 }
 
+"""A connection to a list of `GeneratedArt` values."""
+type GeneratedArtsConnection {
+  """A list of `GeneratedArt` objects."""
+  nodes: [GeneratedArt]!
+
+  """
+  A list of edges which contains the `GeneratedArt` and cursor to aid in pagination.
+  """
+  edges: [GeneratedArtsEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `GeneratedArt` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `GeneratedArt` edge in the connection."""
+type GeneratedArtsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `GeneratedArt` at the end of the edge."""
+  node: GeneratedArt
+}
+
+"""Methods to use when ordering `GeneratedArt`."""
+enum GeneratedArtsOrderBy {
+  NATURAL
+  HASH_ASC
+  HASH_DESC
+  OWNER_ASC
+  OWNER_DESC
+  INFO_ASC
+  INFO_DESC
+  IS_ARCHIVED_ASC
+  IS_ARCHIVED_DESC
+}
+
+"""
+A condition to be used against `GeneratedArt` object types. All fields are
+tested for equality and combined with a logical ‘and.’
+"""
+input GeneratedArtCondition {
+  """Checks for equality with the object’s `hash` field."""
+  hash: String
+
+  """Checks for equality with the object’s `owner` field."""
+  owner: String
+
+  """Checks for equality with the object’s `urls` field."""
+  urls: [String]
+
+  """Checks for equality with the object’s `info` field."""
+  info: JSON
+
+  """Checks for equality with the object’s `isArchived` field."""
+  isArchived: Boolean
+}
+
+"""
+A filter to be used against `GeneratedArt` object types. All fields are combined with a logical ‘and.’
+"""
+input GeneratedArtFilter {
+  """Filter by the object’s `hash` field."""
+  hash: StringFilter
+
+  """Filter by the object’s `owner` field."""
+  owner: StringFilter
+
+  """Filter by the object’s `urls` field."""
+  urls: StringListFilter
+
+  """Filter by the object’s `info` field."""
+  info: JSONFilter
+
+  """Filter by the object’s `isArchived` field."""
+  isArchived: BooleanFilter
+
+  """Checks for all expressions in this list."""
+  and: [GeneratedArtFilter!]
+
+  """Checks for any expressions in this list."""
+  or: [GeneratedArtFilter!]
+
+  """Negates the expression."""
+  not: GeneratedArtFilter
+}
+
+"""
+A filter to be used against String List fields. All fields are combined with a logical ‘and.’
+"""
+input StringListFilter {
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: [String]
+
+  """Not equal to the specified value."""
+  notEqualTo: [String]
+
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: [String]
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: [String]
+
+  """Less than the specified value."""
+  lessThan: [String]
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: [String]
+
+  """Greater than the specified value."""
+  greaterThan: [String]
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: [String]
+
+  """Contains the specified list of values."""
+  contains: [String]
+
+  """Contained by the specified list of values."""
+  containedBy: [String]
+
+  """Overlaps the specified list of values."""
+  overlaps: [String]
+
+  """Any array item is equal to the specified value."""
+  anyEqualTo: String
+
+  """Any array item is not equal to the specified value."""
+  anyNotEqualTo: String
+
+  """Any array item is less than the specified value."""
+  anyLessThan: String
+
+  """Any array item is less than or equal to the specified value."""
+  anyLessThanOrEqualTo: String
+
+  """Any array item is greater than the specified value."""
+  anyGreaterThan: String
+
+  """Any array item is greater than or equal to the specified value."""
+  anyGreaterThanOrEqualTo: String
+}
+
+"""
+Indicates whether archived items should be included in the results or not.
+"""
+enum IncludeArchivedOption {
+  """Exclude archived items."""
+  NO
+
+  """Include archived items."""
+  YES
+
+  """Only include archived items (i.e. exclude non-archived items)."""
+  EXCLUSIVELY
+
+  """
+  If there is a parent GraphQL record and it is archived then this is equivalent to YES, in all other cases this is equivalent to NO.
+  """
+  INHERIT
+}
+
+"""A connection to a list of `Game` values."""
+type GamesConnection {
+  """A list of `Game` objects."""
+  nodes: [Game]!
+
+  """
+  A list of edges which contains the `Game` and cursor to aid in pagination.
+  """
+  edges: [GamesEdge]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Game` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Game` edge in the connection."""
+type GamesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Game` at the end of the edge."""
+  node: Game
+}
+
+"""Methods to use when ordering `Game`."""
+enum GamesOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ID_ASC
+  ID_DESC
+  STATUS_ASC
+  STATUS_DESC
+  GIT_HASH_ASC
+  GIT_HASH_DESC
+  TRACE_ASC
+  TRACE_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+}
+
+"""
+A condition to be used against `Game` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input GameCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: BigInt
+
+  """Checks for equality with the object’s `status` field."""
+  status: GameStateEnum
+
+  """Checks for equality with the object’s `gitHash` field."""
+  gitHash: String
+
+  """Checks for equality with the object’s `trace` field."""
+  trace: JSON
+
+  """Checks for equality with the object’s `createdAt` field."""
+  createdAt: Datetime
+}
+
 """A connection to a list of `Card` values."""
 type CardsConnection {
   """A list of `Card` objects."""
@@ -4378,25 +4612,6 @@ input CardCondition {
 
   """Checks for equality with the object’s `cost` field."""
   cost: Int
-}
-
-"""
-Indicates whether archived items should be included in the results or not.
-"""
-enum IncludeArchivedOption {
-  """Exclude archived items."""
-  NO
-
-  """Include archived items."""
-  YES
-
-  """Only include archived items (i.e. exclude non-archived items)."""
-  EXCLUSIVELY
-
-  """
-  If there is a parent GraphQL record and it is archived then this is equivalent to YES, in all other cases this is equivalent to NO.
-  """
-  INHERIT
 }
 
 """A connection to a list of `CollectionCard` values."""
@@ -4559,221 +4774,6 @@ input CollectionCardFilter {
 
   """Negates the expression."""
   not: CollectionCardFilter
-}
-
-"""A connection to a list of `GeneratedArt` values."""
-type GeneratedArtsConnection {
-  """A list of `GeneratedArt` objects."""
-  nodes: [GeneratedArt]!
-
-  """
-  A list of edges which contains the `GeneratedArt` and cursor to aid in pagination.
-  """
-  edges: [GeneratedArtsEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `GeneratedArt` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `GeneratedArt` edge in the connection."""
-type GeneratedArtsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `GeneratedArt` at the end of the edge."""
-  node: GeneratedArt
-}
-
-"""Methods to use when ordering `GeneratedArt`."""
-enum GeneratedArtsOrderBy {
-  NATURAL
-  HASH_ASC
-  HASH_DESC
-  OWNER_ASC
-  OWNER_DESC
-  INFO_ASC
-  INFO_DESC
-  IS_ARCHIVED_ASC
-  IS_ARCHIVED_DESC
-}
-
-"""
-A condition to be used against `GeneratedArt` object types. All fields are
-tested for equality and combined with a logical ‘and.’
-"""
-input GeneratedArtCondition {
-  """Checks for equality with the object’s `hash` field."""
-  hash: String
-
-  """Checks for equality with the object’s `owner` field."""
-  owner: String
-
-  """Checks for equality with the object’s `urls` field."""
-  urls: [String]
-
-  """Checks for equality with the object’s `info` field."""
-  info: JSON
-
-  """Checks for equality with the object’s `isArchived` field."""
-  isArchived: Boolean
-}
-
-"""
-A filter to be used against `GeneratedArt` object types. All fields are combined with a logical ‘and.’
-"""
-input GeneratedArtFilter {
-  """Filter by the object’s `hash` field."""
-  hash: StringFilter
-
-  """Filter by the object’s `owner` field."""
-  owner: StringFilter
-
-  """Filter by the object’s `urls` field."""
-  urls: StringListFilter
-
-  """Filter by the object’s `info` field."""
-  info: JSONFilter
-
-  """Filter by the object’s `isArchived` field."""
-  isArchived: BooleanFilter
-
-  """Checks for all expressions in this list."""
-  and: [GeneratedArtFilter!]
-
-  """Checks for any expressions in this list."""
-  or: [GeneratedArtFilter!]
-
-  """Negates the expression."""
-  not: GeneratedArtFilter
-}
-
-"""
-A filter to be used against String List fields. All fields are combined with a logical ‘and.’
-"""
-input StringListFilter {
-  """
-  Is null (if `true` is specified) or is not null (if `false` is specified).
-  """
-  isNull: Boolean
-
-  """Equal to the specified value."""
-  equalTo: [String]
-
-  """Not equal to the specified value."""
-  notEqualTo: [String]
-
-  """
-  Not equal to the specified value, treating null like an ordinary value.
-  """
-  distinctFrom: [String]
-
-  """Equal to the specified value, treating null like an ordinary value."""
-  notDistinctFrom: [String]
-
-  """Less than the specified value."""
-  lessThan: [String]
-
-  """Less than or equal to the specified value."""
-  lessThanOrEqualTo: [String]
-
-  """Greater than the specified value."""
-  greaterThan: [String]
-
-  """Greater than or equal to the specified value."""
-  greaterThanOrEqualTo: [String]
-
-  """Contains the specified list of values."""
-  contains: [String]
-
-  """Contained by the specified list of values."""
-  containedBy: [String]
-
-  """Overlaps the specified list of values."""
-  overlaps: [String]
-
-  """Any array item is equal to the specified value."""
-  anyEqualTo: String
-
-  """Any array item is not equal to the specified value."""
-  anyNotEqualTo: String
-
-  """Any array item is less than the specified value."""
-  anyLessThan: String
-
-  """Any array item is less than or equal to the specified value."""
-  anyLessThanOrEqualTo: String
-
-  """Any array item is greater than the specified value."""
-  anyGreaterThan: String
-
-  """Any array item is greater than or equal to the specified value."""
-  anyGreaterThanOrEqualTo: String
-}
-
-"""A connection to a list of `Game` values."""
-type GamesConnection {
-  """A list of `Game` objects."""
-  nodes: [Game]!
-
-  """
-  A list of edges which contains the `Game` and cursor to aid in pagination.
-  """
-  edges: [GamesEdge]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `Game` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `Game` edge in the connection."""
-type GamesEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `Game` at the end of the edge."""
-  node: Game
-}
-
-"""Methods to use when ordering `Game`."""
-enum GamesOrderBy {
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  ID_ASC
-  ID_DESC
-  STATUS_ASC
-  STATUS_DESC
-  GIT_HASH_ASC
-  GIT_HASH_DESC
-  TRACE_ASC
-  TRACE_DESC
-  CREATED_AT_ASC
-  CREATED_AT_DESC
-}
-
-"""
-A condition to be used against `Game` object types. All fields are tested for equality and combined with a logical ‘and.’
-"""
-input GameCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: BigInt
-
-  """Checks for equality with the object’s `status` field."""
-  status: GameStateEnum
-
-  """Checks for equality with the object’s `gitHash` field."""
-  gitHash: String
-
-  """Checks for equality with the object’s `trace` field."""
-  trace: JSON
-
-  """Checks for equality with the object’s `createdAt` field."""
-  createdAt: Datetime
 }
 
 """The output of our `cardCatalogueGetBannedDraftCards` mutation."""
@@ -5087,6 +5087,33 @@ input CreateDeckWithCardsInput {
   cardIds: [String]
 }
 
+"""The output of our `saveGeneratedArt` mutation."""
+type SaveGeneratedArtPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  generatedArt: GeneratedArt
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
+
+"""All input for the `saveGeneratedArt` mutation."""
+input SaveGeneratedArtInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  digest: String
+  links: [String]
+  extraInfo: JSON
+}
+
 """The output of our `cardCatalogueFormats` mutation."""
 type CardCatalogueFormatsPayload {
   """
@@ -5397,33 +5424,6 @@ input CardCatalogueQueryInput {
   rarity: String
   heroClass: String
   attribute: String
-}
-
-"""The output of our `saveGeneratedArt` mutation."""
-type SaveGeneratedArtPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  generatedArt: GeneratedArt
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-}
-
-"""All input for the `saveGeneratedArt` mutation."""
-input SaveGeneratedArtInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  digest: String
-  links: [String]
-  extraInfo: JSON
 }
 
 """The output of our create `BannedDraftCard` mutation."""
@@ -5772,6 +5772,41 @@ input DeckPlayerAttributeTupleInput {
   stringValue: String
 }
 
+"""The output of our create `Deck` mutation."""
+type CreateDeckPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Deck` that was created by this mutation."""
+  deck: Deck
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Deck`. May be used by Relay 1."""
+  deckEdge(
+    """The method to use when ordering `Deck`."""
+    orderBy: [DecksOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): DecksEdge
+}
+
+"""All input for the create `Deck` mutation."""
+input CreateDeckInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Deck` to be created by this mutation."""
+  deck: DeckInput!
+}
+
 """The output of our create `Friend` mutation."""
 type CreateFriendPayload {
   """
@@ -5869,41 +5904,6 @@ input MatchmakingTicketInput {
   createdAt: Datetime
 }
 
-"""The output of our create `Deck` mutation."""
-type CreateDeckPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Deck` that was created by this mutation."""
-  deck: Deck
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Deck`. May be used by Relay 1."""
-  deckEdge(
-    """The method to use when ordering `Deck`."""
-    orderBy: [DecksOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): DecksEdge
-}
-
-"""All input for the create `Deck` mutation."""
-input CreateDeckInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `Deck` to be created by this mutation."""
-  deck: DeckInput!
-}
-
 """The output of our create `MatchmakingQueue` mutation."""
 type CreateMatchmakingQueuePayload {
   """
@@ -5953,60 +5953,6 @@ input MatchmakingQueueInput {
   automaticallyClose: Boolean
   lobbySize: Int
   queueCreatedAt: Datetime
-}
-
-"""The output of our create `Card` mutation."""
-type CreateCardPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Card` that was created by this mutation."""
-  card: Card
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Card`. May be used by Relay 1."""
-  cardEdge(
-    """The method to use when ordering `Card`."""
-    orderBy: [CardsOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): CardsEdge
-}
-
-"""All input for the create `Card` mutation."""
-input CreateCardInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """The `Card` to be created by this mutation."""
-  card: CardInput!
-}
-
-"""An input for mutations affecting `Card`"""
-input CardInput {
-  id: String!
-  createdBy: String!
-
-  """
-  The URI of the application that created this card. The git URL by default represents cards that came from the
-      Spellsource git repository. https://www.getspellsource.com/cards/editor or similar represents cards authored in the
-      web interface
-  """
-  uri: String
-  blocklyWorkspace: JSON
-  cardScript: JSON
-  createdAt: Datetime
-  lastModified: Datetime
-  isArchived: Boolean
-  isPublished: Boolean
 }
 
 """The output of our create `GeneratedArt` mutation."""
@@ -6088,6 +6034,60 @@ input GameInput {
   gitHash: String
   trace: JSON
   createdAt: Datetime
+}
+
+"""The output of our create `Card` mutation."""
+type CreateCardPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Card` that was created by this mutation."""
+  card: Card
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Card`. May be used by Relay 1."""
+  cardEdge(
+    """The method to use when ordering `Card`."""
+    orderBy: [CardsOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): CardsEdge
+}
+
+"""All input for the create `Card` mutation."""
+input CreateCardInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Card` to be created by this mutation."""
+  card: CardInput!
+}
+
+"""An input for mutations affecting `Card`"""
+input CardInput {
+  id: String!
+  createdBy: String!
+
+  """
+  The URI of the application that created this card. The git URL by default represents cards that came from the
+      Spellsource git repository. https://www.getspellsource.com/cards/editor or similar represents cards authored in the
+      web interface
+  """
+  uri: String
+  blocklyWorkspace: JSON
+  cardScript: JSON
+  createdAt: Datetime
+  lastModified: Datetime
+  isArchived: Boolean
+  isPublished: Boolean
 }
 
 """The output of our create `GameUser` mutation."""
@@ -6681,6 +6681,83 @@ input UpdateDeckPlayerAttributeTupleByIdInput {
   deckPlayerAttributeTuplePatch: DeckPlayerAttributeTuplePatch!
 }
 
+"""The output of our update `Deck` mutation."""
+type UpdateDeckPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Deck` that was updated by this mutation."""
+  deck: Deck
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Deck`. May be used by Relay 1."""
+  deckEdge(
+    """The method to use when ordering `Deck`."""
+    orderBy: [DecksOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): DecksEdge
+}
+
+"""All input for the `updateDeck` mutation."""
+input UpdateDeckInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Deck` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `Deck` being updated.
+  """
+  deckPatch: DeckPatch!
+}
+
+"""Represents an update to a `Deck`. Fields that are set will be updated."""
+input DeckPatch {
+  id: String
+
+  """who created this deck originally"""
+  createdBy: String
+
+  """who last edited this deck"""
+  lastEditedBy: String
+  name: String
+  heroClass: String
+  trashed: Boolean
+  format: String
+  deckType: Int
+
+  """premades always shared with all users by application logic"""
+  isPremade: Boolean
+  permittedToDuplicate: Boolean
+}
+
+"""All input for the `updateDeckById` mutation."""
+input UpdateDeckByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: String!
+
+  """
+  An object where the defined keys will be set on the `Deck` being updated.
+  """
+  deckPatch: DeckPatch!
+}
+
 """The output of our update `Friend` mutation."""
 type UpdateFriendPayload {
   """
@@ -6827,83 +6904,6 @@ input UpdateMatchmakingTicketByUserIdInput {
   matchmakingTicketPatch: MatchmakingTicketPatch!
 }
 
-"""The output of our update `Deck` mutation."""
-type UpdateDeckPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Deck` that was updated by this mutation."""
-  deck: Deck
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Deck`. May be used by Relay 1."""
-  deckEdge(
-    """The method to use when ordering `Deck`."""
-    orderBy: [DecksOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): DecksEdge
-}
-
-"""All input for the `updateDeck` mutation."""
-input UpdateDeckInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `Deck` to be updated.
-  """
-  nodeId: ID!
-
-  """
-  An object where the defined keys will be set on the `Deck` being updated.
-  """
-  deckPatch: DeckPatch!
-}
-
-"""Represents an update to a `Deck`. Fields that are set will be updated."""
-input DeckPatch {
-  id: String
-
-  """who created this deck originally"""
-  createdBy: String
-
-  """who last edited this deck"""
-  lastEditedBy: String
-  name: String
-  heroClass: String
-  trashed: Boolean
-  format: String
-  deckType: Int
-
-  """premades always shared with all users by application logic"""
-  isPremade: Boolean
-  permittedToDuplicate: Boolean
-}
-
-"""All input for the `updateDeckById` mutation."""
-input UpdateDeckByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  id: String!
-
-  """
-  An object where the defined keys will be set on the `Deck` being updated.
-  """
-  deckPatch: DeckPatch!
-}
-
 """The output of our update `MatchmakingQueue` mutation."""
 type UpdateMatchmakingQueuePayload {
   """
@@ -6977,82 +6977,6 @@ input UpdateMatchmakingQueueByIdInput {
   An object where the defined keys will be set on the `MatchmakingQueue` being updated.
   """
   matchmakingQueuePatch: MatchmakingQueuePatch!
-}
-
-"""The output of our update `Card` mutation."""
-type UpdateCardPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Card` that was updated by this mutation."""
-  card: Card
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Card`. May be used by Relay 1."""
-  cardEdge(
-    """The method to use when ordering `Card`."""
-    orderBy: [CardsOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): CardsEdge
-}
-
-"""All input for the `updateCard` mutation."""
-input UpdateCardInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `Card` to be updated.
-  """
-  nodeId: ID!
-
-  """
-  An object where the defined keys will be set on the `Card` being updated.
-  """
-  cardPatch: CardPatch!
-}
-
-"""Represents an update to a `Card`. Fields that are set will be updated."""
-input CardPatch {
-  id: String
-  createdBy: String
-
-  """
-  The URI of the application that created this card. The git URL by default represents cards that came from the
-      Spellsource git repository. https://www.getspellsource.com/cards/editor or similar represents cards authored in the
-      web interface
-  """
-  uri: String
-  blocklyWorkspace: JSON
-  cardScript: JSON
-  createdAt: Datetime
-  lastModified: Datetime
-  isArchived: Boolean
-  isPublished: Boolean
-}
-
-"""All input for the `updateCardBySuccession` mutation."""
-input UpdateCardBySuccessionInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  succession: BigInt!
-
-  """
-  An object where the defined keys will be set on the `Card` being updated.
-  """
-  cardPatch: CardPatch!
 }
 
 """The output of our update `GeneratedArt` mutation."""
@@ -7162,6 +7086,82 @@ input UpdateGameByIdInput {
   An object where the defined keys will be set on the `Game` being updated.
   """
   gamePatch: GamePatch!
+}
+
+"""The output of our update `Card` mutation."""
+type UpdateCardPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Card` that was updated by this mutation."""
+  card: Card
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Card`. May be used by Relay 1."""
+  cardEdge(
+    """The method to use when ordering `Card`."""
+    orderBy: [CardsOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): CardsEdge
+}
+
+"""All input for the `updateCard` mutation."""
+input UpdateCardInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Card` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `Card` being updated.
+  """
+  cardPatch: CardPatch!
+}
+
+"""Represents an update to a `Card`. Fields that are set will be updated."""
+input CardPatch {
+  id: String
+  createdBy: String
+
+  """
+  The URI of the application that created this card. The git URL by default represents cards that came from the
+      Spellsource git repository. https://www.getspellsource.com/cards/editor or similar represents cards authored in the
+      web interface
+  """
+  uri: String
+  blocklyWorkspace: JSON
+  cardScript: JSON
+  createdAt: Datetime
+  lastModified: Datetime
+  isArchived: Boolean
+  isPublished: Boolean
+}
+
+"""All input for the `updateCardBySuccession` mutation."""
+input UpdateCardBySuccessionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  succession: BigInt!
+
+  """
+  An object where the defined keys will be set on the `Card` being updated.
+  """
+  cardPatch: CardPatch!
 }
 
 """The output of our update `GameUser` mutation."""
@@ -7643,6 +7643,54 @@ input DeleteDeckPlayerAttributeTupleByIdInput {
   id: BigInt!
 }
 
+"""The output of our delete `Deck` mutation."""
+type DeleteDeckPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Deck` that was deleted by this mutation."""
+  deck: Deck
+  deletedDeckId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Deck`. May be used by Relay 1."""
+  deckEdge(
+    """The method to use when ordering `Deck`."""
+    orderBy: [DecksOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): DecksEdge
+}
+
+"""All input for the `deleteDeck` mutation."""
+input DeleteDeckInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Deck` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteDeckById` mutation."""
+input DeleteDeckByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: String!
+}
+
 """The output of our delete `Friend` mutation."""
 type DeleteFriendPayload {
   """
@@ -7751,54 +7799,6 @@ input DeleteMatchmakingTicketByUserIdInput {
   userId: String!
 }
 
-"""The output of our delete `Deck` mutation."""
-type DeleteDeckPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Deck` that was deleted by this mutation."""
-  deck: Deck
-  deletedDeckId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Deck`. May be used by Relay 1."""
-  deckEdge(
-    """The method to use when ordering `Deck`."""
-    orderBy: [DecksOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): DecksEdge
-}
-
-"""All input for the `deleteDeck` mutation."""
-input DeleteDeckInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `Deck` to be deleted.
-  """
-  nodeId: ID!
-}
-
-"""All input for the `deleteDeckById` mutation."""
-input DeleteDeckByIdInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  id: String!
-}
-
 """The output of our delete `MatchmakingQueue` mutation."""
 type DeleteMatchmakingQueuePayload {
   """
@@ -7845,54 +7845,6 @@ input DeleteMatchmakingQueueByIdInput {
   """
   clientMutationId: String
   id: String!
-}
-
-"""The output of our delete `Card` mutation."""
-type DeleteCardPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """The `Card` that was deleted by this mutation."""
-  card: Card
-  deletedCardId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """An edge for our `Card`. May be used by Relay 1."""
-  cardEdge(
-    """The method to use when ordering `Card`."""
-    orderBy: [CardsOrderBy!]! = [PRIMARY_KEY_ASC]
-  ): CardsEdge
-}
-
-"""All input for the `deleteCard` mutation."""
-input DeleteCardInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-
-  """
-  The globally unique `ID` which will identify a single `Card` to be deleted.
-  """
-  nodeId: ID!
-}
-
-"""All input for the `deleteCardBySuccession` mutation."""
-input DeleteCardBySuccessionInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  succession: BigInt!
 }
 
 """The output of our delete `GeneratedArt` mutation."""
@@ -7969,6 +7921,54 @@ input DeleteGameByIdInput {
   """
   clientMutationId: String
   id: BigInt!
+}
+
+"""The output of our delete `Card` mutation."""
+type DeleteCardPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Card` that was deleted by this mutation."""
+  card: Card
+  deletedCardId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Card`. May be used by Relay 1."""
+  cardEdge(
+    """The method to use when ordering `Card`."""
+    orderBy: [CardsOrderBy!]! = [PRIMARY_KEY_ASC]
+  ): CardsEdge
+}
+
+"""All input for the `deleteCard` mutation."""
+input DeleteCardInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Card` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteCardBySuccession` mutation."""
+input DeleteCardBySuccessionInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  succession: BigInt!
 }
 
 """The output of our delete `GameUser` mutation."""

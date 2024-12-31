@@ -30,6 +30,7 @@ public class Games {
 	public static final String GAMES_CREATE_GAME_SESSION = "games:createGameSession";
 	public static final String ADDRESS_IS_IN_GAME = "games:isInGame:";
 	private static final Logger LOGGER = LoggerFactory.getLogger(Games.class);
+	public static final String GAMES_DEFAULT_NO_ACTIVITY_TIMEOUT = "games.defaultNoActivityTimeout";
 
 	/**
 	 * Creates a match without entering a queue entry between two users.
@@ -70,7 +71,7 @@ public class Games {
 	 * to disconnection.
 	 */
 	public static long getDefaultNoActivityTimeout() {
-		return Long.parseLong(System.getProperties().getProperty("games.defaultNoActivityTimeout", Long.toString(Games.DEFAULT_NO_ACTIVITY_TIMEOUT)));
+		return Long.parseLong(System.getProperties().getProperty(GAMES_DEFAULT_NO_ACTIVITY_TIMEOUT, Long.toString(Games.DEFAULT_NO_ACTIVITY_TIMEOUT)));
 	}
 
 	public static BindAll<VertxGamesGrpcServer.GamesApi> services() {

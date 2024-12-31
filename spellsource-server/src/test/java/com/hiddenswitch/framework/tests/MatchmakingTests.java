@@ -3,6 +3,7 @@ package com.hiddenswitch.framework.tests;
 import com.google.protobuf.Empty;
 import com.hiddenswitch.framework.Client;
 import com.hiddenswitch.framework.Environment;
+import com.hiddenswitch.framework.Games;
 import com.hiddenswitch.framework.Matchmaking;
 import com.hiddenswitch.framework.impl.ClusteredGames;
 import com.hiddenswitch.framework.impl.Infinispan15ClusterManager;
@@ -22,6 +23,7 @@ import io.vertx.core.impl.cpu.CpuCoreSensor;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.junit5.Timeout;
 import io.vertx.junit5.VertxTestContext;
+import net.demilich.metastone.game.logic.GameLogic;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -472,7 +474,7 @@ public class MatchmakingTests extends FrameworkTestBase {
 				.mapToObj(i -> Vertx.vertx(new VertxOptions().setEventLoopPoolSize(CpuCoreSensor.availableProcessors())))
 				.toList();
 
-		System.setProperty("games.turnTimeMillis", "6000");
+		System.setProperty(GameLogic.GAMES_TURN_TIME_MILLIS, "6000");
 		var defaultConfiguration = Hiddenswitch.ServerConfiguration.newBuilder(Environment.getConfiguration()).build();
 		var originalPort = configuration.getGrpcConfiguration().getPort();
 		// server configuration
@@ -604,12 +606,44 @@ public class MatchmakingTests extends FrameworkTestBase {
 						closed.add(promise.future());
 						vertx.close(promise);
 					}
-					System.getProperties().remove("games.turnTimeMillis");
+					System.getProperties().remove(GameLogic.GAMES_TURN_TIME_MILLIS);
 					Environment.setConfiguration(defaultConfiguration);
 					return join(closed);
 				})
 				.onComplete(testContext.succeedingThenComplete());
 	}
+
+	@Test
+	public void testBotQueueWorksAfterDisconnect(Vertx vertx, VertxTestContext testContext) {
+		var client = new Client(vertx);
+		var queueId = UUID.randomUUID().toString();
+		System.getProperties().setProperty(Games.GAMES_DEFAULT_NO_ACTIVITY_TIMEOUT, "10000");
+		startServices(vertx)
+				.compose(v -> Matchmaking.createQueue(createSinglePlayerQueue(queueId)))
+				.compose(v -> client.createAndLogin())
+				.compose(v -> client.matchmake(queueId))
+				.compose(response -> {
+					var gameId1 = response.getUnityConnection().getGameId();
+					return client.connectToGame()
+							.compose(v -> Environment.sleep(vertx, 10000L * 2))
+							.compose(v -> client.matchmake(queueId))
+							.compose(response2 -> {
+								var gameId2 = response2.getUnityConnection().getGameId();
+								testContext.verify(() -> {
+									assertNotEquals(gameId1, gameId2, "gameIds should be different after timing out");
+								});
+								return Future.succeededFuture();
+							});
+				})
+				.onComplete(client::close)
+				.onComplete(v -> {
+					// todo: store the actual default somewhere
+					System.getProperties().setProperty(Games.GAMES_DEFAULT_NO_ACTIVITY_TIMEOUT, "225000");
+				})
+				.compose(v -> Matchmaking.deleteQueue(queueId))
+				.onComplete(testContext.succeedingThenComplete());
+	}
+
 
 	@NotNull
 	private MatchmakingQueues createSinglePlayerQueue(String queueId) {

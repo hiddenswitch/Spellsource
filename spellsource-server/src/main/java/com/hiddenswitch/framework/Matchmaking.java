@@ -6,6 +6,7 @@ import com.hiddenswitch.framework.schema.spellsource.tables.daos.MatchmakingQueu
 import com.hiddenswitch.framework.schema.spellsource.tables.mappers.RowMappers;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingQueues;
 import com.hiddenswitch.framework.schema.spellsource.tables.pojos.MatchmakingTickets;
+import com.hiddenswitch.framework.schema.spellsource.tables.records.MatchmakingQueuesRecord;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutResponse;
 import com.hiddenswitch.spellsource.rpc.Spellsource.MatchmakingQueuePutResponseUnityConnection;
 import com.hiddenswitch.spellsource.rpc.VertxMatchmakingGrpcServer;
@@ -99,6 +100,35 @@ public class Matchmaking extends AbstractVerticle {
 		return vertx.eventBus().<String>request(address, gameId, new DeliveryOptions().setSendTimeout(smallTimeout))
 				.onFailure(Environment.onFailure("failed to notify game ready"))
 				.mapEmpty();
+	}
+
+	public static MatchmakingQueuesRecord[] defaultQueues() {
+		var quickPlay = MATCHMAKING_QUEUES.newRecord()
+				.setName("Quick Play")
+				.setId("quickPlay")
+				.setAutomaticallyClose(false)
+				.setLobbySize(1)
+				.setOnce(false)
+				.setBotOpponent(true)
+				.setPrivateLobby(false)
+				.setAwaitingLobbyTimeout(0L)
+				.setEmptyLobbyTimeout(0L)
+				.setStillConnectedTimeout(4000L)
+				.setStartsAutomatically(true);
+		var constructed = MATCHMAKING_QUEUES.newRecord()
+				.setName("Constructed")
+				.setId("constructed")
+				.setAutomaticallyClose(false)
+				.setLobbySize(2)
+				.setOnce(false)
+				.setBotOpponent(false)
+				.setPrivateLobby(false)
+				.setAwaitingLobbyTimeout(0L)
+				.setEmptyLobbyTimeout(0L)
+				.setStillConnectedTimeout(1000L)
+				.setStartsAutomatically(true);
+
+		return new MatchmakingQueuesRecord[]{quickPlay, constructed};
 	}
 
 	@Override

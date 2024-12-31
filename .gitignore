@@ -1,3 +1,5 @@
+yarn.lock
+node_modules/
 spellsource-python/workdir/models/
 spellsource-python/workdir/user/
 spellsource-python/workdir/custom_nodes/

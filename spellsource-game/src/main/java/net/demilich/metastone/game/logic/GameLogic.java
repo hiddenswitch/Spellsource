@@ -173,6 +173,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	private static final int MAX_SPELL_DEPTH = 288;
 	private static final String TEMP_CARD_LABEL = "temp_card_id_";
+	public static final String GAMES_TURN_TIME_MILLIS = "games.turnTimeMillis";
 	protected static Logger LOGGER = LoggerFactory.getLogger(GameLogic.class);
 
 	static {
@@ -5250,7 +5251,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @return The turn time in milliseconds.
 	 */
 	public int getTurnTimeMillis(int playerId) {
-		return Integer.parseInt(System.getProperty("games.turnTimeMillis", System.getenv().getOrDefault("SPELLSOURCE_TURN_TIME", Integer.toString(DEFAULT_TURN_TIME * 1000))));
+		return Integer.parseInt(System.getProperty(GAMES_TURN_TIME_MILLIS, System.getenv().getOrDefault("SPELLSOURCE_TURN_TIME", Integer.toString(DEFAULT_TURN_TIME * 1000))));
 	}
 
 	public void dispose() {
