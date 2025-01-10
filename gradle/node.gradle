@@ -1,10 +1,10 @@
 import groovy.json.JsonSlurper
 
-def packageJson = new JsonSlurper().parseText(project.file('package.json').text)
+def packageJson = new JsonSlurper().parseText(rootProject.file('package.json').text)
 def yarnVersionStr = (packageJson.packageManager as String).split("@")[1]
 
 node {
   download = false
   yarnVersion = yarnVersionStr
-  yarnWorkDir.set(project.layout.projectDirectory.dir(".gradle/yarn"))
+  yarnWorkDir.set(rootProject.layout.projectDirectory.dir(".gradle/yarn"))
 }

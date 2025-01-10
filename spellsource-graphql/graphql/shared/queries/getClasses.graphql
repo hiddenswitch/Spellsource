@@ -1,0 +1,8 @@
+query getClasses($filter: ClassFilter) {
+  allClasses(filter: $filter) {
+    nodes {
+      ...class
+    }
+    totalCount
+  }
+}

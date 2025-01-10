@@ -1,0 +1,5 @@
+query getCard($id: String!) {
+  getLatestCard(cardId: $id, published: true) {
+    ...card
+  }
+}

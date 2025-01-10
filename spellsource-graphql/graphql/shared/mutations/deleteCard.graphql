@@ -1,0 +1,5 @@
+mutation deleteCard($cardId: String!) {
+  archiveCard(input: {cardId: $cardId}) {
+    clientMutationId
+  }
+}

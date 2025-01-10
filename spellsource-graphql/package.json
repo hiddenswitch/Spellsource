@@ -1,0 +1,43 @@
+{
+  "name": "spellsource-graphql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "engines": {
+    "yarn": "^4.0.0",
+    "node": ">=22.11.0"
+  },
+  "author": "Benjamin Berman",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "@apollo/server": "^4.9.4",
+    "@graphile-contrib/pg-omit-archived": "^4.0.0-beta.2",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@graphql-codegen/c-sharp": "^5.1.0",
+    "@graphql-codegen/c-sharp-operations": "^3.1.0",
+    "@graphql-codegen/cli": "^3.2.2",
+    "@graphql-codegen/java": "^4.0.1",
+    "@graphql-codegen/java-resolvers": "^3.0.0",
+    "@graphql-codegen/plugin-helpers": "^5.1.0",
+    "@graphql-codegen/typescript": "^3.0.2",
+    "@graphql-codegen/typescript-operations": "^3.0.2",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.7",
+    "@graphql-codegen/typescript-resolvers": "^3.1.1",
+    "graphile-migrate": "^2.0.0-rc.2",
+    "nodemon": "^3.1.9",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "yarn@4.5.0",
+  "scripts": {
+    "develop": "nodemon -L server.ts",
+    "build": "tsc",
+    "start": "node build/server.js",
+    "codegen": "graphql-codegen",
+    "strawberry-shake": "dotnet graphql generate -o ../spellsource-client/src/unity/Assets/Scripts"
+  },
+  "keywords": []
+}

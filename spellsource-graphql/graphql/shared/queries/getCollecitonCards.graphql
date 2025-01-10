@@ -1,0 +1,8 @@
+query getCollectionCards($limit: Int, $filter: CollectionCardFilter, $offset: Int, $orderBy: [CollectionCardsOrderBy!]) {
+  allCollectionCards(offset: $offset, filter: $filter, first: $limit, orderBy: $orderBy) {
+    nodes {
+      ...collectionCard
+    }
+    totalCount
+  }
+}

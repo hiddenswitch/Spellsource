@@ -37,3 +37,5 @@ include 'vertx-grpc:vertx-grpc-common'
 include 'vertx-grpc:vertx-grpc-context-storage'
 include 'vertx-grpc:vertx-grpc-it'
 include 'vertx-grpc:vertx-grpc-server'
+include 'spellsource-graphql'
+

@@ -1,5 +1,6 @@
 package com.hiddenswitch.framework.tests.applications;
 
+import com.hiddenswitch.containers.GraphQLContainer;
 import com.hiddenswitch.containers.KeycloakContainer;
 import com.hiddenswitch.containers.PostgresContainer;
 import com.hiddenswitch.containers.RedisContainer;
@@ -27,7 +28,7 @@ public class StandaloneApplication extends Application {
 	protected static final String PGUSER = "admin";
 	protected static final String PGPASSWORD = "password";
 	protected static final String PGHOST = "postgres";
-	protected static final int PGPORT = 5432;
+	protected static final String GRAPHQL_HOST = "graphql";
 	private static final Logger LOGGER = LoggerFactory.getLogger(StandaloneApplication.class);
 	public static RedisContainer REDIS = new RedisContainer()
 			.withNetwork(Network.SHARED)
@@ -36,11 +37,17 @@ public class StandaloneApplication extends Application {
 			.withReuse(true)
 			.withNetwork(Network.SHARED)
 			.withNetworkAliases(PGHOST)
-			.withExposedPorts(PGPORT);
+			.withExposedPorts(PostgresContainer.POSTGRESQL_PORT);
 	public static KeycloakContainer KEYCLOAK = new KeycloakContainer()
 			.withReuse(true)
 			.dependsOn(POSTGRES)
 			.withNetwork(Network.SHARED)
+			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD);
+	public static GraphQLContainer GRAPHQL = new GraphQLContainer()
+			.withReuse(true)
+			.dependsOn(POSTGRES)
+			.withNetwork(Network.SHARED)
+			.withNetworkAliases(GRAPHQL_HOST)
 			.withPostgres(PGHOST, PGDATABASE, PGUSER, PGPASSWORD);
 	protected static AtomicBoolean STARTED = new AtomicBoolean(false);
 
@@ -49,10 +56,10 @@ public class StandaloneApplication extends Application {
 		if (!shouldStart) {
 			return false;
 		}
-		Startables.deepStart(Stream.of(POSTGRES, KEYCLOAK, REDIS)).join();
+		Startables.deepStart(Stream.of(POSTGRES, KEYCLOAK, REDIS, GRAPHQL)).join();
 		var configuration = ServerConfiguration.newBuilder(Environment.getConfiguration());
 		configuration.setPg(ServerConfiguration.PostgresConfiguration.newBuilder()
-				.setPort(POSTGRES.getMappedPort(PGPORT))
+				.setPort(POSTGRES.getMappedPort(PostgresContainer.POSTGRESQL_PORT))
 				.setHost(POSTGRES.getHost())
 				.setDatabase(PGDATABASE)
 				.setUser(PGUSER)
@@ -76,6 +83,11 @@ public class StandaloneApplication extends Application {
 		configuration.setMigration(ServerConfiguration.MigrationConfiguration.newBuilder()
 				.setShouldMigrate(true)
 				.build());
+		configuration.setGraphql(ServerConfiguration.GraphQLConfiguration.newBuilder()
+				.setHost(GRAPHQL_HOST)
+				.setPort(GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT))
+				.setRoute("/graphql")
+		);
 		// todo: allow environment variables *only* to override this configuration, but something weird about kube env
 		// configuration.mergeFrom(Environment.environmentConfiguration());
 
@@ -83,13 +95,18 @@ public class StandaloneApplication extends Application {
 		Environment.setConfiguration(configuration.buildPartial());
 		Environment.migrate().toCompletionStage().toCompletableFuture().join();
 
-		LOGGER.info("StandaloneApplication: Keycloak address is http://localhost:{}", KEYCLOAK.getMappedPort(8080));
+		LOGGER.info("StandaloneApplication: Keycloak address is http://localhost:{}", KEYCLOAK.getMappedPort(KeycloakContainer.KEYCLOAK_PORT_HTTP));
 		LOGGER.info("StandaloneApplication: Redis address is {}", REDIS.getRedisUrl());
 		LOGGER.info("StandaloneApplication: Postgres address is {}", POSTGRES.getHostAndPort());
 		Environment.setConfiguration(configuration.build());
 		try {
 			var envFile = new File("../spellsource-web/.env.local");
-			var contents = "REDIS_URI=" + REDIS.getRedisUrl() + "\nPG_PORT=" + POSTGRES.getMappedPort(PGPORT) + "\nKEYCLOAK_PORT=" + KEYCLOAK.getMappedPort(8080);
+			var contents = STR."""
+REDIS_URI=\{REDIS.getRedisUrl()}
+PG_PORT=\{POSTGRES.getMappedPort(PostgresContainer.POSTGRESQL_PORT)}
+KEYCLOAK_PORT=\{KEYCLOAK.getMappedPort(KeycloakContainer.KEYCLOAK_PORT_HTTP)}
+GRAPHQL_PORT=\{GRAPHQL.getMappedPort(GraphQLContainer.GRAPHQL_PORT)}
+""";
 
 			FileUtils.writeStringToFile(envFile, contents, StandardCharsets.UTF_8);
 

@@ -1,0 +1,28 @@
+{
+  "name": "spellsource",
+  "private": true,
+  "engines": {
+    "yarn": "^4.0.0",
+    "node": ">=22.11.0"
+  },
+  "workspaces": [
+    "spellsource-graphql",
+    "spellsource-web"
+  ],
+  "resolutions": {
+    "graphql": "16.8.1",
+    "@types/node": "22.10.5",
+    "typescript": "5.3.3",
+    "postgraphile": "^5.0.0-beta.37"
+  },
+  "dependencies": {
+    "patch-package": "^6.5.1",
+    "typescript": "^5.3.3",
+    "yarn": "^2.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.5",
+    "ts-node": "^10.9.2"
+  },
+  "packageManager": "yarn@4.5.0"
+}

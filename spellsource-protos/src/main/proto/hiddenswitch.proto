@@ -94,6 +94,12 @@ message ServerConfiguration {
   message CardsConfiguration {
   }
 
+  message GraphQLConfiguration {
+    string host = 1;
+    int32 port = 2;
+    string route = 3;
+  }
+
   PostgresConfiguration pg = 1;
   KeycloakConfiguration keycloak = 2;
   RedisConfiguration redis = 3;
@@ -108,6 +114,7 @@ message ServerConfiguration {
   JaegerConfiguration jaeger = 12;
   VertxConfiguration vertx = 13;
   CardsConfiguration cards = 14;
+  GraphQLConfiguration graphql = 15;
 }
 
 message ClientConfiguration {

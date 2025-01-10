@@ -137,6 +137,9 @@ dependencies {
     exclude group: 'com.google.guava', module: 'guava'
   }
 
+  implementation "io.github.kobylynskyi:graphql-java-codegen:5.9.0"
+  implementation 'com.graphql-java:graphql-java:22.3'
+
 
   testImplementation "ch.qos.logback:logback-classic:$logbackVersion"
   testImplementation(project(':spellsource-containers'))

@@ -1,0 +1,8 @@
+{
+  "watch": ["**/*.ts"],
+  "ext": "graphql,ts,sql",
+  "delay": 5,
+  "execMap": {
+    "ts": "node -r ts-node/register"
+  }
+}

@@ -1163,6 +1163,7 @@ message InventoryCollection {
     enum InventoryCollectionDeckType {
         DRAFT = 0;
         CONSTRUCTED = 1;
+        ROGUE = 2;
     }
 
     enum InventoryCollectionType {
@@ -1174,7 +1175,7 @@ message InventoryCollection {
     // The identifier of this collection. Corresponds to a deckId when this is a deck collection.
     string _id = 1;
 
-    // Indicates whether this is a deck meant for draft or constructed play.
+    // Indicates whether this is a deck meant for draft, constructed play, or a rogue run.
     InventoryCollectionDeckType deckType = 2;
 
     // The format when this is a deck collection.

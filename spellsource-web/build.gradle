@@ -92,11 +92,6 @@ tasks.register('fixComfyClient') {
   }
 }
 
-tasks.named("yarnSetup").configure {
-  enabled = false
-  dependsOn "corepack"
-}
-
 tasks.named('yarn').configure {
   group('spellsource')
   // todo: we need to patch the generator
@@ -115,12 +110,6 @@ tasks.register("corepack") {
     }
   }
 }
-
-tasks.named('yarnSetup').configure {
-  dependsOn "corepack"
-  enabled = false
-}
-
 
 Provider<JavaLauncher> thisToolchain() {
   return (project.services.get(JavaToolchainService) as JavaToolchainService).launcherFor(java.toolchain)
