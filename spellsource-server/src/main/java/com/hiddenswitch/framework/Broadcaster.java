@@ -61,7 +61,7 @@ public class Broadcaster extends AbstractVerticle implements Verticle {
 							LOGGER.info("createDatagramSocket: Replying to datagram received from " + packet.sender().toString());
 							// Reply with the local base path
 							var host = Environment.getHostIpAddress();
-							socket.send(getResponsePrefix() + "http://" + host + ":" + Gateway.defaultGrpcPort() + "/", packet.sender().port(), packet.sender().host(), Promise.promise());
+							socket.send(getResponsePrefix() + "http://" + host + ":" + Gateway.defaultGrpcPort(), packet.sender().port(), packet.sender().host(), Promise.promise());
 						});
 						isListening.complete();
 						LOGGER.info("Broadcaster listening on port " + multicastAddress + ":" + getMulticastPort());
