@@ -1,7 +1,7 @@
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: jgroups-kubeping-pod-reader
+  name: {{ template "spellsource.fullname" . }}-read-pods
 rules:
   - apiGroups: [""]
     resources: ["pods"]
@@ -10,11 +10,11 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: jgroups-kubeping-api-access
+  name: {{ template "spellsource.fullname" . }}-read-pods
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: jgroups-kubeping-pod-reader
+  name: {{ template "spellsource.fullname" . }}-read-pods
 subjects:
   - kind: ServiceAccount
     name: {{ include "spellsource.serviceAccountName" . }}
