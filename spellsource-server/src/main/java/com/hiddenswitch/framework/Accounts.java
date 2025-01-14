@@ -485,7 +485,7 @@ public class Accounts {
 					realmRepresentation.setSslRequired(SslRequired.EXTERNAL.toString());
 					realmRepresentation.setEnabled(true);
 					// use scrypt provider
-					LOGGER.info("""
+					LOGGER.trace("""
 							realm password policy was NOT set to hashAlgorithm(scrypt), not compatible with ancient passwords.
 							set realmRepresentation.setPasswordPolicy("hashAlgorithm(scrypt)") to make compatible""");
 

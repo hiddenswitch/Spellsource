@@ -83,9 +83,9 @@ public class StandaloneApplication extends Application {
 		Environment.setConfiguration(configuration.buildPartial());
 		Environment.migrate().toCompletionStage().toCompletableFuture().join();
 
-		LOGGER.info("StandaloneApplication: Keycloak address is http://localhost:{}", KEYCLOAK.getMappedPort(8080));
-		LOGGER.info("StandaloneApplication: Redis address is {}", REDIS.getRedisUrl());
-		LOGGER.info("StandaloneApplication: Postgres address is {}", POSTGRES.getHostAndPort());
+		LOGGER.info("Keycloak address is http://localhost:{}", KEYCLOAK.getMappedPort(8080));
+		LOGGER.info("Redis address is {}", REDIS.getRedisUrl());
+		LOGGER.info("Postgres address is {}", POSTGRES.getHostAndPort());
 		Environment.setConfiguration(configuration.build());
 		try {
 			var envFile = new File("../spellsource-web/.env.local");

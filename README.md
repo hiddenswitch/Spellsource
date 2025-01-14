@@ -52,7 +52,7 @@ Once you've rebooted, start Docker Desktop at least once. Observe you may be pro
 Hit `Win + X` and click Windows Powershell. Do not start a prompt as an `admin`. Then run the following:
 
 ```sh
-# install node 18
+# install node 22
 nvm install 22
 nvm use 22
 
@@ -80,18 +80,40 @@ Start a local server and website using:
 gradle runServer
 ```
 
-##### Starting the Servers
+### Unity Requirements
+
+Install Unity 6 with the iOS, macOS, Windows, and Android modules for your platform. You should not install Visual Studio.
+
+##### Getting Around Unity
+
+Tools > UIT > Projection > Dimetric1x2
+
+Click Eyeball ("Hide") button in Hierarchy on Canvas (UI) and World (Battlefield), select World hierarchy and hit F to focus, then zoom.
+
+Select Root, then change the Screen View | Current screen property to the screen you want to work on. Screen Views will automatically update the current page to whatever you are clicked on, but it is clunky when you click away.
+
+When getting ready to commit, ensure your resolution is Full HD (1920x1080) with Low Resolution Aspect Ratios unchecked (HiDPI screens only?) in the Game View; then, set the Screen View | Current screen to Loading on the Root game object.
+
+##### Starting the Game
 
 There are four main components:
 
- - The Java server backend: `gradle spellsource-server:run`
+ - The Java server backend:
+   **Windows**: `./gradlew.bat spellsource-server:run`
+   **macOS and Linux**: `./gradlew spellsource-server:run`
  - The website: `yarn install --immutable; cd spellsource-web; yarn run dev`
  - The image generator:
-   - Windows: `gradle venv; & .venv/scripts/activate.ps1; comfyui -w ./spellsource-python/workdir`
-   - Linux and macOS: `gradle venv; source .venv/bin/activate; comfyui -w ./spellsource-python/workdir`
- - The Unity client: Open `spellsource-client/src/unity` in Unity 6, open the Game scene, and hit Play.
+   **Windows**: `./gradlew.bat venv; & .venv/scripts/activate.ps1; comfyui -w ./spellsource-python/workdir`
+   **Linux and macOS:** `./gradlew venv; source .venv/bin/activate; comfyui -w ./spellsource-python/workdir`
+ - The Unity client: Open `spellsource-client/src/unity` in Unity 6, open the **Assets/Scenes/Game.unity** scene, and hit Play.
 
 Start the Java server backend first, since it also starts Postgres and Redis.
+
+The server is ready to accept connections from clients when you see this message:
+
+```text
+11:22:30.497 [vert.x-eventloop-thread-0] INFO  c.hiddenswitch.framework.Application - Started application, now broadcasting
+```
 
 ##### Configure your IDE for Python development:
 
@@ -166,6 +188,12 @@ Use `./gradlew tasks --group spellsource` to see all deployment related tasks. Y
 user for these.
 
 ### Troubleshooting
+
+> I see errors about the Gradle daemon already running.
+
+This is an issue if you are accidentally already running the server in another terminal tab or your IDE. Carefully check that you are not already running the server using a Gradle command.
+
+This is normal when using the IntelliJ IDEs, or when killing Gradle with Ctrl+C on Windows. You can run `gradle --stop` to clean these "daemons" (background processes), or restart your computer.
 
 > I cannot clone the repository.
 
